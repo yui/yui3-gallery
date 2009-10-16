@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+    <title>JSONP example</title>
+</head>
+<body>
+<pre id="x"></pre>
+
+<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui.js"></script>
+<!--script src="../../../build/ls_n.jsonp/ls_n.jsonp-min.js"></script-->
+<script>
+/*
+ * use this in place of YUI() if the module is not found on the CDN
+YUI({
+    modules: {
+        'ls_n.jsonp': {
+            fullpath: '../../../build/ls_n.jsonp/ls_n.jsonp-min.js',
+            requires: ['selector-css3']
+        }
+    }
+})
+*/
+YUI()
+.use('ls_n.jsonp','node','json-stringify', function (Y) {
+
+    var url = 'http://twitter.com/statuses/user_timeline/yuilibrary.json?' +
+              'count=3&callback={callback}';
+
+    Y.ls_n.jsonp(url ,function (data) {
+        Y.one('#x').setContent(Y.JSON.stringify(data, null, 4), 'replace');
+    });
+
+});
+</script>
+</body>
+</html>
