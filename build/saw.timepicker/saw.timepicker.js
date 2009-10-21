@@ -26,19 +26,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Inspired by: http://haineault.com/media/jquery/ui-timepickr/page/
 This software is based on a concept by Maxime Haineault in code licensed under
-an MIT license. However, none of his code or implementation details will reviewed
+an MIT license. However, none of his code or implementation details were reviewed
 or used for this project.
 */
 
-
-/**
- * Great widgets from saw
- * 
- * @module widget
- * @requires oop, event-custom, attribute, base, dom, classnamemanager, widget, event
- */
- 
- 
  /**
   * Timepicker a YUI 3 implementation of the classic jQuery
   * timepicker widget
@@ -46,7 +37,7 @@ or used for this project.
   * @namespace Y.Saw
   * @extends Widget
   */
-YUI.add('timepicker', function(Y){
+YUI.add('saw.timepicker', function(Y){
     
 
     var array       = Y.Array,
