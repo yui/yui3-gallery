@@ -1,1 +1,43 @@
-Add README
+YUI 3 Gallery Source
+
+This is the source tree for the YUI 3 Gallery.  The Gallery is a collection of modules that have been developed by the YUI community to enhance the capabilities of YUI 3. 
+
+Gallery modules in this source tree are not part of the official YUI 3 library distribution. They are submissions that have been written and tested by developers in the YUI community, and have been reviewed by members of the YUI Team before they are accepted into the Gallery.  The modules in this source tree are licensed for use under the same BSD license used by YUI.  To facilitate the use() of these modules, the Gallery content in this source tree is hosted on the Yahoo! CDN.
+
+Please note that Gallery modules are not supported by the YUI team.  If you encounter defects in modules you are using or have enhancement requests you would like to submit, do not file these issues in the ticket database on YUILibrary.com. Instead, consult the landing page corresponding to the module for a link to the issue tracker being used by its developer for the location to post your feedback.  You can also visit the Gallery forum to post questions regarding the use of Gallery items as well as provide answers to questions posted by other developers in the community.
+
+Here are some links you may find helpful in your use of the YUI 3 Gallery:
+
+* Gallery Documentation: http://yuilibrary.com/gallery/
+* Gallery FAQ: http://yuilibrary.com/gallery/faq/
+* License: http://developer.yahoo.com/yui/license.html
+* Latest CDN Post: http://yuilibrary.com/gallery/buildtag/latest
+* Discuss: http://yuilibrary.com/forum/gallery/
+* Contributor Info: http://developer.yahoo.com/yui/community/contribute.html
+
+The source tree for the YUI 3 Gallery includes the following directories:
+
+* build: Generated/built module files.  The built files are generated from
+         the contents of the src directory.  Files are provided in full,
+         commented form (suitable for debugging) and in minified form
+         (suitable for deployment and use).
+
+* sandbox: The sandbox directory contains works-in-progress which may 
+         include unreleased module updates under construction, as well as 
+         experimental and/or demonstration code created by module authors.
+
+* src: This directory contains the source code for each module. src may 
+         also contain all module-specific tests.  All modifications to the 
+         module should take place in this directory.
+
+         The src directory also contains build.xml and build.properties files,  
+         which can be used to build individual modules using the YUI component
+         build tool. The YUI component build tool is part of the YUI "builder" 
+         project, also available on GitHub:
+
+         http://github.com/yui/builder
+
+         The README in the componentbuild directory of the builder project
+         covers installation and use of the build tool.
+  
+
