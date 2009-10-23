@@ -37,9 +37,7 @@ or used for this project.
   * @namespace Y.Saw
   * @extends Widget
   */
-YUI.add('saw.timepicker', function(Y){
-    
-
+  
     var array       = Y.Array,
     getClassName= Y.ClassNameManager.getClassName,
     
@@ -391,6 +389,3 @@ YUI.add('saw.timepicker', function(Y){
     Y.Base.build(Timepicker.NAME, Timepicker, {dynamic:false});
     Y.namespace(NAMESPACE +'.'+CONSTRUCTOR);
     Y[NAMESPACE][CONSTRUCTOR] = Timepicker;
-    
-    
-}, '0.2.0', {requires:['oop', 'event-custom', 'attribute','base', 'dom', 'classnamemanager','widget','event']});
