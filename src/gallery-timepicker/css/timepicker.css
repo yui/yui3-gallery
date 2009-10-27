@@ -1,0 +1,57 @@
+.yui-timepicker{
+    display: block;
+    margin: 5px;
+    left: 0;
+    position: relative;
+    background: transparent;
+}
+
+.yui-timepicker-hidden{
+    left: -9999em;
+    position: absolute;
+}
+
+.yui-timepicker{
+    color: #000;
+    font-family: verdana;
+    text-align: left;
+}
+
+.yui-timepicker ol{
+    display: block;
+    position: relative;
+    left: 0;
+    .left: 5px;
+    margin: 0px;
+    padding: 0px;
+    height: 24px;
+    text-align: left;
+    -webkit-transition: left .1s ease-in;
+}
+
+.yui-timepicker li{
+    list-style: none;
+    display: block;
+    float: left;
+    position: relative;
+    left: 0;
+    overflow: hidden;
+    width: 19px;
+    padding: 1px;
+    margin: 0 2px 0 0;
+    border: 1px solid #999;
+    text-align: center;
+}
+
+.yui-timepicker li{
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+
+
+.yui-timepicker li.yui-timepicker-active{
+    background: #000;
+    color: #fff;
+    -moz-box-shadow: 2px 2px 2px #ccc;
+    -webkit-box-shadow: 2px 2px 2px #ccc;
+}
