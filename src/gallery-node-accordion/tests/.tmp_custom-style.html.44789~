@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Plugin: node-accordion </title>
+	<link type="text/css" rel="stylesheet" href="../../../build/cssfonts/fonts-min.css" />
+	<!-- YUI3 Core //-->
+	<script type="text/javascript" src="../../../build/yui/yui-debug.js"></script>
+	<script type="text/javascript" src="../../../build/node-accordion/node-accordion-debug.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../build/node-accordion/assets/node-accordion-core.css" />
+	<style>
+		/* module examples */
+		div#demo {
+		    position:relative;
+		    width:22em;
+		    overflow:hidden;
+		}
+		.yui-accordion {
+		}
+			.yui-accordion .yui-accordion-item {
+				    border: 1px solid #004c6d;
+				    color: #004c6d;
+					text-align: left;
+			}
+				.yui-accordion .yui-accordion-item .yui-accordion-item-hd {
+					background: #406ed9;
+					color: #fff;
+				    border-bottom:1px solid #004c6d;
+					margin: 0px;
+					padding: 5px;
+				}
+				.yui-accordion .yui-accordion-item .yui-accordion-item-bd {
+					background: #abceff;
+					color:#333333;
+					background: #ABCEFF;
+				}
+					.yui-accordion .yui-accordion-item .yui-accordion-item-bd p {
+						padding: 5px;
+					}
+	</style>
+</head>
+<body class="yui-skin-sam">
+    <div id="doc">
+
+		<div id="demo">
+			<div class="hd"><h3 class="title">H3 - Title</h3></div>
+			<div class="bd">
+
+				<div id="myaccordion" class="yui-accordion yui-accordion-hidden">
+
+				    <div class="yui-module yui-accordion-item yui-accordion-item-active">
+			            <div class="yui-hd yui-accordion-item-hd">
+			            	<h3 class="yui-accordion-item-trigger">item 1</h3>
+						</div>
+			            <div class="yui-bd yui-accordion-item-bd">
+			            	<p>
+								item 1 content here...
+					        </p>
+							<p>
+								item 1 content here...
+					        </p>
+							<p>
+								item 1 content here...
+					        </p>
+					    </div>
+						
+					</div>
+				    <div class="yui-module yui-accordion-item">
+			            <div class="yui-hd yui-accordion-item-hd">
+			            	<h3 class="yui-accordion-item-trigger">item 2</h3>
+						</div>
+			            <div class="yui-bd yui-accordion-item-bd">
+			            	<p>
+								item 2 content here...
+					        </p>
+							<p>
+								item 2 content here...
+					        </p>
+							<p>
+								item 2 content here...
+					        </p>
+					    </div>
+			
+					</div>
+			
+				</div>
+
+					
+			</div>
+		</div>
+
+    </div>
+	<!-- Initialization process //-->
+	<script type="text/javascript">
+		YUI({
+		    base: "../../../build/",
+		    filter: 'debug',
+		    combine: false
+		}).use('anim', 'event', 'node', 'node-accordion', function (Y) {
+			
+		    Y.get("#myaccordion").plug(Y.Plugin.NodeAccordion, { 
+				anim: true,
+				speed: 'slow',
+				fade: true,
+				multiple: false,
+				persistent: true
+			});
+			
+		});
+	</script>
+</body>
+</html>
