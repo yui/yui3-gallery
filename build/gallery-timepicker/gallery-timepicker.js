@@ -36,7 +36,7 @@ or used for this project.
 /**
  * A yui 3 timepicker
  * 
- * @module widget
+ * @module Timepicker
  * @requires oop, event-custom, attribute, base, dom, classnamemanager, widget, event
  */
  
