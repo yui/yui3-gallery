@@ -26,18 +26,29 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Inspired by: http://haineault.com/media/jquery/ui-timepickr/page/
 This software is based on a concept by Maxime Haineault in code licensed under
-an MIT license. However, none of his code or implementation details were reviewed
+an MIT license. However, none of his code or implementation details will reviewed
 or used for this project.
 */
 
+
+/**
+ * A yui 3 timepicker
+ * 
+ * @module Timepicker
+ * @requires oop, event-custom, attribute, base, dom, classnamemanager, widget, event
+ */
+ 
+ 
  /**
-  * Timepicker a YUI 3 implementation of the classic jQuery
+  * a YUI 3 implementation of the classic jQuery
   * timepicker widget
   * @class Timepicker
   * @namespace Y.Saw
   * @extends Widget
   */
-  
+
+    
+
     var array       = Y.Array,
     getClassName= Y.ClassNameManager.getClassName,
     
@@ -175,14 +186,36 @@ or used for this project.
               /**
                * This method syncs the value of time object,
                * including building the strings for 12hr and 24hr
-               * also fires a 'timechange' event
+               * also fires a 'timeset' event
                * @method _syncTime
                * @protected
                *
                */
               _syncTime:function(){
-                  
-                  
+
+                  /**
+                   * Fires when a new time has been set (after the time strings)
+                   * have been built. Use this event rather than timeChange.
+                   * @event timeset
+                   * @param {Object} the time attribute object with the following attributes
+                   * <dl>
+                   *   <dt>hour</dt>
+                   *   <dd>The 12 hour hour</dd>
+                   *   <dt>minute</dt>
+                   *   <dd>The minutes</dd>
+                   *   <dt>s12hour</dt>
+                   *   <dd>A string representing the 12 hour time, with a seperator and an am/pm indicator as defined in strings</dd>
+                   *   <dt>s24hour</dt>
+                   *   <dd>A string representing the 24 hour time, with the seperator defined in strings</dd>
+                   * </dl>
+                   */
+
+
+                   /**
+                    * Fires when a cell is clicked on
+                    * @event cellclick
+                    * @param event {Event.Facade} An Event Facade object
+                    */
                   var time = this.get('time'),
                   
                   ampm = time.ampm,
@@ -207,7 +240,7 @@ or used for this project.
                   this.set('time.s24hour', hour + seperator + minute);
                   
                   //fire time change event
-                  this.fire('timechange', this.get('time'));
+                  this.fire('timeset', this.get('time'));
               },
               
               _handleClick:function(e){
