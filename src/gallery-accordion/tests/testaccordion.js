@@ -350,6 +350,22 @@ YUI({
            }
     });
 
+
+    var testLabelChange = new Y.Test.Case( {
+           testLabelChange: function(){
+               var items, item1, nodeLabel, newLabel = "Label, changed dynamically";
+
+               items = that.accordion.get( "items" );
+               item1 = items[ 1 ];
+
+               item1.set( "label", newLabel );
+               nodeLabel = item1.get( "nodeLabel" );
+
+               Y.Assert.areEqual( newLabel, nodeLabel.get( "innerHTML" ),
+                    "Label must be : " + newLabel );
+           }
+    });
+
     //////////////////////////////////////////////////////////////////////////////////////
     
     var console = new Y.Console({
@@ -371,7 +387,7 @@ YUI({
     Y.Test.Runner.add(testAddItemsFromScript);
     Y.Test.Runner.add(testCollapse);
     Y.Test.Runner.add(testClosable);
-    
+    Y.Test.Runner.add(testLabelChange);
 
     this.accordion.after( "render", function(){
         Y.Test.Runner.run();

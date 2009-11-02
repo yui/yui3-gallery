@@ -650,7 +650,7 @@ Y.extend( AccordionItem, Y.Widget, {
         
         if( this.get( RENDERED ) ){
             label = this.get( NODE_LABEL );
-            label.set( INNER_HTML, ["<a href='#'>", params.newVal, "</a>" ].join('') );
+            label.set( INNER_HTML, params.newVal );
         }
     },
 
