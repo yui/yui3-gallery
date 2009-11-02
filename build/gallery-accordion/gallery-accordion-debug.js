@@ -2363,7 +2363,7 @@ Y.extend( AccordionItem, Y.Widget, {
         
         if( this.get( RENDERED ) ){
             label = this.get( NODE_LABEL );
-            label.set( INNER_HTML, ["<a href='#'>", params.newVal, "</a>" ].join('') );
+            label.set( INNER_HTML, params.newVal );
         }
     },
 
@@ -2607,4 +2607,4 @@ Y.AccordionItem = AccordionItem;
 
 
 
-}, 'gallery-2009.10.27' ,{requires:['event', 'anim-easing', 'dd-constrain', 'dd-proxy', 'dd-drop', 'widget', 'widget-stdmod', 'json-parse']});
+}, 'gallery-2009.11.02-20' ,{requires:['event', 'anim-easing', 'dd-constrain', 'dd-proxy', 'dd-drop', 'widget', 'widget-stdmod', 'json-parse']});
