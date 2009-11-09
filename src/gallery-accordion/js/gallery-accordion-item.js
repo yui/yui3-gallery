@@ -1,5 +1,5 @@
 /**
- * Provides the Accordion class
+ * Provides AccordionItem class
  *
  * @module gallery-accordion
  */
@@ -72,7 +72,12 @@ var Lang = Y.Lang,
     HREF = "href",
     HREF_VALUE = "#",
     YUICONFIG = "yuiConfig",
-    HEADER_CONTENT = "headerContent";
+    HEADER_CONTENT = "headerContent",
+
+    REGEX_TRUE = /^(?:true|yes|1)$/,
+    REGEX_AUTO = /^auto\s*/,
+    REGEX_STRETCH = /^stretch\s*/,
+    REGEX_FIXED = /^fixed-\d+/;
 
 /**
  *  Static property provides a string to identify the class.
@@ -193,7 +198,7 @@ AccordionItem.ATTRS = {
     },
 
     /**
-     * @description Get/Set the expanded status of the item
+     * @description Get/Set expanded status of the item
      *
      * @attribute expanded
      * @default false
@@ -239,7 +244,7 @@ AccordionItem.ATTRS = {
     },
 
     /**
-     * @description Get/Set the expanded status of the item
+     * @description Get/Set always visible status of the item
      *
      * @attribute alwaysVisible
      * @default false
@@ -319,12 +324,18 @@ AccordionItem.HTML_PARSER = {
     },
 
     label: function( contentBox ){
-        var node, labelSelector, yuiConfig;
+        var node, labelSelector, yuiConfig, label;
         
         yuiConfig = this._getConfigDOMAttribute( contentBox );
         
         if( yuiConfig && Lang.isValue( yuiConfig.label ) ){
             return yuiConfig.label;
+        }
+
+        label = contentBox.getAttribute( "data-label" );
+
+        if( label ){
+            return label;
         }
 
         labelSelector = HEADER_SELECTOR_SUB + C_LABEL;
@@ -379,53 +390,96 @@ AccordionItem.HTML_PARSER = {
     },
 
     expanded: function( contentBox ){
-        var yuiConfig = this._getConfigDOMAttribute( contentBox );
+        var yuiConfig, expanded;
 
-        if( yuiConfig && Lang.isValue( yuiConfig.expanded ) ){
+        yuiConfig = this._getConfigDOMAttribute( contentBox );
+
+        if( yuiConfig && Lang.isBoolean( yuiConfig.expanded ) ){
             return yuiConfig.expanded;
+        }
+
+        expanded = contentBox.getAttribute( "data-expanded" );
+
+        if( expanded ) {
+            return REGEX_TRUE.test( expanded );
         }
 
         return contentBox.hasClass( C_EXPANDED );
     },
 
     alwaysVisible: function( contentBox ){
-        var value, yuiConfig;
+        var yuiConfig, alwaysVisible;
 
         yuiConfig = this._getConfigDOMAttribute( contentBox );
 
-        if( yuiConfig && Lang.isValue( yuiConfig.alwaysVisible ) ){
-            value = yuiConfig.alwaysVisible;
+        if( yuiConfig && Lang.isBoolean( yuiConfig.alwaysVisible ) ){
+            alwaysVisible = yuiConfig.alwaysVisible;
         } else {
-            value = contentBox.hasClass( C_ALWAYSVISIBLE );
+            alwaysVisible = contentBox.getAttribute( "data-alwaysvisible" );
+
+            if( alwaysVisible ) {
+                alwaysVisible = REGEX_TRUE.test( alwaysVisible );
+            } else {
+                alwaysVisible = contentBox.hasClass( C_ALWAYSVISIBLE );
+            }
         }
 
-        if( Lang.isBoolean(value) && value ){
+        if( alwaysVisible ){
             this.set( "expanded", true, {
                 internalCall: true
             } );
         }
 
-        return value;
+        return alwaysVisible;
     },
 
     closable: function( contentBox ){
-        var yuiConfig = this._getConfigDOMAttribute( contentBox );
+        var yuiConfig, closable;
 
-        if( yuiConfig && Lang.isValue( yuiConfig.closable ) ){
+        yuiConfig = this._getConfigDOMAttribute( contentBox );
+
+        if( yuiConfig && Lang.isBoolean( yuiConfig.closable ) ){
             return yuiConfig.closable;
+        }
+
+        closable = contentBox.getAttribute( "data-closable" );
+
+        if( closable ) {
+            return REGEX_TRUE.test( closable );
         }
 
         return contentBox.hasClass( C_CLOSABLE );
     },
 
     contentHeight: function( contentBox ){
-        var contentHeightClass, classValue, height = 0, i, length, index, chr, yuiConfig;
+        var contentHeightClass, classValue, height = 0, index, yuiConfig,
+            contentHeight;
 
         yuiConfig = this._getConfigDOMAttribute( contentBox );
 
         if( yuiConfig && yuiConfig.contentHeight ){
             return yuiConfig.contentHeight;
         }
+
+        contentHeight = contentBox.getAttribute( "data-contentheight" );
+
+        if( REGEX_AUTO.test( contentHeight ) ){
+            return {
+                method: AUTO
+            };
+        } else if( REGEX_STRETCH.test( contentHeight ) ){
+            return {
+                method: STRETCH
+            };
+        } else if( REGEX_FIXED.test( contentHeight ) ){
+            height = this._extractFixedMethodValue( contentHeight );
+
+            return {
+                method: FIXED,
+                height: height
+            };
+        }
+
 
         classValue = contentBox.get( CLASS_NAME );
 
@@ -434,31 +488,21 @@ AccordionItem.HTML_PARSER = {
         index = classValue.indexOf( contentHeightClass, 0);
 
         if( index >= 0 ){
-            length = classValue.length;
             index += contentHeightClass.length;
 
             classValue = classValue.substring( index );
 
-            if( classValue.match( /^auto\s*/g ) ){
+            if( REGEX_AUTO.test( classValue ) ){
                 return {
                     method: AUTO
                 };
-            } else if( classValue.match( /^stretch\s*/g ) ){
+            } else if( REGEX_STRETCH.test( classValue ) ){
                 return {
                     method: STRETCH
                 };
-            } else if( classValue.match( /^fixed-\d+/g )  ){
-                for( i = 6, length = classValue.length; i < length; i++ ){ // 6 = "fixed-".length
-                    chr = classValue.charAt(i);
-                    chr = parseInt( chr, 10 );
-
-                    if( Lang.isNumber( chr ) ){
-                        height = (height * 10) + chr;
-                    } else {
-                        break;
-                    }
-                }
-
+            } else if( REGEX_FIXED.test( classValue )  ){
+                height = this._extractFixedMethodValue( classValue );
+                
                 return {
                     method: FIXED,
                     height: height
@@ -865,9 +909,9 @@ Y.extend( AccordionItem, Y.Widget, {
      * This function will be replaced with more clever solution when YUI 3.1 becomes available
      *
      * @method _getConfigDOMAttribute
-     * @private
      * @param {Node} contentBox Widget's contentBox
      * @return {Object} The parsed yuiConfig value
+     * @private
      */
     _getConfigDOMAttribute: function( contentBox ) {
         if( !this._parsedCfg ){
@@ -879,6 +923,33 @@ Y.extend( AccordionItem, Y.Widget, {
         }
 
         return this._parsedCfg;
+    },
+
+
+    /**
+     * Parses and returns the value of contentHeight property, if set method "fixed".
+     * The value must be in this format: fixed-X, where X is integer
+     *
+     * @method _extractFixedMethodValue
+     * @param {String} value The value to be parsed
+     * @return {Number} The parsed value or null
+     * @protected
+     */
+    _extractFixedMethodValue: function( value ){
+        var i, length, chr, height = null;
+
+        for( i = 6, length = value.length; i < length; i++ ){ // 6 = "fixed-".length
+            chr = value.charAt(i);
+            chr = parseInt( chr, 10 );
+
+            if( Lang.isNumber( chr ) ){
+                height = (height * 10) + chr;
+            } else {
+                break;
+            }
+        }
+
+        return height;
     }
     
 });

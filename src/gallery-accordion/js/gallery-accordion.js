@@ -1,5 +1,5 @@
 /**
- * Provides the Accordion class
+ * Provides Accordion widget
  *
  * @module gallery-accordion
  */

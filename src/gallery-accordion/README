@@ -1,6 +1,8 @@
 Accordion widget for YUI 3
 
 I. Changelog
+ver. 1.05
+  - Setting item label bugfix
 ver. 1.04
   - progressive enhancement improvements in AccordionItem
   - header HTML structure changed - table no more used, links will be used instead
