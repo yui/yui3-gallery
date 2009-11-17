@@ -49,20 +49,24 @@ Y.extend(ChoiceField, Y.FormField, {
         if (!Y.Lang.isArray(val)) {
             return false;
         }
+		
+		var valid = true;
 
-        for (var i=0, l=val.length;i<l;i++) {
-            if (!Y.Lang.isObject(val[i])) {
-                return false;
+		Y.Array.each(val, function(c, i, a) {
+            if (!Y.Lang.isObject(c)) {
+                valid = false;
+				return;
             }
-            if (!val[i].label ||
-                !Y.Lang.isString(val[i].label) ||
-                !val[i].value ||
-                !Y.Lang.isString(val[i].value)) {
-                return false;
+            if (!c.label ||
+                !Y.Lang.isString(c.label) ||
+                !c.value ||
+                !Y.Lang.isString(c.value)) {
+					valid = false;
+					return;
             }
-        }
+        });
 
-        return true;
+        return valid;
     },
 
     _renderLabelNode : function () {
@@ -77,16 +81,15 @@ Y.extend(ChoiceField, Y.FormField, {
     _renderFieldNode : function () {
         var contentBox = this.get('contentBox'),
             choices = this.get('choices'),
-            i=0, l=choices.length,
             elLabel, elField;
-        
-        for(;i<l;i++) {
+       
+		Y.Array.each(choices, function(c, i, a) {
             elLabel = Y.Node.create(FormField.LABEL_TEMPLATE);
             contentBox.appendChild(elLabel);
             
             elField = Y.Node.create(FormField.INPUT_TEMPLATE);
             contentBox.appendChild(elField);
-        }
+        });
 
 		this._fieldNode = contentBox.all('input');
     },

@@ -75,15 +75,33 @@ Y.mix(FormField, {
 		/**
 		 * @attribute validator
 		 * @type Function
-		 * @default function () { return true; }
+		 * @default "function () { return true; }"
 		 * @description Used to validate this field by the Form class
 		 */
 		validator : {
 			value : function (val) {
 				return true;
 			},
-			validator : Y.Lang.isFunction
+			validator : function (val) {
+				return this._validateValidator(val);
+			},
+			setter : function (val) {
+				return this._setValidator(val);
+			}
 		},
+
+		/**
+		 * @attribute error
+		 * @type String
+		 * @description An error message associated with this field. Setting this will
+		 *				cause validation to fail until a new value is entered
+		 */
+		 error : {
+			value : false,
+			validator : function (val) {
+				return this._validateError(val);
+			}
+		 },
 		
 		/**
 		 * @attribute required
@@ -92,6 +110,17 @@ Y.mix(FormField, {
 		 * @description Set true if this field must be filled out when submitted
 		 */
 		required : {
+			value : false,
+			validator : Y.Lang.isBoolean
+		},
+
+		/**
+		 * @attribute validateInline
+		 * @type Boolean
+		 * @default false
+		 * @description Set to true to validate this field whenever it's value is changed
+		 */
+		validateInline : {
 			value : false,
 			validator : Y.Lang.isBoolean
 		}
@@ -103,6 +132,178 @@ Y.mix(FormField, {
 	 * @description The current tab index of all FormField instances
 	 */
 	tabIndex : 0,
+	
+	/**
+	 * @method FormField.VALIDATE_EMAIL_ADDRESS
+	 * @static
+	 * @description Utility function to validate an email address
+	 */
+	VALIDATE_EMAIL_ADDRESS : function (val, field) {
+		var filter = /^([\w]+(?:\.[\w]+)*)@((?:[\w]+\.)*\w[\w]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+		if (filter.test(val) === false) {
+			field.set('error', FormField.INVALID_EMAIL_MESSAGE);
+			return false;
+		}
+		
+		return true;
+	},
+
+	/**
+	 * @property FormField.INVALID_EMAIL_MESSAGE
+	 * @type String
+	 * @description Message to display when an invalid email address is entered
+	 */
+	INVALID_EMAIL_MESSAGE : "Please enter a valid email address",
+
+	/**
+	 * @method FormField.VALIDATE_PHONE_NUMBER
+	 * @static
+	 * @description Utility function to validate US and international phone numbers
+	 */
+	VALIDATE_PHONE_NUMBER : function(val, field) {
+		var filter = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/;
+		if (filter.test(val) === false) {
+			field.set('error', FormField.INVALID_PHONE_NUMBER);
+			return false;
+		}
+		return true;
+	},
+
+	/**
+	 * @property FormField.INVALID_PHONE_NUMBER
+	 * @type String
+	 * @description Message to display when an invalid phone number is entered
+	 */
+	INVALID_PHONE_NUMBER : "Please enter a valid phone number",
+
+	/**
+	 * @method FormField.VALIDATE_IP_ADDRESS
+	 * @static
+	 * @description Utility function to validate IPv4 addresses
+	 */
+	VALIDATE_IP_ADDRESS : function (val, field) {
+		var filter = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/,
+			arr, valid = true;
+
+		if (filter.test(val) === false) {
+			valid = false;
+		}
+		
+		arr = val.split(".");
+		Y.Array.each(arr, function (v, i, a) {
+			var n = parseInt(v, 10);
+			if (n < 0 || n > 255) {
+				valid = false;
+			}
+		});
+
+		if (valid === false) {
+			field.set('error', FormField.INVALID_IP_MESSAGE);
+		}
+
+		return valid;
+	},
+
+	/**
+	 * @property FormField.INVALID_IP_MESSAGE
+	 * @type String
+	 * @description Message to display when an invalid IP address is entered
+	 */
+	INVALID_IP_MESSAGE : "Please enter a valid IP address",
+
+	/**
+	 * @method FormField.VALIDATE_DATE
+	 * @static
+	 * @description Utility function to validate dates
+	 */
+	VALIDATE_DATE : function (val, field) {
+		var filter = /^([1-9]|1[0-2])(\-|\/)([0-2][0-9]|3[0-1])(\-|\/)(\d{4}|\d{2})$/;
+		if (filter.test(val) === false) {
+			field.set('error', FormField.INVALID_DATE_MESSAGE);
+			return false;
+		}
+		return true;
+	},
+
+	/**
+	 * @property FormField.INVALID_DATE_MESSAGE
+	 * @type String
+	 * @description Message to display when an invalid date is entered
+	 */
+	INVALID_DATE_MESSAGE : "Please enter a a valid date",
+
+	/**
+	 * @method FormField.VALIDATE_TIME
+	 * @static
+	 * @description Utility function to validate times
+	 */
+	VALIDATE_TIME : function (val, field) {
+		var filter = /^([1-9]|1[0-2]):[0-5]\d(:[0-5]\d(\.\d{1,3})?)?$/;
+		if (filter.test(val) === false) {
+			field.set('error', FormField.INVALID_TIME_MESSAGE);
+			return false;
+		}
+		return true;
+	},
+
+	/**
+	 * @property FormField.INVALID_TIME_MESSAGE
+	 * @type String
+	 * @description Message to display when an invalid time is entered
+	 */
+	INVALID_TIME_MESSAGE : "Please enter a valid time",
+
+	/**
+	 * @method FormField.VALIDATE_POSTAL_CODE
+	 * @static
+	 * @description Utility function to validate US and international postal codes
+	 */
+	VALIDATE_POSTAL_CODE : function (val, field) {
+		var filter,
+			valid = true;
+
+		if (val.length == 6 || val.length == 7) {
+			filter = /^[a-zA-Z]\d[a-zA-Z](-|\s)?\d[a-zA-Z]\d$/;
+		} else if (val.length == 5 || val.length == 10) {
+			filter = /^\d{5}((-|\s)\d{4})?$/;
+		} else if (val.length > 0) {
+			valid = false;
+		}
+
+		if (valid === false || (filter && filter.test(val) === false)) {
+			field.set('error', FormField.INVALID_POSTAL_CODE_MESSAGE);
+			return false;
+		}
+		return true;
+	},
+
+	/**
+	 * @property FormField.INVALID_POSTAL_CODE_MESSAGE
+	 * @type String
+	 * @description Message to display when an invalid postal code is entered
+	 */
+	INVALID_POSTAL_CODE_MESSAGE : "Please enter a valid postal code",
+
+	/**
+	 * @method FormField.VALIDATE_NO_SPECIAL_CHARS
+	 * @static
+	 * @description Utility function to validate only alphanumeric characters
+	 */
+	VALIDATE_NO_SPECIAL_CHARS : function (val, field) {
+		var filter = /^[a-zA-Z0-9]*$/;
+		if(filter.test(val) === false) {
+			field.set('error', FormField.INVALID_SPECIAL_CHARS);
+			return false;
+		}
+		return true;
+	},
+
+	/**
+	 * @property FormField.INVALID_SPECIAL_CHARS
+	 * @type String
+	 * @description Message to display when invalid characters are entered
+	 */
+	INVALID_SPECIAL_CHARS : "Please use only letters and numbers",
 
 	/**
 	 * @property FormField.INPUT_TEMPLATE
@@ -167,6 +368,74 @@ Y.extend(FormField, Y.Widget, {
 	_nodeType : 'text',
 	
 	/**
+	 * @method _validateError
+	 * @protected
+	 * @param val {Mixed}
+	 * @description Validates the value passed to the error attribute
+	 * @return {Boolean}
+	 */
+	_validateError : function (val) {
+		if (Y.Lang.isString(val)) {
+			return true;
+		}
+		if (val === null || typeof val == 'undefined') {
+			return true;
+		}
+
+		return false;
+	},
+
+	/**
+	 * @method _validateValidator
+	 * @protected
+	 * @param val {Mixed}
+	 * @description Validates the input of the validator attribute
+	 * @return {Boolean}
+	 */
+	 _validateValidator : function (val) {
+		if (Y.Lang.isString(val)) {
+			var validate = /^(email|phone|ip|date|time|postal|special)$/;
+			if (validate.test(val) === true) {
+				return true;
+			}
+		}
+		if (Y.Lang.isFunction(val)) {
+			return true;
+		}
+		return false;
+	 },
+
+	/**
+	 * @method _setValidator
+	 * @protected
+	 * @param {val} {String|Function}
+	 * @description Sets the validator to the supplied method or if one of the 
+	 *				convenience strings is passed, the corresponding utility
+	 *				validator
+	 * @return {Function}
+	 */
+	 _setValidator : function (val) {
+		Y.log('Set: ' + val);
+		if (val == "email") {
+			return FormField.VALIDATE_EMAIL_ADDRESS;
+		} else if (val == "phone") {
+			return FormField.VALIDATE_PHONE_NUMBER;
+		} else if (val == "ip") {
+			return FormField.VALIDATE_IP_ADDRESS;
+		} else if (val == "date") {
+			return FormField.VALIDATE_DATE;
+		} else if (val == "time") {
+			return FormField.VALIDATE_TIME;
+		} else if (val == "postal") {
+			return FormField.VALIDATE_POSTAL_CODE;
+		} else if (val == "special") {
+			return FormField.VALIDATE_NO_SPECIAL_CHARS;
+		}
+
+		return val;
+	 },
+
+	/**
 	 * @method _renderLabelNode
 	 * @protected
 	 * @description Draws the form field's label node into the contentBox
@@ -229,6 +498,18 @@ Y.extend(FormField, Y.Widget, {
 		this._fieldNode.setAttribute('tabindex', FormField.tabIndex);
 		FormField.tabIndex++;
 	},
+
+	/**
+	 * @method _syncError
+	 * @private
+	 * @description Displays any pre-defined error message
+	 */
+	_syncError : function () {
+		var err = this.get('error');
+		if (err) {
+			this._showError(err);
+		}
+	},
 	
 	/**
 	 * @method _checkRequired
@@ -244,11 +525,12 @@ Y.extend(FormField, Y.Widget, {
 	},
 	
 	/**
-	 * @method showError
+	 * @method _showError
 	 * @param {String} errMsg
+	 * @private
 	 * @description Adds an error node with the supplied message
 	 */
-	showError : function (errMsg) {
+	_showError : function (errMsg) {
 		var contentBox = this.get('contentBox'),
 			errorNode = Y.Node.create('<span>' + errMsg + '</span>');
 		
@@ -259,34 +541,47 @@ Y.extend(FormField, Y.Widget, {
 	},
 	
 	/**
-	 * @method clearError
+	 * @method _clearError
+	 * @private
 	 * @description Removes the error node from this field
 	 */
-	clearError : function () {
+	_clearError : function () {
 		if (this._errorNode) {
 			var contentBox = this.get('contentBox');
 			contentBox.removeChild(this._errorNode);
 			this._errorNode = null;
 		}
 	},
+
+	_enableInlineValidation : function () {
+		this.after('valueChange', Y.bind(this.validateField, this));
+	},
+
+	_disableInlineValidation : function () {
+		this.detach('valueChange', this.validateField, this);
+	},
 	
 	/**
-	 * @method validate
+	 * @method validateField
 	 * @description Runs the validation functions of this form field
 	 * @return {Boolean}
 	 */
-	validate : function () {
+	validateField : function (e) {
 		var value = this.get('value'),
 			validator = this.get('validator');
 
-		this.clearError();
+		this.set('error', null);
+
+		if (e && e.src != 'ui') {
+			return false;
+		}
 
 		if (!this._checkRequired()) {
-			this.showError('This field is required');
+			this.set('error', 'This field is required');
 			return false;
 		}
 							
-		return validator.call(this, value);
+		return validator.call(this, value, this);
 	},
 
 	/**
@@ -315,18 +610,51 @@ Y.extend(FormField, Y.Widget, {
 
 	bindUI : function () {
 		this._fieldNode.on('change', Y.bind(function (e) {
-			this.set('value', this._fieldNode.get('value'));
+			this.set('value', this._fieldNode.get('value'), {src : 'ui'});
+			this.fire('change', e);
 		}, this));
 		
 		this.on('valueChange', Y.bind(function (e) {
-			this._fieldNode.set('value', e.newVal);
-		}, this)); 
+			if (e.src != 'ui') {
+				this._fieldNode.set('value', e.newVal);
+			}			
+		}, this));
+
+		this._fieldNode.on('blur', Y.bind(function (e) {
+			this.set('value', this._fieldNode.get('value'), {src : 'ui'});
+			this.fire('blur', e);
+		}, this));
+
+		this._fieldNode.on('focus', Y.bind(function(e) {
+			this.fire('focus', e);
+		}, this));
+		
+		this.on('errorChange', Y.bind(function (e) {
+			if (e.newVal) {
+				this._showError(e.newVal);
+			} else {
+				this._clearError();
+			}
+		}, this));
+
+		this.on('validateInlineChange', Y.bind(function (e) {
+			if (e.newVal === true) {
+				this._enableInlineValidation();
+			} else {
+				this._disableInlineValidation();
+			}
+		}, this));
 	},
 
 	syncUI : function () {
 		this.get('boundingBox').removeAttribute('tabindex');
 		this._syncLabelNode();
 		this._syncFieldNode();
+		this._syncError();
+
+		if (this.get('validateInline') === true) {
+			this._enableInlineValidation();
+		}
 	}
 });
 
