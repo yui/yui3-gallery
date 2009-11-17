@@ -27,6 +27,8 @@ YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
     this.multiExpand = false;
 
 };
+var NS = Y.namespace('apm');
+NS.MenuNode = YAHOO.widget.MenuNode;
 
 Y.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
 

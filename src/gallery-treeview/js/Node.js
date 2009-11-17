@@ -22,6 +22,9 @@ YAHOO.widget.Node = function(oData, oParent, expanded) {
     if (oData) { this._nodeinit(oData, oParent, expanded); }
 };
 
+var NS = Y.namespace('apm');
+NS.Node = YAHOO.widget.Node;
+
 // YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 Y.extend(YAHOO.widget.Node, Y.PortBase, {
 

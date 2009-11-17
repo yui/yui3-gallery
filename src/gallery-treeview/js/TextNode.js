@@ -33,6 +33,8 @@ YAHOO.widget.TextNode = function(oData, oParent, expanded) {
         this.setUpLabel(oData);
     }
 };
+var NS = Y.namespace('apm');
+NS.TextNode = YAHOO.widget.TextNode;
 
 Y.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     

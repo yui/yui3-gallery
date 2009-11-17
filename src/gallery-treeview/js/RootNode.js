@@ -23,6 +23,8 @@ var RootNode = function(oTree) {
 };
 
 YAHOO.widget.RootNode = RootNode;
+var NS = Y.namespace('apm');
+NS.RootNode = YAHOO.widget.RootNode;
 
 Y.extend(RootNode, YAHOO.widget.Node, {
     

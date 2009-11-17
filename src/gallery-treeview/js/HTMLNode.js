@@ -35,6 +35,8 @@ YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
         this.initContent(oData, hasIcon);
     }
 };
+var NS = Y.namespace('apm');
+NS.HTMLNode = YAHOO.widget.HTMLNode;
 
 Y.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 
