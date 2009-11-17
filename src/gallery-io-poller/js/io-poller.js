@@ -1,5 +1,5 @@
 	/**
-	 * gallery-io-poller - A utility to smartly poll (via XHR requests) a resource on the server.
+	 * IO Poller - A utility to smartly poll (via XHR requests) a resource on the server.
 	 * http://925html.com/code/smart-polling/
 	 * 
 	 * Oddnut Software
@@ -266,9 +266,9 @@
 			
 			config = Y.merge(ioConfig, {
 				
-				headers	: headers,
+				headers	: Y.merge(ioConfig.headers, headers),
 				context	: this,
-				on		: Y.merge(ioConfig, {
+				on		: Y.merge(ioConfig.on, {
 					
 					start		: this._defStartHandler,
 					complete	: this._defCompleteHandler,
