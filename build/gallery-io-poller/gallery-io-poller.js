@@ -1,7 +1,7 @@
 YUI.add('gallery-io-poller', function(Y) {
 
 	/**
-	 * gallery-io-poller - A utility to smartly poll (via XHR requests) a resource on the server.
+	 * IO Poller - A utility to smartly poll (via XHR requests) a resource on the server.
 	 * http://925html.com/code/smart-polling/
 	 * 
 	 * Oddnut Software
@@ -268,9 +268,9 @@ YUI.add('gallery-io-poller', function(Y) {
 			
 			config = Y.merge(ioConfig, {
 				
-				headers	: headers,
+				headers	: Y.merge(ioConfig.headers, headers),
 				context	: this,
-				on		: Y.merge(ioConfig, {
+				on		: Y.merge(ioConfig.on, {
 					
 					start		: this._defStartHandler,
 					complete	: this._defCompleteHandler,
@@ -394,4 +394,4 @@ YUI.add('gallery-io-poller', function(Y) {
 	
 
 
-}, 'gallery-2009.11.02-20' ,{requires:['io-base', 'base-base']});
+}, 'gallery-2009.11.17-23' ,{requires:['io-base', 'base-base']});

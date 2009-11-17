@@ -69,9 +69,10 @@ var TV = function(id, oConfig) {
 };
 
 
+TV.KEY = KEY;
 Widget.TreeView = TV;
-Y.TreeView = TV;
-Y.TreeView.KEY = KEY;
+var NS = Y.namespace('apm');
+NS.TreeView = TV;
 
 // YAHOO.augment(TV, YAHOO.util.EventProvider);
 Y.extend(TV, Y.PortBase, {
@@ -1451,6 +1452,9 @@ TV.FOCUS_CLASS_NAME = 'ygtvfocus';
 YAHOO.widget.Node = function(oData, oParent, expanded) {
     if (oData) { this._nodeinit(oData, oParent, expanded); }
 };
+
+var NS = Y.namespace('apm');
+NS.Node = YAHOO.widget.Node;
 
 // YAHOO.augment(YAHOO.widget.Node, YAHOO.util.EventProvider);
 Y.extend(YAHOO.widget.Node, Y.PortBase, {
@@ -2919,6 +2923,8 @@ var RootNode = function(oTree) {
 };
 
 YAHOO.widget.RootNode = RootNode;
+var NS = Y.namespace('apm');
+NS.RootNode = YAHOO.widget.RootNode;
 
 Y.extend(RootNode, YAHOO.widget.Node, {
     
@@ -3018,6 +3024,8 @@ YAHOO.widget.TextNode = function(oData, oParent, expanded) {
         this.setUpLabel(oData);
     }
 };
+var NS = Y.namespace('apm');
+NS.TextNode = YAHOO.widget.TextNode;
 
 Y.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
     
@@ -3205,6 +3213,8 @@ YAHOO.widget.MenuNode = function(oData, oParent, expanded) {
     this.multiExpand = false;
 
 };
+var NS = Y.namespace('apm');
+NS.MenuNode = YAHOO.widget.MenuNode;
 
 Y.extend(YAHOO.widget.MenuNode, YAHOO.widget.TextNode, {
 
@@ -3255,6 +3265,8 @@ YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
         this.initContent(oData, hasIcon);
     }
 };
+var NS = Y.namespace('apm');
+NS.HTMLNode = YAHOO.widget.HTMLNode;
 
 Y.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 
@@ -3732,4 +3744,4 @@ Y.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 })();
 
 
-}, 'gallery-2009.11.09-19' ,{requires:['node','gallery-port']});
+}, 'gallery-2009.11.17-23' ,{requires:['node','gallery-port']});
