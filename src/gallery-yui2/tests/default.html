@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 3: gallery-yui2 </title>
+	<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css" />
+	<style>
+
+		/* module examples */
+		div#demo {
+		    position:relative;
+		    width:42em;
+		    overflow:hidden;
+		}
+
+	</style>
+</head>
+<body class="yui-skin-sam">
+    <div id="doc">
+
+		<div>
+			<div class="hd"><h1 class="title">Utility: gallery-yui2</h1></div>
+			<div class="bd">
+				yui2 legacy code (tabview from markup):
+				<p>http://developer.yahoo.com/yui/examples/tabview/frommarkup_clean.html</p>
+				
+				<div id="demo" class="yui-navset">
+				    <ul class="yui-nav">
+				        <li><a href="#tab1"><em>Tab One Label</em></a></li>
+				        <li class="selected"><a href="#tab2"><em>Tab Two Label</em></a></li>
+				        <li><a href="#tab3"><em>Tab Three Label</em></a></li>
+				    </ul>            
+				    <div class="yui-content">
+				        <div id="tab1"><p>Tab One Content</p></div>
+				        <div id="tab2"><p>Tab Two Content</p></div>
+				        <div id="tab3"><p>Tab Three Content</p></div>
+				    </div>
+				</div>
+
+			</div>
+		</div>
+
+    </div>
+	<!-- YUI3 Core //-->
+	<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-debug.js"></script>
+	<script type="text/javascript" src="../../../build/gallery-yui2/gallery-yui2-debug.js"></script>
+	<!-- Initialization process //-->
+	<script type="text/javascript">
+		YUI({
+		    base: "http://yui.yahooapis.com/3.0.0/build/",
+		    filter: 'debug',
+		    combine: false,
+	        useConsole: true,
+	        logExclude: {Dom: true, Selector: true, Node: true, attribute: true, base: true, event: true}
+		}).use('console', 'test', 'gallery-yui2', function (Y) {
+			
+		    // creating the console...
+			(new Y.Console()).render();
+			
+			// starting the testing process
+			var flag = false;
+			
+			Y.yui2().use('tabview', function () {
+				flag = true;
+			});
+			
+			Y.Test.Wait (function () {}, 4000);
+			
+			// add the test cases and suites 
+			Y.Test.Runner.add(new Y.Test.Case({
+				
+				name: "Node Accordion Tests",
+				
+				test_init: function(){
+					
+					//wait 3000 milliseconds and then run this function 
+					this.wait(function(){ 
+						Y.Assert.isTrue(flag, "Something happening during the loading process, the callback function was not executed with 3sec");
+					}, 3000); 
+					
+				},
+				
+				test_checking_global_yui2: function(){
+					
+					Y.Assert.isObject(YAHOO, "Global YAHOO object was not defined correctly.");
+				
+				},
+				
+				test_checking_tabview: function(){
+					
+					var tabView = new YAHOO.widget.TabView('demo');
+					Y.Assert.isObject(tabView, "Something happening during the instantiation process for the tabview.");
+				
+				}
+				
+			})); 
+			
+			//run all tests 
+			Y.Test.Runner.run();
+			
+			/* finishing the testing process */
+			
+		});
+	</script>
+</body>
+</html>
