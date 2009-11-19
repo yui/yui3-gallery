@@ -394,4 +394,4 @@ YUI.add('gallery-io-poller', function(Y) {
 	
 
 
-}, 'gallery-2009.11.17-23' ,{requires:['io-base', 'base-base']});
+}, 'gallery-2009.11.19-20' ,{requires:['io-base', 'base-base']});

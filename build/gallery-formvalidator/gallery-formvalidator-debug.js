@@ -2922,4 +2922,4 @@ YUI.add('gallery-formvalidator', function(Y) {
     Y.SelectField = _SelectField;
 
 
-}, 'gallery-2009.11.17-23' ,{requires:['node', 'event', 'dom', 'base']});
+}, 'gallery-2009.11.19-20' ,{requires:['node', 'event', 'dom', 'base']});

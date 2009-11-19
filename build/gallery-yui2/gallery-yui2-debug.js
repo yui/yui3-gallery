@@ -213,4 +213,4 @@ Y.yui2 = function (o) {
 };
 
 
-}, 'gallery-2009.11.17-23' ,{requires:['node-base', 'get', 'async-queue']});
+}, 'gallery-2009.11.19-20' ,{requires:['node-base', 'get', 'async-queue']});
