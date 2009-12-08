@@ -56,6 +56,10 @@ Y.extend(SelectField, Y.ChoiceField, {
         var choices = this.get('choices'),
             elOption;
        
+		// Create the "Choose one" option
+		elOption = Y.Node.create(SelectField.OPTION_TEMPLATE);
+		this._fieldNode.appendChild(elOption);
+
 		Y.Array.each(choices, function (c, i, a) {
 			elOption = Y.Node.create(SelectField.OPTION_TEMPLATE);
             this._fieldNode.appendChild(elOption);
