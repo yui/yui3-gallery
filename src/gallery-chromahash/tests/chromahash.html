@@ -19,7 +19,7 @@ YUI({
 		name: "ChromaHash Test Cases",
 		testBaseChromaHash: function() {
 			var p = Y.one('#password');
-			(new Y.ChromaHash({node: p})).render();
+			p.plug(Y.ChromaHash);
 			p.set('value','testPassword');
 			p.simulate('keyup');
 
