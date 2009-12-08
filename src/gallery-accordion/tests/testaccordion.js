@@ -21,13 +21,6 @@ YUI({
     });
 
 
-    this.accordion2 = new Y.Accordion( {
-        boundingBox: "#bb2",
-        contentBox: "#acc2",
-        useAnimation: false,
-        collapseOthersOnExpand: false
-    });
-
     /**
      * Set some params just before adding items in the accordion
      */
@@ -375,7 +368,7 @@ YUI({
                item4.set( "closable", true );
                iconClose = item4.get( "iconClose" );
 
-               Y.Event.simulate(  Y.Node.getDOMNode(iconClose), "click" );
+               Y.Event.simulate( Y.Node.getDOMNode(iconClose), "click" );
 
                items = that.accordion1.get( "items" );
                Y.Assert.areEqual( 4, items.length, "There must be 4 items" );
@@ -399,6 +392,75 @@ YUI({
     });
 
     
+    //////////////////////////////////////////////////////////////////////////////////////
+    
+    var console = new Y.Console({
+        verbose : false,
+        printTimeout: 0,
+        newestOnTop : false,
+        entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
+                '<span class="{entry_cat_class}">{label}</span>'+
+                '<span class="{entry_content_class}">{message}</span>'+
+        '</pre>'
+    }).render();
+
+    
+    Y.Test.Runner.add(testBuildFromMarkup);
+    Y.Test.Runner.add(testInsertRemoveItems);
+    Y.Test.Runner.add(testUserInteractions);
+    Y.Test.Runner.add(testContentManipulation);
+    Y.Test.Runner.add(testAddItemsFromScript);
+    Y.Test.Runner.add(testCollapse);
+    Y.Test.Runner.add(testClosable);
+    Y.Test.Runner.add(testLabelChange);
+
+    Y.Test.Runner.on( 'complete', function( resCont ){
+        var color;
+        var results = resCont.results;
+        var res1 = Y.get( "#acc_result1" );
+        res1.setContent(
+            [ "Accordion1 - tests completed.<br>",
+              "Passed:", results.passed,
+              "Failed:", results.failed,
+              "Ignored:", results.failed,
+              "Total:", results.total
+            ].join( ' ' )
+       );
+
+      if( results.failed > 0 ){
+           color = 'red';
+       } else {
+           color = 'green';
+       }
+
+       res1.setStyle( 'color', color );
+    });
+
+    this.accordion1.after( "render", function(){
+        Y.Test.Runner.run();
+    }, this );
+
+    // render accordion widgets
+    this.accordion1.render();
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+YUI({
+    combine: false,
+    debug: true,
+    filter:"RAW"
+}).use( 'dd-constrain', 'dd-proxy', 'dd-drop', "gallery-accordion", 'test', 'console', 'event-simulate', function(Y) {
+    var that = this;
+
+    this.accordion2 = new Y.Accordion( {
+        boundingBox: "#bb2",
+        contentBox: "#acc2",
+        useAnimation: false,
+        reorderItems: true,
+        collapseOthersOnExpand: false
+    });
+
     var testDataAttr = new Y.Test.Case({
         testLabel: function(){
             var items, item1, label, labelFromMarkup = "Label 5, overwritten";
@@ -407,7 +469,7 @@ YUI({
             item1 = items[ 0 ];
 
             label = item1.get( "label" );
-            
+
             Y.Assert.areEqual( labelFromMarkup, label,
                 "Label must be : " + labelFromMarkup );
         },
@@ -469,35 +531,45 @@ YUI({
     });
 
     //////////////////////////////////////////////////////////////////////////////////////
-    
+
     var console = new Y.Console({
         verbose : false,
         printTimeout: 0,
         newestOnTop : false,
-
         entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
                 '<span class="{entry_cat_class}">{label}</span>'+
                 '<span class="{entry_content_class}">{message}</span>'+
         '</pre>'
     }).render();
 
-    
-    Y.Test.Runner.add(testBuildFromMarkup);
-    Y.Test.Runner.add(testInsertRemoveItems);
-    Y.Test.Runner.add(testUserInteractions);
-    Y.Test.Runner.add(testContentManipulation);
-    Y.Test.Runner.add(testAddItemsFromScript);
-    Y.Test.Runner.add(testCollapse);
-    Y.Test.Runner.add(testClosable);
-    Y.Test.Runner.add(testLabelChange);
     Y.Test.Runner.add(testDataAttr);
 
-    this.accordion1.after( "render", function(){
+    Y.Test.Runner.on( 'complete', function( resCont ){
+        var color;
+        var results = resCont.results;
+        var res2 = Y.get( "#acc_result2" );
+        res2.setContent(
+            [ "Accordion2 - tests completed.<br>",
+              "Passed:", results.passed,
+              "Failed:", results.failed,
+              "Ignored:", results.failed,
+              "Total:", results.total
+            ].join( ' ' )
+       );
+
+       if( results.failed > 0 ){
+           color = 'red';
+       } else {
+           color = 'green';
+       }
+
+       res2.setStyle( 'color', color );
+    });
+
+    this.accordion2.after( "render", function(){
         Y.Test.Runner.run();
     }, this );
-    
-    // render accordion widgets
-    this.accordion1.render();
+
     this.accordion2.render();
 });
 
