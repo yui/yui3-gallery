@@ -36,12 +36,35 @@ YUI.add('gallery-yui2', function(Y) {
 //	Util shortcuts
 
 var Env = Y.Env,
-	_config = ((typeof YAHOO_config == "undefined" || !YAHOO_config)?{}:YAHOO_config),
-	_base = _config.base || 'http://yui.yahooapis.com/2.8.0/build/',
+	UNDEFINED = 'undefined',
+	_config = ((typeof YAHOO_config === UNDEFINED || !YAHOO_config)?{}:YAHOO_config),
+	_base = _config.base || 'http://yui.yahooapis.com/2.8.0r4/build/',
 	_seed = _config.seed || 'yuiloader/yuiloader-min.js',
-	_ready = !(typeof YAHOO == "undefined" || !YAHOO || !YAHOO.util || !YAHOO.util.YUILoader),
+	_ready = !(typeof YAHOO === UNDEFINED || !YAHOO),
 	_loader,
 	_useQueue;
+
+/**
+ * The yui2 is a utility to load YUI 2 modules within a YUI 3 Sandbox object. This utility is very handy
+ * for incremental migration. It provides an easy way to bring YUI 2 code into YUI 3 world,
+ * relying in YUI 3 lazy loading system and organization, and providing an easy way to mashup
+ * yui2 and yui3 code. It uses a YUI 2 Loader under the hook so you don't need to worry about dependencies,
+ * and it also provides a pipeline to add custom YUI 2 modules, and a filter by type (css or JS) during the
+ * loading process.
+ *
+ * @class yui2
+ * @constructor
+ * @public
+ * @param o Optional configuration object.  Options:
+ * <ul>
+ *  <li>type:
+ *  js or css, by default the loader will include both</li>
+ *  <li>timeout:
+ *  number of milliseconds before a timeout occurs when dynamically loading nodes.  in not set, there is no timeout</li>
+ *  <li>modules:
+ *  A list of module definitions.  See Loader.addModule for the supported module metadata</li>
+ * </ul>
+ */
 
 /**
  * Initialization process for the YUI Loader obj. In YUI 2.x we should
@@ -54,9 +77,12 @@ var Env = Y.Env,
  */
 function _initLoader (l) {
 	/* creating the loader object */
-	l.combine = l.combine || true; /* using the Combo Handle by default */
+	if (typeof l.combine === UNDEFINED) {
+	    l.combine = true; /* using the Combo Handle by default */
+	}
 	l.filter = l.filter || 'min';  /* using production mode by default */
-	return (new YAHOO.util.YUILoader(l));	
+	_loader = new YAHOO.util.YUILoader(l);
+	return _loader;
 }
 
 /**
@@ -71,13 +97,13 @@ function _initLoader (l) {
  */
 function _register (name, m) {
 	// adding a module to the queue 
-	if (Y.isObject(m)) {
+	if (Y.Lang.isObject(m)) {
 		m.name = m.name || name;
 		m.type = m.type || ((m.fullpath || m.path).indexOf('.css')>=0?'css':'js');
 		Env._legacy._useQueue.add ({
 			fn: function () {
-				Y.log ('Registering a module: '+ m.name, m);
-				Env._legacy._loader.addModule (m);
+				Y.log ('Registering a module: '+ m.name,'info','YUI2Wrapper');
+				_loader.addModule (m);
 			},
 			autoContinue: true
 		});
@@ -107,11 +133,16 @@ function _filterConf(o) {
 
 // preparing the queue and loading yui2 loader if needed
 if (!Env._legacy) {
-	Env._legacy = {_useQueue: new Y.AsyncQueue()};
-	if (!_ready) {
+	_useQueue = new Y.AsyncQueue();
+	Env._legacy = {_useQueue: _useQueue};
+	if (_ready) {
+		// YUI loader is in the page, and we don't need to inject it into the page.
+		Y.log ('YUI 2 Loader is already in the page, don\'t need to be loaded it again.','info','YUI2Wrapper');
+		Env._legacy._loader = Env._legacy._loader || _initLoader(_config);
+	} else {
 		// loading the loader
-		Y.log ('Including YUI 2 Loader');
-		Env._legacy._useQueue.add ({
+		Y.log ('YUI 2 Loader need to be loaded upfront.','info','YUI2Wrapper');
+		_useQueue.add ({
 			fn: function () {
 				YUI ({
 					modules: {
@@ -121,47 +152,25 @@ if (!Env._legacy) {
 					}
 				}).use ('yui2-yuiloader', function (X, result) {
 					if (result.success) {
+						Y.log ('YUI 2 Loader is ready to be used.','info','YUI2Wrapper');
 						Env._legacy._loader = _initLoader(_config);
-						Env._legacy._useQueue.run();
+						_useQueue.run();
 					} else {
-						Y.log ('Error trying to include yui 2 loader in the page');
+						Y.log ('Error trying to include yui 2 loader in the page','error','YUI2Wrapper');
 					}
 				});
 			},
 			autoContinue: false
-		}).run();
+		});
 	}
 	// registering the default set of modules defined by YAHOO_config
 	_config = _filterConf(_config);
+	_useQueue.run();
 }
 
-/**
- * The yui2 is a utility to load YUI 2 modules within a YUI 3 Sandbox object. This utility is very handy
- * for incremental migration. It provides an easy way to bring YUI 2 code into YUI 3 world,
- * relying in YUI 3 lazy loading system and organization, and providing an easy way to mashup
- * yui2 and yui3 code. It uses a YUI 2 Loader under the hook so you don't need to worry about dependencies,
- * and it also provides a pipeline to add custom YUI 2 modules, and a filter by type (css or JS) during the
- * loading process.
- *
- * @class yui2
- */
- 
-/**
- * Mimic YUI 3 systax to load yui 2 modules.
- * 
- * @method yui2
- * @static
- * @public
- * @param o Optional configuration object.  Options:
- * <ul>
- *  <li>type:
- *  js or css, by default the loader will include both</li>
- *  <li>timeout:
- *  number of milliseconds before a timeout occurs when dynamically loading nodes.  in not set, there is no timeout</li>
- *  <li>modules:
- *  A list of module definitions.  See Loader.addModule for the supported module metadata</li>
- * </ul>
- */
+_useQueue = Env._legacy._useQueue;
+_loader = Env._legacy._loader;
+
 Y.yui2 = function (o) {
 	o = _filterConf(o);
 	return {
@@ -184,10 +193,11 @@ Y.yui2 = function (o) {
 
 			_queue.add ({
 				fn: function () {
-					var _loader = Env._legacy._loader;
 					_loader.require(a);
+					Y.log ('Loading modules: '+ a.join(", "),'info','YUI2Wrapper');
 					_loader.insert({
 						onSuccess: function (o) {
+							Y.log ('Modules ready: '+ a.join(", "),'info','YUI2Wrapper');
 							_queue.run();
 							callback.apply(Y, [Y, {success: o}]);
 						},
@@ -213,4 +223,4 @@ Y.yui2 = function (o) {
 };
 
 
-}, 'gallery-2009.11.19-20' ,{requires:['node-base', 'get', 'async-queue']});
+}, 'gallery-2009.12.08-22' ,{requires:['node-base', 'get', 'async-queue']});
