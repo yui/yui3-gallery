@@ -71,7 +71,7 @@ function createHash(params) {
         }
     });
 
-    return hash.join('&');
+    return '#' + hash.join('&');
 }
 
 /**
@@ -264,4 +264,4 @@ if (supportsHashChange) {
 }
 
 
-}, 'gallery-2009.11.09-19' ,{requires:['event-custom']});
+}, 'gallery-2009.12.15-22' ,{requires:['event-custom','event-custom-complex','node']});
