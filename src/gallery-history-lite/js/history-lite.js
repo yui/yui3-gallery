@@ -69,7 +69,7 @@ function createHash(params) {
         }
     });
 
-    return hash.join('&');
+    return '#' + hash.join('&');
 }
 
 /**
