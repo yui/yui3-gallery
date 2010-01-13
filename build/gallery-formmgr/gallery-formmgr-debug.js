@@ -1048,20 +1048,20 @@ FormManager.prototype =
 				continue;
 			}
 
-			var f = this.validation.fn[e_id];
+			var f     = this.validation.fn[e_id];
+			var scope = this;
 			if (Y.Lang.isFunction(f))
 			{
-				var scope = this;
+				// use it
 			}
 			else if (Y.Lang.isString(f))
 			{
-				var scope = this;
-				f         = scope[f];
+				f = scope[f];
 			}
 			else if (f && f.scope)
 			{
-				var scope = f.scope;
-				f         = (Y.Lang.isString(f.fn) ? scope[f.fn] : f.fn);
+				scope = f.scope;
+				f     = (Y.Lang.isString(f.fn) ? scope[f.fn] : f.fn);
 			}
 			else
 			{
@@ -1336,4 +1336,4 @@ FormManager.prototype =
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2009.12.15-22' ,{requires:['node-base','substitute']});
+}, 'gallery-2010.01.13-20' ,{requires:['node-base','substitute']});

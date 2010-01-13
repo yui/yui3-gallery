@@ -1,5 +1,7 @@
 YUI.add('gallery-scrollintoview', function(Y) {
 
+"use strict";
+
 /**********************************************************************
  * <p>Only scrolls the browser if the object is not currently visible.</p>
  * 
@@ -7,7 +9,7 @@ YUI.add('gallery-scrollintoview', function(Y) {
  * Otherwise, this algorithm will skip over them with unpredictable
  * results.</p>
  * 
- * @method scrollIntoView
+ * @chainable
  */
 
 Y.Node.prototype.scrollIntoView = function()
@@ -15,7 +17,7 @@ Y.Node.prototype.scrollIntoView = function()
 	var ancestor = Y.Node.getDOMNode(this.get('offsetParent'));
 	if (!ancestor)
 	{
-		return;
+		return this;
 	}
 
 	var r =
@@ -51,7 +53,7 @@ Y.Node.prototype.scrollIntoView = function()
 			}
 			else if (hit_top)
 			{
-				return;
+				return this;
 			}
 
 			r.move(ancestor.offsetLeft - ancestor.scrollLeft, ancestor.offsetTop - ancestor.scrollTop);
@@ -107,7 +109,9 @@ Y.Node.prototype.scrollIntoView = function()
 			ancestor = ancestor.offsetParent;
 		}
 	}
+
+	return this;
 }
 
 
-}, 'gallery-2009.12.08-22' ,{requires:['gallery-dimensions']});
+}, 'gallery-2010.01.13-20' ,{requires:['gallery-dimensions']});
