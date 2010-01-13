@@ -1,3 +1,5 @@
+"use strict";
+
 /**********************************************************************
  * <p>Only scrolls the browser if the object is not currently visible.</p>
  * 
@@ -5,7 +7,7 @@
  * Otherwise, this algorithm will skip over them with unpredictable
  * results.</p>
  * 
- * @method scrollIntoView
+ * @chainable
  */
 
 Y.Node.prototype.scrollIntoView = function()
@@ -13,7 +15,7 @@ Y.Node.prototype.scrollIntoView = function()
 	var ancestor = Y.Node.getDOMNode(this.get('offsetParent'));
 	if (!ancestor)
 	{
-		return;
+		return this;
 	}
 
 	var r =
@@ -49,7 +51,7 @@ Y.Node.prototype.scrollIntoView = function()
 			}
 			else if (hit_top)
 			{
-				return;
+				return this;
 			}
 
 			r.move(ancestor.offsetLeft - ancestor.scrollLeft, ancestor.offsetTop - ancestor.scrollTop);
@@ -105,4 +107,6 @@ Y.Node.prototype.scrollIntoView = function()
 			ancestor = ancestor.offsetParent;
 		}
 	}
+
+	return this;
 }
