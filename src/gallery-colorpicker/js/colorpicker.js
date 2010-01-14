@@ -38,11 +38,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  /**
   * a port of the yui 2 colorpicker
   * @class Colorpicker
-  * @namespace Y.saw
+  * @namespace Y.color
   * @extends Widget
   */
   
-  var NAMESPACE   = 'Saw',
+  var NAMESPACE   = 'color',
      CONSTRUCTOR  = 'Colorpicker',
      Lang         = Y.Lang,
      Widget       = Y.Widget;
@@ -59,7 +59,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   Y.extend(Colorpicker, Widget, {
       initializer:function(){
-          alert('ol');
       },
       
       renderUI: function(){
