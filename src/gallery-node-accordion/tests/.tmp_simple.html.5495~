@@ -1,0 +1,188 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Plugin: gallery-node-accordion </title>
+	<link type="text/css" rel="stylesheet" href="../../../build/cssfonts/fonts-min.css" />
+	<style>
+
+		/* module examples */
+		div#demo {
+		    position:relative;
+		    width:22em;
+		    overflow:hidden;
+		}
+
+	</style>
+</head>
+<body class="yui-skin-sam">
+    <div id="doc">
+
+		<div id="demo">
+			<div class="hd"><h1 class="title">Plugin: gallery-node-accordion</h1></div>
+			<div class="bd">
+				<h3>Accordion #1</h3>
+				<div id="myaccordion1" class="yui-accordion">
+
+				    <div class="yui-module yui-accordion-item yui-accordion-item-active">
+			            <div class="yui-hd yui-accordion-item-hd">
+			            	<h3 class="yui-accordion-item-trigger">item 1</h3>
+						</div>
+			            <div class="yui-bd yui-accordion-item-bd" id="bd1">
+			            	<p>
+								item 1 content here...
+					        </p>
+					    </div>
+						
+					</div>
+				    <div class="yui-module yui-accordion-item">
+			            <div class="yui-hd yui-accordion-item-hd">
+			            	<h3 class="yui-accordion-item-trigger">item 2</h3>
+						</div>
+			            <div class="yui-bd yui-accordion-item-bd" id="bd2">
+			            	<p>
+								item 2 content here...
+					        </p>
+					    </div>
+			
+					</div>
+			
+				</div>
+
+					
+				<h3>Accordion #2</h3>
+				<div id="myaccordion2" class="yui-accordion">
+
+				    <div class="yui-module yui-accordion-item yui-accordion-item-active">
+			            <div class="yui-hd yui-accordion-item-hd">
+			            	<h3 class="yui-accordion-item-trigger">item 1</h3>
+						</div>
+			            <div class="yui-bd yui-accordion-item-bd" id="bd3">
+			            	<p>
+								item 1 content here...
+					        </p>
+					    </div>
+						
+					</div>
+				    <div class="yui-module yui-accordion-item">
+			            <div class="yui-hd yui-accordion-item-hd">
+			            	<h3 class="yui-accordion-item-trigger">item 2</h3>
+						</div>
+			            <div class="yui-bd yui-accordion-item-bd" id="bd4">
+			            	<p>
+								item 2 content here...
+					        </p>
+					    </div>
+			
+					</div>
+			
+				</div>
+
+
+			</div>
+		</div>
+
+    </div>
+	<!-- YUI3 Core //-->
+	<script type="text/javascript" src="../../../build/yui/yui-debug.js"></script>
+	<script type="text/javascript" src="../../../build/gallery-node-accordion/gallery-node-accordion-debug.js"></script>
+	<link type="text/css" rel="stylesheet" href="../../../build/gallery-node-accordion/assets/gallery-node-accordion-core.css" />
+	<!-- Initialization process //-->
+	<script type="text/javascript">
+		YUI({
+		    base: "../../../build/",
+		    filter: 'debug',
+		    combine: false,
+	        useConsole: true,
+	        logExclude: {Dom: true, Selector: true, Node: true, attribute: true, base: true, event: true, widget: true}
+		}).use('console', 'test', 'anim', 'event-simulate', 'gallery-node-accordion', function (Y) {
+			
+		    // creating the console...
+			(new Y.Console()).render();
+			
+			// accordion 1
+			var node1 = Y.get("#myaccordion1").plug(Y.Plugin.NodeAccordion);
+			var a1 = node1.accordion;
+			var bd1 = Y.get('#bd1');
+			var bd2 = Y.get('#bd2');
+			
+			// starting the testing process
+			
+			// add the test cases and suites 
+			Y.Test.Runner.add(new Y.Test.Case({
+				
+				name: "Node Accordion Tests",
+				
+				test_init: function(){
+					
+					Y.Assert.isObject(a1, "accordion plug fails...");
+				
+				},
+				test_expanding_all: function(){
+					
+					a1.expandAllItems();
+					Y.Assert.isTrue((parseInt(bd1.getStyle('height')) > 10), "accordion expand all items fails");
+					Y.Assert.isTrue((parseInt(bd1.getStyle('height')) > 10), "accordion expand all items fails");
+					
+				},
+				test_collapsing_all: function(){
+					
+					a1.collapseAllItems();
+					Y.Assert.areEqual(parseInt(bd1.getStyle('height')), 0, "accordion collapse all items fails [first item]");
+					Y.Assert.areEqual(parseInt(bd1.getStyle('height')), 0, "accordion collapse all items fails [second item]");
+					
+				},
+				test_expanding_second_item: function(){
+					
+					a1.expandItem(1);
+					Y.Assert.isTrue((parseInt(bd2.getStyle('height')) > 10), "failing handling the second item");
+					
+				},
+				test_toggle_first_item: function(){
+					
+					a1.toggleItem(0);
+					Y.Assert.isTrue((parseInt(bd1.getStyle('height')) > 10), "failing handling the first item");
+					
+				},
+				test_collapse_first_item: function(){
+					
+					a1.collapseItem(0);
+					Y.Assert.areEqual(parseInt(bd1.getStyle('height')), 0, "failing handling the first item");
+					
+				}
+				
+			})); 
+			
+			// accordion 2
+			var node2 = Y.get("#myaccordion2").plug(Y.Plugin.NodeAccordion, {
+				animation: true,
+				multiple: false,
+				persistent: true
+			});
+			var a2 = node2.accordion;
+			var bd3 = Y.get('#bd3');
+			var bd4 = Y.get('#bd4');
+			
+			// starting the testing process
+			
+			// add the test cases and suites 
+			Y.Test.Runner.add(new Y.Test.Case({
+				
+				name: "Node Accordion Tests",
+				
+				test_init: function(){
+					
+					Y.Assert.isObject(a2, "accordion plug with custom arguments fails...");
+				
+				}
+				
+			})); 
+			
+			//run all tests 
+			Y.Test.Runner.run();
+			
+			/* finishing the testing process */
+			
+		});
+	</script>
+</body>
+</html>

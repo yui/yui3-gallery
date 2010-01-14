@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>ChromaHash Tests</title>
+     <script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+     <script type="text/javascript" src="../../../build/gallery-crypto/gallery-crypto-md5.js"></script>
+     <script type="text/javascript" src="../../../build/gallery-chromahash/gallery-chromahash.js"></script>
+  </head>
+  <body class="yui-skin-sam">
+		<input type="password" id="password" />
+		<script type="text/javascript">
+// Create new YUI instance, and populate it with the required modules
+YUI({
+    combine: false, 
+    debug: true, 
+    filter:"RAW"
+}).use("gallery-chromahash", 'test', 'console', 'node-event-simulate', function(Y) {
+	var chromahashTests = new Y.Test.Case({
+		name: "ChromaHash Test Cases",
+		testBaseChromaHash: function() {
+			var p = Y.one('#password');
+			p.plug(Y.ChromaHash);
+			p.set('value','testPassword');
+			p.simulate('keyup');
+
+			//@TODO: Real Unit Tests
+		}
+	});
+
+	Y.Test.Runner.add(chromahashTests);
+	Y.Test.Runner.run();
+});
+		</script>
+  </body>
+</html>
+

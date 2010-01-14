@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Gallery YUI 2 Bootstrap Component Build File -->
+<project name="Gallery YUI 2 Bootstrap" default="local">
+    <description>Gallery YUI 2 Bootstrap Build File</description>
+    <property file="build.properties" />
+    <import file="${builddir}/3.x/bootstrap.xml" description="Default Build Properties and Targets" />
+</project>
