@@ -45,7 +45,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   var NAMESPACE   = 'color',
      CONSTRUCTOR  = 'Colorpicker',
      Lang         = Y.Lang,
-     Widget       = Y.Widget;
+     isNumber     = Lang.isNumber,
+     Widget       = Y.Widget,
+     DEFAULT_PICKER_SIZE = 180;
   
   function Colorpicker(config) {
       Colorpicker.superclass.constructor.apply(this, arguments);
@@ -54,6 +56,131 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   Colorpicker.NAME = "colorpicker";
   
   Colorpicker.ATTRS = {
+      
+      /**
+       * The current hue value 0-360
+       * @attribute hue
+       * @type int
+       */
+       hue:{
+           value:0,
+           validator: isNumber
+       },
+       
+       saturation:{
+           value: 0,
+           validator: isNumber
+       },
+       
+       brightness:{
+           value:100,
+           validator:isNumber
+       }
+      
+      /**
+         * The current blue value 0-255
+         * @attribute blue
+         * @type int
+         */
+      blue:{
+          value:0,
+          validator:isNumber
+      },
+      /**
+         * The current green value 0-255
+         * @attribute green
+         * @type int
+         */
+      green:{
+          value:0,
+          validator:isNumber
+      },
+      /**
+         * The current red value 0-255
+         * @attribute red
+         * @type int
+         */
+      red:{
+          value:0,
+          validator:isNumber
+      },
+      
+      /**
+        * The current hex value #000000-#FFFFFF, without the #
+        * @attribute hex
+        * @type string
+        */   
+      hex:{
+          value:"FFFFFF",
+          validator:isString
+      },
+      
+      /**
+       * The current rgb value.  Updates the state of all of the
+       * other value fields.  Read-only: use setValue to set the
+       * controls rgb value.
+       * @attribute hex
+       * @type [int, int, int]
+       * @readonly
+       */
+      rgb:{
+          value:[0,0,0]
+      },
+      
+      /**
+       * Hide/show the rgb controls
+       * @attribute showrgbcontrols
+       * @type boolean
+       * @default true
+       */
+       showrgbcontrols:{
+           value:true
+       },
+       
+       /**
+        * Hide/show the hsv controls
+        * @attribute showhsvcontrols
+        * @type boolean
+        * @default false
+        */
+        showhsvcontrols:{
+            value:false
+        },
+        
+        /**
+         * The size of the picker. Trying to change this is not recommended.
+         * @attribute pickersize
+         * @default 180
+         * @type int
+         */
+         pickersize:{
+             value:DEFAULT_PICKER_SIZE
+         },
+         
+         
+        
+        
+       
+        /**
+         * Hide/show the hex controls
+         * @attribute showhexcontrols
+         * @type boolean
+         * @default true
+         */
+         showhexcontrols:{
+             value:true
+         },
+         
+         /**
+          * Hide/show the hex summary
+          * @attribute showhexsummary
+          * @type boolean
+          * @default true
+          */
+          showhexsummary:{
+              value:true
+          }
+       
       
   };
   
