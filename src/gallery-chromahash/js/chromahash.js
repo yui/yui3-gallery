@@ -43,8 +43,9 @@ _C.ATTRS =
 			validator:function(node) {
 				if(!node.test('input[type=password]')) {
 					Y.fail("ChromaHash can't be attached to this node.");
+					return false;
 				}
-				return false;
+				return true;
 			},
 			setter: function(node) {
 				this._lblQry = 'label[for=' + node.get('name') + '].chroma-hash';
