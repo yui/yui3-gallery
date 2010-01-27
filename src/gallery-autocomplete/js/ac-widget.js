@@ -155,7 +155,7 @@ Y.ACWidget = Y.extend(
                 out = item;
             //TODO: use Y.cache on this fn so that the regexp is only created
             // once per term/queryTerms
-            var findRegexp = new RegExp("("+queryTerms.join("|")+")", "g",
+            var findRegexp = new RegExp("("+queryTerms.join("|")+")", "g"),
                 replRegexp = self.get("hiliteTpl")
                     .replace(/\$/g, '\\$')
                     .replace(/\{term\}/g, '$1');
