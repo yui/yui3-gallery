@@ -151,9 +151,9 @@ Y.mix(Dispatcher, {
      */
     NAME : DISPATCHER,
 
-     *
+    /**
      * @property Dispatcher._hashtable
-     * @Type Array
+     * @type Array
      * @static
      */
     _hashtable : [],
