@@ -44,6 +44,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   var NAMESPACE   = 'color',
      CONSTRUCTOR  = 'Colorpicker',
+     CONTENT_BOX  = 'contentBox',
+     
      Lang         = Y.Lang,
      isNumber     = Lang.isNumber,
      Widget       = Y.Widget,
@@ -75,7 +77,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
        brightness:{
            value:100,
            validator:isNumber
-       }
+       },
       
       /**
          * The current blue value 0-255
@@ -112,7 +114,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         */   
       hex:{
           value:"FFFFFF",
-          validator:isString
+          validator:Lang.isString
       },
       
       /**
@@ -190,7 +192,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       
       renderUI: function(){
           
-          var cb = this.get('contentBox');
+          var cb = this.get(CONTENT_BOX);
           cb.set('innerHTML', '<h1>Works</h1>');
           
       }
