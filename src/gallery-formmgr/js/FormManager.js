@@ -369,14 +369,7 @@ FormManager.getElementStatus = function(
 	/* string/object */	e)
 {
 	var m = Y.one(e).get('className').match(row_status_regex);
-	if (m && m.length)
-	{
-		return m[1];
-	}
-	else
-	{
-		return false;
-	}
+	return (m && m.length > 1 ? m[1] : false);
 };
 
 function getId(
@@ -396,11 +389,220 @@ function getId(
 	}
 }
 
+/**
+ * Trim leading and trailing whitespace from the specified fields.
+ * 
+ * @method Y.FormManager.cleanValues
+ * @static
+ * @param e {Array|NodeList} The fields to clean.
+ * @return {boolean} <code>true</code> if there are any file inputs.
+ */
+FormManager.cleanValues = function(
+	/* array */	e)
+{
+	var has_file_inputs = false;
+	for (var i=0; i<e.length; i++)
+	{
+		var input = e[i];
+		var type  = input.type && input.type.toLowerCase();
+		if (type == 'file')
+		{
+			has_file_inputs = true;
+		}
+		else if (type == 'select-multiple')
+		{
+			// don't change the value
+		}
+		else if (input.value)
+		{
+			input.value = Y.Lang.trim(input.value);
+		}
+	}
+
+	return has_file_inputs;
+};
+
 function hasLimit(
 	/* string */	s)
 {
 	return (!Y.Lang.isUndefined(s) && s.length > 0);
 }
+
+/**
+ * Validate an input based on its CSS data.
+ * 
+ * @method Y.FormManager.validateFromCSSData
+ * @static
+ * @param e {DOM Element} The field to validate.
+ * @return {Object} Status:
+ *		<dl>
+ *		<dt>keepGoing</dt>
+ *		<dd>{Boolean} <code>true</code> if further validation should be done.</dd>
+ *		<dt>error</dt>
+ *		<dd>{String} The error message, if any.</dd>
+ *		</dl>
+ */
+FormManager.validateFromCSSData = function(
+	/* element */	e,
+	/* map */		msg_list)
+{
+	var required = Y.DOM.hasClass(e, required_class);
+	if (required && e.value === '')
+	{
+		var msg = null;
+		if (msg_list && msg_list.required)
+		{
+			msg = msg_list.required;
+		}
+		else if (e.tagName.toLowerCase() == 'select')
+		{
+			msg = FormManager.Strings.required_menu;
+		}
+		else
+		{
+			msg = FormManager.Strings.required_string;
+		}
+		return { keepGoing: false, error: msg };
+	}
+	else if (!required && e.value === '')
+	{
+		return { keepGoing: false };
+	}
+
+	if (e.className)
+	{
+		var m = e.className.match(length_class_re);
+		if (m && m.length)
+		{
+			if (hasLimit(m[1]) && hasLimit(m[2]) &&
+				parseInt(m[1], 10) > parseInt(m[2], 10))
+			{
+				Y.log(e.name+' has min_length > max_length', 'error', 'FormManager');
+			}
+
+			var msg     = null;
+			var has_min = (hasLimit(m[1]) && m[1] !== '0');
+			if (has_min && hasLimit(m[2]))
+			{
+				msg = FormManager.Strings.length_out_of_range;
+			}
+			else if (has_min)
+			{
+				msg = FormManager.Strings.length_too_short;
+			}
+			else if (hasLimit(m[2]))
+			{
+				msg = FormManager.Strings.length_too_long;
+			}
+
+			if (e.value && hasLimit(m[1]) &&
+				e.value.length < parseInt(m[1], 10))
+			{
+				if (msg_list && msg_list.min_length)
+				{
+					msg = msg_list.min_length;
+				}
+				msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
+				return { keepGoing: false, error: msg };
+			}
+			if (e.value && hasLimit(m[2]) &&
+				e.value.length > parseInt(m[2], 10))
+			{
+				if (msg_list && msg_list.max_length)
+				{
+					msg = msg_list.max_length;
+				}
+				msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
+				return { keepGoing: false, error: msg };
+			}
+		}
+
+		var m = e.className.match(integer_class_re);
+		if (m && m.length)
+		{
+			if (hasLimit(m[1]) && hasLimit(m[2]) &&
+				parseInt(m[1], 10) > parseInt(m[2], 10))
+			{
+				Y.log(e.name+' has min_value > max_value', 'error', 'FormManager');
+			}
+
+			var value = parseInt(e.value, 10);
+			if (e.value &&
+				(!FormManager.integer_value_re.test(e.value) ||
+				 (hasLimit(m[1]) && value < parseInt(m[1], 10)) ||
+				 (hasLimit(m[2]) && value > parseInt(m[2], 10))))
+			{
+				var msg = null;
+				if (msg_list && msg_list.integer)
+				{
+					msg = msg_list.integer;
+				}
+				else if (hasLimit(m[1]) && hasLimit(m[2]))
+				{
+					msg = FormManager.Strings.integer_out_of_range;
+				}
+				else if (hasLimit(m[1]))
+				{
+					msg = FormManager.Strings.integer_too_small;
+				}
+				else if (hasLimit(m[2]))
+				{
+					msg = FormManager.Strings.integer_too_large;
+				}
+				else
+				{
+					msg = FormManager.Strings.integer;
+				}
+				msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
+				return { keepGoing: false, error: msg };
+			}
+		}
+
+		var m = e.className.match(decimal_class_re);
+		if (m && m.length)
+		{
+			if (hasLimit(m[1]) && hasLimit(m[2]) &&
+				parseFloat(m[1]) > parseFloat(m[2]))
+			{
+				Y.log(e.name+' has min_value > max_value', 'error', 'FormManager');
+			}
+
+			var value = parseFloat(e.value);
+			if (e.value &&
+				(!FormManager.decimal_value_re.test(e.value) ||
+				 (hasLimit(m[1]) && value < parseFloat(m[1])) ||
+				 (hasLimit(m[2]) && value > parseFloat(m[2]))))
+			{
+				var msg = null;
+				if (msg_list && msg_list.decimal)
+				{
+					msg = msg_list.decimal;
+				}
+				else if (hasLimit(m[1]) &&
+						 hasLimit(m[2]))
+				{
+					msg = FormManager.Strings.decimal_out_of_range;
+				}
+				else if (hasLimit(m[1]))
+				{
+					msg = FormManager.Strings.decimal_too_small;
+				}
+				else if (hasLimit(m[2]))
+				{
+					msg = FormManager.Strings.decimal_too_large;
+				}
+				else
+				{
+					msg = FormManager.Strings.decimal;
+				}
+				msg = Y.substitute(msg, {min: parseFloat(m[1], 10), max: parseFloat(m[2], 10)});
+				return { keepGoing: false, error: msg };
+			}
+		}
+	}
+
+	return { keepGoing: true };
+};
 
 function populateForm1()
 {
@@ -845,197 +1047,23 @@ FormManager.prototype =
 		this.clearMessages();
 		var status = true;
 
-		this.has_file_inputs = false;
+		var e                = this.form.elements;
+		this.has_file_inputs = FormManager.cleanValues(e);
 
-		var e = this.form.elements;
 		for (var i=0; i<e.length; i++)
-		{
-			if (e[i].type && e[i].type.toLowerCase() == 'file')
-			{
-				this.has_file_inputs = true;
-			}
-			else if (e[i].type && e[i].type.toLowerCase() == 'select-multiple')
-			{
-				// don't change the value
-			}
-			else if (e[i].value)
-			{
-				e[i].value = Y.Lang.trim(e[i].value);
-			}
-		}
-
-		for (i=0; i<e.length; i++)
 		{
 			var e_id     = e[i].id;
 			var msg_list = this.validation_msgs[e_id];
 
-			var required = Y.one(e[i]).hasClass(required_class);
-			if (required && e[i].value === '')
+			var info = FormManager.validateFromCSSData(e[i], msg_list);
+			if (info.error)
 			{
-				var msg = null;
-				if (msg_list && msg_list.required)
-				{
-					msg = msg_list.required;
-				}
-				else if (e[i].tagName.toLowerCase() == 'select')
-				{
-					msg = FormManager.Strings.required_menu;
-				}
-				else
-				{
-					msg = FormManager.Strings.required_string;
-				}
-				this.displayMessage(e[i], msg, 'error');
+				this.displayMessage(e[i], info.error, 'error');
 				status = false;
-				continue;
 			}
-			else if (!required && e[i].value === '')
+			if (!info.keepGoing)
 			{
 				continue;
-			}
-
-			if (e[i].className)
-			{
-				var m = e[i].className.match(length_class_re);
-				if (m && m.length)
-				{
-					var msg     = null;
-					var has_min = (hasLimit(m[1]) && m[1] !== '0');
-					if (has_min && hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.length_out_of_range;
-					}
-					else if (has_min)
-					{
-						msg = FormManager.Strings.length_too_short;
-					}
-					else if (hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.length_too_long;
-					}
-
-					if (hasLimit(m[1]) &&
-						hasLimit(m[2]) &&
-						parseInt(m[1], 10) > parseInt(m[2], 10))
-					{
-						Y.log(e[i].name+' has min_length > max_length', 'error', 'FormManager');
-					}
-
-					if (e[i].value && hasLimit(m[1]) &&
-						e[i].value.length < parseInt(m[1], 10))
-					{
-						if (msg_list && msg_list.min_length)
-						{
-							msg = msg_list.min_length;
-						}
-						msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
-
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
-					if (e[i].value && hasLimit(m[2]) &&
-						e[i].value.length > parseInt(m[2], 10))
-					{
-						if (msg_list && msg_list.max_length)
-						{
-							msg = msg_list.max_length;
-						}
-						msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
-
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
-				}
-
-				var m = e[i].className.match(integer_class_re);
-				if (m && m.length)
-				{
-					var msg = null;
-					if (msg_list && msg_list.integer)
-					{
-						msg = msg_list.integer;
-					}
-					else if (hasLimit(m[1]) &&
-							 hasLimit(m[2]))
-					{
-						if (parseInt(m[1], 10) > parseInt(m[2], 10))
-						{
-							Y.log(e[i].name+' has min_value > max_value', 'error', 'FormManager');
-						}
-
-						msg = FormManager.Strings.integer_out_of_range;
-					}
-					else if (hasLimit(m[1]))
-					{
-						msg = FormManager.Strings.integer_too_small;
-					}
-					else if (hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.integer_too_large;
-					}
-					else
-					{
-						msg = FormManager.Strings.integer;
-					}
-					msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
-
-					var value = parseInt(e[i].value, 10);
-					if (e[i].value &&
-						(!FormManager.integer_value_re.test(e[i].value) ||
-						 (hasLimit(m[1]) && value < parseInt(m[1], 10)) ||
-						 (hasLimit(m[2]) && value > parseInt(m[2], 10))))
-					{
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
-				}
-
-				var m = e[i].className.match(decimal_class_re);
-				if (m && m.length)
-				{
-					var msg = null;
-					if (msg_list && msg_list.decimal)
-					{
-						msg = msg_list.decimal;
-					}
-					else if (hasLimit(m[1]) &&
-							 hasLimit(m[2]))
-					{
-						if (parseFloat(m[1]) > parseFloat(m[2]))
-						{
-							Y.log(e[i].name+' has min_value > max_value', 'error', 'FormManager');
-						}
-
-						msg = FormManager.Strings.decimal_out_of_range;
-					}
-					else if (hasLimit(m[1]))
-					{
-						msg = FormManager.Strings.decimal_too_small;
-					}
-					else if (hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.decimal_too_large;
-					}
-					else
-					{
-						msg = FormManager.Strings.decimal;
-					}
-					msg = Y.substitute(msg, {min: parseFloat(m[1], 10), max: parseFloat(m[2], 10)});
-
-					var value = parseFloat(e[i].value);
-					if (e[i].value &&
-						(!FormManager.decimal_value_re.test(e[i].value) ||
-						 (hasLimit(m[1]) && value < parseFloat(m[1])) ||
-						 (hasLimit(m[2]) && value > parseFloat(m[2]))))
-					{
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
-				}
 			}
 
 			if (this.validation.regex[e_id] &&
