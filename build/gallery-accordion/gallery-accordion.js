@@ -240,10 +240,6 @@ Y.extend( Accordion, Y.Widget, {
         this._initEvents();
 
         this.after( "render", Y.bind( this._afterRender, this ) );
-
-        this._forCollapsing = {};
-        this._forExpanding = {};
-        this._animations   = {};
     },
 
     
@@ -439,13 +435,40 @@ Y.extend( Accordion, Y.Widget, {
         this.publish( ITEMREORDERED );
     },
 
+
+    /**
+     * Contains items for collapsing
+     * @property _forCollapsing
+     * @protected
+     * @type Object
+     */
+    _forCollapsing : {},
+
+
+    /**
+     * Contains items for expanding
+     * @property _forExpanding
+     * @protected
+     * @type Object
+     */
+    _forExpanding : {},
+
+
+    /**
+    * Contains currently running animations
+    * @property _animations
+    * @protected
+    * @type Object
+    */
+    _animations   : {},
+
     
     /**
      * Collection of items handles.
      * Keeps track of each items's event handle, as returned from <code>Y.on</code> or <code>Y.after</code>.
      * @property _itemHandles
      * @private
-     * @type Array
+     * @type Object
      */
     _itemsHandles: {},
     
@@ -1379,6 +1402,47 @@ Y.extend( Accordion, Y.Widget, {
         }
     },
     
+
+    /**
+     * Handles the change of "contentUpdate" property of given item
+     *
+     * @method _afterContentUpdate
+     * @protected
+     * @param params {EventFacade} The event facade for the attribute change
+     */
+    _afterContentUpdate : function( params ){
+        var item, itemContentHeight, body, bodyHeight, expanded, auto, anim;
+
+        item = params.currentTarget;
+        auto = item.get( "contentHeight" ).method === "auto";
+        expanded = item.get( EXPANDED );
+
+        if( auto && expanded && params.src !== Y.Widget.UI_SRC ){
+            Y.later( 0, this, function(){
+                itemContentHeight = this._getItemContentHeight( item );
+
+                body = item.getStdModNode( WidgetStdMod.BODY );
+                bodyHeight = this._getNodeOffsetHeight( body );
+
+                if( itemContentHeight !== bodyHeight ){
+                    anim = this._animations[ item ];
+
+                    // stop waiting animation
+                    if( anim ){
+                        anim.stop();
+                    }
+
+                    this._adjustStretchItems();
+
+                    if( itemContentHeight < bodyHeight ){
+                        this._processCollapsing( item, itemContentHeight, !expanded );
+                    } else if( itemContentHeight > bodyHeight ){
+                        this._processExpanding( item, itemContentHeight, !expanded );
+                    }
+                }
+            } );
+        }
+    },
     
     
     /**
@@ -1594,7 +1658,8 @@ Y.extend( Accordion, Y.Widget, {
         itemHandles = {
             "expandedChange" : item.after( "expandedChange", Y.bind( this._afterItemExpand, this ) ),
             "alwaysVisibleChange" : item.after( "alwaysVisibleChange", Y.bind( this._afterItemAlwaysVisible, this ) ),
-            "contentHeightChange" : item.after( "contentHeightChange", Y.bind( this._afterContentHeight, this ) )
+            "contentHeightChange" : item.after( "contentHeightChange", Y.bind( this._afterContentHeight, this ) ),
+            "contentUpdate" : item.after( "contentUpdate", Y.bind( this._afterContentUpdate, this ) )
         };
         
         this._itemsHandles[ item ] = itemHandles;
@@ -1853,7 +1918,7 @@ AccordionItem.ATTRS = {
     },
 
     /**
-     * @description The node, contains label
+     * @description The node, which contains item's label
      *
      * @attribute nodeLabel
      * @default null
@@ -2430,10 +2495,10 @@ Y.extend( AccordionItem, Y.Widget, {
      * @param  config {Object} Configuration object literal for the AccordionItem
      */
     initializer: function( config ) {
-
         this.after( "labelChange",  Y.bind( this._labelChanged, this ) );
         this.after( "closableChange", Y.bind( this._closableChanged, this ) );
     },
+    
     
     /**
      * Destructor lifecycle implementation for the AccordionItem class.
@@ -2599,6 +2664,17 @@ Y.extend( AccordionItem, Y.Widget, {
         }
         
         return false;
+    },
+
+
+    /**
+     * Forces the item to resize as result of direct content manipulation (via 'innerHTML').
+     * This method should be invoked if 'contentHeight' property has been set to 'auto'.
+     *
+     * @method resize
+     */
+    resize : function(){
+        this.fire( "contentUpdate" );
     },
 
 
@@ -2824,4 +2900,4 @@ Y.AccordionItem = AccordionItem;
 
 
 
-}, 'gallery-2009.12.08-22' ,{requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse'], optional:['dd-constrain', 'dd-proxy', 'dd-drop']});
+}, 'gallery-2010.03.02-18' ,{requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse'], optional:['dd-constrain', 'dd-proxy', 'dd-drop']});
