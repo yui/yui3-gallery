@@ -2,6 +2,10 @@ Accordion widget for YUI 3
 
 I. Changelog
 
+25.02.2010 - ver 1.08
+ - AccordionItem has a new function - resize(). It should be invoked if the content has been updated directly (by using innerHTML).
+   This is neeed only if "contentHeight" property has been set to "auto". The function also causes resizing of all other expanded and stretched items.
+
 22.11.2009 - ver. 1.07
  - Parsing data from markup improved for icon, nodeLabel, iconsContainer, iconAlwaysVisible, iconExpanded and iconClose configuration properties.
    Valid input is not only Node, but raw HTMLElement and a selector string also.

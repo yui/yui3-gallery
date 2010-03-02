@@ -128,7 +128,7 @@ AccordionItem.ATTRS = {
     },
 
     /**
-     * @description The node, contains label
+     * @description The node, which contains item's label
      *
      * @attribute nodeLabel
      * @default null
@@ -705,10 +705,10 @@ Y.extend( AccordionItem, Y.Widget, {
      * @param  config {Object} Configuration object literal for the AccordionItem
      */
     initializer: function( config ) {
-
         this.after( "labelChange",  Y.bind( this._labelChanged, this ) );
         this.after( "closableChange", Y.bind( this._closableChanged, this ) );
     },
+    
     
     /**
      * Destructor lifecycle implementation for the AccordionItem class.
@@ -874,6 +874,17 @@ Y.extend( AccordionItem, Y.Widget, {
         }
         
         return false;
+    },
+
+
+    /**
+     * Forces the item to resize as result of direct content manipulation (via 'innerHTML').
+     * This method should be invoked if 'contentHeight' property has been set to 'auto'.
+     *
+     * @method resize
+     */
+    resize : function(){
+        this.fire( "contentUpdate" );
     },
 
 

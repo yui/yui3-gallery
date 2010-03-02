@@ -5,6 +5,16 @@ YUI({
     debug: true, 
     filter:"RAW"
 }).use("gallery-accordion", 'test', 'console', 'event-simulate', function(Y) {
+
+    var console = new Y.Console({
+        verbose : false,
+        printTimeout: 0,
+        newestOnTop : false,
+        entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
+                '<span class="{entry_cat_class}">{label}</span>'+
+                '<span class="{entry_content_class}">{message}</span>'+
+        '</pre>'
+    }).render();
     
     var that = this;
 
@@ -391,20 +401,14 @@ YUI({
            }
     });
 
-    
-    //////////////////////////////////////////////////////////////////////////////////////
-    
-    var console = new Y.Console({
-        verbose : false,
-        printTimeout: 0,
-        newestOnTop : false,
-        entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
-                '<span class="{entry_cat_class}">{label}</span>'+
-                '<span class="{entry_content_class}">{message}</span>'+
-        '</pre>'
-    }).render();
 
-    
+    var testChangeContent = new Y.Test.Case({
+        testInnerHTMLChange: function(){
+            changeContentInnerHTML.call( that, Y, that.accordion1 );
+        }
+    });
+
+
     Y.Test.Runner.add(testBuildFromMarkup);
     Y.Test.Runner.add(testInsertRemoveItems);
     Y.Test.Runner.add(testUserInteractions);
@@ -413,6 +417,7 @@ YUI({
     Y.Test.Runner.add(testCollapse);
     Y.Test.Runner.add(testClosable);
     Y.Test.Runner.add(testLabelChange);
+    Y.Test.Runner.add(testChangeContent);
 
     Y.Test.Runner.on( 'complete', function( resCont ){
         var color;
@@ -530,19 +535,15 @@ YUI({
         }
     });
 
-    //////////////////////////////////////////////////////////////////////////////////////
+    var testChangeContent = new Y.Test.Case({
+        testInnerHTMLChange: function(){
+            changeContentInnerHTML.call( that, Y, that.accordion2 );
+        }
+    });
 
-    var console = new Y.Console({
-        verbose : false,
-        printTimeout: 0,
-        newestOnTop : false,
-        entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
-                '<span class="{entry_cat_class}">{label}</span>'+
-                '<span class="{entry_content_class}">{message}</span>'+
-        '</pre>'
-    }).render();
-
+    
     Y.Test.Runner.add(testDataAttr);
+    Y.Test.Runner.add(testChangeContent);
 
     Y.Test.Runner.on( 'complete', function( resCont ){
         var color;
@@ -572,5 +573,59 @@ YUI({
 
     this.accordion2.render();
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+function changeContentInnerHTML( Y, accordion ){
+    var newItem, handle, header, items, guid, cb;
+
+    items  = accordion.get( "items" );
+    Y.Array.each( items, function( item, index, items ){
+        if( item.get( "contentHeight" ).method === "stretch" && !item.get( "alwaysVisible" ) ){
+            item.set( "alwaysVisible", true );
+        }
+    }, this );
+
+    handle = accordion.after( "beforeItemExpand", Y.bind(function( attrs ){
+        var item = attrs.item;
+
+        if( item.get('contentBox').get('id') === guid && item.getStdModNode('body').get('children').size() === 0 ){
+            handle.detach();
+
+            item.set( "bodyContent", "<div>Loading, please wait...</div>" );
+
+            Y.later(2000, this, function(){
+                item.set( "bodyContent", [
+                    '<div id="my_first_div">',
+                        '<div id="my_second_div">Loading finished successfully!<br>The whole content of the item has been replaced.',
+                            '<div id="my_third_div"></div>',
+                        '</div>',
+                    '</div>'
+                ].join('') );
+
+                Y.later(1500, this, function(){
+                    var td = Y.get( "#my_third_div" );
+                    td.set( "innerHTML", "Only part of item's content has been changed<br> by using 'innerHTML' and the new resize() function." );
+                    item.resize();
+                });
+            });
+        }
+    }, this) );
+
+    newItem = new Y.AccordionItem({
+        label: "Change content via innerHTML"
+    });
+
+    accordion.addItem( newItem );
+
+    cb = newItem.get('contentBox');
+    guid = Y.guid();
+    cb.set('id', guid);
+
+    Y.later( 1000, this, function(){
+        header = Y.Node.getDOMNode(newItem.getStdModNode( Y.WidgetStdMod.HEADER ));
+        Y.Event.simulate( header, "click" );
+    } );
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
