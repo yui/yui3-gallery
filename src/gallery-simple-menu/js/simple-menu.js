@@ -25,7 +25,7 @@ function SimpleMenu (config) {
 
     this._menu.setAttrs({
         'role': 'menu',
-        'aria-labelledby': 'more-link',
+        'aria-labelledby': this._link.getAttribute('id'),
         'aria-hidden': 'true'
     });
 
