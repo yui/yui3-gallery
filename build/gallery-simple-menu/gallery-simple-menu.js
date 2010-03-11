@@ -27,7 +27,7 @@ function SimpleMenu (config) {
 
     this._menu.setAttrs({
         'role': 'menu',
-        'aria-labelledby': 'more-link',
+        'aria-labelledby': this._link.getAttribute('id'),
         'aria-hidden': 'true'
     });
 
@@ -100,4 +100,4 @@ SimpleMenu.NS = 'simplemenu';
 Y.namespace('Plugin').SimpleMenu = SimpleMenu;
 
 
-}, 'gallery-2010.02.10-01' ,{requires:['node-focusmanager']});
+}, 'gallery-2010.03.11-21' ,{requires:['node-focusmanager']});
