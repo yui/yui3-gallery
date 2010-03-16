@@ -1,9 +1,22 @@
-.yui-slideshow
+.yui3-slideshow-content .bd
 {
 	overflow: hidden;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.yui-slideshow-content .yui-slideshow-img
+.yui3-slideshow-content .bd .yui333-slideshow-img
 {
 	position: relative;
+}
+
+.yui3-slideshow-content .hd h4 
+{
+	text-align: center;
+	margin: 0;
+}
+
+.yui3-slideshow-img
+{
+	background-color: #fff;
 }

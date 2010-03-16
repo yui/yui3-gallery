@@ -1,23 +1,32 @@
 <html>
 	<head>
-		<title>Slideshow Test</title>
-		<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+		<title>Slideshow Progressive Enhancement Test</title>
+		<script src="../../../../yui3/build/yui/yui.js"></script>
 		<script src="../../../build/gallery-slideshow/gallery-slideshow-debug.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../../build/gallery-slideshow/assets/gallery-slideshow-core.css"></link>
 		<style type="text/css">
 		</style>	
 	</head>
 	<body>
-		<div id="ss"></div>
+		<div id="ss">
+			<div class='hd'>
+				<h4>Slideshow Progressive Enhancement Test</h4>
+			</div>
+			<div class='bd' style='height: 87px; width: 87px;'>
+				<div class='yui3-slideshow-img'>
+					<img src="3449422636_602e4a5520_t.jpg" />
+				</div>
+			</div>
+		</div>
 		<script type="text/javascript">
-			YUI().use('gallery-slideshow', 'anim', function(Y) {
+			YUI({filter: 'RAW'}).use('gallery-slideshow', 'anim', function(Y) {
 				var images =  
-					[
+					[/*
 						{
 							'src': "3449422636_602e4a5520_t.jpg",
 							'attribution': "flickrUser hannah_hill",
 							'license': "CC-BY"
-						},
+						},*/
 						{
 							'src': "1224766231_315b54b6d4_t.jpg",
 							'attribution': "flickrUser powi",
@@ -29,7 +38,7 @@
 							'license': "CC-BY"
 						}
 					], anim = {from: { opacity: 1.0 }, to: {opacity: 0.0}, duration: 2};
-				var slideshow = new Y.SlideShow({ boundingBox: '#ss', image_height: 87, image_width: 87, width: 121, images: images, animation: anim, delay: 4000, title: "Slideshow Test"});
+				var slideshow = new Y.SlideShow({ srcNode: '#ss', width: 200, images: images, animation: anim, delay: 4000});
 				slideshow.render();
 			});
 		</script>

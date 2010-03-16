@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- YUI 3 Gallery Component Build File -->
 <project name="SlideShow" default="local">
-    <description>SlideShow Build File</description>
-    <property file="build.properties" />
-    <import file="${builddir}/3.x/bootstrap.xml" description="Default Build Properties and Targets" />
+	<description>SlideShow - Build All Modules</description>
+
+	<target name="local">
+		<ant antfile="build.slideshow.xml" target="local" />
+		<ant antfile="build.slideshow-image-scaler.xml" target="local" />
+		<ant antfile="build.slideshow-image-padder.xml" target="local" />
+	</target>
+
+	<target name="deploy">
+		<ant antfile="build.slideshow.xml" target="deploy" />
+		<ant antfile="build.slideshow-image-scaler.xml" target="deploy" />
+		<ant antfile="build.slideshow-image-padder.xml" target="deploy" />
+	</target>
+
+	<target name="all">
+		<ant antfile="build.slideshow.xml" target="all" />
+		<ant antfile="build.slideshow-image-scaler.xml" target="all" />
+		<ant antfile="build.slideshow-image-padder.xml" target="all" />
+	</target>
 </project>
