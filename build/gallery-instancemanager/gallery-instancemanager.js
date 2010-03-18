@@ -1,5 +1,7 @@
 YUI.add('gallery-instancemanager', function(Y) {
 
+"use strict";
+
 /**********************************************************************
  * <p>Stores instances of JavaScript components.  Allows a constructor to
  * be passed in place of an instance.  This enables lazy construction on
@@ -25,7 +27,6 @@ InstanceManager.prototype =
 	/**
 	 * Retrieve an object.
 	 * 
-	 * @method get
 	 * @param id {String} The id of the object to retrieve.
 	 */
 	get: function(
@@ -56,9 +57,19 @@ InstanceManager.prototype =
 	},
 
 	/**
+	 * Retrieve an object only if it has already been constructed.
+	 * 
+	 * @param id {String} The id of the object to retrieve.
+	 */
+	getIfConstructed: function(
+		/* string */	id)
+	{
+		return this._map[ id ] || false;
+	},
+
+	/**
 	 * Store an object or ctor+args.
 	 * 
-	 * @method put
 	 * @param id {String} The id of the object.
 	 * @param objOrCtor {Object|Function|String} The object or the object's constructor.
 	 * @param args {Array} The array of arguments to pass to the constructor.
@@ -96,14 +107,16 @@ InstanceManager.prototype =
 	 * Remove an object.
 	 * 
 	 * @param id {String} The id of the object.
+	 * @return {mixed} the object that was removed or <code>false</code> if the slot was empty
 	 */
 	remove: function(
 		/* string */	id)
 	{
 		if (this._map[ id ])
 		{
+			var obj = this._map[ id ];
 			delete this._map[ id ];
-			return true;
+			return obj;
 		}
 		else
 		{
@@ -124,10 +137,12 @@ InstanceManager.prototype =
 	 * 
 	 * @param behavior {Function|String|Object} The function to call or the name of the function or an object {fn:,scope:}
 	 * @param arguments {Array} The arguments to pass to the function.
+	 * @param skip_unconstructed {boolean} Optional.  Pass <code>true</code> to skip unconstructed slots.
 	 */
 	applyToAll: function(
 		/* string/fn/object */	behavior,
-		/* array */				args)
+		/* array */				args,
+		/* bool */				skip_unconstructed)
 	{
 		var map        = this._map,
 			isFunction = Y.Lang.isFunction(behavior),
@@ -138,6 +153,15 @@ InstanceManager.prototype =
 			if (map.hasOwnProperty(name))
 			{
 				var item = map[ name ];
+				if (!item && skip_unconstructed)
+				{
+					continue;
+				}
+				else if (!item)
+				{
+					item = this.get(name);
+				}
+
 				if (isFunction || isObject)
 				{
 					// apply the function and pass the map item as an argument
@@ -161,4 +185,4 @@ InstanceManager.prototype =
 Y.InstanceManager = InstanceManager;
 
 
-}, 'gallery-2009.12.08-22' );
+}, 'gallery-2010.03.18-19' );
