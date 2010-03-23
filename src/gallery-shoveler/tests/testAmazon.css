@@ -1,0 +1,30 @@
+.yui-shoveler-button-right {
+	background-position: -25px 0;
+}
+
+.yui-shoveler-button-right.yui-shoveler-button-on {
+	background-position: -25px -50px;
+}
+
+.yui-shoveler-button-left.yui-shoveler-button-on {
+	background-position: 0px -50px;
+}
+
+.yui-shoveler-button-left,
+.yui-shoveler-button-right {
+	height: 50px;
+	width: 25px;
+	background-image: url("http://g-ecx.images-amazon.com/images/G/01/x-locale/personalization/shoveler/left-right-arrow-semi-rd._V236573507_.gif");
+}
+
+.yui-shoveler-cell img {
+	display: block;
+	margin: auto;
+}
+
+.yui-shoveler-loading {
+	width: 14px;
+	height: 14px;
+	background-image: url("https://images-na.ssl-images-amazon.com/images/G/01/ui/loadIndicators/loadIndicator-label._V262087968_.gif");
+	background-position: -59px 0;
+}

@@ -1,0 +1,342 @@
+<html>
+  <head>
+    <title>Shoveler tests</title>
+
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.0.0/build/cssreset/reset-min.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.0.0/build/cssfonts/fonts-min.css">
+    <link rel="stylesheet" type="text/css" href="assets/shoveler-core.css">
+	<link rel="stylesheet" type="text/css" href="testAmazon.css">
+	<link rel="stylesheet" type="text/css" href="testNetflix.css">
+
+	<script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+	<script type="text/javascript" src="gallery-shoveler.js"></script>
+	<script type="text/javascript" src="testShoveler.js"></script>
+
+	<style>
+		#shoveler2 .yui-shoveler-body {
+			height: 120px;
+		}
+		.yui-shoveler {
+			margin-bottom: 40px;
+		}
+		
+		h1 {
+			font-size: 200%;
+			font-weight: bold;
+		}
+		
+		h2 {
+			font-size: 125%;
+			font-weight: bold;
+		}
+		
+		p {
+			padding: 5px;
+		}
+		
+	</style>
+
+  </head>
+  <body class="yui-skin-sam">
+  
+  <h1>
+	YUI Shoveler
+  </h1>
+  <p>
+	The shoveler is a carousel like module that allows you to shovel back and forth between content.
+  </p>
+  
+  <h2>
+	Code
+  </h2>
+  <p>Build: <a href="gallery-shoveler.zip">gallery-shoveler.zip</a></p>
+  <p>Source and Test: <a href="gallery-shoveler-src.zip">gallery-shoveler-src.zip</a></p>
+  
+  <h2>
+	Examples
+  </h2>
+  <p> Basic example of a shoveler where the data already exist in the HTML.  This one is made to look like a shoveler seen on the Amazon.com page
+  There are 3 visible cells and it will be cyclical.  Also I want the cells to be animaged when I scroll so
+  I'm setting the renderFunctionName to "renderCellsWithPop"
+  <pre>
+	shoveler1 = new Y.Shoveler( {
+		contentBox: "#shoveler1",
+		numberOfVisibleCells: 3,
+		cyclical: true,
+		renderFunctionName: "renderCellsWithPop"
+	});
+ 
+	shoveler1.render();
+  </pre>
+  </p>
+     <div id="shoveler1" style="width: 700px;">
+		<div class="yui-shoveler-header">
+			<span class="yui-shoveler-page-text"></span>
+			<h2>Shoveler 1 Test</h2>
+		</div>
+		<div class="yui-shoveler-body">
+			<div class="yui-shoveler-button-left"></div>
+			<ul class="yui-shoveler-cells">
+				<li class="yui-shoveler-cell">
+					<a href="http://www.amazon.com/Highway-Hell-AC-DC/dp/B00008BXJG/ref=pd_ys_home_shvl_8">
+						<img width="130" height="130" border="0" id="" alt="" src="https://images-na.ssl-images-amazon.com/images/I/511%2B7rD9rFL._SL500_SS130_.jpg">
+						Highway to Hell
+					</a> (Audio CD) ~ AC/DC
+				</li>
+				<li class="yui-shoveler-cell">
+					<a href="http://www.amazon.com/Infinity-Journey/dp/B000G7PNKY/ref=pd_ys_home_shvl_50">
+						<img width="130" height="130" border="0" id="" alt="" src="https://images-na.ssl-images-amazon.com/images/I/51MQWN8X36L._SL500_SS130_.jpg">
+						Infinity
+					</a> (Audio CD) ~ Journey
+				</li>
+				<li class="yui-shoveler-cell">
+					<a href="http://www.amazon.com/Essential-Toto/dp/B0000CF30I/ref=pd_ys_home_shvl_48">
+						<img width="130" height="130" border="0" id="" alt="" src="https://images-na.ssl-images-amazon.com/images/I/51xKsJbem0L._SL500_SS130_.jpg">
+						 The Essential Toto
+					</a> (Audio CD) ~ Toto 
+				</li>
+				<li class="yui-shoveler-cell">
+					<a href="http://www.amazon.com/Synchronicity-Digipak-Police/dp/B00008BRB5/ref=pd_ys_home_shvl_47">
+						<img width="130" height="130" border="0" id="" alt="" src="https://images-na.ssl-images-amazon.com/images/I/51XhIp-RhhL._SL500_SS130_.jpg">
+						Synchronicity [Digipak]
+					</a> (Audio CD) ~ The Police 
+				</li>
+
+				<li class="yui-shoveler-cell">
+					<a href="http://www.amazon.com/Best-Talking-Heads/dp/B0002IQMKM/ref=pd_ys_home_shvl_46">
+						<img width="130" height="130" border="0" id="" alt="" src="https://images-na.ssl-images-amazon.com/images/I/51FGxAW1%2BJL._SL500_SS130_.jpg">
+						The Best of Talking Heads
+					</a>(Audio CD) ~ Talking Heads
+				</li>
+				<li class="yui-shoveler-cell">
+					<a href="http://www.amazon.com/Argybargy-Squeeze/dp/B000SLVW8K/">
+						<img width="130" height="130" border="0" id="" alt="" src="https://images-na.ssl-images-amazon.com/images/I/61j%2BruFe5rL._SL500_SS130_.jpg">
+						Argybargy
+					</a>(Audio CD) ~ Squeeze
+				</li>
+				<li class="yui-shoveler-cell">
+					<a href="http://www.amazon.com/Glass-House-Gentle-Giant/dp/B0030U1U6A/">
+						<img width="130" height="130" border="0" id="" alt="" src="https://images-na.ssl-images-amazon.com/images/I/51SARprANjL._SL500_SS130_.jpg">
+						In a Glass House
+					</a>(Audio CD) ~ Gentle Giant
+				</li>
+			</ul>
+			<div class="yui-shoveler-button-right"></div>
+		</div>
+	 </div>
+<hr>
+<p> This shoveler has dynamic content.  By setting dynamic to true and setting numberOfCells to 20 I'm telling it
+to load cells dynamic but only to expect 20 cells.  This one has 4 visible cells is cyclical and renders with a 
+pop like the one above.  In order for the call to be dynamic I need to has a function to create a url to do the 
+data fetching.  In this example I just have a yql query that will fetch my most recent flicker photos.  I also
+have a function to handle the data when it returns.  This one just shows the image and title and replaces it
+in the shoveler.  Lastly prefetch is set to true.  This means the shoveler will try to prefetch data to show.
+Prefetch occurs as soon as you scroll, so try it out.  Scroll once(a normal load) and then do it again(with prefetched data)
+  <pre>
+	shoveler2 = new Y.Shoveler( {
+		contentBox: "#shoveler2",
+		numberOfVisibleCells: 4,
+		cyclical: true,
+		numberOfCells: 20,
+		dynamic: true,
+		renderFunctionName: "renderCellsWithPop",
+		prefetch: true,
+		contructDataSrc: function(start, numberOfVisibleCells) {
+			var url = "http://query.yahooapis.com/v1/public/yql?"+
+				"q=select%20*%20from%20flickr.photos.search("+
+				start+"%2C"+numberOfVisibleCells+
+				")%20where%20user_id%20%3D%20%2217004938%40N00%22&format=json&callback=shoveler2.handleDataRetrieval";
+			return url;
+		},
+		
+		handleData: function(data) {
+			var photos = data.query.results.photo, imageUrl, photo, i, len;
+			for(i = 0, len = photos.length; i < len; i++) {
+				photo = photos[i];
+
+				imageUrl = "http://farm"+photo.farm+
+					".static.flickr.com/"+photo.server+
+					"/"+photo.id+"_"+photo.secret+"_t.jpg";
+				
+				this.replaceCell("&lt;img src='"+imageUrl+"'/&gt;"+photo.title, this.get("fetchStart")+i);
+				
+			}
+		}
+    });
+ 
+    shoveler2.render();
+  </pre>
+  </p>
+	 
+	 <div id="shoveler2" style="width: 700px;">
+		<div class="yui-shoveler-header">
+			<span class="yui-shoveler-page-text"></span>
+			<h2>Shoveler 2 Test</h2>
+		</div>
+		<div class="yui-shoveler-body">
+			<div class="yui-shoveler-button-left"></div>
+			<ul class="yui-shoveler-cells">
+			</ul>
+			<div class="yui-shoveler-button-right"></div>
+		</div>
+	 </div>
+	 <hr>
+<p> Very basic shoveler to show adding and removing cells with some cells loading in the html
+  <pre>
+	shoveler3 = new Y.Shoveler( {
+		contentBox: "#shoveler3",
+		numberOfVisibleCells: 3,
+		cyclical: true
+    });
+ 
+    shoveler3.render();
+	
+	Y.get("#shoveler3AddCell").on("click", function() {
+		shoveler3.addCell(shoveler3.get("numberOfCells"));
+	});
+	
+	Y.get("#shoveler3RemoveCell").on("click", function() {
+		shoveler3.removeCell(shoveler3.get("numberOfCells")-1);
+	});
+	
+	Y.get("#shoveler3AddCell5").on("click", function() {
+		shoveler3.addCell(shoveler3.get("numberOfCells"), 5);
+	});
+  </pre>
+  </p>	 
+	 <input id="shoveler3AddCell" type="button" value="Add Cell" />
+	 <input id="shoveler3RemoveCell" type="button" value="Remove Cell" />
+	 <input id="shoveler3AddCell5" type="button" value="Add Cell to index 5" />
+	 <div id="shoveler3" style="width: 700px;">
+		<div class="yui-shoveler-header">
+			<span class="yui-shoveler-page-text"></span>
+			<h2>Shoveler 3 Test</h2>
+		</div>
+		<div class="yui-shoveler-body">
+			<div class="yui-shoveler-button-left"></div>
+			<ul class="yui-shoveler-cells">
+				<li class="yui-shoveler-cell">
+					0
+				</li>
+				<li class="yui-shoveler-cell">
+					1
+				</li>
+				<li class="yui-shoveler-cell">
+					2
+				</li>
+				<li class="yui-shoveler-cell">
+					3
+				</li>
+			</ul>
+			<div class="yui-shoveler-button-right"></div>
+		</div>
+	 </div>
+	 
+	 <hr>
+<div class="netflix">
+<p> Very basic shoveler is set up to look like a Netflix shoveler.  This one is not cyclical so you can notice
+of the buttons change when a user reaches the end.
+  <pre>
+	shoveler4 = new Y.Shoveler( {
+        contentBox: "#shoveler4",
+		numberOfVisibleCells: 3
+    });
+ 
+    shoveler4.render();
+  </pre>
+  </p>	
+	<div id="shoveler4" style="width: 700px;">
+		<div class="yui-shoveler-header">
+			<span class="yui-shoveler-page-text"></span>
+			<h2>Shoveler 4 Test</h2>
+		</div>
+		<div class="yui-shoveler-body">
+			<div class="yui-shoveler-button-left"></div>
+			<ul class="yui-shoveler-cells">
+				<li  class="yui-shoveler-cell">
+					<div class="title">Robin Hood: Prince of Thieves</div>
+					<img class="boxShotImg" src="http://cdn-8.nflximg.com/us/boxshots/large/60028308.jpg">
+				</li>
+				<li  class="yui-shoveler-cell">
+					<div class="title">Change of Habit</div>
+					<img class="boxShotImg" src="http://cdn-2.nflximg.com/us/boxshots/large/60023762.jpg">
+				</li>
+				<li  class="yui-shoveler-cell">
+					<div class="title">The Great Race</div>
+					<img class="boxShotImg" src="http://cdn-3.nflximg.com/us/boxshots/large/60011163.jpg">
+				</li>
+				<li  class="yui-shoveler-cell">
+					<div class="title">Jerry Maguire</div>
+					<img class="boxShotImg" src="http://cdn-2.nflximg.com/us/boxshots/large/60022922.jpg">
+				</li>
+				<li  class="yui-shoveler-cell">
+					<div class="title">The Seven Year Itch</div>
+					<img class="boxShotImg" src="http://cdn-2.nflximg.com/us/boxshots/large/60004542.jpg">
+				</li>
+				<li  class="yui-shoveler-cell">
+					<div class="title">Gentlemen Prefer Blondes</div>
+					<img class="boxShotImg" src="http://cdn-0.nflximg.com/us/boxshots/large/60004540.jpg">
+				</li>
+				<li  class="yui-shoveler-cell">
+					<div class="title">Dirty Dancing</div>
+					<img class="boxShotImg" src="http://cdn-6.nflximg.com/us/boxshots/large/445386.jpg">
+				</li>
+				<li  class="yui-shoveler-cell">
+					<div class="title">Buck and the Preacher</div>
+					<img class="boxShotImg" src="http://cdn-5.nflximg.com/us/boxshots/large/336455.jpg">
+				</li>
+			</ul>
+			<div class="yui-shoveler-button-right"></div>
+		</div>
+	 </div>
+	 <hr>
+<p> This shoveler is also dynamic and similar to the earlier dynamic example.  The extra differnce here is this
+shoveler is infinite.  The shoveler will continue to grab data according to the contructDataSrc function
+  <pre>
+	shoveler5 = new Y.Shoveler( {
+		contentBox: "#shoveler5",
+		numberOfVisibleCells: 5,
+		infinite: true,
+		dynamic: true,
+		contructDataSrc: function(start, numberOfVisibleCells) {
+			var url = "http://query.yahooapis.com/v1/public/yql?"+
+				"q=select%20*%20from%20flickr.photos.search("+
+				start+"%2C"+numberOfVisibleCells+
+				")%20where%20tags%20%3D%20%22monkey%22&format=json&callback=shoveler5.handleDataRetrieval";
+			return url;
+		},
+		
+		handleData: function(data) {
+			var photos = data.query.results.photo, imageUrl, photo, i, len;
+			for(i = 0, len = photos.length; i < len; i++) {
+				photo = photos[i];
+
+				imageUrl = "http://farm"+photo.farm+
+					".static.flickr.com/"+photo.server+
+					"/"+photo.id+"_"+photo.secret+"_t.jpg";
+				
+				this.replaceCell("&lt;img src='"+imageUrl+"'/&gt;"+photo.title, this.get("fetchStart")+i);
+				
+			}
+		}
+    });
+ 
+    shoveler5.render();
+  </pre>
+  </p>	
+	 <div id="shoveler5" style="width: 700px;">
+		<div class="yui-shoveler-header">
+			<span class="yui-shoveler-page-text"></span>
+			<h2>Shoveler 5 Test</h2>
+		</div>
+		<div class="yui-shoveler-body">
+			<div class="yui-shoveler-button-left"></div>
+			<ul class="yui-shoveler-cells">
+			</ul>
+			<div class="yui-shoveler-button-right"></div>
+		</div>
+	 </div>
+	 <hr>
+</div>
+  </body>
+</html>
