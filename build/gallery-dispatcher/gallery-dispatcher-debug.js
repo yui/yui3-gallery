@@ -1,95 +1,51 @@
 YUI.add('gallery-dispatcher', function(Y) {
 
 /**
-* <p>The Dispatcher Node Plugin makes it easy to transform existing 
-* markup into an dispatcher element with expandable and collapsable elements, 
-* elements are  easy to customize, and only require a small set of dependencies.</p>
+* <p>The Dispatcher satisfies a very common need of developers using the 
+* YUI library: dynamic execution of Ajax response content. Typical strategies to 
+* fulfill this need, like executing the innerHTML property or referencing remote 
+* scripts, are unreliable due to browser incompatibilities. The Dispatcher normalize 
+* this behavior across all a-grade browsers.
 * 
-* 
-* <p>To use the Dispatcher Node Plugin, simply pass a reference to the plugin to a 
-* Node instance's <code>plug</code> method.</p>
+* <p>To use the Dispatcher Module, simply create a new object based on Y.Dispatcher
+* and pass a reference to a node that should be handled.</p>
 * 
 * <p>
 * <code>
 * &#60;script type="text/javascript"&#62; <br>
 * <br>
-* 		//	Call the "use" method, passing in "node-dispatcher".  This will <br>
-* 		//	load the script and CSS for the Dispatcher Node Plugin and all of <br>
+* 		//	Call the "use" method, passing in "gallery-dispatcher".  This will <br>
+* 		//	load the script for the Dispatcher Module and all of <br>
 * 		//	the required dependencies. <br>
 * <br>
 * 		YUI().use("gallery-dispatcher", function(Y) { <br>
 * <br>
-* 			//	Use the "contentready" event to initialize the dispatcher when <br>
-* 			//	the element that represente the dispatcher <br>
-* 			//	(&#60;div id="dispatcher-1"&#62;) is ready to be scripted. <br>
+*			(new Y.Dispatcher ({<br>
+*			    node: '#demoajax',<br>
+*				 content: 'Please wait... (Injecting fragment.html)'<br>
+*			})).set('uri', 'fragment.html');<br>
 * <br>
-* 			Y.on("contentready", function () { <br>
-* <br>
-* 				//	The scope of the callback will be a Node instance <br>
-* 				//	representing the dispatcher (&#60;div id="dispatcher-1"&#62;). <br>
-* 				//	Therefore, since "this" represents a Node instance, it <br>
-* 				//	is possible to just call "this.plug" passing in a <br>
-*				//	reference to the Dispatcher Node Plugin. <br>
-* <br>
-* 				this.plug(Y.Plugin.NodeDispatcher); <br>
-* <br>
-* 			}, "#dispatcher-1"); <br>
 * <br>		
-* 		}); <br>
-* <br>	
 * 	&#60;/script&#62; <br>
 * </code>
 * </p>
 *
-* <p>The Dispatcher Node Plugin has several configuration properties that can be 
-* set via an object literal that is passed as a second argument to a Node 
-* instance's <code>plug</code> method.
+* <p>The Dispatcher has several configuration properties that can be 
+* set via an object literal that is passed as a first argument during the
+* initialization, or using "set" method.
 * </p>
 *
-* <p>
-* <code>
-* &#60;script type="text/javascript"&#62; <br>
-* <br>
-* 		//	Call the "use" method, passing in "node-dispatcher".  This will <br>
-* 		//	load the script and CSS for the Dispatcher Node Plugin and all of <br>
-* 		//	the required dependencies. <br>
-* <br>
-* 		YUI().use("node-dispatcher", function(Y) { <br>
-* <br>
-* 			//	Use the "contentready" event to initialize the dispatcher when <br>
-* 			//	the element that represente the dispatcher <br>
-* 			//	(&#60;div id="dispatcher-1"&#62;) is ready to be scripted. <br>
-* <br>
-* 			Y.on("contentready", function () { <br>
-* <br>
-* 				//	The scope of the callback will be a Node instance <br>
-* 				//	representing the dispatcher (&#60;div id="dispatcher-1"&#62;). <br>
-* 				//	Therefore, since "this" represents a Node instance, it <br>
-* 				//	is possible to just call "this.plug" passing in a <br>
-*				//	reference to the Dispatcher Node Plugin. <br>
-* <br>
-* 				this.plug(Y.Plugin.NodeDispatcher, { anim: true, effect: Y.Easing.backIn });
-* <br><br>
-* 			}, "#dispatcher-1"); <br>
-* <br>		
-* 		}); <br>
-* <br>	
-* 	&#60;/script&#62; <br>
-* </code>
-* </p>
-* 
-* @module node-dispatcher
+* @module gallery-dispatcher
 */
 
-
 //	Util shortcuts
-
 var UA = Y.UA,
 	getClassName = Y.ClassNameManager.getClassName,
 
 	//	Frequently used strings
 	DISPATCHER = "dispatcher",
 	PERIOD = ".",
+	SC = "script",
 	DISPATCHER_START = 'start',
     DISPATCHER_PURGE = 'purge',
     DISPATCHER_CHANGE = 'change',
@@ -98,6 +54,9 @@ var UA = Y.UA,
 	//	Attribute keys
 	ATTR_URI 		 = 'uri',
 	ATTR_CONTENT 	 = 'content',
+	ATTR_AUTOPURGE 	 = 'autopurge',
+	ATTR_LOADING     = 'loading',
+	ATTRS			 = [ATTR_AUTOPURGE, ATTR_LOADING, ATTR_CONTENT, ATTR_URI],
 	
 	//	CSS class names
 	CLASS_DISPATCHER 			 = getClassName(DISPATCHER),
@@ -113,11 +72,10 @@ var UA = Y.UA,
     isObject = L.isObject,	
     
 	/**
-	* The NodeDispatcher class is a plugin for a Node instance.  The class is used via  
-	* the <a href="Node.html#method_plug"><code>plug</code></a> method of Node and 
-	* should not be instantiated directly.
+	* The Dispatcher class represents an object that can manage Node Elements to
+	* inject HTML content as the content of the Node..
 	* @namespace plugin
-	* @class NodeDispatcher
+	* @class Dispatcher
 	*/
 	Dispatcher = function () {
 		Dispatcher.superclass.constructor.apply(this, arguments);
@@ -130,10 +88,8 @@ function _parseContent ( content ) {
 		o = {};
 	
 	fragment.setContent (content);
-	o.css = fragment.all('style, link[type=text/css]').each(function (n) {
-		fragment.removeChild (n);
-	});
-	o.js = fragment.all('script').each(function (n) {
+	   
+	o.js = fragment.all(SC).each(function (n) {
 		fragment.removeChild (n);
 	});
 	o.content = fragment.get ('innerHTML');
@@ -178,6 +134,7 @@ Y.mix(Dispatcher, {
  		*/	
  		autopurge: {
  			value: true,
+ 			writeOnce: true,
  			validator : isBoolean
  		},
  		/**
@@ -194,7 +151,9 @@ Y.mix(Dispatcher, {
  				this._io = this._fetch(v);
 				return v;
 			},
- 			validator : isString
+ 			validator: function (v) {
+ 	            return (v && isString(v) && (v!==''));
+ 	        }
  		},
  		/**
  		* default content for the dynamic area
@@ -207,7 +166,7 @@ Y.mix(Dispatcher, {
  			setter : function (v) {
  				Y.log ('dispatching a new content','info',DISPATCHER);
  				this.stop();
- 				v = this._dispatch(v); // discarding the file name
+ 				this._dispatch(v); // discarding the file name
 	            return v;
 			},
  			validator : isString
@@ -254,6 +213,8 @@ Y.extend(Dispatcher, Y.Base, {
 	//	Public methods
 
     initializer: function (config) {
+		var that = this;
+		config = config || {};
 		Y.log ('Initializer','info',DISPATCHER);
 		this._queue = new Y.AsyncQueue ();
 		if (!isObject(config) || !config.node || !(this._node = Y.one(config.node))) {
@@ -261,6 +222,12 @@ Y.extend(Dispatcher, Y.Base, {
 			// how can we stop the initialization?
 			return;
 		}
+		
+		Y.Array.each (ATTRS, function (v) {
+			if (config[v]) {
+				that.set (v, config[v]);
+			}
+    	});
 
 		/**
          * Signals the end of a thumb drag operation.  Payload includes
@@ -301,37 +268,6 @@ Y.extend(Dispatcher, Y.Base, {
     	var o = _parseContent (content),
     		q = this._queue,
     		n = this._node;
-    	// injecting CSS blocks first
-    	o.css.each (function (cssNode) {
-    		if (cssNode && cssNode.get ('href')) {
-	    		q.add ({
-					fn: function () {
-	    				Y.log ('external link tag: '+cssNode.get ('href'),'info',DISPATCHER);
-	    				//q.next();
-	    				Y.Get.css(cssNode.get ('href'), { 
-	    					onFailure: function(o) {
-	    						Y.log ('external link tag fail to load: '+cssNode.get ('href'),'warn',DISPATCHER);
-							},
-							onEnd: function () {
-								q.run();
-							}
-						});
-					},
-					autoContinue: false
-	    		});  			
-    		} else {
-	    		q.add ({
-					fn: function () {
-		    			// inject css;
-		    			Y.log ('inline style tag: '+cssNode.get ('innerHTML'),'info',DISPATCHER);
-		    			var d = cssNode.get('ownerDocument'),
-							h = d.one('head') || d.get ('documentElement'),
-							newStyle = Y.Node.create('<style></style>');
-						h.replaceChild(cssNode, h.appendChild(newStyle));
-					}
-	    		});
-    		}
-    	});
     	// autopurging children collection
     	if (this.get ('autopurge')) {
     		q.add ({
@@ -376,7 +312,7 @@ Y.extend(Dispatcher, Y.Base, {
 						Y.log ('inline script tag: '+jsNode.get ('innerHTML'),'info',DISPATCHER);
 						var d = jsNode.get('ownerDocument'),
 							h = d.one('head') || d.get ('documentElement'),
-							newScript = Y.Node.create('<script></script>');
+							newScript = Y.Node.create('<'+SC+'></'+SC+'>');
 						h.replaceChild(jsNode, h.appendChild(newScript));
 						if (jsNode._node.text) {
 					        newScript._node.text = jsNode._node.text;
@@ -395,6 +331,9 @@ Y.extend(Dispatcher, Y.Base, {
 	* @return object  Reference to the connection handler
 	*/
 	_fetch: function ( uri, cfg ){
+		if (!uri) {
+			return false;
+		}
 		cfg = cfg || {
 			method: 'GET'
 		};
@@ -407,7 +346,7 @@ Y.extend(Dispatcher, Y.Base, {
 		   		this.set(ATTR_CONTENT, o.responseText);
 	   		},
 	   		failure: function (tid, o) {
-	   			Y.log ('Failure','warn',DISPATCHER);
+	   			Y.log ('Failure: '+uri,'warn',DISPATCHER);
 		   	},
 			end: function () {
 		   		Y.log ('End','info',DISPATCHER);
@@ -434,4 +373,4 @@ Y.extend(Dispatcher, Y.Base, {
 Y.Dispatcher = Dispatcher;
 
 
-}, 'gallery-2010.02.17-20' ,{requires:['base-base', 'node-base', 'io-base', 'get', 'async-queue', 'classnamemanager']});
+}, 'gallery-2010.03.23-17-54' ,{requires:['base-base', 'node-base', 'io-base', 'get', 'async-queue', 'classnamemanager']});
