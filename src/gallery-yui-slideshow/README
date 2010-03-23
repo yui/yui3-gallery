@@ -1,0 +1,16 @@
+YUI Slideshow by Josh Lizarraga @ FreshCutSD.com
+Inspired by jQuery Cycle: http://malsup.com/jquery/cycle/
+
+
+Changelog:
+
+v1.0.0 - March 19, 2010
+	- Added lazy loading of content.
+	- Added ability to pass a Node instance to constructor.
+	- Minor bug fixes.
+
+v0.2.0
+	- Rewritten as a YUI3 module.
+
+v0.1.0
+	- YUI2 version.
