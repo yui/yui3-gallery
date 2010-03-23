@@ -612,9 +612,10 @@ function populateForm1()
 	{
 		var e = this.form.elements[i];
 
+		var name = e.tagName.toLowerCase();
 		var type = (e.type ? e.type.toLowerCase() : null);
 		if (collect_buttons &&
-			(type == 'submit' || type == 'reset' || type == 'button'))
+			(type == 'submit' || type == 'reset' || name == 'button'))
 		{
 			this.button_list.push(e);
 		}
@@ -623,8 +624,6 @@ function populateForm1()
 		{
 			continue;
 		}
-
-		var name = e.tagName.toLowerCase();
 
 		var v = this.default_value_map[ e.name ];
 		if (name == 'input' && type == 'file')
@@ -1149,6 +1148,14 @@ FormManager.prototype =
 	},
 
 	/**
+	 * @return {boolean} <code>true</code> if form is enabled
+	 */
+	isFormEnabled: function()
+	{
+		return this.enabled;
+	},
+
+	/**
 	 * Enable all the registered buttons.
 	 */
 	enableForm: function()
@@ -1256,7 +1263,7 @@ FormManager.prototype =
 	 * @param e {String|Object} The selector for the element or the element itself
 	 * @param msg {String} The message
 	 * @param type {String} The message type (see Y.FormManager.status_order)
-	 * @param scroll {boolean} <code>true</code> if the form row should be scrolled into view
+	 * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
 	 */
 	displayMessage: function(
 		/* id/object */	e,
