@@ -1,0 +1,316 @@
+/*
+Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+COPIED FROM version: 2.7.0
+But class names renamed to yui3-resize
+*/
+.yui3-resize {
+    position: relative;
+    zoom: 1;
+    z-index: 0;
+}
+.yui3-resize-wrap {
+    zoom: 1;
+}
+
+.yui-draggable {
+    cursor: move;
+}
+
+.yui3-resize .yui3-resize-handle {
+    position: absolute;
+    z-index: 1;
+    font-size: 0;
+    margin: 0;
+    padding: 0;
+    zoom: 1;
+    height: 1px;
+    width: 1px;
+}
+.yui3-resize .yui3-resize-handle-br {
+    height: 5px;
+    width: 5px;
+    bottom: 0;
+    right: 0;
+    cursor: se-resize;
+    z-index: 2;
+    zoom: 1;
+}
+
+.yui3-resize .yui3-resize-handle-bl {
+    height: 5px;
+    width: 5px;
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+    z-index: 2;
+    zoom: 1;
+}
+
+.yui3-resize .yui3-resize-handle-tl {
+    height: 5px;
+    width: 5px;
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+    z-index: 2;
+    zoom: 1;
+}
+
+.yui3-resize .yui3-resize-handle-tr {
+    height: 5px;
+    width: 5px;
+    top: 0;
+    right: 0;
+    cursor: ne-resize;
+    z-index: 2;
+    zoom: 1;
+}
+
+.yui3-resize .yui3-resize-handle-r {
+    width: 5px;
+    height: 100%;
+    top: 0;
+    right: 0;
+    cursor: e-resize;
+    zoom: 1;
+}
+
+.yui3-resize .yui3-resize-handle-l {
+    height: 100%;
+    width: 5px;
+    top: 0;
+    left: 0;
+    cursor: w-resize;
+    zoom: 1;
+}
+
+.yui3-resize .yui3-resize-handle-b {
+    width: 100%;
+    height: 5px;
+    bottom: 0;
+    right: 0;
+    cursor: s-resize;
+    zoom: 1;
+}
+.yui3-resize .yui3-resize-handle-t {
+    width: 100%;
+    height: 5px;
+    top: 0;
+    right: 0;
+    cursor: n-resize;
+    zoom: 1;
+}
+.yui3-resize-proxy {
+    position: absolute;
+    border: 1px dashed #000;
+    visibility: hidden;
+    z-index: 1000;
+}
+
+.yui3-resize-hover .yui3-resize-handle,
+.yui3-resize-hidden .yui3-resize-handle {
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+.yui3-resize-ghost {
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+
+.yui3-resize-knob .yui3-resize-handle {
+    height: 6px;
+    width: 6px;
+}
+.yui3-resize-knob .yui3-resize-handle-tr {
+    right: -3px;
+    top: -3px;
+}
+.yui3-resize-knob .yui3-resize-handle-tl {
+    left: -3px;
+    top: -3px;
+}
+.yui3-resize-knob .yui3-resize-handle-bl {
+    left: -3px;
+    bottom: -3px;
+}
+.yui3-resize-knob .yui3-resize-handle-br {
+    right: -3px;
+    bottom: -3px;
+}
+.yui3-resize-knob .yui3-resize-handle-t {
+    left: 45%;
+    top: -3px;
+}
+.yui3-resize-knob .yui3-resize-handle-r {
+    right: -3px;
+    top: 45%;
+}
+.yui3-resize-knob .yui3-resize-handle-l {
+    left: -3px;
+    top: 45%;
+}
+.yui3-resize-knob .yui3-resize-handle-b {
+    left: 45%;
+    bottom: -3px;
+}
+
+.yui3-resize-status {
+    position: absolute;
+    top: -999px;
+    left: -999px;
+    padding: 2px;
+    font-size: 80%;
+    display: none;
+    zoom: 1; /* IE hasLayout */
+    z-index: 9999;
+}
+.yui3-resize-status strong, .yui3-resize-status em {
+    font-weight: normal;
+    font-style: normal;
+    padding: 1px;
+    zoom: 1;
+}
+/*
+Copyright (c) 2009, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+version: 2.7.0
+*/
+/* Give the handle a background color */
+.yui-skin-sam .yui3-resize .yui3-resize-handle {
+    background-color: #F2F2F2;
+    zoom: 1;
+}
+/* Give the active handle a different color */
+.yui-skin-sam .yui3-resize .yui3-resize-handle-active {
+    background-color: #7D98B8;
+    zoom: 1;
+}
+.yui-skin-sam .yui3-resize .yui3-resize-handle-l,
+.yui-skin-sam .yui3-resize .yui3-resize-handle-r,
+.yui-skin-sam .yui3-resize .yui3-resize-handle-l-active,
+.yui-skin-sam .yui3-resize .yui3-resize-handle-r-active {
+    height: 100%;
+    zoom: 1;
+}
+/* Give a border to the 8-way knob style handles */
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle {
+    border: 1px solid #808080;
+}
+/* Show the active handle when hovered */
+.yui-skin-sam .yui3-resize-hover .yui3-resize-handle-active {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+/* Style the resize proxy */
+.yui-skin-sam .yui3-resize-proxy {
+    border: 1px dashed #426FD9;
+}
+
+/* Style the status box similar to a tooltip */
+.yui-skin-sam .yui3-resize-status {
+    border: 1px solid #A6982B;
+    border-top: 1px solid #D4C237;
+    background-color: #FFEE69;
+    color: #000;
+}
+
+
+/* Style the content of the status box */
+.yui-skin-sam .yui3-resize-status strong, .yui-skin-sam .yui3-resize-status em {
+    float: left;
+    display: block;
+    clear: both;
+    padding: 1px;
+    text-align: center;
+}
+
+/* Setup the gripper */
+.yui-skin-sam .yui3-resize .yui3-resize-handle-inner-r,
+.yui-skin-sam .yui3-resize .yui3-resize-handle-inner-l {
+    background: transparent url( layout_sprite.png) no-repeat 0 -5px;
+    height: 16px;
+    width: 5px;
+    position: absolute;
+    top: 45%;
+}
+
+/* Setup the gripper */
+.yui-skin-sam .yui3-resize .yui3-resize-handle-inner-t,
+.yui-skin-sam .yui3-resize .yui3-resize-handle-inner-b {
+    background: transparent url(layout_sprite.png) no-repeat -20px 0;
+    height: 5px;
+    width: 16px;
+    position: absolute;
+    left: 50%;
+}
+
+/* Bottom Right Gripper */
+.yui-skin-sam .yui3-resize .yui3-resize-handle-br {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -62px;
+}
+
+/* Top Right Gripper */
+.yui-skin-sam .yui3-resize .yui3-resize-handle-tr {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -42px;
+}
+
+/* Top Left Gripper */
+.yui-skin-sam .yui3-resize .yui3-resize-handle-tl {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -82px;
+}
+
+/* Bottom Left Gripper */
+.yui-skin-sam .yui3-resize .yui3-resize-handle-bl {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -23px;
+}
+
+/* Remove the background image from the 8-way knobs */
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-t,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-r,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-b,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-l,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-tl,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-tr,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-bl,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-br,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-t,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-r,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-b,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-l,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-tl,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-tr,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-bl,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-inner-br {
+    background-image: none;
+}
+
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-l,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-r,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-l-active,
+.yui-skin-sam .yui3-resize-knob .yui3-resize-handle-r-active {
+    height: 6px;
+    width: 6px;
+}
+
+.yui-skin-sam .yui3-resize-textarea .yui3-resize-handle-r {
+    right: -8px;
+}
+.yui-skin-sam .yui3-resize-textarea .yui3-resize-handle-b {
+    bottom: -8px;
+}
+.yui-skin-sam .yui3-resize-textarea .yui3-resize-handle-br {
+    right: -8px;
+    bottom: -8px;
+}
