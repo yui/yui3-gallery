@@ -9,14 +9,14 @@
 	</head>
 	<body>
 		<div id="ss">
-			<div class='hd'>
-				<h4>Slideshow Progressive Enhancement Test</h4>
+			<div class='yui3-widget-header'>
+				Slideshow Progressive Enhancement Test
 			</div>
-			<div class='bd' style='height: 87px; width: 87px;'>
-				<div class='yui3-slideshow-img'>
+			<ul class='yui3-widget-body' style='height: 87px; width: 87px;'>
+				<li>
 					<img src="3449422636_602e4a5520_t.jpg" />
-				</div>
-			</div>
+				</li>
+			</ul>
 		</div>
 		<script type="text/javascript">
 			YUI({filter: 'RAW'}).use('gallery-slideshow', 'anim', function(Y) {
@@ -38,7 +38,8 @@
 							'license': "CC-BY"
 						}
 					], anim = {from: { opacity: 1.0 }, to: {opacity: 0.0}, duration: 2};
-				var slideshow = new Y.SlideShow({ srcNode: '#ss', width: 200, images: images, animation: anim, delay: 4000});
+				var slideshow = new Y.SlideShow({ srcNode: '#ss', width: 200, animation: anim, delay: 4000});
+				slideshow.addImages(images);
 				slideshow.render();
 			});
 		</script>

@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>Slideshow Test</title>
-		<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+		<script src="../../../../yui3/build/yui/yui.js"></script>
 		<script src="../../../build/gallery-slideshow/gallery-slideshow-debug.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../../build/gallery-slideshow/assets/gallery-slideshow-core.css"></link>
 		<style type="text/css">
@@ -10,7 +10,7 @@
 	<body>
 		<div id="ss"></div>
 		<script type="text/javascript">
-			YUI().use('gallery-slideshow', 'anim', function(Y) {
+			YUI({filter: 'RAW'}).use('gallery-slideshow', 'anim', function(Y) {
 				var images =  
 					[
 						{
@@ -29,8 +29,12 @@
 							'license': "CC-BY"
 						}
 					], anim = {from: { opacity: 1.0 }, to: {opacity: 0.0}, duration: 2};
-				var slideshow = new Y.SlideShow({ boundingBox: '#ss', image_height: 87, image_width: 87, width: 121, images: images, animation: anim, delay: 4000, title: "Slideshow Test"});
+				var slideshow = new Y.SlideShow({ boundingBox: '#ss', image_height: 87, image_width: 87, width: 121, animation: anim, delay: 4000, title: "Slideshow Test", images: images.splice(1,2)});
 				slideshow.render();
+				Y.later(10000, this, function() {
+					Y.log('Later fired.');
+					slideshow.addImages(images.splice(0,1));	
+				}, null, false);
 			});
 		</script>
 	</body>

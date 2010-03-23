@@ -21,7 +21,7 @@ ImageScaling.ATTRS = {
 
 Y.extend(ImageScaling, Y.Plugin.Base, {
 	initializer: function(config) {
-		this.doAfter("createImage", this._scaleImage);
+		this.doAfter("_createImage", this._scaleImage);
 	},
 	_scaleImage: function(img) {
 		var scaleFactor = this.get('scaleFactor'),
