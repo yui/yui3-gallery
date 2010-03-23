@@ -1,0 +1,12 @@
+Effects is meant to bring the concise API seen in Scriptaculous and other
+animation libraries to YUI while also leveraging the great YUI 3 Anim module.
+
+== CHANGELOG ==
+
+Version 0.5
+-----------
+
+This is the first official version and includes basic support for all of the core
+Scriptaculous effects as well as some of the more complex ones.  I plan on releasing
+this as version 1.0 once all of the Scriptaculous effects have been ported over and
+the documentation is complete.  Stay tuned!
