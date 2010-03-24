@@ -4,13 +4,16 @@
 * It is based on the excellent jQuery plugin, Quicksand (http://razorjack.net/quicksand/docs-and-demos.html#demo-link)
 *
 *
+*
+* Project Home - http://kickballcreative.com/yui/modules/yuisand/
+* Copyright (c) 2010 Lauren Smith
+* YUI BSD - http://developer.yahoo.com/yui/license.html
+*
+*
 */
  
 // Constants
-var animationQueue	= [],
-	offsets			= {},
-	timers			= [],
-	YS_COMPLETE		= 'complete'
+var animationQueue = [], sand, s, d, p, sourceItems, destItems, rotate, scale, rotDuration, scaleDuration, sorter;
  
 /**
 * Provides YUISand widget
@@ -132,14 +135,19 @@ Y.extend( YUISand, Y.Base, {
 			}, this );
 		}
  
-		s				= Y.one( this.get( 'source' ) ),
-		d				= Y.one( this.get( 'destination' ) ),
-		p				= s.get( 'parentNode' ),
-		sourceItems		= s.all( '> *' ),
+		// Grab all our nodes
+		s				= Y.one( this.get( 'source' ) );
+		d				= Y.one( this.get( 'destination' ) );
+		p				= s.get( 'parentNode' );
+		sourceItems		= s.all( '> *' );
 		destItems		= d.all( '> *' );
 		
+		// If the destination collection is shown then our job here is complete
+		if ( d.getStyle( 'display' ) == 'block' ) { return; }
+		
+		// If CSS3 transformations set the variables
 		if ( this.get( 'transform' ) ) {
-			
+						
 			rotate			= this.get( 'transform' ).rotate;
 			scale			= this.get( 'transform' ).scale;
 
@@ -148,14 +156,14 @@ Y.extend( YUISand, Y.Base, {
 			
 		}
  
-		// If the destination collection is shown then our job here is complete
-		if ( d.getStyle( 'display' ) == 'block' ) { return; }
- 
+		// Now time to work
 		this._prepCollections();
  
 	},
  
 	_prepCollections: function() {
+		
+		var animationType, offsets = {};
  
 		p.prepend( '<div id="yuisand_sorter" />' ); // Create a container
  
@@ -218,17 +226,17 @@ Y.extend( YUISand, Y.Base, {
 			
 			if ( this.get( 'transform' ) ) {
 				
-				if ( this.get( 'transform' ).rotate ) item.setStyles({
+				if ( this.get( 'transform' ).rotate ) { item.setStyles({
 					'-webkit-transform'		: 'rotate(' + this.get( 'transform' ).rotate[0] + 'deg)',
 					'-moz-transform'		: 'rotate(' + this.get( 'transform' ).rotate[0] + 'deg)',
 					'transform'				: 'rotate(' + this.get( 'transform' ).rotate[0] + 'deg)'
-				})
+				}); }
 
-				if ( this.get( 'transform' ).scale ) item.setStyles({
+				if ( this.get( 'transform' ).scale ) { item.setStyles({
 					'-webkit-transform'		: 'scale(' + this.get( 'transform' ).scale[0] + ')',
 					'-moz-transform'		: 'scale(' + this.get( 'transform' ).scale[0] + ')',
 					'transform'				: 'scale(' + this.get( 'transform' ).scale[0] + ')'
-				})
+				}); }
 				
 			}
  
@@ -246,10 +254,10 @@ Y.extend( YUISand, Y.Base, {
 				var top		= offsets[item.getAttribute( this.get( 'attribute' ) )].top,
 					left	= offsets[item.getAttribute( this.get( 'attribute' ) )].left,
 					x		= offsets[item.getAttribute( this.get( 'attribute' ) )].x,
-					y		= offsets[item.getAttribute( this.get( 'attribute' ) )].y
+					y		= offsets[item.getAttribute( this.get( 'attribute' ) )].y;
  
 				item.setStyle( 'opacity' , '1' );
- 				
+
 				if ( this.get( 'curve' ) ) {
 					
 					item.setX(x).setY(y);
@@ -260,7 +268,7 @@ Y.extend( YUISand, Y.Base, {
 					item.setStyles({
 						'top'		: ( top - item.get( 'offsetTop' ) ) + 'px',
 						'left'		: ( left - item.get( 'offsetLeft' ) ) + 'px'
-					})
+					});
 					
 					animationType.set( 'to', {
 						top : '0px',
@@ -295,6 +303,8 @@ Y.extend( YUISand, Y.Base, {
 	},
  
 	_runQueue: function() {
+		
+		var anim;
  
 		Y.Array.each( animationQueue, function( item, index ) {
  
@@ -311,7 +321,7 @@ Y.extend( YUISand, Y.Base, {
 					this._cleanup();
  
 					// Fire the callback
-					this.fire( YS_COMPLETE );
+					this.fire( 'complete' );
  
 				}, this );
  
@@ -350,7 +360,7 @@ Y.extend( YUISand, Y.Base, {
 		arr.each( function( item ) {
  
 			if ( item.getAttribute( this.get( 'attribute' ) ) === el && unique === true ) {
-				unique = false
+				unique = false;
 			}
  
 		}, this );
@@ -363,7 +373,7 @@ Y.extend( YUISand, Y.Base, {
 		
 		var options			= this.get( 'curve' ),
 			optionsPoints	= ( options.points ) ? options.points : 5,
-			optionsStart	= ( options.start ) ? options.start : [0,0]
+			optionsStart	= ( options.start ) ? options.start : [0,0],
 			points			= [],
 			xDiv			= end[0] / optionsPoints,
 			yDiv			= end[1] / optionsPoints;
@@ -400,11 +410,11 @@ Y.extend( YUISand, Y.Base, {
 					'-webkit-transform'		: 'rotate(' + node.rotateAmt + 'deg)',
 					'-moz-transform'		: 'rotate(' + node.rotateAmt + 'deg)',
 					'transform'				: 'rotate(' + node.rotateAmt + 'deg)'
-				})
+				});
 
 			} else { this._deleteTimer( node.scaleTimer ); }
 			
-			node.rotateTimer = setInterval( function() { sand._transform( node ) }, rotDuration );
+			node.rotateTimer = setInterval( function() { sand._transform( node ); }, rotDuration );
 			
 		}
 
@@ -416,33 +426,33 @@ Y.extend( YUISand, Y.Base, {
 
 				if ( node.scaleAmt > scale[0] ) {
 				
-					node.scaleAmt = node.scaleAmt - .1;
+					node.scaleAmt = node.scaleAmt - 0.1;
 				
 					node.setStyles({
 						'-webkit-transform'		: 'scale(' + node.scaleAmt + ')',
 						'-moz-transform'		: 'scale(' + node.scaleAmt + ')',
 						'transform'				: 'scale(' + node.scaleAmt + ')'
-					})
+					});
 					
 				} else { this._deleteTimer( node.scaleTimer ); }
 				
-				node.scaleTimer = setInterval( function() { sand._transform( node ) }, scaleDuration );
+				node.scaleTimer = setInterval( function() { sand._transform( node ); }, scaleDuration );
 				
 			} else {
 				
 				if ( node.scaleAmt < scale[1] ) {
 
-					node.scaleAmt = node.scaleAmt + .1;
+					node.scaleAmt = node.scaleAmt + 0.1;
 
 					node.setStyles({
 						'-webkit-transform'		: 'scale(' + node.scaleAmt + ')',
 						'-moz-transform'		: 'scale(' + node.scaleAmt + ')',
 						'transform'				: 'scale(' + node.scaleAmt + ')'
-					})
+					});
 
 				} else { this._deleteTimer( node.scaleTimer ); }
 
-				node.scaleTimer = setInterval( function() { sand._transform( node ) }, scaleDuration );
+				node.scaleTimer = setInterval( function() { sand._transform( node ); }, scaleDuration );
 				
 			}
 			
@@ -451,7 +461,7 @@ Y.extend( YUISand, Y.Base, {
 	},
 	
 	_deleteTimer: function( time ) {
-	
+		
 		clearInterval( time );
 		time = null;
 		
