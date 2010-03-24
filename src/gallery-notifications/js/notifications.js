@@ -1,8 +1,6 @@
 /*
  * Copyright (c) 2010 Ricardo Ramirez. All rights reserved.
- */
-
-/**
+ *
  * Holds information about a Notification. The Notifications (plural) class has a collection of
  * Notification that are then displayed. This maps the needed information for the notification like a
  * date and the content of the notification itself
@@ -358,4 +356,5 @@ Y.Notifications.prototype.registerSource = function(source, periodicity) {
 	this.timeoutId = setInterval(callbackFn, (periodicity || 1) * 60 * 1000);
 	callbackFn();
 };
+
 

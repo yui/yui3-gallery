@@ -59,27 +59,6 @@
 	overflow-y: auto; 
 }
 
-/* This is a small hack, that renders a 1px line in the bottom of the popup, to hide only 1/2 of the border */
-/*
-.yui3-notifications-pop .border
-{
-	position: absolute;
-	
-	width: 100px;
-	bottom: 0px;
-	right: 0px;
-	padding: 10px;
-	margin-bottom: -10px;
-
-	height: 2px;
-	font-size: 2px;
-	background-color: #FEE;
-}
-*/
-
-
-
-
 .yui3-notifications-pop ul
 {
 	list-style: none;
