@@ -113,6 +113,13 @@ var	Lang = Y.Lang,
 		tagName: {
 			value: 'div',
 			validator: Lang.isString
+		},
+
+		/**
+		 * @see Widget.ATTRS.value
+		 */
+		visible: {
+			value: false
 		}
 	};
 
@@ -298,6 +305,13 @@ var	CLS_PANEL = 'yui-' + Y.RadialMenuPanel.NAME.toLowerCase(),
 		useMask: {
 			value: false,
 			validator: Lang.isBoolean
+		},
+
+		/**
+		 * @see Widget.ATTRS.value
+		 */
+		visible: {
+			value: false
 		}
 	};
 
@@ -463,13 +477,16 @@ var	CLS_PANEL = 'yui-' + Y.RadialMenuPanel.NAME.toLowerCase(),
 		 * @see Y.Widget.bindUI
 		 */
 		bindUI: function() {
-			var _this = this,
-				doc = document;
+			// only bind the UI if it is visible
+			if (this.get('visible')) {
+				var _this = this,
+					doc = document;
 
-			if (! _this._keyDownHandle) {
-				_this._keyDownHandle = Y.on('keydown', _bind(_this._handleKeyDown, _this), doc);
-				_this._keyUpHandle = Y.on('keyup', _bind(_this._handleKeyUp, _this), doc);
-				_this._nodeClickHandle = Y.on("click", _bind(_this._handleClick, _this), doc);
+				if (! _this._keyDownHandle) {
+					_this._keyDownHandle = Y.on('keydown', _bind(_this._handleKeyDown, _this), doc);
+					_this._keyUpHandle = Y.on('keyup', _bind(_this._handleKeyUp, _this), doc);
+					_this._nodeClickHandle = Y.on("click", _bind(_this._handleClick, _this), doc);
+				}
 			}
 		},
 
@@ -517,8 +534,7 @@ var	CLS_PANEL = 'yui-' + Y.RadialMenuPanel.NAME.toLowerCase(),
 			var _this = this,
 				box, width, height;
 
-			Y.later(1, _this, _this.bindUI);
-			_this.syncUI(true);
+			_this.syncUI();
 
 			if (_this.get('useMask')) {
 				box = _this.get('boundingBox');
@@ -530,12 +546,14 @@ var	CLS_PANEL = 'yui-' + Y.RadialMenuPanel.NAME.toLowerCase(),
 
 				RadialMenu.superclass.show.apply(_this, arguments);
 			}
+			
+			Y.later(200, _this, _this.bindUI);
 		},
 
 		/**
 		 * @see Y.Widget.syncUI
 		 */
-		syncUI: function(isShow) {
+		syncUI: function() {
 			var _this = this,
 				panels = _this.get('panels'),
 				n = _this.get('panels').length,
@@ -551,9 +569,7 @@ var	CLS_PANEL = 'yui-' + Y.RadialMenuPanel.NAME.toLowerCase(),
 					viewport.top + (viewport.height - 5) / 2
 				];
 			}
-
-			if (! isShow) {this.hide();}
-
+			
 			Y.each(panels, function(panel, i) {
 				reg = panel.get('boundingBox').get('region');
 				a = (angle * i - 90) * Math.PI / 180;
@@ -565,7 +581,6 @@ var	CLS_PANEL = 'yui-' + Y.RadialMenuPanel.NAME.toLowerCase(),
 				panel.set('radialpt', [x,y]);
 				panel.set('zIndex', 100 + i);
 				panel[panel.get('rendered') ? 'syncUI' : 'render']();
-				panel[isShow ? 'show' : 'hide']();
 				panel.after(panel._handleMouseEnter, function() {_this._selectedPanel = panel});
 				panel.after(panel._handleMouseLeave, function() {_this._selectedPanel = null});
 			}, _this);
@@ -753,8 +768,7 @@ if (Y.Anim && Y.Plugin) {
 				Y.each(this.get('host').get('panels'),function(panel) {
 					var node = panel.get('boundingBox'),
 						centerpt = panel.get('centerpt');
-					node.setStyle('left', centerpt[0] + 'px');
-					node.setStyle('top', centerpt[1] + 'px');
+					panel.set('xy', centerpt);
 				});
 			}
 		});
@@ -763,4 +777,4 @@ if (Y.Anim && Y.Plugin) {
 }
 
 
-}, 'gallery-2010.03.23-17-54' ,{optional:['anim', 'plugin'], requires:['overlay', 'collection', 'event-mouseenter', 'node']});
+}, 'gallery-2010.03.29-18-07' ,{optional:['anim', 'plugin'], requires:['overlay', 'collection', 'event-mouseenter', 'node']});

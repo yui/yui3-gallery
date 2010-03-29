@@ -18,6 +18,11 @@ YUI.add('gallery-widget-io', function(Y) {
     WidgetIO.NAME = 'widgetIO';
 
     /*
+     * The className to apply to the contentBox while loading.
+     */
+    WidgetIO.LOADING_CLASS_NAME = Y.Widget.getClassName('loading');
+
+    /*
      * The default set of attributes for the WidgetIO class.
      */
     WidgetIO.ATTRS = {
@@ -43,13 +48,6 @@ YUI.add('gallery-widget-io', function(Y) {
             valueFn: function() {
                 return this._defFormatter;
             }
-        },
-
-        /*
-         * The default loading indicator to use, when an io transaction is in progress.
-         */
-        loading: {
-            value: '<img class="yui3-loading" width="32px" height="32px" src="<?php echo $assetsDirectory ?>img/ajax-loader.gif">'
         }
     };
 
@@ -71,7 +69,8 @@ YUI.add('gallery-widget-io', function(Y) {
          */
         refresh: function() {
             if (!this._activeIO) {
-                var uri = this.get('uri');
+                var uri = this.get('uri'),
+                    cfg;
 
                 if (uri) {
 
@@ -105,6 +104,7 @@ YUI.add('gallery-widget-io', function(Y) {
             var response = o.responseText;
             var formatter = this.get('formatter');
 
+            this._toggleLoadingClass(false);
             this.setContent(formatter(response));
         },
 
@@ -112,6 +112,7 @@ YUI.add('gallery-widget-io', function(Y) {
          * The default io transaction failure handler
          */
         _defFailureHandler: function(id, o) {
+            this._toggleLoadingClass(false);
             this.setContent('Failed to retrieve content');
         },
 
@@ -120,7 +121,8 @@ YUI.add('gallery-widget-io', function(Y) {
          */
         _defStartHandler: function(id, o) {
             this._activeIO = o;
-            this.setContent(this.get('loading'));
+            this.setContent('');
+            this._toggleLoadingClass(true);
         },
 
         /*
@@ -128,6 +130,7 @@ YUI.add('gallery-widget-io', function(Y) {
          */
         _defCompleteHandler: function(id, o) {
             this._activeIO = null;
+            this._toggleLoadingClass(false);
         },
 
         /*
@@ -135,11 +138,16 @@ YUI.add('gallery-widget-io', function(Y) {
          */
         _defFormatter: function(val) {
             return val;
+        },
+
+        _toggleLoadingClass: function(add) {
+            this.get('host').get('boundingBox').toggleClass(WidgetIO.LOADING_CLASS_NAME, add);
         }
+
     });
 
     Y.Plugin.WidgetIO = WidgetIO;
 
 
 
-}, 'gallery-2010.03.16-20' ,{requires:['plugin', 'widget', 'io']});
+}, 'gallery-2010.03.29-18-07' ,{requires:['plugin', 'widget', 'io']});
