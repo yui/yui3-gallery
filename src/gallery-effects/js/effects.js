@@ -242,7 +242,7 @@
 				return node;
 			}
 			
-			node._oveflow = DOM.getStyle(node, "overflow") || "auto";
+			node._overflow = DOM.getStyle(node, "overflow") || "auto";
 			
 			if (node._overflow !== "hidden") {
 				DOM.setStyle(node, "overflow", "hidden");
@@ -378,51 +378,30 @@
 	
 	/**
     * @for Effects.BaseEffect
-    * @event beforeStart
+    * @event queue
     * @description fires before an effect is added to the queue to be processed.
-    * @param {Event} ev The beforeStart event.
+    * @param {Event} ev The queue event.
     * @type Event.Custom
     */
-	var BEFORE_START = "beforeStart",
+	var QUEUE = "queue",
 	
 	/**
     * @for Effects.BaseEffect
-    * @event beforeSetup
-    * @description fires before we call the setup method.
-    * @param {Event} ev The beforeSetup event.
+    * @event setup
+    * @description fires when the effect is to be setup.
+    * @param {Event} ev The setup event.
     * @type Event.Custom
     */
-	BEFORE_SETUP = "beforeSetup",
+	SETUP = "setup",
 	
 	/**
     * @for Effects.BaseEffect
-    * @event afterSetup
-    * @description fires after we call the setup method.
-    * @param {Event} ev The afterSetup event.
+    * @event finish
+    * @description fires once the effect is complete.
+    * @param {Event} ev The finish event.
     * @type Event.Custom
     */
-	AFTER_SETUP = "afterSetup",
-	
-	/**
-    * @for Effects.BaseEffect
-    * @event beforeFinish
-    * @description fires before we call the finish method.
-    * @param {Event} ev The beforeFinish event.
-    * @type Event.Custom
-    */
-	BEFORE_FINISH = "beforeFinish",
-	
-	/**
-    * @for Effects.BaseEffect
-    * @event afterFinish
-    * @description fires after we call the finish method.
-    * @param {Event} ev The afterFinish event.
-    * @type Event.Custom
-    */
-	AFTER_FINISH = "afterFinish",
-	
-	// Helper list of all events.
-	EVENT_LIST = [BEFORE_START, BEFORE_SETUP, AFTER_SETUP, BEFORE_FINISH, AFTER_FINISH];	
+	FINISH = "finish";	
 	
 	/***
 	 * The base class for the core effects.  The core effects define a single animation
@@ -472,8 +451,8 @@
          * queue to be processed and it's the responsibility of the creator to make sure the run
          * and finish method are called.
          * 
-         * @attribute wait
-         * @value true
+         * @attribute managed
+         * @value false
          * @type boolean
          */
 		managed: {
@@ -537,12 +516,30 @@
 			this.set("config", config);
 			this.set("node", Y.one(config.node));
 			
-			Y.Array.each(EVENT_LIST, Y.bind(function (event) {
-				this.publish(event);
-				if (config[event]) {
-					this.on(event, config[event]);
-				}
-			}, this));
+			this.publish(QUEUE, { defaultFn: this._queue });
+			this.publish(SETUP, { defaultFn: this.setup });
+			this.publish(FINISH, { defaultFn: this.finish });
+
+			// Subscribe to any events that we know we should subscribe to.
+			if (config.beforeStart) {
+				this.on(QUEUE, config.beforeStart);
+			}
+			
+			if (config.beforeSetup) {
+				this.on(SETUP, config.beforeSetup);
+			}
+			
+			if (config.afterSetup) {
+				this.after(SETUP, config.afterSetup);
+			}
+			
+			if (config.beforeFinish) {
+				this.on(FINISH, config.beforeFinish);
+			}
+			
+			if (config.afterFinish) {
+				this.after(FINISH, config.afterFinish);
+			}
 		},
 		
 		/**
@@ -555,27 +552,13 @@
 		setup: function () {},
 		
 		/**
-         * Add an effect to one of the effect queues.
+         * Add an effect to one of the effect queues by firing the queue event.
          * 
          * @method addToQueue
          */
 		addToQueue: function () {
-
 			if (!this.get("managed")) {
-
-				this.fire("beforeStart");
-				
-				var queue = this._getQueue();
-				
-				queue.add({
-					fn: this.run,
-					context: this,
-					autoContinue: !this.get("wait")
-				});
-				
-				if (!queue.isRunning()) {
-					queue.run();
-				}
+				this.fire(QUEUE);
 			}
 		},
 		
@@ -586,13 +569,11 @@
          */
 		run: function () {
 
-			this.fire("beforeSetup");
-			this.setup();
-			this.fire("afterSetup");
+			this.fire(SETUP);
 			
 			var anim = this.get("anim");
 			
-			anim.on("end", this.finish, this);
+			anim.on("end", function (e) { this.fire(FINISH, { animEnd: e }); }, this);
 			anim.run();
 		},
 		
@@ -605,17 +586,33 @@
          */
 		finish: function () {
 			
-			this.fire("beforeFinish");
-			
 			this._finish();
 			
-			// If it's a managed effect and the queue we were in isn't currently running,
+			// If it's not a managed effect and the queue we were in isn't currently running,
 			// then execute the next effect.
 			if (!this.get("managed") && !this._getQueue().isRunning()) {
 				this._getQueue().run();
 			}
+		},
+		
+		/***
+		 * Queue the animation to be executed.
+		 * 
+		 * @method _queue
+		 * @protected
+		 */
+		_queue: function () {
+			var queue = this._getQueue();
+				
+			queue.add({
+				fn: this.run,
+				context: this,
+				autoContinue: !this.get("wait")
+			});
 			
-			this.fire("afterFinish");
+			if (!queue.isRunning()) {
+				queue.run();
+			}
 		},
 		
 		/**
@@ -632,7 +629,7 @@
          * If there are any node modifications that need to happen after the animation,
          * they should take place here.
          * 
-         * @method _final
+         * @method _finish
          * @protected
          */
 		_finish: function () {}
@@ -675,7 +672,7 @@
          * @method initializer
          * @param config {Object} has of configuration name/value pairs
          */
-		initializer: function () {
+		initializer: function (config) {
 			this.addToQueue();
 		},
 		
@@ -690,16 +687,14 @@
 				config = this.get("config");
 
 			// Do the setup stuff first.
-			this.fire("beforeSetup");
-			this.setup();
-			this.fire("afterSetup");
+			this.fire(SETUP);
 			
 			if (effects.length) {
 				// For the last effect, when we setup the animation for the last effect,
 				// we want to bind to the end event of that effect's animation to execute
 				// the finish method.
 				effects[effects.length - 1].after("animChange", function (event) {
-					event.newVal.on("end", this.finish, this);
+					event.newVal.on("end", function () { this.fire(FINISH, { animEnd : null }); } , this);
 				}, this);
 				
 				// For each animation, set the node it will run on and merge the configuration
@@ -708,12 +703,11 @@
 				Y.Array.each(effects, function (effect) {
 					effect.set("config", Y.merge(effect.get("config"), config));
 					
-					effect.fire("beforeStart");
 					effect.run();
 				});
 			} else {
 				// If there are no effects, then we're done.
-				this.finish();
+				this.fire(FINISH, { animEnd : null });
 			}
 		}
 	});
@@ -794,7 +788,7 @@
          * @method initializer
          * @param config {Object} has of configuration name/value pairs
          */
-		initializer: function(){
+		initializer: function (config) {
 			this.addToQueue();
 		},
 		
@@ -826,6 +820,44 @@
 	});
 	
 	/***
+	 * This effect scrolls a node to a specific position.
+	 * 
+	 * @class Y.Effects.Scroll
+	 * @param config {Object} has of configuration name/value pairs
+	 */
+	Effects.Scroll = function (config) {
+		Effects.Scroll.superclass.constructor.apply(this, arguments);
+	};
+	
+	Effects.Scroll.NAME = "scroll";
+	
+	Y.extend(Effects.Scroll, Effects.BaseEffect, {
+		
+		/**
+		 * 
+         * @method initializer
+         * @param config {Object} has of configuration name/value pairs
+         */
+		initializer: function (config) {
+			this.addToQueue();
+		},
+		
+		/**
+		 * Normalize the "to" and "from" properties for scrolling.
+		 * 
+         * @method setup
+         */
+		setup: function () {
+			var config = this.get("config");
+			
+			config.to = { scroll: config.to };
+			config.from = { scroll: config.from };
+
+			this.set("anim", new Y.Anim(config));
+		}
+	});
+	
+	/***
 	 * Effect for generic mutations. This is the closest to a wrapper for the Y.Anim object
 	 * itself.
 	 * 
@@ -845,7 +877,7 @@
          * @method initializer
          * @param config {Object} has of configuration name/value pairs
          */
-		initializer: function () {
+		initializer: function (config) {
 			this.addToQueue();
 		},
 		
@@ -1198,7 +1230,7 @@
          * @method initializer
          * @param config {Object} has of configuration name/value pairs
          */
-		initializer: function () {
+		initializer: function (config) {
 			this.addToQueue();
 		},
 
@@ -1264,30 +1296,29 @@
 	Effects.Puff = function (config) {
 		
 		var node = Y.one(config.node),
-			// store old styles so we can reset them once we're done.
-			oldStyles = {
-			    opacity: node.getStyle("opacity"),
-			    position: node.getStyle("position"),
-			    top: node.getStyle("top"),
-			    left: node.getStyle("left"),
-			    width: node.getStyle("width"),
-			    height: node.getStyle("height")
-			};
 		
-		return new Effects.Parallel(Y.merge({
+		// store old styles so we can reset them once we're done.
+		oldStyles = {
+		    opacity: node.getStyle("opacity"),
+		    position: node.getStyle("position"),
+		    top: node.getStyle("top"),
+		    left: node.getStyle("left"),
+		    width: node.getStyle("width"),
+		    height: node.getStyle("height")
+		},
+		
+		effect = new Effects.Parallel(Y.merge({
 			effects: [
 				new Effects.Scale({ node: node, managed: true, scaleTo: 200, scaleFromCenter: true, scaleContent: true, restoreAfterFinish: true }),
 				new Effects.Opacity({ node: node, managed: true, to: 0.0 })
 			],
-			duration: 1.0,
-			beforeSetup: function () {
-			    this.get("node").positionAbsolutely();
-			},
-				
-			afterFinish: function () {
-				this.get("node").hide().setStyles(oldStyles);
-			}
+			duration: 1.0
 		}, config));
+		
+		effect.on("setup", function () { this.get("node").positionAbsolutely(); });
+		effect.after("finish", function () { this.get("node").hide().setStyles(oldStyles); });
+		
+		return effect;
 	};
 	
 	/***
@@ -1297,15 +1328,16 @@
 	 */
 	Effects.Appear = function (config) {
 		var node = Y.one(config.node),
-			fromOpacity = !node.displayed() ? 0.0 : node.getStyle("opacity") || 0.0;
+			fromOpacity = !node.displayed() ? 0.0 : node.getStyle("opacity") || 0.0,
 
-		return new Effects.Opacity(Y.merge({
+		effect = new Effects.Opacity(Y.merge({
 			from: fromOpacity,
-			to: 1.0,
-			beforeSetup: function () {
-				this.get("node").setStyle("opacity", fromOpacity).show();
-			}
+			to: 1.0
 		}, config));
+		
+		effect.on("setup", function () { this.get("node").setStyle("opacity", fromOpacity).show(); });
+
+		return effect;
 	};
 	
 	/***
@@ -1316,19 +1348,22 @@
 	Effects.Fade = function (config) {
 		var node = Y.one(config.node),
 			previousOpacity = node.getStyle("opacity"),
-			toOpacity = config.to || 0.0;
+			toOpacity = config.to || 0.0,
 
-		return new Effects.Opacity(Y.merge({
+		effect = new Effects.Opacity(Y.merge({
 			from: previousOpacity || 1.0,
-			to: toOpacity,
-			afterFinish: function () {
-				if (toOpacity !== 0) {
-					return;
-				}
-				
-				this.get("node").hide().setStyle("opacity", previousOpacity);
-			}
+			to: toOpacity
 		}, config));
+		
+		effect.after("finish", function () {
+			if (toOpacity !== 0) {
+				return;
+			}
+			
+			this.get("node").hide().setStyle("opacity", previousOpacity);
+		});
+		
+		return effect;
 	};
 
 	/***
@@ -1341,15 +1376,18 @@
 		
 		node._makeClipping();
 		
-		return new Effects.Scale(Y.merge({
+		var effect = new Effects.Scale(Y.merge({
 			scaleTo: 0,
 			scaleContent: false,
 			scaleX: false,
-			restoreAfterFinish: true,
-			afterFinish: function() {
-				this.get("node").hide()._undoClipping();
-			}
+			restoreAfterFinish: true
 		}, config));
+		
+		effect.after("finish", function () {
+			this.get("node").hide()._undoClipping();
+		});
+		
+		return effect;
 	};
 	
 	/***
@@ -1359,24 +1397,28 @@
 	 */
 	Effects.BlindDown = function (config) {
 		var node = Y.one(config.node),
-			hw = node.getDimensions();
+			hw = node.getDimensions(),
 
-		return new Effects.Scale(Y.merge({
+		effect = new Effects.Scale(Y.merge({
 			scaleTo: 100,
 			scaleContent: false,
 			scaleX: false,
 			scaleFrom: 0,
 			scaleMode: {originalHeight: hw[1], originalWidth: hw[0]},
-			restoreAfterFinish: true,
-			afterSetup: function() {
-				var node = this.get("node");
-
-				node._makeClipping().setStyle("height", "0px").show();
-			},
-			afterFinish: function() {
-				this.get("node")._undoClipping();
-			}
+			restoreAfterFinish: true
 		}, config));
+		
+		effect.after("setup", function() {
+			var node = this.get("node");
+
+			node._makeClipping().setStyle("height", "0px").show();
+		});
+		
+		effect.after("finish", function() {
+			this.get("node")._undoClipping();
+		});
+		
+		return effect;
 	};
 	
 	Y.Effects = Effects;
@@ -1386,7 +1428,7 @@
 	 *********************************/
 	
 	var ExtObj = {},
-		effects = "opacity move scale morph highlight appear fade puff blindUp blindDown".split(" ");
+		effects = "opacity move scroll scale morph highlight appear fade puff blindUp blindDown".split(" ");
 	
 	Y.Array.each(effects, function (effect) {
 		ExtObj[effect] = function (node, config) {

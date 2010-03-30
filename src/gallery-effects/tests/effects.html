@@ -34,6 +34,15 @@
 			width:100px;
 			height:100px;
 		}
+		
+		#scroll {
+			height:200px;
+			width:200px;
+			overflow:auto;
+		}
+		#scroll p {
+			width:300px;
+		}
 		#highlight {
 			background-color:white;
 			border:solid 1px #000;
@@ -60,6 +69,26 @@
 	<div class="controls">
 		<button id="move_class">Class</button>
 		<button id="move_method">Method</button>
+	</div>
+	
+	<h2>Y.Node.Scroll()</h2>
+	<div class="example">
+		<div class="box" id="scroll">
+			<p>This is the first line of text in this div.<br />This is the second line of text in this div.<br />
+			This is the third line of text in this div.<br />This is the fourth line of text in this div.<br />
+			This is the fifth line of text in this div.<br />This is the sixth line of text in this div.
+			This is the seventh line of text in this div.<br />This is the eighth line of text in this div.
+			This is the ninth line of text in this div.<br />This is the tenth line of text in this div.
+			This is the eleventh line of text in this div.<br />This is the twelvth line of text in this div.
+			This is the thirteenth line of text in this div.<br />This is the fourteenth line of text in this div.
+			This is the fifteenth line of text in this div.<br />This is the sixteenth line of text in this div.
+			This is the seventeenth line of text in this div.<br />This is the eighteenth line of text in this div.
+			This is the nineteenth line of text in this div.<br />This is the twenth line of text in this div.</p>
+		</div>
+	</div>
+	<div class="controls">
+		<button id="scroll_class">Class</button>
+		<button id="scroll_method">Method</button>
 	</div>
 	
 	
@@ -167,6 +196,7 @@
 			var cfg = {
 				opacity: { from: 0, to: 1 },
 				move: { x: 50, y: 20 },
+				scroll: { to: [100, 100] },
 				morph: { to: { backgroundColor: "blue", color: "white" } },
 				scale: { scaleTo: 250, scaleFromCenter: true },
 				highlight: { duration: 3 },
