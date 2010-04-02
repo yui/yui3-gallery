@@ -1059,18 +1059,18 @@ FormManager.prototype =
 			{
 				this.displayMessage(e[i], info.error, 'error');
 				status = false;
-			}
-			if (!info.keepGoing)
-			{
 				continue;
 			}
 
-			if (this.validation.regex[e_id] &&
-				!this.validation.regex[e_id].test(e[i].value))
+			if (info.keepGoing)
 			{
-				this.displayMessage(e[i], msg_list ? msg_list.regex : null, 'error');
-				status = false;
-				continue;
+				if (this.validation.regex[e_id] &&
+					!this.validation.regex[e_id].test(e[i].value))
+				{
+					this.displayMessage(e[i], msg_list ? msg_list.regex : null, 'error');
+					status = false;
+					continue;
+				}
 			}
 
 			var f     = this.validation.fn[e_id];
