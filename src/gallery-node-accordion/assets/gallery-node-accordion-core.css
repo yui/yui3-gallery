@@ -1,23 +1,23 @@
-.yui-accordion {
+.yui3-accordion {
 	position: relative;
 	zoom: 1;
 }
-.yui-accordion .yui-accordion-item {
+.yui3-accordion .yui3-accordion-item {
     display: block;
 }
-.yui-accordion .yui-accordion-item .yui-accordion-item-hd {
+.yui3-accordion .yui3-accordion-item .yui3-accordion-item-hd {
 }
-.yui-accordion .yui-accordion-item .yui-accordion-item-bd {
+.yui3-accordion .yui3-accordion-item .yui3-accordion-item-bd {
 	height: 0;
 	_height: 1px;
 	*height: 1px;
 	overflow: hidden;
     zoom: 1;
 }
-.yui-accordion .yui-accordion-item-active .yui-accordion-item-bd {
+.yui3-accordion .yui3-accordion-item-active .yui3-accordion-item-bd {
 	height: auto;
 }
-.yui-accordion-hidden {
+.yui3-accordion-hidden {
     /* absolute position off-screen and box collapsing used to
        avoid display:none, which causes issues for some content (firefox
        restarts flash movies) */
