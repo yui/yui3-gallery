@@ -649,6 +649,12 @@
                    finalCoords ;
 
 
+               if( this._resizeNode.getStyle("position") !== "absolute" ){
+                 orig.t = 0; t=0;
+                 orig.l = 0; l=0;
+               }
+
+
                if( this.get( "xTicks" ) && this.get( "xTicks" ) > 0 ){
                  calcdW =  this._snapTick( dw , this.get( "xTicks" ) );
                  
@@ -722,10 +728,16 @@
                  l = orig.l; calcdL = 0;
                }
 
+
+
+
                finalCoords = this._constrainResize( { w: w + calcdW, 
                                                           h: h + calcdH,
                                                           t: t + calcdT,
                                                           l: l + calcdL } );
+
+
+
 
                this._setPosition( finalCoords , this._resizeNode );
               
@@ -1129,6 +1141,7 @@
         } );
         
         Y.Plugin.Resize = Resize;
+
 
 
 
