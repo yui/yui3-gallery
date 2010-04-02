@@ -6,21 +6,6 @@
 
 (function(){
 
-/**
- * Accordion creates an widget, consists of one or more items, which can be collapsed, expanded,
- * set as always visible and reordered by using Drag&Drop. Collapsing/expanding might be animated.
- * 
- * @param config {Object} Object literal specifying Accordion configuration properties.
- *
- * @class Accordion
- * @constructor
- * @extends Widget
- */
-
-function Accordion( config ){
-    Accordion.superclass.constructor.apply( this, arguments );
-}
-
 // Local constants
 var Lang = Y.Lang,
     Node = Y.Node,
@@ -33,7 +18,7 @@ var Lang = Y.Lang,
     COLLAPSE_HEIGHT = IEQuirksMode ? 1 : 0,
     getCN = Y.ClassNameManager.getClassName,
     
-    C_ITEM = "yui-accordion-item",
+    C_ITEM = "yui3-accordion-item",
     C_PROXY_VISIBLE = getCN( AccName, "proxyel", "visible" ),
     DRAGGROUP = getCN( AccName, "graggroup" ),
 
@@ -75,157 +60,14 @@ var Lang = Y.Lang,
 
 
 /**
- *  Static property provides a string to identify the class.
+ * Accordion creates an widget, consists of one or more items, which can be collapsed, expanded,
+ * set as always visible and reordered by using Drag&Drop. Collapsing/expanding might be animated.
  *
- * @property Accordion.NAME
- * @type String
- * @static
+ * @class Accordion
+ * @extends Widget
  */
-Accordion.NAME = AccName;
 
-/**
- * Static property used to define the default attribute 
- * configuration for the Accordion.
- * 
- * @property Accordion.ATTRS
- * @type Object
- * @static
- */
-Accordion.ATTRS = {
-    /**
-     * @description The event on which Accordion should listen for user interactions.
-     * The value can be also mousedown or mouseup. Mousedown event can be used if
-     * drag&drop is not enabled
-     *
-     * @attribute itemChosen
-     * @default click
-     * @type String
-     */
-    itemChosen: {
-        value: "click",
-        validator: Lang.isString
-    },
-
-    /**
-     * @description Contains the items, currently added to Accordion
-     * 
-     * @attribute items
-     * @readOnly
-     * @default []
-     * @type Array
-     */
-    items: {
-        value: [],
-        readOnly: true,
-        validator: Lang.isArray
-    },
-    
-    /**
-     * @attribute resizeEvent
-     * 
-     * @description The event on which Accordion should listen for resizing.
-     * The value must be one of these:
-     * <ul>
-     *     <li> String "default" - the Accordion will subscribe to Y.windowresize event
-     *     </li>
-     *     <li> An object in the following form: 
-     *         {
-     *             sourceObject: some_javascript_object,
-     *             resizeEvent: an_event_to_subscribe
-     *         }
-     *      </li>
-     * </ul>
-     * For example, if we are using LayoutManager's instance as sourceObject, we will have to use its "resize" event as resizeEvent
-     *  
-     * @default "default"
-     * @type String or Object
-     */
-
-    resizeEvent: {
-        value: DEFAULT,
-        validator: function( value ){
-            if( value === DEFAULT ){
-                return true;
-            } else if( Lang.isObject(value) ){
-                if( Lang.isValue( value.sourceObject ) && Lang.isValue( value.resizeEvent ) ){
-                    return true;
-                }
-            }
-            
-            return false;
-        }
-    },
-
-    /**
-     * @attribute useAnimation
-     * @description Boolean indicating that Accordion should use animation when expanding or collapsing items.
-     * 
-     * @default true
-     * @type Boolean
-     */
-    useAnimation: {
-        value: true,
-        validator: Lang.isBoolean
-    },
-
-    /**
-     * @attribute animation
-     * @description Animation config values, see Y.Animation
-     * 
-     * @default <code> {
-     *    duration: 1, 
-     *    easing: Easing.easeOutStrong
-     *  }
-     *  </code>
-     *  
-     * @type Object
-     */
-    animation: {
-        value: {
-            duration: 1,
-            easing: Easing.easeOutStrong
-        },
-        validator: function( value ){
-            return Lang.isObject( value ) && Lang.isNumber( value.duration ) &&
-                Lang.isFunction( value.easing );
-        }
-    },
-
-    /**
-     * @attribute reorderItems
-     * @description Boolean indicating that items can be reordered via drag and drop.<br>
-     *
-     * Enabling items reordering requires also including the optional drag and drop modules in YUI instance:<br>
-     * 'dd-constrain', 'dd-proxy', 'dd-drop', or just 'dd'
-     *
-     * @default false
-     * @type Boolean
-     */
-    reorderItems: {
-        value: false,
-        validator: function(value){
-            return Lang.isBoolean(value) && !Lang.isUndefined( Y.DD );
-        }
-    },
-
-    /**
-     * @attribute collapseOthersOnExpand
-     * @description If true, on item expanding, all other expanded and not set as always visible items, will be collapsed
-     * Otherwise, they will stay open
-     * 
-     * @default true
-     * @type Boolean
-     */
-    collapseOthersOnExpand: {
-        value: true,
-        validator: Lang.isBoolean
-    }
-};
-
-// Accordion extends Widget
-
-Y.extend( Accordion, Y.Widget, {
-
+Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
     /**
      * Initializer lifecycle implementation for the Accordion class. Publishes events,
      * initializes internal properties and subscribes for resize event.
@@ -240,7 +82,7 @@ Y.extend( Accordion, Y.Widget, {
         this.after( "render", Y.bind( this._afterRender, this ) );
     },
 
-    
+
     /**
      * Destructor lifecycle implementation for the Accordion class.
      * Removes and destroys all registered items.
@@ -250,22 +92,22 @@ Y.extend( Accordion, Y.Widget, {
      */
     destructor: function() {
         var items, item, i, length;
-        
+
         items = this.get( ITEMS );
         length = items.length;
-        
+
         for( i = length - 1; i >= 0; i-- ){
             item = items[ i ];
-            
+
             items.splice( i, 1 );
-            
+
             this._removeItemHandles( item );
-            
+
             item.destroy();
         }
     },
 
-    
+
     /**
      * Publishes Accordion's events
      *
@@ -273,7 +115,7 @@ Y.extend( Accordion, Y.Widget, {
      * @protected
      */
     _initEvents: function(){
-        
+
         /**
          * Signals the beginning of adding an item to the Accordion.
          *
@@ -285,7 +127,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( BEFOREITEMADD );
-        
+
         /**
          * Signals an item has been added to the Accordion.
          *
@@ -297,7 +139,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( ITEMADDED );
-        
+
         /**
          * Signals the beginning of removing an item.
          *
@@ -309,7 +151,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( BEFOREITEMREMOVE );
-        
+
         /**
          * Signals an item has been removed from Accordion.
          *
@@ -333,7 +175,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( BEFOREITEMERESIZED );
-        
+
         /**
          * Signals an item has been resized.
          *
@@ -357,7 +199,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( BEFOREITEMEXPAND );
-        
+
         /**
          * Signals the beginning of collapsing an item
          *
@@ -369,8 +211,8 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( BEFOREITEMCOLLAPSE );
-        
-        
+
+
         /**
          * Signals an item has been expanded
          *
@@ -382,7 +224,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( ITEMEXPANDED );
-        
+
         /**
          * Signals an item has been collapsed
          *
@@ -394,7 +236,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( ITEMCOLLAPSED );
-        
+
         /**
          * Signals the beginning of reordering an item
          *
@@ -406,7 +248,7 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( BEFOREITEMREORDER );
-        
+
         /**
          * Fires before the end of item reordering
          *
@@ -418,8 +260,8 @@ Y.extend( Accordion, Y.Widget, {
          *  </dl>
          */
         this.publish( BEFOREENDITEMREORDER );
-        
-        
+
+
         /**
          * Signals an item has been reordered
          *
@@ -460,7 +302,7 @@ Y.extend( Accordion, Y.Widget, {
     */
     _animations   : {},
 
-    
+
     /**
      * Collection of items handles.
      * Keeps track of each items's event handle, as returned from <code>Y.on</code> or <code>Y.after</code>.
@@ -469,8 +311,8 @@ Y.extend( Accordion, Y.Widget, {
      * @type Object
      */
     _itemsHandles: {},
-    
-    
+
+
     /**
      * Removes all handles, attched to given item
      *
@@ -480,7 +322,7 @@ Y.extend( Accordion, Y.Widget, {
      */
     _removeItemHandles: function( item ){
         var itemHandles, itemHandle;
-        
+
         itemHandles = this._itemsHandles[ item ];
 
         for( itemHandle in itemHandles ){
@@ -492,7 +334,7 @@ Y.extend( Accordion, Y.Widget, {
 
         delete this._itemsHandles[ item ];
     },
-    
+
     /**
      * Obtains the precise height of the node provided, including padding and border.
      *
@@ -555,7 +397,7 @@ Y.extend( Accordion, Y.Widget, {
         }
     },
 
-    
+
     /**
      * Updates user interface of an item and marks it as expanded, alwaysVisible or both
      *
@@ -602,10 +444,10 @@ Y.extend( Accordion, Y.Widget, {
         this._setUpResizing( params.newVal );
     },
 
-    
+
     /**
      * Distributes the involved items as result of user interaction on item header.
-     * Some items might be stored in the list for collapsing, other in the list for expanding. 
+     * Some items might be stored in the list for collapsing, other in the list for expanding.
      * Finally, invokes <code>_processItems</code> function, except if item has been expanded and
      * user has clicked on always visible icon.
      * If the user clicked on close icon, the item will be closed.
@@ -619,7 +461,7 @@ Y.extend( Accordion, Y.Widget, {
     _onItemChosen: function( item, srcIconAlwaysVisible, srcIconClose ){
         var toBeExcluded, alwaysVisible, expanded, collapseOthersOnExpand;
 
-        toBeExcluded = {};        
+        toBeExcluded = {};
         collapseOthersOnExpand = this.get( COLLAPSEOTHERSONEXPAND );
         alwaysVisible = item.get( ALWAYSVISIBLE );
         expanded      = item.get( EXPANDED );
@@ -677,11 +519,11 @@ Y.extend( Accordion, Y.Widget, {
         this._processItems();
     },
 
-    
+
     /**
      * Helper method to adjust the height of all items, which <code>contentHeight</code> property is set as "stretch".
      * If some item has animation running, it will be stopped before running another one.
-     * 
+     *
      * @method adjustStretchItems
      * @protected
      * @return {Number} The calculated height per strech item
@@ -690,7 +532,7 @@ Y.extend( Accordion, Y.Widget, {
         var items = this.get( ITEMS ), heightPerStretchItem;
 
         heightPerStretchItem = this._getHeightPerStretchItem();
-        
+
         Y.Array.each( items, function( item, index, items ){
             var body, bodyHeight, anim, heightSettings, expanded;
 
@@ -721,7 +563,7 @@ Y.extend( Accordion, Y.Widget, {
 
     /**
      * Calculates the height per strech item.
-     * 
+     *
      * @method _getHeightPerStretchItem
      * @protected
      * @return {Number} The calculated height per strech item
@@ -737,7 +579,7 @@ Y.extend( Accordion, Y.Widget, {
 
             header = item.getStdModNode( WidgetStdMod.HEADER );
             heightSettings = item.get( CONTENT_HEIGHT );
-            
+
             headerHeight = this._getNodeOffsetHeight( header );
 
             height -= headerHeight;
@@ -767,10 +609,10 @@ Y.extend( Accordion, Y.Widget, {
         return height;
     },
 
-    
+
     /**
      * Calculates the height of given item depending on its "contentHeight" property.
-     * 
+     *
      * @method _getItemContentHeight
      * @protected
      * @param item {Y.AccordionItem} The item, which height should be calculated
@@ -794,11 +636,11 @@ Y.extend( Accordion, Y.Widget, {
         return height;
     },
 
-    
+
     /**
      * Stores all items, which are expanded and not set as always visible in list
      * in order to be collapsed later.
-     * 
+     *
      * @method _storeItemsForCollapsing
      * @protected
      * @param itemsToBeExcluded {Object} (optional) Contains one or more <code>Y.AccordionItem</code> instances,
@@ -824,10 +666,10 @@ Y.extend( Accordion, Y.Widget, {
         }, this );
     },
 
-    
+
     /**
      * Expands an item to given height. This includes also an update to item's user interface
-     * 
+     *
      * @method _expandItem
      * @protected
      * @param item {Y.AccordionItem} The item, which should be expanded.
@@ -840,12 +682,12 @@ Y.extend( Accordion, Y.Widget, {
         this._setItemUI( item, true, alwaysVisible );
     },
 
-    
+
     /**
-     * Expands an item to given height. Depending on the <code>useAnimation</code> setting, 
+     * Expands an item to given height. Depending on the <code>useAnimation</code> setting,
      * the process of expanding might be animated. This setting will be ignored, if <code>forceSkipAnimation</code> param
      * is <code>true</code>.
-     * 
+     *
      * @method _processExpanding
      * @protected
      * @param item {Y.AccordionItem} An <code>Y.AccordionItem</code> instance to be expanded
@@ -856,14 +698,14 @@ Y.extend( Accordion, Y.Widget, {
     _processExpanding: function( item, height, forceSkipAnimation ){
         var anim, curAnim, animSettings, notifyOthers = false,
             accAnimationSettings, body;
-        
+
         body = item.getStdModNode( WidgetStdMod.BODY );
 
         this.fire( BEFOREITEMERESIZED, {
             'item': item
         });
 
-        if( body.get( "clientHeight" ) <= 0 ){
+        if( body.get( "clientHeight" ) <= COLLAPSE_HEIGHT ){
             notifyOthers = true;
             this.fire( BEFOREITEMEXPAND, {
                 'item': item
@@ -886,9 +728,9 @@ Y.extend( Accordion, Y.Widget, {
 
             anim.set( "duration", animSettings.duration || accAnimationSettings.duration );
             anim.set( "easing"  , animSettings.easing   || accAnimationSettings.easing   );
-            
+
             curAnim = this._animations[ item ];
-            
+
             if( curAnim ){
                 curAnim.stop();
             }
@@ -938,10 +780,10 @@ Y.extend( Accordion, Y.Widget, {
         }
     },
 
-    
+
     /**
      * Collapse an item and update its user interface
-     * 
+     *
      * @method _collapseItem
      * @protected
      * @param item {Y.AccordionItem} The item, which should be collapsed
@@ -951,12 +793,12 @@ Y.extend( Accordion, Y.Widget, {
         this._setItemUI( item, false, false );
     },
 
-    
+
     /**
-     * Collapse an item to given height. Depending on the <code>useAnimation</code> setting, 
+     * Collapse an item to given height. Depending on the <code>useAnimation</code> setting,
      * the process of collapsing might be animated. This setting will be ignored, if <code>forceSkipAnimation</code> param
      * is <code>true</code>.
-     * 
+     *
      * @method _processCollapsing
      * @protected
      * @param item {Y.AccordionItem} An <code>Y.AccordionItem</code> instance to be collapsed
@@ -965,12 +807,12 @@ Y.extend( Accordion, Y.Widget, {
      * without taking in consideration Accordion's <code>useAnimation</code> setting
      */
     _processCollapsing: function( item, height, forceSkipAnimation ){
-        var anim, curAnim, animSettings, accAnimationSettings, body, 
+        var anim, curAnim, animSettings, accAnimationSettings, body,
             notifyOthers = (height === COLLAPSE_HEIGHT);
-            
+
         body = item.getStdModNode( WidgetStdMod.BODY );
 
-        
+
         this.fire( BEFOREITEMERESIZED, {
             'item': item
         });
@@ -999,11 +841,11 @@ Y.extend( Accordion, Y.Widget, {
             anim.set( "easing"  , animSettings.easing   || accAnimationSettings.easing );
 
             curAnim = this._animations[ item ];
-            
+
             if( curAnim ){
                 curAnim.stop();
             }
-            
+
             item.markAsCollapsing( true );
 
             this._animations[ item ] = anim;
@@ -1049,10 +891,10 @@ Y.extend( Accordion, Y.Widget, {
         }
     },
 
-    
+
     /**
      * Make an item draggable. The item can be reordered later.
-     * 
+     *
      * @method _initItemDragDrop
      * @protected
      * @param item {Y.AccordionItem} An <code>Y.AccordionItem</code> instance to be set as draggable
@@ -1211,7 +1053,7 @@ Y.extend( Accordion, Y.Widget, {
         return true;
     },
 
-    
+
     /**
      * Process items as result of user interaction or properties change.
      * This includes four steps:
@@ -1219,12 +1061,12 @@ Y.extend( Accordion, Y.Widget, {
      * 2. Collapse all items stored in the list for collapsing
      * 3. Adjust all stretch items
      * 4. Expand items stored in the list for expanding
-     * 
+     *
      * @method _processItems
      * @protected
      */
     _processItems: function(){
-        var forCollapsing, forExpanding, itemCont, heightPerStretchItem, 
+        var forCollapsing, forExpanding, itemCont, heightPerStretchItem,
             height, heightSettings, item;
 
         forCollapsing = this._forCollapsing;
@@ -1261,10 +1103,10 @@ Y.extend( Accordion, Y.Widget, {
         this._forExpanding = {};
     },
 
-    
+
     /**
      * Update properties of items, which were stored in the lists for collapsing or expanding
-     * 
+     *
      * @method _setItemsProperties
      * @protected
      */
@@ -1292,7 +1134,7 @@ Y.extend( Accordion, Y.Widget, {
 
     /**
      * Handles the change of "expand" property of given item
-     * 
+     *
      * @method _afterItemExpand
      * @protected
      * @param params {EventFacade} The event facade for the attribute change
@@ -1303,18 +1145,18 @@ Y.extend( Accordion, Y.Widget, {
         if( params.internalCall ){
             return;
         }
-        
+
         expanded = params.newVal;
         item    = params.currentTarget;
         alwaysVisible = item.get( ALWAYSVISIBLE );
         collapseOthersOnExpand = this.get( COLLAPSEOTHERSONEXPAND );
-        
+
         if( expanded ){
             this._forExpanding[ item ] = {
                 'item': item,
                 'alwaysVisible': alwaysVisible
             };
-            
+
             if( collapseOthersOnExpand ){
                 this._storeItemsForCollapsing();
             }
@@ -1323,20 +1165,20 @@ Y.extend( Accordion, Y.Widget, {
                 'item': item
             };
         }
-        
+
         this._processItems();
     },
 
     /**
      * Handles the change of "alwaysVisible" property of given item
-     * 
+     *
      * @method _afterItemAlwaysVisible
      * @protected
      * @param params {EventFacade} The event facade for the attribute change
      */
     _afterItemAlwaysVisible: function( params ){
         var item, alwaysVisible, expanded;
-        
+
         if( params.internalCall ){
             return;
         }
@@ -1366,32 +1208,32 @@ Y.extend( Accordion, Y.Widget, {
                 return;
             }
         }
-        
+
         this._processItems();
     },
-    
-    
+
+
     /**
      * Handles the change of "contentHeight" property of given item
-     * 
+     *
      * @method _afterContentHeight
      * @protected
      * @param params {EventFacade} The event facade for the attribute change
      */
     _afterContentHeight: function( params ){
         var item, itemContentHeight, body, bodyHeight, expanded;
-        
+
         item = params.currentTarget;
-        
+
         this._adjustStretchItems();
-        
+
         if( params.newVal.method !== STRETCH ){
             expanded = item.get( EXPANDED );
             itemContentHeight = this._getItemContentHeight( item );
-            
+
             body = item.getStdModNode( WidgetStdMod.BODY );
             bodyHeight = this._getNodeOffsetHeight( body );
-            
+
             if( itemContentHeight < bodyHeight ){
                 this._processCollapsing( item, itemContentHeight, !expanded );
             } else if( itemContentHeight > bodyHeight ){
@@ -1399,7 +1241,7 @@ Y.extend( Accordion, Y.Widget, {
             }
         }
     },
-    
+
 
     /**
      * Handles the change of "contentUpdate" property of given item
@@ -1441,13 +1283,13 @@ Y.extend( Accordion, Y.Widget, {
             } );
         }
     },
-    
-    
+
+
     /**
      * Subscribe for resize event, which could be provided from the browser or from an arbitrary object.
      * For example, if there is LayoutManager in the page, it is preferable to subscribe to its resize event,
      * instead to those, which browser provides.
-     * 
+     *
      * @method _setUpResizing
      * @protected
      * @param value {String|Object} String "default" or object with the following properties:
@@ -1470,25 +1312,26 @@ Y.extend( Accordion, Y.Widget, {
         }
     },
 
-    
+
     /**
      * Creates one or more items found in Accordion's <code>contentBox</code>
-     * 
+     *
      * @method renderUI
      * @protected
      */
     renderUI: function(){
-        var cb, itemsDom;
+        var srcNode, itemsDom;
 
-        cb = this.get( CONTENT_BOX );
-        itemsDom = cb.queryAll( "> div." + C_ITEM );
+        srcNode = this.get( "srcNode" );
+        itemsDom = srcNode.queryAll( "> ." + C_ITEM );
 
         itemsDom.each( function( itemNode, index, itemsDom ){
             var newItem;
 
             if( !this.getItem( itemNode ) ){
                 newItem = new Y.AccordionItem({
-                    contentBox: itemNode
+                    srcNode: itemNode,
+                    id : itemNode.get( "id" )
                 });
 
                 this.addItem( newItem );
@@ -1496,10 +1339,10 @@ Y.extend( Accordion, Y.Widget, {
         }, this );
     },
 
-    
+
     /**
      * Add listener to <code>itemChosen</code> event in Accordion's content box
-     * 
+     *
      * @method bindUI
      * @protected
      */
@@ -1508,8 +1351,8 @@ Y.extend( Accordion, Y.Widget, {
 
         contentBox = this.get( CONTENT_BOX );
         itemChosenEvent = this.get( 'itemChosen' );
-        
-        contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), 'div.yui-widget-hd' );
+
+        contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), '.yui3-widget-hd' );
     },
 
 
@@ -1519,7 +1362,7 @@ Y.extend( Accordion, Y.Widget, {
      *
      * @method _onItemChosenEvent
      * @protected
-     * 
+     *
      * @param e {Event} The itemChosen event
      */
     _onItemChosenEvent: function(e){
@@ -1541,23 +1384,23 @@ Y.extend( Accordion, Y.Widget, {
     /**
      * Add an item to Accordion. Items could be added/removed multiple times and they
      * will be rendered in the process of adding, if not.
-     * The item will be expanded, collapsed, or set as always visible depending on the 
+     * The item will be expanded, collapsed, or set as always visible depending on the
      * settings. Item's properties will be also updated, if they are incomplete.
      * For example, if <code>alwaysVisible</code> is true, but <code>expanded</code>
      * property is false, it will be set to true also.
-     * 
+     *
      * If the second param, <code>parentItem</code> is an <code>Y.AccordionItem</code> instance,
      * registered in Accordion, the item will be added as child of the <code>parentItem</code>
-     * 
+     *
      * @method addItem
      * @param item {Y.AccordionItem} The item to be added in Accordion
      * @param parentItem {Y.AccordionItem} (optional) This item will be the parent of the item being added
-     * 
+     *
      * @return {Boolean} True in case of successfully added item, false otherwise
      */
     addItem: function( item, parentItem ){
-        var expanded, alwaysVisible, bodyContent, itemIndex, items, contentBox,
-            itemHandles, itemContentBox, res, cb, children, itemBoundingBox;
+        var expanded, alwaysVisible, itemBody, itemBodyContent, itemIndex, items, contentBox,
+            itemHandles, itemContentBox, res, children;
 
         res = this.fire( BEFOREITEMADD, {
             'item': item
@@ -1570,8 +1413,7 @@ Y.extend( Accordion, Y.Widget, {
         items = this.get( ITEMS );
         contentBox = this.get( CONTENT_BOX );
 
-        itemContentBox  = item.get( CONTENT_BOX );
-        itemBoundingBox = item.get( BOUNDING_BOX );
+        itemContentBox = item.get( CONTENT_BOX );
 
         if( !itemContentBox.inDoc() ){
             if( parentItem ){
@@ -1582,24 +1424,13 @@ Y.extend( Accordion, Y.Widget, {
                 }
 
                 items.splice( itemIndex, 0, item );
-
-                if( item.get( RENDERED ) ){
-                    contentBox.insertBefore( itemBoundingBox, parentItem.get( BOUNDING_BOX ) );
-                } else {
-                    contentBox.insertBefore( itemContentBox, parentItem.get( BOUNDING_BOX ) );
-                }
+                contentBox.insertBefore( itemContentBox, parentItem.get( BOUNDING_BOX ) );
             } else {
                 items.push( item );
-
-                if( item.get( RENDERED ) ){
-                    contentBox.insertBefore( itemBoundingBox, null );
-                } else {
-                    contentBox.insertBefore( itemContentBox, null );
-                }
+                contentBox.insertBefore( itemContentBox, null );
             }
         } else {
-            cb = this.get( CONTENT_BOX );
-            children = cb.get( CHILDREN );
+            children = contentBox.get( CHILDREN );
 
             res = children.some( function( node, index, nodeList ){
                 if( node === itemContentBox ){
@@ -1615,16 +1446,17 @@ Y.extend( Accordion, Y.Widget, {
             }
         }
 
-        bodyContent = item.get( BODYCONTENT );
+        itemBody = item.getStdModNode( WidgetStdMod.BODY );
+        itemBodyContent = item.get( BODYCONTENT );
 
-        if( !bodyContent ){
-            item.set( BODYCONTENT, "&nbsp;" );
+        if( !itemBody && !itemBodyContent  ){
+            item.set( BODYCONTENT, "" );
         }
 
         if( !item.get( RENDERED ) ){
             item.render();
         }
-        
+
         expanded = item.get( EXPANDED );
         alwaysVisible = item.get( ALWAYSVISIBLE );
 
@@ -1646,20 +1478,20 @@ Y.extend( Accordion, Y.Widget, {
         if( this.get( "reorderItems" ) ){
             this._initItemDragDrop( item );
         }
-        
+
         itemHandles = this._itemsHandles[ item ];
-        
+
         if( !itemHandles ){
             itemHandles = {};
         }
-        
+
         itemHandles = {
             "expandedChange" : item.after( "expandedChange", Y.bind( this._afterItemExpand, this ) ),
             "alwaysVisibleChange" : item.after( "alwaysVisibleChange", Y.bind( this._afterItemAlwaysVisible, this ) ),
             "contentHeightChange" : item.after( "contentHeightChange", Y.bind( this._afterContentHeight, this ) ),
             "contentUpdate" : item.after( "contentUpdate", Y.bind( this._afterContentUpdate, this ) )
         };
-        
+
         this._itemsHandles[ item ] = itemHandles;
 
         this.fire( ITEMADDED, {
@@ -1669,19 +1501,19 @@ Y.extend( Accordion, Y.Widget, {
         return true;
     },
 
-    
+
     /**
      * Removes an previously registered item in Accordion
-     * 
+     *
      * @method removeItem
      * @param p_item {Y.AccordionItem|Number} The item to be removed, or its index
      * @return {Y.AccordionItem} The removed item or null if not found
      */
     removeItem: function( p_item ){
         var items, bb, item = null, itemIndex;
-        
+
         items = this.get( ITEMS );
-        
+
         if( Lang.isNumber( p_item ) ){
             itemIndex = p_item;
         } else if( p_item instanceof Y.AccordionItem ){
@@ -1691,7 +1523,7 @@ Y.extend( Accordion, Y.Widget, {
         }
 
         if( itemIndex >= 0 ){
-            
+
             this.fire( BEFOREITEMREMOVE, {
                 item: p_item
             });
@@ -1699,12 +1531,12 @@ Y.extend( Accordion, Y.Widget, {
             item = items.splice( itemIndex, 1 )[0];
 
             this._removeItemHandles( item );
-            
+
             bb = item.get( BOUNDING_BOX );
             bb.remove();
 
             this._adjustStretchItems();
-            
+
             this.fire( ITEMREMOVED, {
                 item: p_item
             });
@@ -1713,14 +1545,14 @@ Y.extend( Accordion, Y.Widget, {
         return item;
     },
 
-    
+
     /**
      * Searching for item, previously registered in Accordion
-     * 
+     *
      * @method getItem
      * @param param {Number|Y.Node} If number, this must be item's index.
      * If Node, it should be the value of item's <code>contentBox</code> or <code>boundingBox</code> properties
-     * 
+     *
      * @return {Y.AccordionItem} The found item or null
      */
     getItem: function( param ){
@@ -1734,7 +1566,7 @@ Y.extend( Accordion, Y.Widget, {
 
             Y.Array.some( items, function( tmpItem, index, items ){
                 var contentBox, boundingBox;
-                
+
                 contentBox = tmpItem.get( CONTENT_BOX );
                 boundingBox = tmpItem.get( BOUNDING_BOX );
 
@@ -1753,10 +1585,10 @@ Y.extend( Accordion, Y.Widget, {
         return item;
     },
 
-    
+
     /**
      * Looking for the index of previously registered item
-     * 
+     *
      * @method getItemIndex
      * @param item {Y.AccordionItem} The item which index should be returned
      * @return {Number} Item index or <code>-1</code> if item has been not found
@@ -1779,10 +1611,155 @@ Y.extend( Accordion, Y.Widget, {
 
         return res;
     }
-    
-});
+}, {
+    /**
+     *  Static property provides a string to identify the class.
+     *
+     * @property Accordion.NAME
+     * @type String
+     * @static
+     */
+    NAME : AccName,
 
-Y.Accordion = Accordion;
+    /**
+     * Static property used to define the default attribute
+     * configuration for the Accordion.
+     *
+     * @property Accordion.ATTRS
+     * @type Object
+     * @static
+     */
+    ATTRS : {
+        /**
+         * @description The event on which Accordion should listen for user interactions.
+         * The value can be also mousedown or mouseup. Mousedown event can be used if
+         * drag&drop is not enabled
+         *
+         * @attribute itemChosen
+         * @default click
+         * @type String
+         */
+        itemChosen: {
+            value: "click",
+            validator: Lang.isString
+        },
+
+        /**
+         * @description Contains the items, currently added to Accordion
+         *
+         * @attribute items
+         * @readOnly
+         * @default []
+         * @type Array
+         */
+        items: {
+            value: [],
+            readOnly: true,
+            validator: Lang.isArray
+        },
+
+        /**
+         * @attribute resizeEvent
+         *
+         * @description The event on which Accordion should listen for resizing.
+         * The value must be one of these:
+         * <ul>
+         *     <li> String "default" - the Accordion will subscribe to Y.windowresize event
+         *     </li>
+         *     <li> An object in the following form:
+         *         {
+         *             sourceObject: some_javascript_object,
+         *             resizeEvent: an_event_to_subscribe
+         *         }
+         *      </li>
+         * </ul>
+         * For example, if we are using LayoutManager's instance as sourceObject, we will have to use its "resize" event as resizeEvent
+         *
+         * @default "default"
+         * @type String or Object
+         */
+
+        resizeEvent: {
+            value: DEFAULT,
+            validator: function( value ){
+                if( value === DEFAULT ){
+                    return true;
+                } else if( Lang.isObject(value) ){
+                    if( Lang.isValue( value.sourceObject ) && Lang.isValue( value.resizeEvent ) ){
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        },
+
+        /**
+         * @attribute useAnimation
+         * @description Boolean indicating that Accordion should use animation when expanding or collapsing items.
+         *
+         * @default true
+         * @type Boolean
+         */
+        useAnimation: {
+            value: true,
+            validator: Lang.isBoolean
+        },
+
+        /**
+         * @attribute animation
+         * @description Animation config values, see Y.Animation
+         *
+         * @default <code> {
+         *    duration: 1,
+         *    easing: Easing.easeOutStrong
+         *  }
+         *  </code>
+         *
+         * @type Object
+         */
+        animation: {
+            value: {
+                duration: 1,
+                easing: Easing.easeOutStrong
+            },
+            validator: function( value ){
+                return Lang.isObject( value ) && Lang.isNumber( value.duration ) &&
+                    Lang.isFunction( value.easing );
+            }
+        },
+
+        /**
+         * @attribute reorderItems
+         * @description Boolean indicating that items can be reordered via drag and drop.<br>
+         *
+         * Enabling items reordering requires also including the optional drag and drop modules in YUI instance:<br>
+         * 'dd-constrain', 'dd-proxy', 'dd-drop', or just 'dd'
+         *
+         * @default false
+         * @type Boolean
+         */
+        reorderItems: {
+            value: false,
+            validator: function(value){
+                return Lang.isBoolean(value) && !Lang.isUndefined( Y.DD );
+            }
+        },
+
+        /**
+         * @attribute collapseOthersOnExpand
+         * @description If true, on item expanding, all other expanded and not set as always visible items, will be collapsed
+         * Otherwise, they will stay open
+         *
+         * @default true
+         * @type Boolean
+         */
+        collapseOthersOnExpand: {
+            value: true,
+            validator: Lang.isBoolean
+        }
+    }
+});
 
 }());
 

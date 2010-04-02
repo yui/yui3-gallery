@@ -2,6 +2,12 @@ Accordion widget for YUI 3
 
 I. Changelog
 
+01.04.2010 - ver. 1.09
+ - Accordion migrated to YUI 3.1. A lot of internal changes and improvements, but should work with the existing configurations. The main difference is when instantiating - there is no need to pass contentBox/boundingBox as configuration parameters. Instead, you should set "srcNode" only.
+   All Accordion classes has been renamed to start with yui3.
+   Accordion is has been created by using Base.create instead Y.extend and Base.build
+   The method _getConfigDOMAttribute has been removed and Widget's _applyParser has been overwritten in order to parse and prepare yuiConfig attribiute for HTML_PARSER.
+
 25.02.2010 - ver 1.08
  - AccordionItem has a new function - resize(). It should be invoked if the content has been updated directly (by using innerHTML).
    This is neeed only if "contentHeight" property has been set to "auto". The function also causes resizing of all other expanded and stretched items.

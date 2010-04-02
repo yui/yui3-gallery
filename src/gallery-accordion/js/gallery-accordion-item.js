@@ -6,23 +6,8 @@
 
 (function(){
 
-/**
- * Create an AccordionItem widget.
- * 
- * @param config {Object} Object literal specifying AccordionItem configuration properties.
- *
- * @class AccordionItem
- * @constructor
- * @extends Widget
- */
-
-function AccordionItem( config ){
-    AccordionItem.superclass.constructor.apply( this, arguments );
-}
-
 // Local constants
 var Lang = Y.Lang,
-    Base = Y.Base,
     Node = Y.Node,
     JSON = Y.JSON,
     WidgetStdMod = Y.WidgetStdMod,
@@ -53,15 +38,14 @@ var Lang = Y.Lang,
 
     TITLE = "title",
     STRINGS = "strings",
-    CONTENT_BOX = "contentBox",
     RENDERED = "rendered",
     CLASS_NAME = "className",
     AUTO = "auto",
     STRETCH = "stretch",
     FIXED = "fixed",
-    HEADER_SELECTOR = ".yui-widget-hd",
+    HEADER_SELECTOR = ".yui3-widget-hd",
     DOT = ".",
-    HEADER_SELECTOR_SUB = ".yui-widget-hd " + DOT,
+    HEADER_SELECTOR_SUB = ".yui3-widget-hd " + DOT,
     INNER_HTML = "innerHTML",
     ICONS_CONTAINER = "iconsContainer",
     ICON = "icon",
@@ -72,7 +56,6 @@ var Lang = Y.Lang,
     HREF = "href",
     HREF_VALUE = "#",
     YUICONFIG = "yuiConfig",
-    HEADER_CONTENT = "headerContent",
 
     REGEX_TRUE = /^(?:true|yes|1)$/,
     REGEX_AUTO = /^auto\s*/,
@@ -80,447 +63,13 @@ var Lang = Y.Lang,
     REGEX_FIXED = /^fixed-\d+/;
 
 /**
- *  Static property provides a string to identify the class.
+ * Create an AccordionItem widget.
  *
- * @property AccordionItem.NAME
- * @type String
- * @static
+ * @class AccordionItem
+ * @extends Widget
  */
-AccordionItem.NAME = AccItemName;
 
-/**
- * Static property used to define the default attribute 
- * configuration for the Accordion.
- * 
- * @property Accordion.ATTRS
- * @type Object
- * @static
- */
-AccordionItem.ATTRS = {
-
-    /**
-     * @description The Node, representing item's icon
-     *
-     * @attribute icon
-     * @default null
-     * @type Node
-     */
-    icon: {
-        value: null,
-        validator: function( value ){
-            return this._validateIcon( value );
-        },
-        setter : function( value ) {
-            return this._setIcon( value );
-        }
-    },
-
-    /**
-     * @description The label of item
-     *
-     * @attribute label
-     * @default "&#160;"
-     * @type String
-     */
-    label: {
-        value: "&#160;",
-        validator: Lang.isString
-    },
-
-    /**
-     * @description The node, which contains item's label
-     *
-     * @attribute nodeLabel
-     * @default null
-     * @type Node
-     */
-    nodeLabel: {
-        value: null,
-        validator: function( value ){
-            return this._validateNodeLabel( value );
-        },
-        setter : function( value ) {
-            return this._setNodeLabel( value );
-        }
-    },
-
-
-    /**
-     * @description The container of iconAlwaysVisible, iconExpanded and iconClose
-     *
-     * @attribute iconsContainer
-     * @default null
-     * @type Node
-     */
-    iconsContainer: {
-        value: null,
-        validator: function( value ){
-            return this._validateIconsContainer( value );
-        },
-        setter : function( value ) {
-            return this._setIconsContainer( value );
-        }
-    },
-
-    /**
-     * @description The Node, representing icon expanded
-     *
-     * @attribute iconExpanded
-     * @default null
-     * @type Node
-     */
-    iconExpanded: {
-        value: null,
-        validator: function( value ){
-            return this._validateIconExpanded( value );
-        },
-        setter : function( value ) {
-            return this._setIconExpanded( value );
-        }
-    },
-
-
-    /**
-     * @description The Node, representing icon always visible
-     *
-     * @attribute iconAlwaysVisible
-     * @default null
-     * @type Node
-     */
-    iconAlwaysVisible: {
-        value: null,
-        validator: function( value ){
-            return this._validateIconAlwaysVisible( value );
-        },
-        setter : function( value ) {
-            return this._setIconAlwaysVisible( value );
-        }
-    },
-
-
-    /**
-     * @description The Node, representing icon close, or null if the item is not closable
-     *
-     * @attribute iconClose
-     * @default null
-     * @type Node
-     */
-    iconClose: {
-        value: null,
-        validator: function( value ){
-            return this._validateIconClose( value );
-        },
-        setter : function( value ) {
-            return this._setIconClose( value );
-        }
-    },
-
-    /**
-     * @description Get/Set expanded status of the item
-     *
-     * @attribute expanded
-     * @default false
-     * @type Boolean
-     */
-    expanded: {
-        value: false,
-        validator: Lang.isBoolean
-    },
-
-    /**
-     * @description Describe the method, which will be used when expanding/collapsing
-     * the item. The value should be an object with at least one property ("method"):
-     *  <dl>
-     *      <dt>method</dt>
-     *          <dd>The method can be one of these: "auto", "fixed" and "stretch"</dd>
-     *      <dt>height</dt>
-     *          <dd>Must be set only if method's value is "fixed"</dd>
-     *  </dl>
-     *
-     * @attribute contentHeight
-     * @default auto
-     * @type Object
-     */
-    contentHeight: {
-        value: {
-            method: AUTO
-        },
-        validator: function( value ){
-            if( Lang.isObject( value ) ){
-                if( value.method === AUTO ){
-                    return true;
-                } else if( value.method === STRETCH ){
-                    return true;
-                } else if( value.method === FIXED && Lang.isNumber( value.height ) &&
-                    value.height >= 0 ){
-                    return true;
-                }
-            }
-            
-            return false;
-        }
-    },
-
-    /**
-     * @description Get/Set always visible status of the item
-     *
-     * @attribute alwaysVisible
-     * @default false
-     * @type Boolean
-     */
-    alwaysVisible: {
-        value: false,
-        validator: Lang.isBoolean
-    },
-    
-    
-    /**
-     * @description Get/Set the animaton specific settings. By default there are no any settings.
-     * If set, they will overwrite Accordion's animation settings
-     *
-     * @attribute animation
-     * @default {}
-     * @type Object
-     */
-    animation: {
-        value: {},
-        validator: Lang.isObject
-    },
-
-    /**
-     * @description Provides client side string localization support.
-     *
-     * @attribute strings
-     * @default Object English messages
-     * @type Object
-     */
-    strings: {
-        value: {
-            title_always_visible_off: "Click to set always visible on",
-            title_always_visible_on: "Click to set always visible off",
-            title_iconexpanded_off: "Click to expand",
-            title_iconexpanded_on: "Click to collapse",
-            title_iconclose: "Click to close"
-        }
-    },
-
-    /**
-     * @description Boolean indicating that the item can be closed by user.
-     * If true, there will be placed close icon, otherwise not
-     *
-     * @attribute closable
-     * @default false
-     * @type Boolean
-     */
-    closable: {
-        value: false,
-        validator: Lang.isBoolean
-    }
-};
-
-
-/**
- * Static Object hash used to capture existing markup for progressive
- * enhancement.  Keys correspond to config attribute names and values
- * are selectors used to inspect the contentBox for an existing node
- * structure.
- *
- * @property AccordionItem.HTML_PARSER
- * @type Object
- * @protected
- * @static
- */
-AccordionItem.HTML_PARSER = {
-
-    icon: HEADER_SELECTOR_SUB + C_ICON,
-
-    label: function( contentBox ){
-        var node, labelSelector, yuiConfig, label;
-        
-        yuiConfig = this._getConfigDOMAttribute( contentBox );
-        
-        if( yuiConfig && Lang.isValue( yuiConfig.label ) ){
-            return yuiConfig.label;
-        }
-
-        label = contentBox.getAttribute( "data-label" );
-
-        if( label ){
-            return label;
-        }
-
-        labelSelector = HEADER_SELECTOR_SUB + C_LABEL;
-        node = contentBox.query( labelSelector );
-
-        return (node) ? node.get( INNER_HTML ) : null;
-    },
-
-    nodeLabel: HEADER_SELECTOR_SUB + C_LABEL,
-
-    iconsContainer: HEADER_SELECTOR_SUB + C_ICONSCONTAINER,
-    
-    iconAlwaysVisible: HEADER_SELECTOR_SUB + C_ICONALWAYSVISIBLE,
-
-    iconExpanded: HEADER_SELECTOR_SUB + C_ICONEXPANDED,
-
-    iconClose: HEADER_SELECTOR_SUB + C_ICONCLOSE,
-
-    expanded: function( contentBox ){
-        var yuiConfig, expanded;
-
-        yuiConfig = this._getConfigDOMAttribute( contentBox );
-
-        if( yuiConfig && Lang.isBoolean( yuiConfig.expanded ) ){
-            return yuiConfig.expanded;
-        }
-
-        expanded = contentBox.getAttribute( "data-expanded" );
-
-        if( expanded ) {
-            return REGEX_TRUE.test( expanded );
-        }
-
-        return contentBox.hasClass( C_EXPANDED );
-    },
-
-    alwaysVisible: function( contentBox ){
-        var yuiConfig, alwaysVisible;
-
-        yuiConfig = this._getConfigDOMAttribute( contentBox );
-
-        if( yuiConfig && Lang.isBoolean( yuiConfig.alwaysVisible ) ){
-            alwaysVisible = yuiConfig.alwaysVisible;
-        } else {
-            alwaysVisible = contentBox.getAttribute( "data-alwaysvisible" );
-
-            if( alwaysVisible ) {
-                alwaysVisible = REGEX_TRUE.test( alwaysVisible );
-            } else {
-                alwaysVisible = contentBox.hasClass( C_ALWAYSVISIBLE );
-            }
-        }
-
-        if( alwaysVisible ){
-            this.set( "expanded", true, {
-                internalCall: true
-            } );
-        }
-
-        return alwaysVisible;
-    },
-
-    closable: function( contentBox ){
-        var yuiConfig, closable;
-
-        yuiConfig = this._getConfigDOMAttribute( contentBox );
-
-        if( yuiConfig && Lang.isBoolean( yuiConfig.closable ) ){
-            return yuiConfig.closable;
-        }
-
-        closable = contentBox.getAttribute( "data-closable" );
-
-        if( closable ) {
-            return REGEX_TRUE.test( closable );
-        }
-
-        return contentBox.hasClass( C_CLOSABLE );
-    },
-
-    contentHeight: function( contentBox ){
-        var contentHeightClass, classValue, height = 0, index, yuiConfig,
-            contentHeight;
-
-        yuiConfig = this._getConfigDOMAttribute( contentBox );
-
-        if( yuiConfig && yuiConfig.contentHeight ){
-            return yuiConfig.contentHeight;
-        }
-
-        contentHeight = contentBox.getAttribute( "data-contentheight" );
-
-        if( REGEX_AUTO.test( contentHeight ) ){
-            return {
-                method: AUTO
-            };
-        } else if( REGEX_STRETCH.test( contentHeight ) ){
-            return {
-                method: STRETCH
-            };
-        } else if( REGEX_FIXED.test( contentHeight ) ){
-            height = this._extractFixedMethodValue( contentHeight );
-
-            return {
-                method: FIXED,
-                height: height
-            };
-        }
-
-
-        classValue = contentBox.get( CLASS_NAME );
-
-        contentHeightClass = C_CONTENTHEIGHT + '-';
-
-        index = classValue.indexOf( contentHeightClass, 0);
-
-        if( index >= 0 ){
-            index += contentHeightClass.length;
-
-            classValue = classValue.substring( index );
-
-            if( REGEX_AUTO.test( classValue ) ){
-                return {
-                    method: AUTO
-                };
-            } else if( REGEX_STRETCH.test( classValue ) ){
-                return {
-                    method: STRETCH
-                };
-            } else if( REGEX_FIXED.test( classValue )  ){
-                height = this._extractFixedMethodValue( classValue );
-                
-                return {
-                    method: FIXED,
-                    height: height
-                };
-            }
-        }
-
-        return null;
-    }
-};
-
-
- /**
-  * The template HTML strings for each of header components.
-  * e.g.
-  * <pre>
-  *    {
-  *       icon : '&lt;a class="yui-accordion-item-icon"&gt;&lt;/a&gt;',
-  *       label: '&lt;a href="#" class="yui-accordion-item-label"&gt;&lt;/a&gt;',
-  *       iconsContainer: '&lt;div class="yui-accordion-item-icons"&gt;&lt;/div&gt;',
-  *       iconAlwaysVisible: '&lt;a href="#" class="yui-accordion-item-iconalwaysvisible"&gt;&lt;/a&gt;',
-  *       iconExpanded: '&lt;a href="#" class="yui-accordion-item-iconexpanded"&gt;&lt;/a&gt;',
-  *       iconClose: '&lt;a href="#" class="yui-accordion-item-iconclose yui-accordion-item-iconclose-hidden"&gt;&lt;/a&gt;'
-  *    }
-  * </pre>
-  * @property WidgetStdMod.TEMPLATES
-  * @type Object
-  */
-AccordionItem.TEMPLATES = {
-     icon : '<a class="' + C_ICON + '"></a>',
-     label: '<a href="#" class="' + C_LABEL + '"></a>',
-     iconsContainer: '<div class="' + C_ICONSCONTAINER + '"></div>',
-     iconExpanded: ['<a href="#" class="', C_ICONEXPANDED, ' ', C_ICONEXPANDED_OFF, '"></a>'].join(''),
-     iconAlwaysVisible: ['<a href="#" class="', C_ICONALWAYSVISIBLE, ' ',  C_ICONALWAYSVISIBLE_OFF, '"></a>'].join(''),
-     iconClose: ['<a href="#" class="', C_ICONCLOSE, ' ', C_ICONCLOSE_HIDDEN, '"></a>'].join('')
-};
-
-
-// AccordionItem extends Widget
-
-Y.extend( AccordionItem, Y.Widget, {
-
+Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
     /**
      * Creates the header content
      *
@@ -537,11 +86,11 @@ Y.extend( AccordionItem, Y.Widget, {
         iconAlwaysVisible = this.get( ICON_ALWAYSVISIBLE );
         iconClose = this.get( ICON_CLOSE );
         iconsContainer = this.get( ICONS_CONTAINER );
-        
+
         strings = this.get( STRINGS );
         closable = this.get( "closable" );
-        templates = AccordionItem.TEMPLATES;
-        
+        templates = Y.AccordionItem.TEMPLATES;
+
         if( !icon ){
             icon = Node.create( templates.icon );
             this.set( ICON, icon );
@@ -570,7 +119,7 @@ Y.extend( AccordionItem, Y.Widget, {
             iconAlwaysVisible.setAttribute( HREF, HREF_VALUE );
         }
 
-        
+
         if( !iconExpanded ){
             iconExpanded = Node.create( templates.iconExpanded );
             iconExpanded.setAttribute( TITLE, strings.title_iconexpanded_off );
@@ -578,8 +127,8 @@ Y.extend( AccordionItem, Y.Widget, {
         } else if( !iconExpanded.hasAttribute( HREF ) ){
             iconExpanded.setAttribute( HREF, HREF_VALUE );
         }
-        
-        
+
+
         if( !iconClose ){
             iconClose = Node.create( templates.iconClose );
             iconClose.setAttribute( TITLE, strings.title_iconclose );
@@ -587,7 +136,7 @@ Y.extend( AccordionItem, Y.Widget, {
         } else if( !iconClose.hasAttribute( HREF ) ){
             iconClose.setAttribute( HREF, HREF_VALUE );
         }
-        
+
         if( closable ){
             iconClose.removeClass( C_ICONCLOSE_HIDDEN );
         } else {
@@ -614,7 +163,7 @@ Y.extend( AccordionItem, Y.Widget, {
         iconClose = this.get( ICON_CLOSE );
         iconsContainer = this.get( ICONS_CONTAINER );
 
-        header = this.get( HEADER_CONTENT );
+        header = this.getStdModNode( WidgetStdMod.HEADER );
 
         if( !header ){
             header = new Node( document.createDocumentFragment() );
@@ -660,14 +209,14 @@ Y.extend( AccordionItem, Y.Widget, {
 
     /**
      * Handles the change of "labelChanged" property. Updates item's UI with the label provided
-     * 
+     *
      * @method _labelChanged
      * @protected
      * @param params {EventFacade} The event facade for the attribute change
      */
     _labelChanged: function( params ){
         var label;
-        
+
         if( this.get( RENDERED ) ){
             label = this.get( NODE_LABEL );
             label.set( INNER_HTML, params.newVal );
@@ -708,8 +257,8 @@ Y.extend( AccordionItem, Y.Widget, {
         this.after( "labelChange",  Y.bind( this._labelChanged, this ) );
         this.after( "closableChange", Y.bind( this._closableChanged, this ) );
     },
-    
-    
+
+
     /**
      * Destructor lifecycle implementation for the AccordionItem class.
      *
@@ -720,17 +269,17 @@ Y.extend( AccordionItem, Y.Widget, {
         // EMPTY
     },
 
-    
+
     /**
      * Creates AccordionItem's header.
-     * 
+     *
      * @method renderUI
      * @protected
      */
     renderUI: function(){
         this._createHeader();
     },
-    
+
     /**
      * Configures/Sets up listeners to bind Widget State to UI/DOM
      *
@@ -738,10 +287,8 @@ Y.extend( AccordionItem, Y.Widget, {
      * @protected
      */
     bindUI: function(){
-        var contentBox;
-        
-        contentBox = this.get( CONTENT_BOX );
-        
+        var contentBox = this.get( "contentBox" );
+
         contentBox.delegate( "click", Y.bind( this._onLinkClick, this ), HEADER_SELECTOR + ' a' );
     },
 
@@ -758,11 +305,11 @@ Y.extend( AccordionItem, Y.Widget, {
     _onLinkClick: function( e ){
         e.preventDefault();
     },
-    
+
    /**
     * Marks the item as always visible by adding class to always visible icon.
     * The icon will be updated only if needed.
-    * 
+    *
     * @method markAsAlwaysVisible
     * @param alwaysVisible {Boolean} If true, the item should be marked as always visible.
     * @return {Boolean} Return true if the icon has been updated, false if there was no need to update
@@ -786,22 +333,22 @@ Y.extend( AccordionItem, Y.Widget, {
                 return true;
             }
         }
-        
+
         return false;
     },
 
-    
+
     /**
     * Marks the item as expanded by adding class to expand icon.
     * The icon will be updated only if needed.
-    * 
+    *
     * @method markAsExpanded
     * @param expanded {Boolean} Boolean indicating that item should be marked as expanded.
     * @return {Boolean} Return true if the icon has been updated, false if there was no need to update
     */
     markAsExpanded: function( expanded ){
         var strings, iconExpanded;
-        
+
         iconExpanded = this.get( ICON_EXPANDED );
         strings = this.get( STRINGS );
 
@@ -818,22 +365,22 @@ Y.extend( AccordionItem, Y.Widget, {
                 return true;
             }
         }
-        
+
         return false;
     },
 
-   
+
    /**
     * Marks the item as expanding by adding class to expand icon.
     * The method will update icon only if needed.
-    * 
+    *
     * @method markAsExpanding
     * @param expanding {Boolean} Boolean indicating that the item should be marked as expanding.
     * @return {Boolean} Return true if the icon has been updated, false if there was no need to update
     */
     markAsExpanding: function( expanding ){
         var iconExpanded = this.get( ICON_EXPANDED );
-        
+
         if( expanding ){
             if( !iconExpanded.hasClass( C_ICONEXPANDED_EXPANDING ) ){
                 iconExpanded.addClass( C_ICONEXPANDED_EXPANDING );
@@ -845,15 +392,15 @@ Y.extend( AccordionItem, Y.Widget, {
                 return true;
             }
         }
-        
+
         return false;
     },
 
-    
+
    /**
     * Marks the item as collapsing by adding class to expand icon.
     * The method will update icon only if needed.
-    * 
+    *
     * @method markAsCollapsing
     * @param collapsing {Boolean} Boolean indicating that the item should be marked as collapsing.
     * @return {Boolean} Return true if the icon has been updated, false if there was no need to update
@@ -872,7 +419,7 @@ Y.extend( AccordionItem, Y.Widget, {
                 return true;
             }
         }
-        
+
         return false;
     },
 
@@ -885,28 +432,6 @@ Y.extend( AccordionItem, Y.Widget, {
      */
     resize : function(){
         this.fire( "contentUpdate" );
-    },
-
-
-    /**
-     * Parses and returns the yuiConfig attribute from contentBox. It must be stringified JSON object.
-     * This function will be replaced with more clever solution when YUI 3.1 becomes available
-     *
-     * @method _getConfigDOMAttribute
-     * @param contentBox {Node} Widget's contentBox
-     * @return {Object} The parsed yuiConfig value
-     * @private
-     */
-    _getConfigDOMAttribute: function( contentBox ) {
-        if( !this._parsedCfg ){
-            this._parsedCfg = contentBox.getAttribute( YUICONFIG );
-
-            if( this._parsedCfg ){
-                this._parsedCfg = JSON.parse( this._parsedCfg );
-            }
-        }
-
-        return this._parsedCfg;
     },
 
 
@@ -935,8 +460,8 @@ Y.extend( AccordionItem, Y.Widget, {
 
         return height;
     },
-    
-    
+
+
     /**
      * Validator applied to the icon attribute. Setting new value is not allowed if Accordion has been rendered.
      *
@@ -948,8 +473,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _validateIcon: function( value ) {
         return !this.get(RENDERED) || value;
     },
-    
-    
+
+
     /**
      * Validator applied to the nodeLabel attribute. Setting new value is not allowed if Accordion has been rendered.
      *
@@ -961,8 +486,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _validateNodeLabel: function( value ) {
         return !this.get(RENDERED) || value;
     },
-    
-    
+
+
     /**
      * Validator applied to the iconsContainer attribute. Setting new value is not allowed if Accordion has been rendered.
      *
@@ -974,8 +499,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _validateIconsContainer: function( value ) {
         return !this.get(RENDERED) || value;
     },
-    
-    
+
+
     /**
      * Validator applied to the iconExpanded attribute. Setting new value is not allowed if Accordion has been rendered.
      *
@@ -987,8 +512,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _validateIconExpanded: function( value ) {
         return !this.get(RENDERED) || value;
     },
-    
-    
+
+
     /**
      * Validator applied to the iconAlwaysVisible attribute. Setting new value is not allowed if Accordion has been rendered.
      *
@@ -1000,8 +525,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _validateIconAlwaysVisible: function( value ) {
         return !this.get(RENDERED) || value;
     },
-    
-    
+
+
     /**
      * Validator applied to the iconClose attribute. Setting new value is not allowed if Accordion has been rendered.
      *
@@ -1013,8 +538,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _validateIconClose: function( value ) {
         return !this.get(RENDERED) || value;
     },
-    
-    
+
+
     /**
      * Setter applied to the input when updating the icon attribute.  Input can
      * be a Node, raw HTMLElement, or a selector string to locate it.
@@ -1027,8 +552,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _setIcon: function( value ){
         return Y.get( value ) || null;
     },
-    
-    
+
+
     /**
      * Setter applied to the input when updating the nodeLabel attribute.  Input can
      * be a Node, raw HTMLElement, or a selector string to locate it.
@@ -1041,8 +566,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _setNodeLabel: function( value ){
         return Y.get( value ) || null;
     },
-    
-    
+
+
     /**
      * Setter applied to the input when updating the iconsContainer attribute.  Input can
      * be a Node, raw HTMLElement, or a selector string to locate it.
@@ -1055,8 +580,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _setIconsContainer: function( value ){
         return Y.get( value ) || null;
     },
-    
-    
+
+
     /**
      * Setter applied to the input when updating the iconExpanded attribute.  Input can
      * be a Node, raw HTMLElement, or a selector string to locate it.
@@ -1069,8 +594,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _setIconExpanded: function( value ){
         return Y.get( value ) || null;
     },
-    
-    
+
+
     /**
      * Setter applied to the input when updating the iconAlwaysVisible attribute.  Input can
      * be a Node, raw HTMLElement, or a selector string to locate it.
@@ -1083,8 +608,8 @@ Y.extend( AccordionItem, Y.Widget, {
     _setIconAlwaysVisible: function( value ){
         return Y.get( value ) || null;
     },
-    
-    
+
+
     /**
      * Setter applied to the input when updating the iconClose attribute.  Input can
      * be a Node, raw HTMLElement, or a selector string to locate it.
@@ -1096,15 +621,472 @@ Y.extend( AccordionItem, Y.Widget, {
      */
     _setIconClose: function( value ){
         return Y.get( value ) || null;
+    },
+
+
+    /**
+     * Overwrites Widget's _applyParser method in order to parse yuiConfig attribute before entering in HTML_PARSER attributes
+     *
+     * @method _applyParser
+     * @protected
+     * @param config {Object} User configuration object (will be populated with values from Node)
+    */
+    _applyParser : function(config) {
+        var srcNode;
+
+        srcNode = this.get( "srcNode" );
+
+        if( srcNode ){
+            this._parsedYUIConfig = srcNode.getAttribute( YUICONFIG );
+
+            if( this._parsedYUIConfig ){
+                this._parsedYUIConfig = JSON.parse( this._parsedYUIConfig );
+            }
+        }
+
+        Y.AccordionItem.superclass._applyParser.apply( this, arguments );
+
+        delete this._parsedYUIConfig;
     }
-});
+}, {
+    /**
+     *  Static property provides a string to identify the class.
+     *
+     * @property NAME
+     * @type String
+     * @static
+     */
+    NAME : AccItemName,
 
-// Add WidgetStdMod's functionality to AccordionItem
-Base.build( AccordionItem.NAME, AccordionItem, [ WidgetStdMod ], {
-    dynamic: false
-});
+    /**
+     * Static property used to define the default attribute
+     * configuration for the Accordion.
+     *
+     * @property Accordion.ATTRS
+     * @type Object
+     * @static
+     */
+    ATTRS : {
 
-Y.AccordionItem = AccordionItem;
+        /**
+         * @description The Node, representing item's icon
+         *
+         * @attribute icon
+         * @default null
+         * @type Node
+         */
+        icon: {
+            value: null,
+            validator: function( value ){
+                return this._validateIcon( value );
+            },
+            setter : function( value ) {
+                return this._setIcon( value );
+            }
+        },
+
+        /**
+         * @description The label of item
+         *
+         * @attribute label
+         * @default "&#160;"
+         * @type String
+         */
+        label: {
+            value: "&#160;",
+            validator: Lang.isString
+        },
+
+        /**
+         * @description The node, which contains item's label
+         *
+         * @attribute nodeLabel
+         * @default null
+         * @type Node
+         */
+        nodeLabel: {
+            value: null,
+            validator: function( value ){
+                return this._validateNodeLabel( value );
+            },
+            setter : function( value ) {
+                return this._setNodeLabel( value );
+            }
+        },
+
+
+        /**
+         * @description The container of iconAlwaysVisible, iconExpanded and iconClose
+         *
+         * @attribute iconsContainer
+         * @default null
+         * @type Node
+         */
+        iconsContainer: {
+            value: null,
+            validator: function( value ){
+                return this._validateIconsContainer( value );
+            },
+            setter : function( value ) {
+                return this._setIconsContainer( value );
+            }
+        },
+
+        /**
+         * @description The Node, representing icon expanded
+         *
+         * @attribute iconExpanded
+         * @default null
+         * @type Node
+         */
+        iconExpanded: {
+            value: null,
+            validator: function( value ){
+                return this._validateIconExpanded( value );
+            },
+            setter : function( value ) {
+                return this._setIconExpanded( value );
+            }
+        },
+
+
+        /**
+         * @description The Node, representing icon always visible
+         *
+         * @attribute iconAlwaysVisible
+         * @default null
+         * @type Node
+         */
+        iconAlwaysVisible: {
+            value: null,
+            validator: function( value ){
+                return this._validateIconAlwaysVisible( value );
+            },
+            setter : function( value ) {
+                return this._setIconAlwaysVisible( value );
+            }
+        },
+
+
+        /**
+         * @description The Node, representing icon close, or null if the item is not closable
+         *
+         * @attribute iconClose
+         * @default null
+         * @type Node
+         */
+        iconClose: {
+            value: null,
+            validator: function( value ){
+                return this._validateIconClose( value );
+            },
+            setter : function( value ) {
+                return this._setIconClose( value );
+            }
+        },
+
+        /**
+         * @description Get/Set expanded status of the item
+         *
+         * @attribute expanded
+         * @default false
+         * @type Boolean
+         */
+        expanded: {
+            value: false,
+            validator: Lang.isBoolean
+        },
+
+        /**
+         * @description Describe the method, which will be used when expanding/collapsing
+         * the item. The value should be an object with at least one property ("method"):
+         *  <dl>
+         *      <dt>method</dt>
+         *          <dd>The method can be one of these: "auto", "fixed" and "stretch"</dd>
+         *      <dt>height</dt>
+         *          <dd>Must be set only if method's value is "fixed"</dd>
+         *  </dl>
+         *
+         * @attribute contentHeight
+         * @default auto
+         * @type Object
+         */
+        contentHeight: {
+            value: {
+                method: AUTO
+            },
+            validator: function( value ){
+                if( Lang.isObject( value ) ){
+                    if( value.method === AUTO ){
+                        return true;
+                    } else if( value.method === STRETCH ){
+                        return true;
+                    } else if( value.method === FIXED && Lang.isNumber( value.height ) &&
+                        value.height >= 0 ){
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+        },
+
+        /**
+         * @description Get/Set always visible status of the item
+         *
+         * @attribute alwaysVisible
+         * @default false
+         * @type Boolean
+         */
+        alwaysVisible: {
+            value: false,
+            validator: Lang.isBoolean
+        },
+
+
+        /**
+         * @description Get/Set the animaton specific settings. By default there are no any settings.
+         * If set, they will overwrite Accordion's animation settings
+         *
+         * @attribute animation
+         * @default {}
+         * @type Object
+         */
+        animation: {
+            value: {},
+            validator: Lang.isObject
+        },
+
+        /**
+         * @description Provides client side string localization support.
+         *
+         * @attribute strings
+         * @default Object English messages
+         * @type Object
+         */
+        strings: {
+            value: {
+                title_always_visible_off: "Click to set always visible on",
+                title_always_visible_on: "Click to set always visible off",
+                title_iconexpanded_off: "Click to expand",
+                title_iconexpanded_on: "Click to collapse",
+                title_iconclose: "Click to close"
+            }
+        },
+
+        /**
+         * @description Boolean indicating that the item can be closed by user.
+         * If true, there will be placed close icon, otherwise not
+         *
+         * @attribute closable
+         * @default false
+         * @type Boolean
+         */
+        closable: {
+            value: false,
+            validator: Lang.isBoolean
+        }
+    },
+
+
+    /**
+     * Static Object hash used to capture existing markup for progressive
+     * enhancement.  Keys correspond to config attribute names and values
+     * are selectors used to inspect the srcNode for an existing node
+     * structure.
+     *
+     * @property HTML_PARSER
+     * @type Object
+     * @protected
+     * @static
+     */
+    HTML_PARSER : {
+
+        icon: HEADER_SELECTOR_SUB + C_ICON,
+
+        label: function( srcNode ){
+            var node, labelSelector, yuiConfig, label;
+
+            yuiConfig = this._parsedYUIConfig;
+
+            if( yuiConfig && Lang.isValue( yuiConfig.label ) ){
+                return yuiConfig.label;
+            }
+
+            label = srcNode.getAttribute( "data-label" );
+
+            if( label ){
+                return label;
+            }
+
+            labelSelector = HEADER_SELECTOR_SUB + C_LABEL;
+            node = srcNode.query( labelSelector );
+
+            return (node) ? node.get( INNER_HTML ) : null;
+        },
+
+        nodeLabel: HEADER_SELECTOR_SUB + C_LABEL,
+
+        iconsContainer: HEADER_SELECTOR_SUB + C_ICONSCONTAINER,
+
+        iconAlwaysVisible: HEADER_SELECTOR_SUB + C_ICONALWAYSVISIBLE,
+
+        iconExpanded: HEADER_SELECTOR_SUB + C_ICONEXPANDED,
+
+        iconClose: HEADER_SELECTOR_SUB + C_ICONCLOSE,
+
+        expanded: function( srcNode ){
+            var yuiConfig, expanded;
+
+            yuiConfig = this._parsedYUIConfig;
+
+            if( yuiConfig && Lang.isBoolean( yuiConfig.expanded ) ){
+                return yuiConfig.expanded;
+            }
+
+            expanded = srcNode.getAttribute( "data-expanded" );
+
+            if( expanded ) {
+                return REGEX_TRUE.test( expanded );
+            }
+
+            return srcNode.hasClass( C_EXPANDED );
+        },
+
+        alwaysVisible: function( srcNode ){
+            var yuiConfig, alwaysVisible;
+
+            yuiConfig = this._parsedYUIConfig;
+
+            if( yuiConfig && Lang.isBoolean( yuiConfig.alwaysVisible ) ){
+                alwaysVisible = yuiConfig.alwaysVisible;
+            } else {
+                alwaysVisible = srcNode.getAttribute( "data-alwaysvisible" );
+
+                if( alwaysVisible ) {
+                    alwaysVisible = REGEX_TRUE.test( alwaysVisible );
+                } else {
+                    alwaysVisible = srcNode.hasClass( C_ALWAYSVISIBLE );
+                }
+            }
+
+            if( alwaysVisible ){
+                this.set( "expanded", true, {
+                    internalCall: true
+                } );
+            }
+
+            return alwaysVisible;
+        },
+
+        closable: function( srcNode ){
+            var yuiConfig, closable;
+
+            yuiConfig = this._parsedYUIConfig;
+
+            if( yuiConfig && Lang.isBoolean( yuiConfig.closable ) ){
+                return yuiConfig.closable;
+            }
+
+            closable = srcNode.getAttribute( "data-closable" );
+
+            if( closable ) {
+                return REGEX_TRUE.test( closable );
+            }
+
+            return srcNode.hasClass( C_CLOSABLE );
+        },
+
+        contentHeight: function( srcNode ){
+            var contentHeightClass, classValue, height = 0, index, yuiConfig,
+                contentHeight;
+
+            yuiConfig = this._parsedYUIConfig;
+
+            if( yuiConfig && yuiConfig.contentHeight ){
+                return yuiConfig.contentHeight;
+            }
+
+            contentHeight = srcNode.getAttribute( "data-contentheight" );
+
+            if( REGEX_AUTO.test( contentHeight ) ){
+                return {
+                    method: AUTO
+                };
+            } else if( REGEX_STRETCH.test( contentHeight ) ){
+                return {
+                    method: STRETCH
+                };
+            } else if( REGEX_FIXED.test( contentHeight ) ){
+                height = this._extractFixedMethodValue( contentHeight );
+
+                return {
+                    method: FIXED,
+                    height: height
+                };
+            }
+
+
+            classValue = srcNode.get( CLASS_NAME );
+
+            contentHeightClass = C_CONTENTHEIGHT + '-';
+
+            index = classValue.indexOf( contentHeightClass, 0);
+
+            if( index >= 0 ){
+                index += contentHeightClass.length;
+
+                classValue = classValue.substring( index );
+
+                if( REGEX_AUTO.test( classValue ) ){
+                    return {
+                        method: AUTO
+                    };
+                } else if( REGEX_STRETCH.test( classValue ) ){
+                    return {
+                        method: STRETCH
+                    };
+                } else if( REGEX_FIXED.test( classValue )  ){
+                    height = this._extractFixedMethodValue( classValue );
+
+                    return {
+                        method: FIXED,
+                        height: height
+                    };
+                }
+            }
+
+            return null;
+        }
+    },
+
+
+     /**
+      * The template HTML strings for each of header components.
+      * e.g.
+      * <pre>
+      *    {
+      *       icon : '&lt;a class="yui3-accordion-item-icon"&gt;&lt;/a&gt;',
+      *       label: '&lt;a href="#" class="yui3-accordion-item-label"&gt;&lt;/a&gt;',
+      *       iconsContainer: '&lt;div class="yui3-accordion-item-icons"&gt;&lt;/div&gt;',
+      *       iconAlwaysVisible: '&lt;a href="#" class="yui3-accordion-item-iconalwaysvisible"&gt;&lt;/a&gt;',
+      *       iconExpanded: '&lt;a href="#" class="yui3-accordion-item-iconexpanded"&gt;&lt;/a&gt;',
+      *       iconClose: '&lt;a href="#" class="yui3-accordion-item-iconclose yui3-accordion-item-iconclose-hidden"&gt;&lt;/a&gt;'
+      *    }
+      * </pre>
+      * @property WidgetStdMod.TEMPLATES
+      * @type Object
+      */
+    TEMPLATES : {
+         icon : '<a class="' + C_ICON + '"></a>',
+         label: '<a href="#" class="' + C_LABEL + '"></a>',
+         iconsContainer: '<div class="' + C_ICONSCONTAINER + '"></div>',
+         iconExpanded: ['<a href="#" class="', C_ICONEXPANDED, ' ', C_ICONEXPANDED_OFF, '"></a>'].join(''),
+         iconAlwaysVisible: ['<a href="#" class="', C_ICONALWAYSVISIBLE, ' ',  C_ICONALWAYSVISIBLE_OFF, '"></a>'].join(''),
+         iconClose: ['<a href="#" class="', C_ICONCLOSE, ' ', C_ICONCLOSE_HIDDEN, '"></a>'].join('')
+    }
+
+});
 
 }());
 

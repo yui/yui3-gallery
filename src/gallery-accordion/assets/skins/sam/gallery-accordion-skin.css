@@ -1,32 +1,32 @@
-.yui-skin-sam .yui-accordion {
+.yui3-skin-sam .yui3-accordion {
     border: 1px solid #93B2CC;
 }
 
-.yui-skin-sam .yui-accordion-item .yui-widget-hd {
+.yui3-skin-sam .yui3-accordion-item .yui3-widget-hd {
     background-image: url( accordion_sprite.png );
     background-position: 0px 0px;
     border: 1px solid #93B2CC;
     height: 25px;
 }
 
-.yui-skin-sam .yui-accordion-item-icon,
-.yui-skin-sam .yui-accordion-item-iconexpanded,
-.yui-skin-sam .yui-accordion-item-iconalwaysvisible,
-.yui-skin-sam .yui-accordion-item-iconclose {
+.yui3-skin-sam .yui3-accordion-item-icon,
+.yui3-skin-sam .yui3-accordion-item-iconexpanded,
+.yui3-skin-sam .yui3-accordion-item-iconalwaysvisible,
+.yui3-skin-sam .yui3-accordion-item-iconclose {
     background-repeat: no-repeat;
 }
     
-.yui-skin-sam .yui-accordion-item-icon {
+.yui3-skin-sam .yui3-accordion-item-icon {
     background-image: url( accordion_sprite.png );
     background-position: center -25px;
     _background-position: center -27px;
 }
 
-.yui-skin-sam .yui-accordion-item-label{
+.yui3-skin-sam .yui3-accordion-item-label{
     color: #444444;
 }
 
-.yui-skin-sam .yui-accordion-item-label {
+.yui3-skin-sam .yui3-accordion-item-label {
     text-decoration: none;
     background: transparent;
     overflow: hidden;
@@ -34,67 +34,67 @@
     font-weight: bold;
 }
 
-.yui-skin-sam .yui-accordion-item-label:hover{
+.yui3-skin-sam .yui3-accordion-item-label:hover{
     text-decoration: underline;
 }
 
-.yui-skin-sam .yui-accordion-item-iconalwaysvisible,
-.yui-skin-sam .yui-accordion-item-iconalwaysvisible-off {
+.yui3-skin-sam .yui3-accordion-item-iconalwaysvisible,
+.yui3-skin-sam .yui3-accordion-item-iconalwaysvisible-off {
     background-image: url( accordion_sprite.png );
     background-position: 0px -85px;
     _background-position: 0px -87px;
 }
 
-.yui-skin-sam .yui-accordion-item-iconalwaysvisible-on {
+.yui3-skin-sam .yui3-accordion-item-iconalwaysvisible-on {
     background-image: url( accordion_sprite.png );
     background-position: 0px -55px;
     _background-position: 0px -57px;
 }
 
-.yui-skin-sam .yui-accordion-item-iconexpanded,
-.yui-skin-sam .yui-accordion-item-iconexpanded-off {
+.yui3-skin-sam .yui3-accordion-item-iconexpanded,
+.yui3-skin-sam .yui3-accordion-item-iconexpanded-off {
     background-image: url( accordion_sprite.png );
     background-position: 0px -175px;
     _background-position: 0px -177px;
 }
 
-.yui-skin-sam .yui-accordion-item-iconexpanded-off:hover{
+.yui3-skin-sam .yui3-accordion-item-iconexpanded-off:hover{
     background-image: url( accordion_sprite.png );
     background-position: 0px -205px;
 }
 
-.yui-skin-sam .yui-accordion-item-iconexpanded-on {
+.yui3-skin-sam .yui3-accordion-item-iconexpanded-on {
     background-image: url( accordion_sprite.png );
     background-position: 0px -115px;
     _background-position: 0px -117px;
 }
 
 
-.yui-skin-sam .yui-accordion-item-iconexpanded-on:hover {
+.yui3-skin-sam .yui3-accordion-item-iconexpanded-on:hover {
     background-image: url( accordion_sprite.png );
     background-position: 0px -145px;
 }
 
 
-.yui-skin-sam .yui-accordion-item-iconexpanded-expanding {
+.yui3-skin-sam .yui3-accordion-item-iconexpanded-expanding {
     background-image: url( wait_expand.gif );
     background-position: 0px center;
 }
 
 
-.yui-skin-sam .yui-accordion-item-iconexpanded-collapsing {
+.yui3-skin-sam .yui3-accordion-item-iconexpanded-collapsing {
     background-image: url( wait_collapse.gif );
     background-position: 0px center;
 }
 
-.yui-skin-sam .yui-accordion-item-iconclose {
+.yui3-skin-sam .yui3-accordion-item-iconclose {
     background-image: url( accordion_sprite.png );
     background-position: 0px -235px;
     _background-position: 0px -237px;
 }
 
 
-.yui-skin-sam .yui-accordion-proxyel-visible {
+.yui3-skin-sam .yui3-accordion-proxyel-visible {
     border-color : blue;
     color : white;
     font-weight : bold;
