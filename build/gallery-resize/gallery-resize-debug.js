@@ -1,5 +1,6 @@
 YUI.add('gallery-resize', function(Y) {
 
+
 /**
  *
  * Plugin to make elements resizeable.
@@ -75,7 +76,7 @@ YUI.add('gallery-resize', function(Y) {
           
           animateDuration : { value: 0.25 },
           
-          animateEasing : { value: Y.Easing.easeNone },
+          animateEasing : { value: ( Y.Easing === undefined ? null : Y.Easing.easeNone ) },
           
           autoRatio : { 
             value: false ,        
@@ -257,7 +258,9 @@ YUI.add('gallery-resize', function(Y) {
             },
             setter: function( val ) {
               if( val ){
+
                 this._wrappedEls = Y.Array( Y.all( "#" + this.get("host").get("id") + " " + val ) );
+
               }
             }
           },
@@ -272,13 +275,22 @@ YUI.add('gallery-resize', function(Y) {
             value: false,
             lazyAdd: false,
             setter: function( val ){
-              if( this._wrappedEls.length == 1 && val === true ){
-                var c = Y.one(this._wrappedEls[0]), h = this.get("host");
+              if( this._wrappedEls !== undefined && this._wrappedEls.length == 1 && val === true ){
+                var c = this._wrappedEls[0], h = this.get("host"),
+                    hHeight = parseInt( c.getComputedStyle( "height" ) || c.getAttribute( "height" ), 10 ) ,
+                    hWidth = parseInt( c.getComputedStyle( "width" ) || c.getAttribute( "width" ) , 10 );
+
                 if( c.getStyle( "position" ) == "absolute" ){
                   h.setXY( c.getXY() );
                 }
-                h.setStyle( "width" , c.getComputedStyle( "width" ) || c.getAttribute( "width" ) + "px" );
-                h.setStyle( "height" , c.getComputedStyle( "height" ) || c.getAttribute( "height" ) + "px" );
+                
+                if( Y.UA.ie ){
+                  hHeight += 8;
+                  hWidth += 5;
+                }
+
+                h.setStyle( "width" ,  hWidth + "px" );
+                h.setStyle( "height" , hHeight + "px" );
               }
             }
           },
@@ -579,8 +591,7 @@ YUI.add('gallery-resize', function(Y) {
 
 
                // Are we resizing at set ratio - by config or shift key?
-               if( this.get( "ratio" ) ||
-                   ( this.get("autoRatio") && ev.currentTarget._ev_md.shiftKey  ) ) {
+               if( this.get( "ratio" ) || ( this.get("autoRatio") && ev.currentTarget._ev_md.shiftKey  ) ) {
                  this._ratioValue = parseInt( el.getComputedStyle( "height" ) , 10 ) / parseInt( el.getComputedStyle( "width" ) , 10 );
                }
                
@@ -588,8 +599,8 @@ YUI.add('gallery-resize', function(Y) {
                   el.addClass( "yui3-resize-ghost" );
                }
                
-               this._originalPosition = this._getPosition( el );
-               
+               this._originalPosition = this._getPosition( this._resizeNode );
+ 
                this._startChildResize();
                
                // show the status panel:
@@ -623,6 +634,7 @@ YUI.add('gallery-resize', function(Y) {
           
                // get the current location
                var coords = this._getPosition( this._resizeNode  ),
+                   orig = this._originalPosition,
                    w = coords.w,
                    h = coords.h,
                    t = coords.t,
@@ -639,6 +651,12 @@ YUI.add('gallery-resize', function(Y) {
                    finalCoords ;
 
 
+               if( this._resizeNode.getStyle("position") !== "absolute" ){
+                 orig.t = 0; t=0;
+                 orig.l = 0; l=0;
+               }
+
+
                if( this.get( "xTicks" ) && this.get( "xTicks" ) > 0 ){
                  calcdW =  this._snapTick( dw , this.get( "xTicks" ) );
                  
@@ -652,6 +670,8 @@ YUI.add('gallery-resize', function(Y) {
                if ( ch.hasClass( "yui3-resize-handle-r" ) ) {
                    
                  calcdW = dw;
+                 t = orig.t;
+                 l = orig.l;
                
                }
                
@@ -659,19 +679,22 @@ YUI.add('gallery-resize', function(Y) {
 
                  calcdW = -dw;
                  calcdL = dw;
+                 t = orig.t;
                }
                    
                else if( ch.hasClass( "yui3-resize-handle-t" ) ) {
                    
                  calcdH = -dh;
                  calcdT = dh;
+                 l = orig.l;
                
                }
                
                else if ( ch.hasClass( "yui3-resize-handle-b" ) ) {
                
                  calcdH = dh;
-               
+                 l = orig.l;
+                 t = orig.t;
                }
                
                else if( ch.hasClass( "yui3-resize-handle-tl" ) ) {
@@ -687,6 +710,7 @@ YUI.add('gallery-resize', function(Y) {
                  calcdW = dw;
                  calcdH = -dh;
                  calcdT = dh;
+                 l = orig.l;
                
                }
 
@@ -694,26 +718,39 @@ YUI.add('gallery-resize', function(Y) {
                
                  calcdW = -dw;
                  calcdH = dh;
-                 calcdL = dw;               
+                 calcdL = dw;
+                 t = orig.t;           
                }               
 
                else if( ch.hasClass( "yui3-resize-handle-br" ) ) {
                
                  calcdW = dw;
-                 calcdH = dh;               
+                 calcdH = dh;
+                 t = orig.t; calcdT = 0;
+                 l = orig.l; calcdL = 0;
                }
-               
+
+
+
+
                finalCoords = this._constrainResize( { w: w + calcdW, 
                                                           h: h + calcdH,
                                                           t: t + calcdT,
                                                           l: l + calcdL } );
+
+
+
 
                this._setPosition( finalCoords , this._resizeNode );
               
                this._updateStatus( ev, { w: w + calcdW, h: h + calcdH, dw: dw, dh: dh } );
 
                // update any child elements we're wrapping
-               this._resizeChildren( { ratioW: calcdW/w, ratioH: calcdH/h, dl: calcdL, dt: calcdT } );
+               this._resizeChildren( Y.mix( { ratioW: calcdW/w, 
+                                             ratioH: calcdH/h, 
+                                             dl: calcdL, 
+                                             dt: calcdT },
+                                           finalCoords) );
                                        
 
 
@@ -728,9 +765,19 @@ YUI.add('gallery-resize', function(Y) {
              * Resize children by same amount
              */
             _resizeChildren: function( oChange ){
-            
+      
                if( this._wrappedEls === false ){
                  return; 
+               }
+               
+               // single element wrapper: set to same size as wrapper
+               if( this._wrappedEls.length == 1 ){
+                 this._setPosition( {w: oChange.w,
+                                     h: oChange.h,
+                                     t: oChange.t,
+                                     l: oChange.l }, 
+                                    this._wrappedEls[ 0 ] );
+                 return;
                }
 
                // private function does the hard work:
@@ -797,11 +844,12 @@ YUI.add('gallery-resize', function(Y) {
                 if( node === undefined ){
                   node = this.get( "host" );
                 }
-    
-              return { w: parseInt( node.getStyle( "width" ), 10 ),
+
+
+              return { w : parseInt( node.getStyle( "width" ), 10 ),
                        h : parseInt( node.getStyle( "height" ) , 10 ),
-                       t : parseInt( node.getStyle( "top" ) , 10 ),
-                       l : parseInt( node.getStyle( "left" ) , 10 ) };
+                       t : parseInt( node.getY() , 10 ),
+                       l : parseInt( node.getX() , 10 ) };
             },
             
             
@@ -815,7 +863,7 @@ YUI.add('gallery-resize', function(Y) {
                if( node === undefined ) {
                  node = this.get( "host" );
                }
-              
+
                  node.setStyle( "width" , parseInt( oPos.w, 10 ) + "px" );
                  node.setStyle( "height" , parseInt( oPos.h, 10 ) + "px" );
                  node.setStyle( "top" , parseInt( oPos.t, 10 ) + "px" );
@@ -1101,4 +1149,5 @@ YUI.add('gallery-resize', function(Y) {
 
 
 
-}, 'gallery-2010.03.23-17-54' ,{requires:['attribute','node','plugin','dd-plugin','dd-proxy','anim','event-mouseenter']});
+
+}, 'gallery-2010.04.02-17-26' ,{requires:['attribute','node','plugin','dd-plugin','dd-proxy','anim','event-mouseenter']});

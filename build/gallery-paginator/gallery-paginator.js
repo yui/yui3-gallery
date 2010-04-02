@@ -2436,4 +2436,4 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
 };
 
 
-}, 'gallery-2010.02.25-22' ,{requires:['widget','event-key','substitute']});
+}, 'gallery-2010.04.02-17-26' ,{requires:['widget','event-key','substitute']});
