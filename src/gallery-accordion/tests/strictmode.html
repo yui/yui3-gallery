@@ -3,30 +3,36 @@
 <html>
   <head>
     <title>Accordion tests Strict mode</title>
-    
+
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.0/build/cssreset/reset-min.css">
     <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.0/build/cssfonts/fonts-min.css">
     <link rel="stylesheet" type="text/css" href="../../../build/gallery-accordion/assets/skins/sam/gallery-accordion.css">
-				
+
     <style type="text/css">
         html, body {
             height:100%;
         }
-        
+
         #item1 .customiconclass {
             background-image: url("../../../build/gallery-accordion/assets/skins/sam/accordion_sprite.png");
             background-repeat: no-repeat;
             background-position: center -83px;
         }
+
+        #acc1, #acc2 {
+            position: relative;
+            height: 550px;
+            overflow: hidden;
+        }
      </style>
 
-     <script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
+     <script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui.js"></script>
      <script type="text/javascript" src="../../../build/gallery-accordion/gallery-accordion.js"></script>
      <script type="text/javascript" src="testaccordion.js"></script>
 
   </head>
   <body class="yui3-skin-sam">
-      <div style="position: absolute; width:300px; height: 550px;">
+      <div style="position: absolute; width: 300px; height: 550px; left: 10px; top: 10px;">
           <div id="acc1" class="yui3-accordion">
                 <div id="item1" class="yui3-accordion-item yui3-accordion-item-closable yui3-accordion-item-contentheight-fixed-150" yuiConfig='{"alwaysVisible":true}'>
                     <div class="yui3-widget-hd">
@@ -100,11 +106,11 @@
            </div>
       </div>
 
-      <div id="acc_result1" style="position: absolute; width:300px; top: 570px;"></div>
+      <div id="acc_result1" style="position: absolute; left: 10px; width:300px; top: 580px;"></div>
 
       <!-- second accordion -->
-      <div style="position: absolute; width:300px; height: 550px; left: 350px;">
-          <div id="acc2" class="yui3-accordion">
+      <div style="position: absolute; width:300px; height: 550px; left: 360px; top: 10px;">
+          <div id="acc2" class="yui3-accordion" style="position: relative; height: 550px; overflow: hidden;">
               <div id="item5" class="yui3-accordion-item" data-label="Label 5, overwritten" data-expanded="true" data-contentheight="auto">
                 <div class="yui3-widget-hd">
                     <a class="yui3-accordion-item-icon"></a>
@@ -158,6 +164,6 @@
           </div>
       </div>
 
-      <div id="acc_result2" style="position: absolute; width:300px; top: 570px; left: 350px;"></div>
+      <div id="acc_result2" style="position: absolute; width:300px; top: 580px; left: 360px;"></div>
   </body>
 </html>

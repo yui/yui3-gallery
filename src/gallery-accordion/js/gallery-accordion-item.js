@@ -647,7 +647,25 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
         Y.AccordionItem.superclass._applyParser.apply( this, arguments );
 
         delete this._parsedYUIConfig;
-    }
+    },
+
+
+    /**
+     * Overwrites Y.WidgetStdMod fuction in order to resolve Widget 3.1 issue:<br>
+     * If CONTENT_TEMPLATE is null, in renderUI the result of the following code:
+     * <code>this.getStdModNode( Y.WidgetStdMod.HEADER );</code> is null.
+     * The same is with <code>this.getStdModNode( Y.WidgetStdMod.BODY );</code>.
+     *
+     * @method _findStdModSection
+     * @protected
+     * @param {String} section The section for which the render Node is to be found. Either WidgetStdMod.HEADER, WidgetStdMod.BODY or WidgetStdMod.FOOTER.
+     * @return {Node} The rendered node for the given section, or null if not found.
+     */
+    _findStdModSection: function(section) {
+        return this.get("srcNode").one("> ." + Y.WidgetStdMod.SECTION_CLASS_NAMES[section]);
+    },
+
+    CONTENT_TEMPLATE : null
 }, {
     /**
      *  Static property provides a string to identify the class.

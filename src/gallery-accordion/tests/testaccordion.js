@@ -39,7 +39,7 @@ YUI({
         var item, id;
         
         item = attrs.item;
-        id = item.get( "contentBox" ).get( "id" );
+        id = item.get( "id" );
 
         if( id === "item2" ){
             item.set( "label", "Label2" ); // there is no label in markup for this item, so we set it here
