@@ -28,6 +28,45 @@ YUI({
 
     this.undoManager = new Y.UndoManager();
 
+    this.undoManager.on( "actionAdded", Y.bind( function(attrs){
+        var action = attrs.action;
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+    }, this) );
+
+    this.undoManager.on( "actionCanceled", Y.bind( function(attrs){
+        var action = attrs.action;
+        var index = attrs.index;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isNumber( index );
+    }, this) );
+
+    this.undoManager.on( "actionMerged", Y.bind( function(attrs){
+        var action = attrs.action;
+        var mergedAction = attrs.mergedAction;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isInstanceOf( Y.UndoableAction, mergedAction );
+    }, this) );
+
+    this.undoManager.on( "actionRedone", Y.bind( function(attrs){
+        var action = attrs.action;
+        var index = attrs.index;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isNumber( index );
+    }, this) );
+
+
+    this.undoManager.on( "actionUndone", Y.bind( function(attrs){
+        var action = attrs.action;
+        var index = attrs.index;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isNumber( index );
+    }, this) );
+    
+
     var testAsynchronousActions = new Y.Test.Case({
         name: "Test asynchronous action",
 
