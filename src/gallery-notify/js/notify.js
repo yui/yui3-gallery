@@ -141,15 +141,14 @@
                             duration : 0.25,
                             on : {
                                 end : Y.bind(function () {
+                                    this.remove();
                                     bb.remove();
-                                    parent.remove(index);
                                 },this)
                             }
                         }).run();
                     },this)
                 }
             }).run();
-            this.remove();
         },
         
         /**
