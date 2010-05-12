@@ -37,10 +37,13 @@
 			fireOnce	: true
 		});
 			
-		this.after('init', function(e){
-			Y.log('firing: ' + E_INIT_COMPONENTS, 'info', 'baseComponentMgr');
+		if (this.get('initialized')) {
 			this.fire(E_INIT_COMPONENTS, { components: [] });
-		});
+		} else {
+			this.after('initializedChange', function(e){
+				this.fire(E_INIT_COMPONENTS, { components: [] });
+			});
+		}
 	};
 	
 	// *** Static *** //
