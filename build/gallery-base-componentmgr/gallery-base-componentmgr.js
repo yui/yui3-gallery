@@ -38,9 +38,13 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			fireOnce	: true
 		});
 			
-		this.after('init', function(e){
+		if (this.get('initialized')) {
 			this.fire(E_INIT_COMPONENTS, { components: [] });
-		});
+		} else {
+			this.after('initializedChange', function(e){
+				this.fire(E_INIT_COMPONENTS, { components: [] });
+			});
+		}
 	};
 	
 	// *** Static *** //
@@ -54,25 +58,25 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 		// *** Public Methods *** //
 		
 		/**
-		 * Retrieves component instance(s) by component name or reference,
-		 * any non-initialized components will be initalized.
-		 * Component instance(s) will be passed to the callback as arguments.
+		 * Supplies the callback with component instance(s) that were requested by string name or reference,
+		 * any non-initialized components will be initialized.
+		 * Component instance(s) will be passed to the callback as arguments in the order requested.
 		 * 
-		 * @method getComponent
-		 * @param component* {string|object} 1-n components to get/create instances of and return
+		 * @method useComponent
+		 * @param component* {string|object} 1-n components to use and/or create instances of
 		 * @param *callback {function} callback to pass component instances to
 		 */
-		getComponent : function () {
+		useComponent : function () {
 			
 			
 			var args = Y.Array(arguments, 0, true),
-				components = args.slice(0, -1),
-				callback = isFunction(args[args.length-1]) ? args[args.length-1] : noop,
+				callback = isFunction(args[args.length-1]) ? args[args.length-1] : noop,	// last param or noop
+				components = callback === noop ? args : args.slice(0, -1),					// if callback is noop then all params, otherwise all but last params
 				instances = [],
 				initialized;
 			
 			if (components.length < 1) {
-				callback.call(this, null);
+				callback.call(this);
 				return;
 			}
 			
@@ -94,6 +98,19 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			} else {
 				callback.apply(this, instances);
 			}
+		},
+		
+		/**
+		 * Retrieves component an instance by string name or reference.
+		 * The components must have previously been initialized otherwise null is returned.
+		 * 
+		 * @method getComponent
+		 * @param component {string|object} component to get instance of
+		 * @return component instance {object} the component instance if previously initialized, otherwise null
+		 */
+		getComponent : function (component) {
+			
+			return this._getInstance(component);
 		},
 		
 		// *** Private Methods *** //
@@ -140,7 +157,7 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			if ( ! c.instance) {
 				var initFn = isFunction(c.initializer) ? c.initializer :
 						isString(c.initializer) && isFunction(this[c.initializer]) ? this[c.initializer] : noop;
-				try { c.instance = initFn.call(this); } catch(e){}
+				c.instance = initFn.call(this);
 			}
 			
 			return c.instance || null;
@@ -151,4 +168,4 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 	Y.BaseComponentMgr = ComponentMgr;
 
 
-}, 'gallery-2010.03.16-20' ,{requires:['collection']});
+}, 'gallery-2010.05.12-19-08' ,{requires:['collection']});
