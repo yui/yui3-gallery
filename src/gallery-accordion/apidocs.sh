@@ -20,7 +20,7 @@ generator_out=../../build/gallery-accordion/apidocs/
 template=$yuidoc_home/template
 
 # The version of your project to display within the documentation.
-version=1.09
+version=1.091
 
 # The version of YUI the project is using.  This effects the output for
 # YUI configuration attributes.  This should start with '2' or '3'.
