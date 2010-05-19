@@ -1,5 +1,3 @@
-YUI.add('gallery-form-values', function(Y) {
- 
 	var Values,
     NAME = 'formValues',
     NS = 'values';
@@ -82,5 +80,3 @@ Y.extend(Values, Y.Plugin.Base, {
 });
 	
 Y.namespace('Form').Values = Values;
-
-}, '@VERSION@' ,{requires:['plugin','node']});
