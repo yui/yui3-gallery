@@ -1,21 +1,24 @@
-	/**
-	 * Local constants
-	 */
-    var Notify,
-        Message,
-        EVENTS = {
+    /**
+     * Local constants
+     */
+    var EVENTS = {
             INIT    : 'init',
             STARTED : 'started'
-        }
-        ;
+        },
+        YL = Y.Lang,
+        BOUNDING_BOX = 'boundingBox',
+        CONTENT_BOX    = 'contentBox',
+        ATTR_CLOSE_NODE = 'closeNode',
+        ATTR_CLOSABLE = 'closable',
+        ATTR_DEFAULT = 'default';
 
     /**
      * Message is created as a Child Widget
      */
-    Message = Y.Base.create('notify-message', Y.Widget, [Y.WidgetChild], {
-    	/**
-    	 * Override default widget templates
-    	 */
+    Y.namespace('Notify').Message = Y.Base.create('notify-message', Y.Widget, [Y.WidgetChild], {
+        /**
+         * Override default widget templates
+         */
         BOUNDING_TEMPLATE : '<li/>',
         CONTENT_TEMPLATE : '<em/>',
         
@@ -44,7 +47,7 @@
          *     the Message
          */
         initializer : function(config) {
-            this.get('boundingBox').setStyle('opacity',0);
+            this.get(BOUNDING_BOX).setStyle('opacity',0);
         },
         
         /**
@@ -54,20 +57,20 @@
          * @public
          */
         renderUI : function() {
-            var cb = this.get('contentBox'),
-                bb = this.get('boundingBox'),
+            var cb = this.get(CONTENT_BOX),
+                bb = this.get(BOUNDING_BOX),
                 closeNode;
             
             cb.setContent(this.get('message'));
-            bb.addClass(this.getClassName(this.get('flag')));
-            if(this.get('closable')) {
+            if(this.get(ATTR_CLOSABLE)) {
                 closeNode = Y.Node.create(Y.substitute(this.CLOSE_TEMPLATE,{
                     'class' : this.getClassName('close'),
                     'label' : 'X'
                 }));
-                this.set('closeNode',closeNode);
+                this.set(ATTR_CLOSE_NODE,closeNode);
                 bb.append(closeNode);
             }
+            this.get('flag');
         },
         
         /**
@@ -78,7 +81,7 @@
          */
         bindUI : function() {
             this._bindHover();
-            if(this.get('closable')) {
+            if(this.get(ATTR_CLOSABLE)) {
                 this._bindCloseClick();
             }
         },
@@ -96,19 +99,11 @@
                 repeatCount: 1,
                 callback: Y.bind(this.close, this)
             });
-            var bb = this.get('boundingBox'),
-                anim = new Y.Anim({
-                node : bb,
-                to : {
-                    opacity:1
-                },
-                duration: 0.3,
-                on : {
-                    end : Y.bind(function() {
-                        this.timer.start();
-                    },this)
-                }
-            }).run();
+            this.get(BOUNDING_BOX).appear({
+            	afterFinish : Y.bind(function(){
+            		this.timer.start();
+            	},this)
+            });
         },
         
         /**
@@ -122,33 +117,12 @@
             if(this.timer) {
                 this.timer.stop();
             }
-            var bb = this.get('boundingBox'),
-                index = this.get('index'),
-                parent = this.get('parent'),
-                fade = new Y.Anim({
-                node : bb,
-                to : {
-                    opacity : 0
-                },
-                duration : 0.55,
-                on : {
-                    end : Y.bind(function () {
-                        var size = new Y.Anim({
-                            node : bb,
-                            to : {
-                                height : 0
-                            },
-                            duration : 0.25,
-                            on : {
-                                end : Y.bind(function () {
-                                    this.remove();
-                                    bb.remove();
-                                },this)
-                            }
-                        }).run();
-                    },this)
-                }
-            }).run();
+            
+            this.get(BOUNDING_BOX).fade({
+                afterFinish  : Y.bind(function(e){
+                    this.destroy();
+                },this)
+            });
         },
         
         /**
@@ -158,7 +132,7 @@
          * @protected
          */
         _bindCloseClick : function() {
-            this.get('closeNode').on('click',Y.bind(this.close, this));
+            this.get(ATTR_CLOSE_NODE).on('click',Y.bind(this.close, this));
         },
         
         /**
@@ -170,7 +144,7 @@
          * @protected
          */
         _bindHover : function() {
-            var bb = this.get('boundingBox');
+            var bb = this.get(BOUNDING_BOX);
             bb.on('mouseenter',Y.bind(function(e){
                 this.timer.pause();
             },this));
@@ -179,6 +153,7 @@
                 this.timer.resume();
             },this));
         }
+        
     },{
         /**
          * Static property used to define the default attribute
@@ -189,17 +164,17 @@
          * @static
          */
         ATTRS : {
-	        /**
-	         * @description A flag when set to true will allow
-	         * a close button to be rendered in the message
-	         * 
-	         * @attribute closable
-	         * @type Boolean
-	         * @default true
-	         */
+            /**
+             * @description A flag when set to true will allow
+             * a close button to be rendered in the message
+             * 
+             * @attribute closable
+             * @type Boolean
+             * @default true
+             */
             closable : {
                 value : true,
-                validator : Y.Lang.isBoolean
+                validator : YL.isBoolean
             },
             
             /**
@@ -222,7 +197,7 @@
              * @type String
              */
             message : {
-                validator : Y.Lang.isString
+                validator : YL.isString
             },
             
             /**
@@ -237,42 +212,33 @@
             },
             
             /**
-             * @description Classification of message [error, alert, notice] 
+             * @description Sets the flag of notification for styling
              * 
              * @attribute flag
              * @type String
              * @default notice
              */
             flag : {
-                value : 'notice',
-                validator : function(val) {
-                    if(Y.Lang.isString(val)) {
-                        switch(val) {
-                            case 'error': // overflow intentional
-                            case 'alert':
-                            case 'notice':
-                                return true;
-                        }
-                    }
-                    
-                    return false;
+                validator : YL.isString,
+                setter : function(val) {
+                    this.get(BOUNDING_BOX).replaceClass(
+                        this.getClassName('flag', this.get('flag') || ATTR_DEFAULT),
+                        this.getClassName('flag', val || ATTR_DEFAULT)
+                    );
+                    return val;
                 }
             }
         }
     });
 
-    /**
-     * Add Message to Y.Notify namespace
-     */
-    Y.namespace('Notify').Message = Message;
     
     /**
      * Notify is created as a Parent Widget
      */
-    Notify = Y.Base.create('notify',Y.Widget,[Y.WidgetParent, Y.EventTarget],{
-    	/**
-    	 * Override default widget templates
-    	 */
+    Y.Notify = Y.Base.create('notify',Y.Widget,[Y.WidgetParent, Y.EventTarget],{
+        /**
+         * Override default widget templates
+         */
         CONTENT_TEMPLATE : '<ul/>',
 
         /**
@@ -321,7 +287,7 @@
          * @param index {Number} Stack order
          */
         addMessage : function(msg, flag, index) {
-            var flag = flag || 'notice';
+            flag = flag || ATTR_DEFAULT;
             this._buildChildConfig(msg,flag);
 
             if(index) {
@@ -343,7 +309,7 @@
          */
         addMessages : function(obj) {
             for(var o in obj) {
-                if(Y.Lang.isArray(obj[o])) {
+                if(YL.isArray(obj[o])) {
                     for(var i=0, l=obj[o].length; i<l; i++) {
                         this.addMessage(obj[o][i],o);
                     }
@@ -360,7 +326,7 @@
          */
         _buildChildConfig : function(msg,flag) {
             this._childConfig = {
-                closable : this.get('closable'),
+                closable : this.get(ATTR_CLOSABLE),
                 timeout : this.get('timeout'),
                 message : msg,
                 flag : flag
@@ -377,16 +343,16 @@
          * @static
          */
         ATTRS : {
-	        /**
-	         * Specifies if messages attached will have a close button
-	         * 
-	         * @attribute closable
-	         * @type Boolean
-	         * @default true
-	         */
+            /**
+             * Specifies if messages attached will have a close button
+             * 
+             * @attribute closable
+             * @type Boolean
+             * @default true
+             */
             closable : {
                 value : true,
-                validator : Y.Lang.isBoolean
+                validator : YL.isBoolean
             },
             
             /**
@@ -410,7 +376,7 @@
              */
             prepend : {
                 value : false,
-                validator : Y.Lang.isBoolean
+                validator : YL.isBoolean
             },
             
             /**
@@ -434,9 +400,3 @@
          */
         EVENTS : EVENTS
     });
-    
-    /**
-     * Add Notify to Y namespace
-     */
-    Y.Notify = Notify;
-

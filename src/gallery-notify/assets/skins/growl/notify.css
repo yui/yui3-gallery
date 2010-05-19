@@ -38,10 +38,10 @@
 	text-align:center;
 }
 
-.yui3-skin-growl .yui3-notify .yui3-notify-content .yui3-notify-message-error {
+.yui3-skin-growl .yui3-notify .yui3-notify-content .yui3-notify-message-flag-error {
     border-color:rgba(230, 20, 20, .8);
 }
-.yui3-skin-growl .yui3-notify .yui3-notify-content .yui3-notify-message-alert {
+.yui3-skin-growl .yui3-notify .yui3-notify-content .yui3-notify-message-flag-alert {
     border-color:rgba(230, 180, 20, .8);
 }
 
