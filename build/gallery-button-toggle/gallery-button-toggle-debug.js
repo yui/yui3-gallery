@@ -1,7 +1,5 @@
 YUI.add('gallery-button-toggle', function(Y) {
 
-YUI.add('gallery-button-toggle',function(Y){
-    
     var Button,
         YL = Y.Lang,
         CLASSES = {
@@ -71,8 +69,6 @@ YUI.add('gallery-button-toggle',function(Y){
     });
     
     Y.ButtonToggle = Button;
-        
-},'gallery-2010.05.05-19-39',{requires:['gallery-button']});
 
 
-}, 'gallery-2010.05.05-19-39' ,{requires:['gallery-button']});
+}, 'gallery-2010.05.19-19-08' ,{requires:['gallery-button']});

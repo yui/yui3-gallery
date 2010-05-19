@@ -42,8 +42,7 @@ Y.Node.prototype.scrollIntoView = function()
 	{
 		while (1)
 		{
-			var tag     = ancestor.tagName.toLowerCase();
-			var hit_top = (tag == 'html' || tag == 'body');
+			var hit_top = (ancestor.offsetParent === null);
 
 			var a = Y.one(ancestor);
 			if (ancestor.scrollWidth - a.horizMarginBorderPadding() > ancestor.clientWidth ||
@@ -72,7 +71,11 @@ Y.Node.prototype.scrollIntoView = function()
 		};
 
 		var dy = 0;
-		if (r.top < d.top)
+		if (a.getStyle('overflowY') == 'hidden')
+		{
+			// don't scroll
+		}
+		else if (r.top < d.top)
 		{
 			dy = r.top - d.top;
 		}
@@ -82,7 +85,11 @@ Y.Node.prototype.scrollIntoView = function()
 		}
 
 		var dx = 0;
-		if (r.left < d.left)
+		if (a.getStyle('overflowX') == 'hidden')
+		{
+			// don't scroll
+		}
+		else if (r.left < d.left)
 		{
 			dx = r.left - d.left;
 		}
@@ -111,7 +118,7 @@ Y.Node.prototype.scrollIntoView = function()
 	}
 
 	return this;
-}
+};
 
 
-}, 'gallery-2010.01.13-20' ,{requires:['gallery-dimensions']});
+}, 'gallery-2010.05.19-19-08' ,{requires:['gallery-dimensions']});

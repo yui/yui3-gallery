@@ -1,24 +1,21 @@
 YUI.add('gallery-button', function(Y) {
 
-YUI.add('gallery-button',function(Y){
-    
-    var Button,
-        YL = Y.Lang,
+    var YL = Y.Lang,
         EVENTS = {
             DISABLE : 'disable'
         },
         CLASSES = {
-    		HOVER    : '-hover',
-    		PRESSED  : '-pressed',
-    		DEFAULT  : '-default',
-    		DISABLED : '-disabled'
-    	};
+            HOVER    : '-hover',
+            PRESSED  : '-pressed',
+            DEFAULT  : '-default',
+            DISABLED : '-disabled'
+        },
+        BOUNDING_BOX = 'boundingBox',
+        ATTR_DISABLED = 'disabled',
+        ATTR_ENABLED = 'enabled',
+        ATTR_DEFAULT = 'default';
     
-    Button = function() {
-        Button.superclass.constructor.apply(this, arguments);
-    };
-    
-    Y.extend(Button,Y.Widget, {
+    Y.Button = Y.Base.create('button', Y.Widget, [], {
         BOUNDING_TEMPLATE : '<button/>',
         CONTENT_TEMPLATE : '<span/>',
         className : '',
@@ -26,19 +23,41 @@ YUI.add('gallery-button',function(Y){
         _mouseIsDown : false,
         _mouseListener : null,
         
+        /**
+         * Sets className to minimize lookups and binds default and 
+         *   enable change callbacks
+         * 
+         * @param config Object
+         * @see _defaultChanged
+         * @see _enabledChanged
+         */
         initializer : function(config) {
             this.className = this.getClassName();
-            this.after('typeChange',this._typeChanged, this);
             this.after('defaultChange',this._defaultChanged, this);
             this.after('enabledChange',this._enabledChanged, this);
         },
         
+        /**
+         * Adds the predefined label to the content box
+         */
         renderUI : function(){
             this.get('contentBox').set('text',this.get('label'));
         },
         
+        /**
+         * Binds mouse events to the button for up, down, enter, and
+         *   leave. Binds the callback change event and attaches the
+         *   current callback to the click event.
+         * 
+         * @see _bindClick
+         * @see _callbackChange
+         * @see _mouseUp
+         * @see _mouseDown
+         * @see _mouseEnter
+         * @see _mouseLeave
+         */
         bindUI : function(){
-            var bb = this.get('boundingBox');
+            var bb = this.get(BOUNDING_BOX);
         
             this._bindClick();
         
@@ -50,20 +69,43 @@ YUI.add('gallery-button',function(Y){
             bb.on('mouseleave', this._mouseLeave, this);
         },
         
+        /**
+         * Updates the default and enables classes on the boundingBox
+         *   Registers the type attribute to add the class to the 
+         *   boundingBox through the type setter
+         * 
+         * @see _updateDefault
+         * @see _updateEnabled
+         */
         syncUI : function() {
-        	this._updateDefault(this.get('default'));
-        	this._updateEnabled(this.get('enabled'));
-        	this._updateType(this.get('type'));
+            this._updateDefault(this.get(ATTR_DEFAULT));
+            this._updateEnabled(this.get(ATTR_ENABLED));
+            this.get('type');
         },
         
+        /**
+         * Sugar method for setting enable false
+         * 
+         * @return this
+         */
         disable : function() {
-            this.set('disabled',true);
+            this.set(ATTR_ENABLED,false);
+            return this;
         },
         
+        /**
+         * Sugar method for setting enable true
+         * 
+         * @return this
+         */
         enable : function() {
-            this.set('disabled',false);
+            this.set(ATTR_ENABLED,true);
         },
         
+        /**
+         * Removes any previously attached callback for the click event
+         *   and attaches a new one if one is available
+         */
         _bindClick : function() {
             var callback = this.get('callback');
                     
@@ -76,96 +118,141 @@ YUI.add('gallery-button',function(Y){
             }
         },
         
+        /**
+         * Calls _bindClick. Dispatched after the callback is changed
+         * 
+         * @see _bindClick
+         */
         _callbackChange : function(e) {
                this._bindClick();
         },
         
+        /**
+         * Removes the mouse pressed class and set internal property
+         *   _mouseIsDown to false
+         */
         _mouseUp : function() {
-        	this.get('boundingBox').removeClass(this.className + CLASSES.PRESSED);
-        	this._mouseIsDown = false;
+            this.get(BOUNDING_BOX).removeClass(this.className + CLASSES.PRESSED);
+            this._mouseIsDown = false;
         },
+        
+        /**
+         * If enabled, sets the mouse pressed class to the boundingBox
+         *   and sets the internal property _mouseIsDown to true
+         */
         _mouseDown : function() {
-        	if(this.get('enabled')) {
-        		this.get('boundingBox').addClass(this.className + CLASSES.PRESSED);
-        		this._mouseIsDown = true;
-        	}
+            if(this.get(ATTR_ENABLED)) {
+                this.get(BOUNDING_BOX).addClass(this.className + CLASSES.PRESSED);
+                this._mouseIsDown = true;
+            }
         },
+        
+        /**
+         * If enabled, adds the mouse hover class to the boundingBox
+         *   and if the mouse is also down (occurs during a dragOut
+         *   and dragOn event sequence) adds the mouse pressed class
+         *   back to the boundingBox
+         */
         _mouseEnter : function(e) {
-        	if(this.get('enabled')) {
-        		this.get('boundingBox').addClass(this.className + CLASSES.HOVER);
-        		if(this._mouseIsDown) {
-        			this.get('boundingBox').addClass(this.className + CLASSES.PRESSED);
-        		}
-        	}
+            if(this.get(ATTR_ENABLED)) {
+                this.get(BOUNDING_BOX).addClass(this.className + CLASSES.HOVER);
+                if(this._mouseIsDown) {
+                    this.get(BOUNDING_BOX).addClass(this.className + CLASSES.PRESSED);
+                }
+            }
         },
+        
+        /**
+         * If the mouse is pressed or the button has a mouse pressed 
+         *   class, we remove the class and add an event listener for
+         *   mouseUp. Otherwise we ensure that _mouseIsDown is false
+         *   
+         * @see _listenForMouseUp
+         */
         _mouseLeave : function() {
-        	var bb = this.get('boundingBox'),
-        	pressedClass = this.className + CLASSES.PRESSED;
-        	bb.removeClass(this.className + CLASSES.HOVER);
-        	if(bb.hasClass(pressedClass)) {
-            	bb.removeClass(pressedClass);
-            	if(this._mouseListener === null) {
-            		this._mouseListener = Y.on('mouseup',Y.bind(this._listenForMouseUp,this));
-            	}
-        	}else{
-        		this._mouseIsDown = false;
-        	}
+            var bb = this.get(BOUNDING_BOX),
+            pressedClass = this.className + CLASSES.PRESSED;
+            bb.removeClass(this.className + CLASSES.HOVER);
+            if(bb.hasClass(pressedClass) || this._mouseIsDown) {
+                bb.removeClass(pressedClass);
+                if(this._mouseListener === null) {
+                    this._mouseListener = Y.on('mouseup',Y.bind(this._listenForMouseUp,this));
+                }
+            }else{
+                this._mouseIsDown = false;
+            }
         },
         
+        /**
+         * Fires after a listened mouseUp event. Sets _mouseIsDown to 
+         *   false, detaches and unsets the _mouseListener
+         */
         _listenForMouseUp : function() {
-        	this._mouseIsDown = false;
-        	this._mouseListener.detach();
-        	this._mouseListener = null;
+            this._mouseIsDown = false;
+            this._mouseListener.detach();
+            this._mouseListener = null;
         },
         
+        /**
+         * Adds or removes the enabled class based on the provieded 
+         *   status
+         * 
+         * @param status Boolean
+         */
         _updateEnabled : function(status) {
-        	var bb = this.get('boundingBox'),
-        	disableClass = this.className + CLASSES.DISABLED;
-        	if(status) {
-        		bb.removeClass(disableClass);
-        		bb.set('disabled','');
-        	}else{
-        		bb.addClass(disableClass);
-        		bb.removeClass(this.className + CLASSES.HOVER);
-        		bb.removeClass(this.className + CLASSES.PRESSED);
-        		bb.set('disabled','disabled');
-        	}
+            var bb = this.get(BOUNDING_BOX),
+            disableClass = this.className + CLASSES.DISABLED;
+            if(status) {
+                bb.removeClass(disableClass);
+                bb.removeAttribute(ATTR_DISABLED);
+            }else{
+                bb.addClass(disableClass);
+                bb.removeClass(this.className + CLASSES.HOVER);
+                bb.removeClass(this.className + CLASSES.PRESSED);
+                bb.setAttribute(ATTR_DISABLED, ATTR_DISABLED);
+            }
         },
         
+        /**
+         * Fires when ever enabled is changed to update the disabled
+         *   class on the boundingBox
+         * 
+         * @param e Event
+         * @see _updateEnabled
+         */
         _enabledChanged : function(e) {
-        	this._updateEnabled(e.newVal);
+            this._updateEnabled(e.newVal);
         },
         
+        /**
+         * Updates the default class on the boundingBox based on the 
+         *   provided status
+         *   
+         * @param status Boolean
+         */
         _updateDefault : function(status) {
-            var bb = this.get('boundingBox'),
+            var bb = this.get(BOUNDING_BOX),
             defaultClass = this.className + CLASSES.DEFAULT;
-	        if(status) {
-	            bb.addClass(defaultClass);
-	        }else{
-	            bb.removeClass(defaultClass);
-	        }
+            if(status) {
+                bb.addClass(defaultClass);
+                bb.setAttribute(ATTR_DEFAULT,ATTR_DEFAULT);
+            }else{
+                bb.removeClass(defaultClass);
+                bb.set(ATTR_DEFAULT,'');
+            }
         },
         
+        /**
+         * Fires when the default attribute is changed
+         * 
+         * @param e Event
+         * @see _updateDefault
+         */
         _defaultChanged : function(e) {
-        	this._updateDefault(e.newVal);
-        },
-        
-        _updateType : function(cur, prev) {
-        	var bb = this.get('boundingBox'),
-    	    prevClass = this.className + '-' + prev,
-    	    curClass = this.className + '-' + cur;
-        	if(cur) {
-        		bb.replaceClass(prevClass,curClass);
-        	}else if(prev){
-        		bb.removeClass(prevClass);
-        	}
-        },
-        
-        _typeChanged : function(e) {
-        	this._updateType(e.newVal, e.prevVal);
+            this._updateDefault(e.newVal);
         }
+        
     }, {
-        NAME : 'button',
         EVENTS : EVENTS,
         ATTRS : {
             label : {
@@ -180,18 +267,21 @@ YUI.add('gallery-button',function(Y){
                 validator : YL.isBoolean
             },
             'default' : {
-            	value : false,
-            	validator : YL.isBoolean
+                value : false,
+                validator : YL.isBoolean
             },
             type : {
-            	validator : YL.isString
+                validator : YL.isString,
+                setter : function(val) {
+                    this.get(BOUNDING_BOX).replaceClass(
+                        this.getClassName('type', this.get('type') || ATTR_DEFAULT),
+                        this.getClassName('type', val || ATTR_DEFAULT)
+                    );
+                    return val;
+                }
             }
         }
     });
-    
-    Y.Button = Button;
-        
-},'gallery-2010.05.05-19-39',{requires:['widget','event-mouseenter']});
 
 
-}, 'gallery-2010.05.05-19-39' ,{requires:['widget']});
+}, 'gallery-2010.05.19-19-08' ,{requires:['widget','event-mouseenter']});

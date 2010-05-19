@@ -81,13 +81,12 @@ YUI.add('gallery-node-accordion', function(Y) {
 * @module gallery-node-accordion
 */
 
-
 //	Util shortcuts
 
 var UA = Y.UA,
 	getClassName = Y.ClassNameManager.getClassName,
     anims = {},
-    wheels = {fast:0.1,slow:0.6,normal:0.4},
+    WHEELS = {fast:0.1,slow:0.6,normal:0.4},
 
 	//	Frequently used strings
 	ACCORDION = "accordion",
@@ -123,9 +122,6 @@ var UA = Y.UA,
 	//	CSS selectors
 	SELECTOR_ACCORDION_ITEM = PERIOD + CLASS_ACCORDION_ITEM,
 	SELECTOR_ACCORDION_ITEM_BD = PERIOD + CLASS_ACCORDION_ITEM_BD,
-	// few more just in case...
-	//SELECTOR_ACCORDION = PERIOD + CLASS_ACCORDION,
-	//SELECTOR_ACCORDION_ITEM_TRIGGER = PERIOD + CLASS_ACCORDION_ITEM_TRIGGER,
 	
 	FC = '>.',
 	ITEM_QUERY 			= FC + CLASS_ACCORDION_ITEM,
@@ -133,157 +129,19 @@ var UA = Y.UA,
 							ITEM_QUERY + FC + CLASS_ACCORDION_ITEM_HD + PERIOD + CLASS_ACCORDION_ITEM_TRIGGER + ', ' +
 							ITEM_QUERY + FC + CLASS_ACCORDION_ITEM_HD + FC + CLASS_ACCORDION_ITEM_TRIGGER + ', ' +
 							ITEM_QUERY + FC + CLASS_ACCORDION_ITEM_FT + PERIOD + CLASS_ACCORDION_ITEM_TRIGGER + ', ' +
-							ITEM_QUERY + FC + CLASS_ACCORDION_ITEM_FT + FC + CLASS_ACCORDION_ITEM_TRIGGER,
-	// few more just in case...
-	//ITEM_HD_QUERY = FC+CLASS_ACCORDION_ITEM+FC+CLASS_ACCORDION_ITEM_HD,
-	//ITEM_BD_QUERY = FC+CLASS_ACCORDION_ITEM+FC+CLASS_ACCORDION_ITEM_BD,
-	//ITEM_FT_QUERY = FC+CLASS_ACCORDION_ITEM+FC+CLASS_ACCORDION_ITEM_FT,
-	
-	//	Utility functions
-	/**
-	* The NodeAccordion class is a plugin for a Node instance.  The class is used via  
-	* the <a href="Node.html#method_plug"><code>plug</code></a> method of Node and 
-	* should not be instantiated directly.
-	* @namespace Y.Plugin
-	* @class NodeAccordion
-	*/
-	NodeAccordion = function () {
-	
-		NodeAccordion.superclass.constructor.apply(this, arguments);
-	
-	};
+							ITEM_QUERY + FC + CLASS_ACCORDION_ITEM_FT + FC + CLASS_ACCORDION_ITEM_TRIGGER;
 
-NodeAccordion.NAME = "NodeAccordion";
-NodeAccordion.NS = ACCORDION;
+/**
+* The NodeAccordion class is a plugin for a Node instance.  The class is used via  
+* the <a href="Node.html#method_plug"><code>plug</code></a> method of Node and 
+* should not be instantiated directly.
+* @namespace Y.Plugin
+* @class NodeAccordion
+*/
 
-NodeAccordion.ATTRS = {
-	/**
-	* Nodes representing the list of active items.
-	*
-	* @attribute activeItems
-	* @readOnly
-	* @type Y.NodeList
-	*/
-	activeItems: {
-		readOnly: true,
-		getter: function (value) {
-			return this._root.all(FC+CLASS_ACTIVE);
-		}
-	},
-	/**
-	* Nodes representing the list of items.
-	*
-	* @attribute items
-	* @readOnly
-	* @type Y.NodeList
-	*/
-	items: {
-		readOnly: true,
-		getter: function (value) {
-			return this._root.all(ITEM_QUERY);
-		}
-	},
-	
-	/**
-	* orientation defines if the accordion will use width or height to expand and collapse items.
-	*
-	* @attribute orientation
-	* @writeOnce
-	* @default height
-	* @type string
-	*/
-	orientation: {
-		value: HEIGHT,
-		writeOnce: true
-	},
-	/**
-	* Boolean indicating that animation should include opacity to fade in/out the content of the item.
-	*
-	* @attribute fade
-	* @default false
-	* @type boolean
-	*/	
-	fade: {
-		value: false
-	},
-	/**
-	* Boolean indicating that Y.Anim should be used to expand and collapse items.
-	* It also supports a function with an specific effect.
-	* <p>
-	* <code>
-	* &#60;script type="text/javascript"&#62; <br>
-	* <br>
-	* 		//	Call the "use" method, passing in "anim" and "gallery-node-accordion". <br>
-	* <br>
-	* 		YUI().use("anim", "gallery-node-accordion", function(Y) { <br>
-	* <br>
-	* 			Y.one("#myaccordion").plug(Y.Plugin.NodeAccordion, {<br>
-	* 				anim: Y.Easing.backIn<br>
-	* 			}); <br>
-	* <br>	
-	* 	&#60;/script&#62; <br>
-	* </code>
-	* </p>
-	* 
-	* @attribute anim
-	* @default false
-	* @type {boolean|function}
-	*/
-	anim: {
-		value: false,
-		validator : function (v) {
-            return !Y.Lang.isUndefined(Y.Anim);
-        }
-	},
-	/**
-	* Boolean indicating that more than one item can be opened at the same time.
-	*
-	* @attribute multiple
-	* @default true
-	* @type boolean
-	*/
-	multiple: {
-		value: true
-	},
-	/**
-	* Boolean indicating that one of the items should be open at any given time.
-	*
-	* @attribute persistent
-	* @default false
-	* @type boolean
-	*/	
-	persistent: {
-		value: false
-	},
-	/**
-	* Numeric value indicating the speed in mili-seconds for the animation process.
-	* Also support three predefined strings in lowercase:
-	* <ol>
-	* <li>fast = 0.1</li>
-	* <li>normal = 0.4</li>
-	* <li>slow = 0.6</li>
-	* </ol>
-	* 
-	* @attribute speed
-	* @default 0.4
-	* @type numeric
-	*/	
-	speed: {
-		value: 0.4,
-		validator : function (v) {
-            return (Y.Lang.isNumber(v) || (Y.Lang.isString(v) && wheels.hasOwnProperty(v)));
-        },
-        setter : function (v) {
-            return (wheels.hasOwnProperty(v)?wheels[v]:v);
-        }
-	}
+Y.namespace('Plugin').NodeAccordion = Y.Base.create("NodeAccordion", Y.Plugin.Base, [], {
 
-};
-
-
-Y.extend(NodeAccordion, Y.Plugin.Base, {
-
-	//	Protected properties
+	// Prototype Properties for NodeAccordion
 
 	/** 
 	* @property _root
@@ -293,15 +151,11 @@ Y.extend(NodeAccordion, Y.Plugin.Base, {
 	* @type Node
 	*/
 	_root: null,
-
-	//	Public methods
+	
+	_eventHandler: null,
 
     initializer: function (config) {
-		var _root = this.get(HOST),
-			aHandlers = [];
-		if (_root) {
-
-			this._root = _root;
+		if ((this._root = this.get(HOST))) {
 			
 			//	close all items and open the actived ones
 			this.get(ATTR_ITEMS).each(function(item) {
@@ -313,29 +167,27 @@ Y.extend(NodeAccordion, Y.Plugin.Base, {
 			}, this);
 
 			//	Wire up all event handlers
-			aHandlers.push(_root.delegate('click', function(e) {
+			this._eventHandler = this._root.delegate('click', function(e) {
 				Y.log ('Accordion Trigger: ' + e);
 				this.toggleItem(e.currentTarget); // probably is better to pass the ancestor for the item
 				e.target.blur();
 				e.halt();
-			}, ITEM_TRIGGER_QUERY, this));
-			aHandlers = this._eventHandlers;
-
-			_root.removeClass(CLASS_ACCORDION_HIDDEN);
+			}, ITEM_TRIGGER_QUERY, this);
+			
+			// removing this class if exists, in case the accordion is hidden by default.
+			this._root.removeClass(CLASS_ACCORDION_HIDDEN);
 		}
     },
 
 	destructor: function () {
-		var aHandlers = this._eventHandlers;
-		if (aHandlers) {
-			Y.Array.each(aHandlers, function (handle) {
-				handle.detach();
-			});
-			this._eventHandlers = null;
+		if (this._eventHandler) {
+			this._eventHandler.detach();
 		}
+		this._eventHandler = null;
     },
 
 	//	Protected methods
+	
 	/**
 	 * @method _getItem
 	 * @description Searching for an item based on a node reference or an index order.
@@ -507,6 +359,8 @@ Y.extend(NodeAccordion, Y.Plugin.Base, {
         
 	},
 
+	//	Public methods
+
 	//	Generic DOM Event handlers
 	/**
 	* @method expandAllItems
@@ -590,11 +444,150 @@ Y.extend(NodeAccordion, Y.Plugin.Base, {
 	    return this;
 	}
 
+}, {
+
+	// Static Properties for NodeAccordion
+	
+	NS: ACCORDION,
+	
+	/**
+	 * @property DynamicForm.ATTRS
+	 * @type Object
+	 * @static
+	 */
+	ATTRS : {
+	
+		/**
+		* Nodes representing the list of active items.
+		*
+		* @attribute activeItems
+		* @readOnly
+		* @type Y.NodeList
+		*/
+		activeItems: {
+			readOnly: true,
+			getter: function (value) {
+				return this._root.all(FC+CLASS_ACTIVE);
+			}
+		},
+	
+		/**
+		* Nodes representing the list of items.
+		*
+		* @attribute items
+		* @readOnly
+		* @type Y.NodeList
+		*/
+		items: {
+			readOnly: true,
+			getter: function (value) {
+				return this._root.all(ITEM_QUERY);
+			}
+		},
+		
+		/**
+		* orientation defines if the accordion will use width or height to expand and collapse items.
+		*
+		* @attribute orientation
+		* @writeOnce
+		* @default height
+		* @type string
+		*/
+		orientation: {
+			value: HEIGHT,
+			writeOnce: true
+		},
+	
+		/**
+		* Boolean indicating that animation should include opacity to fade in/out the content of the item.
+		*
+		* @attribute fade
+		* @default false
+		* @type boolean
+		*/	
+		fade: {
+			value: false
+		},
+	
+		/**
+		* Boolean indicating that Y.Anim should be used to expand and collapse items.
+		* It also supports a function with an specific effect.
+		* <p>
+		* <code>
+		* &#60;script type="text/javascript"&#62; <br>
+		* <br>
+		* 		//	Call the "use" method, passing in "anim" and "gallery-node-accordion". <br>
+		* <br>
+		* 		YUI().use("anim", "gallery-node-accordion", function(Y) { <br>
+		* <br>
+		* 			Y.one("#myaccordion").plug(Y.Plugin.NodeAccordion, {<br>
+		* 				anim: Y.Easing.backIn<br>
+		* 			}); <br>
+		* <br>	
+		* 	&#60;/script&#62; <br>
+		* </code>
+		* </p>
+		* 
+		* @attribute anim
+		* @default false
+		* @type {boolean|function}
+		*/
+	
+		anim: {
+			value: false,
+			validator : function (v) {
+	            return !Y.Lang.isUndefined(Y.Anim);
+	        }
+		},
+	
+		/**
+		* Boolean indicating that more than one item can be opened at the same time.
+		*
+		* @attribute multiple
+		* @default true
+		* @type boolean
+		*/
+		multiple: {
+			value: true
+		},
+	
+		/**
+		* Boolean indicating that one of the items should be open at any given time.
+		*
+		* @attribute persistent
+		* @default false
+		* @type boolean
+		*/	
+		persistent: {
+			value: false
+		},
+	
+		/**
+		* Numeric value indicating the speed in mili-seconds for the animation process.
+		* Also support three predefined strings in lowercase:
+		* <ol>
+		* <li>fast = 0.1</li>
+		* <li>normal = 0.4</li>
+		* <li>slow = 0.6</li>
+		* </ol>
+		* 
+		* @attribute speed
+		* @default 0.4
+		* @type numeric
+		*/	
+		speed: {
+			value: 0.4,
+			validator : function (v) {
+	            return (Y.Lang.isNumber(v) || (Y.Lang.isString(v) && WHEELS.hasOwnProperty(v)));
+	        },
+	        setter : function (v) {
+	            return (WHEELS.hasOwnProperty(v)?WHEELS[v]:v);
+	        }
+		}
+	
+	}
+
 });
 
-Y.namespace('Plugin');
 
-Y.Plugin.NodeAccordion = NodeAccordion;
-
-
-}, 'gallery-2010.04.02-17-26' ,{requires:['node-base', 'node-style', 'plugin', 'node-event-delegate', 'classnamemanager'], optional:['anim']});
+}, 'gallery-2010.05.19-19-08' ,{optional:['anim'], requires:['node-base', 'node-style', 'plugin', 'base', 'node-event-delegate', 'classnamemanager']});
