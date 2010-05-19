@@ -1,5 +1,3 @@
-YUI.add('gallery-button-toggle',function(Y){
-    
     var Button,
         YL = Y.Lang,
         CLASSES = {
@@ -69,5 +67,3 @@ YUI.add('gallery-button-toggle',function(Y){
     });
     
     Y.ButtonToggle = Button;
-        
-},'@VERSION@',{requires:['gallery-button']});
