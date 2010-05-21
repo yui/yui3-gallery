@@ -50,7 +50,7 @@
 
 <p>Images courtesy of <a href="http://wildzoofari.com">Jim Knox's Wild Zoofari</a></p>
 
-<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
 <script type="text/javascript">
     YUI({
         modules: {
@@ -64,10 +64,10 @@
             }
         }
     }).use("gallery-slideshow-animated", "gallery-slideshow-panned", "log", "dump", function(Y) {
-        Y.log(Y.dump(Y.SlideshowPanned));
-        var s = new Y.SlideshowPanned({contentBox: '#panning_slideshow'})
-        s.render();
-        //Y.SlideshowAnimated.auto();
+       // Y.log(Y.dump(Y.SlideshowPanned));
+        //var s = new Y.SlideshowPanned({contentBox: '#panning_slideshow'})
+        //s.render();
+        Y.SlideshowAnimated.auto();
 /*        
         var append_node = Y.one('#man_slideshow_events'),
             slideshow_events = [

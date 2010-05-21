@@ -1,15 +1,37 @@
-    var SlideshowAnimated, SlideshowPanned;
-
     /***********************************
     * Functionality to add animation to the slideshow
     *
     ***********************************/
-    function Animated() { 
-        this._init_animated(); 
+    function SlideshowAnimated(config) { 
+        SlideshowAnimated.superclass.constructor.apply(this, arguments);
     }
 
-    Animated.prototype = { 
-        _init_animated: function() {
+    SlideshowAnimated.NAME = 'slideshowanimated';
+    SlideshowAnimated.ANIMATION_DURATION = 0.5;
+    SlideshowAnimated.EASING = Y.Easing.easeNone;
+    SlideshowAnimated.ATTRS = { 
+        animation_out: { 
+            value: {
+                from: { opacity: 1},
+                to: { opacity: 0 },
+                duration: SlideshowAnimated.ANIMATION_DURATION,
+                easing: SlideshowAnimated.EASING
+            }
+        },
+        animation_in: { 
+            value: {
+                from: {opacity: 0},
+                to: { opacity: 1 },
+                duration: SlideshowAnimated.ANIMATION_DURATION,
+                easing: SlideshowAnimated.EASING
+            }
+        },
+        reverse_animation: { value: false }
+    };
+
+
+    Y.extend(SlideshowAnimated, Y.Slideshow, {
+        initializer: function() {
             // Setup the display/hide animation
             if (this.get('animation_in')) {
                 this.anim_in = new Y.Anim(this.get('animation_in'));
@@ -113,51 +135,31 @@
             }
             this.show_slide(this._get_previous_slide());
         }
-    };
-    SlideshowAnimated = Y.Base.build("SlideshowAnimated", Y.Slideshow, [Animated]);
-    SlideshowAnimated.ANIMATION_DURATION = 0.5;
-    SlideshowAnimated.EASING = Y.Easing.easeNone;
-    SlideshowAnimated.ATTRS = { 
-        animation_out: { 
-            value: {
-                from: { opacity: 1},
-                to: { opacity: 0 },
-                duration: SlideshowAnimated.ANIMATION_DURATION,
-                easing: SlideshowAnimated.EASING
-            }
-        },
-        animation_in: { 
-            value: {
-                from: {opacity: 0},
-                to: { opacity: 1 },
-                duration: SlideshowAnimated.ANIMATION_DURATION,
-                easing: SlideshowAnimated.EASING
-            }
-        },
-        reverse_animation: { value: false }
-    };
-    
+    });
+
     /**
     * Panning slideshow
     *
     *
     **/
-    function Panned() { 
-        this._init_panned(); 
+    function SlideshowPanned(config) { 
+        SlideshowPanned.superclass.constructor.apply(this, arguments);
     }
-    Panned.ATTRS = {
+
+    SlideshowPanned.NAME = 'slideshowpanned';
+    SlideshowPanned.ATTRS = {
         container: { value: null }
     };
     // The CSS selectors
-    Panned.CONTAINER_SELECTOR = '.container';
-    Panned.HTML_PARSER = {
+    SlideshowPanned.CONTAINER_SELECTOR = '.container';
+    SlideshowPanned.HTML_PARSER = {
         container: function(contentBox) {
-            return contentBox.one(Panned.CONTAINER_SELECTOR);
+            return contentBox.one(SlideshowPanned.CONTAINER_SELECTOR);
         }
     };
 
-    Panned.prototype = { 
-        _init_panned: function() {
+    Y.extend(SlideshowPanned, SlideshowAnimated, {
+        initializer: function() {
             var x, y,
                 current_slide = this.get('slides').item(this.get('current_slide'));
             this.anim_in.set('node', this.get('container'));
@@ -237,8 +239,8 @@
             // as the slide is hidden as part of the 
             // show slide 
         }
-    };
-    SlideshowPanned = Y.Base.build("SlideshowPanned", SlideshowAnimated, [Panned]);
+    });
+//    SlideshowPanned = Y.Base.build("SlideshowPanned", SlideshowAnimated, [Panned]);
     
     /**
     * Auto Generation of slideshows
@@ -384,7 +386,6 @@
         });
     };
 
-    
+
     Y.SlideshowAnimated = SlideshowAnimated;
     Y.SlideshowPanned = SlideshowPanned;
-
