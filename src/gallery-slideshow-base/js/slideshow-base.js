@@ -329,6 +329,11 @@ Y.extend(Slideshow, Y.Widget, {
             });
         }
     },
+    
+    _applyParsedConfig : function(node, cfg, parsedCfg) {
+        // mix instead of aggregate
+        return (parsedCfg) ? Y.mix(cfg, parsedCfg, false) : cfg;
+    },
 
     /*
      * Converts the seconds into milliseconds
