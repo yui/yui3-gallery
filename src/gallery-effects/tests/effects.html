@@ -8,10 +8,10 @@
 	<script src="../../../build/gallery-effects/gallery-effects.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
-		YUI_CONFIG = {
+		Y = YUI({
 			filter: "raw",
 			combine: false
-		};
+		});
 	</script>
 	
 	<style type="text/css">
@@ -171,6 +171,36 @@
 	</div>
 	
 	
+	<h2>Y.Node.switchOff()</h2>
+	<div class="example">
+		<div class="box" id="switchOff"></div>
+	</div>
+	<div class="controls">
+		<button id="switchOff_class">Class</button>
+		<button id="switchOff_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.dropOut()</h2>
+	<div class="example">
+		<div class="box" id="dropOut"></div>
+	</div>
+	<div class="controls">
+		<button id="dropOut_class">Class</button>
+		<button id="dropOut_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.squish()</h2>
+	<div class="example">
+		<div class="box" id="squish"></div>
+	</div>
+	<div class="controls">
+		<button id="squish_class">Class</button>
+		<button id="squish_method">Method</button>
+	</div>
+	
+	
 	<h2>Chaining (wait)</h2>
 	<div class="example">
 		<div class="box" id="chaining"></div>
@@ -190,9 +220,7 @@
 	
 	
 	<script type="text/javascript">
-		YUI(YUI_CONFIG).use("gallery-effects", function(Y) {
-			B = Y;
-			
+		Y.use("gallery-effects", function(Y) {
 			var cfg = {
 				opacity: { from: 0, to: 1 },
 				move: { x: 50, y: 20 },
@@ -204,7 +232,10 @@
 				appear: {},
 				fade: {},
 				blindUp: {},
-				blindDown: {}
+				blindDown: {},
+				switchOff: {},
+				dropOut: {},
+				squish: {}
 			},
 			
 			bindEffect = function (effect, options) {

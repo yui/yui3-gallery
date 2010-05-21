@@ -1421,6 +1421,98 @@
 		return effect;
 	};
 	
+	/***
+	 * 
+	 * @class Y.Effects.SwitchOff
+	 * @param config {Object} has of configuration name/value pairs
+	 */
+	Effects.SwitchOff = function(config){
+		var oldOpacity, effect = new Effects.Appear(Y.merge({
+			duration: 0.4,
+			from: 0,
+			easing: function (t, b, c, d) {
+				var pos = ((-Math.cos(t/d*Math.PI)/4) + 0.75) + Math.random()/4;
+				return c * (pos > 1 ? 1 : pos) + b;
+			}
+		}, config));
+		
+		effect.on("setup", function(){
+			oldOpacity = this.get("node").getStyle("opacity");
+		});
+		
+		effect.after("finish", function(){
+			var scale = new Effects.Scale({
+				node: this.get("node"),
+				scaleTo: 1,
+				duration: 0.3,
+				scaleFromCenter: false,
+				scaleX: false,
+				scaleContent: false,
+				restoreAfterFinish: true
+			});
+			
+			scale.on("setup", function(){
+				this.get("node").makePositioned()._makeClipping();
+			});
+			
+			scale.after("finish", function(){
+				this.get("node").hide()._undoClipping().undoPositioned().setStyle("opacity", oldOpacity);
+			});
+		});
+		
+		return effect;
+	};
+
+	/***
+	 * 
+	 * @class Y.Effects.DropOut
+	 * @param config {Object} has of configuration name/value pairs
+	 */
+	Effects.DropOut = function(config) {
+		var oldStyle,
+		
+		effect = new Effects.Parallel(Y.merge({
+			effects: [
+				new Effects.Move({ node: config.node, managed: true, x: 0, y: 100 }),
+				new Effects.Opacity({ node: config.node, managed: true, to: 0.0 })
+			],
+			duration: 0.5
+		}, config));
+	
+		effect.on("setup", function () {
+			var node = this.get("node");
+			
+			oldStyle = {
+			    top: node.getStyle("top"),
+			    left: node.getStyle("left"),
+			    opacity: node.getStyle("opacity")
+			};
+			
+			this.get("node").makePositioned();
+		});
+		
+		effect.after("finish", function () {
+			this.get("node").hide().undoPositioned().setStyles(oldStyle);
+		});
+
+		return effect;
+	};
+	
+	Effects.Squish = function(config) {
+		
+		var effect = new Effects.Scale(Y.merge({ scaleTo: 0, restoreAfterFinish: true }, config));
+		
+		effect.on("setup", function () {
+	    	this.get("node")._makeClipping();
+		});
+		
+		effect.after("finish", function () {
+			this.get("node").hide()._undoClipping();
+		});
+		
+		return effect;
+	};
+	
 	Y.Effects = Effects;
 	
 	/*********************************
@@ -1428,7 +1520,7 @@
 	 *********************************/
 	
 	var ExtObj = {},
-		effects = "opacity move scroll scale morph highlight appear fade puff blindUp blindDown".split(" ");
+		effects = "opacity move scroll scale morph highlight appear fade puff blindUp blindDown switchOff dropOut squish".split(" ");
 	
 	Y.Array.each(effects, function (effect) {
 		ExtObj[effect] = function (node, config) {
