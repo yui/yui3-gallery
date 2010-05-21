@@ -53,6 +53,8 @@ Y.extend(Button, Y.FormField, {
             innerHTML : this.get('label'),
             id : this.get('id')
         });
+        
+        this.get('contentBox').addClass('first-child');
 	},
 
 	_setClickHandler : function () {

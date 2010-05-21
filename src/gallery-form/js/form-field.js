@@ -123,6 +123,17 @@ Y.mix(FormField, {
 		validateInline : {
 			value : false,
 			validator : Y.Lang.isBoolean
+		},
+		
+		/**
+		 * @attribute disabled
+		 * @type Boolean
+		 * @default false
+		 * @description Set to true to disable the field.
+		 */
+		disabled : {
+		    value : false,
+		    validator : Y.Lang.isBoolean
 		}
 	},
 
@@ -131,7 +142,7 @@ Y.mix(FormField, {
 	 * @type Number
 	 * @description The current tab index of all FormField instances
 	 */
-	tabIndex : 0,
+	tabIndex : 1,
 	
 	/**
 	 * @method FormField.VALIDATE_EMAIL_ADDRESS
@@ -310,14 +321,7 @@ Y.mix(FormField, {
 	 * @type String
 	 * @description Template used to draw an input node
 	 */
-	INPUT_TEMPLATE : '<input>',
-	
-	/**
-	 * @property FormField.TEXTAREA_TEMPLATE
-	 * @type String
-	 * @description Template used to draw a textarea node
-	 */
-	TEXTAREA_TEMPLATE : '<textarea></textarea>',
+	INPUT_TEMPLATE : '<input />',
 	
 	/**
 	 * @property FormField.LABEL_TEMPLATE
@@ -327,11 +331,17 @@ Y.mix(FormField, {
 	LABEL_TEMPLATE : '<label></label>',
 
 	/**
-	 * @property FormField.SELECT_TEMPLATE
+	 * @property FormField.REQUIRED_ERROR_TEXT
 	 * @type String
-	 * @description Template used to draw a select node
+	 * @description Error text to display for a required field
 	 */
-	SELECT_TEMPLATE : '<select></select>'
+	REQUIRED_ERROR_TEXT : 'This field is required',
+	
+	/**
+	 * @property FormField.FIELD_ID_SUFFIX
+	 * @type String
+	 */
+	FIELD_ID_SUFFIX : '-field'
 });
 
 Y.extend(FormField, Y.Widget, {
@@ -367,6 +377,14 @@ Y.extend(FormField, Y.Widget, {
 	 */
 	_nodeType : 'text',
 	
+	/**
+	 * @property _initialValue
+	 * @private
+	 * @type String
+	 * @description The initial value set on this field, reset will set the value to this
+	 */
+	_initialValue : null,
+
 	/**
 	 * @method _validateError
 	 * @protected
@@ -479,7 +497,7 @@ Y.extend(FormField, Y.Widget, {
 			this._labelNode.setAttrs({
 				innerHTML : this.get('label')
 			});
-			this._labelNode.setAttribute('for', this.get('id'));
+			this._labelNode.setAttribute('for', this.get('id') + FormField.FIELD_ID_SUFFIX);
 		}
 	},
 
@@ -492,9 +510,10 @@ Y.extend(FormField, Y.Widget, {
 		this._fieldNode.setAttrs({
 			name : this.get('name'), 
 			type : this._nodeType,
-			id : this.get('id'),
+			id : this.get('id') + FormField.FIELD_ID_SUFFIX,
 			value : this.get('value')
 		});
+		
 		this._fieldNode.setAttribute('tabindex', FormField.tabIndex);
 		FormField.tabIndex++;
 	},
@@ -509,6 +528,15 @@ Y.extend(FormField, Y.Widget, {
 		if (err) {
 			this._showError(err);
 		}
+	},
+	
+	_syncDisabled : function (e) {
+	    var dis = this.get('disabled');
+	    if (dis === true) {
+	        this._fieldNode.setAttribute('disabled', 'disabled');
+	    } else {
+	        this._fieldNode.removeAttribute('disabled');
+	    }
 	},
 	
 	/**
@@ -577,26 +605,40 @@ Y.extend(FormField, Y.Widget, {
 		}
 
 		if (!this._checkRequired()) {
-			this.set('error', 'This field is required');
+			this.set('error', FormField.REQUIRED_ERROR_TEXT);
 			return false;
+		} else if (!value) {
+			return true;
 		}
 							
 		return validator.call(this, value, this);
 	},
 
+	resetFieldNode : function () {
+		this.set('value', this._initialValue);
+		this._fieldNode.set('value', this._initialValue);
+		this.fire('nodeReset');
+	},
+
 	/**
 	 * @method clear
-	 * @description Clears the value of this field
+	 * @description Clears the value AND the initial value of this field
 	 */
 	 clear : function () {
 		this.set('value', '');
 		this._fieldNode.set('value', '');
+		this._initialValue = null;
+		this.fire('clear');
 	},
 
 	initializer : function () {
 		this.publish('blur');
 		this.publish('change');
 		this.publish('focus');
+		this.publish('clear');
+		this.publish('nodeReset');
+		
+		this._initialValue = this.get('value');
 	},
 
 	destructor : function (config) {
@@ -644,6 +686,10 @@ Y.extend(FormField, Y.Widget, {
 				this._disableInlineValidation();
 			}
 		}, this));
+		
+		this.on('disabledChange', Y.bind(function (e) {
+		    this._syncDisabled();
+		}, this));
 	},
 
 	syncUI : function () {
@@ -651,6 +697,7 @@ Y.extend(FormField, Y.Widget, {
 		this._syncLabelNode();
 		this._syncFieldNode();
 		this._syncError();
+		this._syncDisabled();
 
 		if (this.get('validateInline') === true) {
 			this._enableInlineValidation();

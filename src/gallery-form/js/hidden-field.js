@@ -73,7 +73,9 @@ Y.extend(HiddenField, Y.FormField, {
 				this._valueDisplayNode.set('innerHTML', e.newVal);
 			}, this, true));
 		}
-	}
+	},
+
+	clear : function () {}
 });
 
 Y.HiddenField = HiddenField;

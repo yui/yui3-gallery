@@ -78,13 +78,52 @@ Y.mix(Form, {
 		},
 
 		/**
-		 * @attribute oftValidation
+		 * @attribute inlineValidation
 		 * @type Boolean
 		 * @description Set to true to validate fields "on the fly", where they will
 		 *				validate themselves any time the value attribute is changed
+		 * @default false
 		 */
 		inlineValidation : {
 			value : false,
+			validator : Y.Lang.isBoolean
+		},
+
+		/**
+		 * @attribute resetAfterSubmit
+		 * @type Boolean
+		 * @description If true, the form is reset following a successful submit event 
+		 * @default true
+		 */
+		resetAfterSubmit : {
+			value : true,
+			validator : Y.Lang.isBoolean
+		},
+
+		/**
+		 * @attribute encodingType
+		 * @type Number
+		 * @description Set to Form.MULTIPART_ENCODED in order to use the FileField for uploads
+		 * @default Y.Form.URL_ENCODED
+		 */
+		encodingType : {
+			value : Form.URL_ENCODED,
+			validator : Y.Lang.isNumber
+		},
+		
+		/**
+		 * @attribute skipValidationBeforeSubmit
+		 * @type Boolean
+		 * @description Set to true to skip the validation step when submitting
+		 * @default false
+		 */
+		skipValidationBeforeSubmit : {
+			value : false,
+			validator : Y.Lang.isBoolean
+		},
+		
+		submitViaIO : {
+			value : true,
 			validator : Y.Lang.isBoolean
 		}
 	},
@@ -112,7 +151,21 @@ Y.mix(Form, {
 	 * @static
 	 * @description The HTML used to create the form Node
 	 */
-	FORM_TEMPLATE : '<form></form>'
+	FORM_TEMPLATE : '<form></form>',
+
+	/**
+	 * @property Form.URL_ENCODED
+	 * @type Number
+	 * @description Set the form the default text encoding
+	 */
+	URL_ENCODED : 1,
+
+	/**
+	 * @property Form.MULTIPART_ENCODED
+	 * @type Number
+	 * @description Set form to multipart/form-data encoding for file uploads
+	 */
+	MULTIPART_ENCODED : 2
 });
 
 Y.extend(Form, Y.Widget, {
@@ -189,6 +242,8 @@ Y.extend(Form, Y.Widget, {
 						fieldType = Y.HiddenField;
 					} else if (t == 'checkbox') {
 						fieldType = Y.CheckboxField;
+					} else if (t == 'radio') {
+						fieldType = Y.RadioField;
 					} else if (t == 'password') {
 						fieldType = Y.PasswordField;
 					} else if (t == 'textarea') {
@@ -197,6 +252,8 @@ Y.extend(Form, Y.Widget, {
 						fieldType = Y.SelectField;
 					} else if (t == 'choice') {
 						fieldType = Y.ChoiceField;
+					} else if (t == 'file') {
+						fieldType = Y.FileField;
 					} else if (t == 'button' || t == 'submit' || t == 'reset') {
 						fieldType = Y.Button;
 						if (t =='submit') {
@@ -266,7 +323,8 @@ Y.extend(Form, Y.Widget, {
 				o = {
 					type: node.get('type'),
 					name : node.get('name'),
-					value : node.get('value')
+					value : node.get('value'),
+					checked : node.get('checked')
 				};
 
 				if (o.type == 'submit' || o.type == 'reset' || o.type == 'button') {
@@ -353,9 +411,12 @@ Y.extend(Form, Y.Widget, {
 	_syncFormAttributes : function () {
 		this._formNode.setAttrs({
 			action : this.get('action'),
-			method : this.get('method'),
-			id : this.get('id')
-		});    
+			method : this.get('method')
+		});
+
+		if (this.get('encodingType') === Form.MULTIPART_ENCODED) {
+			this._formNode.setAttribute('enctype', 'multipart/form-data');
+		}
 	},
 	
 	/**
@@ -392,30 +453,16 @@ Y.extend(Form, Y.Widget, {
 	},
 
 	/**
-	 * @method _handleIOSuccess
+	 * @method _handleIOEvent
 	 * @protected
+	 * @param {String} eventName
 	 * @param {Number} ioId
 	 * @param {Object} ioResponse
-	 * @description Handles the success event of IO transactions instantiated by this instance
+	 * @description Handles the IO events of transactions instantiated by this instance
 	 */
-	_handleIOSuccess : function (ioId, ioResponse) {
-		if (typeof this._ioIds[ioId] != 'undefined') {
-			delete this._ioIds[ioId];
-			this.fire('success', {response : ioResponse});
-		}
-	},
-
-	/**
-	 * @method _handleIOFailure
-	 * @protected
-	 * @param {Number} ioId
-	 * @param {Object} ioResponse
-	 * @description Handles the failure event of the IO transactions instantiated by this instance
-	 */
-	_handleIOFailure : function (ioId, ioResponse) {
-		if (typeof this._ioIds[ioId] != 'undefined') {
-			this.fire('failure', {response : ioResponse});
-			delete this._ioIds[ioId];
+	_handleIOEvent : function (eventName, ioId, ioResponse) {
+		if (this._ioIds[ioId] !== undefined) {
+			this.fire(eventName, {response : ioResponse});
 		}
 	},
 	
@@ -427,7 +474,8 @@ Y.extend(Form, Y.Widget, {
 		this._formNode.reset();
 		var fields = this.get('fields');
 		Y.Array.each(fields, function (f, i, a) {
-			f.clear();
+			f.resetFieldNode();
+			f.set('error', null);
 		});
 	},
 	
@@ -436,34 +484,32 @@ Y.extend(Form, Y.Widget, {
 	 * @description Submits the form using the defined method to the URL defined in the action
 	 */
 	submit : function () {
-		if (this._runValidation()) {
+		if (this.get('skipValidationBeforeSubmit') === true || this._runValidation()) {
 			var formAction = this.get('action'),
 				formMethod = this.get('method'),
-				fields = this.get('fields'), 
-				postData = '', 
+				submitViaIO = this.get('submitViaIO'),
 				transaction, cfg;
 
-			Y.Array.each(fields, function (f, i, a) {
-				if (f.get('name') !== null) {
-					postData += encodeURIComponent(f.get('name')) + '=' +
-								(encodeURIComponent(f.get('value')) || '') + '&';
-				}
-			});
-
-			cfg = {
-				method : formMethod,
-				data : postData
-			};
-
-			transaction = Y.io(formAction, cfg);
-
-			this._ioIds[transaction.id] = transaction;
+			if (submitViaIO === true) {
+				cfg = {
+					method : formMethod,
+					form : {
+						id : this._formNode,
+						upload : (this.get('encodingType') === Form.MULTIPART_ENCODED)
+					}
+				};
+	
+				transaction = Y.io(formAction, cfg);
+				this._ioIds[transaction.id] = transaction;
+			} else {
+				this._formNode.submit();
+			}
 		}
 	},
 	
 	/**
 	 * @method getField
-	 * @param {String | Number} selector
+	 * @param {String|Number} selector
 	 * @description Get a form field by its name attribute or numerical index
 	 */
 	getField : function (selector) {
@@ -487,8 +533,11 @@ Y.extend(Form, Y.Widget, {
 
 		this.publish('submit');
 		this.publish('reset');
+		this.publish('start');
 		this.publish('success');
 		this.publish('failure');
+		this.publish('complete');
+		this.publish('xdr');
 	},
 	
 	destructor : function () {
@@ -514,11 +563,16 @@ Y.extend(Form, Y.Widget, {
 		}, this));
 
 		this.after('success', Y.bind(function(e) {
-			this.reset();
+			if (this.get('resetAfterSubmit') === true) {
+				this.reset();
+			}
 		}, this));
 
-		Y.on('io:success', Y.bind(this._handleIOSuccess, this));
-		Y.on('io:failure', Y.bind(this._handleIOFailure, this));
+		Y.on('io:start', Y.bind(this._handleIOEvent, this, 'start'));
+		Y.on('io:complete', Y.bind(this._handleIOEvent, this, 'complete'));
+		Y.on('io:xdr', Y.bind(this._handleIOEvent, this, 'xdr'));
+		Y.on('io:success', Y.bind(this._handleIOEvent, this, 'success'));
+		Y.on('io:failure', Y.bind(this._handleIOEvent, this, 'failure'));
 	},
 	
 	syncUI : function () {

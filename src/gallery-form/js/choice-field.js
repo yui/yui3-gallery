@@ -47,26 +47,33 @@ Y.extend(ChoiceField, Y.FormField, {
      */
     _validateChoices : function (val) {
         if (!Y.Lang.isArray(val)) {
+			Y.log('Choice values must be in an array');
             return false;
         }
 		
-		var valid = true;
-
-		Y.Array.each(val, function(c, i, a) {
-            if (!Y.Lang.isObject(c)) {
-                valid = false;
-				return;
+		var i = 0, len = val.length;
+		
+		for (; i < len; i++) {
+            if (!Y.Lang.isObject(val[i])) {
+				Y.log('Choice that is not an object cannot be used');
+                delete val[i];
+				continue;
             }
-            if (!c.label ||
-                !Y.Lang.isString(c.label) ||
-                !c.value ||
-                !Y.Lang.isString(c.value)) {
-					valid = false;
-					return;
+            if (!val[i].label ||
+                !Y.Lang.isString(val[i].label) ||
+                !val[i].value ||
+                !Y.Lang.isString(val[i].value)) {
+					Y.log('Choice without label and value cannot be used');
+					delete val[i];
+					continue;
             }
-        });
+        }
+		
+		if (val.length === 0) {
+			return false;
+		}
 
-        return valid;
+        return true;
     },
 
     _renderLabelNode : function () {
@@ -80,47 +87,26 @@ Y.extend(ChoiceField, Y.FormField, {
     
     _renderFieldNode : function () {
         var contentBox = this.get('contentBox'),
-            choices = this.get('choices'),
-            elLabel, elField;
+            choices = this.get('choices');
        
 		Y.Array.each(choices, function(c, i, a) {
-            elLabel = Y.Node.create(FormField.LABEL_TEMPLATE);
-            contentBox.appendChild(elLabel);
-            
-            elField = Y.Node.create(FormField.INPUT_TEMPLATE);
-            contentBox.appendChild(elField);
-        });
+			var cfg = {
+					value : c.value,
+					id : (this.get('id') + '_choice' + i),
+					name : this.get('name'),
+					label : c.label
+				},
+				fieldType = (this.get('multiple') === true ? Y.CheckboxField : Y.RadioField),
+				field = new fieldType(cfg);
+			
+			field.render(contentBox);
+        }, this);
 
 		this._fieldNode = contentBox.all('input');
     },
 
-	_syncFieldNode : function () {
-		var choices = this.get('choices'),
-			contentBox = this.get('contentBox'),
-			labels = contentBox.all('label'),
-			choiceType = (this.get('multiple') === true ? 'checkbox' : 'radio');
+	_syncFieldNode : function () {},
 
-		labels.each(function (node, index, list) {
-			node.setAttrs({
-				innerHTML : choices[index].label
-			});
-			node.setAttribute('for', (this.get('id') + '_choice' + index));
-		}, this);
-
-		this._fieldNode.each(function (node, index, list) {
-			node.setAttrs({
-				value : choices[index].value,
-				id : (this.get('id') + '_choice' + index),
-				name : this.get('name'),
-				type : choiceType
-			});
-
-			// Setting value above doesn't seem to work (bug?), this forces it
-			var domNode = Y.Node.getDOMNode(node);
-			domNode.value = choices[index].value;
-		}, this);
-	},
-            
     clear : function () {
         this._fieldNode.each(function (node, index, list) {
             node.setAttribute('checked', false);
