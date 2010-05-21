@@ -212,4 +212,4 @@ YUI.add('gallery-overlay-modal', function(Y) {
 	Y.namespace('Plugin').OverlayModal = OverlayModal;
 
 
-}, 'gallery-2010.03.16-20' ,{requires:['overlay', 'plugin', 'event-focus']});
+}, 'gallery-2010.05.21-18-16' ,{requires:['overlay', 'plugin', 'event-focus']});

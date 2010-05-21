@@ -168,4 +168,4 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 	Y.BaseComponentMgr = ComponentMgr;
 
 
-}, 'gallery-2010.05.12-19-08' ,{requires:['collection']});
+}, 'gallery-2010.05.21-18-16' ,{requires:['collection']});

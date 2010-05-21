@@ -11,12 +11,7 @@ var Lang = Y.Lang,
 	Anim = Y.Anim,
 	Easing = Y.Easing,
 	Event = Y.Event,
-	isBoolean = Y.Lang.isBoolean,
-	isNumber = Y.Lang.isNumber,
-	contentBox,
-	boundingBox,
-	toggleButton,
-	expanded = false;
+	isNumber = Y.Lang.isNumber;
 
 
 /**
@@ -108,20 +103,6 @@ Y.mix(SlidingSideBar, {
 		},
 
 		/**
-		 * @attribute toggle
-		 * @description determines if a button is used to toggle the sidbar
-		 * in and out
-		 *
-		 * @default true
-		 * @type Boolean
-		 */
-		'toggle':{
-			key:'toggle',
-			value:true,
-			validator:isBoolean
-		},
-
-		/**
 		* @attribute animation
 		* @description Animation config values, see Y.Animation
 		*
@@ -132,9 +113,9 @@ Y.mix(SlidingSideBar, {
 		* </code>
 		* @type Object
 		*/
-		animation: {
+		'animation': {
 			value: {
-				duration: 0.5,
+				duration: 0.4,
 				easing: Easing.easeOut
 			},
 			validator: function( value ){
@@ -154,6 +135,25 @@ Y.mix(SlidingSideBar, {
 		'content':{
 			key:'content',
 			value:''
+		},
+		
+		/**
+		 * @attribute position
+		 * @description the position you wish to display your sidbar. Valid options are: 'left', 'right', 'top', 'bottom'
+		 *
+		 * @default left
+		 * @type String
+		 */
+		'position':{
+			key:'position',
+			value:'left',
+			validator: function( value ){
+				return (value == 'top' || value == 'right' || value == 'bottom' || value == 'left');
+			}
+		},
+		'tabIndex':{
+			key:'tabIndex',
+			value:1
 		}
 	}
 });
@@ -178,13 +178,10 @@ Y.extend(SlidingSideBar, Y.Overlay, {
 	 * @protected
 	 */
 	renderUI:function(){
-		boundingBox = this.get('boundingBox');
-		contentBox = this.get('contentBox');
+		this.baseZIndex = this.get('zIndex');
 
 		this.set('width',this.get('collapsedWidth'));
 		this.set('height',this.get('collapsedHeight'));
-
-		this._toggleButton_create();/* create close button */
 	},
 
 	/**
@@ -195,7 +192,7 @@ Y.extend(SlidingSideBar, Y.Overlay, {
 	 */
 	bindUI:function(){
 		this.get('contentBox').on('click',this._contentBox_click,this);
-
+		this.after('focusedChange',this._setFocus,this);
 	},
 
 	/**
@@ -215,76 +212,10 @@ Y.extend(SlidingSideBar, Y.Overlay, {
 	 * @protected
 	 */
 	destructor:function(){
-		this._toggleButton_destroy();/* destoy the toggle button */
-		this._title_destroy();/* destroy the title */
+		Event.purgeElement(this.get('contentBox'),true);
+		this.get('contentBox').remove();
 	},
 
-	/**
-	 * Creates the toggle button
-	 *
-	 * @method _toggleButton_create
-	 * @protected
-	 */
-	_toggleButton_create:function(){
-		var className = this.getClassName('toggle');
-		contentBox.append('<a href="#" class="'+className+'">&#160;</a>');
-		toggleButton = boundingBox.one('.'+className);
-		toggleButton.on('click',this._toggleButton_click,this);
-		if(this.get('toggle')===false){
-			this._toggleButton_hide();
-		}
-	},
-	/**
-	 * Destroys the toggle button
-	 *
-	 * @method _toggleButton_destroy
-	 * @protected
-	 */
-	_toggleButton_destroy:function(){
-		Event.purgeElement('#'.toggleButton.getAttribute('id'),true);
-		toggleButton.remove();
-	},
-	/**
-	 * Shows the toggle button
-	 *
-	 * @method _toggleButton_show
-	 * @protected
-	 */
-	_toggleButton_show:function(){
-		toggleButton.removeClass(this.getClassName('hidden'));
-	},
-	/**
-	 * Hides the toggle button
-	 *
-	 * @method _toggleButton_hide
-	 * @protected
-	 */
-	_toggleButton_hide:function(){
-		toggleButton.addClass(this.getClassName('hidden'));
-	},
-	/**
-	 * Toggle button click event
-	 *
-	 * @method _toggleButton_click
-	 * @protected
-	 */
-	_toggleButton_click:function(){
-		this._toggleSidebar();
-		return false;
-	},
-	/**
-	 * Toggle button change event
-	 *
-	 * @method _toggleButton_change
-	 * @protected
-	 */
-	_toggleButton_changed:function(){
-		if(this.get('toggle')){
-			this._toggleButton_show();
-		}else{
-			this._toggleButton_hide();
-		}
-	},
 
 	/**
 	 * Header Content Click event
@@ -302,8 +233,9 @@ Y.extend(SlidingSideBar, Y.Overlay, {
 	 * @protected
 	 */
 	_contentBox_click:function(e){
-		if(e.target.hasClass('yui-widget-hd') || e.target.hasClass(this.getClassName('toggle'))){
+		if(e.target.hasClass('yui-widget-hd')){
 			this._toggleSidebar();
+			var contentBox = this.get('contentBox');
 			if(contentBox.one('.yui-widget-hd')){/* if the head exist */
 				contentBox.one('.yui-widget-hd').on('click',this._headerContent_click,this);
 				Y.detach('click',this._contentBox_click,contentBox);
@@ -319,34 +251,88 @@ Y.extend(SlidingSideBar, Y.Overlay, {
 	 * @protected
 	 */
 	_toggleSidebar:function(){
-		if(expanded){
-			this._contentSize(this.get('collapsedHeight'),this.get('collapsedWidth'));
-			this._hideContent();
-			expanded = false;
+		if(this._isExpanded()){
+			this.collapse();
 		}else{
-			this._contentSize(this.get('expandedHeight'),this.get('expandedWidth'));
-			this._showContent();
-			expanded = true;
+			this.expand();
 		}
 	},
+	
+	/**
+	 * Returns if the side bar is currently expanded
+	 *
+	 * @method _isExpanded
+	 * @returns bool
+	 * @protected
+	 */
+	_isExpanded:function(){
+		return this.get('contentBox').hasClass(this.getClassName('expanded'));
+	},
+	
+	/**
+	 * Expands the sidebar to the open position
+	 *
+	 * @method expand
+	 */
+	expand:function(){
+		this._contentSize(this.get('expandedHeight'),this.get('expandedWidth'));
+		this._showContent();
+		this.get('contentBox').addClass(this.getClassName('expanded'));
+	},
+	
+	/**
+	 * Collapses the sidebar to the closed position
+	 *
+	 * @method collapse
+	 */
+	collapse:function(){
+		this._contentSize(this.get('collapsedHeight'),this.get('collapsedWidth'));
+		this._hideContent();
+		this.get('contentBox').removeClass(this.getClassName('expanded'));
+	},
+
 	/**
 	 * Animation adjustment of the content size
 	 *
 	 * @method _contentSize
 	 * @protected
 	 */
-	_contentSize:function(height,width){
-		var animSet = this.get('animation'),
-			anim = new Anim({
-				node:boundingBox,
-				duration:animSet.duration,
-				easing:animSet.easing,
-				to:{
-					height:height,
-					width:width
+	_contentSize:function(h,w){
+		var animSet,
+			animTo = {
+				'height':h,
+				'width':w
+			};
+
+		switch(this.get('position')){
+			case 'right':
+				if(this._isExpanded()){
+					animTo.left = parseFloat(this.get('boundingBox').getStyle('left')) + (this.get('expandedWidth') - this.get('collapsedWidth'));
+				}else{
+					animTo.left = parseFloat(this.get('boundingBox').getStyle('left')) - (this.get('expandedWidth') - this.get('collapsedWidth'));
 				}
-			});
-		anim.run();
+				break;
+			case 'bottom':
+				if(this._isExpanded()){
+					animTo.top = parseFloat(this.get('boundingBox').getStyle('top')) + (this.get('expandedHeight') - this.get('collapsedHeight'));
+				}else{
+					animTo.top = parseFloat(this.get('boundingBox').getStyle('top')) - (this.get('expandedHeight') - this.get('collapsedHeight'));
+				}
+				break;
+		}
+			
+		
+		animSet = this.get('animation');
+		if(this.sizeAnim){
+			this.sizeAnim.stop();
+		}
+		this.sizeAnim = new Anim({
+			node:this.get('boundingBox'),
+			duration:animSet.duration,
+			easing:animSet.easing,
+			to:animTo
+		});
+		this.sizeAnim.run();
 	},
 
 	/**
@@ -356,20 +342,25 @@ Y.extend(SlidingSideBar, Y.Overlay, {
 	 * @protected
 	 */
 	_showContent:function(){
-		if(contentBox.one('.yui-widget-bd')){
+		if(this.opacityAnim){
+			this.opacityAnim.stop();
+		}
+		if(this.get('contentBox').one('.yui-widget-bd')){
 			var animSet = this.get('animation'),
-				anim = new Anim({
-					node:contentBox.one('.yui-widget-bd'),
-					duration:animSet.duration,
-					easing:animSet.easing,
-					to:{
-						opacity:1
-					}
-				});
-			anim.run();
+				contentBox = this.get('contentBox');
+			this.opacityAnim = new Anim({
+				node:contentBox.one('.yui-widget-bd'),
+				duration:animSet.duration,
+				easing:animSet.easing,
+				to:{
+					opacity:1
+				}
+			});
+			this.opacityAnim.run();
 			contentBox.one('.yui-widget-bd').setStyle('display','block');
 		}
 	},
+
 	/**
 	 * Hides the content box
 	 *
@@ -377,32 +368,46 @@ Y.extend(SlidingSideBar, Y.Overlay, {
 	 * @protected
 	 */
 	_hideContent:function(){
-		if(contentBox.one('.yui-widget-bd')){
-			var animSet = this.get('animation'),
-				anim = new Anim({
-					node:contentBox.one('.yui-widget-bd'),
-					duration:animSet.duration,
-					easing:animSet.easing,
-					to:{
-						opacity:0
-					},
-					on:{
-						end:function(){
-							contentBox.one('.yui-widget-bd').setStyle('display','none');
-						}
-					}
-				});
-			anim.run();
+		if(this.opacityAnim){
+			this.opacityAnim.stop();
 		}
+		if(this.get('contentBox').one('.yui-widget-bd')){
+			var contentBox = this.get('contentBox'),
+				animSet = this.get('animation');
+			this.opacityAnim = new Anim({
+				node:contentBox.one('.yui-widget-bd'),
+				duration:animSet.duration,
+				easing:animSet.easing,
+				to:{
+					opacity:0
+				},
+				on:{
+					end:function(){
+						contentBox.one('.yui-widget-bd').setStyle('display','none');
+					}
+				}
+			});
+			this.opacityAnim.run();
+		}
+	},
+	
+	/**
+	 * Sets the panel to focus by modifying the zIndex
+	 *
+	 * @method _setFocus
+	 * @protected
+	 */
+	_setFocus:function(){
+		var newZIndex = this.baseZIndex;
+		if(this.get('focused')){
+			newZIndex = newZIndex+3;
+		}
+		this.set('zIndex',newZIndex);
 	}
-	/* @todo Add in code to handle zIndex to properly stack sidebars
-	_uiSetFocused: function(val, src) {
-		alert('_uiSetFocused ');
-	}
-	*/
+	
 });
 
 Y.SlidingSideBar = SlidingSideBar;
 
 
-}, 'gallery-2010.02.22-22' ,{requires:['overlay','anim-easing']});
+}, 'gallery-2010.05.21-18-16' ,{requires:['overlay','anim-easing']});

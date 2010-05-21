@@ -331,6 +331,11 @@ Y.extend(Slideshow, Y.Widget, {
             });
         }
     },
+    
+    _applyParsedConfig : function(node, cfg, parsedCfg) {
+        // mix instead of aggregate
+        return (parsedCfg) ? Y.mix(cfg, parsedCfg, false) : cfg;
+    },
 
     /*
      * Converts the seconds into milliseconds
@@ -366,4 +371,4 @@ Y.Slideshow = Slideshow;
 
 
 
-}, 'gallery-2010.03.23-17-54' ,{requires:['node', 'event', 'widget']});
+}, 'gallery-2010.05.21-18-16' ,{requires:['node', 'event', 'widget']});
