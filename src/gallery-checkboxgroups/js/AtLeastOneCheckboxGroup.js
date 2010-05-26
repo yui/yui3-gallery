@@ -3,6 +3,11 @@
  * the active, adjacent one is turned on.  The exact algorithm is explained
  * in "Tog on Interface".  The checkboxes are assumed to be ordered in the
  * order they were added.
+ * 
+ * @module gallery-checkboxgroups
+ * @class AtLeastOneCheckboxGroup
+ * @constructor
+ * @param cb_list {String|Object|Array} The list of checkboxes to manage
  */
 
 function AtLeastOneCheckboxGroup(
