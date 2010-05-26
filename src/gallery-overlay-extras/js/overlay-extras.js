@@ -18,6 +18,7 @@
 		
 		CHANGE = 'Change',
 		
+		isBoolean = Y.Lang.isBoolean,
 		getCN = Y.ClassNameManager.getClassName,
 		
 		supportsPosFixed = (function(){
@@ -59,16 +60,14 @@
 		
 		OverlayAutohide,
 		OVERLAY_AUTOHIDE = 'overlayAutohide',
-		AUTOHIDE = 'autohide';
+		AUTOHIDE = 'autohide',
+		CLICKED_OUTSIDE = 'clickedOutside',
+		FOCUSED_OUTSIDE = 'focusedOutside',
+		PRESSED_ESCAPE = 'pressedEscape';
 		
 	// *** OverlayModal *** //
 	
-	OverlayModal = function (config) {
-		
-		OverlayModal.superclass.constructor.apply(this, arguments);
-	};
-	
-	Y.extend(OverlayModal, Y.Plugin.Base, {
+	OverlayModal = Y.Base.create(OVERLAY_MODAL, Y.Plugin.Base, [], {
 		
 		// *** Instance Members *** //
 		
@@ -217,8 +216,8 @@
 		
 		// *** Static *** //
 		
-		NAME	: OVERLAY_MODAL,
 		NS		: MODAL,
+		
 		ATTRS	: {
 			
 			maskNode : {
@@ -227,18 +226,14 @@
 			}
 			
 		},
+		
 		CLASSES	: MODAL_CLASSES
 		
 	});
 	
 	// *** OverlayKeepaligned *** //
 	
-	OverlayKeepaligned = function (config) {
-		
-		OverlayKeepaligned.superclass.constructor.apply(this, arguments);
-	};
-	
-	Y.extend(OverlayKeepaligned, Y.Plugin.Base, {
+	OverlayKeepaligned = Y.Base.create(OVERLAY_KEEPALIGNED, Y.Plugin.Base, [], {
 		
 		// *** Instance Members *** //
 		
@@ -292,7 +287,7 @@
 				
 			this._uiHandles = [
 				Y.on('windowresize', syncAlign),
-				Y.one('win').on('scroll', syncAlign)
+				Y.on('scroll', syncAlign)
 			];
 		},
 		
@@ -313,19 +308,13 @@
 		
 		// *** Static *** //
 		
-		NAME	: OVERLAY_KEEPALIGNED,
-		NS		: KEEPALIGNED
+		NS : KEEPALIGNED
 		
 	});
 	
 	// *** OverlayAutohide *** //
 	
-	OverlayAutohide = function (config) {
-		
-		OverlayAutohide.superclass.constructor.apply(this, arguments);
-	};
-	
-	Y.extend(OverlayAutohide, Y.Plugin.Base, {
+	OverlayAutohide = Y.Base.create(OVERLAY_AUTOHIDE, Y.Plugin.Base, [], {
 		
 		// *** Instance Members *** //
 		
@@ -376,12 +365,27 @@
 			
 			var host = this.get(HOST),
 				bb = host.get(BOUNDING_BOX),
-				hide = Y.bind(host.hide, host);
+				hide = Y.bind(host.hide, host),
+				uiHandles = [];
 			
-			this._uiHandles = [
-				bb.on('clickoutside', hide),
-				bb.on('focusoutside', hide)
-			];
+			if (this.get(CLICKED_OUTSIDE)) {
+				uiHandles.push(bb.on('clickoutside', hide));
+			}
+			
+			if (this.get(FOCUSED_OUTSIDE)) {
+				uiHandles.push(bb.on('focusoutside', hide));
+			}
+			
+			if (this.get(PRESSED_ESCAPE)) {
+//				uiHandles.push(bb.on('key', hide, 'down:27')); // doesn't work because of event-key metadata issue
+				uiHandles.push(bb.on('keydown', function(e){
+					if (e.keyCode === 27) {
+						hide();
+					}
+				}));
+			}
+			
+			this._uiHandles = uiHandles;
 		},
 		
 		_detachUIHandles : function () {
@@ -401,8 +405,26 @@
 		
 		// *** Static *** //
 		
-		NAME	: OVERLAY_AUTOHIDE,
-		NS		: AUTOHIDE
+		NS : AUTOHIDE,
+		
+		ATTRS : {
+			
+			clickedOutside	: {
+				value		: true,
+				validator	: isBoolean
+			},
+			
+			focusedOutside	: {
+				value		: true,
+				validator	: isBoolean
+			},
+			
+			pressedEscape	: {
+				value		: true,
+				validator	: isBoolean
+			}
+			
+		}
 		
 	});
 	
