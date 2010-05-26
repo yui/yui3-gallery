@@ -87,6 +87,9 @@ Paginator.ui.ItemRangeDropdown.prototype =
 
 		this.page_count = this.span.one('span.yui-item-count');
 
+		this.prev_page_count = -1;
+		this.prev_page_size  = -1;
+		this.prev_rec_count  = -1;
 		this.update();
 
 		return this.span;
@@ -107,22 +110,32 @@ Paginator.ui.ItemRangeDropdown.prototype =
 
 		var page    = this.paginator.getCurrentPage();
 		var count   = this.paginator.getTotalPages();
-		var options = Y.Node.getDOMNode(this.menu).options;
+		var size    = this.paginator.getRowsPerPage();
+		var recs    = this.paginator.getTotalRecords();
 
-		options.length = 0;
-		for (var i=1; i<=count; i++)
+		if (count != this.prev_page_count ||
+			size  != this.prev_page_size  ||
+			recs  != this.prev_rec_count)
 		{
-			var range = this.paginator.getPageRecords(i);
+			var options    = Y.Node.getDOMNode(this.menu).options;
+			options.length = 0;
 
-			options[i-1] = new Option((range[0]+1) + ' - ' + (range[1]+1), i);
-			if (i == page)
+			for (var i=1; i<=count; i++)
 			{
-				this.menu.set('selectedIndex', i-1);
+				var range = this.paginator.getPageRecords(i);
+
+				options[i-1] = new Option((range[0]+1) + ' - ' + (range[1]+1), i);
 			}
+
+			this.page_count.set('innerHTML', recs);
+
+			this.prev_page_count = count;
+			this.prev_page_size  = size;
+			this.prev_rec_count  = recs;
 		}
 
 		this.span.set('className', this.paginator.get('itemRangeDropdownClass'));
-		this.page_count.set('innerHTML', this.paginator.getTotalRecords());
+		this.menu.set('selectedIndex', page-1);
 	},
 
 	_onChange: function(e)
