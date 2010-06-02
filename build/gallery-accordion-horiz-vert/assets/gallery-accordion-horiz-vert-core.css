@@ -1,26 +1,26 @@
 /* horizontal */
 
-.yui-accordion-horiz
+.yui3-accordion-horiz
 {
 	position: relative;
 	overflow: hidden;
 }
 
-.yui-accordion-horiz .yui-accordion-title
-{
-	position: relative;
-	overflow: hidden;
-	float: left;
-}
-
-.yui-accordion-horiz .yui-accordion-content-clip
+.yui3-accordion-horiz .yui3-accordion-title
 {
 	position: relative;
 	overflow: hidden;
 	float: left;
 }
 
-.yui-accordion-horiz .yui-accordion-content
+.yui3-accordion-horiz .yui3-accordion-section-clip
+{
+	position: relative;
+	overflow: hidden;
+	float: left;
+}
+
+.yui3-accordion-horiz .yui3-accordion-section
 {
 	position: relative;
 	overflow-x: hidden;
@@ -29,27 +29,27 @@
 
 /* vertical */
 
-.yui-accordion-vert
+.yui3-accordion-vert
 {
 	position: relative;
 	overflow: hidden;
 }
 
-.yui-accordion-vert .yui-accordion-title
-{
-	position: relative;
-	overflow: hidden;
-	width: 100%;
-}
-
-.yui-accordion-vert .yui-accordion-content-clip
+.yui3-accordion-vert .yui3-accordion-title
 {
 	position: relative;
 	overflow: hidden;
 	width: 100%;
 }
 
-.yui-accordion-vert .yui-accordion-content
+.yui3-accordion-vert .yui3-accordion-section-clip
+{
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+}
+
+.yui3-accordion-vert .yui3-accordion-section
 {
 	position: relative;
 	width: 100%;
@@ -58,14 +58,14 @@
 
 /* hack for 3.0 -- unnecessary once srcNode becomes available in 3.1 */
 
-.yui-accordion ul.yui-accordion-content
+.yui3-accordion ul.yui3-accordion-content
 {
 	margin: 0;
 	border: 0;
 	padding: 0;
 }
 
-.yui-accordion ul.yui-accordion-content li
+.yui3-accordion ul.yui3-accordion-content li
 {
-	list-type-style: none;
+	display:none;
 }

@@ -3,6 +3,7 @@ YUI.add('gallery-accordion-horiz-vert', function(Y) {
 "use strict";
 
 var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
+	browser_can_animate = !(0 < Y.UA.ie && Y.UA.ie < 8),
 	section_min_size = (use_nonzero_empty_div ? 1 : 0);
 
 /**********************************************************************
@@ -52,6 +53,10 @@ function Accordion(config)
 	{
 		config.tabIndex = null;
 	}
+	if (Y.Lang.isUndefined(config.horizontal))
+	{
+		config.horizontal = false;
+	}
 
 	Accordion.superclass.constructor.call(this, config);
 }
@@ -63,7 +68,7 @@ function initAnimationFlag()
 
 function filterAnimationFlag(value)
 {
-	return (value && !Y.Lang.isUndefined(Y.Anim));
+	return (value && browser_can_animate && !Y.Lang.isUndefined(Y.Anim));
 }
 
 Accordion.NAME = "accordion";
@@ -477,7 +482,7 @@ Y.extend(Accordion, Y.Widget,
 
 		if (use_nonzero_empty_div)
 		{
-			t.setStyle('display', t.innerHTML ? '' : 'none');
+			t.setStyle('display', t.get('innerHTML') ? '' : 'none');
 		}
 	},
 
@@ -520,14 +525,17 @@ Y.extend(Accordion, Y.Widget,
 
 		if (el && this.get('replaceSectionContainer'))
 		{
+			var display = d.getStyle('display');
+
 			var p = d.get('parentNode');
 			p.removeChild(d);
 			p.appendChild(el);
 
 			this.section_list[index].content = el;
 
-			el.addClass(this.getClassName('content'));
+			el.addClass(this.getClassName('section'));
 			el.addClass(this.section_list[index].open ? open_class : closed_class);
+			el.setStyle('display', display);
 		}
 		else if (el)
 		{
@@ -588,14 +596,14 @@ Y.extend(Accordion, Y.Widget,
 
 		// create title
 
-		var t = new Y.Node(document.createElement('div'));
+		var t = Y.Node.create('<div/>');
 		t.addClass(this.getClassName('title'));
 		t.addClass(closed_class);
 
 		// create content clipping
 
-		var c = new Y.Node(document.createElement('div'));
-		c.addClass(this.getClassName('content-clip'));
+		var c = Y.Node.create('<div/>');
+		c.addClass(this.getClassName('section-clip'));
 		c.setStyle(this.slide_style_name, section_min_size+'px');
 		if (this.get('animateOpenClose'))
 		{
@@ -604,9 +612,10 @@ Y.extend(Accordion, Y.Widget,
 
 		// create content
 
-		var d = new Y.Node(document.createElement('div'));
-		d.addClass(this.getClassName('content'));
+		var d = Y.Node.create('<div/>');
+		d.addClass(this.getClassName('section'));
 		d.addClass(closed_class);
+		d.setStyle('display', 'none');
 		c.appendChild(d);
 
 		// save in our list
@@ -890,11 +899,14 @@ Y.extend(Accordion, Y.Widget,
 
 		function onCompleteCloseSection(type, index)
 		{
+			this.section_list[index].content.setStyle('display', 'none');
 			this.fire('close', index);
 		}
 
 		if (!this.section_list[index].open)
 		{
+			this.section_list[index].content.setStyle('display', 'block');
+
 			this.fire('beforeOpen', index);
 
 			this.section_list[index].open = true;
@@ -1067,4 +1079,4 @@ Y.extend(Accordion, Y.Widget,
 Y.Accordion = Accordion;
 
 
-}, 'gallery-2010.01.13-20' ,{optional:['anim-base'], requires:['widget','selector-css3']});
+}, 'gallery-2010.06.02-18-59' ,{optional:['anim-base'], requires:['widget','selector-css3']});
