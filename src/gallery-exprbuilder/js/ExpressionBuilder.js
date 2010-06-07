@@ -3,7 +3,7 @@
 /**********************************************************************
  * <p>Class which helps user to build a query expression.</p>
  * 
- * @module gallery-ExpressionBuilder
+ * @module gallery-exprbuilder
  * @class ExpressionBuilder
  * @constructor
  * @param config {Object} Widget configuration
@@ -560,7 +560,7 @@ Y.extend(ExpressionBuilder, Y.Widget,
 		var markup =
 			'<form name="{qbf}">' +
 				'<div class="{qb}"></div>' +
-				'<div class="{qbctl}">' +
+				'<div class="{qbctl} formmgr-row">' +
 					'<button class="{ic}">{insert}</button>' +
 					'<button class="{rc}">{reset}</button>' +
 				'</div>' +
