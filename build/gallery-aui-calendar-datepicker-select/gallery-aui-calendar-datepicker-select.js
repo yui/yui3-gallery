@@ -735,4 +735,4 @@ var DatePickerSelect = A.Component.create(
 A.DatePickerSelect = DatePickerSelect;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-calendar-base','gallery-aui-button-item']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-calendar-base','gallery-aui-button-item']});

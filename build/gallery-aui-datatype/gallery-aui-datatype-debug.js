@@ -74,4 +74,4 @@ DS.evaluate = function(data) {
 };
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-base'], skinnable:false});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base'], skinnable:false});

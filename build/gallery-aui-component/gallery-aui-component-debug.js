@@ -419,4 +419,4 @@ Component.create = function(config) {
 A.Component = Component;
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['widget'], skinnable:false});
+}, 'gallery-2010.06.07-17-52' ,{requires:['widget'], skinnable:false});

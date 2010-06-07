@@ -495,4 +495,4 @@ var IOPlugin = A.Component.create(
 A.namespace('Plugin').IO = IOPlugin;
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-overlay-base','gallery-aui-parse-content','gallery-aui-io-request','gallery-aui-loading-mask']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-overlay-base','gallery-aui-parse-content','gallery-aui-io-request','gallery-aui-loading-mask']});

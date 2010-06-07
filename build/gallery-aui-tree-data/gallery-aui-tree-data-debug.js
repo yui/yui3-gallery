@@ -826,4 +826,4 @@ var TreeData = A.Component.create(
 A.TreeData = TreeData;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:false, requires:['gallery-aui-base']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:false, requires:['gallery-aui-base']});

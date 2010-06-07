@@ -755,4 +755,4 @@ A.mix(
  */
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-panel','dd-constrain','gallery-aui-button-item','gallery-aui-overlay-manager','gallery-aui-overlay-mask','gallery-aui-io-plugin','gallery-aui-resize']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-panel','dd-constrain','gallery-aui-button-item','gallery-aui-overlay-manager','gallery-aui-overlay-mask','gallery-aui-io-plugin','gallery-aui-resize']});

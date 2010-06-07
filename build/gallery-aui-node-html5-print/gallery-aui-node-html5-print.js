@@ -105,4 +105,4 @@ window.attachEvent('onafterprint', onAfterPrint);
 @end@*/
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-node-html5']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-node-html5']});

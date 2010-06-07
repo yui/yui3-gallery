@@ -5,7 +5,7 @@ YUI.add('gallery-exprbuilder', function(Y) {
 /**********************************************************************
  * <p>Class which helps user to build a query expression.</p>
  * 
- * @module gallery-ExpressionBuilder
+ * @module gallery-exprbuilder
  * @class ExpressionBuilder
  * @constructor
  * @param config {Object} Widget configuration
@@ -562,7 +562,7 @@ Y.extend(ExpressionBuilder, Y.Widget,
 		var markup =
 			'<form name="{qbf}">' +
 				'<div class="{qb}"></div>' +
-				'<div class="{qbctl}">' +
+				'<div class="{qbctl} formmgr-row">' +
 					'<button class="{ic}">{insert}</button>' +
 					'<button class="{rc}">{reset}</button>' +
 				'</div>' +
@@ -584,4 +584,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2010.06.02-18-59' ,{requires:['gallery-querybuilder','gallery-formmgr']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-querybuilder','gallery-formmgr']});

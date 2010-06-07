@@ -331,4 +331,4 @@ var Lang = A.Lang,
 	A.OverlayManager = OverlayManager;
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-base','gallery-aui-overlay-base','overlay','plugin']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','gallery-aui-overlay-base','overlay','plugin']});

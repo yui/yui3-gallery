@@ -716,4 +716,4 @@ A.OverlayContextManager = new A.OverlayManager({});
 A.on(MOUSEDOWN, function() { A.OverlayContextManager.hideAll(); }, A.getDoc());
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-overlay-manager','gallery-aui-delayed-task']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-overlay-manager','gallery-aui-delayed-task']});

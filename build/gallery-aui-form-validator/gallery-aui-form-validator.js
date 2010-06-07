@@ -804,4 +804,4 @@ A.each(
 A.FormValidator = FormValidator;
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-base','gallery-aui-event-input','selector-css3','substitute']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','gallery-aui-event-input','selector-css3','substitute']});

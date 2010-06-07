@@ -264,4 +264,4 @@ var CharCounter = A.Component.create(
 A.CharCounter = CharCounter;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:false, requires:['gallery-aui-base','gallery-aui-event-input']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:false, requires:['gallery-aui-base','gallery-aui-event-input']});

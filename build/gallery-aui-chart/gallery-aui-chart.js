@@ -6,9 +6,12 @@ var Lang = A.Lang,
 
 	NAME = 'chart',
 
-	CSS_CHART = getClassName(NAME);
+	CSS_CHART = getClassName(NAME),
+
+	DEFAULT_SWF_PATH = A.config.base + 'gallery-aui-chart/assets/chart.swf';
 
 YUI.AUI.namespace('_CHART');
+YUI.AUI.namespace('defaults.chart');
 
 var Chart = A.Component.create(
 	{
@@ -27,7 +30,7 @@ var Chart = A.Component.create(
 			},
 			swfURL: {
 				valueFn: function() {
-					return YUI.AUI.defaults.chart.swfURL;
+					return YUI.AUI.defaults.chart.swfURL || DEFAULT_SWF_PATH;
 				}
 			},
 			swfCfg: {
@@ -1117,4 +1120,4 @@ A.extend(
 A.Chart.StackedColumnSeries = StackedColumnSeries;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:false, requires:['datasource','gallery-aui-swf','json']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['datasource','gallery-aui-swf','json'], skinnable:false});

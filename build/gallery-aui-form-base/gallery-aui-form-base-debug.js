@@ -86,6 +86,20 @@ var Form = A.Component.create(
 			}
 		},
 
+		HTML_PARSER: {
+			action: function(contentBox) {
+				var instance = this;
+
+				return instance._attributeGetter(null, 'action');
+			},
+
+			method: function(contentBox) {
+				var instance = this;
+
+				return instance._attributeGetter(null, 'method');
+			}
+		},
+
 		prototype: {
 			CONTENT_TEMPLATE: '<form></form>',
 
@@ -519,4 +533,4 @@ var Form = A.Component.create(
 A.Form = Form;
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-base','gallery-aui-data-set','gallery-aui-form-field','querystring-parse']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','gallery-aui-data-set','gallery-aui-form-field','querystring-parse']});

@@ -241,4 +241,4 @@ var SWF = A.Component.create(
 A.SWF = SWF;
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-base','querystring-stringify-simple'], skinnable:false});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','querystring-stringify-simple'], skinnable:false});

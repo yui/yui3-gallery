@@ -13,7 +13,7 @@ var L = A.Lang,
 	isFunction = L.isFunction,
 	isString = L.isString,
 
-	defaults = YUI.AUI.defaults.io,
+	defaults = YUI.AUI.namespace('defaults.io'),
 
 	getDefault = function(attr) {
 		return function() {
@@ -625,4 +625,4 @@ A.io.request = function(uri, config) {
 };
 
 
-}, 'gallery-2010.06.02-20-36' ,{requires:['gallery-aui-base','io','json','plugin','querystring-stringify']});
+}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','io','json','plugin','querystring-stringify']});

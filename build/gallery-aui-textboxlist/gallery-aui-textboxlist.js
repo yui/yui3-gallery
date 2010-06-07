@@ -519,4 +519,4 @@ A.TextboxList = TextboxList;
 A.TextboxListEntry = TextboxListEntry;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['anim-node-plugin','gallery-aui-autocomplete','node-focusmanager']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['anim-node-plugin','gallery-aui-autocomplete','node-focusmanager']});

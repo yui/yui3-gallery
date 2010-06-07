@@ -911,6 +911,8 @@ var TreeViewDD = A.Component.create(
 
 				// bubbling drop event
 				instance.bubbleEvent('drop', output);
+
+				instance.dropAction = null;
 			},
 
 			/**
@@ -934,4 +936,4 @@ var TreeViewDD = A.Component.create(
 A.TreeViewDD = TreeViewDD;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-tree-node','dd']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-tree-node','dd']});

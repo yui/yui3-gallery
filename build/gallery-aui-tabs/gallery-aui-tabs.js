@@ -611,4 +611,4 @@ var TabView = A.Component.create(
 A.TabView = TabView;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-component','gallery-aui-state-interaction']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-component','gallery-aui-state-interaction']});

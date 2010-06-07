@@ -351,13 +351,6 @@ var ColorPicker = A.Component.create(
 				}
 			},
 
-			images: {
-				value: {
-					HUE_THUMB: YUI.AUI.defaults.paths.images + 'color_indic.png',
-					PICKER_THUMB: YUI.AUI.defaults.paths.images + 'select.png'
-				}
-			},
-
 			showOn: {
 				value: 'click'
 			},
@@ -1019,4 +1012,4 @@ ColorPicker.Color = Color;
 A.ColorPicker = ColorPicker;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-overlay-context','dd','slider','substitute','gallery-aui-button-item','gallery-aui-form','gallery-aui-panel']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-overlay-context','dd','slider','substitute','gallery-aui-button-item','gallery-aui-form','gallery-aui-panel']});

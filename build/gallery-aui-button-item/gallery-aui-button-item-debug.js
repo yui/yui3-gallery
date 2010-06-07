@@ -552,4 +552,4 @@ var ButtonItem = A.Component.create(
 A.ButtonItem = A.Base.build(NAME, ButtonItem, [A.WidgetChild], { dynamic: false });
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-state-interaction','widget-child']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-state-interaction','widget-child']});

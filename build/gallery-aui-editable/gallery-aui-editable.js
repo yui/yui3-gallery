@@ -758,4 +758,4 @@ var Editable = A.Component.create(
 A.Editable = Editable;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-form-combobox']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-form-combobox']});

@@ -1649,4 +1649,4 @@ A.each(ALL_HANDLES, function(handle, i) {
 A.Resize = Resize;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-base','dd','substitute']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','dd','substitute']});

@@ -272,4 +272,4 @@ var ParseContent = A.Component.create(
 A.namespace('Plugin').ParseContent = ParseContent;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:false, requires:['async-queue','gallery-aui-base','io','plugin']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:false, requires:['async-queue','gallery-aui-base','io','plugin']});

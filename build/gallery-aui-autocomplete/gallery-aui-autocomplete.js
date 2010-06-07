@@ -2105,4 +2105,4 @@ var AutoComplete = A.Component.create(
 A.AutoComplete = AutoComplete;
 
 
-}, 'gallery-2010.06.02-20-36' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-overlay-base','datasource','dataschema','gallery-aui-form-combobox']});
+}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-overlay-base','datasource','dataschema','gallery-aui-form-combobox']});
