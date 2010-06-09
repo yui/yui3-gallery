@@ -197,12 +197,12 @@ ExpressionBuilder.ATTRS =
 	 * 
 	 * @config resetLabel
 	 * @type {String}
-	 * @default "Reset"
+	 * @default "Cancel"
 	 * @writeonce
 	 */
 	resetLabel:
 	{
-		value:     'Reset',
+		value:     'Cancel',
 		validator: Y.Lang.isString,
 		writeOnce: true
 	},
@@ -244,6 +244,20 @@ ExpressionBuilder.ATTRS =
 	unclosedParenError:
 	{
 		value:     'The expression contains an unclosed parenthesis.',
+		validator: Y.Lang.isString
+	},
+
+	/**
+	 * The error message when the user forgets to select a variable for
+	 * insertion.
+	 * 
+	 * @config noVariableSelectedError
+	 * @type {String}
+	 * @default 'Please choose a variable.'
+	 */
+	noVariableSelectedError:
+	{
+		value:     'Please choose a variable.',
 		validator: Y.Lang.isString
 	}
 };
@@ -320,7 +334,7 @@ function insertQB(e)
 	if (query.length === 0)
 	{
 		var el = qb.get('contentBox').one('select');
-		this.qb_form.displayMessage(el, 'Please choose a variable.', 'error');
+		this.qb_form.displayMessage(el, this.get('noVariableSelectedError'), 'error');
 		e.halt();
 		return;
 	}
@@ -415,10 +429,10 @@ Y.extend(ExpressionBuilder, Y.Widget,
 
 		container.one('.'+this.getClassName('paren')).on('click', paren, this);
 
-		var ops = [ 'and', 'or', 'not' ];
-		for (var i=0; i<ops.length; i++)
+		var op = [ 'and', 'or', 'not' ];
+		for (var i=0; i<op.length; i++)
 		{
-			container.one('.'+this.getClassName(ops[i])).on('click', handler(ops[i]), this);
+			container.one('.'+this.getClassName(op[i])).on('click', handler(op[i]), this);
 		}
 
 		container.one('.'+this.getClassName('clear')).on('click', clear, this);
@@ -584,4 +598,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-querybuilder','gallery-formmgr']});
+}, 'gallery-2010.06.09-20-45' ,{requires:['gallery-querybuilder','gallery-formmgr']});
