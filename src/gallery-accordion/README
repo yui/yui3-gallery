@@ -2,6 +2,10 @@ Accordion widget for YUI 3
 
 I. Changelog
 
+09.06.2010 - ver. 1.10
+ - Fixed bug which caused firing itemExpanded event twice.
+ - Events will be not published in Accordion explicitly, but they will be created if needed.
+
 06.05.2010 - ver. 1.091
  - Accordion migrated to YUI 3.1.1. No code changes.
 

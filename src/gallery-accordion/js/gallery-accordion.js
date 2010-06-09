@@ -69,6 +69,163 @@ var Lang = Y.Lang,
  */
 
 Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
+
+    /**
+     * Signals the beginning of adding an item to the Accordion.
+     *
+     * @event beforeItemAdd
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item being added</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals an item has been added to the Accordion.
+     *
+     * @event itemAdded
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item that has been added</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals the beginning of removing an item.
+     *
+     * @event beforeItemRemove
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item being removed</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals an item has been removed from Accordion.
+     *
+     * @event itemRemoved
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item that has been removed</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals the beginning of resizing an item.
+     *
+     * @event beforeItemResized
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item being resized</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals an item has been resized.
+     *
+     * @event itemResized
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item that has been resized</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals the beginning of expanding an item
+     *
+     * @event beforeItemExpand
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item being expanded</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals the beginning of collapsing an item
+     *
+     * @event beforeItemCollapse
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item being collapsed</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals an item has been expanded
+     *
+     * @event itemExpanded
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item that has been expanded</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals an item has been collapsed
+     *
+     * @event itemCollapsed
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item that has been collapsed</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals the beginning of reordering an item
+     *
+     * @event beforeItemReorder
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item being reordered</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Fires before the end of item reordering
+     *
+     * @event beforeEndItemReorder
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item being reordered</dd>
+     *  </dl>
+     */
+
+
+    /**
+     * Signals an item has been reordered
+     *
+     * @event itemReordered
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> instance of the item that has been reordered</dd>
+     *  </dl>
+     */
+
+
     /**
      * Initializer lifecycle implementation for the Accordion class. Publishes events,
      * initializes internal properties and subscribes for resize event.
@@ -78,8 +235,6 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @param config {Object} Configuration object literal for the Accordion
      */
     initializer: function( config ) {
-        this._initEvents();
-
         this.after( "render", Y.bind( this._afterRender, this ) );
     },
 
@@ -106,174 +261,6 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
 
             item.destroy();
         }
-    },
-
-
-    /**
-     * Publishes Accordion's events
-     *
-     * @method _initEvents
-     * @protected
-     */
-    _initEvents: function(){
-
-        /**
-         * Signals the beginning of adding an item to the Accordion.
-         *
-         * @event beforeItemAdd
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item being added</dd>
-         *  </dl>
-         */
-        this.publish( BEFOREITEMADD );
-
-        /**
-         * Signals an item has been added to the Accordion.
-         *
-         * @event itemAdded
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item that has been added</dd>
-         *  </dl>
-         */
-        this.publish( ITEMADDED );
-
-        /**
-         * Signals the beginning of removing an item.
-         *
-         * @event beforeItemRemove
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item being removed</dd>
-         *  </dl>
-         */
-        this.publish( BEFOREITEMREMOVE );
-
-        /**
-         * Signals an item has been removed from Accordion.
-         *
-         * @event itemRemoved
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item that has been removed</dd>
-         *  </dl>
-         */
-        this.publish( ITEMREMOVED );
-
-        /**
-         * Signals the beginning of resizing an item.
-         *
-         * @event beforeItemResized
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item being resized</dd>
-         *  </dl>
-         */
-        this.publish( BEFOREITEMERESIZED );
-
-        /**
-         * Signals an item has been resized.
-         *
-         * @event itemResized
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item that has been resized</dd>
-         *  </dl>
-         */
-        this.publish( ITEMERESIZED );
-
-        /**
-         * Signals the beginning of expanding an item
-         *
-         * @event beforeItemExpand
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item being expanded</dd>
-         *  </dl>
-         */
-        this.publish( BEFOREITEMEXPAND );
-
-        /**
-         * Signals the beginning of collapsing an item
-         *
-         * @event beforeItemCollapse
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item being collapsed</dd>
-         *  </dl>
-         */
-        this.publish( BEFOREITEMCOLLAPSE );
-
-
-        /**
-         * Signals an item has been expanded
-         *
-         * @event itemExpanded
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item that has been expanded</dd>
-         *  </dl>
-         */
-        this.publish( ITEMEXPANDED );
-
-        /**
-         * Signals an item has been collapsed
-         *
-         * @event itemCollapsed
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item that has been collapsed</dd>
-         *  </dl>
-         */
-        this.publish( ITEMCOLLAPSED );
-
-        /**
-         * Signals the beginning of reordering an item
-         *
-         * @event beforeItemReorder
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item being reordered</dd>
-         *  </dl>
-         */
-        this.publish( BEFOREITEMREORDER );
-
-        /**
-         * Fires before the end of item reordering
-         *
-         * @event beforeEndItemReorder
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item being reordered</dd>
-         *  </dl>
-         */
-        this.publish( BEFOREENDITEMREORDER );
-
-
-        /**
-         * Signals an item has been reordered
-         *
-         * @event itemReordered
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>item</dt>
-         *          <dd>An <code>AccordionItem</code> instance of the item that has been reordered</dd>
-         *  </dl>
-         */
-        this.publish( ITEMREORDERED );
     },
 
 
@@ -530,9 +517,10 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @return {Number} The calculated height per strech item
      */
     _adjustStretchItems: function(){
-        var items = this.get( ITEMS ), heightPerStretchItem;
+        var items = this.get( ITEMS ), heightPerStretchItem, forExpanding;
 
         heightPerStretchItem = this._getHeightPerStretchItem();
+        forExpanding = this._forExpanding;
 
         Y.Array.each( items, function( item, index, items ){
             var body, bodyHeight, anim, heightSettings, expanded;
@@ -540,7 +528,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
             heightSettings = item.get( CONTENT_HEIGHT );
             expanded      = item.get( EXPANDED );
 
-            if( heightSettings.method === STRETCH && expanded ){
+            if( !forExpanding[ item ] && heightSettings.method === STRETCH && expanded ){
                 anim = this._animations[ item ];
 
                 // stop waiting animation
