@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>Intl Bidi Test</title>
+</head>
+<body>
+<script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+<script src="gallery-intl-bidi-min.js"></script>
+<script>
+YUI().use("gallery-intl-bidi", function(Y) {
+    // returns "ltr", since the first letter in the string is a "T", which
+    // is LTR.
+    alert(Y.Intl.bidiDirection("The first letter of the Hebrew alphabet is \u05D0."));
+ 
+    // returns "rtl", since the first letter is a Hebrew Alef, which is RTL.
+    alert(Y.Intl.bidiDirection("----\u05D0----"));
+ 
+    // returns "" (for neutral), since the string contains no letters.
+    alert(Y.Intl.bidiDirection("--------"));
+ 
+    // returns "ltr", as that is specified as the fallback return value for
+    // neutral strings.
+    alert(Y.Intl.bidiDirection("--------", "ltr"));
+ 
+    // returns "rtl", as that is specified as the fallback return value for
+    // neutral strings.
+    alert(Y.Intl.bidiDirection("--------", "rtl"));
+ 
+    // returns "rtl", as although the fallback is specified to be LTR, the
+    // string is not neutral.
+    alert(Y.Intl.bidiDirection("----\u05D0----", "ltr"));
+});
+</script>
+</body>
+</html>
