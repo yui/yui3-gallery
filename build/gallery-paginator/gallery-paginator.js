@@ -34,15 +34,6 @@ Y.mix(Paginator, {
     NAME: "paginator",
 
     /**
-     * Incrementing index used to give instances unique ids.
-     * @static
-     * @property Paginator.id
-     * @type number
-     * @private
-     */
-    id : 0,
-
-    /**
      * Base of id strings used for ui components.
      * @static
      * @property Paginator.ID_BASE
@@ -215,7 +206,7 @@ Paginator.ATTRS =
      * @final
      */
     id: {
-        value    : Paginator.id++,
+        value    : Y.guid(),
         readOnly : true
     }
 };
@@ -2421,4 +2412,4 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
 };
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['widget','event-key','substitute']});
+}, 'gallery-2010.06.23-18-37' ,{requires:['widget','event-key','substitute']});

@@ -405,6 +405,11 @@ Y.extend(ExpressionBuilder, Y.Widget,
 		setValidation.call(this, config.formMgr);
 		this.after('formMgrChange', function(e)
 		{
+			if (e.prevVal)
+			{
+				e.prevVal.setFunction(this.get('fieldId'), null);
+			}
+
 			setValidation.call(this, e.newVal);
 		});
 	},
@@ -598,4 +603,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2010.06.09-20-45' ,{requires:['gallery-querybuilder','gallery-formmgr']});
+}, 'gallery-2010.06.23-18-37' ,{requires:['gallery-querybuilder','gallery-formmgr']});

@@ -267,7 +267,7 @@ function getVisibleSlicesPgTop(
 			{
 				ds:    ds,
 				path:  path.slice(0),
-				start: prev + 1,
+				start: send ? prev + 1 : skip,
 				end:   m + delta - 1
 			});
 			send = true;
@@ -897,4 +897,4 @@ Y.namespace("Parsers").treebledatasource = function(oData, treeble_config)
 };
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['datasource']});
+}, 'gallery-2010.06.23-18-37' ,{requires:['datasource']});
