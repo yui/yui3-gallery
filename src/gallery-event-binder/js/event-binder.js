@@ -55,22 +55,88 @@
 *
 * @module gallery-event-binder
 */
+
+function _modulesReady (e, modules, handler) {
+	var args = Y.Array(modules);
+	
+	// stopping the module inmidiately
+	e.halt();
+	
+	// adding the loading class
+	e.target.addClass('yui3-waiting');
+
+	args.push(function() {
+		// once the modules gets ready, let's remove the original binder
+		handler.detach();
+		// removing the loading class
+		e.target.removeClass('yui3-waiting');
+		// let's simulate the new event based on the original facade
+		Y.Event.simulate(e.target._node, e.type, e);
+	});
+
+	Y.use.apply (Y, args);
+	
+}
+
 Y.EventBinder = {
+	/*
+	 * Filter all the events in the queue by type, and simulate those that match.
+	 * @method flush
+	 * @param type {string} The type of event to flush
+	 */
 	flush: function (type) {
 		var config = Y.config.eventbinder || {};
-		
+
 		config.q = config.q || [];
 		type = type || 'click';
-		
+
 		if (config.fn) {
+			// once you call flush, the original listener should be removed
 			Y.Event.detach(type, config.fn, Y.config.doc);
 		}
+		// filtering all the events in the queue by type
 		Y.each(config.q, function(o) {
-			
+
 			if (type == o.type) {
+				// removing the loading class
 				Y.get(o.target).removeClass('yui3-waiting');
+				// let's simulate the new event based on the backup object described by "e" in the configuration
 				Y.Event.simulate(o.target, type, o);
 			}
+
 		});
+	},
+	/*
+	 * Adds an event listener. This method is an wrap for Y.on, and instead of supporting
+	 * a regular callback, it loads a set of modules and simulate the same event once those
+	 * modules become available.
+	 * @method on
+	 * @param type {string} The type of event to append 
+	 * @param modules {string|array} a module or a list of modules that should be loaded when this event happens
+	 * @param el {String|HTMLElement|Array|NodeList} An id, an element reference, or a collection of ids and/or elements to assign the listener to.
+	 * @return {EventHandle} the detach handle
+	 */
+	on: function (type, modules, el) {
+		// setting the event listener
+		var handler = Y.on (type, function(e) {
+			return _modulesReady(e, modules, handler);
+		}, el);
+	},
+	/*
+	 * Adds an event listener. This method is an wrap for Y.on, and instead of supporting
+	 * a regular callback, it loads a set of modules and simulate the same event once those
+	 * modules become available.
+	 * @method delegate
+	 * @param type {string} the event type to delegate
+	 * @param modules {string|array} a module or a list of modules that should be loaded when this event happens
+	 * @param el {String|HTMLElement|Array|NodeList} An id, an element reference, or a collection of ids and/or elements representing the delegation container.
+	 * @param spec {string} a selector that must match the target of the event.
+	 * @return {EventHandle} the detach handle
+	 */
+	delegate: function (type, modules, el, spec) {
+		// setting the delegate listener
+		var handler = Y.delegate (type, function(e) {
+			return _modulesReady(e, modules, handler);
+		}, el, spec);
 	}
 };
