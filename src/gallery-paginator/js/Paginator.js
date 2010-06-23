@@ -32,15 +32,6 @@ Y.mix(Paginator, {
     NAME: "paginator",
 
     /**
-     * Incrementing index used to give instances unique ids.
-     * @static
-     * @property Paginator.id
-     * @type number
-     * @private
-     */
-    id : 0,
-
-    /**
      * Base of id strings used for ui components.
      * @static
      * @property Paginator.ID_BASE
@@ -213,7 +204,7 @@ Paginator.ATTRS =
      * @final
      */
     id: {
-        value    : Paginator.id++,
+        value    : Y.guid(),
         readOnly : true
     }
 };
