@@ -403,6 +403,11 @@ Y.extend(ExpressionBuilder, Y.Widget,
 		setValidation.call(this, config.formMgr);
 		this.after('formMgrChange', function(e)
 		{
+			if (e.prevVal)
+			{
+				e.prevVal.setFunction(this.get('fieldId'), null);
+			}
+
 			setValidation.call(this, e.newVal);
 		});
 	},
