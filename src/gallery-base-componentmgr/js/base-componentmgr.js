@@ -8,42 +8,26 @@
 	
 	var ComponentMgr,
 		
-		COMPONENTS = 'components',
+		REQUIRES = 'requires',
+		INITIALIZER = 'initializer',
+		INSTANCE = 'instance',
 		
+		E_INIT_COMPONENT = 'initComponent',
 		E_INIT_COMPONENTS = 'initComponents',
 		
 		L = Y.Lang,
 		isArray = L.isArray,
 		isString = L.isString,
+		isObject = L.isObject,
 		isFunction = L.isFunction,
 		noop = function(){};
 		
 	// *** Constructor *** //
 	
-	ComponentMgr = function (config) {
+	ComponentMgr = function () {
 		
 		Y.log('constructor callled', 'info', 'baseComponentMgr');
-		
-		/**
-		 * Fired right after init event to allow implementers to add components to be eagerly initialized.
-		 * a <code>components</code> array is passed to subscribers whom can push on components to be initialized,
-		 * components can be referenced by string name or object reference.
-		 * 
-		 * @event initComponents
-		 * @param event {Event} The event object for initComponents; has properties:
-		 */
-		this.publish(E_INIT_COMPONENTS, {
-			defaultFn	: this._defInitComponentsFn,
-			fireOnce	: true
-		});
-			
-		if (this.get('initialized')) {
-			this.fire(E_INIT_COMPONENTS, { components: [] });
-		} else {
-			this.after('initializedChange', function(e){
-				this.fire(E_INIT_COMPONENTS, { components: [] });
-			});
-		}
+		this.initComponentMgr.apply(this, arguments);
 	};
 	
 	// *** Static *** //
@@ -52,9 +36,95 @@
 	
 	ComponentMgr.prototype = {
 		
-		// *** Instance Members *** //
+		// *** Lifecycle Methods *** //
+		
+		initComponentMgr : function () {
+			
+			// Holds the goods
+			this._components = new Y.State();
+			
+			// Add the components defined in the static COMPONENTS object
+			Y.Object.each(this.constructor.COMPONENTS, function(config, name){
+				this.addComponent(name, config);
+			}, this);
+			
+			/**
+			 * Fired when a component is going to be initialized.
+			 * The <code>componentToInit</code> property is the String name of the component going to be intialized.
+			 * Developers can listen to the 'on' moment to prevent the default action of initializing the component.
+			 * Listening to the 'after' moment, a <code>component</code> property on the Event Object is the component instance.
+			 * 
+			 * @event initComponent
+			 * @param event {Event} The event object for initComponent; has properties: componentToInit, component
+			 */
+			this.publish(E_INIT_COMPONENT, { defaultFn: this._defInitComponentFn });
+			
+			/**
+			 * Fired right after init event to allow implementers to add components to be eagerly initialized.
+			 * A <code>componentsToInit</code> array is passed to subscribers whom can push on components to be initialized,
+			 * components can be referenced by string name or object reference.
+			 * 
+			 * @event initComponents
+			 * @param event {Event} The event object for initComponents; has property: componentsToInit
+			 */
+			this.publish(E_INIT_COMPONENTS, {
+				defaultFn	: this._defInitComponentsFn,
+				fireOnce	: true
+			});
+			
+			// Fire initComponents during Y.Base initialization
+			if (this.get('initialized')) {
+				this.fire(E_INIT_COMPONENTS, { componentsToInit: [] });
+			} else {
+				this.after('initializedChange', function(e){
+					this.fire(E_INIT_COMPONENTS, { componentsToInit: [] });
+				});
+			}
+		},
 		
 		// *** Public Methods *** //
+		
+		/**
+		 * Adds a component to the Class.
+		 * Components are added by giving an name and configuration.
+		 * The Component Manager uses the requires and initializer function to create the component instance on demand.
+		 * 
+		 * @method addComponent
+		 * @param name {String} name of the component to add
+		 * @param config {Object} defining: {Array} requires, {function} initializer
+		 * @return void
+		 */
+		addComponent : function (name, config) {
+			
+			if ( ! isString(name)) { return; }		// string name
+			if ( ! isObject(config)) { return; }	// config object
+			
+			var components = this._components,
+				requires = config.requires,
+				initializer = config.initializer,
+				instance = config.instance;
+				
+			initializer = isFunction(initializer) ? initializer :
+						  isString(initializer) && isFunction(this[initializer]) ? this[initializer] : noop;
+			
+			components.add(name, REQUIRES, requires);
+			components.add(name, INITIALIZER, initializer);
+			components.add(name, INSTANCE, instance);
+		},
+				
+		/**
+		 * Retrieves component an instance by string name or reference.
+		 * The components must have previously been initialized otherwise null is returned.
+		 * 
+		 * @method getComponent
+		 * @param component	{String} component to get instance of
+		 * @return instance	{Object|undefined} the component instance if previously initialized, otherwise undefined
+		 */
+		getComponent : function (component) {
+			
+			Y.log('getComponent called', 'info', 'baseComponentMgr');
+			return this._components.get(component, INSTANCE);
+		},
 		
 		/**
 		 * Supplies the callback with component instance(s) that were requested by string name or reference,
@@ -62,8 +132,9 @@
 		 * Component instance(s) will be passed to the callback as arguments in the order requested.
 		 * 
 		 * @method useComponent
-		 * @param component* {string|object} 1-n components to use and/or create instances of
+		 * @param component* {String} 1-n components to use and/or create instances of
 		 * @param *callback {function} callback to pass component instances to
+		 * @return void
 		 */
 		useComponent : function () {
 			
@@ -82,7 +153,7 @@
 			}
 			
 			initialized = Y.Array.partition(components, function(c){
-				var instance = this._getInstance(c);
+				var instance = this.getComponent(c);
 				instances.push(instance);
 				return instance;
 			}, this);
@@ -94,7 +165,7 @@
 					var instances = [];
 					Y.Array.each(initialized.rejects, this._initComponent, this);
 					Y.Array.each(components, function(c){
-						instances.push(this._getInstance(c));
+						instances.push(this.getComponent(c));
 					}, this);
 					callback.apply(this, instances);
 				}, this)));
@@ -103,32 +174,7 @@
 			}
 		},
 		
-		/**
-		 * Retrieves component an instance by string name or reference.
-		 * The components must have previously been initialized otherwise null is returned.
-		 * 
-		 * @method getComponent
-		 * @param component {string|object} component to get instance of
-		 * @return component instance {object} the component instance if previously initialized, otherwise null
-		 */
-		getComponent : function (component) {
-			
-			Y.log('getComponent called', 'info', 'baseComponentMgr');
-			return this._getInstance(component);
-		},
-		
 		// *** Private Methods *** //
-		
-		_getComponent : function (c) {
-			
-			var components = this[COMPONENTS];
-			return ( isString(c) && Y.Object.hasKey(components, c) ? components[c] : Y.Object.hasValue(c) ? c : null );
-		},
-		
-		_getInstance : function (c) {
-			
-			return ( this._getComponent(c).instance || null );
-		},
 		
 		_getRequires : function (components) {
 			
@@ -136,35 +182,40 @@
 			var requires = [];
 			
 			Y.Array.each(components, function(c){
-				c = this._getComponent(c) || {};
-				requires = requires.concat(c.requires || []);
+				requires = requires.concat(this._components.get(c, REQUIRES) || []);
 			}, this);
 			
 			return Y.Array.unique(requires);
 		},
 		
+		_initComponent : function (c) {
+			
+			this.fire(E_INIT_COMPONENT, { componentToInit: c });
+		},
+		
+		_defInitComponentFn : function (e) {
+			
+			var components = this._components,
+				component = e.componentToInit,
+				initializer = components.get(component, INITIALIZER),
+				instance = components.get(component, INSTANCE);
+			
+			if ( ! instance && isFunction(initializer)) {
+				instance = initializer.call(this);
+				components.add(component, INSTANCE, instance);
+			}
+			
+			e.component = instance;
+		},
+		
 		_defInitComponentsFn : function (e) {
 			
-			var components = e.components,
+			var components = e.componentsToInit,
 				requires = this._getRequires(components);
 				
 			Y.use.apply(Y, requires.concat(Y.bind(function(Y){
 				Y.Array.each(components, this._initComponent, this);
 			}, this)));
-		},
-		
-		_initComponent : function (c) {
-			
-			c = this._getComponent(c);
-			if ( ! c) { return null; }
-			
-			if ( ! c.instance) {
-				var initFn = isFunction(c.initializer) ? c.initializer :
-						isString(c.initializer) && isFunction(this[c.initializer]) ? this[c.initializer] : noop;
-				c.instance = initFn.call(this);
-			}
-			
-			return c.instance || null;
 		}
 		
 	};
