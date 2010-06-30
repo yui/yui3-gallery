@@ -1,74 +1,61 @@
 YUI.add('gallery-button-toggle', function(Y) {
 
-    var Button,
-        YL = Y.Lang,
-        CLASSES = {
-    		ACTIVE : '-active'
-    	};
-    
-    Button = function() {
-        Button.superclass.constructor.apply(this, arguments);
-    };
-    
-    Y.extend(Button,Y.Button, {
-    	
-        initializer : function(config) {
-            this.after('activeChange',this._activeChanged, this);
-        },
-        
-        _toggle : function() {
-        	var bb = this.get('boundingBox'),
-    	    activeClass = this.className + CLASSES.ACTIVE;
-        	if(status) {
-        		bb.addClass(activeClass);
-        		(Y.bind(this.get('callback'),this))();
-        	}else{
-        		bb.removeClass(activeClass);
-        		(Y.bind(this.get('deactivateCallback'),this))();
-        	}
-        	this.set('active',status);
-        },
-
-        _bindClick : function(status) {
-        	this.get('boundingBox').on('click',function(e){
-        		this.set('active', !this.get('active'));
-        	},this);
-        },
-        
-        _deactivateCallbackChange : function(e) {
-            this._bindClick();
-        },
-              
-        _activeChanged : function(e) {
-        	var bb = this.get('boundingBox'),
-    	    activeClass = this.className + CLASSES.ACTIVE;
-        	if(e.newVal) {
-        		bb.addClass(activeClass);
-        		if(this.get('callback')) {
-        			(Y.bind(this.get('callback'),this))();
-        		}
-        	}else{
-        		bb.removeClass(activeClass);
-        		if(this.get('deactivateCallback')) {
-        			(Y.bind(this.get('deactivateCallback'),this))();
-        		}
-        	}
-        }
-        
-    }, {
-        NAME : 'button',
-        ATTRS : {
-            active : {
-            	value : false,
-            	validator : YL.isBoolean
-            },
-            deactivateCallback : {
-            	validator : YL.isFunction
-            }
-        }
-    });
-    
-    Y.ButtonToggle = Button;
+    var YL = Y.Lang,
+        DESELECTED_CALLBACK = 'deselectedCallback';
 
 
-}, 'gallery-2010.05.19-19-08' ,{requires:['gallery-button']});
+	Y.ButtonToggle = Y.Base.create('button', Y.Button, [], {
+	    
+	    initializer : function(config) {
+	        this.after('selectedChange',this._selectedChanged, this);
+	    },
+	    
+	    _bindClick : function() {
+	    	
+	        this.get('boundingBox').after('click',function(e){
+		    	var parent = null;
+		    	if(!this.isRoot()) {
+		    		var parent = this.get('parent'),
+		    		    selection = parent.get('selection');
+		    		if(
+		    		   parent instanceof Y.ButtonGroup && // we are in a button group
+		    		   parent.get('alwaysSelected') && // there should always be at least one
+		    		   this.get('selected') === 1 && // this is selected
+		    		   (
+		    		      selection === this || 
+		    		      (
+		    		         selection instanceof Y.ArrayList && 
+		    		         selection.size() === 1 && 
+		    		         selection.item(0) === this
+		    		      )
+		    		   ) // this is the only selected
+			    	) {
+		    			return;
+			    	}
+		    	}
+	        	this.set('selected', (this.get('selected') === 0) ? 1 : 0);
+	        },this);
+	    },
+	    
+	    _selectedChanged : function(e) {
+	        if(e.newVal) {
+	            if(this.get('callback')) {
+	                (Y.bind(this.get('callback'),this))();
+	            }
+	        }else{
+	            if(this.get(DESELECTED_CALLBACK)) {
+	                (Y.bind(this.get(DESELECTED_CALLBACK),this))();
+	            }
+	        }
+	    }
+	    
+	}, {
+	    ATTRS : {
+	        deselectedCallback : {
+	            validator : YL.isFunction
+	        }
+	    }
+	});
+
+
+}, 'gallery-2010.06.30-19-54' ,{requires:['gallery-button']});

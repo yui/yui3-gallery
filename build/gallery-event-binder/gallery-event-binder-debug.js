@@ -94,7 +94,7 @@ Y.EventBinder = {
 
 		if (config.fn) {
 			// once you call flush, the original listener should be removed
-			Y.Event.detach(type, config.fn, Y.config.doc);
+			YUI.Env.remove(Y.config.doc, type, config.fn);
 		}
 		// filtering all the events in the queue by type
 		Y.each(config.q, function(o) {
@@ -123,6 +123,7 @@ Y.EventBinder = {
 		var handler = Y.on (type, function(e) {
 			return _modulesReady(e, modules, handler);
 		}, el);
+		return handler;
 	},
 	/*
 	 * Adds an event listener. This method is an wrap for Y.on, and instead of supporting
@@ -140,8 +141,9 @@ Y.EventBinder = {
 		var handler = Y.delegate (type, function(e) {
 			return _modulesReady(e, modules, handler);
 		}, el, spec);
+		return handler;
 	}
 };
 
 
-}, 'gallery-2010.06.23-18-37' ,{requires:['event-simulate','event-base','event-delegate']});
+}, 'gallery-2010.06.30-19-54' ,{requires:['event-simulate','event-base','event-delegate']});
