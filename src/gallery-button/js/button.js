@@ -8,7 +8,7 @@
             PRESSED  : '-pressed',
             DEFAULT  : '-default',
             DISABLED : '-disabled',
-            NO_LABEL : '-no-label'
+            NO_LABEL : 'no-label'
         },
         BOUNDING_BOX = 'boundingBox';
     
@@ -48,7 +48,6 @@
             this._updateDefault(this.get('default'));
             this._updateEnabled(this.get('enabled'));
             this.get('icon');
-            this.get('label');
         },
         
         disable : function() {
@@ -57,11 +56,6 @@
         
         enable : function() {
             this.set('disabled',false);
-        },
-        
-        setTitle : function(title) {
-            this.get('boundingBox').set('title', title);
-            return this;
         },
         
         _bindClick : function() {
@@ -160,14 +154,15 @@
                 validator : YL.isString,
                 setter : function(val) {
                     if(!val || val === '') {
-                        this.get(BOUNDING_BOX).addClass(this.className + CLASSES.NO_LABEL);
+                        this.get(BOUNDING_BOX).addClass(this.getClassName(CLASSES.NO_LABEL));
                     }else{
-                        this.get(BOUNDING_BOX).removeClass(this.className + CLASSES.NO_LABEL);
+                        this.get(BOUNDING_BOX).removeClass(this.getClassName(CLASSES.NO_LABEL));
                     }
                     this.get('contentBox').set('text', val);
                     this.set('title',val);
                     return val;
-                }
+                },
+                lazyAdd : false
             },
             callback : {
                 validator : YL.isFunction
