@@ -17,26 +17,19 @@ YUI.add('gallery-timer', function(Y) {
             PAUSE  : 'pause',
             RESUME : 'resume',
             TIMER  : 'timer'
-        }
-        ;
+        };
+
     /**
-     * Constructor
+     * Y.Timer : Losely modeled after AS3's Timer class. Provides a 
+     *           simple interface start, pause, resume, and stop a
+     *           defined timer set with a custom callback method.
+     *
+     * @author Anthony Pipkin
+     * @version 1.1.0
      */
-    Timer = function(config) {
-        Timer.superclass.constructor.apply(this,arguments);
-    };
-    
-    /**
-     * Timer extends Base
-     */
-    Y.extend(Timer, Y.Base,{
-        /**
-         * Local Date object for internal time measurement
-         * 
-         * @property
-         * @protected
-         */
-        _date : new Date(),
+    Y.Timer = Y.Base.create('timer', Y.Base, [] , {
+
+        //////   P U B L I C   //////
         
         /**
          * Initializer lifecycle implementation for the Timer class.
@@ -47,9 +40,10 @@ YUI.add('gallery-timer', function(Y) {
          * @protected
          * @param confit {Object} Configuration object literal for
          *     the Timer
+         * @since 1.0.0
          */
         initializer : function(config){
-            this.after('statusChange',this._statusChanged,this);
+            this.after('statusChange',this._afterStatusChange,this);
             this.publish(EVENTS.START ,  { defaultFn : this._startEvent });
             this.publish(EVENTS.STOP ,   { defaultFn : this._stopEvent });
             this.publish(EVENTS.PAUSE ,  { defaultFn : this._pauseEvent });
@@ -61,6 +55,7 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method start
          * @public
+         * @since 1.0.0
          */
         start : function() {
             if(this.get('status') !== STATUS.RUNNING) {
@@ -74,6 +69,7 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method stop
          * @public
+         * @since 1.0.0
          */
         stop : function() {
             if(this.get('status') === STATUS.RUNNING) {
@@ -87,6 +83,7 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method pause
          * @public
+         * @since 1.0.0
          */
         pause : function() {
             if(this.get('status') === STATUS.RUNNING) {
@@ -100,6 +97,7 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method resume
          * @public
+         * @since 1.0.0
          */
         resume : function() {
             if(this.get('status') === STATUS.PAUSED) {
@@ -108,6 +106,18 @@ YUI.add('gallery-timer', function(Y) {
             return this;
         },
         
+
+        //////   P R O T E C T E D   ////// 
+
+        /**
+         * Local Date object for internal time measurement
+         * 
+         * @property
+         * @protected
+         * @since 1.0.0
+         */
+        _date : new Date(),
+
         /**
          * Checks to see if a new Timer is to be created. If so, calls
          * _timer() after a the schedule number of milliseconds. Sets 
@@ -116,6 +126,7 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _makeTimer
          * @protected
+         * @since 1.0.0
          */
         _makeTimer : function() {
             var id = null,
@@ -123,7 +134,8 @@ YUI.add('gallery-timer', function(Y) {
             if(repeat === 0 || repeat > this.get('step')) {
                 id = Y.later(this.get('length'), this, this._timer);
             }
-            this.set('timer',id);
+
+            this.set('timer', id);
             this.set('start', this._date.getTime());
         },
         
@@ -132,6 +144,7 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _destroyTimer
          * @protected
+         * @since 1.0.0
          */
         _destroyTimer : function() {
             this.get('timer').cancel();
@@ -145,18 +158,24 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _timer
          * @protected
+         * @since 1.0.0
          */
         _timer : function() {
             this.fire(EVENTS.TIMER);
+
             var step = this.get('step'),
                 repeat = this.get('repeatCount');
+
             this.set('step', ++step);
+
             if(repeat > 0 && repeat <= step) {
                 this.stop();
             }else{
                 this._makeTimer();
             }
-            (this.get('callback'))();
+            
+            this._executeCallback();
+
         },
         
         /**
@@ -165,8 +184,9 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _statusChanged
          * @protcted
+         * @since 1.0.0
          */
-        _statusChanged : function(e){
+        _afterStatusChange : function(e){
             switch (this.get('status')) {
                 case STATUS.RUNNING:
                     this._makeTimer();
@@ -183,9 +203,18 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _startEvent
          * @protected
+         * @since 1.0.0
          */
         _startEvent : function(e) {
-            this.set('status',STATUS.RUNNING);
+            var delay = this.get('startDelay');
+
+            if(delay > 0) {
+                Y.later(delay, this, function(){
+                    this.set('status', STATUS.RUNNING);
+                });
+            }else{
+                this.set('status', STATUS.RUNNING);
+            }
         },
         
         /**
@@ -193,9 +222,10 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _stopEvent
          * @protected
+         * @since 1.0.0
          */
         _stopEvent : function(e) {
-            this.set('status',STATUS.STOPPED);
+            this.set('status', STATUS.STOPPED);
         },
         
         /**
@@ -203,9 +233,10 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _pauseEvent
          * @protected
+         * @since 1.0.0
          */
         _pauseEvent : function(e) {
-            this.set('status',STATUS.PAUSED);
+            this.set('status', STATUS.PAUSED);
         },
         
         /**
@@ -214,12 +245,38 @@ YUI.add('gallery-timer', function(Y) {
          * 
          * @method _resumeEvent
          * @protected
+         * @since 1.0.0
          */
         _resumeEvent : function(e) {
             var remaining = this.get('length') - (this.get('stop') - this.get('start'));
-            Y.later(remaining,this,function(){this.set('status',STATUS.RUNNING);});
-         }
+            Y.later(remaining, this, function(){
+            	this._executeCallback();
+            	this.set('status',STATUS.RUNNING);
+            });
+        },
         
+        /**
+         * Abstracted the repeatCount validator into the prototype to
+         * encourage class extension.
+         * 
+         * @method _repeatCountValidator
+         * @protected
+         * @since 1.1.0
+         */
+         _repeatCountValidator : function(val) {
+      	     return (this.get('status') === STATUS.STOPPED);
+    	 },
+    	 
+    	 /**
+    	  * Used to fire the internal callback 
+    	  * 
+    	  * @method _fireCallback
+    	  * @protected
+    	  * @since 1.1.0
+    	  */
+    	 _executeCallback : function() {
+             (this.get('callback'))();
+    	 }
         
     },{
         /**
@@ -256,6 +313,7 @@ YUI.add('gallery-timer', function(Y) {
              * 
              * @attribute callback
              * @type function
+             * @since 1.0.0
              */
             callback : {
                 value : null,
@@ -267,6 +325,7 @@ YUI.add('gallery-timer', function(Y) {
              * 
              * @attribute length
              * @type Number
+             * @since 1.0.0
              */
             length : {
                 value : 3000,
@@ -277,18 +336,19 @@ YUI.add('gallery-timer', function(Y) {
             
             /**
              * Number of times the Timer should fire before it stops
-             * 
+             *  - 1.1.0 - added lazyAdd false to prevent starting from
+             *            overriding the validator
              * @attribute repeatCount
              * @type Number
+             * @since 1.1.0
              */
             repeatCount : {
-            	validator : function(val) {
-            	    return (this.get('state') === STATUS.STOPPED);
-            	},
+            	validator : 'repeatCountValidator',
                 setter : function(val) {
                     return parseInt(val,10);
                 },
-                value : 0
+                value : 0,
+                lazyAdd : false
             },
             
             /**
@@ -296,6 +356,7 @@ YUI.add('gallery-timer', function(Y) {
              * 
              * @attribute start
              * @type Boolean
+             * @since 1.0.0
              */
             start : {
                 readonly : true
@@ -303,12 +364,14 @@ YUI.add('gallery-timer', function(Y) {
 
             /**
              * Timer status
-             * 
-             * @attribute stop
+             *  - 1.1.0 - Changed from state to status. state was left 
+             *            from legacy code
+             * @attribute status
              * @default STATUS.STOPPED
              * @type String
+             * @since 1.1.0
              */
-            state : {
+            status : {
                 value : STATUS.STOPPED,
                 readonly : true
             },
@@ -318,10 +381,21 @@ YUI.add('gallery-timer', function(Y) {
              * 
              * @attribute step
              * @type Boolean
+             * @since 1.0.0
              */
             step : { // number of intervals passed
                 value : 0,
                 readonly : true
+            },
+
+            /** 
+             * Time in ms to wait until starting after start() has been called
+             * @attribute startDelay
+             * @type Number
+             * @since 1.1.0
+             */
+            startDelay : {
+                value : 0
             },
             
             /**
@@ -329,6 +403,7 @@ YUI.add('gallery-timer', function(Y) {
              * 
              * @attribute stop
              * @type Boolean
+             * @since 1.0.0
              */
             stop : {
                 readonly : true
@@ -339,6 +414,7 @@ YUI.add('gallery-timer', function(Y) {
              * 
              * @attribute timer
              * @type Number
+             * @since 1.0.0
              */
             timer : {
                 readonly : true
@@ -365,9 +441,6 @@ YUI.add('gallery-timer', function(Y) {
          */
         EVENTS : EVENTS
     });
-    
-    Y.Timer = Timer;
 
 
-
-}, 'gallery-2010.04.14-19-47' ,{requires:['base','event-custom']});
+}, 'gallery-2010.07.28-20-07' ,{requires:['base','event-custom']});

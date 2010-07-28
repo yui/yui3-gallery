@@ -223,7 +223,7 @@ YUI.add('gallery-overlay-extras', function(Y) {
 		ATTRS	: {
 			
 			maskNode : {
-				getter		: '_getMastNode',
+				getter		: '_getMaskNode',
 				readOnly	: true
 			}
 			
@@ -437,4 +437,4 @@ YUI.add('gallery-overlay-extras', function(Y) {
 	Y.Plugin.OverlayAutohide = OverlayAutohide;
 
 
-}, 'gallery-2010.05.26-19-47' ,{supersedes:['gallery-overlay-modal'], requires:['overlay','plugin','event-resize','gallery-outside-events']});
+}, 'gallery-2010.07.28-20-07' ,{requires:['overlay','plugin','event-resize','gallery-outside-events'], supersedes:['gallery-overlay-modal']});
