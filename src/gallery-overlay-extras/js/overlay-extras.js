@@ -221,7 +221,7 @@
 		ATTRS	: {
 			
 			maskNode : {
-				getter		: '_getMastNode',
+				getter		: '_getMaskNode',
 				readOnly	: true
 			}
 			
