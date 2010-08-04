@@ -646,7 +646,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	{
 		// This must use a select tag!
 
-		var markup = '<select name="{n}" class="{c}" />';
+		var markup = '<select name="{n}" class="formmgr-field {c}" />';
 
 		return Y.Lang.substitute(markup,
 		{

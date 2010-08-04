@@ -39,7 +39,7 @@
 	margin-top: 5px;
 }
 
-.yui3-skin-sam .yui3-querybuilder .formmgr-haserror .yui3-querybuilder-criterion .yui3-querybuilder-value .yui3-querybuilder-field
+.yui3-skin-sam .yui3-querybuilder .yui3-querybuilder-criterion .yui3-querybuilder-value .yui3-querybuilder-field.formmgr-haserror
 {
 	background-color: #FFCCCC;
 }
