@@ -283,7 +283,7 @@
 			if (this._uiHandles) { return; }
 			
 			var host = this.get(HOST),
-				syncAlign = Y.bind(host._syncUIPosAlgin, host);
+				syncAlign = Y.bind(host._syncUIPosAlign || host._syncUIPosAlgin, host);
 				
 			this._uiHandles = [
 				Y.on('windowresize', syncAlign),
