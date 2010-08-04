@@ -199,13 +199,22 @@ FormManager.integer_value_re = /^[-+]?[0-9]+$/;
 FormManager.decimal_value_re = /^[-+]?(?:[0-9]+\.?|[0-9]*\.[0-9]+)$/;
 
 /**
- * The CSS class which marks each row of the form.  Typically, each element
- * (or a very tightly coupled set of elements) is placed in a separate row.
+ * The CSS class which marks each row of the form.  Typically, each field
+ * (or a very tightly coupled set of fields) is placed in a separate row.
  * 
  * @property Y.FormManager.row_marker_class
  * @type {String}
  */
 FormManager.row_marker_class = 'formmgr-row';
+
+/**
+ * The CSS class which marks each field in a row of the form.  This enables
+ * messaging when multiple fields are in a single row.
+ * 
+ * @property Y.FormManager.field_marker_class
+ * @type {String}
+ */
+FormManager.field_marker_class = 'formmgr-field';
 
 /**
  * The CSS class which marks the container for the status message within a
@@ -1251,6 +1260,8 @@ FormManager.prototype =
 			{
 				p.all('.'+FormManager.status_marker_class).set('innerHTML', '');
 				p.removeClass(row_status_pattern);
+
+				p.all('.'+FormManager.field_marker_class).removeClass(row_status_pattern);
 			}
 		}
 
@@ -1282,13 +1293,25 @@ FormManager.prototype =
 		var p = e.ancestor('.'+FormManager.row_marker_class);
 		if (p && FormManager.statusTakesPrecendence(FormManager.getElementStatus(p), type))
 		{
+			var f = p.all('.'+FormManager.field_marker_class);
+			if (f)
+			{
+				f.removeClass(row_status_pattern);
+			}
+
 			if (msg)
 			{
 				p.one('.'+FormManager.status_marker_class).set('innerHTML', msg);
 			}
 
-			p.removeClass(row_status_pattern);
-			p.addClass(FormManager.row_status_prefix + type);
+			var new_class = FormManager.row_status_prefix + type;
+			p.replaceClass(row_status_pattern, new_class);
+
+			f = e.ancestor('.'+FormManager.field_marker_class, true);
+			if (f)
+			{
+				f.replaceClass(row_status_pattern, new_class);
+			}
 
 			var fieldset = e.ancestor('fieldset');
 			if (fieldset && FormManager.statusTakesPrecendence(FormManager.getElementStatus(fieldset), type))
@@ -1370,4 +1393,4 @@ FormManager.prototype =
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2010.06.02-18-59' ,{requires:['node-base','substitute']});
+}, 'gallery-2010.08.04-19-46' ,{requires:['node-base','substitute']});

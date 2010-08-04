@@ -541,7 +541,7 @@ Y.extend(ExpressionBuilder, Y.Widget,
 	{
 		var markup =
 			'<div class="{td}">' +
-				'<textarea id="{tid}" name="{tn}" class="{ta}"></textarea>' +
+				'<textarea id="{tid}" name="{tn}" class="formmgr-field {ta}"></textarea>' +
 			'</div>' +
 			'<div class="{fctl}">' +
 				'<button class="{pc}">{paren}</button>' +
@@ -603,4 +603,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2010.06.23-18-37' ,{requires:['gallery-querybuilder','gallery-formmgr']});
+}, 'gallery-2010.08.04-19-46' ,{requires:['gallery-querybuilder','gallery-formmgr']});

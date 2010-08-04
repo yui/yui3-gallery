@@ -285,7 +285,7 @@ YUI.add('gallery-overlay-extras', function(Y) {
 			if (this._uiHandles) { return; }
 			
 			var host = this.get(HOST),
-				syncAlign = Y.bind(host._syncUIPosAlgin, host);
+				syncAlign = Y.bind(host._syncUIPosAlign || host._syncUIPosAlgin, host);
 				
 			this._uiHandles = [
 				Y.on('windowresize', syncAlign),
@@ -437,4 +437,4 @@ YUI.add('gallery-overlay-extras', function(Y) {
 	Y.Plugin.OverlayAutohide = OverlayAutohide;
 
 
-}, 'gallery-2010.07.28-20-07' ,{requires:['overlay','plugin','event-resize','gallery-outside-events'], supersedes:['gallery-overlay-modal']});
+}, 'gallery-2010.08.04-19-46' ,{requires:['overlay','plugin','event-resize','gallery-outside-events'], supersedes:['gallery-overlay-modal']});
