@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Pasted Event</title>
+    <style>
+        body{width:600px;margin:60px auto;}
+        label{display:block;margin-top:1em;}
+        textarea{display:block;width:99%;height:4em;}
+    </style>
+</head>
+<body class="yui3-skin-sam">
+    <h1>Pasted Event</h1>
+
+    <label>Test input <input id="mytext" type="text"></label>
+    <label>Test password <input id="mypass" type="password"></label>
+    <label for="mytextarea">Textarea to paste into</label>
+    <textarea id="mytextarea" name="textarea-example"></textarea>
+
+    <label for="mytextarea2">Event will only fire if paste changes text</label>
+    <textarea id="mytextarea2" name="textarea-example"></textarea>
+
+    <h2>Editable Content</h2>
+    <p id="editable" contenteditable>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
+    volutpat velit eu purus luctus aliquet molestie dui accumsan. Integer
+    varius risus sit amet odio suscipit congue bibendum purus euismod.
+    Phasellus et ultrices urna. Proin lobortis, est sit amet consequat
+    bibendum, metus augue varius erat, a dignissim magna neque nec lacus.</p>
+
+    <script src="http://yui.yahooapis.com/3.2.0pr1/build/yui/yui-min.js"></script>
+    <script src="../../../../build/gallery-event-pasted/gallery-event-pasted-debug.js"></script>
+    <script>
+        YUI({
+            debug:true,
+            filter:'raw',
+            combine:false
+        }).use('console', 'gallery-event-pasted', function(Y) {
+            new Y.Console().render();
+            var onPasted = function(evt) {
+                // intentionally do nothing, instead confirm event in Log Console
+                //alert('pasted!\n\nwas: "' + evt.prevVal + '"\n\nnow: "' + evt.newVal + '"');
+            };
+            Y.one('#mytext').on('pasted', onPasted);
+            Y.one('#mypass').on('pasted', onPasted, null, true);
+            Y.one('#mytextarea').on('pasted', onPasted);
+            Y.one('#mytextarea2').on('pasted', onPasted, null, true);
+            Y.one('#editable').on('pasted', onPasted);
+        });
+    </script>
+</body>
+</html>
