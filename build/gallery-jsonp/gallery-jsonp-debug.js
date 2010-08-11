@@ -233,7 +233,9 @@ Y.jsonp = function (url,c) {
     return new Y.JSONPRequest(url,c).send();
 };
 
-YUI.Env.JSONP = {};
+if (!YUI.Env.JSONP) {
+    YUI.Env.JSONP = {};
+}
 
 
-}, 'gallery-2010.02.10-01' ,{requires:['get','oop']});
+}, 'gallery-2010.08.11-20-39' ,{requires:['get','oop']});

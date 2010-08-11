@@ -217,7 +217,7 @@ ExpressionBuilder.ATTRS =
 	 */
 	tooManyParensError:
 	{
-		value:     'The expression contains an extra closing parenthesis at "{context}".',
+		value:     'The expression contains an extra closing parenthesis at "{context}...".',
 		validator: Y.Lang.isString
 	},
 
@@ -230,7 +230,7 @@ ExpressionBuilder.ATTRS =
 	 */
 	unmatchedSingleQuoteError:
 	{
-		value:     'The expression contains an unmatched single quote.',
+		value:     'The expression contains an unmatched single quote at "{context}...".',
 		validator: Y.Lang.isString
 	},
 
@@ -243,7 +243,7 @@ ExpressionBuilder.ATTRS =
 	 */
 	unclosedParenError:
 	{
-		value:     'The expression contains an unclosed parenthesis.',
+		value:     'The expression contains an unclosed parenthesis at "{context}...".',
 		validator: Y.Lang.isString
 	},
 
@@ -489,11 +489,17 @@ Y.extend(ExpressionBuilder, Y.Widget,
 	{
 		var s     = e.get('value');
 		var paren = 0;
+		var pi    = -1;
 		var quote = false;
+		var qi    = -1;
 		for (var i=0; i<s.length; i++)
 		{
 			if (!quote && s[i] == '(')
 			{
+				if (paren === 0)
+				{
+					pi = i;
+				}
 				paren++;
 			}
 			else if (!quote && s[i] == ')')
@@ -511,18 +517,30 @@ Y.extend(ExpressionBuilder, Y.Widget,
 			}
 			else if (s[i] == '\'' && (i === 0 || s[i-1] != '\\'))
 			{
+				if (!quote)
+				{
+					qi = i;
+				}
 				quote = ! quote;
 			}
 		}
 
-		if (quote)
+		if (quote && (paren === 0 || qi < pi))
 		{
-			form_mgr.displayMessage(e, this.get('unmatchedSingleQuoteError'), 'error');
+			var msg = Y.Lang.substitute(this.get('unmatchedSingleQuoteError'),
+			{
+				context: s.substr(0,qi+1)
+			});
+			form_mgr.displayMessage(e, msg, 'error');
 			return false;
 		}
 		else if (paren > 0)
 		{
-			form_mgr.displayMessage(e, this.get('unclosedParenError'), 'error');
+			var msg = Y.Lang.substitute(this.get('unclosedParenError'),
+			{
+				context: s.substr(0,pi+1)
+			});
+			form_mgr.displayMessage(e, msg, 'error');
 			return false;
 		}
 
@@ -603,4 +621,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2010.08.04-19-46' ,{requires:['gallery-querybuilder','gallery-formmgr']});
+}, 'gallery-2010.08.11-20-39' ,{requires:['gallery-querybuilder','gallery-formmgr']});
