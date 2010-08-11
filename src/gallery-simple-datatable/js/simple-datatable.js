@@ -3,14 +3,16 @@
    * 
    * @class NodeIo
    * @extends Base
-   * @version 1.1.0
+   * @version 1.2.0
    */
 	
   var YL = Y.Lang,
       SORT_ASC = 'asc',
       SORT_DESC = 'desc',
       SORT_KEY = 'sortKey',
-      SORT_DIRECTION = 'sortDirection';
+      SORT_DIRECTION = 'sortDirection',
+      CONTENT_BOX = 'contentBox',
+      SELECTED_ROW = 'selectedRow';
       
       
   Y.SimpleDatatable = Y.Base.create('simple-datatable', Y.Widget, [Y.WidgetChild],{
@@ -58,9 +60,17 @@
      * @method renderUI
      */
     renderUI : function() {
-      this.tHead = Y.Node.create('<thead/>');
-      this.tBody = Y.Node.create('<tbody/>');
-      this.get('contentBox').append(this.tHead).append(this.tBody);
+      var cb = this.get(CONTENT_BOX),
+          caption = this.get('caption');
+      
+      this.tHead = Y.Node.create('<thead></thead>');
+      this.tBody = Y.Node.create('<tbody></tbody>');
+      
+      if(caption) {
+        cb.append('<caption>' + caption + '</caption>');
+      }
+      
+      cb.append(this.tHead).append(this.tBody);
     },
     
     /**
@@ -75,6 +85,7 @@
       this.on('sortDirectionChange', this._onSortDirectionChange);
       this.after('sortDirectionChange', this._afterSortDirectionChange);
       this.after('selectedRowChange', this._afterSelectedRowChange);
+      this.after('captionChange', this._afterCaptionChange);
    
       // sort on header click
       this.tHead.delegate('click', function(e){
@@ -116,23 +127,25 @@
      */
     setHeaders : function(headerObj){
       Y.log('setHeaders');
-      var row, cell, o, count = 0;
-      row = Y.Node.create('<tr>');
       
-      headerObj || (headerObj = {});
+      var row = Y.Node.create('<tr></tr>'), 
+          cell, o, count = 0;
+      
+      if(!headerObj) {
+        headerObj = {}; 
+      }
       
       if(YL.isObject(headerObj)) {
         for(o in headerObj) {
-          cell = Y.Node.create('<th>');
+          cell = Y.Node.create('<th></th>');
           cell.addClass(this.className + '-col-' + (count++));
           cell.addClass(this.className + '-col-' + o);
-          cell.append('<div>' + headerObj[o] + '<span class="yui3-icon"/></div>');
+          cell.append('<div>' + headerObj[o] + '<span class="yui3-icon"></span></div>');
           cell.setAttribute(SORT_KEY, o);
-          
           row.append(cell);
         }
       }
-      
+
       this.tHead.setContent('');
       this.tHead.setContent(row);
       
@@ -152,7 +165,9 @@
       var i,l;
       this.tBody.setContent('');
       
-      arrayOfRows || (arrayOfRows = []);
+      if(!arrayOfRows) {
+        arrayOfRows = [];
+      }
 
       for(i=0, l=arrayOfRows.length; i < l; i++) {
         this.addRow(arrayOfRows[i], i);
@@ -212,23 +227,31 @@
     
     /**
      * Removes all header content
-     * @since 1.1.0
+     * @since 1.2.0
      * @method clearHeaders
+     * @param purge Removes all header data when set to true
      * @return this
      * @chainable
      */
-    clearHeaders : function() {
+    clearHeaders : function(purge) {
+      if(purge === true) {
+        this.set('headers', {});
+      }
       return this.setHeaders();
     },
     
     /**
      * Removes all rows
-     * @since 1.1.0
+     * @since 1.2.0
      * @method clearRows
+     * @param purge removes all row data when set to true
      * @return this
      * @chainable
      */
-    clearRows : function() {
+    clearRows : function(purge) {
+      if(purge === true) {
+        this.set('rows', []);
+      }
       return this.setRows();
     },
     
@@ -290,15 +313,22 @@
     },
     
     /**
-     * Default function when a row is selected
-     * @since 1.1.0
+     * Default function when a row is selected. When selected row is 
+     *   clicked again, removes the row from being selected.
+     * @since 1.2.0
      * @protected
      * @method _defSelectedFn
      * @param e
      */
     _defSelectedFn : function(e) {
       Y.log('_defSelectedFn');
-      this.set('selectedRow',e.rowTarget);
+      var selectedRow = this.get(SELECTED_ROW);
+      
+      if(selectedRow === e.rowTarget) {
+        this.set(SELECTED_ROW, null);
+      }else{
+        this.set(SELECTED_ROW,e.rowTarget);
+      }
     },
     
     /**
@@ -360,7 +390,7 @@
     /**
      * Sorts the rows on new direction and replaces the rows with the
      *   new content then reselects the previously selected row
-     * @since 1.1.0
+     * @since 1.1.1
      * @see setRows
      * @see _keySort
      * @protected
@@ -368,7 +398,7 @@
      */
     _updateTable : function(){
       Y.log('_updateTable');
-      var rows = this.get('rows');
+      var rows = this.get('rows'),
           ascClass = this.get('ascClass'),
           descClass = this.get('descClass'),
           key = this.get(SORT_KEY),
@@ -384,12 +414,12 @@
       this.tHead.all('.' + descClass).removeClass(descClass);
       this.tHead.all('.' + this.className + '-col-' + key).addClass(this.get(dir + 'Class'));
       
-      this._updateSelectedRow(this.get('selectedRow'));
+      this._updateSelectedRow(this.get(SELECTED_ROW));
     },
     
     /**
      * Custom array sort to sort object by key and direction
-     * @since 1.1.0
+     * @since 1.1.1
      * @protected
      * @method keySort
      * @param key
@@ -399,7 +429,8 @@
      * @return int -1,0,1
      */
     _keySort : function(key, dir, a,b) {
-      var a = a[key], b = b[key];
+      a = a[key];
+      b = b[key];
       
       if(Y.Lang.isString(a)) {
         a = a.toLowerCase();
@@ -440,6 +471,28 @@
       if(newRow) {  
        this.tBody.one('#' + newRow.get('id')).addClass(selectedClass);
       }
+    },
+    
+    /**
+     * Updates the text of the caption after the value is changed
+     * @since 1.2.0
+     * @protected
+     * @method _afterCaptionChange
+     */    
+    _afterCaptionChange : function(e) {
+      Y.log('_updateCaption');
+      var cap = this.get(CONTENT_BOX).one('caption');
+      if(cap) {
+        if(e.newVal) {
+          cap.set('text', e.newVal);
+        }else{
+          cap.remove();
+        }
+      }else{
+        if(e.newVal) {
+          this.get(CONTENT_BOX).prepend('<caption>' + e.newVal + '</caption>');
+        }
+      }
     }
     
   },{
@@ -455,13 +508,21 @@
       },
       
 	  /**
-	   * Ability to customize the class used when sorted DESC
-	   * @since 1.1.0
-       * @attribute descClass
+	   * When set, adds a caption to the table.
+	   * @since 1.2.0
+       * @attribute caption
        * @type string
 	   */
+      caption : {},
+      
+      /**
+       * Ability to customize the class used when sorted DESC
+       * @since 1.1.0
+       * @attribute descClass
+       * @type string
+       */
       descClass : {
-        value : 'yui3-icon-control-n'
+    	  value : 'yui3-icon-control-n'
       },
       
 	  /**
@@ -525,4 +586,3 @@
       }
     }
   });
-  
