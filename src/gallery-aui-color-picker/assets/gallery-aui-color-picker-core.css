@@ -36,6 +36,7 @@
 }
 
 .yui3-colorpicker-controls .yui3-field-content {
+	clear: both;
 	padding: 3px 0;
 }
 
@@ -106,4 +107,9 @@
 	display: block;
 	height: 11px;
 	width: 11px;
+}
+
+.yui3-colorpicker-hue-slider-content {
+	display: inline;
+	position: static;
 }
