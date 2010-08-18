@@ -71,9 +71,7 @@ var CharCounter = A.Component.create(
 			 * @type {Node | String}
 			 */
 			counter: {
-				setter: function(v) {
-					return A.one(v);
-				}
+				setter: A.one
 			},
 
 			/**
@@ -101,9 +99,7 @@ var CharCounter = A.Component.create(
 			 * @type {Node | String}
 			 */
 			input: {
-				setter: function(v) {
-					return A.one(v);
-				}
+				setter: A.one
 			}
 		},
 
@@ -264,4 +260,4 @@ var CharCounter = A.Component.create(
 A.CharCounter = CharCounter;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:false, requires:['gallery-aui-base','gallery-aui-event-input']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-base','gallery-aui-event-input'], skinnable:false});

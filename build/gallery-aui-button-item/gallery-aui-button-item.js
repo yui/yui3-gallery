@@ -12,10 +12,15 @@ var Lang = A.Lang,
 
 	NAME = 'buttonitem',
 
+	CONTENT_BOX = 'contentBox',
+	DOT = '.',
 	ICON = 'icon',
+	ICON_NODE = 'iconNode',
 	LABEL = 'label',
+	LABEL_NODE = 'labelNode',
 	ONLY = 'only',
 	STATE = 'state',
+	TITLE = 'title',
 
 	CSS_BUTTON = getClassName(NAME),
 	CSS_BUTTON_ICON = getClassName(NAME, ICON),
@@ -26,6 +31,8 @@ var Lang = A.Lang,
 	CSS_BUTTON_LABEL_ONLY = getClassName(NAME, LABEL, ONLY),
 
 	CSS_ICON = getClassName(ICON),
+
+	REGEX_ICON = new RegExp(CSS_ICON + '-([a-zA-Z0-9-]+)'),
 
 	TPL_BUTTON = '<button type="button"></button>',
 	TPL_ICON = '<span class="' + [CSS_BUTTON_ICON, CSS_ICON].join(' ') + '"></span>',
@@ -41,7 +48,7 @@ var Lang = A.Lang,
  * </ul>
  *
  * Quick Example:<br/>
- * 
+ *
  * <pre><code>var instance = new A.ButtonItem({
  *	icon: 'gear',
  * label: 'Configuration'
@@ -83,7 +90,7 @@ var ButtonItem = A.Component.create(
 		ATTRS: {
 			/**
 			 * Whether to track the active state of the button.
-			 * 
+			 *
 			 * @attribute activeState
 			 * @default false
 			 * @type Boolean
@@ -94,7 +101,7 @@ var ButtonItem = A.Component.create(
 
 			/**
 			 * An object map of the CSS class names to use for the different interaction states.
-			 * 
+			 *
 			 * @attribute classNames
 			 * @type Object
 			 */
@@ -102,7 +109,7 @@ var ButtonItem = A.Component.create(
 
 			/**
 			 * Whether to apply the default interaction state to the button
-			 * 
+			 *
 			 * @attribute defaultState
 			 * @default true
 			 * @type Boolean
@@ -111,13 +118,13 @@ var ButtonItem = A.Component.create(
 
 			/**
 			 * An event callback to handle when a user interacts with the button.
-			 * This can either be a function that will be attached on click, or 
+			 * This can either be a function that will be attached on click, or
 			 * an object map that accepts the following keys:
 			 * <code>{fn: // The function to execute
 			 * context: // The context to execute the function in
 			 * type: // The type of event to listen for (defaults to "click")
 			 * }</code>
-			 * 
+			 *
 			 * @attribute handler
 			 * @default false
 			 * @type Function | Object
@@ -151,7 +158,7 @@ var ButtonItem = A.Component.create(
 
 			/**
 			 * Whether to track the hover interaction state of the button.
-			 * 
+			 *
 			 * @attribute hoverState
 			 * @default true
 			 * @type Boolean
@@ -159,8 +166,8 @@ var ButtonItem = A.Component.create(
 			hoverState: {},
 
 			/**
-			 * The icon to use inside of the button. Possible values are: 
-			 * 
+			 * The icon to use inside of the button. Possible values are:
+			 *
 			 * @attribute icon
 			 * @type String
 			 */
@@ -169,8 +176,23 @@ var ButtonItem = A.Component.create(
 			},
 
 			/**
+			 * DOM Node to display the icon of the ButtonItem. If not
+             * specified try to query using HTML_PARSER an element inside
+             * boundingBox which matches <code>aui-button-icon</code>.
+			 *
+			 * @attribute iconNode
+			 * @default Generated div element.
+			 * @type String
+			 */
+			iconNode: {
+				valueFn: function() {
+					return A.Node.create(TPL_ICON);
+				}
+			},
+
+			/**
 			 * An id that can be used to identify a button.
-			 * 
+			 *
 			 * @attribute hoverState
 			 * @type Boolean
 			 */
@@ -182,7 +204,7 @@ var ButtonItem = A.Component.create(
 
 			/**
 			 * Text to use inside of the button.
-			 * 
+			 *
 			 * @attribute label
 			 * @type String
 			 */
@@ -191,14 +213,67 @@ var ButtonItem = A.Component.create(
 			},
 
 			/**
+			 * DOM Node to display the text of the ButtonItem. If not
+             * specified try to query using HTML_PARSER an element inside
+             * boundingBox which matches <code>aui-button-label</code>.
+			 *
+			 * @attribute labelNode
+			 * @default Generated div element.
+			 * @type String
+			 */
+			labelNode: {
+				valueFn: function() {
+					return A.Node.create(TPL_LABEL);
+				}
+			},
+
+			/**
 			 * Text to use as the title attribute of the button.
-			 * 
+			 *
 			 * @attribute title
 			 * @type String
 			 */
 			title: {
 				setter: '_setTitle',
 				value: false
+			}
+		},
+
+		/**
+		 * Object hash, defining how attribute values are to be parsed from
+		 * markup contained in the widget's content box.
+		 *
+		 * @property ButtonItem.HTML_PARSER
+		 * @type Object
+		 * @static
+		 */
+		HTML_PARSER: {
+			iconNode: function(srcNode) {
+				return srcNode.one(DOT+CSS_BUTTON_ICON);
+			},
+			labelNode: function(srcNode) {
+				return srcNode.one(DOT+CSS_BUTTON_LABEL);
+			},
+			icon: function(srcNode) {
+				var iconNode = srcNode.one(DOT+CSS_BUTTON_ICON);
+
+				if (iconNode) {
+					this.set(ICON_NODE, iconNode);
+					var cssClass = iconNode.attr('class');
+
+					var match = cssClass.match(REGEX_ICON);
+
+					return match && match[1];
+				}
+			},
+			label: function(srcNode) {
+				var labelNode = srcNode.one(DOT+CSS_BUTTON_LABEL);
+
+				if (labelNode) {
+					this.set(LABEL_NODE, labelNode);
+
+					return labelNode.text();
+				}
 			}
 		},
 
@@ -211,6 +286,8 @@ var ButtonItem = A.Component.create(
 
 			ButtonItem.superclass.constructor.call(this, config);
 		},
+
+		UI_ATTRS: [ICON, LABEL, TITLE],
 
 		prototype: {
 			BOUNDING_TEMPLATE: TPL_BUTTON,
@@ -226,20 +303,8 @@ var ButtonItem = A.Component.create(
 				var instance = this;
 
 				instance._renderStates();
-			},
-
-			/**
-			 * Bind the events on the ButtonItem UI. Lifecycle.
-			 *
-			 * @method bindUI
-			 * @protected
-			 */
-			bindUI: function() {
-				var instance = this;
-
-				instance.after('iconChange', instance._afterIconChange);
-				instance.after('labelChange', instance._afterLabelChange);
-				instance.after('titleChange', instance._afterTitleChange);
+				instance._renderIconNode();
+				instance._renderLabelNode();
 			},
 
 			/**
@@ -269,111 +334,33 @@ var ButtonItem = A.Component.create(
 			},
 
 			/**
-			 * Fires after the value of the
-			 * <a href="ButtonItem.html#config_icon">icon</a> attribute change.
-			 *
-			 * @method 
-			 * @param {EventFacade} event
-			 * @protected
-			 */
-			_afterIconChange: function(event) {
-				var instance = this;
-
-				instance._uiSetIcon(event.newVal, event.prevVal);
-			},
-
-			/**
-			 * Fires after the value of the
-			 * <a href="ButtonItem.html#config_label">label</a> attribute change.
-			 *
-			 * @method 
-			 * @param {EventFacade} event
-			 * @protected
-			 */
-			_afterLabelChange: function(event) {
-				var instance = this;
-
-				instance._uiSetLabel(event.newVal);
-			},
-
-			/**
-			 * Fires after the value of the
-			 * <a href="ButtonItem.html#config_title">title</a> attribute change.
-			 *
-			 * @method 
-			 * @param {EventFacade} event
-			 * @protected
-			 */
-			_afterTitleChange: function(event) {
-				var instance = this;
-
-				instance._uiSetTitle(event.newVal);
-			},
-
-			/**
-			 * Get's a reference to the private icon node, or if not created,
-			 * renders its and returns it.
-			 *
-			 * @method _getIconNode
-			 * @protected
-			 * @return {Node}
-			 */
-			_getIconNode: function() {
-				var instance = this;
-
-				return instance._iconNode || instance._renderIcon();
-			},
-
-			/**
-			 * Get's a reference to the private label node, or if not created,
-			 * renders its and returns it.
-			 *
-			 * @method _getLabelNode
-			 * @protected
-			 * @return {Node}
-			 */
-			_getLabelNode: function() {
-				var instance = this;
-
-				return instance._labelNode || instance._renderLabel();
-			},
-
-			/**
 			 * Renders the underlying markup for the <a href="ButtonItem.html#config_icon">icon</a>.
 			 *
-			 * @method _renderIcon
+			 * @method _renderIconNode
 			 * @protected
 			 * @return {Node}
 			 */
-			_renderIcon: function() {
+			_renderIconNode: function() {
 				var instance = this;
 
-				var iconNode = A.Node.create(TPL_ICON);
-
-				instance._iconNode = iconNode;
-
-				instance.get('boundingBox').appendChild(iconNode);
-
-				return iconNode;
+				instance.get(CONTENT_BOX).append(
+					instance.get(ICON_NODE)
+				);
 			},
 
 			/**
 			 * Renders the underlying markup for the <a href="ButtonItem.html#config_label">label</a>.
 			 *
-			 * @method _renderLabel
+			 * @method _renderLabelNode
 			 * @protected
 			 * @return {Node}
 			 */
-			_renderLabel: function() {
+			_renderLabelNode: function() {
 				var instance = this;
 
-				var labelNode = A.Node.create(TPL_LABEL);
-
-				instance._labelNode = labelNode;
-
-				instance.get('boundingBox').appendChild(labelNode);
-
-				return labelNode;
+				instance.get(CONTENT_BOX).append(
+					instance.get(LABEL_NODE)
+				);
 			},
 
 			/**
@@ -478,53 +465,50 @@ var ButtonItem = A.Component.create(
 			 * Updates the UI for the icon in response to the <a href="ButtonItem.html#event_iconChange">iconChange</a> event.
 			 *
 			 * @method _uiSetIcon
-			 * @param {String} newVal The new value
-			 * @param {String} prevVal The previous value
+			 * @param {String} val Icon name
 			 * @protected
 			 */
-			_uiSetIcon: function(newVal, prevVal) {
+			_uiSetIcon: function(val) {
 				var instance = this;
 
-				var iconNode = instance._getIconNode();
+				var iconNode = instance.get(ICON_NODE);
 
 				var action = 'show';
 
-				if (!newVal) {
+				if (!val) {
 					action = 'hide';
 				}
 
-				newVal = getClassName(ICON, newVal);
+				val = getClassName(ICON, val);
 
-				if (prevVal) {
-					prevVal = getClassName(ICON, prevVal);
-				}
-
-				iconNode.replaceClass(prevVal, newVal);
+				iconNode.replaceClass(instance._iconPrevVal, val);
 
 				iconNode[action]();
 
 				instance._syncChildrenStates();
+
+				instance._iconPrevVal = val;
 			},
 
 			/**
 			 * Updates the UI for the label in response to the <a href="ButtonItem.html#event_labelChange">labelChange</a> event.
 			 *
 			 * @method _uiSetLabel
-			 * @param {String} newVal The new value
+			 * @param {String} val The new value
 			 * @protected
 			 */
-			_uiSetLabel: function(newVal) {
+			_uiSetLabel: function(val) {
 				var instance = this;
 
-				var labelNode = instance._getLabelNode();
+				var labelNode = instance.get(LABEL_NODE);
 
 				var action = 'show';
 
-				if (!newVal) {
+				if (!val) {
 					action = 'hide';
 				}
 
-				labelNode.text(newVal);
+				labelNode.text(val);
 
 				labelNode[action]();
 
@@ -535,15 +519,15 @@ var ButtonItem = A.Component.create(
 			 * Updates the UI for the title in response to the <a href="ButtonItem.html#event_titleChange">titleChange</a> event.
 			 *
 			 * @method _uiSetTitle
-			 * @param {String} newVal The new value
+			 * @param {String} val The new value
 			 * @protected
 			 */
-			_uiSetTitle: function(newVal) {
+			_uiSetTitle: function(val) {
 				var instance = this;
 
 				var boundingBox = instance.get('boundingBox');
 
-				boundingBox.setAttribute('title', newVal);
+				boundingBox.setAttribute('title', val);
 			}
 		}
 	}
@@ -552,4 +536,4 @@ var ButtonItem = A.Component.create(
 A.ButtonItem = A.Base.build(NAME, ButtonItem, [A.WidgetChild], { dynamic: false });
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-state-interaction','widget-child']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-state-interaction','widget-child']});

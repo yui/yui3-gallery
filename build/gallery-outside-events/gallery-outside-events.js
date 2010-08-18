@@ -32,38 +32,34 @@ Y.Event.defineOutside = function (event, name) {
     
     Y.Event.define(name, {
         
-        publishConfig: { emitFacade: false },
-        
-        detach: function (node, sub, evt) {
-            if (this.subscriberCount(evt) === 1) {
-                evt.handle.detach();
-            }
-        },
-        
-        init: function (node, sub, evt) {
-            var doc = Y.one('doc');
-            
-            function outside(el) {
-                return el !== doc && el !== node && !el.ancestor(function (p) {
-                        return p === node;
-                    });
-            }
-            
-            evt.handle = doc.on(event, function (e) {
-                if (outside(e.target)) {
-                    evt.fire(e);
+        on: function (node, sub, notifier) {
+            sub.onHandle = Y.one('doc').on(event, function(e) {
+                if (this.isOutside(node, e.target)) {
+                    notifier.fire(e);
                 }
-            });
+            }, this);
         },
         
-        on: function (node, sub, evt) {
-            if (this.subscriberCount(evt) === 1) {
-                this.init(node, sub, evt);
-            }
+        detach: function (node, sub, notifier) {
+            sub.onHandle.detach();
         },
         
-        subscriberCount: function (evt) {
-            return Y.Object.keys(evt.getSubs()[0]).length;
+        delegate: function (node, sub, notifier, filter) {
+            sub.delegateHandle = Y.one('doc').delegate(event, function (e) {
+                if (this.isOutside(node, e.target)) {
+                    notifier.fire(e);
+                }
+            }, filter, this);
+        },
+        
+        detachDelegate: function (node, sub, notifier, filter) {
+            sub.delegateHandle.detach();
+        },
+        
+        isOutside: function (node, target) {
+            return target !== node && !target.ancestor(function (p) {
+                    return p === node;
+                });
         }
     });
 };
@@ -74,4 +70,4 @@ Y.each(nativeEvents, function (event) {
 });
 
 
-}, 'gallery-2010.04.21-21-51' ,{requires:['event-focus', 'event-synthetic']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['event-focus', 'event-synthetic']});

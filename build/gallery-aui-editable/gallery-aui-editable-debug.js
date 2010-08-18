@@ -254,6 +254,8 @@ var Editable = A.Component.create(
 			}
 		},
 
+		UI_ATTRS: ['node'],
+
 		prototype: {
 			/**
 			 * Construction logic executed during Editable instantiation. Lifecycle.
@@ -264,15 +266,7 @@ var Editable = A.Component.create(
 			initializer: function() {
 				var instance = this;
 
-				instance._scopedSave = A.bind(instance.save, instance);
-
-				var node = instance.get('node');
-				var eventType = instance.get('eventType');
-
-				node.on('mouseenter', instance._onMouseEnterEditable, instance);
-				node.on('mouseleave', instance._onMouseLeaveEditable, instance);
-
-				node.on(eventType, instance._startEditing, instance);
+				instance._uiSetNode(instance.get('node'));
 
 				instance._createEvents();
 			},
@@ -750,6 +744,37 @@ var Editable = A.Component.create(
 				text = text.replace(/(<\/?[^>]+>|\t)/gim, '');
 
 				return text;
+			},
+
+			/**
+			 * Handles the updating of the UI when the node is set.
+			 *
+			 * @method _uiSetNode
+			 * @param {Node} node.
+			 * @protected
+			 */
+
+			_uiSetNode: function(node) {
+				var instance = this;
+
+				if (instance._mouseEnterHandler) {
+					instance._mouseEnterHandler.detach();
+				}
+
+				if (instance._mouseLeaveHandler) {
+					instance._mouseLeaveHandler.detach();
+				}
+
+				if (instance._interactionHandler) {
+					instance._interactionHandler.detach();
+				}
+
+				var eventType = instance.get('eventType');
+
+				instance._mouseEnterHandler = node.on('mouseenter', instance._onMouseEnterEditable, instance);
+				instance._mouseLeaveHandler = node.on('mouseleave', instance._onMouseLeaveEditable, instance);
+
+				instance._interactionHandler = node.on(eventType, instance._startEditing, instance);
 			}
 		}
 	}
@@ -758,4 +783,4 @@ var Editable = A.Component.create(
 A.Editable = Editable;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-form-combobox']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-form-combobox']});

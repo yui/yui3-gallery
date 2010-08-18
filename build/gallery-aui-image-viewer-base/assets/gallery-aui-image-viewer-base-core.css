@@ -24,6 +24,10 @@
 	font-weight: bold;
 }
 
+.yui3-image-viewer-loading .yui3-image-viewer-content .yui3-widget-ft {
+	visibility: hidden;
+}
+
 .yui3-image-viewer-info {
 	color: #777;
 }

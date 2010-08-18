@@ -726,11 +726,13 @@ var ImageGallery = A.Component.create(
 					}
 				}
 
-				if (thumbSrc) {
+				if (thumbSrc && thumbEl.getData('thumbSrc') != thumbSrc) {
 					thumbEl.setStyles({
 						// use background to show the thumbnails to take advantage of the background-position: 50% 50%
 						backgroundImage: 'url(' + thumbSrc + ')'
 					});
+
+					thumbEl.setData('thumbSrc', thumbSrc);
 				}
 			},
 
@@ -821,4 +823,4 @@ var ImageGallery = A.Component.create(
 A.ImageGallery = ImageGallery;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-image-viewer-base','gallery-aui-paginator','gallery-aui-toolbar']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-image-viewer-base','gallery-aui-paginator','gallery-aui-toolbar']});

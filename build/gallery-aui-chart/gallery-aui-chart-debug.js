@@ -133,7 +133,7 @@ var Chart = A.Component.create(
 					flashVars: {
 						allowedDomain: document.location.hostname
 					},
-					backgroundColor: contentBox.getComputedStyle('backgroundColor'),
+					backgroundColor: contentBox.getStyle('backgroundColor'),
 					url: instance.get('swfURL'),
 					height: instance.get('height'),
 					width: instance.get('width'),
@@ -1120,4 +1120,4 @@ A.extend(
 A.Chart.StackedColumnSeries = StackedColumnSeries;
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['datasource','gallery-aui-swf','json'], skinnable:false});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:false, requires:['datasource','gallery-aui-swf','json']});

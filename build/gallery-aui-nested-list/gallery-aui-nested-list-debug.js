@@ -420,4 +420,4 @@ var NestedList = A.Component.create(
 A.NestedList = NestedList;
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','dd'], skinnable:false});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:false, requires:['gallery-aui-base','dd-drag','dd-drop','dd-proxy']});

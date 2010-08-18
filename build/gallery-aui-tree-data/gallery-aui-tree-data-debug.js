@@ -28,10 +28,6 @@ var L = A.Lang,
 	TREE = 'tree',
 	TREE_DATA = 'tree-data',
 
-	nodeSetter = function(v) {
-		return A.one(v);
-	},
-
 	isTreeNode = function(v) {
 		return ( v instanceof A.TreeNode );
 	},
@@ -86,7 +82,7 @@ var TreeData = A.Component.create(
 			 * @type Node | String
 			 */
 			container: {
-				setter: nodeSetter
+				setter: A.one
 			},
 
 			/**
@@ -826,4 +822,4 @@ var TreeData = A.Component.create(
 A.TreeData = TreeData;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:false, requires:['gallery-aui-base']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-base'], skinnable:false});

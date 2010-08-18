@@ -20,13 +20,13 @@ var L = A.Lang,
 		return (v instanceof A.Node);
 	},
 
+	ANCHOR = 'a',
 	BLANK = '',
 	BOUNDING_BOX = 'boundingBox',
 	CAN_RESET = 'canReset',
 	CLEARFIX = 'clearfix',
 	CONTENT_BOX = 'contentBox',
 	DEFAULT_SELECTED = 'defaultSelected',
-	DESTROY = 'destroy',
 	DISABLED = 'disabled',
 	DOT = '.',
 	ELEMENT = 'element',
@@ -34,17 +34,19 @@ var L = A.Lang,
 	EMPTY_STR = '',
 	HELPER = 'helper',
 	HOVER = 'hover',
+	HREF = 'href',
+	HREF_JAVASCRIPT = 'javascript:;',
 	ID = 'id',
-	INNER_HTML = 'innerHTML',
 	INPUT = 'input',
 	INPUT_NAME = 'inputName',
 	LABEL = 'label',
-	LABEL_ELEMENT = 'labelElement',
+	LABEL_NODE = 'labelNode',
 	NAME = 'name',
 	NODE_NAME = 'nodeName',
 	OFF = 'off',
 	ON = 'on',
 	RATING = 'rating',
+	RATING_ELEMENT = 'ratingElement',
 	SELECTED_INDEX = 'selectedIndex',
 	SHOW_TITLE = 'showTitle',
 	SIZE = 'size',
@@ -63,7 +65,11 @@ var L = A.Lang,
 	CSS_RATING_EL = getCN(RATING, ELEMENT),
 	CSS_RATING_EL_HOVER  = getCN(RATING, ELEMENT, HOVER),
 	CSS_RATING_EL_OFF = getCN(RATING, ELEMENT, OFF),
-	CSS_RATING_EL_ON = getCN(RATING, ELEMENT, ON);
+	CSS_RATING_EL_ON = getCN(RATING, ELEMENT, ON),
+
+	TPL_LABEL = '<div class="'+CSS_RATING_LABEL_EL+'"></div>',
+	TPL_RATING_EL = '<a href="'+HREF_JAVASCRIPT+'"></a>',
+	TPL_RATING_EL_DISABLED = '<span></span>';
 
 /**
  * <p><img src="assets/images/aui-rating/main.png"/></p>
@@ -163,8 +169,6 @@ var Rating = A.Component.create(
 			 * @type NodeList
 			 */
 			elements: {
-				writeOnce: true,
-				readOnly: true,
 				validator: isNodeList
 			},
 
@@ -176,17 +180,6 @@ var Rating = A.Component.create(
 			 * @type Node
 			 */
 			hiddenInput: {
-				validator: isNode
-			},
-
-			/**
-			 * Reference for the element which will contain the
-	         * <a href="Rating.html#config_label">label</a>.
-			 *
-			 * @attribute labelElement
-			 * @type Node
-			 */
-			labelElement: {
 				validator: isNode
 			},
 
@@ -216,8 +209,32 @@ var Rating = A.Component.create(
 				validator: isString
 			},
 
-			render: {
-				value: true
+			/**
+			 * DOM Node to display the text of the StarRating. If not
+             * specified try to query using HTML_PARSER an element inside
+             * boundingBox which matches <code>aui-rating-label-element</code>.
+			 *
+			 * @attribute labelNode
+			 * @default Generated div element.
+			 * @type String
+			 */
+			labelNode: {
+				valueFn: function() {
+					return A.Node.create(TPL_LABEL);
+				},
+				validator: isNode
+			},
+
+			ratingElement: {
+				valueFn: function() {
+					var instance = this;
+
+					var ratingElement = A.Node.create(
+						instance.get(DISABLED) ? TPL_RATING_EL_DISABLED : TPL_RATING_EL
+					);
+
+					return ratingElement.addClass(CSS_RATING_EL);
+				}
 			},
 
 			/**
@@ -280,6 +297,30 @@ var Rating = A.Component.create(
 			value: null
 		},
 
+		/**
+		 * Object hash, defining how attribute values are to be parsed from
+		 * markup contained in the widget's content box.
+		 *
+		 * @property StarRating.HTML_PARSER
+		 * @type Object
+		 * @static
+		 */
+		HTML_PARSER: {
+			elements: function(srcNode) {
+				return srcNode.all(DOT+CSS_RATING_EL);
+			},
+
+			label: function(srcNode) {
+				var labelNode = srcNode.one(DOT+CSS_RATING_LABEL_EL);
+
+				if (labelNode) {
+					return labelNode.html();
+				}
+			},
+
+			labelNode: DOT+CSS_RATING_LABEL_EL
+		},
+
 		prototype: {
 			/**
 			 * Construction logic executed during Rating instantiation. Lifecycle.
@@ -303,8 +344,12 @@ var Rating = A.Component.create(
 			 */
 			renderUI: function () {
 				var instance = this;
+				var contentBox = instance.get(CONTENT_BOX);
+
+				contentBox.addClass(CSS_CLEAR_FIX);
 
 				instance._parseInputElements();
+				instance._renderLabel();
 				instance._renderElements();
 			},
 
@@ -335,21 +380,6 @@ var Rating = A.Component.create(
 
 				instance._syncElements();
 				instance._syncLabelUI();
-			},
-
-			/**
-			 * Descructor lifecycle implementation for the Rating class.
-			 * Purges events attached to the node (and all child nodes).
-			 *
-			 * @method destructor
-			 * @protected
-			 */
-			destructor: function(){
-				var instance = this;
-				var	boundingBox = instance.get(BOUNDING_BOX);
-
-				boundingBox.detachAll();
-				boundingBox.remove();
 			},
 
 			/**
@@ -453,6 +483,29 @@ var Rating = A.Component.create(
 				// checks if the widget is not disabled and if the dom event is firing with a item as target
 				// do not fire custom events for other elements into the boundingBox
 				return !instance.get(DISABLED) && domTarget.hasClass(CSS_RATING_EL);
+			},
+
+			/**
+			 * Create rating elements based on the <code>size</code>
+             * attribute. It's only invoked when the HTML_PARSER does not find
+             * nothing.
+			 *
+			 * @method _createElements
+			 * @protected
+			 * @return {NodeList}
+			 */
+			_createElements: function() {
+				var instance = this;
+				var elements = [];
+				var ratingElement = instance.get(RATING_ELEMENT);
+
+				for (var i = 0, size = this.get(SIZE); i < size; i++) {
+					elements.push(
+						ratingElement.clone()
+					);
+				}
+
+				return new A.NodeList(elements);
 			},
 
 			/**
@@ -633,8 +686,8 @@ var Rating = A.Component.create(
 						};
 					});
 
-					labels.remove();
-					inputs.remove();
+					labels.remove(true);
+					inputs.remove(true);
 				}
 
 				if (inputName) {
@@ -647,59 +700,64 @@ var Rating = A.Component.create(
 			},
 
 			/**
+			 * Render the Rating label.
+			 *
+			 * @method _renderLabel
+			 * @protected
+			 */
+			_renderLabel: function() {
+				var instance = this;
+
+				instance.get(CONTENT_BOX).append(
+					instance.get(LABEL_NODE)
+				);
+			},
+
+			/**
 			 * Render the Rating elements.
 			 *
 			 * @method _renderElements
 			 * @protected
 			 */
-			_renderElements: function() {
+			_renderElements: function(elements) {
 				var instance = this;
 				var contentBox = instance.get(CONTENT_BOX);
-				var disabled = instance.get(DISABLED);
 
-				var ratingElement = null;
-				if (disabled){
-					ratingElement = A.Node.create('<span></span>');
-				}
-				else {
-					ratingElement = A.Node.create('<a href="javascript:;"></a>');
-
+				// if not found any elements from the HTML_PARSER create them based on the size attribute
+				if (!instance.get(ELEMENTS).size()) {
+					instance.set(
+						ELEMENTS,
+						instance._createElements()
+					);
 				}
 
-				var labelElement = A.Node.create('<div></div>');
+				instance.get(ELEMENTS).each(
+					function(element, i) {
+						var	data = instance._getInputData(i);
 
-				contentBox.addClass(CSS_CLEAR_FIX);
-				ratingElement.addClass(CSS_RATING_EL);
-				labelElement.addClass(CSS_RATING_LABEL_EL);
+						var content = data.content;
 
-				contentBox.append(labelElement);
+						// try to use the pulled title data from the dom, otherwise use the TITLE attr, in the last case use the content
+						var title = data.title || instance.get(TITLE) || content;
 
-				// creating rating elements
-				for (var i = 0, size = this.get(SIZE); i < size; i++) {
-					var	data = instance._getInputData(i);
-					var element = ratingElement.cloneNode();
+						// setting the content
+						if (content || title) {
+							// if there is no content use the title as content
+							element.html(content || title);
+						}
 
-					var content = data.content;
+						// setting the title
+						if (title && instance.get(SHOW_TITLE)) {
+							element.setAttribute(TITLE, title);
+						}
 
-					// try to use the pulled title data from the dom, otherwise use the TITLE attr, in the last case use the content
-					var title = data.title || instance.get(TITLE) || content;
+						if (!element.attr(HREF) && (element.get(NODE_NAME).toLowerCase() == ANCHOR)) {
+							element.setAttribute(HREF, HREF_JAVASCRIPT);
+						}
 
-					// setting the content
-					if (content || title) {
-						// if there is no content use the title as content
-						element.html(content || title);
+						contentBox.appendChild(element);
 					}
-
-					// setting the title
-					if (title && instance.get(SHOW_TITLE)) {
-						element.setAttribute(TITLE, title);
-					}
-
-					contentBox.appendChild(element);
-				}
-
-				instance.set(LABEL_ELEMENT, labelElement);
-				instance.set(ELEMENTS, contentBox.all(DOT+CSS_RATING_EL));
+				);
 			},
 
 			/**
@@ -727,7 +785,7 @@ var Rating = A.Component.create(
 				var instance = this;
 				var labelText = instance.get(LABEL);
 
-				instance.get(LABEL_ELEMENT).html(labelText);
+				instance.get(LABEL_NODE).html(labelText);
 			},
 
 			/**
@@ -752,7 +810,6 @@ var Rating = A.Component.create(
 			 */
 			_handleClickEvent: function(event) {
 				var instance = this;
-				var domTarget = event.domEvent.target;
 
 				if (instance._canFireCustomEvent(event)) {
 					instance.fire(EV_RATING_ITEM_CLICK, {
@@ -834,7 +891,7 @@ var DOWN = 'down',
  * </ul>
  *
  * Quick Example:<br/>
- * 
+ *
  * <pre><code>var instance = new A.ThumbRating({
  *   boundingBox: '#rating',
  *   defaultSelected: 3,
@@ -939,4 +996,4 @@ A.StarRating = Rating;
 A.ThumbRating = ThumbRating;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base']});

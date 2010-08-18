@@ -228,4 +228,4 @@ var Textarea = A.Component.create(
 A.Textarea = Textarea;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-form-textfield']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-form-textfield']});

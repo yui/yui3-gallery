@@ -9,7 +9,6 @@ shadow or rounded corners.
 .yui3-overlaycontextpanel-content,
 .yui3-tooltip-content,
 .yui3-calendar-content,
-.yui3-datepicker-content,
 .yui3-colorpicker-content,
 .yui3-tree-drag-helper-content {
 	-moz-box-shadow: 4px 4px 14px #777;
@@ -33,7 +32,6 @@ shadow or rounded corners.
 .yui3-state-active,
 .yui3-state-hover,
 .yui3-calendar-content,
-.yui3-datepicker-content,
 .yui3-colorpicker-content,
 .yui3-colorpicker-panel-content,
 .yui3-image-gallery-paginator .yui3-image-gallery-paginator-thumb,

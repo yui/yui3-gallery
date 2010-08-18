@@ -625,4 +625,4 @@ A.io.request = function(uri, config) {
 };
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','io','json','plugin','querystring-stringify']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-base','io-base','json','plugin','querystring-stringify']});

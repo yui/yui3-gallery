@@ -332,4 +332,4 @@ A.mix(
 );
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','anim','anim-node-plugin']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-base','anim','anim-node-plugin']});

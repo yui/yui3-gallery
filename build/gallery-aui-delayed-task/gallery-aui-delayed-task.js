@@ -189,4 +189,4 @@ DelayedTask.prototype = {
 A.DelayedTask = DelayedTask;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:false});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:false});

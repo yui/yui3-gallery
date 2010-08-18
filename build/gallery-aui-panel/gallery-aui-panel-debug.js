@@ -429,4 +429,4 @@ Panel.prototype = {
 A.Panel = A.Base.build(PANEL, A.Component, [Panel, A.WidgetStdMod]);
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-component','widget-stdmod','gallery-aui-toolbar']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-component','widget-stdmod','gallery-aui-toolbar']});

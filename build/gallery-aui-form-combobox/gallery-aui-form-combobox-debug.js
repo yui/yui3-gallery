@@ -81,4 +81,4 @@ var Combobox = A.Component.create(
 A.Combobox = Combobox;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-form-textarea','gallery-aui-toolbar']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-form-textarea','gallery-aui-toolbar']});

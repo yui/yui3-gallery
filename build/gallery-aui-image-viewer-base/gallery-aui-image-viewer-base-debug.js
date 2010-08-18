@@ -51,6 +51,8 @@ var L = A.Lang,
 	LOADING = 'loading',
 	LOADING_EL = 'loadingEl',
 	LOCK = 'lock',
+	MAX_HEIGHT = 'maxHeight',
+	MAX_WIDTH = 'maxWidth',
 	MODAL = 'modal',
 	OFFSET_HEIGHT = 'offsetHeight',
 	OFFSET_WIDTH = 'offsetWidth',
@@ -59,6 +61,7 @@ var L = A.Lang,
 	PRELOAD_ALL_IMAGES = 'preloadAllImages',
 	PRELOAD_NEIGHBOR_IMAGES = 'preloadNeighborImages',
 	PX = 'px',
+	REGION = 'region',
 	RIGHT = 'right',
 	SCROLL = 'scroll',
 	SHOW = 'show',
@@ -510,6 +513,30 @@ var ImageViewer = A.Component.create(
 				valueFn: function() {
 					return A.Node.create(TPL_LOADING);
 				}
+			},
+
+	        /**
+	         * The maximum height of the element
+	         *
+	         * @attribute maxHeight
+	         * @default Infinity
+	         * @type Number
+	         */
+			maxHeight: {
+				value: Infinity,
+				validator: isNumber
+			},
+
+	        /**
+	         * The maximum width of the element
+	         *
+	         * @attribute maxWidth
+	         * @default Infinity
+	         * @type Number
+	         */
+			maxWidth: {
+				value: Infinity,
+				validator: isNumber
 			}
 		},
 
@@ -605,12 +632,12 @@ var ImageViewer = A.Component.create(
 			 * Descructor lifecycle implementation for the ImageViewer class.
 			 * Purges events attached to the node (and all child nodes).
 			 *
-			 * @method destroy
+			 * @method destructor
 			 * @protected
 			 */
-			destroy: function() {
+			destructor: function() {
 				var instance = this;
-				var boundingBox = instance.get(BOUNDING_BOX);
+
 				var links = instance.get(LINKS);
 
 				instance.close();
@@ -621,12 +648,10 @@ var ImageViewer = A.Component.create(
 				// detach key global listener from the document
 				A.getDoc().detach('keydown', instance._keyHandler);
 
-				instance.get(ARROW_LEFT_EL).remove();
-				instance.get(ARROW_RIGHT_EL).remove();
-				instance.get(CLOSE_EL).remove();
-				instance.get(LOADER).remove();
-
-				boundingBox.remove();
+				instance.get(ARROW_LEFT_EL).remove(true);
+				instance.get(ARROW_RIGHT_EL).remove(true);
+				instance.get(CLOSE_EL).remove(true);
+				instance.get(LOADER).remove(true);
 			},
 
 			/**
@@ -689,7 +714,7 @@ var ImageViewer = A.Component.create(
 				}
 
 				// creating the placeholder image
-				instance.activeImage = instance.get(IMAGE).cloneNode(true);
+				instance.activeImage = instance.get(IMAGE).clone();
 
 				var image = instance.activeImage;
 
@@ -815,7 +840,7 @@ var ImageViewer = A.Component.create(
 				if (link) {
 					var src = link.attr(HREF);
 
-					instance.get(IMAGE).cloneNode(true).attr(SRC, src);
+					instance.get(IMAGE).clone().attr(SRC, src);
 				}
 			},
 
@@ -844,12 +869,11 @@ var ImageViewer = A.Component.create(
 			 */
 			showLoading: function() {
 				var instance = this;
-				var bodyNode = instance.bodyNode;
+				var loadingEl = instance.get(LOADING_EL);
 
-				instance.setStdModContent(
-					BODY,
-					instance.get(LOADING_EL)
-				);
+				instance.setStdModContent(BODY, loadingEl);
+
+				loadingEl.center(instance.bodyNode);
 			},
 
 			/**
@@ -1036,6 +1060,32 @@ var ImageViewer = A.Component.create(
 			},
 
 			/**
+			 * Calculate the resize ratio for the loaded image.
+			 *
+			 * @method _getRatio
+			 * @param {Number} width Image width
+			 * @param {Number} height Image height
+			 * @protected
+			 * @return {Number}
+			 */
+			_getRatio: function(width, height) {
+				var instance = this;
+
+				var ratio = 1;
+				var maxHeight = instance.get(MAX_HEIGHT);
+				var maxWidth = instance.get(MAX_WIDTH);
+
+				if ((height > maxHeight) || (width > maxWidth)) {
+					var hRatio = (height / maxHeight);
+					var wRatio = (width / maxWidth);
+
+					ratio = Math.max(hRatio, wRatio);
+				}
+
+				return ratio;
+			},
+
+			/**
 			 * Get the <a href="ImageViewer.html#config_info">info</a> template.
 			 *
 			 * @method _getInfoTemplate
@@ -1210,11 +1260,8 @@ var ImageViewer = A.Component.create(
 			 */
 			_onLoadImage: function(event) {
 				var instance = this;
-				var bodyNode = instance.bodyNode;
 				var image = event.currentTarget;
 
-				var offsetHeight = image.get(OFFSET_HEIGHT) + PX;
-				var offsetWidth = image.get(OFFSET_WIDTH) + PX;
 				var imageAnim = instance.get(IMAGE_ANIM);
 
 				if (instance.get(ANIM)) {
@@ -1233,10 +1280,7 @@ var ImageViewer = A.Component.create(
 
 				instance.setStdModContent(BODY, image);
 
-				bodyNode.setStyles({
-					width: offsetWidth,
-					height: offsetHeight
-				});
+				instance._uiSetImageSize(image);
 
 				instance._syncImageViewerUI();
 
@@ -1254,6 +1298,36 @@ var ImageViewer = A.Component.create(
 					instance.preloadImage(currentIndex + 1);
 					instance.preloadImage(currentIndex - 1);
 				}
+			},
+
+			/**
+			 * Set the size of the image and the overlay respecting the
+             * maxHeight/maxWidth ratio.
+			 *
+			 * @method _uiSetImageSize
+			 * @param {HTMLImage} image Image
+			 * @protected
+			 */
+			_uiSetImageSize: function(image) {
+				var instance = this;
+				var bodyNode = instance.bodyNode;
+				var imageRegion = image.get(REGION);
+
+				var ratio = instance._getRatio(
+					imageRegion.width,
+					imageRegion.height
+				);
+
+				var height = (imageRegion.height / ratio);
+				var width = (imageRegion.width / ratio);
+
+				image.set(OFFSET_HEIGHT, height);
+				image.set(OFFSET_WIDTH, width);
+
+				bodyNode.setStyles({
+					height: height + PX,
+					width: width + PX
+				});
 			}
 		}
 	}
@@ -1273,4 +1347,4 @@ A.ImageViewer = ImageViewer;
 A.ImageViewerMask = new A.OverlayMask().render();
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['anim','gallery-aui-overlay-mask','substitute']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['anim','gallery-aui-overlay-mask','substitute']});

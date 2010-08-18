@@ -27,4 +27,4 @@ YUI.add('gallery-aui-overlay-base', function(A) {
 A.OverlayBase = A.Base.build('overlay', A.Component, [A.WidgetPosition, A.WidgetStack, A.WidgetPositionAlign, A.WidgetPositionConstrain, A.WidgetStdMod]);
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-component','widget-position','widget-stack','widget-position-align','widget-position-constrain','widget-stdmod']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-component','widget-position','widget-stack','widget-position-align','widget-position-constrain','widget-stdmod']});

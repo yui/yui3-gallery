@@ -20,6 +20,10 @@
 	cursor: pointer;
 }
 
+.yui3-tree-node .yui3-dd-draggable, .yui3-tree-node .yui3-dd-draggable .yui3-tree-label {
+	cursor: pointer;
+}
+
 .yui3-tree-collapsed .yui3-tree-hitarea {
 	background-image: url(arrows.png);
 	background-repeat: no-repeat;

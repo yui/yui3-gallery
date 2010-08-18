@@ -29,7 +29,9 @@ var Lang = A.Lang,
 	CSS_THUMB_CANVAS_IMAGE = getClassName(NAME, 'thumb-image'),
 	CSS_HUE_THUMB = getClassName(NAME, 'hue-thumb'),
 	CSS_HUE_THUMB_IMAGE = getClassName(NAME, 'hue-thumb-image'),
-	CSS_TRIGGER= getClassName(NAME, 'trigger'),
+	CSS_SLIDER = getClassName(NAME, 'hue', 'slider'),
+	CSS_SLIDER_CONTENT = getClassName(NAME, 'hue', 'slider', 'content'),
+	CSS_TRIGGER = getClassName(NAME, 'trigger'),
 
 	TPL_CANVAS = '<div class="' + CSS_CANVAS + '"></div>',
 	TPL_HUE_CANVAS = '<span class="' + CSS_HUE_CANVAS + '"></span>',
@@ -826,7 +828,7 @@ var ColorPicker = A.Component.create(
 					}
 				);
 
-				instance._hueSlider = new A.Slider(
+				var slider = new A.Slider(
 					{
 						axis: 'y',
 						min: 0,
@@ -835,10 +837,15 @@ var ColorPicker = A.Component.create(
 					}
 				);
 
-				instance._hueSlider.RAIL_TEMPLATE = TPL_HUE_CANVAS;
-				instance._hueSlider.THUMB_TEMPLATE = TPL_THUMB_HUE;
+				slider.RAIL_TEMPLATE = TPL_HUE_CANVAS;
+				slider.THUMB_TEMPLATE = TPL_THUMB_HUE;
 
-				instance._hueSlider.render(instance._pickerContainer);
+				slider.get('boundingBox').addClass(CSS_SLIDER);
+				slider.get('contentBox').addClass(CSS_SLIDER_CONTENT);
+
+				slider.render(instance._pickerContainer);
+
+				instance._hueSlider = slider;
 			},
 
 			_restoreRGB: function(event) {
@@ -1012,4 +1019,4 @@ ColorPicker.Color = Color;
 A.ColorPicker = ColorPicker;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-overlay-context','dd','slider','substitute','gallery-aui-button-item','gallery-aui-form','gallery-aui-panel']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-overlay-context','dd-drag','slider','substitute','gallery-aui-button-item','gallery-aui-form-base','gallery-aui-panel']});

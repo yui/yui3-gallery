@@ -213,13 +213,15 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
 						Y.log('inline script tag: ' + jsNode.get('innerHTML'), 'info', DISPATCHER);
 						var d = jsNode.get('ownerDocument'),
 						h = d.one('head') || d.get('documentElement'),
+						// creating a new script node to execute the inline javascrip code
 						newScript = Y.Node.create('<' + SC + '></' + SC + '>');
-						h.replaceChild(jsNode, h.appendChild(newScript));
 						if (jsNode._node.text) {
 							newScript._node.text = jsNode._node.text;
 						}
+						h.appendChild(newScript);
+						// removing script nodes as part of the clean up process
+						newScript.remove();
 						jsNode.remove();
-						//removes the script node immediately after executing it
 					}
 				});
 			}
@@ -385,4 +387,4 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
 });
 
 
-}, 'gallery-2010.05.21-18-16' ,{requires:['base', 'node-base', 'io-base', 'get', 'async-queue', 'classnamemanager']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['base', 'node-base', 'io-base', 'get', 'async-queue', 'classnamemanager']});

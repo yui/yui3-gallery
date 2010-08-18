@@ -1,9 +1,10 @@
 YUI.add('gallery-aui-parse-content', function(A) {
 
 /**
- * The ParseContent Utility - Parse a content in a way of all the javascripts
- * within a content will be executed according to the order of apparition.
- *
+ * The ParseContent Utility - Parse the content of a Node so that all of the 
+ * javascript contained in that Node will be executed according to the order
+ * that it appears.
+ * 
  * @module aui-parse-content
  */
 
@@ -272,4 +273,4 @@ var ParseContent = A.Component.create(
 A.namespace('Plugin').ParseContent = ParseContent;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:false, requires:['async-queue','gallery-aui-base','io','plugin']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['async-queue','gallery-aui-base','plugin'], skinnable:false});

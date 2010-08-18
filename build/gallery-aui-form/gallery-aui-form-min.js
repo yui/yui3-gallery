@@ -1,1 +1,1 @@
-YUI.add("gallery-aui-form",function(B){},"gallery-2010.06.07-17-52",{skinnable:false,requires:["gallery-aui-form-base","gallery-aui-form-combobox","gallery-aui-form-field","gallery-aui-form-textarea","gallery-aui-form-textfield","gallery-aui-form-validator"]});
+YUI.add("gallery-aui-form",function(B){},"gallery-2010.08.18-17-12",{requires:["gallery-aui-form-base","gallery-aui-form-combobox","gallery-aui-form-field","gallery-aui-form-textarea","gallery-aui-form-textfield","gallery-aui-form-validator"],skinnable:false});

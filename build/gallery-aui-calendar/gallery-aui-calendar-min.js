@@ -1,1 +1,1 @@
-YUI.add("gallery-aui-calendar",function(B){},"gallery-2010.06.07-17-52",{skinnable:true,requires:["gallery-aui-calendar-base","gallery-aui-calendar-datepicker-select"]});
+YUI.add("gallery-aui-calendar",function(B){},"gallery-2010.08.18-17-12",{requires:["gallery-aui-calendar-base"],skinnable:true});

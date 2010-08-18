@@ -197,6 +197,13 @@ var TextboxList = A.Component.create(
 
 				instance.entries.add(entry);
 			},
+									 
+			addEntries: function(instance) {
+				var instance = this;
+				var inputNode = instance.inputNode;
+				
+				instance.entries.add(inputNode.val(), {});
+			},
 
 			insert: function(index, label) {
 				var instance = this;
@@ -324,7 +331,7 @@ var TextboxList = A.Component.create(
 				}
 				else {
 					if (keyCode == KEY_ENTER && instance.get('allowAnyEntry')) {
-						instance.entries.add(inputNode.val(), {});
+						instance.addEntries();
 					}
 				}
 			},
@@ -519,4 +526,4 @@ A.TextboxList = TextboxList;
 A.TextboxListEntry = TextboxListEntry;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['anim-node-plugin','gallery-aui-autocomplete','node-focusmanager']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['anim-node-plugin','gallery-aui-autocomplete','node-focusmanager']});

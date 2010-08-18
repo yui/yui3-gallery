@@ -223,9 +223,8 @@ var Calendar = A.Component.create(
 			},
 
 			/**
-			 * Minimum allowable date. Accepts String in the same format of
-	         * <a href="Calendar.html#config_dateFormat">dateFormat</a> or a Date
-	         * object.
+			 * Minimum allowable date. Values supported by the Date
+             * constructor are supported.
 			 *
 			 * @attribute minDate
 			 * @default null
@@ -239,9 +238,8 @@ var Calendar = A.Component.create(
 			},
 
 			/**
-			 * Maximum allowable date. Accepts String in the same format of
-	         * <a href="Calendar.html#config_dateFormat">dateFormat</a> or a Date
-	         * object.
+			 * Maximum allowable date. Values supported by the Date
+             * constructor are supported.
 			 *
 			 * @attribute maxDate
 			 * @default null
@@ -550,7 +548,7 @@ var Calendar = A.Component.create(
 					var dayName = instance._getDayNameMin(fixedDay);
 
 					instance.weekDaysNode.append(
-						weekDay.cloneNode().html(dayName)
+						weekDay.clone().html(dayName)
 					);
 
 					day++;
@@ -571,7 +569,7 @@ var Calendar = A.Component.create(
 
 				while (day++ < 7) {
 					instance.monthDaysNode.append(
-						blankDay.cloneNode()
+						blankDay.clone()
 					);
 				}
 
@@ -591,7 +589,7 @@ var Calendar = A.Component.create(
 
 				while (day++ < 31) {
 					instance.monthDaysNode.append(
-						monthDay.cloneNode().html(day)
+						monthDay.clone().html(day)
 					);
 				}
 
@@ -1301,4 +1299,4 @@ A.CalendarManager = new A.OverlayManager({
 });
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-overlay-context','datatype-date','widget-locale']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-overlay-context','datatype-date','widget-locale']});

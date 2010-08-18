@@ -145,7 +145,7 @@ var SWF = A.Component.create(
 
 				instance._swfId = swfId;
 
-				var boundingBox = instance.get('boundingBox');
+				var contentBox = instance.get('contentBox');
 				var flashVars = instance.get('flashVars');
 
 				A.mix(
@@ -188,7 +188,7 @@ var SWF = A.Component.create(
 
 					tplObj += '</object>';
 
-					boundingBox.set('innerHTML', tplObj);
+					contentBox.set('innerHTML', tplObj);
 				}
 
 				instance._swf = A.one('#' + swfId);
@@ -241,4 +241,4 @@ var SWF = A.Component.create(
 A.SWF = SWF;
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','querystring-stringify-simple'], skinnable:false});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:false, requires:['gallery-aui-base','querystring-stringify-simple']});

@@ -354,4 +354,4 @@ A.Sortable = Sortable;
 A.SortableItem = SortableItem;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','dd']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','dd-constrain','dd-drag','dd-drop','dd-proxy']});

@@ -102,4 +102,4 @@ window.attachEvent('onafterprint', onAfterPrint);
 
 }(A.config.win, A.config.doc));
 @end@*/
-},"gallery-2010.06.07-17-52",{requires:["gallery-aui-node-html5"]});
+},"gallery-2010.08.18-17-12",{requires:["gallery-aui-node-html5"]});

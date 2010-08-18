@@ -9,13 +9,18 @@ YUI.add('gallery-aui-node-base', function(A) {
 
 var Lang = A.Lang,
 	isArray = Lang.isArray,
+	isObject = Lang.isObject,
 	isString = Lang.isString,
 	isUndefined = Lang.isUndefined,
 	isValue = Lang.isValue,
 
 	getClassName = A.ClassNameManager.getClassName,
 
-	CLONED_EVENTS = false,
+	CONFIG = A.config,
+
+	STR_EMPTY = '',
+
+	ARRAY_EMPTY_STRINGS = [STR_EMPTY, STR_EMPTY],
 
 	HELPER = 'helper',
 
@@ -27,17 +32,25 @@ var Lang = A.Lang,
 	NONE = 'none',
 	PARENT_NODE = 'parentNode',
 	SCRIPT = 'script',
+
+	SUPPORT_CLONED_EVENTS = false,
+
 	VALUE = 'value';
 
-	// Event cloning detection support based on pieces from jQuery
+	/*
+		Parts of this file are used from jQuery (http://jquery.com)
+		Dual-licensed under MIT/GPL
+	*/
 	var div = document.createElement('div');
-	div.innerHTML = '&nbsp;'; // IE throws an error on fireEvent if the element does not have child nodes
+
+	div.style.display = 'none';
+	div.innerHTML = '   <link/><table></table>&nbsp;';
 
 	if (div.attachEvent && div.fireEvent) {
 		div.attachEvent(
 			'onclick',
 			function(){
-				CLONED_EVENTS = true;
+				SUPPORT_CLONED_EVENTS = true;
 
 				div.detachEvent('onclick', arguments.callee);
 			}
@@ -45,6 +58,45 @@ var Lang = A.Lang,
 
 		div.cloneNode(true).fireEvent('onclick');
 	}
+
+	var SUPPORT_SERIALIZE_HTML = !!div.getElementsByTagName('link').length,
+		SUPPORT_OPTIONAL_TBODY = !div.getElementsByTagName('tbody').length,
+		SUPPORT_LEADING_WHITESPACE = div.firstChild.nodeType === 3;
+
+	var REGEX_LEADING_WHITE_SPACE = /^\s+/,
+		REGEX_IE8_ACTION = /=([^=\x27\x22>\s]+\/)>/g,
+		REGEX_XHTML_TAG = /(<([\w:]+)[^>]*?)\/>/g,
+		REGEX_SELF_CLOSING_ELEMENT = /^(?:area|br|col|embed|hr|img|input|link|meta|param)$/i,
+		REGEX_TAGNAME = /<([\w:]+)/,
+		REGEX_TBODY = /<tbody/i,
+		REGEX_HTML = /<|&#?\w+;/,
+
+		FN_CLOSE_TAG = function(all, start, tagName) {
+			return REGEX_SELF_CLOSING_ELEMENT.test(tagName)
+					? all
+					: start + '></' + tagName + '>';
+		};
+
+	var MAP_WRAPPERS = {
+		_default: [0, STR_EMPTY, STR_EMPTY],
+		area: [1, '<map>', '</map>'],
+		col: [2, '<table><tbody></tbody><colgroup>', '</colgroup></table>'],
+		legend: [1, '<fieldset>', '</fieldset>'],
+		option: [1, '<select multiple="multiple">', '</select>'],
+		td: [3, '<table><tbody><tr>', '</tr></tbody></table>'],
+		thead: [1, '<table>', '</table>'],
+		tr: [2, '<table><tbody>', '</tbody></table>']
+	};
+
+	MAP_WRAPPERS.optgroup = MAP_WRAPPERS.option;
+	MAP_WRAPPERS.tbody = MAP_WRAPPERS.tfoot = MAP_WRAPPERS.colgroup = MAP_WRAPPERS.caption = MAP_WRAPPERS.thead;
+	MAP_WRAPPERS.th = MAP_WRAPPERS.td;
+
+	if (!SUPPORT_SERIALIZE_HTML) {
+		MAP_WRAPPERS._default = [1, 'div<div>', '</div>'];
+	}
+
+	div = null;
 
 /**
  * Augment the <a href="Node.html">YUI3 Node</a> with more util methods.
@@ -175,9 +227,26 @@ A.mix(A.Node.prototype, {
 		var instance = this;
 
 		if (!isUndefined(value)) {
-			return instance.set(name, value);
+			var el = instance.getDOM();
+
+			if (name in el) {
+				instance.set(name, value);
+			}
+			else {
+				instance.setAttribute(name, value);
+			}
+
+			return instance;
 		}
 		else {
+			if (isObject(name)) {
+				for (var i in name) {
+					instance.attr(i, name[i]);
+				}
+
+				return instance;
+			}
+
 			return instance.get(name) || instance.getAttribute(name);
 		}
 	},
@@ -198,9 +267,23 @@ A.mix(A.Node.prototype, {
 	clone: (function() {
 		var clone;
 
-		if (CLONED_EVENTS) {
+		if (SUPPORT_CLONED_EVENTS) {
 			clone = function() {
-				return A.Node.create(this.outerHTML());
+				var el = this.getDOM();
+				var clone;
+
+				if (el.nodeType != 3) {
+					var outerHTML = this.outerHTML();
+
+					outerHTML = outerHTML.replace(REGEX_IE8_ACTION, '="$1">').replace(REGEX_LEADING_WHITE_SPACE, '');
+
+					clone = A.one(A.Node._prepareHTML(outerHTML)[0]);
+				}
+				else {
+					clone = A.one(el.cloneNode());
+				}
+
+				return clone;
 			};
 		}
 		else {
@@ -260,7 +343,7 @@ A.mix(A.Node.prototype, {
 	empty: function() {
 		var instance = this;
 
-		instance.all('>*').remove();
+		instance.all('>*').remove().purge();
 
 		var el = A.Node.getDOMNode(instance);
 
@@ -327,6 +410,51 @@ A.mix(A.Node.prototype, {
 		return instance;
 	},
 
+    /**
+     * Create a hover interaction.
+     *
+     * @method hover
+     * @param {string} overFn
+     * @param {string} outFn
+     * @return {Node} The current Node instance
+     */
+	hover: function(overFn, outFn) {
+		var instance = this;
+
+		var hoverOptions;
+		var defaultHoverOptions = instance._defaultHoverOptions;
+
+		if (isObject(overFn, true)) {
+			hoverOptions = overFn;
+
+			hoverOptions = A.mix(hoverOptions, defaultHoverOptions);
+
+			overFn = hoverOptions.over;
+			outFn = hoverOptions.out;
+		}
+		else {
+			hoverOptions = A.mix(
+				{
+					over: overFn,
+					out: outFn
+				},
+				defaultHoverOptions
+			);
+		}
+
+		instance._hoverOptions = hoverOptions;
+
+		var overTask = new A.DelayedTask(instance._hoverOverTaskFn, instance);
+
+		var outTask = new A.DelayedTask(instance._hoverOutTaskFn, instance);
+
+		hoverOptions.overTask = overTask;
+		hoverOptions.outTask = outTask;
+
+		instance.on(hoverOptions.overEventType, instance._hoverOverHandler, instance);
+		instance.on(hoverOptions.outEventType, instance._hoverOutHandler, instance);
+	},
+
 	/**
      * <p>Get or Set the HTML contents of the node. If the <code>value</code>
      * is passed it's set the content of the element, otherwise it works as a
@@ -372,7 +500,7 @@ A.mix(A.Node.prototype, {
 		}
 
 		var temp = A.Node.create('<div></div>').append(
-			this.cloneNode(true)
+			this.clone()
 		);
 
 		try {
@@ -519,6 +647,10 @@ A.mix(A.Node.prototype, {
 			}
 			else {
 				textField.select();
+			}
+
+			if (textField != document.activeElement) {
+				textField.focus();
 			}
 		}
 		catch(e) {}
@@ -760,6 +892,70 @@ A.mix(A.Node.prototype, {
 	},
 
 	/**
+     * The event handler for the "out" function that is fired for events attached via the hover method.
+	 *
+     * @method _hoverOutHandler
+     * @private
+     * @param {EventFacade} event
+     */
+	_hoverOutHandler: function(event) {
+		var instance = this;
+
+		var hoverOptions = instance._hoverOptions;
+
+		hoverOptions.outTask.delay(hoverOptions.outDelay, null, null, [event]);
+	},
+
+	/**
+     * The event handler for the "over" function that is fired for events attached via the hover method.
+	 *
+     * @method _hoverOverHandler
+     * @private
+     * @param {EventFacade} event
+     */
+	_hoverOverHandler: function(event) {
+		var instance = this;
+
+		var hoverOptions = instance._hoverOptions;
+
+		hoverOptions.overTask.delay(hoverOptions.overDelay, null, null, [event]);
+	},
+
+	/**
+     * Cancels the over task, and fires the users custom "out" function for the hover method
+	 *
+     * @method _hoverOverHandler
+     * @private
+     * @param {EventFacade} event
+     */
+	_hoverOutTaskFn: function(event) {
+		var instance = this;
+
+		var hoverOptions = instance._hoverOptions;
+
+		hoverOptions.overTask.cancel();
+
+		hoverOptions.out.apply(hoverOptions.context || event.currentTarget, arguments);
+	},
+
+	/**
+     * Cancels the out task, and fires the users custom "over" function for the hover method
+	 *
+     * @method _hoverOverHandler
+     * @private
+     * @param {EventFacade} event
+     */
+	_hoverOverTaskFn: function(event) {
+		var instance = this;
+
+		var hoverOptions = instance._hoverOptions;
+
+		hoverOptions.outTask.cancel();
+
+		hoverOptions.over.apply(hoverOptions.context || event.currentTarget, arguments);
+	},
+
+	/**
      * Place a node or html string at a specific location
 	 *
      * @method _place
@@ -773,7 +969,7 @@ A.mix(A.Node.prototype, {
 		var parent = instance.get(PARENT_NODE);
 
 		if (parent) {
-			if (Lang.isString(newNode)) {
+			if (isString(newNode)) {
 				newNode = A.Node.create(newNode);
 			}
 
@@ -781,8 +977,118 @@ A.mix(A.Node.prototype, {
 		}
 
 		return instance;
+	},
+
+	_defaultHoverOptions: {
+		overEventType: 'mouseenter',
+		outEventType: 'mouseleave',
+		overDelay: 0,
+		outDelay: 0,
+		over: Lang.emptyFn,
+		out: Lang.emptyFn
 	}
 }, true);
+
+if (!SUPPORT_OPTIONAL_TBODY) {
+	A.DOM._ADD_HTML = A.DOM.addHTML;
+
+	A.DOM.addHTML = function(node, content, where) {
+		var nodeName = (node.nodeName && node.nodeName.toLowerCase()) || '';
+
+		var tagName;
+
+		if (!isUndefined(content)) {
+			if (isString(content)) {
+				tagName = (REGEX_TAGNAME.exec(content) || ARRAY_EMPTY_STRINGS)[1];
+			}
+			else if (content.nodeName) {
+				tagName = content.nodeName;
+			}
+
+			tagName = tagName.toLowerCase();
+		}
+
+		if (nodeName == 'table' && tagName == 'tr') {
+			node = node.getElementsByTagName('tbody')[0] || node.appendChild(node.ownerDocument.createElement('tbody'));
+
+			var whereNodeName = ((where && where.nodeName) || STR_EMPTY).toLowerCase();
+
+			// Assuming if the "where" is a tbody node,
+			// we're trying to prepend to a table. Attempt to
+			// grab the first child of the tbody.
+			if (whereNodeName == 'tbody' && where.childNodes.length > 0) {
+				where = where.firstChild;
+			}
+		}
+
+		A.DOM._ADD_HTML(node, content, where);
+	};
+}
+
+A.Node._prepareHTML = function(element) {
+	var doc = CONFIG.doc;
+
+	var returnData = [];
+
+	if (isString(element)) {
+		if (!REGEX_HTML.test(element)) {
+			element = doc.createTextNode(element);
+		}
+		else {
+			element = element.replace(REGEX_XHTML_TAG, FN_CLOSE_TAG);
+
+			var tagName = (REGEX_TAGNAME.exec(element) || ARRAY_EMPTY_STRINGS)[1].toLowerCase();
+			var wrap = MAP_WRAPPERS[tagName] || MAP_WRAPPERS._default;
+			var depth = wrap[0];
+			var div = doc.createElement('div');
+
+			div.innerHTML = wrap[1] + element + wrap[2];
+
+			while (depth--) {
+				div = div.lastChild;
+			}
+
+			if (!SUPPORT_OPTIONAL_TBODY) {
+				var hasTBody = REGEX_TBODY.test(element);
+				var tbody = [];
+
+				if (tagName == 'table' && !hasTBody) {
+					if (div.firstChild) {
+						tbody = div.firstChild.childNodes;
+					}
+				}
+				else {
+					if (wrap[1] == '<table>' && !hasTBody) {
+						tbody = div.childNodes;
+					}
+				}
+
+				for (var i = tbody.length - 1; i >= 0; --i) {
+					var node = tbody[i];
+
+					if (node.nodeName.toLowerCase() == 'tbody' && node.childNodes.length) {
+						node.parentNode.removeChild(node);
+					}
+				}
+			}
+
+			if (!SUPPORT_LEADING_WHITESPACE && REGEX_LEADING_WHITE_SPACE.test(element)) {
+				div.insertBefore(doc.createTextNode(REGEX_LEADING_WHITE_SPACE.exec(element)[0]), div.firstChild);
+			}
+
+			element = div.childNodes;
+		}
+	}
+
+	if (element.nodeType) {
+		returnData.push(element);
+	}
+	else {
+		returnData = element;
+	}
+
+	return returnData;
+};
 
 /**
  * Augment the <a href="NodeList.html">YUI3 NodeList</a> with more util methods.
@@ -809,6 +1115,8 @@ A.NodeList.importMethod(
 
 		'hide',
 
+		'hover',
+
 		'html',
 
 		'outerHTML',
@@ -816,6 +1124,8 @@ A.NodeList.importMethod(
 		'prepend',
 
 		'prependTo',
+
+		'purge',
 
 		'selectText',
 
@@ -864,6 +1174,18 @@ A.mix(
 		},
 
 		/**
+		 * Returns the first element in the node list collection.
+		 *
+		 * @method first
+		 * @return {Node}
+		 */
+		first: function() {
+			var instance = this;
+
+			return instacne.item(0);
+		},
+
+		/**
 	     * See <a href="Node.html#method_getDOM">Node getDOM</a>.
 	     *
 	     * @method getDOM
@@ -872,6 +1194,18 @@ A.mix(
 			var instance = this;
 
 			return A.NodeList.getDOMNodes(this);
+		},
+
+		/**
+		 * Returns the last element in the node list collection.
+		 *
+		 * @method last
+		 * @return {Node}
+		 */
+		last: function() {
+			var instance = this;
+
+			return instance.item(instance._nodes.length - 1);
 		},
 
 		/**
@@ -914,7 +1248,7 @@ A.mix(
 			var instance = this;
 
 			if (!instance._bodyNode) {
-				instance._bodyNode = A.one(document.body);
+				instance._bodyNode = A.one(CONFIG.doc.body);
 			}
 
 			return instance._bodyNode;
@@ -929,7 +1263,7 @@ A.mix(
 			var instance = this;
 
 			if (!instance._documentNode) {
-				instance._documentNode = A.one(document);
+				instance._documentNode = A.one(CONFIG.doc);
 			}
 
 			return instance._documentNode;
@@ -944,7 +1278,7 @@ A.mix(
 			var instance = this;
 
 			if (!instance._windowNode) {
-				instance._windowNode = A.one(window);
+				instance._windowNode = A.one(CONFIG.win);
 			}
 
 			return instance._windowNode;
@@ -953,4 +1287,4 @@ A.mix(
 );
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-base']});

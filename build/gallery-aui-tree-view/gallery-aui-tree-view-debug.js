@@ -936,4 +936,4 @@ var TreeViewDD = A.Component.create(
 A.TreeViewDD = TreeViewDD;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-tree-node','dd']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-tree-node','dd-drag','dd-drop','dd-proxy']});

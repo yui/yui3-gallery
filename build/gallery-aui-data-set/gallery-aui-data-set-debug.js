@@ -707,4 +707,4 @@ A.extend(
 A.DataSet = DataSet;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:false, requires:['oop','collection','base']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['oop','collection','base'], skinnable:false});

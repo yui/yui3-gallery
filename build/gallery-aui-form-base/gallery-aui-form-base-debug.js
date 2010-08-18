@@ -8,7 +8,7 @@ var Lang = A.Lang,
 
 	CSS_FORM = getClassName(NAME),
 	CSS_LABELS = getClassName('field', 'labels'),
-	CSS_LABELS_INLINE = getClassName('field', 'labels', 'inline')
+	CSS_LABELS_INLINE = getClassName('field', 'labels', 'inline'),
 
 	CSS_LABEL_ALIGN = {
 		left: [CSS_LABELS, 'left'].join('-'),
@@ -533,4 +533,4 @@ var Form = A.Component.create(
 A.Form = Form;
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-base','gallery-aui-data-set','gallery-aui-form-field','querystring-parse']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-base','gallery-aui-data-set','gallery-aui-form-field','querystring-parse']});

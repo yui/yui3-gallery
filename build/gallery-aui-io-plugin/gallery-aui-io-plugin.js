@@ -314,11 +314,11 @@ var IOPlugin = A.Component.create(
 
 				instance._bindParseContent();
 
+				instance._getContentSetterByType().apply(instance, [content]);
+
 				if (instance.overlayMaskBoundingBox) {
 					instance.overlayMaskBoundingBox.remove();
 				}
-
-				instance._getContentSetterByType().apply(instance, [content]);
 			},
 
 			/**
@@ -495,4 +495,4 @@ var IOPlugin = A.Component.create(
 A.namespace('Plugin').IO = IOPlugin;
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-overlay-base','gallery-aui-parse-content','gallery-aui-io-request','gallery-aui-loading-mask']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-overlay-base','gallery-aui-parse-content','gallery-aui-io-request','gallery-aui-loading-mask']});

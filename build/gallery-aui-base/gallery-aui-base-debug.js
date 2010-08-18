@@ -15,19 +15,6 @@ A.mix(A.Array, {
 	}
 });
 
-A.mix(
-	A.Object,
-	{
-		isEmpty: function(o) {
-			for (var name in o) {
-				return false;
-			}
-
-			return true;
-		}
-	}
-);
-
 var Lang = A.Lang;
 var isArray = Lang.isArray;
 var isFunction = Lang.isFunction;
@@ -102,7 +89,7 @@ A.mix(
 );
 ;(function() {
 	/*
-	 * Alloy JavaScript Library vgallery-2010.06.07-17-52
+	 * Alloy JavaScript Library vgallery-2010.08.18-17-12
 	 * http://alloy.liferay.com/
 	 *
 	 * Copyright (c) 2010 Liferay Inc.
@@ -192,7 +179,7 @@ A.mix(
 
 	AUI._guidExtensions = guidExtensions;
 
-	window.AUI = AUI;
+	
 
 	var UA = ALLOY.UA;
 
@@ -309,6 +296,10 @@ A.mix(
 
 		UA.renderer = '';
 
+		var documentElement = document.documentElement;
+
+		UA.dir = documentElement.getAttribute('dir') || 'ltr';
+
 		if (UA.ie) {
 			UA.renderer = 'trident';
 		}
@@ -333,6 +324,7 @@ A.mix(
 			UA.browser,
 			UA.browser + UA.version.major,
 			UA.os,
+			UA.dir,
 			'js'
 		];
 
@@ -353,8 +345,6 @@ A.mix(
 
 		UA.selectors = selectors.join(' ');
 
-		var documentElement = document.documentElement;
-
 		if (!documentElement._yuid) {
 			documentElement.className += ' ' + UA.selectors;
 
@@ -363,7 +353,19 @@ A.mix(
 	};
 
 	AUI._uaExtensions(ALLOY);
+
+	/*
+	* Disable background image flickering in IE6
+	*/
+
+	if (UA.ie && UA.version.major <= 6) {
+		try {
+			document.execCommand('BackgroundImageCache', false, true);
+		}
+		catch (e) {
+		}
+	}
 })();
 
 
-}, 'gallery-2010.06.07-17-52' ,{requires:['gallery-aui-node','gallery-aui-component','gallery-aui-delayed-task','event','oop','widget-css','gallery-aui-skin-base'], skinnable:false});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:false, requires:['gallery-aui-node-base','gallery-aui-component','gallery-aui-delayed-task','gallery-aui-selector','event','oop']});

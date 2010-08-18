@@ -312,4 +312,4 @@ WidgetParentId.prototype = {
 A.Toolbar = A.Base.build(NAME, Toolbar, [A.WidgetParent, WidgetParentId], { dynamic: false });
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-button-item','gallery-aui-data-set','widget-parent']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-button-item','gallery-aui-data-set','widget-parent']});

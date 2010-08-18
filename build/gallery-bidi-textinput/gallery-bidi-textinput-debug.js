@@ -29,4 +29,4 @@ Y.namespace('Plugin');
 Y.Plugin.BidiTextInput = BidiTextInputPlugin;
 
 
-}, 'gallery-2010.06.16-19-51' ,{requires:['plugin','gallery-value-change','gallery-intl-bidi','gallery-node-setdir']});
+}, 'gallery-2010.08.18-17-12' ,{requires:['plugin','event-valuechange','gallery-intl-bidi','gallery-node-setdir']});

@@ -57,10 +57,6 @@ var L = A.Lang,
 	TOTAL_LABEL = 'totalLabel',
 	TOTAL_PAGES = 'totalPages',
 
-	nodeSetter = function(v) {
-		return A.one(v);
-	},
-
 	concat = function() {
 		return Array.prototype.slice.call(arguments).join(SPACE);
 	},
@@ -204,7 +200,7 @@ var Paginator = A.Component.create(
 			 * @type Node | String
 			 */
 			firstPageLink: {
-				setter: nodeSetter,
+				setter: A.one,
 				valueFn: function() {
 					var label = this.get(FIRST_PAGE_LINK_LABEL);
 
@@ -234,7 +230,7 @@ var Paginator = A.Component.create(
 			 * @type Node | String
 			 */
 			lastPageLink: {
-				setter: nodeSetter,
+				setter: A.one,
 				valueFn: function() {
 					var label = this.get(LAST_PAGE_LINK_LABEL);
 
@@ -284,7 +280,7 @@ var Paginator = A.Component.create(
 			 * @type Node | String
 			 */
 			nextPageLink: {
-				setter: nodeSetter,
+				setter: A.one,
 				valueFn: function() {
 					var label = this.get(NEXT_PAGE_LINK_LABEL);
 
@@ -383,7 +379,7 @@ var Paginator = A.Component.create(
 			 * @type String
 			 */
 			pageReportEl: {
-				setter: nodeSetter,
+				setter: A.one,
 				valueFn: function() {
 					var label = this.get(PAGE_REPORT_LABEL_TEMPLATE);
 
@@ -422,7 +418,7 @@ var Paginator = A.Component.create(
 			 * @type Node | String
 			 */
 			prevPageLink: {
-				setter: nodeSetter,
+				setter: A.one,
 				valueFn: function() {
 					var label = this.get(PREV_PAGE_LINK_LABEL);
 
@@ -481,7 +477,7 @@ var Paginator = A.Component.create(
 			 * @type Node | String
 			 */
 			rowsPerPageEl: {
-				setter: nodeSetter,
+				setter: A.one,
 				valueFn: function() {
 					return A.Node.create(ROWS_PER_PAGE_TPL);
 				}
@@ -548,7 +544,7 @@ var Paginator = A.Component.create(
 			 * @type String
 			 */
 			totalEl: {
-				setter: nodeSetter,
+				setter: A.one,
 				valueFn: function() {
 					var label = this.get(TOTAL_LABEL);
 
@@ -670,14 +666,13 @@ var Paginator = A.Component.create(
 			 * Descructor lifecycle implementation for the Paginator class.
 			 * Purges events attached to the node (and all child nodes).
 			 *
-			 * @method destroy
+			 * @method destructor
 			 * @protected
 			 */
-			destroy: function() {
+			destructor: function() {
 				var instance = this;
 
-				instance.get(BOUNDING_BOX).remove();
-				instance.get(CONTAINERS).remove();
+				instance.get(CONTAINERS).remove(true);
 			},
 
 			/**
@@ -1224,4 +1219,4 @@ var Paginator = A.Component.create(
 A.Paginator = Paginator;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-base','substitute']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','substitute']});

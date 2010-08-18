@@ -347,4 +347,4 @@ A.each([HIDE, SHOW, TOGGLE], function(method) {
 A.LoadingMask = LoadingMask;
 
 
-}, 'gallery-2010.06.07-17-52' ,{skinnable:true, requires:['gallery-aui-overlay-mask','plugin','substitute']});
+}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-overlay-mask','plugin','substitute']});
