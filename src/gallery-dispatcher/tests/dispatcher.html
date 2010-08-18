@@ -1,0 +1,226 @@
+<html>
+<head>
+<title>Dispatcher Tests</title>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+    <h1>Dispatcher Tests</h1>
+    <div id="c"></div>
+    <div id="demo">
+      <p>Placeholder for dispatcher tests</p>
+    </div>
+<script type="text/javascript" src="../../../build/gallery-dispatcher/gallery-dispatcher-debug.js"></script>
+<script type="text/javascript">
+    
+YUI({
+    useConsoleOutput: true,
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'gallery-dispatcher', function (Y) {
+
+  Y.namespace("Tests");
+
+  Y.Tests.Dispatcher = (function() {
+
+      var Assert = Y.Assert,
+          ObjectAssert = Y.ObjectAssert;
+
+      //-------------------------------------------------------------------------
+      // Base Test Suite
+      //-------------------------------------------------------------------------
+      var suite = new Y.Test.Suite("Dispatcher Tests");
+
+      //-------------------------------------------------------------------------
+      // Test Case for encoding
+      //-------------------------------------------------------------------------
+      suite.add(new Y.Test.Case({
+
+          name: "Dispatcher Inline Tests",
+
+          //---------------------------------------------
+          // Setup and tear down
+          //---------------------------------------------
+          setUp: function() {
+              // global variable
+              //data = 100;
+              counter = 0;
+              //flag = 0;
+              this.disp = new Y.Dispatcher({
+                  node: '#demo'
+              });
+              Y.one('#demo').set('innerHTML', 'placeholder');
+          },
+
+          tearDown: function() {
+              //delete data;
+              //delete counter;
+              //delete flag;
+              },
+
+          //---------------------------------------------------------------------
+          // Tests
+          //---------------------------------------------------------------------
+          testBasicHtmlContent: function() {
+              var newcontent = "simple content";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  var result = Y.one('#demo').get('innerHTML');
+                  Assert.areEqual(newcontent, result, 'The new content was not properly injected.');
+                  this.resume();
+              }, this);
+              this.wait();
+          },
+
+          testInlineScript: function() {
+              var newcontent = "<p>simple content</p><script>window.flag = true;<\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.isTrue(flag, 'The script was not executed.');
+                  var result = Y.one('#demo p').get('innerHTML');
+                  Assert.areEqual('simple content', result, 'The script tag was not removed from the original content');
+                  this.resume();
+              }, this);
+              this.wait();
+          },
+
+          testInlineScriptGlobalVar: function() {
+              var newcontent = "<p>simple content</p><script>var data = 1;<\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.areEqual(1, data, 'The script fails for a global variable called DATA.');
+                  this.resume();
+              }, this);
+              this.wait();
+          },
+
+          testInlineScriptAssumingGlobal: function() {
+              var newcontent = "<p>simple content</p><script>data = 2;<\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.areEqual(2, data, 'The script fails while assuming a global variable called DATA.');
+                  this.resume();
+              }, this);
+              this.wait();
+          },
+
+          testInlineScriptCounter: function() {
+              var newcontent = "<p>simple content</p><script>counter++;<\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.areEqual(1, counter, 'The script was executed more than one time.');
+                  this.resume();
+              }, this);
+              this.wait();
+          }
+
+      }));
+
+      suite.add(new Y.Test.Case({
+
+          name: "Dispatcher External Tests",
+
+          //---------------------------------------------
+          // Setup and tear down
+          //---------------------------------------------
+          setUp: function() {
+              // global variable
+              //data = 100;
+              counter = 0;
+              //flag = 0;
+              this.disp = new Y.Dispatcher({
+                  node: '#demo'
+              });
+              Y.one('#demo').set('innerHTML', 'placeholder');
+          },
+
+          tearDown: function() {
+              //delete data;
+              //delete counter;
+              //delete flag;
+              },
+
+          //---------------------------------------------------------------------
+          // Tests
+          //---------------------------------------------------------------------
+          testExternalScript: function() {
+              var newcontent = "<p>simple content</p><script src='external.js'><\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.isTrue(flag, 'The script was not executed.');
+                  var result = Y.one('#demo p').get('innerHTML');
+                  Assert.areEqual('simple content', result);
+                  this.resume();
+              }, this);
+              this.wait();
+          },
+
+          testExternalScriptCache: function() {
+              var newcontent = "<p>simple content</p><script src='external.js'><\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.isTrue(flag, 'The script was not executed twice, dispatcher is caching it.');
+                  this.resume();
+              }, this);
+              this.wait();
+          },
+
+          testExternalScriptGlobalVar: function() {
+              var newcontent = "<p>simple content</p><script src='external.js'><\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.areEqual(3, data, 'The script fails for a global variable called DATA.');
+                  this.resume();
+              }, this);
+              this.wait();
+          },
+
+          testExternalScriptCounter: function() {
+              var newcontent = "<p>simple content</p><script src='external.js'><\/script>";
+              // using the dispatcher object to set a new content
+              this.disp.set('content', newcontent);
+              // dispatcher uses a queue, it will take a while to inject the content
+              this.disp.on('ready', function() {
+                  Assert.areEqual(1, counter, 'The script was executed more than one time.');
+                  this.resume();
+              }, this);
+              this.wait();
+          }
+
+      }));
+
+      //return it
+      return suite;
+
+  })();
+
+
+  (new Y.Console({
+      verbose: true,
+      newestOnTop: false
+  })).render('#c');
+
+  //add to the testrunner and run
+  Y.Test.Runner.add(Y.Tests.Dispatcher);
+  Y.Test.Runner.run();
+
+});
+
+
+</script>
+</body>
+</html>
