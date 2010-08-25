@@ -246,7 +246,10 @@ Y.extend(QueryBuilder, Y.Widget,
 	{
 		for (var i=0; i<this.row_list.length; i++)
 		{
-			this.row_list[i].plugin.destroy();
+			if (this.row_list[i].plugin)
+			{
+				this.row_list[i].plugin.destroy();
+			}
 		}
 
 		this.row_list = null;
@@ -937,4 +940,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2010.08.04-19-46' ,{requires:['widget','substitute'], optional:['gallery-formmgr','gallery-scrollintoview']});
+}, 'gallery-2010.08.25-19-45' ,{requires:['widget','substitute'], optional:['gallery-formmgr','gallery-scrollintoview']});
