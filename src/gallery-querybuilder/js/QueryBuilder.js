@@ -244,7 +244,10 @@ Y.extend(QueryBuilder, Y.Widget,
 	{
 		for (var i=0; i<this.row_list.length; i++)
 		{
-			this.row_list[i].plugin.destroy();
+			if (this.row_list[i].plugin)
+			{
+				this.row_list[i].plugin.destroy();
+			}
 		}
 
 		this.row_list = null;
