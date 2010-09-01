@@ -56,6 +56,11 @@ ATTR_CONTENT = 'content',
 ATTR_AUTOPURGE = 'autopurge',
 ATTR_LOADING = 'loading',
 ATTR_NODE = 'node',
+ATTR_NORMALIZE = 'normalize',
+
+// Regular Expressions
+reBODY = /<\s*body.*?>(.*?)<\/\s*?body[^>\w]*?>/i,
+reHEAD = /<\s*head.*?>(.*?)<\/\s*?head[^>\w]*?>/i,
 
 //	CSS class names
 CLASS_DISPATCHER_LOADING = getClassName(DISPATCHER, 'loading'),
@@ -66,16 +71,30 @@ isBoolean = L.isBoolean,
 isString = L.isString;
 
 //	Utility functions
-function _parseContent(content) {
+function _parseContent(content, normalize) {
 	var fragment = Y.Node.create('<div></div>'),
-	o = {};
+		head = fragment.cloneNode(),
+		o = {}, match = null, inject = '';
+	
+	// if normalize is set, let's parse the head
+	if (normalize && (match = reHEAD.exec(content))) {
+		Y.log('normalizing scripts, links and styles from the head tag', 'info', DISPATCHER);
+		fragment.setContent(match[1]).all(SC+',style,link').each(function(n) {
+			head.append(n);
+		});
+		inject = head.get('innerHTML');
+		Y.log('trying to inject this content: '+inject, 'info', DISPATCHER);
+	}
 
-	fragment.setContent(content);
-
+	// if the content has a body tag, we should take the content of the body, if not, assume full content
+	// we should also include any injection from the head if exists
+	fragment.setContent(inject+((match=reBODY.exec(content))?match[1]:content));
+	
 	o.js = fragment.all(SC).each(function(n) {
 		n.get('parentNode').removeChild(n);
 	});
 	o.content = fragment.get('innerHTML');
+
 	return o;
 }
 
@@ -152,7 +171,7 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
 	 */
 	_dispatch: function(content) {
 		var that = this,
-		o = _parseContent(content),
+		o = _parseContent(content, this.get(ATTR_NORMALIZE)),
 		q = this._queue,
 		n = this.get(ATTR_NODE);
 
@@ -325,7 +344,6 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
 				return Y.one(n);
 			}
 		},
-
 		/**
 		* If dispatcher should purge the DOM elements before replacing the content
 		* @attribute autopurge
@@ -334,6 +352,17 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
 		*/
 		autopurge: {
 			value: true,
+			validator: isBoolean
+		},
+		/**
+		* If dispatcher should analyze the content before injecting it. This will help 
+		* to support full html document injection, to collect scripts and styles from head if exists, etc.
+		* @attribute normalize
+		* @default false
+		* @type boolean
+		*/
+		normalize: {
+			value: false,
 			validator: isBoolean
 		},
 		/**
@@ -387,4 +416,4 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
 });
 
 
-}, 'gallery-2010.08.18-17-12' ,{requires:['base', 'node-base', 'io-base', 'get', 'async-queue', 'classnamemanager']});
+}, 'gallery-2010.09.01-19-12' ,{requires:['base', 'node-base', 'io-base', 'get', 'async-queue', 'classnamemanager']});
