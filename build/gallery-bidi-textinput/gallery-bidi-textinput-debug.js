@@ -10,7 +10,7 @@ function BidiTextInputPlugin() {
     BidiTextInputPlugin.superclass.constructor.apply(this, arguments);
 }
 
-BidiTextInputPlugin.NS = "bidi";
+BidiTextInputPlugin.NS = "bidiTextInput";
 BidiTextInputPlugin.NAME = "bidiTextInput";
 
 Y.extend(BidiTextInputPlugin, Y.Plugin.Base, {
@@ -29,4 +29,4 @@ Y.namespace('Plugin');
 Y.Plugin.BidiTextInput = BidiTextInputPlugin;
 
 
-}, 'gallery-2010.08.18-17-12' ,{requires:['plugin','event-valuechange','gallery-intl-bidi','gallery-node-setdir']});
+}, 'gallery-2010.09.08-19-45' ,{requires:['plugin','event-valuechange','gallery-intl-bidi','gallery-node-setdir']});
