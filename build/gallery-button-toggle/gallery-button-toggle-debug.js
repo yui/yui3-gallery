@@ -1,61 +1,40 @@
 YUI.add('gallery-button-toggle', function(Y) {
 
-    var YL = Y.Lang,
-        DESELECTED_CALLBACK = 'deselectedCallback';
+var YL = Y.Lang,
+    DESELECTED_CALLBACK = 'deselectedCallback';
+
+Y.ButtonToggle = Y.Base.create('button', Y.Button, [], {
+
+    initializer : function(config) {
+        this.after('selectedChange',this._afterSelectedChanged, this);
+    },
+
+    _defPressFn : function(e) {
+        this.set('selected', (this.get('selected') === 0) ? 1 : 0);
+    },
+
+    _afterSelectedChanged : function(e) {
+        if(e.newVal) {
+          this._executeCallback();
+        }else{
+          this._executeDeselectCallback();
+        }
+    },
+
+    _executeDeselectCallback : function(e) {
+      Y.log('Y.ButtonToggle::_executeDeselectCallback');
+      if(this.get(DESELECTED_CALLBACK)) {
+        (this.get(DESELECTED_CALLBACK))();
+      }
+    }
+
+}, {
+    ATTRS : {
+        deselectedCallback : {
+            validator : YL.isFunction
+        }
+    }
+});
 
 
-	Y.ButtonToggle = Y.Base.create('button', Y.Button, [], {
-	    
-	    initializer : function(config) {
-	        this.after('selectedChange',this._selectedChanged, this);
-	    },
-	    
-	    _bindClick : function() {
-	    	
-	        this.get('boundingBox').after('click',function(e){
-		    	var parent = null;
-		    	if(!this.isRoot()) {
-		    		var parent = this.get('parent'),
-		    		    selection = parent.get('selection');
-		    		if(
-		    		   parent instanceof Y.ButtonGroup && // we are in a button group
-		    		   parent.get('alwaysSelected') && // there should always be at least one
-		    		   this.get('selected') === 1 && // this is selected
-		    		   (
-		    		      selection === this || 
-		    		      (
-		    		         selection instanceof Y.ArrayList && 
-		    		         selection.size() === 1 && 
-		    		         selection.item(0) === this
-		    		      )
-		    		   ) // this is the only selected
-			    	) {
-		    			return;
-			    	}
-		    	}
-	        	this.set('selected', (this.get('selected') === 0) ? 1 : 0);
-	        },this);
-	    },
-	    
-	    _selectedChanged : function(e) {
-	        if(e.newVal) {
-	            if(this.get('callback')) {
-	                (Y.bind(this.get('callback'),this))();
-	            }
-	        }else{
-	            if(this.get(DESELECTED_CALLBACK)) {
-	                (Y.bind(this.get(DESELECTED_CALLBACK),this))();
-	            }
-	        }
-	    }
-	    
-	}, {
-	    ATTRS : {
-	        deselectedCallback : {
-	            validator : YL.isFunction
-	        }
-	    }
-	});
-
-
-}, 'gallery-2010.06.30-19-54' ,{requires:['gallery-button']});
+}, 'gallery-2010.09.08-19-45' ,{requires:['gallery-button']});

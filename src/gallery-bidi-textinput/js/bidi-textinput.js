@@ -8,7 +8,7 @@ function BidiTextInputPlugin() {
     BidiTextInputPlugin.superclass.constructor.apply(this, arguments);
 }
 
-BidiTextInputPlugin.NS = "bidi";
+BidiTextInputPlugin.NS = "bidiTextInput";
 BidiTextInputPlugin.NAME = "bidiTextInput";
 
 Y.extend(BidiTextInputPlugin, Y.Plugin.Base, {

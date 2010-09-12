@@ -2,15 +2,15 @@ YUI.add('gallery-plugin-node-io', function(Y) {
 
   /**
    * Node IO provides a simple interface to load text into a node
-   * 
+   *
    * @class NodeIo
    * @extends Base
    * @version 1.1.0
    */
   var YL = Y.Lang;
-  
+
   Y.Plugin.NodeIo = Y.Base.create('node-io', Y.Base, [], {
-    
+
     ///////  P U B L I C  //////
     /**
      * Set up ioHandler and bind events
@@ -19,9 +19,9 @@ YUI.add('gallery-plugin-node-io', function(Y) {
      */
     initializer : function(){
       this.publish('success', {defaultFn: this._defSuccessFn });
-      
+
       this.after('uriChange', this._afterUriChange);
-      
+
       this._ioHandlers = {
         complete: Y.bind(this._handleResponse, this, 'complete'),
         success: Y.bind(this._handleResponse, this, 'success'),
@@ -29,7 +29,7 @@ YUI.add('gallery-plugin-node-io', function(Y) {
         end: Y.bind(this._handleResponse, this, 'end')
       };
     },
-    
+
     /**
      * Set uri and start io
      * @since 1.0.0
@@ -39,17 +39,20 @@ YUI.add('gallery-plugin-node-io', function(Y) {
      */
     load : function(uri) {
       var config = this.get('ioConfig');
-      
-      uri || (uri = this.get('uri'));
-      this.set('uri', uri);
-      
+
+      if(!uri) {
+        uri = this.get('uri');
+      }else{
+        this.set('uri', uri);
+      }
+
       config.on = this._ioHandlers;
-      
+
       this._io = Y.io(uri, config);
-      
+
       return this;
     },
-    
+
     /**
      * Sugar method to refresh the content
      * Not recommended if placement is not `replace`
@@ -61,7 +64,7 @@ YUI.add('gallery-plugin-node-io', function(Y) {
     refresh : function(){
       return this.load();
     },
-    
+
     /**
      * Stops any current io
      * @since 1.0.0
@@ -73,24 +76,24 @@ YUI.add('gallery-plugin-node-io', function(Y) {
       this._stopIO();
       return this;
     },
-    
-    
+
+
     //////  P R O T E C T E D  //////
-    
+
     /**
      * Local storage of the internal Y.io
      * @since 1.0.0
      * @protected
      */
     _io: null,
-    
+
     /**
      * Object used to set the on of the _io
      * @since 1.1.0
      * @protected
      */
     _ioHandlers: null,
-    
+
     /**
      * Aborts any current io
      * @since 1.0.0
@@ -103,7 +106,7 @@ YUI.add('gallery-plugin-node-io', function(Y) {
         this._io = null;
       }
     },
-    
+
     /**
      * Single interface for io responses
      * @since 1.1.0
@@ -114,7 +117,7 @@ YUI.add('gallery-plugin-node-io', function(Y) {
       this.fire(type, {id: id, response: o});
       this._io = null;
     },
-    
+
     /**
      * Default onSuccess method for io
      * Inserts response text into the host by placement
@@ -125,7 +128,7 @@ YUI.add('gallery-plugin-node-io', function(Y) {
     _defSuccessFn : function(e) {
       this.get('host').insert(e.response.responseText, this.get('placement'));
     },
-    
+
     /**
      * Aborts any io when the uri is changed
      * @since 1.1.0
@@ -135,7 +138,7 @@ YUI.add('gallery-plugin-node-io', function(Y) {
     _afterUriChange : function() {
       this._stopIO();
     }
-    
+
   }, {
     NS : 'io',
     ATTRS : {
@@ -148,7 +151,7 @@ YUI.add('gallery-plugin-node-io', function(Y) {
       host : {
         writeOnce : true
       },
-      
+
       /**
        * Allows for advanced io configuration
        * @since 1.0.0
@@ -160,9 +163,9 @@ YUI.add('gallery-plugin-node-io', function(Y) {
         value : {},
         validator : YL.isObject
       },
-      
+
       /**
-       * Placement of responseText 
+       * Placement of responseText
        * @since 1.0.0
        * @attribute placement
        * @type string
@@ -171,12 +174,12 @@ YUI.add('gallery-plugin-node-io', function(Y) {
       placement : {
         value : 'replace',
         validator : function(val) {
-          return /replace|(?:ap|pre)pend/.test(val);
+          return (/replace|(?:ap|pre)pend/).test(val);
         }
       },
-      
+
       /**
-       * Specifies the URI for the io 
+       * Specifies the URI for the io
        * @since 1.0.0
        * @attribute uri
        * @type string
@@ -188,4 +191,4 @@ YUI.add('gallery-plugin-node-io', function(Y) {
   });
 
 
-}, 'gallery-2010.07.07-19-52' ,{requires:['plugin','node','io']});
+}, 'gallery-2010.09.08-19-45' ,{requires:['plugin','node-base','node-pluginhost','io-base','base-build']});
