@@ -94,7 +94,7 @@ function QueryBuilder(
 
 	// list of possible query operations for each data type
 
-	this.op_list      = Y.clone(operators);
+	this.op_list      = Y.clone(operators, true);
 	this.op_list.none = [];
 
 	// table rows containing the query elements
@@ -281,7 +281,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 		if (operators)
 		{
-			this.op_list      = Y.clone(operators);
+			this.op_list      = Y.clone(operators, true);
 			this.op_list.none = [];
 		}
 
