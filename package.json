@@ -1,6 +1,6 @@
 {
     "name": "yui3-gallery",
-    "version": "0.0.1",
+    "version": "2010.09.15",
     "description": "YUI 3 Gallery",
     "author": "Dav Glass <davglass@gmail.com>",
     "bugs": { "web" : "http://yuilibrary.com/projects/yuilibrary" },
@@ -13,7 +13,7 @@
     },
     "main": "./gallery.js",
     "dependencies": {
-        "yui3": ">=0.5.4"
+        "yui3": ">=0.5.8"
     },
     "licenses":[
         {
