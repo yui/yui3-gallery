@@ -3,5 +3,6 @@
 <project name="gallery-carousel" default="local">
     <description>Gallery Carousel Build File</description>
     <property file="build.properties" />
-    <import file="${builddir}/3.x/bootstrap.xml" description="Default Build Properties and Targets" />
+    <import file="${builddir}/3.x/bootstrap.xml"
+            description="Default Build Properties and Targets" />
 </project>
