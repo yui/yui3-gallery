@@ -1,12 +1,26 @@
 YUI.add('gallery-carousel', function(Y) {
 
 /**
- * Carousel provides a widget ...
+ * Carousel provides a widget for browsing among a set of like objects arrayed
+ * vertically or horizontally in an overloaded page region.
+ *
+ * @module carousel
+ */
+
+/**
+ * Create a Carousel control.
+ *
+ * The Carousel module provides a widget for browsing among a set of like
+ * objects represented pictorially.
+ *
+ * @class Carousel
+ * @extends Widget
+ * @param config {Object} Configuration options for the widget
+ * @constructor
  */
 function Carousel() {
     Carousel.superclass.constructor.apply(this, arguments);
 }
-
 
 // Some useful abbreviations
 var getCN = Y.ClassNameManager.getClassName,
@@ -183,7 +197,6 @@ Carousel.ATTRS = {
 };
 
 Y.Carousel = Y.extend(Carousel, Y.Widget, {
-
     /**
      * Add an item to the Carousel.
      *
@@ -1152,7 +1165,6 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _vtbl: null
 });
-
 
 
 }, '@VERSION@' ,{requires:['widget']});
