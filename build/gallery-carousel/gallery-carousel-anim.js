@@ -13,7 +13,35 @@ function CarouselAnimPlugin() {
 }
 
 // Some useful abbreviations
-var JS = Y.Lang;
+var JS = Y.Lang,
+    // Carousel custom events
+    /**
+     * @event afterScroll
+     * @description          fires after the Carousel has scrolled its view
+     *                       port.  The index of the first and last visible
+     *                       items in the view port are passed back.
+     * @param {Event}  ev    The <code>afterScroll</code> event
+     * @param {Number} first The index of the first visible item in the view
+     *                       port
+     * @param {Number} last  The index of the last visible item in the view
+     *                       port
+     * @type Event.Custom
+     */
+    AFTERSCROLL_EVENT = "afterScroll",
+
+    /**
+     * @event beforeScroll
+     * @description          fires before the Carousel scrolls its view port.
+     *                       The index of the first and last visible items
+     *                       in the view port are passed back.
+     * @param {Event}  ev    The <code>afterScroll</code> event
+     * @param {Number} first The index of the first visible item in the view
+     *                       port
+     * @param {Number} last  The index of the last visible item in the view
+     *                       port
+     * @type Event.Custom
+     */
+    BEFORESCROLL_EVENT = "beforeScroll";
 
 /**
  * The identity of the plugin.
@@ -81,12 +109,11 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
      * @public
      */
     animateAndScrollTo: function (index) {
-        var self = this,
-            anim, animation, carousel, cb, from, isVertical, to;
+        var self = this, carousel = self.get("host"),
+            anim, animation, cb, first, from, isVertical, to;
 
-        if (this.get("host").get("rendered")) {
+        if (carousel.get("rendered")) {
             animation = self.get("animation");
-            carousel = self.get("host");
             if (carousel && animation.speed > 0) {
                 cb = carousel.get("contentBox");
                 isVertical = carousel.get("isVertical");
@@ -97,6 +124,10 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
                     from = { left: carousel.get("left") };
                     to = { left: carousel._getOffsetForIndex(index) };
                 }
+                first = carousel.getFirstVisible();
+                self.fire(BEFORESCROLL_EVENT,
+                        { first: first,
+                          last: first + carousel.get("numVisible") });
                 anim = new Y.Anim({
                     node: cb,
                     from: from,
@@ -104,12 +135,25 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
                     duration: animation.speed,
                     easing: animation.effect
                 });
+                anim.on("end", Y.bind(self._afterAnimEnd, self, index));
                 anim.run();
                 return new Y.Do.Prevent();
             }
         }
 
         return false;
+    },
+
+    /**
+     * Update the "selectedItem".
+     *
+     * @method _afterAnimEnd
+     * @param {Number} pos The new position of the "selectedItem"
+     * @protected
+     */
+    _afterAnimEnd: function (pos) {
+        var self = this, carousel = self.get("host");
+        carousel.set("selectedItem", pos);
     },
 
     /**
