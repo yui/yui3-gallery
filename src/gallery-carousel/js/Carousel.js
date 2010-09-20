@@ -23,7 +23,78 @@ function Carousel() {
 // Some useful abbreviations
 var getCN = Y.ClassNameManager.getClassName,
     JS = Y.Lang,
-    Node = Y.Node;
+    Node = Y.Node,
+    // Carousel custom events
+    /**
+     * @event afterScroll
+     * @description          fires after the Carousel has scrolled its view
+     *                       port.  The index of the first and last visible
+     *                       items in the view port are passed back.
+     * @param {Event}  ev    The <code>afterScroll</code> event
+     * @param {Number} first The index of the first visible item in the view
+     *                       port
+     * @param {Number} last  The index of the last visible item in the view
+     *                       port
+     * @type Event.Custom
+     */
+    AFTERSCROLL_EVENT = "afterScroll",
+
+    /**
+     * @event beforeScroll
+     * @description          fires before the Carousel scrolls its view port.
+     *                       The index of the first and last visible items
+     *                       in the view port are passed back.
+     * @param {Event}  ev    The <code>afterScroll</code> event
+     * @param {Number} first The index of the first visible item in the view
+     *                       port
+     * @param {Number} last  The index of the last visible item in the view
+     *                       port
+     * @type Event.Custom
+     */
+    BEFORESCROLL_EVENT = "beforeScroll",
+
+    /**
+     * @event itemAdded
+     * @description         fires after an item has been added to the Carousel
+     * @param {Event}  ev   The <code>itemAdded</code> event
+     * @param {Node}   item The node that will be added
+     * @param {Number} pos  The position where the node would be added
+     * @type Event.Custom
+     */
+    ITEMADDED_EVENT = "itemAdded",
+
+    /**
+     * @event itemRemoved
+     * @description         fires after an item has been removed from the
+     *                      Carousel
+     * @param {Event}  ev   The <code>itemRemoved</code> event
+     * @param {Node}   item The node that will be removed
+     * @param {Number} pos  The position from where the node would be removed
+     * @type Event.Custom
+     */
+    ITEMREMOVED_EVENT = "itemRemoved",
+
+    /**
+     * @event itemSelected
+     * @description        fires when an item has been selected in the Carousel
+     * @param {Event}  ev  The <code>itemSelected</code> event
+     * @param {Number} pos The index of the selected item
+     * @type Event.Custom
+     */
+    ITEMSELECTED_EVENT = "itemSelected",
+
+    /**
+     * @event navStateChanged
+     * @description          fires when the state of either one of the
+     *                       navigation buttons are changed from enabled to
+     *                       disabled or vice versa
+     * @param {Event}  ev    The <code>navStateChanged</code> event
+     * @param {Object} state The state of previous and next buttons for e.g.,
+     *                       { prev: false, next: true } indicating previous
+     *                       button is disabled, and next button is enabled
+     * @type Event.Custom
+     */
+    NAVSTATECHANGED_EVENT = "navStateChanged";
 
 /**
  * The identity of the widget.
@@ -209,7 +280,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
      addItem: function (node, pos) {
-         var self = this, count, item;
+         var self = this, count, index, item;
 
          if (JS.isString(node)) {
              item = Node.create(Y.substitute(self.ITEM_TEMPLATE, {
@@ -228,15 +299,18 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 
          if (JS.isUndefined(pos)) {
              self._vtbl.items.push(item);
+             index = self._vtbl.items.length - 1;
          } else {
              if (!self._vtbl.items[pos]) {
                  self._vtbl.items[pos] = undefined;
              }
              self._vtbl.items.splice(pos, 1, item);
+             index = pos;
          }
 
          count = this.get("numItems");
          this.set("numItems", count + 1);
+         this.fire(ITEMADDED_EVENT, { item: item, pos: index });
 
          return true;
      },
@@ -452,6 +526,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
          count = self.get("numItems");
          --count;
          self.set("numItems", count);
+         this.fire(ITEMREMOVED_EVENT, { item: item, pos: index });
 
          return true;
      },
@@ -523,7 +598,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
          var self = this,
              isCircular = self.get("isCircular"),
              numItems = self.get("numItems"),
-             attr, cb, offset;
+             attr, cb, first, offset;
 
          /* Attempt to fix an "out of bounds" index if possible. */
          if (index < 0) {
@@ -543,7 +618,13 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
          offset = self._getOffsetForIndex(index);
          cb = self.get("contentBox");
          attr = self.get("isVertical") ? "top" : "left";
+         first = self.getFirstVisible();
+         self.fire(BEFORESCROLL_EVENT, { first: first,
+                                         last: first+self.get("numVisible") });
          cb.setStyle(attr, offset);
+         first = self.getFirstVisible(); // ask for the "new" first visible
+         self.fire(AFTERSCROLL_EVENT, { first: first,
+                                        last: first+self.get("numVisible") });
 
          self.set("selectedItem", index); // assume this is what the user want
      },
@@ -662,8 +743,10 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _afterSelectedItemChange: function (ev) {
         var self = this;
+
         self._uiSetSelectedItem(ev.prevVal, false);
         self._uiSetSelectedItem(ev.newVal, true);
+        self.fire(ITEMSELECTED_EVENT, { pos: ev.newVal });
         if (!self.get("hidePagination")) {
             self._updateNavigation(ev.newVal);
         }
