@@ -19,6 +19,10 @@ Y.Node.addMethod('setDirection', function (node, direction) {
         // a bug in addMethod.
         that = Y.one(node);
 
+        // This is the best known way to find the actual direction of a node
+        // on a page. Note that according to the CSS specification, setting
+        // the 'dir' attribute affects the computed value of the 'direction'
+        // style.
         previousDirection = that.getStyle("direction");
 
         // Set the direction anyway, even if the node is already in the
@@ -37,4 +41,4 @@ Y.Node.addMethod('setDirection', function (node, direction) {
 });
 
 
-}, 'gallery-2010.06.16-19-51' ,{requires:['classnamemanager', 'node-base', 'node-style']});
+}, 'gallery-2010.09.22-20-15' ,{requires:['classnamemanager', 'node-base', 'node-style']});
