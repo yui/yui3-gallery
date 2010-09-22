@@ -96,7 +96,7 @@ function QueryBuilder(
 
 	// list of possible query operations for each data type
 
-	this.op_list      = Y.clone(operators);
+	this.op_list      = Y.clone(operators, true);
 	this.op_list.none = [];
 
 	// table rows containing the query elements
@@ -283,7 +283,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 		if (operators)
 		{
-			this.op_list      = Y.clone(operators);
+			this.op_list      = Y.clone(operators, true);
 			this.op_list.none = [];
 		}
 
@@ -940,4 +940,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2010.08.25-19-45' ,{requires:['widget','substitute'], optional:['gallery-formmgr','gallery-scrollintoview']});
+}, 'gallery-2010.09.15-18-40' ,{requires:['widget','substitute'], optional:['gallery-formmgr','gallery-scrollintoview']});

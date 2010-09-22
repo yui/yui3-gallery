@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>
+			YUI Raphael Sandbox
+		</title>
+	</head>
+	<body class=" yui-skin-sam">
+
+		<div id="rcanvas"></div>
+		
+		<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.2.0/build/yui/yui-debug.js"></script>		
+		
+		<script type="text/javascript" src="build_tmp/gallery-raphael-debug.js"></script>
+		
+		<script>
+			YUI({debug: true, useConsole: true}).use('gallery-raphael', function(Y) {
+				
+	Y.Raphael().use(function(Raphael) {
+		
+		// use Raphael just like normal
+		var paper = Raphael('rcanvas', 600, 800);
+		
+		// create SVG objects normally as well
+		var rect = paper.rect(0,0,100,200);
+		rect.attr({fill: 'cyan', stroke: '#000', 'stroke-width': 1});
+		
+		var circ = paper.circle(200, 200, 80);
+		circ.attr({fill: 'red', stroke: '#333', 'stroke-width': 5});
+		
+		// but now each has a .$node property that is a Y.Node wrapped around the SVG HTMLElement
+		circ.$node.on('click', function() {
+			// and each object Raphael creates is an EventTarget, so we can fire events now
+			circ.fire('bam');
+		});
+		// listening for circle events
+		circ.on('bam', function() {
+			alert('it worked');
+		});
+		
+		// use .$node as a normal Y.Node for event handling
+		rect.$node.on('mouseover', function() {
+			circ.attr('fill', 'blue');
+		});
+		rect.$node.on('mouseout', function() {
+			circ.attr('fill', 'red');
+		});
+		
+	});
+				
+			});
+		</script>
+	</body>
+</html>
