@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YUI3 Textshadow Anim Module Tests</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    
+    <style type="text/css" media="screen">
+        h1 { margin: 100px 100px; }
+    </style>
+</head>
+<body lang="en-US" class="yui3-skin-sam">
+	
+    <h1>gallery-textshadow-anim Tests</h1>
+    
+    <script type="text/javascript" src="http://yui.yahooapis.com/combo?3.2.0/build/yui/yui.js&3.2.0/build/loader/loader.js"></script>
+    <script type="text/javascript">
+        YUI_config = { 
+            modules : {
+                "gallery-textshadow-anim" : {
+                    fullpath : "../../../build/gallery-textshadow-anim/gallery-textshadow-anim.js",
+                    requires : [ 'anim-base' ]
+                },
+                
+                "textshadow-anim-tests" : {
+                    fullpath : "textshadow-anim-tests.js",
+                    requires : [ "gallery-textshadow-anim", "test" ]
+                }
+            }
+        };
+        
+        YUI().use("console", "textshadow-anim-tests", function(Y) {
+            //create the console
+            new Y.Console({
+                height: "600px",
+                width: "500px",
+                newestOnTop : false
+            }).render();
+            
+            Y.Test.Runner.add(Y.TextShadowAnim.Tests).run();
+        });
+    </script>
+</body>
+</html>
