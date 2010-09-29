@@ -112,7 +112,8 @@
         });
         // plugins using Raphael.el to add methods to SVG elements just work without help
         
-        return raphInst;
+		// finally, mix in the properties
+        return Y.mix(raphInst, raph);
     }
     
     // augmenting static methods

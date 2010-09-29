@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>
+			YUI Raphael Gallery Example #2
+		</title>
+		<style>
+			body {
+				font-family: Helvetica;
+			}
+			#rcanvas {
+				border: solid black 1px;
+				width: 500px;
+			}
+			#code {
+				background-color: #d1d7da;
+				padding: 10px;
+			}
+		</style>
+	</head>
+	<body class=" yui-skin-sam">
+
+		<h1>YUI Raphael Gallery Example #2</h1>
+		<p>This example displays how you can use YUI3 with RaphaelJS. This also shows how you can fire events from individual SVG objects and catch them to modify other drawings on the page. The circles attached to the right edges of the bars below are drawn in response to the bars individually firing <code>width-changed</code> events.</p>
+		<p>Mouse over the cirlce in the image below to see it working.</p>
+
+		<h3>RaphaelJS Canvas</h3>
+		<div id="rcanvas"></div>
+		
+		<h3>Code</h3>
+		<div id="code"></div>
+		
+		<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.2.0/build/yui/yui-debug.js"></script>		
+		
+		<script id="sourceCode">
+			YUI({gallery: 'gallery-2010.09.22-20-15'}).use('gallery-raphael', function(Y) {
+				
+				Y.Raphael({type:'raw'}).use(function(Raphael) {
+					
+					var paper = Raphael('rcanvas', 500, 400);
+					
+					var circ = paper.circle(350, 200, 100).attr({fill: 'pink', stroke: 'black'});
+					
+					var i=0, rectangles = [], circles = [];
+					for (; i<10; i++) {
+						rectangles.push(paper.rect(0, 40*i, 40*i, 20).attr({fill: 'red', stroke: 'yellow'}));
+						circles.push(paper.circle(0,0,20).hide());
+					}
+					Y.Array.each(rectangles, function(rect, index) {
+						var i = index + 1;
+						circ.$node.on('mousemove', function(evt) {
+							var lf = circ.attrs.cx - circ.attrs.r,
+								rt = 2 * circ.attrs.r + lf,
+								x = evt.clientX - lf,
+								top = circ.attrs.cy - circ.attrs.r,
+								btm = 2 * circ.attrs.r + top,
+								y = evt.clientY - top;
+								newWidth = (((256 * x) / (2 * circ.attrs.r))-1) * i/6,
+								red = (((128 * x) / (2 * circ.attrs.r))-1) * i/6,
+								green = 256 - ((((128 * x) / (2 * circ.attrs.r))-1) * i/6),
+								blue = (((128 * y) / (2 * circ.attrs.r))-1) * i/6;
+							rect.attr({
+								width: newWidth,
+								fill: 'rgb(' + red + ', ' + green + ', ' + blue + ')'
+							});
+							rect.fire('width-changed', {width:newWidth, source: rect, order: index});
+						});
+						
+						rect.on('width-changed', function(evt) {
+							var attrs = evt.source.attrs;
+							
+							circles[evt.order].attr({
+								cx: attrs.x + attrs.width,
+								cy: attrs.y,
+								fill: 'cornflowerblue'
+							}).show();
+							
+						});
+						
+					});
+					
+				});
+				
+			});
+		</script>
+
+		<script>
+			YUI().use('node', function(Y) {
+				var rawcode = Y.one('#sourceCode').get('innerHTML'), code = '';
+				Y.Array.each(rawcode.split('\n'), function(line) {
+					code += line.replace(/^\t{3}/, '') + '\n';
+				});
+				Y.one('#code').set('innerHTML', '<pre>' + code + '</pre>');
+			});
+		</script>
+	</body>
+</html>
