@@ -114,7 +114,8 @@ YUI.add('gallery-raphael', function(Y) {
         });
         // plugins using Raphael.el to add methods to SVG elements just work without help
         
-        return raphInst;
+		// finally, mix in the properties
+        return Y.mix(raphInst, raph);
     }
     
     // augmenting static methods
@@ -129,4 +130,4 @@ YUI.add('gallery-raphael', function(Y) {
 }());
 
 
-}, 'gallery-2010.09.22-20-15' ,{requires:['oop', 'event-custom', 'event', 'node']});
+}, 'gallery-2010.09.29-18-36' ,{requires:['oop', 'event-custom', 'event', 'node']});
