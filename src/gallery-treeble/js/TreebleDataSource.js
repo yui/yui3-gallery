@@ -503,9 +503,9 @@ function requestSlices(
 				}
 				else
 				{
-					for (var i=0; i<slice.path.length; i++)
+					for (var j=0; j<slice.path.length; j++)
 					{
-						if (req.path[i] != slice.path[i])
+						if (req.path[j] != slice.path[j])
 						{
 							Y.error('TreebleDataSource found path mismatch');
 							break;
