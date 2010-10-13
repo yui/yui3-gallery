@@ -505,9 +505,9 @@ function requestSlices(
 				}
 				else
 				{
-					for (var i=0; i<slice.path.length; i++)
+					for (var j=0; j<slice.path.length; j++)
 					{
-						if (req.path[i] != slice.path[i])
+						if (req.path[j] != slice.path[j])
 						{
 							Y.error('TreebleDataSource found path mismatch');
 							break;
@@ -980,4 +980,4 @@ Y.namespace("Parsers").treebledatasource = function(oData)
 };
 
 
-}, 'gallery-2010.09.15-18-40' ,{requires:['datasource']});
+}, 'gallery-2010.10.13-20-59' ,{requires:['datasource']});
