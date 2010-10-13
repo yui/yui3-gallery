@@ -13,6 +13,30 @@ Y.mix(Y.namespace("Intl"), {
         this._neturalPattern = new RegExp("^(?:" + this._neutralChars + ")*$"); // ^N*$
     },
 
+    // Changes the list of bidi characters that define the behavior of the
+    // detectDirection method.
+    // Both parameters should be strings that would define regular expressions.
+    // Set each parameter to 'undefined' (or leave
+    // it undefined) in order to use the previous value.
+    //
+    // This should only be used in very rare cases, like when there are
+    // privately defined characters used. Use extreme care when using this
+    // method. The behavior of the detectDirection function is not
+    // well-defined if there is any string that would match both rtlChars
+    // and neutralChars, or if any of those parameters match anything other
+    // than a non-empty set of Unicode characters (it is OK to use two
+    // UTF-16 units to refer to characters outside the BMP).    
+    setBidiChars: function (rtlChars, neutralChars) {
+        if (rtlChars !== undefined) {
+            this._rtlChars = rtlChars;
+        }
+        if (neutralChars !== undefined) {
+            this._neutralChars = neutralChars;
+        }
+        this._initializeBidiPatterns();
+    },
+
+
     // Takes two parameters, and returns the detected bidi direction, based
     // on the Unicode Bidirectional Algorithm (UBA).
     //
@@ -36,7 +60,7 @@ Y.mix(Y.namespace("Intl"), {
     // don't want that, as it biases neutral strings towards
     // left-to-right), run the function with the second parameter set to
     // "ltr".
-    bidiDirection: function (text, fallbackDirection) {
+    detectDirection: function (text, fallbackDirection) {
         if (this._rtlPattern.test(text)) {
             return "rtl";
         } else if (fallbackDirection === "ltr") {
@@ -55,3 +79,5 @@ Y.mix(Y.namespace("Intl"), {
 });
 
 Y.Intl._initializeBidiPatterns();
+
+Y.mix(Y.namespace("Intl"), { bidiDirection: Y.Intl.detectDirection }); // For backward compatibility

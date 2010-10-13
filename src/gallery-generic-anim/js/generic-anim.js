@@ -10,7 +10,13 @@ Y.GenericAnim = Y.Base.create("genericAnim", Y.Base, [], {
     _timer : null,
     _start : null,
     
-    initializer : function() { },
+    initializer : function() {
+        var args = { preventable : false, emitFacade : false };
+        this.publish("step", args);
+        this.publish("complete", args);
+        this.publish("stopped", args);
+        this.publish("end", args);
+    },
     
     run : function() {
         this.publish("start", {
@@ -19,16 +25,24 @@ Y.GenericAnim = Y.Base.create("genericAnim", Y.Base, [], {
                 
                 this._frame = 0;
                 
-                if(this._timer && L.isFunction(this._timer.cancel())) {
+                if(this._timer && L.isFunction(this._timer.cancel)) {
+                    Y.log("cancelling previous animation");
+                    
                     this._timer.cancel();
                 }
                 
                 this._timer = Y.later(Math.floor(this.get("duration") / steps), this, function() {
                     if(this._frame < steps) {
+                        Y.log("animation step #" + (this._frame + 1));
+                        
                         this.fire("step", ++this._frame);
                     } else {
+                        Y.log("animation complete");
+                        Y.log("animation end");
+                        
                         this._timer.cancel();
                         this.fire("complete");
+                        this.fire("end");
                     }
                 }, null, true);
             }
@@ -36,8 +50,13 @@ Y.GenericAnim = Y.Base.create("genericAnim", Y.Base, [], {
     },
     
     stop : function() {
-        if(this._timer && L.isFunction(this._timer.cancel())) {
+        if(this._timer && L.isFunction(this._timer.cancel)) {
+            Y.log("animation stopped");
+            Y.log("animation end");
+            
             this._timer.cancel();
+            this.fire("stopped");
+            this.fire("end");
         }
     },
     
