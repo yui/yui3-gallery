@@ -186,4 +186,4 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
 });
 
 
-}, '@VERSION@' ,{requires:['gallery-carousel', 'anim', 'plugin', 'pluginhost']});
+}, 'gallery-2010.10.13-20-59' ,{requires:['gallery-carousel', 'anim', 'plugin', 'pluginhost']});
