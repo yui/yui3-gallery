@@ -1172,38 +1172,38 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         if (selectedItem === 0) {
             btn = bb.one(".yui3-carousel-next-button");
             if (btn) {
-                btn.removeClass(".yui3-carousel-button-disabled");
+                btn.removeClass("yui3-carousel-button-disabled");
                 canGoForward = true;
             }
             if (!isCircular) {
                 btn = bb.one(".yui3-carousel-first-button");
                 if (btn) {
-                    btn.addClass(".yui3-carousel-first-button-disabled");
+                    btn.addClass("yui3-carousel-first-button-disabled");
                     canGoBackward = false;
                 }
             }
         } else if (currPage == lastPage) {
             btn = bb.one(".yui3-carousel-first-button");
             if (btn) {
-                btn.removeClass(".yui3-carousel-first-button-disabled");
+                btn.removeClass("yui3-carousel-first-button-disabled");
                 canGoBackward = true;
             }
             if (!isCircular) {
                 btn = bb.one(".yui3-carousel-next-button");
                 if (btn) {
-                    btn.addClass(".yui3-carousel-button-disabled");
+                    btn.addClass("yui3-carousel-button-disabled");
                     canGoForward = false;
                 }
             }
         } else {
             btn = bb.one(".yui3-carousel-first-button");
             if (btn) {
-                btn.removeClass(".yui3-carousel-first-button-disabled");
+                btn.removeClass("yui3-carousel-first-button-disabled");
                 canGoBackward = true;
             }
             btn = bb.one(".yui3-carousel-next-button");
             if (btn) {
-                btn.removeClass(".yui3-carousel-button-disabled");
+                btn.removeClass("yui3-carousel-button-disabled");
                 canGoForward = true;
             }
         }
