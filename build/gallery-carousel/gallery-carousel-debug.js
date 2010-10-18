@@ -26,7 +26,11 @@ function Carousel() {
 var getCN = Y.ClassNameManager.getClassName,
     JS = Y.Lang,
     Node = Y.Node,
+    canGoBackward = false,
+    canGoForward = true,
+
     // Carousel custom events
+
     /**
      * @event afterScroll
      * @description          fires after the Carousel has scrolled its view
@@ -837,9 +841,13 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         }
 
         if (target.hasClass("yui3-carousel-first-button")) {
-            self.scrollPageBackward();
+            if (canGoBackward) {
+                self.scrollPageBackward();
+            }
         } else if (target.hasClass("yui3-carousel-next-button")) {
-            self.scrollPageForward();
+            if (canGoForward) {
+                self.scrollPageForward();
+            }
         }
     },
 
@@ -1140,44 +1148,51 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         var self = this,
             bb = self.get("boundingBox"),
             isCircular = self.get("isCircular"),
-            btn, p, pages;
+            btn, currPage, lastPage, pages;
 
         selectedItem = selectedItem || self.get("selectedItem");
         self._uiSetSelectedItem(selectedItem, true);
         pages = bb.all(".yui3-carousel-nav-item");
-        p = self.getPageForItem(selectedItem);
-        self._uiSetNavItem(pages.item(p));
+        currPage = self.getPageForItem(selectedItem);
+        self._uiSetNavItem(pages.item(currPage));
+        lastPage = self.getPageForItem(self.get("numItems") - 1);
 
         if (selectedItem === 0) {
             btn = bb.one(".yui3-carousel-next-button");
             if (btn) {
                 btn.removeClass(".yui3-carousel-button-disabled");
+                canGoForward = true;
             }
             if (!isCircular) {
                 btn = bb.one(".yui3-carousel-first-button");
                 if (btn) {
                     btn.addClass(".yui3-carousel-first-button-disabled");
+                    canGoBackward = false;
                 }
             }
-        } else if (selectedItem == self.get("numItems") - 1) {
+        } else if (currPage == lastPage) {
             btn = bb.one(".yui3-carousel-first-button");
             if (btn) {
                 btn.removeClass(".yui3-carousel-first-button-disabled");
+                canGoBackward = true;
             }
             if (!isCircular) {
                 btn = bb.one(".yui3-carousel-next-button");
                 if (btn) {
                     btn.addClass(".yui3-carousel-button-disabled");
+                    canGoForward = false;
                 }
             }
         } else {
             btn = bb.one(".yui3-carousel-first-button");
             if (btn) {
                 btn.removeClass(".yui3-carousel-first-button-disabled");
+                canGoBackward = true;
             }
             btn = bb.one(".yui3-carousel-next-button");
             if (btn) {
                 btn.removeClass(".yui3-carousel-button-disabled");
+                canGoForward = true;
             }
         }
     },
