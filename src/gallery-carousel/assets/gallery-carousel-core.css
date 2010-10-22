@@ -43,6 +43,8 @@
 
 .yui3-js-enabled .yui3-carousel-vertical {
     min-width: 114px;
+
+    *width: 114px;
 }
 
 .yui3-js-enabled .yui3-carousel-nav {
