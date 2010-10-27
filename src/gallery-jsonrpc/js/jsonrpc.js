@@ -129,13 +129,22 @@ Y.JSONRPC = Y.mix(JSONRPC, {
                             data = Y.JSON.parse(response.responseText);
                         }
                         catch (e) {
-                            if (failure) {
-                                failure.call(ioConfig.context, response,
-                                    "Invalid JSON response");
-                            }
+                            data = {
+                                error: {
+                                    code: -32700,
+                                    message: "Parse error"
+                                },
+                                id: null
+                            };
                         }
 
-                        success.call(ioConfig.context, data);
+                        if (data.error) {
+                            if (failure) {
+                                failure.call(ioConfig.context, data.error);
+                            }
+                        } else {
+                            success.call(ioConfig.context, data.result);
+                        }
                     };
                 }
             }
