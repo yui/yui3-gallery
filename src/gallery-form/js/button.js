@@ -1,47 +1,8 @@
-function Button () {
-    Button.superclass.constructor.apply(this,arguments);
-}
-
-Y.mix(Button, {
-    NAME : 'button',
-    
-    HTML_PARSER : {
-        
-    },
-
-    ATTRS : {
-        onclick : {
-			validator : function (val) {
-				if (Y.Lang.isObject(val) === false) {
-					return false;
-				}
-				if (typeof val.fn == 'undefined' ||
-					Y.Lang.isFunction(val.fn) === false) {
-					return false;
-				}
-				return true;
-			},
-			value : {
-				fn : function (e) {
-
-				}
-			},
-            setter : function (val) {
-                val.scope = val.scope || this;
-                val.argument = val.argument || {};
-                return val;
-            }
-        }
-    },
-
-    NODE_TEMPLATE : '<button></button>'
-});
-
-Y.extend(Button, Y.FormField, {
+Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
     _renderButtonNode : function () {
         var contentBox = this.get('contentBox'), bn;
         
-        bn = Y.Node.create(Button.NODE_TEMPLATE);
+        bn = Y.Node.create(Y.FormButton.NODE_TEMPLATE);
         contentBox.appendChild(bn);
         this._fieldNode = bn;
     },
@@ -75,6 +36,31 @@ Y.extend(Button, Y.FormField, {
 		this.after('onclickChange', Y.bind(this._setClickHandler, this, true));
 		this._setClickHandler();
 	}
-});
+}, {
+    ATTRS : {
+        onclick : {
+			validator : function (val) {
+				if (Y.Lang.isObject(val) === false) {
+					return false;
+				}
+				if (typeof val.fn == 'undefined' ||
+					Y.Lang.isFunction(val.fn) === false) {
+					return false;
+				}
+				return true;
+			},
+			value : {
+				fn : function (e) {
 
-Y.Button = Button;
+				}
+			},
+            setter : function (val) {
+                val.scope = val.scope || this;
+                val.argument = val.argument || {};
+                return val;
+            }
+        }
+    },
+
+    NODE_TEMPLATE : '<button></button>'
+});

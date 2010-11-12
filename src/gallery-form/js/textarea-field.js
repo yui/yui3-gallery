@@ -5,33 +5,17 @@
  * @constructor
  * @description A hidden field node
  */
-function TextareaField () {
-    TextareaField.superclass.constructor.apply(this,arguments);
-}
-
-Y.mix(TextareaField, {
-    NAME : 'textarea-field',
-
-    /** 
-     * @property TextareaField.NODE_TEMPLATE
-     * @type String
-     * @description Template used to draw a textarea node
-     */
-    NODE_TEMPLATE : '<textarea></textarea>'
-});
-
-Y.extend(TextareaField, Y.FormField, {
+Y.TextareaField = Y.Base.create('textarea-field', Y.FormField, [Y.WidgetChild], {
     _renderFieldNode : function () {
         var contentBox = this.get('contentBox'),
-            field = contentBox.query('#' + this.get('id'));
+            field = contentBox.one('#' + this.get('id'));
                 
         if (!field) {
-            field = Y.Node.create(Y.substitute(TextareaField.NODE_TEMPLATE, {
+            field = Y.Node.create(Y.TextareaField.NODE_TEMPLATE);
+            field.setAttrs({
                 name : this.get('name'), 
-                type : 'text',
-                id : this.get('id'),
-                value : this.get('value')
-            }));
+                innerHTML : this.get('value')
+            });
             contentBox.appendChild(field);
         }
 
@@ -40,6 +24,11 @@ Y.extend(TextareaField, Y.FormField, {
         
         this._fieldNode = field;
     }
+}, {
+    /** 
+     * @property TextareaField.NODE_TEMPLATE
+     * @type String
+     * @description Template used to draw a textarea node
+     */
+    NODE_TEMPLATE : '<textarea></textarea>'
 });
-
-Y.TextareaField = TextareaField;

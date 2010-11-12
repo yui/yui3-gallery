@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Form</title>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.1.0pr2/build/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/combo?3.1.1/build/loader/loader-min.js" type="text/javascript"></script>
+<script src="http://yui.yahooapis.com/combo?3.1.1/build/oop/oop.js&3.1.1/build/dom/dom.js&3.1.1/build/event-custom/event-custom.js&3.1.1/build/event/event-base.js&3.1.1/build/pluginhost/pluginhost.js&3.1.1/build/node/node.js&3.1.1/build/event/event-delegate.js&3.1.1/build/attribute/attribute.js&3.1.1/build/event/event-focus.js&3.1.1/build/base/base.js&3.1.1/build/classnamemanager/classnamemanager.js&3.1.1/build/io/io-base.js&3.1.1/build/io/io-form.js&3.1.1/build/collection/arraylist.js&3.1.1/build/widget/widget-parent.js&3.1.1/build/widget/widget-child.js&3.1.1/build/widget/widget.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../../build/gallery-form/gallery-form.js"></script>
+</head>
+<body>
+    <div id="form">
+	</div>
+<div id="form">
+</div>
+
+<script type="text/javascript">
+//<!--
+	YUI({
+		filter : "RAW"
+	}).use('gallery-form', function (Y) {
+		var f = new Y.Form({
+			contentBox : '#form',
+			children : [
+			    {type : 'SelectField', useDefaultOption : false, name : 'test-choices', label : 'test choices',  choices : [
+			        {label : 'ch1', value : 'ch1'},
+			        {label : 'ch2', value : 'ch2'}
+			    ]}
+			]
+		});
+		f.render();
+
+	});
+//-->
+</script>
+</body>
+</html>
