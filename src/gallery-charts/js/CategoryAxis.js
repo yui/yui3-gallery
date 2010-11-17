@@ -27,7 +27,7 @@ Y.extend(CategoryAxis, Y.BaseAxis,
 	 */
 	_updateMinAndMax: function()
 	{
-		this._dataMaximum = Math.max(this._data.length - 1, 0);
+		this._dataMaximum = Math.max(this.get("data").length - 1, 0);
 		this._dataMinimum = 0;
 	},
 
@@ -54,25 +54,29 @@ Y.extend(CategoryAxis, Y.BaseAxis,
 		}
         this._indices[key] = arr;
 		this.get("keys")[key] = labels.concat();
-		this._data = this._data.concat(labels);
-	},
+	    this._updateTotalDataFlag = true;
+    },
 
-	/**
-	 * Returns an array of values based on an identifier key.
-	 */
-	getDataByKey: function (value)
-	{
-		var keys = this._indices;
-		if(keys[value])
-		{
-			return keys[value];
-		}
-		return null;
-	},
+    /**
+     * Returns an array of values based on an identifier key.
+     */
+    getDataByKey: function (value)
+    {
+        if(!this._indices)
+        {
+            this.get("keys");
+        }
+        var keys = this._indices;
+        if(keys[value])
+        {
+            return keys[value];
+        }
+        return null;
+    },
 
     getTotalMajorUnits: function(majorUnit, len)
     {
-        return this._data.length;
+        return this.get("data").length;
     },
     
     getMajorUnitDistance: function(len, uiLen, majorUnit)
@@ -93,12 +97,17 @@ Y.extend(CategoryAxis, Y.BaseAxis,
     {
         return l/ct;
     },
-    
+   
+    getLabelByIndex: function(i, l, format)
+    {
+        return this.get("data")[i];
+    },
+
     getLabelAtPosition: function(pos, len, format)
     {
-        var count = this._data.length - 1,
+        var count = this.get("data").length - 1,
         i = Math.round(pos/(len/count));
-        return this._data[i];
+        return this.get("data")[i];
     }
 });
 

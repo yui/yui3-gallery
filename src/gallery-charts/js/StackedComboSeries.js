@@ -1,4 +1,4 @@
-Y.StackedComboSeries = Y.Base.create("stackedComboSeries", Y.ComboSeries, [], {
+Y.StackedComboSeries = Y.Base.create("stackedComboSeries", Y.ComboSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
         Y.StackedComboSeries.superclass.setAreaData.apply(this);

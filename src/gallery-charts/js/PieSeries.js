@@ -1,104 +1,4 @@
-function PieSeries(config)
-{
-    PieSeries.superclass.constructor.apply(this, arguments);
-}
-
-PieSeries.NAME = "pieSeries";
-
-PieSeries.ATTRS = {
-
-	type: {		
-  	    value: "pie"
-    },
-	/**
-	 * Order of this ISeries instance of this <code>type</code>.
-	 */
-	order: {
-	    value:NaN
-    },
-	graph: {
-        value: null
-	},
-	/**
-	 * Reference to the <code>Axis</code> instance used for assigning 
-	 * x-values to the graph.
-	 */
-	categoryAxis: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("categoryAxis");
-		},
-		
-        lazyAdd: false
-	},
-	
-	valueAxis: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("valueAxis");
-		},
-		
-        lazyAdd: false
-    },
-	/**
-	 * Indicates which array to from the hash of value arrays in 
-	 * the category <code>Axis</code> instance.
-	 */
-	categoryKey: {
-        value: null,
-
-		validator: function(value)
-		{
-			return value !== this.get("categoryKey");
-		}
-	},
-	/**
-	 * Indicates which array to from the hash of value arrays in 
-	 * the value <code>Axis</code> instance.
-	 */
-	valueKey: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("valueKey");
-		}
-	},
-
-    categoryDisplayName: {
-        setter: function(val)
-        {
-            this._categoryDisplayName = val;
-            return val;
-        },
-
-        getter: function()
-        {
-            return this._categoryDisplayName || this.get("categoryKey");
-        }
-    },
-
-    valueDisplayName: {
-        setter: function(val)
-        {
-            this._valueDisplayName = val;
-            return val;
-        },
-
-        getter: function()
-        {
-            return this._valueDisplayName || this.get("valueKey");
-        }
-    },
-
-    slices: null
-};
-
-Y.extend(PieSeries, Y.Renderer, {
+Y.PieSeries = Y.Base.create("pieSeries", Y.MarkerSeries, [], { 
     /**
      * @private
      */
@@ -112,38 +12,44 @@ Y.extend(PieSeries, Y.Renderer, {
     /**
      * @private
      */
-    renderUI: function()
-    {
-        this._setNode();
-    },
-    
-    /**
-     * @private
-     */
-    bindUI: function()
+    addListeners: function()
     {
         var categoryAxis = this.get("categoryAxis"),
             valueAxis = this.get("valueAxis");
         if(categoryAxis)
         {
-            categoryAxis.after("axisReady", Y.bind(this._categoryAxisChangeHandler, this));
-            categoryAxis.after("axisUpdate", Y.bind(this._categoryAxisChangeHandler, this));
+            categoryAxis.after("dataReady", Y.bind(this._categoryDataChangeHandler, this));
+            categoryAxis.after("dataUpdate", Y.bind(this._categoryDataChangeHandler, this));
         }
         if(valueAxis)
         {
-            valueAxis.after("axisReady", Y.bind(this._valueAxisChangeHandler, this));
-            valueAxis.after("axisUpdate", Y.bind(this._valueAxisChangeHandler, this));
+            valueAxis.after("dataReady", Y.bind(this._valueDataChangeHandler, this));
+            valueAxis.after("dataUpdate", Y.bind(this._valueDataChangeHandler, this));
         }
-        this.after("categoryAxisChange", Y.bind(this.categoryAxisChangeHandler, this));
-        this.after("valueAxisChange", Y.bind(this.valueAxisChangeHandler, this));
-        this.after("stylesChange", Y.bind(this._updateHandler, this));
-        
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
+        this.after("categoryAxisChange", this.categoryAxisChangeHandler);
+        this.after("valueAxisChange", this.valueAxisChangeHandler);
+        this.after("stylesChange", this._updateHandler);
     },
    
+    validate: function()
+    {
+        this.draw();
+        this._renderered = true;
+    },
+
+    _categoryAxisChangeHandler: function(e)
+    {
+        var categoryAxis = this.get("categoryAxis");
+        categoryAxis.after("dataReady", Y.bind(this._categoryDataChangeHandler, this));
+        categoryAxis.after("dataUpdate", Y.bind(this._categoryDataChangeHandler, this));
+    },
+    
+    _valueAxisChangeHandler: function(e)
+    {
+        var valueAxis = this.get("valueAxis");
+        valueAxis.after("dataReady", Y.bind(this._valueDataChangeHandler, this));
+        valueAxis.after("dataUpdate", Y.bind(this._valueDataChangeHandler, this));
+    },
 	/**
 	 * Constant used to generate unique id.
 	 */
@@ -154,9 +60,9 @@ Y.extend(PieSeries, Y.Renderer, {
 	 * Handles updating the graph when the x < code>Axis</code> values
 	 * change.
 	 */
-	_categoryAxisChangeHandler: function(event)
+	_categoryDataChangeHandler: function(event)
 	{
-        if(this.get("rendered") && this.get("categoryKey") && this.get("valueKey"))
+       if(this._rendered && this.get("categoryKey") && this.get("valueKey"))
 		{
 			this.draw();
 		}
@@ -167,121 +73,55 @@ Y.extend(PieSeries, Y.Renderer, {
 	 * Handles updating the chart when the y <code>Axis</code> values
 	 * change.
 	 */
-	_valueAxisChangeHandler: function(event)
+	_valueDataChangeHandler: function(event)
 	{
-        if(this.get("rendered") && this.get("categoryKey") && this.get("valueKey"))
+        if(this._rendered && this.get("categoryKey") && this.get("valueKey"))
 		{
-			this.draw();
+            this.draw();
 		}
 	},
-    
+   
 	/**
 	 * @private (override)
 	 */
 	draw: function()
     {
-        var node = Y.Node.one(this._parentNode).get("parentNode"),
-			w = node.get("offsetWidth"),
-            h = node.get("offsetHeight");
-        if  (!isNaN(w) && !isNaN(h) && w > 0 && h > 0)
-		{
+        var graph = this.get("graph"),
+            w = graph.get("width"),
+            h = graph.get("height");
+        if(isFinite(w) && isFinite(h) && w > 0 && h > 0)
+		{   
+            this._rendered = true;
             this.drawSeries();
+            this.fire("drawingComplete");
 		}
 	},
     
     /**
      * @private
-     * @description Creates a marker based on its style properties.
      */
-    getMarker: function(config)
-    {
-        var marker,
-            cache = this._markerCache,
-            styles = config.styles,
-            index = config.index;
-        config.colorIndex = index;
-        if(cache.length > 0)
-        {
-            marker = cache.shift();
-            marker.set("index", index);
-            marker.set("series", this);
-            marker.set("colorIndex", index);
-            if(marker.get("styles") !== styles)
-            {
-                marker.set("styles", styles);
-            }
-        }
-        else
-        {
-            config.series = this;
-            marker = new Y.Marker(config);
-            marker.render(Y.one(this.get("node")));
-        }
-        this._markers.push(marker);
-        this._markerNodes.push(Y.one(marker.get("node")));
-        return marker;
-    },   
-    
-    /**
-     * @private
-     * Creates a cache of markers for reuse.
-     */
-    _createMarkerCache: function()
-    {
-        if(this._markers)
-        {
-            this._markerCache = this._markers.concat();
-        }
-        else
-        {
-            this._markerCache = [];
-        }
-        this._markers = [];
-        this._markerNodes = [];
-    },
-    
-    /**
-     * @private
-     * Removes unused markers from the marker cache
-     */
-    _clearMarkerCache: function()
-    {
-        var len = this._markerCache.length,
-            i = 0,
-            marker,
-            markerCache;
-        for(; i < len; ++i)
-        {
-            marker = markerCache[i];
-            marker.parentNode.removeChild(marker);
-        }
-        this._markerCache = [];
-    },
-    
-    /**
-     * @private
-     */
-	drawSeries: function()
+	drawPlots: function()
     {
         var values = this.get("valueAxis").getDataByKey(this.get("valueKey")).concat(),
+            catValues = this.get("categoryAxis").getDataByKey(this.get("categoryKey")).concat(),
             totalValue = 0,
             itemCount = values.length,
-            styles = this.get("styles"),
-            fillColors = styles.fillColors,
-            fillAlphas = styles.fillAlphas || ["1"],
-            borderColors = styles.borderColors,
-            borderWeights = styles.borderWeights,
-            borderAlphas = styles.borderAlphas,
+            styles = this.get("styles").marker,
+            fillColors = styles.fill.colors,
+            fillAlphas = styles.fill.alphas || ["1"],
+            borderColors = styles.border.colors,
+            borderWeights = [styles.border.weight],
+            borderAlphas = [styles.border.alpha],
             tbw = borderWeights.concat(),
             tbc = borderColors.concat(),
             tba = borderAlphas.concat(),
             tfc,
             tfa,
             padding = styles.padding,
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-			w = node.get("offsetWidth") - (padding.left + padding.right),
-            h = node.get("offsetHeight") - (padding.top + padding.bottom),
-            totalAngle = 0,
+            graph = this.get("graph"),
+			w = graph.get("width") - (padding.left + padding.right),
+            h = graph.get("height") - (padding.top + padding.bottom),
+            startAngle = -90,
             halfWidth = w / 2,
             halfHeight = h / 2,
             radius = Math.min(halfWidth, halfHeight),
@@ -292,8 +132,9 @@ Y.extend(PieSeries, Y.Renderer, {
             la,
             lw,
             wedgeStyle,
-            marker;
-
+            marker,
+            graphOrder = this.get("graphOrder"),
+            mnode;
         for(; i < itemCount; ++i)
         {
             value = values[i];
@@ -324,7 +165,7 @@ Y.extend(PieSeries, Y.Renderer, {
             {
                 tfc = fillColors.concat();
             }
-            if(tfc && tfa.length < 1)
+            if(tfa && tfa.length < 1)
             {
                 tfa = fillAlphas.concat();
             }
@@ -343,6 +184,7 @@ Y.extend(PieSeries, Y.Renderer, {
             lw = tbw ? tbw.shift() : null;
             lc = tbc ? tbc.shift() : null;
             la = tba ? tba.shift() : null;
+            startAngle += angle;
             wedgeStyle = {
                 border: {
                     color:lc,
@@ -350,86 +192,200 @@ Y.extend(PieSeries, Y.Renderer, {
                     alpha:la
                 },
                 fill: {
-                    color:tfc ? tfc.shift() : null,
+                    color:tfc ? tfc.shift() : this._getDefaultColor(i, "slice"),
                     alpha:tfa ? tfa.shift() : null
                 },
                 shape: "wedge",
                 props: {
                     arc: angle,
                     radius: radius,
-                    startAngle: totalAngle,
+                    startAngle: startAngle,
                     x: halfWidth,
                     y: halfHeight
                 },
                 width: w,
                 height: h
             };
-            marker = this.getMarker.apply(this, [{index:i, styles:wedgeStyle}]);
-            totalAngle += angle;    
+            marker = this.getMarker(wedgeStyle, graphOrder, i);
+            mnode = Y.one(marker.parent);
         }
         this._clearMarkerCache();
     },
 
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget);
-
-            switch(type)
+        var state = this._getState(type),
+            markerStyles,
+            indexStyles,
+            marker = this._markers[i],
+            graphicNode = this._graphicNodes[i],
+            styles = this.get("styles").marker; 
+            markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+            indexStyles = this._mergeStyles(markerStyles, {});
+            indexStyles.fill.color = indexStyles.fill.colors[i % indexStyles.fill.colors.length];
+            indexStyles.fill.alpha = indexStyles.fill.alphas[i % indexStyles.fill.alphas.length];
+            marker.update(indexStyles);
+            if(state == "over" || state == "down")
             {
-                case "mouseout" :
-                    marker.set("state", "off");
-                break;
-                case "mouseover" :
-                    marker.set("state", "over");
-                break;
-                case "mouseup" :
-                    marker.set("state", "over");
-                break;
-                case "mousedown" :
-                    marker.set("state", "down");
-                break;
+                Y.one(graphicNode).setStyle("zIndex", 3);
+            }
+            else
+            {
+                Y.one(graphicNode).setStyle("zIndex", 2);
             }
     },
+    
     /**
      * @private
      * @return Default styles for the widget
      */
-    _getDefaultStyles: function()
+    _getPlotDefaults: function()
     {
-        return {
+         var defs = {
             padding:{
                 top: 0,
                 left: 0,
                 right: 0,
                 bottom: 0
             },
-            fillAlphas:["1"],
-            borderColors:["#000000"],
-            borderWeights:["0"],
-            borderAlphas:["1"],
-
-            over: {
-                borderColors:["#000000"],
-                fillAlphas:[1]
+            fill:{
+                alphas:["1"]
+            },
+            border: {
+                weight: 0,
+                alpha: 1
             }
         };
+        defs.fill.colors = this._defaultSliceColors;
+        defs.border.colors = this._defaultBorderColors;
+        return defs;
     },
+
+    /**
+     * @private
+     */
+    _defaultLineColors:["#426ab3", "#d09b2c", "#000000", "#b82837", "#b384b5", "#ff7200", "#779de3", "#cbc8ba", "#7ed7a6", "#007a6c"],
+
+    /**
+     * @private
+     */
+    _defaultFillColors:["#6084d0", "#eeb647", "#6c6b5f", "#d6484f", "#ce9ed1", "#ff9f3b", "#93b7ff", "#e0ddd0", "#94ecba", "#309687"],
+    
+    /**
+     * @private
+     */
+    _defaultBorderColors:["#205096", "#b38206", "#000000", "#94001e", "#9d6fa0", "#e55b00", "#5e85c9", "#adab9e", "#6ac291", "#006457"],
+    
+    /**
+     * @private
+     */
+    _defaultSliceColors: ["#66007f", "#a86f41", "#295454", "#996ab2", "#e8cdb7", "#90bdbd","#000000","#c3b8ca", "#968373", "#678585"],
 
     /**
      * @private
      * @description Colors used if style colors are not specified
      */
-    _getDefaultColor: function(index)
+    _getDefaultColor: function(index, type)
     {
-        var colors = [
-                "#2011e6", "#f5172c", "#00ff33", "#ff6600", "#7f03d6", "#f3f301",
-				"#4982b8", "#f905eb", "#0af9da", "#fecb01", "#8e9a9b", "#d701fe",
-				"#8cb3d1", "#d18cae", "#b3ddd3", "#fcc551", "#785a85", "#f86b0e"
-            ];
+        var colors = {
+                line: this._defaultLineColors,
+                fill: this._defaultFillColors,
+                border: this._defaultBorderColors,
+                slice: this._defaultSliceColors
+            },
+            col = colors[type],
+            l = col.length;
         index = index || 0;
-        return colors[index];
+        if(index >= l)
+        {
+            index = index % l;
+        }
+        type = type || "fill";
+        return colors[type][index];
+    }
+}, {
+    ATTRS: {
+
+        type: {		
+            value: "pie"
+        },
+        /**
+         * Order of this ISeries instance of this <code>type</code>.
+         */
+        order: {},
+        graph: {},
+        /**
+         * Reference to the <code>Axis</code> instance used for assigning 
+         * x-values to the graph.
+         */
+        categoryAxis: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("categoryAxis");
+            }
+        },
+        
+        valueAxis: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("valueAxis");
+            }
+        },
+        /**
+         * Indicates which array to from the hash of value arrays in 
+         * the category <code>Axis</code> instance.
+         */
+        categoryKey: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("categoryKey");
+            }
+        },
+        /**
+         * Indicates which array to from the hash of value arrays in 
+         * the value <code>Axis</code> instance.
+         */
+        valueKey: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("valueKey");
+            }
+        },
+
+        categoryDisplayName: {
+            setter: function(val)
+            {
+                this._categoryDisplayName = val;
+                return val;
+            },
+
+            getter: function()
+            {
+                return this._categoryDisplayName || this.get("categoryKey");
+            }
+        },
+
+        valueDisplayName: {
+            setter: function(val)
+            {
+                this._valueDisplayName = val;
+                return val;
+            },
+
+            getter: function()
+            {
+                return this._valueDisplayName || this.get("valueKey");
+            }
+        },
+
+        slices: null
     }
 });
-	
-Y.PieSeries = PieSeries;

@@ -1,4 +1,4 @@
-Y.StackedAreaSplineSeries = Y.Base.create("stackedAreaSplineSeries", Y.AreaSeries, [], {
+Y.StackedAreaSplineSeries = Y.Base.create("stackedAreaSplineSeries", Y.AreaSeries, [Y.CurveUtil, Y.StackingUtil], {
 	/**
 	 * @private
 	 */
@@ -10,10 +10,10 @@ Y.StackedAreaSplineSeries = Y.Base.create("stackedAreaSplineSeries", Y.AreaSerie
     }
 }, {
     ATTRS : {
+        /**
+         * Indicates the type of graph.
+         */
         type: {
-            /**
-             * Indicates the type of graph.
-             */
             value:"stackedAreaSpline"
         }
     }

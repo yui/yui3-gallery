@@ -14,9 +14,6 @@
 function BaseAxis (config)
 {
     this._createId();
-    this._keys = {};
-    this._data = [];
-    this._keyCollection = [];
     BaseAxis.superclass.constructor.apply(this, arguments);
 }
 
@@ -28,12 +25,38 @@ BaseAxis.NAME = "baseAxis";
  */
 BaseAxis.ATTRS = {
 	/**
-	 * Parent element for the BaseAxis instance.
+	 * Hash of array identifed by a string value.
 	 */
-	parent:{
-		lazyAdd:false,
-		
-		value:null
+	keys: {
+        getter: function ()
+		{
+            if(!this._keys)
+            {
+                this._keys = {};
+            }
+			return this._keys;
+		},
+        
+        setter: function(val)
+        {
+            var i, l;
+            if(Y.Lang.isArray(val))
+            {
+                l = val.length;
+                for(i = 0; i < l; ++i)
+                {
+                    this.addKey(val[i]);
+                }
+                return;
+            }
+            for(i in val)
+            {
+                if(val.hasOwnProperty(i))
+                {
+                    this.addKey(val[i]);
+                }
+            }
+        }
 	},
 
 	/**
@@ -41,7 +64,7 @@ BaseAxis.ATTRS = {
 	 * Storage for rounding unit
 	 */
 	roundingUnit:{
-		getter: function ()
+        getter: function ()
 		{
 			return this._roundingUnit;
 		},
@@ -52,7 +75,6 @@ BaseAxis.ATTRS = {
 			{
 				this._updateMinAndMax();
 			}
-			return val;
 		}
  	},
 
@@ -72,7 +94,7 @@ BaseAxis.ATTRS = {
 				return val;
 			}
 			this._roundMinAndMax = val;
-			this._updateMinAndMax();
+            this._updateMinAndMax();
 		}
   	},
 
@@ -97,20 +119,12 @@ BaseAxis.ATTRS = {
 	 * to build its own data.
 	 */
 	dataProvider:{
-		getter: function ()
+        getter: function ()
 		{
 			return this._dataProvider;
 		},
 		setter: function (value)
 		{
-			if(value === this._dataProvider) 
-			{
-				return;
-			}
-			if(this._dataProvider) 
-			{
-				//remove listeners
-			}
 			if(value.hasOwnProperty("data") && Y.Lang.isArray(value.data))
             {
                 value = Y.merge(value);
@@ -118,9 +132,35 @@ BaseAxis.ATTRS = {
             }
             this._dataProvider = {data:value.concat()};
 			this._dataClone = this._dataProvider.data.concat();
-			return value;
-		},
-		lazyAdd: false
+           
+            var keyCollection = this.get("keyCollection"),
+                keys = this.get("keys"),
+                i,
+                l;
+            if(keys)
+            {
+                for(i in keys)
+                {
+                    if(keys.hasOwnProperty(i))
+                    {
+                        delete keys[i];
+                    }
+                }
+            }
+            if(keyCollection && keyCollection.length)
+            {
+                i = 0;
+                l = keyCollection.length;
+                for(; i < l; ++i)
+                {
+                    this.addKey(keyCollection[i]);
+                }
+            }
+            if(this._dataReady)
+            {
+                this.fire("dataUpdate");
+            }
+		}
 	},
 
 	/**
@@ -130,6 +170,10 @@ BaseAxis.ATTRS = {
 	dataMaximum: {
 		getter: function ()
 		{
+            if(!this._dataMaximum)
+            {
+                this._updateMinAndMax();
+            }
 			return this._dataMaximum;
 		}
 	},
@@ -140,9 +184,9 @@ BaseAxis.ATTRS = {
 	maximum: {
 		getter: function ()
 		{
-			if(this._autoMax || !this._setMaximum) 
+			if(this.get("autoMax") || !this._setMaximum) 
 			{
-				return this._dataMaximum;
+				return this.get("dataMaximum");
 			}
 			return this._setMaximum;
 		},
@@ -159,6 +203,10 @@ BaseAxis.ATTRS = {
 	dataMinimum: {
 		getter: function ()
 		{
+            if(isNaN(this._dataMinimum))
+            {
+                this._updateMinAndMax();
+            }
 			return this._dataMinimum;
 		}
 	},
@@ -169,11 +217,11 @@ BaseAxis.ATTRS = {
 	minimum: {
 		getter: function ()
 		{
-			if(this._autoMin || !this._setMinimum) 
+			if(this.get("autoMin") || !this._setMinimum) 
 			{
-				return this._dataMinimum;
+				return this.get("dataMinimum");
 			}
-			return this._setMinimum;
+            return this._setMinimum;
 		},
         setter: function(val)
         {
@@ -187,30 +235,16 @@ BaseAxis.ATTRS = {
 	 * set by the user.
 	 */
 	autoMax: {
-		getter: function ()
-		{
-			return this._autoMax;
-		},
-		setter: function (value)
-		{
-			this._autoMax = value;
-		}
-	},
+	    value: true
+    },
 
 	/**
 	 * Determines whether the minimum is calculated or explicitly
 	 * set by the user.
 	 */
 	autoMin: {
-		getter: function ()
-		{
-			return this._autoMin;
-		},
-		setter: function (value)
-		{
-			this._autoMin = value;
-		}
-	},
+	    value: true
+    },
 
 	/**
 	 * Array of axis data
@@ -218,64 +252,36 @@ BaseAxis.ATTRS = {
 	data: {
 		getter: function ()
 		{
-			return this._data;
+			if(!this._data || this._updateTotalDataFlag)
+            {
+                this._updateTotalData();
+            }
+            return this._data;
 		}
-	},
-
-	/**
-	 * Hash of array identifed by a string value.
-	 */
-	keys: {
-		lazyAdd: false,
-
-        getter: function ()
-		{
-			return this._keys;
-		},
-
-        setter: function(val)
-        {
-            var i, l;
-            if(Y.Lang.isArray(val))
-            {
-                l = val.length;
-                for(i = 0; i < l; ++i)
-                {
-                    this.addKey(val[i]);
-                }
-                return;
-            }
-            for(i in val)
-            {
-                if(val.hasOwnProperty(i))
-                {
-                    this.addKey(val[i]);
-                }
-            }
-        }
 	},
 
     keyCollection: {
         getter: function()
         {
-            return this._keyCollection;
+            var keys = this.get("keys"),
+                i, 
+                col = [];
+            for(i in keys)
+            {
+                if(keys.hasOwnProperty(i))
+                {
+                    col.push(i);
+                }
+            }
+            return col;
         },
         readOnly: true
     },
 
     labelFunction: {
-        getter: function()
+        value: function(val, format)
         {
-            if(this._labelFunction)
-            {
-                return this._labelFunction;
-            }
-            return this._defaultLabelFunction;
-        },
-
-        setter: function(val)
-        {
-            this._labelFunction = val;
+            return val;
         }
     }
 };
@@ -332,12 +338,8 @@ Y.extend(BaseAxis, Y.Base,
 	 * is true.
 	 */
 	_dataMaximum: null,
-	/**
-	 * @private
-	 * Storage for autoMax
-	 */
-	_autoMax: true,
-	/**
+	
+    /**
 	 * @private
 	 * Storage for minimum when autoMin is false.
 	 */
@@ -347,11 +349,6 @@ Y.extend(BaseAxis, Y.Base,
 	 * Storage for dataMinimum. 
 	 */
 	_dataMinimum: null,
-	/**
-	 * @private 
-	 * Storage for autoMin.
-	 */
-	_autoMin: true,
 	/**
 	 * @private
 	 * Storage for data
@@ -363,12 +360,14 @@ Y.extend(BaseAxis, Y.Base,
 	 */
 	_keys: null,
 
+    _updateTotalDataFlag: true,
+
 	/**
 	 * @private
 	 * Indicates that the axis has a data source and at least one
 	 * key.
 	 */
-	_axisReady: false,
+	_dataReady: false,
 	/**
 	 * Adds an array to the key hash.
 	 *
@@ -381,24 +380,23 @@ Y.extend(BaseAxis, Y.Base,
 		{
 			return;
 		}
-        this._keyCollection.push(value);
 		this._dataClone = this.get("dataProvider").data.concat();
 		var keys = this.get("keys"),
 			eventKeys = {},
 			event = {axis:this};
 		this._setDataByKey(value);
 		eventKeys[value] = keys[value].concat();
-		this._updateMinAndMax();
+        this._updateMinAndMax();
 		event.keysAdded = eventKeys;
 		if(!this._dataReady)
 		{
 			this._dataReady = true;
-			this.publish("axisReady", {fireOnce:true});
-			this.fire("axisReady", event);
+			this.publish("dataReady", {fireOnce:true});
+			this.fire("dataReady", event);
 		}
 		else
 		{
-			this.fire("axisUpdate", event);
+			this.fire("dataUpdate", event);
 		}
 	},
 
@@ -420,9 +418,27 @@ Y.extend(BaseAxis, Y.Base,
 			arr[i] = obj[key];
 		}
 		this.get("keys")[key] = arr;
-		this._data = this._data.concat(arr);
-	},
-		
+	    this._updateTotalDataFlag = true;
+    },
+
+    /**
+     * @private
+     */
+    _updateTotalData: function()
+    {
+		var keys = this.get("keys"),
+            i;
+        this._data = [];
+        for(i in keys)
+        {
+            if(keys.hasOwnProperty(i))
+            {
+                this._data = this._data.concat(keys[i]);
+            }
+        }
+        this._updateTotalDataFlag = false;
+    },
+
 	/**
 	 * Removes an array from the key hash.
 	 * 
@@ -442,13 +458,7 @@ Y.extend(BaseAxis, Y.Base,
 			newData = [],
 			removedKeys = {},
 			keys = this.get("keys"),
-			event = {},
-            keyCollection = this.get("keyCollection"),
-            i = Y.Array.indexOf(keyCollection, value);
-        if(keyCollection && keyCollection.length > 0 && i > -1)
-        {
-            keyCollection.splice(i, 1);
-        }
+			event = {};
         removedKeys[value] = keys[value].concat();
         for(key in keys)
         {
@@ -464,10 +474,10 @@ Y.extend(BaseAxis, Y.Base,
             }
         }
         keys = newKeys;
-        this._data = newData;
+        this._updateTotalDataFlag = true;
         this._updateMinAndMax();
         event.keysRemoved = removedKeys;
-        this.fire("axisUpdate", event);
+        this.fire("dataUpdate", event);
 	},
 
 	/**
@@ -532,77 +542,6 @@ Y.extend(BaseAxis, Y.Base,
 		this._dataMinimum = min;
 	},
 
-	/**
-	 * @private 
-	 * Handles updates axis data properties based on the <code>DataEvent.NEW_DATA</code>
-	 * event from the <code>dataProvider</code>.
-	 */
-	newDataUpdateHandler: function()
-	{
-		var i,
-			keys = this.get("keys"),
-			event = {}; 
-		this._data = [];
-		this._dataClone = this.get("dataProvider").data.concat();
-		for(i in keys)
-		{
-			if(keys.hasOwnProperty(i))
-			{
-				keys[i] = this._setDataByKey(i);
-				this._data = this._data.concat(keys[i]);
-			}
-		}
-		this._updateMinAndMax();
-		event.keysAdded = keys;
-		this.fire("axisUpdate", event);
-	},
-	/**
-	 * @private 
-	 * Updates axis data properties based on the <code>DataEvent.DATA_CHANGE</code>
-	 * event from the <code>dataProvider</code>.
-	 */
-	_keyDataUpdateHandler: function ()
-	{
-		var hasKey = false,
-			event = {},
-			keysAdded = event.keysAdded,
-			keysRemoved = event.keysRemoved,
-			keys = this.get("keys"),
-            i;
-		for(i in keys)
-		{
-			if(keys.hasOwnProperty(i))
-			{
-				if(keysAdded.hasOwnProperty(i))
-				{
-					hasKey = true;
-					keys[i] = keys[i];
-				}
-				if(keysRemoved.hasOwnProperty(i))
-				{
-					hasKey = true;
-					keys[i] = [];
-				}
-			}
-		}
-		if(!hasKey) 
-		{
-			return;
-		}
-		this._data = [];
-		for(i in keys) 
-		{
-			if(keys.hasOwnProperty(i))
-			{
-				this._data = this._data.concat(keys[i]);
-			}
-		}
-		this._updateMinAndMax();
-		event.keysAdded = keysAdded;
-		event.keysRemoved = keysRemoved;
-		this.fire("axisUpdate", event);
-    },
-
     getTotalMajorUnits: function(majorUnit, len)
     {
         var units;
@@ -636,19 +575,15 @@ Y.extend(BaseAxis, Y.Base,
         return 0;
     },
 
-    getLabelAtPosition:function(pos, len, format)
+    getLabelByIndex: function(i, l)
     {
         var min = this.get("minimum"),
             max = this.get("maximum"),
-            val = (pos/len * (max - min)) + min;
-        return this.get("labelFunction")(val, format);
-    },
-
-    _labelFunction: this._defaultLabelFunction,
-    
-    _defaultLabelFunction: function(val, format)
-    {
-        return val;
+            increm = (max - min)/(l-1),
+            label;
+            l -= 1;
+            label = min + (i * increm);
+        return label;
     }
 });
 Y.BaseAxis = BaseAxis;

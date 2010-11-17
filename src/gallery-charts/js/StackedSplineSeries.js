@@ -1,25 +1,17 @@
-function StackedSplineSeries(config)
-{
-	StackedSplineSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedSplineSeries.NAME = "stackedSplineSeries";
-
-StackedSplineSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedSpline"
-    }
-};
-
-Y.extend(StackedSplineSeries, Y.SplineSeries, {
+Y.StackedSplineSeries = Y.Base.create("stackedSplineSeries", Y.SplineSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
-        StackedSplineSeries.superclass.setAreaData.apply(this);
+        Y.StackedSplineSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
+    }
+}, {
+    ATTRS: {
+        /**
+         * Indicates the type of graph.
+         */
+        type: {
+            value:"stackedSpline"
+        }
     }
 });
 
-Y.StackedSplineSeries = StackedSplineSeries;

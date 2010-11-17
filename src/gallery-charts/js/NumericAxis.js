@@ -24,9 +24,28 @@ NumericAxis.ATTRS = {
 			this._updateMinAndMax();
 			return value;
 		}
-	}
+	},
+    
+    labelFunction: { 
+        value: function(val, format)
+        {
+            if(format)
+            {
+                return Y.DataType.Number.format(val, format);
+            }
+            return val;
+        }
+    },
 
-
+    labelFormat: {
+        value: {
+            prefix: "",
+            thousandsSeparator: "",
+            decimalSeparator: "",
+            decimalPlaces: "0",
+            suffix: ""
+        }
+    }
 };
 
 Y.extend(NumericAxis, Y.BaseAxis,
@@ -85,19 +104,26 @@ Y.extend(NumericAxis, Y.BaseAxis,
 				}
 			}
 		}	
-		if(this._roundMinAndMax && !isNaN(this._roundingUnit))
+		if(this._roundMinAndMax && !isNaN(this.get("roundingUnit")))
 		{
-			this._dataMaximum = this._roundUpToNearest(max, this._roundingUnit);
-			this._dataMinimum = this._roundDownToNearest(min, this._roundingUnit);
-		}
+            this._dataMaximum = max === 0 ? max : this._roundUpToNearest(max, this.get("roundingUnit"));
+			if(min === 0 || (min > 0 && min < this.get("roundingUnit")))
+            {
+                this._dataMinimum = 0;
+            }
+            else
+            {
+                this._dataMinimum = this._roundDownToNearest(min, this.get("roundingUnit"));
+            }
+        }
 		else
 		{
 			this._dataMaximum = max;
 			this._dataMinimum = min;
 		}
-		if(this._alwaysShowZero)
+		if(this.get("alwaysShowZero"))
 		{
-			this._dataMinimum = Math.min(0, this._dataMinimum);
+			this._dataMinimum = Math.min(0, this.get("dataMinimum"));
 		}
 	},
 
@@ -173,12 +199,7 @@ Y.extend(NumericAxis, Y.BaseAxis,
 		precision = precision || 0;
 		var decimalPlaces = Math.pow(10, precision);
 		return Math.round(decimalPlaces * number) / decimalPlaces;
-	},
-    
-    _defaultLabelFunction: function(val, format)
-    {
-        return Y.DataType.Number.format(val, format);
-    }
+	}
 });
 
 Y.NumericAxis = NumericAxis;

@@ -86,6 +86,39 @@ Y.extend(TopAxisLayout, Y.Base, {
         var ar = this.get("axisRenderer");
         return {x:pt.x, y:pt.y - ar.get("topTickOffset")};
     },
+    
+    updateMaxLabelSize: function(label)
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            rot =  Math.min(90, Math.max(-90, style.rotation)),
+            absRot = Math.abs(rot),
+            radCon = Math.PI/180,
+            sinRadians = parseFloat(parseFloat(Math.sin(absRot * radCon)).toFixed(8)),
+            cosRadians = parseFloat(parseFloat(Math.cos(absRot * radCon)).toFixed(8)),
+            max;
+        if(Y.UA.ie)
+        {
+            label.style.filter = "progid:DXImageTransform.Microsoft.BasicImage(rotation=" + rot + ")";
+            this.set("maxLabelSize", Math.max(this.get("maxLabelSize"), label.offsetHeight));
+        }
+        else
+        {
+            if(rot === 0)
+            {
+                max = label.offsetHeight;
+            }
+            else if(absRot === 90)
+            {
+                max = label.offsetWidth;
+            }
+            else
+            {
+                max = (sinRadians * label.offsetWidth) + (cosRadians * label.offsetHeight); 
+            }
+            this.set("maxLabelSize",  Math.max(this.get("maxLabelSize"), max));
+        }
+    },
 
     positionLabel: function(label, pt)
     {
@@ -197,11 +230,11 @@ Y.extend(TopAxisLayout, Y.Base, {
             sz += tickLen * 0.5;
         }
         sz += labelSize;
-        ar.get("node").style.top = labelSize + "px";
+        ar.get("contentBox").setStyle("top", labelSize + "px");
         ar.set("height", sz);
     },
     
-    offsetNodeForTick: function(node)
+    offsetNodeForTick: function(cb)
     {
         var ar = this.get("axisRenderer"),
             majorTicks = ar.get("styles").majorTicks,
@@ -209,12 +242,20 @@ Y.extend(TopAxisLayout, Y.Base, {
             display = majorTicks.display;
         if(display === "inside")
         {
-            node.style.marginBottom = (0 - tickLength) + "px";
+            cb.setStyle("marginBottom", (0 - tickLength) + "px");
         }
         else if (display === "cross")
         {
-            node.style.marginBottom = (0 - (tickLength * 0.5)) + "px";
+            cb.setStyle("marginBottom", (0 - (tickLength * 0.5)) + "px");
         }
+    },
+
+    setCalculatedSize: function()
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            ttl = ar.get("topTickOffset") + this.get("maxLabelSize") + style.margin.bottom;
+            ar.set("height", ttl);
     }
 });
 

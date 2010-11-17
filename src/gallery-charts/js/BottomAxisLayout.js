@@ -44,30 +44,6 @@ Y.extend(BottomAxisLayout, Y.Base, {
             break;
         }
     },
-    
-    /**
-     * Calculates the size and positions the content elements.
-     */
-    setSizeAndPosition: function()
-    {
-        var labelSize = this.get("maxLabelSize"),
-            ar = this.get("axisRenderer"),
-            style = ar.get("styles"),
-            sz = style.line.weight,
-            majorTicks = style.majorTicks,
-            display = majorTicks.display,
-            tickLen = majorTicks.length;
-        if(display === "outside")
-        {
-            sz += tickLen;
-        }
-        else if(display === "cross")
-        {
-            sz += tickLen * 0.5;
-        }
-        sz += labelSize;
-        ar.set("height", sz);
-    },
 
     /**
      * Calculates the coordinates for the first point on an axis.
@@ -115,6 +91,39 @@ Y.extend(BottomAxisLayout, Y.Base, {
         return {x:point.x, y:point.y + ar.get("bottomTickOffset")};
     },
     
+    updateMaxLabelSize: function(label)
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            rot =  Math.min(90, Math.max(-90, style.rotation)),
+            absRot = Math.abs(rot),
+            radCon = Math.PI/180,
+            sinRadians = parseFloat(parseFloat(Math.sin(absRot * radCon)).toFixed(8)),
+            cosRadians = parseFloat(parseFloat(Math.cos(absRot * radCon)).toFixed(8)),
+            max;
+        if(Y.UA.ie)
+        {
+            label.style.filter = "progid:DXImageTransform.Microsoft.BasicImage(rotation=" + rot + ")";
+            this.set("maxLabelSize", Math.max(this.get("maxLabelSize"), label.offsetHeight));
+        }
+        else
+        {
+            if(rot === 0)
+            {
+                max = label.offsetHeight;
+            }
+            else if(absRot === 90)
+            {
+                max = label.offsetWidth;
+            }
+            else
+            {
+                max = (sinRadians * label.offsetWidth) + (cosRadians * label.offsetHeight); 
+            }
+            this.set("maxLabelSize",  Math.max(this.get("maxLabelSize"), max));
+        }
+    },
+    
     /**
      * Rotate and position labels.
      */
@@ -133,12 +142,10 @@ Y.extend(BottomAxisLayout, Y.Base, {
             m11 = cosRadians,
             m12 = rot > 0 ? -sinRadians : sinRadians,
             m21 = -m12,
-            m22 = m11,
-            max = 0,
-            maxLabelSize = this.get("maxLabelSize");
-        if(label.margin && label.margin.top)
+            m22 = m11;
+        if(style.margin && style.margin.top)
         {
-            margin = label.margin.top;
+            margin = style.margin.top;
         }
         if(Y.UA.ie)
         {
@@ -168,30 +175,26 @@ Y.extend(BottomAxisLayout, Y.Base, {
             label.style.left = leftOffset + "px";
             label.style.top = topOffset + "px";
             label.style.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=' + m11 + ' M12=' + m12 + ' M21=' + m21 + ' M22=' + m22 + ' sizingMethod="auto expand")';
-            this.set("maxLabelSize", Math.max(label.offsetHeight, maxLabelSize));
             return;
         }
         if(rot === 0)
         {
             leftOffset -= label.offsetWidth * 0.5;
-            max = label.offsetHeight;
         }
         else if(absRot === 90)
         {
-            max = label.offsetWidth;
             if(rot === 90)
             {
                 leftOffset += label.offsetHeight * 0.5;
             }
             else
             {
-                topOffset += max;
+                topOffset += label.offsetWidth;
                 leftOffset -= label.offsetHeight * 0.5;
             }
         }
         else 
         {
-            max = (sinRadians * label.offsetWidth) + (cosRadians * label.offsetHeight); 
             if(rot < 0)
             {
                 leftOffset -= (cosRadians * label.offsetWidth) + (sinRadians * (label.offsetHeight * 0.6));
@@ -209,26 +212,64 @@ Y.extend(BottomAxisLayout, Y.Base, {
         label.style.MozTransform = "rotate(" + rot + "deg)";
         label.style.webkitTransformOrigin = "0 0";
         label.style.webkitTransform = "rotate(" + rot + "deg)";
-        this.set("maxLabelSize", Math.max(max, maxLabelSize));
+    },
+    
+    /**
+     * Calculates the size and positions the content elements.
+     */
+    setSizeAndPosition: function()
+    {
+        var labelSize = this.get("maxLabelSize"),
+            ar = this.get("axisRenderer"),
+            style = ar.get("styles"),
+            sz = style.line.weight,
+            majorTicks = style.majorTicks,
+            display = majorTicks.display,
+            tickLen = majorTicks.length,
+            margin = style.label.margin;
+        if(display === "outside")
+        {
+            sz += tickLen;
+        }
+        else if(display === "cross")
+        {
+            sz += tickLen * 0.5;
+        }
+        if(margin && margin.top)
+        {   
+            sz += margin.top;
+        }
+        sz += labelSize;
+        sz = Math.round(sz);
+        ar.set("height", sz);
     },
 
     /**
      * Adjusts position for inner ticks.
      */
-    offsetNodeForTick: function(node)
+    offsetNodeForTick: function(cb)
     {
         var ar = this.get("axisRenderer"),
-            majorTicks = ar.get("styles").majorTicks,
+            styles = ar.get("styles"),
+            majorTicks = styles.majorTicks,
             tickLength = majorTicks.length,
             display = majorTicks.display;
         if(display === "inside")
         {
-            node.style.marginTop = (0 - tickLength) + "px";
+            cb.setStyle("marginTop", (0 - tickLength) + "px");
         }
         else if (display === "cross")
         {
-            node.style.marginTop = (0 - (tickLength * 0.5)) + "px";
+            cb.setStyle("marginTop", (0 - (tickLength * 0.5)) + "px");
         }
+    },
+
+    setCalculatedSize: function()
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            ttl = ar.get("bottomTickOffset") + this.get("maxLabelSize") + style.margin.top;
+            ar.set("height", Math.round(ttl));
     }
 });
 

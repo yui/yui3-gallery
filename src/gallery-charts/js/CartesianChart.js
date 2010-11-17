@@ -1,253 +1,107 @@
 /**
  * A basic chart application.
  */
-function CartesianChart(config)
-{
-    CartesianChart.superclass.constructor.apply(this, arguments);
-}
-
-CartesianChart.NAME = "cartesianChart";
-
-CartesianChart.ATTRS = {
+Y.CartesianChart = Y.Base.create("cartesianChart", Y.Widget, [Y.ChartBase], {
     /**
-     * Data used to generate the chart.
+     * @private
      */
-    dataProvider: {
-        getter: function()
+    renderUI: function()
+    {
+        //move the position = absolute logic to a class file
+        this.get("boundingBox").setStyle("position", "absolute");
+        this.get("contentBox").setStyle("position", "absolute");
+        this._addAxes();
+        this._addGridlines();
+        this._addSeries();
+        if(this.get("showTooltip"))
         {
-            return this._dataProvider;
-        },
-
-        setter: function(val)
-        {
-            this._setDataValues(val);
+            this._addTooltip();
         }
-    },
-
-    /**
-     * Axes to appear in the chart. 
-     */
-    axes: {
-        getter: function()
+        //If there is a style definition. Force them to set.
+        this.get("styles");
+        if(this.get("interactionType") == "all")
         {
-            return this._axes;
-        },
-
-        setter: function(val)
-        {
-            this._parseAxes(val);
+            var overlay = document.createElement("div");
+            this.get("contentBox").appendChild(overlay);
+            this._overlay = Y.one(overlay); 
+            this._overlay.setStyle("position", "absolute");
+            this._overlay.setStyle("background", "#fff");
+            this._overlay.setStyle("opacity", 0);
+            this._overlay.addClass("yui3-overlay");
+            this._overlay.setStyle("zIndex", 4);
         }
+        this._redraw();
     },
 
     /**
-     * Collection of series to appear on the chart. This can be an array of Series instances or object literals
-     * used to describe a Series instance.
+     * @private
      */
-    seriesCollection: {
-        getter: function()
-        {
-            return this._getSeriesCollection();
-        },
-
-        setter: function(val)
-        {
-            return this._setSeriesCollection(val);
-        }
-    },
-
-    /**
-     * Element that contains left axes
-     */
-    leftAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains bottom axes
-     */
-    bottomAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains right axes
-     */
-    rightAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains top axes
-     */
-    topAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains graphs
-     */
-    graphContainer: {
-        value: null
-    },
-
-    /**
-     * Reference to graph instance
-     * @type Graph 
-     */
-    graph: {
-        value: null
-    },
-
-    /**
-     * Type of chart when there is no series collection specified.
-     * @type String 
-     */
-    type: {
-        getter: function()
-        {
-            if(this.get("stacked"))
+    _mouseMoveHandler: function(e)
+    {
+        var graph = this.get("graph"),
+            bb = this.get("boundingBox"),
+            cb = graph.get("contentBox"),
+            x = e.pageX,
+            offsetX = x - cb.getX(),
+            posX = x - bb.getX(),
+            y = e.pageY,
+            offsetY = y - cb.getY(),
+            posY = y - bb.getY(),
+            sc = graph.get("seriesCollection"),
+            series,
+            i = 0,
+            index,
+            oldIndex = this._selectedIndex,
+            items = [],
+            direction = this.get("direction"),
+            hasMarkers,
+            coord = direction == "horizontal" ? offsetX : offsetY,
+            //data columns and area data could be created on a graph level
+            markerPlane = direction == "horizontal" ? sc[0].get("xMarkerPlane") : sc[0].get("yMarkerPlane"),
+            len = markerPlane.length;
+       //only change on whole numbers
+       if(coord % 1 > 0)
+       {
+            return;
+       }
+      
+       for(; i < len; ++i)
+       {
+            if(coord <= markerPlane[i].end && coord >= markerPlane[i].start)
             {
-                return "stacked" + this._type;
+                index = i;
+                break;
             }
-            return this._type;
-        },
-
-        setter: function(val)
-        {
-            this._setChartType(val);
-        }
-    },
-    
-    /**
-     * Indicates whether or not the chart is stacked.
-     * @type Boolean
-     */
-    stacked: {
-        value: false
-    },
-
-    /**
-     * Direction of chart's category axis when there is no series collection specified. Charts can
-     * be horizontal or vertical. When the chart type is column, the chart is horizontal.
-     * When the chart type is bar, the chart is vertical. 
-     * @type String
-     * @default Horizontal
-     */
-    direction: {
-        getter: function()
-        {
-            var type = this.get("type");
-            if(type == "bar")
-            {   
-                return "vertical";
-            }
-            else if(type == "column")
+       }
+       len = sc.length;
+       for(i = 0; i < len; ++i)
+       {
+            series = sc[i];
+            hasMarkers = series.get("markers");
+            if(hasMarkers && !isNaN(oldIndex) && oldIndex > -1)
             {
-                return "horizontal";
+                series.updateMarkerState("mouseout", oldIndex);
             }
-            return this._direction;
-        },
-
-        setter: function(val)
-        {
-            this._direction = val;
+            if(series.get("ycoords")[index] > -1)
+            {
+                if(hasMarkers && !isNaN(index) && index > -1)
+                {
+                    series.updateMarkerState("mouseover", index);
+                }
+                items.push(series);
+            }
+                
         }
-    },
-
-    /**
-     * Indicates whether or not to show a tooltip.
-     */
-    showTooltip: {
-        value:true
-    },
-
-    /** 
-     * The key value used for the chart's category axis. 
-     * @default "category"
-     * @type String
-     */
-    categoryKey: {
-        value: "category"
-    },
-    
-    /**
-     * A collection of keys that map to the series axes. If no keys are set,
-     * they will be generated automatically depending on the data structure passed into 
-     * the chart.
-     * @type Array
-     */
-    seriesKeys: {
-        value: null    
-    },
-
-    /**
-     * Indicates whether or not an area is filled in a combo chart.
-     */
-    showAreaFill: {
-        value: null
-    }
-};
-
-Y.extend(CartesianChart, Y.Widget, {
-    /**
-     * Returns a series instance by index
-     * @method getSeriesByIndex
-     */
-    getSeriesByIndex: function(val)
-    {
-        var series, 
-            graph = this.get("graph");
-        if(graph)
+        this._selectedIndex = index;
+        
+        if(index > -1)
         {
-            series = graph.getSeriesByIndex(val);
+            this.fire("markerEvent:mouseover", {x:posX, y:posY, index:index, items:items, direction:direction, graph:graph});
         }
-        return series;
-    },
-
-    /**
-     * Returns a series instance by key value.
-     * @method getSeriesByKey
-     */
-    getSeriesByKey: function(val)
-    {
-        var series, 
-            graph = this.get("graph");
-        if(graph)
+        else
         {
-            series = graph.getSeriesByKey(val);
+            this.fire("markerEvent:mouseout");
         }
-        return series;
-    },
-
-    /**
-     * Returns axis by key reference
-     * @method getAxisByKey
-     */
-    getAxisByKey: function(val)
-    {
-        var axis,
-            axes = this.get("axes");
-        if(axes.hasOwnProperty(val))
-        {
-            axis = axes[val];
-        }
-        return axis;
-    },
-
-    /**
-     * Returns the category axis for the chart.
-     * @method getCategoryAxis
-     */
-    getCategoryAxis: function()
-    {
-        var axis,
-            key = this.get("categoryKey"),
-            axes = this.get("axes");
-        if(axes.hasOwnProperty(key))
-        {
-            axis = axes[key];
-        }
-        return axis;
     },
 
     /**
@@ -258,77 +112,48 @@ Y.extend(CartesianChart, Y.Widget, {
     /**
      * @private
      */
-    _direction: "horizontal",
-    
-    /**
-     * @private
-     */
-    _dataProvider: null,
+    _axesRenderQueue: null,
 
     /**
-     * @private
+     * Adds an axis to the queue
      */
-    _setDataValues: function(val)
+    _addToAxesRenderQueue: function(axis)
     {
-        if(Y.Lang.isArray(val[0]))
+        if(!this._axesRenderQueue)
         {
-            var hash, 
-                dp = [], 
-                cats = val[0], 
-                i = 0, 
-                l = cats.length, 
-                n, 
-                sl = val.length;
-            for(; i < l; ++i)
-            {
-                hash = {category:cats[i]};
-                for(n = 1; n < sl; ++n)
-                {
-                    hash["series" + n] = val[n][i];
-                }
-                dp[i] = hash; 
-            }
-            this._dataProvider = dp;
-            return;
+            this._axesRenderQueue = [];
         }
-        this._dataProvider = val;
-    },
-
-    /**
-     * @private 
-     */
-    _seriesCollection: null,
-
-    /**
-     * @private
-     */
-    _setSeriesCollection: function(val)
-    {
-        this._seriesCollection = val;
+        if(Y.Array.indexOf(this._axesRenderQueue, axis) < 0)
+        {
+            this._axesRenderQueue.push(axis);
+        }
     },
 
     /**
      * @private
      */
-    _getSeriesCollection: function()
+    _getDefaultSeriesCollection: function(val)
     {
-        if(this._seriesCollection)
-        {
-            return this._seriesCollection;
-        }
-        var axes = this.get("axes"),
-            dir = this.get("direction"), 
-            sc = [], 
+        var dir = this.get("direction"), 
+            categoryAxisName = this.get("categoryAxisName") || this.get("categoryKey"),
+            valueAxisName = this.get("valueAxisName"),
+            sc = val || [], 
             catAxis,
             valAxis,
-            seriesKeys,
-            i = 0,
+            tempKeys = [],
+            series,
+            seriesKeys = this.get("seriesKeys").concat(),
+            i,
+            index,
             l,
             type = this.get("type"),
             key,
             catKey,
             seriesKey,
-            showAreaFill = this.get("showAreaFill");
+            categoryKey = this.get("categoryKey"),
+            showMarkers = this.get("showMarkers"),
+            showAreaFill = this.get("showAreaFill"),
+            showLines = this.get("showLines");
         if(dir == "vertical")
         {
             catAxis = "yAxis";
@@ -343,147 +168,214 @@ Y.extend(CartesianChart, Y.Widget, {
             valAxis = "yAxis";
             seriesKey = "yKey";
         }
-        if(axes)
+        l = sc.length;
+        for(i = 0; i < l; ++i)
         {
-            seriesKeys = axes.values.get("axis").get("keyCollection");
-            key = axes.category.get("axis").get("keyCollection")[0];
-            l = seriesKeys.length;
-            for(; i < l; ++i)
+            key = this._getBaseAttribute(sc[i], seriesKey);
+            if(key)
             {
-                sc[i] = {type:type};
-                sc[i][catAxis] = "category";
-                sc[i][valAxis] = "values";
-                sc[i][catKey] = key;
-                sc[i][seriesKey] = seriesKeys[i];
-                if((type == "combo" || type == "stackedcombo" || type == "combospline" || type == "stackedcombospline") && showAreaFill !== null)
+                index = Y.Array.indexOf(seriesKeys, key);
+                if(index > -1)
                 {
-                    sc[i].showAreaFill = showAreaFill;
+                    seriesKeys.splice(index, 1);
                 }
+               tempKeys.push(key);
             }
         }
-        this._seriesCollection = sc;
+        if(seriesKeys.length > 0)
+        {
+            tempKeys = tempKeys.concat(seriesKeys);
+        }
+        l = tempKeys.length;
+        for(i = 0; i < l; ++i)
+        {
+            series = sc[i] || {type:type};
+            if(series instanceof Y.CartesianSeries)
+            {
+                continue;
+            }
+            series[catKey] = series[catKey] || categoryKey;
+            series[seriesKey] = series[seriesKey] || seriesKeys.shift();
+            series[catAxis] = series[catAxis] || categoryAxisName;
+            series[valAxis] = this._getSeriesAxis(series[seriesKey], valueAxisName);
+            series.type = series.type || type;
+            if((series.type == "combo" || series.type == "stackedcombo" || series.type == "combospline" || series.type == "stackedcombospline"))
+            {
+                if(showAreaFill !== null)
+                {
+                    series.showAreaFill = series.showAreaFill || showAreaFill;
+                }
+                if(showMarkers !== null)
+                {
+                    series.showMarkers = series.showMarkers || showMarkers;
+                }
+                if(showLines !== null)
+                {
+                    series.showLines = series.showLines || showLines;
+                }
+            }
+            sc[i] = series;
+        }
+        if(val)
+        {
+            var graph = this.get("graph");
+            graph.set("seriesCollection", sc);
+            sc = graph.get("seriesCollection");
+        }
         return sc;
     },
 
     /**
      * @private
+     * @description Gets the appropriate axis to bind a series to when one is not explicitly
+     * set.
      */
-    _getDataClass: function(t)
+    _getSeriesAxis:function(key, axis)
     {
-        return this._dataClass[t];
+        var axes = this.get("axes"),
+            i,
+            keys;
+        if(axes)
+        {
+            for(i in axes)
+            {
+                if(axes.hasOwnProperty(i))
+                {
+                    keys = axes[i].get("dataSet").get("keys");
+                    if(keys && keys.hasOwnProperty(key))
+                    {
+                        axis = i;
+                        break;
+                    }
+                }
+            }
+        }
+        return axis;
     },
 
     /**
      * @private
+     * @description Gets an attribute from an object, using a getter for Base objects and a property for object
+     * literals. Used for determining attributes from series/axis references which can be an actual class instance
+     * or a hash of properties that will be used to create a class instance.
      */
-    _dataClass: {
-        stacked: Y.StackedAxis,
-        numeric: Y.NumericAxis,
-        category: Y.CategoryAxis,
-        time: Y.TimeAxis
+    _getBaseAttribute: function(item, key)
+    {
+        if(item instanceof Y.Base)
+        {
+            return item.get(key);
+        }
+        if(item.hasOwnProperty(key))
+        {
+            return item[key];
+        }
+        return null;
     },
 
     /**
      * @private
+     * @description Sets an attribute on an object, using a setter of Base objects and a property for object
+     * literals. Used for setting attributes on a Base class, either directly or to be stored in an object literal
+     * for use at instantiation.
      */
-    _parseAxes: function(hash)
+    _setBaseAttribute: function(item, key, value)
     {
-        if(!this._axes)
+        if(item instanceof Y.Base)
         {
-            this._axes = {};
+            item.set(key, value);
         }
-        if(!this._dataAxes)
+        else
         {
-            this._dataAxes = {};
+            item[key] = value;
         }
-        var i, pos, axis, dataAxis, dh, config, dataClass;
+    },
 
+    /**
+     * @private
+     * Creates Axis and Axis data classes based on hashes of properties.
+     */
+    _parseAxes: function(val)
+    {
+        var hash = this._getDefaultAxes(val),
+            axes = {},
+            axesAttrs = {
+                edgeOffset: "edgeOffset", 
+                position: "position",
+                overlapGraph:"overlapGraph",
+                labelFunction:"labelFunction",
+                labelFunctionScope:"labelFunctionScope",
+                labelFormat:"labelFormat"
+            },
+            ai,
+            i, pos, axis, dataAxis, dh, config, dataClass, dcfg,
+            axesCollection;
         for(i in hash)
         {
             if(hash.hasOwnProperty(i))
             {
                 dh = hash[i];
-                pos = dh.position;
-                dataClass = this._getDataClass(dh.type);
-                config = {dataProvider:this.get("dataProvider"), keys:dh.keys};
-                if(dh.hasOwnProperty("roundingUnit"))
+                if(dh instanceof Y.Axis)
                 {
-                    config.roundingUnit = dh.roundingUnit;
+                    axis = dh;
                 }
-                dataAxis = new dataClass(config);
-                if(pos && pos != "none")
+                else
                 {
-                    axis = new Y.AxisRenderer({axis:dataAxis, position:dh.position, styles:dh.styles});
-                    this._axes[i] = axis;
+                    dataClass = this._getDataClass(dh.type);
+                    dcfg = {dataProvider:this.get("dataProvider"), keys:dh.keys};
+                    
+                    if(dh.hasOwnProperty("roundingUnit"))
+                    {
+                        dcfg.roundingUnit = dh.roundingUnit;
+                    }
+                    
+                    
+                    dataAxis = new dataClass(dcfg);
+                    pos = dh.position;
+                    config = {};
+                    if(dh.styles)
+                    {
+                        config.styles = dh.styles;
+                    }
+                    config.dataSet = dataAxis;
+                    config.position = dh.position;
+                    for(ai in axesAttrs)
+                    {
+                        if(axesAttrs.hasOwnProperty(ai) && dh.hasOwnProperty(ai))
+                        {
+                            config[ai] = dh[ai];
+                        }
+                    }
+                    if(pos && pos != "none")
+                    {
+                        axis = new Y.Axis(config);
+                    }
                 }
-                this._dataAxes[i] = dataAxis;
+
+                if(axis)
+                {
+                    axesCollection = this.get(pos + "AxesCollection");
+                    if(axesCollection && Y.Array.indexOf(axesCollection, axis) > 0)
+                    {
+                        axis.set("overlapGraph", false);
+                    }
+                    axis.after("axisRendered", Y.bind(this._axisRendered, this));
+                    axes[i] = axis;
+                }
+                if(!this._dataAxes)
+                {
+                    this._dataAxes = {};
+                }
+                if(axes[i])
+                {
+                    this._dataAxes[i] = axes[i].get("dataSet");
+                }
+                else
+                {
+                    this._dataAxes[i] = dataAxis;
+                }
             }
         }
-    },
-
-    /**
-     * @private
-     */
-    _dataAxes: null,
-
-    /**
-     * @private
-     */
-    _axes: null,
-
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._createLayout();
-    },
-    
-    /**
-     * @private
-     */
-    bindUI: function()
-    {
-        this.after("showTooltipChange", Y.bind(this._showTooltipChangeHandler, this));
-    },
-   
-    /**
-     * @private
-     */
-    syncUI: function()
-    {
-        this._addAxes();
-        this._addSeries();
-        if(!this.tooltip && this.get("showTooltip"))
-        {
-            this._addTooltip();
-        }
-    },
-    
-    /**
-     * @private
-     */
-    _setChartType: function(val)
-    {
-        if(val == this._type)
-        {
-            return;
-        }
-        if(this._type == "bar")
-        {
-            if(val != "bar")
-            {
-                this.set("direction", "horizontal");
-            }
-        }
-        else
-        {
-            if(val == "bar")
-            {
-                this.set("direction", "vertical");
-            }
-        }
-        this._type = val;
+        return axes;
     },
     
     /**
@@ -492,24 +384,52 @@ Y.extend(CartesianChart, Y.Widget, {
     _addAxes: function()
     {
         var axes = this.get("axes"),
-            containers = {
-                left:this.get("leftAxesContainer"),
-                bottom:this.get("bottomAxesContainer"),
-                right:this.get("rightAxesContainer"),
-                top:this.get("topAxesContainer")
-            }, i, axis, p;
-        if(!axes)
-        {
-            this.set("axes", this._getDefaultAxes());
-            axes = this.get("axes");
+            i, 
+            axis, 
+            pos,
+            w = this.get("width"),
+            h = this.get("height"),
+            node = Y.Node.one(this._parentNode);
+        if(!this._axesCollection)
+        {   
+            this._axesCollection = [];
         }
         for(i in axes)
         {
             if(axes.hasOwnProperty(i))
             {
                 axis = axes[i];
-                p = axis.get("position");
-                axis.render(containers[p]);
+                if(axis instanceof Y.Axis)
+                {
+                    if(!w)
+                    {
+                        this.set("width", node.get("offsetWidth"));
+                        w = this.get("width");
+                    }
+                    if(!h)
+                    {
+                        this.set("height", node.get("offsetHeight"));
+                        h = this.get("height");
+                    }
+                    axis.set("width", w);
+                    axis.set("height", h);
+                    this._addToAxesRenderQueue(axis);
+                    pos = axis.get("position");
+                    if(!this.get(pos + "AxesCollection"))
+                    {
+                        this.set(pos + "AxesCollection", [axis]);
+                    }
+                    else
+                    {
+                        this.get(pos + "AxesCollection").push(axis);
+                    }
+                    this._axesCollection.push(axis);
+                    if(axis.get("dataSet").get("keys").hasOwnProperty(this.get("categoryKey")))
+                    {
+                        this.set("categoryAxis", axis.get("dataSet"));
+                    }
+                    axis.render(this.get("contentBox"));
+                }
             }
         }
     },
@@ -519,14 +439,44 @@ Y.extend(CartesianChart, Y.Widget, {
      */
     _addSeries: function()
     {
-        var seriesCollection = this.get("seriesCollection");
-        this._parseSeriesAxes(seriesCollection);
-        this.set("graph", new Y.Graph({parent:this.get("graphContainer")}));
-        this.get("graph").on("chartRendered", Y.bind(function(e) {
-            this.fire("chartRendered");
-        }, this));
-        this.get("graph").set("seriesCollection", seriesCollection);
-        this._seriesCollection = this.get("graph").get("seriesCollection");
+        var graph = this.get("graph"),
+            sc = this.get("seriesCollection");
+        this._parseSeriesAxes(sc);
+        graph.render(this.get("contentBox"));
+
+    },
+
+    /**
+     * @private
+     * @description Adds gridlines to the chart.
+     */
+    _addGridlines: function()
+    {
+        var graph = this.get("graph"),
+            hgl = this.get("horizontalGridlines"),
+            vgl = this.get("verticalGridlines");
+        if(hgl)
+        {
+            if(!this._getBaseAttribute(hgl, "axis"))
+            {
+                this._setBaseAttribute(hgl, "axis", this.get("leftAxesCollection")[0] || this.get("rightAxesCollection")[0]);
+                if(this._getBaseAttribute(hgl, "axis"))
+                {
+                    graph.set("horizontalGridlines", hgl);
+                }
+            }
+        }
+        if(vgl)
+        {
+            if(!this._getBaseAttribute(vgl, "axis"))
+            {
+                this._setBaseAttribute(vgl, "axis", this.get("bottomAxesCollection")[0] || this.get("topAxesCollection")[0]);
+                if(this._getBaseAttribute(vgl, "axis"))
+                {
+                    graph.set("verticalGridlines", vgl);
+                }
+            }
+        }
     },
 
     /**
@@ -536,106 +486,44 @@ Y.extend(CartesianChart, Y.Widget, {
     {
         var i = 0, 
             len = c.length, 
-            s;
+            s,
+            axis;
         for(; i < len; ++i)
         {
             s = c[i];
-            s.xAxis = this._dataAxes[s.xAxis];
-            s.yAxis = this._dataAxes[s.yAxis];
+            if(s)
+            {
+           
+                this._setBaseAttribute(s, "xAxis", this._dataAxes[this._getBaseAttribute(s, "xAxis")]);
+                this._setBaseAttribute(s, "yAxis", this._dataAxes[this._getBaseAttribute(s, "yAxis")]);
+            }
         }
     },
 
     /**
      * @private
-     * @description Creates the layout container for the chart.
      */
-    _createLayout: function()
-    {
-        var cb = this.get("contentBox"),
-            tbl = document.createElement("table"),
-            tr = document.createElement("tr"),
-            mr = document.createElement("tr"),
-            br = document.createElement("tr"),
-            tlc = document.createElement("td"),
-            tcc = document.createElement("td"),
-            trc = document.createElement("td"),
-            mlc = document.createElement("td"),
-            mcc = document.createElement("td"),
-            mrc = document.createElement("td"),
-            blc = document.createElement("td"),
-            bcc = document.createElement("td"),
-            brc = document.createElement("td"),
-            la = document.createElement("div"),
-            ba = document.createElement("div"),
-            ra = document.createElement("div"),
-            ta = document.createElement("div"),
-            gc = document.createElement("div"),
-            tblstyles = "vertical-align:top;border:0px;margin:0px;padding:0px;border-spacing:0px";
-        tbl.setAttribute("style", tblstyles);
-        tr.setAttribute("style", tblstyles);
-        mr.setAttribute("style", tblstyles);
-        br.setAttribute("style", tblstyles);
-        tlc.setAttribute("style", tblstyles);
-        tcc.setAttribute("style", tblstyles);
-        trc.setAttribute("style", tblstyles);
-        mlc.setAttribute("style", tblstyles);
-        mcc.setAttribute("style", tblstyles);
-        mrc.setAttribute("style", tblstyles);
-        blc.setAttribute("style", tblstyles);
-        bcc.setAttribute("style", tblstyles);
-        brc.setAttribute("style", tblstyles);
-
-        tr.id = "topRow";
-        mr.id = "midRow";
-        br.id = "bottomRow";
-        cb.appendChild(tbl);
-        tbl.appendChild(tr);
-        tr.appendChild(tlc);
-        tr.appendChild(tcc);
-        tr.appendChild(trc);
-        tbl.appendChild(mr);
-        mr.appendChild(mlc);
-        mr.appendChild(mcc);
-        mr.appendChild(mrc);
-        tbl.appendChild(br);
-        br.appendChild(blc);
-        br.appendChild(bcc);
-        br.appendChild(brc);
-        
-        ta.setAttribute("style", "position:relative;width:800px;");
-        ta.setAttribute("id", "topAxesContainer");
-        la.setAttribute("style", "position:relative;height:300px;");
-        la.setAttribute("id", "leftAxesContainer");
-        ba.setAttribute("style", "position:relative;width:800px;");
-        ba.setAttribute("id", "bottomAxesContainer");
-        ra.setAttribute("style", "position:relative;height:300px;");
-        ra.setAttribute("id", "rightAxesContainer");
-        gc.setAttribute("style", "position:relative;width:100%;height:100%;");
-        tcc.appendChild(ta);
-        mlc.appendChild(la);
-        bcc.appendChild(ba);
-        mrc.appendChild(ra);
-        mcc.appendChild(gc);
-
-        this.set("leftAxesContainer", la);
-        this.set("bottomAxesContainer", ba);
-        this.set("rightAxesContainer", ra);
-        this.set("topAxesContainer", ta);
-        this.set("graphContainer", gc);
-    },
-
-    /**
-     * @private
-     */
-    _getDefaultAxes: function()
+    _getDefaultAxes: function(axes)
     {
         var catKey = this.get("categoryKey"),
+            axis,
+            attr,
+            keys,
+            newAxes = {},
+            claimedKeys = [],
+            categoryAxisName = this.get("categoryAxisName") || this.get("categoryKey"),
+            valueAxisName = this.get("valueAxisName"),
             seriesKeys = this.get("seriesKeys") || [], 
             i, 
+            l,
+            ii,
+            ll,
+            cIndex,
             dv = this.get("dataProvider")[0],
             direction = this.get("direction"),
             seriesPosition,
             categoryPosition,
+            valueAxes = [],
             seriesAxis = this.get("stacked") ? "stacked" : "numeric";
         if(direction == "vertical")
         {
@@ -647,75 +535,246 @@ Y.extend(CartesianChart, Y.Widget, {
             seriesPosition = "left";
             categoryPosition = "bottom";
         }
+        if(axes)
+        {
+            for(i in axes)
+            {
+                if(axes.hasOwnProperty(i))
+                {
+                    axis = axes[i];
+                    keys = this._getBaseAttribute(axis, "keys");
+                    attr = this._getBaseAttribute(axis, "type");
+                    if(attr == "time" || attr == "category")
+                    {
+                        categoryAxisName = i;
+                        this.set("categoryAxisName", i);
+                        if(Y.Lang.isArray(keys) && keys.length > 0)
+                        {
+                            catKey = keys[0];
+                            this.set("categoryKey", catKey);
+                        }
+                        newAxes[i] = axis;
+                    }
+                    else if(i == categoryAxisName)
+                    {
+                        newAxes[i] = axis;
+                    }
+                    else 
+                    {
+                        newAxes[i] = axis;
+                        if(i != valueAxisName && keys && Y.Lang.isArray(keys))
+                        {
+                            ll = keys.length;
+                            for(ii = 0; ii < ll; ++ii)
+                            {
+                                claimedKeys.push(keys[ii]);
+                            }
+                            valueAxes.push(newAxes[i]);
+                        }
+                        if(!(this._getBaseAttribute(newAxes[i], "type")))
+                        {
+                            this._setBaseAttribute(newAxes[i], "type", seriesAxis);
+                        }
+                        if(!(this._getBaseAttribute(newAxes[i], "position")))
+                        {
+                            this._setBaseAttribute(newAxes[i], "position", this._getDefaultAxisPosition(newAxes[i], valueAxes, seriesPosition));
+                        }
+                    }
+                }
+            }
+        }
         if(seriesKeys.length < 1)
         {
             for(i in dv)
             {
-                if(i != catKey)
+                if(dv.hasOwnProperty(i) && i != catKey && Y.Array.indexOf(claimedKeys, i) == -1)
                 {
                     seriesKeys.push(i);
                 }
             }
-            if(seriesKeys.length > 0)
+        }
+        cIndex = Y.Array.indexOf(seriesKeys, catKey);
+        if(cIndex > -1)
+        {
+            seriesKeys.splice(cIndex, 1);
+        }
+        l = claimedKeys.length;
+        for(i = 0; i < l; ++i)
+        {
+            cIndex = Y.Array.indexOf(seriesKeys, claimedKeys[i]); 
+            if(cIndex > -1)
             {
-                this.set("seriesKeys", seriesKeys);
+                seriesKeys.splice(cIndex, 1);
             }
         }
-        return {
-            values:{
-                keys:seriesKeys,
-                position:seriesPosition,
-                type:seriesAxis
-            },
-            category:{
-                keys:[catKey],
-                position:categoryPosition,
-                type:"category"
+        if(!newAxes.hasOwnProperty(categoryAxisName))
+        {
+            newAxes[categoryAxisName] = {};
+        }
+        if(!(this._getBaseAttribute(newAxes[categoryAxisName], "keys")))
+        {
+            this._setBaseAttribute(newAxes[categoryAxisName], "keys", [catKey]);
+        }
+        
+        if(!(this._getBaseAttribute(newAxes[categoryAxisName], "position")))
+        {
+            this._setBaseAttribute(newAxes[categoryAxisName], "position", categoryPosition);
+        }
+         
+        if(!(this._getBaseAttribute(newAxes[categoryAxisName], "type")))
+        {
+            this._setBaseAttribute(newAxes[categoryAxisName], "type", this.get("categoryType"));
+        }
+        if(!newAxes.hasOwnProperty(valueAxisName) && seriesKeys && seriesKeys.length > 0)
+        {
+            newAxes[valueAxisName] = {keys:seriesKeys};
+            valueAxes.push(newAxes[valueAxisName]);
+        }
+        if(claimedKeys.length > 0)
+        {
+            if(seriesKeys.length > 0)
+            {
+                seriesKeys = claimedKeys.concat(seriesKeys);
             }
-        };
+            else
+            {
+                seriesKeys = claimedKeys;
+            }
+        }
+        if(newAxes.hasOwnProperty(valueAxisName))
+        {
+            if(!(this._getBaseAttribute(newAxes[valueAxisName], "position")))
+            {
+                this._setBaseAttribute(newAxes[valueAxisName], "position", this._getDefaultAxisPosition(newAxes[valueAxisName], valueAxes, seriesPosition));
+            }
+            if(!(this._getBaseAttribute(newAxes[valueAxisName], "type")))
+            {
+                this._setBaseAttribute(newAxes[valueAxisName], "type", seriesAxis);
+            }
+            if(!(this._getBaseAttribute(newAxes[valueAxisName], "keys")))
+            {
+                this._setBaseAttribute(newAxes[valueAxisName], "keys", seriesKeys);
+            }
+        } 
+        this.set("seriesKeys", seriesKeys);
+        return newAxes;
     },
 
-    /**
-     * Reference to the tooltip
-     */
-    tooltip: null,
+    _getDefaultAxisPosition: function(axis, valueAxes, position)
+    {
+        var i = Y.Array.indexOf(valueAxes, axis);
+        if(valueAxes[i - 1] && valueAxes[i - 1].position)
+        {
+            if(valueAxes[i - 1].position == "left")
+            {
+                position = "right";
+            }
+            else if(valueAxes[i - 1].position == "right")
+            {
+                position = "left";
+            }
+            else if (valueAxes[i -1].position == "bottom")
+            {
+                position = "top";
+            }       
+            else
+            {
+                position = "bottom";
+            }
+        }
+        return position;
+    },
+
+    _displayTooltip: function(e) {
+        var node = e.node,
+        graph = Y.Widget.getByNode(node),
+        strArr = e.node.getAttribute("id").split("_"),
+        seriesIndex = strArr[1],
+        series = graph.getSeriesByIndex(seriesIndex),
+        index = strArr[2],
+        xAxis = series.get("xAxis"),
+        yAxis = series.get("yAxis"),
+        xKey = series.get("xKey"),
+        yKey = series.get("yKey"),
+        categoryItem = {},
+        valueItem = {},
+        tt = this.get("tooltip"),
+        msg;
+        if(this.get("direction") == "vertical")
+        {
+            categoryItem = {
+                axis:yAxis,
+                key:yKey,
+                value:yAxis.getKeyValueAt(yKey, index)
+            };
+            valueItem = {
+                axis:xAxis,
+                key:xKey,
+                value: xAxis.getKeyValueAt(xKey, index)
+            };
+        }
+        else
+        {
+            valueItem = {
+                axis:yAxis,
+                key:yKey,
+                value:yAxis.getKeyValueAt(yKey, index)
+            };
+            categoryItem = {
+                axis:xAxis,
+                key:xKey,
+                value: xAxis.getKeyValueAt(xKey, index)
+            };
+        }
+        categoryItem.displayName = series.get("categoryDisplayName");
+        valueItem.displayName = series.get("valueDisplayName");
+
+        
+        msg = tt.labelFunction.apply(this, [categoryItem, valueItem, index, series, seriesIndex]);
+        if (node) {
+           this._showTooltip(msg, e.x + 10, e.y + 10);
+        }
+
+    },
 
     /**
      * @private
      */
-    _addTooltip: function(e)
+    _displayMultiTooltip: function(e)
     {
-        if(!Y.Tooltip)
+        var items = e.items,
+            len = items.length,
+            i = 0,
+            index = e.index,
+            msg = "",
+            series,
+            xAxis,
+            yAxis,
+            categoryAxis = this.get("categoryAxis"),
+            horizontal = e.direction == "horizontal";
+        if(categoryAxis)
         {
-            return;
+            msg = categoryAxis.get("labelFunction").apply(this, [categoryAxis.getKeyValueAt(this.get("categoryKey"), index), categoryAxis.get("labelFormat")]);
         }
-        var tt = new Y.Tooltip({
-            triggerNodes:".yui3-seriesmarker",
-            delegate: "#" + this._parentNode.get("id"),
-            shim:false,
-            zIndex:2
-        });
-        
-        tt.render();
-        
-        tt.on("triggerEnter", function(e) {
-            var node = e.node,
-            marker = Y.Widget.getByNode(node),
-            index = marker.get("index"),
-            series = marker.get("series"),
-            xAxis = series.get("xAxis"),
-            yAxis = series.get("yAxis"),
-            xKey = series.get("xKey"),
-            yKey = series.get("yKey"),
-            msg = series.get("xDisplayName") + 
-            ": " + xAxis.get("labelFunction")(xAxis.getKeyValueAt(xKey, index)) + 
-            "<br/>" + series.get("yDisplayName") + 
-            ": " + yAxis.get("labelFunction")(yAxis.getKeyValueAt(yKey, index));
-            if (node) {
-                this.setTriggerContent(msg);
+
+        for(; i < len; ++i)
+        {
+            series = items[i];
+            if(series.get("visible"))
+            {
+                if(horizontal)
+                {
+                    yAxis = series.get("yAxis");
+                    msg += "<br/><span>" + series.get("yDisplayName") + ":&nbsp;"  + yAxis.get("labelFunction").apply(this, [yAxis.getKeyValueAt(series.get("yKey"), index), yAxis.get("labelFormat")]) + "</span>";
+                }
+                else
+                {
+                    xAxis = series.get("xAxis");
+                    msg += "<br/><span>" + series.get("xDisplayName") + "&nbsp;" + xAxis.get("labelFunction").apply(this, [xAxis.getKeyValueAt(series.get("xKey"), index), xAxis.get("labelFormat")]) + "</span>";
+                }
             }
-        });
-        this.tooltip = tt;
+        }
+        this._showTooltip(msg, e.x + 10, e.y + 10);
     },
 
     /**
@@ -727,7 +786,547 @@ Y.extend(CartesianChart, Y.Widget, {
         {
             this._addTooltip();
         }
+    },
+
+    /**
+     * @private
+     * @description Listender for axisRendered event.
+     */
+    _axisRendered: function(e)
+    {
+        this._axesRenderQueue = this._axesRenderQueue.splice(1 + Y.Array.indexOf(this._axesRenderQueue, e.currentTarget), 1);
+        if(this._axesRenderQueue.length < 1)
+        {
+            this._redraw();
+        }
+    },
+
+    _sizeChanged: function(e)
+    {
+        if(this._axesCollection)
+        {
+            var ac = this._axesCollection,
+                i = 0,
+                l = ac.length;
+            for(; i < l; ++i)
+            {
+                this._addToAxesRenderQueue(ac[i]);
+            }
+            this._redraw();
+        }
+    },
+
+    _redraw: function()
+    {
+        var w = this.get("width"),
+            h = this.get("height"),
+            lw = 0,
+            rw = 0,
+            th = 0,
+            bh = 0,
+            lc = this.get("leftAxesCollection"),
+            rc = this.get("rightAxesCollection"),
+            tc = this.get("topAxesCollection"),
+            bc = this.get("bottomAxesCollection"),
+            i = 0,
+            l,
+            axis,
+            pos,
+            pts = [],
+            graph = this.get("graph"); 
+        if(lc)
+        {
+            l = lc.length;
+            for(i = l - 1; i > -1; --i)
+            {
+                pts[Y.Array.indexOf(this._axesCollection, lc[i])] = {x:lw + "px"};
+                lw += lc[i].get("width");
+            }
+        }
+        if(rc)
+        {
+            l = rc.length;
+            i = 0;
+            for(i = l - 1; i > -1; --i)
+            {
+                rw += rc[i].get("width");
+                pts[Y.Array.indexOf(this._axesCollection, rc[i])] = {x:(w - rw) + "px"};
+            }
+        }
+        if(tc)
+        {
+            l = tc.length;
+            for(i = l - 1; i > -1; --i)
+            {
+                pts[Y.Array.indexOf(this._axesCollection, tc[i])] = {y:th + "px"};
+                th += tc[i].get("height");
+            }
+        }
+        if(bc)
+        {
+            l = bc.length;
+            for(i = l - 1; i > -1; --i)
+            {
+                bh += bc[i].get("height");
+                pts[Y.Array.indexOf(this._axesCollection, bc[i])] = {y:(h - bh) + "px"};
+            }
+        }
+        l = this._axesCollection.length;
+        i = 0;
+        
+        for(; i < l; ++i)
+        {
+            axis = this._axesCollection[i];
+            pos = axis.get("position");
+            if(pos == "left" || pos === "right")
+            {
+                axis.get("boundingBox").setStyle("top", th + "px");
+                axis.get("boundingBox").setStyle("left", pts[i].x);
+                if(axis.get("height") !== h - (bh + th))
+                {
+                    axis.set("height", h - (bh + th));
+                }
+                continue;
+            }
+            if(axis.get("width") !== w - (lw + rw))
+            {
+                axis.set("width", w - (lw + rw));
+            }
+            axis.get("boundingBox").setStyle("left", lw + "px");
+            axis.get("boundingBox").setStyle("top", pts[i].y);
+        }
+        
+        if(graph)
+        {
+            graph.get("boundingBox").setStyle("left", lw + "px");
+            graph.get("boundingBox").setStyle("top", th + "px");
+            graph.set("width", w - (lw + rw));
+            graph.set("height", h - (th + bh));
+        }
+
+        if(this._overlay)
+        {
+            this._overlay.setStyle("left", lw + "px");
+            this._overlay.setStyle("top", th + "px");
+            this._overlay.setStyle("width", (w - (lw + rw)) + "px");
+            this._overlay.setStyle("height", (h - (th + bh)) + "px");
+        }
+    }
+}, {
+    ATTRS: {
+        axesStyles: {
+            getter: function()
+            {
+                var axes = this.get("axes"),
+                    i,
+                    styles = this._axesStyles;
+                if(axes)
+                {
+                    for(i in axes)
+                    {
+                        if(axes.hasOwnProperty(i) && axes[i] instanceof Y.Axis)
+                        {
+                            if(!styles)
+                            {
+                                styles = {};
+                            }
+                            styles[i] = axes[i].get("styles");
+                        }
+                    }
+                }
+                return styles;
+            },
+            
+            setter: function(val)
+            {
+                var axes = this.get("axes"),
+                    i;
+                for(i in val)
+                {
+                    if(val.hasOwnProperty(i) && axes.hasOwnProperty(i))
+                    {
+                        this._setBaseAttribute(axes[i], "styles", val[i]);
+                    }
+                }
+            }
+        },
+
+        seriesStyles: {
+            getter: function()
+            {
+                var styles = this._seriesStyles,
+                    graph = this.get("graph"),
+                    dict,
+                    i;
+                if(graph)
+                {
+                    dict = graph.get("seriesDictionary");
+                    if(dict)
+                    {
+                        styles = {};
+                        for(i in dict)
+                        {
+                            if(dict.hasOwnProperty(i))
+                            {
+                                styles[i] = dict[i].get("styles");
+                            }
+                        }
+                    }
+                }
+                return styles;
+            },
+            
+            setter: function(val)
+            {
+                var i,
+                    l,
+                    s;
+    
+                if(Y.Lang.isArray(val))
+                {
+                    s = this.get("seriesCollection");
+                    i = 0;
+                    l = val.length;
+
+                    for(; i < l; ++i)
+                    {
+                        this._setBaseAttribute(s[i], "styles", val[i]);
+                    }
+                }
+                else
+                {
+                    for(i in val)
+                    {
+                        if(val.hasOwnProperty(i))
+                        {
+                            s = this.getSeries(i);
+                            this._setBaseAttribute(s, "styles", val[i]);
+                        }
+                    }
+                }
+            }
+        },
+
+        graphStyles: {
+            getter: function()
+            {
+                var graph = this.get("graph");
+                if(graph)
+                {
+                    return(graph.get("styles"));
+                }
+                return this._graphStyles;
+            },
+
+            setter: function(val)
+            {
+                var graph = this.get("graph");
+                this._setBaseAttribute(graph, "styles", val);
+            }
+
+        },
+
+        styles: {
+            getter: function()
+            {
+                var styles = { 
+                    axes: this.get("axesStyles"),
+                    series: this.get("seriesStyles"),
+                    graph: this.get("graphStyles")
+                };
+                return styles;
+            },
+            setter: function(val)
+            {
+                if(val.hasOwnProperty("axes"))
+                {
+                    if(this.get("axesStyles"))
+                    {
+                        this.set("axesStyles", val.axes);
+                    }
+                    else
+                    {
+                        this._axesStyles = val.axes;
+                    }
+                }
+                if(val.hasOwnProperty("series"))
+                {
+                    if(this.get("seriesStyles"))
+                    {
+                        this.set("seriesStyles", val.series);
+                    }
+                    else
+                    {
+                        this._seriesStyles = val.series;
+                    }
+                }
+                if(val.hasOwnProperty("graph"))
+                {
+                    this.set("graphStyles", val.graph);
+                }
+            }
+        },
+
+        /**
+         * Data used to generate the chart.
+         */
+        dataProvider: {
+            getter: function()
+            {
+                return this._dataProvider;
+            },
+
+            setter: function(val)
+            {
+                if(this._dataAxes)
+                {
+                    var i;
+                    for(i in this._dataAxes)
+                    {
+                        if(this._dataAxes.hasOwnProperty(i))
+                        {
+                            this._dataAxes[i].set("dataProvider", val);
+                        }
+                    }
+                    this._dataProvider = val;
+                }
+                else
+                {
+                    this._setDataValues(val);
+                }
+            }
+        },
+
+        /**
+         * Axes to appear in the chart. 
+         */
+        axes: {
+            valueFn: "_parseAxes",
+
+            setter: function(val)
+            {
+                return this._parseAxes(val);
+            }
+        },
+        /**
+         * Collection of series to appear on the chart. This can be an array of Series instances or object literals
+         * used to describe a Series instance.
+         */
+        seriesCollection: {
+            valueFn: "_getDefaultSeriesCollection",
+            
+            setter: function(val)
+            {
+                return this._getDefaultSeriesCollection(val);
+            }
+        },
+
+        /**
+         * Element that contains left axes
+         */
+        leftAxesCollection: {},
+
+        /**
+         * Element that contains bottom axes
+         */
+        bottomAxesCollection: {},
+
+        /**
+         * Element that contains right axes
+         */
+        rightAxesCollection: {},
+
+        /**
+         * Element that contains top axes
+         */
+        topAxesCollection: {},
+
+        /**
+         * All axes in a chart
+         */
+        axesCollection: {},
+        
+        /**
+         * Indicates whether or not the chart is stacked.
+         * @type Boolean
+         */
+        stacked: {
+            value: false
+        },
+
+        /**
+         * Direction of chart's category axis when there is no series collection specified. Charts can
+         * be horizontal or vertical. When the chart type is column, the chart is horizontal.
+         * When the chart type is bar, the chart is vertical. 
+         * @type String
+         * @default Horizontal
+         */
+        direction: {
+            getter: function()
+            {
+                var type = this.get("type");
+                if(type == "bar")
+                {   
+                    return "vertical";
+                }
+                else if(type == "column")
+                {
+                    return "horizontal";
+                }
+                return this._direction;
+            },
+
+            setter: function(val)
+            {
+                this._direction = val;
+                return this._direction;
+            }
+        },
+
+        /**
+         * Indicates whether or not to show a tooltip.
+         */
+        showTooltip: {
+            value:true
+        },
+
+        /** 
+         * The key value used for the chart's category axis. 
+         * @default "category"
+         * @type String
+         */
+        categoryKey: {
+            value: "category"
+        },
+        
+        /**
+         * A collection of keys that map to the series axes. If no keys are set,
+         * they will be generated automatically depending on the data structure passed into 
+         * the chart.
+         * @type Array
+         */
+        seriesKeys: {},
+
+        /**
+         * Indicates whether or not an area is filled in a combo chart.
+         */
+        showAreaFill: {},
+
+        showMarkers:{},
+
+        showLines:{},
+        
+        /**
+         * Indicates the type of axis to use for the category axis.
+         */
+        categoryType:{
+            value:"category"
+        },
+
+        /**
+         * Indicates the key value used to identify a category axis in the <code>axes</code> hash.
+         */
+        categoryAxisName: {
+        },
+
+        valueAxisName: {
+            value: "values"
+        },
+
+        horizontalGridlines: {
+            getter: function()
+            {
+                var graph = this.get("graph");
+                if(graph)
+                {
+                    return graph.get("horizontalGridlines");
+                }
+                return this._horizontalGridlines;
+            },
+            setter: function(val)
+            {
+                var graph = this.get("graph");
+                if(val && !Y.Lang.isObject(val))
+                {
+                    val = {};
+                }
+                if(graph)
+                {
+                    graph.set("horizontalGridlines", val);
+                }
+                else
+                {
+                    this._horizontalGridlines = val;
+                }
+            }
+        },
+
+        verticalGridlines: {
+            getter: function()
+            {
+                var graph = this.get("graph");
+                if(graph)
+                {
+                    return graph.get("verticalGridlines");
+                }
+                return this._verticalGridlines;
+            },
+            setter: function(val)
+            {
+                var graph = this.get("graph");
+                if(val && !Y.Lang.isObject(val))
+                {
+                    val = {};
+                }
+                if(graph)
+                {
+                    graph.set("verticalGridlines", val);
+                }
+                else
+                {
+                    this._verticalGridlines = val;
+                }
+            }
+        },
+        
+        /**
+         * Type of chart when there is no series collection specified.
+         * @type String 
+         */
+        type: {
+            getter: function()
+            {
+                if(this.get("stacked"))
+                {
+                    return "stacked" + this._type;
+                }
+                return this._type;
+            },
+
+            setter: function(val)
+            {
+                if(this._type == "bar")
+                {
+                    if(val != "bar")
+                    {
+                        this.set("direction", "horizontal");
+                    }
+                }
+                else
+                {
+                    if(val == "bar")
+                    {
+                        this.set("direction", "vertical");
+                    }
+                }
+                this._type = val;
+                return this._type;
+            }
+        },
+        
+        /**
+         * Reference to the category axis used by the chart.
+         */
+        categoryAxis:{}
     }
 });
-
-Y.CartesianChart = CartesianChart;

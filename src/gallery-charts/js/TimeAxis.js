@@ -10,33 +10,49 @@ TimeAxis.ATTRS =
     maximum: {
 		getter: function ()
 		{
-			if(this._autoMax || this._setMaximum === null) 
+			if(this.get("autoMax") || this._setMaximum === null) 
 			{
-                return this._getNumber(this._dataMaximum);
+                return this._getNumber(this.get("dataMaximum"));
 			}
 			return this._setMaximum;
 		},
 		setter: function (value)
 		{
             this._setMaximum = this._getNumber(value);
-            this.fire("dataChange");
+            this.fire("dataUpdate");
 		}
     },
 
     minimum: {
 		getter: function ()
 		{
-			if(this._autoMin || this._setMinimum === null) 
+			if(this.get("autoMin") || this._setMinimum === null) 
 			{
-				return this._dataMinimum;
+				return this.get("dataMinimum");
 			}
 			return this._setMinimum;
 		},
 		setter: function (value)
 		{
             this._setMinimum = this._getNumber(value);
-            this.fire("dataChange");
+            this.fire("dataUpdate");
         }
+    },
+
+    labelFunction: {
+        value: function(val, format)
+        {
+            val = Y.DataType.Date.parse(val);
+            if(format)
+            {
+                return Y.DataType.Date.format(val, {format:format});
+            }
+            return val;
+        }
+    },
+
+    labelFormat: {
+        value: "%b %d, %y"
     }
 };
 
@@ -80,8 +96,8 @@ Y.extend(TimeAxis, Y.BaseAxis, {
 			arr[i] = val;
 		}
 		this.get("keys")[key] = arr;
-		this._data = this._data.concat(arr);
-	},
+        this._updateTotalDataFlag = true;
+    },
 
     _getNumber: function(val)
     {
@@ -95,41 +111,7 @@ Y.extend(TimeAxis, Y.BaseAxis, {
         }
 
         return val;
-    },
-
-    updateMaxByPosition:function(pos)
-    {
-        var range = this._dataMaximum - this._dataMinimum;
-            pos = Math.round(pos * 100)/100;
-            pos = pos * range;
-            pos += this._dataMinimum;
-        this.set("maximum", pos);
-    },
-
-    updateMinByPosition:function(pos)
-    {
-        var range = this._dataMaximum - this._dataMinimum;
-            pos = Math.round(pos * 100)/100;
-            pos = pos * range;
-            pos += this._dataMinimum;
-        this.set("minimum", pos);
-    },
-
-    updateMinAndMaxByPosition: function(minVal, maxVal, len)
-    {
-        var min = minVal / len,
-            max = maxVal / len;
-        min += this._dataMinimum;
-        max += this._dataMaximum;
-        this._setMaximum = this._getNumber(max);
-        this._setMinimum = this._getNumber(min);
-        this.fire("dataChange");
-    },
-    
-    _defaultLabelFunction: function(val, format)
-    {
-        return Y.DataType.Date.format(Y.DataType.Date.parse(val), {format:format});
-    }
+    }    
 });
 
 Y.TimeAxis = TimeAxis;

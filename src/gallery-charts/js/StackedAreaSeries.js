@@ -1,23 +1,7 @@
-function StackedAreaSeries(config)
-{
-	StackedAreaSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedAreaSeries.NAME = "stackedAreaSeries";
-
-StackedAreaSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedArea"
-    }
-};
-
-Y.extend(StackedAreaSeries, Y.AreaSeries, {
+Y.StackedAreaSeries = Y.Base.create("stackedAreaSeries", Y.AreaSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
-        StackedAreaSeries.superclass.setAreaData.apply(this);
+        Y.StackedAreaSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
     },
 
@@ -26,6 +10,13 @@ Y.extend(StackedAreaSeries, Y.AreaSeries, {
         this.get("graphic").clear();
         this.drawFill.apply(this, this._getStackedClosingPoints());
     }
+}, {
+    ATTRS: {
+        /**
+         * Indicates the type of graph.
+         */
+        type: {
+            value:"stackedArea"
+        }
+    }
 });
-
-Y.StackedAreaSeries = StackedAreaSeries;
