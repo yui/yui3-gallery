@@ -1,460 +1,27 @@
 YUI.add('gallery-charts', function(Y) {
 
-/**
- * The gallery-charts module allows for the creation of graphic data visualizations.
- * @module gallery-charts
- * @depends dom, datatype, event-custom, event-mouseenter, widget, widget-position, widget-stack
- */
-    var Lang = Y.Lang,
-        Node = Y.Node,
-        OX = -10000,
-        OY = -10000;
-    /**
-     * A Simple Tooltip.
-     * @class Tooltip
-     */
-    Y.Tooltip = Y.Base.create("tooltip", Y.Widget, [Y.WidgetPosition, Y.WidgetStack], {
-
-        // PROTOTYPE METHODS/PROPERTIES
-
-        /*
-         * Initialization Code: Sets up privately used state
-         * properties, and publishes the events Tooltip introduces
-         */
-        initializer : function(config) {
-
-            this._triggerClassName = this.getClassName("trigger");
-
-            // Currently bound trigger node information
-            this._currTrigger = {
-                node: null,
-                title: null,
-                mouseX: Y.Tooltip.OFFSCREEN_X,
-                mouseY: Y.Tooltip.OFFSCREEN_Y
-            };
-
-            // Event handles - mouse over is set on the delegate
-            // element, mousemove and mouseleave are set on the trigger node
-            this._eventHandles = {
-                delegate: null,
-                trigger: {
-                    mouseMove : null,
-                    mouseOut: null
-                }
-            };
-
-            // Show/hide timers
-            this._timers = {
-                show: null,
-                hide: null
-            };
-
-            // Publish events introduced by Tooltip. Note the triggerEnter event is preventable,
-            // with the default behavior defined in the _defTriggerEnterFn method 
-            this.publish("triggerEnter", {defaultFn: this._defTriggerEnterFn, preventable:true});
-            this.publish("triggerLeave", {preventable:false});
-        },
-
-        /*
-         * Destruction Code: Clears event handles, timers,
-         * and current trigger information
-         */
-        destructor : function() {
-            this._clearCurrentTrigger();
-            this._clearTimers();
-            this._clearHandles();
-        },
-
-        /*
-         * bindUI is used to bind attribute change and dom event
-         * listeners
-         */
-        bindUI : function() {
-            this.after("delegateChange", this._afterSetDelegate);
-            this.after("nodesChange", this._afterSetNodes);
-
-            this._bindDelegate();
-        },
-
-        /*
-         * syncUI is used to update the rendered DOM, based on the current
-         * Tooltip state
-         */
-        syncUI : function() {
-            this._uiSetNodes(this.get("triggerNodes"));
-        },
-
-        /*
-         * Public method, which can be used by triggerEvent event listeners
-         * to set the content of the tooltip for the current trigger node
-         */
-        setTriggerContent : function(content) {
-            var contentBox = this.get("contentBox"),
-                i = 0,
-                l;
-            contentBox.set("innerHTML", "");
-
-            if (content) {
-                if (content instanceof Node) {
-                    l = content.size();
-                    for (; i < l; ++i) {
-                        contentBox.appendChild(content.item(i));
-                    }
-                } else if (Lang.isString(content)) {
-                    contentBox.set("innerHTML", content);
-                }
-            }
-        },
-
-        /*
-         * Default attribute change listener for 
-         * the triggerNodes attribute
-         */
-        _afterSetNodes : function(e) {
-            this._uiSetNodes(e.newVal);
-        },
-
-        /*
-         * Default attribute change listener for 
-         * the delegate attribute
-         */
-        _afterSetDelegate : function(e) {
-            this._bindDelegate(e.newVal);
-        },
-
-        /*
-         * Updates the rendered DOM to reflect the
-         * set of trigger nodes passed in
-         */
-        _uiSetNodes : function(nodes) {
-            if (this._triggerNodes) {
-                this._triggerNodes.removeClass(this._triggerClassName);
-            }
-
-            if (nodes) {
-                this._triggerNodes = nodes;
-                this._triggerNodes.addClass(this._triggerClassName);
-            }
-        },
-
-        /*
-         * Attaches the default mouseover DOM listener to the 
-         * current delegate node
-         */
-        _bindDelegate : function() {
-            var eventHandles = this._eventHandles;
-
-            if (eventHandles.delegate) {
-                eventHandles.delegate.detach();
-                eventHandles.delegate = null;
-            }
-            eventHandles.delegate = Y.delegate("mouseenter", Y.bind(this._onNodeMouseEnter, this), this.get("delegate"), "." + this._triggerClassName);
-        },
-
-        /*
-         * Default mouse enter DOM event listener.
-         * 
-         * Delegates to the _enterTrigger method,
-         * if the mouseover enters a trigger node.
-         */
-        _onNodeMouseEnter : function(e) {
-            var node = e.currentTarget;
-            if (node && (!this._currTrigger.node || !node.compareTo(this._currTrigger.node))) {
-                this._enterTrigger(node, e.pageX, e.pageY);
-            }
-        },
-
-        /*
-         * Default mouse leave DOM event listener
-         * 
-         * Delegates to _leaveTrigger if the mouse
-         * leaves the current trigger node
-         */
-        _onNodeMouseLeave : function(e) {
-            this._leaveTrigger(e.currentTarget);
-        },
-
-        /*
-         * Default mouse move DOM event listener
-         */
-        _onNodeMouseMove : function(e) {
-            this._overTrigger(e.pageX, e.pageY);
-        },
-
-        /*
-         * Default handler invoked when the mouse enters
-         * a trigger node. Fires the triggerEnter
-         * event which can be prevented by listeners to 
-         * show the tooltip from being displayed.
-         */
-        _enterTrigger : function(node, x, y) {
-            this._setCurrentTrigger(node, x, y);
-            this.fire("triggerEnter", {node:node, pageX:x, pageY:y});
-        },
-
-        /*
-         * Default handler for the triggerEvent event,
-         * which will setup the timer to display the tooltip,
-         * if the default handler has not been prevented.
-         */
-        _defTriggerEnterFn : function(e) {
-            var node = e.node,
-                delay;
-            if (!this.get("disabled")) {
-                this._clearTimers();
-                delay = (this.get("visible")) ? 0 : this.get("showDelay");
-                this._timers.show = Y.later(delay, this, this._showTooltip, [node]);
-            }
-        },
-
-        /*
-         * Default handler invoked when the mouse leaves
-         * the current trigger node. Fires the triggerLeave
-         * event and sets up the hide timer
-         */
-        _leaveTrigger : function(node) {
-            this.fire("triggerLeave");
-
-            this._clearCurrentTrigger();
-            this._clearTimers();
-
-            this._timers.hide = Y.later(this.get("hideDelay"), this, this._hideTooltip);
-        },
-
-        /*
-         * Default handler invoked for mousemove events
-         * on the trigger node. Stores the current mouse 
-         * x, y positions
-         */
-        _overTrigger : function(x, y) {
-            this._currTrigger.mouseX = x;
-            this._currTrigger.mouseY = y;
-        },
-
-        /*
-         * Shows the tooltip, after moving it to the current mouse
-         * position.
-         */
-        _showTooltip : function(node) {
-            var x = this._currTrigger.mouseX,
-                y = this._currTrigger.mouseY;
-
-            this.move(x + Y.Tooltip.OFFSET_X, y + Y.Tooltip.OFFSET_Y);
-
-            this.show();
-            this._clearTimers();
-
-            this._timers.hide = Y.later(this.get("autoHideDelay"), this, this._hideTooltip);
-        },
-
-        /*
-         * Hides the tooltip, after clearing existing timers.
-         */
-        _hideTooltip : function() {
-            this._clearTimers();
-            this.hide();
-        },
-
-        /*
-         * Set the rendered content of the tooltip for the current
-         * trigger, based on (in order of precedence):
-         * 
-         * a). The string/node content attribute value
-         * b). From the content lookup map if it is set, or 
-         * c). From the title attribute if set.
-         */
-        _setTriggerContent : function(node) {
-            var content = this.get("content");
-            if (content && !(content instanceof Node || Lang.isString(content))) {
-                content = content[node.get("id")] || node.getAttribute("title");
-            }
-            this.setTriggerContent(content);
-        },
-
-        /*
-         * Set the currently bound trigger node information, clearing 
-         * out the title attribute if set and setting up mousemove/out 
-         * listeners.
-         */
-        _setCurrentTrigger : function(node, x, y) {
-
-            var currTrigger = this._currTrigger,
-                triggerHandles = this._eventHandles.trigger,
-                title;
-
-            this._setTriggerContent(node);
-
-            triggerHandles.mouseMove = Y.on("mousemove", Y.bind(this._onNodeMouseMove, this), node);
-            triggerHandles.mouseOut = Y.on("mouseleave", Y.bind(this._onNodeMouseLeave, this), node);
-
-            title = node.getAttribute("title");
-            node.setAttribute("title", "");
-
-            currTrigger.mouseX = x;
-            currTrigger.mouseY = y;
-            currTrigger.node = node;
-            currTrigger.title = title;
-        },
-
-        /*
-         * Clear out the current trigger state, restoring
-         * the title attribute on the trigger node, 
-         * if it was originally set.
-         */
-        _clearCurrentTrigger : function() {
-
-            var currTrigger = this._currTrigger,
-                triggerHandles = this._eventHandles.trigger,
-                node,
-                title;
-
-            if (currTrigger.node) {
-                node = currTrigger.node;
-                title = currTrigger.title || "";
-
-                currTrigger.node = null;
-                currTrigger.title = "";
-
-                triggerHandles.mouseMove.detach();
-                triggerHandles.mouseOut.detach();
-                triggerHandles.mouseMove = null;
-                triggerHandles.mouseOut = null;
-
-                node.setAttribute("title", title);
-            }
-        },
-
-        /*
-         * Cancel any existing show/hide timers
-         */
-        _clearTimers : function() {
-            var timers = this._timers;
-            if (timers.hide) {
-                timers.hide.cancel();
-                timers.hide = null;
-            }
-            if (timers.show) {
-              timers.show.cancel();
-              timers.show = null;
-            }
-        },
-
-        /*
-         * Detach any stored event handles
-         */
-        _clearHandles : function() {
-            var eventHandles = this._eventHandles;
-
-            if (eventHandles.delegate) {
-                this._eventHandles.delegate.detach();
-            }
-            if (eventHandles.trigger.mouseOut) {
-                eventHandles.trigger.mouseOut.detach();
-            }
-            if (eventHandles.trigger.mouseMove) {
-                eventHandles.trigger.mouseMove.detach();
-            }
-        }
-    }, {
-    
-        // STATIC METHODS/PROPERTIES
-       
-        OFFSET_X : 15,
-        OFFSET_Y : 15,
-        OFFSCREEN_X : OX,
-        OFFSCREEN_Y : OY,
-
-        ATTRS : {
-    
-            /* 
-             * The tooltip content. This can either be a fixed content value, 
-             * or a map of id-to-values, designed to be used when a single
-             * tooltip is mapped to multiple trigger elements.
-             */
-            content : {
-                value: null
-            },
-    
-            /* 
-             * The set of nodes to bind to the tooltip instance. Can be a string, 
-             * or a node instance.
-             */
-            triggerNodes : {
-                value: null,
-                setter: function(val) {
-                    if (val && Lang.isString(val)) {
-                        val = Node.all(val);
-                    }
-                    return val;
-                }
-            },
-    
-            /*
-             * The delegate node to which event listeners should be attached.
-             * This node should be an ancestor of all trigger nodes bound
-             * to the instance. By default the document is used.
-             */
-            delegate : {
-                value: null,
-                setter: function(val) {
-                    return Y.one(val) || Y.one("document");
-                }
-            },
-    
-            /*
-             * The time to wait, after the mouse enters the trigger node,
-             * to display the tooltip
-             */
-            showDelay : {
-                value:250
-            },
-    
-            /*
-             * The time to wait, after the mouse leaves the trigger node,
-             * to hide the tooltip
-             */
-            hideDelay : {
-                value:10
-            },
-    
-            /*
-             * The time to wait, after the tooltip is first displayed for 
-             * a trigger node, to hide it, if the mouse has not left the 
-             * trigger node
-             */
-            autoHideDelay : {
-                value:2000
-            },
-    
-            /*
-             * Override the default visibility set by the widget base class
-             */
-            visible : {
-                value:false
-            },
-    
-            /*
-             * Override the default XY value set by the widget base class,
-             * to position the tooltip offscreen
-             */
-            xy: {
-                value:[OX, OY]
-            }
-        }
-    });
-
 var Graphic = function(config) {
     
     this.initializer.apply(this, arguments);
 };
 
 Graphic.prototype = {
+    autoSize: true,
+
     initializer: function(config) {
         config = config || {};
         var w = config.width || 0,
             h = config.height || 0;
-        this._svg = this._createGraphics();
-        this.setSize(w, h);
+        if(config.node)
+        {
+            this.node = config.node;
+            this._styleGroup(this.node);
+        }
+        else
+        {
+            this.node = this._createGraphics();
+            this.setSize(w, h);
+        }
         this._initProps();
     },
 
@@ -506,7 +73,7 @@ Graphic.prototype = {
         if(!this._defs)
         {
             this._defs = this._createGraphicNode("defs");
-            this._svg.appendChild(this._defs);
+            this.node.appendChild(this._defs);
         }
         this._fillAlphas = alphas;
         this._fillColors = config.colors;
@@ -522,10 +89,65 @@ Graphic.prototype = {
     },
 
     /**
+     * Removes all nodes
+     */
+    destroy: function()
+    {
+        this._removeChildren(this.node);
+        this.node.parentNode.removeChild(this.node);
+    },
+    
+    /**
+     * @private
+     */
+    _removeChildren: function(node)
+    {
+        if(node.hasChildNodes())
+        {
+            var child;
+            while(node.firstChild)
+            {
+                child = node.firstChild;
+                this._removeChildren(child);
+                node.removeChild(child);
+            }
+        }
+    },
+
+    toggleVisible: function(val)
+    {
+        this._toggleVisible(this.node, val);
+    },
+
+    _toggleVisible: function(node, val)
+    {
+        var children = Y.one(node).get("children"),
+            visibility = val ? "visible" : "hidden",
+            i = 0,
+            len;
+        if(children)
+        {
+            len = children.length;
+            for(; i < len; ++i)
+            {
+                this._toggleVisible(children[i], val);
+            }
+        }
+        node.style.visibility = visibility;
+    },
+
+    /**
      * Clears the graphics object.
      */
     clear: function() {
-        this._path = '';
+        if(this._graphicsList)
+        {
+            while(this._graphicsList.length > 0)
+            {
+                this.node.removeChild(this._graphicsList.shift());
+            }
+        }
+        this.path = '';
     },
 
     /**
@@ -533,12 +155,12 @@ Graphic.prototype = {
      */
     curveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
         this._shapeType = "path";
-        if(this._path.indexOf("C") < 0 || this._pathType !== "C")
+        if(this.path.indexOf("C") < 0 || this._pathType !== "C")
         {
             this._pathType = "C";
-            this._path += ' C';
+            this.path += ' C';
         }
-        this._path += Math.round(cp1x) + ", " + Math.round(cp1y) + ", " + Math.round(cp2x) + ", " + Math.round(cp2y) + ", " + x + ", " + y + " ";
+        this.path += Math.round(cp1x) + ", " + Math.round(cp1y) + ", " + Math.round(cp2x) + ", " + Math.round(cp2y) + ", " + x + ", " + y + " ";
         this._trackSize(x, y);
     },
 
@@ -546,12 +168,12 @@ Graphic.prototype = {
      * Draws a quadratic bezier curve
      */
     quadraticCurveTo: function(cpx, cpy, x, y) {
-        if(this._path.indexOf("Q") < 0 || this._pathType !== "Q")
+        if(this.path.indexOf("Q") < 0 || this._pathType !== "Q")
         {
             this._pathType = "Q";
-            this._path += " Q";
+            this.path += " Q";
         }
-        this._path +=  Math.round(cpx) + " " + Math.round(cpy) + " " + Math.round(x) + " " + Math.round(y);
+        this.path +=  Math.round(cpx) + " " + Math.round(cpy) + " " + Math.round(x) + " " + Math.round(y);
     },
 
     /**
@@ -652,12 +274,72 @@ Graphic.prototype = {
     drawWedge: function(x, y, startAngle, arc, radius, yRadius)
     {
         this._drawingComplete = false;
-        this._path = this._getWedgePath({x:x, y:y, startAngle:startAngle, arc:arc, radius:radius, yRadius:yRadius});
+        this.path = this._getWedgePath({x:x, y:y, startAngle:startAngle, arc:arc, radius:radius, yRadius:yRadius});
         this._width = radius * 2;
         this._height = this._width;
         this._shapeType = "path";
         this._draw();
 
+    },
+
+    end: function() {
+        if(this._shapeType)
+        {
+            this._draw();
+        }
+        this._initProps();
+    },
+
+    /**
+     * @private
+     * Not implemented
+     * Specifies a gradient to use for the stroke when drawing lines.
+     */
+    lineGradientStyle: function() {
+    },
+     
+    /**
+     * Specifies a line style used for subsequent calls to drawing methods
+     */
+    lineStyle: function(thickness, color, alpha, pixelHinting, scaleMode, caps, joints, miterLimit) {
+        this._stroke = 1;
+        this._strokeWeight = thickness;
+        if (color) {
+            this._strokeColor = color;
+        }
+        this._strokeAlpha = alpha || 1;
+    },
+    
+    /**
+     * Draws a line segment using the current line style from the current drawing position to the specified x and y coordinates.
+     */
+    lineTo: function(point1, point2, etc) {
+        var args = arguments,
+            i,
+            len;
+        if (typeof point1 === 'string' || typeof point1 === 'number') {
+            args = [[point1, point2]];
+        }
+        len = args.length;
+        this._shapeType = "path";
+        if(this.path.indexOf("L") < 0 || this._pathType !== "L")
+        {
+            this._pathType = "L";
+            this.path += ' L';
+        }
+        for (i = 0; i < len; ++i) {
+            this.path += args[i][0] + ', ' + args[i][1] + " ";
+
+            this._trackSize.apply(this, args[i]);
+        }
+    },
+
+    /**
+     * Moves the current drawing position to specified x and y coordinates.
+     */
+    moveTo: function(x, y) {
+        this._pathType = "M";
+        this.path += ' M' + x + ', ' + y;
     },
 
     /**
@@ -704,12 +386,12 @@ Graphic.prototype = {
         theta = -(segAngle / 180) * Math.PI;
         
         // convert angle startAngle to radians
-        angle = -(startAngle / 180) * Math.PI;
+        angle = (startAngle / 180) * Math.PI;
         if(segs > 0)
         {
             // draw a line from the center to the start of the curve
             ax = x + Math.cos(startAngle / 180 * Math.PI) * radius;
-            ay = y + Math.sin(-startAngle / 180 * Math.PI) * yRadius;
+            ay = y + Math.sin(startAngle / 180 * Math.PI) * yRadius;
             path += " L" + Math.round(ax) + ", " +  Math.round(ay);
             path += " Q";
             for(; i < segs; ++i)
@@ -727,104 +409,22 @@ Graphic.prototype = {
         return path;
     },
 
-    end: function() {
-        if(this._shapeType)
-        {
-            this._draw();
-        }
-        this._initProps();
-    },
-
-    /**
-     * @private
-     * Not implemented
-     * Specifies a gradient to use for the stroke when drawing lines.
-     */
-    lineGradientStyle: function() {
-    },
-    
-    /**
-     * Specifies a line style used for subsequent calls to drawing methods
-     */
-    lineStyle: function(thickness, color, alpha, pixelHinting, scaleMode, caps, joints, miterLimit) {
-        this._stroke = 1;
-        this._strokeWeight = thickness;
-        if (color) {
-            this._strokeColor = color;
-        }
-        this._strokeAlpha = alpha || 1;
-    },
-
-    /**
-     * Draws a line segment using the current line style from the current drawing position to the specified x and y coordinates.
-     */
-    lineTo: function(point1, point2, etc) {
-        var args = arguments,
-            i,
-            len;
-        if (typeof point1 === 'string' || typeof point1 === 'number') {
-            args = [[point1, point2]];
-        }
-        len = args.length;
-        this._shapeType = "path";
-        if(this._path.indexOf("L") < 0 || this._pathType !== "L")
-        {
-            this._pathType = "L";
-            this._path += ' L';
-        }
-        for (i = 0; i < len; ++i) {
-            this._path += args[i][0] + ', ' + args[i][1] + " ";
-
-            this._trackSize.apply(this, args[i]);
-        }
-    },
-
-    /**
-     * Moves the current drawing position to specified x and y coordinates.
-     */
-    moveTo: function(x, y) {
-        this._pathType = "M";
-        this._path += ' M' + x + ', ' + y;
-    },
-
     /**
      * Sets the size of the graphics object
      */
     setSize: function(w, h) {
-        if(w > this._svg.getAttribute("width"))
+        if(this.autoSize)
         {
-            this._svg.setAttribute("width",  w);
+            if(w > this.node.getAttribute("width"))
+            {
+                this.node.setAttribute("width",  w);
+            }
+            if(h > this.node.getAttribute("height"))
+            {
+                this.node.setAttribute("height", h);
+            }
         }
-        if(h > this._svg.getAttribute("height"))
-        {
-            this._svg.setAttribute("height", h);
-        }
-   },
-   
-    setPosition: function(x, y)
-    {
-        this._svg.setAttribute("x", x);
-        this._svg.setAttribute("y", y);
     },
-
-    /**
-     * @private
-     */
-    render: function(node) {
-        var w = node.offsetWidth,
-            h = node.offsetHeight;
-        node = node || Y.config.doc.body;
-        node.appendChild(this._svg);
-        this.setSize(w, h);
-        this._initProps();
-        return this;
-    },
-
-    /**
-     * @private
-     * Reference to current vml shape
-     */
-    _shapeType: null,
 
     /**
      * @private
@@ -838,6 +438,25 @@ Graphic.prototype = {
             this._height = h;
         }
         this.setSize(w, h);
+    },
+
+    setPosition: function(x, y)
+    {
+        this.node.setAttribute("x", x);
+        this.node.setAttribute("y", y);
+    },
+
+    /**
+     * @private
+     */
+    render: function(parentNode) {
+        var w = parentNode.get("width") || parentNode.get("offsetWidth"),
+            h = parentNode.get("height") || parentNode.get("offsetHeight");
+        parentNode = parentNode || Y.config.doc.body;
+        parentNode.appendChild(this.node);
+        this.setSize(w, h);
+        this._initProps();
+        return this;
     },
 
     /**
@@ -859,7 +478,7 @@ Graphic.prototype = {
         this._fillHeight = null;
         this._fillX = NaN;
         this._fillY = NaN;
-        this._path = '';
+        this.path = '';
         this._width = 0;
         this._height = 0;
         this._x = 0;
@@ -879,7 +498,7 @@ Graphic.prototype = {
     {
         this._shape = null;
         this._shapeType = null;
-        this._path = '';
+        this.path = '';
         this._width = 0;
         this._height = 0;
         this._x = 0;
@@ -897,13 +516,13 @@ Graphic.prototype = {
         var shape = this._createGraphicNode(this._shapeType),
             i,
             gradFill;
-        if(this._path)
+        if(this.path)
         {
             if(this._fill)
             {
-                this._path += 'z';
+                this.path += 'z';
             }
-            shape.setAttribute("d", this._path);
+            shape.setAttribute("d", this.path);
         }
         else
         {
@@ -941,7 +560,7 @@ Graphic.prototype = {
             shape.setAttribute("fill", "url(#" + this._gradientId + ")");
 
         }
-        this._svg.appendChild(shape);
+        this.node.appendChild(shape);
         this._clearPath();
     },
 
@@ -1065,18 +684,23 @@ Graphic.prototype = {
         return fill;
     },
 
-    _defs: null,
-
     /**
      * @private
      * Creates a group element
      */
     _createGraphics: function() {
         var group = this._createGraphicNode("svg");
+        this._styleGroup(group);
+        return group;
+    },
+
+    _styleGroup: function(group)
+    {
         group.style.position = "absolute";
         group.style.top = "0px";
+        group.style.overflow = "visible";
         group.style.left = "0px";
-        return group;
+        group.setAttribute("pointer-events", "none");
     },
 
     /**
@@ -1091,172 +715,23 @@ Graphic.prototype = {
         {
             node.setAttribute("pointer-events", v);
         }
-        return node;
-    },
-    
-    _getNodeShapeType: function(type)
-    {
-        if(this._typeConversionHash.hasOwnProperty(type))
+        if(type != "svg")
         {
-            type = this._typeConversionHash[type];
+            if(!this._graphicsList)
+            {
+                this._graphicsList = [];
+            }
+            this._graphicsList.push(node);
         }
-        return type;
-    },
-
-    _typeConversionHash: {
-        circle: "ellipse",
-        wedge: "path"
+        return node;
     },
 
     /**
      * Returns a shape.
      */
     getShape: function(config) {
-        var shape,
-            node,
-            type,
-            fill = config.fill,
-            border = config.border,
-            w = config.width,
-            h = config.height,
-            cx = w/2,
-            cy = h/2,
-            rx = w/2,
-            ry = h/2,
-            path;
-        if(config.node)
-        {
-            node = config.node;
-            type = config.type || config.shape;
-            if(type === "circle")
-            {
-                type = "ellipse";
-            }
-        }
-        else
-        {
-            this.clear();
-            type = config.shape || "shape";
-            if(type === "circle")
-            {
-                type = "ellipse";
-            }
-            node = this._createGraphicNode(this._getNodeShapeType(type), "visiblePainted");
-            if(type === "wedge")
-            {
-                path = this._getWedgePath(config.props) + " Z";
-                node.setAttribute("d", path);
-            }
-        }
-        if(border && border.weight && border.weight > 0)
-        {
-            border.color = border.color || "#000000";
-            border.weight = border.weight || 1;
-            border.alpha = border.alpha || 1;
-            node.setAttribute("stroke", border.color);
-            node.setAttribute("stroke-width",  border.weight);
-            node.setAttribute("stroke-opacity", border.alpha);
-        }
-        else
-        {
-            node.setAttribute("stroke", "none");
-        }
-        this.setSize(w, h); 
-        this.setPosition(0, 0);
-        if(type === "ellipse")
-        {
-            if(border.weight && border.weight > 0)
-            {
-                rx -= border.weight;
-                ry -= border.weight;
-            }
-            node.setAttribute("cx", cx);
-            node.setAttribute("cy", cy);
-            node.setAttribute("rx", rx);
-            node.setAttribute("ry", ry);
-        }
-        else
-        {
-            node.setAttribute("width", w);
-            node.setAttribute("height", h);
-            node.style.width = w + "px";
-            node.style.height = h + "px";
-        }
-        if(fill.type === "linear" || fill.type === "radial")
-        {
-            //this.beginGradientFill(fill);
-            //node.appendChild(this._getFill());
-        }
-        else if(fill.type === "bitmap")
-        {
-            //this.beginBitmapFill(fill);
-            //node.appendChild(this._getFill());
-        }
-        else
-        {
-            if(!fill.color)
-            {
-                node.setAttribute("fill", "none");
-            }
-            else
-            {
-                fill.alpha = fill.alpha || 1;
-                node.setAttribute("fill", fill.color);
-                node.setAttribute("fill-opacity", fill.alpha);
-            }
-        }
-        
-        node.style.display = "block";
-        node.style.position = "absolute";
-        if(!config.node)
-        {
-            this._svg.appendChild(node);
-        }
-        shape = {
-            width:w,
-            height:h,
-            fill:fill,
-            node:node,
-            border:border,
-            type:type
-        };
-        return shape; 
-    },
-    
-    /**
-     * @description Updates an existing shape with new properties.
-     */
-    updateShape: function(shape, config)
-    {
-        if(config.fill)
-        {
-            shape.fill = Y.merge(shape.fill, config.fill);
-        }
-        if(config.border)
-        {
-            shape.border = Y.merge(shape.border, config.border);
-            if(config.border.weight)
-            {
-                shape.border.weight = config.border.weight;
-            }
-            else if(config.border.weight === 0)
-            {
-                shape.border.weight = 0;
-            }
-        }
-        if(config.width)
-        {
-            shape.width = config.width;
-        }
-        if(config.height)
-        {
-            shape.height = config.height;
-        }
-        if(config.shape !== shape.type)
-        {
-            config.node = null;
-        }
-        return this.getShape(shape);
+        config.graphic = this;
+        return new Y.Shape(config); 
     }
 
 };
@@ -1272,7 +747,7 @@ VMLGraphics.prototype = {
         config = config || {};
         var w = config.width || 0,
             h = config.height || 0;
-        this._vml = this._createGraphics();
+        this.node = this._createGraphics();
         this.setSize(w, h);
         this._initProps();
     },
@@ -1403,7 +878,16 @@ VMLGraphics.prototype = {
      */
     clear: function() {
         this._path = '';
-        this._removeChildren(this._vml);
+        this._removeChildren(this.node);
+    },
+
+    /**
+     * Removes all nodes
+     */
+    destroy: function()
+    {
+        this._removeChildren(this.node);
+        this.node.parentNode.removeChild(this.node);
     },
 
     /**
@@ -1421,6 +905,28 @@ VMLGraphics.prototype = {
                 node.removeChild(child);
             }
         }
+    },
+
+    toggleVisible: function(val)
+    {
+        this._toggleVisible(this.node, val);
+    },
+
+    _toggleVisible: function(node, val)
+    {
+        var children = Y.one(node).get("children"),
+            visibility = val ? "visible" : "hidden",
+            i = 0,
+            len;
+        if(children)
+        {
+            len = children.length;
+            for(; i < len; ++i)
+            {
+                this._toggleVisible(children[i], val);
+            }
+        }
+        node.style.visibility = visibility;
     },
 
     /**
@@ -1530,7 +1036,7 @@ VMLGraphics.prototype = {
         {
             arc = 360;
         }
-        startAngle *= 65535;
+        startAngle *= -65535;
         arc *= 65536;
         path = " m " + x + " " + y + " ae " + x + " " + y + " " + radius + " " + yRadius + " " + startAngle + " " + arc;
         return path;
@@ -1576,7 +1082,6 @@ VMLGraphics.prototype = {
         this._path += ' l ';
         for (i = 0; i < len; ++i) {
             this._path += ' ' + Math.round(args[i][0]) + ', ' + Math.round(args[i][1]);
-
             this._trackSize.apply(this, args[i]);
         }
     },
@@ -1592,25 +1097,31 @@ VMLGraphics.prototype = {
      * Sets the size of the graphics object
      */
     setSize: function(w, h) {
-        this._vml.style.width = w + 'px';
-        this._vml.style.height = h + 'px';
-        this._vml.coordSize = w + ' ' + h;
+        w = Math.round(w);
+        h = Math.round(h);
+        this.node.style.width = w + 'px';
+        this.node.style.height = h + 'px';
+        this.node.coordSize = w + ' ' + h;
+        this._canvasWidth = w;
+        this._canvasHeight = h;
     },
    
     setPosition: function(x, y)
     {
-        this._vml.style.left = x + "px";
-        this._vml.style.top = y + "px";
+        x = Math.round(x);
+        y = Math.round(y);
+        this.node.style.left = x + "px";
+        this.node.style.top = y + "px";
     },
 
     /**
      * @private
      */
-    render: function(node) {
-        var w = node.offsetWidth || 0,
-            h = node.offsetHeight || 0;
-        node = node || Y.config.doc.body;
-        node.appendChild(this._vml);
+    render: function(parentNode) {
+        var w = Math.max(parentNode.offsetWidth || 0, this._canvasWidth),
+            h = Math.max(parentNode.offsetHeight || 0, this._canvasHeight);
+        parentNode = parentNode || Y.config.doc.body;
+        parentNode.appendChild(this.node);
         this.setSize(w, h);
         this._initProps();
         return this;
@@ -1675,9 +1186,10 @@ VMLGraphics.prototype = {
     _draw: function()
     {
         var shape = this._createGraphicNode(this._shape),
-            w = this._width,
-            h = this._height,
+            w = Math.round(this._width),
+            h = Math.round(this._height),
             fillProps = this._fillProps;
+            this.setSize(w, h);
         if(this._path)
         {
             if(this._fill || this._fillProps)
@@ -1718,7 +1230,7 @@ VMLGraphics.prototype = {
             shape.filled = true;
             shape.appendChild(this._getFill());
         }
-        this._vml.appendChild(shape);
+        this.node.appendChild(shape);
         this._clearPath();
     },
 
@@ -1816,135 +1328,13 @@ VMLGraphics.prototype = {
      * Returns a shape.
      */
     getShape: function(config) {
-        var shape,
-            node,
-            type,
-            fill = config.fill,
-            border = config.border,
-            fillnode,
-            w = config.width,
-            h = config.height, 
-            path;
-        if(config.node)
-        {
-            node = config.node;
-            type = config.type || config.shape;
-        }
-        else
-        {
-            this.clear();
-            type = config.shape || "shape";
-            node = this._createGraphicNode(this._getNodeShapeType(type));
-            if(type === "wedge")
-            {
-                path = this._getWedgePath(config.props);
-                if(fill)
-                {
-                    path += ' x';
-                }
-                if(border)
-                {
-                    path += ' e';
-                }
-                node.path = path;
-            }
-        }
-        this.setPosition(0, 0);
-        if(border && border.weight && border.weight > 0)
-        {
-            node.strokecolor = border.color || "#000000";
-            node.strokeweight = border.weight || 1;
-            node.stroked = true;
-            w -= border.weight;
-            h -= border.weight;
-        }
-        else
-        {
-            node.stroked = false;
-        }
-        this.setSize(w, h);
-        node.style.width = w + "px";
-        node.style.height = h + "px";
-        node.filled = true;
-        if(fill.type === "linear" || fill.type === "radial")
-        {
-            this.beginGradientFill(fill);
-            node.appendChild(this._getFill());
-        }
-        else if(fill.type === "bitmap")
-        {
-            this.beginBitmapFill(fill);
-            node.appendChild(this._getFill());
-        }
-        else
-        {
-            if(!fill.color)
-            {
-                node.filled = false;
-            }
-            else
-            {
-                if(config.fillnode)
-                {
-                    this._removeChildren(config.fillnode);
-                }
-                fillnode = this._createGraphicNode("fill");
-                fillnode.setAttribute("type", "solid");
-                fill.alpha = fill.alpha || 1;                
-                fillnode.setAttribute("color", fill.color);
-                fillnode.setAttribute("opacity", fill.alpha);
-                node.appendChild(fillnode);
-            }
-        }
-        node.style.display = "block";
-        node.style.position = "absolute";
-        if(!config.node)
-        {
-            this._vml.appendChild(node);
-        }
-        shape = {
-            width:w,
-            height:h,
-            fill:fill,
-            node:node,
-            fillnode:fillnode,
-            border:border
-        };
-        return shape; 
-    },
-   
-    /**
-     * @description Updates an existing shape with new properties.
-     */
-    updateShape: function(shape, config)
-    {
-        if(config.fill)
-        {
-            shape.fill = Y.merge(shape.fill, config.fill);
-        }
-        if(config.border)
-        {
-            shape.border = Y.merge(shape.border, config.border);
-        }
-        if(config.width)
-        {
-            shape.width = config.width;
-        }
-        if(config.height)
-        {
-            shape.height = config.height;
-        }
-        if(config.shape !== shape.type)
-        {
-            config.node = null;
-            config.fillnode = null;
-        }
-        return this.getShape(shape);
+        config.graphic = this;
+        return new Y.Shape(config); 
     },
 
     addChild: function(child)
     {
-        this._vml.appendChild(child);
+        this.node.appendChild(child);
     }
 };
 
@@ -2043,6 +1433,349 @@ else
     Y.NodeList.importMethod(Y.Node.prototype, ['addClass']);
 }
 
+function Shape(cfg)
+{
+    this._initialize(cfg);
+    this._draw();
+}
+
+Y.extend(Shape, Y.Graphic, {
+    type: "shape",
+
+    autoSize: false,
+
+    pointerEvents: "visiblePainted", 
+
+    _initialize: function(cfg) 
+    {
+        if(!cfg.graphic)
+        {
+            cfg.graphic = new Y.Graphic();
+        }
+        this._setProps(cfg);
+    },
+  
+    _setProps: function(cfg)
+    {
+        this.autoSize = cfg.autoSize || this.autoSize; 
+        this.pointerEvents = cfg.pointerEvents || this.pointerEvents;
+        this.width = cfg.width || this.width;
+        this.height = cfg.height || this.height;
+        this.border = cfg.border || this.border;
+        this.graphics = cfg.graphic || this.graphics;
+        this.canvas = this.graphics;
+        this.parentNode = this.graphics.node;
+        this.fill = cfg.fill || this.fill;
+        this.type = cfg.shape || this.type;
+        this.nodetype = this._getNodeShapeType(this.type); 
+        this.props = cfg.props || this.props;
+        this.path = cfg.path || this.path;
+    },
+
+    _draw: function()
+    {
+        var cx,
+            cy,
+            rx,
+            ry,
+            parentNode = this.parentNode,
+            borderWeight = 0,
+            fillWidth = this.width || 0,
+            fillHeight = this.height || 0;
+        if(!this.node)
+        {
+            this.node = this._createGraphicNode(this.nodetype, this.pointerEvents);
+            parentNode.appendChild(this.node);
+        }
+        if(this.nodetype == "path")
+        {
+            if(this.type == "wedge")
+            {
+                this.path = this._getWedgePath(this.props);
+            
+            }
+            this._setPath();
+        }
+        if(this.border && this.border.weight && this.border.weight > 0)
+        {
+            borderWeight = this.border.weight;
+            fillWidth -= borderWeight * 2;
+            fillHeight -= borderWeight * 2;
+        }
+        this._addBorder();
+        if(this.nodetype === "ellipse")
+        {
+            rx = cx = this.width/2;
+            ry = cy = this.height/2;
+            rx -= borderWeight;
+            ry -= borderWeight;
+            this.node.setAttribute("cx", cx);
+            this.node.setAttribute("cy", cy);
+            this.node.setAttribute("rx", rx);
+            this.node.setAttribute("ry", ry);
+        }
+        else
+        {
+            this.node.setAttribute("width", fillWidth);
+            this.node.setAttribute("height", fillHeight);
+            this.node.style.width = fillWidth + "px";
+            this.node.style.height = fillHeight + "px";
+        }
+        this._addFill();
+        parentNode.style.width = this.width + "px";
+        parentNode.style.height = this.height + "px";
+        parentNode.setAttribute("width", this.width);
+        parentNode.setAttribute("height", this.height);
+        this.node.style.visibility = "visible";
+        this.node.setAttribute("x", borderWeight); 
+        this.node.setAttribute("y", borderWeight); 
+        return this;       
+    },
+
+    _setPath: function()
+    {
+        if(this.path)
+        {
+            this.path += " Z";
+            this.node.setAttribute("d", this.path);
+        }
+    },
+
+    _addBorder: function()
+    {
+        if(this.border && this.border.weight && this.border.weight > 0)
+        {
+            this.border.color = this.border.color || "#000000";
+            this.border.weight = this.border.weight || 1;
+            this.border.alpha = this.border.alpha || 1;
+            this.border.linecap = this.border.linecap || "square";
+            this.node.setAttribute("stroke", this.border.color);
+            this.node.setAttribute("stroke-linecap", this.border.linecap);
+            this.node.setAttribute("stroke-width",  this.border.weight);
+            this.node.setAttribute("stroke-opacity", this.border.alpha);
+        }
+        else
+        {
+            this.node.setAttribute("stroke", "none");
+        }
+    },
+
+    _addFill: function()
+    {
+        if(this.fill.type === "linear" || this.fill.type === "radial")
+        {
+            this.beginGradientFill(this.fill);
+            this.node.appendChild(this._getFill());
+        }
+        else if(this.fill.type === "bitmap")
+        {
+            this.beginBitmapFill(this.fill);
+            this.node.appendChild(this._getFill());
+        }
+        else
+        {
+            if(!this.fill.color)
+            {
+                this.node.setAttribute("fill", "none");
+            }
+            else
+            {
+                this.fill.alpha = this.fill.alpha !== undefined ? this.fill.alpha : 1;
+                this.node.setAttribute("fill", this.fill.color);
+                this.node.setAttribute("fill-opacity", this.fill.alpha);
+            }
+        }
+    },
+
+    end: function()
+    {
+        this._setPath();
+    },
+
+    update: function(cfg)
+    {
+        this._setProps(cfg);
+        this._draw();
+        return this;
+    },
+    
+    _getNodeShapeType: function(type)
+    {
+        if(this._typeConversionHash.hasOwnProperty(type))
+        {
+            type = this._typeConversionHash[type];
+        }
+        return type;
+    },
+
+    toggleVisible: function(val)
+    {
+        var visibility = val ? "visible" : "hidden";
+        if(this.node)
+        {
+            Y.one(this.node).setStyle("visibility", visibility);
+        }
+    },
+
+    _typeConversionHash: {
+        circle: "ellipse",
+        wedge: "path"
+    }
+});
+
+Y.Shape = Shape;
+function VMLShape(cfg)
+{
+    this._initialize(cfg);
+    this._draw();
+}
+
+VMLShape.prototype = {
+    /**
+     * Type of shape
+     */
+    type: "shape",
+    
+    _initialize: function(cfg) 
+    {
+        if(!cfg.graphic)
+        {
+            cfg.graphic = new Y.Graphic();
+        }
+        this._setProps(cfg);
+    },
+
+    width: 0,
+
+    height: 0,
+
+    /**
+     * Returns a shape.
+     */
+    _setProps: function(cfg) {
+        this.width = cfg.width && cfg.width >= 0 ? cfg.width : this.width;
+        this.height = cfg.height && cfg.height >= 0 ? cfg.height : this.height;
+        this.border = cfg.border || this.border;
+        this.graphics = cfg.graphic || this.graphics;
+        this.canvas = this.graphics;
+        this.parentNode = this.graphics.node;
+        this.fill = cfg.fill || this.fill;
+        this.type = cfg.shape || this.type;
+        this.props = cfg.props || this.props;
+    },
+
+    _draw: function()
+    {
+        var path,
+            borderWeight = 0,
+            fillWidth = this.width || 0,
+            fillHeight = this.height || 0;
+        this.graphics.setSize(fillWidth, fillHeight);
+        if(this.node)
+        {
+            this.node.style.visible = "hidden";
+        }
+        else if(!this.node)
+        {
+            this.node = this.graphics._createGraphicNode(this.graphics._getNodeShapeType(this.type));
+            this.graphics.node.appendChild(this.node);
+        }
+        if(this.type === "wedge")
+        {
+            path = this.graphics._getWedgePath(this.props);
+            if(this.fill)
+            {
+                path += ' x';
+            }
+            if(this.border)
+            {
+                path += ' e';
+            }
+            this.node.path = path;
+        }
+        this._addBorder();
+        if(this.border && this.border.weight && this.border.weight > 0)
+        {
+            borderWeight = this.border.weight;
+            fillWidth -= borderWeight;
+            fillHeight -= borderWeight;
+        }
+        this.node.style.width = Math.max(fillWidth, 0) + "px";
+        this.node.style.height = Math.max(fillHeight, 0) + "px";
+        this._addFill();
+        return this;
+    },
+    
+    _addBorder: function()
+    {
+        if(this.border && this.border.weight && this.border.weight > 0)
+        {
+            this.node.strokecolor = this.border.color || "#000000";
+            this.node.strokeweight = this.border.weight || 1;
+            this.node.stroked = true;
+        }
+        else
+        {
+            this.node.stroked = false;
+        }
+    },
+
+    _addFill: function()
+    {
+        this.node.filled = true;
+        if(this.fill.type === "linear" || this.fill.type === "radial")
+        {
+            this.graphics.beginGradientFill(this.fill);
+            this.node.appendChild(this.graphics._getFill());
+        }
+        else if(this.fill.type === "bitmap")
+        {
+            this.graphics.beginBitmapFill(this.fill);
+            this.node.appendChild(this.graphics._getFill());
+        }
+        else
+        {
+            if(!this.fill.color)
+            {
+                this.node.filled = false;
+            }
+            else
+            {
+                if(this.fillnode)
+                {
+                    this.graphics._removeChildren(this.fillnode);
+                }
+                this.fillnode = this.graphics._createGraphicNode("fill");
+                this.fillnode.type = "solid";
+                this.fillnode.color = this.fill.color;
+                this.fillnode.opacity = this.fill.alpha || 1;
+                this.node.appendChild(this.fillnode);
+            }
+        }
+    },
+
+    toggleVisible: function(val)
+    {
+        var visibility = val ? "visible" : "hidden";
+        if(this.node)
+        {
+            Y.one(this.node).setStyle("visibility", visibility);
+        }
+    },
+
+    update: function(cfg)
+    {
+        this._setProps(cfg);
+        this._draw();
+        return this;
+    }
+};
+
+Y.VMLShape = VMLShape;
+
+if (Y.UA.ie) {
+    Y.Shape = VMLShape;
+}
 /**
  * BaseAxis is the base class for observable baseAxis classes.
  */
@@ -2059,9 +1792,6 @@ else
 function BaseAxis (config)
 {
     this._createId();
-    this._keys = {};
-    this._data = [];
-    this._keyCollection = [];
     BaseAxis.superclass.constructor.apply(this, arguments);
 }
 
@@ -2073,12 +1803,38 @@ BaseAxis.NAME = "baseAxis";
  */
 BaseAxis.ATTRS = {
 	/**
-	 * Parent element for the BaseAxis instance.
+	 * Hash of array identifed by a string value.
 	 */
-	parent:{
-		lazyAdd:false,
-		
-		value:null
+	keys: {
+        getter: function ()
+		{
+            if(!this._keys)
+            {
+                this._keys = {};
+            }
+			return this._keys;
+		},
+        
+        setter: function(val)
+        {
+            var i, l;
+            if(Y.Lang.isArray(val))
+            {
+                l = val.length;
+                for(i = 0; i < l; ++i)
+                {
+                    this.addKey(val[i]);
+                }
+                return;
+            }
+            for(i in val)
+            {
+                if(val.hasOwnProperty(i))
+                {
+                    this.addKey(val[i]);
+                }
+            }
+        }
 	},
 
 	/**
@@ -2086,7 +1842,7 @@ BaseAxis.ATTRS = {
 	 * Storage for rounding unit
 	 */
 	roundingUnit:{
-		getter: function ()
+        getter: function ()
 		{
 			return this._roundingUnit;
 		},
@@ -2097,7 +1853,6 @@ BaseAxis.ATTRS = {
 			{
 				this._updateMinAndMax();
 			}
-			return val;
 		}
  	},
 
@@ -2117,7 +1872,7 @@ BaseAxis.ATTRS = {
 				return val;
 			}
 			this._roundMinAndMax = val;
-			this._updateMinAndMax();
+            this._updateMinAndMax();
 		}
   	},
 
@@ -2142,20 +1897,12 @@ BaseAxis.ATTRS = {
 	 * to build its own data.
 	 */
 	dataProvider:{
-		getter: function ()
+        getter: function ()
 		{
 			return this._dataProvider;
 		},
 		setter: function (value)
 		{
-			if(value === this._dataProvider) 
-			{
-				return;
-			}
-			if(this._dataProvider) 
-			{
-				//remove listeners
-			}
 			if(value.hasOwnProperty("data") && Y.Lang.isArray(value.data))
             {
                 value = Y.merge(value);
@@ -2163,9 +1910,35 @@ BaseAxis.ATTRS = {
             }
             this._dataProvider = {data:value.concat()};
 			this._dataClone = this._dataProvider.data.concat();
-			return value;
-		},
-		lazyAdd: false
+           
+            var keyCollection = this.get("keyCollection"),
+                keys = this.get("keys"),
+                i,
+                l;
+            if(keys)
+            {
+                for(i in keys)
+                {
+                    if(keys.hasOwnProperty(i))
+                    {
+                        delete keys[i];
+                    }
+                }
+            }
+            if(keyCollection && keyCollection.length)
+            {
+                i = 0;
+                l = keyCollection.length;
+                for(; i < l; ++i)
+                {
+                    this.addKey(keyCollection[i]);
+                }
+            }
+            if(this._dataReady)
+            {
+                this.fire("dataUpdate");
+            }
+		}
 	},
 
 	/**
@@ -2175,6 +1948,10 @@ BaseAxis.ATTRS = {
 	dataMaximum: {
 		getter: function ()
 		{
+            if(!this._dataMaximum)
+            {
+                this._updateMinAndMax();
+            }
 			return this._dataMaximum;
 		}
 	},
@@ -2185,9 +1962,9 @@ BaseAxis.ATTRS = {
 	maximum: {
 		getter: function ()
 		{
-			if(this._autoMax || !this._setMaximum) 
+			if(this.get("autoMax") || !this._setMaximum) 
 			{
-				return this._dataMaximum;
+				return this.get("dataMaximum");
 			}
 			return this._setMaximum;
 		},
@@ -2204,6 +1981,10 @@ BaseAxis.ATTRS = {
 	dataMinimum: {
 		getter: function ()
 		{
+            if(isNaN(this._dataMinimum))
+            {
+                this._updateMinAndMax();
+            }
 			return this._dataMinimum;
 		}
 	},
@@ -2214,11 +1995,11 @@ BaseAxis.ATTRS = {
 	minimum: {
 		getter: function ()
 		{
-			if(this._autoMin || !this._setMinimum) 
+			if(this.get("autoMin") || !this._setMinimum) 
 			{
-				return this._dataMinimum;
+				return this.get("dataMinimum");
 			}
-			return this._setMinimum;
+            return this._setMinimum;
 		},
         setter: function(val)
         {
@@ -2232,30 +2013,16 @@ BaseAxis.ATTRS = {
 	 * set by the user.
 	 */
 	autoMax: {
-		getter: function ()
-		{
-			return this._autoMax;
-		},
-		setter: function (value)
-		{
-			this._autoMax = value;
-		}
-	},
+	    value: true
+    },
 
 	/**
 	 * Determines whether the minimum is calculated or explicitly
 	 * set by the user.
 	 */
 	autoMin: {
-		getter: function ()
-		{
-			return this._autoMin;
-		},
-		setter: function (value)
-		{
-			this._autoMin = value;
-		}
-	},
+	    value: true
+    },
 
 	/**
 	 * Array of axis data
@@ -2263,64 +2030,36 @@ BaseAxis.ATTRS = {
 	data: {
 		getter: function ()
 		{
-			return this._data;
+			if(!this._data || this._updateTotalDataFlag)
+            {
+                this._updateTotalData();
+            }
+            return this._data;
 		}
-	},
-
-	/**
-	 * Hash of array identifed by a string value.
-	 */
-	keys: {
-		lazyAdd: false,
-
-        getter: function ()
-		{
-			return this._keys;
-		},
-
-        setter: function(val)
-        {
-            var i, l;
-            if(Y.Lang.isArray(val))
-            {
-                l = val.length;
-                for(i = 0; i < l; ++i)
-                {
-                    this.addKey(val[i]);
-                }
-                return;
-            }
-            for(i in val)
-            {
-                if(val.hasOwnProperty(i))
-                {
-                    this.addKey(val[i]);
-                }
-            }
-        }
 	},
 
     keyCollection: {
         getter: function()
         {
-            return this._keyCollection;
+            var keys = this.get("keys"),
+                i, 
+                col = [];
+            for(i in keys)
+            {
+                if(keys.hasOwnProperty(i))
+                {
+                    col.push(i);
+                }
+            }
+            return col;
         },
         readOnly: true
     },
 
     labelFunction: {
-        getter: function()
+        value: function(val, format)
         {
-            if(this._labelFunction)
-            {
-                return this._labelFunction;
-            }
-            return this._defaultLabelFunction;
-        },
-
-        setter: function(val)
-        {
-            this._labelFunction = val;
+            return val;
         }
     }
 };
@@ -2377,12 +2116,8 @@ Y.extend(BaseAxis, Y.Base,
 	 * is true.
 	 */
 	_dataMaximum: null,
-	/**
-	 * @private
-	 * Storage for autoMax
-	 */
-	_autoMax: true,
-	/**
+	
+    /**
 	 * @private
 	 * Storage for minimum when autoMin is false.
 	 */
@@ -2392,11 +2127,6 @@ Y.extend(BaseAxis, Y.Base,
 	 * Storage for dataMinimum. 
 	 */
 	_dataMinimum: null,
-	/**
-	 * @private 
-	 * Storage for autoMin.
-	 */
-	_autoMin: true,
 	/**
 	 * @private
 	 * Storage for data
@@ -2408,12 +2138,14 @@ Y.extend(BaseAxis, Y.Base,
 	 */
 	_keys: null,
 
+    _updateTotalDataFlag: true,
+
 	/**
 	 * @private
 	 * Indicates that the axis has a data source and at least one
 	 * key.
 	 */
-	_axisReady: false,
+	_dataReady: false,
 	/**
 	 * Adds an array to the key hash.
 	 *
@@ -2426,24 +2158,23 @@ Y.extend(BaseAxis, Y.Base,
 		{
 			return;
 		}
-        this._keyCollection.push(value);
 		this._dataClone = this.get("dataProvider").data.concat();
 		var keys = this.get("keys"),
 			eventKeys = {},
 			event = {axis:this};
 		this._setDataByKey(value);
 		eventKeys[value] = keys[value].concat();
-		this._updateMinAndMax();
+        this._updateMinAndMax();
 		event.keysAdded = eventKeys;
 		if(!this._dataReady)
 		{
 			this._dataReady = true;
-			this.publish("axisReady", {fireOnce:true});
-			this.fire("axisReady", event);
+			this.publish("dataReady", {fireOnce:true});
+			this.fire("dataReady", event);
 		}
 		else
 		{
-			this.fire("axisUpdate", event);
+			this.fire("dataUpdate", event);
 		}
 	},
 
@@ -2465,9 +2196,27 @@ Y.extend(BaseAxis, Y.Base,
 			arr[i] = obj[key];
 		}
 		this.get("keys")[key] = arr;
-		this._data = this._data.concat(arr);
-	},
-		
+	    this._updateTotalDataFlag = true;
+    },
+
+    /**
+     * @private
+     */
+    _updateTotalData: function()
+    {
+		var keys = this.get("keys"),
+            i;
+        this._data = [];
+        for(i in keys)
+        {
+            if(keys.hasOwnProperty(i))
+            {
+                this._data = this._data.concat(keys[i]);
+            }
+        }
+        this._updateTotalDataFlag = false;
+    },
+
 	/**
 	 * Removes an array from the key hash.
 	 * 
@@ -2487,13 +2236,7 @@ Y.extend(BaseAxis, Y.Base,
 			newData = [],
 			removedKeys = {},
 			keys = this.get("keys"),
-			event = {},
-            keyCollection = this.get("keyCollection"),
-            i = Y.Array.indexOf(keyCollection, value);
-        if(keyCollection && keyCollection.length > 0 && i > -1)
-        {
-            keyCollection.splice(i, 1);
-        }
+			event = {};
         removedKeys[value] = keys[value].concat();
         for(key in keys)
         {
@@ -2509,10 +2252,10 @@ Y.extend(BaseAxis, Y.Base,
             }
         }
         keys = newKeys;
-        this._data = newData;
+        this._updateTotalDataFlag = true;
         this._updateMinAndMax();
         event.keysRemoved = removedKeys;
-        this.fire("axisUpdate", event);
+        this.fire("dataUpdate", event);
 	},
 
 	/**
@@ -2577,77 +2320,6 @@ Y.extend(BaseAxis, Y.Base,
 		this._dataMinimum = min;
 	},
 
-	/**
-	 * @private 
-	 * Handles updates axis data properties based on the <code>DataEvent.NEW_DATA</code>
-	 * event from the <code>dataProvider</code>.
-	 */
-	newDataUpdateHandler: function()
-	{
-		var i,
-			keys = this.get("keys"),
-			event = {}; 
-		this._data = [];
-		this._dataClone = this.get("dataProvider").data.concat();
-		for(i in keys)
-		{
-			if(keys.hasOwnProperty(i))
-			{
-				keys[i] = this._setDataByKey(i);
-				this._data = this._data.concat(keys[i]);
-			}
-		}
-		this._updateMinAndMax();
-		event.keysAdded = keys;
-		this.fire("axisUpdate", event);
-	},
-	/**
-	 * @private 
-	 * Updates axis data properties based on the <code>DataEvent.DATA_CHANGE</code>
-	 * event from the <code>dataProvider</code>.
-	 */
-	_keyDataUpdateHandler: function ()
-	{
-		var hasKey = false,
-			event = {},
-			keysAdded = event.keysAdded,
-			keysRemoved = event.keysRemoved,
-			keys = this.get("keys"),
-            i;
-		for(i in keys)
-		{
-			if(keys.hasOwnProperty(i))
-			{
-				if(keysAdded.hasOwnProperty(i))
-				{
-					hasKey = true;
-					keys[i] = keys[i];
-				}
-				if(keysRemoved.hasOwnProperty(i))
-				{
-					hasKey = true;
-					keys[i] = [];
-				}
-			}
-		}
-		if(!hasKey) 
-		{
-			return;
-		}
-		this._data = [];
-		for(i in keys) 
-		{
-			if(keys.hasOwnProperty(i))
-			{
-				this._data = this._data.concat(keys[i]);
-			}
-		}
-		this._updateMinAndMax();
-		event.keysAdded = keysAdded;
-		event.keysRemoved = keysRemoved;
-		this.fire("axisUpdate", event);
-    },
-
     getTotalMajorUnits: function(majorUnit, len)
     {
         var units;
@@ -2681,19 +2353,15 @@ Y.extend(BaseAxis, Y.Base,
         return 0;
     },
 
-    getLabelAtPosition:function(pos, len, format)
+    getLabelByIndex: function(i, l)
     {
         var min = this.get("minimum"),
             max = this.get("maximum"),
-            val = (pos/len * (max - min)) + min;
-        return this.get("labelFunction")(val, format);
-    },
-
-    _labelFunction: this._defaultLabelFunction,
-    
-    _defaultLabelFunction: function(val, format)
-    {
-        return val;
+            increm = (max - min)/(l-1),
+            label;
+            l -= 1;
+            label = min + (i * increm);
+        return label;
     }
 });
 Y.BaseAxis = BaseAxis;
@@ -2724,9 +2392,28 @@ NumericAxis.ATTRS = {
 			this._updateMinAndMax();
 			return value;
 		}
-	}
+	},
+    
+    labelFunction: { 
+        value: function(val, format)
+        {
+            if(format)
+            {
+                return Y.DataType.Number.format(val, format);
+            }
+            return val;
+        }
+    },
 
-
+    labelFormat: {
+        value: {
+            prefix: "",
+            thousandsSeparator: "",
+            decimalSeparator: "",
+            decimalPlaces: "0",
+            suffix: ""
+        }
+    }
 };
 
 Y.extend(NumericAxis, Y.BaseAxis,
@@ -2785,19 +2472,26 @@ Y.extend(NumericAxis, Y.BaseAxis,
 				}
 			}
 		}	
-		if(this._roundMinAndMax && !isNaN(this._roundingUnit))
+		if(this._roundMinAndMax && !isNaN(this.get("roundingUnit")))
 		{
-			this._dataMaximum = this._roundUpToNearest(max, this._roundingUnit);
-			this._dataMinimum = this._roundDownToNearest(min, this._roundingUnit);
-		}
+            this._dataMaximum = max === 0 ? max : this._roundUpToNearest(max, this.get("roundingUnit"));
+			if(min === 0 || (min > 0 && min < this.get("roundingUnit")))
+            {
+                this._dataMinimum = 0;
+            }
+            else
+            {
+                this._dataMinimum = this._roundDownToNearest(min, this.get("roundingUnit"));
+            }
+        }
 		else
 		{
 			this._dataMaximum = max;
 			this._dataMinimum = min;
 		}
-		if(this._alwaysShowZero)
+		if(this.get("alwaysShowZero"))
 		{
-			this._dataMinimum = Math.min(0, this._dataMinimum);
+			this._dataMinimum = Math.min(0, this.get("dataMinimum"));
 		}
 	},
 
@@ -2873,12 +2567,7 @@ Y.extend(NumericAxis, Y.BaseAxis,
 		precision = precision || 0;
 		var decimalPlaces = Math.pow(10, precision);
 		return Math.round(decimalPlaces * number) / decimalPlaces;
-	},
-    
-    _defaultLabelFunction: function(val, format)
-    {
-        return Y.DataType.Number.format(val, format);
-    }
+	}
 });
 
 Y.NumericAxis = NumericAxis;
@@ -2956,10 +2645,10 @@ Y.extend(StackedAxis, Y.NumericAxis,
                 min = Math.min(min, pos);
             }
         }
-        if(this._roundMinAndMax && !isNaN(this._roundingUnit))
+        if(this._roundMinAndMax && !isNaN(this.get("roundingUnit")))
 		{
-			this._dataMaximum = this._roundUpToNearest(max, this._roundingUnit);
-			this._dataMinimum = this._roundDownToNearest(min, this._roundingUnit);
+			this._dataMaximum = this._roundUpToNearest(max, this.get("roundingUnit"));
+			this._dataMinimum = this._roundDownToNearest(min, this.get("roundingUnit"));
 		}
 		else
 		{
@@ -2987,33 +2676,49 @@ TimeAxis.ATTRS =
     maximum: {
 		getter: function ()
 		{
-			if(this._autoMax || this._setMaximum === null) 
+			if(this.get("autoMax") || this._setMaximum === null) 
 			{
-                return this._getNumber(this._dataMaximum);
+                return this._getNumber(this.get("dataMaximum"));
 			}
 			return this._setMaximum;
 		},
 		setter: function (value)
 		{
             this._setMaximum = this._getNumber(value);
-            this.fire("dataChange");
+            this.fire("dataUpdate");
 		}
     },
 
     minimum: {
 		getter: function ()
 		{
-			if(this._autoMin || this._setMinimum === null) 
+			if(this.get("autoMin") || this._setMinimum === null) 
 			{
-				return this._dataMinimum;
+				return this.get("dataMinimum");
 			}
 			return this._setMinimum;
 		},
 		setter: function (value)
 		{
             this._setMinimum = this._getNumber(value);
-            this.fire("dataChange");
+            this.fire("dataUpdate");
         }
+    },
+
+    labelFunction: {
+        value: function(val, format)
+        {
+            val = Y.DataType.Date.parse(val);
+            if(format)
+            {
+                return Y.DataType.Date.format(val, {format:format});
+            }
+            return val;
+        }
+    },
+
+    labelFormat: {
+        value: "%b %d, %y"
     }
 };
 
@@ -3057,8 +2762,8 @@ Y.extend(TimeAxis, Y.BaseAxis, {
 			arr[i] = val;
 		}
 		this.get("keys")[key] = arr;
-		this._data = this._data.concat(arr);
-	},
+        this._updateTotalDataFlag = true;
+    },
 
     _getNumber: function(val)
     {
@@ -3072,41 +2777,7 @@ Y.extend(TimeAxis, Y.BaseAxis, {
         }
 
         return val;
-    },
-
-    updateMaxByPosition:function(pos)
-    {
-        var range = this._dataMaximum - this._dataMinimum;
-            pos = Math.round(pos * 100)/100;
-            pos = pos * range;
-            pos += this._dataMinimum;
-        this.set("maximum", pos);
-    },
-
-    updateMinByPosition:function(pos)
-    {
-        var range = this._dataMaximum - this._dataMinimum;
-            pos = Math.round(pos * 100)/100;
-            pos = pos * range;
-            pos += this._dataMinimum;
-        this.set("minimum", pos);
-    },
-
-    updateMinAndMaxByPosition: function(minVal, maxVal, len)
-    {
-        var min = minVal / len,
-            max = maxVal / len;
-        min += this._dataMinimum;
-        max += this._dataMaximum;
-        this._setMaximum = this._getNumber(max);
-        this._setMinimum = this._getNumber(min);
-        this.fire("dataChange");
-    },
-    
-    _defaultLabelFunction: function(val, format)
-    {
-        return Y.DataType.Date.format(Y.DataType.Date.parse(val), {format:format});
-    }
+    }    
 });
 
 Y.TimeAxis = TimeAxis;
@@ -3140,7 +2811,7 @@ Y.extend(CategoryAxis, Y.BaseAxis,
 	 */
 	_updateMinAndMax: function()
 	{
-		this._dataMaximum = Math.max(this._data.length - 1, 0);
+		this._dataMaximum = Math.max(this.get("data").length - 1, 0);
 		this._dataMinimum = 0;
 	},
 
@@ -3167,25 +2838,29 @@ Y.extend(CategoryAxis, Y.BaseAxis,
 		}
         this._indices[key] = arr;
 		this.get("keys")[key] = labels.concat();
-		this._data = this._data.concat(labels);
-	},
+	    this._updateTotalDataFlag = true;
+    },
 
-	/**
-	 * Returns an array of values based on an identifier key.
-	 */
-	getDataByKey: function (value)
-	{
-		var keys = this._indices;
-		if(keys[value])
-		{
-			return keys[value];
-		}
-		return null;
-	},
+    /**
+     * Returns an array of values based on an identifier key.
+     */
+    getDataByKey: function (value)
+    {
+        if(!this._indices)
+        {
+            this.get("keys");
+        }
+        var keys = this._indices;
+        if(keys[value])
+        {
+            return keys[value];
+        }
+        return null;
+    },
 
     getTotalMajorUnits: function(majorUnit, len)
     {
-        return this._data.length;
+        return this.get("data").length;
     },
     
     getMajorUnitDistance: function(len, uiLen, majorUnit)
@@ -3206,146 +2881,50 @@ Y.extend(CategoryAxis, Y.BaseAxis,
     {
         return l/ct;
     },
-    
+   
+    getLabelByIndex: function(i, l, format)
+    {
+        return this.get("data")[i];
+    },
+
     getLabelAtPosition: function(pos, len, format)
     {
-        var count = this._data.length - 1,
+        var count = this.get("data").length - 1,
         i = Math.round(pos/(len/count));
-        return this._data[i];
+        return this.get("data")[i];
     }
 });
 
 Y.CategoryAxis = CategoryAxis;
 		
-function Renderer(config)
-{
-    Renderer.superclass.constructor.apply(this, arguments);
-}
-
-Renderer.NAME = "renderer";
+function Renderer(){}
 
 Renderer.ATTRS = {
-    padding: {
-        getter: function()
+        /**
+         * Hash of style properties for class
+         */
+        styles:
         {
-            return this._padding || this._getDefPadding();
+            getter: function()
+            {
+                this._styles = this._styles || this._getDefaultStyles();
+                return this._styles;
+            },
+
+            setter: function(val)
+            {
+                this._styles = this._setStyles(val);
+            }
         },
-
-        setter: function(val)
-        {
-            var def = this._padding || this._getDefPadding();
-            this._padding = Y.merge(def, val);
-        }
-    },
-
-    node: {
-        value: null
-    },
-    
-    /**
-	 * The graphic in which the series will be rendered.
-	 */
-	graphic: {
-        value: null
-    },
-	
-    /**
-	 * Hash of style properties for class
-	 */
-	styles:
-	{
-		value: {},
-
-		getter: function()
-		{
-            this._styles = this._styles || this._getDefaultStyles();
-			return this._styles;
-		},
-			   
-		setter: function(val)
-		{
-			this._styles = this._setStyles(val);
-			return this._styles;
-		},
-		
-		validator: function(val)
-		{
-			return Y.Lang.isObject(val);
-		}
-	}
+        
+        /**
+         * The graphic in which the series will be rendered.
+         */
+        graphic: {}
 };
+Renderer.NAME = "renderer";
 
-Y.extend(Renderer, Y.Widget, {
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._setNode();
-        if(!this.get("graphic"))
-        {
-            this._setCanvas();
-        }
-    },
-    
-    /**
-     * @private
-     */
-    bindUI: function()
-    {
-        this.after("stylesChange", Y.bind(this._updateHandler, this));
-    },
-   
-    /**
-     * @private
-     */
-    syncUI: function()
-    {
-        this.draw();
-    },
-
-    /**
-     * @private
-     */
-    _updateHandler: function(e)
-    {
-        if(this.get("rendered"))
-        {
-            this.draw();
-        }
-    },
-
-    _setNode: function()
-    {
-       var cb = this.get("contentBox"),
-            n = document.createElement("div"),
-            style = n.style;
-        cb.appendChild(n);
-        style.position = "absolute";
-        style.display = "block";
-        style.top = "0px"; 
-        style.left = "0px";
-        style.width = "100%";
-        style.height = "100%";
-        this.set("node", n);
-    },
-
-    /**
-     * @private
-     * Creates a <code>Graphic</code> instance.
-     */
-    _setCanvas: function()
-    {
-        this.set("graphic", new Y.Graphic());
-        this.get("graphic").render(this.get("contentBox"));
-    },
-	
-    /**
-     * @private
-     * @description Hash of newly set styles.
-     */
-    _newStyles: null,
-
+Renderer.prototype = {
     /**
      * @private
      * @description Storage for styles
@@ -3363,36 +2942,35 @@ Y.extend(Renderer, Y.Widget, {
 		var styles = this.get("styles");
         return this._mergeStyles(newstyles, styles);
 	},
-
-	/**
-	 * Merges to object literals only overriding properties explicitly.
-	 * 
-	 * @private
-	 * @param {Object} newHash hash of properties to set
-	 * @param {Object} default hash of properties to be overwritten
-	 * @return {Object}
-	 */
-	_mergeStyles: function(a, b)
-	{
-        this._newStyles = {};
-		if(!b)
+    
+    /**
+     * Merges to object literals only overriding properties explicitly.
+     * 
+     * @private
+     * @param {Object} newHash hash of properties to set
+     * @param {Object} default hash of properties to be overwritten
+     * @return {Object}
+     */
+    _mergeStyles: function(a, b)
+    {
+        if(!b)
         {
             b = {};
         }
+        var newstyles = Y.merge(b, {});
         Y.Object.each(a, function(value, key, a)
-		{
-			if(b.hasOwnProperty(key) && Y.Lang.isObject(value) && !Y.Lang.isArray(value))
-			{
-				b[key] = this._mergeStyles(value, b[key]);
-			}
-			else
-			{
-				b[key] = value;
-			    this._newStyles[key] = value;
+        {
+            if(b.hasOwnProperty(key) && Y.Lang.isObject(value) && !Y.Lang.isArray(value))
+            {
+                newstyles[key] = this._mergeStyles(value, b[key]);
             }
-		}, this);
-		return b;
-	},
+            else
+            {
+                newstyles[key] = value;
+            }
+        }, this);
+        return newstyles;
+    },
 
     /**
      * @private
@@ -3400,200 +2978,180 @@ Y.extend(Renderer, Y.Widget, {
      */
     _getDefaultStyles: function()
     {
-        return {};
-    },
-
-    /**
-     * @private
-     */
-    _getDefPadding: function()
-    {
-        return {
+        return {padding:{
             top:0,
             right: 0,
             bottom: 0,
             left: 0
-        };
-    }
-});
-
-Y.Renderer = Renderer;
-
-function Marker(config)
-{
-	Marker.superclass.constructor.apply(this, arguments);
-}
-
-Marker.NAME = "marker";
-
-Marker.ATTRS = {
-    series: {
-        value: null
-    },
-
-    drawMethod: {
-        getter: function()
-        {
-            return this._drawMethod;
-        },
-        setter: function(val)
-        {
-            this._drawMethod = val;
-            return val;
-        }
-    },
-
-    index: {
-        value: null
-    },
-
-    colorIndex: {
-        value: null
-    },
-    
-    state: {
-        value:"off"
+        }};
     }
 };
 
-Y.extend(Marker, Y.Renderer, {
-    bindUI: function()
-    {
-        this.after("stylesChange", Y.bind(this._updateHandler, this));
-        this.after("stateChange", Y.bind(this._updateHandler, this));
-    },
+Y.augment(Renderer, Y.Attribute);
+Y.Renderer = Renderer;
 
+/**
+ * Utility class used for calculating curve points.
+ */
+function CurveUtil()
+{
+}
+
+CurveUtil.prototype = {
     /**
      * @private
+     * @return {Object}
+     * Creates an array of start, end and control points for splines. 
      */
-    renderUI: function()
+    getCurveControlPoints: function(xcoords, ycoords) 
     {
-        if(!this.get("graphic"))
+		var outpoints = [],
+            i = 1,
+            l = xcoords.length - 1,
+		    xvals = [],
+		    yvals = [];
+		
+		
+		// Too few points, need at least two
+		if (l < 1) 
         {
-            this._setCanvas();
-        }
-    },
-
-    /**
-     * @private
-     */
-    _updateHandler: function(e)
-    {
-        if(this.get("rendered"))
-        {
-            this._update();
-        }
-    },
-    
-    /**
-	 * @private
-	 */
-    _handleMouseOver: function(e)
-    { 
-        this.set("state", "over");
-    },
-
-    /**
-	 * @private
-	 */
-    _handleMouseDown: function(e)
-    {
-        this.set("state", "down");
-    },
-
-    /**
-	 * @private
-	 */
-    _handleMouseOut: function(e)
-    {
-        this.set("state", "off");
-    },
-
-    _getStateStyles: function()
-    {
-        var styles = this._mergeStyles(this.get("styles"), {}),
-            state = this.get("state"),
-            stateStyles,
-            w,
-            h,
-            x = 0,
-            y = 0,
-            fill = this._mergeStyles(styles.fill, {}),
-            border = this._mergeStyles(styles.border, {}),
-            dc = this.get("series")._getDefaultColor(this.get("colorIndex"));
-            fill.color = fill.color || dc;
-            border.color = border.color || dc;
-        stateStyles = {
-                fill:fill,                
-                border:border, 
-                shape: styles.shape,
-                width: styles.width,
-                height: styles.height,
-                props: this._mergeStyles(styles.props, {})
+			return null;
+		} 
+        
+        outpoints[0] = {
+            startx: xcoords[0], 
+            starty: ycoords[0],
+            endx: xcoords[1],
+            endy: ycoords[1]
         };
-        if((state === "over" || state === "down") && styles[state])
+        
+		// Special case, the Bezier should be a straight line
+        if (l === 1) 
         {
-            stateStyles = this._mergeStyles(styles[state], stateStyles);
-        }
-        w = stateStyles.width;
-        h = stateStyles.height;
-        stateStyles.x = x;
-        stateStyles.y = y;
-        stateStyles.width = w;
-        stateStyles.height = h;
-        this.set("width", w);
-        this.set("height", h);
-        return stateStyles;
-    },
+			outpoints[0].ctrlx1 = (2.0*xcoords[0] + xcoords[1])/3.0;  
+			outpoints[0].ctrly2 = (2.0*ycoords[0] + ycoords[1])/3.0;
+			outpoints[0].ctrlx2 = 2.0*outpoints[0].ctrlx1 - xcoords[0];
+            outpoints[0].ctrly2 = 2.0*outpoints[0].ctrly1 - ycoords[0];
+            return outpoints;
+		}
 
-    /**
-	 * @private (override)
-	 */
-	draw: function()
-    {
-        var stateStyles = this._getStateStyles(),
-            graphic = this.get("graphic");
-        this._shape = graphic.getShape(stateStyles);
-        Y.one(this._shape.node).addClass("yui3-seriesmarker");
-
+		for (; i < l; ++i) 
+        {
+			outpoints.push({startx: Math.round(xcoords[i]), starty: Math.round(ycoords[i]), endx: Math.round(xcoords[i+1]), endy: Math.round(ycoords[i+1])});
+			xvals[i] = 4.0 * xcoords[i] + 2*xcoords[i+1];
+			yvals[i] = 4.0*ycoords[i] + 2*ycoords[i+1];
+		}
+		
+		xvals[0] = xcoords[0] + (2.0 * xcoords[1]);
+		xvals[l-1] = (8.0 * xcoords[l-1] + xcoords[l]) / 2.0;
+		xvals = this.getControlPoints(xvals.concat());
+        yvals[0] = ycoords[0] + (2.0 * ycoords[1]);
+		yvals[l-1] = (8.0 * ycoords[l-1] + ycoords[l]) / 2.0;	
+		yvals = this.getControlPoints(yvals.concat());
+		
+        for (i = 0; i < l; ++i) 
+        {
+			outpoints[i].ctrlx1 = Math.round(xvals[i]);
+            outpoints[i].ctrly1 = Math.round(yvals[i]);
+			
+			if (i < l-1) 
+            {
+				outpoints[i].ctrlx2 = Math.round(2*xcoords[i+1] - xvals[i+1]);
+                outpoints[i].ctrly2 = Math.round(2*ycoords[i+1] - yvals[i+1]);
+			}
+			else 
+            {
+				outpoints[i].ctrlx2 = Math.round((xcoords[l] + xvals[l-1])/2);
+                outpoints[i].ctrly2 = Math.round((ycoords[l] + yvals[l-1])/2);
+			}
+		}
+		
+		return outpoints;	
 	},
 
     /**
      * @private
-     * @description Reference to the graphic object.
      */
-    _shape: null,
+	getControlPoints: function(vals) 
+    {
+		var l = vals.length,
+            x = [],
+            tmp = [],
+            b = 2.0,
+            i = 1;
+		x[0] = vals[0] / b;
+		for (; i < l; ++i) 
+        {
+			tmp[i] = 1/b;
+			b = (i < l-1 ? 4.0 : 3.5) - tmp[i];
+			x[i] = (vals[i] - x[i-1]) / b;
+		}
+		
+		for (i = 1; i < l; ++i) 
+        {
+			x[l-i-1] -= tmp[l-i] * x[l-i];
+		}
+		
+		return x;
+	}
+};
+Y.CurveUtil = CurveUtil;
+/**
+ * Methods used for creating stacked series
+ */
+function StackingUtil(){}
 
+StackingUtil.prototype = {
     /**
      * @private
-     * @description Updates the properties of an existing state.
+     * Adjusts coordinate values for stacked series.
      */
-    _update: function()
+    _stackCoordinates: function() 
     {
-        this.get("graphic").updateShape(this._shape, this._getStateStyles());
-    }
-});
-
-Y.Marker = Marker;
-function Lines(cfg)
-{
-    var attrs = {
-        line: {
-            getter: function()
+        var direction = this.get("direction"),
+            order = this.get("order"),
+            type = this.get("type"),
+            graph = this.get("graph"),
+            h = graph.get("height"), 
+            seriesCollection = graph.seriesTypes[type],
+            i = 0,
+            len,
+            xcoords = this.get("xcoords"),
+            ycoords = this.get("ycoords"),
+            prevXCoords,
+            prevYCoords;
+        if(order === 0)
+        {
+            return;
+        }
+        prevXCoords = seriesCollection[order - 1].get("xcoords").concat();
+        prevYCoords = seriesCollection[order - 1].get("ycoords").concat();
+        if(direction === "vertical")
+        {
+            len = prevXCoords.length;
+            for(; i < len; ++i)
             {
-                return this._lineDefaults || this._getLineDefaults();
-            },
-
-            setter: function(val)
-            {
-                var defaults = this._defaults || this._getLineDefaults();
-                this._lineDefaults = Y.merge(defaults, val);
+                if(!isNaN(prevXCoords[i]) && !isNaN(xcoords[i]))
+                {
+                    xcoords[i] += prevXCoords[i];
+                }
             }
         }
-    };
-    this.addAttrs(attrs, cfg);
-    this.get("styles");
-}
+        else
+        {
+            len = prevYCoords.length;
+            for(; i < len; ++i)
+            {
+                if(!isNaN(prevYCoords[i]) && !isNaN(ycoords[i]))
+                {
+                    ycoords[i] = prevYCoords[i] - (h - ycoords[i]);
+                }
+            }
+        }
+    }
+};
+Y.StackingUtil = StackingUtil;
+function Lines(){}
 
 Lines.prototype = {
     /**
@@ -3621,9 +3179,9 @@ Lines.prototype = {
 			nextX,
 			nextY,
 			i,
-			styles = this.get("line"),
+			styles = this.get("styles").line,
 			lineType = styles.lineType,
-            lc = styles.color || this._getDefaultColor(this.get("graphOrder")),
+            lc = styles.color || this._getDefaultColor(this.get("graphOrder"), "line"),
 			dashLength = styles.dashLength,
 			gapSpace = styles.gapSpace,
 			connectDiscontinuousPoints = styles.connectDiscontinuousPoints,
@@ -3702,9 +3260,9 @@ Lines.prototype = {
             x,
             y,
             i = 0,
-			styles = this.get("line"),
+			styles = this.get("styles").line,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "line");
         graphic.lineStyle(styles.weight, color);
         graphic.moveTo(xcoords[0], ycoords[0]);
         for(; i < len; i = ++i)
@@ -3774,12 +3332,12 @@ Lines.prototype = {
     {
         return {
             alpha: 1,
-            weight: 1,
+            weight: 6,
             lineType:"solid", 
             dashLength:10, 
             gapSpace:10, 
-            connectDiscontinuousPoint:true, 
-            discontinuousType:"dashed", 
+            connectDiscontinuousPoints:true, 
+            discontinuousType:"solid", 
             discontinuousDashLength:10, 
             discontinuousGapSpace:10
         };
@@ -3825,9 +3383,9 @@ Fills.prototype = {
 			nextX,
 			nextY,
 			i = 1,
-			styles = this.get("area"),
+			styles = this.get("styles").area,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
         graphic.clear();
         graphic.beginFill(color, styles.alpha);
         graphic.moveTo(firstX, firstY);
@@ -3870,9 +3428,9 @@ Fills.prototype = {
             i = 0,
 			firstX = xcoords[0],
             firstY = ycoords[0],
-            styles = this.get("area"),
+            styles = this.get("styles").area,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
         graphic.beginFill(color, styles.alpha);
         graphic.moveTo(firstX, firstY);
         for(; i < len; i = ++i)
@@ -3927,9 +3485,9 @@ Fills.prototype = {
             i = 0,
 			firstX,
             firstY,
-            styles = this.get("area"),
+            styles = this.get("styles").area,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
 		firstX = xcoords[0];
         firstY = ycoords[0];
         curvecoords = this.getCurveControlPoints(xcoords, ycoords);
@@ -4061,7 +3619,6 @@ Fills.prototype = {
     _getAreaDefaults: function()
     {
         return {
-            alpha: 0.5
         };
     }
 };
@@ -4069,22 +3626,15 @@ Y.augment(Fills, Y.Attribute);
 Y.Fills = Fills;
 function Plots(cfg)
 {
-    var attrs = {
-        marker: {
+    var attrs = { 
+        markers: {
             getter: function()
             {
-                return this._plotDefaults || this._getPlotDefaults();
-            },
-
-            setter: function(val)
-            {
-                var defaults = this._plotDefaults || this._getPlotDefaults();
-                this._plotDefaults = Y.merge(defaults, val);
+                return this._markers;
             }
         }
     };
     this.addAttrs(attrs, cfg);
-    this.get("styles");
 }
 
 Plots.prototype = {
@@ -4093,21 +3643,13 @@ Plots.prototype = {
      */
     _plotDefaults: null,
 
-    bindUI: function()
-    {
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-    },
-    
     drawPlots: function()
     {
-	    if(!this.get("xcoords") || this.get("xcoords").length < 1) 
+        if(!this.get("xcoords") || this.get("xcoords").length < 1) 
 		{
 			return;
 		}
-        var style = this.get("marker"),
+        var style = Y.clone(this.get("styles").marker),
             w = style.width,
             h = style.height,
             xcoords = this.get("xcoords"),
@@ -4119,14 +3661,43 @@ Plots.prototype = {
             marker,
             mnode,
             offsetWidth = w/2,
-            offsetHeight = h/2;
-            this._createMarkerCache();
+            offsetHeight = h/2,
+            fillColors = null,
+            borderColors = null,
+            graphOrder = this.get("graphOrder");
+        if(Y.Lang.isArray(style.fill.color))
+        {
+            fillColors = style.fill.color.concat(); 
+        }
+        if(Y.Lang.isArray(style.border.color))
+        {
+            borderColors = style.border.colors.concat();
+        }
+        this._createMarkerCache();
         for(; i < len; ++i)
         {
-            top = (ycoords[i] - offsetWidth) + "px";
-            left = (xcoords[i] - offsetHeight) + "px";
-            marker = this.getMarker.apply(this, [{index:i, styles:style}]);
-            mnode = marker.get("boundingBox");
+            top = (ycoords[i] - offsetHeight);
+            left = (xcoords[i] - offsetWidth);            
+            if(!top || !left || top === undefined || left === undefined || top == "undefined" || left == "undefined" || isNaN(top) || isNaN(left))
+            {
+                this._markers.push(null);
+                this._markerNodes.push(null);
+                this._graphicCollection.push(null);
+                this._graphicNodes.push(null);
+                continue;
+            }
+            top += "px";
+            left += "px";
+            if(fillColors)
+            {
+                style.fill.color = fillColors[i % fillColors.length];
+            }
+            if(borderColors)
+            {
+                style.border.colors = borderColors[i % borderColors.length];
+            }
+            marker = this.getMarker(style, graphOrder, i);
+            mnode = Y.one(marker.parentNode);
             mnode.setStyle("position", "absolute"); 
             mnode.setStyle("top", top);
             mnode.setStyle("left", left);
@@ -4136,7 +3707,7 @@ Plots.prototype = {
 
 	_getPlotDefaults: function()
     {
-        return {
+        var defs = {
             fill:{
                 type: "solid",
                 alpha: 1,
@@ -4148,9 +3719,351 @@ Plots.prototype = {
                 weight: 1,
                 alpha: 1
             },
-            width: 6,
-            height: 6,
-            shape: "circle",
+            width: 10,
+            height: 10,
+            shape: "circle"
+        };
+        defs.fill.color = this._getDefaultColor(this.get("graphOrder"), "fill");
+        defs.border.color = this._getDefaultColor(this.get("graphOrder"), "border");
+        return defs;
+    },
+
+    /**
+     * @private
+     * Collection of markers to be used in the series.
+     */
+    _markers: null,
+
+    /**
+     * @private
+     * Collection of markers to be re-used on a series redraw.
+     */
+    _markerCache: null,
+    
+    /**
+     * @private
+     * @description Creates a marker based on its style properties.
+     */
+    getMarker: function(styles, order, index)
+    {
+        var marker,
+            graphic,
+            cfg;
+        if(this._markerCache.length > 0)
+        {
+            while(!marker)
+            {
+                marker = this._markerCache.shift();
+            }
+            marker.update(styles);
+        }
+        else
+        {
+            graphic = new Y.Graphic();
+            graphic.render(this.get("graph").get("contentBox"));
+            graphic.node.setAttribute("id", "markerParent_" + order + "_" + index);
+            cfg = Y.clone(styles);
+            marker = graphic.getShape(cfg);
+            Y.one(marker.node).addClass("yui3-seriesmarker");
+            marker.node.setAttribute("id", "series_" + order + "_" + index);
+            graphic.render(this.get("graph").get("contentBox"));
+        }
+        this._markers.push(marker);
+        this._markerNodes.push(Y.one(marker.node));
+        this._graphicCollection.push(graphic);
+        this._graphicNodes.push(marker.parentNode);
+        return marker;
+    },   
+    
+    /**
+     * @private
+     * Creates a cache of markers for reuse.
+     */
+    _createMarkerCache: function()
+    {
+        if(this._markers && this._markers.length > 0)
+        {
+            this._markerCache = this._markers.concat();
+        }
+        else
+        {
+            this._markerCache = [];
+        }
+        this._markers = [];
+        this._graphicNodes = [];
+        this._markerNodes = [];
+        this._graphicCollection = [];
+    },
+    
+    /**
+     * @private
+     * Removes unused markers from the marker cache
+     */
+    _clearMarkerCache: function()
+    {
+        var len = this._markerCache.length,
+            i = 0,
+            graphic,
+            marker;
+        for(; i < len; ++i)
+        {
+            marker = this._markerCache[i];
+            if(marker)
+            {
+                graphic = marker.graphics;
+                graphic.destroy();
+            }
+        }
+        this._markerCache = [];
+    },
+
+    updateMarkerState: function(type, i)
+    {
+        if(this._markers[i])
+        {
+            var w,
+                h,
+                markerStyles,
+                styles = Y.clone(this.get("styles").marker),
+                state = this._getState(type),
+                xcoords = this.get("xcoords"),
+                ycoords = this.get("ycoords"),
+                marker = this._markers[i],
+                graphicNode = marker.parentNode;
+                markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+                markerStyles.fill.color = this._getItemColor(markerStyles.fill.color, i);
+                markerStyles.border.color = this._getItemColor(markerStyles.border.color, i);
+                marker.update(markerStyles);
+                w = markerStyles.width;
+                h = markerStyles.height;
+                graphicNode.style.left = (xcoords[i] - w/2) + "px";
+                graphicNode.style.top = (ycoords[i] - h/2) + "px";
+                marker.toggleVisible(this.get("visible"));
+        }
+    },
+
+    /**
+     * @protected
+     * @description parses a color from an array.
+     */
+    _getItemColor: function(val, i)
+    {
+        if(Y.Lang.isArray(val))
+        {
+            return val[i % val.length];
+        }
+        return val;
+    },
+
+    /**
+     * @private
+     */
+    _setStyles: function(val)
+    {
+        val = this._parseMarkerStyles(val);
+        return Y.Renderer.prototype._setStyles.apply(this, [val]);
+    },
+
+    _parseMarkerStyles: function(val)
+    {
+        if(val.marker)
+        {
+            var defs = this._getPlotDefaults();
+            val.marker = this._mergeStyles(val.marker, defs);
+            if(val.marker.over)
+            {
+                val.marker.over = this._mergeStyles(val.marker.over, val.marker);
+            }
+            if(val.marker.down)
+            {
+                val.marker.down = this._mergeStyles(val.marker.down, val.marker);
+            }
+        }
+        return val;
+    },
+
+    /**
+     * Returns marker state based on event type
+     */
+    _getState: function(type)
+    {
+        var state;
+        switch(type)
+        {
+            case "mouseout" :
+                state = "off";
+            break;
+            case "mouseover" :
+                state = "over";
+            break;
+            case "mouseup" :
+                state = "over";
+            break;
+            case "mousedown" :
+                state = "down";
+            break;
+        }
+        return state;
+    },
+
+    /**
+     * @private
+     */
+    _toggleVisible: function(e) 
+    {
+        var graphic = this.get("graphic"),
+            markers = this.get("markers"),
+            i = 0,
+            len,
+            visible = this.get("visible"),
+            marker;
+        if(graphic)
+        {
+            graphic.toggleVisible(visible);
+        }
+        if(markers)
+        {
+            len = markers.length;
+            for(; i < len; ++i)
+            {
+                marker = markers[i];
+                if(marker)
+                {
+                    marker.toggleVisible(visible);
+                }
+            }
+
+        }
+    },
+
+    _stateSyles: null
+};
+
+Y.augment(Plots, Y.Attribute);
+Y.Plots = Plots;
+function Histogram(){}
+
+Histogram.prototype = {
+    /**
+	 * @private
+	 */
+	drawSeries: function()
+	{
+	    if(this.get("xcoords").length < 1) 
+		{
+			return;
+		}
+        var style = Y.clone(this.get("styles").marker),
+            setSize,
+            calculatedSize,
+            xcoords = this.get("xcoords"),
+            ycoords = this.get("ycoords"),
+            i = 0,
+            len = xcoords.length,
+            top = ycoords[0],
+            type = this.get("type"),
+            graph = this.get("graph"),
+            seriesCollection = graph.seriesTypes[type],
+            seriesLen = seriesCollection.length,
+            seriesSize = 0,
+            totalSize = 0,
+            offset = 0,
+            ratio,
+            renderer,
+            order = this.get("order"),
+            graphOrder = this.get("graphOrder"),
+            left,
+            marker,
+            setSizeKey,
+            calculatedSizeKey,
+            config,
+            fillColors = null,
+            borderColors = null,
+            mnode;
+            if(Y.Lang.isArray(style.fill.color))
+            {
+                fillColors = style.fill.color.concat(); 
+            }
+            if(Y.Lang.isArray(style.border.color))
+            {
+                borderColors = style.border.colors.concat();
+            }
+            if(this.get("direction") == "vertical")
+            {
+                setSizeKey = "height";
+                calculatedSizeKey = "width";
+            }
+            else
+            {
+                setSizeKey = "width";
+                calculatedSizeKey = "height";
+            }
+            setSize = style[setSizeKey];
+            calculatedSize = style[calculatedSizeKey];
+            this._createMarkerCache();
+        for(; i < seriesLen; ++i)
+        {
+            renderer = seriesCollection[i];
+            seriesSize += renderer.get("styles").marker[setSizeKey];
+            if(order > i) 
+            {
+                offset = seriesSize;
+            }
+        }
+        totalSize = len * seriesSize;
+        if(totalSize > graph.get(setSizeKey))
+        {
+            ratio = graph.get(setSizeKey)/totalSize;
+            seriesSize *= ratio;
+            offset *= ratio;
+            setSize *= ratio;
+            setSize = Math.max(setSize, 1);
+        }
+        offset -= seriesSize/2;
+        for(i = 0; i < len; ++i)
+        {
+            config = this._getMarkerDimensions(xcoords[i], ycoords[i], calculatedSize, offset);
+            top = config.top;
+            calculatedSize = config.calculatedSize;
+            left = config.left;
+            style[setSizeKey] = setSize;
+            style[calculatedSizeKey] = calculatedSize;
+            if(fillColors)
+            {
+                style.fill.color = fillColors[i % fillColors.length];
+            }
+            if(borderColors)
+            {
+                style.border.colors = borderColors[i % borderColors.length];
+            }
+            marker = this.getMarker(style, graphOrder, i);
+            mnode = Y.one(marker.parentNode);
+            mnode.setStyle("position", "absolute"); 
+            mnode.setStyle("top", top);
+            mnode.setStyle("left", left);
+        }
+        this._clearMarkerCache();
+    },
+    
+    _defaultFillColors: ["#66007f", "#a86f41", "#295454", "#996ab2", "#e8cdb7", "#90bdbd","#000000","#c3b8ca", "#968373", "#678585"],
+    
+    _getPlotDefaults: function()
+    {
+        var defs = {
+            fill:{
+                type: "solid",
+                alpha: 1,
+                colors:null,
+                alphas: null,
+                ratios: null
+            },
+            border:{
+                weight: 0,
+                alpha: 1
+            },
+            width: 12,
+            height: 12,
+            shape: "rect",
 
             padding:{
                 top: 0,
@@ -4159,143 +4072,560 @@ Plots.prototype = {
                 bottom: 0
             }
         };
-    },
+        defs.fill.color = this._getDefaultColor(this.get("graphOrder"), "fill");
+        defs.border.color = this._getDefaultColor(this.get("graphOrder"), "border");
+        return defs;
+ 	}
+};
 
-    _markerEventHandler: function(e)
+Y.Histogram = Histogram;
+Y.CartesianSeries = Y.Base.create("cartesianSeries", Y.Base, [Y.Renderer], {
+    /**
+     * @private
+     */
+    _xDisplayName: null,
+
+    /**
+     * @private
+     */
+    _yDisplayName: null,
+    
+    /**
+     * @private
+     */
+    _leftOrigin: null,
+
+    /**
+     * @private
+     */
+    _bottomOrigin: null,
+
+    render: function()
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget),
-            w,
-            h,
-            xcoords = this.get("xcoords"),
-            ycoords = this.get("ycoords"),
-            i = marker.get("index") || Y.Array.indexOf(this.get("markers"), marker),
-            bb = marker.get("boundingBox");
-            switch(type)
+        this._setCanvas();
+        this.addListeners();
+        this.set("rendered", true);
+        this.validate();
+    },
+
+    /**
+     * @private
+     */
+    addListeners: function()
+    {
+        var xAxis = this.get("xAxis"),
+            yAxis = this.get("yAxis");
+        if(xAxis)
+        {
+            xAxis.after("dataReady", Y.bind(this._xDataChangeHandler, this));
+            xAxis.after("dataUpdate", Y.bind(this._xDataChangeHandler, this));
+        }
+        if(yAxis)
+        {
+            yAxis.after("dataReady", Y.bind(this._yDataChangeHandler, this));
+            yAxis.after("dataUpdate", Y.bind(this._yDataChangeHandler, this));
+        }
+        this.after("xAxisChange", this._xAxisChangeHandler);
+        this.after("yAxisChange", this._yAxisChangeHandler);
+        this.after("stylesChange", function(e) {
+            var axesReady = this._updateAxisData();
+            if(axesReady)
             {
-                case "mouseout" :
-                    marker.set("state", "off");
-                break;
-                case "mouseover" :
-                    marker.set("state", "over");
-                break;
-                case "mouseup" :
-                    marker.set("state", "over");
-                break;
-                case "mousedown" :
-                    marker.set("state", "down");
-                break;
+                this.draw();
             }
-            w = marker.get("width");
-            h = marker.get("height");
-            bb.setStyle("left", (xcoords[i] - w/2) + "px");
-            bb.setStyle("top", (ycoords[i] - h/2) + "px");    
-    }
-};
-
-Y.augment(Plots, Y.Attribute);
-Y.Plots = Plots;
-function PieSeries(config)
-{
-    PieSeries.superclass.constructor.apply(this, arguments);
-}
-
-PieSeries.NAME = "pieSeries";
-
-PieSeries.ATTRS = {
-
-	type: {		
-  	    value: "pie"
+        });
+        this.after("widthChange", function(e) {
+            var axesReady = this._updateAxisData();
+            if(axesReady)
+            {
+                this.draw();
+            }
+        });
+        this.after("heightChange", function(e) {
+            var axesReady = this._updateAxisData();
+            if(axesReady)
+            {
+                this.draw();
+            }
+        });
+        this.after("visibleChange", this._toggleVisible);
     },
-	/**
-	 * Order of this ISeries instance of this <code>type</code>.
-	 */
-	order: {
-	    value:NaN
+   
+    _xAxisChangeHandler: function(e)
+    {
+        var xAxis = this.get("xAxis");
+        xAxis.after("dataReady", Y.bind(this._xDataChangeHandler, this));
+        xAxis.after("dataUpdate", Y.bind(this._xDataChangeHandler, this));
     },
-	graph: {
-        value: null
-	},
-	/**
-	 * Reference to the <code>Axis</code> instance used for assigning 
-	 * x-values to the graph.
-	 */
-	categoryAxis: {
-		value: null,
+    
+    _yAxisChangeHandler: function(e)
+    {
+        var yAxis = this.get("yAxis");
+        yAxis.after("dataReady", Y.bind(this._yDataChangeHandler, this));
+        yAxis.after("dataUpdate", Y.bind(this._yDataChangeHandler, this));
+    },
 
-        validator: function(value)
-		{
-			return value !== this.get("categoryAxis");
-		},
-		
-        lazyAdd: false
-	},
+	/**
+	 * Constant used to generate unique id.
+	 */
+	GUID: "yuicartesianseries",
 	
-	valueAxis: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("valueAxis");
-		},
-		
-        lazyAdd: false
-    },
 	/**
-	 * Indicates which array to from the hash of value arrays in 
-	 * the category <code>Axis</code> instance.
+	 * @private (protected)
+	 * Handles updating the graph when the x < code>Axis</code> values
+	 * change.
 	 */
-	categoryKey: {
-        value: null,
-
-		validator: function(value)
+	_xDataChangeHandler: function(event)
+	{
+        var axesReady = this._updateAxisData();
+        if(axesReady)
 		{
-			return value !== this.get("categoryKey");
-		}
-	},
-	/**
-	 * Indicates which array to from the hash of value arrays in 
-	 * the value <code>Axis</code> instance.
-	 */
-	valueKey: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("valueKey");
+			this.draw();
 		}
 	},
 
-    categoryDisplayName: {
-        setter: function(val)
-        {
-            this._categoryDisplayName = val;
-            return val;
-        },
+	/**
+	 * @private (protected)
+	 * Handles updating the chart when the y <code>Axis</code> values
+	 * change.
+	 */
+	_yDataChangeHandler: function(event)
+	{
+        var axesReady = this._updateAxisData();
+        if(axesReady)
+		{
+			this.draw();
+		}
+	},
 
-        getter: function()
+    /**
+     * @private 
+     */
+    _updateAxisData: function()
+    {
+        var xAxis = this.get("xAxis"),
+            yAxis = this.get("yAxis"),
+            xKey = this.get("xKey"),
+            yKey = this.get("yKey"),
+            yData,
+            xData;
+        if(!xAxis || !yAxis || !xKey || !yKey)
         {
-            return this._categoryDisplayName || this.get("categoryKey");
+            return false;
+        }
+        xData = xAxis.getDataByKey(xKey);
+        yData = yAxis.getDataByKey(yKey);
+        if(!xData || !yData)
+        {
+            return false;
+        }
+        this.set("xData", xData);
+        this.set("yData", yData);
+        return true;
+    },
+
+    validate: function()
+    {
+        if((this.get("xData") && this.get("yData")) || this._updateAxisData())
+        {
+            this.draw();
         }
     },
 
-    valueDisplayName: {
-        setter: function(val)
+    /**
+     * @private
+     * Creates a <code>Graphic</code> instance.
+     */
+    _setCanvas: function()
+    {
+        this.set("graphic", new Y.Graphic());
+        this.get("graphic").render(this.get("graph").get("contentBox"));
+    },
+	/**
+	 * @private
+	 */
+	setAreaData: function()
+	{
+        var nextX, nextY,
+            graph = this.get("graph"),
+            w = graph.get("width"),
+            h = graph.get("height"),
+            xAxis = this.get("xAxis"),
+            yAxis = this.get("yAxis"),
+            xData = this.get("xData").concat(),
+            yData = this.get("yData").concat(),
+            xOffset = xAxis.getEdgeOffset(xData.length, w),
+            yOffset = yAxis.getEdgeOffset(yData.length, h),
+            padding = this.get("styles").padding,
+			leftPadding = padding.left,
+			topPadding = padding.top,
+			dataWidth = w - (leftPadding + padding.right + xOffset),
+			dataHeight = h - (topPadding + padding.bottom + yOffset),
+			xcoords = [],
+			ycoords = [],
+			xMax = xAxis.get("maximum"),
+			xMin = xAxis.get("minimum"),
+			yMax = yAxis.get("maximum"),
+			yMin = yAxis.get("minimum"),
+            xScaleFactor = dataWidth / (xMax - xMin),
+			yScaleFactor = dataHeight / (yMax - yMin),
+            dataLength,
+            direction = this.get("direction"),
+            i = 0,
+            xMarkerPlane = [],
+            yMarkerPlane = [],
+            xMarkerPlaneOffset = this.get("xMarkerPlaneOffset"),
+            yMarkerPlaneOffset = this.get("yMarkerPlaneOffset"),
+            graphic = this.get("graphic");
+        dataLength = xData.length; 	
+        xOffset *= 0.5;
+        yOffset *= 0.5;
+        //Assuming a vertical graph has a range/category for its vertical axis.    
+        if(direction === "vertical")
         {
-            this._valueDisplayName = val;
-            return val;
-        },
-
-        getter: function()
-        {
-            return this._valueDisplayName || this.get("valueKey");
+            yData = yData.reverse();
         }
+        if(graphic)
+        {
+            graphic.setSize(w, h);
+        }
+        this._leftOrigin = Math.round(((0 - xMin) * xScaleFactor) + leftPadding + xOffset);
+        this._bottomOrigin =  Math.round((dataHeight + topPadding + yOffset) - (0 - yMin) * yScaleFactor);
+        for (; i < dataLength; ++i) 
+		{
+            nextX = Math.round((((xData[i] - xMin) * xScaleFactor) + leftPadding + xOffset));
+			nextY = Math.round(((dataHeight + topPadding + yOffset) - (yData[i] - yMin) * yScaleFactor));
+            xcoords.push(nextX);
+            ycoords.push(nextY);
+            xMarkerPlane.push({start:nextX - xMarkerPlaneOffset, end: nextX + xMarkerPlaneOffset});
+            yMarkerPlane.push({start:nextY - yMarkerPlaneOffset, end: nextY + yMarkerPlaneOffset});
+        }
+        this.set("xcoords", xcoords);
+		this.set("ycoords", ycoords);
+        this.set("xMarkerPlane", xMarkerPlane);
+        this.set("yMarkerPlane", yMarkerPlane);
     },
 
-    slices: null
-};
+	/**
+	 * @private (override)
+	 */
+	draw: function()
+    {
+        var graph = this.get("graph"),
+            w = graph.get("width"),
+            h = graph.get("height");
+        if(this.get("rendered"))
+        {
+            if((isFinite(w) && isFinite(h) && w > 0 && h > 0) && ((this.get("xData") && this.get("yData")) || this._updateAxisData()))
+            {
+                this.setAreaData();
+                this.drawSeries();
+                this._toggleVisible(this.get("visible"));
+                this.fire("drawingComplete");
+            }
+        }
+	},
+    
+    _defaultPlaneOffset: 4,
+    
+    /**
+     * @private
+     * @return Default styles for the widget
+     */
+    _getDefaultStyles: function()
+    {
+        return {padding:{
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0
+            }};
+    },
 
-Y.extend(PieSeries, Y.Renderer, {
+    /**
+     * @private
+     */
+    _defaultLineColors:["#426ab3", "#d09b2c", "#000000", "#b82837", "#b384b5", "#ff7200", "#779de3", "#cbc8ba", "#7ed7a6", "#007a6c"],
+
+    /**
+     * @private
+     */
+    _defaultFillColors:["#6084d0", "#eeb647", "#6c6b5f", "#d6484f", "#ce9ed1", "#ff9f3b", "#93b7ff", "#e0ddd0", "#94ecba", "#309687"],
+    
+    /**
+     * @private
+     */
+    _defaultBorderColors:["#205096", "#b38206", "#000000", "#94001e", "#9d6fa0", "#e55b00", "#5e85c9", "#adab9e", "#6ac291", "#006457"],
+    
+    /**
+     * @private
+     */
+    _defaultSliceColors: ["#66007f", "#a86f41", "#295454", "#996ab2", "#e8cdb7", "#90bdbd","#000000","#c3b8ca", "#968373", "#678585"],
+
+    /**
+     * @private
+     * @description Colors used if style colors are not specified
+     */
+    _getDefaultColor: function(index, type)
+    {
+        var colors = {
+                line: this._defaultLineColors,
+                fill: this._defaultFillColors,
+                border: this._defaultBorderColors,
+                slice: this._defaultSliceColors
+            },
+            col = colors[type],
+            l = col.length;
+        index = index || 0;
+        if(index >= l)
+        {
+            index = index % l;
+        }
+        type = type || "fill";
+        return colors[type][index];
+    },
+    
+    /**
+     * @private
+     */
+    _toggleVisible: function(e) 
+    {
+        var graphic = this.get("graphic");
+        if(graphic)
+        {
+            graphic.toggleVisible(this.get("visible"));
+        }
+    }
+}, {
+    ATTRS: {
+        xDisplayName: {
+            getter: function()
+            {
+                return this._xDisplayName || this.get("xKey");
+            },
+
+            setter: function(val)
+            {
+                this._xDisplayName = val;
+                return val;
+            }
+        },
+
+        yDisplayName: {
+            getter: function()
+            {
+                return this._yDisplayName || this.get("yKey");
+            },
+
+            setter: function(val)
+            {
+                this._yDisplayName = val;
+                return val;
+            }
+        },
+        
+        categoryDisplayName: {
+            readOnly: true,
+
+            getter: function()
+            {
+                return this.get("direction") == "vertical" ? this.get("yDisplayName") : this.get("xDisplayName");
+            }
+        },
+
+        valueDisplayName: {
+            readOnly: true,
+
+            getter: function()
+            {
+                return this.get("direction") == "vertical" ? this.get("xDisplayName") : this.get("yDisplayName");
+            }
+        },
+
+        type: {		
+            value: "cartesian"
+        },
+
+        /**
+         * Order of this ISeries instance of this <code>type</code>.
+         */
+        order: {},
+
+        /**
+         * Order of the ISeries instance
+         */
+        graphOrder: {},
+
+        /**
+         * x coordinates for the series.
+         */
+        xcoords: {},
+        
+        /**
+         * y coordinates for the series
+         */
+        ycoords: {},
+        
+        graph: {},
+
+        /**
+         * Reference to the <code>Axis</code> instance used for assigning 
+         * x-values to the graph.
+         */
+        xAxis: {},
+        
+        yAxis: {},
+        /**
+         * Indicates which array to from the hash of value arrays in 
+         * the x-axis <code>Axis</code> instance.
+         */
+        xKey: {},
+        /**
+         * Indicates which array to from the hash of value arrays in 
+         * the y-axis <code>Axis</code> instance.
+         */
+        yKey: {},
+
+        /**
+         * Array of x values for the series.
+         */
+        xData: {},
+
+        /**
+         * Array of y values for the series.
+         */
+        yData: {},
+       
+        rendered: {
+            value: false
+        },
+
+        /*
+         * Returns the width of the parent graph
+         */
+        width: {
+            readOnly: true,
+            
+            getter: function()
+            {
+                this.get("graph").get("width");
+            }
+        },
+
+        /**
+         * Returns the height of the parent graph
+         */
+        height: {
+            readOnly: true,
+            
+            getter: function()
+            {
+                this.get("graph").get("height");
+            }
+        },
+
+        /**
+         * Indicates whether to show the series
+         */
+        visible: {
+            value: true
+        },
+
+        /**
+         * Collection of area maps along the xAxis. Used to determine mouseover for multiple
+         * series.
+         */
+        xMarkerPlane: {},
+        
+        /**
+         * Collection of area maps along the yAxis. Used to determine mouseover for multiple
+         * series.
+         */
+        yMarkerPlane: {},
+
+        /**
+         * Distance from a data coordinate to the left/right for setting a hotspot.
+         */
+        xMarkerPlaneOffset: {
+            getter: function() {
+                var marker = this.get("styles").marker;
+                if(marker && marker.width && isFinite(marker.width))
+                {
+                    return marker.width * 0.5;
+                }
+                return this._defaultPlaneOffset;
+            }
+        },
+
+        /**
+         * Distance from a data coordinate to the top/bottom for setting a hotspot.
+         */
+        yMarkerPlaneOffset: {
+            getter: function() {
+                var marker = this.get("styles").marker;
+                if(marker && marker.height && isFinite(marker.height))
+                {
+                    return marker.height * 0.5;
+                }
+                return this._defaultPlaneOffset;
+            }
+        },
+
+        /**
+         * Direction of the series
+         */
+        direction: {
+            value: "horizontal"
+        }
+    }
+});
+Y.MarkerSeries = Y.Base.create("markerSeries", Y.CartesianSeries, [Y.Plots], {
+    /**
+     * @private
+     */
+    renderUI: function()
+    {
+        this._setNode();
+    },
+    /**
+     * @private
+     */
+    drawSeries: function()
+    {
+        this.drawPlots();
+    },
+    /**
+     * @private
+     */
+    _setStyles: function(val)
+    {
+        if(!val.marker)
+        {
+            val = {marker:val};
+        }
+        val = this._parseMarkerStyles(val);
+        return Y.MarkerSeries.superclass._mergeStyles.apply(this, [val, this._getDefaultStyles()]);
+    },
+    /**
+     * @private
+     */
+    _getDefaultStyles: function()
+    {
+        var styles = this._mergeStyles({marker:this._getPlotDefaults()}, Y.MarkerSeries.superclass._getDefaultStyles());
+        return styles;
+    }
+},{
+    ATTRS : {
+        /**
+         * Indicates the type of graph.
+         */
+        type: {
+            value:"marker"
+        }
+    }
+});
+
+Y.PieSeries = Y.Base.create("pieSeries", Y.MarkerSeries, [], { 
     /**
      * @private
      */
@@ -4309,38 +4639,44 @@ Y.extend(PieSeries, Y.Renderer, {
     /**
      * @private
      */
-    renderUI: function()
-    {
-        this._setNode();
-    },
-    
-    /**
-     * @private
-     */
-    bindUI: function()
+    addListeners: function()
     {
         var categoryAxis = this.get("categoryAxis"),
             valueAxis = this.get("valueAxis");
         if(categoryAxis)
         {
-            categoryAxis.after("axisReady", Y.bind(this._categoryAxisChangeHandler, this));
-            categoryAxis.after("axisUpdate", Y.bind(this._categoryAxisChangeHandler, this));
+            categoryAxis.after("dataReady", Y.bind(this._categoryDataChangeHandler, this));
+            categoryAxis.after("dataUpdate", Y.bind(this._categoryDataChangeHandler, this));
         }
         if(valueAxis)
         {
-            valueAxis.after("axisReady", Y.bind(this._valueAxisChangeHandler, this));
-            valueAxis.after("axisUpdate", Y.bind(this._valueAxisChangeHandler, this));
+            valueAxis.after("dataReady", Y.bind(this._valueDataChangeHandler, this));
+            valueAxis.after("dataUpdate", Y.bind(this._valueDataChangeHandler, this));
         }
-        this.after("categoryAxisChange", Y.bind(this.categoryAxisChangeHandler, this));
-        this.after("valueAxisChange", Y.bind(this.valueAxisChangeHandler, this));
-        this.after("stylesChange", Y.bind(this._updateHandler, this));
-        
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
+        this.after("categoryAxisChange", this.categoryAxisChangeHandler);
+        this.after("valueAxisChange", this.valueAxisChangeHandler);
+        this.after("stylesChange", this._updateHandler);
     },
    
+    validate: function()
+    {
+        this.draw();
+        this._renderered = true;
+    },
+
+    _categoryAxisChangeHandler: function(e)
+    {
+        var categoryAxis = this.get("categoryAxis");
+        categoryAxis.after("dataReady", Y.bind(this._categoryDataChangeHandler, this));
+        categoryAxis.after("dataUpdate", Y.bind(this._categoryDataChangeHandler, this));
+    },
+    
+    _valueAxisChangeHandler: function(e)
+    {
+        var valueAxis = this.get("valueAxis");
+        valueAxis.after("dataReady", Y.bind(this._valueDataChangeHandler, this));
+        valueAxis.after("dataUpdate", Y.bind(this._valueDataChangeHandler, this));
+    },
 	/**
 	 * Constant used to generate unique id.
 	 */
@@ -4351,9 +4687,9 @@ Y.extend(PieSeries, Y.Renderer, {
 	 * Handles updating the graph when the x < code>Axis</code> values
 	 * change.
 	 */
-	_categoryAxisChangeHandler: function(event)
+	_categoryDataChangeHandler: function(event)
 	{
-        if(this.get("rendered") && this.get("categoryKey") && this.get("valueKey"))
+       if(this._rendered && this.get("categoryKey") && this.get("valueKey"))
 		{
 			this.draw();
 		}
@@ -4364,121 +4700,55 @@ Y.extend(PieSeries, Y.Renderer, {
 	 * Handles updating the chart when the y <code>Axis</code> values
 	 * change.
 	 */
-	_valueAxisChangeHandler: function(event)
+	_valueDataChangeHandler: function(event)
 	{
-        if(this.get("rendered") && this.get("categoryKey") && this.get("valueKey"))
+        if(this._rendered && this.get("categoryKey") && this.get("valueKey"))
 		{
-			this.draw();
+            this.draw();
 		}
 	},
-    
+   
 	/**
 	 * @private (override)
 	 */
 	draw: function()
     {
-        var node = Y.Node.one(this._parentNode).get("parentNode"),
-			w = node.get("offsetWidth"),
-            h = node.get("offsetHeight");
-        if  (!isNaN(w) && !isNaN(h) && w > 0 && h > 0)
-		{
+        var graph = this.get("graph"),
+            w = graph.get("width"),
+            h = graph.get("height");
+        if(isFinite(w) && isFinite(h) && w > 0 && h > 0)
+		{   
+            this._rendered = true;
             this.drawSeries();
+            this.fire("drawingComplete");
 		}
 	},
     
     /**
      * @private
-     * @description Creates a marker based on its style properties.
      */
-    getMarker: function(config)
-    {
-        var marker,
-            cache = this._markerCache,
-            styles = config.styles,
-            index = config.index;
-        config.colorIndex = index;
-        if(cache.length > 0)
-        {
-            marker = cache.shift();
-            marker.set("index", index);
-            marker.set("series", this);
-            marker.set("colorIndex", index);
-            if(marker.get("styles") !== styles)
-            {
-                marker.set("styles", styles);
-            }
-        }
-        else
-        {
-            config.series = this;
-            marker = new Y.Marker(config);
-            marker.render(Y.one(this.get("node")));
-        }
-        this._markers.push(marker);
-        this._markerNodes.push(Y.one(marker.get("node")));
-        return marker;
-    },   
-    
-    /**
-     * @private
-     * Creates a cache of markers for reuse.
-     */
-    _createMarkerCache: function()
-    {
-        if(this._markers)
-        {
-            this._markerCache = this._markers.concat();
-        }
-        else
-        {
-            this._markerCache = [];
-        }
-        this._markers = [];
-        this._markerNodes = [];
-    },
-    
-    /**
-     * @private
-     * Removes unused markers from the marker cache
-     */
-    _clearMarkerCache: function()
-    {
-        var len = this._markerCache.length,
-            i = 0,
-            marker,
-            markerCache;
-        for(; i < len; ++i)
-        {
-            marker = markerCache[i];
-            marker.parentNode.removeChild(marker);
-        }
-        this._markerCache = [];
-    },
-    
-    /**
-     * @private
-     */
-	drawSeries: function()
+	drawPlots: function()
     {
         var values = this.get("valueAxis").getDataByKey(this.get("valueKey")).concat(),
+            catValues = this.get("categoryAxis").getDataByKey(this.get("categoryKey")).concat(),
             totalValue = 0,
             itemCount = values.length,
-            styles = this.get("styles"),
-            fillColors = styles.fillColors,
-            fillAlphas = styles.fillAlphas || ["1"],
-            borderColors = styles.borderColors,
-            borderWeights = styles.borderWeights,
-            borderAlphas = styles.borderAlphas,
+            styles = this.get("styles").marker,
+            fillColors = styles.fill.colors,
+            fillAlphas = styles.fill.alphas || ["1"],
+            borderColors = styles.border.colors,
+            borderWeights = [styles.border.weight],
+            borderAlphas = [styles.border.alpha],
             tbw = borderWeights.concat(),
             tbc = borderColors.concat(),
             tba = borderAlphas.concat(),
             tfc,
             tfa,
             padding = styles.padding,
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-			w = node.get("offsetWidth") - (padding.left + padding.right),
-            h = node.get("offsetHeight") - (padding.top + padding.bottom),
-            totalAngle = 0,
+            graph = this.get("graph"),
+			w = graph.get("width") - (padding.left + padding.right),
+            h = graph.get("height") - (padding.top + padding.bottom),
+            startAngle = -90,
             halfWidth = w / 2,
             halfHeight = h / 2,
             radius = Math.min(halfWidth, halfHeight),
@@ -4489,8 +4759,9 @@ Y.extend(PieSeries, Y.Renderer, {
             la,
             lw,
             wedgeStyle,
-            marker;
-
+            marker,
+            graphOrder = this.get("graphOrder"),
+            mnode;
         for(; i < itemCount; ++i)
         {
             value = values[i];
@@ -4521,7 +4792,7 @@ Y.extend(PieSeries, Y.Renderer, {
             {
                 tfc = fillColors.concat();
             }
-            if(tfc && tfa.length < 1)
+            if(tfa && tfa.length < 1)
             {
                 tfa = fillAlphas.concat();
             }
@@ -4540,6 +4811,7 @@ Y.extend(PieSeries, Y.Renderer, {
             lw = tbw ? tbw.shift() : null;
             lc = tbc ? tbc.shift() : null;
             la = tba ? tba.shift() : null;
+            startAngle += angle;
             wedgeStyle = {
                 border: {
                     color:lc,
@@ -4547,745 +4819,234 @@ Y.extend(PieSeries, Y.Renderer, {
                     alpha:la
                 },
                 fill: {
-                    color:tfc ? tfc.shift() : null,
+                    color:tfc ? tfc.shift() : this._getDefaultColor(i, "slice"),
                     alpha:tfa ? tfa.shift() : null
                 },
                 shape: "wedge",
                 props: {
                     arc: angle,
                     radius: radius,
-                    startAngle: totalAngle,
+                    startAngle: startAngle,
                     x: halfWidth,
                     y: halfHeight
                 },
                 width: w,
                 height: h
             };
-            marker = this.getMarker.apply(this, [{index:i, styles:wedgeStyle}]);
-            totalAngle += angle;    
+            marker = this.getMarker(wedgeStyle, graphOrder, i);
+            mnode = Y.one(marker.parent);
         }
         this._clearMarkerCache();
     },
 
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget);
-
-            switch(type)
+        var state = this._getState(type),
+            markerStyles,
+            indexStyles,
+            marker = this._markers[i],
+            graphicNode = this._graphicNodes[i],
+            styles = this.get("styles").marker; 
+            markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+            indexStyles = this._mergeStyles(markerStyles, {});
+            indexStyles.fill.color = indexStyles.fill.colors[i % indexStyles.fill.colors.length];
+            indexStyles.fill.alpha = indexStyles.fill.alphas[i % indexStyles.fill.alphas.length];
+            marker.update(indexStyles);
+            if(state == "over" || state == "down")
             {
-                case "mouseout" :
-                    marker.set("state", "off");
-                break;
-                case "mouseover" :
-                    marker.set("state", "over");
-                break;
-                case "mouseup" :
-                    marker.set("state", "over");
-                break;
-                case "mousedown" :
-                    marker.set("state", "down");
-                break;
+                Y.one(graphicNode).setStyle("zIndex", 3);
+            }
+            else
+            {
+                Y.one(graphicNode).setStyle("zIndex", 2);
             }
     },
+    
     /**
      * @private
      * @return Default styles for the widget
      */
-    _getDefaultStyles: function()
+    _getPlotDefaults: function()
     {
-        return {
+         var defs = {
             padding:{
                 top: 0,
                 left: 0,
                 right: 0,
                 bottom: 0
             },
-            fillAlphas:["1"],
-            borderColors:["#000000"],
-            borderWeights:["0"],
-            borderAlphas:["1"],
-
-            over: {
-                borderColors:["#000000"],
-                fillAlphas:[1]
-            }
-        };
-    },
-
-    /**
-     * @private
-     * @description Colors used if style colors are not specified
-     */
-    _getDefaultColor: function(index)
-    {
-        var colors = [
-                "#2011e6", "#f5172c", "#00ff33", "#ff6600", "#7f03d6", "#f3f301",
-				"#4982b8", "#f905eb", "#0af9da", "#fecb01", "#8e9a9b", "#d701fe",
-				"#8cb3d1", "#d18cae", "#b3ddd3", "#fcc551", "#785a85", "#f86b0e"
-            ];
-        index = index || 0;
-        return colors[index];
-    }
-});
-	
-Y.PieSeries = PieSeries;
-function CartesianSeries(config)
-{
-    CartesianSeries.superclass.constructor.apply(this, arguments);
-}
- 
-CartesianSeries.NAME = "cartesianSeries";
-
-CartesianSeries.ATTRS = {
-	xDisplayName: {
-        getter: function()
-        {
-            return this._xDisplayName || this.get("xKey");
-        },
-
-        setter: function(val)
-        {
-            this._xDisplayName = val;
-            return val;
-        }
-    },
-
-    yDisplayName: {
-        getter: function()
-        {
-            return this._yDisplayName || this.get("yKey");
-        },
-
-        setter: function(val)
-        {
-            this._yDisplayName = val;
-            return val;
-        }
-    },
-
-    type: {		
-  	    value: "cartesian"
-    },
-	/**
-	 * Order of this ISeries instance of this <code>type</code>.
-	 */
-	order: {
-	    value:NaN
-    },
-
-    /**
-     * Order of the ISeries instance
-     */
-    graphOrder: {
-        value:NaN
-    },
-
-	/**
-	 * x coordinates for the series.
-	 */
-	xcoords: {
-        value: null
-	},
-	/**
-	 * y coordinates for the series
-	 */
-	ycoords: {
-        value: null
-	},
-	graph: {
-        value: null
-	},
-	/**
-	 * Reference to the <code>Axis</code> instance used for assigning 
-	 * x-values to the graph.
-	 */
-	xAxis: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("xAxis");
-		},
-		
-        lazyAdd: false
-	},
-	
-	yAxis: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("yAxis");
-		},
-		
-        lazyAdd: false
-	},
-	/**
-	 * Indicates which array to from the hash of value arrays in 
-	 * the x-axis <code>Axis</code> instance.
-	 */
-	xKey: {
-        value: null,
-
-		validator: function(value)
-		{
-			return value !== this.get("xKey");
-		}
-	},
-	/**
-	 * Indicates which array to from the hash of value arrays in 
-	 * the y-axis <code>Axis</code> instance.
-	 */
-	yKey: {
-		value: null,
-
-        validator: function(value)
-		{
-			return value !== this.get("yKey");
-		}
-	},
-
-    /**
-     * Array of x values for the series.
-     */
-    xData: {
-        value: null
-    },
-
-    /**
-     * Array of y values for the series.
-     */
-    yData: {
-        value: null
-    },
-    
-    markers: {
-        getter: function()
-        {
-            return this._markers;
-        }
-    },
-
-    direction: {
-        value: "horizontal"
-    }
-};
-
-Y.extend(CartesianSeries, Y.Renderer, {
-    /**
-     * @private
-     */
-    _xDisplayName: null,
-
-    /**
-     * @private
-     */
-    _yDisplayName: null,
-    
-    /**
-     * @private
-     */
-    _leftOrigin: null,
-
-    /**
-     * @private
-     */
-    _bottomOrigin: null,
-
-    /**
-     * @private
-     */
-    bindUI: function()
-    {
-        var xAxis = this.get("xAxis"),
-            yAxis = this.get("yAxis");
-        if(xAxis)
-        {
-            xAxis.after("axisReady", Y.bind(this._xAxisChangeHandler, this));
-            xAxis.after("axisUpdate", Y.bind(this._xAxisChangeHandler, this));
-        }
-        if(yAxis)
-        {
-            yAxis.after("axisReady", Y.bind(this._yAxisChangeHandler, this));
-            yAxis.after("axisUpdate", Y.bind(this._yAxisChangeHandler, this));
-        }
-        this.after("xAxisChange", Y.bind(this.xAxisChangeHandler, this));
-        this.after("yAxisChange", Y.bind(this.yAxisChangeHandler, this));
-        this.after("stylesChange", Y.bind(this._updateHandler, this));
-    },
-
-	/**
-	 * Constant used to generate unique id.
-	 */
-	GUID: "yuicartesianseries",
-	
-	/**
-	 * @private (protected)
-	 * Handles updating the graph when the x < code>Axis</code> values
-	 * change.
-	 */
-	_xAxisChangeHandler: function(event)
-	{
-        var axesReady = this._updateAxisData();
-        if(this.get("rendered") && axesReady)
-		{
-			this.draw();
-		}
-	},
-
-	/**
-	 * @private (protected)
-	 * Handles updating the chart when the y <code>Axis</code> values
-	 * change.
-	 */
-	_yAxisChangeHandler: function(event)
-	{
-        var axesReady = this._updateAxisData();
-        if(this.get("rendered") && axesReady)
-		{
-			this.draw();
-		}
-	},
-
-    /**
-     * @private 
-     */
-    _updateAxisData: function()
-    {
-        var xAxis = this.get("xAxis"),
-            yAxis = this.get("yAxis"),
-            xKey = this.get("xKey"),
-            yKey = this.get("yKey");
-        if(!xAxis || !yAxis || !xKey || !yKey)
-        {
-            return false;
-        }
-        
-        this.set("xData", xAxis.getDataByKey(xKey));
-        this.set("yData", yAxis.getDataByKey(yKey));
-        return true;
-    },
-
-    syncUI: function()
-    {
-        if(this.get("xData") && this.get("yData"))
-        {
-            this.draw();
-        }
-        else if(this._updateAxisData())
-        {
-            this.draw();
-        }
-    },
-
-    /**
-     * @private
-     * Collection of markers to be used in the series.
-     */
-    _markers: null,
-
-    /**
-     * @private
-     * Collection of markers to be re-used on a series redraw.
-     */
-    _markerCache: null,
-
-	/**
-	 * @private
-	 */
-	setAreaData: function()
-	{
-        var nextX, nextY,
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            w = node.get("offsetWidth"),
-            h = node.get("offsetHeight"),
-            xAxis = this.get("xAxis"),
-            yAxis = this.get("yAxis"),
-            xData = this.get("xData").concat(),
-            yData = this.get("yData").concat(),
-            xOffset = xAxis.getEdgeOffset(xData.length, w),
-            yOffset = yAxis.getEdgeOffset(yData.length, h),
-            padding = this.get("padding"),
-			leftPadding = padding.left,
-			topPadding = padding.top,
-			dataWidth = w - (leftPadding + padding.right + xOffset),
-			dataHeight = h - (topPadding + padding.bottom + yOffset),
-			xcoords = [],
-			ycoords = [],
-			xMax = xAxis.get("maximum"),
-			xMin = xAxis.get("minimum"),
-			yMax = yAxis.get("maximum"),
-			yMin = yAxis.get("minimum"),
-			xScaleFactor = dataWidth / (xMax - xMin),
-			yScaleFactor = dataHeight / (yMax - yMin),
-            dataLength,
-            direction = this.get("direction"),
-            i = 0;
-            dataLength = xData.length; 	
-            xOffset *= 0.5;
-            yOffset *= 0.5;
-        //Assuming a vertical graph has a range/category for its vertical axis.    
-        if(direction === "vertical")
-        {
-            yData = yData.reverse();
-        }
-        if(this.get("graphic"))
-        {
-            this.get("graphic").setSize(w, h);
-        }
-        this._leftOrigin = Math.round(((0 - xMin) * xScaleFactor) + leftPadding + xOffset);
-        this._bottomOrigin =  Math.round((dataHeight + topPadding + yOffset) - (0 - yMin) * yScaleFactor);
-        for (; i < dataLength; ++i) 
-		{
-            nextX = Math.round((((xData[i] - xMin) * xScaleFactor) + leftPadding + xOffset));
-			nextY = Math.round(((dataHeight + topPadding + yOffset) - (yData[i] - yMin) * yScaleFactor));
-            xcoords.push(nextX);
-            ycoords.push(nextY);
-        }
-        this.set("xcoords", xcoords);
-		this.set("ycoords", ycoords);
-    },
-
-	/**
-	 * @private (override)
-	 */
-	draw: function()
-    {
-        var node = Y.Node.one(this._parentNode).get("parentNode"),
-			w = node.get("offsetWidth"),
-            h = node.get("offsetHeight");
-        if  (!isNaN(w) && !isNaN(h) && w > 0 && h > 0)
-		{
-            this.setAreaData();
-            this.drawSeries();
-            this.fire("drawingComplete");
-		}
-	},
-    
-    /**
-     * @private
-     * @return {Object}
-     * Creates an array of start, end and control points for splines. 
-     */
-    getCurveControlPoints: function(xcoords, ycoords) 
-    {
-		var outpoints = [],
-            i = 1,
-            l = xcoords.length - 1,
-		    xvals = [],
-		    yvals = [];
-		
-		
-		// Too few points, need at least two
-		if (l < 1) 
-        {
-			return null;
-		} 
-        
-        outpoints[0] = {
-            startx: xcoords[0], 
-            starty: ycoords[0],
-            endx: xcoords[1],
-            endy: ycoords[1]
-        };
-        
-		// Special case, the Bezier should be a straight line
-        if (l === 1) 
-        {
-			outpoints[0].ctrlx1 = (2.0*xcoords[0] + xcoords[1])/3.0;  
-			outpoints[0].ctrly2 = (2.0*ycoords[0] + ycoords[1])/3.0;
-			outpoints[0].ctrlx2 = 2.0*outpoints[0].ctrlx1 - xcoords[0];
-            outpoints[0].ctrly2 = 2.0*outpoints[0].ctrly1 - ycoords[0];
-            return outpoints;
-		}
-
-		for (; i < l; ++i) 
-        {
-			outpoints.push({startx: Math.round(xcoords[i]), starty: Math.round(ycoords[i]), endx: Math.round(xcoords[i+1]), endy: Math.round(ycoords[i+1])});
-			xvals[i] = 4.0 * xcoords[i] + 2*xcoords[i+1];
-			yvals[i] = 4.0*ycoords[i] + 2*ycoords[i+1];
-		}
-		
-		xvals[0] = xcoords[0] + (2.0 * xcoords[1]);
-		xvals[l-1] = (8.0 * xcoords[l-1] + xcoords[l]) / 2.0;
-		xvals = this.getControlPoints(xvals.concat());
-        yvals[0] = ycoords[0] + (2.0 * ycoords[1]);
-		yvals[l-1] = (8.0 * ycoords[l-1] + ycoords[l]) / 2.0;	
-		yvals = this.getControlPoints(yvals.concat());
-		
-        for (i = 0; i < l; ++i) 
-        {
-			outpoints[i].ctrlx1 = Math.round(xvals[i]);
-            outpoints[i].ctrly1 = Math.round(yvals[i]);
-			
-			if (i < l-1) 
-            {
-				outpoints[i].ctrlx2 = Math.round(2*xcoords[i+1] - xvals[i+1]);
-                outpoints[i].ctrly2 = Math.round(2*ycoords[i+1] - yvals[i+1]);
-			}
-			else 
-            {
-				outpoints[i].ctrlx2 = Math.round((xcoords[l] + xvals[l-1])/2);
-                outpoints[i].ctrly2 = Math.round((ycoords[l] + yvals[l-1])/2);
-			}
-		}
-		
-		return outpoints;	
-	},
-
-    /**
-     * @private
-     */
-	getControlPoints: function(vals) 
-    {
-		var l = vals.length,
-            x = [],
-            tmp = [],
-            b = 2.0,
-            i = 1;
-		x[0] = vals[0] / b;
-		for (; i < l; ++i) 
-        {
-			tmp[i] = 1/b;
-			b = (i < l-1 ? 4.0 : 3.5) - tmp[i];
-			x[i] = (vals[i] - x[i-1]) / b;
-		}
-		
-		for (i = 1; i < l; ++i) 
-        {
-			x[l-i-1] -= tmp[l-i] * x[l-i];
-		}
-		
-		return x;
-	},
-   
-    /**
-     * @private
-     * Adjusts coordinate values for stacked series.
-     */
-    _stackCoordinates: function() 
-    {
-        var direction = this.get("direction"),
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            h = node.get("offsetHeight"),
-            order = this.get("order"),
-            type = this.get("type"),
-            graph = this.get("graph"),
-            seriesCollection = graph.seriesTypes[type],
-            i = 0,
-            len,
-            xcoords = this.get("xcoords"),
-            ycoords = this.get("ycoords"),
-            prevXCoords,
-            prevYCoords;
-        if(order === 0)
-        {
-            return;
-        }
-        prevXCoords = seriesCollection[order - 1].get("xcoords").concat();
-        prevYCoords = seriesCollection[order - 1].get("ycoords").concat();
-        if(direction === "vertical")
-        {
-            len = prevXCoords.length;
-            for(; i < len; ++i)
-            {
-                if(!isNaN(prevXCoords[i]) && !isNaN(xcoords[i]))
-                {
-                    xcoords[i] += prevXCoords[i];
-                }
-            }
-        }
-        else
-        {
-            len = prevYCoords.length;
-            for(; i < len; ++i)
-            {
-                if(!isNaN(prevYCoords[i]) && !isNaN(ycoords[i]))
-                {
-                    ycoords[i] = prevYCoords[i] - (h - ycoords[i]);
-                }
-            }
-        }
-    },
-
-    /**
-     * @private
-     * @description Creates a marker based on its style properties.
-     */
-    getMarker: function(config)
-    {
-        var marker,
-            colorIndex = this.get("graphOrder"),
-            cache = this._markerCache,
-            styles = config.styles,
-            index = config.index;
-        config.colorIndex = colorIndex;
-        if(cache.length > 0)
-        {
-            marker = cache.shift();
-            marker.set("index", index);
-            marker.set("series", this);
-            marker.set("colorIndex", colorIndex);
-            if(marker.get("styles") !== styles)
-            {
-                marker.set("styles", styles);
-            }
-        }
-        else
-        {
-            config.series = this;
-            marker = new Y.Marker(config);
-            marker.render(this.get("node"));
-            Y.one(marker.get("boundingBox")).setStyle("zIndex", 2);
-        }
-        this._markers.push(marker);
-        this._markerNodes.push(Y.one(marker.get("node")));
-        return marker;
-    },   
-    
-    /**
-     * @private
-     * Creates a cache of markers for reuse.
-     */
-    _createMarkerCache: function()
-    {
-        if(this._markers)
-        {
-            this._markerCache = this._markers.concat();
-        }
-        else
-        {
-            this._markerCache = [];
-        }
-        this._markers = [];
-        this._markerNodes = [];
-    },
-    
-    /**
-     * @private
-     * Removes unused markers from the marker cache
-     */
-    _clearMarkerCache: function()
-    {
-        var len = this._markerCache.length,
-            i = 0,
-            marker,
-            markerCache;
-        for(; i < len; ++i)
-        {
-            marker = markerCache[i];
-            marker.parentNode.removeChild(marker);
-        }
-        this._markerCache = [];
-    },
-
-    /**
-     * @private
-     * @return Default styles for the widget
-     */
-    _getDefaultStyles: function()
-    {
-        return {padding:{
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }};
-    },
-
-    /**
-     * @private
-     * @description Colors used if style colors are not specified
-     */
-    _getDefaultColor: function(index)
-    {
-        var colors = [
-                "#2011e6", "#f5172c", "#00ff33", "#ff6600", "#7f03d6", "#f3f301",
-				"#4982b8", "#f905eb", "#0af9da", "#fecb01", "#8e9a9b", "#d701fe",
-				"#8cb3d1", "#d18cae", "#b3ddd3", "#fcc551", "#785a85", "#f86b0e"
-            ];
-        index = index || 0;
-        return colors[index];
-    }
-});
-
-Y.CartesianSeries = CartesianSeries;
-Y.MarkerSeries = Y.Base.create("markerSeries", Y.CartesianSeries, [Y.Plots], {
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._setNode();
-    },
-    /**
-     * @private
-     */
-	drawSeries: function()
-	{
-        this.drawPlots();
-    }
-},{
-    ATTRS : {
-        type: {
-            /**
-             * Indicates the type of graph.
-             */
-            value:"marker"
-        },
-        
-        styles: {
-            getter: function()
-            {
-                var styles = this.get("marker");
-                styles.padding = this.get("padding");
+            fill:{
+                alphas:["1"]
             },
-            
+            border: {
+                weight: 0,
+                alpha: 1
+            }
+        };
+        defs.fill.colors = this._defaultSliceColors;
+        defs.border.colors = this._defaultBorderColors;
+        return defs;
+    },
+
+    /**
+     * @private
+     */
+    _defaultLineColors:["#426ab3", "#d09b2c", "#000000", "#b82837", "#b384b5", "#ff7200", "#779de3", "#cbc8ba", "#7ed7a6", "#007a6c"],
+
+    /**
+     * @private
+     */
+    _defaultFillColors:["#6084d0", "#eeb647", "#6c6b5f", "#d6484f", "#ce9ed1", "#ff9f3b", "#93b7ff", "#e0ddd0", "#94ecba", "#309687"],
+    
+    /**
+     * @private
+     */
+    _defaultBorderColors:["#205096", "#b38206", "#000000", "#94001e", "#9d6fa0", "#e55b00", "#5e85c9", "#adab9e", "#6ac291", "#006457"],
+    
+    /**
+     * @private
+     */
+    _defaultSliceColors: ["#66007f", "#a86f41", "#295454", "#996ab2", "#e8cdb7", "#90bdbd","#000000","#c3b8ca", "#968373", "#678585"],
+
+    /**
+     * @private
+     * @description Colors used if style colors are not specified
+     */
+    _getDefaultColor: function(index, type)
+    {
+        var colors = {
+                line: this._defaultLineColors,
+                fill: this._defaultFillColors,
+                border: this._defaultBorderColors,
+                slice: this._defaultSliceColors
+            },
+            col = colors[type],
+            l = col.length;
+        index = index || 0;
+        if(index >= l)
+        {
+            index = index % l;
+        }
+        type = type || "fill";
+        return colors[type][index];
+    }
+}, {
+    ATTRS: {
+
+        type: {		
+            value: "pie"
+        },
+        /**
+         * Order of this ISeries instance of this <code>type</code>.
+         */
+        order: {},
+        graph: {},
+        /**
+         * Reference to the <code>Axis</code> instance used for assigning 
+         * x-values to the graph.
+         */
+        categoryAxis: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("categoryAxis");
+            }
+        },
+        
+        valueAxis: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("valueAxis");
+            }
+        },
+        /**
+         * Indicates which array to from the hash of value arrays in 
+         * the category <code>Axis</code> instance.
+         */
+        categoryKey: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("categoryKey");
+            }
+        },
+        /**
+         * Indicates which array to from the hash of value arrays in 
+         * the value <code>Axis</code> instance.
+         */
+        valueKey: {
+            value: null,
+
+            validator: function(value)
+            {
+                return value !== this.get("valueKey");
+            }
+        },
+
+        categoryDisplayName: {
             setter: function(val)
             {
-                this.set("marker", val);
-                if(val.hasOwnProperty("padding"))
-                {
-                    this.set("padding", val.padding);
-                }
+                this._categoryDisplayName = val;
+                return val;
+            },
+
+            getter: function()
+            {
+                return this._categoryDisplayName || this.get("categoryKey");
             }
-        }
+        },
+
+        valueDisplayName: {
+            setter: function(val)
+            {
+                this._valueDisplayName = val;
+                return val;
+            },
+
+            getter: function()
+            {
+                return this._valueDisplayName || this.get("valueKey");
+            }
+        },
+
+        slices: null
     }
 });
-
 Y.LineSeries = Y.Base.create("lineSeries", Y.CartesianSeries, [Y.Lines], {
-	drawSeries: function()
+    drawSeries: function()
     {
         this.get("graphic").clear();
         this.drawLines();
+    },
+
+    _setStyles: function(val)
+    {
+        if(!val.line)
+        {
+            val = {line:val};
+        }
+        return Y.LineSeries.superclass._setStyles.apply(this, [val]);
+    },
+
+    _getDefaultStyles: function()
+    {
+        var styles = this._mergeStyles({line:this._getLineDefaults()}, Y.LineSeries.superclass._getDefaultStyles());
+        return styles;
     }
 },
 {
     ATTRS: {
+        /**
+         * Indicates the type of graph.
+         */
         type: {
-            /**
-             * Indicates the type of graph.
-             */
             value:"line"
-        },
-
-        styles: {
-            getter: function()
-            {
-                var styles = this.get("line");
-                styles.padding = this.get("padding");
-            },
-
-            setter: function(val)
-            {
-                this.set("line", val);
-                if(val.hasOwnProperty("padding"))
-                {
-                    this.set("padding", val.padding);
-                }
-            }
         }
+
     }
 });
 
@@ -5294,7 +5055,7 @@ Y.LineSeries = Y.Base.create("lineSeries", Y.CartesianSeries, [Y.Lines], {
 		
 
 		
-Y.SplineSeries = Y.Base.create("splineSeries",  Y.CartesianSeries, [Y.Lines], {
+Y.SplineSeries = Y.Base.create("splineSeries",  Y.CartesianSeries, [Y.CurveUtil, Y.Lines], {
 	/**
 	 * @private
 	 */
@@ -5319,7 +5080,7 @@ Y.SplineSeries = Y.Base.create("splineSeries",  Y.CartesianSeries, [Y.Lines], {
 		
 
 		
-Y.AreaSplineSeries = Y.Base.create("areaSplineSeries", Y.CartesianSeries, [Y.Fills], {
+Y.AreaSplineSeries = Y.Base.create("areaSplineSeries", Y.CartesianSeries, [Y.Fills, Y.CurveUtil], {
 	/**
 	 * @private
 	 */
@@ -5339,256 +5100,102 @@ Y.AreaSplineSeries = Y.Base.create("areaSplineSeries", Y.CartesianSeries, [Y.Fil
     }
 });
 
-function StackedSplineSeries(config)
-{
-	StackedSplineSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedSplineSeries.NAME = "stackedSplineSeries";
-
-StackedSplineSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedSpline"
-    }
-};
-
-Y.extend(StackedSplineSeries, Y.SplineSeries, {
+Y.StackedSplineSeries = Y.Base.create("stackedSplineSeries", Y.SplineSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
-        StackedSplineSeries.superclass.setAreaData.apply(this);
+        Y.StackedSplineSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
+    }
+}, {
+    ATTRS: {
+        /**
+         * Indicates the type of graph.
+         */
+        type: {
+            value:"stackedSpline"
+        }
     }
 });
 
-Y.StackedSplineSeries = StackedSplineSeries;
-function StackedMarkerSeries(config)
-{
-	StackedMarkerSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedMarkerSeries.NAME = "stackedMarkerSeries";
-
-StackedMarkerSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedMarker"
-    }
-};
-
-Y.extend(StackedMarkerSeries, Y.MarkerSeries, {
+Y.StackedMarkerSeries = Y.Base.create("stackedMarkerSeries", Y.MarkerSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
-        StackedMarkerSeries.superclass.setAreaData.apply(this);
+        Y.StackedMarkerSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
+    }
+}, {
+    ATTRS: {
+        /**
+         * Indicates the type of graph.
+         */
+        type: {
+            value:"stackedMarker"
+        }
     }
 });
 
-Y.StackedMarkerSeries = StackedMarkerSeries;
-function ColumnSeries(config)
-{
-	ColumnSeries.superclass.constructor.apply(this, arguments);
-}
-
-ColumnSeries.NAME = "columnSeries";
-
-ColumnSeries.ATTRS = {
-	type: {
-        value: "column"
-    }
-};
-
-Y.extend(ColumnSeries, Y.CartesianSeries, {
-    /**
-     * @private
-     */
-    renderUI: function()
+Y.ColumnSeries = Y.Base.create("columnSeries", Y.MarkerSeries, [Y.Histogram], {
+    _getMarkerDimensions: function(xcoord, ycoord, calculatedSize, offset)
     {
-        this._setNode();
+        var config = {
+            top: ycoord,
+            left: xcoord + offset
+        };
+        config.calculatedSize = this._bottomOrigin - config.top;
+        return config;
     },
-
-    bindUI: function()
-    {
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-    },
-
-    /**
-	 * @private
-	 */
-	drawSeries: function()
-	{
-	    if(this.get("xcoords").length < 1) 
-		{
-			return;
-		}
-        var style = this._mergeStyles(this.get("styles"), {}),
-            w = style.width,
-            h = style.height,
-            xcoords = this.get("xcoords"),
-            ycoords = this.get("ycoords"),
-            i = 0,
-            len = xcoords.length,
-            top = ycoords[0],
-            type = this.get("type"),
-            graph = this.get("graph"),
-            seriesCollection = graph.seriesTypes[type],
-            seriesLen = seriesCollection.length,
-            seriesWidth = 0,
-            totalWidth = 0,
-            offset = 0,
-            ratio,
-            renderer,
-            order = this.get("order"),
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            left,
-            marker,
-            bb;
-            this._createMarkerCache();
-        for(; i < seriesLen; ++i)
-        {
-            renderer = seriesCollection[i];
-            seriesWidth += renderer.get("styles").width;
-            if(order > i) 
-            {
-                offset = seriesWidth;
-            }
-        }
-        totalWidth = len * seriesWidth;
-        if(totalWidth > node.offsetWidth)
-        {
-            ratio = this.width/totalWidth;
-            seriesWidth *= ratio;
-            offset *= ratio;
-            w *= ratio;
-            w = Math.max(w, 1);
-        }
-        offset -= seriesWidth/2;
-        for(i = 0; i < len; ++i)
-        {
-            top = ycoords[i];
-            h = this._bottomOrigin - top;
-            left = xcoords[i] + offset;
-            style.width = w;
-            style.height = h;
-            marker = this.getMarker.apply(this, [{index:i, styles:style}]);
-            bb = marker.get("boundingBox");
-            bb.setStyle("position", "absolute");
-            bb.setStyle("left", left + "px");
-            bb.setStyle("top", top + "px");
-        }
-        this._clearMarkerCache();
- 	},
 
     /**
      * @private
      * Resizes and positions markers based on a mouse interaction.
      */
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget),
+        var styles = Y.clone(this.get("styles").marker),
+            markerStyles,
+            state = this._getState(type),
             xcoords = this.get("xcoords"),
             ycoords = this.get("ycoords"),
-            i = marker.get("index") || Y.Array.indexOf(this.get("markers"), marker),
+            marker = this._markers[i],
             graph = this.get("graph"),
             seriesCollection = graph.seriesTypes[this.get("type")],
             seriesLen = seriesCollection.length,
-            seriesWidth = 0,
+            seriesSize = 0,
             offset = 0,
             renderer,
             n = 0,
             xs = [],
             order = this.get("order");
-        switch(type)
-        {
-            case "mouseout" :
-                marker.set("state", "off");
-            break;
-            case "mouseover" :
-                marker.set("state", "over");
-            break;
-            case "mouseup" :
-                marker.set("state", "over");
-            break;
-            case "mousedown" :
-                marker.set("state", "down");
-            break;
-        }
-        marker.set("styles", {over:{height: (this._bottomOrigin - ycoords[i])}});
+        markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+        markerStyles.fill.color = this._getItemColor(markerStyles.fill.color, i);
+        markerStyles.border.color = this._getItemColor(markerStyles.border.color, i);
+        markerStyles.height = this._bottomOrigin - ycoords[i];
+        marker.update(markerStyles);
         for(; n < seriesLen; ++n)
         {
             renderer = seriesCollection[n].get("markers")[i];
-            xs[n] = xcoords[i] + seriesWidth;
-            seriesWidth += parseInt(renderer.get("boundingBox").getStyle("width"), 10);
+            xs[n] = xcoords[i] + seriesSize;
+            seriesSize += renderer.width;
             if(order > n)
             {
-                offset = seriesWidth;
+                offset = seriesSize;
             }
-            offset -= seriesWidth/2;
+            offset -= seriesSize/2;
         }
         for(n = 0; n < seriesLen; ++n)
         {
-            renderer = seriesCollection[n].get("markers")[i];
-            renderer.get("boundingBox").setStyle("left", (xs[n] - seriesWidth/2) + "px");
+            renderer = Y.one(seriesCollection[n]._graphicNodes[i]);
+            renderer.setStyle("left", (xs[n] - seriesSize/2) + "px");
         }
-    },
-    
-    _getDefaultStyles: function()
-    {
-        return {
-            fill: {
-                alpha: "1",
-                colors: [],
-                alphas: [],
-                ratios: [],
-                rotation: 0
-            },
-            width: 6,
-            height: 6,
-            shape: "rect",
-            padding:{
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }
-        };
+    }
+}, {
+    ATTRS: {
+        type: {
+            value: "column"
+        }
     }
 });
-
-Y.ColumnSeries = ColumnSeries;
-function BarSeries(config)
-{
-	BarSeries.superclass.constructor.apply(this, arguments);
-}
-
-BarSeries.NAME = "barSeries";
-
-BarSeries.ATTRS = {
-	type: {
-        value: "bar"
-    },
-    direction: {
-        value: "vertical"
-    }
-};
-
-Y.extend(BarSeries, Y.CartesianSeries, {
-    bindUI: function()
-    {
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-    },
-
+Y.BarSeries = Y.Base.create("barSeries", Y.MarkerSeries, [Y.Histogram], {
     /**
      * @private
      */
@@ -5596,167 +5203,90 @@ Y.extend(BarSeries, Y.CartesianSeries, {
     {
         this._setNode();
     },
-	/**
-	 * @private
-	 */
-    drawSeries: function()
-	{
-	    if(this.get("xcoords").length < 1) 
-		{
-			return;
-		}
-        var style = this._mergeStyles(this.get("styles"), {}),
-            h = style.height,
-            w = style.width,
-            xcoords = this.get("xcoords"),
-            ycoords = this.get("ycoords"),
-            i = 0,
-            len = xcoords.length,
-            top = ycoords[0],
-            type = this.get("type"),
-            graph = this.get("graph"),
-            seriesCollection = graph.seriesTypes[type],
-            seriesLen = seriesCollection.length,
-            seriesHeight = 0,
-            totalHeight = 0,
-            offset = 0,
-            ratio,
-            renderer,
-            order = this.get("order"),
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            left,
-            marker,
-            bb;
-            this._createMarkerCache();
-        for(; i < seriesLen; ++i)
-        {
-            renderer = seriesCollection[i];
-            seriesHeight += renderer.get("styles").height;
-            if(order > i) 
-            {
-                offset = seriesHeight;
-            }
-        }
-        totalHeight = len * seriesHeight;
-        if(totalHeight > node.offsetHeight)
-        {
-            ratio = this.height/totalHeight;
-            seriesHeight *= ratio;
-            offset *= ratio;
-            h *= ratio;
-            h = Math.max(h, 1);
-        }
-        offset -= seriesHeight/2;
-        for(i = 0; i < len; ++i)
-        {
-            top = ycoords[i] + offset;
-            left = xcoords[i];
-            w = left - this._leftOrigin;
-            style.width = w;
-            style.height = h;
-            marker = this.getMarker.apply(this, [{index:i, styles:style}]);
-            bb = marker.get("boundingBox");
-            bb.setStyle("position", "absolute");
-            bb.setStyle("left", 0 + "px");
-            bb.setStyle("top", top + "px");
-        }
-        this._clearMarkerCache();
- 	},
 
+    _getMarkerDimensions: function(xcoord, ycoord, calculatedSize, offset)
+    {
+        var config = {
+            top: ycoord + offset,
+            left: this._leftOrigin
+        };
+        config.calculatedSize = xcoord - config.left;
+        return config;
+    },
+    
     /**
      * @private
      * Resizes and positions markers based on a mouse interaction.
      */
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget),
+        var styles = Y.clone(this.get("styles").marker),
+            markerStyles,
+            state = this._getState(type),
             xcoords = this.get("xcoords"),
             ycoords = this.get("ycoords"),
-            i = marker.get("index") || Y.Array.indexOf(this.get("markers"), marker),
+            marker = this._markers[i],
             graph = this.get("graph"),
             seriesCollection = graph.seriesTypes[this.get("type")],
             seriesLen = seriesCollection.length,
-            seriesHeight = 0,
+            seriesSize = 0,
             offset = 0,
             renderer,
             n = 0,
             ys = [],
             order = this.get("order");
-        switch(type)
-        {
-            case "mouseout" :
-                marker.set("state", "off");
-            break;
-            case "mouseover" :
-                marker.set("state", "over");
-            break;
-            case "mouseup" :
-                marker.set("state", "over");
-            break;
-            case "mousedown" :
-                marker.set("state", "down");
-            break;
-        }
-        marker.set("styles", {over:{width:(xcoords[i] - this._leftOrigin)}});
+        markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+        markerStyles.fill.color = this._getItemColor(markerStyles.fill.color, i);
+        markerStyles.border.color = this._getItemColor(markerStyles.border.color, i);
+        markerStyles.width = (xcoords[i] - this._leftOrigin);
+        marker.update(markerStyles);
         for(; n < seriesLen; ++n)
         {
             renderer = seriesCollection[n].get("markers")[i];
-            ys[n] = ycoords[i] + seriesHeight;
-            seriesHeight += parseInt(renderer.get("boundingBox").getStyle("height"), 10);
+            ys[n] = ycoords[i] + seriesSize;
+            seriesSize += renderer.height;
             if(order > n)
             {
-                offset = seriesHeight;
+                offset = seriesSize;
             }
-            offset -= seriesHeight/2;
+            offset -= seriesSize/2;
         }
         for(n = 0; n < seriesLen; ++n)
         {
-            renderer = seriesCollection[n].get("markers")[i];
-            renderer.get("boundingBox").setStyle("top", (ys[n] - seriesHeight/2) + "px");
+            renderer = Y.one(seriesCollection[n]._graphicNodes[i]);
+            renderer.setStyle("top", (ys[n] - seriesSize/2));
         }
-    },
-
-	/**
-	 * @private
-	 */
-    drawMarker: function(graphic, func, left, top, w, h)
-    {
-        graphic.drawRect(this._leftOrigin, top, w, h);
-    },
-	
-	/**
-	 * @private
-	 */
-    _getDefaultStyles: function()
-    {
-        return {
-            fill: {
-                alpha: "1",
-                colors: [],
-                alphas: [],
-                ratios: [],
-                rotation: 0
-            },
-            width: 6,
-            height: 6,
-            shape: "rect",
-            padding:{
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            }
-        };
+    }
+}, {
+    ATTRS: {
+        type: {
+            value: "bar"
+        },
+        direction: {
+            value: "vertical"
+        }
     }
 });
-
-Y.BarSeries = BarSeries;
 Y.AreaSeries = Y.Base.create("areaSeries", Y.CartesianSeries, [Y.Fills], {
 	drawSeries: function()
     {
         this.get("graphic").clear();
         this.drawFill.apply(this, this._getClosingPoints());
+    },
+    
+    _setStyles: function(val)
+    {
+        if(!val.area)
+        {
+            val = {area:val};
+        }
+        return Y.AreaSeries.superclass._setStyles.apply(this, [val]);
+    },
+
+    _getDefaultStyles: function()
+    {
+        var styles = this._mergeStyles({area:this._getAreaDefaults()}, Y.AreaSeries.superclass._getDefaultStyles());
+        return styles;
     }
 },
 {
@@ -5766,23 +5296,6 @@ Y.AreaSeries = Y.Base.create("areaSeries", Y.CartesianSeries, [Y.Fills], {
              * Indicates the type of graph.
              */
             value:"area"
-        },
-        
-        styles: {
-            getter: function()
-            {
-                var styles = this.get("area");
-                styles.padding = this.get("padding");
-            },
-
-            setter: function(val)
-            {
-                this.set("area", val);
-                if(val.hasOwnProperty("padding"))
-                {
-                    this.set("padding", val.padding);
-                }
-            }
         }
     }
 });
@@ -5792,7 +5305,7 @@ Y.AreaSeries = Y.Base.create("areaSeries", Y.CartesianSeries, [Y.Fills], {
 		
 
 		
-Y.StackedAreaSplineSeries = Y.Base.create("stackedAreaSplineSeries", Y.AreaSeries, [], {
+Y.StackedAreaSplineSeries = Y.Base.create("stackedAreaSplineSeries", Y.AreaSeries, [Y.CurveUtil, Y.StackingUtil], {
 	/**
 	 * @private
 	 */
@@ -5804,10 +5317,10 @@ Y.StackedAreaSplineSeries = Y.Base.create("stackedAreaSplineSeries", Y.AreaSerie
     }
 }, {
     ATTRS : {
+        /**
+         * Indicates the type of graph.
+         */
         type: {
-            /**
-             * Indicates the type of graph.
-             */
             value:"stackedAreaSpline"
         }
     }
@@ -5829,14 +5342,23 @@ Y.ComboSeries = Y.Base.create("comboSeries", Y.CartesianSeries, [Y.Fills, Y.Line
         {
             this.drawPlots();
         }   
+    },
+
+    /**
+     * @private
+     */
+    _getDefaultStyles: function()
+    {
+        var styles = Y.ComboSeries.superclass._getDefaultStyles();
+        styles.line = this._getLineDefaults();
+        styles.marker = this._getPlotDefaults();
+        styles.area = this._getAreaDefaults();
+        return styles;
     }
 },
 {
     ATTRS: {
         type: {
-            /**
-             * Indicates the type of graph.
-             */
             value:"combo"
         },
 
@@ -5852,28 +5374,39 @@ Y.ComboSeries = Y.Base.create("comboSeries", Y.CartesianSeries, [Y.Fills, Y.Line
             value: true
         },
 
-        styles: {
+        marker: {
+            lazyAdd: false,
             getter: function()
             {
-                var styles = this._styles || this._getDefaultStyles();
-                styles.marker = this.get("marker");
-                styles.line = this.get("line");
-                styles.area = this.get("area");
-                styles.padding = this.get("padding");
-                return styles;
+                return this.get("styles").marker;
             },
-
             setter: function(val)
             {
-                var col = {area:"area", line:"line", marker:"marker", padding:"padding"}, i;
-                for(i in col)
-                {
-                    if(val.hasOwnProperty(i))
-                    {
-                        this.set(i, val[i]);
-                    }
-                }
-                this.styles = val;
+                this.set("styles", {marker:val});
+            }
+        },
+
+        line: {
+            lazyAdd: false,
+            getter: function()
+            {
+                return this.get("styles").line;
+            },
+            setter: function(val)
+            {
+                this.set("styles", {line:val});
+            }
+        },
+
+        area: {
+            lazyAdd: false,
+            getter: function()
+            {
+                return this.get("styles").area;
+            },
+            setter: function(val)
+            {
+                this.set("styles", {area:val});
             }
         }
     }
@@ -5884,7 +5417,7 @@ Y.ComboSeries = Y.Base.create("comboSeries", Y.CartesianSeries, [Y.Fills, Y.Line
 		
 
 		
-Y.StackedComboSeries = Y.Base.create("stackedComboSeries", Y.ComboSeries, [], {
+Y.StackedComboSeries = Y.Base.create("stackedComboSeries", Y.ComboSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
         Y.StackedComboSeries.superclass.setAreaData.apply(this);
@@ -5919,7 +5452,7 @@ Y.StackedComboSeries = Y.Base.create("stackedComboSeries", Y.ComboSeries, [], {
         }
     }
 });
-Y.ComboSplineSeries = Y.Base.create("comboSplineSeries", Y.ComboSeries, [], {
+Y.ComboSplineSeries = Y.Base.create("comboSplineSeries", Y.ComboSeries, [Y.CurveUtil], {
 	drawSeries: function()
     {
         this.get("graphic").clear();
@@ -5943,7 +5476,7 @@ Y.ComboSplineSeries = Y.Base.create("comboSplineSeries", Y.ComboSeries, [], {
         }
     }
 });
-Y.StackedComboSplineSeries = Y.Base.create("stackedComboSplineSeries", Y.StackedComboSeries, [], {
+Y.StackedComboSplineSeries = Y.Base.create("stackedComboSplineSeries", Y.StackedComboSeries, [Y.CurveUtil], {
 	drawSeries: function()
     {
         this.get("graphic").clear();
@@ -6289,51 +5822,26 @@ Y.extend(CandlestickSeries, Y.RangeSeries, {
 });
 
 Y.CandlestickSeries = CandlestickSeries;
-function StackedLineSeries(config)
-{
-	StackedLineSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedLineSeries.NAME = "stackedLineSeries";
-
-StackedLineSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedLine"
-    }
-};
-
-Y.extend(StackedLineSeries, Y.LineSeries, {
+Y.StackedLineSeries = Y.Base.create("stackedLineSeries", Y.LineSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
-        StackedLineSeries.superclass.setAreaData.apply(this);
+        Y.StackedLineSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
     }
-});
-
-Y.StackedLineSeries = StackedLineSeries;
-function StackedAreaSeries(config)
-{
-	StackedAreaSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedAreaSeries.NAME = "stackedAreaSeries";
-
-StackedAreaSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedArea"
+}, {
+    ATTRS: {
+        type: {
+            /**
+             * Indicates the type of graph.
+             */
+            value:"stackedLine"
+        }
     }
-};
-
-Y.extend(StackedAreaSeries, Y.AreaSeries, {
+});
+Y.StackedAreaSeries = Y.Base.create("stackedAreaSeries", Y.AreaSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
-        StackedAreaSeries.superclass.setAreaData.apply(this);
+        Y.StackedAreaSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
     },
 
@@ -6342,47 +5850,17 @@ Y.extend(StackedAreaSeries, Y.AreaSeries, {
         this.get("graphic").clear();
         this.drawFill.apply(this, this._getStackedClosingPoints());
     }
-});
-
-Y.StackedAreaSeries = StackedAreaSeries;
-function StackedColumnSeries(config)
-{
-	StackedColumnSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedColumnSeries.NAME = "stackedColumnSeries";
-
-StackedColumnSeries.ATTRS = {
-	type: {
-        value: "stackedColumn"
-    },
-
-    negativeBaseValues: {
-        value: null
-    },
-
-    positiveBaseValues: {
-        value: null
+}, {
+    ATTRS: {
+        /**
+         * Indicates the type of graph.
+         */
+        type: {
+            value:"stackedArea"
+        }
     }
-};
-
-Y.extend(StackedColumnSeries, Y.CartesianSeries, {
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._setNode();
-    },
-    
-    bindUI: function()
-    {
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-    },
-	
+});
+Y.StackedColumnSeries = Y.Base.create("stackedColumnSeries", Y.ColumnSeries, [Y.StackingUtil], {
     /**
 	 * @private
 	 */
@@ -6392,7 +5870,7 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
 		{
 			return;
 		}
-        var style = this._mergeStyles(this.get("styles"), {}),
+        var style = this.get("styles").marker, 
             w = style.width,
             h = style.height,
             xcoords = this.get("xcoords"),
@@ -6405,17 +5883,17 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
             seriesCollection = graph.seriesTypes[type],
             ratio,
             order = this.get("order"),
+            graphOrder = this.get("graphOrder"),
+            left,
+            marker,
             lastCollection,
             negativeBaseValues,
             positiveBaseValues,
             useOrigin = order === 0,
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            left,
-            marker,
-            bb,
-            totalWidth = len * w;
+            totalWidth = len * w,
+            mnode;
         this._createMarkerCache();
-        if(totalWidth > node.offsetWidth)
+        if(totalWidth > this.get("width"))
         {
             ratio = this.width/totalWidth;
             w *= ratio;
@@ -6474,11 +5952,11 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
             left = xcoords[i] - w/2;
             style.width = w;
             style.height = h;
-            marker = this.getMarker.apply(this, [{index:i, styles:style}]);
-            bb = marker.get("boundingBox");
-            bb.setStyle("position", "absolute");
-            bb.setStyle("left", left + "px");
-            bb.setStyle("top", top + "px");
+            marker = this.getMarker(style, graphOrder, i);
+            mnode = Y.one(marker.parentNode);
+            mnode.setStyle("position", "absolute");
+            mnode.setStyle("left", left);
+            mnode.setStyle("top", top);
         }
         this._clearMarkerCache();
  	},
@@ -6487,51 +5965,44 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
      * @private
      * Resizes and positions markers based on a mouse interaction.
      */
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget),
+        var styles,
+            markerStyles,
+            state = this._getState(type),
             xcoords = this.get("xcoords"),
-            offset,
-            i = marker.get("index") || Y.Array.indexOf(this.get("markers"), marker);
-        switch(type)
-        {
-            case "mouseout" :
-                marker.set("state", "off");
-            break;
-            case "mouseover" :
-                marker.set("state", "over");
-            break;
-            case "mouseup" :
-                marker.set("state", "over");
-            break;
-            case "mousedown" :
-                marker.set("state", "down");
-            break;
-        }
-        offset = marker.get("width") * 0.5;
-        marker.get("boundingBox").setStyle("left", (xcoords[i] - offset) + "px");    
+            marker = this._markers[i],
+            graphic = this._graphicCollection[i],
+            offset = 0;        
+        styles = this.get("styles").marker;
+        markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+        markerStyles.height = marker.height;
+        marker.update(markerStyles);
+        offset = styles.width * 0.5;
+        Y.one(graphic.node).setStyle("left", (xcoords[i] - offset));
     },
 	
 	/**
 	 * @private
 	 */
-    _getDefaultStyles: function()
+    _getPlotDefaults: function()
     {
-        return {
-            fill: {
-                alpha: "1",
-                colors: [],
-                alphas: [],
-                ratios: [],
-                rotation: 0
+        var defs = {
+            fill:{
+                type: "solid",
+                alpha: 1,
+                colors:null,
+                alphas: null,
+                ratios: null
             },
-            border: {
-                weight:0
+            border:{
+                weight: 0,
+                alpha: 1
             },
-            width: 6,
-            height: 6,
+            width: 24,
+            height: 24,
             shape: "rect",
+
             padding:{
                 top: 0,
                 left: 0,
@@ -6539,58 +6010,35 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
                 bottom: 0
             }
         };
+        defs.fill.color = this._getDefaultColor(this.get("graphOrder"), "fill");
+        defs.border.color = this._getDefaultColor(this.get("graphOrder"), "border");
+        return defs;
+ 	}
+}, {
+    ATTRS: {
+        type: {
+            value: "stackedColumn"
+        },
+
+        negativeBaseValues: {
+            value: null
+        },
+
+        positiveBaseValues: {
+            value: null
+        }
     }
 });
 
-Y.StackedColumnSeries = StackedColumnSeries;
-function StackedBarSeries(config)
-{
-	StackedBarSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedBarSeries.NAME = "stackedBarSeries";
-
-StackedBarSeries.ATTRS = {
-	type: {
-        value: "stackedBar"
-    },
-    direction: {
-        value: "vertical"
-    },
-
-    negativeBaseValues: {
-        value: null
-    },
-
-    positiveBaseValues: {
-        value: null
-    }
-};
-
-Y.extend(StackedBarSeries, Y.CartesianSeries, {
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._setNode();
-    },
-    
-    bindUI: function()
-    {
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-    },
-    
+Y.StackedBarSeries = Y.Base.create("stackedBarSeries", Y.BarSeries, [Y.StackingUtil], {
     drawSeries: function()
 	{
 	    if(this.get("xcoords").length < 1) 
 		{
 			return;
 		}
-        var style = this._mergeStyles(this.get("styles"), {}),
+
+        var style = this.get("styles").marker,
             w = style.width,
             h = style.height,
             xcoords = this.get("xcoords"),
@@ -6601,20 +6049,19 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
             type = this.get("type"),
             graph = this.get("graph"),
             seriesCollection = graph.seriesTypes[type],
-            totalHeight = 0,
             ratio,
             order = this.get("order"),
+            graphOrder = this.get("graphOrder"),
+            left,
+            marker,
             lastCollection,
             negativeBaseValues,
             positiveBaseValues,
             useOrigin = order === 0,
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            left,
-            marker,
-            bb;
-        totalHeight = len * h;
+            totalHeight = len * h,
+            mnode;
         this._createMarkerCache();
-        if(totalHeight > node.offsetHeight)
+        if(totalHeight > this.get("height"))
         {
             ratio = this.height/totalHeight;
             h *= ratio;
@@ -6677,11 +6124,11 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
             top -= h/2;        
             style.width = w;
             style.height = h;
-            marker = this.getMarker.apply(this, [{index:i, styles:style}]);
-            bb = marker.get("boundingBox");
-            bb.setStyle("position", "absolute");
-            bb.setStyle("left", left + "px");
-            bb.setStyle("top", top + "px");
+            marker = this.getMarker(style, graphOrder, i);
+            mnode = Y.one(marker.parentNode);
+            mnode.setStyle("position", "absolute");
+            mnode.setStyle("left", left);
+            mnode.setStyle("top", top);
         }
         this._clearMarkerCache();
  	},
@@ -6690,47 +6137,38 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
      * @private
      * Resizes and positions markers based on a mouse interaction.
      */
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget),
+        var state = this._getState(type),
             ycoords = this.get("ycoords"),
-            i = marker.get("index") || Y.Array.indexOf(this.get("markers"), marker),
-            h = marker.get("height");
-        switch(type)
-        {
-            case "mouseout" :
-                marker.set("state", "off");
-            break;
-            case "mouseover" :
-                marker.set("state", "over");
-            break;
-            case "mouseup" :
-                marker.set("state", "over");
-            break;
-            case "mousedown" :
-                marker.set("state", "down");
-            break;
-        }
-        marker.get("boundingBox").setStyle("top", (ycoords[i] - h/2) + "px");    
+            marker = this._markers[i],
+            graphic = this._graphicCollection[i],
+            styles = this.get("styles").marker,
+            h = styles.height,
+            markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+        markerStyles.width = marker.width;
+        marker.update(markerStyles);
+        Y.one(graphic).setStyle("top", (ycoords[i] - h/2));    
     },
 	
-	/**
-	 * @private
-	 */
-    _getDefaultStyles: function()
+    _getPlotDefaults: function()
     {
-        return {
-            fill: {
-                alpha: "1",
-                colors: [],
-                alphas: [],
-                ratios: [],
-                rotation: 0
+        var defs = {
+            fill:{
+                type: "solid",
+                alpha: 1,
+                colors:null,
+                alphas: null,
+                ratios: null
             },
-            width: 6,
-            height: 6,
+            border:{
+                weight: 0,
+                alpha: 1
+            },
+            width: 24,
+            height: 24,
             shape: "rect",
+
             padding:{
                 top: 0,
                 left: 0,
@@ -6738,344 +6176,568 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
                 bottom: 0
             }
         };
+        defs.fill.color = this._getDefaultColor(this.get("graphOrder"), "fill");
+        defs.border.color = this._getDefaultColor(this.get("graphOrder"), "border");
+        return defs;
+ 	}
+}, {
+    ATTRS: {
+        type: {
+            value: "stackedBar"
+        },
+        direction: {
+            value: "vertical"
+        },
+
+        negativeBaseValues: {
+            value: null
+        },
+
+        positiveBaseValues: {
+            value: null
+        }
     }
 });
 
-Y.StackedBarSeries = StackedBarSeries;
-function Graph(config)
-{
-    Graph.superclass.constructor.apply(this, arguments);
-}
-
-Graph.NAME = "graph";
-
-Graph.ATTRS = {
-    seriesCollection: {
-        lazyAdd: false,
-
-        getter: function()
-        {
-            return this._seriesCollection;
-        },
-
-        setter: function(val)
-        {
-            this._parseSeriesCollection(val);
-            return this._seriesCollection;
-        }
-    },
-
-    parent: {
-        value: null
-    }
-};
-
-Y.extend(Graph, Y.Base, {
+Y.Axis = Y.Base.create("axis", Y.Widget, [Y.Renderer], {
     /**
-     * Hash of arrays containing series mapped to a series type.
+     * @private
+     * @description Triggered by a change in the dataSet attribute. Removes any old dataSet listeners and sets up listeners for the new dataSet.
      */
-    seriesTypes: null,
-
-    /**
-     * Returns a series instance based on an index.
-     */
-    getSeriesByIndex: function(val)
+    dataSetChangeHandler: function(e)
     {
-        var col = this._seriesCollection,
-            series;
-        if(col && col.length > val)
+       var dataSet = e.newVal,
+            oldDataSet = e.prevVal;
+        if(oldDataSet)
         {
-            series = col[val];
+            oldDataSet.detach("dataReady", this._dataChangeHandler);
+            oldDataSet.detach("dataUpdate", this._dataChangeHandler);
         }
-        return series;
+        dataSet.after("dataReady", Y.bind(this._dataChangeHandler, this));
+        dataSet.after("dataUpdate", Y.bind(this._dataChangeHandler, this));
     },
 
     /**
-     * Returns a series instance based on a key value.
+     * @private
+     * @description Handler for data changes.
      */
-    getSeriesByKey: function(val)
+    _dataChangeHandler: function(e)
     {
-        var obj = this._seriesDictionary,
-            series;
-        if(obj && obj.hasOwnProperty(val))
+        if(this.get("rendered"))
         {
-            series = obj[val];
+            this._drawAxis();
         }
-        return series;
     },
 
     /**
-     * Adds dispatcher to collection
+     * @private
      */
-    addDispatcher: function(val)
+    _updateHandler: function(e)
     {
-        if(!this._dispatchers)
+        if(this.get("rendered"))
         {
-            this._dispatchers = [];
+            this._drawAxis();
         }
-        this._dispatchers.push(val);
     },
 
     /**
-     * @private 
-     * @description Collection of series to be displayed in the graph.
+     * @private
      */
-    _seriesCollection: null,
+    _positionChangeHandler: function(e)
+    {
+        this._layout =this.getLayout(this.get("position"));
+        if(this.get("rendered"))
+        {
+            this._drawAxis();
+        }
+    },
+
+    /**
+     * @private
+     */
+    renderUI: function()
+    {
+        this._layout =this.getLayout(this.get("position"));
+        this._setCanvas();
+    },
     
     /**
      * @private
      */
-    _seriesDictionary: null,
+    bindUI: function()
+    {
+        var dataSet = this.get("dataSet");
+        if(dataSet)
+        {
+            dataSet.after("dataReady", Y.bind(this._dataChangeHandler, this));
+            dataSet.after("dataUpdate", Y.bind(this._dataChangeHandler, this));
+        }
+        this.after("axisChange", this.dataSetChangeHandler);
+        this.after("stylesChange", this._updateHandler);
+        this.after("positionChange", this._positionChangeHandler);
+        this.after("overlapGraphChange", this._updateHandler);
+        this.after("widthChange", this._handleSizeChange);
+        this.after("heightChange", this._handleSizeChange);
+    },
+   
+    /**
+     * @private
+     */
+    syncUI: function()
+    {
+        this._drawAxis();
+    },
 
     /**
      * @private
-     * @description Parses series instances to be displayed in the graph.
-     * @param {Array} Collection of series instances or object literals containing necessary properties for creating a series instance.
+     * Creates a <code>Graphic</code> instance.
      */
-    _parseSeriesCollection: function(val)
+    _setCanvas: function()
     {
-        if(!val)
+        var cb = this.get("contentBox"),
+            bb = this.get("boundingBox"),
+            p = this.get("position"),
+            pn = this._parentNode,
+            w = this.get("width"),
+            h = this.get("height");
+        bb.setStyle("position", "absolute");
+        w = w ? w + "px" : pn.getStyle("width");
+        h = h ? h + "px" : pn.getStyle("height");
+        if(p === "top" || p === "bottom")
+        {
+            cb.setStyle("width", w);
+        }
+        else
+        {
+            cb.setStyle("height", h);
+        }
+        cb.setStyle("position", "relative");
+        cb.setStyle("left", "0px");
+        cb.setStyle("top", "0px");
+        this.set("graphic", new Y.Graphic());
+        this.get("graphic").render(cb);
+    },
+	
+    /**
+     * @private
+     * @description Returns the default style values for the axis.
+     */
+    _getDefaultStyles: function()
+    {
+        var axisstyles = {
+            majorTicks: {
+                display:"inside",
+                length:4,
+                color:"#808080",
+                weight:1,
+                alpha:1
+            },
+            minorTicks: {
+                display:"none",
+                length:2,
+                color:"#808080",
+                weight:1
+            },
+            line: {
+                weight:1,
+                color:"#808080",
+                alpha:1
+            },
+            majorUnit: {
+                determinant:"count",
+                count:11,
+                distance:75
+            },
+            top: "0px",
+            left: "0px",
+            width: "100px",
+            height: "100px",
+            label: {
+                color:"#808080",
+                fontSize:"85%",
+                rotation: 0,
+                margin: {
+                    top:4,
+                    right:4,
+                    bottom:4,
+                    left:4
+                }
+            },
+            hideOverlappingLabelTicks: false
+        };
+        
+        return Y.merge(Y.Renderer.prototype._getDefaultStyles(), axisstyles); 
+    },
+
+    _handleSizeChange: function(e)
+    {
+        var type = e.type,
+            pos = this.get("position"),
+            vert = pos == "left" || pos == "right",
+            cb = this.get("contentBox"),
+            hor = pos == "bottom" || pos == "top";
+        cb.setStyle("width", this.get("width"));
+        cb.setStyle("height", this.get("height"));
+        if((hor && type == "widthChange") || (vert && type == "heightChange"))
+        {
+            this._drawAxis();
+        }
+    },
+
+    /**
+     * @private
+     * @description Strategy for drawing the axis dependent upon the axis position.
+     */
+    _layout: null,
+
+    /**
+     * @private 
+     * @description Returns the correct _layout class instance to be used for drawing the
+     * axis.
+     */
+    getLayout: function(pos)
+    {
+        var l;
+        switch(pos)
+        {
+            case "top" :
+                l = new Y.TopAxisLayout({axisRenderer:this});
+            break;
+            case "bottom" : 
+                l = new Y.BottomAxisLayout({axisRenderer:this});
+            break;
+            case "left" :
+                l = new Y.LeftAxisLayout({axisRenderer:this});
+            break;
+            case "right" :
+                l = new Y.RightAxisLayout({axisRenderer:this});
+            break;
+        }
+        return l;
+    },
+    
+    /**
+     * @private
+     * @description Draws line based on start point, end point and line object.
+     */
+    drawLine: function(startPoint, endPoint, line)
+    {
+        var graphic = this.get("graphic");
+        graphic.lineStyle(line.weight, line.color, line.alpha);
+        graphic.moveTo(startPoint.x, startPoint.y);
+        graphic.lineTo(endPoint.x, endPoint.y);
+        graphic.end();
+    },
+
+    /**
+     * @private
+     * Basic logic for drawing an axis.
+     */
+    _drawAxis: function ()
+    {
+        var styles = this.get("styles"),
+            majorTickStyles = styles.majorTicks,
+            drawTicks = majorTickStyles.display != "none",
+            tickPoint,
+            majorUnit = styles.majorUnit,
+            dataSet = this.get("dataSet"),
+            len,
+            majorUnitDistance,
+            i = 0,
+            layoutLength,
+            position,
+            lineStart,
+            label,
+            layout = this._layout,
+            labelFunction = this.get("labelFunction") || dataSet.get("labelFunction"),
+            labelFunctionScope = this.get("labelFunctionScope") || this,
+            labelFormat = this.get("labelFormat") || dataSet.get("labelFormat"),
+            graphic = this.get("graphic");
+        graphic.clear();
+		layout.setTickOffsets();
+        layoutLength = this.getLength();
+        lineStart = layout.getLineStart();
+        len = dataSet.getTotalMajorUnits(majorUnit, layoutLength);
+        majorUnitDistance = dataSet.getMajorUnitDistance(len, layoutLength, majorUnit);
+        this.set("edgeOffset", dataSet.getEdgeOffset(len, layoutLength) * 0.5);
+        tickPoint = this.getFirstPoint(lineStart);
+        this.drawLine(lineStart, this.getLineEnd(tickPoint), styles.line);
+        if(drawTicks) 
+        {
+           layout.drawTick(tickPoint, majorTickStyles);
+        }
+        if(len < 1) 
         {
             return;
-        }	
-        var len = val.length,
-            i = 0,
-            series,
-            seriesKey;
-        if(!this._seriesCollection)
-        {
-            this._seriesCollection = [];
         }
-        if(!this._seriesDictionary)
-        {
-            this._seriesDictionary = {};
-        }
-        if(!this.seriesTypes)
-        {
-            this.seriesTypes = [];
-        }
+        this._createLabelCache();
+        this._tickPoints = [];
+        layout.set("maxLabelSize", 0); 
         for(; i < len; ++i)
-        {	
-            series = val[i];
-            if(!(series instanceof Y.CartesianSeries) && !(series instanceof Y.PieSeries))
+	    {
+            if(drawTicks) 
             {
-                this._createSeries(series);
-                continue;
+                layout.drawTick(tickPoint, majorTickStyles);
             }
-            this._addSeries(series);
+            position = this.getPosition(tickPoint);
+            label = this.getLabel(tickPoint);
+            label.innerHTML = labelFunction.apply(labelFunctionScope, [dataSet.getLabelByIndex(i, len), labelFormat]);
+            tickPoint = this.getNextPoint(tickPoint, majorUnitDistance);
         }
-        len = this._seriesCollection.length;
+        layout.setSizeAndPosition();
+        this._clearLabelCache();
+        if(this.get("overlapGraph"))
+        {
+           layout.offsetNodeForTick(this.get("contentBox"));
+        }
+        layout.setCalculatedSize();
         for(i = 0; i < len; ++i)
         {
-            series = this._seriesCollection[i];
-            seriesKey = series.get("direction") == "horizontal" ? "yKey" : "xKey";
-            this._seriesDictionary[series.get(seriesKey)] = series;
-            series.render(this.get("parent"));
+            layout.positionLabel(this.get("labels")[i], this._tickPoints[i]);
         }
+        this.fire("axisRendered");
+    },
+    
+    /**
+     * @private
+     * @description Collection of labels used in creating an axis.
+     */
+    _labels: null,
+
+    /**
+     * @private 
+     * @description Collection of labels to be reused in creating an axis.
+     */
+    _labelCache: null,
+
+    /**
+     * @private
+     * @description Draws and positions a label based on its style properties.
+     */
+    getLabel: function(pt, pos)
+    {
+        var i,
+            label,
+            cache = this._labelCache,
+            styles = this.get("styles").label;
+        if(cache.length > 0)
+        {
+            label = cache.shift();
+        }
+        else
+        {
+            label = document.createElement("span");
+            label.style.whiteSpace = "nowrap";
+            Y.one(label).addClass("axisLabel");
+        }
+        label.style.display = "block";
+        label.style.position = "absolute";
+        this.get("contentBox").appendChild(label);
+        this._labels.push(label);
+        this._tickPoints.push({x:pt.x, y:pt.y});
+        this._layout.updateMaxLabelSize(label);
+        for(i in styles)
+        {
+            if(styles.hasOwnProperty(i) && i != "rotation" && i != "margin")
+            {
+                label.style[i] = styles[i];
+            }
+        }
+        return label;
+    },   
+    
+    /**
+     * @private
+     * Creates a cache of labels for reuse.
+     */
+    _createLabelCache: function()
+    {
+        if(this._labels)
+        {
+            this._labelCache = this._labels.concat();
+        }
+        else
+        {
+            this._labelCache = [];
+        }
+        this._labels = [];
+    },
+    
+    /**
+     * @private
+     * Removes unused labels from the label cache
+     */
+    _clearLabelCache: function()
+    {
+        var len = this._labelCache.length,
+            i = 0,
+            label,
+            labelCache;
+        for(; i < len; ++i)
+        {
+            label = labelCache[i];
+            label.parentNode.removeChild(label);
+        }
+        this._labelCache = [];
     },
 
     /**
      * @private
-     * @description Adds a series to the graph.
-     * @param {Series}
+     * Indicates how to include tick length in the size calculation of an
+     * axis. If set to true, the length of the tick is used to calculate
+     * this size. If false, the offset of tick will be used.
      */
-    _addSeries: function(series)
-    {
-        var type = series.get("type"),
-            seriesCollection = this._seriesCollection,
-            graphSeriesLength = seriesCollection.length,
-            seriesTypes = this.seriesTypes,
-            typeSeriesCollection;	
-        if(!series.get("graph")) 
-        {
-            series.set("graph", this);
-        }
-        seriesCollection.push(series);
-        if(!seriesTypes.hasOwnProperty(type))
-        {
-            this.seriesTypes[type] = [];
-        }
-        typeSeriesCollection = this.seriesTypes[type];
-        series.set("graphOrder", graphSeriesLength);
-        series.set("order", typeSeriesCollection.length);
-        typeSeriesCollection.push(series);
-        this.addDispatcher(series);
-        series.after("drawingComplete", Y.bind(this._drawingCompleteHandler, this));
-        this.fire("seriesAdded", series);
-    },
+    _calculateSizeByTickLength: true,
 
-    _createSeries: function(seriesData)
+    /**
+     * Indicate the end point of the axis line
+     */
+    getLineEnd: function(pt)
     {
-        var type = seriesData.type,
-            seriesCollection = this._seriesCollection,
-            seriesTypes = this.seriesTypes,
-            typeSeriesCollection,
-            seriesType,
-            series;
-            seriesData.graph = this;
-        if(!seriesTypes.hasOwnProperty(type))
+        var w = this.get("width"),
+            h = this.get("height"),
+            pos = this.get("position");
+        if(pos === "top" || pos === "bottom")
         {
-            seriesTypes[type] = [];
+            return {x:w, y:pt.y};
         }
-        typeSeriesCollection = seriesTypes[type];
-        seriesData.graph = this;
-        seriesData.order = typeSeriesCollection.length;
-        seriesData.graphOrder = seriesCollection.length;
-        seriesType = this._getSeries(seriesData.type);
-        series = new seriesType(seriesData);
-        this.addDispatcher(series);
-        series.after("drawingComplete", Y.bind(this._drawingCompleteHandler, this));
-        typeSeriesCollection.push(series);
-        seriesCollection.push(series);
+        else
+        {
+            return {x:pt.x, y:h};
+        }
     },
 
     /**
-     * @private
-     * @description Creates a series instance based on a specified type.
-     * @param {String} Indicates type of series instance to be created.
-     * @return {Series} Series instance created.
+     * Returns the distance between the first and last data points.
      */
-    _getSeries: function(type)
+    getLength: function()
     {
-        var seriesClass;
-        switch(type)
+        var l,
+            style = this.get("styles"),
+            padding = style.padding,
+            w = this.get("width"),
+            h = this.get("height"),
+            pos = this.get("position");
+        if(pos === "top" || pos === "bottom")
         {
-            case "line" :
-                seriesClass = Y.LineSeries;
-            break;
-            case "column" :
-                seriesClass = Y.ColumnSeries;
-            break;
-            case "bar" :
-                seriesClass = Y.BarSeries;
-            break;
-            case "area" : 
-                seriesClass = Y.AreaSeries;
-            break;
-            case "candlestick" :
-                seriesClass = Y.CandlestickSeries;
-            break;
-            case "ohlc" :
-                seriesClass = Y.OHLCSeries;
-            break;
-            case "stackedarea" :
-                seriesClass = Y.StackedAreaSeries;
-            break;
-            case "stackedline" :
-                seriesClass = Y.StackedLineSeries;
-            break;
-            case "stackedcolumn" :
-                seriesClass = Y.StackedColumnSeries;
-            break;
-            case "stackedbar" :
-                seriesClass = Y.StackedBarSeries;
-            break;
-            case "markerseries" :
-                seriesClass = Y.MarkerSeries;
-            break;
-            case "spline" :
-                seriesClass = Y.SplineSeries;
-            break;
-            case "areaspline" :
-                seriesClass = Y.AreaSplineSeries;
-            break;
-            case "stackedspline" :
-                seriesClass = Y.StackedSplineSeries;
-            break;
-            case "stackedareaspline" :
-                seriesClass = Y.StackedAreaSplineSeries;
-            break;
-            case "stackedmarkerseries" :
-                seriesClass = Y.StackedMarkerSeries;
-            break;
-            case "pieseries" :
-                seriesClass = Y.PieSeries;
-            break;
-            case "combo" :
-                seriesClass = Y.ComboSeries;
-            break;
-            case "stackedcombo" :
-                seriesClass = Y.StackedComboSeries;
-            break;
-            case "combospline" :
-                seriesClass = Y.ComboSplineSeries;
-            break;
-            case "stackedcombospline" :
-                seriesClass = Y.StackedComboSplineSeries;
-            break;
-            default:
-                seriesClass = Y.CartesianSeries;
-            break;
+            l = w - (padding.left + padding.right);
         }
-        return seriesClass;
+        else
+        {
+            l = h - (padding.top + padding.bottom);
+        }
+        return l;
     },
 
     /**
-     * @private
+     * Calculates the coordinates for the first point on an axis.
      */
-    _dispatchers: null,
+    getFirstPoint:function(pt)
+    {
+        var style = this.get("styles"),
+            pos = this.get("position"),
+            padding = style.padding,
+            np = {x:pt.x, y:pt.y};
+        if(pos === "top" || pos === "bottom")
+        {
+            np.x += padding.left + this.get("edgeOffset");
+        }
+        else
+        {
+            np.y += this.get("height") - (padding.top + this.get("edgeOffset"));
+        }
+        return np;
+    },
 
     /**
-     * @private
+     * Returns the next majorUnit point.
      */
-    _drawingCompleteHandler: function(e)
+    getNextPoint: function(point, majorUnitDistance)
     {
-        var series = e.currentTarget,
-            index = Y.Array.indexOf(this._dispatchers, series);
-        if(index > -1)
+        var pos = this.get("position");
+        if(pos === "top" || pos === "bottom")
         {
-            this._dispatchers.splice(index, 1);
+            point.x = point.x + majorUnitDistance;		
         }
-        if(this._dispatchers.length < 1)
+        else
         {
-            this.fire("chartRendered");
+            point.y = point.y - majorUnitDistance;
         }
+        return point;
+    },
+
+    /**
+     * Calculates the coordinates for the last point on an axis.
+     */
+    getLastPoint: function()
+    {
+        var style = this.get("styles"),
+            padding = style.padding,
+            w = this.get("width"),
+            pos = this.get("position");
+        if(pos === "top" || pos === "bottom")
+        {
+            return {x:w - padding.right, y:padding.top};
+        }
+        else
+        {
+            return {x:padding.left, y:padding.top};
+        }
+    },
+
+    /**
+     * Calculates the position of a point on the axis.
+     */
+    getPosition: function(point)
+    {
+        var p,
+            h = this.get("height"),
+            style = this.get("styles"),
+            padding = style.padding,
+            pos = this.get("position"),
+            dataType = this.get("dataSet").get("dataType");
+        if(pos === "left" || pos === "right") 
+        {
+            //Numeric data on a vertical axis is displayed from bottom to top.
+            //Categorical and Timeline data is displayed from top to bottom.
+            if(dataType === "numeric")
+            {
+                p = (h - (padding.top + padding.bottom)) - (point.y - padding.top);
+            }
+            else
+            {
+                p = point.y - padding.top;
+            }
+        }
+        else
+        {
+            p = point.x - padding.left;
+        }
+        return p;
     }
-});
-
-Y.Graph = Graph;
-/**
- * Renders an axis.
- */
-function AxisRenderer(config)
-{
-    AxisRenderer.superclass.constructor.apply(this, arguments);
-}
-
-AxisRenderer.NAME = "axisRenderer";
-
-AxisRenderer.ATTRS = {
-        edgeOffset: {
+}, {
+    ATTRS: 
+    {
+        edgeOffset: 
+        {
             value: 0
         },
 
         /**
          * The graphic in which the axis line and ticks will be rendered.
          */
-        graphic: {
-            value: null
-        },
+        graphic: {},
         
         /**
          * Reference to the <code>Axis</code> instance used for assigning 
-         * <code>AxisRenderer</code>.
+         * <code>Axis</code>.
          */
-        axis: {
-            
-            value: null,
-
-            validator: function(value)
-            {
-                return value !== this.get("axis");
-            }
-        },
+        dataSet: {},
 
         /**
          * Contains the contents of the axis. 
          */
-        node: {
-            value: null
-        },
+        node: {},
 
         /**
          * Direction of the axis.
@@ -7085,7 +6747,7 @@ AxisRenderer.ATTRS = {
 
             validator: function(val)
             {
-                return ((val !== this.get("position")) && (val === "bottom" || val === "top" || val === "left" || val === "right"));
+                return ((val === "bottom" || val === "top" || val === "left" || val === "right"));
             }
         },
 
@@ -7120,6 +6782,26 @@ AxisRenderer.ATTRS = {
         rightTickOffset: {
             value: 0
         },
+        
+        labels: {
+            readOnly: true,
+            getter: function()
+            {
+                return this._labels;
+            }
+        },
+
+        /**
+         * Collection of points used for placement of labels and ticks along the axis.
+         */
+        tickPoints: {
+            readOnly: true,
+
+            getter: function()
+            {
+                return this._tickPoints;
+            }
+        },
 
         /**
          * Indicates whether the axis overlaps the graph. If an axis is the inner most axis on a given
@@ -7132,183 +6814,24 @@ AxisRenderer.ATTRS = {
             {
                 return Y.Lang.isBoolean(val);
             }
-        }
-    };
-    Y.extend(AxisRenderer, Y.Renderer, {    
-    /**
-     * @private
-     * @description Triggered by a change in the axis attribute. Removes any old axis listeners and sets up listeners for the new axis.
-     */
-    axisChangeHandler: function(e)
-    {
-       var axis = e.newVal,
-            oldAxis = e.prevVal;
-        if(oldAxis)
-        {
-            oldAxis.detach("axisReady", this._axisDataChangeHandler);
-            oldAxis.detach("axisUpdate", this._axisDataChangeHandler);
-        }
-        axis.after("axisReady", Y.bind(this._axisDataChangeHandler, this));
-        axis.after("axisUpdate", Y.bind(this._axisDataChangeHandler, this));
-    },
+        },
 
-    /**
-     * @private
-     * @description Handler for data changes.
-     */
-    _axisDataChangeHandler: function(e)
-    {
-        if(this.get("rendered"))
-        {
-            this._drawAxis();
-        }
-    },
+        /**
+         * Function used to format labels.
+         */
+        labelFunction: {},
 
-    /**
-     * @private
-     */
-    _updateHandler: function(e)
-    {
-        if(this.get("rendered"))
-        {
-            this._drawAxis();
-        }
-    },
+        /**
+         * Object which should have by the labelFunction
+         */
+        labelFunctionScope: {},
 
-    /**
-     * @private
-     */
-    _positionChangeHandler: function(e)
-    {
-        this._ui =this.getLayout(this.get("position"));
-        if(this.get("rendered"))
-        {
-            this._drawAxis();
-        }
-    },
-
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._ui =this.getLayout(this.get("position"));
-        this._setCanvas();
-    },
-    
-    /**
-     * @private
-     */
-    bindUI: function()
-    {
-        var axis = this.get("axis");
-        if(axis)
-        {
-            axis.after("axisReady", Y.bind(this._axisDataChangeHandler, this));
-            axis.after("axisUpdate", Y.bind(this._axisDataChangeHandler, this));
-        }
-        this.after("axisChange", this.axisChangeHandler);
-        this.after("stylesChange", this._updateHandler);
-        this.after("positionChange", this._positionChangeHandler);
-        this.after("overlapGraphChange", this._updateHandler);
-    },
-   
-    /**
-     * @private
-     */
-    syncUI: function()
-    {
-        this._drawAxis();
-    },
-
-    /**
-     * @private
-     * Creates a <code>Graphic</code> instance.
-     */
-    _setCanvas: function()
-    {
-        var cb = this.get("contentBox"),
-            p = this.get("position"),
-            n = document.createElement("div"),
-            style = n.style,
-            pn = this._parentNode;
-        cb.appendChild(n);
-        style.position = "absolute";
-        style.display = "block";
-        style.top = "0px"; 
-        style.left = "0px";
-        style.border = "1px";
-        if(p === "top" || p === "bottom")
-        {
-            cb.setStyle("width", pn.getStyle("width"));
-        }
-        else
-        {
-            cb.setStyle("height", pn.getStyle("height"));
-        }
-        style.width = cb.getStyle("width");
-        style.height = cb.getStyle("height");
-        this.set("node", n);
-        this.set("graphic", new Y.Graphic());
-        this.get("graphic").render(this.get("node"));
-    },
-	
-    /**
-     * @private
-     * @description Returns the default style values for the axis.
-     */
-    _getDefaultStyles: function()
-    {
-        return {
-            majorTicks: {
-                display:"inside",
-                length:4,
-                color:"#000000",
-                weight:1,
-                alpha:1
-            },
-            minorTicks: {
-                display:"none",
-                length:2,
-                color:"#000000",
-                weight:1
-            },
-            line: {
-                weight:1,
-                color:"#000000",
-                alpha:1
-            },
-            majorUnit: {
-                determinant:"count",
-                count:11,
-                distance:75
-            },
-            padding: {
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0
-            },
-            top: "0px",
-            left: "0px",
-            width: "100px",
-            height: "100px",
-            label: {
-                rotation: 0,
-                margin: {
-                    top:4,
-                    right:4,
-                    bottom:4,
-                    left:4
-                }
-            },
-            hideOverlappingLabelTicks: false
-        };
+        /**
+         * Pattern to be used by a labelFunction
+         */
+        labelFormat: {}
     }
-
 });
-
-Y.AxisRenderer = AxisRenderer;        
 /**
  * Contains algorithms for rendering a left axis.
  */
@@ -7353,7 +6876,25 @@ Y.extend(LeftAxisLayout, Y.Base, {
                 ar.set("rightTickOffset", halfTick); 
                 ar.set("leftTickOffset",  halfTick);
             break;
+            default:
+                ar.set("rightTickOffset", 0);
+                ar.set("leftTickOffset", 0);
+            break;
         }
+    },
+    
+    /**
+     * Draws a tick
+     */
+    drawTick: function(pt, tickStyles)
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles"),
+            padding = style.padding,
+            tickLength = tickStyles.length,
+            start = {x:padding.left, y:pt.y},
+            end = {x:tickLength + padding.left, y:pt.y};
+        ar.drawLine(start, end, tickStyles);
     },
 
     /**
@@ -7380,26 +6921,45 @@ Y.extend(LeftAxisLayout, Y.Base, {
     },
     
     /**
-     * Draws a tick
-     */
-    drawTick: function(pt, tickStyles)
-    {
-        var ar = this.get("axisRenderer"),
-            style = ar.get("styles"),
-            padding = style.padding,
-            tickLength = tickStyles.length,
-            start = {x:padding.left, y:pt.y},
-            end = {x:tickLength + padding.left, y:pt.y};
-        ar.drawLine(start, end, tickStyles);
-    },
-    
-    /**
      * Calculates the point for a label.
      */
     getLabelPoint: function(point)
     {
         var ar = this.get("axisRenderer");
         return {x:point.x - ar.get("leftTickOffset"), y:point.y};
+    },
+    
+    updateMaxLabelSize: function(label)
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            rot =  Math.min(90, Math.max(-90, style.rotation)),
+            absRot = Math.abs(rot),
+            radCon = Math.PI/180,
+            sinRadians = parseFloat(parseFloat(Math.sin(absRot * radCon)).toFixed(8)),
+            cosRadians = parseFloat(parseFloat(Math.cos(absRot * radCon)).toFixed(8)),
+            max;
+        if(Y.UA.ie)
+        {
+            label.style.filter = "progid:DXImageTransform.Microsoft.BasicImage(rotation=" + rot + ")";
+            this.set("maxLabelSize", Math.max(this.get("maxLabelSize"), label.offsetWidth));
+        }
+        else
+        {
+            if(rot === 0)
+            {
+                max = label.offsetWidth;
+            }
+            else if(absRot === 90)
+            {
+                max = label.offsetHeight;
+            }
+            else
+            {
+                max = (cosRadians * label.offsetWidth) + (sinRadians * label.offsetHeight);
+            }
+            this.set("maxLabelSize",  Math.max(this.get("maxLabelSize"), max));
+        }
     },
 
     positionLabel: function(label, pt)
@@ -7417,9 +6977,7 @@ Y.extend(LeftAxisLayout, Y.Base, {
             m11 = cosRadians,
             m12 = rot > 0 ? -sinRadians : sinRadians,
             m21 = -m12,
-            m22 = m11,
-            max = 0,
-            maxLabelSize = this.get("maxLabelSize");
+            m22 = m11;
         if(style.margin && style.margin.right)
         {
             margin = style.margin.right;
@@ -7452,36 +7010,30 @@ Y.extend(LeftAxisLayout, Y.Base, {
                 leftOffset -= (cosRadians * label.offsetWidth) + (absRot/90 * label.offsetHeight);
                 topOffset -= cosRadians * (label.offsetHeight * 0.5);
             }
-            leftOffset -= margin;
-            label.style.left = leftOffset + "px";
+            label.style.left = (this.get("maxLabelSize") + leftOffset) + "px";
             label.style.top = topOffset + "px";
             label.style.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=' + m11 + ' M12=' + m12 + ' M21=' + m21 + ' M22=' + m22 + ' sizingMethod="auto expand")';
-            this.set("maxLabelSize", Math.max(maxLabelSize, label.offsetWidth));
             return;
         }
         if(rot === 0)
         {
-            max = label.offsetWidth;
-            leftOffset -= max;
+            leftOffset -= label.offsetWidth;
             topOffset -= label.offsetHeight * 0.5;
         }
         else if(rot === 90)
         {
-            max = label.offsetHeight;
             topOffset -= label.offsetWidth * 0.5;
         }
         else if(rot === -90)
         {
-            max = label.offsetHeight;
-            leftOffset -= max;
+            leftOffset -= label.offsetHeight;
             topOffset += label.offsetWidth * 0.5;
         }
         else
         {
-            max = (cosRadians * label.offsetWidth) + (sinRadians * label.offsetHeight);
             if(rot < 0)
             {
-                leftOffset -= max;
+                leftOffset -= (cosRadians * label.offsetWidth) + (sinRadians * label.offsetHeight);
                 topOffset += (sinRadians * label.offsetWidth) - (cosRadians * (label.offsetHeight * 0.6)); 
             }
             else
@@ -7491,13 +7043,12 @@ Y.extend(LeftAxisLayout, Y.Base, {
             }
         }
         leftOffset -= margin;
-        label.style.left = leftOffset + "px";
+        label.style.left = (this.get("maxLabelSize") + leftOffset) + "px";
         label.style.top = topOffset + "px";
         label.style.MozTransformOrigin =  "0 0";
         label.style.MozTransform = "rotate(" + rot + "deg)";
         label.style.webkitTransformOrigin = "0 0";
         label.style.webkitTransform = "rotate(" + rot + "deg)";
-        this.set("maxLabelSize", Math.max(max, maxLabelSize));
     },
 
     /**
@@ -7509,23 +7060,30 @@ Y.extend(LeftAxisLayout, Y.Base, {
             ar = this.get("axisRenderer"),
             style = ar.get("styles"),
             sz = style.line.weight,
+            graphic = ar.get("graphic"),
             majorTicks = style.majorTicks,
             display = majorTicks.display,
-            tickLen = majorTicks.length;
-        if(display === "outside")
+            tickLen = majorTicks.length,
+            margin = style.label.margin;
+        if(display === "inside")
         {
-            sz += tickLen;
+            sz -= tickLen;
         }
         else if(display === "cross")
         {
-            sz += tickLen * 0.5;
+            sz -= tickLen * 0.5;
+        }
+        if(margin && margin.right)
+        {
+            sz += margin.right;
         }
         sz += labelSize;
-        ar.get("node").style.left = labelSize + "px";
+        sz = Math.round(sz);
         ar.set("width", sz);
+        Y.one(graphic.node).setStyle("left", sz);
     },
     
-    offsetNodeForTick: function(node)
+    offsetNodeForTick: function(cb)
     {
         var ar = this.get("axisRenderer"),
             majorTicks = ar.get("styles").majorTicks,
@@ -7533,12 +7091,24 @@ Y.extend(LeftAxisLayout, Y.Base, {
             display = majorTicks.display;
         if(display === "inside")
         {
-            node.style.marginRight = (0 - tickLength) + "px";
+            cb.setStyle("left", tickLength + "px");
         }
         else if (display === "cross")
         {
-            node.style.marginRight = (0 - (tickLength * 0.5)) + "px";
+            cb.setStyle("left", (tickLength * 0.5) + "px");
         }
+        else 
+        {
+            cb.setStyle("left", "0px");    
+        }
+    },
+
+    setCalculatedSize: function()
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            ttl = ar.get("leftTickOffset") + this.get("maxLabelSize") + style.margin.right;
+            ar.set("width", Math.round(ttl));
     }
 });
 
@@ -7627,6 +7197,39 @@ Y.extend(RightAxisLayout, Y.Base, {
     {
         var ar = this.get("axisRenderer");
         return {x:point.x + ar.get("rightTickOffset"), y:point.y};
+    },
+    
+    updateMaxLabelSize: function(label)
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            rot =  Math.min(90, Math.max(-90, style.rotation)),
+            absRot = Math.abs(rot),
+            radCon = Math.PI/180,
+            sinRadians = parseFloat(parseFloat(Math.sin(absRot * radCon)).toFixed(8)),
+            cosRadians = parseFloat(parseFloat(Math.cos(absRot * radCon)).toFixed(8)),
+            max;
+        if(Y.UA.ie)
+        {
+            label.style.filter = "progid:DXImageTransform.Microsoft.BasicImage(rotation=" + rot + ")";
+            this.set("maxLabelSize", Math.max(this.get("maxLabelSize"), label.offsetWidth));
+        }
+        else
+        {
+            if(rot === 0)
+            {
+                max = label.offsetWidth;
+            }
+            else if(absRot === 90)
+            {
+                max = label.offsetHeight;
+            }
+            else
+            {
+                max = (cosRadians * label.offsetWidth) + (sinRadians * label.offsetHeight);
+            }
+            this.set("maxLabelSize",  Math.max(this.get("maxLabelSize"), max));
+        }
     },
 
     positionLabel: function(label, pt)
@@ -7729,7 +7332,7 @@ Y.extend(RightAxisLayout, Y.Base, {
         ar.set("width", sz);
     },
     
-    offsetNodeForTick: function(node)
+    offsetNodeForTick: function(cb)
     {
         var ar = this.get("axisRenderer"),
             majorTicks = ar.get("styles").majorTicks,
@@ -7737,12 +7340,20 @@ Y.extend(RightAxisLayout, Y.Base, {
             display = majorTicks.display;
         if(display === "inside")
         {
-            node.style.marginLeft = (0 - tickLength) + "px";
+            cb.setStyle("left", 0 - tickLength + "px");
         }
         else if (display === "cross")
         {
-            node.style.marginLeft = (0 - (tickLength * 0.5)) + "px";
+            cb.setStyle("left", 0 - (tickLength * 0.5) + "px");
         }
+    },
+
+    setCalculatedSize: function()
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            ttl = ar.get("rightTickOffset") + this.get("maxLabelSize") + style.margin.left;
+            ar.set("width", ttl);
     }
 });
 
@@ -7793,30 +7404,6 @@ Y.extend(BottomAxisLayout, Y.Base, {
             break;
         }
     },
-    
-    /**
-     * Calculates the size and positions the content elements.
-     */
-    setSizeAndPosition: function()
-    {
-        var labelSize = this.get("maxLabelSize"),
-            ar = this.get("axisRenderer"),
-            style = ar.get("styles"),
-            sz = style.line.weight,
-            majorTicks = style.majorTicks,
-            display = majorTicks.display,
-            tickLen = majorTicks.length;
-        if(display === "outside")
-        {
-            sz += tickLen;
-        }
-        else if(display === "cross")
-        {
-            sz += tickLen * 0.5;
-        }
-        sz += labelSize;
-        ar.set("height", sz);
-    },
 
     /**
      * Calculates the coordinates for the first point on an axis.
@@ -7864,6 +7451,39 @@ Y.extend(BottomAxisLayout, Y.Base, {
         return {x:point.x, y:point.y + ar.get("bottomTickOffset")};
     },
     
+    updateMaxLabelSize: function(label)
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            rot =  Math.min(90, Math.max(-90, style.rotation)),
+            absRot = Math.abs(rot),
+            radCon = Math.PI/180,
+            sinRadians = parseFloat(parseFloat(Math.sin(absRot * radCon)).toFixed(8)),
+            cosRadians = parseFloat(parseFloat(Math.cos(absRot * radCon)).toFixed(8)),
+            max;
+        if(Y.UA.ie)
+        {
+            label.style.filter = "progid:DXImageTransform.Microsoft.BasicImage(rotation=" + rot + ")";
+            this.set("maxLabelSize", Math.max(this.get("maxLabelSize"), label.offsetHeight));
+        }
+        else
+        {
+            if(rot === 0)
+            {
+                max = label.offsetHeight;
+            }
+            else if(absRot === 90)
+            {
+                max = label.offsetWidth;
+            }
+            else
+            {
+                max = (sinRadians * label.offsetWidth) + (cosRadians * label.offsetHeight); 
+            }
+            this.set("maxLabelSize",  Math.max(this.get("maxLabelSize"), max));
+        }
+    },
+    
     /**
      * Rotate and position labels.
      */
@@ -7882,12 +7502,10 @@ Y.extend(BottomAxisLayout, Y.Base, {
             m11 = cosRadians,
             m12 = rot > 0 ? -sinRadians : sinRadians,
             m21 = -m12,
-            m22 = m11,
-            max = 0,
-            maxLabelSize = this.get("maxLabelSize");
-        if(label.margin && label.margin.top)
+            m22 = m11;
+        if(style.margin && style.margin.top)
         {
-            margin = label.margin.top;
+            margin = style.margin.top;
         }
         if(Y.UA.ie)
         {
@@ -7917,30 +7535,26 @@ Y.extend(BottomAxisLayout, Y.Base, {
             label.style.left = leftOffset + "px";
             label.style.top = topOffset + "px";
             label.style.filter = 'progid:DXImageTransform.Microsoft.Matrix(M11=' + m11 + ' M12=' + m12 + ' M21=' + m21 + ' M22=' + m22 + ' sizingMethod="auto expand")';
-            this.set("maxLabelSize", Math.max(label.offsetHeight, maxLabelSize));
             return;
         }
         if(rot === 0)
         {
             leftOffset -= label.offsetWidth * 0.5;
-            max = label.offsetHeight;
         }
         else if(absRot === 90)
         {
-            max = label.offsetWidth;
             if(rot === 90)
             {
                 leftOffset += label.offsetHeight * 0.5;
             }
             else
             {
-                topOffset += max;
+                topOffset += label.offsetWidth;
                 leftOffset -= label.offsetHeight * 0.5;
             }
         }
         else 
         {
-            max = (sinRadians * label.offsetWidth) + (cosRadians * label.offsetHeight); 
             if(rot < 0)
             {
                 leftOffset -= (cosRadians * label.offsetWidth) + (sinRadians * (label.offsetHeight * 0.6));
@@ -7958,26 +7572,64 @@ Y.extend(BottomAxisLayout, Y.Base, {
         label.style.MozTransform = "rotate(" + rot + "deg)";
         label.style.webkitTransformOrigin = "0 0";
         label.style.webkitTransform = "rotate(" + rot + "deg)";
-        this.set("maxLabelSize", Math.max(max, maxLabelSize));
+    },
+    
+    /**
+     * Calculates the size and positions the content elements.
+     */
+    setSizeAndPosition: function()
+    {
+        var labelSize = this.get("maxLabelSize"),
+            ar = this.get("axisRenderer"),
+            style = ar.get("styles"),
+            sz = style.line.weight,
+            majorTicks = style.majorTicks,
+            display = majorTicks.display,
+            tickLen = majorTicks.length,
+            margin = style.label.margin;
+        if(display === "outside")
+        {
+            sz += tickLen;
+        }
+        else if(display === "cross")
+        {
+            sz += tickLen * 0.5;
+        }
+        if(margin && margin.top)
+        {   
+            sz += margin.top;
+        }
+        sz += labelSize;
+        sz = Math.round(sz);
+        ar.set("height", sz);
     },
 
     /**
      * Adjusts position for inner ticks.
      */
-    offsetNodeForTick: function(node)
+    offsetNodeForTick: function(cb)
     {
         var ar = this.get("axisRenderer"),
-            majorTicks = ar.get("styles").majorTicks,
+            styles = ar.get("styles"),
+            majorTicks = styles.majorTicks,
             tickLength = majorTicks.length,
             display = majorTicks.display;
         if(display === "inside")
         {
-            node.style.marginTop = (0 - tickLength) + "px";
+            cb.setStyle("marginTop", (0 - tickLength) + "px");
         }
         else if (display === "cross")
         {
-            node.style.marginTop = (0 - (tickLength * 0.5)) + "px";
+            cb.setStyle("marginTop", (0 - (tickLength * 0.5)) + "px");
         }
+    },
+
+    setCalculatedSize: function()
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            ttl = ar.get("bottomTickOffset") + this.get("maxLabelSize") + style.margin.top;
+            ar.set("height", Math.round(ttl));
     }
 });
 
@@ -8069,6 +7721,39 @@ Y.extend(TopAxisLayout, Y.Base, {
     {
         var ar = this.get("axisRenderer");
         return {x:pt.x, y:pt.y - ar.get("topTickOffset")};
+    },
+    
+    updateMaxLabelSize: function(label)
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            rot =  Math.min(90, Math.max(-90, style.rotation)),
+            absRot = Math.abs(rot),
+            radCon = Math.PI/180,
+            sinRadians = parseFloat(parseFloat(Math.sin(absRot * radCon)).toFixed(8)),
+            cosRadians = parseFloat(parseFloat(Math.cos(absRot * radCon)).toFixed(8)),
+            max;
+        if(Y.UA.ie)
+        {
+            label.style.filter = "progid:DXImageTransform.Microsoft.BasicImage(rotation=" + rot + ")";
+            this.set("maxLabelSize", Math.max(this.get("maxLabelSize"), label.offsetHeight));
+        }
+        else
+        {
+            if(rot === 0)
+            {
+                max = label.offsetHeight;
+            }
+            else if(absRot === 90)
+            {
+                max = label.offsetWidth;
+            }
+            else
+            {
+                max = (sinRadians * label.offsetWidth) + (cosRadians * label.offsetHeight); 
+            }
+            this.set("maxLabelSize",  Math.max(this.get("maxLabelSize"), max));
+        }
     },
 
     positionLabel: function(label, pt)
@@ -8181,11 +7866,11 @@ Y.extend(TopAxisLayout, Y.Base, {
             sz += tickLen * 0.5;
         }
         sz += labelSize;
-        ar.get("node").style.top = labelSize + "px";
+        ar.get("contentBox").setStyle("top", labelSize + "px");
         ar.set("height", sz);
     },
     
-    offsetNodeForTick: function(node)
+    offsetNodeForTick: function(cb)
     {
         var ar = this.get("axisRenderer"),
             majorTicks = ar.get("styles").majorTicks,
@@ -8193,421 +7878,633 @@ Y.extend(TopAxisLayout, Y.Base, {
             display = majorTicks.display;
         if(display === "inside")
         {
-            node.style.marginBottom = (0 - tickLength) + "px";
+            cb.setStyle("marginBottom", (0 - tickLength) + "px");
         }
         else if (display === "cross")
         {
-            node.style.marginBottom = (0 - (tickLength * 0.5)) + "px";
+            cb.setStyle("marginBottom", (0 - (tickLength * 0.5)) + "px");
         }
+    },
+
+    setCalculatedSize: function()
+    {
+        var ar = this.get("axisRenderer"),
+            style = ar.get("styles").label,
+            ttl = ar.get("topTickOffset") + this.get("maxLabelSize") + style.margin.bottom;
+            ar.set("height", ttl);
     }
 });
 
 Y.TopAxisLayout = TopAxisLayout;
 
-Y.mix(Y.AxisRenderer.prototype, {
+Y.Gridlines = Y.Base.create("gridlines", Y.Base, [Y.Renderer], {
     /**
      * @private
-     * @description Strategy for drawing the axis dependent upon the axis position.
      */
-    _ui: null,
+    render: function()
+    {
+        this._setCanvas();
+    },
+
+    remove: function()
+    {
+        var graphic = this.get("graphic"),
+            gNode;
+        if(graphic)
+        {
+            gNode = graphic.node;
+            if(gNode)
+            {
+                Y.one(gNode).remove();
+            }
+        }
+    },
 
     /**
-     * @private 
-     * @description Returns the correct _ui class instance to be used for drawing the
-     * axis.
+     * Draws the gridlines
      */
-    getLayout: function(pos)
+    draw: function()
     {
-        var l;
-        switch(pos)
+        if(this.get("axis") && this.get("graph"))
         {
-            case "top" :
-                l = new Y.TopAxisLayout({axisRenderer:this});
-            break;
-            case "bottom" : 
-                l = new Y.BottomAxisLayout({axisRenderer:this});
-            break;
-            case "left" :
-                l = new Y.LeftAxisLayout({axisRenderer:this});
-            break;
-            case "right" :
-                l = new Y.RightAxisLayout({axisRenderer:this});
-            break;
+            this._drawGridlines();
         }
-        return l;
     },
-    
+
     /**
      * @private
-     * @description Draws line based on start point, end point and line object.
      */
-    drawLine: function(startPoint, endPoint, line)
+    _drawGridlines: function()
     {
-        var graphic = this.get("graphic");
-        graphic.lineStyle(line.weight, line.color, line.alpha);
-        graphic.moveTo(startPoint.x, startPoint.y);
-        graphic.lineTo(endPoint.x, endPoint.y);
+        var graphic = this.get("graphic"),
+            axis = this.get("axis"),
+            points = axis.get("tickPoints"),
+            i = 0,
+            l = points.length,
+            direction = this.get("direction"),
+            graph = this.get("graph"),
+            w = graph.get("width"),
+            h = graph.get("height"),
+            line = this.get("styles").line,
+            color = line.color,
+            weight = line.weight,
+            alpha = line.alpha,
+            lineFunction = direction == "vertical" ? this._verticalLine : this._horizontalLine;
+        if(!graphic)
+        {
+            this._setCanvas();
+            graphic = this.get("graphic");
+        }
+        graphic.clear();
+        graphic.setSize(w, h);
+        graphic.lineStyle(weight, color, alpha);
+        for(; i < l; ++i)
+        {
+            lineFunction(graphic, points[i], w, h);
+        }
         graphic.end();
     },
 
-    /**
-     * @private
-     * Basic logic for drawing an axis.
-     */
-    _drawAxis: function ()
+    _horizontalLine: function(graphic, pt, w, h)
     {
-        var style = this.get("styles"),
-            majorTickStyles = style.majorTicks,
-            drawTicks = majorTickStyles.display != "none",
-            tickPoint,
-            majorUnit = style.majorUnit,
-            axis = this.get("axis"),
-            len,
-            majorUnitDistance,
-            i = 0,
-            uiLength,
-            position,
-            lineStart,
-            label,
-            ui = this._ui,
-            graphic = this.get("graphic");
-        graphic.clear();
-		ui.setTickOffsets();
-        uiLength = this.getLength();
-        lineStart = ui.getLineStart();
-        len = axis.getTotalMajorUnits(majorUnit, uiLength);
-        majorUnitDistance = axis.getMajorUnitDistance(len, uiLength, majorUnit);
-        this.set("edgeOffset", axis.getEdgeOffset(len, uiLength) * 0.5);
-        tickPoint = this.getFirstPoint(lineStart);
-        this.drawLine(lineStart, this.getLineEnd(tickPoint), this.get("styles").line);
-        if(drawTicks) 
-        {
-           ui.drawTick(tickPoint, majorTickStyles);
-        }
-        if(len < 1) 
-        {
-            return;
-        }
-        this._createLabelCache();
-        ui.set("maxLabelSize", 0);
-        for(; i < len; ++i)
-	    {
-            if(drawTicks) 
-            {
-                ui.drawTick(tickPoint, majorTickStyles);
-            }
-            position = this.getPosition(tickPoint);
-            label = this.getLabel(tickPoint, axis.getLabelAtPosition(position, uiLength));
-            ui.positionLabel(label, ui.getLabelPoint(tickPoint));
-            tickPoint = this.getNextPoint(tickPoint, majorUnitDistance);
-        }
-        ui.setSizeAndPosition();
-        this._clearLabelCache();
-        if(this.get("overlapGraph"))
-        {
-            ui.offsetNodeForTick(this.get("node"));
-        }
-        this.fire("axisRendered");
+        graphic.moveTo(0, pt.y);
+        graphic.lineTo(w, pt.y);
+    },
+
+    _verticalLine: function(graphic, pt, w, h)
+    {
+        graphic.moveTo(pt.x, 0);
+        graphic.lineTo(pt.x, h);
     },
 
     /**
      * @private
-     * @description Collection of labels used in creating an axis.
+     * Creates a <code>Graphic</code> instance.
      */
-    _labels: null,
+    _setCanvas: function()
+    {
+        this.set("graphic", new Y.Graphic());
+        this.get("graphic").render(this.get("graph").get("contentBox"));
+    },
+    
+    /**
+     * @private
+     */
+    _getDefaultStyles: function()
+    {
+        var defs = {
+            line: {
+                color:"#fff",
+                weight: 1,
+                alpha: 1
+            }
+        };
+        return defs;
+    }
+
+},
+{
+    ATTRS: {
+        direction: {},
+        axis: {},
+        graph: {}
+    }
+});
+Y.Graph = Y.Base.create("graph", Y.Widget, [Y.Renderer], {
+    bindUI: function()
+    {
+        var bb = this.get("boundingBox");
+        bb.setStyle("position", "absolute");
+        this.after("widthChange", this._sizeChangeHandler);
+        this.after("heightChange", this._sizeChangeHandler);
+        this.after("stylesChange", this._updateStyles);
+    },
+
+    /**
+     * @private
+     */
+    syncUI: function()
+    {
+        if(this.get("showBackground"))
+        {
+            var graphic = new Y.Graphic(),
+                cb = this.get("contentBox"),
+                bg = this.get("styles").background,
+                w = this.get("width"),
+                h = this.get("height");
+            if(w)
+            {
+                bg.width = w;
+            }   
+            if(h)
+            {
+                bg.height = h;
+            }
+            this._background = graphic.getShape(bg);
+            graphic.render(cb);
+            Y.one(graphic.node).setStyle("zIndex", -1);
+        }
+    },
+   
+    /**
+     * @private
+     */
+    renderUI: function()
+    {
+        var sc = this.get("seriesCollection"),
+            series,
+            i = 0,
+            len = sc.length;
+        for(; i < len; ++i)
+        {
+            series = sc[i];
+            if(series instanceof Y.CartesianSeries)
+            {
+                series.render();
+            }
+        }
+    },
+
+    /**
+     * Hash of arrays containing series mapped to a series type.
+     */
+    seriesTypes: null,
+
+    /**
+     * Returns a series instance based on an index.
+     */
+    getSeriesByIndex: function(val)
+    {
+        var col = this.get("seriesCollection"),
+            series;
+        if(col && col.length > val)
+        {
+            series = col[val];
+        }
+        return series;
+    },
+
+    /**
+     * Returns a series instance based on a key value.
+     */
+    getSeriesByKey: function(val)
+    {
+        var obj = this._seriesDictionary,
+            series;
+        if(obj && obj.hasOwnProperty(val))
+        {
+            series = obj[val];
+        }
+        return series;
+    },
+
+    /**
+     * Adds dispatcher to collection
+     */
+    addDispatcher: function(val)
+    {
+        if(!this._dispatchers)
+        {
+            this._dispatchers = [];
+        }
+        this._dispatchers.push(val);
+    },
 
     /**
      * @private 
-     * @description Collection of labels to be reused in creating an axis.
+     * @description Collection of series to be displayed in the graph.
      */
-    _labelCache: null,
+    _seriesCollection: null,
+    
+    /**
+     * @private
+     */
+    _seriesDictionary: null,
 
     /**
      * @private
-     * @description Draws and positions a label based on its style properties.
+     * @description Parses series instances to be displayed in the graph.
+     * @param {Array} Collection of series instances or object literals containing necessary properties for creating a series instance.
      */
-    getLabel: function(pt, txt, pos)
+    _parseSeriesCollection: function(val)
     {
-        var label,
-            cache = this._labelCache;
-        if(cache.length > 0)
+        if(!val)
         {
-            label = cache.shift();
-        }
-        else
-        {
-            label = document.createElement("span");
-        }
-        label.innerHTML = txt;
-        label.style.display = "block";
-        label.style.position = "absolute";
-        this.get("node").appendChild(label);
-        this._labels.push(label);
-        return label;
-    },   
-    
-    /**
-     * @private
-     * Creates a cache of labels for reuse.
-     */
-    _createLabelCache: function()
-    {
-        if(this._labels)
-        {
-            this._labelCache = this._labels.concat();
-        }
-        else
-        {
-            this._labelCache = [];
-        }
-        this._labels = [];
-    },
-    
-    /**
-     * @private
-     * Removes unused labels from the label cache
-     */
-    _clearLabelCache: function()
-    {
-        var len = this._labelCache.length,
+            return;
+        }	
+        var len = val.length,
             i = 0,
-            label,
-            labelCache;
-        for(; i < len; ++i)
+            series,
+            seriesKey;
+        if(!this.get("seriesCollection"))
         {
-            label = labelCache[i];
-            label.parentNode.removeChild(label);
+            this._seriesCollection = [];
         }
-        this._labelCache = [];
+        if(!this._seriesDictionary)
+        {
+            this._seriesDictionary = {};
+        }
+        if(!this.seriesTypes)
+        {
+            this.seriesTypes = [];
+        }
+        for(; i < len; ++i)
+        {	
+            series = val[i];
+            if(!(series instanceof Y.CartesianSeries) && !(series instanceof Y.PieSeries))
+            {
+                this._createSeries(series);
+                continue;
+            }
+            this._addSeries(series);
+        }
+        len = this.get("seriesCollection").length;
+        for(i = 0; i < len; ++i)
+        {
+            series = this.get("seriesCollection")[i];
+            seriesKey = series.get("direction") == "horizontal" ? "yKey" : "xKey";
+            this._seriesDictionary[series.get(seriesKey)] = series;
+        }
     },
 
     /**
      * @private
-     * Indicates how to include tick length in the size calculation of an
-     * axis. If set to true, the length of the tick is used to calculate
-     * this size. If false, the offset of tick will be used.
+     * @description Adds a series to the graph.
+     * @param {Series}
      */
-    _calculateSizeByTickLength: true,
-
-    /**
-     * Indicate the end point of the axis line
-     */
-    getLineEnd: function(pt)
+    _addSeries: function(series)
     {
-        var w = this.get("node").offsetWidth,
-            h = this.get("node").offsetHeight,
-            pos = this.get("position");
-        if(pos === "top" || pos === "bottom")
+        var type = series.get("type"),
+            seriesCollection = this.get("seriesCollection"),
+            graphSeriesLength = seriesCollection.length,
+            seriesTypes = this.seriesTypes,
+            typeSeriesCollection;	
+        if(!series.get("graph")) 
         {
-            return {x:w, y:pt.y};
+            series.set("graph", this);
         }
-        else
+        seriesCollection.push(series);
+        if(!seriesTypes.hasOwnProperty(type))
         {
-            return {x:pt.x, y:h};
+            this.seriesTypes[type] = [];
         }
+        typeSeriesCollection = this.seriesTypes[type];
+        series.set("graphOrder", graphSeriesLength);
+        series.set("order", typeSeriesCollection.length);
+        typeSeriesCollection.push(series);
+        this.addDispatcher(series);
+        series.after("drawingComplete", Y.bind(this._drawingCompleteHandler, this));
+        this.fire("seriesAdded", series);
+    },
+
+    _createSeries: function(seriesData)
+    {
+        var type = seriesData.type,
+            seriesCollection = this.get("seriesCollection"),
+            seriesTypes = this.seriesTypes,
+            typeSeriesCollection,
+            seriesType,
+            series;
+            seriesData.graph = this;
+        if(!seriesTypes.hasOwnProperty(type))
+        {
+            seriesTypes[type] = [];
+        }
+        typeSeriesCollection = seriesTypes[type];
+        seriesData.graph = this;
+        seriesData.order = typeSeriesCollection.length;
+        seriesData.graphOrder = seriesCollection.length;
+        seriesType = this._getSeries(seriesData.type);
+        series = new seriesType(seriesData);
+        this.addDispatcher(series);
+        series.after("drawingComplete", Y.bind(this._drawingCompleteHandler, this));
+        typeSeriesCollection.push(series);
+        seriesCollection.push(series);
     },
 
     /**
-     * Returns the distance between the first and last data points.
+     * @private
+     * @description Creates a series instance based on a specified type.
+     * @param {String} Indicates type of series instance to be created.
+     * @return {Series} Series instance created.
      */
-    getLength: function()
+    _getSeries: function(type)
     {
-        var l,
-            style = this.get("styles"),
-            padding = style.padding,
-            w = this.get("node").offsetWidth,
-            h = this.get("node").offsetHeight,
-            pos = this.get("position");
-        if(pos === "top" || pos === "bottom")
+        var seriesClass;
+        switch(type)
         {
-            l = w - (padding.left + padding.right);
+            case "line" :
+                seriesClass = Y.LineSeries;
+            break;
+            case "column" :
+                seriesClass = Y.ColumnSeries;
+            break;
+            case "bar" :
+                seriesClass = Y.BarSeries;
+            break;
+            case "area" : 
+                seriesClass = Y.AreaSeries;
+            break;
+            case "candlestick" :
+                seriesClass = Y.CandlestickSeries;
+            break;
+            case "ohlc" :
+                seriesClass = Y.OHLCSeries;
+            break;
+            case "stackedarea" :
+                seriesClass = Y.StackedAreaSeries;
+            break;
+            case "stackedline" :
+                seriesClass = Y.StackedLineSeries;
+            break;
+            case "stackedcolumn" :
+                seriesClass = Y.StackedColumnSeries;
+            break;
+            case "stackedbar" :
+                seriesClass = Y.StackedBarSeries;
+            break;
+            case "markerseries" :
+                seriesClass = Y.MarkerSeries;
+            break;
+            case "spline" :
+                seriesClass = Y.SplineSeries;
+            break;
+            case "areaspline" :
+                seriesClass = Y.AreaSplineSeries;
+            break;
+            case "stackedspline" :
+                seriesClass = Y.StackedSplineSeries;
+            break;
+            case "stackedareaspline" :
+                seriesClass = Y.StackedAreaSplineSeries;
+            break;
+            case "stackedmarkerseries" :
+                seriesClass = Y.StackedMarkerSeries;
+            break;
+            case "pie" :
+                seriesClass = Y.PieSeries;
+            break;
+            case "combo" :
+                seriesClass = Y.ComboSeries;
+            break;
+            case "stackedcombo" :
+                seriesClass = Y.StackedComboSeries;
+            break;
+            case "combospline" :
+                seriesClass = Y.ComboSplineSeries;
+            break;
+            case "stackedcombospline" :
+                seriesClass = Y.StackedComboSplineSeries;
+            break;
+            default:
+                seriesClass = Y.CartesianSeries;
+            break;
         }
-        else
-        {
-            l = h - (padding.top + padding.bottom);
-        }
-        return l;
+        return seriesClass;
     },
 
     /**
-     * Calculates the coordinates for the first point on an axis.
+     * @private
      */
-    getFirstPoint:function(pt)
+    _markerEventHandler: function(e)
     {
-        var style = this.get("styles"),
-            pos = this.get("position"),
-            padding = style.padding,
-            np = {x:pt.x, y:pt.y};
-        if(pos === "top" || pos === "bottom")
-        {
-            np.x += padding.left + this.get("edgeOffset");
-        }
-        else
-        {
-            np.y += padding.top + this.get("edgeOffset");
-        }
-        return np;
+        var type = e.type,
+            markerNode = e.currentTarget,
+            strArr = markerNode.getAttribute("id").split("_"),
+            series = this.getSeriesByIndex(strArr[1]),
+            index = strArr[2];
+        series.updateMarkerState(type, index);
     },
 
     /**
-     * Returns the next majorUnit point.
+     * @private
      */
-    getNextPoint: function(point, majorUnitDistance)
+    _dispatchers: null,
+
+    /**
+     * @private
+     */
+    _updateStyles: function()
     {
-        var pos = this.get("position");
-        if(pos === "top" || pos === "bottom")
-        {
-            point.x = point.x + majorUnitDistance;		
-        }
-        else
-        {
-            point.y = point.y + majorUnitDistance;
-        }
-        return point;
+        this._background.update(this.get("styles").background);
+        this._sizeChangeHandler();
     },
 
     /**
-     * Calculates the coordinates for the last point on an axis.
+     * @private
      */
-    getLastPoint: function()
+    _sizeChangeHandler: function(e)
     {
-        var style = this.get("styles"),
-            padding = style.padding,
-            w = this.get("node").offsetWidth,
-            pos = this.get("position");
-        if(pos === "top" || pos === "bottom")
+        var sc = this.get("seriesCollection"),
+            hgl = this.get("horizontalGridlines"),
+            vgl = this.get("verticalGridlines"),
+            i = 0,
+            l,
+            w = this.get("width"),
+            h = this.get("height");
+        if(this._background)
         {
-            return {x:w - padding.right, y:padding.top};
-        }
-        else
-        {
-            return {x:padding.left, y:padding.top};
-        }
-    },
-
-    /**
-     * Calculates the position of a point on the axis.
-     */
-    getPosition: function(point)
-    {
-        var p,
-            h = this.get("node").offsetHeight,
-            style = this.get("styles"),
-            padding = style.padding,
-            pos = this.get("position"),
-            dataType = this.get("axis").get("dataType");
-        if(pos === "left" || pos === "right") 
-        {
-            //Numeric data on a vertical axis is displayed from bottom to top.
-            //Categorical and Timeline data is displayed from top to bottom.
-            if(dataType === "numeric")
+            if(w && h)
             {
-                p = (h - (padding.top + padding.bottom)) - (point.y - padding.top);
-            }
-            else
-            {
-                p = point.y - padding.top;
+                this._background.update({width:w, height:h});
             }
         }
-        else
+        if(hgl && hgl instanceof Y.Gridlines)
         {
-            p = point.x - padding.left;
+            hgl.draw();
         }
-        return p;
+        if(vgl && vgl instanceof Y.Gridlines)
+        {
+            vgl.draw();
+        }
+        if(sc)
+        {
+            l = sc.length;
+            for(; i < l; ++i)
+            {
+                sc[i].draw();
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    _drawingCompleteHandler: function(e)
+    {
+        var series = e.currentTarget,
+            index = Y.Array.indexOf(this._dispatchers, series);
+        if(index > -1)
+        {
+            this._dispatchers.splice(index, 1);
+        }
+        if(this._dispatchers.length < 1)
+        {
+            this.fire("chartRendered");
+        }
+    },
+
+    /**
+     * @private
+     */
+    _getDefaultStyles: function()
+    {
+        var defs = {
+            background: {
+                shape: "rect",
+                fill:{
+                    color:"#faf9f2"
+                },
+                border: {
+                    color:"#ccc",
+                    weight: 1
+                }
+            }
+        };
+        return defs;
+    }
+}, {
+    ATTRS: {
+        seriesCollection: {
+            getter: function()
+            {
+                return this._seriesCollection;
+            },
+
+            setter: function(val)
+            {
+                this._parseSeriesCollection(val);
+                return this._seriesCollection;
+            }
+        },
+        
+        showBackground: {
+            value: true
+        },
+
+        seriesDictionary: {
+            readOnly: true,
+
+            getter: function()
+            {
+                return this._seriesDictionary;
+            }
+        },
+
+        horizontalGridlines: {
+            value: null,
+
+            setter: function(val)
+            {
+                var gl = this.get("horizontalGridlines");
+                if(gl && gl instanceof Y.Gridlines)
+                {
+                    gl.remove();
+                }
+                if(val instanceof Y.Gridlines)
+                {
+                    gl = val;
+                    val.set("graph", this);
+                    val.render();
+                    return val;
+                }
+                else if(val && val.axis)
+                {
+                    gl = new Y.Gridlines({direction:"horizontal", axis:val.axis, graph:this, styles:val.styles});
+                    gl.render();
+                    return gl;
+                }
+            }
+        },
+        
+        verticalGridlines: {
+            value: null,
+
+            setter: function(val)
+            {
+                var gl = this.get("verticalGridlines");
+                if(gl && gl instanceof Y.Gridlines)
+                {
+                    gl.remove();
+                }
+                if(val instanceof Y.Gridlines)
+                {
+                    gl = val;
+                    val.set("graph", this);
+                    val.render();
+                    return val;
+                }
+                else if(val && val.axis)
+                {
+                    gl = new Y.Gridlines({direction:"vertical", axis:val.axis, graph:this, styles:val.styles});
+                    gl.render();
+                    return gl;
+                }
+            }
+        }
     }
 });
+function ChartBase() {}
 
-
-/**
- * A basic chart application.
- */
-function CartesianChart(config)
-{
-    CartesianChart.superclass.constructor.apply(this, arguments);
-}
-
-CartesianChart.NAME = "cartesianChart";
-
-CartesianChart.ATTRS = {
-    /**
-     * Data used to generate the chart.
-     */
-    dataProvider: {
-        getter: function()
-        {
-            return this._dataProvider;
-        },
+ChartBase.ATTRS = {
+    tooltip: {
+        valueFn: "_getTooltip",
 
         setter: function(val)
         {
-            this._setDataValues(val);
+            return this._updateTooltip(val);
         }
     },
 
     /**
-     * Axes to appear in the chart. 
+     * @description Indicates the the type of interactions that will fire events.
+     * <ul>
+     *  <li>marker</li>
+     *  <li>all</li>
+     *  <li>none</li>
      */
-    axes: {
-        getter: function()
-        {
-            return this._axes;
-        },
-
-        setter: function(val)
-        {
-            this._parseAxes(val);
-        }
-    },
-
-    /**
-     * Collection of series to appear on the chart. This can be an array of Series instances or object literals
-     * used to describe a Series instance.
-     */
-    seriesCollection: {
-        getter: function()
-        {
-            return this._getSeriesCollection();
-        },
-
-        setter: function(val)
-        {
-            return this._setSeriesCollection(val);
-        }
-    },
-
-    /**
-     * Element that contains left axes
-     */
-    leftAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains bottom axes
-     */
-    bottomAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains right axes
-     */
-    rightAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains top axes
-     */
-    topAxesContainer: {
-        value: null
-    },
-
-    /**
-     * Element that contains graphs
-     */
-    graphContainer: {
-        value: null
+    interactionType: {
+        value: "marker"
     },
 
     /**
@@ -8615,126 +8512,42 @@ CartesianChart.ATTRS = {
      * @type Graph 
      */
     graph: {
-        value: null
-    },
-
-    /**
-     * Type of chart when there is no series collection specified.
-     * @type String 
-     */
-    type: {
-        getter: function()
-        {
-            if(this.get("stacked"))
-            {
-                return "stacked" + this._type;
-            }
-            return this._type;
-        },
-
-        setter: function(val)
-        {
-            this._setChartType(val);
-        }
-    },
-    
-    /**
-     * Indicates whether or not the chart is stacked.
-     * @type Boolean
-     */
-    stacked: {
-        value: false
-    },
-
-    /**
-     * Direction of chart's category axis when there is no series collection specified. Charts can
-     * be horizontal or vertical. When the chart type is column, the chart is horizontal.
-     * When the chart type is bar, the chart is vertical. 
-     * @type String
-     * @default Horizontal
-     */
-    direction: {
-        getter: function()
-        {
-            var type = this.get("type");
-            if(type == "bar")
-            {   
-                return "vertical";
-            }
-            else if(type == "column")
-            {
-                return "horizontal";
-            }
-            return this._direction;
-        },
-
-        setter: function(val)
-        {
-            this._direction = val;
-        }
-    },
-
-    /**
-     * Indicates whether or not to show a tooltip.
-     */
-    showTooltip: {
-        value:true
-    },
-
-    /** 
-     * The key value used for the chart's category axis. 
-     * @default "category"
-     * @type String
-     */
-    categoryKey: {
-        value: "category"
-    },
-    
-    /**
-     * A collection of keys that map to the series axes. If no keys are set,
-     * they will be generated automatically depending on the data structure passed into 
-     * the chart.
-     * @type Array
-     */
-    seriesKeys: {
-        value: null    
-    },
-
-    /**
-     * Indicates whether or not an area is filled in a combo chart.
-     */
-    showAreaFill: {
-        value: null
-    }
+        valueFn: "_getGraph"
+   }
 };
 
-Y.extend(CartesianChart, Y.Widget, {
+ChartBase.prototype = {
     /**
-     * Returns a series instance by index
-     * @method getSeriesByIndex
+     * @private
+     * @description Default value function for the <code>graph</code> attribute.
      */
-    getSeriesByIndex: function(val)
+    _getGraph: function()
     {
-        var series, 
-            graph = this.get("graph");
-        if(graph)
-        {
-            series = graph.getSeriesByIndex(val);
-        }
-        return series;
+        var graph = new Y.Graph();
+        graph.after("chartRendered", Y.bind(function(e) {
+            this.fire("chartRendered");
+        }, this));
+        return graph; 
     },
 
     /**
-     * Returns a series instance by key value.
-     * @method getSeriesByKey
+     * Returns a series instance
+     * @method getSeries
      */
-    getSeriesByKey: function(val)
+    getSeries: function(val)
     {
-        var series, 
+        var series = null, 
             graph = this.get("graph");
         if(graph)
         {
-            series = graph.getSeriesByKey(val);
+            if(Y.Lang.isNumber(val))
+            {
+                series = graph.getSeriesByIndex(val);
+            }
+            else
+            {
+                series = graph.getSeriesByKey(val);
+            }
         }
         return series;
     },
@@ -8769,11 +8582,6 @@ Y.extend(CartesianChart, Y.Widget, {
         }
         return axis;
     },
-
-    /**
-     * @private
-     */
-    _type: "combo",
 
     /**
      * @private
@@ -8826,65 +8634,6 @@ Y.extend(CartesianChart, Y.Widget, {
     {
         this._seriesCollection = val;
     },
-
-    /**
-     * @private
-     */
-    _getSeriesCollection: function()
-    {
-        if(this._seriesCollection)
-        {
-            return this._seriesCollection;
-        }
-        var axes = this.get("axes"),
-            dir = this.get("direction"), 
-            sc = [], 
-            catAxis,
-            valAxis,
-            seriesKeys,
-            i = 0,
-            l,
-            type = this.get("type"),
-            key,
-            catKey,
-            seriesKey,
-            showAreaFill = this.get("showAreaFill");
-        if(dir == "vertical")
-        {
-            catAxis = "yAxis";
-            catKey = "yKey";
-            valAxis = "xAxis";
-            seriesKey = "xKey";
-        }
-        else
-        {
-            catAxis = "xAxis";
-            catKey = "xKey";
-            valAxis = "yAxis";
-            seriesKey = "yKey";
-        }
-        if(axes)
-        {
-            seriesKeys = axes.values.get("axis").get("keyCollection");
-            key = axes.category.get("axis").get("keyCollection")[0];
-            l = seriesKeys.length;
-            for(; i < l; ++i)
-            {
-                sc[i] = {type:type};
-                sc[i][catAxis] = "category";
-                sc[i][valAxis] = "values";
-                sc[i][catKey] = key;
-                sc[i][seriesKey] = seriesKeys[i];
-                if((type == "combo" || type == "stackedcombo" || type == "combospline" || type == "stackedcombospline") && showAreaFill !== null)
-                {
-                    sc[i].showAreaFill = showAreaFill;
-                }
-            }
-        }
-        this._seriesCollection = sc;
-        return sc;
-    },
-
     /**
      * @private
      */
@@ -8892,7 +8641,6 @@ Y.extend(CartesianChart, Y.Widget, {
     {
         return this._dataClass[t];
     },
-
     /**
      * @private
      */
@@ -8902,45 +8650,6 @@ Y.extend(CartesianChart, Y.Widget, {
         category: Y.CategoryAxis,
         time: Y.TimeAxis
     },
-
-    /**
-     * @private
-     */
-    _parseAxes: function(hash)
-    {
-        if(!this._axes)
-        {
-            this._axes = {};
-        }
-        if(!this._dataAxes)
-        {
-            this._dataAxes = {};
-        }
-        var i, pos, axis, dataAxis, dh, config, dataClass;
-
-        for(i in hash)
-        {
-            if(hash.hasOwnProperty(i))
-            {
-                dh = hash[i];
-                pos = dh.position;
-                dataClass = this._getDataClass(dh.type);
-                config = {dataProvider:this.get("dataProvider"), keys:dh.keys};
-                if(dh.hasOwnProperty("roundingUnit"))
-                {
-                    config.roundingUnit = dh.roundingUnit;
-                }
-                dataAxis = new dataClass(config);
-                if(pos && pos != "none")
-                {
-                    axis = new Y.AxisRenderer({axis:dataAxis, position:dh.position, styles:dh.styles});
-                    this._axes[i] = axis;
-                }
-                this._dataAxes[i] = dataAxis;
-            }
-        }
-    },
-
     /**
      * @private
      */
@@ -8956,7 +8665,16 @@ Y.extend(CartesianChart, Y.Widget, {
      */
     renderUI: function()
     {
-        this._createLayout();
+        //move the position = absolute logic to a class file
+        this.get("boundingBox").setStyle("position", "absolute");
+        this.get("contentBox").setStyle("position", "absolute");
+        this._addAxes();
+        this._addSeries();
+        if(this.get("showTooltip"))
+        {
+            this._addTooltip();
+        }
+        this._redraw();
     },
     
     /**
@@ -8965,45 +8683,568 @@ Y.extend(CartesianChart, Y.Widget, {
     bindUI: function()
     {
         this.after("showTooltipChange", Y.bind(this._showTooltipChangeHandler, this));
-    },
-   
-    /**
-     * @private
-     */
-    syncUI: function()
-    {
-        this._addAxes();
-        this._addSeries();
-        if(!this.tooltip && this.get("showTooltip"))
+        this.after("widthChange", this._sizeChanged);
+        this.after("heightChange", this._sizeChanged);
+        var cb = this.get("contentBox"),
+            interactionType = this.get("interactionType"),
+            defaultTooltipFunction;
+        if(interactionType == "marker")
         {
-            this._addTooltip();
+            Y.delegate("mouseenter", Y.bind(this._markerEventHandler, this), cb, ".yui3-seriesmarker");
+            Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), cb, ".yui3-seriesmarker");
+            Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), cb, ".yui3-seriesmarker");
+            Y.delegate("mouseleave", Y.bind(this._markerEventHandler, this), cb, ".yui3-seriesmarker");
+            Y.delegate("mousemove", Y.bind(this._positionTooltip, this), cb, ".yui3-seriesmarker");
+            defaultTooltipFunction = this._displayTooltip;
+        }
+        else if(interactionType == "all")
+        {
+            this._overlay.on("mousemove", Y.bind(this._mouseMoveHandler, this));
+            this.on("mouseout", this._hideTooltip);
+            defaultTooltipFunction = this._displayMultiTooltip;
+        }
+        if(this.get("tooltip"))
+        {
+            this.on("markerEvent:mouseover", defaultTooltipFunction);
+            this.on("markerEvent:mouseout", this._hideTooltip);
         }
     },
     
     /**
      * @private
      */
-    _setChartType: function(val)
+    _markerEventHandler: function(e)
     {
-        if(val == this._type)
+        var type = e.type,
+            cb = this.get("contentBox"),
+            markerNode = e.currentTarget,
+            strArr = markerNode.getAttribute("id").split("_"),
+            seriesIndex = strArr[0],
+            series = this.getSeries(parseInt(strArr[1], 10)),
+            index = strArr[2],
+            x = e.pageX - cb.getX(),
+            y = e.pageY - cb.getY();
+        if(type == "mouseenter")
         {
-            return;
+            type = "mouseover";
         }
-        if(this._type == "bar")
+        else if(type == "mouseleave")
         {
-            if(val != "bar")
+            type = "mouseout";
+        }
+        series.updateMarkerState(type, index);
+        this.fire("markerEvent:" + type, {node:markerNode, x:x, y:y, series:series, index:index, seriesIndex:seriesIndex});
+    },
+
+    /**
+     * @private
+     */
+    _showTooltip: function(msg, x, y)
+    {
+        var tt = this.get("tooltip"),
+            node = tt.node;
+        if(msg)
+        {
+            node.set("innerHTML", msg);
+            node.setStyle("top", y + "px");
+            node.setStyle("left", x + "px");
+            node.removeClass("yui3-widget-hidden");
+        }
+    },
+
+    /**
+     * @private
+     */
+    _positionTooltip: function(e)
+    {
+        var tt = this.get("tooltip"),
+            node = tt.node,
+            cb = this.get("contentBox"),
+            x = (e.pageX + 10) - cb.getX(),
+            y = (e.pageY + 10) - cb.getY();
+        if(node)
+        {
+            node.setStyle("left", x + "px");
+            node.setStyle("top", y + "px");
+        }
+    },
+
+    /**
+     * @private
+     */
+    _hideTooltip: function()
+    {
+        var tt = this.get("tooltip"),
+            node = tt.node;
+        node.set("innerHTML", "");
+        node.setStyle("left", -10000);
+        node.setStyle("top", -10000);
+        node.addClass("yui3-widget-hidden");
+    },
+
+    /**
+     * @private
+     */
+    _addTooltip: function()
+    {
+        var tt = this.get("tooltip");
+        this.get("contentBox").appendChild(tt.node);
+    },
+
+    /**
+     * @private
+     */
+    _updateTooltip: function(val)
+    {
+        var tt = this._tooltip,
+            i,
+            styles = val.styles;
+        if(styles)
+        {
+            for(i in styles)
             {
-                this.set("direction", "horizontal");
+                if(styles.hasOwnProperty(i))
+                {
+                    tt.node.setStyle(i, styles[i]);
+                }
             }
+        }
+        if(val.hasOwnProperty("labelFunction"))
+        {
+            tt.labelFunction = val.labelFunction;
+        }
+        return tt;
+    },
+
+    /**
+     * @private
+     */
+    _getTooltip: function()
+    {
+        var node = document.createElement("div"),
+            tt = {
+                labelFunction: this._tooltipLabelFunction
+            };
+        node = Y.one(node);
+        node.setStyle("fontSize", "9px");
+        node.setStyle("fontWeight", "bold");
+        node.setStyle("position", "absolute");
+        node.setStyle("paddingTop", "2px");
+        node.setStyle("paddingRight", "5px");
+        node.setStyle("paddingBottom", "5px");
+        node.setStyle("paddingLeft", "2px");
+        node.setStyle("backgroundColor", "#edeeee");
+        node.setStyle("border", "1px solid #aeae9e");
+        node.setStyle("zIndex", 3);
+        node.setStyle("whiteSpace", "noWrap");
+        node.addClass("yui3-widget-hidden");
+        tt.node = Y.one(node);
+        this._tooltip = tt;
+        return tt;
+    },
+
+    /**
+     * @private
+     */
+    _tooltipLabelFunction: function(categoryItem, valueItem, itemIndex, series, seriesIndex)
+    {
+        var msg = categoryItem.displayName +
+        ":&nbsp;" + categoryItem.axis.get("labelFunction").apply(this, [categoryItem.value, categoryItem.axis.get("labelFormat")]) + 
+        "<br/>" + valueItem.displayName + 
+        ":&nbsp;" + valueItem.axis.get("labelFunction").apply(this, [valueItem.value, valueItem.axis.get("labelFormat")]);
+        return msg; 
+    },
+
+    /**
+     * @private
+     */
+    _showTooltipChangeHandler: function(e)
+    {
+        if(this.get("showTooltip"))
+        {
+            this._addTooltip();
+        }
+    }
+};
+Y.ChartBase = ChartBase;
+/**
+ * A basic chart application.
+ */
+Y.CartesianChart = Y.Base.create("cartesianChart", Y.Widget, [Y.ChartBase], {
+    /**
+     * @private
+     */
+    renderUI: function()
+    {
+        //move the position = absolute logic to a class file
+        this.get("boundingBox").setStyle("position", "absolute");
+        this.get("contentBox").setStyle("position", "absolute");
+        this._addAxes();
+        this._addGridlines();
+        this._addSeries();
+        if(this.get("showTooltip"))
+        {
+            this._addTooltip();
+        }
+        //If there is a style definition. Force them to set.
+        this.get("styles");
+        if(this.get("interactionType") == "all")
+        {
+            var overlay = document.createElement("div");
+            this.get("contentBox").appendChild(overlay);
+            this._overlay = Y.one(overlay); 
+            this._overlay.setStyle("position", "absolute");
+            this._overlay.setStyle("background", "#fff");
+            this._overlay.setStyle("opacity", 0);
+            this._overlay.addClass("yui3-overlay");
+            this._overlay.setStyle("zIndex", 4);
+        }
+        this._redraw();
+    },
+
+    /**
+     * @private
+     */
+    _mouseMoveHandler: function(e)
+    {
+        var graph = this.get("graph"),
+            bb = this.get("boundingBox"),
+            cb = graph.get("contentBox"),
+            x = e.pageX,
+            offsetX = x - cb.getX(),
+            posX = x - bb.getX(),
+            y = e.pageY,
+            offsetY = y - cb.getY(),
+            posY = y - bb.getY(),
+            sc = graph.get("seriesCollection"),
+            series,
+            i = 0,
+            index,
+            oldIndex = this._selectedIndex,
+            items = [],
+            direction = this.get("direction"),
+            hasMarkers,
+            coord = direction == "horizontal" ? offsetX : offsetY,
+            //data columns and area data could be created on a graph level
+            markerPlane = direction == "horizontal" ? sc[0].get("xMarkerPlane") : sc[0].get("yMarkerPlane"),
+            len = markerPlane.length;
+       //only change on whole numbers
+       if(coord % 1 > 0)
+       {
+            return;
+       }
+      
+       for(; i < len; ++i)
+       {
+            if(coord <= markerPlane[i].end && coord >= markerPlane[i].start)
+            {
+                index = i;
+                break;
+            }
+       }
+       len = sc.length;
+       for(i = 0; i < len; ++i)
+       {
+            series = sc[i];
+            hasMarkers = series.get("markers");
+            if(hasMarkers && !isNaN(oldIndex) && oldIndex > -1)
+            {
+                series.updateMarkerState("mouseout", oldIndex);
+            }
+            if(series.get("ycoords")[index] > -1)
+            {
+                if(hasMarkers && !isNaN(index) && index > -1)
+                {
+                    series.updateMarkerState("mouseover", index);
+                }
+                items.push(series);
+            }
+                
+        }
+        this._selectedIndex = index;
+        
+        if(index > -1)
+        {
+            this.fire("markerEvent:mouseover", {x:posX, y:posY, index:index, items:items, direction:direction, graph:graph});
         }
         else
         {
-            if(val == "bar")
+            this.fire("markerEvent:mouseout");
+        }
+    },
+
+    /**
+     * @private
+     */
+    _type: "combo",
+
+    /**
+     * @private
+     */
+    _axesRenderQueue: null,
+
+    /**
+     * Adds an axis to the queue
+     */
+    _addToAxesRenderQueue: function(axis)
+    {
+        if(!this._axesRenderQueue)
+        {
+            this._axesRenderQueue = [];
+        }
+        if(Y.Array.indexOf(this._axesRenderQueue, axis) < 0)
+        {
+            this._axesRenderQueue.push(axis);
+        }
+    },
+
+    /**
+     * @private
+     */
+    _getDefaultSeriesCollection: function(val)
+    {
+        var dir = this.get("direction"), 
+            categoryAxisName = this.get("categoryAxisName") || this.get("categoryKey"),
+            valueAxisName = this.get("valueAxisName"),
+            sc = val || [], 
+            catAxis,
+            valAxis,
+            tempKeys = [],
+            series,
+            seriesKeys = this.get("seriesKeys").concat(),
+            i,
+            index,
+            l,
+            type = this.get("type"),
+            key,
+            catKey,
+            seriesKey,
+            categoryKey = this.get("categoryKey"),
+            showMarkers = this.get("showMarkers"),
+            showAreaFill = this.get("showAreaFill"),
+            showLines = this.get("showLines");
+        if(dir == "vertical")
+        {
+            catAxis = "yAxis";
+            catKey = "yKey";
+            valAxis = "xAxis";
+            seriesKey = "xKey";
+        }
+        else
+        {
+            catAxis = "xAxis";
+            catKey = "xKey";
+            valAxis = "yAxis";
+            seriesKey = "yKey";
+        }
+        l = sc.length;
+        for(i = 0; i < l; ++i)
+        {
+            key = this._getBaseAttribute(sc[i], seriesKey);
+            if(key)
             {
-                this.set("direction", "vertical");
+                index = Y.Array.indexOf(seriesKeys, key);
+                if(index > -1)
+                {
+                    seriesKeys.splice(index, 1);
+                }
+               tempKeys.push(key);
             }
         }
-        this._type = val;
+        if(seriesKeys.length > 0)
+        {
+            tempKeys = tempKeys.concat(seriesKeys);
+        }
+        l = tempKeys.length;
+        for(i = 0; i < l; ++i)
+        {
+            series = sc[i] || {type:type};
+            if(series instanceof Y.CartesianSeries)
+            {
+                continue;
+            }
+            series[catKey] = series[catKey] || categoryKey;
+            series[seriesKey] = series[seriesKey] || seriesKeys.shift();
+            series[catAxis] = series[catAxis] || categoryAxisName;
+            series[valAxis] = this._getSeriesAxis(series[seriesKey], valueAxisName);
+            series.type = series.type || type;
+            if((series.type == "combo" || series.type == "stackedcombo" || series.type == "combospline" || series.type == "stackedcombospline"))
+            {
+                if(showAreaFill !== null)
+                {
+                    series.showAreaFill = series.showAreaFill || showAreaFill;
+                }
+                if(showMarkers !== null)
+                {
+                    series.showMarkers = series.showMarkers || showMarkers;
+                }
+                if(showLines !== null)
+                {
+                    series.showLines = series.showLines || showLines;
+                }
+            }
+            sc[i] = series;
+        }
+        if(val)
+        {
+            var graph = this.get("graph");
+            graph.set("seriesCollection", sc);
+            sc = graph.get("seriesCollection");
+        }
+        return sc;
+    },
+
+    /**
+     * @private
+     * @description Gets the appropriate axis to bind a series to when one is not explicitly
+     * set.
+     */
+    _getSeriesAxis:function(key, axis)
+    {
+        var axes = this.get("axes"),
+            i,
+            keys;
+        if(axes)
+        {
+            for(i in axes)
+            {
+                if(axes.hasOwnProperty(i))
+                {
+                    keys = axes[i].get("dataSet").get("keys");
+                    if(keys && keys.hasOwnProperty(key))
+                    {
+                        axis = i;
+                        break;
+                    }
+                }
+            }
+        }
+        return axis;
+    },
+
+    /**
+     * @private
+     * @description Gets an attribute from an object, using a getter for Base objects and a property for object
+     * literals. Used for determining attributes from series/axis references which can be an actual class instance
+     * or a hash of properties that will be used to create a class instance.
+     */
+    _getBaseAttribute: function(item, key)
+    {
+        if(item instanceof Y.Base)
+        {
+            return item.get(key);
+        }
+        if(item.hasOwnProperty(key))
+        {
+            return item[key];
+        }
+        return null;
+    },
+
+    /**
+     * @private
+     * @description Sets an attribute on an object, using a setter of Base objects and a property for object
+     * literals. Used for setting attributes on a Base class, either directly or to be stored in an object literal
+     * for use at instantiation.
+     */
+    _setBaseAttribute: function(item, key, value)
+    {
+        if(item instanceof Y.Base)
+        {
+            item.set(key, value);
+        }
+        else
+        {
+            item[key] = value;
+        }
+    },
+
+    /**
+     * @private
+     * Creates Axis and Axis data classes based on hashes of properties.
+     */
+    _parseAxes: function(val)
+    {
+        var hash = this._getDefaultAxes(val),
+            axes = {},
+            axesAttrs = {
+                edgeOffset: "edgeOffset", 
+                position: "position",
+                overlapGraph:"overlapGraph",
+                labelFunction:"labelFunction",
+                labelFunctionScope:"labelFunctionScope",
+                labelFormat:"labelFormat"
+            },
+            ai,
+            i, pos, axis, dataAxis, dh, config, dataClass, dcfg,
+            axesCollection;
+        for(i in hash)
+        {
+            if(hash.hasOwnProperty(i))
+            {
+                dh = hash[i];
+                if(dh instanceof Y.Axis)
+                {
+                    axis = dh;
+                }
+                else
+                {
+                    dataClass = this._getDataClass(dh.type);
+                    dcfg = {dataProvider:this.get("dataProvider"), keys:dh.keys};
+                    
+                    if(dh.hasOwnProperty("roundingUnit"))
+                    {
+                        dcfg.roundingUnit = dh.roundingUnit;
+                    }
+                    
+                    
+                    dataAxis = new dataClass(dcfg);
+                    pos = dh.position;
+                    config = {};
+                    if(dh.styles)
+                    {
+                        config.styles = dh.styles;
+                    }
+                    config.dataSet = dataAxis;
+                    config.position = dh.position;
+                    for(ai in axesAttrs)
+                    {
+                        if(axesAttrs.hasOwnProperty(ai) && dh.hasOwnProperty(ai))
+                        {
+                            config[ai] = dh[ai];
+                        }
+                    }
+                    if(pos && pos != "none")
+                    {
+                        axis = new Y.Axis(config);
+                    }
+                }
+
+                if(axis)
+                {
+                    axesCollection = this.get(pos + "AxesCollection");
+                    if(axesCollection && Y.Array.indexOf(axesCollection, axis) > 0)
+                    {
+                        axis.set("overlapGraph", false);
+                    }
+                    axis.after("axisRendered", Y.bind(this._axisRendered, this));
+                    axes[i] = axis;
+                }
+                if(!this._dataAxes)
+                {
+                    this._dataAxes = {};
+                }
+                if(axes[i])
+                {
+                    this._dataAxes[i] = axes[i].get("dataSet");
+                }
+                else
+                {
+                    this._dataAxes[i] = dataAxis;
+                }
+            }
+        }
+        return axes;
     },
     
     /**
@@ -9012,24 +9253,52 @@ Y.extend(CartesianChart, Y.Widget, {
     _addAxes: function()
     {
         var axes = this.get("axes"),
-            containers = {
-                left:this.get("leftAxesContainer"),
-                bottom:this.get("bottomAxesContainer"),
-                right:this.get("rightAxesContainer"),
-                top:this.get("topAxesContainer")
-            }, i, axis, p;
-        if(!axes)
-        {
-            this.set("axes", this._getDefaultAxes());
-            axes = this.get("axes");
+            i, 
+            axis, 
+            pos,
+            w = this.get("width"),
+            h = this.get("height"),
+            node = Y.Node.one(this._parentNode);
+        if(!this._axesCollection)
+        {   
+            this._axesCollection = [];
         }
         for(i in axes)
         {
             if(axes.hasOwnProperty(i))
             {
                 axis = axes[i];
-                p = axis.get("position");
-                axis.render(containers[p]);
+                if(axis instanceof Y.Axis)
+                {
+                    if(!w)
+                    {
+                        this.set("width", node.get("offsetWidth"));
+                        w = this.get("width");
+                    }
+                    if(!h)
+                    {
+                        this.set("height", node.get("offsetHeight"));
+                        h = this.get("height");
+                    }
+                    axis.set("width", w);
+                    axis.set("height", h);
+                    this._addToAxesRenderQueue(axis);
+                    pos = axis.get("position");
+                    if(!this.get(pos + "AxesCollection"))
+                    {
+                        this.set(pos + "AxesCollection", [axis]);
+                    }
+                    else
+                    {
+                        this.get(pos + "AxesCollection").push(axis);
+                    }
+                    this._axesCollection.push(axis);
+                    if(axis.get("dataSet").get("keys").hasOwnProperty(this.get("categoryKey")))
+                    {
+                        this.set("categoryAxis", axis.get("dataSet"));
+                    }
+                    axis.render(this.get("contentBox"));
+                }
             }
         }
     },
@@ -9039,14 +9308,44 @@ Y.extend(CartesianChart, Y.Widget, {
      */
     _addSeries: function()
     {
-        var seriesCollection = this.get("seriesCollection");
-        this._parseSeriesAxes(seriesCollection);
-        this.set("graph", new Y.Graph({parent:this.get("graphContainer")}));
-        this.get("graph").on("chartRendered", Y.bind(function(e) {
-            this.fire("chartRendered");
-        }, this));
-        this.get("graph").set("seriesCollection", seriesCollection);
-        this._seriesCollection = this.get("graph").get("seriesCollection");
+        var graph = this.get("graph"),
+            sc = this.get("seriesCollection");
+        this._parseSeriesAxes(sc);
+        graph.render(this.get("contentBox"));
+
+    },
+
+    /**
+     * @private
+     * @description Adds gridlines to the chart.
+     */
+    _addGridlines: function()
+    {
+        var graph = this.get("graph"),
+            hgl = this.get("horizontalGridlines"),
+            vgl = this.get("verticalGridlines");
+        if(hgl)
+        {
+            if(!this._getBaseAttribute(hgl, "axis"))
+            {
+                this._setBaseAttribute(hgl, "axis", this.get("leftAxesCollection")[0] || this.get("rightAxesCollection")[0]);
+                if(this._getBaseAttribute(hgl, "axis"))
+                {
+                    graph.set("horizontalGridlines", hgl);
+                }
+            }
+        }
+        if(vgl)
+        {
+            if(!this._getBaseAttribute(vgl, "axis"))
+            {
+                this._setBaseAttribute(vgl, "axis", this.get("bottomAxesCollection")[0] || this.get("topAxesCollection")[0]);
+                if(this._getBaseAttribute(vgl, "axis"))
+                {
+                    graph.set("verticalGridlines", vgl);
+                }
+            }
+        }
     },
 
     /**
@@ -9056,106 +9355,44 @@ Y.extend(CartesianChart, Y.Widget, {
     {
         var i = 0, 
             len = c.length, 
-            s;
+            s,
+            axis;
         for(; i < len; ++i)
         {
             s = c[i];
-            s.xAxis = this._dataAxes[s.xAxis];
-            s.yAxis = this._dataAxes[s.yAxis];
+            if(s)
+            {
+           
+                this._setBaseAttribute(s, "xAxis", this._dataAxes[this._getBaseAttribute(s, "xAxis")]);
+                this._setBaseAttribute(s, "yAxis", this._dataAxes[this._getBaseAttribute(s, "yAxis")]);
+            }
         }
     },
 
     /**
      * @private
-     * @description Creates the layout container for the chart.
      */
-    _createLayout: function()
-    {
-        var cb = this.get("contentBox"),
-            tbl = document.createElement("table"),
-            tr = document.createElement("tr"),
-            mr = document.createElement("tr"),
-            br = document.createElement("tr"),
-            tlc = document.createElement("td"),
-            tcc = document.createElement("td"),
-            trc = document.createElement("td"),
-            mlc = document.createElement("td"),
-            mcc = document.createElement("td"),
-            mrc = document.createElement("td"),
-            blc = document.createElement("td"),
-            bcc = document.createElement("td"),
-            brc = document.createElement("td"),
-            la = document.createElement("div"),
-            ba = document.createElement("div"),
-            ra = document.createElement("div"),
-            ta = document.createElement("div"),
-            gc = document.createElement("div"),
-            tblstyles = "vertical-align:top;border:0px;margin:0px;padding:0px;border-spacing:0px";
-        tbl.setAttribute("style", tblstyles);
-        tr.setAttribute("style", tblstyles);
-        mr.setAttribute("style", tblstyles);
-        br.setAttribute("style", tblstyles);
-        tlc.setAttribute("style", tblstyles);
-        tcc.setAttribute("style", tblstyles);
-        trc.setAttribute("style", tblstyles);
-        mlc.setAttribute("style", tblstyles);
-        mcc.setAttribute("style", tblstyles);
-        mrc.setAttribute("style", tblstyles);
-        blc.setAttribute("style", tblstyles);
-        bcc.setAttribute("style", tblstyles);
-        brc.setAttribute("style", tblstyles);
-
-        tr.id = "topRow";
-        mr.id = "midRow";
-        br.id = "bottomRow";
-        cb.appendChild(tbl);
-        tbl.appendChild(tr);
-        tr.appendChild(tlc);
-        tr.appendChild(tcc);
-        tr.appendChild(trc);
-        tbl.appendChild(mr);
-        mr.appendChild(mlc);
-        mr.appendChild(mcc);
-        mr.appendChild(mrc);
-        tbl.appendChild(br);
-        br.appendChild(blc);
-        br.appendChild(bcc);
-        br.appendChild(brc);
-        
-        ta.setAttribute("style", "position:relative;width:800px;");
-        ta.setAttribute("id", "topAxesContainer");
-        la.setAttribute("style", "position:relative;height:300px;");
-        la.setAttribute("id", "leftAxesContainer");
-        ba.setAttribute("style", "position:relative;width:800px;");
-        ba.setAttribute("id", "bottomAxesContainer");
-        ra.setAttribute("style", "position:relative;height:300px;");
-        ra.setAttribute("id", "rightAxesContainer");
-        gc.setAttribute("style", "position:relative;width:100%;height:100%;");
-        tcc.appendChild(ta);
-        mlc.appendChild(la);
-        bcc.appendChild(ba);
-        mrc.appendChild(ra);
-        mcc.appendChild(gc);
-
-        this.set("leftAxesContainer", la);
-        this.set("bottomAxesContainer", ba);
-        this.set("rightAxesContainer", ra);
-        this.set("topAxesContainer", ta);
-        this.set("graphContainer", gc);
-    },
-
-    /**
-     * @private
-     */
-    _getDefaultAxes: function()
+    _getDefaultAxes: function(axes)
     {
         var catKey = this.get("categoryKey"),
+            axis,
+            attr,
+            keys,
+            newAxes = {},
+            claimedKeys = [],
+            categoryAxisName = this.get("categoryAxisName") || this.get("categoryKey"),
+            valueAxisName = this.get("valueAxisName"),
             seriesKeys = this.get("seriesKeys") || [], 
             i, 
+            l,
+            ii,
+            ll,
+            cIndex,
             dv = this.get("dataProvider")[0],
             direction = this.get("direction"),
             seriesPosition,
             categoryPosition,
+            valueAxes = [],
             seriesAxis = this.get("stacked") ? "stacked" : "numeric";
         if(direction == "vertical")
         {
@@ -9167,6 +9404,995 @@ Y.extend(CartesianChart, Y.Widget, {
             seriesPosition = "left";
             categoryPosition = "bottom";
         }
+        if(axes)
+        {
+            for(i in axes)
+            {
+                if(axes.hasOwnProperty(i))
+                {
+                    axis = axes[i];
+                    keys = this._getBaseAttribute(axis, "keys");
+                    attr = this._getBaseAttribute(axis, "type");
+                    if(attr == "time" || attr == "category")
+                    {
+                        categoryAxisName = i;
+                        this.set("categoryAxisName", i);
+                        if(Y.Lang.isArray(keys) && keys.length > 0)
+                        {
+                            catKey = keys[0];
+                            this.set("categoryKey", catKey);
+                        }
+                        newAxes[i] = axis;
+                    }
+                    else if(i == categoryAxisName)
+                    {
+                        newAxes[i] = axis;
+                    }
+                    else 
+                    {
+                        newAxes[i] = axis;
+                        if(i != valueAxisName && keys && Y.Lang.isArray(keys))
+                        {
+                            ll = keys.length;
+                            for(ii = 0; ii < ll; ++ii)
+                            {
+                                claimedKeys.push(keys[ii]);
+                            }
+                            valueAxes.push(newAxes[i]);
+                        }
+                        if(!(this._getBaseAttribute(newAxes[i], "type")))
+                        {
+                            this._setBaseAttribute(newAxes[i], "type", seriesAxis);
+                        }
+                        if(!(this._getBaseAttribute(newAxes[i], "position")))
+                        {
+                            this._setBaseAttribute(newAxes[i], "position", this._getDefaultAxisPosition(newAxes[i], valueAxes, seriesPosition));
+                        }
+                    }
+                }
+            }
+        }
+        if(seriesKeys.length < 1)
+        {
+            for(i in dv)
+            {
+                if(dv.hasOwnProperty(i) && i != catKey && Y.Array.indexOf(claimedKeys, i) == -1)
+                {
+                    seriesKeys.push(i);
+                }
+            }
+        }
+        cIndex = Y.Array.indexOf(seriesKeys, catKey);
+        if(cIndex > -1)
+        {
+            seriesKeys.splice(cIndex, 1);
+        }
+        l = claimedKeys.length;
+        for(i = 0; i < l; ++i)
+        {
+            cIndex = Y.Array.indexOf(seriesKeys, claimedKeys[i]); 
+            if(cIndex > -1)
+            {
+                seriesKeys.splice(cIndex, 1);
+            }
+        }
+        if(!newAxes.hasOwnProperty(categoryAxisName))
+        {
+            newAxes[categoryAxisName] = {};
+        }
+        if(!(this._getBaseAttribute(newAxes[categoryAxisName], "keys")))
+        {
+            this._setBaseAttribute(newAxes[categoryAxisName], "keys", [catKey]);
+        }
+        
+        if(!(this._getBaseAttribute(newAxes[categoryAxisName], "position")))
+        {
+            this._setBaseAttribute(newAxes[categoryAxisName], "position", categoryPosition);
+        }
+         
+        if(!(this._getBaseAttribute(newAxes[categoryAxisName], "type")))
+        {
+            this._setBaseAttribute(newAxes[categoryAxisName], "type", this.get("categoryType"));
+        }
+        if(!newAxes.hasOwnProperty(valueAxisName) && seriesKeys && seriesKeys.length > 0)
+        {
+            newAxes[valueAxisName] = {keys:seriesKeys};
+            valueAxes.push(newAxes[valueAxisName]);
+        }
+        if(claimedKeys.length > 0)
+        {
+            if(seriesKeys.length > 0)
+            {
+                seriesKeys = claimedKeys.concat(seriesKeys);
+            }
+            else
+            {
+                seriesKeys = claimedKeys;
+            }
+        }
+        if(newAxes.hasOwnProperty(valueAxisName))
+        {
+            if(!(this._getBaseAttribute(newAxes[valueAxisName], "position")))
+            {
+                this._setBaseAttribute(newAxes[valueAxisName], "position", this._getDefaultAxisPosition(newAxes[valueAxisName], valueAxes, seriesPosition));
+            }
+            if(!(this._getBaseAttribute(newAxes[valueAxisName], "type")))
+            {
+                this._setBaseAttribute(newAxes[valueAxisName], "type", seriesAxis);
+            }
+            if(!(this._getBaseAttribute(newAxes[valueAxisName], "keys")))
+            {
+                this._setBaseAttribute(newAxes[valueAxisName], "keys", seriesKeys);
+            }
+        } 
+        this.set("seriesKeys", seriesKeys);
+        return newAxes;
+    },
+
+    _getDefaultAxisPosition: function(axis, valueAxes, position)
+    {
+        var i = Y.Array.indexOf(valueAxes, axis);
+        if(valueAxes[i - 1] && valueAxes[i - 1].position)
+        {
+            if(valueAxes[i - 1].position == "left")
+            {
+                position = "right";
+            }
+            else if(valueAxes[i - 1].position == "right")
+            {
+                position = "left";
+            }
+            else if (valueAxes[i -1].position == "bottom")
+            {
+                position = "top";
+            }       
+            else
+            {
+                position = "bottom";
+            }
+        }
+        return position;
+    },
+
+    _displayTooltip: function(e) {
+        var node = e.node,
+        graph = Y.Widget.getByNode(node),
+        strArr = e.node.getAttribute("id").split("_"),
+        seriesIndex = strArr[1],
+        series = graph.getSeriesByIndex(seriesIndex),
+        index = strArr[2],
+        xAxis = series.get("xAxis"),
+        yAxis = series.get("yAxis"),
+        xKey = series.get("xKey"),
+        yKey = series.get("yKey"),
+        categoryItem = {},
+        valueItem = {},
+        tt = this.get("tooltip"),
+        msg;
+        if(this.get("direction") == "vertical")
+        {
+            categoryItem = {
+                axis:yAxis,
+                key:yKey,
+                value:yAxis.getKeyValueAt(yKey, index)
+            };
+            valueItem = {
+                axis:xAxis,
+                key:xKey,
+                value: xAxis.getKeyValueAt(xKey, index)
+            };
+        }
+        else
+        {
+            valueItem = {
+                axis:yAxis,
+                key:yKey,
+                value:yAxis.getKeyValueAt(yKey, index)
+            };
+            categoryItem = {
+                axis:xAxis,
+                key:xKey,
+                value: xAxis.getKeyValueAt(xKey, index)
+            };
+        }
+        categoryItem.displayName = series.get("categoryDisplayName");
+        valueItem.displayName = series.get("valueDisplayName");
+
+        
+        msg = tt.labelFunction.apply(this, [categoryItem, valueItem, index, series, seriesIndex]);
+        if (node) {
+           this._showTooltip(msg, e.x + 10, e.y + 10);
+        }
+
+    },
+
+    /**
+     * @private
+     */
+    _displayMultiTooltip: function(e)
+    {
+        var items = e.items,
+            len = items.length,
+            i = 0,
+            index = e.index,
+            msg = "",
+            series,
+            xAxis,
+            yAxis,
+            categoryAxis = this.get("categoryAxis"),
+            horizontal = e.direction == "horizontal";
+        if(categoryAxis)
+        {
+            msg = categoryAxis.get("labelFunction").apply(this, [categoryAxis.getKeyValueAt(this.get("categoryKey"), index), categoryAxis.get("labelFormat")]);
+        }
+
+        for(; i < len; ++i)
+        {
+            series = items[i];
+            if(series.get("visible"))
+            {
+                if(horizontal)
+                {
+                    yAxis = series.get("yAxis");
+                    msg += "<br/><span>" + series.get("yDisplayName") + ":&nbsp;"  + yAxis.get("labelFunction").apply(this, [yAxis.getKeyValueAt(series.get("yKey"), index), yAxis.get("labelFormat")]) + "</span>";
+                }
+                else
+                {
+                    xAxis = series.get("xAxis");
+                    msg += "<br/><span>" + series.get("xDisplayName") + "&nbsp;" + xAxis.get("labelFunction").apply(this, [xAxis.getKeyValueAt(series.get("xKey"), index), xAxis.get("labelFormat")]) + "</span>";
+                }
+            }
+        }
+        this._showTooltip(msg, e.x + 10, e.y + 10);
+    },
+
+    /**
+     * @private
+     */
+    _showTooltipChangeHandler: function(e)
+    {
+        if(this.get("showTooltip") && this.get("rendered"))
+        {
+            this._addTooltip();
+        }
+    },
+
+    /**
+     * @private
+     * @description Listender for axisRendered event.
+     */
+    _axisRendered: function(e)
+    {
+        this._axesRenderQueue = this._axesRenderQueue.splice(1 + Y.Array.indexOf(this._axesRenderQueue, e.currentTarget), 1);
+        if(this._axesRenderQueue.length < 1)
+        {
+            this._redraw();
+        }
+    },
+
+    _sizeChanged: function(e)
+    {
+        if(this._axesCollection)
+        {
+            var ac = this._axesCollection,
+                i = 0,
+                l = ac.length;
+            for(; i < l; ++i)
+            {
+                this._addToAxesRenderQueue(ac[i]);
+            }
+            this._redraw();
+        }
+    },
+
+    _redraw: function()
+    {
+        var w = this.get("width"),
+            h = this.get("height"),
+            lw = 0,
+            rw = 0,
+            th = 0,
+            bh = 0,
+            lc = this.get("leftAxesCollection"),
+            rc = this.get("rightAxesCollection"),
+            tc = this.get("topAxesCollection"),
+            bc = this.get("bottomAxesCollection"),
+            i = 0,
+            l,
+            axis,
+            pos,
+            pts = [],
+            graph = this.get("graph"); 
+        if(lc)
+        {
+            l = lc.length;
+            for(i = l - 1; i > -1; --i)
+            {
+                pts[Y.Array.indexOf(this._axesCollection, lc[i])] = {x:lw + "px"};
+                lw += lc[i].get("width");
+            }
+        }
+        if(rc)
+        {
+            l = rc.length;
+            i = 0;
+            for(i = l - 1; i > -1; --i)
+            {
+                rw += rc[i].get("width");
+                pts[Y.Array.indexOf(this._axesCollection, rc[i])] = {x:(w - rw) + "px"};
+            }
+        }
+        if(tc)
+        {
+            l = tc.length;
+            for(i = l - 1; i > -1; --i)
+            {
+                pts[Y.Array.indexOf(this._axesCollection, tc[i])] = {y:th + "px"};
+                th += tc[i].get("height");
+            }
+        }
+        if(bc)
+        {
+            l = bc.length;
+            for(i = l - 1; i > -1; --i)
+            {
+                bh += bc[i].get("height");
+                pts[Y.Array.indexOf(this._axesCollection, bc[i])] = {y:(h - bh) + "px"};
+            }
+        }
+        l = this._axesCollection.length;
+        i = 0;
+        
+        for(; i < l; ++i)
+        {
+            axis = this._axesCollection[i];
+            pos = axis.get("position");
+            if(pos == "left" || pos === "right")
+            {
+                axis.get("boundingBox").setStyle("top", th + "px");
+                axis.get("boundingBox").setStyle("left", pts[i].x);
+                if(axis.get("height") !== h - (bh + th))
+                {
+                    axis.set("height", h - (bh + th));
+                }
+                continue;
+            }
+            if(axis.get("width") !== w - (lw + rw))
+            {
+                axis.set("width", w - (lw + rw));
+            }
+            axis.get("boundingBox").setStyle("left", lw + "px");
+            axis.get("boundingBox").setStyle("top", pts[i].y);
+        }
+        
+        if(graph)
+        {
+            graph.get("boundingBox").setStyle("left", lw + "px");
+            graph.get("boundingBox").setStyle("top", th + "px");
+            graph.set("width", w - (lw + rw));
+            graph.set("height", h - (th + bh));
+        }
+
+        if(this._overlay)
+        {
+            this._overlay.setStyle("left", lw + "px");
+            this._overlay.setStyle("top", th + "px");
+            this._overlay.setStyle("width", (w - (lw + rw)) + "px");
+            this._overlay.setStyle("height", (h - (th + bh)) + "px");
+        }
+    }
+}, {
+    ATTRS: {
+        axesStyles: {
+            getter: function()
+            {
+                var axes = this.get("axes"),
+                    i,
+                    styles = this._axesStyles;
+                if(axes)
+                {
+                    for(i in axes)
+                    {
+                        if(axes.hasOwnProperty(i) && axes[i] instanceof Y.Axis)
+                        {
+                            if(!styles)
+                            {
+                                styles = {};
+                            }
+                            styles[i] = axes[i].get("styles");
+                        }
+                    }
+                }
+                return styles;
+            },
+            
+            setter: function(val)
+            {
+                var axes = this.get("axes"),
+                    i;
+                for(i in val)
+                {
+                    if(val.hasOwnProperty(i) && axes.hasOwnProperty(i))
+                    {
+                        this._setBaseAttribute(axes[i], "styles", val[i]);
+                    }
+                }
+            }
+        },
+
+        seriesStyles: {
+            getter: function()
+            {
+                var styles = this._seriesStyles,
+                    graph = this.get("graph"),
+                    dict,
+                    i;
+                if(graph)
+                {
+                    dict = graph.get("seriesDictionary");
+                    if(dict)
+                    {
+                        styles = {};
+                        for(i in dict)
+                        {
+                            if(dict.hasOwnProperty(i))
+                            {
+                                styles[i] = dict[i].get("styles");
+                            }
+                        }
+                    }
+                }
+                return styles;
+            },
+            
+            setter: function(val)
+            {
+                var i,
+                    l,
+                    s;
+    
+                if(Y.Lang.isArray(val))
+                {
+                    s = this.get("seriesCollection");
+                    i = 0;
+                    l = val.length;
+
+                    for(; i < l; ++i)
+                    {
+                        this._setBaseAttribute(s[i], "styles", val[i]);
+                    }
+                }
+                else
+                {
+                    for(i in val)
+                    {
+                        if(val.hasOwnProperty(i))
+                        {
+                            s = this.getSeries(i);
+                            this._setBaseAttribute(s, "styles", val[i]);
+                        }
+                    }
+                }
+            }
+        },
+
+        graphStyles: {
+            getter: function()
+            {
+                var graph = this.get("graph");
+                if(graph)
+                {
+                    return(graph.get("styles"));
+                }
+                return this._graphStyles;
+            },
+
+            setter: function(val)
+            {
+                var graph = this.get("graph");
+                this._setBaseAttribute(graph, "styles", val);
+            }
+
+        },
+
+        styles: {
+            getter: function()
+            {
+                var styles = { 
+                    axes: this.get("axesStyles"),
+                    series: this.get("seriesStyles"),
+                    graph: this.get("graphStyles")
+                };
+                return styles;
+            },
+            setter: function(val)
+            {
+                if(val.hasOwnProperty("axes"))
+                {
+                    if(this.get("axesStyles"))
+                    {
+                        this.set("axesStyles", val.axes);
+                    }
+                    else
+                    {
+                        this._axesStyles = val.axes;
+                    }
+                }
+                if(val.hasOwnProperty("series"))
+                {
+                    if(this.get("seriesStyles"))
+                    {
+                        this.set("seriesStyles", val.series);
+                    }
+                    else
+                    {
+                        this._seriesStyles = val.series;
+                    }
+                }
+                if(val.hasOwnProperty("graph"))
+                {
+                    this.set("graphStyles", val.graph);
+                }
+            }
+        },
+
+        /**
+         * Data used to generate the chart.
+         */
+        dataProvider: {
+            getter: function()
+            {
+                return this._dataProvider;
+            },
+
+            setter: function(val)
+            {
+                if(this._dataAxes)
+                {
+                    var i;
+                    for(i in this._dataAxes)
+                    {
+                        if(this._dataAxes.hasOwnProperty(i))
+                        {
+                            this._dataAxes[i].set("dataProvider", val);
+                        }
+                    }
+                    this._dataProvider = val;
+                }
+                else
+                {
+                    this._setDataValues(val);
+                }
+            }
+        },
+
+        /**
+         * Axes to appear in the chart. 
+         */
+        axes: {
+            valueFn: "_parseAxes",
+
+            setter: function(val)
+            {
+                return this._parseAxes(val);
+            }
+        },
+        /**
+         * Collection of series to appear on the chart. This can be an array of Series instances or object literals
+         * used to describe a Series instance.
+         */
+        seriesCollection: {
+            valueFn: "_getDefaultSeriesCollection",
+            
+            setter: function(val)
+            {
+                return this._getDefaultSeriesCollection(val);
+            }
+        },
+
+        /**
+         * Element that contains left axes
+         */
+        leftAxesCollection: {},
+
+        /**
+         * Element that contains bottom axes
+         */
+        bottomAxesCollection: {},
+
+        /**
+         * Element that contains right axes
+         */
+        rightAxesCollection: {},
+
+        /**
+         * Element that contains top axes
+         */
+        topAxesCollection: {},
+
+        /**
+         * All axes in a chart
+         */
+        axesCollection: {},
+        
+        /**
+         * Indicates whether or not the chart is stacked.
+         * @type Boolean
+         */
+        stacked: {
+            value: false
+        },
+
+        /**
+         * Direction of chart's category axis when there is no series collection specified. Charts can
+         * be horizontal or vertical. When the chart type is column, the chart is horizontal.
+         * When the chart type is bar, the chart is vertical. 
+         * @type String
+         * @default Horizontal
+         */
+        direction: {
+            getter: function()
+            {
+                var type = this.get("type");
+                if(type == "bar")
+                {   
+                    return "vertical";
+                }
+                else if(type == "column")
+                {
+                    return "horizontal";
+                }
+                return this._direction;
+            },
+
+            setter: function(val)
+            {
+                this._direction = val;
+                return this._direction;
+            }
+        },
+
+        /**
+         * Indicates whether or not to show a tooltip.
+         */
+        showTooltip: {
+            value:true
+        },
+
+        /** 
+         * The key value used for the chart's category axis. 
+         * @default "category"
+         * @type String
+         */
+        categoryKey: {
+            value: "category"
+        },
+        
+        /**
+         * A collection of keys that map to the series axes. If no keys are set,
+         * they will be generated automatically depending on the data structure passed into 
+         * the chart.
+         * @type Array
+         */
+        seriesKeys: {},
+
+        /**
+         * Indicates whether or not an area is filled in a combo chart.
+         */
+        showAreaFill: {},
+
+        showMarkers:{},
+
+        showLines:{},
+        
+        /**
+         * Indicates the type of axis to use for the category axis.
+         */
+        categoryType:{
+            value:"category"
+        },
+
+        /**
+         * Indicates the key value used to identify a category axis in the <code>axes</code> hash.
+         */
+        categoryAxisName: {
+        },
+
+        valueAxisName: {
+            value: "values"
+        },
+
+        horizontalGridlines: {
+            getter: function()
+            {
+                var graph = this.get("graph");
+                if(graph)
+                {
+                    return graph.get("horizontalGridlines");
+                }
+                return this._horizontalGridlines;
+            },
+            setter: function(val)
+            {
+                var graph = this.get("graph");
+                if(val && !Y.Lang.isObject(val))
+                {
+                    val = {};
+                }
+                if(graph)
+                {
+                    graph.set("horizontalGridlines", val);
+                }
+                else
+                {
+                    this._horizontalGridlines = val;
+                }
+            }
+        },
+
+        verticalGridlines: {
+            getter: function()
+            {
+                var graph = this.get("graph");
+                if(graph)
+                {
+                    return graph.get("verticalGridlines");
+                }
+                return this._verticalGridlines;
+            },
+            setter: function(val)
+            {
+                var graph = this.get("graph");
+                if(val && !Y.Lang.isObject(val))
+                {
+                    val = {};
+                }
+                if(graph)
+                {
+                    graph.set("verticalGridlines", val);
+                }
+                else
+                {
+                    this._verticalGridlines = val;
+                }
+            }
+        },
+        
+        /**
+         * Type of chart when there is no series collection specified.
+         * @type String 
+         */
+        type: {
+            getter: function()
+            {
+                if(this.get("stacked"))
+                {
+                    return "stacked" + this._type;
+                }
+                return this._type;
+            },
+
+            setter: function(val)
+            {
+                if(this._type == "bar")
+                {
+                    if(val != "bar")
+                    {
+                        this.set("direction", "horizontal");
+                    }
+                }
+                else
+                {
+                    if(val == "bar")
+                    {
+                        this.set("direction", "vertical");
+                    }
+                }
+                this._type = val;
+                return this._type;
+            }
+        },
+        
+        /**
+         * Reference to the category axis used by the chart.
+         */
+        categoryAxis:{}
+    }
+});
+Y.PieChart = Y.Base.create("pieChart", Y.Widget, [Y.ChartBase], {
+    /**
+     * @private
+     */
+    _getSeriesCollection: function()
+    {
+        if(this._seriesCollection)
+        {
+            return this._seriesCollection;
+        }
+        var axes = this.get("axes"),
+            sc = [], 
+            seriesKeys,
+            i = 0,
+            l,
+            type = this.get("type"),
+            key,
+            catAxis = "categoryAxis",
+            catKey = "categoryKey",
+            valAxis = "valueAxis",
+            seriesKey = "valueKey";
+        if(axes)
+        {
+            seriesKeys = axes.values.get("dataSet").get("keyCollection");
+            key = axes.category.get("dataSet").get("keyCollection")[0];
+            l = seriesKeys.length;
+            for(; i < l; ++i)
+            {
+                sc[i] = {type:type};
+                sc[i][catAxis] = "category";
+                sc[i][valAxis] = "values";
+                sc[i][catKey] = key;
+                sc[i][seriesKey] = seriesKeys[i];
+            }
+        }
+        this._seriesCollection = sc;
+        return sc;
+    },
+
+    /**
+     * @private
+     */
+    _parseAxes: function(hash)
+    {
+        if(!this._axes)
+        {
+            this._axes = {};
+        }
+        if(!this._dataAxes)
+        {
+            this._dataAxes = {};
+        }
+        var i, pos, axis, dataAxis, dh, config, dataClass,
+            type = this.get("type"),
+            w = this.get("width"),
+            h = this.get("height"),
+            node = Y.Node.one(this._parentNode);
+        if(!w)
+        {
+            this.set("width", node.get("offsetWidth"));
+            w = this.get("width");
+        }
+        if(!h)
+        {
+            this.set("height", node.get("offsetHeight"));
+            h = this.get("height");
+        }
+        for(i in hash)
+        {
+            if(hash.hasOwnProperty(i))
+            {
+                dh = hash[i];
+                pos = type == "pie" ? "none" : dh.position;
+                dataClass = this._getDataClass(dh.type);
+                config = {dataProvider:this.get("dataProvider"), keys:dh.keys};
+                if(dh.hasOwnProperty("roundingUnit"))
+                {
+                    config.roundingUnit = dh.roundingUnit;
+                }
+                dataAxis = new dataClass(config);
+                if(pos && pos != "none")
+                {
+                    axis = new Y.Axis({dataSet:dataAxis, width:w, height:h, position:dh.position, styles:dh.styles});
+                    axis.on("axisRendered", Y.bind(this._axisRendered, this));
+                    this._axes[i] = axis;
+                }
+                this._dataAxes[i] = dataAxis;
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    _addAxes: function()
+    {
+        var axes = this.get("axes"),
+            i, 
+            axis, 
+            p;
+        if(!axes)
+        {
+            this.set("axes", this._getDefaultAxes());
+            axes = this.get("axes");
+        }
+        if(!this._axesCollection)
+        {   
+            this._axesCollection = [];
+        }
+        for(i in axes)
+        {
+            if(axes.hasOwnProperty(i))
+            {
+                axis = axes[i];
+                p = axis.get("position");
+                if(!this.get(p + "AxesCollection"))
+                {
+                    this.set(p + "AxesCollection", [axis]);
+                }
+                else
+                {
+                    this.get(p + "AxesCollection").push(axis);
+                }
+                this._axesCollection.push(axis);
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    _addSeries: function()
+    {
+        var graph = this.get("graph"),
+            seriesCollection = this.get("seriesCollection");
+        this._parseSeriesAxes(seriesCollection);
+        graph.set("showBackground", false);
+        graph.set("width", this.get("width"));
+        graph.set("height", this.get("height"));
+        graph.set("seriesCollection", seriesCollection);
+        this._seriesCollection = graph.get("seriesCollection");
+        graph.render(this.get("contentBox"));
+    },
+
+    /**
+     * @private
+     */
+    _parseSeriesAxes: function(c)
+    {
+        var i = 0, 
+            len = c.length, 
+            s,
+            axis;
+        for(; i < len; ++i)
+        {
+            s = c[i];
+            if(s)
+            {
+                //If series is an actual series instance, 
+                //replace axes attribute string ids with axes
+                if(s instanceof Y.PieSeries)
+                {
+                    axis = s.get("categoryAxis");
+                    if(axis && !(axis instanceof Y.BaseAxis))
+                    {
+                        s.set("categoryAxis", this._dataAxes[axis]);
+                    }
+                    axis = s.get("valueAxis");
+                    if(axis && !(axis instanceof Y.BaseAxis))
+                    {
+                        s.set("valueAxis", this._dataAxes[axis]);
+                    }
+                    continue;
+                }
+                s.categoryAxis = this._dataAxes.category;
+                s.valueAxis = this._dataAxes.values;
+                if(!s.type)
+                {
+                    s.type = this.get("type");
+                }
+            }
+        }
+    },
+
+    /**
+     * @private
+     */
+    _getDefaultAxes: function()
+    {
+        var catKey = this.get("categoryKey"),
+            seriesKeys = this.get("seriesKeys") || [], 
+            seriesAxis = "numeric",
+            i, 
+            dv = this.get("dataProvider")[0];
         if(seriesKeys.length < 1)
         {
             for(i in dv)
@@ -9184,81 +10410,205 @@ Y.extend(CartesianChart, Y.Widget, {
         return {
             values:{
                 keys:seriesKeys,
-                position:seriesPosition,
                 type:seriesAxis
             },
             category:{
                 keys:[catKey],
-                position:categoryPosition,
-                type:"category"
+                type:this.get("categoryType")
             }
         };
     },
-
-    /**
-     * Reference to the tooltip
-     */
-    tooltip: null,
-
-    /**
-     * @private
-     */
-    _addTooltip: function(e)
-    {
-        if(!Y.Tooltip)
-        {
-            return;
-        }
-        var tt = new Y.Tooltip({
-            triggerNodes:".yui3-seriesmarker",
-            delegate: "#" + this._parentNode.get("id"),
-            shim:false,
-            zIndex:2
-        });
         
-        tt.render();
-        
-        tt.on("triggerEnter", function(e) {
-            var node = e.node,
-            marker = Y.Widget.getByNode(node),
-            index = marker.get("index"),
-            series = marker.get("series"),
-            xAxis = series.get("xAxis"),
-            yAxis = series.get("yAxis"),
-            xKey = series.get("xKey"),
-            yKey = series.get("yKey"),
-            msg = series.get("xDisplayName") + 
-            ": " + xAxis.get("labelFunction")(xAxis.getKeyValueAt(xKey, index)) + 
-            "<br/>" + series.get("yDisplayName") + 
-            ": " + yAxis.get("labelFunction")(yAxis.getKeyValueAt(yKey, index));
-            if (node) {
-                this.setTriggerContent(msg);
-            }
-        });
-        this.tooltip = tt;
+    _displayTooltip: function(e) {
+        var tt = this.get("tooltip"),
+            node = e.node,
+            graph = Y.Widget.getByNode(node),
+            strArr = e.node.getAttribute("id").split("_"),
+            seriesIndex = strArr[1],
+            series = graph.getSeriesByIndex(seriesIndex),
+            index = strArr[2],
+            categoryItem = {
+                axis: series.get("categoryAxis"),
+                key: series.get("categoryKey"),
+                displayName: series.get("categoryDisplayName")
+            },
+            valueItem = {
+                axis: series.get("valueAxis"),
+                key: series.get("valueKey"),
+                displayName: series.get("valueDisplayName")
+            },
+            msg;
+        categoryItem.value = categoryItem.axis.getKeyValueAt(categoryItem.key, index);
+        valueItem.value = valueItem.axis.getKeyValueAt(valueItem.key, index);
+        msg = tt.labelFunction.apply(this, [categoryItem, valueItem, index, series, seriesIndex]);
+        this._showTooltip(msg, e.x + 10, e.y + 10);
     },
 
-    /**
-     * @private
-     */
-    _showTooltipChangeHandler: function(e)
+    _sizeChanged: function(e)
     {
-        if(this.get("showTooltip") && this.get("rendered"))
+        this._redraw();
+    },
+
+    _redraw: function()
+    {
+        var graph = this.get("graph");
+        if(graph)
         {
-            this._addTooltip();
+            graph.set("width", this.get("width"));
+            graph.set("height", this.get("height"));
+        }
+    }
+}, {
+    ATTRS: {
+        /**
+         * Data used to generate the chart.
+         */
+        dataProvider: {
+            getter: function()
+            {
+                return this._dataProvider;
+            },
+
+            setter: function(val)
+            {
+                if(this._dataAxes)
+                {
+                    var i;
+                    for(i in this._dataAxes)
+                    {
+                        if(this._dataAxes.hasOwnProperty(i))
+                        {
+                            this._dataAxes[i].set("dataProvider", val);
+                        }
+                    }
+                    this._dataProvider = val;
+                }
+                else
+                {
+                    this._setDataValues(val);
+                }
+            }
+        },
+
+        /**
+         * Axes to appear in the chart. 
+         */
+        axes: {
+            getter: function()
+            {
+                return this._axes;
+            },
+
+            setter: function(val)
+            {
+                this._parseAxes(val);
+            }
+        },
+
+        /**
+         * Collection of series to appear on the chart. This can be an array of Series instances or object literals
+         * used to describe a Series instance.
+         */
+        seriesCollection: {
+            getter: function()
+            {
+                return this._getSeriesCollection();
+            },
+            
+            setter: function(val)
+            {
+                return this._setSeriesCollection(val);
+            }
+        },
+
+        /**
+         * All axes in a chart
+         */
+        axesCollection: {
+            value: null
+        },
+        
+        type: {
+            value: "pie"
+        },
+
+        /**
+         * Reference to graph instance
+         * @type Graph 
+         */
+        graph: {},
+
+        /**
+         * Direction of chart's category axis when there is no series collection specified. Charts can
+         * be horizontal or vertical. When the chart type is column, the chart is horizontal.
+         * When the chart type is bar, the chart is vertical. 
+         * @type String
+         * @default Horizontal
+         */
+        direction: {
+            getter: function()
+            {
+                var type = this.get("type");
+                if(type == "bar")
+                {   
+                    return "vertical";
+                }
+                else if(type == "column")
+                {
+                    return "horizontal";
+                }
+                return this._direction;
+            },
+
+            setter: function(val)
+            {
+                this._direction = val;
+            }
+        },
+
+        /**
+         * Indicates whether or not to show a tooltip.
+         */
+        showTooltip: {
+            value:true
+        },
+
+        /** 
+         * The key value used for the chart's category axis. 
+         * @default "category"
+         * @type String
+         */
+        categoryKey: {
+            value: "category"
+        },
+        
+        /**
+         * A collection of keys that map to the series axes. If no keys are set,
+         * they will be generated automatically depending on the data structure passed into 
+         * the chart.
+         * @type Array
+         */
+        seriesKeys: {
+            value: null    
+        },
+
+        categoryType:{
+            value:"category"
         }
     }
 });
-
-Y.CartesianChart = CartesianChart;
 function Chart(cfg)
 {
     if(cfg.type != "pie")
     {
         return new Y.CartesianChart(cfg);
     }
+    else
+    {
+        return new Y.PieChart(cfg);
+    }
 }
 Y.Chart = Chart;
 
 
-}, 'gallery-2010.09.08-19-45' ,{requires:['dom', 'datatype', 'event-custom', 'event-mouseenter', 'widget', 'widget-position', 'widget-stack']});
+}, 'gallery-2010.11.17-21-32' ,{requires:['dom', 'datatype', 'event-custom', 'event-mouseenter', 'widget', 'widget-position', 'widget-stack']});

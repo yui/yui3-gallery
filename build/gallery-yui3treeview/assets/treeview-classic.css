@@ -1,0 +1,73 @@
+.yui3-treeview {
+    margin:0;
+    padding:0;
+    margin-left: 10px;
+    list-style:none;
+    zoom: 1;
+}
+
+.yui3-js-enabled .yui3-treeview-loading {
+    display:none;
+}
+
+.yui3-treeview .yui3-treeview {
+    border-left: 1px solid #ebebeb;
+}
+
+.yui3-treeleaf-content,
+.yui3-treeleaf,
+.yui3-treeview .yui3-treeview-content .yui3-treeview,
+.yui3-treeview-treelabel {
+    background: url(tree_view_icons_blue_01_arrow_beside_folders.gif) no-repeat;
+}
+
+.yui3-treeview-content .yui3-tree-collapsed {
+    background: none;
+}
+
+.yui3-treeview .yui3-treeview-content .yui3-treeview .yui3-treeview-treelabel {
+    background-position: 23px -123px;
+    padding-left: 60px;
+}
+
+.yui3-treeview .yui3-tree-collapsed .yui3-treeview-treelabel {
+    background-position: 0 -83px;
+}
+
+.yui3-treeview .yui3-treeview-content .yui3-tree-collapsed .yui3-treeview-treelabel {
+    background-position: 23px -83px;
+}
+
+.yui3-treeview-treelabel {
+    padding-left: 38px;
+    position: relative;
+    left: -5px;
+    background-position: 0 -123px;
+    text-decoration: none;
+    color: black;
+}
+
+.yui3-treeview .yui3-tree-collapsed .yui3-treeview-content {
+    display : none;
+}
+
+.yui3-treeview .yui3-treeview-content {
+    padding-bottom: 3px;
+    margin-left: 22px;
+}
+
+.yui3-treeview .yui3-treeleaf,
+.yui3-treeview .yui3-treeview-content .yui3-treeview {
+    background-position: 0px -252px;
+    margin-left: -25px;
+    margin-top: -15px;
+    padding-top: 19px;
+    padding-left: 19px;
+    border: none;
+}
+
+.yui3-treeleaf-content {
+    background-position: 0px -162px;
+    padding-left: 38px;
+}
+
