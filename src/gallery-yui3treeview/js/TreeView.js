@@ -12,7 +12,7 @@ var getClassName = Y.ClassNameManager.getClassName,
             loading : getClassName(TREEVIEW,'loading'),
             tree : getClassName(TREE),
             treeLabel : getClassName(TREEVIEW,"treelabel"),
-            toggle : getClassName('toggle'),
+            labelcontent : getClassName(TREEVIEW,'label-content'),
             treeview : getClassName(TREEVIEW),
             collapsed : getClassName(TREE,"collapsed"),
             leaf : getClassName(TREELEAF)
@@ -76,15 +76,16 @@ var getClassName = Y.ClassNameManager.getClassName,
                 treeLabeltokens;
                 
                 
-                toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{toggleClassName:classNames.toggle});
                 
                 //We get the anchor to retrieve the label, we add the classname
                 if (this._renderFromMarkup) {
+
                     labelContainer = boundingBox.one(":first-child");
                     labelContainer.set("role","treeitem");
                     labelContainer.addClass(treelabelClassName);
-                    labelContainer.prepend(toggleControlHtml);
                     label = labelContainer.get(INNERHTML);
+                    toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{labelcontentClassName:classNames.labelcontent, label : label});
+                    labelContainer.set(INNERHTML,toggleControlHtml);
                     this.set("label",label);
                     this._renderFromMarkup = FALSE;
                 } else {
@@ -112,7 +113,7 @@ var getClassName = Y.ClassNameManager.getClassName,
                               
         TREEVIEWLABEL_TEMPLATE : "<a class={treelabelClassName} role='treeitem' href='#'>{label}</a>",
         
-        EXPANDCONTROL_TEMPLATE : "<span class={toggleClassName}></span>",
+        EXPANDCONTROL_TEMPLATE : "<span class={labelcontentClassName}>{label}</span>",
         
         /**
          * In charge of attaching events. 
@@ -208,6 +209,13 @@ var getClassName = Y.ClassNameManager.getClassName,
             if (!this.isRoot()) {
                 this.get(BOUNDING_BOX).addClass(classNames.collapsed);   
             }
+            
+            var src = this.get('srcNode');
+            
+            if (!this.get(BOUNDING_BOX).siblings().size()) {
+                this.get(BOUNDING_BOX).addClass("yui3-singletree"); 
+            }
+                        
         },
         
         /**
@@ -270,7 +278,7 @@ var getClassName = Y.ClassNameManager.getClassName,
             for (i=0;i<cLength;i++) {
                 className = classes[i];
                 switch (className) {
-                    case classNames.toggle :
+                    case classNames.labelcontent :
                         this.fire('toggleTreeState',{actionNode:target});
                         break;
                     case classNames.treeLabel :
@@ -399,4 +407,3 @@ var getClassName = Y.ClassNameManager.getClassName,
             }      
         }        
     });
-
