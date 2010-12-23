@@ -136,65 +136,7 @@ var getClassName = Y.ClassNameManager.getClassName,
             
  
         }, 
-            
-        /**
-         * Needs to overwrite the Widget _createUIEvent, so it can reference treeview's own _instance
-         * hash 
-         * @method _createUIEvent
-         * @protected
-         */
-        _createUIEvent: function (type) {
-                var uiEvtNode = this._getUIEventNode(),
-                    key = (Y.stamp(uiEvtNode) + type),
-                    info,
-                    self = this,
-                    handle;
-        
-                    this._uievts = this._uievts || {};
-                    info = this._uievts[key];
-        
-            //  For each Node instance: Ensure that there is only one delegated
-            //  event listener used to fire Widget UI events.
-            if (!info) {
-                handle = uiEvtNode.delegate(type, function (evt) {
-                    //access your own instance, you should be golden
-                    var widget = self.getByNode(this);
-                    
-                    //  Make the DOM event a property of the custom event
-                    //  so that developers still have access to it.
-                     widget.fire(evt.type, { domEvent: evt });
-            
-                }, "." + Y.Widget.getClassName());
-            
-                this._uievts[key] = info = { instances: {}, handle: handle };
-            }
-            //Register this Widget as using this Node as a delegation container.
-            info.instances[Y.stamp(this)] = 1;
-        },
-
-        /**
-         * Needs to overwrite the Widget instance, used by _createUIEvent
-         * @method getByNode
-         * @param Y.Node 
-         * @protected
-         */
-        getByNode : function (node) {
-            var widget,
-                widgetMarker = "yui3-widget";
-
-            
-            node = Y.Node.one(node);
-            
-            if (node) {
-                node = node.ancestor("." + widgetMarker, true);
-                if (node) {
-                    widget = _instances[Y.stamp(node, TRUE)];
-                }
-            }
-        
-            return widget || null;
-        },
-     
+    
     
         /**
          * Add class collapsed to all trees

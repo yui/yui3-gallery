@@ -14,16 +14,6 @@
     border-left: 1px solid #ebebeb;
 }
 
-.yui3-toggle {
-    background-position: -6px -285px;
-    display: block;
-    position: absolute;
-    height: 9px;
-    width: 9px;
-    bottom: 0px;
-    left: -5px;
-}
-
 .yui3-tree-collapsed .yui3-treeview-label-content {
     background-position: -0px -81px;
 }

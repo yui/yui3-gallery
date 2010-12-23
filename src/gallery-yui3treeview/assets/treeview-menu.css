@@ -13,8 +13,7 @@
 }
 
 .yui3-treeleaf-content,
-.yui3-treeview-label-content,
-.yui3-toggle {
+.yui3-treeview-label-content {
     background: url(tree_view_icons_blue_01_arrow_beside_folders.gif) no-repeat;
 }
 
