@@ -24,8 +24,8 @@
     left: -5px;
 }
 
-.yui3-tree-collapsed .yui3-toggle {
-    background-position: -6px -245px;
+.yui3-tree-collapsed .yui3-treeview-label-content {
+    background-position: -0px -81px;
 }
 
 .yui3-treeview-label-content {
@@ -35,8 +35,6 @@
     left : -5px;
     padding-left : 35px;
     top : 5px;
-
-
 }
 
 .yui3-treeview .yui3-singletree {
@@ -45,12 +43,10 @@
 
 .yui3-treeleaf-content,
 .yui3-treeleaf,
-.yui3-toggle,
-
 .yui3-treeview .yui3-treeview-content .yui3-treeview,
 .yui3-treeview-label-content
 {
-    background-image: url(tree_view_icons_blue_01_line_test.gif);
+    background-image: url(tree_view_icons_blue_01_arrow_beside_folders.gif);
     background-repeat: no-repeat;
 }
 
@@ -88,5 +84,6 @@
     background-position: 0 -162px;
     padding-left: 35px;
     margin-left: 4px;
+    text-decoration: none;
 }
 
