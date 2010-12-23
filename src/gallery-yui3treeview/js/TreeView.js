@@ -75,11 +75,8 @@ var getClassName = Y.ClassNameManager.getClassName,
                 treelabelClassName = this.getClassName("treelabel"),
                 treeLabeltokens;
                 
-                
-                
                 //We get the anchor to retrieve the label, we add the classname
                 if (this._renderFromMarkup) {
-
                     labelContainer = boundingBox.one(":first-child");
                     labelContainer.set("role","treeitem");
                     labelContainer.addClass(treelabelClassName);
@@ -89,13 +86,11 @@ var getClassName = Y.ClassNameManager.getClassName,
                     this.set("label",label);
                     this._renderFromMarkup = FALSE;
                 } else {
-                    treeLabeltokens = {
-                        treelabelClassName : treelabelClassName,
-                        label : this.get("label")
-                    };
-                    treeLabelHtml = Y.substitute(this.TREEVIEWLABEL_TEMPLATE, treeLabeltokens);
+                    label = this.get("label");
+                    treeLabelHtml = Y.substitute(this.TREEVIEWLABEL_TEMPLATE, {treelabelClassName : treelabelClassName});
                     treeLabelHtml = Y.Node.create(treeLabelHtml);
-                    treeLabelHtml.prepend(toggleControlHtml);
+                    toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{labelcontentClassName:classNames.labelcontent, label : label});
+                    treeLabelHtml.append(toggleControlHtml);
                     this._set(CONTENT_BOX,Y.Node.create("<ul></ul>"));
                     this._set(BOUNDING_BOX, Y.Node.create(tag));
                     boundingBox = this.get(BOUNDING_BOX).setContent(treeLabelHtml);
@@ -104,14 +99,13 @@ var getClassName = Y.ClassNameManager.getClassName,
                 }
                 
                 boundingBox.set("role","presentation");
-
         },   
     
         CONTENT_TEMPLATE :  "<div></div>",
         
         BOUNDING_TEMPLATE : '<ul></ul>',
                               
-        TREEVIEWLABEL_TEMPLATE : "<a class={treelabelClassName} role='treeitem' href='#'>{label}</a>",
+        TREEVIEWLABEL_TEMPLATE : "<a class={treelabelClassName} role='treeitem' href='#'></a>",
         
         EXPANDCONTROL_TEMPLATE : "<span class={labelcontentClassName}>{label}</span>",
         
@@ -138,7 +132,9 @@ var getClassName = Y.ClassNameManager.getClassName,
                     },
                     circular: true
                 });
-            } 
+            }
+            
+ 
         }, 
             
         /**
@@ -210,12 +206,12 @@ var getClassName = Y.ClassNameManager.getClassName,
                 this.get(BOUNDING_BOX).addClass(classNames.collapsed);   
             }
             
-            var src = this.get('srcNode');
+            var src = this.get('srcNode'),
+                items = this._items;
             
-            if (!this.get(BOUNDING_BOX).siblings().size()) {
-                this.get(BOUNDING_BOX).addClass("yui3-singletree"); 
+            if (items.length === 1 && (items[0] instanceof Y.TreeView)) {
+              items[0].get(BOUNDING_BOX).addClass("yui3-singletree"); 
             }
-                        
         },
         
         /**
@@ -334,6 +330,8 @@ var getClassName = Y.ClassNameManager.getClassName,
                         isContained = srcNode.ancestor("ul"),
                         subTree,
                         children = [];
+                        
+                        
                         
                     if (leafs.size() > 0 || isContained) {
                         this._renderFromMarkup = true;
