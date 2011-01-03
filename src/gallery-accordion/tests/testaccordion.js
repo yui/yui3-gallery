@@ -422,7 +422,7 @@ YUI({
     Y.Test.Runner.on( 'complete', function( resCont ){
         var color;
         var results = resCont.results;
-        var res1 = Y.get( "#acc_result1" );
+        var res1 = Y.one( "#acc_result1" );
         res1.setContent(
             [ "Accordion1 - tests completed.<br>",
               "Passed:", results.passed,
@@ -547,7 +547,7 @@ YUI({
     Y.Test.Runner.on( 'complete', function( resCont ){
         var color;
         var results = resCont.results;
-        var res2 = Y.get( "#acc_result2" );
+        var res2 = Y.one( "#acc_result2" );
         res2.setContent(
             [ "Accordion2 - tests completed.<br>",
               "Passed:", results.passed,
@@ -603,7 +603,7 @@ function changeContentInnerHTML( Y, accordion ){
                 ].join('') );
 
                 Y.later(1500, this, function(){
-                    var td = Y.get( "#my_third_div" );
+                    var td = Y.one( "#my_third_div" );
                     td.set( "innerHTML", "Only part of item's content has been changed<br> by using 'innerHTML' and the new resize() function." );
                     item.resize();
                 });
