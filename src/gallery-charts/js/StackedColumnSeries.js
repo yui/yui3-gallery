@@ -1,41 +1,4 @@
-function StackedColumnSeries(config)
-{
-	StackedColumnSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedColumnSeries.NAME = "stackedColumnSeries";
-
-StackedColumnSeries.ATTRS = {
-	type: {
-        value: "stackedColumn"
-    },
-
-    negativeBaseValues: {
-        value: null
-    },
-
-    positiveBaseValues: {
-        value: null
-    }
-};
-
-Y.extend(StackedColumnSeries, Y.CartesianSeries, {
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._setNode();
-    },
-    
-    bindUI: function()
-    {
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-    },
-	
+Y.StackedColumnSeries = Y.Base.create("stackedColumnSeries", Y.ColumnSeries, [Y.StackingUtil], {
     /**
 	 * @private
 	 */
@@ -45,7 +8,7 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
 		{
 			return;
 		}
-        var style = this._mergeStyles(this.get("styles"), {}),
+        var style = this.get("styles").marker, 
             w = style.width,
             h = style.height,
             xcoords = this.get("xcoords"),
@@ -58,17 +21,17 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
             seriesCollection = graph.seriesTypes[type],
             ratio,
             order = this.get("order"),
+            graphOrder = this.get("graphOrder"),
+            left,
+            marker,
             lastCollection,
             negativeBaseValues,
             positiveBaseValues,
             useOrigin = order === 0,
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            left,
-            marker,
-            bb,
-            totalWidth = len * w;
+            totalWidth = len * w,
+            mnode;
         this._createMarkerCache();
-        if(totalWidth > node.offsetWidth)
+        if(totalWidth > this.get("width"))
         {
             ratio = this.width/totalWidth;
             w *= ratio;
@@ -127,11 +90,11 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
             left = xcoords[i] - w/2;
             style.width = w;
             style.height = h;
-            marker = this.getMarker.apply(this, [{index:i, styles:style}]);
-            bb = marker.get("boundingBox");
-            bb.setStyle("position", "absolute");
-            bb.setStyle("left", left + "px");
-            bb.setStyle("top", top + "px");
+            marker = this.getMarker(style, graphOrder, i);
+            mnode = Y.one(marker.parentNode);
+            mnode.setStyle("position", "absolute");
+            mnode.setStyle("left", left);
+            mnode.setStyle("top", top);
         }
         this._clearMarkerCache();
  	},
@@ -140,51 +103,44 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
      * @private
      * Resizes and positions markers based on a mouse interaction.
      */
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget),
+        var styles,
+            markerStyles,
+            state = this._getState(type),
             xcoords = this.get("xcoords"),
-            offset,
-            i = marker.get("index") || Y.Array.indexOf(this.get("markers"), marker);
-        switch(type)
-        {
-            case "mouseout" :
-                marker.set("state", "off");
-            break;
-            case "mouseover" :
-                marker.set("state", "over");
-            break;
-            case "mouseup" :
-                marker.set("state", "over");
-            break;
-            case "mousedown" :
-                marker.set("state", "down");
-            break;
-        }
-        offset = marker.get("width") * 0.5;
-        marker.get("boundingBox").setStyle("left", (xcoords[i] - offset) + "px");    
+            marker = this._markers[i],
+            graphic = this._graphicCollection[i],
+            offset = 0;        
+        styles = this.get("styles").marker;
+        markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+        markerStyles.height = marker.height;
+        marker.update(markerStyles);
+        offset = styles.width * 0.5;
+        Y.one(graphic.node).setStyle("left", (xcoords[i] - offset));
     },
 	
 	/**
 	 * @private
 	 */
-    _getDefaultStyles: function()
+    _getPlotDefaults: function()
     {
-        return {
-            fill: {
-                alpha: "1",
-                colors: [],
-                alphas: [],
-                ratios: [],
-                rotation: 0
+        var defs = {
+            fill:{
+                type: "solid",
+                alpha: 1,
+                colors:null,
+                alphas: null,
+                ratios: null
             },
-            border: {
-                weight:0
+            border:{
+                weight: 0,
+                alpha: 1
             },
-            width: 6,
-            height: 6,
+            width: 24,
+            height: 24,
             shape: "rect",
+
             padding:{
                 top: 0,
                 left: 0,
@@ -192,7 +148,23 @@ Y.extend(StackedColumnSeries, Y.CartesianSeries, {
                 bottom: 0
             }
         };
+        defs.fill.color = this._getDefaultColor(this.get("graphOrder"), "fill");
+        defs.border.color = this._getDefaultColor(this.get("graphOrder"), "border");
+        return defs;
+ 	}
+}, {
+    ATTRS: {
+        type: {
+            value: "stackedColumn"
+        },
+
+        negativeBaseValues: {
+            value: null
+        },
+
+        positiveBaseValues: {
+            value: null
+        }
     }
 });
 
-Y.StackedColumnSeries = StackedColumnSeries;

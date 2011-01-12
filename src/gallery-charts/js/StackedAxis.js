@@ -71,10 +71,10 @@ Y.extend(StackedAxis, Y.NumericAxis,
                 min = Math.min(min, pos);
             }
         }
-        if(this._roundMinAndMax && !isNaN(this._roundingUnit))
+        if(this._roundMinAndMax && !isNaN(this.get("roundingUnit")))
 		{
-			this._dataMaximum = this._roundUpToNearest(max, this._roundingUnit);
-			this._dataMinimum = this._roundDownToNearest(min, this._roundingUnit);
+			this._dataMaximum = this._roundUpToNearest(max, this.get("roundingUnit"));
+			this._dataMinimum = this._roundDownToNearest(min, this.get("roundingUnit"));
 		}
 		else
 		{

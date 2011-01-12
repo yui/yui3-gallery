@@ -6,39 +6,7 @@
  * @description A form field which allows one or multiple values from a 
  * selection of choices
  */
-function ChoiceField() {
-    ChoiceField.superclass.constructor.apply(this,arguments);
-}
-
-Y.mix(ChoiceField, {
-    NAME : 'choice-field',
-    
-	ATTRS : { 
-        /** 
-         * @attribute choices
-         * @type Array
-         * @description The choices to render into this field
-         */
-        choices : { 
-            validator : function (val) {
-                return this._validateChoices(val);
-            }
-        },  
-
-        /** 
-         * @attribute multiple
-         * @type Boolean
-         * @default false
-         * @description Set to true to allow multiple values to be selected
-         */
-        multiple : { 
-            validator : Y.Lang.isBoolean,
-            value : false
-        }   
-    }  
-});
-
-Y.extend(ChoiceField, Y.FormField, {
+Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.WidgetChild], {
     /**
      * @method _validateChoices
      * @protected
@@ -78,8 +46,9 @@ Y.extend(ChoiceField, Y.FormField, {
 
     _renderLabelNode : function () {
         var contentBox = this.get('contentBox'),
-            titleNode = Y.Node.create('<span>' + this.get('label') + '</span>');
+            titleNode = Y.Node.create('<span></span>');
         
+        titleNode.set('innerHTML', this.get('label'));
         contentBox.appendChild(titleNode);
         
         this._labelNode = titleNode;
@@ -87,24 +56,24 @@ Y.extend(ChoiceField, Y.FormField, {
     
     _renderFieldNode : function () {
         var contentBox = this.get('contentBox'),
-            choices = this.get('choices');
-       
-		Y.Array.each(choices, function(c, i, a) {
-			var cfg = {
-					value : c.value,
-					id : (this.get('id') + '_choice' + i),
-					name : this.get('name'),
-					label : c.label
-				},
-				fieldType = (this.get('multiple') === true ? Y.CheckboxField : Y.RadioField),
-				field = new fieldType(cfg);
-			
-			field.render(contentBox);
+            choices = this.get('choices'),
+            multiple = this.get('multi'),
+            fieldType = (multiple === true ? Y.CheckboxField : Y.RadioField);
+        
+        Y.Array.each(choices, function(c, i, a) {
+            var cfg = {
+                    value : c.value,
+                    id : (this.get('id') + '_choice' + i),
+                    name : this.get('name'),
+                    label : c.label
+                },
+                field = new fieldType(cfg);
+        		
+            field.render(contentBox);
         }, this);
-
-		this._fieldNode = contentBox.all('input');
+        this._fieldNode = contentBox.all('input');
     },
-
+    
 	_syncFieldNode : function () {},
 
     clear : function () {
@@ -125,6 +94,28 @@ Y.extend(ChoiceField, Y.FormField, {
 		}, this));
 	}
 
-});
+}, {
+	ATTRS : { 
+        /** 
+         * @attribute choices
+         * @type Array
+         * @description The choices to render into this field
+         */
+        choices : { 
+            validator : function (val) {
+                return this._validateChoices(val);
+            }
+        },  
 
-Y.ChoiceField = ChoiceField;
+        /** 
+         * @attribute multi
+         * @type Boolean
+         * @default false
+         * @description Set to true to allow multiple values to be selected
+         */
+        multi : { 
+            validator : Y.Lang.isBoolean,
+            value : false
+        }   
+    }  
+});

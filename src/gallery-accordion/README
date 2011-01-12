@@ -2,6 +2,9 @@ Accordion widget for YUI 3
 
 I. Changelog
 
+03.01.2011 - ver. 1.11
+ - Deprecated/removed YUI API functions (like "Node.query", "Node.queryAll" and "Y.get") have been replaced with their alternatives
+
 09.06.2010 - ver. 1.10
  - Fixed bug which caused firing itemExpanded event twice.
  - Events will be not published in Accordion explicitly, but they will be created if needed.

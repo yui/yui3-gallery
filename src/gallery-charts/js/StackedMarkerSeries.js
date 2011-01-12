@@ -1,25 +1,17 @@
-function StackedMarkerSeries(config)
-{
-	StackedMarkerSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedMarkerSeries.NAME = "stackedMarkerSeries";
-
-StackedMarkerSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedMarker"
-    }
-};
-
-Y.extend(StackedMarkerSeries, Y.MarkerSeries, {
+Y.StackedMarkerSeries = Y.Base.create("stackedMarkerSeries", Y.MarkerSeries, [Y.StackingUtil], {
     setAreaData: function()
     {   
-        StackedMarkerSeries.superclass.setAreaData.apply(this);
+        Y.StackedMarkerSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
+    }
+}, {
+    ATTRS: {
+        /**
+         * Indicates the type of graph.
+         */
+        type: {
+            value:"stackedMarker"
+        }
     }
 });
 
-Y.StackedMarkerSeries = StackedMarkerSeries;

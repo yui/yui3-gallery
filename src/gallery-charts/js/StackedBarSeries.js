@@ -1,51 +1,12 @@
-function StackedBarSeries(config)
-{
-	StackedBarSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedBarSeries.NAME = "stackedBarSeries";
-
-StackedBarSeries.ATTRS = {
-	type: {
-        value: "stackedBar"
-    },
-    direction: {
-        value: "vertical"
-    },
-
-    negativeBaseValues: {
-        value: null
-    },
-
-    positiveBaseValues: {
-        value: null
-    }
-};
-
-Y.extend(StackedBarSeries, Y.CartesianSeries, {
-    /**
-     * @private
-     */
-    renderUI: function()
-    {
-        this._setNode();
-    },
-    
-    bindUI: function()
-    {
-        Y.delegate("mouseover", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mousedown", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseup", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-        Y.delegate("mouseout", Y.bind(this._markerEventHandler, this), this.get("node"), ".yui3-seriesmarker");
-    },
-    
+Y.StackedBarSeries = Y.Base.create("stackedBarSeries", Y.BarSeries, [Y.StackingUtil], {
     drawSeries: function()
 	{
 	    if(this.get("xcoords").length < 1) 
 		{
 			return;
 		}
-        var style = this._mergeStyles(this.get("styles"), {}),
+
+        var style = this.get("styles").marker,
             w = style.width,
             h = style.height,
             xcoords = this.get("xcoords"),
@@ -56,20 +17,19 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
             type = this.get("type"),
             graph = this.get("graph"),
             seriesCollection = graph.seriesTypes[type],
-            totalHeight = 0,
             ratio,
             order = this.get("order"),
+            graphOrder = this.get("graphOrder"),
+            left,
+            marker,
             lastCollection,
             negativeBaseValues,
             positiveBaseValues,
             useOrigin = order === 0,
-            node = Y.Node.one(this._parentNode).get("parentNode"),
-            left,
-            marker,
-            bb;
-        totalHeight = len * h;
+            totalHeight = len * h,
+            mnode;
         this._createMarkerCache();
-        if(totalHeight > node.offsetHeight)
+        if(totalHeight > this.get("height"))
         {
             ratio = this.height/totalHeight;
             h *= ratio;
@@ -132,11 +92,11 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
             top -= h/2;        
             style.width = w;
             style.height = h;
-            marker = this.getMarker.apply(this, [{index:i, styles:style}]);
-            bb = marker.get("boundingBox");
-            bb.setStyle("position", "absolute");
-            bb.setStyle("left", left + "px");
-            bb.setStyle("top", top + "px");
+            marker = this.getMarker(style, graphOrder, i);
+            mnode = Y.one(marker.parentNode);
+            mnode.setStyle("position", "absolute");
+            mnode.setStyle("left", left);
+            mnode.setStyle("top", top);
         }
         this._clearMarkerCache();
  	},
@@ -145,47 +105,38 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
      * @private
      * Resizes and positions markers based on a mouse interaction.
      */
-    _markerEventHandler: function(e)
+    updateMarkerState: function(type, i)
     {
-        var type = e.type,
-            marker = Y.Widget.getByNode(e.currentTarget),
+        var state = this._getState(type),
             ycoords = this.get("ycoords"),
-            i = marker.get("index") || Y.Array.indexOf(this.get("markers"), marker),
-            h = marker.get("height");
-        switch(type)
-        {
-            case "mouseout" :
-                marker.set("state", "off");
-            break;
-            case "mouseover" :
-                marker.set("state", "over");
-            break;
-            case "mouseup" :
-                marker.set("state", "over");
-            break;
-            case "mousedown" :
-                marker.set("state", "down");
-            break;
-        }
-        marker.get("boundingBox").setStyle("top", (ycoords[i] - h/2) + "px");    
+            marker = this._markers[i],
+            graphic = this._graphicCollection[i],
+            styles = this.get("styles").marker,
+            h = styles.height,
+            markerStyles = state == "off" || !styles[state] ? styles : styles[state]; 
+        markerStyles.width = marker.width;
+        marker.update(markerStyles);
+        Y.one(graphic).setStyle("top", (ycoords[i] - h/2));    
     },
 	
-	/**
-	 * @private
-	 */
-    _getDefaultStyles: function()
+    _getPlotDefaults: function()
     {
-        return {
-            fill: {
-                alpha: "1",
-                colors: [],
-                alphas: [],
-                ratios: [],
-                rotation: 0
+        var defs = {
+            fill:{
+                type: "solid",
+                alpha: 1,
+                colors:null,
+                alphas: null,
+                ratios: null
             },
-            width: 6,
-            height: 6,
+            border:{
+                weight: 0,
+                alpha: 1
+            },
+            width: 24,
+            height: 24,
             shape: "rect",
+
             padding:{
                 top: 0,
                 left: 0,
@@ -193,7 +144,26 @@ Y.extend(StackedBarSeries, Y.CartesianSeries, {
                 bottom: 0
             }
         };
+        defs.fill.color = this._getDefaultColor(this.get("graphOrder"), "fill");
+        defs.border.color = this._getDefaultColor(this.get("graphOrder"), "border");
+        return defs;
+ 	}
+}, {
+    ATTRS: {
+        type: {
+            value: "stackedBar"
+        },
+        direction: {
+            value: "vertical"
+        },
+
+        negativeBaseValues: {
+            value: null
+        },
+
+        positiveBaseValues: {
+            value: null
+        }
     }
 });
 
-Y.StackedBarSeries = StackedBarSeries;

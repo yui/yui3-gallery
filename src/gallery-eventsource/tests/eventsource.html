@@ -1,0 +1,342 @@
+<!doctype html>
+<html>
+<head>
+<title>EventSource Tests</title>
+<script src="http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+    <h1>EventSource Tests</h1>
+    <p>Note: this requires a PHP web server to work correctly.</p>
+    <div id="c"></div>
+<script type="text/javascript">  
+    
+YUI({
+    gallery: 'gallery-2009.12.08-22',
+    modules: {
+        'gallery-eventsource': {
+            fullpath: 'gallery-eventsource.js',
+            requires: ["event-custom"],
+            optional: [],
+            supersedes: []
+        }
+ 
+    },
+    filter: "debug",
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'gallery-eventsource', function (Y) {
+
+
+    var testSuite = new Y.Test.Suite("Server-Sent Events Tests");
+    
+    
+    //-------------------------------------------------------------------------
+    // Error Conditions Tests
+    // Tests all functionality and circumstances where the error event will be
+    // fired.
+    //-------------------------------------------------------------------------
+    testSuite.add(new Y.Test.Case({
+    
+        name: "Error Conditions",
+        
+        setUp: function(){
+            
+        },
+        
+        tearDown: function(){
+            this.src.close();
+            this.src = null;
+        },
+        
+        "A response type other than text/event-stream should cause an error": function(){
+            this.src = new Y.EventSource("resources/invalid_content_type.php");
+            this.src.on("error", Y.bind(function(event){
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual(event.type, "error", "Event type should be error.");
+                    Y.Assert.areEqual(2, that.src.readyState, "Ready state should be 2.");                
+                });
+            }, this));
+            this.wait(1000);        
+        },
+
+        "Cross-domain requests without CORS should cause an error": function(){
+            this.src = new Y.EventSource("http://www.example.com");
+            this.src.on("error", Y.bind(function(event){
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual(event.type, "error", "Event type should be error.");
+                    Y.Assert.areEqual(2, that.src.readyState, "Ready state should be 2.");                
+                });
+            }, this));
+            this.wait(1000);         
+        },
+        
+        "A 404 should cause an error": function(){
+            this.src = new Y.EventSource("404.php");
+            this.src.on("error", Y.bind(function(event){
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual(event.type, "error", "Event type should be error.");
+                    Y.Assert.areEqual(2, that.src.readyState, "Ready state should be 2.");                
+                });
+            }, this));
+            this.wait(1000);         
+        }
+        
+    }));
+
+    //-------------------------------------------------------------------------
+    // Basic Functionality Tests
+    // Tests opening and closing event sources.
+    //-------------------------------------------------------------------------
+
+    testSuite.add(new Y.Test.Case({
+    
+        name: "Basic Functionality",
+        
+        setUp: function(){
+            
+        },
+        
+        tearDown: function(){
+            this.src.close();
+            this.src = null;
+        },
+
+        "The URL property should be set": function(){
+            this.src = new Y.EventSource("resources/one_message.php");            
+            Y.Assert.areEqual("resources/one_message.php", this.src.url);
+        },
+        
+        "The open event should fire when a connection is established": function(){
+            this.src = new Y.EventSource("resources/one_message.php");
+
+            this.src.on("open", Y.bind(function(event){
+                this.src.detach("open");  //must detach to avoid errors
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual(event.type, "open", "Event type should be open.");
+                    Y.Assert.areEqual(1, that.src.readyState, "Ready state should be 1.");                
+                });
+            }, this));
+            this.wait(1000);        
+        },
+        
+        "Calling close() should change readyState to 2": function(){
+            this.src = new Y.EventSource("resources/one_message.php");
+            this.src.close();
+            Y.Assert.areEqual(2, this.src.readyState);
+        },
+        
+
+        "A single message should cause the message event to fire": function(){
+            this.src = new Y.EventSource("resources/one_message.php");
+            this.src.on("message", Y.bind(function(event){
+                this.src.detach("message");  //must detach to avoid errors
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    Y.Assert.areEqual("hello", event.data, "Event data should be 'hello'.");                
+                });
+            }, this));
+            this.wait(1000);        
+        }/*,
+        
+        "Multiple messages should cause the message event to fire multiple times": function(){
+            this.src = new Y.EventSource("resources/five_messages.php");
+            var count = 0;
+            this.src.on("message", Y.bind(function(event){
+                count++;
+                if (count >= 5){
+                    this.src.detach("message");  //must detach to avoid errors
+                }
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    Y.Assert.areEqual("hello", event.data, "Event data should be 'hello'.");                
+                });
+            }, this));
+            this.wait(function(){
+                Y.Assert.areEqual(5, count, "Message handler should have been called five times.");
+            }, 6000);        
+        }*/
+        
+    
+    }));
+
+    //-------------------------------------------------------------------------
+    // Message Interpretation Tests
+    // Tests handling of message format issues.
+    //-------------------------------------------------------------------------
+
+    testSuite.add(new Y.Test.Case({
+    
+        name: "Message Interpretation",
+        
+        setUp: function(){
+            
+        },
+        
+        tearDown: function(){
+            this.src.close();
+            this.src = null;
+        },
+        
+        "A single message with leading white space should only remove first space": function(){
+            this.src = new Y.EventSource("resources/one_message_leading_whitespace.php");
+            this.src.on("message", Y.bind(function(event){
+                this.src.detach("message");  //must detach to avoid errors
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    Y.Assert.areEqual(" hello", event.data, "Event data should be 'hello'.");                
+                });
+            }, this));
+            this.wait(1000);        
+        },
+                
+        "A multiline message should fire one message event": function(){
+            this.src = new Y.EventSource("resources/one_multiline_message.php");
+            this.src.on("message", Y.bind(function(event){
+                this.src.detach("message");  //must detach to avoid errors
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    Y.Assert.areEqual("YHOO\n+2\n10", event.data, "Event data should be 'YHOO\\n+2\\n10'.");                
+                });
+            }, this));
+            this.wait(1000);     
+        },        
+        
+        "A response that has no empty lines after last data should fire message event": function(){
+            this.src = new Y.EventSource("resources/one_message_no_last_blank_line.php");
+            this.src.on("message", Y.bind(function(event){
+                this.src.detach("message");  //must detach to avoid errors
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    Y.Assert.areEqual("hello", event.data, "Event data should be 'hello'.");                
+                });
+            }, this));
+            this.wait(1000);     
+        },        
+        
+        "A custom event type should fire an event of the same name": function(){
+            this.src = new Y.EventSource("resources/custom_event.php");
+            this.src.on("foo", Y.bind(function(event){
+                this.src.detach("foo");  //must detach to avoid errors
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("foo", event.type, "Event type should be 'foo'.");
+                    Y.Assert.areEqual("bar", event.data, "Event data should be 'bar'.");                
+                });
+            }, this));
+            this.wait(1000);     
+        },
+        
+        "A response with two messages should fire two message events": function(){
+            this.src = new Y.EventSource("resources/two_messages.php");
+            var count = 0;
+            this.src.on("message", Y.bind(function(event){
+                count++;
+                
+                if (count == 2){
+                    this.src.detach("message");  //must detach to avoid errors
+                }
+                
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    
+                    if (count == 1){
+                        Y.Assert.areEqual("hello", event.data, "Event data should be 'hello'.");
+                        that.wait(1000);
+                    } else {
+                        Y.Assert.areEqual("goodbye", event.data, "Event data should be 'goodbye'.");                
+                    }
+                });
+            }, this));
+            this.wait(1000);     
+        },
+        
+        "A custom event followed by a non-custom should fire two events": function(){
+            this.src = new Y.EventSource("resources/custom_event_then_normal.php");
+            var gotFoo = false, gotMessage = false;
+            
+            var handler = Y.Mock();
+            Y.Mock.expect(handler, {
+                method: "handleFoo",
+                args: [Y.Mock.Value(function(event){
+                    Y.Assert.areEqual("foo", event.type, "Event type should be 'foo'.");
+                    Y.Assert.areEqual("bar", event.data, "Event data should be 'bar'.");                             
+                })]
+            });
+            
+
+            this.src.on("foo", Y.bind(function(event){
+                this.src.detach("foo");  //must detach to avoid errors
+                gotFoo = true;
+                this.resume(function(){
+                    Y.Assert.areEqual("foo", event.type, "Event type should be 'foo'.");
+                    Y.Assert.areEqual("bar", event.data, "Event data should be 'bar'.");
+                    this.wait(1000);
+                });
+            },this));
+
+            
+            this.src.on("message", Y.bind(function(event){
+                this.src.detach("message");  //must detach to avoid errors
+                gotMessage = true;
+                this.resume(function(){
+                    Y.Assert.isTrue(gotFoo, "Should have received 'foo' message first.");
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    Y.Assert.areEqual("hello", event.data, "Event data should be 'hello'.");                                
+                });
+            },this));
+            
+            this.wait(1000);     
+        }
+        
+/*
+        "Two 'data' lines in a row should fire the message event once": function(){
+            this.src = new Y.EventSource("resources/edge_case.php");
+            this.src.on("message", Y.bind(function(event){
+                var that = this;
+                this.resume(function(){               
+                    Y.Assert.areEqual("message", event.type, "Event type should be 'message'.");
+                    Y.Assert.areEqual("\n", event.data, "Event data should be '\\n'.");                
+                });
+            }, this));
+            this.wait(1000);     
+        } 
+    */
+        
+    
+    }));
+    
+    
+    var r = new Y.Console({
+        verbose : true,
+        //consoleLimit : 10,
+        newestOnTop : false
+    });
+    
+    r.render('#c');
+    
+    
+    //add to the testrunner and run
+    Y.Test.Runner.add(testSuite);
+    Y.Test.Runner.run();
+
+    /*if (parent && parent != window) {
+        YAHOO.tool.TestManager.load();
+    } else {
+        YAHOO.tool.TestRunner.run();
+    }*/
+ 
+});
+
+
+</script>
+</body>
+</html>

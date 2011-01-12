@@ -33,16 +33,20 @@
     font-size:9px;
     font-weight:bold;
 }
-
 #mychart {
     margin:10px 10px 10px 10px;
     padding:10px 10px 10px 10px;
-    min-height:350px;
+    width:750px;
+    height:400px;
 }
 .code {
     margin: 10px; 10px; 10px; 10px;
     border: 1px solid #000;
     overflow: auto;
+}
+.axisLabel{
+    color:#808080;
+    font-size:85%;
 }
 </style>
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts-min.css">
@@ -54,15 +58,15 @@
 <h3 style="margin-left:10px">Code Snippet</h3>
 <div class="code">
 <pre>
-        var myDataValues = [ 
-            {category:"5/1/2010", values:2000, expenses:3700, revenue:2200}, 
-            {category:"5/2/2010", values:50, expenses:9100, revenue:100}, 
-            {category:"5/3/2010", values:400, expenses:1100, revenue:1500}, 
-            {category:"5/4/2010", values:200, expenses:1900, revenue:2800}, 
-            {category:"5/5/2010", values:5000, expenses:5000, revenue:2650}
-        ];
-        
-        var mychart = new Y.Chart({type:"bar", dataProvider:myDataValues, stacked: true, render:"#mychart"});
+    var myDataValues = [ 
+        {category:"5/1/2010", values:2000, expenses:3700, revenue:2200}, 
+        {category:"5/2/2010", values:50, expenses:9100, revenue:100}, 
+        {category:"5/3/2010", values:400, expenses:1100, revenue:1500}, 
+        {category:"5/4/2010", values:200, expenses:1900, revenue:2800}, 
+        {category:"5/5/2010", values:5000, expenses:5000, revenue:2650}
+    ];
+    
+    var mychart = new Y.Chart({type:"bar", dataProvider:myDataValues, stacked: true, render:"#mychart"});
 </pre>
 </div>
 <script type="text/javascript" src="http://yui.yahooapis.com/3.1.2/build/yui/yui-min.js"></script>

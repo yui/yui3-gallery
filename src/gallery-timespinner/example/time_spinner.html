@@ -1,0 +1,210 @@
+<html>
+<head>
+<title>Time Spinner</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:10;
+	padding:0;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="css/gallery-timespinner.css">
+</head>
+
+<body class="yui-skin-sam">
+<h3>Time Spinner Config.</h3>
+<p>var timespinner = new Y.TimeSpinner{... </p>
+<p>
+	hourtype:'12', <span>'hourtype' is either 12 or 24 hr format.</span> <br/>
+	separator:':',  <span>'separator' the separator to be used in between hh:mm:ss.</span><br/>
+	seconds:true,  <span>'seconds' true or false as wether or not ss are required.</span><br/>
+	timepsan:{required:true,sep:' - '},  <span>'timepsan' true or false and the spearator to be used.</span><br/>
+	holder:'#..'  <span>the id of the element to where the time spinner will be drawn.</span><br/>
+
+<p>
+<h3>Time Spinner Examples</h3>
+<p>
+Time Spinner <br/>
+12 hour clock, with seconds, with a time span.
+</p>
+<p>
+var timespinner = new Y.TimeSpinner({
+       hourtype:'12',
+       separator:':',
+       seconds:true,
+       timepsan:{required:true,sep:' - '},
+	   holder:'#boxd'
+    });
+    timespinner.render();
+    timespinner.focus();
+
+</p>
+<div id="boxd"></div>
+<input type=button id="button" value="GetValue TS"/>
+<p>To get the value of the time spinner. 'timespinner.getValue();'</p>
+<br/><br/>
+
+<p>
+Time Spinner 1. <br/>
+12 hour clock, no seconds, with a time span.
+</p>
+<p>
+var timespinner1 = new Y.TimeSpinner({
+       hourtype:'12',
+       separator:':',
+       seconds:false,
+       timepsan:{required:true,sep:' - '},
+	   holder:'#boxd1'
+    });
+    timespinner1.render();
+    timespinner1.focus();
+
+</p>
+<div id="boxd1"> </div>
+<input type=button id="button1" value="GetValue TS & TS 1"/>
+<p>To get the value of the time spinner. 'timespinner1.getValue();'</p>
+<br/><br/>
+<p>
+Time Spinner 2. <br/>
+24 hour clock, no seconds, no time span.
+</p>
+<p>
+	var timespinner2 = new Y.TimeSpinner({
+       hourtype:'24',
+       separator:':',
+       seconds:false,
+       timepsan:{required:false,sep:' - '},
+	   holder:'#boxd2'
+    });
+    timespinner2.render();
+    timespinner2.focus();
+
+</p>
+<div id="boxd2"> </div>
+<input type=button id="button2" value="GetValue TS 2"/>
+<p>To get the value of the time spinner. 'timespinner2.getValue();'</p>
+<br/><br/>
+
+<p>
+Time Spinner 3. <br/>
+12 hour clock, no seconds, no time span.
+</p>
+<p>
+	var timespinner3 = new Y.TimeSpinner({
+       hourtype:'12',
+       separator:':',
+       seconds:false,
+       timepsan:{required:false,sep:' - '},
+	   holder:'#boxd3'
+    });
+    timespinner3.render();
+    timespinner3.focus();
+
+</p>
+<div id="boxd3"> </div>
+<input type=button id="button3" value="GetValue TS 3"/>
+<p>To get the value of the time spinner. 'timespinner3.getValue();'</p>
+
+
+<script src="http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js">
+</script>
+<script src="js/gallery-timespinner.js">
+</script>
+<script>
+
+YUI(
+
+).use('gallery-timespinner', function (Y) {
+    // Create a new TimeSpinner instance
+    
+var timespinner = new Y.TimeSpinner({
+       hourtype:'12',
+       separator:':',
+       seconds:true,
+       timepsan:{required:true,sep:' - '},
+	   holder:'#boxd'
+    });
+    timespinner.render();
+    timespinner.focus();
+	
+	
+	var timespinner1 = new Y.TimeSpinner({
+       hourtype:'12',
+       separator:':',
+       seconds:false,
+       timepsan:{required:true,sep:' - '},
+	   holder:'#boxd1'
+    });
+    timespinner1.render();
+    timespinner1.focus();
+	
+	
+	var timespinner2 = new Y.TimeSpinner({
+       hourtype:'24',
+       separator:':',
+       seconds:false,
+       timepsan:{required:false,sep:' - '},
+	   holder:'#boxd2'
+    });
+    timespinner2.render();
+    timespinner2.focus();
+	
+	var timespinner3 = new Y.TimeSpinner({
+       hourtype:'12',
+       separator:':',
+       seconds:false,
+       timepsan:{required:false,sep:' - '},
+	   holder:'#boxd3'
+    });
+    timespinner3.render();
+    timespinner3.focus();
+	
+	var foo = Y.one("#button");
+
+	Y.on("click", function(){var ts0 = timespinner.getValue();
+									alert(ts0);
+							} ,foo);
+	
+	
+	var foo1 = Y.one("#button1");
+	Y.on("click", function(){
+	
+	var ts0 = timespinner.getValue();
+	var ts1 = timespinner1.getValue();
+	alert(ts0);
+	alert(ts1);
+	
+	} ,foo1);
+	
+	
+	var foo2 = Y.one("#button2");
+	Y.on("click", function(){
+	
+	var ts3 = timespinner2.getValue();
+	alert(ts3);
+	
+	} ,foo2);
+	
+	var foo3 = Y.one("#button3");
+	Y.on("click", function(){
+	
+	var ts4 = timespinner3.getValue();
+	alert(ts4);
+	
+	} ,foo3);
+	
+	
+});
+
+</script>
+
+
+
+</body>
+</html>
+

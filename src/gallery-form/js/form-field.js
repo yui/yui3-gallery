@@ -5,19 +5,361 @@
  * @constructor
  * @description A representation of an individual form field.
  */
-function FormField () {
-	FormField.superclass.constructor.apply(this,arguments);
-}
 
-Y.mix(FormField, {
+Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChild], {
+    toString : function () {
+        return this.name;
+    },
+	/**
+	 * @property _labelNode
+	 * @protected
+	 * @type Object
+	 * @description The label node for this form field
+	 */
+	_labelNode : null,
+
+	/**
+	 * @property _fieldNode
+	 * @protected
+	 * @type Object
+	 * @description The form field itself
+	 */    
+	_fieldNode : null,
+
+	/**
+	 * @property _errorNode
+	 * @protected
+	 * @type Object
+	 * @description If a validation error occurs, it will be displayed in this node
+	 */    
+	_errorNode : null,
 	
 	/**
-	 * @property FormField.NAME
+	 * @property _initialValue
+	 * @private
 	 * @type String
-	 * @static
+	 * @description The initial value set on this field, reset will set the value to this
 	 */
-	NAME : 'form-field',
+	_initialValue : null,
+
+	/**
+	 * @method _validateError
+	 * @protected
+	 * @param val {Mixed}
+	 * @description Validates the value passed to the error attribute
+	 * @return {Boolean}
+	 */
+	_validateError : function (val) {
+		if (Y.Lang.isString(val)) {
+			return true;
+		}
+		if (val === null || typeof val == 'undefined') {
+			return true;
+		}
+
+		return false;
+	},
+
+	/**
+	 * @method _validateValidator
+	 * @protected
+	 * @param val {Mixed}
+	 * @description Validates the input of the validator attribute
+	 * @return {Boolean}
+	 */
+	 _validateValidator : function (val) {
+		if (Y.Lang.isString(val)) {
+			var validate = /^(email|phone|ip|date|time|postal|special)$/;
+			if (validate.test(val) === true) {
+				return true;
+			}
+		}
+		if (Y.Lang.isFunction(val)) {
+			return true;
+		}
+		return false;
+	 },
+
+	/**
+	 * @method _setValidator
+	 * @protected
+	 * @param {val} {String|Function}
+	 * @description Sets the validator to the supplied method or if one of the 
+	 *				convenience strings is passed, the corresponding utility
+	 *				validator
+	 * @return {Function}
+	 */
+	 _setValidator : function (val) {
+		Y.log('Set: ' + val);
+		var valMap = {
+		    email : Y.FormField.VALIDATE_EMAIL_ADDRESS,
+		    phone : Y.FormField.VALIDATE_PHONE_NUMBER,
+		    ip : Y.FormField.VALIDATE_IP_ADDRESS,
+		    date : Y.FormField.VALIDATE_DATE,
+		    time : Y.FormField.VALIDATE_TIME,
+		    postal : Y.FormField.VALIDATE_POSTAL_CODE,
+		    special : Y.FormField.VALIDATE_NO_SPECIAL_CHARS
+		};
+
+		return (valMap[val] ? valMap[val] : val);
+	 },
+
+	/**
+	 * @method _renderLabelNode
+	 * @protected
+	 * @description Draws the form field's label node into the contentBox
+	 */
+	_renderLabelNode : function () {
+		var contentBox = this.get('contentBox'),
+			labelNode = contentBox.one('label');
+		
+		if (!labelNode || labelNode.get('for') != this.get('id')) {
+			labelNode = Y.Node.create(Y.FormField.LABEL_TEMPLATE);
+			contentBox.appendChild(labelNode);
+		}
+		
+		this._labelNode = labelNode;	 
+	},
 	
+	/**
+	 * @method _renderFieldNode
+	 * @protected
+	 * @description Draws the field node into the contentBox
+	 */
+	_renderFieldNode : function () {
+		var contentBox = this.get('contentBox'),
+			field = contentBox.one('#' + this.get('id'));
+				
+		if (!field) {
+			field = Y.Node.create(Y.FormField.INPUT_TEMPLATE);
+			contentBox.appendChild(field);
+		}
+
+		this._fieldNode = field;
+	},
+
+	/**
+	 * @method _syncLabelNode
+	 * @protected
+	 * @description Syncs the the label node and this instances attributes
+	 */
+	_syncLabelNode : function () {
+		if (this._labelNode) {
+			this._labelNode.setAttrs({
+				innerHTML : this.get('label')
+			});
+			this._labelNode.setAttribute('for', this.get('id') + Y.FormField.FIELD_ID_SUFFIX);
+		}
+	},
+
+	/**
+	 * @method _syncLabelNode
+	 * @protected
+	 * @description Syncs the fieldNode and this instances attributes
+	 */
+	_syncFieldNode : function () {
+	    var nodeType = this.name.split('-')[0];
+	    if (!nodeType) {
+	        return;
+	    }
+	    
+		this._fieldNode.setAttrs({
+			name : this.get('name'), 
+			type : nodeType,
+			id : this.get('id') + Y.FormField.FIELD_ID_SUFFIX,
+			value : this.get('value')
+		});
+		
+		this._fieldNode.setAttribute('tabindex', Y.FormField.tabIndex);
+		Y.FormField.tabIndex++;
+	},
+
+	/**
+	 * @method _syncError
+	 * @private
+	 * @description Displays any pre-defined error message
+	 */
+	_syncError : function () {
+		var err = this.get('error');
+		if (err) {
+			this._showError(err);
+		}
+	},
+	
+	_syncDisabled : function (e) {
+	    var dis = this.get('disabled');
+	    if (dis === true) {
+	        this._fieldNode.setAttribute('disabled', 'disabled');
+	    } else {
+	        this._fieldNode.removeAttribute('disabled');
+	    }
+	},
+	
+	/**
+	 * @method _checkRequired
+	 * @private
+	 * @description if the required attribute is set to true, returns whether or not a value has been set
+	 * @return {Boolean}
+	 */
+	_checkRequired : function () {
+		if (this.get('required') === true && this.get('value').length === 0) {
+			return false;
+		}
+		return true;
+	},
+	
+	/**
+	 * @method _showError
+	 * @param {String} errMsg
+	 * @private
+	 * @description Adds an error node with the supplied message
+	 */
+	_showError : function (errMsg) {
+		var contentBox = this.get('contentBox'),
+			errorNode = Y.Node.create('<span>' + errMsg + '</span>');
+		
+		errorNode.addClass('error');
+		contentBox.insertBefore(errorNode,this._labelNode);
+		
+		this._errorNode = errorNode;
+	},
+	
+	/**
+	 * @method _clearError
+	 * @private
+	 * @description Removes the error node from this field
+	 */
+	_clearError : function () {
+		if (this._errorNode) {
+			var contentBox = this.get('contentBox');
+			contentBox.removeChild(this._errorNode);
+			this._errorNode = null;
+		}
+	},
+
+	_enableInlineValidation : function () {
+		this.after('valueChange', Y.bind(this.validateField, this));
+	},
+
+	_disableInlineValidation : function () {
+		this.detach('valueChange', this.validateField, this);
+	},
+	
+	/**
+	 * @method validateField
+	 * @description Runs the validation functions of this form field
+	 * @return {Boolean}
+	 */
+	validateField : function (e) {
+		var value = this.get('value'),
+			validator = this.get('validator');
+
+		this.set('error', null);
+
+		if (e && e.src != 'ui') {
+			return false;
+		}
+
+		if (!this._checkRequired()) {
+			this.set('error', Y.FormField.REQUIRED_ERROR_TEXT);
+			return false;
+		} else if (!value) {
+			return true;
+		}
+							
+		return validator.call(this, value, this);
+	},
+
+	resetFieldNode : function () {
+		this.set('value', this._initialValue);
+		this._fieldNode.set('value', this._initialValue);
+		this.fire('nodeReset');
+	},
+
+	/**
+	 * @method clear
+	 * @description Clears the value AND the initial value of this field
+	 */
+	 clear : function () {
+		this.set('value', '');
+		this._fieldNode.set('value', '');
+		this._initialValue = null;
+		this.fire('clear');
+	},
+
+	initializer : function () {
+		this.publish('blur');
+		this.publish('change');
+		this.publish('focus');
+		this.publish('clear');
+		this.publish('nodeReset');
+		
+		this._initialValue = this.get('value');
+	},
+
+	destructor : function (config) {
+	
+	},
+
+	renderUI : function () {
+		this._renderLabelNode();
+		this._renderFieldNode();
+	},
+
+	bindUI : function () {
+		this._fieldNode.on('change', Y.bind(function (e) {
+			this.set('value', this._fieldNode.get('value'), {src : 'ui'});
+			this.fire('change', e);
+		}, this));
+		
+		this.on('valueChange', Y.bind(function (e) {
+			if (e.src != 'ui') {
+				this._fieldNode.set('value', e.newVal);
+			}			
+		}, this));
+
+		this._fieldNode.on('blur', Y.bind(function (e) {
+			this.set('value', this._fieldNode.get('value'), {src : 'ui'});
+			this.fire('blur', e);
+		}, this));
+
+		this._fieldNode.on('focus', Y.bind(function(e) {
+			this.fire('focus', e);
+		}, this));
+		
+		this.on('errorChange', Y.bind(function (e) {
+			if (e.newVal) {
+				this._showError(e.newVal);
+			} else {
+				this._clearError();
+			}
+		}, this));
+
+		this.on('validateInlineChange', Y.bind(function (e) {
+			if (e.newVal === true) {
+				this._enableInlineValidation();
+			} else {
+				this._disableInlineValidation();
+			}
+		}, this));
+		
+		this.on('disabledChange', Y.bind(function (e) {
+		    this._syncDisabled();
+		}, this));
+	},
+
+	syncUI : function () {
+		this.get('boundingBox').removeAttribute('tabindex');
+		this._syncLabelNode();
+		this._syncFieldNode();
+		this._syncError();
+		this._syncDisabled();
+
+		if (this.get('validateInline') === true) {
+			this._enableInlineValidation();
+		}
+	}
+}, {	
 	/**
 	 * @property FormField.ATTRS
 	 * @type Object
@@ -140,7 +482,7 @@ Y.mix(FormField, {
 	/**
 	 * @property FormField.tabIndex
 	 * @type Number
-	 * @description The current tab index of all FormField instances
+	 * @description The current tab index of all Y.FormField instances
 	 */
 	tabIndex : 1,
 	
@@ -152,7 +494,7 @@ Y.mix(FormField, {
 	VALIDATE_EMAIL_ADDRESS : function (val, field) {
 		var filter = /^([\w]+(?:\.[\w]+)*)@((?:[\w]+\.)*\w[\w]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
 		if (filter.test(val) === false) {
-			field.set('error', FormField.INVALID_EMAIL_MESSAGE);
+			field.set('error', Y.FormField.INVALID_EMAIL_MESSAGE);
 			return false;
 		}
 		
@@ -174,7 +516,7 @@ Y.mix(FormField, {
 	VALIDATE_PHONE_NUMBER : function(val, field) {
 		var filter = /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/;
 		if (filter.test(val) === false) {
-			field.set('error', FormField.INVALID_PHONE_NUMBER);
+			field.set('error', Y.FormField.INVALID_PHONE_NUMBER);
 			return false;
 		}
 		return true;
@@ -209,7 +551,7 @@ Y.mix(FormField, {
 		});
 
 		if (valid === false) {
-			field.set('error', FormField.INVALID_IP_MESSAGE);
+			field.set('error', Y.FormField.INVALID_IP_MESSAGE);
 		}
 
 		return valid;
@@ -230,7 +572,7 @@ Y.mix(FormField, {
 	VALIDATE_DATE : function (val, field) {
 		var filter = /^([1-9]|1[0-2])(\-|\/)([0-2][0-9]|3[0-1])(\-|\/)(\d{4}|\d{2})$/;
 		if (filter.test(val) === false) {
-			field.set('error', FormField.INVALID_DATE_MESSAGE);
+			field.set('error', Y.FormField.INVALID_DATE_MESSAGE);
 			return false;
 		}
 		return true;
@@ -251,7 +593,7 @@ Y.mix(FormField, {
 	VALIDATE_TIME : function (val, field) {
 		var filter = /^([1-9]|1[0-2]):[0-5]\d(:[0-5]\d(\.\d{1,3})?)?$/;
 		if (filter.test(val) === false) {
-			field.set('error', FormField.INVALID_TIME_MESSAGE);
+			field.set('error', Y.FormField.INVALID_TIME_MESSAGE);
 			return false;
 		}
 		return true;
@@ -282,7 +624,7 @@ Y.mix(FormField, {
 		}
 
 		if (valid === false || (filter && filter.test(val) === false)) {
-			field.set('error', FormField.INVALID_POSTAL_CODE_MESSAGE);
+			field.set('error', Y.FormField.INVALID_POSTAL_CODE_MESSAGE);
 			return false;
 		}
 		return true;
@@ -303,7 +645,7 @@ Y.mix(FormField, {
 	VALIDATE_NO_SPECIAL_CHARS : function (val, field) {
 		var filter = /^[a-zA-Z0-9]*$/;
 		if(filter.test(val) === false) {
-			field.set('error', FormField.INVALID_SPECIAL_CHARS);
+			field.set('error', Y.FormField.INVALID_SPECIAL_CHARS);
 			return false;
 		}
 		return true;
@@ -343,366 +685,3 @@ Y.mix(FormField, {
 	 */
 	FIELD_ID_SUFFIX : '-field'
 });
-
-Y.extend(FormField, Y.Widget, {
-	/**
-	 * @property _labelNode
-	 * @protected
-	 * @type Object
-	 * @description The label node for this form field
-	 */
-	_labelNode : null,
-
-	/**
-	 * @property _fieldNode
-	 * @protected
-	 * @type Object
-	 * @description The form field itself
-	 */    
-	_fieldNode : null,
-
-	/**
-	 * @property _errorNode
-	 * @protected
-	 * @type Object
-	 * @description If a validation error occurs, it will be displayed in this node
-	 */    
-	_errorNode : null,
-	
-	/**
-	 * @property _nodeType
-	 * @protected
-	 * @type String
-	 * @description The type of form field to draw
-	 */
-	_nodeType : 'text',
-	
-	/**
-	 * @property _initialValue
-	 * @private
-	 * @type String
-	 * @description The initial value set on this field, reset will set the value to this
-	 */
-	_initialValue : null,
-
-	/**
-	 * @method _validateError
-	 * @protected
-	 * @param val {Mixed}
-	 * @description Validates the value passed to the error attribute
-	 * @return {Boolean}
-	 */
-	_validateError : function (val) {
-		if (Y.Lang.isString(val)) {
-			return true;
-		}
-		if (val === null || typeof val == 'undefined') {
-			return true;
-		}
-
-		return false;
-	},
-
-	/**
-	 * @method _validateValidator
-	 * @protected
-	 * @param val {Mixed}
-	 * @description Validates the input of the validator attribute
-	 * @return {Boolean}
-	 */
-	 _validateValidator : function (val) {
-		if (Y.Lang.isString(val)) {
-			var validate = /^(email|phone|ip|date|time|postal|special)$/;
-			if (validate.test(val) === true) {
-				return true;
-			}
-		}
-		if (Y.Lang.isFunction(val)) {
-			return true;
-		}
-		return false;
-	 },
-
-	/**
-	 * @method _setValidator
-	 * @protected
-	 * @param {val} {String|Function}
-	 * @description Sets the validator to the supplied method or if one of the 
-	 *				convenience strings is passed, the corresponding utility
-	 *				validator
-	 * @return {Function}
-	 */
-	 _setValidator : function (val) {
-		Y.log('Set: ' + val);
-		if (val == "email") {
-			return FormField.VALIDATE_EMAIL_ADDRESS;
-		} else if (val == "phone") {
-			return FormField.VALIDATE_PHONE_NUMBER;
-		} else if (val == "ip") {
-			return FormField.VALIDATE_IP_ADDRESS;
-		} else if (val == "date") {
-			return FormField.VALIDATE_DATE;
-		} else if (val == "time") {
-			return FormField.VALIDATE_TIME;
-		} else if (val == "postal") {
-			return FormField.VALIDATE_POSTAL_CODE;
-		} else if (val == "special") {
-			return FormField.VALIDATE_NO_SPECIAL_CHARS;
-		}
-
-		return val;
-	 },
-
-	/**
-	 * @method _renderLabelNode
-	 * @protected
-	 * @description Draws the form field's label node into the contentBox
-	 */
-	_renderLabelNode : function () {
-		var contentBox = this.get('contentBox'),
-			labelNode = contentBox.query('label');
-		
-		if (!labelNode || labelNode.get('for') != this.get('id')) {
-			labelNode = Y.Node.create(FormField.LABEL_TEMPLATE);
-			contentBox.appendChild(labelNode);
-		}
-		
-		this._labelNode = labelNode;	 
-	},
-	
-	/**
-	 * @method _renderFieldNode
-	 * @protected
-	 * @description Draws the field node into the contentBox
-	 */
-	_renderFieldNode : function () {
-		var contentBox = this.get('contentBox'),
-			field = contentBox.query('#' + this.get('id'));
-				
-		if (!field) {
-			field = Y.Node.create(FormField.INPUT_TEMPLATE);
-			contentBox.appendChild(field);
-		}
-
-		this._fieldNode = field;
-	},
-
-	/**
-	 * @method _syncLabelNode
-	 * @protected
-	 * @description Syncs the the label node and this instances attributes
-	 */
-	_syncLabelNode : function () {
-		if (this._labelNode) {
-			this._labelNode.setAttrs({
-				innerHTML : this.get('label')
-			});
-			this._labelNode.setAttribute('for', this.get('id') + FormField.FIELD_ID_SUFFIX);
-		}
-	},
-
-	/**
-	 * @method _syncLabelNode
-	 * @protected
-	 * @description Syncs the fieldNode and this instances attributes
-	 */
-	_syncFieldNode : function () {
-		this._fieldNode.setAttrs({
-			name : this.get('name'), 
-			type : this._nodeType,
-			id : this.get('id') + FormField.FIELD_ID_SUFFIX,
-			value : this.get('value')
-		});
-		
-		this._fieldNode.setAttribute('tabindex', FormField.tabIndex);
-		FormField.tabIndex++;
-	},
-
-	/**
-	 * @method _syncError
-	 * @private
-	 * @description Displays any pre-defined error message
-	 */
-	_syncError : function () {
-		var err = this.get('error');
-		if (err) {
-			this._showError(err);
-		}
-	},
-	
-	_syncDisabled : function (e) {
-	    var dis = this.get('disabled');
-	    if (dis === true) {
-	        this._fieldNode.setAttribute('disabled', 'disabled');
-	    } else {
-	        this._fieldNode.removeAttribute('disabled');
-	    }
-	},
-	
-	/**
-	 * @method _checkRequired
-	 * @private
-	 * @description if the required attribute is set to true, returns whether or not a value has been set
-	 * @return {Boolean}
-	 */
-	_checkRequired : function () {
-		if (this.get('required') === true && this.get('value').length === 0) {
-			return false;
-		}
-		return true;
-	},
-	
-	/**
-	 * @method _showError
-	 * @param {String} errMsg
-	 * @private
-	 * @description Adds an error node with the supplied message
-	 */
-	_showError : function (errMsg) {
-		var contentBox = this.get('contentBox'),
-			errorNode = Y.Node.create('<span>' + errMsg + '</span>');
-		
-		errorNode.addClass('error');
-		contentBox.insertBefore(errorNode,this._labelNode);
-		
-		this._errorNode = errorNode;
-	},
-	
-	/**
-	 * @method _clearError
-	 * @private
-	 * @description Removes the error node from this field
-	 */
-	_clearError : function () {
-		if (this._errorNode) {
-			var contentBox = this.get('contentBox');
-			contentBox.removeChild(this._errorNode);
-			this._errorNode = null;
-		}
-	},
-
-	_enableInlineValidation : function () {
-		this.after('valueChange', Y.bind(this.validateField, this));
-	},
-
-	_disableInlineValidation : function () {
-		this.detach('valueChange', this.validateField, this);
-	},
-	
-	/**
-	 * @method validateField
-	 * @description Runs the validation functions of this form field
-	 * @return {Boolean}
-	 */
-	validateField : function (e) {
-		var value = this.get('value'),
-			validator = this.get('validator');
-
-		this.set('error', null);
-
-		if (e && e.src != 'ui') {
-			return false;
-		}
-
-		if (!this._checkRequired()) {
-			this.set('error', FormField.REQUIRED_ERROR_TEXT);
-			return false;
-		} else if (!value) {
-			return true;
-		}
-							
-		return validator.call(this, value, this);
-	},
-
-	resetFieldNode : function () {
-		this.set('value', this._initialValue);
-		this._fieldNode.set('value', this._initialValue);
-		this.fire('nodeReset');
-	},
-
-	/**
-	 * @method clear
-	 * @description Clears the value AND the initial value of this field
-	 */
-	 clear : function () {
-		this.set('value', '');
-		this._fieldNode.set('value', '');
-		this._initialValue = null;
-		this.fire('clear');
-	},
-
-	initializer : function () {
-		this.publish('blur');
-		this.publish('change');
-		this.publish('focus');
-		this.publish('clear');
-		this.publish('nodeReset');
-		
-		this._initialValue = this.get('value');
-	},
-
-	destructor : function (config) {
-	
-	},
-
-	renderUI : function () {
-		this._renderLabelNode();
-		this._renderFieldNode();
-	},
-
-	bindUI : function () {
-		this._fieldNode.on('change', Y.bind(function (e) {
-			this.set('value', this._fieldNode.get('value'), {src : 'ui'});
-			this.fire('change', e);
-		}, this));
-		
-		this.on('valueChange', Y.bind(function (e) {
-			if (e.src != 'ui') {
-				this._fieldNode.set('value', e.newVal);
-			}			
-		}, this));
-
-		this._fieldNode.on('blur', Y.bind(function (e) {
-			this.set('value', this._fieldNode.get('value'), {src : 'ui'});
-			this.fire('blur', e);
-		}, this));
-
-		this._fieldNode.on('focus', Y.bind(function(e) {
-			this.fire('focus', e);
-		}, this));
-		
-		this.on('errorChange', Y.bind(function (e) {
-			if (e.newVal) {
-				this._showError(e.newVal);
-			} else {
-				this._clearError();
-			}
-		}, this));
-
-		this.on('validateInlineChange', Y.bind(function (e) {
-			if (e.newVal === true) {
-				this._enableInlineValidation();
-			} else {
-				this._disableInlineValidation();
-			}
-		}, this));
-		
-		this.on('disabledChange', Y.bind(function (e) {
-		    this._syncDisabled();
-		}, this));
-	},
-
-	syncUI : function () {
-		this.get('boundingBox').removeAttribute('tabindex');
-		this._syncLabelNode();
-		this._syncFieldNode();
-		this._syncError();
-		this._syncDisabled();
-
-		if (this.get('validateInline') === true) {
-			this._enableInlineValidation();
-		}
-	}
-});
-
-Y.FormField = FormField;

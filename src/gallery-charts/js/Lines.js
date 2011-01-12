@@ -1,22 +1,4 @@
-function Lines(cfg)
-{
-    var attrs = {
-        line: {
-            getter: function()
-            {
-                return this._lineDefaults || this._getLineDefaults();
-            },
-
-            setter: function(val)
-            {
-                var defaults = this._defaults || this._getLineDefaults();
-                this._lineDefaults = Y.merge(defaults, val);
-            }
-        }
-    };
-    this.addAttrs(attrs, cfg);
-    this.get("styles");
-}
+function Lines(){}
 
 Lines.prototype = {
     /**
@@ -44,9 +26,9 @@ Lines.prototype = {
 			nextX,
 			nextY,
 			i,
-			styles = this.get("line"),
+			styles = this.get("styles").line,
 			lineType = styles.lineType,
-            lc = styles.color || this._getDefaultColor(this.get("graphOrder")),
+            lc = styles.color || this._getDefaultColor(this.get("graphOrder"), "line"),
 			dashLength = styles.dashLength,
 			gapSpace = styles.gapSpace,
 			connectDiscontinuousPoints = styles.connectDiscontinuousPoints,
@@ -125,9 +107,9 @@ Lines.prototype = {
             x,
             y,
             i = 0,
-			styles = this.get("line"),
+			styles = this.get("styles").line,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "line");
         graphic.lineStyle(styles.weight, color);
         graphic.moveTo(xcoords[0], ycoords[0]);
         for(; i < len; i = ++i)
@@ -197,12 +179,12 @@ Lines.prototype = {
     {
         return {
             alpha: 1,
-            weight: 1,
+            weight: 6,
             lineType:"solid", 
             dashLength:10, 
             gapSpace:10, 
-            connectDiscontinuousPoint:true, 
-            discontinuousType:"dashed", 
+            connectDiscontinuousPoints:true, 
+            discontinuousType:"solid", 
             discontinuousDashLength:10, 
             discontinuousGapSpace:10
         };

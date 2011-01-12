@@ -1,5 +1,6 @@
 YUI.add('gallery-parent-window', function(Y) {
 
+/*global YUI, window */
 /**
  * Y.ParentWindow() function for YUI3
  * This utility provides a set of functionalities to interact with the parent window:
@@ -28,45 +29,24 @@ YUI.add('gallery-parent-window', function(Y) {
 
 var res = {};
 try {
-	res.doc = (res.win = window.parent).document;
+    res.doc = (res.win = window.parent).document;
 } catch (e) {
-	return;
+    return;
 }
 
 Y.ParentWindow = function(o2, o3, o4, o5) {
-	var L = YUI({ fetchCSS: false }, o2, o3, o4, o5), // internal Y instance for loading purpose only.
-		P = YUI({ fetchCSS: false, bootstrap: false, win: res.win, doc: res.doc }, o2, o3, o4, o5), // adding one more config to force to use the parent window as the base dom structure
-		USE = P.use; // backing up the P.use
+    // adding one more config to force to use the parent window as the base dom structure
+    var P = YUI({ win: res.win, doc: res.doc }, o2, o3, o4, o5); 
 
-	//Dump the instance logs to the parent instance because it's hard to debug the iframe directly
+    // wiring the script tag injection routine to inject JS into the iframe document
+    // there is not need to wire the CSS routine, CSS should be injected in the parent window by default
+    P.Get.script = function() {
+        return Y.Get.script.apply(Y, arguments);
+    };
 
-	// customizing the "use" method to load modules from the iframe, then inject them into the ParentWindow instance.
-	P.use = function() {
-		var SLICE 	 = Array.prototype.slice,
-			args     = SLICE.call(arguments, 0),
-			bk		 = SLICE.call(arguments, 0),
-	        callback = args[args.length - 1],
-			fn = function() {
-				USE.apply (P, bk);
-			};
-		
-		// The last argument supplied to use can be a load complete callback
-        if (typeof callback === 'function') {
-            args.pop();
-		} else {
-			callback = null;
-		}
-		// propagating the callback call to the ParentWindow instance
-		args.push(fn);
-
-		// loading modules in the iframe doc
-		L.use.apply(L, args);
-		// chaining 
-		return P;
-	};
-	// returning the parent window Y instance
-	return P;
+    // returning the parent window Y instance
+    return P;
 };
 
 
-}, 'gallery-2010.09.01-19-12' );
+}, 'gallery-2010.11.17-21-32' );

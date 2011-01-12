@@ -3,6 +3,21 @@ Y.AreaSeries = Y.Base.create("areaSeries", Y.CartesianSeries, [Y.Fills], {
     {
         this.get("graphic").clear();
         this.drawFill.apply(this, this._getClosingPoints());
+    },
+    
+    _setStyles: function(val)
+    {
+        if(!val.area)
+        {
+            val = {area:val};
+        }
+        return Y.AreaSeries.superclass._setStyles.apply(this, [val]);
+    },
+
+    _getDefaultStyles: function()
+    {
+        var styles = this._mergeStyles({area:this._getAreaDefaults()}, Y.AreaSeries.superclass._getDefaultStyles());
+        return styles;
     }
 },
 {
@@ -12,23 +27,6 @@ Y.AreaSeries = Y.Base.create("areaSeries", Y.CartesianSeries, [Y.Fills], {
              * Indicates the type of graph.
              */
             value:"area"
-        },
-        
-        styles: {
-            getter: function()
-            {
-                var styles = this.get("area");
-                styles.padding = this.get("padding");
-            },
-
-            setter: function(val)
-            {
-                this.set("area", val);
-                if(val.hasOwnProperty("padding"))
-                {
-                    this.set("padding", val.padding);
-                }
-            }
         }
     }
 });

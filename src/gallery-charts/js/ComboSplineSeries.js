@@ -1,4 +1,4 @@
-Y.ComboSplineSeries = Y.Base.create("comboSplineSeries", Y.ComboSeries, [], {
+Y.ComboSplineSeries = Y.Base.create("comboSplineSeries", Y.ComboSeries, [Y.CurveUtil], {
 	drawSeries: function()
     {
         this.get("graphic").clear();

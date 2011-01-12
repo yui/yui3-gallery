@@ -1,32 +1,58 @@
-function Graph(config)
-{
-    Graph.superclass.constructor.apply(this, arguments);
-}
+Y.Graph = Y.Base.create("graph", Y.Widget, [Y.Renderer], {
+    bindUI: function()
+    {
+        var bb = this.get("boundingBox");
+        bb.setStyle("position", "absolute");
+        this.after("widthChange", this._sizeChangeHandler);
+        this.after("heightChange", this._sizeChangeHandler);
+        this.after("stylesChange", this._updateStyles);
+    },
 
-Graph.NAME = "graph";
-
-Graph.ATTRS = {
-    seriesCollection: {
-        lazyAdd: false,
-
-        getter: function()
+    /**
+     * @private
+     */
+    syncUI: function()
+    {
+        if(this.get("showBackground"))
         {
-            return this._seriesCollection;
-        },
-
-        setter: function(val)
+            var graphic = new Y.Graphic(),
+                cb = this.get("contentBox"),
+                bg = this.get("styles").background,
+                w = this.get("width"),
+                h = this.get("height");
+            if(w)
+            {
+                bg.width = w;
+            }   
+            if(h)
+            {
+                bg.height = h;
+            }
+            this._background = graphic.getShape(bg);
+            graphic.render(cb);
+            Y.one(graphic.node).setStyle("zIndex", -1);
+        }
+    },
+   
+    /**
+     * @private
+     */
+    renderUI: function()
+    {
+        var sc = this.get("seriesCollection"),
+            series,
+            i = 0,
+            len = sc.length;
+        for(; i < len; ++i)
         {
-            this._parseSeriesCollection(val);
-            return this._seriesCollection;
+            series = sc[i];
+            if(series instanceof Y.CartesianSeries)
+            {
+                series.render();
+            }
         }
     },
 
-    parent: {
-        value: null
-    }
-};
-
-Y.extend(Graph, Y.Base, {
     /**
      * Hash of arrays containing series mapped to a series type.
      */
@@ -37,7 +63,7 @@ Y.extend(Graph, Y.Base, {
      */
     getSeriesByIndex: function(val)
     {
-        var col = this._seriesCollection,
+        var col = this.get("seriesCollection"),
             series;
         if(col && col.length > val)
         {
@@ -98,7 +124,7 @@ Y.extend(Graph, Y.Base, {
             i = 0,
             series,
             seriesKey;
-        if(!this._seriesCollection)
+        if(!this.get("seriesCollection"))
         {
             this._seriesCollection = [];
         }
@@ -120,13 +146,12 @@ Y.extend(Graph, Y.Base, {
             }
             this._addSeries(series);
         }
-        len = this._seriesCollection.length;
+        len = this.get("seriesCollection").length;
         for(i = 0; i < len; ++i)
         {
-            series = this._seriesCollection[i];
+            series = this.get("seriesCollection")[i];
             seriesKey = series.get("direction") == "horizontal" ? "yKey" : "xKey";
             this._seriesDictionary[series.get(seriesKey)] = series;
-            series.render(this.get("parent"));
         }
     },
 
@@ -138,7 +163,7 @@ Y.extend(Graph, Y.Base, {
     _addSeries: function(series)
     {
         var type = series.get("type"),
-            seriesCollection = this._seriesCollection,
+            seriesCollection = this.get("seriesCollection"),
             graphSeriesLength = seriesCollection.length,
             seriesTypes = this.seriesTypes,
             typeSeriesCollection;	
@@ -163,7 +188,7 @@ Y.extend(Graph, Y.Base, {
     _createSeries: function(seriesData)
     {
         var type = seriesData.type,
-            seriesCollection = this._seriesCollection,
+            seriesCollection = this.get("seriesCollection"),
             seriesTypes = this.seriesTypes,
             typeSeriesCollection,
             seriesType,
@@ -244,7 +269,7 @@ Y.extend(Graph, Y.Base, {
             case "stackedmarkerseries" :
                 seriesClass = Y.StackedMarkerSeries;
             break;
-            case "pieseries" :
+            case "pie" :
                 seriesClass = Y.PieSeries;
             break;
             case "combo" :
@@ -269,7 +294,66 @@ Y.extend(Graph, Y.Base, {
     /**
      * @private
      */
+    _markerEventHandler: function(e)
+    {
+        var type = e.type,
+            markerNode = e.currentTarget,
+            strArr = markerNode.getAttribute("id").split("_"),
+            series = this.getSeriesByIndex(strArr[1]),
+            index = strArr[2];
+        series.updateMarkerState(type, index);
+    },
+
+    /**
+     * @private
+     */
     _dispatchers: null,
+
+    /**
+     * @private
+     */
+    _updateStyles: function()
+    {
+        this._background.update(this.get("styles").background);
+        this._sizeChangeHandler();
+    },
+
+    /**
+     * @private
+     */
+    _sizeChangeHandler: function(e)
+    {
+        var sc = this.get("seriesCollection"),
+            hgl = this.get("horizontalGridlines"),
+            vgl = this.get("verticalGridlines"),
+            i = 0,
+            l,
+            w = this.get("width"),
+            h = this.get("height");
+        if(this._background)
+        {
+            if(w && h)
+            {
+                this._background.update({width:w, height:h});
+            }
+        }
+        if(hgl && hgl instanceof Y.Gridlines)
+        {
+            hgl.draw();
+        }
+        if(vgl && vgl instanceof Y.Gridlines)
+        {
+            vgl.draw();
+        }
+        if(sc)
+        {
+            l = sc.length;
+            for(; i < l; ++i)
+            {
+                sc[i].draw();
+            }
+        }
+    },
 
     /**
      * @private
@@ -286,7 +370,105 @@ Y.extend(Graph, Y.Base, {
         {
             this.fire("chartRendered");
         }
+    },
+
+    /**
+     * @private
+     */
+    _getDefaultStyles: function()
+    {
+        var defs = {
+            background: {
+                shape: "rect",
+                fill:{
+                    color:"#faf9f2"
+                },
+                border: {
+                    color:"#ccc",
+                    weight: 1
+                }
+            }
+        };
+        return defs;
+    }
+}, {
+    ATTRS: {
+        seriesCollection: {
+            getter: function()
+            {
+                return this._seriesCollection;
+            },
+
+            setter: function(val)
+            {
+                this._parseSeriesCollection(val);
+                return this._seriesCollection;
+            }
+        },
+        
+        showBackground: {
+            value: true
+        },
+
+        seriesDictionary: {
+            readOnly: true,
+
+            getter: function()
+            {
+                return this._seriesDictionary;
+            }
+        },
+
+        horizontalGridlines: {
+            value: null,
+
+            setter: function(val)
+            {
+                var gl = this.get("horizontalGridlines");
+                if(gl && gl instanceof Y.Gridlines)
+                {
+                    gl.remove();
+                }
+                if(val instanceof Y.Gridlines)
+                {
+                    gl = val;
+                    val.set("graph", this);
+                    val.render();
+                    return val;
+                }
+                else if(val && val.axis)
+                {
+                    gl = new Y.Gridlines({direction:"horizontal", axis:val.axis, graph:this, styles:val.styles});
+                    gl.render();
+                    return gl;
+                }
+            }
+        },
+        
+        verticalGridlines: {
+            value: null,
+
+            setter: function(val)
+            {
+                var gl = this.get("verticalGridlines");
+                if(gl && gl instanceof Y.Gridlines)
+                {
+                    gl.remove();
+                }
+                if(val instanceof Y.Gridlines)
+                {
+                    gl = val;
+                    val.set("graph", this);
+                    val.render();
+                    return val;
+                }
+                else if(val && val.axis)
+                {
+                    gl = new Y.Gridlines({direction:"vertical", axis:val.axis, graph:this, styles:val.styles});
+                    gl.render();
+                    return gl;
+                }
+            }
+        }
     }
 });
-
-Y.Graph = Graph;

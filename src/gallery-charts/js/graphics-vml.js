@@ -8,7 +8,7 @@ VMLGraphics.prototype = {
         config = config || {};
         var w = config.width || 0,
             h = config.height || 0;
-        this._vml = this._createGraphics();
+        this.node = this._createGraphics();
         this.setSize(w, h);
         this._initProps();
     },
@@ -139,7 +139,16 @@ VMLGraphics.prototype = {
      */
     clear: function() {
         this._path = '';
-        this._removeChildren(this._vml);
+        this._removeChildren(this.node);
+    },
+
+    /**
+     * Removes all nodes
+     */
+    destroy: function()
+    {
+        this._removeChildren(this.node);
+        this.node.parentNode.removeChild(this.node);
     },
 
     /**
@@ -157,6 +166,28 @@ VMLGraphics.prototype = {
                 node.removeChild(child);
             }
         }
+    },
+
+    toggleVisible: function(val)
+    {
+        this._toggleVisible(this.node, val);
+    },
+
+    _toggleVisible: function(node, val)
+    {
+        var children = Y.one(node).get("children"),
+            visibility = val ? "visible" : "hidden",
+            i = 0,
+            len;
+        if(children)
+        {
+            len = children.length;
+            for(; i < len; ++i)
+            {
+                this._toggleVisible(children[i], val);
+            }
+        }
+        node.style.visibility = visibility;
     },
 
     /**
@@ -266,7 +297,7 @@ VMLGraphics.prototype = {
         {
             arc = 360;
         }
-        startAngle *= 65535;
+        startAngle *= -65535;
         arc *= 65536;
         path = " m " + x + " " + y + " ae " + x + " " + y + " " + radius + " " + yRadius + " " + startAngle + " " + arc;
         return path;
@@ -313,7 +344,6 @@ VMLGraphics.prototype = {
         this._path += ' l ';
         for (i = 0; i < len; ++i) {
             this._path += ' ' + Math.round(args[i][0]) + ', ' + Math.round(args[i][1]);
-
             this._trackSize.apply(this, args[i]);
         }
     },
@@ -329,25 +359,31 @@ VMLGraphics.prototype = {
      * Sets the size of the graphics object
      */
     setSize: function(w, h) {
-        this._vml.style.width = w + 'px';
-        this._vml.style.height = h + 'px';
-        this._vml.coordSize = w + ' ' + h;
+        w = Math.round(w);
+        h = Math.round(h);
+        this.node.style.width = w + 'px';
+        this.node.style.height = h + 'px';
+        this.node.coordSize = w + ' ' + h;
+        this._canvasWidth = w;
+        this._canvasHeight = h;
     },
    
     setPosition: function(x, y)
     {
-        this._vml.style.left = x + "px";
-        this._vml.style.top = y + "px";
+        x = Math.round(x);
+        y = Math.round(y);
+        this.node.style.left = x + "px";
+        this.node.style.top = y + "px";
     },
 
     /**
      * @private
      */
-    render: function(node) {
-        var w = node.offsetWidth || 0,
-            h = node.offsetHeight || 0;
-        node = node || Y.config.doc.body;
-        node.appendChild(this._vml);
+    render: function(parentNode) {
+        var w = Math.max(parentNode.offsetWidth || 0, this._canvasWidth),
+            h = Math.max(parentNode.offsetHeight || 0, this._canvasHeight);
+        parentNode = parentNode || Y.config.doc.body;
+        parentNode.appendChild(this.node);
         this.setSize(w, h);
         this._initProps();
         return this;
@@ -412,9 +448,10 @@ VMLGraphics.prototype = {
     _draw: function()
     {
         var shape = this._createGraphicNode(this._shape),
-            w = this._width,
-            h = this._height,
+            w = Math.round(this._width),
+            h = Math.round(this._height),
             fillProps = this._fillProps;
+            this.setSize(w, h);
         if(this._path)
         {
             if(this._fill || this._fillProps)
@@ -455,7 +492,7 @@ VMLGraphics.prototype = {
             shape.filled = true;
             shape.appendChild(this._getFill());
         }
-        this._vml.appendChild(shape);
+        this.node.appendChild(shape);
         this._clearPath();
     },
 
@@ -553,135 +590,13 @@ VMLGraphics.prototype = {
      * Returns a shape.
      */
     getShape: function(config) {
-        var shape,
-            node,
-            type,
-            fill = config.fill,
-            border = config.border,
-            fillnode,
-            w = config.width,
-            h = config.height, 
-            path;
-        if(config.node)
-        {
-            node = config.node;
-            type = config.type || config.shape;
-        }
-        else
-        {
-            this.clear();
-            type = config.shape || "shape";
-            node = this._createGraphicNode(this._getNodeShapeType(type));
-            if(type === "wedge")
-            {
-                path = this._getWedgePath(config.props);
-                if(fill)
-                {
-                    path += ' x';
-                }
-                if(border)
-                {
-                    path += ' e';
-                }
-                node.path = path;
-            }
-        }
-        this.setPosition(0, 0);
-        if(border && border.weight && border.weight > 0)
-        {
-            node.strokecolor = border.color || "#000000";
-            node.strokeweight = border.weight || 1;
-            node.stroked = true;
-            w -= border.weight;
-            h -= border.weight;
-        }
-        else
-        {
-            node.stroked = false;
-        }
-        this.setSize(w, h);
-        node.style.width = w + "px";
-        node.style.height = h + "px";
-        node.filled = true;
-        if(fill.type === "linear" || fill.type === "radial")
-        {
-            this.beginGradientFill(fill);
-            node.appendChild(this._getFill());
-        }
-        else if(fill.type === "bitmap")
-        {
-            this.beginBitmapFill(fill);
-            node.appendChild(this._getFill());
-        }
-        else
-        {
-            if(!fill.color)
-            {
-                node.filled = false;
-            }
-            else
-            {
-                if(config.fillnode)
-                {
-                    this._removeChildren(config.fillnode);
-                }
-                fillnode = this._createGraphicNode("fill");
-                fillnode.setAttribute("type", "solid");
-                fill.alpha = fill.alpha || 1;                
-                fillnode.setAttribute("color", fill.color);
-                fillnode.setAttribute("opacity", fill.alpha);
-                node.appendChild(fillnode);
-            }
-        }
-        node.style.display = "block";
-        node.style.position = "absolute";
-        if(!config.node)
-        {
-            this._vml.appendChild(node);
-        }
-        shape = {
-            width:w,
-            height:h,
-            fill:fill,
-            node:node,
-            fillnode:fillnode,
-            border:border
-        };
-        return shape; 
-    },
-   
-    /**
-     * @description Updates an existing shape with new properties.
-     */
-    updateShape: function(shape, config)
-    {
-        if(config.fill)
-        {
-            shape.fill = Y.merge(shape.fill, config.fill);
-        }
-        if(config.border)
-        {
-            shape.border = Y.merge(shape.border, config.border);
-        }
-        if(config.width)
-        {
-            shape.width = config.width;
-        }
-        if(config.height)
-        {
-            shape.height = config.height;
-        }
-        if(config.shape !== shape.type)
-        {
-            config.node = null;
-            config.fillnode = null;
-        }
-        return this.getShape(shape);
+        config.graphic = this;
+        return new Y.Shape(config); 
     },
 
     addChild: function(child)
     {
-        this._vml.appendChild(child);
+        this.node.appendChild(child);
     }
 };
 

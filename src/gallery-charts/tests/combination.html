@@ -40,266 +40,26 @@
     height:400px;
     width:400px;
 }
-.code {
-    margin: 10px; 10px; 10px; 10px;
-    border: 1px solid #000;
-    height: 400px;
-    overflow: auto;
-}
 </style>
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts-min.css">
 <!-- BEGIN EXAMPLE CODE -->	
 </head>		
 <body class="yui3-skin-sam">
-<script type="text/javascript" src="http://yui.yahooapis.com/3.1.2/build/yui/yui.js"></script>
-<script type="text/javascript" src="../../../build/gallery-charts/gallery-charts.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.2/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-charts/gallery-charts-min.js"></script>
 <h3>Combination Chart</h3>
-<table>
-<tr><td></td><td></td><td></td></tr>
-<tr><td><div id="vertaxis" style="margin:0px 0px 0px 0px;height:400px;position:relative"></div></td><td><div id="chart" style="width:800px;height:400px;position:relative"></div></td><td></td></tr>
-<tr><td></td><td><div id="axis" style="margin:0px 0px 0px 0px;position:relative;width:800px"></div></td><td></td></tr>
-</table>
-<h3 style="margin-left:10px">Code Snippet</h3>
-<div class="code">
-<pre>
-                // Create data 
-                var mydata = {
-                    id:"myData", 
-                    data: [
-                        {day:"Monday", taxes:2000, expenses:3700, revenue:2200}, {day:"Tuesday", taxes:50, expenses:9100, revenue:100}, 
-                        {day:"Wednesday", taxes:-4000, expenses:1100, revenue:1500}, {day:"Thursday", taxes:200, expenses:1900, revenue:2800}, {day:"Friday", taxes:2000, expenses:700, revenue:2650}
-                    ]
-                };					
-
-                var expensegraphstyles = {
-                    color:"#5577AF",
-                    fill: {
-                        color:"#5577AF", 
-                        alpha:0.2
-                    },
-                    over:{
-                        fill:{alpha:1}
-                    },
-                    width:8, 
-                    height:6,
-                    border: {
-                        weight:"1",
-                        color: "#ff0000"
-                    }
-                };
-
-                // Add revenue graph styles
-                var revenuegraphstyles = {
-                    color:"#FF0000",
-                    fill: {
-                        color:"#ff0000", 
-                        alpha:0.2
-                    },
-                    border: {
-                        weight:1,
-                        color:"#0000ff"
-                    },
-                    over: {
-                        fill:{
-                            color:"#0000ff",
-                            alpha: 0.2
-                        },
-                        border:{
-                            color:"#0000ff"
-                        }
-                    },
-                    width:16,
-                    height:10
-                };
-
-                var taxgraphstyles = {
-                    fill:
-                    {
-                        color:"#0000ff"
-                    },
-                    over: {
-                        fill: {
-                            color:"#ff0000",
-                            alpha: 0.5
-                        },
-                        border: {
-                            weight:1,
-                            color:"#0000ee"
-                        },
-                        width:10,
-                        height:10
-                    },
-                    width:6, 
-                    height:6,
-                    border:
-                    {
-                        weight:"0"
-                    }   
-                };
-            
-                var taxareastyles = {
-                    color: "#0000ff",
-                    alpha: 0.5
-                };
-                // Create bottom axis styles
-                var bottomaxisstyles = {
-                    label:{
-                        color:"#BDD7EB",
-                        rotation:0,
-                        margin:{top:5},
-                    },
-                    dataFormat:{
-                        pattern:"%b %d, %y"
-                    },
-                    majorTicks:{
-                        color:"#BDD7EB",
-                        display:"inside"
-                    },
-                    line:{
-                        color:"#BDD7EB"
-                    },
-                    majorUnit:
-                    {
-                        count:5
-                    }
-                };	
-                
-                var leftaxisstyles = {
-                    label:{
-                        color:"#BDD7EB",
-                        rotation:0,
-                        margin:{top:5},
-                    },
-                    dataFormat:{
-                        pattern:
-                        {
-                            prefix: "$"
-                        }
-                    },
-                    majorTicks:{
-                        color:"#BDD7EB",
-                        display:"outside"
-                    },
-                    line:{
-                        color:"#BDD7EB"
-                    },
-                    majorUnit:
-                    {
-                        count:5
-                    }
-                };	
-                var dataProvider = mydata;
-                var timeaxis = new Y.CategoryAxis({dataProvider:dataProvider});
-                timeaxis.addKey("day");
-                
-                var numericaxis = new Y.NumericAxis({dataProvider:dataProvider});
-                numericaxis.addKey("revenue");
-                numericaxis.addKey("expenses");	
-                numericaxis.addKey("taxes");
-              var lineSeries = new Y.LineSeries({
-                                                    type:"line",
-                                                    xAxis:timeaxis,
-                                                    yAxis:numericaxis,
-                                                    xKey:"day",
-                                                    yKey:"taxes",
-                                                    xDisplayName:"Day",
-                                                    yDisplayName: "Taxes",
-                                                    styles:taxgraphstyles});
-            var markerSeries = new Y.MarkerSeries({
-                                                    xAxis:timeaxis,
-                                                    yAxis:numericaxis,
-                                                    xKey:"day",
-                                                    yKey:"taxes",
-                                                    xDisplayName:"Day",
-                                                    yDisplayName: "Taxes",
-                                                    styles:taxgraphstyles});
-               var graph = new Y.Graph({parent:"#chart", seriesCollection:[{
-                                                                                    type:"area",
-                                                                                    xAxis:timeaxis,
-                                                                                    yAxis:numericaxis,
-                                                                                    xKey:"day",
-                                                                                    yKey:"taxes",
-                                                                                    xDisplayName:"Day",
-                                                                                    yDisplayName: "Taxes",
-                                                                                    styles:taxareastyles
-                                                                                },
-                                                                                lineSeries,
-                                                                                {
-                                                                                    type:"column", 
-                                                                                    xAxis:timeaxis, 
-                                                                                    yAxis:numericaxis, 
-                                                                                    xKey:"day", 
-                                                                                    yKey:"revenue", 
-                                                                                    xDisplayName:"Day",
-                                                                                    yDisplayName: "Revenue",
-                                                                                    styles:revenuegraphstyles
-                                                                                },
-                                                                                {
-                                                                                    type:"column",
-                                                                                    xAxis:timeaxis,
-                                                                                    yAxis:numericaxis,
-                                                                                    xKey:"day",
-                                                                                    yKey:"expenses",
-                                                                                    xDisplayName:"Day",
-                                                                                    yDisplayName: "Expenses",
-                                                                                    styles:expensegraphstyles
-                                                                                
-                                                                                },
-                                                                                markerSeries
-                                                                                ]});
-                
-                
-                var axisrenderer = new Y.AxisRenderer({axis:timeaxis, position:"bottom", styles:bottomaxisstyles});
-                axisrenderer.render("#axis");
-                function updateAxisLabelRotation()
-                {
-                    axisrenderer.set("styles", {label:{rotation:document.getElementById("xLabelRotationField").value}});
-                    vaxis.set("styles", {label:{rotation:document.getElementById("yLabelRotationField").value}});
-                }
-                Y.on("click", updateAxisLabelRotation, "#rotationbutton");
-                var vaxis = new Y.AxisRenderer({position:"left", axis:numericaxis, styles:leftaxisstyles});
-                vaxis.render("#vertaxis");
-
-                var tt = new Y.Tooltip({
-                    triggerNodes:".yui3-seriesmarker",
-                    delegate: "#chart",
-                    shim:false,
-                    zIndex:2
-                });
-                
-                tt.render();
-                
-                tt.on("triggerEnter", function(e) {
-                    var node = e.node,
-                    marker = Y.Widget.getByNode(node),
-                    index = marker.get("index"),
-                    series = marker.get("series"),
-                    xKey = series.get("xKey"),
-                    yKey = series.get("yKey"),
-                    msg = series.get("xDisplayName") + 
-                    ": " + series.get("xAxis").getKeyValueAt(xKey, index) + 
-                    "<br/>" + series.get("yDisplayName") + 
-                    ": " + series.get("yAxis").getKeyValueAt(yKey, index);
-                    if (node) {
-                        
-                        this.setTriggerContent(msg);
-                    }
-                });
-        });
-</pre>
-</div>
+<div id="mychart"></div>
 <script type="text/javascript">            
     YUI().use('gallery-charts', function (Y) 
     {
-
-					// Create data 
-					var mydata = {
-						id:"myData", 
-						data: [
-							{day:"Monday", taxes:2000, expenses:3700, revenue:2200}, {day:"Tuesday", taxes:50, expenses:9100, revenue:100}, 
-							{day:"Wednesday", taxes:-4000, expenses:1100, revenue:1500}, {day:"Thursday", taxes:200, expenses:1900, revenue:2800}, {day:"Friday", taxes:2000, expenses:700, revenue:2650}
-						]
-					};					
+		// Create data 
+		var mydata = [
+            {date:"5/1/2010", values:2000, expenses:3700, revenue:2200, taxes:200}, 
+            {date:"5/2/2010", values:50, expenses:3100, revenue:100, taxes:600}, 
+            {date:"5/3/2010", values:400, expenses:1100, revenue:1500, taxes:900}, 
+            {date:"5/4/2010", values:200, expenses:1900, revenue:2800, taxes:1500}, 
+            {date:"5/5/2010", values:5000, expenses:5000, revenue:2650, taxes:3500}
+        ];
 
 					var expensegraphstyles = {
 						color:"#5577AF",
@@ -310,7 +70,7 @@
                         over:{
                             fill:{alpha:1}
                         },
-                        width:8, 
+                        width:12, 
                         height:6,
                         border: {
 						    weight:"1",
@@ -338,15 +98,17 @@
                                 color:"#0000ff"
                             }
                         },
-                        width:16,
+                        width:12,
                         height:10
 					};
 
                     var taxgraphstyles = {
-						fill:
+                        weight:1,
+                        fill:
                         {
                             color:"#0000ff"
 						},
+                        color: "#0000ff",
                         over: {
                             fill: {
                                 color:"#ff0000"
@@ -396,7 +158,7 @@
 					var leftaxisstyles = {
 						label:{
 							color:"#BDD7EB",
-							rotation:0,
+							rotation:-45,
 							margin:{top:5},
 						},
 						dataFormat:{
@@ -407,7 +169,7 @@
 						},
 						majorTicks:{
 							color:"#BDD7EB",
-                            display:"outside"
+                            display:"inside"
 						},
 						line:{
 							color:"#BDD7EB"
@@ -417,36 +179,28 @@
 							count:5
 						}
 					};	
-                    var dataProvider = mydata;
-                    var timeaxis = new Y.CategoryAxis({dataProvider:dataProvider});
-					timeaxis.addKey("day");
-                    
-                    var numericaxis = new Y.NumericAxis({dataProvider:dataProvider});
-					numericaxis.addKey("revenue");
-			        numericaxis.addKey("expenses");	
-                    numericaxis.addKey("taxes");
                   var lineSeries = new Y.LineSeries({
                                                         type:"line",
-                                                        xAxis:timeaxis,
-                                                        yAxis:numericaxis,
-                                                        xKey:"day",
+                                                        xAxis:"timeaxis",
+                                                        yAxis:"numericaxis",
+                                                        xKey:"date",
                                                         yKey:"taxes",
                                                         xDisplayName:"Day",
                                                         yDisplayName: "Taxes",
                                                         styles:taxgraphstyles});
                 var markerSeries = new Y.MarkerSeries({
-                                                        xAxis:timeaxis,
-                                                        yAxis:numericaxis,
-                                                        xKey:"day",
+                                                        xAxis:"timeaxis",
+                                                        yAxis:"numericaxis",
+                                                        xKey:"date",
                                                         yKey:"taxes",
                                                         xDisplayName:"Day",
                                                         yDisplayName: "Taxes",
                                                         styles:taxgraphstyles});
-                   var graph = new Y.Graph({parent:"#chart", seriesCollection:[{
+                   var graph = new Y.Chart({render:"#mychart", dataProvider:mydata, width:800, height:380, seriesCollection:[{
                                                                                         type:"area",
-                                                                                        xAxis:timeaxis,
-                                                                                        yAxis:numericaxis,
-                                                                                        xKey:"day",
+                                                                                        xAxis:"timeaxis",
+                                                                                        yAxis:"numericaxis",
+                                                                                        xKey:"date",
                                                                                         yKey:"taxes",
                                                                                         xDisplayName:"Day",
                                                                                         yDisplayName: "Taxes",
@@ -455,9 +209,9 @@
                                                                                     lineSeries,
                                                                                     {
                                                                                         type:"column", 
-                                                                                        xAxis:timeaxis, 
-                                                                                        yAxis:numericaxis, 
-                                                                                        xKey:"day", 
+                                                                                        xAxis:"timeaxis", 
+                                                                                        yAxis:"numericaxis", 
+                                                                                        xKey:"date", 
                                                                                         yKey:"revenue", 
                                                                                         xDisplayName:"Day",
                                                                                         yDisplayName: "Revenue",
@@ -465,9 +219,9 @@
                                                                                     },
                                                                                     {
                                                                                         type:"column",
-                                                                                        xAxis:timeaxis,
-                                                                                        yAxis:numericaxis,
-                                                                                        xKey:"day",
+                                                                                        xAxis:"timeaxis",
+                                                                                        yAxis:"numericaxis",
+                                                                                        xKey:"date",
                                                                                         yKey:"expenses",
                                                                                         xDisplayName:"Day",
                                                                                         yDisplayName: "Expenses",
@@ -475,45 +229,23 @@
                                                                                     
                                                                                     },
                                                                                     markerSeries
-                                                                                    ]});
+                                                                                    ],
+                                                                                    axes:{
+                                                                                        timeaxis:{
+                                                                                            type:"category",
+                                                                                            position:"bottom",
+                                                                                            styles:bottomaxisstyles,
+                                                                                            keys:["date"]
+                                                                                        },
+                                                                                        numericaxis: {
+                                                                                            type:"numeric",
+                                                                                            position:"left",
+                                                                                            styles:leftaxisstyles,
+                                                                                            keys:["revenue", "expenses", "taxes"]
+                                                                                        }
+                                                                                    }});
                     
                     
-                    var axisrenderer = new Y.AxisRenderer({axis:timeaxis, position:"bottom", styles:bottomaxisstyles});
-                    axisrenderer.render("#axis");
-                    function updateAxisLabelRotation()
-                    {
-                        axisrenderer.set("styles", {label:{rotation:document.getElementById("xLabelRotationField").value}});
-                        vaxis.set("styles", {label:{rotation:document.getElementById("yLabelRotationField").value}});
-                    }
-                    Y.on("click", updateAxisLabelRotation, "#rotationbutton");
-                    var vaxis = new Y.AxisRenderer({position:"left", axis:numericaxis, styles:leftaxisstyles});
-                    vaxis.render("#vertaxis");
-    
-                    var tt = new Y.Tooltip({
-                        triggerNodes:".yui3-seriesmarker",
-                        delegate: "#chart",
-                        shim:false,
-                        zIndex:2
-                    });
-                    
-                    tt.render();
-                    
-                    tt.on("triggerEnter", function(e) {
-                        var node = e.node,
-                        marker = Y.Widget.getByNode(node),
-                        index = marker.get("index"),
-                        series = marker.get("series"),
-                        xKey = series.get("xKey"),
-                        yKey = series.get("yKey"),
-                        msg = series.get("xDisplayName") + 
-                        ": " + series.get("xAxis").getKeyValueAt(xKey, index) + 
-                        "<br/>" + series.get("yDisplayName") + 
-                        ": " + series.get("yAxis").getKeyValueAt(yKey, index);
-                        if (node) {
-                            
-                            this.setTriggerContent(msg);
-                        }
-                    });
             });
 </script>
 </body>

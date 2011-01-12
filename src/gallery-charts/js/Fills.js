@@ -36,9 +36,9 @@ Fills.prototype = {
 			nextX,
 			nextY,
 			i = 1,
-			styles = this.get("area"),
+			styles = this.get("styles").area,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
         graphic.clear();
         graphic.beginFill(color, styles.alpha);
         graphic.moveTo(firstX, firstY);
@@ -81,9 +81,9 @@ Fills.prototype = {
             i = 0,
 			firstX = xcoords[0],
             firstY = ycoords[0],
-            styles = this.get("area"),
+            styles = this.get("styles").area,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
         graphic.beginFill(color, styles.alpha);
         graphic.moveTo(firstX, firstY);
         for(; i < len; i = ++i)
@@ -138,9 +138,9 @@ Fills.prototype = {
             i = 0,
 			firstX,
             firstY,
-            styles = this.get("area"),
+            styles = this.get("styles").area,
 			graphic = this.get("graphic"),
-            color = styles.color || this._getDefaultColor(this.get("graphOrder"));
+            color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
 		firstX = xcoords[0];
         firstY = ycoords[0];
         curvecoords = this.getCurveControlPoints(xcoords, ycoords);
@@ -272,7 +272,6 @@ Fills.prototype = {
     _getAreaDefaults: function()
     {
         return {
-            alpha: 0.5
         };
     }
 };

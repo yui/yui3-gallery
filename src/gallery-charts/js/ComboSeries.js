@@ -14,14 +14,23 @@ Y.ComboSeries = Y.Base.create("comboSeries", Y.CartesianSeries, [Y.Fills, Y.Line
         {
             this.drawPlots();
         }   
+    },
+
+    /**
+     * @private
+     */
+    _getDefaultStyles: function()
+    {
+        var styles = Y.ComboSeries.superclass._getDefaultStyles();
+        styles.line = this._getLineDefaults();
+        styles.marker = this._getPlotDefaults();
+        styles.area = this._getAreaDefaults();
+        return styles;
     }
 },
 {
     ATTRS: {
         type: {
-            /**
-             * Indicates the type of graph.
-             */
             value:"combo"
         },
 
@@ -37,28 +46,39 @@ Y.ComboSeries = Y.Base.create("comboSeries", Y.CartesianSeries, [Y.Fills, Y.Line
             value: true
         },
 
-        styles: {
+        marker: {
+            lazyAdd: false,
             getter: function()
             {
-                var styles = this._styles || this._getDefaultStyles();
-                styles.marker = this.get("marker");
-                styles.line = this.get("line");
-                styles.area = this.get("area");
-                styles.padding = this.get("padding");
-                return styles;
+                return this.get("styles").marker;
             },
-
             setter: function(val)
             {
-                var col = {area:"area", line:"line", marker:"marker", padding:"padding"}, i;
-                for(i in col)
-                {
-                    if(val.hasOwnProperty(i))
-                    {
-                        this.set(i, val[i]);
-                    }
-                }
-                this.styles = val;
+                this.set("styles", {marker:val});
+            }
+        },
+
+        line: {
+            lazyAdd: false,
+            getter: function()
+            {
+                return this.get("styles").line;
+            },
+            setter: function(val)
+            {
+                this.set("styles", {line:val});
+            }
+        },
+
+        area: {
+            lazyAdd: false,
+            getter: function()
+            {
+                return this.get("styles").area;
+            },
+            setter: function(val)
+            {
+                this.set("styles", {area:val});
             }
         }
     }

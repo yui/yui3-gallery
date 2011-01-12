@@ -7,7 +7,7 @@ var SORT = {
       DIRECTION : 'direction'
     };
 
-Y.Plugin.SDTSort= Y.Base.create('simple-datatable-sort', Y.Plugin.Base, [], {
+Y.Plugin.SDTSort= Y.Base.create('sdt-sort', Y.Plugin.Base, [], {
 
   _host : null,
 
@@ -66,6 +66,8 @@ Y.Plugin.SDTSort= Y.Base.create('simple-datatable-sort', Y.Plugin.Base, [], {
    */
   sortBy : function(key) {
     Y.log('sortBy','info','plugin-sort');
+  this._sortCell = this._host.get('boundingBox').one('th.yui3-sdt-col-' + key);
+  this._newKey = true;
     this.set(SORT.KEY, key);
     return this;
   },
@@ -106,7 +108,7 @@ Y.Plugin.SDTSort= Y.Base.create('simple-datatable-sort', Y.Plugin.Base, [], {
         oldToString;
 
     this._tHead = this._host.get('contentBox').one('thead');
-    this._tHead.all('th .yui3-simple-datatable-title').each(function(th){
+    this._tHead.all('th .yui3-sdt-liner').each(function(th){
       if(!th.one('.yui3-icon')){
         th.append('<span class="yui3-icon"></span>');
       }
@@ -277,7 +279,7 @@ Y.Plugin.SDTSort= Y.Base.create('simple-datatable-sort', Y.Plugin.Base, [], {
      * @type string
      */
     ascClass : {
-      value : 'yui3-icon-control-s'
+      value : 'yui3-type-control-s'
     },
 
     /**
@@ -287,7 +289,7 @@ Y.Plugin.SDTSort= Y.Base.create('simple-datatable-sort', Y.Plugin.Base, [], {
      * @type string
      */
     descClass : {
-      value : 'yui3-icon-control-n'
+      value : 'yui3-type-control-n'
     },
 
     /**
@@ -318,5 +320,4 @@ Y.Plugin.SDTSort= Y.Base.create('simple-datatable-sort', Y.Plugin.Base, [], {
 });
 
 
-
-}, 'gallery-2010.09.08-19-45' ,{requires:['plugin','event','selector-css3']});
+}, 'gallery-2010.12.10-17-31' ,{requires:['plugin','event','selector-css3']});
