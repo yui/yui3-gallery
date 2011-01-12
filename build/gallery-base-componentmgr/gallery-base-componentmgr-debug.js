@@ -10,45 +10,47 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 	
 	var ComponentMgr,
 		
-		REQUIRES = 'requires',
-		INITIALIZER = 'initializer',
-		INSTANCE = 'instance',
+		REQUIRES			= 'requires',
+		INITIALIZER			= 'initializer',
+		INSTANCE			= 'instance',
 		
-		E_INIT_COMPONENT = 'initComponent',
-		E_INIT_COMPONENTS = 'initComponents',
+		E_INIT_COMPONENT	= 'initComponent',
+		E_INIT_COMPONENTS	= 'initComponents',
 		
-		L = Y.Lang,
-		isArray = L.isArray,
-		isString = L.isString,
-		isObject = L.isObject,
-		isFunction = L.isFunction,
-		noop = function(){};
+		YLang				= Y.Lang,
+		isArray				= YLang.isArray,
+		isString			= YLang.isString,
+		isObject			= YLang.isObject,
+		isFunction			= YLang.isFunction,
+		noop				= function(){};
 		
 	// *** Constructor *** //
 	
 	ComponentMgr = function () {
 		
 		Y.log('constructor callled', 'info', 'baseComponentMgr');
-		this.initComponentMgr.apply(this, arguments);
+		this._initComponentMgr.apply(this, arguments);
 	};
 	
 	// *** Static *** //
+	
+	ComponentMgr._COMPONENT_CFG = [REQUIRES, INITIALIZER, INSTANCE];
 	
 	// *** Prototype *** //
 	
 	ComponentMgr.prototype = {
 		
+		// *** Instance Members *** //
+		
+		_components : null,
+		
 		// *** Lifecycle Methods *** //
 		
-		initComponentMgr : function () {
+		_initComponentMgr : function () {
 			
 			// Holds the goods
 			this._components = new Y.State();
-			
-			// Add the components defined in the static COMPONENTS object
-			Y.Object.each(this.constructor.COMPONENTS, function(config, name){
-				this.addComponent(name, config);
-			}, this);
+			this._initComponentHierarchy();
 			
 			/**
 			 * Fired when a component is going to be initialized.
@@ -101,10 +103,10 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			if ( ! isString(name)) { return; }		// string name
 			if ( ! isObject(config)) { return; }	// config object
 			
-			var components = this._components,
-				requires = config.requires,
-				initializer = config.initializer,
-				instance = config.instance;
+			var components	= this._components,
+				requires	= config.requires,
+				initializer	= config.initializer,
+				instance	= config.instance;
 				
 			initializer = isFunction(initializer) ? initializer :
 						  isString(initializer) && isFunction(this[initializer]) ? this[initializer] : noop;
@@ -142,10 +144,10 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			
 			Y.log('useComponent called', 'info', 'baseComponentMgr');
 			
-			var args = Y.Array(arguments, 0, true),
-				callback = isFunction(args[args.length-1]) ? args[args.length-1] : noop,	// last param or noop
-				components = callback === noop ? args : args.slice(0, -1),					// if callback is noop then all params, otherwise all but last params
-				instances = [],
+			var args		= Y.Array(arguments, 0, true),
+				callback	= isFunction(args[args.length-1]) ? args[args.length-1] : noop,	// last param or noop
+				components	= callback === noop ? args : args.slice(0, -1),					// if callback is noop then all params, otherwise all but last params
+				instances	= [],
 				initialized;
 			
 			if (components.length < 1) {
@@ -178,6 +180,34 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 		
 		// *** Private Methods *** //
 		
+		_initComponentHierarchy : function () {
+			
+			var classes					= this._getClasses(),
+				components				= {},
+				componentConfigProps	= ComponentMgr._COMPONENT_CFG,
+				i, mergeComponentConfigs;
+			
+			// Loop over the Class Hierarchy, aggregating the Component configs
+				
+			mergeComponentConfigs = function (config, name) {
+				
+				if ( ! components[name]) {
+					components[name] = Y.mix({}, config, true, componentConfigProps);
+				} else {
+					Y.mix(components[name], config, true, componentConfigProps);
+				}
+			};
+			
+			for (i = classes.length-1; i >= 0; i--) {
+				Y.Object.each(classes[i].COMPONENTS, mergeComponentConfigs);
+			}
+			
+			// Add the components defined in the static COMPONENTS object
+			Y.Object.each(components, function(config, name){
+				this.addComponent(name, config);
+			}, this);
+		},
+		
 		_getRequires : function (components) {
 			
 			components = isArray(components) ? components : [components];
@@ -197,13 +227,17 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 		
 		_defInitComponentFn : function (e) {
 			
-			var components = this._components,
-				component = e.componentToInit,
-				initializer = components.get(component, INITIALIZER),
-				instance = components.get(component, INSTANCE);
+			var components	= this._components,
+				component	= e.componentToInit,
+				initializer	= components.get(component, INITIALIZER),
+				instance	= components.get(component, INSTANCE);
 			
 			if ( ! instance && isFunction(initializer)) {
 				instance = initializer.call(this);
+				// Add us as an event bubble target for the instance
+				if (instance._yuievt && isFunction(instance.addTarget)) {
+					instance.addTarget(this);
+				}
 				components.add(component, INSTANCE, instance);
 			}
 			
@@ -212,8 +246,8 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 		
 		_defInitComponentsFn : function (e) {
 			
-			var components = e.componentsToInit,
-				requires = this._getRequires(components);
+			var components	= e.componentsToInit,
+				requires	= this._getRequires(components);
 				
 			Y.use.apply(Y, requires.concat(Y.bind(function(Y){
 				Y.Array.each(components, this._initComponent, this);
@@ -225,4 +259,4 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 	Y.BaseComponentMgr = ComponentMgr;
 
 
-}, 'gallery-2010.06.23-18-37' ,{requires:['collection']});
+}, 'gallery-2011.01.03-18-30' ,{requires:['base-base', 'collection']});

@@ -1320,7 +1320,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
          */
         contentBox.set( "id", srcNodeId );
 
-        itemsDom = srcNode.queryAll( "> ." + C_ITEM );
+        itemsDom = srcNode.all( "> ." + C_ITEM );
 
         itemsDom.each( function( itemNode, index, itemsDom ){
             var newItem;

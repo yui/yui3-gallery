@@ -550,7 +550,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIcon: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -564,7 +564,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setNodeLabel: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -578,7 +578,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconsContainer: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -592,7 +592,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconExpanded: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -606,7 +606,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconAlwaysVisible: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -620,7 +620,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconClose: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -938,7 +938,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
             }
 
             labelSelector = HEADER_SELECTOR_SUB + C_LABEL;
-            node = srcNode.query( labelSelector );
+            node = srcNode.one( labelSelector );
 
             return (node) ? node.get( INNER_HTML ) : null;
         },

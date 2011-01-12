@@ -14,11 +14,10 @@ var getClassName = Y.ClassNameManager.getClassName,
             loading : getClassName(TREEVIEW,'loading'),
             tree : getClassName(TREE),
             treeLabel : getClassName(TREEVIEW,"treelabel"),
+            labelcontent : getClassName(TREEVIEW,'label-content'),
             treeview : getClassName(TREEVIEW),
-            leaf : getClassName(TREELEAF),
             collapsed : getClassName(TREE,"collapsed"),
-            hasChildren : getClassName("hasChildren"),
-            expanded : getClassName(TREE,'expanded')
+            leaf : getClassName(TREELEAF)
         };
 
         
@@ -44,7 +43,6 @@ var getClassName = Y.ClassNameManager.getClassName,
          * @param  config {Object} Configuration object literal for the widget
          */
         initializer : function (config) {
-            Y.log("initializing");
             
             this.after('parentChange', this._onParentChange,this);
             this.publish('toggleTreeState', { 
@@ -75,39 +73,43 @@ var getClassName = Y.ClassNameManager.getClassName,
                 boundingBox = this.get(BOUNDING_BOX),
                 labelContainer,
                 label,
+                toggleControlHtml,
                 treelabelClassName = this.getClassName("treelabel"),
                 treeLabeltokens;
                 
-                
                 //We get the anchor to retrieve the label, we add the classname
                 if (this._renderFromMarkup) {
-                    labelContainer = boundingBox.one("> a");
+                    labelContainer = boundingBox.one(":first-child");
+                    labelContainer.set("role","treeitem");
                     labelContainer.addClass(treelabelClassName);
                     label = labelContainer.get(INNERHTML);
+                    toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{labelcontentClassName:classNames.labelcontent, label : label});
+                    labelContainer.set(INNERHTML,toggleControlHtml);
                     this.set("label",label);
                     this._renderFromMarkup = FALSE;
                 } else {
-                    treeLabeltokens = {
-                        treelabelClassName : treelabelClassName,
-                        label : this.get("label")
-                    };
-                    treeLabelHtml = Y.substitute(this.TREEVIEWLABEL_TEMPLATE, treeLabeltokens);
+                    label = this.get("label");
+                    treeLabelHtml = Y.substitute(this.TREEVIEWLABEL_TEMPLATE, {treelabelClassName : treelabelClassName});
                     treeLabelHtml = Y.Node.create(treeLabelHtml);
+                    toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{labelcontentClassName:classNames.labelcontent, label : label});
+                    treeLabelHtml.append(toggleControlHtml);
                     this._set(CONTENT_BOX,Y.Node.create("<ul></ul>"));
                     this._set(BOUNDING_BOX, Y.Node.create(tag));
                     boundingBox = this.get(BOUNDING_BOX).setContent(treeLabelHtml);
                     //Since we changed the boundigbox we need to update the _instance
                     _instances[Y.stamp(boundingBox)] = this;
                 }
+                
+                boundingBox.set("role","presentation");
         },   
     
         CONTENT_TEMPLATE :  "<div></div>",
         
         BOUNDING_TEMPLATE : '<ul></ul>',
                               
-        TREEVIEWLABEL_TEMPLATE : "<a class={treelabelClassName} href='#'>{label}</a>",
+        TREEVIEWLABEL_TEMPLATE : "<a class={treelabelClassName} role='treeitem' href='#'></a>",
         
-        EXPANDCONTROL_TEMPLATE : "<span class='{controlClassName}'>Expand/Collapse</a>",
+        EXPANDCONTROL_TEMPLATE : "<span class={labelcontentClassName}>{label}</span>",
         
         /**
          * In charge of attaching events. 
@@ -116,7 +118,6 @@ var getClassName = Y.ClassNameManager.getClassName,
          * @protected
          */
         bindUI: function() {
-            Y.log("binding");
             var boundingBox,
                 contentBox;
             
@@ -124,6 +125,7 @@ var getClassName = Y.ClassNameManager.getClassName,
                 boundingBox = this.get(BOUNDING_BOX);
                 contentBox = this.get(CONTENT_BOX);
                 boundingBox.on("click",this.onViewEvents,this);
+                boundingBox.on("keydown",this.onViewEvents,this);
                 boundingBox.plug(Y.Plugin.NodeFocusManager, {
                     descendants: ".yui3-treeleaf-content, .yui3-treeview-treelabel",
                     keys: {
@@ -132,67 +134,11 @@ var getClassName = Y.ClassNameManager.getClassName,
                     },
                     circular: true
                 });
-            } 
+            }
+            
+ 
         }, 
-            
-        /**
-         * Needs to overwrite the Widget _createUIEvent, so it can reference treeview's own _instance
-         * hash 
-         * @method _createUIEvent
-         * @protected
-         */
-        _createUIEvent: function (type) {
-                var uiEvtNode = this._getUIEventNode(),
-                    key = (Y.stamp(uiEvtNode) + type),
-                    info,
-                    self = this,
-                    handle;
-        
-                    this._uievts = this._uievts || {};
-                    info = this._uievts[key];
-        
-            //  For each Node instance: Ensure that there is only one delegated
-            //  event listener used to fire Widget UI events.
-            if (!info) {
-                handle = uiEvtNode.delegate(type, function (evt) {
-                    //access your own instance, you should be golden
-                    var widget = self.getByNode(this);
-                    
-                    //  Make the DOM event a property of the custom event
-                    //  so that developers still have access to it.
-                     widget.fire(evt.type, { domEvent: evt });
-            
-                }, "." + Y.Widget.getClassName());
-            
-                this._uievts[key] = info = { instances: {}, handle: handle };
-            }
-            //Register this Widget as using this Node as a delegation container.
-            info.instances[Y.stamp(this)] = 1;
-        },
-
-        /**
-         * Needs to overwrite the Widget instance, used by _createUIEvent
-         * @method getByNode
-         * @param Y.Node 
-         * @protected
-         */
-        getByNode : function (node) {
-            var widget,
-                widgetMarker = "yui3-widget";
-
-            
-            node = Y.Node.one(node);
-            
-            if (node) {
-                node = node.ancestor("." + widgetMarker, true);
-                if (node) {
-                    widget = _instances[Y.stamp(node, TRUE)];
-                }
-            }
-        
-            return widget || null;
-        },
-     
+    
     
         /**
          * Add class collapsed to all trees
@@ -203,17 +149,50 @@ var getClassName = Y.ClassNameManager.getClassName,
             if (!this.isRoot()) {
                 this.get(BOUNDING_BOX).addClass(classNames.collapsed);   
             }
+            
+            var src = this.get('srcNode'),
+                items = this._items;
+            
+            if (items.length === 1 && (items[0] instanceof Y.TreeView)) {
+              items[0].get(BOUNDING_BOX).addClass("yui3-singletree"); 
+            }
         },
         
         /**
          * Toggles the collapsed/expanded class
-         * @method renderUI
+         * @method _toggleTreeState
          * @protected
          */
-        _toggleTreeState : function (e) {
-            var tree = e.actionNode.ancestor('.'+classNames.treeview);                
+        _toggleTreeState : function (target) {
+            var tree = target.actionNode.ancestor('.'+classNames.treeview);   
             
             tree.toggleClass(classNames.collapsed);
+        },
+        
+        /**
+         * Collapse the tree
+         * @method _collapseTree
+         * @protected
+         */
+        _collapseTree: function (target) {
+            var tree = target.ancestor('.'+classNames.treeview);   
+            
+            if (!tree.hasClass(classNames.collapsed)) {
+                tree.toggleClass(classNames.collapsed);
+            }
+        },
+        
+        /**
+         * Expands the tree
+         * @method _expandTree
+         * @protected
+         */
+        _expandTree : function (target) {
+            var tree = target.ancestor('.'+classNames.treeview);   
+            
+            if (tree.hasClass(classNames.collapsed)) {
+                tree.toggleClass(classNames.collapsed);
+            }
         },
             
         /**
@@ -224,6 +203,7 @@ var getClassName = Y.ClassNameManager.getClassName,
          */
         onViewEvents : function (event) {
             var target = event.target,
+                keycode = event.keyCode,
                 classes,
                 className,
                 i,
@@ -234,10 +214,20 @@ var getClassName = Y.ClassNameManager.getClassName,
             
             event.preventDefault();
             
+            
             for (i=0;i<cLength;i++) {
                 className = classes[i];
-                if (className === classNames.treeLabel) {
-                    this.fire('toggleTreeState',{actionNode:target});
+                switch (className) {
+                    case classNames.labelcontent :
+                        this.fire('toggleTreeState',{actionNode:target});
+                        break;
+                    case classNames.treeLabel :
+                        if (keycode === 39) {
+                            this._expandTree(target);
+                        } else if (keycode === 37) {
+                            this._collapseTree(target);
+                        }
+                        break;
                 }
             }
         }
@@ -284,6 +274,8 @@ var getClassName = Y.ClassNameManager.getClassName,
                         isContained = srcNode.ancestor("ul"),
                         subTree,
                         children = [];
+                        
+                        
                         
                     if (leafs.size() > 0 || isContained) {
                         this._renderFromMarkup = true;
@@ -338,8 +330,8 @@ var getClassName = Y.ClassNameManager.getClassName,
         },
         
         renderUI: function () {
-            Y.log("Rendering leaf");
             this.get(CONTENT_BOX).setContent(this.get("label"));
+            this.get(BOUNDING_BOX).set("role","treeitem");
         }
     }, {
         NAME : "TreeLeaf",
@@ -359,5 +351,4 @@ var getClassName = Y.ClassNameManager.getClassName,
     });
 
 
-
-}, 'gallery-2010.11.17-21-32' ,{supersedes:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager' ]});
+}, 'gallery-2011.01.03-18-30' ,{requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager']});

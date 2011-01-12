@@ -57,8 +57,8 @@ Y.Node.prototype.scrollIntoView = function()
 			ancestor = ancestor.offsetParent || ancestor.parentNode;
 		}
 
-		var scrollX = (hit_top ? document.documentElement.scrollLeft || document.body.scrollLeft : ancestor.scrollLeft);
-		var scrollY = (hit_top ? document.documentElement.scrollTop || document.body.scrollTop : ancestor.scrollTop);
+		var scrollX = (hit_top ? Y.config.doc.documentElement.scrollLeft || Y.config.doc.body.scrollLeft : ancestor.scrollLeft);
+		var scrollY = (hit_top ? Y.config.doc.documentElement.scrollTop || Y.config.doc.body.scrollTop : ancestor.scrollTop);
 
 		var d =
 		{
@@ -79,7 +79,7 @@ Y.Node.prototype.scrollIntoView = function()
 		}
 		else if (r.bottom > d.bottom)
 		{
-			dy = r.bottom - d.bottom;
+			dy = Math.min(r.bottom - d.bottom, r.top - d.top);
 		}
 
 		var dx = 0;
@@ -93,7 +93,7 @@ Y.Node.prototype.scrollIntoView = function()
 		}
 		else if (r.right > d.right)
 		{
-			dx = r.right - d.right;
+			dx = Math.min(r.right - d.right, r.left - d.left);
 		}
 
 		if (hit_top)

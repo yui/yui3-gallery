@@ -292,7 +292,7 @@ if (storageMode === MODE_HTML5 || storageMode === MODE_GECKO) {
             storageDriver.load(USERDATA_PATH);
 
             try {
-                data = JSON.parse(storageDriver.getAttribute(USERDATA_NAME));
+                data = JSON.parse(storageDriver.getAttribute(USERDATA_NAME) || '{}');
             } catch (ex) {
                 data = {};
             }

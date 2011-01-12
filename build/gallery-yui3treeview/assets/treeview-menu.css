@@ -7,19 +7,18 @@
     color: black;
 }
 
-
-.yui3-tree-collapsed .yui3-treeview-treelabel {
-    background-position: 0 -3px;
+.yui3-treeview .yui3-treeview-label-content {
+    background-position: 0 -43px;
+    padding-left: 38px;
 }
 
 .yui3-treeleaf-content,
-.yui3-treeview-treelabel {
+.yui3-treeview-label-content {
     background: url(tree_view_icons_blue_01_arrow_beside_folders.gif) no-repeat;
 }
 
-.yui3-treeview-treelabel {
-    padding-left: 40px;
-    background-position: 0 -43px;
+.yui3-tree-collapsed  .yui3-treeview-label-content {
+    background-position: 0 -3px;
 }
 
 .yui3-treeview .yui3-tree-collapsed .yui3-treeview-content {
@@ -34,14 +33,8 @@
     margin-top: 1px;
 }
 
-.playground {
-    margin: 1em;
-}
-
 .yui3-treeleaf-content {
-    background-position: 0px -162px;
-    padding-left: 40px;
+    background-position: 0 -162px;
+    padding-left: 38px;
 }
 
-.yui3-treeview-selected {
-}
