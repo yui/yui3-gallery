@@ -6,10 +6,11 @@ YUI.add('gallery-simple-datatable', function(Y) {
  *
  * @class SimpleDatatable
  * @extends Widget
- * @version 1.5.0
+ * @version 1.5.1
  */
 
-var YL = Y.Lang;
+var YL = Y.Lang,
+    CONTENT_BOX = 'contentBox';
 
 
 Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
@@ -26,6 +27,14 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
    */
   _className : '',
 
+  /**
+   * Reference to the caption node if it exists
+   * @since 1.5.1
+   * @protected
+   * @property _caption
+   */
+  _caption : null,
+  
   /**
    * Provides a reference to the table head
    * @since 1.0.0
@@ -66,9 +75,26 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
    */
   renderUI : function() {
     Y.log('renderUI','info','simple-datatable');
+  var cb = this.get(CONTENT_BOX),
+      caption = this.get('caption');
+    
     this.tHead = Y.Node.create('<thead></thead>');
     this.tBody = Y.Node.create('<tbody></tbody>');
-    this.get('contentBox').append(this.tHead).append(this.tBody);
+  
+  if (caption) {
+    if (!this._caption) {
+      this._caption = Y.Node.create('<caption />');
+      cb.append(this._caption);
+    }
+    this._caption.setContent(caption);
+  }
+  
+    cb.append(this.tHead).append(this.tBody);
+  },
+  
+  bindUI : function() {
+    Y.log('bindUI', 'info','simple-datatable');
+  this.after('captionChange', this._afterCaptionChange);
   },
 
   /**
@@ -196,7 +222,7 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
   
   _buildRows : function(arrayOfRows) {
     Y.log('_buildRows','info','simple-datatable');
-    var i,l, cb = this.get('contentBox'),
+    var i,l, cb = this.get(CONTENT_BOX),
         rows = '';
 
     if(arrayOfRows) {
@@ -293,16 +319,46 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
     }
 
     cell += Y.substitute(template, cellConfig);
-
   
   cell += '</td>';
   
     return cell;
+  },
+  
+  /**
+   * Updates the content of the caption after the value is changed
+   * @since 1.5.1
+   * @protected
+   * @method _afterCaptionChange
+   */
+  _afterCaptionChange : function(e) {
+    Y.log('_afterCaptionChange', 'info', 'simple-datatable');
+  
+  if (e.newVal) {
+    if (!this._caption) {
+      this._caption = Y.Node.create('<caption />');
+      this.get(CONTENT_BOX).prepend(this._caption);
+    }
+    
+    this._caption.setContent(e.newVal);
+    
+  } else {
+    this._caption.remove(true);
+    this._caption = null;
+  }
   }
 
 
 },{
   ATTRS : {
+  
+    /**
+   * When set, adds a caption to the table.
+   * @since 1.5.1
+   * @attribute caption
+   * @type string
+   */
+  caption : {},
 
     /**
      * An associated array of key -&gt; value pairs where key is used
@@ -343,4 +399,4 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
 });
 
 
-}, 'gallery-2010.12.10-17-31' ,{requires:['node','widget','widget-child','event','event-mouseenter','substitute']});
+}, 'gallery-2011.01.18-21-05' ,{requires:['node','widget','widget-child','event','event-mouseenter','substitute']});
