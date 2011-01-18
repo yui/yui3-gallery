@@ -38,7 +38,22 @@
                 position:"right"
             }
         };
-        var mychart = new Y.Chart({axes:axes, type:"column", dataProvider:myDataValues, render:"#mychart"});
+        
+        var styleDef = {
+            series: {
+                expenses: {
+                    marker: {
+                        fill:
+                        {
+                            color: "#ff0000",
+                            alpha: .3
+                        }
+                    }
+                }
+            }
+
+        };
+        var mychart = new Y.Chart({axes:axes, styles: styleDef, type:"column", dataProvider:myDataValues, render:"#mychart"});
     });
 </script>
 </body>

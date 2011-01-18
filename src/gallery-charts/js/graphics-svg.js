@@ -1,11 +1,51 @@
+/**
+ * The Charts widget provides an api for displaying data
+ * graphically.
+ *
+ * @module charts
+ */
+var ISCHROME = Y.UA.chrome,
+    DRAWINGAPI,
+    canvas = document.createElement("canvas");
+if(document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1"))
+{
+    DRAWINGAPI = "svg";
+}
+else if(canvas && canvas.getContext && canvas.getContext("2d"))
+{
+    DRAWINGAPI = "canvas";
+}
+else
+{
+    DRAWINGAPI = "vml";
+}
+
+/**
+ * Graphic is a simple drawing api that allows for basic drawing operations.
+ *
+ * @class Graphic
+ * @constructor
+ */
 var Graphic = function(config) {
     
     this.initializer.apply(this, arguments);
 };
 
 Graphic.prototype = {
+    /**
+     * Indicates whether or not the instance will size itself based on its contents.
+     *
+     * @property autoSize 
+     * @type String
+     */
     autoSize: true,
 
+    /**
+     * Initializes the class.
+     *
+     * @method initializer
+     * @private
+     */
     initializer: function(config) {
         config = config || {};
         var w = config.width || 0,
@@ -24,7 +64,10 @@ Graphic.prototype = {
     },
 
     /** 
-     *Specifies a bitmap fill used by subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) for the object.
+     * Specifies a bitmap fill used by subsequent calls to other drawing methods.
+     * 
+     * @method beginBitmapFill
+     * @param {Object} config
      */
     beginBitmapFill: function(config) {
        
@@ -51,11 +94,15 @@ Graphic.prototype = {
     },
 
     /**
-     * Specifes a solid fill used by subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) for the object.
+     * Specifes a solid fill used by subsequent calls to other drawing methods.
+     *
+     * @method beginFill
+     * @param {String} color Hex color value for the fill.
+     * @param {Number} alpha Value between 0 and 1 used to specify the opacity of the fill.
      */
     beginFill: function(color, alpha) {
         if (color) {
-            this._fillAlpha = alpha || 1;
+            this._fillAlpha = Y.Lang.isNumber(alpha) ? alpha : 1;
             this._fillColor = color;
             this._fillType = 'solid';
             this._fill = 1;
@@ -64,7 +111,10 @@ Graphic.prototype = {
     },
     
     /** 
-     *Specifies a gradient fill used by subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) for the object.
+     * Specifies a gradient fill used by subsequent calls to other drawing methods.
+     *
+     * @method beginGradientFill
+     * @param {Object} config
      */
     beginGradientFill: function(config) {
         var alphas = config.alphas || [];
@@ -87,15 +137,24 @@ Graphic.prototype = {
     },
 
     /**
-     * Removes all nodes
+     * Removes all nodes.
+     *
+     * @method destroy
      */
     destroy: function()
     {
         this._removeChildren(this.node);
-        this.node.parentNode.removeChild(this.node);
+        if(this.node && this.node.parentNode)
+        {
+            this.node.parentNode.removeChild(this.node);
+        }
     },
     
     /**
+     * Removes all child nodes.
+     *
+     * @method _removeChildren
+     * @param {HTMLElement} node
      * @private
      */
     _removeChildren: function(node)
@@ -112,14 +171,28 @@ Graphic.prototype = {
         }
     },
 
+    /**
+     * Shows and and hides a the graphic instance.
+     *
+     * @method toggleVisible
+     * @param val {Boolean} indicates whether the instance should be visible.
+     */
     toggleVisible: function(val)
     {
         this._toggleVisible(this.node, val);
     },
 
+    /**
+     * Toggles visibility
+     *
+     * @method _toggleVisible
+     * @param {HTMLElement} node element to toggle
+     * @param {Boolean} val indicates visibilitye
+     * @private
+     */
     _toggleVisible: function(node, val)
     {
-        var children = Y.one(node).get("children"),
+        var children = Y.Selector.query(">/*", node),
             visibility = val ? "visible" : "hidden",
             i = 0,
             len;
@@ -136,6 +209,8 @@ Graphic.prototype = {
 
     /**
      * Clears the graphics object.
+     *
+     * @method clear
      */
     clear: function() {
         if(this._graphicsList)
@@ -149,7 +224,15 @@ Graphic.prototype = {
     },
 
     /**
-     * Draws a bezier curve
+     * Draws a bezier curve.
+     *
+     * @method curveTo
+     * @param {Number} cp1x x-coordinate for the first control point.
+     * @param {Number} cp1y y-coordinate for the first control point.
+     * @param {Number} cp2x x-coordinate for the second control point.
+     * @param {Number} cp2y y-coordinate for the second control point.
+     * @param {Number} x x-coordinate for the end point.
+     * @param {Number} y y-coordinate for the end point.
      */
     curveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
         this._shapeType = "path";
@@ -163,7 +246,13 @@ Graphic.prototype = {
     },
 
     /**
-     * Draws a quadratic bezier curve
+     * Draws a quadratic bezier curve.
+     *
+     * @method quadraticCurveTo
+     * @param {Number} cpx x-coordinate for the control point.
+     * @param {Number} cpy y-coordinate for the control point.
+     * @param {Number} x x-coordinate for the end point.
+     * @param {Number} y y-coordinate for the end point.
      */
     quadraticCurveTo: function(cpx, cpy, x, y) {
         if(this.path.indexOf("Q") < 0 || this._pathType !== "Q")
@@ -175,7 +264,12 @@ Graphic.prototype = {
     },
 
     /**
-     * Draws a circle
+     * Draws a circle.
+     *
+     * @method drawCircle
+     * @param {Number} x y-coordinate
+     * @param {Number} y x-coordinate
+     * @param {Number} r radius
      */
 	drawCircle: function(x, y, r) {
         this._shape = {
@@ -193,7 +287,13 @@ Graphic.prototype = {
 	},
 
     /**
-     * Draws an ellipse
+     * Draws an ellipse.
+     *
+     * @method drawEllipse
+     * @param {Number} x x-coordinate
+     * @param {Number} y y-coordinate
+     * @param {Number} w width
+     * @param {Number} h height
      */
     drawEllipse: function(x, y, w, h) {
         this._shape = {
@@ -211,7 +311,13 @@ Graphic.prototype = {
     },
 
     /**
-     * Draws a rectangle
+     * Draws a rectangle.
+     *
+     * @method drawRect
+     * @param {Number} x x-coordinate
+     * @param {Number} y y-coordinate
+     * @param {Number} w width
+     * @param {Number} h height
      */
     drawRect: function(x, y, w, h) {
         this._shape = {
@@ -233,7 +339,15 @@ Graphic.prototype = {
     },
 
     /**
-     * Draws a rectangle with rounded corners
+     * Draws a rectangle with rounded corners.
+     * 
+     * @method drawRect
+     * @param {Number} x x-coordinate
+     * @param {Number} y y-coordinate
+     * @param {Number} w width
+     * @param {Number} h height
+     * @param {Number} ew width of the ellipse used to draw the rounded corners
+     * @param {Number} eh height of the ellipse used to draw the rounded corners
      */
     drawRoundRect: function(x, y, w, h, ew, eh) {
         this._shape = {
@@ -259,15 +373,14 @@ Graphic.prototype = {
 	},
 
     /**
-     * @private
      * Draws a wedge.
      * 
-     * @param x				x component of the wedge's center point
-     * @param y				y component of the wedge's center point
-     * @param startAngle	starting angle in degrees
-     * @param arc			sweep of the wedge. Negative values draw clockwise.
-     * @param radius		radius of wedge. If [optional] yRadius is defined, then radius is the x radius.
-     * @param yRadius		[optional] y radius for wedge.
+     * @param {Number} x			x-coordinate of the wedge's center point
+     * @param {Number} y			y-coordinate of the wedge's center point
+     * @param {Number} startAngle	starting angle in degrees
+     * @param {Number} arc			sweep of the wedge. Negative values draw clockwise.
+     * @param {Number} radius		radius of wedge. If [optional] yRadius is defined, then radius is the x radius.
+     * @param {Number} yRadius		[optional] y radius for wedge.
      */
     drawWedge: function(x, y, startAngle, arc, radius, yRadius)
     {
@@ -280,6 +393,11 @@ Graphic.prototype = {
 
     },
 
+    /**
+     * Completes a drawing operation. 
+     *
+     * @method end
+     */
     end: function() {
         if(this._shapeType)
         {
@@ -289,16 +407,23 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
-     * Not implemented
      * Specifies a gradient to use for the stroke when drawing lines.
+     * Not implemented
+     *
+     * @method lineGradientStyle
+     * @private
      */
     lineGradientStyle: function() {
         Y.log('lineGradientStyle not implemented', 'warn', 'graphics-canvas');
     },
      
     /**
-     * Specifies a line style used for subsequent calls to drawing methods
+     * Specifies a line style used for subsequent calls to drawing methods.
+     * 
+     * @method lineStyle
+     * @param {Number} thickness indicates the thickness of the line
+     * @param {String} color hex color value for the line
+     * @param {Number} alpha Value between 0 and 1 used to specify the opacity of the fill.
      */
     lineStyle: function(thickness, color, alpha, pixelHinting, scaleMode, caps, joints, miterLimit) {
         this._stroke = 1;
@@ -306,11 +431,15 @@ Graphic.prototype = {
         if (color) {
             this._strokeColor = color;
         }
-        this._strokeAlpha = alpha || 1;
+        this._strokeAlpha = Y.Lang.isNumber(alpha) ? alpha : 1;
     },
     
     /**
      * Draws a line segment using the current line style from the current drawing position to the specified x and y coordinates.
+     * 
+     * @method lineTo
+     * @param {Number} point1 x-coordinate for the end point.
+     * @param {Number} point2 y-coordinate for the end point.
      */
     lineTo: function(point1, point2, etc) {
         var args = arguments,
@@ -335,6 +464,10 @@ Graphic.prototype = {
 
     /**
      * Moves the current drawing position to specified x and y coordinates.
+     *
+     * @method moveTo
+     * @param {Number} x x-coordinate for the end point.
+     * @param {Number} y y-coordinate for the end point.
      */
     moveTo: function(x, y) {
         this._pathType = "M";
@@ -342,8 +475,12 @@ Graphic.prototype = {
     },
 
     /**
+     * Generates a path string for a wedge shape
+     *
+     * @method _getWedgePath
+     * @param {Object} config attributes used to create the path
+     * @return String
      * @private
-     * @description Generates a path string for a wedge shape
      */
     _getWedgePath: function(config)
     {
@@ -409,7 +546,11 @@ Graphic.prototype = {
     },
 
     /**
-     * Sets the size of the graphics object
+     * Sets the size of the graphics object.
+     * 
+     * @method setSize
+     * @param w {Number} width to set for the instance.
+     * @param h {Number} height to set for the instance.
      */
     setSize: function(w, h) {
         if(this.autoSize)
@@ -426,8 +567,12 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
      * Updates the size of the graphics object
+     *
+     * @method _trackSize
+     * @param {Number} w width
+     * @param {Number} h height
+     * @private
      */
     _trackSize: function(w, h) {
         if (w > this._width) {
@@ -439,6 +584,13 @@ Graphic.prototype = {
         this.setSize(w, h);
     },
 
+    /**
+     * Sets the positon of the graphics object.
+     *
+     * @method setPosition
+     * @param {Number} x x-coordinate for the object.
+     * @param {Number} y y-coordinate for the object.
+     */
     setPosition: function(x, y)
     {
         this.node.setAttribute("x", x);
@@ -446,7 +598,10 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
+     * Adds the graphics node to the dom.
+     * 
+     * @method render
+     * @param {HTMLElement} parentNode node in which to render the graphics node into.
      */
     render: function(parentNode) {
         var w = parentNode.get("width") || parentNode.get("offsetWidth"),
@@ -459,8 +614,10 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
      * Clears the properties
+     *
+     * @method _initProps
+     * @private
      */
     _initProps: function() {
         this._shape = null;
@@ -490,8 +647,10 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
      * Clears path properties
+     * 
+     * @method _clearPath
+     * @private
      */
     _clearPath: function()
     {
@@ -507,8 +666,10 @@ Graphic.prototype = {
     },
 
     /**
+     * Completes a shape
+     *
+     * @method _draw
      * @private 
-     * Completes a vml shape
      */
     _draw: function()
     {
@@ -564,8 +725,10 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
      * Returns ths actual fill object to be used in a drawing or shape
+     *
+     * @method _getFill
+     * @private
      */
     _getFill: function() {
         var type = this._fillType,
@@ -586,8 +749,11 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
      * Returns a linear gradient fill
+     *
+     * @method _getLinearGradient
+     * @param {String} type gradient type
+     * @private
      */
     _getLinearGradient: function(type) {
         var fill = this._createGraphicNode("linearGradient"),
@@ -669,10 +835,11 @@ Graphic.prototype = {
         def = 0;
         for(i = 0; i < l; ++i)
         {
+            alpha = alphas[i];
             color = colors[i];
             ratio = ratios[i] || i/(l - 1);
             ratio = Math.round(ratio * 100) + "%";
-            alpha = alphas[i] || "1";
+            alpha = Y.Lang.isNumber(alpha) ? alpha : "1";
             def = (i + 1) / l;
             stop = this._createGraphicNode("stop");
             stop.setAttribute("offset", ratio);
@@ -684,8 +851,10 @@ Graphic.prototype = {
     },
 
     /**
-     * @private
      * Creates a group element
+     *
+     * @method _createGraphics
+     * @private
      */
     _createGraphics: function() {
         var group = this._createGraphicNode("svg");
@@ -693,6 +862,12 @@ Graphic.prototype = {
         return group;
     },
 
+    /**
+     * Styles a group element
+     *
+     * @method _styleGroup
+     * @private
+     */
     _styleGroup: function(group)
     {
         group.style.position = "absolute";
@@ -703,8 +878,13 @@ Graphic.prototype = {
     },
 
     /**
+     * Creates a graphic node
+     *
+     * @method _createGraphicNode
+     * @param {String} type node type to create
+     * @param {String} pe specified pointer-events value
+     * @return HTMLElement
      * @private
-     * Creates a vml node.
      */
     _createGraphicNode: function(type, pe)
     {
@@ -726,7 +906,11 @@ Graphic.prototype = {
     },
 
     /**
-     * Returns a shape.
+     * Creates a Shape instance and adds it to the graphics object.
+     *
+     * @method getShape
+     * @param {Object} config Object literal of properties used to construct a Shape.
+     * @return Shape
      */
     getShape: function(config) {
         config.graphic = this;

@@ -1,15 +1,25 @@
+/**
+ * Histogram is the base class for Column and Bar series.
+ *
+ * @class Histogram
+ * @constructor
+ */
 function Histogram(){}
 
 Histogram.prototype = {
     /**
-	 * @private
-	 */
-	drawSeries: function()
-	{
-	    if(this.get("xcoords").length < 1) 
-		{
-			return;
-		}
+     * @protected
+     *
+     * Draws the series.
+     *
+     * @method drawSeries
+     */
+    drawSeries: function()
+    {
+        if(this.get("xcoords").length < 1) 
+        {
+            return;
+        }
         var style = Y.clone(this.get("styles").marker),
             setSize,
             calculatedSize,
@@ -36,28 +46,33 @@ Histogram.prototype = {
             config,
             fillColors = null,
             borderColors = null,
-            mnode;
-            if(Y.Lang.isArray(style.fill.color))
-            {
-                fillColors = style.fill.color.concat(); 
-            }
-            if(Y.Lang.isArray(style.border.color))
-            {
-                borderColors = style.border.colors.concat();
-            }
-            if(this.get("direction") == "vertical")
-            {
-                setSizeKey = "height";
-                calculatedSizeKey = "width";
-            }
-            else
-            {
-                setSizeKey = "width";
-                calculatedSizeKey = "height";
-            }
-            setSize = style[setSizeKey];
-            calculatedSize = style[calculatedSizeKey];
-            this._createMarkerCache();
+            hotspot,
+            isChrome = ISCHROME;
+        if(Y.Lang.isArray(style.fill.color))
+        {
+            fillColors = style.fill.color.concat(); 
+        }
+        if(Y.Lang.isArray(style.border.color))
+        {
+            borderColors = style.border.colors.concat();
+        }
+        if(this.get("direction") == "vertical")
+        {
+            setSizeKey = "height";
+            calculatedSizeKey = "width";
+        }
+        else
+        {
+            setSizeKey = "width";
+            calculatedSizeKey = "height";
+        }
+        setSize = style[setSizeKey];
+        calculatedSize = style[calculatedSizeKey];
+        this._createMarkerCache();
+        if(isChrome)
+        {
+            this._createHotspotCache();
+        }
         for(; i < seriesLen; ++i)
         {
             renderer = seriesCollection[i];
@@ -94,16 +109,29 @@ Histogram.prototype = {
                 style.border.colors = borderColors[i % borderColors.length];
             }
             marker = this.getMarker(style, graphOrder, i);
-            mnode = Y.one(marker.parentNode);
-            mnode.setStyle("position", "absolute"); 
-            mnode.setStyle("top", top);
-            mnode.setStyle("left", left);
+            marker.setPosition(left, top);
+            if(isChrome)
+            {
+                hotspot = this.getHotspot(style, graphOrder, i);
+                hotspot.setPosition(left, top);
+                hotspot.parentNode.style.zIndex = 5;
+            }
         }
         this._clearMarkerCache();
+        if(isChrome)
+        {
+            this._clearHotspotCache();
+        }
     },
     
+    /**
+     * @private
+     */
     _defaultFillColors: ["#66007f", "#a86f41", "#295454", "#996ab2", "#e8cdb7", "#90bdbd","#000000","#c3b8ca", "#968373", "#678585"],
     
+    /**
+     * @private
+     */
     _getPlotDefaults: function()
     {
         var defs = {
@@ -132,7 +160,7 @@ Histogram.prototype = {
         defs.fill.color = this._getDefaultColor(this.get("graphOrder"), "fill");
         defs.border.color = this._getDefaultColor(this.get("graphOrder"), "border");
         return defs;
- 	}
+    }
 };
 
 Y.Histogram = Histogram;

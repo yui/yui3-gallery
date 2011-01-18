@@ -10,36 +10,49 @@
     margin:10px 10px 10px 10px;
     padding:10px 10px 10px 10px;
     width:700px;
-    height:400px;
+    height:350px;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts-min.css">
 <!-- BEGIN EXAMPLE CODE -->	
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts-min.css">
 </head>		
 <body class="yui3-skin-sam">
-<h3>Label Rotation</h3>
-<div id="mychart"></div>
 <script type="text/javascript" src="http://yui.yahooapis.com/3.1.2/build/yui/yui-min.js"></script>
 <script type="text/javascript" src="../../../build/gallery-charts/gallery-charts-min.js"></script>
+<button type="button" id="updatechart">Update Chart</button><br/>
+<h3>Multiple Series</h3>
+<div id="mychart"></div>
+<div id="outputdiv" style="position:absolute;left:800px"></div>
 <script type="text/javascript">            
-    YUI().use('gallery-charts', function (Y) 
+    YUI({filter:"raw"}).use('gallery-charts', function (Y) 
     { 
         var myDataValues = [ 
             {date:"5/1/2010", values:2000, expenses:3700, revenue:2200}, 
             {date:"5/2/2010", values:50, expenses:9100, revenue:100}, 
             {date:"5/3/2010", values:400, expenses:1100, revenue:1500}, 
             {date:"5/4/2010", values:200, expenses:1900, revenue:2800}, 
-            {date:"5/5/2010", values:5000, expenses:5000, revenue:2650}
+            {date:"5/5/2010", values:5000, expenses:5000, revenue:2650},
+            {date:"5/6/2010", values:2000, expenses:3700, revenue:2200}, 
+            {date:"5/7/2010", values:50, expenses:9100, revenue:100}, 
+            {date:"5/8/2010", values:400, expenses:1100, revenue:1500}, 
+            {date:"5/9/2010", values:200, expenses:1900, revenue:2800}, 
+            {date:"5/10/2010", values:5000, expenses:5000, revenue:2650}
         ];
         
-        var mychart = new Y.Chart({dataProvider:myDataValues, 
+        var myDataValues2 = [ 
+            {date:"5/1/2010", values:2000, expenses:3700, revenue:2200}, 
+            {date:"5/2/2010", values:50, expenses:9100, revenue:100}, 
+            {date:"5/3/2010", values:400, expenses:1100, revenue:1500}, 
+            {date:"5/4/2010", values:200, expenses:1900, revenue:2800}, 
+            {date:"5/5/2010", values:5000, expenses:5000, revenue:2650}
+        ];
+
+        var mychart = new Y.Chart({seriesKeys:["expenses", "revenue"], dataProvider:myDataValues, 
                                             axes:{
                                                 financials:{
                                                     keys:["revenue", "expenses"],
-                                                    position:"left",
+                                                    position:"none",
                                                     type:"numeric",
-                                                    roundMinAndMax:true,
-                                                    roundingUnit:500,
                                                     styles:{
                                                         majorTicks:{
                                                             display:"inside",
@@ -47,16 +60,15 @@
                                                             color:"#333"
                                                         },
                                                         line:{color:"#333"},
-                                                        label:
-                                                        {
-                                                            margin:{right:5}
-                                                        },
-                                                        majorUnit:{count:5}
+                                                        rotation:0,
+                                                        margin:{right:5},
+                                                        majorUnit:{count:11},
+                                                        roundingUnit:100
                                                     }
                                                 },
                                                 dateRange:{
                                                     keys:["date"],
-                                                    position:"bottom",
+                                                    position:"none",
                                                     type:"time",
                                                     styles:{
                                                         majorTicks:{
@@ -65,9 +77,7 @@
                                                             color:"#333"
                                                         },
                                                         line:{color:"#333"},
-                                                        label: {
-                                                            rotation:-63
-                                                        },
+                                                        rotation:-45,
                                                         margin:{top:5},
                                                         majorUnit:{count:10}
                                                     }
@@ -84,24 +94,14 @@
                                                     yDisplayName:"Deductions",
                                                     marker: {
                                                         fill: {
-                                                            color: "#6600cc"
+                                                            color: "#cc33cc"
                                                         },
                                                         border: {
-                                                            weight: 0
+                                                            color: "#330066",
+                                                            weight: 1
                                                         },
-                                                        width:8,
-                                                        height:8,
-                                                        over: {
-                                                            fill: {
-                                                                color: "#cc66cc"
-                                                            },
-                                                            border: {
-                                                                color: "#6600cc",
-                                                                weight: 1
-                                                            },
-                                                            width: 11,
-                                                            height: 11
-                                                        }
+                                                        width:9,
+                                                        height:9
                                                     },
                                                     line: {color: "#cc33cc"}
                                                 },
@@ -111,25 +111,19 @@
                                                     yAxis:"financials",
                                                     xKey:"date",
                                                     yKey:"expenses",
+                                                    dataTip:{
+                                                        show:"mouseenter",
+                                                        hide:"mouseleave"
+                                                    },
                                                     marker:{
                                                         fill: {
-                                                            color:"#006633" 
+                                                            color:"#00ff66" 
                                                         },
+                                                        width:9, 
+                                                        height:9,
                                                         border: {
-                                                            weight: 0
-                                                        },
-                                                        width:8, 
-                                                        height:8,
-                                                        over: {
-                                                            border: {
-                                                                weight:"1",
-                                                                color: "#006633"
-                                                            },
-                                                            fill: {
-                                                                color: "#00ff66"
-                                                            },
-                                                            width: 11,
-                                                            height: 11
+                                                            weight:"1",
+                                                            color: "#006633"
                                                         }
                                                     },
                                                     line: {
@@ -138,6 +132,16 @@
                                                 }
                                             ],
                                             render:"#mychart"});
+        function updateChart(e)
+        {
+            var dp = myDataValues;
+            if(mychart.get("dataProvider") === myDataValues)
+            {
+                dp = myDataValues2;
+            }
+            mychart.set("dataProvider", dp);
+        }
+        Y.on("click", updateChart, "#updatechart");
     });
 </script>
 </body>
