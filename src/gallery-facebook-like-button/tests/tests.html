@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Test Facebook Like Button</title>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js"></script>
+</head>
+<body>
+<p>Test Facebook Like Button</p>
+<div id="button1"></div>
+<div id="button2"></div>
+<div id="button3"></div>
+<div id="button4"></div>
+<script type="text/javascript">
+YUI({
+    modules: {
+        'gallery-facebook-like-button': {
+            fullpath: '../../../build/gallery-facebook-like-button/gallery-facebook-like-button-min.js',
+            requires: ['node', 'querystring']
+        }
+    }
+}).use('gallery-facebook-like-button', function(Y) {
+    Y.Facebook.LikeButton.add('#button1', {
+        href: 'http://www.yahoo.com/'
+    });
+    Y.Facebook.LikeButton.add('#button2', {
+        href: 'http://www.yahoo.com/',
+        layout: 'button_count'
+    });
+    Y.Facebook.LikeButton.add('#button3', {
+        href: 'http://www.yahoo.com/',
+        layout: 'box_count',
+        action: 'recommend'
+    });
+    Y.Facebook.LikeButton.add('#button4', {
+        href: 'http://www.yahoo.com/',
+        font: 'verdana',
+        colorscheme: 'dark'
+    });
+});
+</script>
+</body>
+</html>
