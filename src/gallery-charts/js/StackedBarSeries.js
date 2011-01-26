@@ -76,11 +76,12 @@ Y.StackedBarSeries = Y.Base.create("stackedBarSeries", Y.BarSeries, [Y.StackingU
             
             if(useOrigin)
             {
-                w = left - this._leftOrigin;
+                w = Math.abs(left - this._leftOrigin);
                 if(left > this._leftOrigin)
                 {
                     positiveBaseValues[i] = left;
                     negativeBaseValues[i] = this._leftOrigin;
+                    left -= w;
                 }
                 else if(left < this._leftOrigin)
                 {   
@@ -92,7 +93,6 @@ Y.StackedBarSeries = Y.Base.create("stackedBarSeries", Y.BarSeries, [Y.StackingU
                     positiveBaseValues[i] = left;
                     negativeBaseValues[i] = this._leftOrigin;
                 }
-                left -= w;
             }
             else
             {
@@ -102,7 +102,7 @@ Y.StackedBarSeries = Y.Base.create("stackedBarSeries", Y.BarSeries, [Y.StackingU
                     w = negativeBaseValues[i] - left;
                     negativeBaseValues[i] = left;
                 }
-                else if(left > this._leftOrigin)
+                else if(left >= this._leftOrigin)
                 {
                     left += (positiveBaseValues[i] - this._leftOrigin);
                     w = left - positiveBaseValues[i];
