@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Manual Inheritance Tests</title>
+		<script src="../markout.js"></script>
+		<script src="http://yui.yahooapis.com/combo?3.3.0/build/yui/yui-base-min.js&amp;3.3.0/build/oop/oop-min.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			YUI().use('oop', function(Y){
+				
+				function YMarkout() {
+					var self = this;
+					if ( ! Y.instanceOf(self, YMarkout)) {
+						self = new YMarkout();
+					}
+					self._init.apply(self, arguments);
+					return self;
+				};
+				Y.extend(YMarkout, Markout, {
+					_init : function () {
+						return this;
+					}
+				});
+
+				var foo = new YMarkout(),
+					bar = YMarkout();
+
+				console.log(foo.constructor);
+				console.log(bar.constructor);
+
+			});
+		</script>
+	</body>
+</html>

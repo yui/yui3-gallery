@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Manual Markout Tests</title>
+		<script src="../../../../yui3/build/yui/yui-debug.js"></script>
+		<script src="../../../build/gallery-markout/gallery-markout-debug.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			YUI().use('gallery-markout', function(Y){
+				
+				var content = Y.Markout(),
+					h1 = content.h1();
+				
+				h1.text('Manual ');
+				h1.a({ href: 'http://oddnut.com/markout' }, 'Markout');
+				h1.text(' Tests!');
+				content.p('Find out more on: ').a({ href: 'http://oddnut.com/markout' }, 'Markout’s home page!');
+				content.node().appendTo('body');
+				
+			});
+		</script>
+	</body>
+</html>
