@@ -60,6 +60,21 @@ QueryBuilder.String.prototype =
 		return [ op_cell, value_cell ];
 	},
 
+	postCreate: function(
+		/* int */		filter_index,
+		/* object */	var_config,
+		/* array */		op_list,
+		/* array */		value)
+	{
+		Y.Lang.later(1, this, function()	// hack for IE7
+		{
+			if (this.value_input)		// could be destroyed
+			{
+				this.value_input.focus();
+			}
+		});
+	},
+
 	destroy: function()
 	{
 		this.op_menu     = null;
