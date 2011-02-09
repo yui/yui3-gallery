@@ -8,7 +8,7 @@
         /** set up **/
         renderUI: function() {
             Y.log('renderUI', 'info', 'Y.ProgressBar');
-            this.get('contentBox').append(Y.substitute(this.get('layout'), {
+            this.get('contentBox').append(LANG.sub(this.get('layout'), {
                 sliderClass: this.getClassName('slider'),
                 labelClass: this.getClassName('label')
             }));
