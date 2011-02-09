@@ -16,6 +16,7 @@ var L = A.Lang,
 
 	ALWAYS_VISIBLE = 'alwaysVisible',
 	BOUNDING_BOX = 'boundingBox',
+	CIRCULAR = 'circular',
 	CONTAINER = 'container',
 	CONTAINERS = 'containers',
 	CONTENT = 'content',
@@ -165,6 +166,11 @@ var Paginator = A.Component.create(
 				validator: isBoolean
 			},
 
+			circular: {
+				value: false,
+				validator: isBoolean
+			},
+
 			/**
 			 * The Paginator controls UI could be displayed in more than one
 	         * container (i.e., in the header and footer of a list). Pass a
@@ -309,9 +315,7 @@ var Paginator = A.Component.create(
 			 * @type Number
 			 */
 			page: {
-				setter: function(v) {
-					return num(v);
-				},
+				setter: num,
 				value: 1
 			},
 
@@ -462,9 +466,7 @@ var Paginator = A.Component.create(
 			 * @type Number
 			 */
 			rowsPerPage: {
-				setter: function(v) {
-					return num(v);
-				},
+				setter: num,
 				value: 1
 			},
 
@@ -492,12 +494,8 @@ var Paginator = A.Component.create(
 			 * @type Object
 			 */
 			state: {
-				setter: function(v) {
-					return this._setState(v);
-				},
-				getter: function(v) {
-					return this._getState(v);
-				},
+				setter: '_setState',
+				getter: '_getState',
 				value: {},
 				validator: isObject
 			},
@@ -513,9 +511,7 @@ var Paginator = A.Component.create(
 			 * @type String
 			 */
 			template: {
-				getter: function(v) {
-					return this._getTemplate(v);
-				},
+				getter: '_getTemplate',
 				writeOnce: true,
 				value: DEFAULT_OUTPUT_TPL,
 				validator: isString
@@ -790,6 +786,22 @@ var Paginator = A.Component.create(
 			changeRequest: function() {
 				var instance = this;
 				var state = instance.get(STATE);
+
+				if (instance.get(CIRCULAR)) {
+					var page = state.page;
+					var totalPages = state.totalPages;
+
+					if (state.before && (state.before.page == page)) {
+						if (page <= 1) {
+							state.page = totalPages;
+						}
+						else if (page >= totalPages) {
+							state.page = 1;
+						}
+
+						instance.set(STATE, state);
+					}
+				}
 
 				instance.fire('changeRequest', { state: state });
 			},
@@ -1079,13 +1091,11 @@ var Paginator = A.Component.create(
 			_onClickPrevLinkEl: function(event) {
 				var instance = this;
 
-				if (instance.hasPrevPage()) {
-					var page = instance.get(PAGE);
+				var page = instance.get(PAGE);
 
-					instance.set(PAGE, page - 1);
+				instance.set(PAGE, (instance.hasPrevPage() ? page - 1 : page));
 
-					instance.changeRequest();
-				}
+				instance.changeRequest();
 
 				event.halt();
 			},
@@ -1120,13 +1130,11 @@ var Paginator = A.Component.create(
 			_onClickNextLinkEl: function(event) {
 				var instance = this;
 
-				if (instance.hasNextPage()) {
-					var page = instance.get(PAGE);
+				var page = instance.get(PAGE);
 
-					instance.set(PAGE, page + 1);
+				instance.set(PAGE, (instance.hasNextPage() ? page + 1 : page));
 
-					instance.changeRequest();
-				}
+				instance.changeRequest();
 
 				event.halt();
 			},
@@ -1219,4 +1227,4 @@ var Paginator = A.Component.create(
 A.Paginator = Paginator;
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','substitute']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-base','substitute'], skinnable:true});

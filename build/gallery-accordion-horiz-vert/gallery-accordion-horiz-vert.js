@@ -335,6 +335,8 @@ Y.extend(Accordion, Y.Widget,
 	{
 		this.section_list = [];
 
+		this.get('allowAllClosed');	// force init of this.allow_all_closed
+
 		if (this.get('horizontal'))
 		{
 			this.slide_style_name = 'width';
@@ -1079,4 +1081,4 @@ Y.extend(Accordion, Y.Widget,
 Y.Accordion = Accordion;
 
 
-}, 'gallery-2010.06.02-18-59' ,{optional:['anim-base'], requires:['widget','selector-css3']});
+}, 'gallery-2011.02.09-21-32' ,{optional:['anim-base'], requires:['widget','selector-css3']});

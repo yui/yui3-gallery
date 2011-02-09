@@ -96,6 +96,10 @@ var L = A.Lang,
  * @class Dialog
  * @constructor
  * @extends Panel
+ * @uses WidgetPosition
+ * @uses WidgetStack
+ * @uses WidgetPositionAlign
+ * @uses WidgetPositionConstrain
  */
 var Dialog = function(config) {
 	if (!A.DialogMask) {
@@ -356,6 +360,7 @@ Dialog.prototype = {
 		var boundingBox = instance.get(BOUNDING_BOX);
 
 		A.Event.purgeElement(boundingBox, true);
+		A.DialogManager.remove(instance);
 	},
 
 	/**
@@ -795,4 +800,4 @@ A.mix(
  */
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-panel','dd-constrain','gallery-aui-button-item','gallery-aui-overlay-manager','gallery-aui-overlay-mask','gallery-aui-io-plugin','gallery-aui-resize']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-panel','dd-constrain','gallery-aui-button-item','gallery-aui-overlay-manager','gallery-aui-overlay-mask','gallery-aui-io-plugin','gallery-aui-resize'], skinnable:true});

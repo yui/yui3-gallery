@@ -8,7 +8,21 @@ YUI.add('gallery-node-extras', function(Y) {
  */
 var NodePrototype = Y.Node.prototype,
     originalOne = NodePrototype.one,
-    originalAll = NodePrototype.all;
+    originalAll = NodePrototype.all,
+    domNode = Y.Node.getDOMNode(Y.config.doc.createElement('div'));
+
+/**
+ * Get the text representation of the current Node, including all of it's children
+ * @readOnly
+ * @config outerHTML
+ * @type string
+ */
+Y.Node.ATTRS.outerHTML = {
+    readOnly: true,
+    getter: domNode.outerHTML ?
+        function() { return this._node.outerHTML; } :
+        function() { return Y.Node.create('<div />').append(this.cloneNode(true)).get('innerHTML'); }
+};
 
 /**
  * Wraps the content of this Node with new HTML
@@ -57,7 +71,7 @@ Y.Node.frag = function() {
 NodePrototype.one = function(node) {
     node = node || "> *";
     return originalOne.call(this, node);
-}
+};
 
 /**
  * Extends existing Y.Node.all to take no argument and return all the immediate
@@ -76,7 +90,32 @@ NodePrototype.all = function(node) {
     } else {
         return this.get('children');
     }
-}
+};
+
+/**
+ * Returns a NodeList off all the siblings after this node which match the given selector
+ * @method nextAll
+ * @param {string} The CSS Selector to filter the siblings against
+ */
+NodePrototype.nextAll = function(selector) {
+    var siblings = this.ancestor().get('children');
+    siblings = siblings.slice(siblings.indexOf(this)+1);
+    return siblings.filter(selector);
+};
+
+/**
+ * Returns a NodeList off all the siblings before this node which match the given selector
+ * @method prevAll
+ * @param {string} The CSS Selector to filter the siblings against
+ */
+NodePrototype.prevAll = function(selector) {
+    var siblings = this.ancestor().get('children');
+    // There is a bug in the nodelist-arrays submodule, so I need to call the method directly
+    siblings = new Y.NodeList(siblings._nodes.slice(0, siblings.indexOf(this)));
+    return siblings.filter(selector);
+};
+
+domNode = undefined;
 
 
-}, 'gallery-2011.01.18-21-05' ,{requires:['node']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['node']});

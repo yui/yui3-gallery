@@ -1,1 +1,1 @@
-YUI.add("gallery-aui-tree",function(B){},"gallery-2010.08.18-17-12",{skinnable:true,requires:["gallery-aui-tree-data","gallery-aui-tree-node","gallery-aui-tree-view"]});
+YUI.add("gallery-aui-tree",function(a){},"gallery-2011.02.09-21-32",{requires:["gallery-aui-tree-data","gallery-aui-tree-node","gallery-aui-tree-view"],skinnable:true});

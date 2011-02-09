@@ -3,4 +3,4 @@ YUI.add('gallery-aui-color-picker', function(A) {
 
 
 
-}, 'gallery-2010.10.06-18-55' ,{skinnable:true, requires:['gallery-aui-color-picker-base','gallery-aui-color-picker-grid-plugin']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-color-picker-base','gallery-aui-color-picker-grid-plugin'], skinnable:true});
