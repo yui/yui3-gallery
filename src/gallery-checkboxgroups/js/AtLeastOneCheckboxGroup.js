@@ -7,20 +7,27 @@
  * @module gallery-checkboxgroups
  * @class AtLeastOneCheckboxGroup
  * @constructor
- * @param cb_list {String|Object|Array} The list of checkboxes to manage
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
 
 function AtLeastOneCheckboxGroup(
-	/* string/object/array */	cb_list)
+	/* string/Node/NodeList */	cb_list)
 {
+	this.direction = AtLeastOneDirection.SLIDE_UP;
 	AtLeastOneCheckboxGroup.superclass.constructor.call(this, cb_list);
 }
 
-function getNextActiveIndex(
-	/* array */	cb_list,
-	/* int */	index)
+var AtLeastOneDirection =
 {
-	if (cb_list.length < 2)
+	SLIDE_UP:   0,
+	SLIDE_DOWN: 1
+};
+
+function getNextActiveIndex(
+	/* NodeList */	cb_list,
+	/* int */		index)
+{
+	if (cb_list.size() < 2)
 		{
 		return index;
 		}
@@ -30,23 +37,23 @@ function getNextActiveIndex(
 		{
 		if (new_index === 0)
 			{
-			this.direction = Direction.SLIDE_DOWN;
+			this.direction = AtLeastOneDirection.SLIDE_DOWN;
 			}
-		else if (new_index == cb_list.length-1)
+		else if (new_index == cb_list.size()-1)
 			{
-			this.direction = Direction.SLIDE_UP;
+			this.direction = AtLeastOneDirection.SLIDE_UP;
 			}
 
-		if (this.direction == Direction.SLIDE_UP)
+		if (this.direction == AtLeastOneDirection.SLIDE_UP)
 			{
 			new_index = Math.max(0, new_index-1);
 			}
 		else
 			{
-			new_index = Math.min(cb_list.length-1, new_index+1);
+			new_index = Math.min(cb_list.size()-1, new_index+1);
 			}
 		}
-		while (cb_list[new_index].get('disabled'));
+		while (cb_list.item(new_index).get('disabled'));
 
 	return new_index;
 }
@@ -54,12 +61,12 @@ function getNextActiveIndex(
 Y.extend(AtLeastOneCheckboxGroup, CheckboxGroup,
 {
 	enforceConstraints: function(
-		/* array */	cb_list,
-		/* int */	index)
+		/* NodeList */	cb_list,
+		/* int */		index)
 	{
-		if (cb_list[index].get('checked') || !this.allUnchecked())
+		if (cb_list.item(index).get('checked') || !this.allUnchecked())
 		{
-			this.direction = Direction.SLIDE_UP;
+			this.direction = AtLeastOneDirection.SLIDE_UP;
 			return;
 		}
 
@@ -74,7 +81,7 @@ Y.extend(AtLeastOneCheckboxGroup, CheckboxGroup,
 		// turn the new checkbox on
 
 		this.ignore_change = true;
-		cb_list[new_index].set('checked', true);
+		cb_list.item(new_index).set('checked', true);
 		this.ignore_change = false;
 	}
 });

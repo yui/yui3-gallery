@@ -7,12 +7,12 @@
  * @class SelectAllCheckboxGroup
  * @constructor
  * @param select_all_cb {String|Object} The checkbox that triggers "select all"
- * @param cb_list {String|Object|Array} The list of checkboxes to manage
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
 
 function SelectAllCheckboxGroup(
-	/* string/object */			select_all_cb,
-	/* string/object/array */	cb_list)
+	/* string/Node */			select_all_cb,
+	/* string/Node/NodeList */	cb_list)
 {
 	this.select_all_cb = Y.one(select_all_cb);
 	this.select_all_cb.on('click', this.toggleSelectAll, this);
@@ -30,18 +30,20 @@ Y.extend(SelectAllCheckboxGroup, CheckboxGroup,
 	toggleSelectAll: function()
 	{
 		var checked = this.select_all_cb.get('checked');
-		for (var i=0; i<this.cb_list.length; i++)
+		var count   = this.cb_list.size();
+		for (var i=0; i<count; i++)
 		{
-			if (!this.cb_list[i].get('disabled'))
+			var cb = this.cb_list.item(i);
+			if (!cb.get('disabled'))
 			{
-				this.cb_list[i].set('checked', checked);
+				cb.set('checked', checked);
 			}
 		}
 	},
 
 	enforceConstraints: function(
-		/* array */	cb_list,
-		/* int */	index)
+		/* NodeList */	cb_list,
+		/* int */		index)
 	{
 		this.select_all_cb.set('checked', this.allChecked());
 	}

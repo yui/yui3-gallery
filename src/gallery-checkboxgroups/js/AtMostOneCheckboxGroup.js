@@ -5,11 +5,11 @@
  * @module gallery-checkboxgroups
  * @class AtMostOneCheckboxGroup
  * @constructor
- * @param cb_list {String|Object|Array} The list of checkboxes to manage
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
 
 function AtMostOneCheckboxGroup(
-	/* string/object/array */	cb_list)
+	/* string/Node/NodeList */	cb_list)
 {
 	AtMostOneCheckboxGroup.superclass.constructor.call(this, cb_list);
 }
@@ -17,20 +17,20 @@ function AtMostOneCheckboxGroup(
 Y.extend(AtMostOneCheckboxGroup, CheckboxGroup,
 {
 	enforceConstraints: function(
-		/* array */	cb_list,
+		/* NodeList */	cb_list,
 		/* int */	index)
 	{
-		if (!cb_list[index].get('checked'))
+		if (!cb_list.item(index).get('checked'))
 		{
 			return;
 		}
 
-		var count = cb_list.length;
+		var count = cb_list.size();
 		for (var i=0; i<count; i++)
 		{
 			if (i != index)
 			{
-				cb_list[i].set('checked', false);
+				cb_list.item(i).set('checked', false);
 			}
 		}
 	}
