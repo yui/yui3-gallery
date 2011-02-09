@@ -5,126 +5,13 @@
 
 <script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
 
-<style type="text/css">
-body {
-    font:13px/1.22 arial;
-}
-
-#doc {
-    min-height:200px;
-    width:1000px;
-    border:10px solid red;
-    padding:1em;
-}
-
-#get-style {
-    background:#ccc;
-    float:left;
-    font-size:10px;
-    height:10em;
-    padding:15px 0;
-    width:200px;
-}
-
-.mask {
-    background:#ccc;
-    position:absolute;
-    top:0;
-    left:0;
-    overflow:hidden;
-}
-
-#test-xy {
-    background:green;
-    position:absolute;
-    height:10px;
-    width:10px;
-}
-
-#test-computed {
-    border: medium solid #000;
-    position:relative;
-    width:50%;
-    margin:auto;
-    padding:10px;
-    z-index: 2;
-    zoom:1;
-}
-
-#test-scroll {
-    height: 100px;
-    width: 100px;
-    overflow:auto;
-}
-
-#test-scroll p {
-    height:1000px;
-    width:1000px;
-}
-
-button {
-    display:block;
-}
-
-.yui3-skin-sam .yui-console-entry-pass .yui-console-entry-cat {
-    background: #070;
-    color: #fff;
-}
-.yui3-skin-sam .yui-console-entry-fail .yui-console-entry-cat {
-    background: #700;
-    color: #fff;
-}
-</style>
-
 </head>
 <body class="yui3-skin-sam">
-    <div id="test-append"></div>
-    <div id="test-xy"></div>
-    <div id="test-remove"></div>
-    <div id="test-replace"><p>replace me</p></div>
-    <div id="test-scroll">
-        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
-    </div>
     <div id="test-frag">
         <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
         <p>Lorem ipsum dolor <em>sit</em>.</p>
     </div>
-    <div id="doc" class="doc-wrap">
-        <a href="http://www.yahoo.com/foo" id="link-1">Yahoo!</a>
-        <a href="foo.html" id="link-2" tabIndex="-1">foo</a>
-        <form id="test-form" class="test-class" action="#">
-            <label for="test-text-value"><em>label</em></label>
-            <input name="test-text-value" id="test-text-value" value="text value">
-            <input name="test-text-novalue">
-    
-            <textarea name="test-textarea-value" value="textarea value"></textarea>
-            <textarea name="test-textarea-novalue"></textarea>
-            <textarea name="test-textarea-textvalue">textarea text</textarea>
-
-            <button name="test-button-value" value="button value">button</button>
-            <button name="test-button-novalue"></button>
-            <button name="test-button-textvalue">button text</button>
-
-        </form><div id="test-class">test class</div>
-        <div id="test-prop" tabindex="4">text<em id="test-contains">test<span></span></em><strong>node</strong></div>
-        <div id="set-style"><div class="bar" id="bar">setStyle</div>foo<div>blah</div></div>
-        <div id="get-style">getStyle</div>
-        <div id="baz">baz</div>
-        text
-        <div id="test-extras">extras</div>
-        <div id="test-children">foo <span>bar</span> <strong>baz</strong> </div>
-        <div id="test-empty-children"></div>
-    </div>
-    <div id="inline-style" style="color: green">inline style</div>
-    <div id="foo" aria-checked="true"></div>
     <div id="test-computed">test computed style</div>
-    <form id="form.foo@bar:baz">
-        <select id="test-select" name="test-select">
-            <option value="0">foo</option>
-            <option value="1">bar</option>
-            <option>baz</option>
-        </select>
-    </form>
     <div id="test-nodes">
         <ul>
             <li>item 1</li>
@@ -140,50 +27,68 @@ button {
         </ol>
     </div>
 
-    <table id="test-table">
-        <tr><td id="test-td"><div><div>grandchild of td</div></div></td></tr>
-    </table>
-
-    <ol>
+    <ol id="test-swap">
         <li>item 1</li>
         <li>item 2</li>
         <li>item 3</li>
         <li>item 4</li>
     </ol>
-<div id="test-insert-html">foo</div>
-<div id="test:colon">
-    <h2>test</h2>
-</div>
 
-<ol id="test-swap">
-    <li>item 1</li>
-    <li>item 2</li>
-    <li>item 3</li>
-    <li>item 4</li>
-</ol>
+    <ul id="test-outerHTML">
+        <li>item 1</li>
+        <li>item 2</li>
+        <li><select><option value="1">option 1</option><option value="2">option 2</option></select></li>
+    </ul>
 
-<div id="_funky:id{$400}">
-    <h2>test</h2>
-</div>
-
+    <div id="test-nextAll">
+        <p>p</p>
+        <div>div</div>
+        <p>p</p>
+        <p class="start">p</p>
+        <div>div</div>
+        <p>p</p>
+        <div>div</div>
+    </div>
+    
 <div id="yui-log"></div>
 <script type="text/javascript">
-        YUI({base: '../../../../yui3/build/', filter: 'raw', groups: { gallery: { base: '../../../build/', modules: { 'gallery-node-extras': { path: 'gallery-node-extras/gallery-node-extras.js' }}}}}).use('node', 'gallery-node-extras', 'test', function(Y) {
-    var Assert = Y.Assert,
-        ArrayAssert = Y.ArrayAssert,
-        suite = new Y.Test.Suite("yuisuite");
+    YUI({base: '../../../../yui3/build/', filter: 'raw', groups: { gallery: { base: '../../../build/', modules: { 'gallery-node-extras': { path: 'gallery-node-extras/gallery-node-extras.js' }}}}}).use('node', 'gallery-node-extras', 'test', function(Y) {
+var Assert = Y.Assert,
+    ArrayAssert = Y.ArrayAssert,
+    suite = new Y.Test.Suite("yuisuite");
 
-    var byId = function(id) {
-        return document.getElementById(id);
-    };
+var byId = function(id) {
+    return document.getElementById(id);
+};
 
-    var $ = Y.Selector.query;
+var $ = Y.Selector.query;
 
-    suite.add( new Y.Test.Case({
-        name: 'Node frag',
-        "frag should return a Document Fragment Node": function() {
-            var node = Y.Node.frag();
-            Y.Assert.areEqual(11, node.get('nodeType'));
+suite.add( new Y.Test.Case({
+    name: 'Node frag',
+    "frag should return a Document Fragment Node": function() {
+        var node = Y.Node.frag();
+        Y.Assert.areEqual(11, node.get('nodeType'));
+    }
+}));
+
+suite.add( new Y.Test.Case({
+    name: 'Node outerHTML',
+    "outerHTML of a fragment should return the fragment": function() {
+            Y.Assert.areEqual("<p>oops</p>", Y.Node.create("<p>oops</p>").get('outerHTML'));
+        },
+        // In the following test, I allow the result to be one of several options because of how IE will
+        // tend to return outerHTML. Since either output can be sent to Y.Node.create to create a new DOM
+        // fragment which is functionally identical to the earlier fragment, I find this behaviour acceptable
+        "outerHTML of a node not a valid child of a div should return the appropriate string": function() {
+            var node = Y.one("#test-outerHTML li"),
+                node2 = Y.one("#test-outerHTML option"),
+                liExpected = [ "<li>item 1</li>", // Firefox, Chrome, etc
+                               "<li>item 1"], // IE
+                optionExpected = ['<option value="1">option 1</option>', // Firefox, Chrome, etc
+                                  '<option value=1>option 1</option>']; // IE
+                
+            ArrayAssert.contains(node.get('outerHTML'), liExpected, "Failed to process LI");
+            ArrayAssert.contains(node2.get('outerHTML'), optionExpected, "Failed to process OPTION");
         }
     }));
 
@@ -233,7 +138,30 @@ button {
                 Y.Assert.isTrue(n.one('> *').test('span.test'));
             });
         }
-    })); 
+    }));
+
+    suite.add( new Y.Test.Case({
+        name: 'Node nextAll/prevAll',
+        "nextAll/prevAll  should return a NodeList": function() {
+            var start = Y.one("#test-nextAll .start");
+            
+            Assert.isInstanceOf(Y.NodeList, start.nextAll('p'), "nextAll");
+            Assert.isInstanceOf(Y.NodeList, start.prevAll('p'), "prevAll");
+        },
+        "the length of the NodeList returned by nextAll should be correct": function() {
+            var start = Y.one("#test-nextAll .start");
+
+            Assert.areEqual(1, start.nextAll('p').size());
+            Assert.areEqual(2, start.nextAll('div').size());
+        },
+        "the length of the NodeList returned by prevAll should be correct": function() {
+            var start = Y.one("#test-nextAll .start");
+
+            Assert.areEqual(2, start.prevAll('p').size(), "p check");
+            Assert.areEqual(1, start.prevAll('div').size(), "div check");
+        }
+    }));
+
     Y.Test.Runner.add(suite);
 
     Y.on('load', function() {
