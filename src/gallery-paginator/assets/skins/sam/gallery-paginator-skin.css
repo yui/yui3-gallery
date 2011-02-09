@@ -82,3 +82,16 @@ version: 2.8.0r4
 .yui3-skin-sam .yui3-paginator-page-input .yui3-page-input {
 	width: 2.4em;
 }
+
+.yui3-skin-sam .yui3-paginator-page.yui3-haserror,
+.yui3-skin-sam .yui3-paginator-page.yui3-haswarn {
+	padding-left: 21px;
+}
+
+.yui3-skin-sam .yui3-paginator-page.yui3-haserror {
+	background: url(error.png) no-repeat left center;
+}
+
+.yui3-skin-sam .yui3-paginator-page.yui3-haswarn {
+	background: url(warn.png) no-repeat left center;
+}
