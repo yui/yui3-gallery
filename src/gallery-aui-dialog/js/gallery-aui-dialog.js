@@ -94,6 +94,10 @@ var L = A.Lang,
  * @class Dialog
  * @constructor
  * @extends Panel
+ * @uses WidgetPosition
+ * @uses WidgetStack
+ * @uses WidgetPositionAlign
+ * @uses WidgetPositionConstrain
  */
 var Dialog = function(config) {
 	if (!A.DialogMask) {
@@ -354,6 +358,7 @@ Dialog.prototype = {
 		var boundingBox = instance.get(BOUNDING_BOX);
 
 		A.Event.purgeElement(boundingBox, true);
+		A.DialogManager.remove(instance);
 	},
 
 	/**
