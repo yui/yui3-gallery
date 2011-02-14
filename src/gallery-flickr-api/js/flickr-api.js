@@ -135,21 +135,21 @@ Y.flickrAPI = {
         
         var uri = default_uri;
         
-        Y.Object.each(oRequest, function(val, key, obj) {
-            obj[key] = encodeURIComponent(val);
-        });
-        
         // Merge Local and Global Configs (Local Wins)
         oRequest  = Y.merge(Y.config.flickrAPI, oRequest);
         
-        // Allow method to be filled out in a more obvious place in the interface
-        oRequest.method = sMethod;
-        
-        //Get URI
+        // Get URI
         if(oRequest.flickr_api_uri) {
             uri = oRequest.flickr_api_uri;
             delete oRequest.flickr_api_uri;
         }
+        
+        Y.Object.each(oRequest, function(val, key, obj) {
+            obj[key] = encodeURIComponent(val);
+        });
+        
+        // Allow method to be filled out in a more obvious place in the interface
+        oRequest.method = sMethod;
         
         //Format callback object
         if( Y.Lang.isFunction(oCallback) ) {
