@@ -1,3 +1,10 @@
+/**
+ * VMLShape is a fallback class for Shape. It creates a graphic object with editable properties when 
+ * SVG is not available.
+ *
+ * @class VMLShape
+ * @constructor
+ */
 function VMLShape(cfg)
 {
     this._initialize(cfg);
@@ -6,10 +13,19 @@ function VMLShape(cfg)
 
 VMLShape.prototype = {
     /**
-     * Type of shape
+     * Indicates the type of shape. 
+     *
+     * @property type 
+     * @type string
      */
     type: "shape",
     
+    /**
+     * Initializes the graphic instance.
+     *
+     * @method _initialize
+     * @private
+     */
     _initialize: function(cfg) 
     {
         if(!cfg.graphic)
@@ -19,12 +35,22 @@ VMLShape.prototype = {
         this._setProps(cfg);
     },
 
+    /**
+     * @private
+     */
     width: 0,
 
+    /**
+     * @private
+     */
     height: 0,
 
     /**
-     * Returns a shape.
+     * Updates properties for the shape.
+     *
+     * @method _setProps
+     * @param {Object} cfg Properties to update.
+     * @private
      */
     _setProps: function(cfg) {
         this.width = cfg.width && cfg.width >= 0 ? cfg.width : this.width;
@@ -38,6 +64,12 @@ VMLShape.prototype = {
         this.props = cfg.props || this.props;
     },
 
+    /**
+     * Draws the graphic.
+     *
+     * @method _draw
+     * @private
+     */
     _draw: function()
     {
         var path,
@@ -80,12 +112,35 @@ VMLShape.prototype = {
         return this;
     },
     
+    /**
+     * Adds a border to the shape node.
+     *
+     * @method _addBorder
+     * @private
+     */
     _addBorder: function()
     {
         if(this.border && this.border.weight && this.border.weight > 0)
         {
+            var borderAlpha = this.border.alpha,
+                borderWeight = this.borderWeight;
+            borderAlpha = Y.Lang.isNumber(borderAlpha) ? borderAlpha : 1;
+            borderWeight = Y.Lang.isNumber(borderWeight) ? borderWeight : 1;
             this.node.strokecolor = this.border.color || "#000000";
-            this.node.strokeweight = this.border.weight || 1;
+            this.node.strokeweight = borderWeight;
+            if(borderAlpha < 1)
+            {
+                if(!this._strokeNode)
+                {
+                    this._strokeNode = this.graphics._createGraphicNode("stroke");
+                    this.node.appendChild(this._strokeNode);
+                }
+                this._strokeNode.opacity = borderAlpha;
+            }
+            else if(this._strokeNode)
+            {
+                this._strokeNode.opacity = borderAlpha;
+            }
             this.node.stroked = true;
         }
         else
@@ -94,8 +149,15 @@ VMLShape.prototype = {
         }
     },
 
+    /**
+     * Adds a fill to the shape node.
+     *
+     * @method _addFill
+     * @private
+     */
     _addFill: function()
     {
+        var fillAlpha;
         this.node.filled = true;
         if(this.fill.type === "linear" || this.fill.type === "radial")
         {
@@ -119,15 +181,39 @@ VMLShape.prototype = {
                 {
                     this.graphics._removeChildren(this.fillnode);
                 }
+                fillAlpha = this.fill.alpha;
+                fillAlpha = Y.Lang.isNumber(fillAlpha) ? fillAlpha : 1;
+                this.fill.alpha = fillAlpha;
                 this.fillnode = this.graphics._createGraphicNode("fill");
                 this.fillnode.type = "solid";
                 this.fillnode.color = this.fill.color;
-                this.fillnode.opacity = this.fill.alpha || 1;
+                this.fillnode.opacity = fillAlpha;
                 this.node.appendChild(this.fillnode);
             }
         }
     },
+    
+    /**
+     * Adds a class to the shape's node.
+     *
+     * @method addClass
+     * @param {String} className Name of the class to add.
+     */
+    addClass: function(val)
+    {
+        var node = this.node;
+        if(node)
+        {
+            Y.one(node).addClass(val);
+        }
+    },
 
+    /**
+     * Sets the visibility of a shape.
+     * 
+     * @method toggleVisible
+     * @param {Boolean} val indicates whether or not the shape is visible.
+     */
     toggleVisible: function(val)
     {
         var visibility = val ? "visible" : "hidden";
@@ -137,6 +223,27 @@ VMLShape.prototype = {
         }
     },
 
+    /**
+     * Positions the parent node of the shape.
+     *
+     * @method setPosition
+     * @param {Number}, x The x-coordinate
+     * @param {Number}, y The y-coordinate
+     */
+    setPosition: function(x, y)
+    {
+        var pNode = Y.one(this.parentNode);
+        pNode.setStyle("position", "absolute");
+        pNode.setStyle("left", x);
+        pNode.setStyle("top", y);
+    },
+    
+    /**
+     * Updates the properties of the shape instance.
+     *
+     * @method update
+     * @param {Object} cfg Object literal containing properties to update.
+     */
     update: function(cfg)
     {
         this._setProps(cfg);
@@ -147,6 +254,6 @@ VMLShape.prototype = {
 
 Y.VMLShape = VMLShape;
 
-if (Y.UA.ie) {
+if (DRAWINGAPI == "vml") {
     Y.Shape = VMLShape;
 }

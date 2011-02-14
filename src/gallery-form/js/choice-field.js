@@ -74,7 +74,18 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
         this._fieldNode = contentBox.all('input');
     },
     
-	_syncFieldNode : function () {},
+	_syncFieldNode : function () {
+            var choice = this.get('value');
+
+            if (choice) {
+                this._fieldNode.some(function (node, index, list) {
+                    if (node.get('value') == choice) {
+                        node.setAttribute('checked', true);
+                        return true;
+                    }
+                }, this);
+            }
+        },
 
     clear : function () {
         this._fieldNode.each(function (node, index, list) {

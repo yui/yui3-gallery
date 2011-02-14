@@ -144,7 +144,7 @@ function populateOpen(
 		}
 	}
 
-	uniqueIdKey = this.get('uniqueIdKey');
+	var uniqueIdKey = this.get('uniqueIdKey');
 
 	var result = true;
 	for (var k=0; k<data.length; k++)
@@ -629,7 +629,7 @@ function treeFailure(e, reqIndex)
 
 	this._callback.error    = e.error;
 	this._callback.response = e.response;
-	Y.DataSource.Local.issueCallback(this._callback);
+	this.fire('response', this._callback);
 }
 
 function setNodeInfo(
@@ -726,7 +726,7 @@ function checkFinished()
 	}
 
 	this._callback.response = response;
-	Y.DataSource.Local.issueCallback(this._callback);
+	this.fire('response', this._callback);
 }
 
 function toggleSuccess(e, node, completion)

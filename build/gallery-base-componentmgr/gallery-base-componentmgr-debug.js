@@ -4,7 +4,7 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 	 * Base Component Manager
 	 * 
 	 * Oddnut Software
-	 * Copyright (c) 2010 Eric Ferraiuolo - http://eric.ferraiuolo.name
+	 * Copyright (c) 2010-2011 Eric Ferraiuolo - http://eric.ferraiuolo.name
 	 * YUI BSD License - http://developer.yahoo.com/yui/license.html
 	 */
 	
@@ -12,10 +12,12 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 		
 		REQUIRES			= 'requires',
 		INITIALIZER			= 'initializer',
+		DESTRUCTOR			= 'destructor',
 		INSTANCE			= 'instance',
 		
 		E_INIT_COMPONENT	= 'initComponent',
 		E_INIT_COMPONENTS	= 'initComponents',
+		E_DESTROY_COMPONENT	= 'destroyComponent',
 		
 		YLang				= Y.Lang,
 		isArray				= YLang.isArray,
@@ -34,7 +36,7 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 	
 	// *** Static *** //
 	
-	ComponentMgr._COMPONENT_CFG = [REQUIRES, INITIALIZER, INSTANCE];
+	ComponentMgr._COMPONENT_CFG = [REQUIRES, INITIALIZER, DESTRUCTOR, INSTANCE];
 	
 	// *** Prototype *** //
 	
@@ -53,17 +55,6 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			this._initComponentHierarchy();
 			
 			/**
-			 * Fired when a component is going to be initialized.
-			 * The <code>componentToInit</code> property is the String name of the component going to be intialized.
-			 * Developers can listen to the 'on' moment to prevent the default action of initializing the component.
-			 * Listening to the 'after' moment, a <code>component</code> property on the Event Object is the component instance.
-			 * 
-			 * @event initComponent
-			 * @param event {Event} The event object for initComponent; has properties: componentToInit, component
-			 */
-			this.publish(E_INIT_COMPONENT, { defaultFn: this._defInitComponentFn });
-			
-			/**
 			 * Fired right after init event to allow implementers to add components to be eagerly initialized.
 			 * A <code>componentsToInit</code> array is passed to subscribers whom can push on components to be initialized,
 			 * components can be referenced by string name or object reference.
@@ -76,6 +67,27 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 				fireOnce	: true
 			});
 			
+			/**
+			 * Fired when a component is going to be initialized.
+			 * The <code>componentToInit</code> property is the String name of the component going to be initialized.
+			 * Developers can listen to the 'on' moment to prevent the default action of initializing the component.
+			 * Listening to the 'after' moment, a <code>component</code> property on the Event Object is the component instance.
+			 * 
+			 * @event initComponent
+			 * @param event {Event} The event object for initComponent; has properties: componentToInit, component
+			 */
+			this.publish(E_INIT_COMPONENT, { defaultFn: this._defInitComponentFn });
+			
+			/**
+			 * Fired when a component is going to be destroyed.
+			 * The <code>component</code> property is the String name of the component going to be destroyed.
+			 * Developers can listen to the 'on' moment to prevent the default action of destroying the component.
+			 * 
+			 * @event destroyComponent
+			 * @param event {Event} The event object for destoryComponent; has properties: component
+			 */
+			this.publish(E_DESTROY_COMPONENT, { defaultFn: this._defDestoryComponentFn });
+			
 			// Fire initComponents during Y.Base initialization
 			if (this.get('initialized')) {
 				this.fire(E_INIT_COMPONENTS, { componentsToInit: [] });
@@ -84,6 +96,8 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 					this.fire(E_INIT_COMPONENTS, { componentsToInit: [] });
 				});
 			}
+			
+			Y.before(this._destroyComponents, this.constructor.prototype, 'destructor', this);
 		},
 		
 		// *** Public Methods *** //
@@ -106,19 +120,24 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			var components	= this._components,
 				requires	= config.requires,
 				initializer	= config.initializer,
+				destructor	= config.destructor,
 				instance	= config.instance;
 				
-			initializer = isFunction(initializer) ? initializer :
-						  isString(initializer) && isFunction(this[initializer]) ? this[initializer] : noop;
+			initializer	= isFunction(initializer) ? initializer :
+						  isString(initializer) && isFunction(this[initializer]) ? this[initializer] : null;
+						  
+			destructor	= isFunction(destructor) ? destructor :
+						  isString(destructor) && isFunction(this[destructor]) ? this[destructor] : null;
 			
 			components.add(name, REQUIRES, requires);
 			components.add(name, INITIALIZER, initializer);
+			components.add(name, DESTRUCTOR, destructor);
 			components.add(name, INSTANCE, instance);
 		},
 				
 		/**
-		 * Retrieves component an instance by string name or reference.
-		 * The components must have previously been initialized otherwise null is returned.
+		 * Retrieves component an instance by string name.
+		 * The component must have previously been initialized otherwise null is returned.
 		 * 
 		 * @method getComponent
 		 * @param component	{String} component to get instance of
@@ -131,7 +150,29 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 		},
 		
 		/**
-		 * Supplies the callback with component instance(s) that were requested by string name or reference,
+		 * Destroys a component or set of components by string name.
+		 * This will call the component???s configured destructor fn (preferred), or
+		 * if the instance has a <code>destroy</code> method that will be used by convention.
+		 * 
+		 * @method destroyComponent
+		 * @param component	{String | String... | Array} components to destroy
+		 * @return void
+		 */
+		destroyComponent : function () {
+			
+			var args		= Y.Array(arguments, 0, true),
+				components	= isArray(args[0]) ? args[0] : args;
+			
+			Y.log('destroyComponent called', 'info', 'baseComponentMgr');
+			Y.Array.each(components, function(c){
+				if (this._components.get(c, INSTANCE)) {
+					this._destroyComponent(c);
+				}
+			}, this);
+		},
+		
+		/**
+		 * Supplies the callback with component instance(s) that were requested by string name,
 		 * any non-initialized components will be initialized.
 		 * Component instance(s) will be passed to the callback as arguments in the order requested.
 		 * 
@@ -225,6 +266,32 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			this.fire(E_INIT_COMPONENT, { componentToInit: c });
 		},
 		
+		_destroyComponent : function (c) {
+			
+			this.fire(E_DESTROY_COMPONENT, { component: c });
+		},
+		
+		_destroyComponents : function () {
+			
+			var instances = this._components.data[INSTANCE];
+			
+			Y.each(instances, function(instance, component){
+				if (instance) {
+					this._destroyComponent(component);
+				}
+			}, this);
+		},
+		
+		_defInitComponentsFn : function (e) {
+			
+			var components	= e.componentsToInit,
+			requires	= this._getRequires(components);
+			
+			Y.use.apply(Y, requires.concat(Y.bind(function(Y){
+				Y.Array.each(components, this._initComponent, this);
+			}, this)));
+		},
+		
 		_defInitComponentFn : function (e) {
 			
 			var components	= this._components,
@@ -244,14 +311,28 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 			e.component = instance;
 		},
 		
-		_defInitComponentsFn : function (e) {
+		_defDestoryComponentFn : function (e) {
 			
-			var components	= e.componentsToInit,
-				requires	= this._getRequires(components);
-				
-			Y.use.apply(Y, requires.concat(Y.bind(function(Y){
-				Y.Array.each(components, this._initComponent, this);
-			}, this)));
+			var components	= this._components,
+				component	= e.component,
+				destructor	= components.get(component, DESTRUCTOR),
+				instance	= components.get(component, INSTANCE);
+			
+			if ( ! instance ) { return; }
+			
+			// removes us as an event bubble target for the instance
+			if (instance._yuievt && isFunction(instance.removeTarget)) {
+				instance.removeTarget(this);
+			}
+			
+			// prefer the configured destructor fn, or use use destroy instance method by convention
+			if (isFunction(destructor)) {
+				destructor.call(this, instance);
+			} else if (isFunction(instance.destroy)) {
+				instance.destroy();
+			}
+			
+			components.remove(component, INSTANCE);
 		}
 		
 	};
@@ -259,4 +340,4 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 	Y.BaseComponentMgr = ComponentMgr;
 
 
-}, 'gallery-2011.01.03-18-30' ,{requires:['base-base', 'collection']});
+}, 'gallery-2011.01.26-20-33' ,{requires:['base-base', 'collection']});

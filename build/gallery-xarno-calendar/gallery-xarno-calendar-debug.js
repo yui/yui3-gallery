@@ -7,7 +7,8 @@ YUI.add('gallery-xarno-calendar', function(Y) {
  */
   var EVENT_SELECT = 'select',
       EVENT_UPDATE = 'update',
-      DATE = 'date';
+      DATE = 'date',
+      LANG = Y.Lang;
 
   Y.namespace('Xarno').Calendar = Y.Base.create('xarno-calendar', Y.Widget, [Y.WidgetStdMod], {
     
@@ -331,17 +332,17 @@ YUI.add('gallery-xarno-calendar', function(Y) {
       
       // previous days
       for (i=22, l=31; i <= l; i++) {
-        days += Y.substitute(p, { count: i});
+        days += LANG.sub(p, { count: i});
       }
       
       // current days
       for (i=1, l=31; i <= l; i++) {
-        days += Y.substitute(d, { count: i});
+        days += LANG.sub(d, { count: i});
       }
       
       // next days
       for (i=1, l=14; i <= l; i++) {
-        days += Y.substitute(n, { count: i});
+        days += LANG.sub(n, { count: i});
       }
       
       // add days
@@ -440,4 +441,4 @@ YUI.add('gallery-xarno-calendar', function(Y) {
   });
 
 
-}, 'gallery-2010.12.10-17-31' ,{requires:['base-build','widget','widget-stdmod','substitute']});
+}, 'gallery-2011.02.02-21-07' ,{requires:['base-build','widget','widget-stdmod']});

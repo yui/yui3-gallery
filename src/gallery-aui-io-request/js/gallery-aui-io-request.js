@@ -337,6 +337,17 @@ var IORequest = A.Component.create(
 			},
 
 			/**
+			 * A selector to be used to query against the response of the
+			 * request. Only works if the response is XML or HTML.
+			 *
+			 * @attribute selector
+			 * @type string
+			 */
+			selector: {
+				value: null
+			},
+
+			/**
 			 * See <a href="http://developer.yahoo.com/yui/3/io/#configuration">IO
 	        * Configuration</a>.
 			 *
@@ -493,15 +504,16 @@ var IORequest = A.Component.create(
 			 *
 			 * @method _end
 			 * @param {Number} id ID of the IO transaction.
+			 * @param {Object} args Custom arguments, passed to the event handler. See <a href="http://developer.yahoo.com/yui/3/io/#configuration">IO
 			 * @protected
 			 */
-			_end: function(id) {
+			_end: function(id, args) {
 				var instance = this;
 
 				instance.set(ACTIVE, false);
 				instance.set(TRANSACTION, null);
 
-				instance.fire(END, id);
+				instance.fire(END, id, args);
 			},
 
 			/**
@@ -510,15 +522,16 @@ var IORequest = A.Component.create(
 			 * @method _success
 			 * @param {Number} id ID of the IO transaction.
 			 * @param {Object} obj IO transaction Object.
+			 * @param {Object} args Custom arguments, passed to the event handler. See <a href="http://developer.yahoo.com/yui/3/io/#configuration">IO
 			 * @protected
 			 */
-			_success: function(id, obj) {
+			_success: function(id, obj, args) {
 				var instance = this;
 
 				// update the responseData attribute with the new data from xhr
 				instance.set(RESPONSE_DATA, obj);
 
-				instance.fire(SUCCESS, id, obj);
+				instance.fire(SUCCESS, id, obj, args);
 			},
 
 			/**
@@ -586,6 +599,22 @@ var IORequest = A.Component.create(
 						}
 						catch(e) {
 							// throw PARSE_ERROR;
+						}
+					}
+					else {
+						var selector = instance.get('selector');
+
+						if (data && selector) {
+							var tempRoot;
+
+							if (data.documentElement) {
+								tempRoot = A.one(data);
+							}
+							else {
+								tempRoot = A.Node.create(data);
+							}
+
+							data = tempRoot.all(selector);
 						}
 					}
 				}

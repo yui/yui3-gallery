@@ -11,13 +11,14 @@ var YL = Y.Lang,
   CLASS_PRESSED  = '-pressed',
   CLASS_DEFAULT  = '-default',
   CLASS_DISABLED = '-disabled',
-  CLASS_NO_LABEL = '-no-label',
+  CLASS_NO_LABEL = 'no-label',
   BOUNDING_BOX = 'boundingBox',
   CONTENT_BOX = 'contentBox',
   DEFAULT = 'default',
   ENABLED = 'enabled',
   DISABLED = 'disabled',
   HREF = 'href',
+  TAB_INDEX = 'tabindex',
   ICON = 'icon',
   TITLE = 'title',
   INNER_HTML = 'innerHTML';
@@ -56,13 +57,15 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
    */
   renderUI : function(){
     Y.log('renderUI', 'info', 'Y.Button');
-  var href = this.get(HREF);
-  
-  this.get(CONTENT_BOX).setContent(this.get('label'));
-  
-  if(href) {
-    this.get(BOUNDING_BOX).setAttribute(HREF, href);
-  }
+    var href = this.get(HREF);
+    
+    this.get(CONTENT_BOX).setContent(this.get('label'));
+    
+    if(href) {
+        this.get(BOUNDING_BOX).setAttribute(HREF, href);
+    } else {
+        this.get(BOUNDING_BOX).set('tabIndex',0);
+    }
   },
 
   /**
@@ -79,6 +82,7 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
     bb.on('click', this._defClickFn, this);
     bb.on('mouseup', this._mouseUp, this);
     bb.on('mousedown', this._mouseDown, this);
+    bb.after('tabindexChange', this._afterTabindexChange, this);
   },
   
   /**
@@ -91,6 +95,7 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
     Y.log('syncUI', 'info', 'Y.Button');
     this._updateDefault(this.get(DEFAULT));
     this._updateEnabled(this.get(ENABLED));
+    this._updateTabindex(this.get(TAB_INDEX));
   },
 
   /**
@@ -103,7 +108,7 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
   disable : function() {
     Y.log('disable', 'info', 'Y.Button');
     this.set(ENABLED, false);
-  return this;
+    return this;
   },
 
   /**
@@ -116,7 +121,7 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
   enable : function() {
     Y.log('enable', 'info', 'Y.Button');
     this.set(ENABLED, true);
-  return this;
+    return this;
   },
 
   /**
@@ -141,16 +146,16 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
    */
   _defClickFn : function(e) {
     Y.log('_defClickFn', 'info', 'Y.Button');
-  var href = this.get(HREF);
-  
-  if (!this.get(ENABLED)) {
-    e.preventDefault();
-    return;
-  }
-  
-  if(!href || href === '#') {
-    e.preventDefault();
-  }
+    var href = this.get(HREF);
+    
+    if (!this.get(ENABLED)) {
+        e.preventDefault();
+        return;
+    }
+    
+    if(!href || href === '#') {
+        e.preventDefault();
+    }
     this.fire(EVENT_PRESS, {click : e});
   },
   
@@ -179,7 +184,7 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
     if(this._mouseListener !== null) {
       this._mouseListener.detach();
       this._mouseListener = null;
-  }
+    }
   },
 
   /**
@@ -192,7 +197,7 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
     Y.log('_mouseDown', 'info', 'Y.Button');
     if(this.get(ENABLED)) {
       this.get(BOUNDING_BOX).addClass(this._className + CLASS_PRESSED);
-    this._mouseIsDown = true;
+      this._mouseIsDown = true;
       if(this._mouseListener === null) {
         this._mouseListener = Y.on('mouseup',Y.bind(this._listenForMouseUp,this));
       }
@@ -234,11 +239,11 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
 
     if(status) {
       bb.removeClass(disableClass);
-      bb.set(DISABLED,'');
+      bb.removeAttribute(DISABLED);
     }else{
       bb.addClass(disableClass);
       bb.removeClass(this._className + CLASS_PRESSED);
-      bb.set(DISABLED,DISABLED);
+      bb.setAttribute(DISABLED,DISABLED);
     }
 
   },
@@ -287,8 +292,8 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
     if(this.get('callback')) {
       (this.get('callback'))(e);
     }else{
-    (this._callbackFromType())(e);
-  }
+        (this._callbackFromType())(e);
+    }
   },
   
   /**
@@ -316,9 +321,9 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
   _labelSetterFn : function(val) {
     Y.log('_labelSetterFn', 'info', 'Y.Button');
     if (!val || val === '') {
-      this.get(BOUNDING_BOX).addClass(this._className + CLASS_NO_LABEL);
+      this.get(BOUNDING_BOX).addClass(this.getClassName(CLASS_NO_LABEL));
     } else {
-      this.get(BOUNDING_BOX).removeClass(this._className + CLASS_NO_LABEL);
+      this.get(BOUNDING_BOX).removeClass(this.getClassName(CLASS_NO_LABEL));
     }
     this.get(CONTENT_BOX).setContent(val);
     this.set(TITLE, val);
@@ -350,18 +355,34 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
   _callbackFromType : function() {
     Y.log('_callbackFromType', 'info', 'Y.Button');
     var bb = this.get(BOUNDING_BOX), 
-      frm = bb.ancestor('form');
+        frm = bb.ancestor('form');
+        
+    switch (this.get('type')) {
+        case 'submit':
+            if (frm) { return Y.bind(frm.submit, frm); }
+            break;
+        case 'reset':
+            if (frm) { return Y.bind(frm.reset, frm); }
+            break;
+    }
     
-  switch (this.get('type')) {
-    case 'submit':
-      if (frm) { return Y.bind(frm.submit, frm); }
-      break;
-    case 'reset':
-      if (frm) { return Y.bind(frm.reset, frm); }
-      break;
-  }
+    return function(){};
+  },
   
-  return function(){};
+  _afterTabindexChange : function(e) {
+    Y.log('_afterTabindexChange', 'info', 'Y.Button');
+    this._updateTabindex(e.newVal);
+  },
+  
+  _updateTabindex : function(val) {
+    Y.log('_updateTabindex', 'info', 'Y.Button');
+    var bb = this.get(BOUNDING_BOX);
+    
+    if (val !== undefined && val !== null) {
+        bb.setAttribute(TAB_INDEX, val);
+    } else {
+        bb.removeAttribute(TAB_INDEX);
+    }
   }
   
 }, {
@@ -387,22 +408,25 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
           validator : YL.isBoolean
       },
       icon : {
-      value : DEFAULT,
+        value : DEFAULT,
         setter : '_iconSetterFn',
-    lazyAdd : false
+        lazyAdd : false
       },
-    href : {
-    value : null
-    },
+      href : {
+        value : null
+      },
       title : {
           validator : YL.isString,
           setter : '_titleSetterFn'
+      },
+      tabindex : {
+          value : 0
       },
       type : {
           value : 'push',
           validator : YL.isString,
           lazyAdd : false
-    }
+      }
   },
   /**
    * HTML Parser assumes srcNode is either a &lt;button&gt; or 
@@ -412,9 +436,9 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
   HTML_PARSER : {
   
     enabled : function(srcNode) {
-    return !srcNode.get(DISABLED);
-  },
-  
+        return !srcNode.get(DISABLED);
+    },
+    
     label : function(srcNode) {
       if(srcNode.getAttribute('value')) {
         return srcNode.getAttribute('value');
@@ -422,52 +446,52 @@ Y.Button = Y.Base.create('button',Y.Widget, [Y.WidgetChild], {
       if(srcNode.get(INNER_HTML)) {
         return srcNode.get(INNER_HTML);
       }
-    
-    // default form button labels based on type
-    if(srcNode.get('tagName') === 'INPUT') {
-      switch (srcNode.get('type')) {
-      case 'reset' : return 'Reset';
-      case 'submit' : return 'Submit';
-    }
-    }
-    
+      
+      // default form button labels based on type
+      if(srcNode.get('tagName') === 'INPUT') {
+        switch (srcNode.get('type')) {
+          case 'reset' : return 'Reset';
+          case 'submit' : return 'Submit';
+        }
+      }
+      
       return null;
     },
-  
-  href : function(srcNode) {
-    var href = srcNode.getAttribute(HREF);
     
-    if(href) { 
-      return href; 
-    }
+    href : function(srcNode) {
+        var href = srcNode.getAttribute(HREF);
+        
+        if(href) { 
+            return href; 
+        }
+        
+        return null;
+    },
     
-    return null;
-  },
-  
-  type : function(srcNode) {
-    var type = srcNode.getAttribute('type');
+    type : function(srcNode) {
+        var type = srcNode.getAttribute('type');
+        
+        if(type) {
+            return type;
+        }
+        return null;
+    },
     
-    if(type) {
-      return type;
-    }
-    return null;
-  },
-  
     title : function(srcNode) {
       if(srcNode.getAttribute(TITLE)) {
         return srcNode.getAttribute(TITLE);
       }
-    if(srcNode.getAttribute('value')) {
+      if(srcNode.getAttribute('value')) {
         return srcNode.getAttribute('value');
       }
       if(srcNode.get(INNER_HTML)) {
         return srcNode.get(INNER_HTML);
       }
       return null;
-  }
+    }
   }
 });
 
 
 
-}, 'gallery-2010.12.10-17-31' ,{requires:['widget','event-mouseenter','widget-child']});
+}, 'gallery-2011.02.02-21-07' ,{requires:['widget','event-mouseenter','widget-child']});

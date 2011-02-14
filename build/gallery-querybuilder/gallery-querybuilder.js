@@ -218,6 +218,14 @@ function changeVar(
 	}
 }
 
+function keyUp(e)
+{
+	if (e.keyCode != 13)
+	{
+		this._notifyChanged();
+	}
+}
+
 Y.extend(QueryBuilder, Y.Widget,
 {
 	initializer: function(config)
@@ -234,7 +242,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	{
 		var container = this.get('contentBox');
 		container.on('change', this._notifyChanged, this);
-		container.on('keyup', this._notifyChanged, this);
+		container.on('keyup', keyUp, this);
 
 		this.table = Y.Node.create('<table></table>');
 		container.appendChild(this.table);
@@ -746,6 +754,21 @@ QueryBuilder.String.prototype =
 		return [ op_cell, value_cell ];
 	},
 
+	postCreate: function(
+		/* int */		filter_index,
+		/* object */	var_config,
+		/* array */		op_list,
+		/* array */		value)
+	{
+		Y.Lang.later(1, this, function()	// hack for IE7
+		{
+			if (this.value_input)		// could be destroyed
+			{
+				this.value_input.focus();
+			}
+		});
+	},
+
 	destroy: function()
 	{
 		this.op_menu     = null;
@@ -878,6 +901,15 @@ QueryBuilder.Select.prototype =
 		return [ value_cell ];
 	},
 
+	postCreate: function(
+		/* int */		filter_index,
+		/* object */	var_config,
+		/* array */		op_list,
+		/* array */		value)
+	{
+		this.value_menu.focus();
+	},
+
 	destroy: function()
 	{
 		this.value_menu = null;
@@ -940,4 +972,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2010.09.15-18-40' ,{requires:['widget','substitute'], optional:['gallery-formmgr','gallery-scrollintoview']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['widget','substitute'], optional:['gallery-formmgr','gallery-scrollintoview']});

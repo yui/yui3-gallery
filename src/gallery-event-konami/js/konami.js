@@ -5,13 +5,14 @@
  * responsibility, after all.
  *
  * @module event-konami
+ *
+ * @class YUI~event-konami
  */
 
 /**
  * Provides a subscribable event named &quot;konami&quot;.
  *
  * @event konami
- * @for YUI
  * @param type {String} 'konami'
  * @param fn {Function} the callback function
  * @param id {String|Node|etc} the element to bind (typically document)
@@ -20,48 +21,46 @@
  * to the listener.
  * @return {Event.Handle} the detach handle
  */
-var progress = {},
-    handlers = {},
-    keys = [38,38,40,40,37,39,37,39,66,65],
-    eventDef;
+Y.Event.define('konami', {
+    _keys: [ 38, 38, 40, 40, 37, 39, 37, 39, 66, 65 ],
 
-eventDef = {
-    on: function (type, fn, el) {
-        var args = Y.Array(arguments,0,true),
-            ename;
+    _attach: function (node, sub, notifier, filter) {
+        var method = (filter) ? 'delegate' : 'on',
+            progressKey = '-yui3-konami-progress(' + Y.guid() + ')',
+            keys = this._keys;
 
-        el = args[2] = Y.get(el);
+        sub['_' + method + 'Handle'] = node[method]("keydown", function (e) {
+            var progress = this.getData(progressKey) || 0;
 
-        if (el) {
-            ename = ('konami_' + Y.stamp(el)).replace(/,/g,'_');
-
-            if (!Y.getEvent(ename)) {
-                progress[ename] = 0;
-                handlers[ename] = {};
-
-                handlers[ename].dom = el.on('keydown', function (e) {
-                    if (e.keyCode === keys[progress[ename]]) {
-                        if (++progress[ename] === keys.length) {
-                            Y.fire(ename,e);
-                            handlers[ename].dom.detach();
-                            handlers[ename].proxy.detach();
-                            delete handlers[ename];
-                        }
-                    } else {
-                        progress[ename] = 0;
-                    }
-                });
+            if (e.keyCode === keys[progress]) {
+                if (++progress === 10) {
+                    this.clearData(progressKey);
+                    notifier.fire();
+                    node.detach('konami');
+                }
+            } else {
+                progress = 0;
             }
 
-            args[0] = ename;
-            args.splice(2,1);
+            this.setData(progressKey, progress);
 
-            handlers[ename].proxy = Y.on.apply(Y,args);
+        }, (filter || node));
+    },
+
+    on: function () {
+        this._attach.apply(this, arguments);
+    },
+    delegate: function () {
+        this._attach.apply(this, arguments);
+    },
+    detach: function (node, sub) {
+        if (sub._onHandle) {
+            sub._onHandle.detach();
+        }
+    },
+    detachDelegate: function (node, sub) {
+        if (sub._delegateHandle) {
+            sub._delegateHandle.detach();
         }
     }
-};
-
-Y.Env.evt.plugins.konami = eventDef;
-if (Y.Node) {
-    Y.Node.DOM_EVENTS.konami = eventDef;
-}
+});

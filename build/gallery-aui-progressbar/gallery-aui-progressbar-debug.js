@@ -84,7 +84,7 @@ var L = A.Lang,
  *
  * @class ProgressBar
  * @constructor
- * @extends Base
+ * @extends Component
  */
 var ProgressBar = A.Component.create(
 	{
@@ -468,4 +468,4 @@ var ProgressBar = A.Component.create(
 A.ProgressBar = ProgressBar;
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-base'], skinnable:true});

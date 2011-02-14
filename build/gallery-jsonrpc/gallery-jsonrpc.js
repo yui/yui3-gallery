@@ -97,7 +97,7 @@ Y.JSONRPC = Y.mix(JSONRPC, {
                 config = this._config,
                 ioConfig = {
                     headers: {
-                        'content-type': 'application/json'
+                        'Content-Type': 'application/json; charset=utf-8'
                     },
                     method: config.method,
                     sync: config.sync,
@@ -167,7 +167,7 @@ Y.JSONRPC = Y.mix(JSONRPC, {
 
             Y.io(config.url, {
                 headers: {
-                    'content-type': 'application/json'
+                    'Content-Type': 'application/json; charset=utf-8'
                 },
                 sync: config.sync,
                 on: {
@@ -216,4 +216,4 @@ Y.jsonrpc = function (url, method, params, callback) {
 };
 
 
-}, 'gallery-2010.10.27-19-38' ,{requires:['io-base', 'event-custom', 'json']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['io-base', 'event-custom', 'json']});

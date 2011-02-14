@@ -55,10 +55,18 @@ YUI.add('gallery-ellipsis', function(Y) {
             charIncrement = currentLength,
       
             // copy the element so we can string length invisibly
-            clone = Y.one(document.createElement(yEl.get('nodeName'))),
+            clone         = Y.one(document.createElement(yEl.get('nodeName'))),
+
+            // the allowable difference when comparing floating point numbers
+            fp_epsilon    = 0.01,
+
+            // floating point comparison
+            fp_equals     = function (a, b) { return Math.abs(a - b) <= fp_epsilon; },
+            fp_greater    = function (a, b) { return a - b >= fp_epsilon; },
+            fp_lesser     = function (a, b) { return a - b <= fp_epsilon; },
 
             // some current values used to cache .getComputedStyle() accesses and compare to our goals
-            lineHeight, targetHeight, currentHeight;
+            lineHeight, targetHeight, currentHeight, lastKnownGood;
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @ NOTE: I'm intentionally ignoring padding as .getComputedStyle('height') @
@@ -88,7 +96,7 @@ YUI.add('gallery-ellipsis', function(Y) {
         Y.one('body').append(clone);
 
         // get the height of the node with only 1 character of text (should be 1 line)
-        lineHeight    = parseInt(clone.getComputedStyle('height'));
+        lineHeight    = parseFloat(clone.getComputedStyle('height'), 10);
 
         // set overflow back to visible
         clone.setStyle('overflow', 'visible');
@@ -100,7 +108,7 @@ YUI.add('gallery-ellipsis', function(Y) {
         clone.set('text', originalText);
 
         // ok, now that we have a node in the DOM with the right text, measure it's height
-        currentHeight = parseInt(clone.getComputedStyle('height'));
+        currentHeight = parseFloat(clone.getComputedStyle('height'), 10);
 
         // console.log('lineHeight', lineHeight);
         // console.log('currentHeight', currentHeight);
@@ -109,29 +117,29 @@ YUI.add('gallery-ellipsis', function(Y) {
         // console.log('yEl.get(\'text\').length', yEl.get('text').length);
 
         // quick sanity check
-        if (currentHeight <= targetHeight && originalText.length === yEl.get('text').length) {
+        if (fp_lesser(currentHeight, targetHeight) && originalText.length === yEl.get('text').length) {
             // console.log('truncation not necessary!');
             clone.remove();
             return;
         }
 
         // now, let's start looping through and slicing the text as necessary
-        for (var lastKnownGood; charIncrement >= 1;) {
+        for (; charIncrement >= 1; ) {
 
             // increment decays by half every time 
             charIncrement = Math.floor(charIncrement / 2);
             
             // if the height is too big, remove some chars, else add some
-            currentLength += currentHeight > targetHeight ? -charIncrement : +charIncrement;
+            currentLength += fp_greater(currentHeight, targetHeight) ? -charIncrement : +charIncrement;
             
             // try text at current length
             clone.set('text', originalText.slice(0, currentLength - conf.ellipsis.length) + conf.ellipsis);
             
             // compute the current height
-            currentHeight = parseInt(clone.getComputedStyle('height'));
+            currentHeight = parseFloat(clone.getComputedStyle('height'), 10);
 
             // we only want to store values that aren't too big
-            if (currentHeight <= targetHeight) {
+            if (fp_equals(currentHeight, targetHeight) || fp_lesser(currentHeight, targetHeight)) {
                 lastKnownGood = currentLength;
             }
 
@@ -176,4 +184,4 @@ YUI.add('gallery-ellipsis', function(Y) {
     Y.NodeList.importMethod(Y.Node.prototype, 'ellipsis');
 
 
-}, 'gallery-2010.11.17-21-32' ,{requires:['base','node']});
+}, 'gallery-2011.02.02-21-07' ,{requires:['base','node']});

@@ -1,37 +1,158 @@
-A.mix(A.Array, {
-	remove: function(a, from, to) {
-	  var rest = a.slice((to || from) + 1 || a.length);
-	  a.length = (from < 0) ? (a.length + from) : from;
+var Lang = A.Lang,
+	isArray = Lang.isArray,
+	isFunction = Lang.isFunction,
+	isString = Lang.isString,
 
-	  return a.push.apply(a, rest);
-	},
+	AArray = A.Array,
+	LString = A.namespace('Lang.String'),
+	arrayIndexOf = AArray.indexOf,
 
-	removeItem: function(a, item) {
-		var index = A.Array.indexOf(a, item);
+	EMPTY_STR = '',
 
-		return A.Array.remove(a, index);
-	}
-});
-
-var Lang = A.Lang;
-var isArray = Lang.isArray;
-var isFunction = Lang.isFunction;
-var isString = Lang.isString;
+	DOC = A.config.doc,
+	FIRST_CHILD = 'firstChild',
+	INNER_HTML = 'innerHTML',
+	NODE_VALUE = 'nodeValue',
+	NORMALIZE = 'normalize';
 
 A.mix(
-	Lang,
+	LString,
 	{
-		emptyFn: function() {},
-		emptyFnFalse: function() {
-			return false;
+		contains: function(s, ss) {
+		  return s.indexOf(ss) != -1;
 		},
-		emptyFnTrue: function() {
-			return true;
+
+		endsWith: function(str, suffix) {
+			var length = (str.length - suffix.length);
+
+			return ((length >= 0) && (str.indexOf(suffix, length) == length));
 		},
 
 		// Courtesy of: http://simonwillison.net/2006/Jan/20/escape/
 		escapeRegEx: function(str) {
 			return str.replace(/([.*+?^$(){}|[\]\/\\])/g, '\\$1');
+		},
+
+		repeat: function(string, length) {
+			return new Array(length + 1).join(string);
+		},
+
+		padNumber: function(num, length, precision) {
+			var str = precision ? Number(num).toFixed(precision) : String(num);
+			var index = str.indexOf('.');
+
+			if (index == -1) {
+				index = str.length;
+			}
+
+			return LString.repeat('0', Math.max(0, length - index)) + str;
+		},
+
+		remove: function(s, substitute, all) {
+			var re = new RegExp(LString.escapeRegEx(substitute), all ? 'g' : '');
+
+			return s.replace(re, '');
+		},
+
+		removeAll: function(s, substitute) {
+			return LString.remove(s, substitute, true);
+		},
+
+		startsWith: function(str, prefix) {
+			return (str.lastIndexOf(prefix, 0) == 0);
+		},
+
+		trim: Lang.trim,
+
+		// inspired from Google unescape entities
+		unescapeEntities: function(str) {
+			if (LString.contains(str, '&')) {
+				if (DOC && !LString.contains(str, '<')) {
+					str = LString._unescapeEntitiesUsingDom(str);
+				}
+				else {
+					// Fall back on pure XML entities
+					str = LString._unescapeXmlEntities(str);
+				}
+			}
+
+			return str;
+		},
+
+		_unescapeEntitiesUsingDom: function(str) {
+			var el = LString._unescapeNode;
+
+			el[INNER_HTML] = str;
+
+			if (el[NORMALIZE]) {
+				el[NORMALIZE]();
+			}
+
+			str = el.firstChild.nodeValue;
+
+			el[INNER_HTML] = EMPTY_STR;
+
+			return str;
+		},
+
+		_unescapeXmlEntities: function(str) {
+			return str.replace(/&([^;]+);/g, function(s, entity) {
+				switch (entity) {
+					case 'amp':
+						return '&';
+					case 'lt':
+						return '<';
+					case 'gt':
+						return '>';
+					case 'quot':
+						return '"';
+					default:
+						if (entity.charAt(0) == '#') {
+							var n = Number('0' + entity.substr(1));
+
+							if (!isNaN(n)) {
+								return String.fromCharCode(n);
+							}
+						}
+
+					return s;
+				}
+			});
+		},
+
+		_unescapeNode: DOC.createElement('a')
+	}
+);
+
+A.mix(
+	AArray,
+	{
+		remove: function(a, from, to) {
+		  var rest = a.slice((to || from) + 1 || a.length);
+		  a.length = (from < 0) ? (a.length + from) : from;
+
+		  return a.push.apply(a, rest);
+		},
+
+		removeItem: function(a, item) {
+			var index = arrayIndexOf(a, item);
+
+			return AArray.remove(a, index);
+		}
+	}
+);
+
+A.mix(
+	Lang,
+	{
+		emptyFn: function() {},
+
+		emptyFnFalse: function() {
+			return false;
+		},
+
+		emptyFnTrue: function() {
+			return true;
 		},
 
 		isGuid: function(id) {

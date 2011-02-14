@@ -7,6 +7,7 @@ YUI.add('gallery-aui-editable', function(A) {
  */
 
 var Lang = A.Lang,
+	LString = Lang.String,
 	isFunction = Lang.isFunction,
 
 	getClassName = A.ClassNameManager.getClassName,
@@ -144,9 +145,6 @@ var Editable = A.Component.create(
 					if (!node) {
 						A.error('AUI.Editable: Invalid Node Given: ' + value);
 					}
-					else {
-						node = node.item(0);
-					}
 
 					return node;
 				}
@@ -185,9 +183,6 @@ var Editable = A.Component.create(
 
 					if (!node) {
 						A.error('AUI.Editable: Invalid renderTo Given: ' + value);
-					}
-					else {
-						node = node.item(0);
 					}
 
 					return node;
@@ -648,7 +643,7 @@ var Editable = A.Component.create(
 					value = instance._toText(value);
 				}
 
-				instance.inputNode.set('value', value);
+				instance.inputNode.set('value', LString.unescapeEntities(value));
 			},
 
 			/**
@@ -783,4 +778,4 @@ var Editable = A.Component.create(
 A.Editable = Editable;
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-form-combobox']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-base','gallery-aui-form-combobox'], skinnable:true});

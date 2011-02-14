@@ -1,20 +1,16 @@
 YUI.add('gallery-dialog', function(Y) {
 
 var YL = Y.Lang,
-    LABEL = {
-      CANCEL : 'Cancel',
-      OK : 'OK'
-    },
-    CALLBACK = {
-      CANCEL : 'cancel',
-      OK : 'ok'
-    },
+    LABEL_CANCEL = 'Cancel',
+  LABEL_OK = 'OK',
+    CALLBACK_CANCEL = 'cancel',
+    CALLBACK_OK = 'ok',
     EMPTY_FN = function(){},
     ATTR_CALLBACKS = 'callbacks',
     ATTR_DEFAULT_BUTTON = 'defaultButton',
     ATTR_DRAGGABLE = 'draggable',
     ATTR_RETURN_VAL = 'returnVal',
-    ATTR_TYPE = 'type';
+    ATTR_ICON = 'icon';
 
 Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
 
@@ -49,15 +45,10 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
     Y.one('body').set('tabIndex',-1).focus();
 
     Y.Dialog.superclass.hide.apply(this,arguments);
-    var fn = (callbackType) ? this.getCallback(callbackType) : null;
+    var fn = (callbackType) ? this.getCallback(callbackType) : this.getCallback(CALLBACK_CANCEL);
     if(YL.isFunction(fn)) {
       (Y.bind(fn,this,this.get(ATTR_RETURN_VAL)))();
       this.set(ATTR_RETURN_VAL,null);
-    }else{
-      fn = this.getCallback(CALLBACK.CANCEL);
-      if(fn) {
-        (fn)();
-      }
     }
 
     this.anim.get('animHide').on('end',Y.bind(function(){
@@ -74,8 +65,9 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
     Y.log('initializer','info','Y.Dialog');
     this.get(ATTR_DRAGGABLE);
 
-    this.handleEscape = Y.once('esc',Y.bind(function(){this.hide();},this),Y.config.doc);
+    this.handleEscape = Y.once('esc', Y.bind(function(){ this.hide(); }, this), Y.config.doc);
     Y.Dialog.superclass.show.apply(this,arguments);
+  this.syncUI();
 
     var dBtn = this.get(ATTR_DEFAULT_BUTTON);
 
@@ -83,7 +75,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
       dBtn.focus();
     }
 
-    this.get('boundingBox').set('tabIndex',-1);
+    this.get('boundingBox').set('tabIndex', -1);
   },
 
   /**
@@ -96,7 +88,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   header : function(content, placement) {
     Y.log('initializer','info','Y.Dialog');
-    this._setContent(Y.WidgetStdMod.HEADER,content,placement);
+    this._setContent(Y.WidgetStdMod.HEADER, content, placement);
   },
 
   /**
@@ -109,7 +101,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   body : function(content, placement) {
     Y.log('initializer','info','Y.Dialog');
-    this._setContent(Y.WidgetStdMod.BODY,content,placement);
+    this._setContent(Y.WidgetStdMod.BODY, content, placement);
   },
 
   /**
@@ -122,7 +114,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   footer : function(content, placement) {
     Y.log('initializer','info','Y.Dialog');
-    this._setContent(Y.WidgetStdMod.FOOTER,content,placement);
+    this._setContent(Y.WidgetStdMod.FOOTER, content, placement);
   },
 
   /**
@@ -135,7 +127,8 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   build : function(header, body, buttons) {
     Y.log('initializer','info','Y.Dialog');
-    var i,l,btn;
+  
+    var i, l, btn;
 
     this.purge();
 
@@ -153,7 +146,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
         btn = buttons[i];
         btn.render();
         if(btn.get('default')) {
-          this.set(ATTR_DEFAULT_BUTTON,btn);
+          this.set(ATTR_DEFAULT_BUTTON, btn);
         }
 
         this.footer(btn.get('boundingBox'), 'after');
@@ -206,13 +199,13 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    * @returns this
    */
   addCloseButton : function() {
-    Y.log('addCloseButton','info','Y.Dialog');
+    Y.log('addCloseButton', 'info', 'Y.Dialog');
     var btn = new Y.Button({
       label: "X",
       callback: Y.bind(function(e){
         this.hide();
       },this),
-      type: 'close'
+      title: 'Close'
     });
     btn.render();
     this.header(btn.get('boundingBox'),'after');
@@ -241,14 +234,14 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   alert: function(msg, title, callback){
     Y.log('initializer','info','Y.Dialog');
-    this.set(ATTR_TYPE,'alert');
+    this.set(ATTR_ICON,'alert');
 
-    this.addCallback(CALLBACK.CANCEL, callback || EMPTY_FN);
+    this.addCallback(CALLBACK_CANCEL, callback || EMPTY_FN);
 
     var header = title || this._getDefaultTitle(),
         body = msg || null,
         okBtn = new Y.Button({
-          label: LABEL.OK,
+          label: LABEL_OK,
           callback: Y.bind(function(e){
             this.hide();
           },this),
@@ -268,22 +261,22 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   confirm: function(msg, title, okCallback, cancelCallback){
     Y.log('initializer','info','Y.Dialog');
-    this.set(ATTR_TYPE,'confirm');
+    this.set(ATTR_ICON,'confirm');
 
-    this.addCallback(CALLBACK.OK, okCallback || EMPTY_FN);
-    this.addCallback(CALLBACK.CANCEL, cancelCallback || EMPTY_FN);
+    this.addCallback(CALLBACK_OK, okCallback || EMPTY_FN);
+    this.addCallback(CALLBACK_CANCEL, cancelCallback || EMPTY_FN);
 
     var header = title || this._getDefaultTitle(),
         body = msg || null,
         okBtn = new Y.Button({
-          label: LABEL.OK,
+          label: LABEL_OK,
           callback: Y.bind(function(e){
-            this.hide(CALLBACK.OK);
+            this.hide(CALLBACK_OK);
           },this),
           'default': true
         }),
         cancelBtn = new Y.Button({
-          label: LABEL.CANCEL,
+          label: LABEL_CANCEL,
           callback: Y.bind(function(e){
             this.hide();
           },this)
@@ -304,22 +297,22 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   prompt: function(msg, title, okCallback, cancelCallback){
     Y.log('initializer','info','Y.Dialog');
-    this.set(ATTR_TYPE,'prompt');
+    this.set(ATTR_ICON,'prompt');
 
-    this.addCallback(CALLBACK.OK, okCallback || EMPTY_FN);
-    this.addCallback(CALLBACK.CANCEL, cancelCallback || EMPTY_FN);
+    this.addCallback(CALLBACK_OK, okCallback || EMPTY_FN);
+    this.addCallback(CALLBACK_CANCEL, cancelCallback || EMPTY_FN);
 
     var header = title || this._getDefaultTitle(),
         body = msg || null, promptInput,
         okBtn = new Y.Button({
-          label: LABEL.OK,
+          label: LABEL_OK,
           callback: Y.bind(function(e){
-            this.hide(CALLBACK.OK);
+            this.hide(CALLBACK_OK);
           },this),
           'default': true
         }),
         cancelBtn = new Y.Button({
-          label: LABEL.CANCEL,
+          label: LABEL_CANCEL,
           callback: Y.bind(function(e){
             this.hide();
           },this)
@@ -330,24 +323,20 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
     // need to build the input box and bind the events to it
     //   then append it to the body
     promptInput = Y.Node.create('<input type="text" style="display: block; margin-top: 0.5em;">');
-    if(Y.UA.ie < 8) {
-      promptInput.setStyle('width','300px');
-    }else{
-      promptInput.setStyle('width','100%');
-    }
+  promptInput.addClass(this.getClassName('prompt'));
 
-    promptInput.on('keyup',Y.bind(function(e){
+    promptInput.on('keyup', Y.bind(function(e){
       this.set(ATTR_RETURN_VAL, promptInput.get('value'));
     },this));
 
-    this.handleEnter = Y.once('enter',Y.bind(function(e){
+    this.handleEnter = Y.once('enter', Y.bind(function(e){
       var defBtn = this.get(ATTR_DEFAULT_BUTTON);
       if(defBtn) {
         defBtn.fire('press');
       }
     },this),promptInput);
 
-    this.body(promptInput,'after');
+    this.body(promptInput, 'after');
 
     this.addCloseButton().show();
   },
@@ -390,7 +379,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
 
   _setContent : function(section, content, placement) {
     Y.log('_setContent','info','Y.Dialog');
-    this.setStdModContent(section,content,this._standardizePlacement(placement));
+    this.setStdModContent(section, content, this._standardizePlacement(placement));
   },
 
   /**
@@ -418,17 +407,25 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
 
 },{
   ATTRS : {
+  
+    centered : {
+    value : true
+  },
+  
     callbacks : {
       value : {}
     },
+  
     constrain : {
       value : true
     },
+  
     defaultButton : {
       validator : function(val) {
         return (val instanceof Y.Button);
       }
     },
+  
     draggable : {
       value : true,
       validator : YL.isBoolean,
@@ -437,25 +434,30 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
         return val;
       }
     },
+  
     render : {
       value : true
     },
+  
     returnVal : {
       value : null
     },
-    type : {
+  
+    icon : {
       validator : YL.isString,
       setter : function(val) {
         this.get('boundingBox').replaceClass(
-          this.getClassName(ATTR_TYPE, this.get(ATTR_TYPE) || 'default'),
-          this.getClassName(ATTR_TYPE, val || 'default')
+          this.getClassName(ATTR_ICON, this.get(ATTR_ICON) || 'default'),
+          this.getClassName(ATTR_ICON, val || 'default')
         );
         return val;
       }
     },
+  
     visible : {
       value : false
     },
+  
     zIndex : {
       value : 20000
     }
@@ -463,4 +465,4 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
 });
 
 
-}, 'gallery-2010.09.08-19-45' ,{requires:['gallery-overlay-extras','gallery-button','overlay','widget-anim','node','gallery-event-nav-keys','dd']});
+}, 'gallery-2011.02.02-21-07' ,{requires:['gallery-overlay-extras','gallery-button','overlay','widget-anim','node','gallery-event-nav-keys','dd-plugin']});

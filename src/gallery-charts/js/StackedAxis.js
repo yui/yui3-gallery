@@ -1,3 +1,11 @@
+/**
+ * StackedAxis manages stacked numeric data on an axis.
+ *
+ * @param {Object} config (optional) Configuration parameters for the Chart.
+ * @class StackedAxis
+ * @constructor
+ * @extends NumericAxis
+ */
 function StackedAxis(config)
 {
 	StackedAxis.superclass.constructor.apply(this, arguments);
@@ -9,17 +17,16 @@ StackedAxis.NAME = "stackedAxis";
 Y.extend(StackedAxis, Y.NumericAxis,
 {
     /**
-	 * @private
-	 * Determines the maximum and minimum values for the axis.
-	 */
-	_updateMinAndMax: function()
-	{
-		var max = 0,
-			min = 0,
-			pos = 0,
+     * @private
+     */
+    _updateMinAndMax: function()
+    {
+        var max = 0,
+            min = 0,
+            pos = 0,
             neg = 0,
             len = 0,
-			i = 0,
+            i = 0,
             key,
             num,
             keys = this.get("keys");
@@ -40,10 +47,10 @@ Y.extend(StackedAxis, Y.NumericAxis,
                 if(keys.hasOwnProperty(key))
                 {
                     num = keys[key][i];
-					if(isNaN(num))
-					{
+                    if(isNaN(num))
+                    {
                         continue;
-					}
+                    }
                     if(num >= 0)
                     {
                         pos += num;
@@ -71,21 +78,8 @@ Y.extend(StackedAxis, Y.NumericAxis,
                 min = Math.min(min, pos);
             }
         }
-        if(this._roundMinAndMax && !isNaN(this.get("roundingUnit")))
-		{
-			this._dataMaximum = this._roundUpToNearest(max, this.get("roundingUnit"));
-			this._dataMinimum = this._roundDownToNearest(min, this.get("roundingUnit"));
-		}
-		else
-		{
-			this._dataMaximum = max;
-			this._dataMinimum = min;
-		}
-		if(this._alwaysShowZero && min > 0)
-		{
-			this._dataMinimum = Math.min(0, this._dataMinimum);
-		}
-	}
+        this._roundMinAndMax(min, max);
+    }
 });
 
 Y.StackedAxis = StackedAxis;

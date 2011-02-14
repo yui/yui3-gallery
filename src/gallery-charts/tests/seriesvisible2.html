@@ -43,7 +43,7 @@
                 date:{
                     label:{
                         rotation:-45,
-                        color: "#ff0000",
+                        color: "#ff0000"
                     }
                 }
             },
@@ -99,7 +99,7 @@
             return msg; 
         }
 
-        var mychart = new Y.Chart({dataProvider:myDataValues, interactionType:"all", categoryKey:"date", styles:styleDef, horizontalGridlines:true, verticalGridlines:true, render:"#mychart", tooltip: {labelFunction:tooltipLabelFunction}, seriesCollection: [{yKey:"expenses", visible:false}]});
+        var mychart = new Y.Chart({dataProvider:myDataValues, interactionType:"planar", categoryKey:"date", styles:styleDef, horizontalGridlines:true, verticalGridlines:true, render:"#mychart", tooltip: {labelFunction:tooltipLabelFunction}, seriesCollection: [{yKey:"expenses", visible:false}]});
     });
 </script>
 </body>
