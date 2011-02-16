@@ -1039,4 +1039,4 @@ Y.namespace("Treeble").treeValueFormatter = function(o)
 };
 
 
-}, 'gallery-2011.01.26-20-33' ,{requires:['datasource']});
+}, 'gallery-2011.02.16-20-31' ,{requires:['datasource'], skinnable:true});

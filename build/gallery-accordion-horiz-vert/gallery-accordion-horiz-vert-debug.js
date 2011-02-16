@@ -1082,4 +1082,4 @@ Y.extend(Accordion, Y.Widget,
 Y.Accordion = Accordion;
 
 
-}, 'gallery-2011.02.09-21-32' ,{optional:['anim-base'], requires:['widget','selector-css3']});
+}, 'gallery-2011.02.16-20-31' ,{requires:['widget','selector-css3'], optional:['anim-base'], skinnable:true});

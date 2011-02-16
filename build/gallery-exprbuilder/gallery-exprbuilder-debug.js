@@ -621,4 +621,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2010.08.11-20-39' ,{requires:['gallery-querybuilder','gallery-formmgr']});
+}, 'gallery-2011.02.16-20-31' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});

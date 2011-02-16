@@ -972,4 +972,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2011.02.09-21-32' ,{requires:['widget','substitute'], optional:['gallery-formmgr','gallery-scrollintoview']});
+}, 'gallery-2011.02.16-20-31' ,{optional:['gallery-formmgr','gallery-scrollintoview'], requires:['widget','substitute'], skinnable:true});

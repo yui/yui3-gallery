@@ -2486,4 +2486,4 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 });
 
 
-}, 'gallery-2011.02.09-21-32' ,{requires:['widget','event-key','substitute']});
+}, 'gallery-2011.02.16-20-31' ,{requires:['widget','event-key','substitute'], skinnable:true});
