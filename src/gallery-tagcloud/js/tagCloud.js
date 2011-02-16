@@ -1,4 +1,3 @@
-
     function highlight(node, text) {
         var skip = 0, pos, i, spannode, middlebit, endbit, middleclone;
 
@@ -41,8 +40,7 @@
     Y.NodeList.importMethod(Y.Node.prototype, "removeHighlight");
 
     function tagCloud(node, outId, options) {
-        var out, cloud = {}, cl = [], max = 0, i, n, t,
-            tags = Y.one(node).get("text").replace(/\W/g, ' ').split(' ');
+        var out, cloud = {}, cl = [], max = 0, i, n, t, tags;
 
         outId = outId || "#dynacloud";
 
@@ -50,6 +48,12 @@
         options.max = options.max || 20;
         options.scale = options.scale || 4;
         options.sort = options.sort === undefined ? true : options.sort;
+        options.fieldDelimeter = options.fieldDelimeter || ' ';
+        options.fieldRegex = options.fieldRegex || new RegExp(/\W/g);
+
+        tags = Y.one(node).get("text")
+            .replace(options.fieldRegex, options.fieldDelimeter)
+            .split(options.fieldDelimeter);
 
         n = tags.length;
         for (i = 0; i < n; i += 1) {
@@ -85,8 +89,7 @@
             Y.one("body").append('<p id="dynacloud"><\/p>');
             out = Y.one(outId);
         }
-
-        out.get('children').remove(true);
+        out.empty(true);
 
         n = Math.min(options.max, cl.length);
         for (i = 0; i < n; i += 1) {
@@ -105,4 +108,3 @@
     }
 
     Y.Node.addMethod("tagCloud", tagCloud);
-
