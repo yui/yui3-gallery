@@ -1509,7 +1509,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @return {Y.AccordionItem} The removed item or null if not found
      */
     removeItem: function( p_item ){
-        var items, bb, item = null, itemIndex;
+        var items, bb, item = null, itemIndex, allowed;
 
         items = this.get( ITEMS );
 
@@ -1522,10 +1522,13 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
         }
 
         if( itemIndex >= 0 ){
-
-            this.fire( BEFOREITEMREMOVE, {
+            allowed = this.fire( BEFOREITEMREMOVE, {
                 item: p_item
             });
+
+            if( !allowed ){
+                return null;
+            }
 
             item = items.splice( itemIndex, 1 )[0];
 
@@ -2887,4 +2890,4 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
 
 
 
-}, 'gallery-2011.01.03-18-30' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});
+}, 'gallery-2011.02.18-23-10' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});
