@@ -235,6 +235,21 @@ YUI({
             items = that.accordion1.get( "items" );
 
             Y.Assert.areSame( item3, items[ 0 ], "The items must be identical" );
+        },
+
+        testCancelRemoveItem: function(){
+            var items, item3;
+
+            that.accordion1.once("beforeItemRemove", function (e) {
+                e.halt();
+            });
+
+            item3 = that.accordion1.removeItem( 3 );
+
+            items = that.accordion1.get( "items" );
+
+            Y.Assert.areSame( 4, items.length, "There must be still 4 items" );
+            Y.Assert.areSame( null, item3, "The return value in case of canceled remove must be null" );
         }
     });
     
