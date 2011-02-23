@@ -28,7 +28,8 @@ YUI({
     this.accordion1 = new Y.Accordion( {
         srcNode: "#acc1",
         useAnimation: true,
-        collapseOthersOnExpand: true
+        collapseOthersOnExpand: true,
+		itemChosen: ['click', 'mouseenter']
     });
 
 
@@ -263,7 +264,7 @@ YUI({
             header = Y.Node.getDOMNode(item3.getStdModNode( Y.WidgetStdMod.HEADER ));
             
             Y.Event.simulate( header, "click" );
-            Y.Assert.areSame( true, item3.get( "expanded" ), "Item3 must be exapnded now" );
+            Y.Assert.areSame( true, item3.get( "expanded" ), "Item3 must be expanded now" );
         },
         
         testClickAlwaysVisible: function(){
@@ -276,11 +277,23 @@ YUI({
 
             Y.Event.simulate( iconAlwaysVisible, "click" );
             
-            Y.Assert.areSame( true, item2.get( "expanded" ), "Item3 must be exapnded now" );
+            Y.Assert.areSame( true, item2.get( "expanded" ), "Item3 must be expanded now" );
             Y.Assert.areSame( true, item2.get( "alwaysVisible" ), "Item3 must be always visible" );
 
             Y.Assert.areSame( false, item3.get( "expanded" ), "Item3 must be collapsed now" );
-        }
+        },
+
+		testMouseEnter: function(){
+			var item0, header;
+
+			item0 = that.accordion1.getItem( 0 );
+
+			header = Y.Node.getDOMNode(item0.getStdModNode( Y.WidgetStdMod.HEADER ));
+
+			Y.Event.simulate( header, "mouseover" );
+
+			Y.Assert.areSame( false, item0.get( "expanded" ), "Item0 must be collapsed now" );
+		}
         
     });
         
