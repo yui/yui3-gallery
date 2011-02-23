@@ -124,6 +124,11 @@ function neonOn()
 	}
 
 	this.node.setStyle('display', '');
+
+	if (this.flicker_count === 0)
+	{
+		this.node.fire('neon:finished');
+	}
 }
 
 function show()
