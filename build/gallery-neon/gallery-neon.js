@@ -126,6 +126,11 @@ function neonOn()
 	}
 
 	this.node.setStyle('display', '');
+
+	if (this.flicker_count === 0)
+	{
+		this.node.fire('neon:finished');
+	}
 }
 
 function show()
@@ -157,4 +162,4 @@ Y.namespace("Plugin");
 Y.Plugin.Neon = Neon;
 
 
-}, 'gallery-2011.02.18-23-10' ,{requires:['node-style','node-pluginhost','anim-easing','plugin']});
+}, 'gallery-2011.02.23-19-01' ,{requires:['node-style','node-pluginhost','anim-easing','plugin']});

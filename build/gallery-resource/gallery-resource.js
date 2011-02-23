@@ -61,7 +61,9 @@ YUI.add('gallery-resource', function(Y) {
 				contentType	: 'application/json; charset=UTF-8',
 				serialize	: Y.JSON.stringify,
 				deserialize	: function(r){
-					return Y.JSON.parse(r.responseText);
+					if (r.responseText) {
+						return Y.JSON.parse(r.responseText);
+					}
 				}
 			},
 			
@@ -343,4 +345,4 @@ YUI.add('gallery-resource', function(Y) {
 	Y.Resource = Resource;
 
 
-}, 'gallery-2011.01.26-20-33' ,{requires:['base-base', 'io-base', 'querystring-stringify-simple', 'substitute', 'json']});
+}, 'gallery-2011.02.23-19-01' ,{requires:['base-base', 'io-base', 'querystring-stringify-simple', 'substitute', 'json']});

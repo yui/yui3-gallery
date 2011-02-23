@@ -266,6 +266,19 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
     },
 
 
+	/**
+     * Binds an event to Accordion's contentBox.
+     *
+     * @method _bindItemChosenEvent
+     * @protected
+     */
+	_bindItemChosenEvent: function(itemChosenEvent) {
+		var contentBox;
+
+		contentBox = this.get( CONTENT_BOX );
+		contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), '.yui3-widget-hd' );
+	},
+
     /**
      * Contains items for collapsing
      * @property _forCollapsing
@@ -1340,18 +1353,26 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
 
 
     /**
-     * Add listener to <code>itemChosen</code> event in Accordion's content box
+     * Add listener(s) to <code>itemChosen</code> event in Accordion's content box.
+	 * If itemChosen is an Array, this function will invoke multiple times _bindItemChosenEvent
      *
      * @method bindUI
      * @protected
      */
     bindUI: function(){
-        var contentBox, itemChosenEvent;
+		var i, itemChosenEvent, length;
 
-        contentBox = this.get( CONTENT_BOX );
         itemChosenEvent = this.get( 'itemChosen' );
 
-        contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), '.yui3-widget-hd' );
+		if( Lang.isArray(itemChosenEvent) ){
+			length = itemChosenEvent.length;
+
+			for( i = 0; i < length; i++ ) {
+				this._bindItemChosenEvent(itemChosenEvent[i]);
+			}
+		} else {
+			this._bindItemChosenEvent(itemChosenEvent);
+		}
     },
 
 
@@ -1647,16 +1668,18 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
     ATTRS : {
         /**
          * @description The event on which Accordion should listen for user interactions.
-         * The value can be also mousedown or mouseup. Mousedown event can be used if
-         * drag&drop is not enabled
+         * The value can be also 'mousedown', 'mouseup' or ['mouseenter','click'].
+		 * Mousedown event can be used if drag&drop is not enabled.
          *
          * @attribute itemChosen
          * @default click
-         * @type String
+         * @type String|Array
          */
         itemChosen: {
             value: "click",
-            validator: Lang.isString
+            validator: function( value ) {
+				return Lang.isString(value) || Lang.isArray(value);
+			}
         },
 
         /**
@@ -2890,4 +2913,4 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
 
 
 
-}, 'gallery-2011.02.18-23-10' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});
+}, 'gallery-2011.02.23-19-01' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});
