@@ -6,145 +6,149 @@
  * @description A select field node
  */
 Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.WidgetChild], {
-	/**
+    /**
 	 * @method _renderFieldNode
 	 * @protected
 	 * @description Draws the select node into the contentBox
 	 */
-    _renderFieldNode : function () {
+    _renderFieldNode: function() {
         var contentBox = this.get('contentBox'),
-            field = contentBox.one('#' + this.get('id'));
-                
+        field = contentBox.one('#' + this.get('id'));
+
         if (!field) {
             field = Y.Node.create(Y.SelectField.NODE_TEMPLATE);
             contentBox.appendChild(field);
         }
-        
+
         this._fieldNode = field;
 
         this._renderOptionNodes();
     },
-    
-	/**
+
+    /**
 	 * @method _renderOptionNodes
 	 * @protected
 	 * @description Renders the option nodes into the select node
 	 */
-    _renderOptionNodes : function () {
+    _renderOptionNodes: function() {
         var choices = this.get('choices'),
-            elOption;
-       
-		// Create the "Choose one" option
-		if (this.get('useDefaultOption') === true) {
-    		elOption = Y.Node.create(Y.SelectField.OPTION_TEMPLATE);
-    		this._fieldNode.appendChild(elOption);
-		}
+        elOption;
 
-		Y.Array.each(choices, function (c, i, a) {
-			elOption = Y.Node.create(Y.SelectField.OPTION_TEMPLATE);
+        // Create the "Choose one" option
+        if (this.get('useDefaultOption') === true) {
+            elOption = Y.Node.create(Y.SelectField.OPTION_TEMPLATE);
             this._fieldNode.appendChild(elOption);
-        }, this);
+        }
+
+        Y.Array.each(choices,
+        function(c, i, a) {
+            elOption = Y.Node.create(Y.SelectField.OPTION_TEMPLATE);
+            this._fieldNode.appendChild(elOption);
+        },
+        this);
     },
 
-	/**
+    /**
 	 * @method _syncFieldNode
 	 * @protected
 	 * @description Syncs the select node with the instance attributes
 	 */
-	_syncFieldNode : function () {
-		Y.SelectField.superclass.constructor.superclass._syncFieldNode.apply(this, arguments);
+    _syncFieldNode: function() {
+        Y.SelectField.superclass.constructor.superclass._syncFieldNode.apply(this, arguments);
 
-		this._fieldNode.setAttrs({
-			multiple : (this.get('multi') === true ? 'multiple' : '')
-		});
-	},
+        this._fieldNode.setAttrs({
+            multiple: (this.get('multi') === true ? 'multiple': '')
+        });
+    },
 
-	/**
+    /**
 	 * @method _syncOptionNodes
 	 * @protected
 	 * @description Syncs the option nodes with the choices attribute
 	 */
-	_syncOptionNodes : function () {
+    _syncOptionNodes: function() {
         var choices = this.get('choices'),
-			contentBox = this.get('contentBox'),
-			options = contentBox.all('option'),
-			useDefaultOption = this.get('useDefaultOption'),
-			currentVal = this.get('value');
+        contentBox = this.get('contentBox'),
+        options = contentBox.all('option'),
+        useDefaultOption = this.get('useDefaultOption'),
+        currentVal = this.get('value');
 
         if (useDefaultOption === true) {
             choices.unshift({
-                label : Y.SelectField.DEFAULT_OPTION_TEXT,
-                value : ''
+                label: Y.SelectField.DEFAULT_OPTION_TEXT,
+                value: ''
             });
         }
 
-		options.each(function(node, index, nodeList) {
-			var label = choices[index].label,
-				val = choices[index].value;
+        options.each(function(node, index, nodeList) {
+            var label = choices[index].label,
+            val = choices[index].value;
 
-			node.setAttrs({
-				innerHTML : label,
-				value : val
-			});
+            node.setAttrs({
+                innerHTML: label,
+                value: val
+            });
 
-			if (currentVal == val) {
-				node.setAttrs({
-					selected : true,
-					defaultSelected : true
-				});
-			}
-		}, this);
-	},
-    
-	/**
+            if (currentVal == val) {
+                node.setAttrs({
+                    selected: true,
+                    defaultSelected: true
+                });
+            }
+        },
+        this);
+    },
+
+    /**
 	 * @method clear
 	 * @description Restores the selected option to the default
 	 */
-    clear : function () {
+    clear: function() {
         this._fieldNode.value = '';
     },
 
-	bindUI : function () {
-		Y.SelectField.superclass.constructor.superclass.bindUI.apply(this, arguments);
-	},
+    bindUI: function() {
+        Y.SelectField.superclass.constructor.superclass.bindUI.apply(this, arguments);
+    },
 
-	syncUI : function () {
-		Y.SelectField.superclass.syncUI.apply(this, arguments);
-		this._syncOptionNodes();
-	}
-}, {
+    syncUI: function() {
+        Y.SelectField.superclass.syncUI.apply(this, arguments);
+        this._syncOptionNodes();
+    }
+},
+{
     /**
      * @property SelectField.NODE_TEMPLATE
      * @type String
      * @description Template used to draw a select node
      */
-    NODE_TEMPLATE : '<select></select>',
+    NODE_TEMPLATE: '<select></select>',
 
-	/**
+    /**
 	 * @property SelectField.OPTION_TEMPLATE
 	 * @type String
 	 * @description Template used to draw an option node
 	 */
-	OPTION_TEMPLATE : '<option></option>',
+    OPTION_TEMPLATE: '<option></option>',
 
-	/**
+    /**
 	 * @property SelectField.DEFAULT_OPTION_TEXT
 	 * @type String
 	 * @description The display title of the default choice in the select box
 	 */
-	DEFAULT_OPTION_TEXT : 'Choose one',
-	
-	ATTRS : {
-	    /**
+    DEFAULT_OPTION_TEXT: 'Choose one',
+
+    ATTRS: {
+        /**
 	     * @attribute useDefaultOption
 	     * @type Boolean
 	     * @default true
 	     * @description If true, the first option will use the DEFAULT_OPTION_TEXT
 	     *              to create a blank option
 	     */
-	    useDefaultOption : {
-	        validator : Y.Lang.isBoolean,
-	        value : true
-	    }
-	}
+        useDefaultOption: {
+            validator: Y.Lang.isBoolean,
+            value: true
+        }
+    }
 });
