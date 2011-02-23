@@ -59,7 +59,9 @@
 				contentType	: 'application/json; charset=UTF-8',
 				serialize	: Y.JSON.stringify,
 				deserialize	: function(r){
-					return Y.JSON.parse(r.responseText);
+					if (r.responseText) {
+						return Y.JSON.parse(r.responseText);
+					}
 				}
 			},
 			
