@@ -1,0 +1,22 @@
+Node Accordion Plugin
+    The Accordion Node Plugin makes it easy to transform existing markup 
+    into an accordion element with expandable and collapsible elements. 
+    Elements are easy to customize, and only require a small set of 
+    dependencies.
+    More info at http://yuilibrary.com/gallery/show/node-accordion
+
+HEAD
+    * Adding minHeight and minWidth attributes to allow redefining the target size for bd.
+    * Making the accordion skinnable (it will try to load SAM skin by default).
+    * Adding triggerSelector, itemSelector and itemBodySelector attributes to facilitate
+      the manipulation of the selectors for the item, trigger and body elements. Useful if 
+      you plan to have a custom markup (like a table).
+    * Tested on YUI 3.8.0
+
+2010.05.21-18-16
+    * Tested on YUI 3.1.2
+    * Adding support for horizontal (attr orientation: 'width').
+
+2009.10.27-23
+    * Tested on YUI 3.0.0
+    * Initial release
