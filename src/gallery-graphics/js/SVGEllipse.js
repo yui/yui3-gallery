@@ -34,6 +34,7 @@
         node.setAttribute("cy", cy);
         this._fillChangeHandler();
         this._strokeChangeHandler();
+        this._updateTransform();
     }
  }, {
     ATTRS: {

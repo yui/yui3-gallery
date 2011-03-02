@@ -97,11 +97,18 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
         {
             path += 'z';
         }
-        node.setAttribute("d", path);
-        this._translate(left + tx, top + ty);
+        if(path)
+        {
+            node.setAttribute("d", path);
+        }
+        //Use transform to handle positioning.
+        this._transformArgs = this._transformArgs || {};
+        this._transformArgs.translate = [left + tx, top + ty];
+        
         this.set("path", path);
         this._fillChangeHandler();
         this._strokeChangeHandler();
+        this._updateTransform();
     },
    
     /**
@@ -116,7 +123,6 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
         var node = this.get("node");
         this._translateX = x;
         this._translateY = y;
-        this._translate(x, y);
         this._translate(this._left + x, this._top + y);
     },
     
@@ -162,10 +168,10 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
         {
             wt = stroke.weight;
         }
-        bounds.left = this._left - wt - tx;
-        bounds.top = this._top - wt - ty;
-        bounds.right = (this._right - this._left) + wt - tx;
-        bounds.bottom = (this._bottom - this._top) + wt - ty;
+        bounds.left = this._left - wt + tx;
+        bounds.top = this._top - wt + ty;
+        bounds.right = (this._right - this._left) + wt + tx;
+        bounds.bottom = (this._bottom - this._top) + wt + ty;
         return bounds;
     }
 }, {

@@ -288,6 +288,10 @@ Graphic.prototype = {
             shape,
             shapes = this._graphicsList,
             len = shapes.length;
+        this._left = 0;
+        this._right = 0;
+        this._top = 0;
+        this._bottom = 0;
         for(; i < len; ++i)
         {
             shape = this.getShape(shapes[i].getAttribute("id"));

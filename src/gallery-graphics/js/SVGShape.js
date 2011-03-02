@@ -41,6 +41,7 @@
     _addListeners: function()
     {
         this.after("initializedChange", this._updateHandler);
+        this.after("transformAdded", this._updateHandler);
         this.after("strokeChange", this._updateHandler);
         this.after("fillChange", this._updateHandler);
         this.after("widthChange", this._updateHandler);
@@ -99,29 +100,16 @@
             fillAlpha;
         if(fill)
         {
-            if(fill.type === "linear" || fill.type === "radial")
+            if(!fill.color)
             {
-                this.beginGradientFill(fill);
-                //node.appendChild(this._getFill());
-            }
-            else if(fill.type === "bitmap")
-            {
-                this.beginBitmapFill(fill);
-                //node.appendChild(this._getFill());
+                node.setAttribute("fill", "none");
             }
             else
             {
-                if(!fill.color)
-                {
-                    node.setAttribute("fill", "none");
-                }
-                else
-                {
-                    fillAlpha = fill.alpha; 
-                    fill.alpha = Y.Lang.isNumber(fillAlpha) ? fillAlpha : 1;
-                    node.setAttribute("fill", fill.color);
-                    node.setAttribute("fill-opacity", fillAlpha);
-                }
+                fillAlpha = fill.alpha; 
+                fill.alpha = Y.Lang.isNumber(fillAlpha) ? fillAlpha : 1;
+                node.setAttribute("fill", fill.color);
+                node.setAttribute("fill-opacity", fillAlpha);
             }
         }
         else
@@ -154,10 +142,7 @@
      */
     _translate: function(x, y)
     {
-        var node = this.get("node"),
-            translate = "translate(" + x + ", " + y + ")",
-            transform = node.getAttribute("transform");
-        this._updateTransform("translate", /translate\(.*\)/, translate);
+        this._addTransform("translate", arguments);
     },
 
     /**
@@ -168,8 +153,7 @@
      */
      skewX: function(x)
      {
-        var skewX= "skewX(" + x + ")";
-        this._updateTransform("skewX", /skewX\(.*\)/, skewX);
+        this._addTransform("skewX", arguments);
      },
 
     /**
@@ -180,8 +164,7 @@
      */
      skewY: function(y)
      {
-        var skewY = "skewY(" + y + ")";
-        this._updateTransform("skewY", /skewY\(.*\)/, skewY);
+        this._addTransform("skewY", arguments);
      },
 
      /**
@@ -190,13 +173,9 @@
       * @method rotate
       * @param
       */
-     rotate: function(deg, translate)
+     rotate: function(deg)
      {
-        var w = this.get("width") * 0.5,
-            h = this.get("height") * 0.5;
-        translate = translate || w + "," + h;
-        var rotate = "rotate(" + deg + "," + translate + ")";
-        this._updateTransform("rotate", /rotate\(.*\)/, rotate);
+        this._addTransform("rotate", arguments);
      },
 
     /**
@@ -207,8 +186,7 @@
      */
     scale: function(val)
     {
-        var scale = "scale(" + val + ")";
-        this._updateTransform("scale", /scale\(.*\)/, scale);
+        this._addTransform("scale", arguments);
     },
 
     /**
@@ -218,34 +196,69 @@
      */
     matrix: function(a, b, c, d, e, f)
     {
-        var matrix = "matrix(" + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ")";
-        this._updateTransform("matrix", /matrix\(.*\)/, matrix);
+        this._addTransform("matrix", arguments);
     },
 
     /**
      * @private
      */
-    _updateTransform: function(type, test, val)
+    _addTransform: function(type, args)
+    {
+        if(!this._transformArgs)
+        {
+            this._transformArgs = {};
+        }
+        this._transformArgs[type] = Array.prototype.slice.call(args, 0);
+        this.fire("transformAdded");
+    },
+
+    /**
+     * @private
+     */
+    _updateTransform: function()
     {
         var node = this.get("node"),
-            transform = node.getAttribute("transform");
-        if(transform && transform.length > 0)
+            key,
+            args,
+            val,
+            transform = node.getAttribute("transform"),
+            test;
+        if(this._transformArgs)
         {
-            if(transform.indexOf(type) > -1)
+            if(this._transformArgs.hasOwnProperty("rotate"))
             {
-                transform = transform.replace(test, val);
-            }
-            else
-            {
-                transform += " " + val;
+                args = this._transformArgs.rotate;
+                args[1] = this.get("x") + (this.get("width") * 0.5);
+                args[2] = this.get("y") + (this.get("height") * 0.5);
             }
         }
-        else
+        for(key in this._transformArgs)
         {
-            transform = val;
+            if(key && this._transformArgs.hasOwnProperty(key))
+            {
+                val = key + "(" + this._transformArgs[key].toString() + ")";
+                if(transform && transform.length > 0)
+                {
+                    test = new RegExp(key + '(.*)');
+                    if(transform.indexOf(key) > -1)
+                    {
+                        transform = transform.replace(test, val);
+                    }
+                    else
+                    {
+                        transform += " " + val;
+                    }
+                }
+                else
+                {
+                    transform = val;
+                }
+            }
         }
-        node.setAttribute("transform", transform);
-        this.fire("shapeUpdate");
+        if(transform)
+        {
+            node.setAttribute("transform", transform);
+        }
     },
 
     /**
@@ -265,6 +278,7 @@
         node.style.top = this.get("y") + "px";
         this._fillChangeHandler();
         this._strokeChangeHandler();
+        this._updateTransform();
     },
 
     /**
