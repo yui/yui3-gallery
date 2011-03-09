@@ -43,10 +43,6 @@ Y.CustomEvent.prototype.fireComplex = function(args) {
 
     self.events = events;
 
-    if (self.preventedFn) {
-        events.on('prevented', self.preventedFn);
-    }
-
     if (self.stoppedFn) {
         events.on('stopped', self.stoppedFn);
     }
@@ -163,4 +159,4 @@ Y.CustomEvent.prototype.fireComplex = function(args) {
 };
 
 
-}, 'gallery-2011.02.09-21-32' ,{requires:['event-custom-complex']});
+}, 'gallery-2011.03.09-21-14' ,{requires:['event-custom-complex']});
