@@ -1,0 +1,57 @@
+.yui3-skin-xarno-growl .yui3-button {
+	background: #d9d9d9 url('img/background.png') left top repeat-x;
+	border: 1px solid #959595;
+	color: #3a3a3a;
+	height: 26px;
+	line-height: 26px;
+	padding: 2px 3px 2px 1px;
+	margin: 3px;
+	cursor: pointer;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+}
+.yui3-skin-xarno-growl .yui3-button span {
+    padding-left: 21px;
+    line-height: 16px;
+    margin-top: -2px;
+    display: block;
+    text-shadow: 1px 1px #efefef;
+    font-family: font-family:Verdana, Geneva, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    height: 16px;
+    cursor: pointer;
+}
+.yui3-skin-xarno-growl .yui3-button-no-label span {
+	padding-left: 18px;
+}
+
+.yui3-skin-xarno-growl .yui3-icon {
+  background-image:url("img/icon-sprite.png");
+}
+
+.yui3-skin-xarno-growl .yui3-button-hover {
+	background-position: left -30px;
+}
+
+.yui3-skin-xarno-growl .yui3-button-pressed {
+	background-position: left -60px;
+}
+
+.yui3-skin-xarno-growl .yui3-button-selected {
+    border-color: CornflowerBlue;
+    background-image:url('img/background-active.png');
+}
+
+.yui3-skin-xarno-growl .yui3-button-disabled span {
+    background-image: url('img/icon-sprite-bw.gif');
+    text-shadow: none;
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+
+.yui3-skin-xarno-growl .yui3-type-default span {
+	padding-left: 0;
+	background: none;
+}
