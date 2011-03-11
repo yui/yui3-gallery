@@ -28,23 +28,25 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
             node = this.get("node"),
             w = this.get("width"),
             h = this.get("height"),
-            path = this.get("path");
+            path = this.get("path"),
+            pathEnd = "";
+        node.style.visible = "hidden";
         this._fillChangeHandler();
         this._strokeChangeHandler();
         if(path)
         {
             if(fill && fill.color)
             {
-                path += ' x';
+                pathEnd += ' x';
             }
             if(stroke)
             {
-                path += ' e';
+                pathEnd += ' e';
             }
         }
         if(path)
         {
-            node.path = path;
+            node.path = path + pathEnd;
         }
         if(w && h)
         {
@@ -54,6 +56,8 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
             node.style.height = h + "px";
         }
         this.set("path", path);
+        this.fire("shapeUpdate");
+        node.style.visible = "visible";
     },
 
     /**

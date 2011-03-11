@@ -230,6 +230,7 @@ Graphic.prototype = {
     addShape: function(shape)
     {
         var node = shape.get("node");
+        shape.set("graphic", this);
         this.node.appendChild(node);
         if(!this._graphicsList)
         {
@@ -265,7 +266,59 @@ Graphic.prototype = {
     addChild: function(child)
     {
         this.node.appendChild(child);
-    }
+    },
+
+    /**
+     * Updates the size of the graphics container and.
+     *
+     * @method updateSize
+     */
+    updateSize: function(e)
+    {
+        var bounds,
+            i = 0,
+            shape,
+            shapes = this._graphicsList,
+            len = shapes.length,
+            w,
+            h;
+        this._left = 0;
+        this._right = 0;
+        this._top = 0;
+        this._bottom = 0;
+        for(; i < len; ++i)
+        {
+            shape = this.getShape(shapes[i].getAttribute("id"));
+            bounds = shape.getBounds();
+            this._left = Math.min(this._left, bounds.left);
+            this._top = Math.min(this._top, bounds.top);
+            this._right = Math.max(this._right, bounds.right);
+            this._bottom = Math.max(this._bottom, bounds.bottom);
+        }
+        w = this._width = this._right - this._left;
+        h = this._height = this._bottom - this._top;
+        this.setSize(this._width, this._height);
+    },
+    
+    /**
+     * @private
+     */
+    _left: 0,
+    
+    /**
+     * @private
+     */
+    _right: 0,
+    
+    /**
+     * @private
+     */
+    _top: 0,
+    
+    /**
+     * @private
+     */
+    _bottom: 0
 };
 Y.Graphic = Graphic;
 

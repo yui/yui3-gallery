@@ -223,9 +223,19 @@ Drawing.prototype = {
      * @param {Number} y y-coordinate for the end point.
      */
     curveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
+        var hiX,
+            hiY,
+            loX,
+            loY;
         this._updateDrawingQueue(["bezierCurveTo", cp1x, cp1y, cp2x, cp2y, x, y]);
         this._drawingComplete = false;
         this._updateShapeProps(x, y);
+        hiX = Math.max(x, Math.max(cp1x, cp2x));
+        hiY = Math.max(y, Math.max(cp1y, cp2y));
+        loX = Math.min(x, Math.min(cp1x, cp2x));
+        loY = Math.min(y, Math.min(cp1y, cp2y));
+        this._updatePosition(hiX, hiY);
+        this._updatePosition(loX, loY);
         return this;
     },
 
@@ -238,10 +248,20 @@ Drawing.prototype = {
      * @param {Number} x x-coordinate for the end point.
      * @param {Number} y y-coordinate for the end point.
      */
-    quadraticCurveTo: function(controlX, controlY, anchorX, anchorY) {
-        this._updateDrawingQueue(["quadraticCurveTo", controlX, controlY, anchorX, anchorY]);
+    quadraticCurveTo: function(cpx, cpy, x, y) {
+        var hiX,
+            hiY,
+            loX,
+            loY;
+        this._updateDrawingQueue(["quadraticCurveTo", cpx, cpy, x, y]);
         this._drawingComplete = false;
-        this._updateShapeProps(anchorX, anchorY);
+        this._updateShapeProps(x, y);
+        hiX = Math.max(x, cpx);
+        hiY = Math.max(y, cpy);
+        loX = Math.min(x, cpx);
+        loY = Math.min(y, cpy);
+        this._updatePosition(hiX, hiY);
+        this._updatePosition(loX, loY);
         return this;
     },
 

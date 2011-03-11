@@ -248,7 +248,6 @@
      */
     _draw: function()
     {
-        this.clear();
         this._paint();
     },
 
@@ -268,68 +267,87 @@
             w = this.get("width") || this._width,
             h = this.get("height") || this._height,
             context = this._context,
-            methods = this._methods,
+            methods = [],
+            cachedMethods = this._methods.concat(),
             i = 0,
-            lineToMethods = this._lineToMethods,
-            lineToLen = lineToMethods ? lineToMethods.length : 0,
+            j,
             method,
             args,
-            len = methods ? methods.length : 0;
-        node.setAttribute("width", w);
-        node.setAttribute("height", h);
-        if(!len || len < 1)
-        {
-            return;
-        }
-        for(; i < lineToLen; ++i)
-        {
-            args = lineToMethods[i];
-            args[1] = args[1] - this._left;
-            args[2] = args[2] - this._top;
-        }
-        context.beginPath();
-        for(i = 0; i < len; ++i)
-        {
-            args = methods[i];
-            if(args && args.length > 0)
+            len = 0,
+            right = this._right,
+            left = this._left,
+            top = this._top,
+            bottom = this._bottom;
+       if(this._methods)
+       {
+            len = cachedMethods.length;
+            if(!len || len < 1)
             {
-                method = args.shift();
-                if(method)
+                return;
+            }
+            for(; i < len; ++i)
+            {
+                methods[i] = cachedMethods[i].concat();
+                args = methods[i];
+                for(j = 1; j < args.length; ++j)
                 {
-                    if(method && method == "lineTo" && this._dashstyle)
+                    if(j % 2 === 0)
                     {
-                        args.unshift(this._xcoords[i] - this._left, this._ycoords[i] - this._top);
-                        this._drawDashedLine.apply(this, args);
+                        args[j] = args[j] - this._top;
                     }
                     else
                     {
-                        context[method].apply(context, args); 
+                        args[j] = args[j] - this._left;
                     }
                 }
             }
-        }
-
-
-        if (this._fillType) {
-            context.fillStyle = this._fillColor;
-            context.closePath();
-        }
-
-        if (this._fillType) {
-            context.fill();
-        }
-
-        if (this._stroke) {
-            if(this._strokeWeight)
+            node.setAttribute("width", w);
+            node.setAttribute("height", h);
+            context.beginPath();
+            for(i = 0; i < len; ++i)
             {
-                context.lineWidth = this._strokeWeight;
+                args = methods[i];
+                if(args && args.length > 0)
+                {
+                    method = args.shift();
+                    if(method)
+                    {
+                        if(method && method == "lineTo" && this._dashstyle)
+                        {
+                            args.unshift(this._xcoords[i] - this._left, this._ycoords[i] - this._top);
+                            this._drawDashedLine.apply(this, args);
+                        }
+                        else
+                        {
+                            context[method].apply(context, args); 
+                        }
+                    }
+                }
             }
-            context.strokeStyle = this._strokeStyle;
-            context.stroke();
+
+
+            if (this._fillType) {
+                context.fillStyle = this._fillColor;
+                context.closePath();
+            }
+
+            if (this._fillType) {
+                context.fill();
+            }
+
+            if (this._stroke) {
+                if(this._strokeWeight)
+                {
+                    context.lineWidth = this._strokeWeight;
+                }
+                context.strokeStyle = this._strokeStyle;
+                context.stroke();
+            }
+            this._drawingComplete = true;
+            this._clearAndUpdateCoords();
+            this._updateNodePosition();
+            this._methods = cachedMethods;
         }
-        this._drawingComplete = true;
-        this._clearAndUpdateCoords();
-        this._updateNodePosition();
     },
 
     /**

@@ -16,6 +16,16 @@ function Drawing() {}
 
 Drawing.prototype = {
     /**
+     * @private
+     */
+    _currentX: 0,
+
+    /**
+     * @private
+     */
+    _currentY: 0,
+
+    /**
      * Draws a bezier curve.
      *
      * @method curveTo
@@ -27,8 +37,19 @@ Drawing.prototype = {
      * @param {Number} y y-coordinate for the end point.
      */
     curveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
+        var hiX,
+            loX,
+            hiY,
+            loY;
         this._path += ' c ' + Math.round(cp1x) + ", " + Math.round(cp1y) + ", " + Math.round(cp2x) + ", " + Math.round(cp2y) + ", " + x + ", " + y;
-        this._trackSize(x, y);
+        this._currentX = x;
+        this._currentY = y;
+        hiX = Math.max(x, Math.max(cp1x, cp2x));
+        hiY = Math.max(y, Math.max(cp1y, cp2y));
+        loX = Math.min(x, Math.min(cp1x, cp2x));
+        loY = Math.min(y, Math.min(cp1y, cp2y));
+        this._trackSize(hiX, hiY);
+        this._trackSize(loX, loY);
     },
 
     /**
@@ -41,13 +62,13 @@ Drawing.prototype = {
      * @param {Number} y y-coordinate for the end point.
      */
     quadraticCurveTo: function(cpx, cpy, x, y) {
-        var hiX = Math.max(x, cpx),
-            hiY = Math.max(y, cpy),
-            loX = Math.min(x, cpx),
-            loY = Math.min(y, cpy);
-        this._path += ' qb ' + cpx + ", " + cpy + ", " + x + ", " + y;
-        this._trackSize(hiX, hiY);
-        this._trackSize(loX, loY);
+        var currentX = this._currentX,
+            currentY = this._currentY,
+            cp1x = currentX + 0.67*(cpx - currentX),
+            cp1y = currentY + 0.67*(cpy - currentY),
+            cp2x = cp1x + (x - currentX) * 0.34,
+            cp2y = cp1y + (y - currentY) * 0.34;
+        this.curveTo( cp1x, cp1y, cp2x, cp2y, x, y );
     },
 
     /**
@@ -65,6 +86,9 @@ Drawing.prototype = {
         this.lineTo(x + w, y + h);
         this.lineTo(x, y + h);
         this.lineTo(x, y);
+        this._currentX = x;
+        this._currentY = y;
+        return this;
     },
 
     /**
@@ -88,6 +112,7 @@ Drawing.prototype = {
         this.quadraticCurveTo(x + w, y, x + w - ew, y);
         this.lineTo(x + ew, y);
         this.quadraticCurveTo(x, y, x, y + eh);
+        return this;
     },
 
     /**
@@ -106,6 +131,9 @@ Drawing.prototype = {
         yRadius = yRadius || radius;
         this._path += this._getWedgePath({x:x, y:y, startAngle:startAngle, arc:arc, radius:radius, yRadius:yRadius});
         this._trackSize(diameter, diameter); 
+        this._currentX = x;
+        this._currentY = y;
+        return this;
     },
 
     /**
@@ -167,6 +195,8 @@ Drawing.prototype = {
         for (i = 0; i < len; ++i) {
             this._path += ' ' + Math.round(args[i][0]) + ', ' + Math.round(args[i][1]);
             this._trackSize.apply(this, args[i]);
+            this._currentX = args[i][0];
+            this._currentY = args[i][1];
         }
         var path = this._path;
         return this;
@@ -186,6 +216,8 @@ Drawing.prototype = {
         }
         this._path += ' m ' + Math.round(x) + ', ' + Math.round(y);
         this._trackSize(x, y);
+        this._currentX = x;
+        this._currentY = y;
     },
 
 
