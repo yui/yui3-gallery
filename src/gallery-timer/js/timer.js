@@ -37,6 +37,7 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
      */
     initializer : function(config){
       this.after('statusChange',this._afterStatusChange,this);
+	  //this.publish(EVENT_TIMER);
       this.publish(EVENT_START ,  { defaultFn : this._defStartFn });
       this.publish(EVENT_STOP ,   { defaultFn : this._defStopFn });
       this.publish(EVENT_PAUSE ,  { defaultFn : this._defPauseFn });
@@ -286,10 +287,10 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
     */
    _executeCallback : function() {
       Y.log('Timer::_executeCallback','info');
-    var callback = this.get('callback');
-    if (Y.Lang.isFunction(callback)) {
+	  var callback = this.get('callback');
+	  if (Y.Lang.isFunction(callback)) {
         (this.get('callback'))();
-    }
+	  }
    }
 
 },{
