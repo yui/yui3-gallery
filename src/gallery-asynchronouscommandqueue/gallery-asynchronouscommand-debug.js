@@ -76,4 +76,4 @@ Y.extend(_class, Y.Base, {
 Y.AsynchronousCommand = _class;
 
 
-}, '@VERSION@' ,{skinnable:false, requires:['base']});
+}, '@VERSION@' ,{requires:['base'], skinnable:false});

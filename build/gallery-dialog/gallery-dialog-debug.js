@@ -2,7 +2,7 @@ YUI.add('gallery-dialog', function(Y) {
 
 var YL = Y.Lang,
     LABEL_CANCEL = 'Cancel',
-  LABEL_OK = 'OK',
+	LABEL_OK = 'OK',
     CALLBACK_CANCEL = 'cancel',
     CALLBACK_OK = 'ok',
     EMPTY_FN = function(){},
@@ -67,7 +67,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
 
     this.handleEscape = Y.once('esc', Y.bind(function(){ this.hide(); }, this), Y.config.doc);
     Y.Dialog.superclass.show.apply(this,arguments);
-  this.syncUI();
+	this.syncUI();
 
     var dBtn = this.get(ATTR_DEFAULT_BUTTON);
 
@@ -127,7 +127,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
    */
   build : function(header, body, buttons) {
     Y.log('initializer','info','Y.Dialog');
-  
+	
     var i, l, btn;
 
     this.purge();
@@ -323,7 +323,7 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
     // need to build the input box and bind the events to it
     //   then append it to the body
     promptInput = Y.Node.create('<input type="text" style="display: block; margin-top: 0.5em;">');
-  promptInput.addClass(this.getClassName('prompt'));
+	promptInput.addClass(this.getClassName('prompt'));
 
     promptInput.on('keyup', Y.bind(function(e){
       this.set(ATTR_RETURN_VAL, promptInput.get('value'));
@@ -409,23 +409,23 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
   ATTRS : {
   
     centered : {
-    value : true
-  },
-  
+	  value : true
+	},
+	
     callbacks : {
       value : {}
     },
-  
+	
     constrain : {
       value : true
     },
-  
+	
     defaultButton : {
       validator : function(val) {
         return (val instanceof Y.Button);
       }
     },
-  
+	
     draggable : {
       value : true,
       validator : YL.isBoolean,
@@ -434,15 +434,15 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
         return val;
       }
     },
-  
+	
     render : {
       value : true
     },
-  
+	
     returnVal : {
       value : null
     },
-  
+	
     icon : {
       validator : YL.isString,
       setter : function(val) {
@@ -453,11 +453,11 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
         return val;
       }
     },
-  
+	
     visible : {
       value : false
     },
-  
+	
     zIndex : {
       value : 20000
     }
@@ -465,4 +465,4 @@ Y.Dialog = Y.Base.create('dialog', Y.Overlay, [], {
 });
 
 
-}, 'gallery-2011.02.02-21-07' ,{requires:['gallery-overlay-extras','gallery-button','overlay','widget-anim','node','gallery-event-nav-keys','dd-plugin']});
+}, 'gallery-2011.03.11-23-49' ,{requires:['gallery-overlay-extras','gallery-button','overlay','widget-anim','node','gallery-event-nav-keys','dd-plugin']});

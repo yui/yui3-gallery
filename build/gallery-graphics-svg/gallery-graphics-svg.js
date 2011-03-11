@@ -949,65 +949,69 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
      */
     _draw: function()
     {
-        var pathArray = this._pathArray,
+        var pathArray,
             segmentArray,
             pathType,
             len,
             val,
             val2,
             i,
-            path = this.get("path"),
+            path = "",
             node = this.get("node"),
             tx = this.get("translateX"),
             ty = this.get("translateY"),
             left = this._left,
             top = this._top;
-        while(pathArray && pathArray.length > 0)
+        if(this._pathArray)
         {
-            segmentArray = pathArray.shift();
-            len = segmentArray.length;
-            pathType = segmentArray[0];
-            path += " " + pathType + (segmentArray[1] - left);
-            switch(pathType)
+            pathArray = this._pathArray.concat();
+            while(pathArray && pathArray.length > 0)
             {
-                case "L" :
-                case "M" :
-                    for(i = 2; i < len; ++i)
-                    {
-                        val = (i % 2 === 0) ? top : left;
-                        val = segmentArray[i] - val;
-                        path += ", " + val;
-                    }
-                break;
-                case "Q" :
-                case "C" :
-                    for(i = 2; i < len; ++i)
-                    {
-                        val = (i % 2 === 0) ? top : left;
-                        val2 = segmentArray[i];
-                        val2 -= val;
-                        path += " " + val2;
-                    }
-                break;
+                segmentArray = pathArray.shift();
+                len = segmentArray.length;
+                pathType = segmentArray[0];
+                path += " " + pathType + (segmentArray[1] - left);
+                switch(pathType)
+                {
+                    case "L" :
+                    case "M" :
+                    case "Q" :
+                        for(i = 2; i < len; ++i)
+                        {
+                            val = (i % 2 === 0) ? top : left;
+                            val = segmentArray[i] - val;
+                            path += ", " + val;
+                        }
+                    break;
+                    case "C" :
+                        for(i = 2; i < len; ++i)
+                        {
+                            val = (i % 2 === 0) ? top : left;
+                            val2 = segmentArray[i];
+                            val2 -= val;
+                            path += " " + val2;
+                        }
+                    break;
 
+                }
             }
+            if(this._fill)
+            {
+                path += 'z';
+            }
+            if(path)
+            {
+                node.setAttribute("d", path);
+            }
+            //Use transform to handle positioning.
+            this._transformArgs = this._transformArgs || {};
+            this._transformArgs.translate = [left + tx, top + ty];
+            
+            this.set("path", path);
+            this._fillChangeHandler();
+            this._strokeChangeHandler();
+            this._updateTransform();
         }
-        if(this._fill)
-        {
-            path += 'z';
-        }
-        if(path)
-        {
-            node.setAttribute("d", path);
-        }
-        //Use transform to handle positioning.
-        this._transformArgs = this._transformArgs || {};
-        this._transformArgs.translate = [left + tx, top + ty];
-        
-        this.set("path", path);
-        this._fillChangeHandler();
-        this._strokeChangeHandler();
-        this._updateTransform();
     },
    
     /**
@@ -1047,6 +1051,7 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
         this._right = 0;
         this._top = 0;
         this._bottom = 0;
+        this._pathArray = [];
         this.set("path", "");
     },
 

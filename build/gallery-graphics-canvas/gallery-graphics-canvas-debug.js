@@ -404,9 +404,19 @@ Drawing.prototype = {
      * @param {Number} y y-coordinate for the end point.
      */
     curveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
+        var hiX,
+            hiY,
+            loX,
+            loY;
         this._updateDrawingQueue(["bezierCurveTo", cp1x, cp1y, cp2x, cp2y, x, y]);
         this._drawingComplete = false;
         this._updateShapeProps(x, y);
+        hiX = Math.max(x, Math.max(cp1x, cp2x));
+        hiY = Math.max(y, Math.max(cp1y, cp2y));
+        loX = Math.min(x, Math.min(cp1x, cp2x));
+        loY = Math.min(y, Math.min(cp1y, cp2y));
+        this._updatePosition(hiX, hiY);
+        this._updatePosition(loX, loY);
         return this;
     },
 
@@ -419,10 +429,20 @@ Drawing.prototype = {
      * @param {Number} x x-coordinate for the end point.
      * @param {Number} y y-coordinate for the end point.
      */
-    quadraticCurveTo: function(controlX, controlY, anchorX, anchorY) {
-        this._updateDrawingQueue(["quadraticCurveTo", controlX, controlY, anchorX, anchorY]);
+    quadraticCurveTo: function(cpx, cpy, x, y) {
+        var hiX,
+            hiY,
+            loX,
+            loY;
+        this._updateDrawingQueue(["quadraticCurveTo", cpx, cpy, x, y]);
         this._drawingComplete = false;
-        this._updateShapeProps(anchorX, anchorY);
+        this._updateShapeProps(x, y);
+        hiX = Math.max(x, cpx);
+        hiY = Math.max(y, cpy);
+        loX = Math.min(x, cpx);
+        loY = Math.min(y, cpy);
+        this._updatePosition(hiX, hiY);
+        this._updatePosition(loX, loY);
         return this;
     },
 
@@ -1030,7 +1050,6 @@ Y.Drawing = Drawing;
      */
     _draw: function()
     {
-        this.clear();
         this._paint();
     },
 
@@ -1050,68 +1069,87 @@ Y.Drawing = Drawing;
             w = this.get("width") || this._width,
             h = this.get("height") || this._height,
             context = this._context,
-            methods = this._methods,
+            methods = [],
+            cachedMethods = this._methods.concat(),
             i = 0,
-            lineToMethods = this._lineToMethods,
-            lineToLen = lineToMethods ? lineToMethods.length : 0,
+            j,
             method,
             args,
-            len = methods ? methods.length : 0;
-        node.setAttribute("width", w);
-        node.setAttribute("height", h);
-        if(!len || len < 1)
-        {
-            return;
-        }
-        for(; i < lineToLen; ++i)
-        {
-            args = lineToMethods[i];
-            args[1] = args[1] - this._left;
-            args[2] = args[2] - this._top;
-        }
-        context.beginPath();
-        for(i = 0; i < len; ++i)
-        {
-            args = methods[i];
-            if(args && args.length > 0)
+            len = 0,
+            right = this._right,
+            left = this._left,
+            top = this._top,
+            bottom = this._bottom;
+       if(this._methods)
+       {
+            len = cachedMethods.length;
+            if(!len || len < 1)
             {
-                method = args.shift();
-                if(method)
+                return;
+            }
+            for(; i < len; ++i)
+            {
+                methods[i] = cachedMethods[i].concat();
+                args = methods[i];
+                for(j = 1; j < args.length; ++j)
                 {
-                    if(method && method == "lineTo" && this._dashstyle)
+                    if(j % 2 === 0)
                     {
-                        args.unshift(this._xcoords[i] - this._left, this._ycoords[i] - this._top);
-                        this._drawDashedLine.apply(this, args);
+                        args[j] = args[j] - this._top;
                     }
                     else
                     {
-                        context[method].apply(context, args); 
+                        args[j] = args[j] - this._left;
                     }
                 }
             }
-        }
-
-
-        if (this._fillType) {
-            context.fillStyle = this._fillColor;
-            context.closePath();
-        }
-
-        if (this._fillType) {
-            context.fill();
-        }
-
-        if (this._stroke) {
-            if(this._strokeWeight)
+            node.setAttribute("width", w);
+            node.setAttribute("height", h);
+            context.beginPath();
+            for(i = 0; i < len; ++i)
             {
-                context.lineWidth = this._strokeWeight;
+                args = methods[i];
+                if(args && args.length > 0)
+                {
+                    method = args.shift();
+                    if(method)
+                    {
+                        if(method && method == "lineTo" && this._dashstyle)
+                        {
+                            args.unshift(this._xcoords[i] - this._left, this._ycoords[i] - this._top);
+                            this._drawDashedLine.apply(this, args);
+                        }
+                        else
+                        {
+                            context[method].apply(context, args); 
+                        }
+                    }
+                }
             }
-            context.strokeStyle = this._strokeStyle;
-            context.stroke();
+
+
+            if (this._fillType) {
+                context.fillStyle = this._fillColor;
+                context.closePath();
+            }
+
+            if (this._fillType) {
+                context.fill();
+            }
+
+            if (this._stroke) {
+                if(this._strokeWeight)
+                {
+                    context.lineWidth = this._strokeWeight;
+                }
+                context.strokeStyle = this._strokeStyle;
+                context.stroke();
+            }
+            this._drawingComplete = true;
+            this._clearAndUpdateCoords();
+            this._updateNodePosition();
+            this._methods = cachedMethods;
         }
-        this._drawingComplete = true;
-        this._clearAndUpdateCoords();
-        this._updateNodePosition();
     },
 
     /**

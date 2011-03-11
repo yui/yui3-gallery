@@ -75,26 +75,26 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
    */
   renderUI : function() {
     Y.log('renderUI','info','simple-datatable');
-  var cb = this.get(CONTENT_BOX),
-      caption = this.get('caption');
-    
+	var cb = this.get(CONTENT_BOX),
+	    caption = this.get('caption');
+		
     this.tHead = Y.Node.create('<thead></thead>');
     this.tBody = Y.Node.create('<tbody></tbody>');
-  
-  if (caption) {
-    if (!this._caption) {
-      this._caption = Y.Node.create('<caption />');
-      cb.append(this._caption);
-    }
-    this._caption.setContent(caption);
-  }
-  
+	
+	if (caption) {
+		if (!this._caption) {
+			this._caption = Y.Node.create('<caption />');
+			cb.append(this._caption);
+		}
+		this._caption.setContent(caption);
+	}
+	
     cb.append(this.tHead).append(this.tBody);
   },
   
   bindUI : function() {
     Y.log('bindUI', 'info','simple-datatable');
-  this.after('captionChange', this._afterCaptionChange);
+	this.after('captionChange', this._afterCaptionChange);
   },
 
   /**
@@ -118,7 +118,7 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
    */
   setHeaders : function(headerObj){
     Y.log('setHeaders','info','simple-datatable');
-  this._buildHeader(headerObj);
+	this._buildHeader(headerObj);
     return this;
   },
 
@@ -133,7 +133,7 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
    */
   setRows : function(arrayOfRows) {
     Y.log('setRows','info','simple-datatable');
-  this._buildRows(arrayOfRows);
+	this._buildRows(arrayOfRows);
     return this;
   },
 
@@ -186,34 +186,34 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
         };
 
     if(headerObj) {
-    if(YL.isObject(headerObj)) {
-      for(o in headerObj) {
-      cells += '<th class="' + this._className + '-col-' + (count++) + ' ' + this._className + '-col-' + o + '"';
-      cells += ' key="' + o +'"';
-         
-      if(YL.isObject(headerObj[o])) {
-        for(p in headerObj[o]) {
-        cells += ' ' + p + '="'+ headerObj[o][p] + '"';
-        }
-      }
-      
-      if(YL.isString(headerObj[o])) {
-        headerConfig.label = headerObj[o];
-      }else if(headerObj[o].label){
-        headerConfig.label = headerObj[o].label.toString();
-      }else{
-        headerConfig.label = o;
-      }
-      
-      cells += Y.substitute(template, headerConfig);
-      
-      cells += '</th>';
+		if(YL.isObject(headerObj)) {
+		  for(o in headerObj) {
+			cells += '<th class="' + this._className + '-col-' + (count++) + ' ' + this._className + '-col-' + o + '"';
+			cells += ' key="' + o +'"';
+				 
+			if(YL.isObject(headerObj[o])) {
+			  for(p in headerObj[o]) {
+				cells += ' ' + p + '="'+ headerObj[o][p] + '"';
+			  }
+			}
+			
+			if(YL.isString(headerObj[o])) {
+			  headerConfig.label = headerObj[o];
+			}else if(headerObj[o].label){
+			  headerConfig.label = headerObj[o].label.toString();
+			}else{
+			  headerConfig.label = o;
+			}
+			
+			cells += Y.substitute(template, headerConfig);
+			
+			cells += '</th>';
 
-      }
-    }
-  }
-  
-  row += cells + '</tr>';
+		  }
+		}
+	}
+	
+	row += cells + '</tr>';
 
     this.tHead.setContent(row);
 
@@ -226,12 +226,12 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
         rows = '';
 
     if(arrayOfRows) {
-    for(i=0, l=arrayOfRows.length; i < l; i++) {
-      rows += this._addRow(arrayOfRows[i], i) ;
-    }
+		for(i=0, l=arrayOfRows.length; i < l; i++) {
+		  rows += this._addRow(arrayOfRows[i], i) ;
+		}
     }
 
-  this.tbody = Y.Node.create('<tbody>' + rows + '</tbody>');
+	this.tbody = Y.Node.create('<tbody>' + rows + '</tbody>');
     cb.one('tbody').replace(this.tbody);
 
     this.rowsSet = true;
@@ -258,7 +258,7 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
           labelClasses : this._className + '-label',
           label : ''
         },
-    isObject = YL.isObject(rowData),
+		isObject = YL.isObject(rowData),
         isArray = YL.isArray(rowData);
 
 
@@ -275,17 +275,17 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
           row += ' ' + key.substring(2) + '="' + rowData[key] + '"';
         }
       }
-    /*
+	  /*
       if (!rowData[yuiId]) {
         rowData[yuiId] = Y.Event.generateId(Y.Node.create('<b />'));
       }
-    */
-    row += ' id="' + rowData[yuiId] + '"';
+	  */
+	  row += ' id="' + rowData[yuiId] + '"';
     }
 
-  row += ' class="' + this._className + '-' + ( (rowCount % 2) ? 'even' : 'odd') + '">';
-  
-  row += cells + '</tr>';
+	row += ' class="' + this._className + '-' + ( (rowCount % 2) ? 'even' : 'odd') + '">';
+	
+	row += cells + '</tr>';
 
     return row;
   },
@@ -319,8 +319,8 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
     }
 
     cell += Y.substitute(template, cellConfig);
-  
-  cell += '</td>';
+	
+	cell += '</td>';
   
     return cell;
   },
@@ -333,19 +333,19 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
    */
   _afterCaptionChange : function(e) {
     Y.log('_afterCaptionChange', 'info', 'simple-datatable');
-  
-  if (e.newVal) {
-    if (!this._caption) {
-      this._caption = Y.Node.create('<caption />');
-      this.get(CONTENT_BOX).prepend(this._caption);
-    }
-    
-    this._caption.setContent(e.newVal);
-    
-  } else {
-    this._caption.remove(true);
-    this._caption = null;
-  }
+	
+	if (e.newVal) {
+	  if (!this._caption) {
+	    this._caption = Y.Node.create('<caption />');
+	    this.get(CONTENT_BOX).prepend(this._caption);
+	  }
+	  
+	  this._caption.setContent(e.newVal);
+	  
+	} else {
+	  this._caption.remove(true);
+	  this._caption = null;
+	}
   }
 
 
@@ -353,12 +353,12 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
   ATTRS : {
   
     /**
-   * When set, adds a caption to the table.
-   * @since 1.5.1
-   * @attribute caption
-   * @type string
-   */
-  caption : {},
+	 * When set, adds a caption to the table.
+	 * @since 1.5.1
+	 * @attribute caption
+	 * @type string
+	 */
+	caption : {},
 
     /**
      * An associated array of key -&gt; value pairs where key is used
@@ -391,12 +391,12 @@ Y.SimpleDatatable = Y.Base.create('sdt', Y.Widget, [],{
     rows : {
       value : [],
       validator : YL.isArray,
-    setter: function(val) {
-      return val;
-    }
+	  setter: function(val) {
+		  return val;
+	  }
     }
   }
 });
 
 
-}, 'gallery-2011.01.18-21-05' ,{requires:['node','widget','widget-child','event','event-mouseenter','substitute']});
+}, 'gallery-2011.03.11-23-49' ,{requires:['node','widget','widget-child','event','event-mouseenter','substitute']});

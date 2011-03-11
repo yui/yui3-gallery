@@ -17,6 +17,16 @@ function Drawing() {}
 
 Drawing.prototype = {
     /**
+     * @private
+     */
+    _currentX: 0,
+
+    /**
+     * @private
+     */
+    _currentY: 0,
+
+    /**
      * Draws a bezier curve.
      *
      * @method curveTo
@@ -28,8 +38,19 @@ Drawing.prototype = {
      * @param {Number} y y-coordinate for the end point.
      */
     curveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
+        var hiX,
+            loX,
+            hiY,
+            loY;
         this._path += ' c ' + Math.round(cp1x) + ", " + Math.round(cp1y) + ", " + Math.round(cp2x) + ", " + Math.round(cp2y) + ", " + x + ", " + y;
-        this._trackSize(x, y);
+        this._currentX = x;
+        this._currentY = y;
+        hiX = Math.max(x, Math.max(cp1x, cp2x));
+        hiY = Math.max(y, Math.max(cp1y, cp2y));
+        loX = Math.min(x, Math.min(cp1x, cp2x));
+        loY = Math.min(y, Math.min(cp1y, cp2y));
+        this._trackSize(hiX, hiY);
+        this._trackSize(loX, loY);
     },
 
     /**
@@ -42,13 +63,13 @@ Drawing.prototype = {
      * @param {Number} y y-coordinate for the end point.
      */
     quadraticCurveTo: function(cpx, cpy, x, y) {
-        var hiX = Math.max(x, cpx),
-            hiY = Math.max(y, cpy),
-            loX = Math.min(x, cpx),
-            loY = Math.min(y, cpy);
-        this._path += ' qb ' + cpx + ", " + cpy + ", " + x + ", " + y;
-        this._trackSize(hiX, hiY);
-        this._trackSize(loX, loY);
+        var currentX = this._currentX,
+            currentY = this._currentY,
+            cp1x = currentX + 0.67*(cpx - currentX),
+            cp1y = currentY + 0.67*(cpy - currentY),
+            cp2x = cp1x + (x - currentX) * 0.34,
+            cp2y = cp1y + (y - currentY) * 0.34;
+        this.curveTo( cp1x, cp1y, cp2x, cp2y, x, y );
     },
 
     /**
@@ -66,6 +87,9 @@ Drawing.prototype = {
         this.lineTo(x + w, y + h);
         this.lineTo(x, y + h);
         this.lineTo(x, y);
+        this._currentX = x;
+        this._currentY = y;
+        return this;
     },
 
     /**
@@ -89,6 +113,7 @@ Drawing.prototype = {
         this.quadraticCurveTo(x + w, y, x + w - ew, y);
         this.lineTo(x + ew, y);
         this.quadraticCurveTo(x, y, x, y + eh);
+        return this;
     },
 
     /**
@@ -107,6 +132,9 @@ Drawing.prototype = {
         yRadius = yRadius || radius;
         this._path += this._getWedgePath({x:x, y:y, startAngle:startAngle, arc:arc, radius:radius, yRadius:yRadius});
         this._trackSize(diameter, diameter); 
+        this._currentX = x;
+        this._currentY = y;
+        return this;
     },
 
     /**
@@ -168,6 +196,8 @@ Drawing.prototype = {
         for (i = 0; i < len; ++i) {
             this._path += ' ' + Math.round(args[i][0]) + ', ' + Math.round(args[i][1]);
             this._trackSize.apply(this, args[i]);
+            this._currentX = args[i][0];
+            this._currentY = args[i][1];
         }
         var path = this._path;
         return this;
@@ -187,6 +217,8 @@ Drawing.prototype = {
         }
         this._path += ' m ' + Math.round(x) + ', ' + Math.round(y);
         this._trackSize(x, y);
+        this._currentX = x;
+        this._currentY = y;
     },
 
 
@@ -224,6 +256,7 @@ Y.Drawing = Drawing;
      */
     initializer: function()
     {
+        this.publish("shapeUpdate");
         this._addListeners();
         this._draw();
     },
@@ -369,7 +402,10 @@ Y.Drawing = Drawing;
             coordSize = node.coordSize;
         x = 0 - (coordSize.x/w * x);
         y = 0 - (coordSize.y/h * y);
+        this._translateX = x;
+        this._translateY = y;
         node.coordOrigin = x + "," + y;
+        this.fire("shapeUpdate");
     },
 
     /**
@@ -404,6 +440,7 @@ Y.Drawing = Drawing;
      {
         var node = this.get("node");
             node.style.rotation = deg;
+        this.fire("shapeUpdate");
      },
     
     /**
@@ -437,6 +474,7 @@ Y.Drawing = Drawing;
             y = this.get("y"),
             w = this.get("width"),
             h = this.get("height");
+        node.style.visible = "hidden";
         node.style.position = "absolute";
         node.style.left = x + "px";
         node.style.top = y + "px";
@@ -444,6 +482,8 @@ Y.Drawing = Drawing;
         node.style.height = h + "px";
         this._fillChangeHandler();
         this._strokeChangeHandler();
+        this.fire("shapeUpdate");
+        node.style.visible = "visible";
     },
 
     /**
@@ -459,6 +499,32 @@ Y.Drawing = Drawing;
     {
         type = type || this._type;
         return document.createElement('<' + type + ' xmlns="urn:schemas-microsft.com:vml" class="vml' + type + '"/>');
+    },
+    
+    /**
+     * Returns the bounds for a shape.
+     *
+     * @method getBounds
+     * @return Object
+     */
+    getBounds: function()
+    {
+        var w = this.get("width"),
+            h = this.get("height"),
+            stroke = this.get("stroke"),
+            x = this.get("x"),
+            y = this.get("y"),
+            wt = 0,
+            bounds = {};
+        if(stroke && stroke.weight)
+        {
+            wt = stroke.weight;
+        }
+        bounds.left = x - wt;
+        bounds.top = y - wt;
+        bounds.right = x + w + wt;
+        bounds.bottom = y + h + wt;
+        return bounds;
     }
  }, {
     ATTRS: {
@@ -643,6 +709,19 @@ Y.Drawing = Drawing;
          */
         pointerEvents: {
             value: "visiblePainted"
+        },
+
+        /**
+         * Reference to the container Graphic.
+         *
+         * @attribute graphic
+         * @type Graphic
+         */
+        graphic: {
+            setter: function(val){
+                this.after("shapeUpdate", Y.bind(val.updateSize, val));
+                return val;
+            }
         }
     }
 });
@@ -677,23 +756,25 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
             node = this.get("node"),
             w = this.get("width"),
             h = this.get("height"),
-            path = this.get("path");
+            path = this.get("path"),
+            pathEnd = "";
+        node.style.visible = "hidden";
         this._fillChangeHandler();
         this._strokeChangeHandler();
         if(path)
         {
             if(fill && fill.color)
             {
-                path += ' x';
+                pathEnd += ' x';
             }
             if(stroke)
             {
-                path += ' e';
+                pathEnd += ' e';
             }
         }
         if(path)
         {
-            node.path = path;
+            node.path = path + pathEnd;
         }
         if(w && h)
         {
@@ -703,6 +784,8 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
             node.style.height = h + "px";
         }
         this.set("path", path);
+        this.fire("shapeUpdate");
+        node.style.visible = "visible";
     },
 
     /**
@@ -1160,6 +1243,7 @@ Graphic.prototype = {
     addShape: function(shape)
     {
         var node = shape.get("node");
+        shape.set("graphic", this);
         this.node.appendChild(node);
         if(!this._graphicsList)
         {
@@ -1195,7 +1279,59 @@ Graphic.prototype = {
     addChild: function(child)
     {
         this.node.appendChild(child);
-    }
+    },
+
+    /**
+     * Updates the size of the graphics container and.
+     *
+     * @method updateSize
+     */
+    updateSize: function(e)
+    {
+        var bounds,
+            i = 0,
+            shape,
+            shapes = this._graphicsList,
+            len = shapes.length,
+            w,
+            h;
+        this._left = 0;
+        this._right = 0;
+        this._top = 0;
+        this._bottom = 0;
+        for(; i < len; ++i)
+        {
+            shape = this.getShape(shapes[i].getAttribute("id"));
+            bounds = shape.getBounds();
+            this._left = Math.min(this._left, bounds.left);
+            this._top = Math.min(this._top, bounds.top);
+            this._right = Math.max(this._right, bounds.right);
+            this._bottom = Math.max(this._bottom, bounds.bottom);
+        }
+        w = this._width = this._right - this._left;
+        h = this._height = this._bottom - this._top;
+        this.setSize(this._width, this._height);
+    },
+    
+    /**
+     * @private
+     */
+    _left: 0,
+    
+    /**
+     * @private
+     */
+    _right: 0,
+    
+    /**
+     * @private
+     */
+    _top: 0,
+    
+    /**
+     * @private
+     */
+    _bottom: 0
 };
 Y.Graphic = Graphic;
 
