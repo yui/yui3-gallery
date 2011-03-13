@@ -13,57 +13,33 @@ var keys = {
         down     : 40
     };
 
-Y.Object.each( keys, function ( keyCode, name ) {
-    Y.Event.define( name, {
-        publishConfig: { emitFacade: false },
+Y.Object.each(keys, function (keyCode, name) {
+    Y.Event.define({
+        type: name,
 
-        on: function ( node, sub, ce ) {
-            sub._evtGuid = Y.guid() + '|';
+        on: function (node, sub, notifier, filter) {
+            var method = (filter) ? 'delegate' : 'on';
 
-            node.on( sub._evtGuid + 'keydown', function ( e ) {
-                if ( e.keyCode === keyCode ) {
-                    e.type = name;
-                    ce.fire( e );
+            sub._handle = node[method]('keydown', function (e) {
+                if (e.keyCode === keyCode) {
+                    notifier.fire(e);
                 }
-            });
+            }, filter);
         },
 
-        detach: function (node, sub, ce) {
-            node.detach(sub._evtGuid + '*');
+        delegate: function () {
+            this.on.apply(this, arguments);
+        },
+
+        detach: function (node, sub) {
+            sub._handle.detach();
+        },
+
+        detachDelegate: function () {
+            this.detach.apply(this, arguments);
         }
-    } );
-} );
-
-Y.Event.define( 'arrow', {
-    publishConfig: { emitFacade: false },
-
-    on: function ( node, sub, ce ) {
-        var directions = this._directions;
-
-        sub._evtGuid = Y.guid() + '|';
-
-        node.on( 'keydown', function ( e ) {
-            if ( e.keyCode > 36 && e.keyCode < 41 ) {
-                e.originalType = e.type;
-                e.type = 'arrow';
-                e.direction = directions[ e.keyCode ];
-
-                ce.fire( e );
-            }
-        } );
-    },
-
-    detach: function ( node, sub, ce ) {
-        node.detach( sub._evtGuid + '*' );
-    },
-
-    _directions: {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    }
-} );
+    });
+});
 
 
-}, 'gallery-2010.03.02-18' ,{requires:['event-synthetic']});
+}, 'gallery-2011.02.02-21-07' ,{requires:['event-synthetic']});

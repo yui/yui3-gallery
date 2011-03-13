@@ -46,7 +46,6 @@ var L = A.Lang,
 	OFF = 'off',
 	ON = 'on',
 	RATING = 'rating',
-	RATING_ELEMENT = 'ratingElement',
 	SELECTED_INDEX = 'selectedIndex',
 	SHOW_TITLE = 'showTitle',
 	SIZE = 'size',
@@ -68,8 +67,24 @@ var L = A.Lang,
 	CSS_RATING_EL_ON = getCN(RATING, ELEMENT, ON),
 
 	TPL_LABEL = '<div class="'+CSS_RATING_LABEL_EL+'"></div>',
+	MAP_RATING_EL = {
+		tagName: 'a',
+		attrs: ''
+	},
+	MAP_RATING_EL_DISABLED = {
+		tagName: 'a',
+		attrs: 'href="'+HREF_JAVASCRIPT+'"'
+	},
 	TPL_RATING_EL = '<a href="'+HREF_JAVASCRIPT+'"></a>',
-	TPL_RATING_EL_DISABLED = '<span></span>';
+	TPL_RATING_EL_DISABLED = '<span></span>',
+	TPL_RATING_CLASS_ATTR = ' class="' + CSS_RATING_EL + '"',
+	FN_GET_RATING_TPL = function(disabled) {
+		var map = disabled ? MAP_RATING_EL_DISABLED : MAP_RATING_EL;
+
+		var buffer = ['<',map.tagName, map.attrs, TPL_RATING_CLASS_ATTR, '>','</',map.tagName,'>'];
+
+		return buffer.join('');
+	};
 
 /**
  * <p><img src="assets/images/aui-rating/main.png"/></p>
@@ -223,18 +238,6 @@ var Rating = A.Component.create(
 					return A.Node.create(TPL_LABEL);
 				},
 				validator: isNode
-			},
-
-			ratingElement: {
-				valueFn: function() {
-					var instance = this;
-
-					var ratingElement = A.Node.create(
-						instance.get(DISABLED) ? TPL_RATING_EL_DISABLED : TPL_RATING_EL
-					);
-
-					return ratingElement.addClass(CSS_RATING_EL);
-				}
 			},
 
 			/**
@@ -497,15 +500,18 @@ var Rating = A.Component.create(
 			_createElements: function() {
 				var instance = this;
 				var elements = [];
-				var ratingElement = instance.get(RATING_ELEMENT);
+
+				var ratingTPL = FN_GET_RATING_TPL(instance.get(DISABLED));
 
 				for (var i = 0, size = this.get(SIZE); i < size; i++) {
 					elements.push(
-						ratingElement.clone()
+						ratingTPL
 					);
 				}
 
-				return new A.NodeList(elements);
+				var elementFrag = A.DOM.create(elements.join(''));
+
+				return new A.NodeList(elementFrag.childNodes);
 			},
 
 			/**
@@ -662,7 +668,7 @@ var Rating = A.Component.create(
 
 					instance.set(SIZE, size);
 
-					var labels = boundingBox.all('label');
+					var labels = boundingBox.getElementsByTagName('label');
 
 					inputs.each(function(node, index) {
 						var id = node.get(ID);
@@ -723,15 +729,16 @@ var Rating = A.Component.create(
 				var instance = this;
 				var contentBox = instance.get(CONTENT_BOX);
 
+				var elements = instance.get(ELEMENTS);
+
 				// if not found any elements from the HTML_PARSER create them based on the size attribute
-				if (!instance.get(ELEMENTS).size()) {
-					instance.set(
-						ELEMENTS,
-						instance._createElements()
-					);
+				if (!elements.size()) {
+					elements = instance._createElements();
+
+					instance.set(ELEMENTS, elements);
 				}
 
-				instance.get(ELEMENTS).each(
+				elements.each(
 					function(element, i) {
 						var	data = instance._getInputData(i);
 
@@ -754,10 +761,10 @@ var Rating = A.Component.create(
 						if (!element.attr(HREF) && (element.get(NODE_NAME).toLowerCase() == ANCHOR)) {
 							element.setAttribute(HREF, HREF_JAVASCRIPT);
 						}
-
-						contentBox.appendChild(element);
 					}
 				);
+
+				contentBox.append(elements.getDOM());
 			},
 
 			/**
@@ -996,4 +1003,4 @@ A.StarRating = Rating;
 A.ThumbRating = ThumbRating;
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-base'], skinnable:true});

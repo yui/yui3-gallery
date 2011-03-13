@@ -1,31 +1,49 @@
-function StackedAreaSeries(config)
-{
-	StackedAreaSeries.superclass.constructor.apply(this, arguments);
-}
-
-StackedAreaSeries.NAME = "stackedAreaSeries";
-
-StackedAreaSeries.ATTRS = {
-	type: {
-		/**
-		 * Indicates the type of graph.
-		 */
-        value:"stackedArea"
-    }
-};
-
-Y.extend(StackedAreaSeries, Y.AreaSeries, {
+/**
+ * StackedAreaSeries area fills to display data showing its contribution to a whole.
+ *
+ * @param {Object} config (optional) Configuration parameters for the Chart.
+ * @class StackedAreaSeries
+ * @constructor
+ * @extends AreaSeries
+ * @uses StackingUtil
+ */
+Y.StackedAreaSeries = Y.Base.create("stackedAreaSeries", Y.AreaSeries, [Y.StackingUtil], {
+    /**
+     * @protected
+     *
+     * Calculates the coordinates for the series. Overrides base implementation.
+     *
+     * @method setAreaData
+     */
     setAreaData: function()
     {   
-        StackedAreaSeries.superclass.setAreaData.apply(this);
+        Y.StackedAreaSeries.superclass.setAreaData.apply(this);
         this._stackCoordinates.apply(this);
     },
 
+    /**
+     * @protected
+     *
+     * Draws the series
+     *
+     * @method drawSeries
+     */
 	drawSeries: function()
     {
         this.get("graphic").clear();
         this.drawFill.apply(this, this._getStackedClosingPoints());
     }
+}, {
+    ATTRS: {
+        /**
+         * Read-only attribute indicating the type of series.
+         *
+         * @attribute type
+         * @type String
+         * @default stackedArea
+         */
+        type: {
+            value:"stackedArea"
+        }
+    }
 });
-
-Y.StackedAreaSeries = StackedAreaSeries;

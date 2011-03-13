@@ -345,17 +345,16 @@ var OverlayContextPanel = A.Component.create(
 			 */
 			hide: function(event) {
 				var instance = this;
-				var boundingBox = instance.get(BOUNDING_BOX);
 
 				if(instance._hideAnim) {
 					var visible = instance.get(VISIBLE);
 
 					if (visible) {
-						instance._hideAnim.run();
-
-						instance._hideAnim.on(END, function() {
+						instance._hideAnim.once(END, function() {
 							OverlayContextPanel.superclass.hide.apply(instance, arguments);
 						});
+
+						instance._hideAnim.run();
 					}
 				}
 				else {
@@ -540,4 +539,4 @@ A.OverlayContextPanelManager = new A.OverlayManager({
 });
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-overlay-context','anim']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-overlay-context','anim'], skinnable:true});

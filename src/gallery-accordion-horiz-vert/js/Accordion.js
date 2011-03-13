@@ -333,6 +333,8 @@ Y.extend(Accordion, Y.Widget,
 	{
 		this.section_list = [];
 
+		this.get('allowAllClosed');	// force init of this.allow_all_closed
+
 		if (this.get('horizontal'))
 		{
 			this.slide_style_name = 'width';

@@ -31,3 +31,13 @@
 .yui3-toolbar-vertical .yui3-buttonitem-icon-only .yui3-buttonitem-icon {
 	float: none;
 }
+
+.yui3-toolbar-horizontal .yui3-toolbarspacer {
+	width: 4px;
+	display: inline-block;
+}
+
+.yui3-toolbar-vertical .yui3-toolbarspacer {
+	height: 4px;
+	display: block;
+}

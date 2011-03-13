@@ -55,6 +55,15 @@ QueryBuilder.Select.prototype =
 		return [ value_cell ];
 	},
 
+	postCreate: function(
+		/* int */		filter_index,
+		/* object */	var_config,
+		/* array */		op_list,
+		/* array */		value)
+	{
+		this.value_menu.focus();
+	},
+
 	destroy: function()
 	{
 		this.value_menu = null;

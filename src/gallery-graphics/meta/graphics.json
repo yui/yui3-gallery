@@ -1,0 +1,25 @@
+{
+    "graphics": {
+        "requires": ["dom", "event-custom", "base"],
+        "plugins": {
+            "graphics-svg": {
+                "condition": {
+                    "trigger": "graphics",
+                    "test": "graphics-svg.js"
+                }
+            },
+            "graphics-canvas": {
+                "condition": {
+                    "trigger": "graphics",
+                    "test": "graphics-canvas.js"
+                }
+            },
+            "graphics-vml": {
+                "condition": {
+                    "trigger": "graphics",
+                    "test": "graphics-vml.js"
+                }
+            } 
+        }
+    }
+}

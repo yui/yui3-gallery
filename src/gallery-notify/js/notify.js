@@ -10,7 +10,7 @@ var EVENTS = {
     CONTENT_BOX    = 'contentBox',
     ATTR_CLOSABLE = 'closable',
     ATTR_DEFAULT = 'default',
-    TYPE = 'type';
+    ICON = 'icon';
 
 /**
  * Message is created as a Child Widget
@@ -63,7 +63,7 @@ Y.namespace('Notify').Message = Y.Base.create('notify-message', Y.Widget, [Y.Wid
 
     cb.setContent(this.get('message'));
     if(this.get(ATTR_CLOSABLE)) {
-      closeBtn = new Y.Button({type:'close', callback: Y.bind(this.close, this), render: true});
+      closeBtn = new Y.Button({icon:'eks-circle', callback: Y.bind(this.close, this), render: true});
       bb.append(closeBtn.get('boundingBox').remove());
     }
   },
@@ -111,11 +111,21 @@ Y.namespace('Notify').Message = Y.Base.create('notify-message', Y.Widget, [Y.Wid
       this.timer = null;
     }
 
-    this.get(BOUNDING_BOX).fade({
+    var bb = this.get(BOUNDING_BOX);
+
+    bb.fade({
       on : {
         finish : Y.bind(function(e){
           e.preventDefault();
-          this.destroy();
+          bb.blindUp({
+            duration : 0.2,
+            on : {
+              finish : Y.bind(function(e){
+                e.preventDefault();
+                this.destroy();
+              },this)
+            }
+          })
         },this)
       }
     });
@@ -187,18 +197,18 @@ Y.namespace('Notify').Message = Y.Base.create('notify-message', Y.Widget, [Y.Wid
     },
 
     /**
-     * @description Sets the type of notification for styling
+     * @description Sets the icon of notification for styling
      *
-     * @attribute type
+     * @attribute icon
      * @type String
      * @default notice
      */
-    type : {
+    icon : {
       validator : YL.isString,
       setter : function(val) {
         this.get(BOUNDING_BOX).replaceClass(
-          this.getClassName(TYPE, this.get(TYPE) || ATTR_DEFAULT),
-          this.getClassName(TYPE, val || ATTR_DEFAULT)
+          this.getClassName(ICON, this.get(ICON) || ATTR_DEFAULT),
+          this.getClassName(ICON, val || ATTR_DEFAULT)
         );
         return val;
       },
@@ -211,7 +221,7 @@ Y.namespace('Notify').Message = Y.Base.create('notify-message', Y.Widget, [Y.Wid
 /**
  * Notify is created as a Parent Widget
  */
-Y.Notify = Y.Base.create('notify',Y.Widget,[Y.WidgetParent, Y.EventTarget],{
+Y.Notify = Y.Base.create('notify', Y.Widget, [Y.WidgetParent, Y.EventTarget], {
   /**
    * Override default widget templates
    */
@@ -259,14 +269,14 @@ Y.Notify = Y.Base.create('notify',Y.Widget,[Y.WidgetParent, Y.EventTarget],{
    * @method addMessage
    * @public
    * @param msg {String} Message to be displayed
-   * @param type {String} Classification of message
+   * @param icon {String} Classification of message
    * @param index {Number} Stack order
    */
-  addMessage : function(msg, type, index) {
-    if(!type) {
-      type = ATTR_DEFAULT;
+  addMessage : function(msg, icon, index) {
+    if(!icon) {
+      icon = ATTR_DEFAULT;
     }
-    this._buildChildConfig(msg,type);
+    this._buildChildConfig(msg,icon);
 
     if(index) {
       return this.add(this._childConfig,index);
@@ -301,14 +311,14 @@ Y.Notify = Y.Base.create('notify',Y.Widget,[Y.WidgetParent, Y.EventTarget],{
    *
    * @method _buildChildConfig
    * @param msg {String} Message to be displayed
-   * @param type {String} Classification of message
+   * @param icon {String} Classification of message
    */
-  _buildChildConfig : function(msg,type) {
+  _buildChildConfig : function(msg,icon) {
     this._childConfig = {
       closable : this.get(ATTR_CLOSABLE),
       timeout : this.get('timeout'),
       message : msg,
-      type : type
+      icon : icon 
     };
   }
 

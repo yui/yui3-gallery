@@ -5,16 +5,4 @@
  * @constructor
  * @description A Radio field node
  */
-function RadioField () {
-    RadioField.superclass.constructor.apply(this,arguments);
-}
-
-Y.mix(RadioField, {
-    NAME : 'radio-field'
-});
-
-Y.extend(RadioField, Y.CheckboxField, {
-    _nodeType : 'radio'
-});
-
-Y.RadioField = RadioField;
+Y.RadioField = Y.Base.create('radio-field', Y.FormField, [Y.WidgetChild]);

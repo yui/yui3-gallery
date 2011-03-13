@@ -95,7 +95,7 @@ Y.JSONRPC = Y.mix(JSONRPC, {
                 config = this._config,
                 ioConfig = {
                     headers: {
-                        'content-type': 'application/json'
+                        'Content-Type': 'application/json; charset=utf-8'
                     },
                     method: config.method,
                     sync: config.sync,
@@ -129,13 +129,22 @@ Y.JSONRPC = Y.mix(JSONRPC, {
                             data = Y.JSON.parse(response.responseText);
                         }
                         catch (e) {
-                            if (failure) {
-                                failure.call(ioConfig.context, response,
-                                    "Invalid JSON response");
-                            }
+                            data = {
+                                error: {
+                                    code: -32700,
+                                    message: "Parse error"
+                                },
+                                id: null
+                            };
                         }
 
-                        success.call(ioConfig.context, data);
+                        if (data.error) {
+                            if (failure) {
+                                failure.call(ioConfig.context, data.error);
+                            }
+                        } else {
+                            success.call(ioConfig.context, data.result);
+                        }
                     };
                 }
             }
@@ -156,7 +165,7 @@ Y.JSONRPC = Y.mix(JSONRPC, {
 
             Y.io(config.url, {
                 headers: {
-                    'content-type': 'application/json'
+                    'Content-Type': 'application/json; charset=utf-8'
                 },
                 sync: config.sync,
                 on: {

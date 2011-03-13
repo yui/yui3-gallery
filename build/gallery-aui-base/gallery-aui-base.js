@@ -1,39 +1,160 @@
 YUI.add('gallery-aui-base', function(A) {
 
-A.mix(A.Array, {
-	remove: function(a, from, to) {
-	  var rest = a.slice((to || from) + 1 || a.length);
-	  a.length = (from < 0) ? (a.length + from) : from;
+var Lang = A.Lang,
+	isArray = Lang.isArray,
+	isFunction = Lang.isFunction,
+	isString = Lang.isString,
 
-	  return a.push.apply(a, rest);
-	},
+	AArray = A.Array,
+	LString = A.namespace('Lang.String'),
+	arrayIndexOf = AArray.indexOf,
 
-	removeItem: function(a, item) {
-		var index = A.Array.indexOf(a, item);
+	EMPTY_STR = '',
 
-		return A.Array.remove(a, index);
-	}
-});
-
-var Lang = A.Lang;
-var isArray = Lang.isArray;
-var isFunction = Lang.isFunction;
-var isString = Lang.isString;
+	DOC = A.config.doc,
+	FIRST_CHILD = 'firstChild',
+	INNER_HTML = 'innerHTML',
+	NODE_VALUE = 'nodeValue',
+	NORMALIZE = 'normalize';
 
 A.mix(
-	Lang,
+	LString,
 	{
-		emptyFn: function() {},
-		emptyFnFalse: function() {
-			return false;
+		contains: function(s, ss) {
+		  return s.indexOf(ss) != -1;
 		},
-		emptyFnTrue: function() {
-			return true;
+
+		endsWith: function(str, suffix) {
+			var length = (str.length - suffix.length);
+
+			return ((length >= 0) && (str.indexOf(suffix, length) == length));
 		},
 
 		// Courtesy of: http://simonwillison.net/2006/Jan/20/escape/
 		escapeRegEx: function(str) {
 			return str.replace(/([.*+?^$(){}|[\]\/\\])/g, '\\$1');
+		},
+
+		repeat: function(string, length) {
+			return new Array(length + 1).join(string);
+		},
+
+		padNumber: function(num, length, precision) {
+			var str = precision ? Number(num).toFixed(precision) : String(num);
+			var index = str.indexOf('.');
+
+			if (index == -1) {
+				index = str.length;
+			}
+
+			return LString.repeat('0', Math.max(0, length - index)) + str;
+		},
+
+		remove: function(s, substitute, all) {
+			var re = new RegExp(LString.escapeRegEx(substitute), all ? 'g' : '');
+
+			return s.replace(re, '');
+		},
+
+		removeAll: function(s, substitute) {
+			return LString.remove(s, substitute, true);
+		},
+
+		startsWith: function(str, prefix) {
+			return (str.lastIndexOf(prefix, 0) == 0);
+		},
+
+		trim: Lang.trim,
+
+		// inspired from Google unescape entities
+		unescapeEntities: function(str) {
+			if (LString.contains(str, '&')) {
+				if (DOC && !LString.contains(str, '<')) {
+					str = LString._unescapeEntitiesUsingDom(str);
+				}
+				else {
+					// Fall back on pure XML entities
+					str = LString._unescapeXmlEntities(str);
+				}
+			}
+
+			return str;
+		},
+
+		_unescapeEntitiesUsingDom: function(str) {
+			var el = LString._unescapeNode;
+
+			el[INNER_HTML] = str;
+
+			if (el[NORMALIZE]) {
+				el[NORMALIZE]();
+			}
+
+			str = el.firstChild.nodeValue;
+
+			el[INNER_HTML] = EMPTY_STR;
+
+			return str;
+		},
+
+		_unescapeXmlEntities: function(str) {
+			return str.replace(/&([^;]+);/g, function(s, entity) {
+				switch (entity) {
+					case 'amp':
+						return '&';
+					case 'lt':
+						return '<';
+					case 'gt':
+						return '>';
+					case 'quot':
+						return '"';
+					default:
+						if (entity.charAt(0) == '#') {
+							var n = Number('0' + entity.substr(1));
+
+							if (!isNaN(n)) {
+								return String.fromCharCode(n);
+							}
+						}
+
+					return s;
+				}
+			});
+		},
+
+		_unescapeNode: DOC.createElement('a')
+	}
+);
+
+A.mix(
+	AArray,
+	{
+		remove: function(a, from, to) {
+		  var rest = a.slice((to || from) + 1 || a.length);
+		  a.length = (from < 0) ? (a.length + from) : from;
+
+		  return a.push.apply(a, rest);
+		},
+
+		removeItem: function(a, item) {
+			var index = arrayIndexOf(a, item);
+
+			return AArray.remove(a, index);
+		}
+	}
+);
+
+A.mix(
+	Lang,
+	{
+		emptyFn: function() {},
+
+		emptyFnFalse: function() {
+			return false;
+		},
+
+		emptyFnTrue: function() {
+			return true;
 		},
 
 		isGuid: function(id) {
@@ -89,7 +210,7 @@ A.mix(
 );
 ;(function() {
 	/*
-	 * Alloy JavaScript Library vgallery-2010.08.18-17-12
+	 * Alloy JavaScript Library vgallery-2011.02.09-21-32
 	 * http://alloy.liferay.com/
 	 *
 	 * Copyright (c) 2010 Liferay Inc.
@@ -139,15 +260,15 @@ A.mix(
 
 	var ALLOY;
 
-	try {
+	if (typeof A != 'undefined') {
 		ALLOY = A;
 	}
-	catch (e) {
+	else {
 		ALLOY = YUI(defaults);
 	}
 
 	var guidExtensions = function(A) {
-		A.Env._guidp = ['aui', A.version, A.Env._yidx].join('-').replace(/\./g, '-');
+		A.Env._guidp = ['aui', A.version, A.Env._yidx].join('_').replace(/\./g, '_');
 	};
 
 	guidExtensions(ALLOY);
@@ -229,128 +350,238 @@ A.mix(
 		UA extensions
 	*/
 
-	AUI._uaExtensions = function(A) {
-		var p = navigator.platform;
-		var u = navigator.userAgent;
-		var b = /(Firefox|Opera|Chrome|Safari|KDE|iCab|Flock|IE)/.exec(u);
-		var os = /(Win|Mac|Linux|iPhone|iPad|Sun|Solaris)/.exec(p);
-		var versionDefaults = [0,0];
+	(function() {
+		var REGEX_VERSION_DOT = /\./g;
 
-		b = (!b || !b.length) ? (/(Mozilla)/.exec(u) || ['']) : b;
-		os = (!os || !os.length) ? [''] : os;
+		var parseVersionNumber = function(str) {
+			var count = 0;
 
-		UA = A.merge(
-			UA,
-			{
-				gecko: /Gecko/.test(u) && !/like Gecko/.test(u),
-				webkit: /WebKit/.test(u),
-
-				aol: /America Online Browser/.test(u),
-				camino: /Camino/.test(u),
-				firefox: /Firefox/.test(u),
-				flock: /Flock/.test(u),
-				icab: /iCab/.test(u),
-				konqueror: /KDE/.test(u),
-				mozilla: /mozilla/.test(u),
-				ie: /MSIE/.test(u),
-				netscape: /Netscape/.test(u),
-				opera: /Opera/.test(u),
-				chrome: /Chrome/.test(u),
-				safari: /Safari/.test(u) && !(/Chrome/.test(u)),
-				browser: b[0].toLowerCase(),
-
-				win: /Win/.test(p),
-				mac: /Mac/.test(p),
-				linux: /Linux/.test(p),
-				iphone: (p == 'iPhone'),
-				ipad: (p == 'iPad'),
-				sun: /Solaris|SunOS/.test(p),
-				os: os[0].toLowerCase(),
-
-				platform: p,
-				agent: u
-			}
-		);
-
-		UA.version = {
-			string: ''
+			return parseFloat(
+				str.replace(
+					REGEX_VERSION_DOT,
+					function() {
+						return (count++ == 1) ? '' : '.';
+					}
+				)
+			);
 		};
 
-		if (UA.ie) {
-			UA.version.string = (/MSIE ([^;]+)/.exec(u) || versionDefaults)[1];
-		}
-		else if (UA.firefox) {
-			UA.version.string = (/Firefox\/(.+)/.exec(u) || versionDefaults)[1];
-		}
-		else if (UA.safari) {
-			UA.version.string = (/Version\/([^\s]+)/.exec(u) || versionDefaults)[1];
-		}
-		else if (UA.opera) {
-			UA.version.string = (/Opera\/([^\s]+)/.exec(u) || versionDefaults)[1];
-		}
+		var DEFAULTS_VERSION = ['0','0'];
 
-		UA.version.number = parseFloat(UA.version.string) || versionDefaults[0];
-		UA.version.major = (/([^\.]+)/.exec(UA.version.string) || versionDefaults)[1];
+		var getVersion = function(regex, userAgent) {
+			var version = (userAgent.match(regex) || DEFAULTS_VERSION)[1];
 
-		UA[UA.browser + UA.version.major] = true;
+			return parseVersionNumber(version);
+		};
 
-		UA.renderer = '';
+		var MAP_OS_SELECTORS = {
+			windows: 'win',
+			macintosh: 'mac'
+		};
 
-		var documentElement = document.documentElement;
-
-		UA.dir = documentElement.getAttribute('dir') || 'ltr';
-
-		if (UA.ie) {
-			UA.renderer = 'trident';
-		}
-		else if (UA.gecko) {
-			UA.renderer = 'gecko';
-		}
-		else if (UA.webkit) {
-			UA.renderer = 'webkit';
-		}
-		else if (UA.opera) {
-			UA.renderer = 'presto';
-		}
-
-		A.UA = UA;
-
-		/*
-		* Browser selectors
-		*/
-
-		var selectors = [
-			UA.renderer,
-			UA.browser,
-			UA.browser + UA.version.major,
-			UA.os,
-			UA.dir,
-			'js'
+		var BROWSERS = [
+			'ie',
+			'opera',
+			'chrome',
+			'aol',
+			'camino',
+			'firefox',
+			'flock',
+			'mozilla',
+			'netscape',
+			'icab',
+			'konqueror',
+			'safari'
 		];
 
-		if (UA.os == 'macintosh') {
-			selectors.push('mac');
-		}
-		else if (UA.os == 'windows') {
-			selectors.push('win');
-		}
+		AUI._uaExtensions = function(A) {
+			var nav = navigator;
 
-		if (UA.mobile) {
-			selectors.push('mobile');
-		}
+			var userAgent = nav.userAgent;
 
-		if (UA.secure) {
-			selectors.push('secure');
-		}
+			var UA = A.UA;
+			var OS = UA.os;
 
-		UA.selectors = selectors.join(' ');
+			var UAX = {
+				aol: 0,
 
-		if (!documentElement._yuid) {
-			documentElement.className += ' ' + UA.selectors;
+				camino: 0,
+				firefox: 0,
+				flock: 0,
+				mozilla: 0,
+				netscape: 0,
 
-			A.stamp(documentElement);
-		}
-	};
+				icab: 0,
+				konqueror: 0,
+
+				safari: 0,
+
+				browser: 0,
+
+				win: OS == 'windows',
+				mac: OS == 'macintosh',
+				rhino: OS == 'rhino',
+
+				agent: userAgent
+			};
+
+			if (UA.ie) {
+				UAX.aol = getVersion(/America Online Browser ([^\s]*);/, userAgent);
+			}
+			else if (UA.gecko) {
+				UAX.netscape = getVersion(/(Netscape|Navigator)\/([^\s]*)/, userAgent);
+				UAX.flock = getVersion(/Flock\/([^\s]*)/, userAgent);
+				UAX.camino = getVersion(/Camino\/([^\s]*)/, userAgent);
+				UAX.firefox = getVersion(/Firefox\/([^\s]*)/, userAgent);
+			}
+			else if (UA.webkit) {
+				UAX.safari = getVersion(/Version\/([^\s]*) Safari/, userAgent);
+			}
+			else {
+				UAX.icab = getVersion(/iCab(?:\/|\s)?([^\s]*)/, userAgent);
+				UAX.konqueror = getVersion(/Konqueror\/([^\s]*)/, userAgent);
+			}
+
+			if (!UAX.win && !UAX.mac) {
+				var linux = /Linux/.test(userAgent);
+				var sun = /Solaris|SunOS/.test(userAgent);
+
+				if (linux) {
+					UA.os = 'linux';
+					UAX.linux = linux;
+				}
+				else if (sun) {
+					UA.os = 'sun';
+					UAX.sun = sun;
+				}
+			}
+
+			A.mix(UA, UAX);
+
+			var browserList = [];
+			var versionMajor = 0;
+
+			var browser;
+			var version;
+			var uaVersionMajor;
+			var uaVersionMinor;
+
+			var versionObj = {
+				string: '',
+				major: versionMajor
+			};
+
+			var i = BROWSERS.length;
+
+			while (i--) {
+				browser = BROWSERS[i];
+				version = UA[browser];
+
+				if (version > 0) {
+					versionMajor = parseInt(version, 10);
+					uaVersionMajor = browser + versionMajor;
+
+					uaVersionMinor = (browser + version);
+
+					if (String(version).indexOf('.') > -1) {
+						uaVersionMinor = uaVersionMinor.replace(/\.(\d).*/, '-$1');
+					}
+					else {
+						uaVersionMinor += '-0';
+					}
+
+					browserList.push(browser, uaVersionMajor, uaVersionMinor);
+
+					versionObj.string = browser + '';
+					versionObj.major = versionMajor;
+				}
+			}
+
+			UA.version = versionObj;
+
+			UA.renderer = '';
+
+			var documentElement = A.config.doc.documentElement;
+
+			UA.dir = documentElement.getAttribute('dir') || 'ltr';
+
+			if (UA.ie) {
+				UA.renderer = 'trident';
+			}
+			else if (UA.gecko) {
+				UA.renderer = 'gecko';
+			}
+			else if (UA.webkit) {
+				UA.renderer = 'webkit';
+			}
+			else if (UA.opera) {
+				UA.renderer = 'presto';
+			}
+
+			A.UA = UA;
+
+			/*
+			* Browser selectors
+			*/
+
+			var selectors = [
+				UA.renderer,
+				UA.dir,
+				'js'
+			].concat(browserList);
+
+			var osSelector = MAP_OS_SELECTORS[UA.os] || UA.os;
+
+			selectors.push(osSelector);
+
+			if (UA.mobile) {
+				selectors.push('mobile');
+			}
+
+			if (UA.secure) {
+				selectors.push('secure');
+			}
+
+			UA.selectors = selectors.join(' ');
+
+			// The methods in this if block only run once across all instances
+			if (!documentElement._yuid) {
+				documentElement.className += ' ' + UA.selectors;
+
+				var CONFIG = A.config,
+					DOC = CONFIG.doc,
+					vml,
+					svg;
+
+				vml = !(svg = !!(CONFIG.win.SVGAngle || DOC.implementation.hasFeature('http://www.w3.org/TR/SVG11/feature#BasicStructure', '1.1')));
+
+				if (vml) {
+					var div = DOC.createElement('div');
+					var behaviorObj;
+
+					div.innerHTML = '<v:shape adj="1"/>';
+
+					behaviorObj = div.firstChild;
+
+					behaviorObj.style.behavior = 'url(#default#VML)';
+
+					if (!(behaviorObj && typeof behaviorObj.adj == 'object')) {
+						vml = false;
+					}
+
+					div = null;
+				}
+
+				AUI._VML = vml;
+				AUI._SVG = svg;
+
+				A.stamp(documentElement);
+			}
+
+			UA.vml = AUI._VML;
+			UA.svg = AUI._SVG;
+		};
+	})();
 
 	AUI._uaExtensions(ALLOY);
 
@@ -368,4 +599,4 @@ A.mix(
 })();
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:false, requires:['gallery-aui-node-base','gallery-aui-component','gallery-aui-delayed-task','gallery-aui-selector','event','oop']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-node-base','gallery-aui-component','gallery-aui-delayed-task','gallery-aui-selector','event','oop'], skinnable:false});

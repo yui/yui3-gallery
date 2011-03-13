@@ -294,7 +294,7 @@ if (storageMode === MODE_HTML5 || storageMode === MODE_GECKO) {
             storageDriver.load(USERDATA_PATH);
 
             try {
-                data = JSON.parse(storageDriver.getAttribute(USERDATA_NAME));
+                data = JSON.parse(storageDriver.getAttribute(USERDATA_NAME) || '{}');
             } catch (ex) {
                 data = {};
             }
@@ -312,4 +312,4 @@ if (storageMode === MODE_HTML5 || storageMode === MODE_GECKO) {
 }
 
 
-}, 'gallery-2010.02.22-22' ,{requires:['event-base','event-custom','event-custom-complex','json']});
+}, 'gallery-2010.12.01-21-32' ,{requires:['event-base','event-custom','event-custom-complex','json']});

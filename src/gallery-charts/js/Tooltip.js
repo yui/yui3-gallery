@@ -437,7 +437,11 @@
              */
             xy: {
                 value:[OX, OY]
-            }
+            },
+
+            labelFunction: {},
+
+            labelFunctionScope: {}
         }
     });
 

@@ -1,0 +1,40 @@
+.yui3-skin-xarno {
+  
+}
+.yui3-skin-xarno .yui3-hidden {
+  overflow: hidden;
+  height: 0;
+  width: 0;
+  display: block;
+}
+
+.yui3-skin-xarno .yui3-header {
+
+}
+
+.yui3-skin-xarno .yui3-content {
+  background-color: #ffffff;
+  color: #2a2a2a;
+}
+
+.yui3-skin-xarno .yui3-clickable {
+  cursor: pointer;
+}
+
+.yui3-skin-xarno .yui3-highlight {
+
+}
+
+.yui3-skin-xarno .yui3-error {
+
+}
+
+.yui3-skin-xarno .yui3-overlay-mask {
+    background-color: #ffffff;
+    opacity: 0.7;
+}
+
+.yui3-skin-xarno .yui3-shadow {
+
+}
+

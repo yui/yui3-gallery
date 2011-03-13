@@ -1,0 +1,6 @@
+.tabView { position: relative; padding:1px; overflow: hidden; font-size: 1em; }
+.tabView dt { float: left; margin-right: 1px; position:relative; cursor: pointer; z-index: 1; height: 2em; line-height: 2em; border: 1px solid #ddd; padding:0 1em; top: 2px; }
+.tabView dt.active { z-index: 3; cursor: default; border-bottom-color: #fff; top: -1px; }
+.tabView dd { float: right; position:relative; margin-top: 2em; margin-left: -100%; width: 100%; display: none; z-index: 2; background: #fff;}
+.tabView dd.active { display: block;}
+.tabView dd .liner { border: 1px solid #ddd; padding: 5px 12px 5px 10px;}

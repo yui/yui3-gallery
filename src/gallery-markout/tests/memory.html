@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Markout Memory Tests</title>
+		<script src="../../../../yui3/build/yui/yui.js"></script>
+		<script src="../../../build/gallery-markout/gallery-markout-debug.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			YUI({ filter: 'RAW' }).use('gallery-markout', function(Y){
+			
+				Y.later(5000, null, function(){
+					
+					var body = Y.Markout('body'),
+						i = 0;
+	
+					for (i = 0; i < 10000; i++) {
+						var h1 = body.h1();
+						h1.a({ href: 'http://oddnut.com/markout' }, 'Markout');
+						h1.text(' Memory Test: ' + i);
+						h1.node().one('a').set('text', 'Markout');
+					}
+	
+					Y.later(10000, null, function(){
+						body.node().remove().destroy(true);
+					});
+	
+				});
+				
+			});
+		</script>
+	</body>
+</html>

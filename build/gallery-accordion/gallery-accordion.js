@@ -266,6 +266,19 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
     },
 
 
+	/**
+     * Binds an event to Accordion's contentBox.
+     *
+     * @method _bindItemChosenEvent
+     * @protected
+     */
+	_bindItemChosenEvent: function(itemChosenEvent) {
+		var contentBox;
+
+		contentBox = this.get( CONTENT_BOX );
+		contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), '.yui3-widget-hd' );
+	},
+
     /**
      * Contains items for collapsing
      * @property _forCollapsing
@@ -1322,7 +1335,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
          */
         contentBox.set( "id", srcNodeId );
 
-        itemsDom = srcNode.queryAll( "> ." + C_ITEM );
+        itemsDom = srcNode.all( "> ." + C_ITEM );
 
         itemsDom.each( function( itemNode, index, itemsDom ){
             var newItem;
@@ -1340,18 +1353,26 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
 
 
     /**
-     * Add listener to <code>itemChosen</code> event in Accordion's content box
+     * Add listener(s) to <code>itemChosen</code> event in Accordion's content box.
+	 * If itemChosen is an Array, this function will invoke multiple times _bindItemChosenEvent
      *
      * @method bindUI
      * @protected
      */
     bindUI: function(){
-        var contentBox, itemChosenEvent;
+		var i, itemChosenEvent, length;
 
-        contentBox = this.get( CONTENT_BOX );
         itemChosenEvent = this.get( 'itemChosen' );
 
-        contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), '.yui3-widget-hd' );
+		if( Lang.isArray(itemChosenEvent) ){
+			length = itemChosenEvent.length;
+
+			for( i = 0; i < length; i++ ) {
+				this._bindItemChosenEvent(itemChosenEvent[i]);
+			}
+		} else {
+			this._bindItemChosenEvent(itemChosenEvent);
+		}
     },
 
 
@@ -1509,7 +1530,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @return {Y.AccordionItem} The removed item or null if not found
      */
     removeItem: function( p_item ){
-        var items, bb, item = null, itemIndex;
+        var items, bb, item = null, itemIndex, allowed;
 
         items = this.get( ITEMS );
 
@@ -1522,10 +1543,13 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
         }
 
         if( itemIndex >= 0 ){
-
-            this.fire( BEFOREITEMREMOVE, {
+            allowed = this.fire( BEFOREITEMREMOVE, {
                 item: p_item
             });
+
+            if( !allowed ){
+                return null;
+            }
 
             item = items.splice( itemIndex, 1 )[0];
 
@@ -1644,16 +1668,18 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
     ATTRS : {
         /**
          * @description The event on which Accordion should listen for user interactions.
-         * The value can be also mousedown or mouseup. Mousedown event can be used if
-         * drag&drop is not enabled
+         * The value can be also 'mousedown', 'mouseup' or ['mouseenter','click'].
+		 * Mousedown event can be used if drag&drop is not enabled.
          *
          * @attribute itemChosen
          * @default click
-         * @type String
+         * @type String|Array
          */
         itemChosen: {
             value: "click",
-            validator: Lang.isString
+            validator: function( value ) {
+				return Lang.isString(value) || Lang.isArray(value);
+			}
         },
 
         /**
@@ -2327,7 +2353,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIcon: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -2341,7 +2367,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setNodeLabel: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -2355,7 +2381,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconsContainer: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -2369,7 +2395,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconExpanded: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -2383,7 +2409,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconAlwaysVisible: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -2397,7 +2423,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
      * @protected
      */
     _setIconClose: function( value ){
-        return Y.get( value ) || null;
+        return Y.one( value ) || null;
     },
 
 
@@ -2715,7 +2741,7 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
             }
 
             labelSelector = HEADER_SELECTOR_SUB + C_LABEL;
-            node = srcNode.query( labelSelector );
+            node = srcNode.one( labelSelector );
 
             return (node) ? node.get( INNER_HTML ) : null;
         },
@@ -2887,4 +2913,4 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
 
 
 
-}, 'gallery-2010.06.09-20-45' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});
+}, 'gallery-2011.02.23-19-01' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});

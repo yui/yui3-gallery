@@ -1,0 +1,10 @@
+Parent Window Utility
+    This utility provides a set of functionalities to interact with the parent window. 
+    More info at http://yuilibrary.com/gallery/show/parent-window
+
+HEAD
+    * Tested on YUI 3.2.0
+
+2010.08.18-17-12
+    * Tested on YUI 3.1.2
+    * Initial release
