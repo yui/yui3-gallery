@@ -667,6 +667,9 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             bb.delegate("click", Y.bind(self._onNavButtonClick, self),
                         ".yui3-carousel-button");
         }
+
+        bb.delegate("click", Y.bind(self._onItemClick, self),
+                    ".yui3-carousel-item");
     },
 
     /**
@@ -820,6 +823,33 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     },
 
     /**
+     * Handle the item click event.
+     *
+     * @method _onItemClick
+     * @protected
+     */
+    _onItemClick: function (ev) {
+        var self = this,
+            bb = self.get("boundingBox"),
+            container, el, target;
+
+        target = ev && ev.target ? ev.target : null;
+        if (!target) {
+            return;
+        }
+        ev.preventDefault();
+
+        container = bb.one(".yui3-carousel-content");
+        el = target;
+        while (el && el != container) {
+            if (el.hasClass(self.ITEM_CLASS_NAME)) {
+                break;
+            }
+            el = el.parentNode;
+        }
+    },
+
+    /**
      * Handle the navigation button click event.
      *
      * @method _onNavButtonClick
@@ -860,11 +890,11 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         var self = this,
             link, target;
 
-        ev.preventDefault();
         target = ev && ev.target ? ev.target : null;
         if (!target) {
             return;
         }
+        ev.preventDefault();
 
         link = target.get("href");
         if (link) {
@@ -962,6 +992,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
                     }
                 }
                 node.setStyle(attr, size * i);
+                node.addClass(self.ITEM_CLASS_NAME);
             }
         }
     },
@@ -1217,7 +1248,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     /**
      * Template for a single Carousel item.
      */
-    ITEM_TEMPLATE: "<li>{content}</li>",
+    ITEM_TEMPLATE: "<li class=\"" + self.ITEM_CLASS_NAME + "\">{content}</li>",
 
     /**
      * Template for the Carousel navigation.
@@ -1231,6 +1262,11 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         "<button type=\"button\">" + "{nav_next_btn_text}</button>" +
         "</span>" +
         "</div>",
+
+    /**
+     * Class name for a single Carousel item.
+     */
+    ITEM_CLASS_NAME: "yui3-carousel-item",
 
     /**
      * Template for a single Carousel navigation item.
