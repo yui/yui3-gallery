@@ -831,7 +831,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     _onItemClick: function (ev) {
         var self = this,
             bb = self.get("boundingBox"),
-            container, el, target;
+            container, el, target, i, len, items;
 
         target = ev && ev.target ? ev.target : null;
         if (!target) {
@@ -845,7 +845,17 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             if (el.hasClass(self.ITEM_CLASS_NAME)) {
                 break;
             }
-            el = el.parentNode;
+            el = el.get("parentNode");
+        }
+
+        if (el) {
+            items = self._vtbl.items;
+            for (i = 0, len = items.length; i < len; ++i) {
+                if (el == items[i]) {
+                    self.set("selectedItem", i);
+                    break;
+                }
+            }
         }
     },
 
