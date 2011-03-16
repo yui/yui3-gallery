@@ -1223,7 +1223,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         self._uiSetNavItem(pages.item(currPage));
         lastPage = self.getPageForItem(self.get("numItems") - 1);
 
-        if (selectedItem === 0) {
+        if (currPage === 0) {
             btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
             if (btn) {
                 btn.removeClass(getCN(Carousel.NAME, cpButtonDisabled));
