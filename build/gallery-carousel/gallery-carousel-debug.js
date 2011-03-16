@@ -26,7 +26,19 @@ function Carousel() {
 var getCN = Y.ClassNameManager.getClassName,
     JS = Y.Lang,
     Node = Y.Node,
+    canGoBackward = false,
+    canGoForward = true,
+
+    // Custom class prefixes
+    cpButton = "button",
+    cpButtonDisabled = "button-disabled",
+    cpContent = "content",
+    cpItem = "item",
+    cpNav = "nav",
+    cpNavItem = "nav-item",
+
     // Carousel custom events
+
     /**
      * @event afterScroll
      * @description          fires after the Carousel has scrolled its view
@@ -281,399 +293,409 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @return {Boolean} True if the add succeeded; false otherwise
      * @public
      */
-     addItem: function (node, pos) {
-         var self = this, count, index, item;
+    addItem: function (node, pos) {
+        var self = this, count, index, item;
 
-         if (JS.isString(node)) {
-             item = Node.create(Y.substitute(self.ITEM_TEMPLATE, {
-                 content: node
-             }));
-         } else if (JS.isObject(node) && node.constructor.NAME === "node") {
-             item = node;
-         } else {
-             return false;
-         }
+        if (JS.isString(node)) {
+            item = Node.create(Y.substitute(self.ITEM_TEMPLATE, {
+                content: node
+            }));
+        } else if (JS.isObject(node) && node.constructor.NAME === "node") {
+            item = node;
+        } else {
+            return false;
+        }
 
-         /* To calculate the size of a single item. */
-         if (!self._vtbl.item.content) {
-             self._vtbl.item.content = item;
-         }
+        /* To calculate the size of a single item. */
+        if (!self._vtbl.item.content) {
+            self._vtbl.item.content = item;
+        }
 
-         if (JS.isUndefined(pos)) {
-             self._vtbl.items.push(item);
-             index = self._vtbl.items.length - 1;
-         } else {
-             if (!self._vtbl.items[pos]) {
-                 self._vtbl.items[pos] = undefined;
-             }
-             self._vtbl.items.splice(pos, 1, item);
-             index = pos;
-         }
+        if (JS.isUndefined(pos)) {
+            self._vtbl.items.push(item);
+            index = self._vtbl.items.length - 1;
+        } else {
+            if (!self._vtbl.items[pos]) {
+                self._vtbl.items[pos] = undefined;
+            }
+            self._vtbl.items.splice(pos, 1, item);
+            index = pos;
+        }
 
-         count = this.get("numItems");
-         this.set("numItems", count + 1);
-         this.fire(ITEMADDED_EVENT, { item: item, pos: index });
+        count = this.get("numItems");
+        this.set("numItems", count + 1);
+        this.fire(ITEMADDED_EVENT, { item: item, pos: index });
 
-         return true;
-     },
+        return true;
+    },
 
-     /**
-      * Insert or append multiple items to the Carousel.
-      *
-      * @method addItems
-      * @param {Array} items An array containing the new items and their
-      *                      positions (optional).  The item can be a content
-      *                      string or a Node.
-      *                      E.g., [{content: "<li>item</li>"},
-      *                             {content: "<li>item2</li>", pos: 3}]
-      * @return {Boolean} True if all items have been successfully added
-      * @public
-      */
-     addItems: function (items) {
-         var self = this, rv = false, item, i, n;
+    /**
+     * Insert or append multiple items to the Carousel.
+     *
+     * @method addItems
+     * @param {Array} items An array containing the new items and their
+     *                      positions (optional).  The item can be a content
+     *                      string or a Node.
+     *                      E.g., [{content: "<li>item</li>"},
+     *                             {content: "<li>item2</li>", pos: 3}]
+     * @return {Boolean} True if all items have been successfully added
+     * @public
+     */
+    addItems: function (items) {
+        var self = this,
+            rv = false,
+            item, i, n;
 
-         if (!JS.isArray(items)) {
-             return false;
-         }
+        if (!JS.isArray(items)) {
+            return false;
+        }
 
-         rv = true;
-         for (i = 0, n = items.length; i < n; ++i) {
-             item = items[i].content;
-             if (!self.addItem(item, items[i].pos)) {
-                 Y.log("Unable to add item " + item, "error", Carousel.NAME);
-                 rv = false;
-             }
-         }
-         return rv;
-     },
+        rv = true;
+        for (i = 0, n = items.length; i < n; ++i) {
+            item = items[i].content;
+            if (!self.addItem(item, items[i].pos)) {
+                Y.log("Unable to add item " + item, "error", Carousel.NAME);
+                rv = false;
+            }
+        }
+        return rv;
+    },
 
-     /**
-      * Empty the Carousel and hide it.
-      *
-      * @method clearItems
-      * @public
-      */
-     clearItems: function () {
-         var self = this, tbl = self._vtbl.items;
+    /**
+     * Empty the Carousel and hide it.
+     *
+     * @method clearItems
+     * @public
+     */
+    clearItems: function () {
+        var self = this,
+            tbl = self._vtbl.items;
 
-         while (tbl.length > 0) {
-             self.removeItem(0);
-         }
-     },
+        while (tbl.length > 0) {
+            self.removeItem(0);
+        }
+    },
 
-     /**
-      * Return the item at index or null if the index is not found.
-      *
-      * If there are no items at the specified index, this method returns null.
-      *
-      * @method getItem
-      * @param {Number} index The index of the item to be returned
-      * @return {Node} The node at index or null if index is not found
-      * @deprecated Use getItem instead
-      * @public
-      */
-     getElementForItem: function (index) {
-         return this.getItem(index);
-     },
+    /**
+     * Return the item at index or null if the index is not found.
+     *
+     * If there are no items at the specified index, this method returns null.
+     *
+     * @method getItem
+     * @param {Number} index The index of the item to be returned
+     * @return {Node} The node at index or null if index is not found
+     * @deprecated Use getItem instead
+     * @public
+     */
+    getElementForItem: function (index) {
+        return this.getItem(index);
+    },
 
-     /**
-      * Return the Carousel items as an array.
-      *
-      * The difference between V2 and V3 API is that if there is no item at a
-      * particular index, the array position is filled out as null.
-      *
-      * @method getItems
-      * @param {Array} pos The optional positions to be returned
-      * @return {Array} The array of items
-      * @deprecated Use getItems instead
-      * @public
-      */
-     getElementForItems: function (pos) {
-         return this.getItems(pos);
-     },
+    /**
+     * Return the Carousel items as an array.
+     *
+     * The difference between V2 and V3 API is that if there is no item at a
+     * particular index, the array position is filled out as null.
+     *
+     * @method getItems
+     * @param {Array} pos The optional positions to be returned
+     * @return {Array} The array of items
+     * @deprecated Use getItems instead
+     * @public
+     */
+    getElementForItems: function (pos) {
+        return this.getItems(pos);
+    },
 
-     /**
-      * Return the index of the first visible item in the current viewport.
-      *
-      * @method getFirstVisible
-      * @return {Number} Index of the first visible item
-      * @public
-      */
-     getFirstVisible: function () {
-         var self = this,
-             numVisible = self.get("numVisible"),
-             selectedItem = self.get("selectedItem");
-         return self._getFirstVisible(selectedItem, numVisible);
-     },
+    /**
+     * Return the index of the first visible item in the current viewport.
+     *
+     * @method getFirstVisible
+     * @return {Number} Index of the first visible item
+     * @public
+     */
+    getFirstVisible: function () {
+        var self = this,
+            numVisible = self.get("numVisible"),
+            selectedItem = self.get("selectedItem");
 
-     /**
-      * Return the index of the first visible item on the specified page.
-      *
-      * @method getFirstVisibleOnPage
-      * @param {Number} The page number; page numbers start from zero
-      * @return {Number} Index of the first visible item
-      * @public
-      */
-     getFirstVisibleOnPage: function (page) {
-         return (page - 1) * this.get("numVisible");
-     },
+        return self._getFirstVisible(selectedItem, numVisible);
+    },
 
-     /**
-      * Return the item at index or null if the index is not found.
-      *
-      * If there are no items at the specified index, this method returns null.
-      *
-      * @method getItem
-      * @param {Number} index The index of the item to be returned
-      * @return {Node} The node at index or null if index is not found
-      * @public
-      */
-     getItem: function (index) {
-         var self = this;
+    /**
+     * Return the index of the first visible item on the specified page.
+     *
+     * @method getFirstVisibleOnPage
+     * @param {Number} The page number; page numbers start from zero
+     * @return {Number} Index of the first visible item
+     * @public
+     */
+    getFirstVisibleOnPage: function (page) {
+        return (page - 1) * this.get("numVisible");
+    },
 
-         if (index < 0 || index > self._vtbl.items.length - 1) {
-             Y.log("Index " + index + " out of bounds", "error",
-                   Carousel.NAME);
-             return null;
-         }
+    /**
+     * Return the item at index or null if the index is not found.
+     *
+     * If there are no items at the specified index, this method returns null.
+     *
+     * @method getItem
+     * @param {Number} index The index of the item to be returned
+     * @return {Node} The node at index or null if index is not found
+     * @public
+     */
+    getItem: function (index) {
+        var self = this;
 
-         return JS.isUndefined(self._vtbl.items[index]) ? null
-                 : self._vtbl.items[index];
-     },
+        if (index < 0 || index > self._vtbl.items.length - 1) {
+            Y.log("Index " + index + " out of bounds", "error",
+                  Carousel.NAME);
+            return null;
+        }
 
-     /**
-      * Return the Carousel items as an array.
-      *
-      * The difference between V2 and V3 API is that if there is no item at a
-      * particular index, the array position is filled out as null.
-      *
-      * @method getItems
-      * @param {Array} pos The optional positions to be returned
-      * @return {Array} The array of items
-      * @public
-      */
-     getItems: function (pos) {
-         var self = this, items = [], i, n;
+        return JS.isUndefined(self._vtbl.items[index]) ? null
+                : self._vtbl.items[index];
+    },
 
-         if (JS.isUndefined(pos)) { // return everything
-             for (i = 0, n = self._vtbl.items.length; i < n; ++i) {
-                 items[i] = self.getItem(i);
-             }
-         } else {
-             for (i = 0, n = pos.length; i < n; ++i) {
-                 items[pos[i]] = self.getItem(pos[i]);
-             }
-         }
+    /**
+     * Return the Carousel items as an array.
+     *
+     * The difference between V2 and V3 API is that if there is no item at a
+     * particular index, the array position is filled out as null.
+     *
+     * @method getItems
+     * @param {Array} pos The optional positions to be returned
+     * @return {Array} The array of items
+     * @public
+     */
+    getItems: function (pos) {
+        var self = this,
+            items = [],
+            i, n;
 
-         return items;
-     },
+        if (JS.isUndefined(pos)) { // return everything
+            for (i = 0, n = self._vtbl.items.length; i < n; ++i) {
+                items[i] = self.getItem(i);
+            }
+        } else {
+            for (i = 0, n = pos.length; i < n; ++i) {
+                items[pos[i]] = self.getItem(pos[i]);
+            }
+        }
 
-     /**
-      * Return the page number for an item in the Carousel.
-      *
-      * @method getPageForItem
-      * @param {Number} item The item for which the page number should be
-      *                      returned
-      * @return {Number} The page number
-      * @public
-      */
-     getPageForItem: function (item) {
-         return Math.floor(item / this.get("numVisible"));
-     },
+        return items;
+    },
 
-     /**
-      * Return the visible items in the current viewport as an array.
-      *
-      * @method getVisibleItems
-      * @return {Array} The list of visible items in the current viewport
-      * @public
-      */
-     getVisibleItems: function () {
-         var self = this,
-             numVisible = self.get("numVisible"),
-             firstVisible = self.getFirstVisible(),
-             rv = [],
-             i, n;
+    /**
+     * Return the page number for an item in the Carousel.
+     *
+     * @method getPageForItem
+     * @param {Number} item The item for which the page number should be
+     *                      returned
+     * @return {Number} The page number
+     * @public
+     */
+    getPageForItem: function (item) {
+        return Math.floor(item / this.get("numVisible"));
+    },
 
-         for (i = firstVisible, n = firstVisible + numVisible; i < n; ++i) {
-             rv.push(self._vtbl.items[i]);
-         }
-         return rv;
-     },
+    /**
+     * Return the visible items in the current viewport as an array.
+     *
+     * @method getVisibleItems
+     * @return {Array} The list of visible items in the current viewport
+     * @public
+     */
+    getVisibleItems: function () {
+        var self = this,
+            numVisible = self.get("numVisible"),
+            firstVisible = self.getFirstVisible(),
+            rv = [],
+            i, n;
 
-     /**
-      * Remove the item at index from the Carousel.
-      *
-      * @method removeItem
-      * @param {Number} index Index of the item to be removed
-      * @return {Boolean} Return true on success, false otherwise
-      * @public
-      */
-     removeItem: function (index) {
-         var self = this, item, count;
+        for (i = firstVisible, n = firstVisible + numVisible; i < n; ++i) {
+            rv.push(self._vtbl.items[i]);
+        }
+        return rv;
+    },
 
-         if (index < 0 || index > self._vtbl.items.length - 1) {
-             Y.log("Index " + index + " out of bounds", "error",
-                   Carousel.NAME);
-             return false;
-         }
+    /**
+     * Remove the item at index from the Carousel.
+     *
+     * @method removeItem
+     * @param {Number} index Index of the item to be removed
+     * @return {Boolean} Return true on success, false otherwise
+     * @public
+     */
+    removeItem: function (index) {
+        var self = this,
+            item, count;
 
-         item = self._vtbl.items.splice(index, 1);
-         if (!item) {
-             Y.log("Item at index " + index + " is undefined", "warn",
-                   Carousel.NAME);
-             return false;
-         }
+        if (index < 0 || index > self._vtbl.items.length - 1) {
+            Y.log("Index " + index + " out of bounds", "error",
+                  Carousel.NAME);
+            return false;
+        }
 
-         count = self.get("numItems");
-         --count;
-         self.set("numItems", count);
-         this.fire(ITEMREMOVED_EVENT, { item: item, pos: index });
+        item = self._vtbl.items.splice(index, 1);
+        if (!item) {
+            Y.log("Item at index " + index + " is undefined", "warn",
+                  Carousel.NAME);
+            return false;
+        }
 
-         return true;
-     },
+        count = self.get("numItems");
+        --count;
+        self.set("numItems", count);
+        this.fire(ITEMREMOVED_EVENT, { item: item, pos: index });
 
-     /**
-      * Scroll the Carousel by "scrollIncrement" backward.
-      *
-      * @method scrollBackward
-      * @public
-      */
-     scrollBackward: function () {
-         var self = this,
-             scrollIncrement = self.get("scrollIncrement"),
-             selectedItem = self.get("selectedItem");
+        return true;
+    },
 
-         self.scrollTo(selectedItem - scrollIncrement);
-     },
+    /**
+     * Scroll the Carousel by "scrollIncrement" backward.
+     *
+     * @method scrollBackward
+     * @public
+     */
+    scrollBackward: function () {
+        var self = this,
+            scrollIncrement = self.get("scrollIncrement"),
+            selectedItem = self.get("selectedItem");
 
-     /**
-      * Scroll the Carousel by "scrollIncrement" forward.
-      *
-      * @method scrollForward
-      * @public
-      */
-     scrollForward: function () {
-         var self = this,
-             scrollIncrement = self.get("scrollIncrement"),
-             selectedItem = self.get("selectedItem");
+        self.scrollTo(selectedItem - scrollIncrement);
+    },
 
-         self.scrollTo(selectedItem + scrollIncrement);
-     },
+    /**
+     * Scroll the Carousel by "scrollIncrement" forward.
+     *
+     * @method scrollForward
+     * @public
+     */
+    scrollForward: function () {
+        var self = this,
+            scrollIncrement = self.get("scrollIncrement"),
+            selectedItem = self.get("selectedItem");
 
-     /**
-      * Scroll the Carousel by a page backward.
-      *
-      * @method scrollPageBackward
-      * @public
-      */
-     scrollPageBackward: function () {
-         var self = this,
-             numVisible = self.get("numVisible"),
-             selectedItem = self.get("selectedItem");
+        self.scrollTo(selectedItem + scrollIncrement);
+    },
 
-         self.scrollTo(selectedItem - numVisible);
-     },
+    /**
+     * Scroll the Carousel by a page backward.
+     *
+     * @method scrollPageBackward
+     * @public
+     */
+    scrollPageBackward: function () {
+        var self = this,
+            numVisible = self.get("numVisible"),
+            selectedItem = self.get("selectedItem");
 
-     /**
-      * Scroll the Carousel by a page forward.
-      *
-      * @method scrollPageForward
-      * @public
-      */
-     scrollPageForward: function () {
-         var self = this,
-             numVisible = self.get("numVisible"),
-             selectedItem = self.get("selectedItem");
+        self.scrollTo(selectedItem - numVisible);
+    },
 
-         self.scrollTo(selectedItem + numVisible);
-     },
+    /**
+     * Scroll the Carousel by a page forward.
+     *
+     * @method scrollPageForward
+     * @public
+     */
+    scrollPageForward: function () {
+        var self = this,
+            numVisible = self.get("numVisible"),
+            selectedItem = self.get("selectedItem");
 
-     /**
-      * Scroll the Carousel to make the item at index visible.
-      *
-      * @method scrollTo
-      * @param {Number} index The index to be scrolled to
-      * @public
-      */
-     scrollTo: function (index) {
-         var self = this,
-             isCircular = self.get("isCircular"),
-             numItems = self.get("numItems"),
-             attr, cb, first, offset;
+        self.scrollTo(selectedItem + numVisible);
+    },
 
-         /* Attempt to fix an "out of bounds" index if possible. */
-         if (index < 0) {
-             if (isCircular) {
-                 index += numItems;
-             } else {
-                 index = 0;
-             }
-         } else if (index > numItems - 1) {
-             if (isCircular) {
-                 index = numItems - index;
-             } else {
-                 index = numItems - 1;
-             }
-         }
+    /**
+     * Scroll the Carousel to make the item at index visible.
+     *
+     * @method scrollTo
+     * @param {Number} index The index to be scrolled to
+     * @public
+     */
+    scrollTo: function (index) {
+        var self = this,
+            isCircular = self.get("isCircular"),
+            numItems = self.get("numItems"),
+            attr, cb, first, offset;
 
-         offset = self._getOffsetForIndex(index);
-         cb = self.get("contentBox");
-         attr = self.get("isVertical") ? "top" : "left";
-         first = self.getFirstVisible();
-         self.fire(BEFORESCROLL_EVENT, { first: first,
-                                         last: first+self.get("numVisible") });
-         cb.setStyle(attr, offset);
-         first = self.getFirstVisible(); // ask for the "new" first visible
-         self.fire(AFTERSCROLL_EVENT, { first: first,
-                                        last: first+self.get("numVisible") });
+        /* Attempt to fix an "out of bounds" index if possible. */
+        if (index < 0) {
+            if (isCircular) {
+                index += numItems;
+            } else {
+                index = 0;
+            }
+        } else if (index > numItems - 1) {
+            if (isCircular) {
+                index = numItems - index;
+            } else {
+                index = numItems - 1;
+            }
+        }
 
-         self.set("selectedItem", index); // assume this is what the user want
-     },
+        offset = self._getOffsetForIndex(index);
+        cb = self.get("contentBox");
+        attr = self.get("isVertical") ? "top" : "left";
+        first = self.getFirstVisible();
+        self.fire(BEFORESCROLL_EVENT, { first: first,
+                last: first+self.get("numVisible") });
+        cb.setStyle(attr, offset);
+        first = self.getFirstVisible(); // ask for the "new" first visible
+        self.fire(AFTERSCROLL_EVENT, { first: first,
+                last: first+self.get("numVisible") });
+        self.set("selectedItem", index); // assume this is what the user want
+    },
 
-     /**
-      * Scroll the Carousel to the given page.
-      *
-      * @method scrollToPage
-      * @param {Number} page The page to be scrolled to (starts from zero)
-      * @public
-      */
-     scrollToPage: function (page) {
-         var self = this;
-         self.scrollTo(page * self.get("numVisible"));
-     },
+    /**
+     * Scroll the Carousel to the given page.
+     *
+     * @method scrollToPage
+     * @param {Number} page The page to be scrolled to (starts from zero)
+     * @public
+     */
+    scrollToPage: function (page) {
+        var self = this;
+        self.scrollTo(page * self.get("numVisible"));
+    },
 
-     /* Overridable protected methods. */
+    /* Overridable protected methods. */
 
-     /**
-      * Attach event handlers that bind UI to Carousel state.
-      *
-      * @method bindUI
-      * @protected
-      */
-     bindUI: function () {
-         var self = this, bb = self.get("boundingBox");
+    /**
+     * Attach event handlers that bind UI to Carousel state.
+     *
+     * @method bindUI
+     * @protected
+     */
+    bindUI: function () {
+        var self = this,
+            bb = self.get("boundingBox");
 
-         self.after("selectedItemChange", self._afterSelectedItemChange);
+        self.after("selectedItemChange", self._afterSelectedItemChange);
 
-         /* Handle navigation. */
-         if (!self.get("hidePagination")) {
-             bb.delegate("click", Y.bind(self._onNavItemClick, self),
-                         ".yui3-carousel-nav-item > a");
-             bb.delegate("click", Y.bind(self._onNavButtonClick, self),
-                         ".yui3-carousel-button");
-         }
-     },
+        /* Handle navigation. */
+        if (!self.get("hidePagination")) {
+            bb.delegate("click", Y.bind(self._onNavItemClick, self),
+                        "." + getCN(Carousel.NAME, cpNavItem) + " > a");
+            bb.delegate("click", Y.bind(self._onNavButtonClick, self),
+                        "." + getCN(Carousel.NAME, cpButton));
+        }
 
-     /**
-      * Initialize the lifecycle of the Carousel widget.
-      *
-      * Initialize internal data structures and create the events to be
-      * published.
-      *
-      * @method initializer
-      * @protected
-      */
+        bb.delegate("click", Y.bind(self._onItemClick, self),
+                    "." + getCN(Carousel.NAME, cpItem));
+    },
+
+    /**
+     * Initialize the lifecycle of the Carousel widget.
+     *
+     * Initialize internal data structures and create the events to be
+     * published.
+     *
+     * @method initializer
+     * @protected
+     */
     initializer: function () {
         var self = this;
 
@@ -777,7 +799,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _getOffsetForIndex: function (index) {
-        var self = this, sz;
+        var self = this,
+            sz;
 
         sz = self.get("isVertical") ? self._vtbl.item.vsz : self._vtbl.item.hsz;
         return -sz * index;
@@ -797,24 +820,61 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         if (node && node.constructor.NAME === "node") {
             if (which === "height") {
                 sz = parseInt(node.getComputedStyle("marginTop"), 10) +
-                     parseInt(node.getComputedStyle("paddingTop"), 10) +
-                     parseInt(node.getComputedStyle("borderTopWidth"), 10) +
-                     parseInt(node.getComputedStyle("height"), 10) +
-                     parseInt(node.getComputedStyle("borderBottomWidth"), 10) +
-                     parseInt(node.getComputedStyle("paddingBottom"), 10) +
-                     parseInt(node.getComputedStyle("marginBottom"), 10);
+                parseInt(node.getComputedStyle("paddingTop"), 10) +
+                parseInt(node.getComputedStyle("borderTopWidth"), 10) +
+                parseInt(node.getComputedStyle("height"), 10) +
+                parseInt(node.getComputedStyle("borderBottomWidth"), 10) +
+                parseInt(node.getComputedStyle("paddingBottom"), 10) +
+                parseInt(node.getComputedStyle("marginBottom"), 10);
             } else if (which == "width") {
                 sz = parseInt(node.getComputedStyle("marginLeft"), 10) +
-                     parseInt(node.getComputedStyle("paddingLeft"), 10) +
-                     parseInt(node.getComputedStyle("borderLeftWidth"), 10) +
-                     parseInt(node.getComputedStyle("width"), 10) +
-                     parseInt(node.getComputedStyle("borderRightWidth"), 10)+
-                     parseInt(node.getComputedStyle("paddingRight"), 10) +
-                     parseInt(node.getComputedStyle("marginRight"), 10);
+                parseInt(node.getComputedStyle("paddingLeft"), 10) +
+                parseInt(node.getComputedStyle("borderLeftWidth"), 10) +
+                parseInt(node.getComputedStyle("width"), 10) +
+                parseInt(node.getComputedStyle("borderRightWidth"), 10)+
+                parseInt(node.getComputedStyle("paddingRight"), 10) +
+                parseInt(node.getComputedStyle("marginRight"), 10);
             }
         }
 
         return sz;
+    },
+
+    /**
+     * Handle the item click event.
+     *
+     * @method _onItemClick
+     * @protected
+     */
+    _onItemClick: function (ev) {
+        var self = this,
+            bb = self.get("boundingBox"),
+            container, el, target, i, len, items;
+
+        target = ev && ev.target ? ev.target : null;
+        if (!target) {
+            return;
+        }
+        ev.preventDefault();
+
+        container = bb.one("." + getCN(Carousel.NAME, cpContent));
+        el = target;
+        while (el && el != container) {
+            if (el.hasClass(self.ITEM_CLASS_NAME)) {
+                break;
+            }
+            el = el.get("parentNode");
+        }
+
+        if (el) {
+            items = self._vtbl.items;
+            for (i = 0, len = items.length; i < len; ++i) {
+                if (el == items[i]) {
+                    self.set("selectedItem", i);
+                    break;
+                }
+            }
+        }
     },
 
     /**
@@ -824,7 +884,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _onNavButtonClick: function (ev) {
-        var self = this, target;
+        var self = this,
+            target;
 
         ev.preventDefault();
         target = ev && ev.target ? ev.target : null;
@@ -837,9 +898,13 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         }
 
         if (target.hasClass("yui3-carousel-first-button")) {
-            self.scrollPageBackward();
+            if (canGoBackward) {
+                self.scrollPageBackward();
+            }
         } else if (target.hasClass("yui3-carousel-next-button")) {
-            self.scrollPageForward();
+            if (canGoForward) {
+                self.scrollPageForward();
+            }
         }
     },
 
@@ -850,13 +915,14 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _onNavItemClick: function (ev) {
-        var self = this, link, target;
+        var self = this,
+            link, target;
 
-        ev.preventDefault();
         target = ev && ev.target ? ev.target : null;
         if (!target) {
             return;
         }
+        ev.preventDefault();
 
         link = target.get("href");
         if (link) {
@@ -875,7 +941,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _parseItems: function () {
-        var cb, items, self = this;
+        var self = this,
+            cb, items;
 
         cb = self.get("contentBox");
         items = cb.all(self.get("carouselItemEl"));
@@ -902,7 +969,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             navsz = 0, nav, val;
 
         if (!hidePagination) {
-            nav = bb.one(".yui3-carousel-nav");
+            nav = bb.one("." + getCN(Carousel.NAME, cpNav));
             navsz = self._getNodeSize(nav, "height");
         }
 
@@ -955,6 +1022,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
                     }
                 }
                 node.setStyle(attr, size * i);
+                node.addClass(self.ITEM_CLASS_NAME);
             }
         }
     },
@@ -1053,10 +1121,15 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _uiSetNavItem: function (node) {
-        var self = this, bb = self.get("boundingBox"), clazz;
+        var self = this,
+            bb, clazz;
 
+        if (!node) {
+            return;
+        }
+        bb = self.get("boundingBox");
         clazz = getCN(Carousel.NAME, "nav-item-selected");
-        bb.all(".yui3-carousel-nav-item").removeClass(clazz);
+        bb.all("." + getCN(Carousel.NAME, cpNavItem)).removeClass(clazz);
         node.addClass(clazz);
     },
 
@@ -1070,7 +1143,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _uiSetSelectedItem: function (index, flag) {
-        var self = this, node = self._vtbl.items[index],
+        var self = this,
+            node = self._vtbl.items[index],
             className = getCN(Carousel.NAME, "selected");
 
         if (node) {
@@ -1140,44 +1214,51 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         var self = this,
             bb = self.get("boundingBox"),
             isCircular = self.get("isCircular"),
-            btn, p, pages;
+            btn, currPage, lastPage, pages;
 
         selectedItem = selectedItem || self.get("selectedItem");
         self._uiSetSelectedItem(selectedItem, true);
-        pages = bb.all(".yui3-carousel-nav-item");
-        p = self.getPageForItem(selectedItem);
-        self._uiSetNavItem(pages.item(p));
+        pages = bb.all("." + getCN(Carousel.NAME, cpNavItem));
+        currPage = self.getPageForItem(selectedItem);
+        self._uiSetNavItem(pages.item(currPage));
+        lastPage = self.getPageForItem(self.get("numItems") - 1);
 
-        if (selectedItem === 0) {
-            btn = bb.one(".yui3-carousel-next-button");
+        if (currPage === 0) {
+            btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
             if (btn) {
-                btn.removeClass(".yui3-carousel-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, cpButtonDisabled));
+                canGoForward = true;
             }
             if (!isCircular) {
-                btn = bb.one(".yui3-carousel-first-button");
+                btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
                 if (btn) {
-                    btn.addClass(".yui3-carousel-first-button-disabled");
+                    btn.addClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
+                    canGoBackward = false;
                 }
             }
-        } else if (selectedItem == self.get("numItems") - 1) {
-            btn = bb.one(".yui3-carousel-first-button");
+        } else if (currPage == lastPage) {
+            btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
-                btn.removeClass(".yui3-carousel-first-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
+                canGoBackward = true;
             }
             if (!isCircular) {
-                btn = bb.one(".yui3-carousel-next-button");
+                btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
                 if (btn) {
-                    btn.addClass(".yui3-carousel-button-disabled");
+                    btn.addClass(getCN(Carousel.NAME, cpButtonDisabled));
+                    canGoForward = false;
                 }
             }
         } else {
-            btn = bb.one(".yui3-carousel-first-button");
+            btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
-                btn.removeClass(".yui3-carousel-first-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
+                canGoBackward = true;
             }
-            btn = bb.one(".yui3-carousel-next-button");
+            btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
             if (btn) {
-                btn.removeClass(".yui3-carousel-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, cpButtonDisabled));
+                canGoForward = true;
             }
         }
     },
@@ -1211,7 +1292,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     /**
      * Template for a single Carousel item.
      */
-    ITEM_TEMPLATE: "<li>{content}</li>",
+    ITEM_TEMPLATE: "<li class=\"" + self.ITEM_CLASS_NAME + "\">{content}</li>",
 
     /**
      * Template for the Carousel navigation.
@@ -1225,6 +1306,11 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         "<button type=\"button\">" + "{nav_next_btn_text}</button>" +
         "</span>" +
         "</div>",
+
+    /**
+     * Class name for a single Carousel item.
+     */
+    ITEM_CLASS_NAME: "yui3-carousel-item",
 
     /**
      * Template for a single Carousel navigation item.
@@ -1250,4 +1336,4 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 });
 
 
-}, 'gallery-2010.10.13-22-23' ,{requires:['widget']});
+}, 'gallery-2011.03.16-21-24' ,{skinnable:true, requires:['widget']});

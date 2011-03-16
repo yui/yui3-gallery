@@ -43,6 +43,8 @@ Drawing.prototype = {
             loX,
             hiY,
             loY;
+        x = Math.round(x);
+        y = Math.round(y);
         this._path += ' c ' + Math.round(cp1x) + ", " + Math.round(cp1y) + ", " + Math.round(cp2x) + ", " + Math.round(cp2y) + ", " + x + ", " + y;
         this._currentX = x;
         this._currentY = y;
@@ -70,7 +72,7 @@ Drawing.prototype = {
             cp1y = currentY + 0.67*(cpy - currentY),
             cp2x = cp1x + (x - currentX) * 0.34,
             cp2y = cp1y + (y - currentY) * 0.34;
-        this.curveTo( cp1x, cp1y, cp2x, cp2y, x, y );
+        this.curveTo(cp1x, cp1y, cp2x, cp2y, x, y);
     },
 
     /**
@@ -353,14 +355,11 @@ Y.Drawing = Drawing;
             fill = this.get("fill"),
             fillNode,
             fillAlpha;
-        if(fill)
+        if(fill && fill.color)
         {
             fillAlpha = fill.alpha;
-            if(!fill.color)
-            {
-                node.filled = false;
-            }
-            else if(Y.Lang.isNumber(fillAlpha))
+            node.filled = true;
+            if(Y.Lang.isNumber(fillAlpha))
             {
                 fillAlpha = Math.max(Math.min(fillAlpha, 1), 0);
                 if(!this._fillNode)
@@ -657,8 +656,17 @@ Y.Drawing = Drawing;
         fill: {
             setter: function(val)
             {
-                var tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
-                return (val) ? Y.merge(tmpl, val) : null;
+                var fill,
+                    tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
+                fill = (val) ? Y.merge(tmpl, val) : null;
+                if(fill && fill.color)
+                {
+                    if(fill.color === undefined || fill.color == "none")
+                    {
+                        fill.color = null;
+                    }
+                }
+                return fill;
             }
         },
 
