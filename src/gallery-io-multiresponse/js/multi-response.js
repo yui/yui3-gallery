@@ -12,7 +12,8 @@
  * requests can only be made to your own server because the callback will
  * reference <code>window.parent</code>.  In order to trigger script
  * parsing in all browsers, the first chunk of data that the server writes
- * to the connection must be at least 1024 bytes.</p>
+ * to the connection must be at least 1024 bytes, and it must be part of
+ * the body, so you will need to explicitly send an empty head.</p>
  * 
  * <p>Due to the way that the request data is parsed, it is not safe to
  * send JSON-encoded data using the standard YUI 3 IO methods.  However, if
@@ -378,15 +379,18 @@ Y.io.upload = function(o, uri, c) {
         }
 
         // reset timeout
-        _clearTimeout(o.id);
-        _startTimeout(o, c);
+        if (c.timeout) {
+            _clearTimeout(o.id);
+            _startTimeout(o, c);
+        }
 
         if (c.on && c.on.response) {
             _tE('response', c).fire(o.id, data);
         }
     };
 
-    c.data = (c.data || '') + 'callback=' + encodeURIComponent('window.parent.YUI.Env.io_multi_response_callback[' + o.id + ']');
+    var callback_arg = 'callback=' + encodeURIComponent('window.parent.YUI.Env.io_multi_response_callback[' + o.id + ']');
+    c.data = c.data ? c.data + '&' + callback_arg : callback_arg;
 
     if (c.form && !c.form.id) {
         delete c.form;
