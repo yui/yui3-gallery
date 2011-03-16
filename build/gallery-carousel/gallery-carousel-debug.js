@@ -29,6 +29,14 @@ var getCN = Y.ClassNameManager.getClassName,
     canGoBackward = false,
     canGoForward = true,
 
+    // Custom class prefixes
+    cpButton = "button",
+    cpButtonDisabled = "button-disabled",
+    cpContent = "content",
+    cpItem = "item",
+    cpNav = "nav",
+    cpNavItem = "nav-item",
+
     // Carousel custom events
 
     /**
@@ -670,13 +678,13 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         /* Handle navigation. */
         if (!self.get("hidePagination")) {
             bb.delegate("click", Y.bind(self._onNavItemClick, self),
-                        ".yui3-carousel-nav-item > a");
+                        "." + getCN(Carousel.NAME, cpNavItem) + " > a");
             bb.delegate("click", Y.bind(self._onNavButtonClick, self),
-                        ".yui3-carousel-button");
+                        "." + getCN(Carousel.NAME, cpButton));
         }
 
         bb.delegate("click", Y.bind(self._onItemClick, self),
-                    ".yui3-carousel-item");
+                    "." + getCN(Carousel.NAME, cpItem));
     },
 
     /**
@@ -849,7 +857,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         }
         ev.preventDefault();
 
-        container = bb.one(".yui3-carousel-content");
+        container = bb.one("." + getCN(Carousel.NAME, cpContent));
         el = target;
         while (el && el != container) {
             if (el.hasClass(self.ITEM_CLASS_NAME)) {
@@ -961,7 +969,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             navsz = 0, nav, val;
 
         if (!hidePagination) {
-            nav = bb.one(".yui3-carousel-nav");
+            nav = bb.one("." + getCN(Carousel.NAME, cpNav));
             navsz = self._getNodeSize(nav, "height");
         }
 
@@ -1114,11 +1122,14 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _uiSetNavItem: function (node) {
         var self = this,
-            bb = self.get("boundingBox"),
-            clazz;
+            bb, clazz;
 
+        if (!node) {
+            return;
+        }
+        bb = self.get("boundingBox");
         clazz = getCN(Carousel.NAME, "nav-item-selected");
-        bb.all(".yui3-carousel-nav-item").removeClass(clazz);
+        bb.all("." + getCN(Carousel.NAME, cpNavItem)).removeClass(clazz);
         node.addClass(clazz);
     },
 
@@ -1207,46 +1218,46 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 
         selectedItem = selectedItem || self.get("selectedItem");
         self._uiSetSelectedItem(selectedItem, true);
-        pages = bb.all(".yui3-carousel-nav-item");
+        pages = bb.all("." + getCN(Carousel.NAME, cpNavItem));
         currPage = self.getPageForItem(selectedItem);
         self._uiSetNavItem(pages.item(currPage));
         lastPage = self.getPageForItem(self.get("numItems") - 1);
 
         if (selectedItem === 0) {
-            btn = bb.one(".yui3-carousel-next-button");
+            btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
             if (btn) {
-                btn.removeClass("yui3-carousel-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, cpButtonDisabled));
                 canGoForward = true;
             }
             if (!isCircular) {
-                btn = bb.one(".yui3-carousel-first-button");
+                btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
                 if (btn) {
-                    btn.addClass("yui3-carousel-first-button-disabled");
+                    btn.addClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
                     canGoBackward = false;
                 }
             }
         } else if (currPage == lastPage) {
-            btn = bb.one(".yui3-carousel-first-button");
+            btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
-                btn.removeClass("yui3-carousel-first-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
                 canGoBackward = true;
             }
             if (!isCircular) {
-                btn = bb.one(".yui3-carousel-next-button");
+                btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
                 if (btn) {
-                    btn.addClass("yui3-carousel-button-disabled");
+                    btn.addClass(getCN(Carousel.NAME, cpButtonDisabled));
                     canGoForward = false;
                 }
             }
         } else {
-            btn = bb.one(".yui3-carousel-first-button");
+            btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
-                btn.removeClass("yui3-carousel-first-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
                 canGoBackward = true;
             }
-            btn = bb.one(".yui3-carousel-next-button");
+            btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
             if (btn) {
-                btn.removeClass("yui3-carousel-button-disabled");
+                btn.removeClass(getCN(Carousel.NAME, cpButtonDisabled));
                 canGoForward = true;
             }
         }
