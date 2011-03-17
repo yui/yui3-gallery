@@ -1,5 +1,5 @@
 .yui3-skin-xarno-smooth .yui3-button {
-	background: #d9d9d9 url('img/background.png') left top repeat-x;
+	background: #d9d9d9 url('assets/smooth/background.png') left top repeat-x;
 	border: 1px solid #959595;
 	color: #3a3a3a;
 	padding: 2px 4px;
@@ -21,7 +21,7 @@
 	-webkit-box-shadow: 0 0 2px #009ee7;
 }
 .yui3-skin-xarno-smooth .yui3-button .yui3-button-content {
-    background-image: url('img/icon-sprite.gif');
+    background-image: url('assets/smooth/icon-sprite.gif');
     padding-left: 22px;
     line-height: 16px;
     text-shadow: 1px 1px #efefef;
@@ -55,11 +55,11 @@
 
 .yui3-skin-xarno-smooth .yui3-button-selected {
     border-color: CornflowerBlue;
-    background-image:url('img/background-active.png');
+    background-image:url('assets/smooth/background-active.png');
 }
 
 .yui3-skin-xarno-smooth .yui3-button-disabled .yui3-button-content {
-    background-image: url('img/icon-sprite-bw.gif');
+    background-image: url('assets/smooth/icon-sprite-bw.gif');
     text-shadow: none;
     opacity: .5;
     filter: alpha(opacity=50);

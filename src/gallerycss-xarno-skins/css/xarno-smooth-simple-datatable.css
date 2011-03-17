@@ -11,7 +11,7 @@
   border-bottom: 1px solid #959595;
   text-align: left;
   color:#7da2ce;
-  background: url('img/background.png') left top repeat-x;
+  background: url('assets/smooth/background.png') left top repeat-x;
   padding-right: 0;
 }
 .yui3-skin-xarno-smooth .yui3-sdt th {

@@ -37,15 +37,15 @@
 }
 .yui3-skin-xarno-smooth .yui3-dialog-icon-alert .yui3-widget-bd {
 	padding-left: 60px;
-	background: url("img/caution.png") no-repeat scroll 14px 11px transparent;
+	background: url("assets/smooth/caution.png") no-repeat scroll 14px 11px transparent;
 }
 .yui3-skin-xarno-smooth .yui3-dialog-icon-confirm .yui3-widget-bd {
 	padding-left: 60px;
-	background: url("img/question.png") no-repeat scroll 14px 11px transparent;
+	background: url("assets/smooth/question.png") no-repeat scroll 14px 11px transparent;
 }
 .yui3-skin-xarno-smooth .yui3-dialog-icon-prompt .yui3-widget-bd {
 	padding-left: 60px;
-	background: url("img/question.png") no-repeat scroll 14px 11px transparent;
+	background: url("assets/smooth/question.png") no-repeat scroll 14px 11px transparent;
 }
 .yui3-skin-xarno-smooth .yui3-dialog .yui3-widget-ft {
     border-color: #555555;
