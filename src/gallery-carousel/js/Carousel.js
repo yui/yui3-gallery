@@ -316,7 +316,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             if (!self._vtbl.items[pos]) {
                 self._vtbl.items[pos] = undefined;
             }
-            self._vtbl.items.splice(pos, 1, item);
+            self._vtbl.items.splice(pos, 0, item);
             index = pos;
         }
 
@@ -757,7 +757,34 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
          }
      },
 
-     /* Attribute state supporting methods (see attribute config above.) */
+     /**
+      * Add the Carousel items to the DOM on addItem.
+      *
+      * @method _addItemToDom
+      * @protected
+      */
+     _addItemToDom: function (arg) {
+         var self = this,
+             cb = self.get("contentBox"),
+             item, node, numItems, pos;
+
+         item = arg.item;
+         pos = arg.pos + 1;     // real position has shifted now
+
+         if (item && !cb.contains(item)) {
+             node = self._vtbl.items[pos];
+             if (node) {
+                 cb.insertBefore(item, node);
+             }
+             if (self.get("selectedItem") == pos) {
+                 numItems = self.get("numItems");
+                 ++pos;
+                 pos = pos > numItems - 1 ? numItems - 1 : pos;
+                 self.set("selectedItem", pos);
+             }
+             self._redrawUi();
+        }
+    },
 
      /**
       * Handle the "selectedItem" change and trigger the appropriate UI changes.
