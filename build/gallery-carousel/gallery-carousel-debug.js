@@ -675,6 +675,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             bb = self.get("boundingBox");
 
         self.after("selectedItemChange", self._afterSelectedItemChange);
+        self.on(ITEMADDED_EVENT, self._addItemToDom);
         self.on(ITEMREMOVED_EVENT, self._removeItemFromDom);
 
         /* Handle navigation. */
@@ -995,14 +996,14 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
                  self.set("selectedItem", pos);
              }
              /*
-              * An item removal would can result in any of the following cases:
-              * (a) the position of the items would require a change since one of
-              *     them would be missing now
-              * (b) the navigation has to be redrawn since the number of items
-              *     has changed
-              * (c) the container may have to be redrawn since the height may
-              *     have changed for a vertical Carousel
-              */
+                 An item removal would can result in any of the following cases:
+                 (a) the position of the items would require a change since one of
+                     them would be missing now
+                 (b) the navigation has to be redrawn since the number of items
+                     has changed
+                  (c) the container may have to be redrawn since the height may
+                      have changed for a vertical Carousel
+             */
              self._redrawUi();
         }
     },
