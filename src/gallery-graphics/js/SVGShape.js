@@ -430,8 +430,17 @@
         fill: {
             setter: function(val)
             {
-                var tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
-                return (val) ? Y.merge(tmpl, val) : null;
+                var fill,
+                    tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
+                fill = (val) ? Y.merge(tmpl, val) : null;
+                if(fill && fill.color)
+                {
+                    if(fill.color === undefined || fill.color == "none")
+                    {
+                        fill.color = null;
+                    }
+                }
+                return fill;
             }
         },
 

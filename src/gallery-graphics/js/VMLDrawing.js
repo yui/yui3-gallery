@@ -41,6 +41,8 @@ Drawing.prototype = {
             loX,
             hiY,
             loY;
+        x = Math.round(x);
+        y = Math.round(y);
         this._path += ' c ' + Math.round(cp1x) + ", " + Math.round(cp1y) + ", " + Math.round(cp2x) + ", " + Math.round(cp2y) + ", " + x + ", " + y;
         this._currentX = x;
         this._currentY = y;
@@ -68,7 +70,7 @@ Drawing.prototype = {
             cp1y = currentY + 0.67*(cpy - currentY),
             cp2x = cp1x + (x - currentX) * 0.34,
             cp2y = cp1y + (y - currentY) * 0.34;
-        this.curveTo( cp1x, cp1y, cp2x, cp2y, x, y );
+        this.curveTo(cp1x, cp1y, cp2x, cp2y, x, y);
     },
 
     /**

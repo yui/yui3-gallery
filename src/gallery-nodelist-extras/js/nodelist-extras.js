@@ -76,7 +76,7 @@ NodeListPrototype.reject = function(filter) {
  * @return {Node|NodeList}
  */
 NodeListPrototype.first = function(first) {
-    var nodes, i, length;
+    var i, length, currentNode;
     if (!ISVALUE(first)) {
         return this.item(0);
     }
@@ -84,9 +84,10 @@ NodeListPrototype.first = function(first) {
         return this.slice(0, first);
     }
     if (ISFUNCTION(first)) {
-        nodes = this._nodes; length = nodes.length;
+        length = this.size();
         for (i = 0 ; i < length ; i++) {
-            if (first(nodes[i])) { return nodes[i]; }
+            currentNode = this.item(i);
+            if (first(currentNode)) { return currentNode; }
         }
     }
 };
@@ -101,7 +102,7 @@ NodeListPrototype.first = function(first) {
  * @return {Node|NodeList}
  */
 NodeListPrototype.last = function(last) {
-    var nodes, i, length;
+    var i, length, currentNode;
     if (!ISVALUE(last)) {
         return this.item(this.size()-1);
     }
@@ -109,9 +110,10 @@ NodeListPrototype.last = function(last) {
         return this.slice(-last);
     }
     if (ISFUNCTION(last)) {
-        nodes = this._nodes; length = nodes.length;
+        length = this.size();
         for (i = length - 1 ; i >= 0 ; i--) {
-            if (last(nodes[i])) { return nodes[i]; }
+            currentNode = this.item(i);
+            if (last(currentNode)) { return currentNode; }
         }
     }
 };

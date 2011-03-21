@@ -1,0 +1,71 @@
+.yui3-skin-xarno-smooth .yui3-button {
+	background: #d9d9d9 url('assets/smooth/background.png') left top repeat-x;
+	border: 1px solid #959595;
+	color: #3a3a3a;
+	padding: 2px 4px;
+	margin: 3px;
+	cursor: pointer;
+	border-radius: 3px;
+	-ms-border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-decoration: none;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+.yui3-skin-xarno-smooth .yui3-button-focused {
+	border-color: #009ee7;
+	box-shadow: 0 0 2px #009ee7;
+	-moz-box-shadow: 0 0 2px #009ee7;
+	-webkit-box-shadow: 0 0 2px #009ee7;
+}
+.yui3-skin-xarno-smooth .yui3-button .yui3-button-content {
+    background-image: url('assets/smooth/icon-sprite.gif');
+    padding-left: 22px;
+    line-height: 16px;
+    text-shadow: 1px 1px #efefef;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    height: 16px;
+    cursor: pointer;
+    display: block;
+}
+
+.yui3-skin-xarno-smooth .yui3-button-no-label .yui3-button-content {
+	padding-left: 18px;
+}
+.yui3-skin-xarno-smooth .yui3-button:hover,
+.yui3-skin-xarno-smooth .yui3-button-hover {
+	background-position: left -30px;
+}
+
+.yui3-skin-xarno-smooth .yui3-button-pressed,
+.yui3-skin-xarno-smooth .yui3-button-pressed:hover {
+	background-position: left -60px;
+}
+
+.yui3-skin-xarno-smooth .yui3-button-disabled:hover,
+.yui3-skin-xarno-smooth .yui3-button-disabled {
+	background-position: left 0px;
+	cursor: default;
+}
+.yui3-skin-xarno-smooth .yui3-button-disabled .yui3-button-content {
+	cursor: default;
+}
+
+.yui3-skin-xarno-smooth .yui3-button-selected {
+    border-color: CornflowerBlue;
+    background-image:url('assets/smooth/background-active.png');
+}
+
+.yui3-skin-xarno-smooth .yui3-button-disabled .yui3-button-content {
+    background-image: url('assets/smooth/icon-sprite-bw.gif');
+    text-shadow: none;
+    opacity: .5;
+    filter: alpha(opacity=50);
+}
+
+.yui3-skin-xarno-smooth .yui3-icon-default .yui3-button-content {
+	padding-left: 0;
+	background: none;
+}
