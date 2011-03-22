@@ -767,6 +767,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
              node = self._vtbl.items[pos];
              if (node) {
                  cb.insertBefore(item, node);
+             } else {
+                 cb.append(item);
              }
              if (self.get("selectedItem") == pos) {
                  numItems = self.get("numItems");
@@ -1288,10 +1290,6 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             selected page.
         */
         numPages = Math.ceil(self.get("numItems") / self.get("numVisible"));
-        if (numPages < 1) {
-            self.set("hidePagination", true);
-            return;
-        }
         pages.remove();
 
         pageContainer = bb.one(".yui3-carousel-nav > ul");
@@ -1308,7 +1306,18 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         self._uiSetNavItem(pages.item(currPage));
         lastPage = self.getPageForItem(self.get("numItems") - 1);
 
-        if (currPage === 0) {
+        if (lastPage < 0) {
+            btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
+            if (btn) {
+                btn.addClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
+                canGoBackward = false;
+            }
+            btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
+            if (btn) {
+                btn.addClass(getCN(Carousel.NAME, cpButtonDisabled));
+                canGoForward = false;
+            }
+        } else if (currPage === 0 && currPage != lastPage) {
             btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));
             if (btn) {
                 btn.removeClass(getCN(Carousel.NAME, cpButtonDisabled));
@@ -1321,7 +1330,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
                     canGoBackward = false;
                 }
             }
-        } else if (currPage == lastPage) {
+        } else if (currPage !== 0 && currPage == lastPage) {
             btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
                 btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
@@ -1334,7 +1343,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
                     canGoForward = false;
                 }
             }
-        } else {
+        } else if (lastPage > 0) {
             btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
                 btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
