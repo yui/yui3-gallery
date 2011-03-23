@@ -5,14 +5,14 @@
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 </head>
 <body class="yui3-skin-sam">
-    <script src="http://yui.yahooapis.com/combo?3.2.0pr1/build/yui/yui-min.js&3.2.0pr1/build/loader/loader-min.js"></script>
+    <script src="http://yui.yahooapis.com/combo?3.3.0/build/yui/yui-min.js&3.3.0/build/loader/loader-min.js"></script>
     <script src="../../../build/gallery-overlay-transition/gallery-overlay-transition.js"></script>
     <script src="tests.js"></script>
     <script>
     var Y = YUI({
-        //combine : false,
-        //filter : "raw"
-    }).use("test", "console", "gallery-overlay-transition", "overlay-transition-tests", function(Y) {
+        combine : false,
+        filter : "raw"
+    }).use("node", "overlay", "test", "console", "gallery-overlay-transition", "overlay-transition-tests", function(Y) {
         new Y.Console({
             verbose : true,
             height: 600,
