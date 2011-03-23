@@ -822,9 +822,10 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
       */
      _getOffsetForIndex: function (index) {
          var self = this,
+             item = self._vtbl.item,
              sz;
 
-         sz = self.get("isVertical") ? self._vtbl.item.vsz : self._vtbl.item.hsz;
+         sz = self.get("isVertical") ? item.vsz : item.hsz;
          return -sz * index;
      },
 
@@ -982,13 +983,16 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
       */
      _redrawUi: function () {
          var self = this,
-             bb = self.get("boundingBox");
+             attr = "left",
+             cb = self.get("contentBox");
          
          self._renderItems();
          self._updateNavigation();
          if (self.get("isVertical")) {
              self._renderContainer();
+             attr = "top";
          }
+         cb.setStyle(attr, 0);
      },
 
      /**
@@ -1382,7 +1386,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     /**
      * Template for a single Carousel item.
      */
-    ITEM_TEMPLATE: "<li class=\"" + self.ITEM_CLASS_NAME + "\">{content}</li>",
+    ITEM_TEMPLATE: "<li class=\"yui3-carousel-item\">{content}</li>",
 
     /**
      * Template for the Carousel navigation.
@@ -1396,11 +1400,6 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         "<button type=\"button\">" + "{nav_next_btn_text}</button>" +
         "</span>" +
         "</div>",
-
-    /**
-     * Class name for a single Carousel item.
-     */
-    ITEM_CLASS_NAME: "yui3-carousel-item",
 
     /**
      * Template for a single Carousel navigation item.
