@@ -65,7 +65,9 @@
             dash,
             i, 
             len,
-            space;
+            space,
+            miterlimit,
+            linejoin = stroke.linejoin || "round";
         if(stroke && stroke.weight && stroke.weight > 0)
         {
             strokeAlpha = stroke.alpha;
@@ -80,6 +82,19 @@
             node.setAttribute("stroke-linecap", stroke.linecap);
             node.setAttribute("stroke-width",  stroke.weight);
             node.setAttribute("stroke-opacity", stroke.alpha);
+            if(linejoin == "round" || linejoin == "bevel")
+            {
+                node.setAttribute("stroke-linejoin", linejoin);
+            }
+            else
+            {
+                linejoin = parseInt(linejoin, 10);
+                if(Y.Lang.isNumber(linejoin))
+                {
+                    node.setAttribute("stroke-miterlimit",  Math.max(linejoin, 1));
+                    node.setAttribute("stroke-linejoin", "miter");
+                }
+            }
         }
         else
         {
