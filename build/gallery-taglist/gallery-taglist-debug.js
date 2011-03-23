@@ -294,4 +294,4 @@ Y[NAME] = Y.Base.create(NAME, Y.Plugin.Base, [], {
 });
 
 
-}, 'gallery-2011.01.26-20-33' ,{requires:['base-build','plugin','node','classnamemanager','event']});
+}, 'gallery-2011.03.23-22-20' ,{requires:['base-build','plugin','node','classnamemanager','event']});

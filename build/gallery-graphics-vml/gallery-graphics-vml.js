@@ -305,12 +305,18 @@ Y.Drawing = Drawing;
             val,
             endcap,
             i = 0,
-            len;
+            len,
+            miterlimit,
+            linecap = stroke.linecap || "flat",
+            linejoin = stroke.linejoin || "round";
         if(stroke && stroke.weight && stroke.weight > 0)
         {
+            if(linecap != "round" && linecap != "square")
+            {
+                linecap = "flat";
+            }
             strokeAlpha = stroke.alpha;
             dashstyle = stroke.dashstyle || "none";
-            endcap = stroke.endcap || "flat";
             stroke.color = stroke.color || "#000000";
             stroke.weight = stroke.weight || 1;
             stroke.alpha = Y.Lang.isNumber(strokeAlpha) ? strokeAlpha : 1;
@@ -323,6 +329,7 @@ Y.Drawing = Drawing;
                 this._strokeNode = this._createGraphicNode("stroke");
                 node.appendChild(this._strokeNode);
             }
+            this._strokeNode.endcap = linecap;
             this._strokeNode.opacity = stroke.alpha;
             if(Y.Lang.isArray(dashstyle))
             {
@@ -332,6 +339,19 @@ Y.Drawing = Drawing;
                 {
                     val = dashstyle[i];
                     dash[i] = val / stroke.weight;
+                }
+            }
+            if(linejoin == "round" || linejoin == "bevel")
+            {
+                this._strokeNode.joinstyle = linejoin;
+            }
+            else
+            {
+                linejoin = parseInt(linejoin, 10);
+                if(Y.Lang.isNumber(linejoin))
+                {
+                    this._strokeNode.miterlimit = Math.max(linejoin, 1);
+                    this._strokeNode.joinstyle = "miter";
                 }
             }
             this._strokeNode.dashstyle = dash;
