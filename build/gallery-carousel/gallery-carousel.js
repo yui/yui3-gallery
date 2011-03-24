@@ -983,8 +983,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
       */
      _redrawUi: function () {
          var self = this,
-             attr = "left",
-             cb = self.get("contentBox");
+             attr = "left";
          
          self._renderItems();
          self._updateNavigation();
@@ -992,7 +991,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
              self._renderContainer();
              attr = "top";
          }
-         cb.setStyle(attr, 0);
+         self.scrollTo(0);
      },
 
      /**
