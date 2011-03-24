@@ -25,10 +25,10 @@ BODY {
 </div>
 <div id="mycanvas" style="backround-color:#9aa;overflow:visible;position:absolute;top:50px;left:100px;border:1px solid"></div>
 <script type="text/javascript">            
-    YUI({gallery: 'gallery-2011.02.18-23-10',
+    YUI({gallery: 'gallery-2011.03.16-21-24',
             groups: {
                 gallery: {
-                    base: 'http://yui.yahooapis.com/combo?gallery-2011.02.18-23-10/build/',
+                    base: 'http://yui.yahooapis.com/combo?gallery-2011.03.16-21-24/build/',
                     patterns: {'gallery-': {}},
                     modules:
                     {
@@ -98,14 +98,12 @@ BODY {
                     color:"#000",
                     weight: 1
                 },
-                fill: {
-                    color: "#fc0"
-                },
                 width:40,
                 height:50
             });
             
             mygraphic.addShape(myrect);
+            myrect.set("fill", {color:"#fc0"});
             myellipse = new Y.Ellipse({stroke: {
                     color: "#ddd",
                     weight: 2

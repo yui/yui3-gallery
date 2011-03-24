@@ -2,6 +2,13 @@ Accordion widget for YUI 3
 
 I. Changelog
 
+20.03.2011 - ver. 1.14
+ - The developer may prevent the action which follows 'itemChosen' event (expanding, collapsing, closing, etc.) by preventing the default function, bound to this event.
+
+23.02.2011 - ver. 1.12
+ - Closing an item can be prevented.
+ - 'itemChosen' property supports multiple events - for example ['mouseenter', 'click']
+
 03.01.2011 - ver. 1.11
  - Deprecated/removed YUI API functions (like "Node.query", "Node.queryAll" and "Y.get") have been replaced with their alternatives
 
