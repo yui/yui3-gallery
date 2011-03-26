@@ -495,4 +495,4 @@ Y.SWFPlugin = Y.Base.create(NAME, Y.Plugin.Base, [], {
 });
 
 
-}, '@VERSION@' ,{requires:['event-custom', 'node', 'swfdetect', 'querystring-stringify', 'base-build', 'plugin'], skinnable:false, optional:['swf']});
+}, '@VERSION@' ,{optional:['swf'], requires:['event-custom', 'node', 'swfdetect', 'querystring-stringify', 'base-build', 'plugin'], skinnable:false});
