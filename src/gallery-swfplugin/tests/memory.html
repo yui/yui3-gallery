@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>SWFPlugin</title>
+</head>
+<body>
+	<div id="parent"></div>
+	<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui.js"></script>
+	<script src="swfplugin.js"></script>
+	<script>
+window.Y = YUI().use ('node', 'async-queue', 'swfplugin', function (Y) {
+	var node = Y.one('#parent'), q = new Y.AsyncQueue();
+	
+	// create 1000 nodes on the page
+	q.add({
+		fn: function () {
+			node.append('<div style="width:400px;height:300px;"></div>');
+		},
+		iterations: 100
+	// then get the first child
+	}, function () {
+		node = node.one('div');
+	// add 1000 swfs to the page
+	}, {
+		fn: function () {
+			node.plug(Y.SWFPlugin, {
+				url: 'Simple.swf',
+				params: {
+					wmode: 'opaque',
+					allowScriptAccess: 'always'
+				}
+			});
+			node.swf.on(Y.SWFPlugin.SWF_READY, Y.log, Y);
+			node = node.next();
+		},
+		iterations: 100
+	// remove all node instances we created
+	}, function () {
+		var pi = Y.Object.size(Y.SWF._instances);
+		Y.
+			one('#parent').
+			empty(true).
+			setContent('Peak instances: ' + pi + ', Remaining instances: ' + Y.Object.size(Y.SWF._instances));
+	}).run();
+});
+	</script>
+</body>
+</html>

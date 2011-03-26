@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>SWFPlugin</title>
+</head>
+<body>
+	<div id="parent" style="width:400px;height:300px"></div>
+	<script src="../../../../yui3/build/yui/yui-debug.js"></script>
+	<script src="../../../build/gallery-swfplugin/gallery-swfplugin-debug.js"></script>
+	<script>
+/*
+ 	"Bad artists copy. Great artists steal." - Pablo Picasso
+	Uses the SWF from Y.SWF for testing.
+*/
+window.Y = YUI().use('node', 'swf', 'gallery-swfplugin', function (Y) {
+	var node = Y.one('#parent');
+	
+	function debugEvent(event) {
+		Y.log(event.type, event);
+	}
+	
+	node.plug(Y.SWFPlugin, {
+		url: '../assets/Simple.swf',
+		write: false
+	});
+	node.swf.on(Y.SWFPlugin.SWF_READY, function (event) {
+		debugEvent(event);
+		event.target.callSWF('addText', ['Hello world!']);
+	});
+	node.swf.on('textAdded', debugEvent);
+	node.swf.writeSWF();
+});
+	</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>SWFPlugin</title>
+</head>
+<body>
+	<div id="parent"></div>
+	<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui.js"></script>
+	<script src="swfobject.js"></script>
+	<script>
+
+window.Y = YUI().use('node', 'async-queue', function (Y) {
+	var node = Y.one('#parent'), q = new Y.AsyncQueue(),
+		EVENT_HANDLER = "SWF.eventHandler";
+	
+	Y.SWF = {
+		eventHandler: function (id, event) {
+			Y.one("#" + id).fire(event.type, event);
+		}
+	}
+	
+	// create 100 nodes on the page
+	q.add({
+		fn: function () {
+			node.append('<div style="width:400px;height:300px;"><div id="' + Y.guid() + '"></div></div>');
+		},
+		iterations: 100
+	// then get the first child
+	}, function () {
+		node = node.one('div');
+	// add 100 swfs to the page
+	}, {
+		fn: function () {
+			var id = node.one('div').get('id');
+			
+			swfobject.embedSWF("Simple.swf", id, "100%", "100%", "9.0.0", null, {
+				yId: Y.id,
+				YUISwfId: id,
+				YUIBridgeCallback: EVENT_HANDLER,
+				allowedDomain: document.location.hostname
+			}, {
+				wmode: 'opaque', allowScriptAccess: 'always'
+			});
+			
+			node.one('*').on('swfReady', Y.log, Y);
+			node = node.next();
+		},
+		iterations: 100
+	// remove all node instances we created
+	}, function () {
+		Y.one('#parent').empty(true);
+	}).run();
+});
+	</script>
+</body>
+</html>
