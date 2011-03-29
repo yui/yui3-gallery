@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<title>SWFPlugin</title>
 </head>
-<body>
+<body class="yui3-skin-sam">
 	<div id="parent" style="width:400px;height:300px"></div>
 	<script src="../../../../yui3/build/yui/yui-debug.js"></script>
 	<script src="../../../build/gallery-swfplugin/gallery-swfplugin-debug.js"></script>
@@ -13,23 +13,91 @@
  	"Bad artists copy. Great artists steal." - Pablo Picasso
 	Uses the SWF from Y.SWF for testing.
 */
-window.Y = YUI().use('node', 'swf', 'gallery-swfplugin', function (Y) {
-	var node = Y.one('#parent');
+window.Y = YUI({ logInclude: { TestRunner: true } }).use('node', 'swf', 'gallery-swfplugin', 'console', 'test', function (Y) {
+    var yconsole = new Y.Console({
+        newestOnTop: false
+    }), TestRunner = Y.Test.Runner;
+    yconsole.render('body');
 	
-	function debugEvent(event) {
-		Y.log(event.type, event);
-	}
-	
-	node.plug(Y.SWFPlugin, {
-		url: 'Simple.swf',
-		write: false
+	TestRunner.add(new Y.Test.Case({
+		name: "SWFPlugin Test",
+		//---------------------------------------------
+		// Setup and tear down
+		//---------------------------------------------
+		setUp: function () {
+			this.node = Y.one('#parent');
+		},
+		tearDown: function () {
+			this.node.destroy(true);
+			delete this.node;
+		},
+		//---------------------------------------------
+		// Tests
+		//---------------------------------------------
+		"should embed swf" : function () {
+			this.node.plug(Y.SWFPlugin, {
+				url: 'Simple.swf'
+			});
+			Y.Assert.isNotNull(this.node.one('*'));
+			this.node.unplug(Y.SWFPlugin);
+			Y.Assert.isNull(this.node.one('*'));
+		},
+		"should fire swf ready": function () {
+			this.node.plug(Y.SWFPlugin, {
+				url: 'Simple.swf',
+				render: false
+			});
+			this.node.swf.on(Y.SWFPlugin.SWF_READY, function (event) {
+				this.resume(function () {});
+			}, this);
+			this.node.swf.render();
+			this.wait(10000);
+		},
+		"should verify Flash version": function () {
+			var wrongVersion = false;
+			this.node.plug(Y.SWFPlugin, {
+				url: 'Simple.swf',
+				minVersion: [10000, 0, 0],
+				render: false
+			});
+			this.node.swf.on(Y.SWFPlugin.SWF_READY, function (event) {
+				Y.Assert.fail("should not have loaded when Flash version wrong");
+			}, this);
+			this.node.swf.on(Y.SWFPlugin.WRONG_FLASH_VERSION, function (event) {
+				wrongVersion = true;
+			});
+			this.node.swf.render();
+			this.wait(function () {
+				Y.Assert.isTrue(wrongVersion);
+			}, 1000);
+		},
+		"should call ei methods": function () {
+			this.node.plug(Y.SWFPlugin, {
+				url: 'Simple.swf',
+				render: false
+			});
+			this.node.swf.on(Y.SWFPlugin.SWF_READY, function (event) {
+				event.target.callSWF('addText', ['Hello world!']);
+			});
+			this.node.swf.on('textAdded', function (event) {
+				this.resume(function () {});
+			}, this);
+			this.node.swf.render();
+			this.wait(10000);
+		}
+	}));
+	TestRunner.subscribe(TestRunner.COMPLETE_EVENT, function (event) {
+		var node = Y.one('#parent');
+		node.plug(Y.SWFPlugin, {
+			url: 'Simple.swf',
+			render: false
+		});
+		node.swf.on(Y.SWFPlugin.SWF_READY, function (event) {
+			event.target.callSWF('addText', ['Hello world!']);
+		});
+		node.swf.render();
 	});
-	node.swf.on(Y.SWFPlugin.SWF_READY, function (event) {
-		debugEvent(event);
-		event.target.callSWF('addText', ['Hello world!']);
-	});
-	node.swf.on('textAdded', debugEvent);
-	node.swf.writeSWF();
+	TestRunner.run();
 });
 	</script>
 </body>

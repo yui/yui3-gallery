@@ -187,8 +187,8 @@ Y.SWFPlugin = Y.Base.create(NAME, Y.Plugin.Base, [], {
 			fireOnce: true,
 			emitFacade: true
 		});
-		if (this.get('write')) {
-			this.writeSWF(true);
+		if (this.get('render')) {
+			this.render(true);
 		}
 	},
 	
@@ -197,10 +197,10 @@ Y.SWFPlugin = Y.Base.create(NAME, Y.Plugin.Base, [], {
 	/**
 	 * Writes the swf to the page. Only required if the write
 	 * attr is set to false.
-	 * @method writeSWF
+	 * @method render
 	 * @param destroy {Boolean} Whether the host's current content should be destroyed.
 	 */
-	writeSWF: function (destroy) {
+	render: function (destroy) {
 		var host = this.get(HOST),
 			id = this.get(SWF_ID),
 			isFlashVersionRight  = Y_SWFDetect_isFlashVersionAtLeast.apply(null, this.get("minVersion")),
@@ -259,10 +259,11 @@ Y.SWFPlugin = Y.Base.create(NAME, Y.Plugin.Base, [], {
 
 			// write the string to the DOM
 			this._swf = this._writeSWFtoPage(host, objstring);
+			this.set('rendered', true);
 		}
 	    else {
 			this.fire(WRONG_FLASH_VERSION, {
-				required: this.get('version').join("."),
+				required: this.get('minVersion').join("."),
 				actual: Y_SWFDetect.getFlashVersion()
 			});
 		}
@@ -307,6 +308,9 @@ Y.SWFPlugin = Y.Base.create(NAME, Y.Plugin.Base, [], {
 		return method.apply(node, args);
 	},
 
+
+	
+	
 	/**
 	 * Remove internal references and event listeners.
 	 * if writeSWF() was called with destroy = false, will
@@ -314,7 +318,19 @@ Y.SWFPlugin = Y.Base.create(NAME, Y.Plugin.Base, [], {
 	 *
 	 * @method destructor
 	 */
-	destructor: Y_UA.ie ? ieSWFDestructor : swfDestructor,
+	destructor: function () {
+		if (this.get('rendered')) {
+			this._swfDestructor();
+		}
+	},
+
+	/**
+	 * SWF Desctruction by browser
+	 *
+	 * @private
+	 * @method _swfDestructor
+	 */
+	_swfDestructor: Y_UA.ie ? ieSWFDestructor : swfDestructor,
 
 	/**
 	 * Finishes clean up process after IE/NS code fork.
@@ -421,14 +437,22 @@ Y.SWFPlugin = Y.Base.create(NAME, Y.Plugin.Base, [], {
 			value: ""
 		},
 		/**
-		 * @attribute write
+		 * @attribute render
 		 * @writeOnce
 		 * @default true
 		 * @type boolean
 		 */
-		write: {
+		render: {
 			value: true,
 			writeOnce: true
+		},
+		/**
+		 * @attribute rendered
+		 * @default false
+		 * @type boolean
+		 */
+		rendered: {
+			value: false
 		},
 		/**
 		 * Whether or not the SWF Plugin should attempt to use
