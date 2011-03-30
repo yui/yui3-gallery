@@ -184,4 +184,4 @@ YUI.add('gallery-ellipsis', function(Y) {
     Y.NodeList.importMethod(Y.Node.prototype, 'ellipsis');
 
 
-}, 'gallery-2011.02.02-21-07' ,{requires:['base','node']});
+}, 'gallery-2011.03.30-19-47' ,{requires:['base','node']});
