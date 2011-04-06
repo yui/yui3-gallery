@@ -12,7 +12,9 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  * <p>The default package provides two data types:  String (which can also
  * be used for numbers) and Select (which provides a menu of options).  The
  * plugin API allows defining additional data types, e.g., date range or
- * multi-select.  A plugin must implement the following functions:</p>
+ * multi-select.  Every plugin must be registered in
+ * <code>Y.QueryBuilder.plugin_mapping</code>.  Plugins must implement the
+ * following functions:</p>
  * 
  * <dl>
  * <dt><code>constructor(qb, config)</code></dt>
@@ -608,7 +610,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		return result;
 	},
 
-	/**********************************************************************
+	/*
 	 * API for plugins
 	 */
 
@@ -631,7 +633,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		this.fire('queryChanged');
 	},
 
-	/**********************************************************************
+	/*
 	 * Form element names.
 	 */
 
@@ -764,7 +766,14 @@ QueryBuilder.String.prototype =
 		{
 			if (this.value_input)		// could be destroyed
 			{
-				this.value_input.focus();
+				try
+				{
+					this.value_input.focus();
+				}
+				catch (e)
+				{
+					// IE will complain if field is invisible, instead of just ignoring it
+				}
 			}
 		});
 	},
@@ -907,7 +916,14 @@ QueryBuilder.Select.prototype =
 		/* array */		op_list,
 		/* array */		value)
 	{
-		this.value_menu.focus();
+		try
+		{
+			this.value_menu.focus();
+		}
+		catch (e)
+		{
+			// IE will complain if field is invisible, instead of just ignoring it
+		}
 	},
 
 	destroy: function()
@@ -972,4 +988,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2011.02.16-20-31' ,{optional:['gallery-formmgr','gallery-scrollintoview'], requires:['widget','substitute'], skinnable:true});
+}, 'gallery-2011.04.06-19-44' ,{skinnable:true, optional:['gallery-formmgr','gallery-scrollintoview'], requires:['widget','substitute']});

@@ -35,7 +35,10 @@ YUI.add('gallery-ellipsis', function(Y) {
             'fudge'    : 3,
 
             // target number of lines to wrap
-            'lines'    : 1
+            'lines'    : 1,
+
+            // whether or not to remember the original text to able to de-truncate
+            'remember' : true
         });
 
         // console.log(conf);
@@ -45,8 +48,11 @@ YUI.add('gallery-ellipsis', function(Y) {
             // the element we're trying to truncate
         var yEl           = Y.one(node),
 
+            // the name of the field we use to store using .setData()
+            dataAttrName  = 'ellipsis-original-text',
+
             // original text
-            originalText  = yEl.getAttribute('originalText') || yEl.get('text'),
+            originalText  = conf.remember && yEl.getData(dataAttrName) || yEl.get('text'),
             
             // keep the current length of the text so far
             currentLength = originalText.length,
@@ -155,8 +161,8 @@ YUI.add('gallery-ellipsis', function(Y) {
         clone.remove();
         
         // set the original text if we want to ever want to expand past the current truncation
-        if (!yEl.getAttribute('originalText')) {
-            yEl.setAttribute('originalText', originalText);
+        if (conf.remember && !yEl.getData(dataAttrName)) {
+            yEl.setData(dataAttrName, originalText);
         }
 
         // console.log('originalText.length', originalText.length);
@@ -184,4 +190,5 @@ YUI.add('gallery-ellipsis', function(Y) {
     Y.NodeList.importMethod(Y.Node.prototype, 'ellipsis');
 
 
-}, 'gallery-2011.03.30-19-47' ,{requires:['base','node']});
+
+}, 'gallery-2011.04.06-19-44' ,{requires:['base','node']});
