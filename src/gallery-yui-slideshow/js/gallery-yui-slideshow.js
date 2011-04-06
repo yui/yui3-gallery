@@ -1,372 +1,889 @@
-	// Transitions:
-	
-	Y.Transitions = {
+/**
+ * A simple YUI3 slideshow kit inspired by the jQuery Cycle plugin.
+ * @module gallery-yui-slideshow
+ * @requires widget, transition, event-mouseenter
+ * @author Josh Lizarraga
+ */
 
-		none: {},
-		staticTL: {
-			from: {
-				top: 0,
-				left: 0
-			},
-			to: {
-				top: 0,
-				left: 0
-			}
-		},
-		staticTR: {
-			from: {
-				top: 0,
-				right: 0
-			},
-			to: {
-				top: 0,
-				right: 0
-			}
-		},
-		staticBL: {
-			from: {
-				bottom: 0,
-				left: 0
-			},
-			to: {
-				bottom: 0,
-				left: 0
-			}
-		},
-		staticBR: {
-			from: {
-				bottom: 0,
-				right: 0
-			},
-			to: {
-				bottom: 0,
-				right: 0
-			}
-		},
-		fadeIn: {
-			from: {
-				opacity: 0
-			},
-			to: {
-				opacity: 1
-			}
-		},
-		fadeOut: {
-			from: {
-				opacity: 1
-			},
-			to: {
-				opacity: 0
-			}
-		},
-		swipeInLTR: {
-			from: {
-				left: function(node){
-					return parseInt(-(node.get('parentNode').get('offsetWidth')), 10);
-				}
-			},
-			to: {
-				left: 0
-			}
-		},
-		swipeOutLTR: {
-			from: {
-				left: 0
-			},
-			to: {
-				left: function(node){
-					return parseInt(node.get('parentNode').get('offsetWidth'), 10);
-				}
-			}
-		},
-		swipeInRTL: {
-			from: {
-				right: function(node){
-					return parseInt(-(node.get('parentNode').get('offsetWidth')), 10);
-				}
-			},
-			to: {
-				right: 0
-			}
-		},
-		swipeOutRTL: {
-			from: {
-				right: 0
-			},
-			to: {
-				right: function(node){
-					return parseInt(node.get('parentNode').get('offsetWidth'), 10);
-				}
-			}
-		},
-		swipeInTTB: {
-			from: {
-				top: function(node){
-					return parseInt(-(node.get('parentNode').get('offsetHeight')), 10);
-				}
-			},
-			to: {
-				top: 0
-			}
-		},
-		swipeOutTTB: {
-			from: {
-				top: 0
-			},
-			to: {
-				top: function(node){
-					return parseInt(node.get('parentNode').get('offsetHeight'), 10);
-				}
-			}
-		},
-		swipeInBTT: {
-			from: {
-				bottom: function(node){
-					return parseInt(-(node.get('parentNode').get('offsetHeight')), 10);
-				}
-			},
-			to: {
-				bottom: 0
-			}
-		},
-		swipeOutBTT: {
-			from: {
-				bottom: 0
-			},
-			to: {
-				bottom: function(node){
-					return parseInt(node.get('parentNode').get('offsetHeight'), 10);
-				}
-			}
-		}
-
-	}; // Y.Transitions
+	/**
+	* @class Slideshow
+	* @constructor
+	* @param {Object} config Widget configuration object.
+	*/
+    var Slideshow = function(config){
+    	
+        Slideshow.superclass.constructor.apply(this, arguments);
+        
+    };
 	
-	Y.Slideshow = function(pTarget, pConfig){
+	/**
+	* @property NAME
+	* @type String
+	* @default Slideshow
+	*/
+	Slideshow.NAME = 'Slideshow';
+	
+	// Presets:
+	
+	Slideshow.PRESETS = {
 		
-		// Target:
-		
-		switch(typeof(pTarget)){
-			
-			case 'string':
-			
-				this.id = (pTarget.indexOf('#') === 0) ? pTarget : '#' + pTarget;
-				this.container = Y.one(this.id);
-				break;
-				
-			case 'object':
-			
-				if(Y.Lang.isArray(pTarget)){
-					
-					var oSlideshows = [];
-					for(var i=0; i<pTarget.length; i++){
-						oSlideshows.push(new Y.Slideshow(pTarget[i], pConfig));
-					}
-					return oSlideshows;
-					
-				} else if(!Y.Lang.isUndefined(pTarget._node)){
-					
-					this.id = (pTarget.get('id') === '') ? Y.guid(): pTarget.get('id');
-					pTarget.set('id', this.id);
-					this.id = (this.id.indexOf('#') === 0) ? this.id : '#' + this.id;
-					this.container = pTarget;
-					break;
-					
-				} else if(!Y.Lang.isUndefined(pTarget.nodeName)){
-					
-					this.id = (pTarget.id === '') ? Y.guid(): pTarget.id;
-					this.id = (this.id.indexOf('#') === 0) ? this.id : '#' + this.id;
-					this.container = Y.one(this.id);
-					break;
-					
+		/**
+		* Incoming slide fades in.
+		* Outgoing slide fades out.
+		* @property PRESETS.fade
+		* @type Preset Slide Transition
+		*/
+		fade: {
+			slideIn: {
+				before: {
+					opacity: 0
+				},
+				transition: {
+					opacity: 1
 				}
-				
-			default:
-			
-				return false;
-				
-		}
+			},
+			slideOut: {
+				before: {
+					opacity: 1
+				},
+				transition: {
+					opacity: 0
+				}
+			}
+		},
 		
-		// Lazy load?
+		/**
+		* Both slides slide from top to bottom.
+		* @property PRESETS.slideDown
+		* @type Preset Slide Transition
+		*/
+		slideDown: {
+			slideIn: {
+				before: {
+					bottom: 'cH'
+				},
+				transition: {
+					bottom: '0px'
+				}
+			},
+			slideOut: {
+				before: {
+					bottom: '0px'
+				},
+				transition: {
+					bottom: '-cH'
+				}
+			}
+		},
 		
-		if(Y.Lang.isObject(pConfig)){
-			if(!Y.Lang.isUndefined(pConfig.lazyLoad)){
-				this.container.append(pConfig.lazyLoad);
+		/**
+		* Both slides slide from right to left.
+		* @property PRESETS.slideRight
+		* @type Preset Slide Transition
+		*/
+		slideLeft: {
+			slideIn: {
+				before: {
+					right: '-cW'
+				},
+				transition: {
+					right: '0px'
+				}
+			},
+			slideOut: {
+				before: {
+					right: '0px'
+				},
+				transition: {
+					right: 'cW'
+				}
+			}
+		},
+		
+		/**
+		* Both slides slide from bottom to top.
+		* @property PRESETS.slideUp
+		* @type Preset Slide Transition
+		*/
+		slideUp: {
+			slideIn: {
+				before: {
+					top: 'cH'
+				},
+				transition: {
+					top: '0px'
+				}
+			},
+			slideOut: {
+				before: {
+					top: '0px'
+				},
+				transition: {
+					top: '-cH'
+				}
+			}
+		},
+		
+		/**
+		* Both slides slide from left to right.
+		* @property PRESETS.slideRight
+		* @type Preset Slide Transition
+		*/
+		slideRight: {
+			slideIn: {
+				before: {
+					left: '-cW'
+				},
+				transition: {
+					left: '0px'
+				}
+			},
+			slideOut: {
+				before: {
+					left: '0px'
+				},
+				transition: {
+					left: 'cW'
+				}
 			}
 		}
 		
-		// Properties:
+	};
+	
+	// Attributes:
+	
+    Slideshow.ATTRS = {
 		
-		this.slides = this.container.get('children');
+		/**
+		* Slides NodeList instance.
+		* @attribute slides
+		* @type NodeList
+		* @default null
+		*/
+		slides: {
+			value: null
+		},
 		
-		this.zIndex = {
-			container: 1,
-			slides: 2,
-			nextSlide: 3,
-			currentSlide: 4
-		};
+		/**
+		* Current slide index.
+		* @attribute currentIndex
+		* @type Integer
+		* @default 0
+		*/
+		currentIndex: {
+			value: 0
+		},
 		
-		this.transIn = Y.Transitions.fadeIn;
-		this.transOut = Y.Transitions.fadeOut;
+		/**
+		* Previous slide button Node/NodeList/selector string.
+		* @attribute previousButton
+		* @type Mixed
+		* @default null
+		*/
+		previousButton: {
+			value: null
+		},
 		
-		this.easingIn = Y.Easing.easeOut;
-		this.easingOut = Y.Easing.easeOut;
+		/**
+		* Next slide button Node/NodeList/selector string.
+		* @attribute nextButton
+		* @type Mixed
+		* @default null
+		*/
+		nextButton: {
+			value: null
+		},
 		
-		this.currentSlide = 0;
-		this.interval = 4000;
-		this.duration = 0.5;
+		/**
+		* Pause button Node/NodeList/selector string.
+		* @attribute pauseButton
+		* @type Mixed
+		* @default null
+		*/
+		pauseButton: {
+			value: null
+		},
 		
-		this.autoplay = true;
-		this.debug = false; // Changes autoplay timer from setInterval to setTimeout.
+		/**
+		* Play button Node/NodeList/selector string.
+		* @attribute playButton
+		* @type Mixed
+		* @default null
+		*/
+		playButton: {
+			value: null
+		},
 		
-		this.loop = false;
+		/**
+		* Node/selector string for the element whose children correspond to slides.
+		* This setting works best with an ordered list of links.
+		* @attribute pages
+		* @type Mixed
+		* @default null
+		*/
+		pages: {
+			value: null
+		},
 		
-		this.previousButton = false;
-		this.nextButton = false;
-		this.playButton = false;
-		this.pauseButton = false;
-		this.stopOnUser = true;
+		/**
+		* Time interval between slide transitions in seconds.
+		* @attribute interval
+		* @type Float
+		* @default 4
+		*/
+		interval: {
+			value: 4
+		},
 		
-		// Config:
+		/**
+		* Set to false to disable autoplay.
+		* @attribute autoplay
+		* @type Boolean
+		* @default true
+		*/
+		autoplay: {
+			value: true
+		},
 		
-		if(Y.Lang.isObject(pConfig)){
-			for(var i in pConfig){
-				if(pConfig.hasOwnProperty(i)){
-					this[i] = pConfig[i];
-				}
+		/**
+		* Set to false to continue autoplay when the user changes slides.
+		* @attribute pauseOnChange
+		* @type Boolean
+		* @default true
+		*/
+		pauseOnChange: {
+			value: true
+		},
+		
+		/**
+		* Set to false to continue playing when the user hovers over the slideshow.
+		* @attribute pauseOnHover
+		* @type Boolean
+		* @default true
+		*/
+		pauseOnHover: {
+			value: true
+		},
+		
+		/**
+		* Default duration for slide transitions.
+		* @attribute duration
+		* @type Float
+		* @default null
+		*/
+		duration: {
+			value: 0.5
+		},
+		
+		/**
+		* Default slide transition easing.
+		* @attribute easing
+		* @type String
+		* @default ease-out
+		*/
+		easing: {
+			value: 'ease-out'
+		},
+		
+		/**
+		* Default slide transition.
+		* @attribute transition
+		* @type Slide Transition
+		* @default Slideshow.PRESETS.fade
+		*/
+		transition: {
+			value: Slideshow.PRESETS.fade
+		},
+		
+		/**
+		* Default transIn (incoming slide) "before" settings. Sets z-index to 1.
+		* @attribute transInBefore
+		* @type Object
+		* @default (See source)
+		*/
+		transInBefore: {
+			value: {
+				zIndex: 1
 			}
+		},
+		
+		/**
+		* Default transIn (incoming slide) "after" settings. Sets z-index to 2.
+		* @attribute transInAfter
+		* @type Object
+		* @default (See source)
+		*/
+		transInAfter: {
+			value: {
+				zIndex: 2
+			}
+		},
+		
+		/**
+		* Default transOut (outgoing slide) "before" settings. Sets z-index to 2.
+		* @attribute transOutBefore
+		* @type Object
+		* @default (See source)
+		*/
+		transOutBefore: {
+			value: {
+				zIndex: 2
+			}
+		},
+		
+		/**
+		* Default transOut (outgoing slide) "after" settings. Sets z-index to -30000.
+		* @attribute transOutAfter
+		* @type Object
+		* @default (See source)
+		*/
+		transOutAfter: {
+			value: {
+				zIndex: -30000
+			}
+		},
+		
+		/**
+		* Changes timer from setInterval to setTimeout. Can be useful for debugging slide transitions.
+		* @attribute _debug
+		* @protected
+		* @type Boolean
+		* @default false
+		*/
+		_debug: {
+			value: false
+		},
+		
+		/**
+		* The ID returned by autoplay's setInterval call.
+		* @attribute _intervalID
+		* @protected
+		* @type Integer
+		* @default null
+		*/
+		_intervalID: {
+			value: null
+		},
+		
+		/**
+		* Paused flag.
+		* @attribute _isPaused
+		* @protected
+		* @type Boolean
+		* @default true
+		*/
+		_isPaused: {
+			value: true
 		}
 		
-		var that = this;
+    };
+    
+    Y.extend(Slideshow, Y.Widget, {
 		
-		// Methods:
+		// Public methods:
+		
+		/**
+		* Advances the slideshow by one slide.
+		* @method next
+		*/
+        next: function(){
+			
+			if( this.get('pauseOnChange') ){
 				
-		this.slideChange = function(pWhich){
+				this.pause();
+				
+			}
 			
-			var oOutAnimObject = { node: this.slides.item(this.currentSlide) };
+			this.slide('next');
 			
-			switch(pWhich){
+        },
+		
+		/**
+		* Pauses the slideshow.
+		* @method pause
+		*/
+        pause: function(){
+			
+			if( !this.get('_isPaused') ){
+				
+				window.clearInterval( this.get('_intervalID') );
+				
+				this.set('_isPaused', true);
+				
+			}
+			
+        },
+		
+		/**
+		* Plays the slideshow.
+		* @method play
+		*/
+        play: function(){
+			
+			var $that = this,
+				$function;
+			
+			if( this.get('_isPaused') ){
+				
+				$function = this.get('_debug') ? 'setTimeout' : 'setInterval' ;
+				
+				this.set( '_intervalID', window[$function](function(){
+					
+					$that.slide('next');
+					
+				}, parseInt( this.get('interval') * 1000, 10 )) );
+				
+				this.set('_isPaused', false);
+				
+			}
+			
+        },
+		
+		/**
+		* Reverses the slideshow by one slide.
+		* @method previous
+		*/
+        previous: function(){
+			
+			if( this.get('pauseOnChange') ){
+				
+				this.pause();
+				
+			}
+			
+			this.slide('previous');
+			
+        },
+		
+		/**
+		* Advances the slideshow to a given slide.
+		* @method slide
+		* @param $which {Mixed} The slide to advance to. Can be a slide index, "next", or "previous".
+		*/
+        slide: function($which){
+			
+			var $that				= this,
+				$currentIndex		= this.get('currentIndex'),
+				$slides				= this.get('slides'),
+				$slideTransition	= this.get('transition'),
+				$outgoingSlide,
+				$incomingSlide;
+			
+			$outgoingSlide = $slides.item($currentIndex);
+			
+			switch( $which ){
+				
 				case 'next':
-					if(this.currentSlide + 1 < this.slides.size()){
-						this.currentSlide++;
-					} else {
-						this.currentSlide = 0;
+					
+					if( $currentIndex + 1 < $slides.size() ){
+						
+						$currentIndex++;
+						
 					}
+					
+					else {
+						
+						$currentIndex = 0;
+						
+					}
+					
 					break;
+					
 				case 'previous':
-					if(this.currentSlide - 1 > -1){
-						this.currentSlide--;
-					} else {
-						this.currentSlide = this.slides.size() - 1;
+					
+					if( $currentIndex - 1 > -1 ){
+						
+						$currentIndex--;
+						
 					}
+					
+					else {
+						
+						$currentIndex = $slides.size() - 1;
+						
+					}
+					
 					break;
+					
 				default:
-					this.currentSlide = parseInt(pWhich, 10);
-			}
-			
-			var oInAnimObject = { node: this.slides.item(this.currentSlide) };
-			
-			oInAnimObject.node.setStyle('zIndex', this.zIndex.nextSlide);
-			
-			for(var i in this.transOut){
-				if(this.transOut.hasOwnProperty(i)){
-					oOutAnimObject[i] = this.transOut[i];
-				}
-			}
-			for(var i in this.transIn){
-				if(this.transIn.hasOwnProperty(i)){
-					oInAnimObject[i] = this.transIn[i];
-				}
-			}
-			
-			var oOutAnim = new Y.Anim(oOutAnimObject);
-			var oInAnim = new Y.Anim(oInAnimObject);
-			
-			if(Y.Lang.isUndefined(oOutAnimObject.duration)){
-				oOutAnim.set('duration', this.duration);
-			}
-			if(Y.Lang.isUndefined(oInAnimObject.duration)){
-				oInAnim.set('duration', this.duration);
-			}
-			if(Y.Lang.isUndefined(oOutAnimObject.easing)){
-				oOutAnim.set('easing', this.easingOut);
-			}
-			if(Y.Lang.isUndefined(oInAnimObject.easing)){
-				oInAnim.set('easing', this.easingIn);
-			}
-			
-			oOutAnim.on('end', function(){
-				oOutAnimObject.node.setStyle('zIndex', this.zIndex.slides);
-			}, this);
-			oInAnim.on('end', function(){
-				oInAnimObject.node.setStyle('zIndex', this.zIndex.currentSlide);
-			}, this);
-			
-			oOutAnim.run();
-			oInAnim.run();
-			
-		}; // slideChange()
-		
-		this.startLoop = function(){
-			if(this.autoplay === true){
-				if(this.debug === false){
-					this.loop = setInterval(function(){ that.slideChange('next'); }, this.interval);
-				} else if(this.debug === true) {
-					this.loop = setTimeout(function(){ that.slideChange('next'); }, this.interval);
-				}
-			}
-		}; // startLoop()
-		
-		// Init - Set positioning and z-indexes:
+					
+					if( $which == $currentIndex ){
+						
+						return false;
+						
+					} else {
+						
+						$currentIndex = parseInt( $which, 10 );
+						
+					}
+					
+					break;
 				
-		this.container.setStyles({
-			position: 'relative',
-			zIndex: this.zIndex.container
-		});
-		this.slides.setStyles({
-			position: 'absolute',
-			zIndex: this.zIndex.slides
-		});
-		this.slides.item(this.currentSlide).setStyle('zIndex', this.zIndex.currentSlide);
-		this.slides.item(this.currentSlide + 1).setStyle('zIndex', this.zIndex.nextSlide);
-		
-		// Init - Controls:
-		
-		if(this.previousButton !== false){
-			Y.on('click', function(){
-				if(this.loop !== false && this.stopOnUser === true){
-					clearInterval(this.loop);
-					this.loop = false;
+			}
+			
+			this.set('currentIndex', $currentIndex);
+			
+			$incomingSlide = $slides.item($currentIndex);
+			
+			// Duraton and easing:
+			
+			if( Y.Lang.isUndefined($slideTransition.slideOut.transition.duration) ){
+				
+				$slideTransition.slideOut.transition.duration = this.get('duration');
+				
+			}
+			
+			if( Y.Lang.isUndefined($slideTransition.slideOut.transition.easing) ){
+				
+				$slideTransition.slideOut.transition.easing = this.get('easing');
+				
+			}
+			
+			if( Y.Lang.isUndefined($slideTransition.slideIn.transition.duration) ){
+				
+				$slideTransition.slideIn.transition.duration = this.get('duration');
+				
+			}
+			
+			if( Y.Lang.isUndefined($slideTransition.slideIn.transition.easing) ){
+				
+				$slideTransition.slideIn.transition.easing = this.get('easing');
+				
+			}
+			
+			// Default "before" styles:
+			
+			this._setStyles( $outgoingSlide, this.get('transOutBefore') );
+			
+			this._setStyles( $incomingSlide, this.get('transInBefore') );
+			
+			// Transition "before" styles:
+			
+			if( Y.Lang.isObject($slideTransition.slideOut.before) ){
+				
+				this._setStyles( $outgoingSlide, $slideTransition.slideOut.before );
+				
+			}
+			
+			if( Y.Lang.isObject($slideTransition.slideIn.before) ){
+				
+				this._setStyles( $incomingSlide, $slideTransition.slideIn.before );
+				
+			}
+			
+			// Transitions:
+			
+			$slideTransition.slideOut.transition = this._checkTransitionValues($outgoingSlide, $slideTransition.slideOut.transition);
+			
+			$slideTransition.slideIn.transition = this._checkTransitionValues($incomingSlide, $slideTransition.slideIn.transition);
+			
+			$outgoingSlide.transition($slideTransition.slideOut.transition, function(){
+				
+				// Default "after" styles:
+				
+				$that._setStyles( $outgoingSlide, $that.get('transOutAfter') );
+				
+				// Transition "after" styles:
+				
+				if( Y.Lang.isObject($slideTransition.slideOut.after) ){
+					
+					$that._setStyles( $outgoingSlide, $slideTransition.slideOut.after );
+					
 				}
-				this.slideChange('previous');
-			}, this.previousButton, this);
-		}
-		if(this.nextButton !== false){
-			Y.on('click', function(){
-				if(this.loop !== false && this.stopOnUser === true){
-					clearInterval(this.loop);
-					this.loop = false;
+				
+			});
+			
+			$incomingSlide.transition($slideTransition.slideIn.transition, function(){
+				
+				// Default "after" styles:
+				
+				$that._setStyles( $incomingSlide, $that.get('transInAfter') );
+				
+				// Transition "after" styles:
+				
+				if( Y.Lang.isObject($slideTransition.slideIn.after) ){
+					
+					$that._setStyles( $incomingSlide, $slideTransition.slideIn.after );
+					
 				}
-				this.slideChange('next');
-			}, this.nextButton, this);
-		}
-		if(this.playButton !== false){
-			Y.on('click', function(){
-				if(this.loop === false){
-					this.startLoop();
+				
+			});
+			
+        },
+		
+		// Protected methods:
+		
+		/**
+		* Checks CSS values for shortcut keywords.
+		* @method _checkCSSValue
+		* @protected
+		* @param {Node} $node The Node to use if shortcut keywords are found.
+		* @param {Mixed} $value The CSS value to check.
+		* @return {Mixed} The parsed CSS value.
+		*/
+        _checkCSSValue: function($node, $value){
+			
+			switch( $value ){
+				
+				case 'cW':
+				case 'containerWidth':
+					
+					return parseInt(this.get('contentBox').get('offsetWidth'), 10) + 'px';
+					
+					break;
+					
+				case '-cW':
+				case '-containerWidth':
+					
+					return (parseInt(this.get('contentBox').get('offsetWidth'), 10) * -1) + 'px';
+					
+					break;
+					
+				case 'cH':
+				case 'containerHeight':
+					
+					return parseInt(this.get('contentBox').get('offsetHeight'), 10) + 'px';
+					
+					break;
+					
+				case '-cH':
+				case '-containerHeight':
+					
+					return (parseInt(this.get('contentBox').get('offsetHeight'), 10) * -1) + 'px';
+					
+					break;
+					
+				case 'sW':
+				case 'slideWidth':
+					
+					return parseInt($node.get('offsetWidth')) + 'px';
+					
+					break;
+					
+				case '-sW':
+				case '-slideWidth':
+					
+					return (parseInt($node.get('offsetWidth')) * -1) + 'px';
+					
+					break;
+					
+				case 'sH':
+				case 'slideHeight':
+					
+					return parseInt($node.get('offsetHeight')) + 'px';
+					
+					break;
+					
+				case '-sH':
+				case '-slideHeight':
+					
+					return (parseInt($node.get('offsetHeight')) * -1) + 'px';
+					
+					break;
+					
+				default:
+					
+					return $value;
+					
+					break;
+					
+			}
+			
+        },
+		
+		/**
+		* Sanitizes transition values with _checkCSSValue.
+		* @method _checkTransitionValues
+		* @protected
+		* @param {Node} $node The Node to use if shortcut keywords are found.
+		* @param {Object} $transition The transition to check.
+		* @return {Mixed} The sanitized transition.
+		*/
+        _checkTransitionValues: function($node, $transition){
+			
+			var $sanitized = {},
+				$i;
+			
+			for( i in $transition ){
+				
+				if( i == 'duration' || i == 'easing' || i == 'delay' ){
+					
+					$sanitized[i] = $transition[i];
+					
+				} else {
+					
+					$sanitized[i] = this._checkCSSValue($node, $transition[i]);
+					
 				}
-			}, this.playButton, this);
-		}
-		if(this.pauseButton !== false){
-			Y.on('click', function(){
-				if(this.loop !== false){
-					clearInterval(this.loop);
+				
+			}
+			
+			return $sanitized;
+			
+        },
+		
+		/**
+		* Handles clicks on pagination elements.
+		* @method _handlePageClick
+		* @protected
+		* @param {Event} e The Event object.
+		*/
+        _handlePageClick: function(e){
+			
+			if( this.get('pauseOnChange') ){
+				
+				this.pause();
+				
+			}
+			
+			e.target = e.target.ancestor( '.' + this.getClassName('page') );
+			
+			this.slide( this.get('pages').indexOf(e.target) );
+			
+        },
+		
+		/**
+		* Sets styles after they are sanitized by _checkCSSValue.
+		* @method _setStyles
+		* @protected
+		* @param {Node} $node The node to style.
+		* @param {Object} $styles The styles to set.
+		*/
+        _setStyles: function($node, $styles){
+			
+			for( var i in $styles ){
+				
+				if( $styles.hasOwnProperty(i) ){
+					
+					$node.setStyle(i, this._checkCSSValue($node, $styles[i]));
+					
 				}
-			}, this.pauseButton, this);
-		}
+				
+			}
+			
+        },
 		
-		// Init - Start loop:
+		// Lifecycle methods:
 		
-		this.startLoop();
+		/**
+		* Binds event handlers to previous, next, pause, and play buttons.
+		* @method bindUI
+		*/
+        bindUI: function(){
+			
+			var $buttons = ['previous', 'next', 'pause', 'play'],
+				$pages = this.get('pages'),
+				$button,
+				$target,
+				i;
+			
+			// Buttons:
+			
+			for( i = 0; i < $buttons.length; i++ ){
+				
+				$target = this.get( $buttons[i] + 'Button' );
+				
+				if( !Y.Lang.isNull($target) ){
+					
+					Y.on('click', this[$buttons[i]], $target, this);
+					
+				}
+				
+			}
+			
+			// Pages?
+			
+			if( !Y.Lang.isNull($pages) ){
+				
+				$pages.on('click', this._handlePageClick, this);
+				
+			}
+			
+			// Hover?
+			
+			if( this.get('pauseOnHover') ){
+				
+				this.get('contentBox').on('mouseenter', this.pause, this);
+				
+				this.get('contentBox').on('mouseleave', this.play, this);
+				
+			}
+			
+        },
 		
-	}; // Y.Slideshow()
+		/**
+		* Sets initial widget state.
+		* @method bindUI
+		*/
+        syncUI: function(){
+			
+			var $that = this,
+				$pages = this.get('pages'),
+				$count = 0;
+			
+			// Slides:
+			
+			this.get('slides').each(function( $node ){
+				
+				$count++;
+				
+				if( $count > 1 ){
+					
+					$node.setStyles( $that.get('transOutAfter') );
+					
+				}
+				
+			});
+			
+			// Pages?
+			
+			if( !Y.Lang.isNull($pages) ){
+				
+				$pages.addClass( this.getClassName('page') );
+				
+			}
+			
+			// Autoplay?
+			
+			if( this.get('autoplay') ){
+				
+				this.play();
+				
+			}
+			
+        },
+        
+		/**
+		* Initializes the Slideshow.
+		* @method initializer
+		*/
+        initializer: function(){
+			
+			var $pages = this.get('pages');
+			
+			// Slides:
+			
+			this.set('slides', this.get('contentBox').get('children'));
+			
+			// Pages?
+			
+			if( Y.Lang.isString($pages) ){
+				
+				$pages = Y.one($pages);
+				
+			}
+			
+			if( !Y.Lang.isNull($pages) ){
+				
+				$pages = $pages.get('children');
+				
+			}
+			
+			this.set('pages', $pages);
+			
+        }
+        
+    });
+    
+	Y.Slideshow = Slideshow;    
+    
