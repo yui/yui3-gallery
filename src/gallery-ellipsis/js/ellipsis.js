@@ -33,7 +33,10 @@
             'fudge'    : 3,
 
             // target number of lines to wrap
-            'lines'    : 1
+            'lines'    : 1,
+
+            // whether or not to remember the original text to able to de-truncate
+            'remember' : true
         });
 
         // console.log(conf);
@@ -43,8 +46,11 @@
             // the element we're trying to truncate
         var yEl           = Y.one(node),
 
+            // the name of the field we use to store using .setData()
+            dataAttrName  = 'ellipsis-original-text',
+
             // original text
-            originalText  = yEl.getAttribute('originalText') || yEl.get('text'),
+            originalText  = conf.remember && yEl.getData(dataAttrName) || yEl.get('text'),
             
             // keep the current length of the text so far
             currentLength = originalText.length,
@@ -153,8 +159,8 @@
         clone.remove();
         
         // set the original text if we want to ever want to expand past the current truncation
-        if (!yEl.getAttribute('originalText')) {
-            yEl.setAttribute('originalText', originalText);
+        if (conf.remember && !yEl.getData(dataAttrName)) {
+            yEl.setData(dataAttrName, originalText);
         }
 
         // console.log('originalText.length', originalText.length);
@@ -180,3 +186,4 @@
 
     Y.Node.importMethod(Y.DOM, 'ellipsis');
     Y.NodeList.importMethod(Y.Node.prototype, 'ellipsis');
+
