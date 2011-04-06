@@ -10,7 +10,9 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  * <p>The default package provides two data types:  String (which can also
  * be used for numbers) and Select (which provides a menu of options).  The
  * plugin API allows defining additional data types, e.g., date range or
- * multi-select.  A plugin must implement the following functions:</p>
+ * multi-select.  Every plugin must be registered in
+ * <code>Y.QueryBuilder.plugin_mapping</code>.  Plugins must implement the
+ * following functions:</p>
  * 
  * <dl>
  * <dt><code>constructor(qb, config)</code></dt>
@@ -606,7 +608,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		return result;
 	},
 
-	/**********************************************************************
+	/*
 	 * API for plugins
 	 */
 
@@ -629,7 +631,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		this.fire('queryChanged');
 	},
 
-	/**********************************************************************
+	/*
 	 * Form element names.
 	 */
 

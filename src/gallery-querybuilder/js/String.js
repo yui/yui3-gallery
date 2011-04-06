@@ -70,7 +70,14 @@ QueryBuilder.String.prototype =
 		{
 			if (this.value_input)		// could be destroyed
 			{
-				this.value_input.focus();
+				try
+				{
+					this.value_input.focus();
+				}
+				catch (e)
+				{
+					// IE will complain if field is invisible, instead of just ignoring it
+				}
 			}
 		});
 	},
