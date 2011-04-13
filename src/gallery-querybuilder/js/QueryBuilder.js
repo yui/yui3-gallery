@@ -6,14 +6,14 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  * <p>Class which allows user to build a list of query criteria, e.g., for
  * searching.  All the conditions are either AND'ed or OR'ed.  For a more
  * general query builder, see gallery-exprbuilder.</p>
- * 
+ *
  * <p>The default package provides two data types:  String (which can also
  * be used for numbers) and Select (which provides a menu of options).  The
  * plugin API allows defining additional data types, e.g., date range or
  * multi-select.  Every plugin must be registered in
  * <code>Y.QueryBuilder.plugin_mapping</code>.  Plugins must implement the
  * following functions:</p>
- * 
+ *
  * <dl>
  * <dt><code>constructor(qb, config)</code></dt>
  * <dd>The arguments passed to the constructor are the QueryBuilder instance
@@ -47,7 +47,7 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  *		a single inner array.  A date range plugin would return two inner
  *		arrays, one for the start date and one for the end date.</dd>
  * </dl>
- * 
+ *
  * @module gallery-querybuilder
  * @class QueryBuilder
  * @constructor
@@ -112,7 +112,7 @@ QueryBuilder.ATTRS =
 {
 	/**
 	 * The prompt displayed when a new item is added to the query.
-	 * 
+	 *
 	 * @config chooseVarPrompt
 	 * @type {String}
 	 * @default "Choose a variable"
@@ -128,7 +128,7 @@ QueryBuilder.ATTRS =
 	/**
 	 * All generated form field names start with this prefix.  This avoids
 	 * conflicts if you have more than one QueryBuilder on a page.
-	 * 
+	 *
 	 * @config fieldPrefix
 	 * @type {String}
 	 * @default ""
@@ -143,7 +143,7 @@ QueryBuilder.ATTRS =
 
 	/**
 	 * Configuration passed to plugins when they are constructed.
-	 * 
+	 *
 	 * @config pluginConfig
 	 * @type {Object}
 	 * @default {}
@@ -204,7 +204,7 @@ function removeRow(
 	if (i >= 0)
 	{
 		this.remove(i);
-    }
+	}
 }
 
 function changeVar(
@@ -230,10 +230,10 @@ Y.extend(QueryBuilder, Y.Widget,
 {
 	initializer: function(config)
 	{
-		var field_prefix                     = this.get('fieldPrefix');
-		this.var_menu_name_pattern           = field_prefix + 'query_var_{i}';
-		this.get('pluginConfig').fieldPrefix = field_prefix;
-		this.plugin_column_count             = 0;	// expands as needed
+		var field_prefix                      = this.get('fieldPrefix');
+		this.var_menu_name_pattern            = field_prefix + 'query_var_{i}';
+		this.get('pluginConfig').field_prefix = field_prefix;
+		this.plugin_column_count              = 0;	// expands as needed
 
 		initVarList.call(this);
 	},
@@ -266,7 +266,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Reset the query.
-	 * 
+	 *
 	 * @param var_list {Array} If specified, the list of available variables is replaced.
 	 * @param operators {Object} If specified, the operators for all variable types will be replaced.
 	 */
@@ -300,7 +300,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Append a new query condition to the table.
-	 * 
+	 *
 	 * @param name {String} If specified, this variable is selected.
 	 * @param value {String} If specified, this value is selected.
 	 * @return {Object} plugin that was created for the row, if any
@@ -424,7 +424,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Set the value of the specified row.
-	 * 
+	 *
 	 * @param row_index {int} The index of the row
 	 * @param value {String} If specified, the value to set
 	 */
@@ -461,7 +461,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		var cells = [];
 		if (selected_var.type != 'none')
 		{
-			this.row_list[row_index].plugin = 
+			this.row_list[row_index].plugin =
 				new QueryBuilder.plugin_mapping[ selected_var.type ](
 					this, this.get('pluginConfig'));
 			cells =
@@ -513,7 +513,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Removes the specified row.
-	 * 
+	 *
 	 * @param row_index {int} The index of the row
 	 * @return {boolean} <code>true</code> if successful
 	 */
@@ -574,7 +574,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Returns plugin used for the specified row, if any.
-	 * 
+	 *
 	 * @param row_index {int} The index of the row
 	 * @return {Object} the plugin for the row, if any
 	 */
@@ -623,7 +623,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Fires the queryChanged event.
-	 * 
+	 *
 	 * @protected
 	 */
 	_notifyChanged: function()
