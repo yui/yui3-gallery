@@ -1,37 +1,79 @@
 YUI.add('gallery-asynchronouscommandqueue-base', function(Y) {
 
+/**
+ * @module gallery-asynchronouscommandqueue
+ */
+
 'use strict';
 
 var _class;
 
+/**
+ * Asynchronous Command Queue.
+ * @class AsynchronousCommandQueue
+ * @constructor
+ * @extends Y.Base
+ * @namespace Y
+ * @param {Object} config Configuration Object.
+ */
 _class = function (config) {
     _class.superclass.constructor.call(this, config);
 };
 
 _class.ATTRS = {
+    /**
+     * @attribute completed
+     * @final
+     * @type Boolean
+     */
     completed: {
         readOnly: true,
         value: false
     },
+    /**
+     * @attribute paused
+     * @type Boolean
+     */
     paused: {
         value: false
     },
+    /**
+     * @attribute started
+     * @final
+     * @type Boolean
+     */
     started: {
         readOnly: true,
         value: false
     },
+    /**
+     * @attribute queue
+     * @type Array
+     * @writeOnce
+     */
     queue: {
         value: [],
         writeOnce: 'initOnly'
     }
 };
+
 _class.NAME = 'AsynchronousCommandQueue';
 
 Y.extend(_class, Y.Base, {
+    /**
+     * Adds a command to the end of the queue.  This method is chainable.
+     * @method addCommand
+     * @param {Object} asynchronousCommand
+     * @return {Object} this
+     */
     addCommand: function (asynchronousCommand) {
         this.get('queue').push(asynchronousCommand);
         return this;
     },
+    /**
+     * @method getCommandCount
+     * @return {Number}
+     */
     getCommandCount: function () {
         return this.get('queue.length');
     },
@@ -39,11 +81,15 @@ Y.extend(_class, Y.Base, {
         this.publish('complete', {
             fireOnce: true
         });
-        this.publish('pause');
-        this.publish('resume');
         this.publish('start', {
             fireOnce: true
         });
+
+        this.after('pausedChange', function (eventFacade) {
+            if (!eventFacade.newVal) {
+                this.startQueue();
+            }
+        }, this);
 
         this.on('complete', function (eventFacade, response, args) {
             this._set('completed', true);
@@ -53,16 +99,10 @@ Y.extend(_class, Y.Base, {
             this._set('started', true);
         }, this);
     },
-    pauseQueue: function () {
-        this.set('paused', true);
-        this.fire('pause');
-        return this;
-    },
-    resumeQueue: function () {
-        this.set('paused', false);
-        this.fire('resume');
-        return this.startQueue();
-    },
+    /**
+     * @method startAll
+     * @return {Object} this
+     */
     startAll: function () {
         var commandCount,
             completeCount = 0,
@@ -90,8 +130,16 @@ Y.extend(_class, Y.Base, {
             startCommand.call(this, queue[i]);
         }
 
+        if (!commandCount) {
+            this.fire('complete');
+        }
+
         return this;
     },
+    /**
+     * @method startQueue
+     * @return {Object} this
+     */
     startQueue: function () {
         if (this.get('paused')) {
             return this;
@@ -112,4 +160,4 @@ Y.extend(_class, Y.Base, {
 Y.AsynchronousCommandQueue = _class;
 
 
-}, 'gallery-2011.03.16-21-24' ,{requires:['base'], skinnable:false});
+}, 'gallery-2011.04.13-22-38' ,{requires:['base'], skinnable:false});

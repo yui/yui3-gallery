@@ -61,7 +61,14 @@ QueryBuilder.Select.prototype =
 		/* array */		op_list,
 		/* array */		value)
 	{
-		this.value_menu.focus();
+		try
+		{
+			this.value_menu.focus();
+		}
+		catch (e)
+		{
+			// IE will complain if field is invisible, instead of just ignoring it
+		}
 	},
 
 	destroy: function()

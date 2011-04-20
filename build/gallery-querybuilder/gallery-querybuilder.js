@@ -8,12 +8,14 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  * <p>Class which allows user to build a list of query criteria, e.g., for
  * searching.  All the conditions are either AND'ed or OR'ed.  For a more
  * general query builder, see gallery-exprbuilder.</p>
- * 
+ *
  * <p>The default package provides two data types:  String (which can also
  * be used for numbers) and Select (which provides a menu of options).  The
  * plugin API allows defining additional data types, e.g., date range or
- * multi-select.  A plugin must implement the following functions:</p>
- * 
+ * multi-select.  Every plugin must be registered in
+ * <code>Y.QueryBuilder.plugin_mapping</code>.  Plugins must implement the
+ * following functions:</p>
+ *
  * <dl>
  * <dt><code>constructor(qb, config)</code></dt>
  * <dd>The arguments passed to the constructor are the QueryBuilder instance
@@ -47,7 +49,7 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  *		a single inner array.  A date range plugin would return two inner
  *		arrays, one for the start date and one for the end date.</dd>
  * </dl>
- * 
+ *
  * @module gallery-querybuilder
  * @class QueryBuilder
  * @constructor
@@ -112,7 +114,7 @@ QueryBuilder.ATTRS =
 {
 	/**
 	 * The prompt displayed when a new item is added to the query.
-	 * 
+	 *
 	 * @config chooseVarPrompt
 	 * @type {String}
 	 * @default "Choose a variable"
@@ -128,7 +130,7 @@ QueryBuilder.ATTRS =
 	/**
 	 * All generated form field names start with this prefix.  This avoids
 	 * conflicts if you have more than one QueryBuilder on a page.
-	 * 
+	 *
 	 * @config fieldPrefix
 	 * @type {String}
 	 * @default ""
@@ -143,7 +145,7 @@ QueryBuilder.ATTRS =
 
 	/**
 	 * Configuration passed to plugins when they are constructed.
-	 * 
+	 *
 	 * @config pluginConfig
 	 * @type {Object}
 	 * @default {}
@@ -204,7 +206,7 @@ function removeRow(
 	if (i >= 0)
 	{
 		this.remove(i);
-    }
+	}
 }
 
 function changeVar(
@@ -230,10 +232,10 @@ Y.extend(QueryBuilder, Y.Widget,
 {
 	initializer: function(config)
 	{
-		var field_prefix                     = this.get('fieldPrefix');
-		this.var_menu_name_pattern           = field_prefix + 'query_var_{i}';
-		this.get('pluginConfig').fieldPrefix = field_prefix;
-		this.plugin_column_count             = 0;	// expands as needed
+		var field_prefix                      = this.get('fieldPrefix');
+		this.var_menu_name_pattern            = field_prefix + 'query_var_{i}';
+		this.get('pluginConfig').field_prefix = field_prefix;
+		this.plugin_column_count              = 0;	// expands as needed
 
 		initVarList.call(this);
 	},
@@ -266,7 +268,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Reset the query.
-	 * 
+	 *
 	 * @param var_list {Array} If specified, the list of available variables is replaced.
 	 * @param operators {Object} If specified, the operators for all variable types will be replaced.
 	 */
@@ -300,7 +302,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Append a new query condition to the table.
-	 * 
+	 *
 	 * @param name {String} If specified, this variable is selected.
 	 * @param value {String} If specified, this value is selected.
 	 * @return {Object} plugin that was created for the row, if any
@@ -424,7 +426,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Set the value of the specified row.
-	 * 
+	 *
 	 * @param row_index {int} The index of the row
 	 * @param value {String} If specified, the value to set
 	 */
@@ -461,7 +463,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		var cells = [];
 		if (selected_var.type != 'none')
 		{
-			this.row_list[row_index].plugin = 
+			this.row_list[row_index].plugin =
 				new QueryBuilder.plugin_mapping[ selected_var.type ](
 					this, this.get('pluginConfig'));
 			cells =
@@ -513,7 +515,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Removes the specified row.
-	 * 
+	 *
 	 * @param row_index {int} The index of the row
 	 * @return {boolean} <code>true</code> if successful
 	 */
@@ -574,7 +576,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Returns plugin used for the specified row, if any.
-	 * 
+	 *
 	 * @param row_index {int} The index of the row
 	 * @return {Object} the plugin for the row, if any
 	 */
@@ -608,7 +610,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		return result;
 	},
 
-	/**********************************************************************
+	/*
 	 * API for plugins
 	 */
 
@@ -623,7 +625,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 	/**
 	 * Fires the queryChanged event.
-	 * 
+	 *
 	 * @protected
 	 */
 	_notifyChanged: function()
@@ -631,7 +633,7 @@ Y.extend(QueryBuilder, Y.Widget,
 		this.fire('queryChanged');
 	},
 
-	/**********************************************************************
+	/*
 	 * Form element names.
 	 */
 
@@ -693,12 +695,18 @@ Y.extend(QueryBuilder, Y.Widget,
 
 Y.QueryBuilder = QueryBuilder;
 /**********************************************************************
- * <p>Plugin for accepting a string or number.  In the <code>var_list</code>
- * configuration, specify <code>validation</code> to CSS classes that will
- * be interpreted by <code>Y.FormManager</code>.</p>
+ * <p>Plugin for accepting a string or number.  All the operators specified
+ * for this plugin are displayed on a menu.</p>
  * 
- * <p>All the operators specified for this plugin are displayed on a
- * menu.</p>
+ * <p>In the <code>var_list</code> configuration, specify
+ * <code>validation</code> to provide CSS classes that will be interpreted
+ * by <code>Y.FormManager</code>.</p>
+ * 
+ * <p>To enable autocomplete, define <code>autocomplete</code> in the
+ * <code>var_list</code> configuration.  The object will be used as the
+ * configuration for <code>Y.Plugin.AutoComplete</code>.  If you specify
+ * <code>autocomplete.containerClassName</code>, this CSS class will be
+ * added to the container generated by the autocomplete plugin.</p>
  * 
  * @module gallery-querybuilder
  * @class QueryBuilder.String
@@ -764,13 +772,37 @@ QueryBuilder.String.prototype =
 		{
 			if (this.value_input)		// could be destroyed
 			{
-				this.value_input.focus();
+				if (var_config.autocomplete)
+				{
+					var config    = Y.clone(var_config.autocomplete);
+					config.render = Y.one('body');
+					this.value_input.plug(Y.Plugin.AutoComplete, config);
+
+					if (var_config.autocomplete.containerClassName)
+					{
+						this.value_input.ac.get('boundingBox').addClass(var_config.autocomplete.containerClassName);
+					}
+				}
+
+				try
+				{
+					this.value_input.focus();
+				}
+				catch (e)
+				{
+					// IE will complain if field is invisible, instead of just ignoring it
+				}
 			}
 		});
 	},
 
 	destroy: function()
 	{
+		if (this.value_input.unplug)
+		{
+			this.value_input.unplug(Y.Plugin.AutoComplete);
+		}
+
 		this.op_menu     = null;
 		this.value_input = null;
 	},
@@ -907,7 +939,14 @@ QueryBuilder.Select.prototype =
 		/* array */		op_list,
 		/* array */		value)
 	{
-		this.value_menu.focus();
+		try
+		{
+			this.value_menu.focus();
+		}
+		catch (e)
+		{
+			// IE will complain if field is invisible, instead of just ignoring it
+		}
 	},
 
 	destroy: function()
@@ -972,4 +1011,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2011.02.16-20-31' ,{optional:['gallery-formmgr','gallery-scrollintoview'], requires:['widget','substitute'], skinnable:true});
+}, 'gallery-2011.04.13-22-38' ,{skinnable:true, optional:['gallery-formmgr','gallery-scrollintoview','autocomplete'], requires:['widget','substitute']});

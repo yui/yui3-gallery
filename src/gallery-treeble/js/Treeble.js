@@ -1,5 +1,3 @@
-"use strict";
-
 /**********************************************************************
  * @module gallery-treeble
  * @class Treeble

@@ -14,8 +14,7 @@
 		moveToAndCopy : function(target) {
 			Y.log('moveToAndCopy','info','Y.Xarno.Clipboard');
 			
-			this.moveTo(target);
-			this.copy(target);
+			this.moveTo(target).copy(target);
 		},
 		
 		hide : function() {
@@ -35,12 +34,14 @@
 				width: target.getComputedStyle('width'),
 				height: target.getComputedStyle('height')
 			});
+			
+			return this;
 		},
 		
 		copy : function(target) {
 			var copyTarget = this.get('clipTarget');
 			
-			if (target !== null) {
+			if (target !== null && target !== undefined) {
 				copyTarget = target;
 			} else {
 				copyTarget = Y.one(copyTarget);
@@ -49,10 +50,14 @@
 			if (copyTarget) {
 				this.setText( copyTarget.getContent() );
 			}
+			
+			return this;
 		},
 		
 		setText : function(text) {
 			this._swfCall('setText', [ text ]);
+			
+			return this;
 		},
 		
 		_movieReady : function() {
