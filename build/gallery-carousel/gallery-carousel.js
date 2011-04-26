@@ -323,8 +323,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         }
 
         count = this.get("numItems");
-        this.set("numItems", count + 1);
-        this.fire(ITEMADDED_EVENT, { item: item, pos: index });
+        self.set("numItems", count + 1);
+        self.fire(ITEMADDED_EVENT, { item: item, pos: index });
 
         return true;
     },
@@ -872,7 +872,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      _onItemClick: function (ev) {
          var self = this,
              bb = self.get("boundingBox"),
-             container, el, target, i, len, items;
+             container, el, target, i, itemClass, items, len;
 
          target = ev && ev.target ? ev.target : null;
          if (!target) {
@@ -882,8 +882,9 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 
          container = bb.one("." + getCN(Carousel.NAME, cpContent));
          el = target;
+         itemClass = getCN(Carousel.NAME, cpItem);
          while (el && el != container) {
-             if (el.hasClass(self.ITEM_CLASS_NAME)) {
+             if (el.hasClass(itemClass)) {
                  break;
              }
              el = el.get("parentNode");
@@ -983,8 +984,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
       */
      _redrawUi: function () {
          var self = this,
-             attr = "left",
-             cb = self.get("contentBox");
+             attr = "left";
          
          self._renderItems();
          self._updateNavigation();
@@ -992,7 +992,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
              self._renderContainer();
              attr = "top";
          }
-         cb.setStyle(attr, 0);
+         self.scrollTo(0);
      },
 
      /**
@@ -1076,7 +1076,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     _renderItems: function () {
         var self = this,
             cb = self.get("contentBox"),
-            attr, i, n, node, size;
+            attr, i, itemClass, n, node, size;
 
         if (self.get("isVertical")) {
             attr = "top";
@@ -1086,6 +1086,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             size = self._vtbl.item.hsz;
         }
 
+        itemClass = getCN(Carousel.NAME, cpItem);
         for (i = 0, n = self._vtbl.items.length; i < n; ++i) {
             node = self._vtbl.items[i];
             if (node) {
@@ -1097,7 +1098,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
                     }
                 }
                 node.setStyle(attr, size * i);
-                node.addClass(self.ITEM_CLASS_NAME);
+                node.addClass(itemClass);
             }
         }
     },
@@ -1400,11 +1401,6 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         "<button type=\"button\">" + "{nav_next_btn_text}</button>" +
         "</span>" +
         "</div>",
-
-    /**
-     * Class name for a single Carousel item.
-     */
-    ITEM_CLASS_NAME: "yui3-carousel-item",
 
     /**
      * Template for a single Carousel navigation item.
