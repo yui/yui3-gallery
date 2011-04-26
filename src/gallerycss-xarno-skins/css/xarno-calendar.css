@@ -1,0 +1,16 @@
+.yui3-xarno-calendar { background: #ffffff; font-family: Arial, Helvetica, sans-serif; overflow: hidden; width: 300px; border: 1px solid #666666; border-radius: 6px; -moz-border-radius: 6px; -webkit-border-radius: 6px; padding: 2px; }
+
+.yui3-xarno-calendar .day-name, .yui3-xarno-calendar .day { width: 14.28%; display: inline-block; zoom:1; *display: inline; }
+
+.yui3-xarno-calendar .day-name .liner { display: block;  margin: 2px; padding: 2px 5px 2px 2px; font-size: .7em; text-align: center; }
+
+.yui3-xarno-calendar .day .liner { display: block; line-height: 1.4em; text-align: right; margin: 2px; padding: 2px 5px 2px 2px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px; }
+.yui3-xarno-calendar .day .liner { background: #fafafa; cursor: pointer; }
+.yui3-xarno-calendar .day .liner:hover { background: #FFFF99; }
+
+.yui3-xarno-calendar .previous, .yui3-xarno-calendar .next, .yui3-xarno-calendar .day-29, .yui3-xarno-calendar .day-30, .yui3-xarno-calendar .day-31 { display: none; }
+
+.yui3-xarno-calendar .p22 .previous-day-22, .yui3-xarno-calendar .p23 .previous-day-23, .yui3-xarno-calendar .p24 .previous-day-24, .yui3-xarno-calendar .p25 .previous-day-25, .yui3-xarno-calendar .p26 .previous-day-26, .yui3-xarno-calendar .p27 .previous-day-27, .yui3-xarno-calendar .p28 .previous-day-28, .yui3-xarno-calendar .p29 .previous-day-29, .yui3-xarno-calendar .p30 .previous-day-30,.yui3-xarno-calendar .p31 .previous-day-31, .yui3-xarno-calendar .d29 .day-29, .yui3-xarno-calendar .d30 .day-30, .yui3-xarno-calendar .d31 .day-31, .yui3-xarno-calendar .n1 .next-day-1, .yui3-xarno-calendar .n2 .next-day-2, .yui3-xarno-calendar .n3 .next-day-3, .yui3-xarno-calendar .n4 .next-day-4, .yui3-xarno-calendar .n5 .next-day-5, .yui3-xarno-calendar .n6 .next-day-6, .yui3-xarno-calendar .n7 .next-day-7, .yui3-xarno-calendar .n8 .next-day-8, .yui3-xarno-calendar .n9 .next-day-9, .yui3-xarno-calendar .n10 .next-day-10, .yui3-xarno-calendar .n11 .next-day-11, .yui3-xarno-calendar .n12 .next-day-12, .yui3-xarno-calendar .n13 .next-day-13, .yui3-xarno-calendar .n14 .next-day-14 { display: inline-block; zoom:1; *display: inline; }
+
+.yui3-xarno-calendar .selected .liner, #cal .selected .liner:hover { border:2px solid #FFD52E; padding: 0 3px 0 0; }
+.yui3-xarno-calendar .previous .liner, .yui3-xarno-calendar .next .liner { color: #999999; cursor: pointer; }

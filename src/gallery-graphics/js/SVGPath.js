@@ -62,7 +62,8 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
             tx = this.get("translateX"),
             ty = this.get("translateY"),
             left = this._left,
-            top = this._top;
+            top = this._top,
+            fill = this.get("fill");
         if(this._pathArray)
         {
             pathArray = this._pathArray.concat();
@@ -96,7 +97,7 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
 
                 }
             }
-            if(this._fill)
+            if(fill && fill.color)
             {
                 path += 'z';
             }
@@ -125,6 +126,8 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
     translate: function(x, y)
     {
         var node = this.get("node");
+        x = parseInt(x, 10);
+        y = parseInt(y, 10);
         this._translateX = x;
         this._translateY = y;
         this._translate(this._left + x, this._top + y);

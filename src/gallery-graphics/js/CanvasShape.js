@@ -89,7 +89,10 @@
         var color = stroke.color,
             weight = stroke.weight,
             alpha = stroke.alpha,
+            linejoin = stroke.linejoin || "round",
+            linecap = stroke.linecap || "butt",
             dashstyle = stroke.dashstyle;
+        this._miterlimit = null;
         this._dashstyle = (dashstyle && Y.Lang.isArray(dashstyle) && dashstyle.length > 1) ? dashstyle : null;
         this._strokeWeight = weight;
 
@@ -107,6 +110,20 @@
         else
         {
             this._strokeStyle = color;
+        }
+        this._linecap = linecap;
+        if(linejoin == "round" || linejoin == "square")
+        {
+            this._linejoin = linejoin;
+        }
+        else
+        {
+            linejoin = parseInt(linejoin, 10);
+            if(Y.Lang.isNumber(linejoin))
+            {
+                this._miterlimit =  Math.max(linejoin, 1);
+                this._linejoin = "miter";
+            }
         }
     },
     
@@ -339,6 +356,12 @@
                 if(this._strokeWeight)
                 {
                     context.lineWidth = this._strokeWeight;
+                }
+                context.lineCap = this._linecap;
+                context.lineJoin = this._linejoin;
+                if(this._miterlimit)
+                {
+                    context.miterLimit = this._miterlimit;
                 }
                 context.strokeStyle = this._strokeStyle;
                 context.stroke();

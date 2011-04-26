@@ -1,115 +1,109 @@
 YUI.add('gallery-overlay-transition', function(Y) {
 
-var L = Y.Lang;
+YUI.add("gallery-overlay-transition", function(Y) {
+    var L = Y.Lang;
 
-Y.Plugin.TransitionOverlay = Y.Base.create("overlayTransitionPlugin", Y.Plugin.Base, [], {
+    Y.Plugin.TransitionOverlay = Y.Base.create("overlayTransitionPlugin", Y.Plugin.Base, [], {
 
-    _showing : false,
-    _argsShow : null,
-    _argsHide : null,
+        _showing : false,
+        _styleCache : {},
 
-    initializer : function(config) {
-        this.doBefore("_uiSetVisible", this._uiAnimSetVisible); // Override default _uiSetVisible method
-
-        var host = this.get("host"),
-            bb = host.get("boundingBox"),
-            duration = this.get("duration"),
-            easing = this.get("easing");
-        
-        this.publish("start", { preventable : false });
-        this.publish("end",   { preventable : false });
-        
-        this._argsShow = Y.merge({ duration : duration, easing : easing }, this.get("show"));
-        this._argsHide = Y.merge({ duration : duration, easing : easing }, this.get("hide"));
-        
-        //hack around some limitations in the transition module, also support both 3.2.0pr1 & 3.2.0 events (changed between them)
-        bb.on([ "transition:start", "transitionstart" ], Y.bind(function(o) {
-            this.fire("start", this._showing);
+        initializer : function(config) {
+            this.doBefore("_uiSetVisible", this._uiAnimSetVisible); // Override default _uiSetVisible method
             
-            if(this._showing) {
-                this._uiSetVisible(true);
-            }
-        }, this));
-
-        bb.on([ "transition:end", "transitionend" ], Y.bind(function(o) {
-            this.fire("end", this._showing);
+            this._host = this.get("host");
+            this._bb = this._host.get("boundingBox");
             
-            if(!this._showing) {
-                this._uiSetVisible(false);
+            this.publish("start", { preventable : false });
+            this.publish("end",   { preventable : false });
+            
+            //if the first visible change is from hidden to showing, handle that
+            if(this.get("styleOverride")) {
+                this._host.once("visibleChange", function(o) {
+                    if(o.newVal && !o.prevVal) {
+                        this._applyDefaultStyle();
+                    }
+                }, this);
             }
-        }, this));
+        },
         
-        //if the first visible change is from hidden to showing, handle that
-        if(this.get("styleOverride")) {
-            host.once("visibleChange", function(o) {
-                if(o.newVal && !o.prevVal) {
-                    this._applyDefaultStyle();
+        destructor : function() {
+            this._host = this._bb = null;
+        },
+        
+        _applyDefaultStyle : function() {
+            var hide = this.get("hide"),
+                bb = this._bb;
+            
+            //cache the previous versions of our style
+            Y.each(hide, Y.bind(function(v, p) {
+                this._styleCache[p] = bb.getComputedStyle(p);
+            }, this));
+            
+            //apply default hidden style
+            if(!this._host.get("visible")) {
+                bb.setStyles(hide);
+            }
+        },
+        
+        _uiAnimSetVisible : function(val) {
+            var host = this._host,
+                showing;
+            
+            if (host.get("rendered")) {
+                this._showing = val;
+                
+                this.fire("start", val);
+                
+                if(val) {
+                    this._uiSetVisible(true);
                 }
-            }, this);
-        }
-    },
-
-    destructor : function() {
-        this._argsShow = this._argsHide = null;
-    },
-    
-    _applyDefaultStyle : function() {
-        var hide = this.get("hide"),
-            host = this.get("host"),
-            bbox = host.get("boundingBox");
-        
-        //apply default hidden style
-        if(!host.get("visible")) {
-            bbox.setStyles(hide);
-        }
-    },
-    
-    _uiAnimSetVisible : function(val) {
-        var host = this.get("host");
-        
-        if (host.get("rendered")) {
-            this._showing = val;
-            
-            host.get("boundingBox").transition((val) ? this._argsShow : this._argsHide);
-            
-            return new Y.Do.Prevent("AnimPlugin prevented default show/hide");
-        }
-    },
-
-    /*
-     * The original Widget _uiSetVisible implementation
-     */
-    _uiSetVisible : function(val) {
-        var host = this.get("host");
-        
-        host.get("boundingBox").toggleClass(host.getClassName("hidden"), !val);
-    }
-}, {
-    NS : "transitionPlugin",
-    ATTRS : {
-        duration : { value : 0.25 },
-        easing : { value : "ease-in" },
-        
-        styleOverride : { 
-            value : true,
-            validator : L.isBoolean
-        },
-        
-        hide : {
-            value : { opacity : 0 },
-            setter : function(value) {
-                return Y.merge(this.get("duration"), value);
+                
+                this._bb.transition((val) ? this.get("show") : this.get("hide"), Y.bind(function() {
+                    this.fire("end", val);
+                
+                    if(!val) {
+                        this._uiSetVisible(false);
+                    }
+                }, this));
+                
+                return new Y.Do.Prevent("AnimPlugin prevented default show/hide");
             }
         },
 
-        show : {
-            value : { opacity : 1 },
-            setter : function(value) {
-                return Y.merge(this.get("duration"), value);
+        /*
+         * The original Widget _uiSetVisible implementation
+         */
+        _uiSetVisible : function(val) {
+            this._bb.toggleClass(this._host.getClassName("hidden"), !val);
+        }
+    }, {
+        NS : "transitionPlugin",
+        ATTRS : {
+            duration : { value : 0.25 },
+            
+            styleOverride : { 
+                value : true,
+                validator : L.isBoolean
+            },
+            
+            hide : {
+                value : { opacity : 0 },
+                setter : function(value) {
+                    return Y.merge(this.get("duration"), value);
+                }   
+            },
+
+            show : {
+                value : { opacity : 1 },
+                setter : function(value) {
+                    return Y.merge(this.get("duration"), value);
+                }
             }
         }
-    }
-});
+    });
+
+}, "gallery-2011.03.23-22-20", { requires : [ "base-build", "plugin", "event-custom", "transition" ] });
 
 
-}, 'gallery-2010.09.01-19-12' ,{requires:['plugin','overlay','event-custom','transition']});
+}, 'gallery-2011.03.23-22-20' ,{requires:['plugin','overlay','event-custom','transition']});

@@ -420,7 +420,9 @@ Y.Drawing = Drawing;
             dash,
             i, 
             len,
-            space;
+            space,
+            miterlimit,
+            linejoin = stroke.linejoin || "round";
         if(stroke && stroke.weight && stroke.weight > 0)
         {
             strokeAlpha = stroke.alpha;
@@ -435,6 +437,19 @@ Y.Drawing = Drawing;
             node.setAttribute("stroke-linecap", stroke.linecap);
             node.setAttribute("stroke-width",  stroke.weight);
             node.setAttribute("stroke-opacity", stroke.alpha);
+            if(linejoin == "round" || linejoin == "bevel")
+            {
+                node.setAttribute("stroke-linejoin", linejoin);
+            }
+            else
+            {
+                linejoin = parseInt(linejoin, 10);
+                if(Y.Lang.isNumber(linejoin))
+                {
+                    node.setAttribute("stroke-miterlimit",  Math.max(linejoin, 1));
+                    node.setAttribute("stroke-linejoin", "miter");
+                }
+            }
         }
         else
         {
@@ -785,8 +800,17 @@ Y.Drawing = Drawing;
         fill: {
             setter: function(val)
             {
-                var tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
-                return (val) ? Y.merge(tmpl, val) : null;
+                var fill,
+                    tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
+                fill = (val) ? Y.merge(tmpl, val) : null;
+                if(fill && fill.color)
+                {
+                    if(fill.color === undefined || fill.color == "none")
+                    {
+                        fill.color = null;
+                    }
+                }
+                return fill;
             }
         },
 
@@ -961,7 +985,8 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
             tx = this.get("translateX"),
             ty = this.get("translateY"),
             left = this._left,
-            top = this._top;
+            top = this._top,
+            fill = this.get("fill");
         if(this._pathArray)
         {
             pathArray = this._pathArray.concat();
@@ -995,7 +1020,7 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
 
                 }
             }
-            if(this._fill)
+            if(fill && fill.color)
             {
                 path += 'z';
             }
@@ -1024,6 +1049,8 @@ Y.Path = Y.Base.create("path", Y.Shape, [Y.Drawing], {
     translate: function(x, y)
     {
         var node = this.get("node");
+        x = parseInt(x, 10);
+        y = parseInt(y, 10);
         this._translateX = x;
         this._translateY = y;
         this._translate(this._left + x, this._top + y);

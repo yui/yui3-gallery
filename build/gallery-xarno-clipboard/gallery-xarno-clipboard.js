@@ -14,8 +14,7 @@ YUI.add('gallery-xarno-clipboard', function(Y) {
 		
 		moveToAndCopy : function(target) {
 			
-			this.moveTo(target);
-			this.copy(target);
+			this.moveTo(target).copy(target);
 		},
 		
 		hide : function() {
@@ -34,12 +33,14 @@ YUI.add('gallery-xarno-clipboard', function(Y) {
 				width: target.getComputedStyle('width'),
 				height: target.getComputedStyle('height')
 			});
+			
+			return this;
 		},
 		
 		copy : function(target) {
 			var copyTarget = this.get('clipTarget');
 			
-			if (target !== null) {
+			if (target !== null && target !== undefined) {
 				copyTarget = target;
 			} else {
 				copyTarget = Y.one(copyTarget);
@@ -48,10 +49,14 @@ YUI.add('gallery-xarno-clipboard', function(Y) {
 			if (copyTarget) {
 				this.setText( copyTarget.getContent() );
 			}
+			
+			return this;
 		},
 		
 		setText : function(text) {
 			this._swfCall('setText', [ text ]);
+			
+			return this;
 		},
 		
 		_movieReady : function() {
@@ -140,4 +145,4 @@ YUI.add('gallery-xarno-clipboard', function(Y) {
 	});
 
 
-}, 'gallery-2011.03.11-23-49' ,{requires:['node','event','base-build','swf']});
+}, 'gallery-2011.03.30-19-47' ,{requires:['node','event','base-build','swf']});

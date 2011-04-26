@@ -59,12 +59,18 @@
             val,
             endcap,
             i = 0,
-            len;
+            len,
+            miterlimit,
+            linecap = stroke.linecap || "flat",
+            linejoin = stroke.linejoin || "round";
         if(stroke && stroke.weight && stroke.weight > 0)
         {
+            if(linecap != "round" && linecap != "square")
+            {
+                linecap = "flat";
+            }
             strokeAlpha = stroke.alpha;
             dashstyle = stroke.dashstyle || "none";
-            endcap = stroke.endcap || "flat";
             stroke.color = stroke.color || "#000000";
             stroke.weight = stroke.weight || 1;
             stroke.alpha = Y.Lang.isNumber(strokeAlpha) ? strokeAlpha : 1;
@@ -77,6 +83,7 @@
                 this._strokeNode = this._createGraphicNode("stroke");
                 node.appendChild(this._strokeNode);
             }
+            this._strokeNode.endcap = linecap;
             this._strokeNode.opacity = stroke.alpha;
             if(Y.Lang.isArray(dashstyle))
             {
@@ -86,6 +93,19 @@
                 {
                     val = dashstyle[i];
                     dash[i] = val / stroke.weight;
+                }
+            }
+            if(linejoin == "round" || linejoin == "bevel")
+            {
+                this._strokeNode.joinstyle = linejoin;
+            }
+            else
+            {
+                linejoin = parseInt(linejoin, 10);
+                if(Y.Lang.isNumber(linejoin))
+                {
+                    this._strokeNode.miterlimit = Math.max(linejoin, 1);
+                    this._strokeNode.joinstyle = "miter";
                 }
             }
             this._strokeNode.dashstyle = dash;
@@ -108,14 +128,11 @@
             fill = this.get("fill"),
             fillNode,
             fillAlpha;
-        if(fill)
+        if(fill && fill.color)
         {
             fillAlpha = fill.alpha;
-            if(!fill.color)
-            {
-                node.filled = false;
-            }
-            else if(Y.Lang.isNumber(fillAlpha))
+            node.filled = true;
+            if(Y.Lang.isNumber(fillAlpha))
             {
                 fillAlpha = Math.max(Math.min(fillAlpha, 1), 0);
                 if(!this._fillNode)
@@ -412,8 +429,17 @@
         fill: {
             setter: function(val)
             {
-                var tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
-                return (val) ? Y.merge(tmpl, val) : null;
+                var fill,
+                    tmpl = this.get("fill") || this._getAttrCfg("fill").defaultValue;
+                fill = (val) ? Y.merge(tmpl, val) : null;
+                if(fill && fill.color)
+                {
+                    if(fill.color === undefined || fill.color == "none")
+                    {
+                        fill.color = null;
+                    }
+                }
+                return fill;
             }
         },
 
