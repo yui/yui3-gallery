@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>Geo Demo</title>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.3.0/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+    <h1>Geo Tests</h1>
+    <div id="c"></div>
+<script type="text/javascript">  
+    
+YUI({
+    gallery: 'gallery-2009.12.08-22',
+    modules: {
+        'gallery-geo': {
+            fullpath: '../../../build/gallery-geo/gallery-geo.js',
+            requires: ["jsonp"],
+            optional: [],
+            supersedes: []
+        }
+ 
+    },
+    filter: "raw",
+    logInclude: { TestRunner: true }
+}).use('gallery-geo', function (Y) {
+
+    Y.Geo.getCurrentPosition(function(data){
+        if (data.success){
+            console.log(data.coords.latitude);
+            console.log(data.coords.longitude);
+            console.log(data.coords.accuracy);
+        }
+    });
+ 
+});
+
+
+</script>
+</body>
+</html>
