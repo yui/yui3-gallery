@@ -953,7 +953,6 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
              link = parseInt(link.replace(/.*#(.*)$/, "$1"), 10);
              if (JS.isNumber(link)) {
                  self.scrollToPage(link - 1);
-                 self._uiSetNavItem(target.ancestor());
              }
          }
      },
@@ -992,7 +991,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
              self._renderContainer();
              attr = "top";
          }
-         self.scrollTo(0);
+         self.scrollTo(self.get("selectedItem"));
      },
 
      /**
