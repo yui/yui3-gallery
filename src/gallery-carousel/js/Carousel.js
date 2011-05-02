@@ -558,11 +558,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollBackward: function () {
-        var self = this,
-            scrollIncrement = self.get("scrollIncrement"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem - scrollIncrement);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() - self.get("scrollIncrement"));
     },
 
     /**
@@ -572,11 +569,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollForward: function () {
-        var self = this,
-            scrollIncrement = self.get("scrollIncrement"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem + scrollIncrement);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() + self.get("scrollIncrement"));
     },
 
     /**
@@ -586,11 +580,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollPageBackward: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem - numVisible);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() - self.get("numVisible"));
     },
 
     /**
@@ -600,11 +591,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollPageForward: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem + numVisible);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() + self.get("numVisible"));
     },
 
     /**
