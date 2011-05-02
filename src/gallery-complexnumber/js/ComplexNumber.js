@@ -54,7 +54,7 @@ ComplexNumber.prototype =
 	 */
 	magnitude: function()
 	{
-		return ComplexMath.abs(this);
+		return Math.sqrt(this.r*this.r + this.i*this.i);
 	},
 
 	/**
@@ -169,6 +169,34 @@ ComplexNumber.prototype =
 
 		this.r = - this.r;
 		this.i = - this.i;
+
+		return this;
+	},
+
+	/**
+	 * Negates the imaginary part.
+	 * @chainable
+	 */
+	conjugate: function()
+	{
+		failIfConstant(this);
+
+		this.i = - this.i;
+
+		return this;
+	},
+
+	/**
+	 * Rotates the number around the origin by the specified angle in radians.
+	 * @param angle {number}
+	 * @chainable
+	 */
+	rotate: function(
+		/* float */	angle)
+	{
+		failIfConstant(this);
+
+		this.multiply(ComplexNumber.fromPolar(1, angle));
 
 		return this;
 	},

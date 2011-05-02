@@ -1,0 +1,128 @@
+<html>
+<head>
+<title>Mediator Tests</title>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.3.0/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+    <h1>Mediator Tests</h1>
+    <div id="c"></div>
+<script type="text/javascript">  
+    
+YUI({
+    gallery: 'gallery-2009.12.08-22',
+    modules: {
+        'gallery-mediator': {
+            fullpath: '../../../build/gallery-mediator/gallery-mediator.js',
+            requires: [],
+            optional: [],
+            supersedes: []
+        }
+ 
+    },
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'gallery-mediator', function (Y) {
+
+    Y.namespace("Tests");
+    
+    Y.Tests.Mediator = (function(){
+    
+        var Assert          = Y.Assert,
+            ObjectAssert    = Y.ObjectAssert;
+        
+        //-------------------------------------------------------------------------
+        // Base Test Suite
+        //-------------------------------------------------------------------------
+        
+        var suite = new Y.Test.Suite("Mediator Tests");
+        
+        //-------------------------------------------------------------------------
+        // Test Case for listening
+        //-------------------------------------------------------------------------
+        
+        suite.add(new Y.Test.Case({
+            
+            name : "Broadcast/Listen Tests",
+    
+            //---------------------------------------------------------------------
+            // Tests
+            //---------------------------------------------------------------------
+        
+            testBroadcastListen: function(){         
+                var mediator = new Y.Mediator(),
+                    msg = "foo",
+                    handler = new Y.Mock(),
+                    data = {};
+                    
+                Y.Mock.expect(handler, {
+                    method: "handleMessage",
+                    args: [Y.Mock.Value(function(value){
+                        Y.Assert.areSame(data, value.data);
+                        Y.Assert.areEqual(msg, value.type);
+                    })]
+                });
+                
+                mediator.listen(msg, handler.handleMessage, handler);
+                
+                mediator.broadcast(msg, data);
+                
+                Y.Mock.verify(handler);
+            },
+            
+            testBroadcastListenWithScope: function(){         
+                var mediator = new Y.Mediator(),
+                    msg = "foo",
+                    handler = new Y.Mock(),
+                    data = {};
+                    
+                handler.handleMessage = function(value){
+                    this.message = msg;
+                };
+                
+                Y.Mock.expect(handler, {
+                    property: "message",
+                    value: "foo"
+                });
+                
+                mediator.listen(msg, handler.handleMessage, handler);
+                
+                mediator.broadcast(msg, data);
+                
+                Y.Mock.verify(handler);
+            }
+            
+            
+        }));
+        
+        
+       
+        //return it
+        return suite;
+    
+    })();
+
+    
+    var r = new Y.Console({
+        verbose : true,
+        //consoleLimit : 10,
+        newestOnTop : false
+    });
+    
+    r.render('#c');
+    
+    
+    //add to the testrunner and run
+    Y.Test.Runner.add(Y.Tests.Mediator);
+    Y.Test.Runner.run();
+
+    /*if (parent && parent != window) {
+        YAHOO.tool.TestManager.load();
+    } else {
+        YAHOO.tool.TestRunner.run();
+    }*/
+ 
+});
+
+
+</script>
+</body>
+</html>

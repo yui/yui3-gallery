@@ -119,7 +119,8 @@ YUI.add('gallery-oauth', function(Y) {
                     };
                 }
                 this._callback.format = Y.bind(function(url, proxy) {
-                    return Y.oAuth.signURL(this._opts.key, this._opts.secret, (url + 'callback=' + proxy));
+                    var url = Y.oAuth.signURL(this._opts.key, this._opts.secret, (url + '&callback=' + proxy));
+                    return url;
                 }, this);
             }
             this._send();
@@ -127,4 +128,4 @@ YUI.add('gallery-oauth', function(Y) {
     }
 
 
-}, 'gallery-2011.03.09-21-14' ,{optional:['yql'], requires:['jsonp']});
+}, 'gallery-2011.04.27-17-14' ,{optional:['yql'], requires:['jsonp']});
