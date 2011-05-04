@@ -115,6 +115,7 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
                   CarouselAnimPlugin.NAME);
             animation = self.get("animation");
             if (carousel && animation.speed > 0) {
+                index = carousel._getCorrectedIndex(index); // sanitize the value
                 cb = carousel.get("contentBox");
                 isVertical = carousel.get("isVertical");
                 if (isVertical) {
