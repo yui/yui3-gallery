@@ -1,11 +1,9 @@
 /*global YUI*/
-//select * from geo.places where woeid in (select place.woeid from flickr.places where (lat,lon) in(select latitude,longitude from ip.location where ip="209.131.62.113"))
+
 /*
  * Copyright (c) 2011 Yahoo! Inc. All rights reserved.
  * Written by Nicholas C. Zakas, nczonline.net
  */
- 
-var IP_URL  = "http://www.geoplugin.net/json.gp?jsoncallback=";
 
 /**
  * Geolocation API
@@ -61,23 +59,26 @@ function getCurrentPositionByAPI(callback, scope){
  */
 function getCurrentPositionByGeoIP(callback, scope){
 
-    //Try to get by IP address
-    Y.jsonp(IP_URL, {
-        format: function(url, proxy){
-            return url + proxy;
-        },
+    Y.YQL("select * from pidgets.geoip", {
         on: {
             success: function(response){
-                callback.call(scope, {
-                    success: true,
-                    coords: {
-                        latitude: parseFloat(response.geoplugin_latitude),
-                        longitude: parseFloat(response.geoplugin_longitude),
-                        accuracy: Infinity    //TODO: Figure out better value
-                    },
-                    timestamp: +new Date(),
-                    source: "geoplugin"
-                });                
+                var results;
+                
+                if (response.error){
+                    callback.call(scope, { success: false });
+                } else {
+                    results = response.query.results.Result;
+                    callback.call(scope, {
+                        success: true,
+                        coords: {
+                            latitude: parseFloat(results.latitude),
+                            longitude: parseFloat(results.longitude),
+                            accuracy: Infinity    //TODO: Figure out better value
+                        },
+                        timestamp: +new Date(),
+                        source: "pidgets.geoip"
+                    });   
+                }
             },
             failure: function(){
                 callback.call(scope, { success: false });
