@@ -560,11 +560,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollBackward: function () {
-        var self = this,
-            scrollIncrement = self.get("scrollIncrement"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem - scrollIncrement);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() - self.get("scrollIncrement"));
     },
 
     /**
@@ -574,11 +571,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollForward: function () {
-        var self = this,
-            scrollIncrement = self.get("scrollIncrement"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem + scrollIncrement);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() + self.get("scrollIncrement"));
     },
 
     /**
@@ -588,11 +582,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollPageBackward: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem - numVisible);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() - self.get("numVisible"));
     },
 
     /**
@@ -602,11 +593,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollPageForward: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem + numVisible);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() + self.get("numVisible"));
     },
 
     /**
@@ -620,33 +608,20 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         var self = this,
             isCircular = self.get("isCircular"),
             numItems = self.get("numItems"),
+            numVisible = self.get("numVisible"),
             attr, cb, first, offset;
 
-        /* Attempt to fix an "out of bounds" index if possible. */
-        if (index < 0) {
-            if (isCircular) {
-                index += numItems;
-            } else {
-                index = 0;
-            }
-        } else if (index > numItems - 1) {
-            if (isCircular) {
-                index = numItems - index;
-            } else {
-                index = numItems - 1;
-            }
-        }
-
+        index = self._getCorrectedIndex(index); // sanitize the value
         offset = self._getOffsetForIndex(index);
         cb = self.get("contentBox");
         attr = self.get("isVertical") ? "top" : "left";
         first = self.getFirstVisible();
         self.fire(BEFORESCROLL_EVENT, { first: first,
-                last: first+self.get("numVisible") });
+                last: first + numVisible });
         cb.setStyle(attr, offset);
         first = self.getFirstVisible(); // ask for the "new" first visible
         self.fire(AFTERSCROLL_EVENT, { first: first,
-                last: first+self.get("numVisible") });
+                last: first + numVisible });
         self.set("selectedItem", index); // assume this is what the user want
     },
 
@@ -806,6 +781,44 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         if (!self.get("hidePagination")) {
             self._updateNavigation(ev.newVal);
         }
+    },
+
+    /**
+     * Return the correct index for the current configuration.
+     *
+     * @method _getCorrectedIndex
+     * @param {Number} index The index of the item to be scrolled to
+     * @return The corrected index after sanitizing for out of bounds error
+     * @protected
+     */
+    _getCorrectedIndex: function (index) {
+        var self = this,
+            isCircular = self.get("isCircular"),
+            numItems = self.get("numItems"),
+            numVisible = self.get("numVisible"),
+            sentinel = numItems - 1,
+            firstOfLastPage;
+
+        // Fix for Issues #2 and #11 - thanks <http://github.com/amasad>
+        if (isCircular) {
+            firstOfLastPage = self.getPageForItem(sentinel) * numVisible;
+        }
+        
+        if (index < 0) {
+            if (isCircular) {
+                index = firstOfLastPage;
+            } else {
+                index = 0;
+            }
+        } else if (index > sentinel) {
+            if (isCircular) {
+                index = 0;
+            } else {
+                index = firstOfLastPage;
+            }
+        }
+
+        return index;
     },
 
     /**
@@ -1451,4 +1464,4 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 });
 
 
-}, 'gallery-2011.04.27-18-16' ,{skinnable:true, requires:['widget']});
+}, 'gallery-2011.05.04-20-03' ,{skinnable:true, requires:['widget']});
