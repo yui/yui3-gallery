@@ -514,7 +514,7 @@
 				return this._pointerNode;
 			},
 			
-			_uiSetHostAlign : function (prevAlign, newAlign) {
+			_uiSetHostAlign : function (newAlign, prevAlign) {
 				
 				var host		= this.get(HOST),
 					bb			= host.get(BOUNDING_BOX),
@@ -522,12 +522,14 @@
 				
 				if (prevAlign && prevAlign.points) {
 					bb.removeClass(getCN(OVERLAY, POINTING, prevAlign.points[0]));
+					bb.removeClass(getCN(OVERLAY, POINTING, prevAlign.points[0], prevAlign.points[1]));
 				}
 				
 				// Overlay is aligned to another node (not viewport) on one of it's sides (not centered)
 				if (newAlign && newAlign.node && newAlign.points[0] !== Y.WidgetPositionAlign.CC) {
 					bb.addClass(POINTER_CLASSES.pointing);
 					bb.addClass(getCN(OVERLAY, POINTING, newAlign.points[0]));
+					bb.addClass(getCN(OVERLAY, POINTING, newAlign.points[0], newAlign.points[1]));
 					pointerNode.show();
 				} else {
 					pointerNode.hide();
@@ -540,7 +542,7 @@
 			
 			_afterHostAlignChange : function (e) {
 				
-				this._uiSetHostAlign(e.prevVal, e.newVal);
+				this._uiSetHostAlign(e.newVal, e.prevVal);
 			}
 			
 		}, {

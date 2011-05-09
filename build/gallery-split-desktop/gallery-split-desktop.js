@@ -1,6 +1,6 @@
 YUI.add('gallery-split-desktop', function(Y) {
 
-    var PX = 'px',
+var PX = 'px',
         POUND = '#',
         HTML = 'HTML',
         WIDTH = 'width',
@@ -9,6 +9,19 @@ YUI.add('gallery-split-desktop', function(Y) {
         BACKGROUNDPOSITION = 'backgroundPosition',
         PATH_TO_IMAGES = 'assets/',
         FALLBACK_PATH = '/gallery-split-desktop/',
+        GALLERYSPLITDESKTOP = 'gallery-split-desktop',
+        E_ENTER = 'enter',
+        E_DRAG = 'drag',
+        E_CLOSE = 'close',
+        E_OPEN = 'open',
+        E_MAIN = 'Main',
+        E_INIT = 'init',
+        E_START = 'start',
+        E_END = 'end',
+        E_CROWN = 'Crown',    
+        E_NE = 'NE',     
+        E_NW = 'NW',     
+        E_CROWN = 'Crown',     
         PAGE_DEF_WIDTH = 960,
         NW_MIN_WIDTH = 150,
         DEF_MAIN_HEIGHT = 700,
@@ -50,7 +63,14 @@ YUI.add('gallery-split-desktop', function(Y) {
         DRAG_HERE_TOP_CONF = 'dragHereTop',
         MAIN_HEIGHT_CONF = 'mainHeight',
         CROWN_HEIGHT_CONF = 'crownHeight',
+        ISDRAGGING_CONF = 'isDragging',
         PREFIX_CONF = 'prefix',
+        CLOSE_CROWN_CONF = 'closeCrownHeight',
+        CLOSE_NW_CONF = 'closeNWWidth',
+        CLOSE_NE_CONF = 'closeNEWidth',
+        IS_CLOSE_CROWN_CONF = 'isCloseCrown',
+        IS_CLOSE_NW_CONF = 'isCloseNW',
+        IS_CLOSE_NE_CONF = 'isCloseNE',
         /*
         default provided here, updated if PREFIX is customized.
         Corresponding nodes are fetched after configuration based on updated selector
@@ -67,9 +87,13 @@ YUI.add('gallery-split-desktop', function(Y) {
         ddHandle = null,
         started = false,
         totW = 0,
+        totH = 0,
         w = 0,
         h = 0,
-        MARGIN = 5;
+        MARGIN = 5,
+        cutOffNeClosed = null,
+        cutOffNwClosed = null,
+        cutOffCrownClosed = null;
 
     /* class constructor */
     function SplitDesktop(config) {
@@ -145,7 +169,8 @@ YUI.add('gallery-split-desktop', function(Y) {
             value: DEF_MAIN_HEIGHT + PX
         },
         crownHeight: {
-            value: DEF_CROWN_HEIGHT + PX
+            value: DEF_CROWN_HEIGHT + PX,
+            setter: '_setCrownHeight'
         },
         prefix: {
             value: DEF_PREFIX
@@ -153,7 +178,32 @@ YUI.add('gallery-split-desktop', function(Y) {
         baseUrl: {
             getter: '_getBaseUrl',
             lazyAdd: false
+        },
+        isDragging: {
+            value: false
+        },
+        closeCrownHeight: {
+            value: 40,
+            validator: '_validateCloseCrownHeight'
+        },
+        closeNWWidth: {
+            value: 30,
+            validator: '_validateCloseNwWidth'
+        },
+        closeNEWidth: {
+            value: 30,
+            validator: '_validateCloseNeWidth'
+        },        
+        isCloseCrown: {
+            value: false
+        },        
+        isCloseNW: {
+            value: false
+        },        
+        isCloseNE: {
+            value: false
         }
+        
     };
 
 
@@ -172,10 +222,13 @@ YUI.add('gallery-split-desktop', function(Y) {
                     case PAGE_WIDTH_CONF:
                        PAGE_DEF_WIDTH = this.get(i);
                         var    ne = PAGE_DEF_WIDTH - NW_MIN_WIDTH;/*  */
+                        var     m = PAGE_DEF_WIDTH + 21;
                         /* nw div is always 150 and comes auto from page_wrapper - ne */
                         Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.wrapper).setStyle('width', PAGE_DEF_WIDTH);
                         /*adjust ne accordingly */
                         Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.ne).setStyle('width', ne);
+                        /* resize ea_body_main accordingly */
+                        Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.main).setStyle('width', m);
                         break;
                     case BORDERS_COLOR_CONF:
                         var c = this.get(BORDERS_COLOR_CONF); /**/
@@ -237,27 +290,72 @@ YUI.add('gallery-split-desktop', function(Y) {
             }
 
             /* some events to be used by subclasses to focus on diff areas */
-            this.publish("enterCrown", {
-                defaultFn: this._defEnterCrownFn,
-                bubbles: false
+
+            this.publish(E_ENTER + E_MAIN, {
+                bubbles: true
             });
 
-            this.publish("enterMain", {
-                defaultFn: this._defEnterMainFn,
-                bubbles: false
+            this.publish(E_ENTER + E_NE, {
+                bubbles: true
             });
 
-            this.publish("enterSecondary", {
-                defaultFn: this._defEnterSecondaryFn,
-                bubbles: false
+            this.publish(E_ENTER + E_NW, {
+                bubbles: true
             });
-
-            this.publish("enterResizer", {
-                defaultFn: this._defEnterResizerFn,
-                bubbles: false
+            
+            this.publish(E_DRAG + E_INIT, {
             });
-
-        },
+            
+            this.publish(E_DRAG + E_START, {
+            });
+            
+            this.publish(E_DRAG + E_END, {
+            });
+            
+            this.publish(E_CLOSE + E_NE, {
+            });
+            
+            this.publish(E_CLOSE + E_NW, {
+            });
+            
+            this.publish(E_CLOSE + E_CROWN, {
+            });
+            
+            this.publish(E_OPEN + E_CROWN, {
+            });
+            
+            this.publish(E_OPEN + E_NE, {
+            });
+            
+            this.publish(E_OPEN + E_NW, {
+            });
+            
+            this._over = function (e) {
+                switch (POUND + e.currentTarget.get('id')){
+                case SECONDARY_SELECTOR:
+                    if(!this.get("isDragging")){
+                        this.fire(E_ENTER + E_NW);      
+                    }          
+                    break;
+                case RESIZER_SELECTOR:
+                    if(!this.get("isDragging")){
+                        this.fire(E_ENTER + E_NE);                
+                    }
+                    break;
+                case MAIN_SELECTOR:
+                    if(!this.get("isDragging")){
+                        this.fire(E_ENTER + E_MAIN);                
+                    }
+                    break;    
+                }
+            };
+            
+            this._out = function (e) {
+                return;
+            };
+            
+            Y.one(WRAPPER_SELECTOR).delegate("hover", this._over, this._out, ".sdt-active", this);    
+        },        
 
         renderUI : function () {
 
@@ -272,10 +370,10 @@ YUI.add('gallery-split-desktop', function(Y) {
         },
 
         bindUI : function () {
-
-            ddHandle.on('drag:start', this._onDragStart);
-            ddHandle.on('drag:drag', this._onDragDrag);
-            ddHandle.on('drag:end', this._onDragEnd);
+            ddHandle.on('drag:start', this._onDragStart, this);
+            ddHandle.on('drag:drag', this._onDragDrag, this);
+            ddHandle.on('drag:end', this._onDragEnd, this);
+            
         },
 
         syncUI : function () {
@@ -283,14 +381,23 @@ YUI.add('gallery-split-desktop', function(Y) {
             Y.one(HTML).setStyle('display', 'block');
 
         },
+        
+        /**
+        * @protected
+        *
+        */
 
         _onDragStart : function (e) {
             /* remove background from main */
             mainNode = Y.one(MAIN_SELECTOR);
+            this.set(ISDRAGGING_CONF, true);
             switch (started) {
             case false:
+                this.fire(E_DRAG + E_INIT);
                 mainNode.setStyle(BACKGROUNDIMAGE, 'none');
+                
             case true:
+                this.fire(E_DRAG + E_START);
                 h = parseInt(resizerNode.getStyle(HEIGHT).toString().replace(PX, ''), 10);
                 w = parseInt(resizerNode.getStyle(WIDTH).toString().replace(PX, ''), 10);
                 started = true;
@@ -307,55 +414,51 @@ YUI.add('gallery-split-desktop', function(Y) {
                 deltaH = parseInt(e.info.offset[1], 10);
 
             totW = w - deltaW;
+            totH =  h + deltaH;
+            
+            /* ne closed when resizer width is page width - padding - close value */
+            if(!cutOffNwClosed){
+                cutOffNwClosed = this.get(PAGE_WIDTH_CONF) - 6 - this.get(CLOSE_NW_CONF);
+            }
+            if(!cutOffNeClosed){
+                cutOffNeClosed = this.get(CLOSE_NE_CONF);
+            }
+            if(!cutOffCrownClosed){
+                cutOffCrownClosed = this.get(CLOSE_CROWN_CONF);
+            }
+            
+            this._isPaneClosed(IS_CLOSE_NW_CONF, E_NW,  cutOffNwClosed, totW, true);
+            this._isPaneClosed(IS_CLOSE_NE_CONF, E_NE,  cutOffNeClosed, totW, false);
+            this._isPaneClosed(IS_CLOSE_CROWN_CONF, E_CROWN,  cutOffCrownClosed, totH, false);
             resizerNode.setStyle(WIDTH, totW);
-            resizerNode.setStyle(HEIGHT, h + deltaH);
+            resizerNode.setStyle(HEIGHT, totH);
 
             secondaryNode.setStyle(WIDTH, PAGE_DEF_WIDTH - totW + MARGIN);
-            secondaryNode.setStyle(HEIGHT, h + deltaH);
+            secondaryNode.setStyle(HEIGHT, totH);
         },
 
         _onDragEnd : function (e) {
             /* 
             reposition to  00  pos in resizer window
             the window width might have changed from the drag:start due to scrollbars,
-            hence the currrent x y is not necessarily at the bottom left corner of the window
+            hence the current x y is not necessarily at the bottom left corner of the window
             */
-            handleImgNode.setStyle('left', 0);
-            handleImgNode.setStyle('bottom', 0);
-        },
-
-        /**
-        * @protected
-        *
-        */
-
-        _defEnterCrownFn : function (e) {
-            this.fire('enterCrown');
-        },
-
-        _defEnterMainFn : function (e) {
-            this.fire('enterMain');
-        },
-
-        _defEnterSecondaryFn : function (e) {
-            this.fire('enterSecondary');
-        },
-
-        _defEnterResizerFn : function (e) {
-            this.fire('enterResizer');
+            this.fire(E_DRAG + E_END);
+            this.set(ISDRAGGING_CONF, false);
+            this._repositionHandle();
         },
                 
         _getBaseUrl : function () {
             if(Y.config.modules){
-                if(Y.config.modules['gallery-split-desktop']){
+                if(Y.config.modules[GALLERYSPLITDESKTOP]){
                     /* defined as single module */
-                    if(Y.config.modules['gallery-split-desktop'].gallery){
+                    if(Y.config.modules[GALLERYSPLITDESKTOP].gallery){
                         /* source is on CDN */
-                        return Y.Env.base + Y.config.modules['gallery-split-desktop'].gallery + '/build';
+                        return Y.Env.base + Y.config.modules[GALLERYSPLITDESKTOP].gallery + '/build/';
                         
-                    }else if(Y.config.modules['gallery-split-desktop'].fullpath){
+                    }else if(Y.config.modules[GALLERYSPLITDESKTOP].fullpath){
                         //extract root, assets relative to root
-                        var url = Y.config.modules['gallery-split-desktop'].fullpath;
+                        var url = Y.config.modules[GALLERYSPLITDESKTOP].fullpath;
                         return url.substring(0,url.lastIndexOf('/')+1);
                         
                     }else if(Y.config.modules.base){
@@ -364,7 +467,7 @@ YUI.add('gallery-split-desktop', function(Y) {
                 }
             }else if(Y.config.gallery){
                 /* source is general gallery url */
-                return Y.Env.base + Y.config.gallery + '/build';
+                return Y.Env.base + Y.config.gallery + '/build/';
 
             }else if(Y.config.fullpath){
                 //extract root, assets relative to root
@@ -374,11 +477,69 @@ YUI.add('gallery-split-desktop', function(Y) {
             }else{
                 return FALLBACK_PATH;
             }
+        },
+                
+        _getMain : function () {
+            return Y.one(MAIN_SELECTOR);
+        },
+                
+        _getSecondary : function () {
+            return Y.one(SECONDARY_SELECTOR);
+        },
+                
+        _getResizer : function () {
+            return Y.one(RESIZER_SELECTOR);
+        },
+        
+        _validateCloseCrownHeight : function (val) {
+            return (val >= this.get(CROWN_HEIGHT_CONF));
+        },
+        
+        _validateCloseNWWidth : function (val) {
+            return (val >= 0 &&  val <= parseInt(this.get(PAGE_WIDTH_CONF).replace(PX, ''), 10) / 4);
+        },
+                
+        _validateCloseNEWidth : function (val) {
+            return (val >= 0 && val  <= parseInt(this.get(PAGE_WIDTH_CONF).replace(PX, ''), 10) / 4);
+        },
+           
+        _isPaneClosed : function (confName, eventType,  cutOffVal, actualVal, direction) {
+            /* close/open events for NW */
+            /* NW behaves in opposite direction: use false */
+            if(!this.get(confName)){
+                if(this._evalLimits(cutOffVal <= actualVal, direction)){
+                    this.set(confName, true);
+                    this.fire(E_CLOSE + eventType);
+                }
+            }else{
+               if(this._evalLimits(cutOffVal > actualVal, direction)){
+                   this.set(confName, false);
+                   this.fire(E_OPEN + eventType);
+                } 
+            }
+        },
+        _evalLimits : function (operation, bit){
+            return bit ? operation : !operation;
+        },
+        /*some configuration function */
+        _setCrownHeight : function (val) {
+            DEF_PREFIX = this.get(PREFIX_CONF);
+            Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.ne).setStyle(HEIGHT, val + PX);
+            this._repositionHandle(val);
+        },
+        _repositionHandle : function (val) {
+            handleImgNode.setStyle('left', '0px');
+            if(val){
+                secondaryNode.setStyle(HEIGHT, val);
+            }
+            handleImgNode.setStyle('bottom', '0px');
+            handleImgNode.setStyle('top', '')
+            
         }
 
-    });//return Y.Env.base + Y.config.gallery + '/build';
+    });
 
-    Y.namespace('sdt').SplitDesktop = SplitDesktop;
+    Y.namespace('Widget').SplitDesktop = SplitDesktop;
 
 
-}, 'gallery-2011.04.06-19-44' ,{requires:['widget','dd-constrain']});
+}, 'gallery-2011.05.04-20-03' ,{requires:['widget','dd-constrain','event-hover']});
