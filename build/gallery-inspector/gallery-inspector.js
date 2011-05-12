@@ -953,7 +953,16 @@ Inspector = Y.Base.create('inspector', Widget, [Y.WidgetStack], {
          */
         strings: {
             valueFn: function () {
-                return Y.Intl.get('gallery-inspector');
+                // return Y.Intl.get('gallery-inspector');
+                return {
+                    collapse    : 'Collapse',
+                    expand      : 'Expand',
+                    filter_attrs: 'Filter attributes',
+                    name        : 'Name',
+                    pause       : 'Pause',
+                    title       : 'Inspector',
+                    value       : 'Value'
+                };
             }
         },
         
@@ -1016,4 +1025,4 @@ Inspector = Y.Base.create('inspector', Widget, [Y.WidgetStack], {
 Y.Inspector = Inspector;
 
 
-}, 'gallery-2011.05.04-20-03' ,{lang:['en'], requires:['dd-constrain', 'escape', 'event-key', 'event-valuechange', 'substitute', 'widget', 'widget-stack'], skinnable:true});
+}, 'gallery-2011.05.12-13-26' ,{requires:['dd-constrain', 'escape', 'event-key', 'event-valuechange', 'substitute', 'widget', 'widget-stack'], skinnable:true});
