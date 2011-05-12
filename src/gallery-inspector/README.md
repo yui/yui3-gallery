@@ -15,6 +15,9 @@ Use Inspector's attribute filter to narrow the attribute list.
 Collapse Inspector to get it out of your way, or drag it by the header to a new
 location.
 
+* [API docs](http://brettstimmerman.github.com/inspector/docs/)
+* [Bugs](https://github.com/brettstimmerman/inspector/issues)
+
 <img 
     src="https://github.com/brettstimmerman/Inspector/raw/master/screenshot.png"
     alt="Screenshot" />
