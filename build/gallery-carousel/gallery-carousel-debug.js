@@ -612,6 +612,9 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             attr, cb, first, offset;
 
         index = self._getCorrectedIndex(index); // sanitize the value
+        if (isNaN(index)) {
+            return;
+        }
         offset = self._getOffsetForIndex(index);
         cb = self.get("contentBox");
         attr = self.get("isVertical") ? "top" : "left";
@@ -797,7 +800,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             numItems = self.get("numItems"),
             numVisible = self.get("numVisible"),
             sentinel = numItems - 1,
-            firstOfLastPage;
+            firstOfLastPage = 0;
 
         // Fix for Issues #2 and #11 - thanks <http://github.com/amasad>
         if (isCircular) {
@@ -1464,4 +1467,4 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 });
 
 
-}, 'gallery-2011.05.04-20-03' ,{skinnable:true, requires:['widget']});
+}, 'gallery-2011.05.18-19-11' ,{skinnable:true, requires:['widget']});

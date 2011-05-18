@@ -18,10 +18,10 @@ var PX = 'px',
         E_INIT = 'init',
         E_START = 'start',
         E_END = 'end',
-        E_CROWN = 'Crown',    
-        E_NE = 'NE',     
-        E_NW = 'NW',     
-        E_CROWN = 'Crown',     
+        E_CROWN = 'Crown',
+        E_NE = 'NE',
+        E_NW = 'NW',
+        E_CROWN = 'Crown',
         PAGE_DEF_WIDTH = 960,
         NW_MIN_WIDTH = 150,
         DEF_MAIN_HEIGHT = 700,
@@ -57,9 +57,9 @@ var PX = 'px',
         BORDERS_COLOR_CONF = 'bordersColor',
         DRAG_HERE_IMG_CONF = 'dragHereImg',
         PATH_TO_IMAGES_CONF = 'pathToImages',
-        BORDER_PIX_CONF	= 'borderPixImg',
-        HANDLE_IMG_CONF	= 'handleImg',
-        DRAG_HERE_LEFT_CONF	= 'dragHereLeft',
+        BORDER_PIX_CONF = 'borderPixImg',
+        HANDLE_IMG_CONF = 'handleImg',
+        DRAG_HERE_LEFT_CONF = 'dragHereLeft',
         DRAG_HERE_TOP_CONF = 'dragHereTop',
         MAIN_HEIGHT_CONF = 'mainHeight',
         CROWN_HEIGHT_CONF = 'crownHeight',
@@ -72,9 +72,9 @@ var PX = 'px',
         IS_CLOSE_NW_CONF = 'isCloseNW',
         IS_CLOSE_NE_CONF = 'isCloseNE',
         /*
-        default provided here, updated if PREFIX is customized.
-        Corresponding nodes are fetched after configuration based on updated selector
-        */
+default provided here, updated if PREFIX is customized.
+Corresponding nodes are fetched after configuration based on updated selector
+*/
         RESIZER_SELECTOR = POUND + DEF_PREFIX + FULL_DESKTOP.ne,
         SECONDARY_SELECTOR = POUND + DEF_PREFIX + FULL_DESKTOP.nwbody,
         MAIN_SELECTOR = POUND + DEF_PREFIX + FULL_DESKTOP.main,
@@ -193,13 +193,13 @@ var PX = 'px',
         closeNEWidth: {
             value: 30,
             validator: '_validateCloseNeWidth'
-        },        
+        },
         isCloseCrown: {
             value: false
-        },        
+        },
         isCloseNW: {
             value: false
-        },        
+        },
         isCloseNE: {
             value: false
         }
@@ -221,8 +221,8 @@ var PX = 'px',
                     switch (i) {
                     case PAGE_WIDTH_CONF:
                        PAGE_DEF_WIDTH = this.get(i);
-                        var    ne = PAGE_DEF_WIDTH - NW_MIN_WIDTH;/*  */
-                        var     m = PAGE_DEF_WIDTH + 21;
+                        var ne = PAGE_DEF_WIDTH - NW_MIN_WIDTH;/* */
+                        var m = PAGE_DEF_WIDTH + 21;
                         /* nw div is always 150 and comes auto from page_wrapper - ne */
                         Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.wrapper).setStyle('width', PAGE_DEF_WIDTH);
                         /*adjust ne accordingly */
@@ -240,10 +240,10 @@ var PX = 'px',
                     case BORDER_PIX_CONF:
                     case HANDLE_IMG_CONF:
                     /**
-                    If base url is on CDN we will either have inside Y.config a property of 'gallery' or alternatively fullpath.
-                    In case we have gallery => assume CDN (Y.Env.cdn is the base url) 
-                    In case we have fullpath => assume js file is inside root of package basedir (Y.config.fullpath ) is the baseurl
-                    */
+If base url is on CDN we will either have inside Y.config a property of 'gallery' or alternatively fullpath.
+In case we have gallery => assume CDN (Y.Env.cdn is the base url)
+In case we have fullpath => assume js file is inside root of package basedir (Y.config.fullpath ) is the baseurl
+*/
                         DRAG_HERE_IMG_URL = this.get(PATH_TO_IMAGES_CONF) + this.get(DRAG_HERE_IMG_CONF);
                         Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.main).setStyle(BACKGROUNDIMAGE, 'url("' + DRAG_HERE_IMG_URL + '")');
 
@@ -334,19 +334,19 @@ var PX = 'px',
                 switch (POUND + e.currentTarget.get('id')){
                 case SECONDARY_SELECTOR:
                     if(!this.get("isDragging")){
-                        this.fire(E_ENTER + E_NW);      
-                    }          
+                        this.fire(E_ENTER + E_NW);
+                    }
                     break;
                 case RESIZER_SELECTOR:
                     if(!this.get("isDragging")){
-                        this.fire(E_ENTER + E_NE);                
+                        this.fire(E_ENTER + E_NE);
                     }
                     break;
                 case MAIN_SELECTOR:
                     if(!this.get("isDragging")){
-                        this.fire(E_ENTER + E_MAIN);                
+                        this.fire(E_ENTER + E_MAIN);
                     }
-                    break;    
+                    break;
                 }
             };
             
@@ -354,8 +354,8 @@ var PX = 'px',
                 return;
             };
             
-            Y.one(WRAPPER_SELECTOR).delegate("hover", this._over, this._out, ".sdt-active", this);    
-        },        
+            Y.one(WRAPPER_SELECTOR).delegate("hover", this._over, this._out, ".sdt-active", this);
+        },
 
         renderUI : function () {
 
@@ -383,9 +383,9 @@ var PX = 'px',
         },
         
         /**
-        * @protected
-        *
-        */
+* @protected
+*
+*/
 
         _onDragStart : function (e) {
             /* remove background from main */
@@ -414,7 +414,7 @@ var PX = 'px',
                 deltaH = parseInt(e.info.offset[1], 10);
 
             totW = w - deltaW;
-            totH =  h + deltaH;
+            totH = h + deltaH;
             
             /* ne closed when resizer width is page width - padding - close value */
             if(!cutOffNwClosed){
@@ -427,9 +427,9 @@ var PX = 'px',
                 cutOffCrownClosed = this.get(CLOSE_CROWN_CONF);
             }
             
-            this._isPaneClosed(IS_CLOSE_NW_CONF, E_NW,  cutOffNwClosed, totW, true);
-            this._isPaneClosed(IS_CLOSE_NE_CONF, E_NE,  cutOffNeClosed, totW, false);
-            this._isPaneClosed(IS_CLOSE_CROWN_CONF, E_CROWN,  cutOffCrownClosed, totH, false);
+            this._isPaneClosed(IS_CLOSE_NW_CONF, E_NW, cutOffNwClosed, totW, true);
+            this._isPaneClosed(IS_CLOSE_NE_CONF, E_NE, cutOffNeClosed, totW, false);
+            this._isPaneClosed(IS_CLOSE_CROWN_CONF, E_CROWN, cutOffCrownClosed, totH, false);
             resizerNode.setStyle(WIDTH, totW);
             resizerNode.setStyle(HEIGHT, totH);
 
@@ -438,11 +438,11 @@ var PX = 'px',
         },
 
         _onDragEnd : function (e) {
-            /* 
-            reposition to  00  pos in resizer window
-            the window width might have changed from the drag:start due to scrollbars,
-            hence the current x y is not necessarily at the bottom left corner of the window
-            */
+            /*
+reposition to 00 pos in resizer window
+the window width might have changed from the drag:start due to scrollbars,
+hence the current x y is not necessarily at the bottom left corner of the window
+*/
             this.fire(E_DRAG + E_END);
             this.set(ISDRAGGING_CONF, false);
             this._repositionHandle();
@@ -454,7 +454,7 @@ var PX = 'px',
                     /* defined as single module */
                     if(Y.config.modules[GALLERYSPLITDESKTOP].gallery){
                         /* source is on CDN */
-                        return Y.Env.base + Y.config.modules[GALLERYSPLITDESKTOP].gallery + '/build/';
+                        return Y.Env.base + Y.config.modules[GALLERYSPLITDESKTOP].gallery + '/build/gallery-split-desktop/';
                         
                     }else if(Y.config.modules[GALLERYSPLITDESKTOP].fullpath){
                         //extract root, assets relative to root
@@ -467,7 +467,7 @@ var PX = 'px',
                 }
             }else if(Y.config.gallery){
                 /* source is general gallery url */
-                return Y.Env.base + Y.config.gallery + '/build/';
+                return Y.Env.base + Y.config.gallery + '/build/gallery-split-desktop/';
 
             }else if(Y.config.fullpath){
                 //extract root, assets relative to root
@@ -496,14 +496,14 @@ var PX = 'px',
         },
         
         _validateCloseNWWidth : function (val) {
-            return (val >= 0 &&  val <= parseInt(this.get(PAGE_WIDTH_CONF).replace(PX, ''), 10) / 4);
+            return (val >= 0 && val <= parseInt(this.get(PAGE_WIDTH_CONF).replace(PX, ''), 10) / 4);
         },
                 
         _validateCloseNEWidth : function (val) {
-            return (val >= 0 && val  <= parseInt(this.get(PAGE_WIDTH_CONF).replace(PX, ''), 10) / 4);
+            return (val >= 0 && val <= parseInt(this.get(PAGE_WIDTH_CONF).replace(PX, ''), 10) / 4);
         },
            
-        _isPaneClosed : function (confName, eventType,  cutOffVal, actualVal, direction) {
+        _isPaneClosed : function (confName, eventType, cutOffVal, actualVal, direction) {
             /* close/open events for NW */
             /* NW behaves in opposite direction: use false */
             if(!this.get(confName)){
@@ -515,7 +515,7 @@ var PX = 'px',
                if(this._evalLimits(cutOffVal > actualVal, direction)){
                    this.set(confName, false);
                    this.fire(E_OPEN + eventType);
-                } 
+                }
             }
         },
         _evalLimits : function (operation, bit){
@@ -542,4 +542,4 @@ var PX = 'px',
     Y.namespace('Widget').SplitDesktop = SplitDesktop;
 
 
-}, 'gallery-2011.05.04-20-03' ,{requires:['widget','dd-constrain','event-hover']});
+}, 'gallery-2011.05.18-19-11' ,{requires:['widget','dd-constrain','event-hover']});

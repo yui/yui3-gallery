@@ -117,7 +117,10 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
                   CarouselAnimPlugin.NAME);
             animation = self.get("animation");
             if (carousel && animation.speed > 0) {
-                index = carousel._getCorrectedIndex(index); // sanitize the value
+                index = carousel._getCorrectedIndex(index);
+                if (isNaN(index)) {
+                    return;
+                }
                 cb = carousel.get("contentBox");
                 isVertical = carousel.get("isVertical");
                 if (isVertical) {
@@ -191,4 +194,4 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
 });
 
 
-}, 'gallery-2011.05.04-20-03' ,{requires:['gallery-carousel', 'anim', 'plugin', 'pluginhost']});
+}, 'gallery-2011.05.18-19-11' ,{requires:['gallery-carousel', 'anim', 'plugin', 'pluginhost']});
