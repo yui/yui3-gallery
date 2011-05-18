@@ -34,4 +34,3 @@ Y.extend(InspectorPlugin, Y.Inspector, {}, {
 });
 
 Plugin.Inspector = InspectorPlugin;
-

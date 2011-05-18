@@ -38,5 +38,4 @@ Y.extend(InspectorPlugin, Y.Inspector, {}, {
 Plugin.Inspector = InspectorPlugin;
 
 
-
-}, 'gallery-2011.05.04-20-03' ,{requires:['gallery-inspector']});
+}, 'gallery-2011.05.12-13-26' ,{requires:['gallery-inspector']});

@@ -951,7 +951,16 @@ Inspector = Y.Base.create('inspector', Widget, [Y.WidgetStack], {
          */
         strings: {
             valueFn: function () {
-                return Y.Intl.get('gallery-inspector');
+                // return Y.Intl.get('gallery-inspector');
+                return {
+                    collapse    : 'Collapse',
+                    expand      : 'Expand',
+                    filter_attrs: 'Filter attributes',
+                    name        : 'Name',
+                    pause       : 'Pause',
+                    title       : 'Inspector',
+                    value       : 'Value'
+                };
             }
         },
         
