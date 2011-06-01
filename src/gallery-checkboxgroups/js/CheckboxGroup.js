@@ -14,11 +14,6 @@
 function CheckboxGroup(
 	/* string/Node/NodeList */	cb_list)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	this.cb_list = new Y.NodeList('');
 	this.ev_list = [];
 	this.splice(0, 0, cb_list);
