@@ -913,21 +913,19 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	{
 		if (this._callback)
 		{
-			var r = this._callback.request;
-			for (var key in r)
+			Y.Object.some(this._callback.request, function(value, key)
 			{
-				if (!r.hasOwnProperty(key) ||
-					key == 'startIndex' || key == 'resultCount')
+				if (key == 'startIndex' || key == 'resultCount')
 				{
-					continue;
+					return false;
 				}
 
-				if (r[key] !== e.request[key])
+				if (value !== e.request[key])
 				{
 					this._open = [];
-					break;
+					return true;
 				}
-			}
+			});
 		}
 
 		this._callback = e;
@@ -1065,4 +1063,4 @@ Y.namespace("Treeble").treeValueFormatter = function(o)
 };
 
 
-}, 'gallery-2011.04.13-22-38' ,{requires:['datasource'], skinnable:true});
+}, 'gallery-2011.06.01-20-18' ,{requires:['datasource'], skinnable:true});

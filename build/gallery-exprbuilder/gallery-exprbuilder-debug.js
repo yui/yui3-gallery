@@ -13,11 +13,6 @@ YUI.add('gallery-exprbuilder', function(Y) {
 
 function ExpressionBuilder(config)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	ExpressionBuilder.superclass.constructor.call(this, config);
 }
 
@@ -621,4 +616,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2011.02.16-20-31' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});
+}, 'gallery-2011.06.01-20-18' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});

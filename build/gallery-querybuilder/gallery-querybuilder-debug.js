@@ -77,11 +77,6 @@ function QueryBuilder(
 	/* object */	operators,
 	/* object */	config)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	if (!Y.FormManager)
 	{
 		Y.FormManager =
@@ -1011,4 +1006,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2011.04.13-22-38' ,{skinnable:true, optional:['gallery-formmgr','gallery-scrollintoview','autocomplete'], requires:['widget','substitute']});
+}, 'gallery-2011.06.01-20-18' ,{skinnable:true, optional:['gallery-formmgr','gallery-scrollintoview','autocomplete'], requires:['widget','substitute']});

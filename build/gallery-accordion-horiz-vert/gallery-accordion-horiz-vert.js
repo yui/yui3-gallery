@@ -43,11 +43,6 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 
 function Accordion(config)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	config = config || {};
 	if (Y.Lang.isUndefined(config.tabIndex))
 	{
@@ -1081,4 +1076,4 @@ Y.extend(Accordion, Y.Widget,
 Y.Accordion = Accordion;
 
 
-}, 'gallery-2011.02.18-23-10' ,{optional:['anim-base'], requires:['widget','selector-css3'], skinnable:true});
+}, 'gallery-2011.06.01-20-18' ,{skinnable:true, optional:['anim-base'], requires:['widget','selector-css3']});

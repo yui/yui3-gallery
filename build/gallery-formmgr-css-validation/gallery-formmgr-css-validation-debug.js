@@ -167,7 +167,7 @@ Y.FormManager.validateFromCSSData = function(
 			if (hasLimit(m[1]) && hasLimit(m[2]) &&
 				parseInt(m[1], 10) > parseInt(m[2], 10))
 			{
-				Y.log(e.name+' has min_length > max_length', 'error', 'FormManager');
+				Y.error(e.name+' has min_length > max_length', null, 'FormManager');
 			}
 
 			var msg     = null;
@@ -213,7 +213,7 @@ Y.FormManager.validateFromCSSData = function(
 			if (hasLimit(m[1]) && hasLimit(m[2]) &&
 				parseInt(m[1], 10) > parseInt(m[2], 10))
 			{
-				Y.log(e.name+' has min_value > max_value', 'error', 'FormManager');
+				Y.error(e.name+' has min_value > max_value', null, 'FormManager');
 			}
 
 			var value = parseInt(e.value, 10);
@@ -254,7 +254,7 @@ Y.FormManager.validateFromCSSData = function(
 			if (hasLimit(m[1]) && hasLimit(m[2]) &&
 				parseFloat(m[1]) > parseFloat(m[2]))
 			{
-				Y.log(e.name+' has min_value > max_value', 'error', 'FormManager');
+				Y.error(e.name+' has min_value > max_value', null, 'FormManager');
 			}
 
 			var value = parseFloat(e.value);
@@ -295,4 +295,4 @@ Y.FormManager.validateFromCSSData = function(
 };
 
 
-}, 'gallery-2011.04.13-22-38' ,{requires:['substitute']});
+}, 'gallery-2011.06.01-20-18' ,{requires:['substitute']});

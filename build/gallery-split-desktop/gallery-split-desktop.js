@@ -21,7 +21,6 @@ var PX = 'px',
         E_CROWN = 'Crown',
         E_NE = 'NE',
         E_NW = 'NW',
-        E_CROWN = 'Crown',
         PAGE_DEF_WIDTH = 960,
         NW_MIN_WIDTH = 150,
         DEF_MAIN_HEIGHT = 700,
@@ -214,7 +213,7 @@ Corresponding nodes are fetched after configuration based on updated selector
                 i,
                 HANDLE_IMG_URL = BASE_URL + PATH_TO_IMAGES + HANDLE_IMG;
                 
-            HANDLE_IMG_TPL = IMG_OPEN_TPL + ID_OPEN_TPL + DEF_PREFIX + HANDLE_ID + ID_CLOSE_TPL + SRC_OPEN_TPL + HANDLE_IMG_URL + SRC_CLOSE_TPL + IMG_CLOSE_TPL
+            HANDLE_IMG_TPL = IMG_OPEN_TPL + ID_OPEN_TPL + DEF_PREFIX + HANDLE_ID + ID_CLOSE_TPL + SRC_OPEN_TPL + HANDLE_IMG_URL + SRC_CLOSE_TPL + IMG_CLOSE_TPL;
             
             for (i in config) {
                 if (config.hasOwnProperty(i)) {
@@ -472,7 +471,7 @@ hence the current x y is not necessarily at the bottom left corner of the window
             }else if(Y.config.fullpath){
                 //extract root, assets relative to root
                 var url = Y.config.fullpath;
-                return url.substring(0,lastIndexOf('/',url)+1);
+                return url.substring(0,url.lastIndexOf('/')+1);
                 
             }else{
                 return FALLBACK_PATH;
@@ -533,7 +532,7 @@ hence the current x y is not necessarily at the bottom left corner of the window
                 secondaryNode.setStyle(HEIGHT, val);
             }
             handleImgNode.setStyle('bottom', '0px');
-            handleImgNode.setStyle('top', '')
+            handleImgNode.setStyle('top', '');
             
         }
 
@@ -542,4 +541,4 @@ hence the current x y is not necessarily at the bottom left corner of the window
     Y.namespace('Widget').SplitDesktop = SplitDesktop;
 
 
-}, 'gallery-2011.05.18-19-11' ,{requires:['widget','dd-constrain','event-hover']});
+}, 'gallery-2011.06.01-20-18' ,{requires:['widget','dd-constrain','event-hover']});

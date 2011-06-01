@@ -134,41 +134,38 @@ InstanceManager.prototype =
 			isFunction = Y.Lang.isFunction(behavior),
 			isObject   = Y.Lang.isObject(behavior);
 
-		for (var name in map)
+		Y.Object.each(map, function(item, name)
 		{
-			if (map.hasOwnProperty(name))
+			if (!item && skip_unconstructed)
 			{
-				var item = map[ name ];
-				if (!item && skip_unconstructed)
-				{
-					continue;
-				}
-				else if (!item)
-				{
-					item = this.get(name);
-				}
-
-				if (isFunction || isObject)
-				{
-					// apply the function and pass the map item as an argument
-
-					var fn    = isFunction ? behavior : behavior.fn,
-						scope = isFunction ? window : behavior.scope;
-
-					fn.apply(scope, [ { key:name, value:item } ].concat( args ) );
-				}
-				else if (item && Y.Lang.isFunction(item[ behavior ]))
-				{
-					// the string is the name of a method
-
-					item[ behavior ].apply(item, args);
-				}
+				return;
 			}
-		}
+			else if (!item)
+			{
+				item = this.get(name);
+			}
+
+			if (isFunction || isObject)
+			{
+				// apply the function and pass the map item as an argument
+
+				var fn    = isFunction ? behavior : behavior.fn,
+					scope = isFunction ? window : behavior.scope;
+
+				fn.apply(scope, [ { key:name, value:item } ].concat( args ) );
+			}
+			else if (item && Y.Lang.isFunction(item[ behavior ]))
+			{
+				// the string is the name of a method
+
+				item[ behavior ].apply(item, args);
+			}
+		},
+		this);
 	}
 };
 
 Y.InstanceManager = InstanceManager;
 
 
-}, 'gallery-2011.03.23-22-20' );
+}, 'gallery-2011.06.01-20-18' );

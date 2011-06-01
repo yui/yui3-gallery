@@ -135,18 +135,14 @@ function _setAttrs(f, id, uri, method) {
  * @return {void}
  */
 function _resetAttrs(f, a){
-    var p;
-
-    for (p in a) {
-        if (a.hasOwnProperty(p)) {
-            if (a[p]) {
-                f.setAttribute(p, f[p]);
-            }
-            else {
-                f.removeAttribute(p);
-            }
+    Y.Object.each(a, function(v, p) {
+        if (v) {
+            f.setAttribute(p, v);
         }
-    }
+        else {
+            f.removeAttribute(p);
+        }
+    });
 }
 
 /**
@@ -376,7 +372,7 @@ Y.io.upload = function(o, uri, c) {
 
     YUI.Env.io_multi_response_callback[ o.id ] = function(data) {
         if (!data) {
-            Y.log('Callback ' + o.id + ' invoked without data.', 'error', 'io');
+            Y.error('Callback ' + o.id + ' invoked without data.', null, 'io');
             return;
         }
 
@@ -402,7 +398,10 @@ Y.io.upload = function(o, uri, c) {
     return _send(o, uri, c);
 };
 
-YUI.Env.io_multi_response_callback = [];
+if (!YUI.Env.io_multi_response_callback)
+{
+    YUI.Env.io_multi_response_callback = [];
+}
 
 var orig_io = Y.io;
 
@@ -428,4 +427,4 @@ Y.io = function(uri, c, i) {
 Y.mix(Y.io, orig_io);
 
 
-}, 'gallery-2011.03.16-21-24' ,{requires:['io-upload-iframe'], optional:['json-stringify']});
+}, 'gallery-2011.06.01-20-18' ,{requires:['io-upload-iframe'], optional:['json-stringify']});

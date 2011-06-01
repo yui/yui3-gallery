@@ -125,15 +125,8 @@ function FormManager(
 	/* string */	form_name,
 	/* object */	config)		// {status_node, default_value_map}
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
-	if (!config)
-	{
-		config = {};
-	}
+	config = config || {};
+	FormManager.superclass.constructor.call(this, config);
 
 	this.form_name   = form_name;
 	this.status_node = Y.one(config.status_node);
@@ -486,7 +479,7 @@ function populateForm1()
 	}
 }
 
-FormManager.prototype =
+Y.extend(FormManager, Y.Plugin.Host,
 {
 	/* *********************************************************************
 	 * Access functions.
@@ -598,6 +591,7 @@ FormManager.prototype =
 
 		if (!this.validation_msgs[id] || !this.validation_msgs[id].regex)
 		{
+			Y.error(Y.substitute('No error message provided for regex validation of {id}!', {id:id}), null, 'FormManager');
 		}
 	},
 
@@ -916,7 +910,9 @@ FormManager.prototype =
 	 */
 
 	/**
-	 * Register a button that can be disabled.  Buttons contained within
+	 * Register an object that can be disabled.  The object must support
+	 * the set('disabled', ...) API.  (The exception is DOM nodes, since
+	 * they are automatically wrapped in Y.Node.)  Buttons contained within
 	 * the form DOM element are automatically registered.
 	 * 
 	 * @param el {String|Object} The selector for the element or the element itself
@@ -926,7 +922,7 @@ FormManager.prototype =
 	{
 		var info =
 		{
-			e: Y.one(el)
+			e: Y.Lang.isString(el) || el.tagName ? Y.one(el) : el
 		};
 
 		this.user_button_list.push(info);
@@ -1175,20 +1171,12 @@ FormManager.prototype =
 		{
 		}
 	}
-};
+});
 
-if (Y.FormManager)	// static data & functions from gallery-formmgr-css-validation
-{
-	for (var key in Y.FormManager)
-	{
-		if (Y.FormManager.hasOwnProperty(key))
-		{
-			FormManager[key] = Y.FormManager[key];
-		}
-	}
-}
+// static data & functions from gallery-formmgr-css-validation
+Y.aggregate(FormManager, Y.FormManager);
 
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2011.04.13-22-38' ,{requires:['gallery-node-optimizations','gallery-formmgr-css-validation']});
+}, 'gallery-2011.06.01-20-18' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});

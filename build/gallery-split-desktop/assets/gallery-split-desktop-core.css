@@ -30,7 +30,7 @@ HTML {
 	height: 100%;
 	position:absolute;
 	top: 0px;
-	background: transparent url(../../pix-blue.gif) repeat-x bottom;
+	background: transparent url(pix-blue.gif) repeat-x bottom;
 
 }
 
@@ -81,14 +81,10 @@ HTML {
     border: none;
     clear: both;
     background-repeat: no-repeat;
-    background: transparent url(../../drag-here.png) no-repeat 162px 7px; /* xx */
+    background: transparent url(drag-here.png) no-repeat 162px 7px; /* xx */
     overflow-y: auto;
     overflow-x: hidden;
-<<<<<<< HEAD:src/gallery-split-desktop/assets/gallery-split-desktop-core.css
     width: 981px;/* hide scrollbar behind page_wrapper 960 + 21 */    
-=======
-    width: 981px;/* hide scrollbar behind page_wrapper */    
->>>>>>> upstream/master:src/gallery-split-desktop/assets/gallery-split-desktop-core.css
 }
 
 #ea_body_main{
