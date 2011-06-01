@@ -75,11 +75,6 @@ function QueryBuilder(
 	/* object */	operators,
 	/* object */	config)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	if (!Y.FormManager)
 	{
 		Y.FormManager =
