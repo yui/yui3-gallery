@@ -911,21 +911,19 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	{
 		if (this._callback)
 		{
-			var r = this._callback.request;
-			for (var key in r)
+			Y.Object.some(this._callback.request, function(value, key)
 			{
-				if (!r.hasOwnProperty(key) ||
-					key == 'startIndex' || key == 'resultCount')
+				if (key == 'startIndex' || key == 'resultCount')
 				{
-					continue;
+					return false;
 				}
 
-				if (r[key] !== e.request[key])
+				if (value !== e.request[key])
 				{
 					this._open = [];
-					break;
+					return true;
 				}
-			}
+			});
 		}
 
 		this._callback = e;
