@@ -41,11 +41,6 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 
 function Accordion(config)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	config = config || {};
 	if (Y.Lang.isUndefined(config.tabIndex))
 	{
