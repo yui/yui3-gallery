@@ -26,9 +26,6 @@
  * <dt>changed</dt><dd>Optional.  The function to call with the old and new
  * value.  Should return true if the values are different.</dd>
  *
- * <dt>copyDown</dt><dd>If true, the top cell in the column will have a
- * button to copy the value down to the rest of the rows.</dd>
- *
  * <dt>formatter</dt><dd>The cell formatter which will render an
  * appropriate form field: &lt;input type="text"&gt;, &lt;textarea&gt;,
  * or &lt;select&gt;.</dd>
@@ -85,6 +82,10 @@
  */
 
 /*
+ *
+ * <dt>copyDown</dt><dd>If true, the top cell in the column will have a
+ * button to copy the value down to the rest of the rows.</dd>
+ *
  * <p>Custom QuickEdit Formatters</p>
  *
  * <p>To write a custom cell formatter for QuickEdit mode, you must
@@ -386,7 +387,7 @@ function copyDown(
 	}
 }
 
-/**
+/*
  * Called with exactly the same arguments as a normal cell
  * formatter, this function inserts a "Copy down" button if the
  * cell is in the first row of the DataTable.  Call this at the end
@@ -498,8 +499,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 {
 	initializer: function(config)
 	{
-		this.get('host').qe = this;
-		this.hasMessages    = false;
+		this.hasMessages = false;
 	},
 
 	/**
@@ -581,14 +581,10 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 		delete this.saveEdit;
 
 		cols = host.get('columnset').keyHash;
-		for (var key in this.saveFmt)
+		Y.Object.each(this.saveFmt, function(fmt, key)
 		{
-			if (this.saveFmt.hasOwnProperty(key))
-			{
-				var col = cols[key];
-				col.set('formatter', this.saveFmt[key]);
-			}
-		}
+			cols[key].set('formatter', fmt);
+		});
 		delete this.saveFmt;
 
 		var container = host.get('contentBox');
