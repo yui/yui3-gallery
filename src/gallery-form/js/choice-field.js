@@ -7,6 +7,11 @@
  * selection of choices
  */
 Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.WidgetChild], {
+
+    LABEL_TEMPLATE: '<span></span>',
+    SINGLE_CHOICE: Y.RadioField,
+    MULTI_CHOICE: Y.CheckboxField,
+
     /**
      * @method _validateChoices
      * @protected
@@ -45,22 +50,16 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
         return true;
     },
 
-    _renderLabelNode: function() {
-        var contentBox = this.get('contentBox'),
-        titleNode = Y.Node.create('<span></span>');
-
-        titleNode.set('innerHTML', this.get('label'));
-        contentBox.appendChild(titleNode);
-
-        this._labelNode = titleNode;
-    },
-
     _renderFieldNode: function() {
         var contentBox = this.get('contentBox'),
-        choices = this.get('choices'),
-        multiple = this.get('multi'),
-        fieldType = (multiple === true ? Y.CheckboxField: Y.RadioField);
+            parent = contentBox.one("." + this.FIELD_CLASS),
+            choices = this.get('choices'),
+            multiple = this.get('multi'),
+            fieldType = (multiple === true ? this.MULTI_CHOICE: this.SINGLE_CHOICE);
 
+        if (!parent) {
+            parent = contentBox;
+        }
         Y.Array.each(choices,
         function(c, i, a) {
             var cfg = {
@@ -71,9 +70,9 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
             },
             field = new fieldType(cfg);
 
-            field.render(contentBox);
+            field.render(parent);
         }, this);
-        this._fieldNode = contentBox.all('input');
+        this._fieldNode = parent.all('input');
     },
 
     _syncFieldNode: function() {
@@ -89,6 +88,17 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
                 }, this);
             }, this);
         }
+    },
+
+    /**
+     * @method _afterChoiceChange
+     * @description When the available choices for the choice field change,
+     *     the old ones are removed and the new ones are rendered.
+     */
+    _afterChoicesChange: function(event) {
+        var contentBox = this.get("contentBox");
+        contentBox.all(".yui3-form-field").remove();
+        this._renderFieldNode();
     },
 
     clear: function() {
@@ -114,6 +124,7 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
             this.set('value', value);
         },
         this));
+        this.after('choicesChange', this._afterChoicesChange);
     }
 
 },

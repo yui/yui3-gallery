@@ -19,6 +19,7 @@ suite.add(new Y.Test.Case({
     testRenderUI: function() {
         var contentBox = this.button.get("contentBox");
         Y.Assert.isNotNull(contentBox.one("button"));
+        Y.Assert.isNull(contentBox.one("label"));
     },
 
     // The 'onclick' attribute can be set to an event handler for the
@@ -50,6 +51,29 @@ suite.add(new Y.Test.Case({
         var buttonNode = contentBox.one("button");
         Y.Assert.areEqual("Press me", buttonNode.get("text"));
         Y.Assert.areEqual(this.button.get("id") + "-field", buttonNode.get("id"));
+    },
+
+    // If the message attribute is set, the button prompts for confirmation.
+    testOnClickWithConfirm: function() {
+        var messages = [];
+        this.button.set("message", "Really?");
+        this.button.set("confirm", function(message) {
+            messages.push(message);
+            return true;
+        });
+        var contentBox = this.button.get("contentBox");
+        var buttonNode = contentBox.one("button");
+        this.button.set("onclick", {fn: function() {}});
+        buttonNode.simulate("click");
+        Y.ArrayAssert.itemsAreEqual(["Really?"], messages);
+    },
+
+    // It's possible to toggle the disabled state of a FormButton.
+    testDisable: function() {
+        this.button.disable();
+        var contentBox = this.button.get("contentBox");
+        var buttonNode = contentBox.one("button");
+        Y.Assert.areEqual("disabled", buttonNode.getAttribute("disabled"));
     }
 }));
 

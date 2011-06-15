@@ -6,5 +6,5 @@
  * @description A reset button
  */
 Y.ResetButton = Y.Base.create('reset-button', Y.FormField, [Y.WidgetChild], {
-    _renderLabelNode: function() {}
+    LABEL_TEMPLATE: ''
 });

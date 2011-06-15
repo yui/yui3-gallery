@@ -246,6 +246,7 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
             var formAction = this.get('action'),
             formMethod = this.get('method'),
             submitViaIO = this.get('submitViaIO'),
+            io = this.get("io"),
             transaction,
             cfg;
 
@@ -258,7 +259,6 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
                     }
                 };
 
-                var io = this.get("io");
                 transaction = io(formAction, cfg);
                 this._ioIds[transaction.id] = transaction;
             } else {

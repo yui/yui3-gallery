@@ -1,13 +1,7 @@
 Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
-    _renderButtonNode : function () {
-        var contentBox = this.get('contentBox'), bn;
-        
-        bn = Y.Node.create(Y.FormButton.NODE_TEMPLATE);
-        contentBox.appendChild(bn);
-        this._fieldNode = bn;
-    },
 
-    _syncLabelNode: function () {},
+    FIELD_TEMPLATE : '<button></button>',
+    LABEL_TEMPLATE: '',
 
     _syncFieldNode : function () {
         this._fieldNode.setAttrs({
@@ -23,17 +17,26 @@ Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
             return;
         }
 
-        var oc = this.get('onclick');
         Y.Event.purgeElement(this._fieldNode, true, 'click');
-        Y.on('click', Y.bind(oc.fn, oc.scope, true), this._fieldNode);
+        Y.on('click', Y.bind(this._promptConfirm, this), this._fieldNode);
     },
 
-    renderUI : function () {
-        this._renderButtonNode();
+    _promptConfirm: function(event) {
+        event.preventDefault();
+        var message = this.get("message"),
+            onclick = this.get("onclick");
+
+        if (message) {
+            if (!this.get("confirm")(message)) {
+                return;
+            }
+        }
+        onclick.fn.apply(onclick.scope);
     },
 
     bindUI : function () {
         this.after('onclickChange', Y.bind(this._setClickHandler, this, true));
+        this.after('disabledChange', this._syncDisabled, this);
         this._setClickHandler();
     }
 }, {
@@ -59,8 +62,32 @@ Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
                 val.argument = val.argument || {};
                 return val;
             }
-        }
-    },
+        },
 
-    NODE_TEMPLATE : '<button></button>'
+        /** 
+         * @attribute message
+         * @type String
+         * @default null
+         * @description Optional confirmation message to be passed to the
+         *     confirm function.
+         */
+        message: {
+            validator : Y.Lang.isString,
+            value: null
+        },
+
+        /** 
+         * @attribute confirm
+         * @type Function
+         * @default null
+         * @description Optional confirmation function called when the button
+         *     is clicked. It will be be passed the string set in the 'message'
+         *     attribute. If it returns 'true' the the onclick handler will be
+         *     called, otherwise it will be skipped.
+         */
+        confirm:  {
+            validator : Y.Lang.isFunction,
+            value: null
+        }
+    }
 });

@@ -6,22 +6,23 @@
  * @description A select field node
  */
 Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.WidgetChild], {
+
+    FIELD_TEMPLATE : '<select></select>',
+
+    /**
+     * @property SelectField.DEFAULT_OPTION_TEXT
+     * @type String
+     * @description The display title of the default choice in the select box
+     */
+    DEFAULT_OPTION_TEXT : 'Choose one',	
+
     /**
 	 * @method _renderFieldNode
 	 * @protected
 	 * @description Draws the select node into the contentBox
 	 */
     _renderFieldNode: function() {
-        var contentBox = this.get('contentBox'),
-        field = contentBox.one('#' + this.get('id'));
-
-        if (!field) {
-            field = Y.Node.create(Y.SelectField.NODE_TEMPLATE);
-            contentBox.appendChild(field);
-        }
-
-        this._fieldNode = field;
-
+        Y.SelectField.superclass.constructor.superclass._renderFieldNode.apply(this, arguments);
         this._renderOptionNodes();
     },
 
@@ -57,6 +58,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
         Y.SelectField.superclass.constructor.superclass._syncFieldNode.apply(this, arguments);
 
         this._fieldNode.setAttrs({
+            size : this.get('size'),
             multiple: (this.get('multi') === true ? 'multiple': '')
         });
     },
@@ -75,7 +77,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 
         if (useDefaultOption === true) {
             choices.unshift({
-                label: Y.SelectField.DEFAULT_OPTION_TEXT,
+                label : this.DEFAULT_OPTION_TEXT,
                 value: ''
             });
         }
@@ -100,6 +102,18 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
     },
 
     /**
+     * @method _afterChoiceChange
+     * @description When the available options for the select field change,
+     *     the old ones are removed and the new ones are rendered.
+     */
+    _afterChoicesChange: function(evt) {
+        var options = this._fieldNode.all("option");
+        options.remove();
+        this._renderOptionNodes();
+        this._syncOptionNodes();
+    },
+
+    /**
 	 * @method clear
 	 * @description Restores the selected option to the default
 	 */
@@ -109,6 +123,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 
     bindUI: function() {
         Y.SelectField.superclass.constructor.superclass.bindUI.apply(this, arguments);
+        this.after('choicesChange', this._afterChoicesChange);
     },
 
     syncUI: function() {
@@ -118,25 +133,11 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 },
 {
     /**
-     * @property SelectField.NODE_TEMPLATE
-     * @type String
-     * @description Template used to draw a select node
-     */
-    NODE_TEMPLATE: '<select></select>',
-
-    /**
 	 * @property SelectField.OPTION_TEMPLATE
 	 * @type String
 	 * @description Template used to draw an option node
 	 */
     OPTION_TEMPLATE: '<option></option>',
-
-    /**
-	 * @property SelectField.DEFAULT_OPTION_TEXT
-	 * @type String
-	 * @description The display title of the default choice in the select box
-	 */
-    DEFAULT_OPTION_TEXT: 'Choose one',
 
     ATTRS: {
         /**
@@ -149,6 +150,35 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
         useDefaultOption: {
             validator: Y.Lang.isBoolean,
             value: true
+        },
+
+        /** 
+         * @attribute choices
+         * @type Array
+         * @description The choices to render into this field
+         */
+        choices: {
+            validator: function(val) {
+                if (this.get("useDefaultOption") &&
+                    Y.Lang.isArray(val) &&
+                    val.length === 0) {
+                    // Empty arrays are okay if useDefaultOption is 'true'
+                    return true;
+                } else {
+                    return this._validateChoices(val);
+                }
+            }
+        },
+
+        /**
+         * @attribute size
+         * @type String
+         * @default 0
+         * @description Value of 'size' attribute of the select element.
+         */
+        size : {
+            validator : Y.Lang.isString,
+            value : '0'
         }
     }
 });
