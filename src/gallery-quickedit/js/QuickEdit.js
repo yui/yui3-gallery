@@ -182,7 +182,7 @@ function getStatusPrecedence(
 	return QuickEdit.status_order.length;
 }
 
-function statusTakesPrecendence(
+function statusTakesPrecedence(
 	/* string */    orig_status,
 	/* string */    new_status)
 {
@@ -724,7 +724,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 
 		e       = Y.one(e);
 		var row = e.getAncestorByTagName('tr');
-		if (statusTakesPrecendence(this._getElementStatus(row, qe_row_status_re), type))
+		if (statusTakesPrecedence(this._getElementStatus(row, qe_row_status_re), type))
 		{
 			if (!this.hasMessages && scroll)
 			{
@@ -736,7 +736,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 		}
 
 		var cell = e.getAncestorByTagName('td');
-		if (statusTakesPrecendence(this._getElementStatus(cell, qe_cell_status_re), type))
+		if (statusTakesPrecedence(this._getElementStatus(cell, qe_cell_status_re), type))
 		{
 			if (msg)
 			{
