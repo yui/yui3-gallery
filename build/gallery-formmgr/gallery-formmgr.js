@@ -313,13 +313,13 @@ FormManager.getStatusPrecedence = function(
 /**
  * Compare two status values.
  * 
- * @method Y.FormManager.statusTakesPrecendence
+ * @method Y.FormManager.statusTakesPrecedence
  * @static
  * @param orig_status {String} The name of the original status value.
  * @param new_status {String} The name of the new status value.
  * @return {boolean} <code>true</code> if <code>new_status</code> takes precedence over <code>orig_status</code>
  */
-FormManager.statusTakesPrecendence = function(
+FormManager.statusTakesPrecedence = function(
 	/* string */	orig_status,
 	/* string */	new_status)
 {
@@ -1084,7 +1084,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 		e     = Y.one(e);
 		var p = e.getAncestorByClassName(FormManager.row_marker_class);
-		if (p && FormManager.statusTakesPrecendence(FormManager.getElementStatus(p), type))
+		if (p && FormManager.statusTakesPrecedence(FormManager.getElementStatus(p), type))
 		{
 			var f = p.all('.'+FormManager.field_marker_class);
 			if (f)
@@ -1107,7 +1107,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 			}
 
 			var fieldset = e.getAncestorByTagName('fieldset');
-			if (fieldset && FormManager.statusTakesPrecendence(FormManager.getElementStatus(fieldset), type))
+			if (fieldset && FormManager.statusTakesPrecedence(FormManager.getElementStatus(fieldset), type))
 			{
 				fieldset.removeClass(rowStatusPattern());
 				fieldset.addClass(FormManager.row_status_prefix + type);
@@ -1193,4 +1193,4 @@ Y.aggregate(FormManager, Y.FormManager);
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2011.06.08-20-04' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});
+}, 'gallery-2011.06.15-19-18' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});

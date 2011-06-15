@@ -248,6 +248,7 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
             var formAction = this.get('action'),
             formMethod = this.get('method'),
             submitViaIO = this.get('submitViaIO'),
+            io = this.get("io"),
             transaction,
             cfg;
 
@@ -260,7 +261,6 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
                     }
                 };
 
-                var io = this.get("io");
                 transaction = io(formAction, cfg);
                 this._ioIds[transaction.id] = transaction;
             } else {
@@ -523,6 +523,68 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     toString: function() {
         return this.name;
     },
+
+    /**
+     * @property FormField.FIELD_TEMPLATE
+     * @type String
+     * @description Template used to render the field node
+     */
+    FIELD_TEMPLATE : '<input></input>',
+
+    /**
+     * @property FormField.FIELD_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the field node and style it.
+     */
+    FIELD_CLASS : 'field',
+
+    /**
+     * @property FormField.LABEL_TEMPLATE
+     * @type String
+     * @description Template used to draw a label node
+     */
+    LABEL_TEMPLATE : '<label></label>',
+
+    /**
+     * @property FormField.LABEL_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the label node and style it.
+     */
+    LABEL_CLASS : 'label',
+
+    /**
+     * @property FormField.HINT_TEMPLATE
+     * @type String
+     * @description Optionally a template used to draw a hint node. Derived
+     *     classes can use it to provide additional information about the field
+     */
+    HINT_TEMPLATE : '',
+
+    /**
+     * @property FormField.HINT_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the hint node and style it.
+     */
+    HINT_CLASS : 'hint',
+
+    /**
+     * @property FormField.ERROR_TEMPLATE
+     * @type String
+     * @description Template used to draw an error node
+     */
+    ERROR_TEMPLATE : '<span></span>',
+
+    /**
+     * @property FormField.ERROR_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the error node and style it.
+     */
+    ERROR_CLASS : 'error',
+
     /**
      * @property _labelNode
      * @protected
@@ -530,6 +592,14 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description The label node for this form field
      */
     _labelNode: null,
+
+     /**
+     * @property _hintNode
+     * @protected
+     * @type Object
+     * @description The hint node with extra text describing the field
+     */    
+    _hintNode : null,
 
     /**
      * @property _fieldNode
@@ -617,6 +687,35 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     },
 
     /**
+     * @method _renderNode
+     * @protected
+     * @description Helper method to render new nodes, possibly replacing
+     *     markup placeholders.
+     */
+    _renderNode : function (nodeTemplate, nodeClass, nodeBefore) {
+        if (!nodeTemplate) {
+            return null;
+        }
+        var contentBox = this.get('contentBox'),
+            node = Y.Node.create(nodeTemplate),
+            placeHolder = contentBox.one('.' + nodeClass);
+
+        node.addClass(nodeClass);
+
+        if (placeHolder) {
+            placeHolder.replace(node);
+        } else {
+            if (nodeBefore) {
+                contentBox.insertBefore(node, nodeBefore);
+            } else {
+                contentBox.appendChild(node);
+            }
+        }
+
+        return node;
+    },
+
+    /**
      * @method _renderLabelNode
      * @protected
      * @description Draws the form field's label node into the contentBox
@@ -626,11 +725,22 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         labelNode = contentBox.one('label');
 
         if (!labelNode || labelNode.get('for') != this.get('id')) {
-            labelNode = Y.Node.create(Y.FormField.LABEL_TEMPLATE);
-            contentBox.appendChild(labelNode);
+            labelNode = this._renderNode(this.LABEL_TEMPLATE, this.LABEL_CLASS);
         }
 
         this._labelNode = labelNode;
+    },
+
+    /**
+     * @method _renderHintNode
+     * @protected
+     * @description Draws the hint node into the contentBox. If a node is
+     *     found in the contentBox with class HINT_CLASS, it will be
+     *     considered a markup placeholder and replaced with the hint node.
+     */
+    _renderHintNode : function () {
+        this._hintNode = this._renderNode(this.HINT_TEMPLATE,
+                                          this.HINT_CLASS);
     },
 
     /**
@@ -643,8 +753,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         field = contentBox.one('#' + this.get('id'));
 
         if (!field) {
-            field = Y.Node.create(Y.FormField.INPUT_TEMPLATE);
-            contentBox.appendChild(field);
+            field = this._renderNode(this.FIELD_TEMPLATE, this.FIELD_CLASS);
         }
 
         this._fieldNode = field;
@@ -656,16 +765,35 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description Syncs the the label node and this instances attributes
      */
     _syncLabelNode: function() {
+        var label = this.get('label'),
+            required = this.get('required'),
+            requiredLabel = this.get('requiredLabel');
         if (this._labelNode) {
-            this._labelNode.setAttrs({
-                innerHTML: this.get('label')
-            });
+            this._labelNode.set("text", "");
+            if (label) {
+                this._labelNode.append("<span class='caption'>" + label + "</span>"); 
+            }
+            if (required && requiredLabel) {
+                this._labelNode.append("<span class='separator'> </span>");
+                this._labelNode.append("<span class='required'>" + requiredLabel + "</span>");
+            }
             this._labelNode.setAttribute('for', this.get('id') + Y.FormField.FIELD_ID_SUFFIX);
         }
     },
 
     /**
-     * @method _syncLabelNode
+     * @method _syncHintNode
+     * @protected
+     * @description Syncs the hintNode
+     */
+    _syncHintNode : function () {
+        if (this._hintNode) {
+            this._hintNode.set("text", this.get("hint"));
+        }
+    },
+
+    /**
+     * @method _syncFieldNode
      * @protected
      * @description Syncs the fieldNode and this instances attributes
      */
@@ -727,12 +855,9 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description Adds an error node with the supplied message
      */
     _showError: function(errMsg) {
-        var contentBox = this.get('contentBox'),
-        errorNode = Y.Node.create('<span>' + errMsg + '</span>');
+        var errorNode = this._renderNode(this.ERROR_TEMPLATE, this.ERROR_CLASS, this._labelNode);
 
-        errorNode.addClass('error');
-        contentBox.insertBefore(errorNode, this._labelNode);
-
+        errorNode.set("text", errMsg);
         this._errorNode = errorNode;
     },
 
@@ -743,8 +868,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      */
     _clearError: function() {
         if (this._errorNode) {
-            var contentBox = this.get('contentBox');
-            contentBox.removeChild(this._errorNode);
+            this._errorNode.remove();
             this._errorNode = null;
         }
     },
@@ -816,6 +940,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     renderUI: function() {
         this._renderLabelNode();
         this._renderFieldNode();
+        this._renderHintNode();
     },
 
     bindUI: function() {
@@ -872,6 +997,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     syncUI: function() {
         this.get('boundingBox').removeAttribute('tabindex');
         this._syncLabelNode();
+        this._syncHintNode();
         this._syncFieldNode();
         this._syncError();
         this._syncDisabled();
@@ -937,6 +1063,17 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         },
 
         /**
+         * @attribute hint
+         * @type String
+         * @default ""
+         * @description Extra text explaining what the field is about.
+         */
+        hint : {
+            value : '',
+            validator : Y.Lang.isString
+        },
+        
+        /**
          * @attribute validator
          * @type Function
          * @default "function () { return true; }"
@@ -987,6 +1124,17 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         validateInline: {
             value: false,
             validator: Y.Lang.isBoolean
+        },
+
+        /**
+         * @attribute requiredLabel
+         * @type String
+         * @description Text to append to the labal caption for a required
+         *     field, by default nothing will be appended.
+         */
+        requiredLabel : {
+            value : '',
+            validator : Y.Lang.isString
         }
     },
 
@@ -1172,20 +1320,6 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     INVALID_SPECIAL_CHARS: "Please use only letters and numbers",
 
     /**
-     * @property FormField.INPUT_TEMPLATE
-     * @type String
-     * @description Template used to draw an input node
-     */
-    INPUT_TEMPLATE: '<input />',
-
-    /**
-     * @property FormField.LABEL_TEMPLATE
-     * @type String
-     * @description Template used to draw a label node
-     */
-    LABEL_TEMPLATE: '<label></label>',
-
-    /**
      * @property FormField.REQUIRED_ERROR_TEXT
      * @type String
      * @description Error text to display for a required field
@@ -1338,31 +1472,9 @@ Y.HiddenField = Y.Base.create('hidden-field', Y.FormField, [Y.WidgetChild], {
  * @description A hidden field node
  */
 Y.TextareaField = Y.Base.create('textarea-field', Y.FormField, [Y.WidgetChild], {
-    _renderFieldNode : function () {
-        var contentBox = this.get('contentBox'),
-            field = contentBox.one('#' + this.get('id'));
-                
-        if (!field) {
-            field = Y.Node.create(Y.TextareaField.NODE_TEMPLATE);
-            field.setAttrs({
-                name : this.get('name'), 
-                innerHTML : this.get('value')
-            });
-            contentBox.appendChild(field);
-        }
 
-		field.setAttribute('tabindex', Y.FormField.tabIndex);
-		Y.FormField.tabIndex++;
-        
-        this._fieldNode = field;
-    }
-}, {
-    /** 
-     * @property TextareaField.NODE_TEMPLATE
-     * @type String
-     * @description Template used to draw a textarea node
-     */
-    NODE_TEMPLATE : '<textarea></textarea>'
+    FIELD_TEMPLATE : '<textarea></textarea>'
+
 });
 /**
  * @class ChoiceField
@@ -1373,6 +1485,11 @@ Y.TextareaField = Y.Base.create('textarea-field', Y.FormField, [Y.WidgetChild], 
  * selection of choices
  */
 Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.WidgetChild], {
+
+    LABEL_TEMPLATE: '<span></span>',
+    SINGLE_CHOICE: Y.RadioField,
+    MULTI_CHOICE: Y.CheckboxField,
+
     /**
      * @method _validateChoices
      * @protected
@@ -1408,22 +1525,16 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
         return true;
     },
 
-    _renderLabelNode: function() {
-        var contentBox = this.get('contentBox'),
-        titleNode = Y.Node.create('<span></span>');
-
-        titleNode.set('innerHTML', this.get('label'));
-        contentBox.appendChild(titleNode);
-
-        this._labelNode = titleNode;
-    },
-
     _renderFieldNode: function() {
         var contentBox = this.get('contentBox'),
-        choices = this.get('choices'),
-        multiple = this.get('multi'),
-        fieldType = (multiple === true ? Y.CheckboxField: Y.RadioField);
+            parent = contentBox.one("." + this.FIELD_CLASS),
+            choices = this.get('choices'),
+            multiple = this.get('multi'),
+            fieldType = (multiple === true ? this.MULTI_CHOICE: this.SINGLE_CHOICE);
 
+        if (!parent) {
+            parent = contentBox;
+        }
         Y.Array.each(choices,
         function(c, i, a) {
             var cfg = {
@@ -1434,9 +1545,9 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
             },
             field = new fieldType(cfg);
 
-            field.render(contentBox);
+            field.render(parent);
         }, this);
-        this._fieldNode = contentBox.all('input');
+        this._fieldNode = parent.all('input');
     },
 
     _syncFieldNode: function() {
@@ -1452,6 +1563,17 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
                 }, this);
             }, this);
         }
+    },
+
+    /**
+     * @method _afterChoiceChange
+     * @description When the available choices for the choice field change,
+     *     the old ones are removed and the new ones are rendered.
+     */
+    _afterChoicesChange: function(event) {
+        var contentBox = this.get("contentBox");
+        contentBox.all(".yui3-form-field").remove();
+        this._renderFieldNode();
     },
 
     clear: function() {
@@ -1477,6 +1599,7 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
             this.set('value', value);
         },
         this));
+        this.after('choicesChange', this._afterChoicesChange);
     }
 
 },
@@ -1513,22 +1636,23 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
  * @description A select field node
  */
 Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.WidgetChild], {
+
+    FIELD_TEMPLATE : '<select></select>',
+
+    /**
+     * @property SelectField.DEFAULT_OPTION_TEXT
+     * @type String
+     * @description The display title of the default choice in the select box
+     */
+    DEFAULT_OPTION_TEXT : 'Choose one',	
+
     /**
 	 * @method _renderFieldNode
 	 * @protected
 	 * @description Draws the select node into the contentBox
 	 */
     _renderFieldNode: function() {
-        var contentBox = this.get('contentBox'),
-        field = contentBox.one('#' + this.get('id'));
-
-        if (!field) {
-            field = Y.Node.create(Y.SelectField.NODE_TEMPLATE);
-            contentBox.appendChild(field);
-        }
-
-        this._fieldNode = field;
-
+        Y.SelectField.superclass.constructor.superclass._renderFieldNode.apply(this, arguments);
         this._renderOptionNodes();
     },
 
@@ -1564,6 +1688,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
         Y.SelectField.superclass.constructor.superclass._syncFieldNode.apply(this, arguments);
 
         this._fieldNode.setAttrs({
+            size : this.get('size'),
             multiple: (this.get('multi') === true ? 'multiple': '')
         });
     },
@@ -1582,7 +1707,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 
         if (useDefaultOption === true) {
             choices.unshift({
-                label: Y.SelectField.DEFAULT_OPTION_TEXT,
+                label : this.DEFAULT_OPTION_TEXT,
                 value: ''
             });
         }
@@ -1607,6 +1732,18 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
     },
 
     /**
+     * @method _afterChoiceChange
+     * @description When the available options for the select field change,
+     *     the old ones are removed and the new ones are rendered.
+     */
+    _afterChoicesChange: function(evt) {
+        var options = this._fieldNode.all("option");
+        options.remove();
+        this._renderOptionNodes();
+        this._syncOptionNodes();
+    },
+
+    /**
 	 * @method clear
 	 * @description Restores the selected option to the default
 	 */
@@ -1616,6 +1753,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 
     bindUI: function() {
         Y.SelectField.superclass.constructor.superclass.bindUI.apply(this, arguments);
+        this.after('choicesChange', this._afterChoicesChange);
     },
 
     syncUI: function() {
@@ -1625,25 +1763,11 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 },
 {
     /**
-     * @property SelectField.NODE_TEMPLATE
-     * @type String
-     * @description Template used to draw a select node
-     */
-    NODE_TEMPLATE: '<select></select>',
-
-    /**
 	 * @property SelectField.OPTION_TEMPLATE
 	 * @type String
 	 * @description Template used to draw an option node
 	 */
     OPTION_TEMPLATE: '<option></option>',
-
-    /**
-	 * @property SelectField.DEFAULT_OPTION_TEXT
-	 * @type String
-	 * @description The display title of the default choice in the select box
-	 */
-    DEFAULT_OPTION_TEXT: 'Choose one',
 
     ATTRS: {
         /**
@@ -1656,19 +1780,42 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
         useDefaultOption: {
             validator: Y.Lang.isBoolean,
             value: true
+        },
+
+        /** 
+         * @attribute choices
+         * @type Array
+         * @description The choices to render into this field
+         */
+        choices: {
+            validator: function(val) {
+                if (this.get("useDefaultOption") &&
+                    Y.Lang.isArray(val) &&
+                    val.length === 0) {
+                    // Empty arrays are okay if useDefaultOption is 'true'
+                    return true;
+                } else {
+                    return this._validateChoices(val);
+                }
+            }
+        },
+
+        /**
+         * @attribute size
+         * @type String
+         * @default 0
+         * @description Value of 'size' attribute of the select element.
+         */
+        size : {
+            validator : Y.Lang.isString,
+            value : '0'
         }
     }
 });
 Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
-    _renderButtonNode : function () {
-        var contentBox = this.get('contentBox'), bn;
-        
-        bn = Y.Node.create(Y.FormButton.NODE_TEMPLATE);
-        contentBox.appendChild(bn);
-        this._fieldNode = bn;
-    },
 
-    _syncLabelNode: function () {},
+    FIELD_TEMPLATE : '<button></button>',
+    LABEL_TEMPLATE: '',
 
     _syncFieldNode : function () {
         this._fieldNode.setAttrs({
@@ -1684,17 +1831,26 @@ Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
             return;
         }
 
-        var oc = this.get('onclick');
         Y.Event.purgeElement(this._fieldNode, true, 'click');
-        Y.on('click', Y.bind(oc.fn, oc.scope, true), this._fieldNode);
+        Y.on('click', Y.bind(this._promptConfirm, this), this._fieldNode);
     },
 
-    renderUI : function () {
-        this._renderButtonNode();
+    _promptConfirm: function(event) {
+        event.preventDefault();
+        var message = this.get("message"),
+            onclick = this.get("onclick");
+
+        if (message) {
+            if (!this.get("confirm")(message)) {
+                return;
+            }
+        }
+        onclick.fn.apply(onclick.scope);
     },
 
     bindUI : function () {
         this.after('onclickChange', Y.bind(this._setClickHandler, this, true));
+        this.after('disabledChange', this._syncDisabled, this);
         this._setClickHandler();
     }
 }, {
@@ -1720,10 +1876,34 @@ Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
                 val.argument = val.argument || {};
                 return val;
             }
-        }
-    },
+        },
 
-    NODE_TEMPLATE : '<button></button>'
+        /** 
+         * @attribute message
+         * @type String
+         * @default null
+         * @description Optional confirmation message to be passed to the
+         *     confirm function.
+         */
+        message: {
+            validator : Y.Lang.isString,
+            value: null
+        },
+
+        /** 
+         * @attribute confirm
+         * @type Function
+         * @default null
+         * @description Optional confirmation function called when the button
+         *     is clicked. It will be be passed the string set in the 'message'
+         *     attribute. If it returns 'true' the the onclick handler will be
+         *     called, otherwise it will be skipped.
+         */
+        confirm:  {
+            validator : Y.Lang.isFunction,
+            value: null
+        }
+    }
 });
 /**
  * @class FileField
@@ -1733,21 +1913,7 @@ Y.FormButton = Y.Base.create('button-field', Y.FormField, [Y.WidgetChild], {
  * @description A file field node
  */
 
-Y.FileField = Y.Base.create('file-field', Y.FormField, [Y.WidgetChild], {
-    _renderFieldNode : function () {
-        var contentBox = this.get('contentBox'),
-            field = contentBox.one('#' + this.get('id'));
-                        
-        if (!field) {
-            field = Y.Node.create(Y.FileField.FILE_INPUT_TEMPLATE);
-            contentBox.appendChild(field);
-        }
-
-        this._fieldNode = field;
-    }
-}, {
-    FILE_INPUT_TEMPLATE : '<input type="file" />'
-});
+Y.FileField = Y.Base.create('file-field', Y.FormField, [Y.WidgetChild]);
 /**
  * @class SubmitButton
  * @extends FormField
@@ -1766,8 +1932,8 @@ Y.SubmitButton = Y.Base.create('submit-button', Y.FormField, [Y.WidgetChild], {
  * @description A reset button
  */
 Y.ResetButton = Y.Base.create('reset-button', Y.FormField, [Y.WidgetChild], {
-    _renderLabelNode: function() {}
+    LABEL_TEMPLATE: ''
 });
 
 
-}, 'gallery-2011.02.23-19-01' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
+}, 'gallery-2011.06.15-19-18' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
