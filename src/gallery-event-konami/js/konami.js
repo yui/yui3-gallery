@@ -9,6 +9,39 @@
  * @class YUI~event-konami
  */
 
+var config = {
+    _keys: [ 38, 38, 40, 40, 37, 39, 37, 39, 66, 65 ],
+
+    on: function (node, sub, notifier, filter) {
+        var method = (filter) ? 'delegate' : 'on',
+            progressKey = '-yui3-konami-progress(' + Y.guid() + ')',
+            keys = this._keys;
+
+        sub.handle = node[method]("keydown", function (e) {
+            var progress = this.getData(progressKey) || 0;
+
+            if (e.keyCode === keys[progress]) {
+                if (++progress === 10) {
+                    this.clearData(progressKey);
+                    notifier.fire(e);
+                    node.detach('konami');
+                }
+            } else {
+                progress = 0;
+            }
+
+            this.setData(progressKey, progress);
+
+        }, (filter || node));
+    },
+
+    detach: function (node, sub) {
+        sub.handle.detach();
+    }
+};
+config.delegate = config.on;
+config.detachDelegate = config.detach;
+
 /**
  * Provides a subscribable event named &quot;konami&quot;.
  *
@@ -21,46 +54,4 @@
  * to the listener.
  * @return {Event.Handle} the detach handle
  */
-Y.Event.define('konami', {
-    _keys: [ 38, 38, 40, 40, 37, 39, 37, 39, 66, 65 ],
-
-    _attach: function (node, sub, notifier, filter) {
-        var method = (filter) ? 'delegate' : 'on',
-            progressKey = '-yui3-konami-progress(' + Y.guid() + ')',
-            keys = this._keys;
-
-        sub['_' + method + 'Handle'] = node[method]("keydown", function (e) {
-            var progress = this.getData(progressKey) || 0;
-
-            if (e.keyCode === keys[progress]) {
-                if (++progress === 10) {
-                    this.clearData(progressKey);
-                    notifier.fire();
-                    node.detach('konami');
-                }
-            } else {
-                progress = 0;
-            }
-
-            this.setData(progressKey, progress);
-
-        }, (filter || node));
-    },
-
-    on: function () {
-        this._attach.apply(this, arguments);
-    },
-    delegate: function () {
-        this._attach.apply(this, arguments);
-    },
-    detach: function (node, sub) {
-        if (sub._onHandle) {
-            sub._onHandle.detach();
-        }
-    },
-    detachDelegate: function (node, sub) {
-        if (sub._delegateHandle) {
-            sub._delegateHandle.detach();
-        }
-    }
-});
+Y.Event.define('konami', config);
