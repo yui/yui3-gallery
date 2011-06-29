@@ -5,10 +5,14 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 	section_min_size = (use_nonzero_empty_div ? 1 : 0);
 
 /**********************************************************************
- * <p>Class to manage an accordion, either horizontally or vertically.
+ * <p>Widget to manage an accordion, either horizontally or vertically.
  * Allows either multiple open sections or only a single open section.
- * Provides option to always force at lease one item to be open.</p>
+ * Provides option to always force at least one item to be open.</p>
  * 
+ * @module gallery-accordion-horiz-vert
+ */
+
+/**
  * <p>An accordion can be constructed from existing markup or from strings
  * containing HTML.  Existing markup can be provided either by setting
  * <code>contentBox</code> or by specifying CSS selectors.  See the
@@ -33,7 +37,6 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
  * opacity.  IE6 doesn't always render correctly with opacity set, so if
  * animation is turned off, we don't use opacity at all.</p>
  * 
- * @module gallery-accordion-horiz-vert
  * @class Accordion
  * @constructor
  * @param config {Object} Widget configuration
