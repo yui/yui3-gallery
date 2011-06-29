@@ -5,10 +5,14 @@ YUI.add('gallery-querybuilder', function(Y) {
 var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
 
 /**********************************************************************
- * <p>Class which allows user to build a list of query criteria, e.g., for
+ * Widget which allows user to build a list of query criteria, e.g., for
  * searching.  All the conditions are either AND'ed or OR'ed.  For a more
- * general query builder, see gallery-exprbuilder.</p>
- *
+ * general query builder, see gallery-exprbuilder.
+ * 
+ * @module gallery-querybuilder
+ */
+
+/**
  * <p>The default package provides two data types:  String (which can also
  * be used for numbers) and Select (which provides a menu of options).  The
  * plugin API allows defining additional data types, e.g., date range or
@@ -48,10 +52,16 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  *		and a value.  The default String and Select plugins each return
  *		a single inner array.  A date range plugin would return two inner
  *		arrays, one for the start date and one for the end date.</dd>
+ * <dt><code>validate()</code></dt>
+ * <dd>Optional.  If additional validations are required beyond the basic
+ *		validations encoded in CSS, this function should check them.  If
+ *		the input is not valid, call <code>displayFieldMessage()</code>
+ *		on the QueryBuilder object and return false.  Otherwise, return
+ *		true.</dd>
  * </dl>
  *
- * @module gallery-querybuilder
  * @class QueryBuilder
+ * @extends Widget
  * @constructor
  * @param var_list {Array} List of variables that be included in the query.
  *		Each item in the list is an object containing:
@@ -82,6 +92,7 @@ function QueryBuilder(
 		Y.FormManager =
 		{
 			row_marker_class:    '',
+			field_marker_class:  '',
 			status_marker_class: '',
 			required_class:      ''
 		};
@@ -292,6 +303,7 @@ Y.extend(QueryBuilder, Y.Widget,
 			this.op_list.none = [];
 		}
 
+		this.has_messages = false;
 		this.appendNew();
 	},
 
@@ -456,8 +468,14 @@ Y.extend(QueryBuilder, Y.Widget,
 		var selected_var = this.var_list[ var_menu.get('selectedIndex') ];
 
 		var cells = [];
-		if (selected_var.type != 'none')
+		if (selected_var.type == 'none')
 		{
+			query_row.addClass(this.getClassName('empty'));
+		}
+		else
+		{
+			query_row.removeClass(this.getClassName('empty'));
+
 			this.row_list[row_index].plugin =
 				new QueryBuilder.plugin_mapping[ selected_var.type ](
 					this, this.get('pluginConfig'));
@@ -553,20 +571,98 @@ Y.extend(QueryBuilder, Y.Widget,
 
 		// renumber remaining rows
 
-		for (var i=0; i<this.row_list.length; i++)
+		Y.Array.each(this.row_list, function(row, i)
 		{
-			var var_menu = this.row_list[i].var_menu;
+			var var_menu = row.var_menu;
 			var_menu.setAttribute('name', this.variableName(i));
 
 			var selected_var = this.var_list[ var_menu.get('selectedIndex') ];
 			if (selected_var.type != 'none')
 			{
-				this.row_list[i].plugin.updateName(i);
+				row.plugin.updateName(i);
 			}
-		}
+		},
+		this);
 
 		this.fire('queryChanged', {remove: true});
 		return true;
+	},
+
+	/**
+	 * Validate the fields in each row.
+	 * 
+	 * @return {Boolean} <code>true</code> if all values are valid
+	 */
+	validateFields: function()
+	{
+		this.clearFieldMessages();
+
+		var status = true;
+		Y.Array.each(this.row_list, function(row, i)
+		{
+			var info;
+			row.row.all('input').some(function(n)
+			{
+				info = Y.FormManager.validateFromCSSData(n);
+
+				if (info.error)
+				{
+					this.displayFieldMessage(n, info.error, 'error');
+					status = false;
+					return true;
+				}
+			},
+			this);
+
+			if ((!info || info.keepGoing) && row.plugin && Y.Lang.isFunction(row.plugin.validate))
+			{
+				status = row.plugin.validate() && status;	// status last to guarantee call to validate()
+			}
+		},
+		this);
+
+		return status;
+	},
+
+	clearFieldMessages: function()
+	{
+		this.has_messages = false;
+
+		this.get('contentBox').all('input').each(function(n)
+		{
+			Y.FormManager.clearMessage(n);
+		});
+
+		this.get('contentBox').all('select').each(function(n)
+		{
+			Y.FormManager.clearMessage(n);
+		});
+	},
+
+	/**
+	 * Display a message for the specified field.
+	 * 
+	 * @param e {String|Object} The selector for the element or the element itself
+	 * @param msg {String} The message
+	 * @param type {String} The message type (see Y.FormManager.status_order)
+	 * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+	 * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
+	 */
+	displayFieldMessage: function(
+		/* id/object */	e,
+		/* string */	msg,
+		/* string */	type,
+		/* boolean */	scroll)
+	{
+		if (Y.FormManager.displayMessage(e, msg, type, this.has_messages, scroll))
+		{
+			this.has_messages = true;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	},
 
 	/**
@@ -639,7 +735,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	variableName: function(
 		/* int */	i)
 	{
-		return Y.Lang.substitute(this.var_menu_name_pattern, {i:i});
+		return Y.Lang.sub(this.var_menu_name_pattern, {i:i});
 	},
 
 	//
@@ -656,11 +752,12 @@ Y.extend(QueryBuilder, Y.Widget,
 	{
 		// This must use a select tag!
 
-		var markup = '<select name="{n}" class="formmgr-field {c}" />';
+		var markup = '<select name="{n}" class="{f} {c}" />';
 
-		return Y.Lang.substitute(markup,
+		return Y.Lang.sub(markup,
 		{
 			n: menu_name,
+			f: Y.FormManager.field_marker_class,
 			c: this.getClassName('field')
 		});
 	},
@@ -677,7 +774,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 		if (!this._controls_markup)
 		{
-			this._controls_markup = Y.Lang.substitute(markup,
+			this._controls_markup = Y.Lang.sub(markup,
 			{
 				ci: this.getClassName('insert'),
 				cr: this.getClassName('remove')
@@ -689,6 +786,28 @@ Y.extend(QueryBuilder, Y.Widget,
 });
 
 Y.QueryBuilder = QueryBuilder;
+
+/**
+ * <p>Environment information.</p>
+ * 
+ * <dl>
+ * <dt>has_bubble_problem</dt>
+ * <dd>True if change events from select elements do not bubble.</dd>
+ * </dl>
+ * 
+ * @property Y.QueryBuilder.Env
+ * @type {Object}
+ * @static
+ */
+Y.QueryBuilder.Env =
+{
+	has_bubble_problem: has_bubble_problem
+};
+/**
+ * @module gallery-querybuilder
+ * @namespace QueryBuilder
+ */
+
 /**********************************************************************
  * <p>Plugin for accepting a string or number.  All the operators specified
  * for this plugin are displayed on a menu.</p>
@@ -703,9 +822,7 @@ Y.QueryBuilder = QueryBuilder;
  * <code>autocomplete.containerClassName</code>, this CSS class will be
  * added to the container generated by the autocomplete plugin.</p>
  * 
- * @module gallery-querybuilder
- * @class QueryBuilder.String
- * @constructor
+ * @class String
  */
 
 QueryBuilder.String = function(
@@ -758,7 +875,7 @@ QueryBuilder.String.prototype =
 	},
 
 	postCreate: function(
-		/* int */		filter_index,
+		/* int */		query_index,
 		/* object */	var_config,
 		/* array */		op_list,
 		/* array */		value)
@@ -822,20 +939,20 @@ QueryBuilder.String.prototype =
 		return [ [ this.op_menu.get('value'), this.value_input.get('value') ] ];
 	},
 
-	/**********************************************************************
+	/* *********************************************************************
 	 * Form element names.
 	 */
 
 	operationName: function(
 		/* int */	i)
 	{
-		return Y.Lang.substitute(this.op_menu_name_pattern, {i:i});
+		return Y.Lang.sub(this.op_menu_name_pattern, {i:i});
 	},
 
 	valueName: function(
 		/* int */	i)
 	{
-		return Y.Lang.substitute(this.val_input_name_pattern, {i:i});
+		return Y.Lang.sub(this.val_input_name_pattern, {i:i});
 	},
 
 	//
@@ -847,11 +964,12 @@ QueryBuilder.String.prototype =
 	{
 		// This must use a select tag!
 
-		var markup = '<select name="{n}" class="formmgr-field {c}" />';
+		var markup = '<select name="{n}" class="{f} {c}" />';
 
-		return Y.Lang.substitute(markup,
+		return Y.Lang.sub(markup,
 		{
 			n: menu_name,
+			f: Y.FormManager.field_marker_class,
 			c: this.qb.getClassName('field')
 		});
 	},
@@ -862,15 +980,21 @@ QueryBuilder.String.prototype =
 	{
 		// This must use an input tag!
 
-		var markup = '<input type="text" name="{n}" class="yiv-required formmgr-field {c}"/>';
+		var markup = '<input type="text" name="{n}" class="yiv-required {f} {c}"/>';
 
-		return Y.Lang.substitute(markup,
+		return Y.Lang.sub(markup,
 		{
 			n: input_name,
+			f: Y.FormManager.field_marker_class,
 			c: validation_class + ' ' + this.qb.getClassName('field')
 		});
 	}
 };
+/**
+ * @module gallery-querybuilder
+ * @namespace QueryBuilder
+ */
+
 /**********************************************************************
  * <p>Plugin for choosing from a list of values.  In the
  * <code>var_list</code> configuration, specify <code>value_list</code> as
@@ -879,9 +1003,7 @@ QueryBuilder.String.prototype =
  * 
  * <p>There must be exactly one operator specified for this plugin.</p>
  * 
- * @module gallery-querybuilder
- * @class QueryBuilder.Select
- * @constructor
+ * @class Select
  */
 
 QueryBuilder.Select = function(
@@ -929,7 +1051,7 @@ QueryBuilder.Select.prototype =
 	},
 
 	postCreate: function(
-		/* int */		filter_index,
+		/* int */		query_index,
 		/* object */	var_config,
 		/* array */		op_list,
 		/* array */		value)
@@ -967,14 +1089,14 @@ QueryBuilder.Select.prototype =
 		return [ [ this.db_query_equals, this.value_menu.get('value') ] ];
 	},
 
-	/**********************************************************************
+	/* *********************************************************************
 	 * Form element names.
 	 */
 
 	valueName: function(
 		/* int */	i)
 	{
-		return Y.Lang.substitute(this.val_input_name_pattern, {i:i});
+		return Y.Lang.sub(this.val_input_name_pattern, {i:i});
 	},
 
 	//
@@ -986,18 +1108,39 @@ QueryBuilder.Select.prototype =
 	{
 		// This must use a select tag!
 
-		var markup = '<select name="{n}" class="formmgr-field {c}" />';
+		var markup = '<select name="{n}" class="{f} {c}" />';
 
-		return Y.Lang.substitute(markup,
+		return Y.Lang.sub(markup,
 		{
 			n: menu_name,
+			f: Y.FormManager.field_marker_class,
 			c: this.qb.getClassName('field')
 		});
 	}
 };
-// global mapping of variable types to plugin classes
-// (always introduce new variable types rather than changing the existing mappings)
+/**
+ * @module gallery-querybuilder
+ * @namespace
+ * @class QueryBuilder
+ */
 
+/**
+ * <p>Mapping of variable types to plugin classes.  (Always introduce new
+ * variable types rather than changing the existing mappings.)</p>
+ * 
+ * <dl>
+ * <dt>string</dt>
+ * <dd>Generic string.</dd>
+ * <dt>number</dt>
+ * <dd>Generic number.  You must specify appropriate validations, e.g., yiv-integer or yiv-decimal.</dd>
+ * <dt>select</dt>
+ * <dd>Generic list of values.</dd>
+ * </dl>
+ *
+ * @property Y.QueryBuilder.plugin_mapping
+ * @type {Object}
+ * @static
+ */
 QueryBuilder.plugin_mapping =
 {
 	string: QueryBuilder.String,
@@ -1006,4 +1149,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2011.06.01-20-18' ,{skinnable:true, optional:['gallery-formmgr','gallery-scrollintoview','autocomplete'], requires:['widget','substitute']});
+}, '@VERSION@' ,{skinnable:true, optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr']});

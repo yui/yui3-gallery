@@ -8,6 +8,10 @@ YUI.add('gallery-formmgr', function(Y) {
  * 
  * <p>Also see the documentation for gallery-formmgr-css-validation.</p>
  * 
+ * @module gallery-formmgr
+ */
+
+/**
  * <p><strong>Required Markup Structure</strong></p>
  * 
  * <p>Each element (or tighly coupled set of elements) must be contained by
@@ -113,7 +117,6 @@ YUI.add('gallery-formmgr', function(Y) {
  *		is a problem.</dd>
  * </dl>
  *
- * @module gallery-formmgr
  * @class FormManager
  * @constructor
  * @param form_name {String} The name attribute of the HTML form.
@@ -1236,4 +1239,4 @@ Y.aggregate(FormManager, Y.FormManager);
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2011.06.29-20-12' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});
+}, 'gallery-2011.06.29-22-55' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});
