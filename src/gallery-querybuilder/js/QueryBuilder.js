@@ -3,10 +3,14 @@
 var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
 
 /**********************************************************************
- * <p>Class which allows user to build a list of query criteria, e.g., for
+ * Widget which allows user to build a list of query criteria, e.g., for
  * searching.  All the conditions are either AND'ed or OR'ed.  For a more
- * general query builder, see gallery-exprbuilder.</p>
- *
+ * general query builder, see gallery-exprbuilder.
+ * 
+ * @module gallery-querybuilder
+ */
+
+/**
  * <p>The default package provides two data types:  String (which can also
  * be used for numbers) and Select (which provides a menu of options).  The
  * plugin API allows defining additional data types, e.g., date range or
@@ -54,7 +58,6 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  *		true.</dd>
  * </dl>
  *
- * @module gallery-querybuilder
  * @class QueryBuilder
  * @extends Widget
  * @constructor
