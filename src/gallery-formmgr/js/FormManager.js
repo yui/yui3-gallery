@@ -6,6 +6,10 @@
  * 
  * <p>Also see the documentation for gallery-formmgr-css-validation.</p>
  * 
+ * @module gallery-formmgr
+ */
+
+/**
  * <p><strong>Required Markup Structure</strong></p>
  * 
  * <p>Each element (or tighly coupled set of elements) must be contained by
@@ -111,7 +115,6 @@
  *		is a problem.</dd>
  * </dl>
  *
- * @module gallery-formmgr
  * @class FormManager
  * @constructor
  * @param form_name {String} The name attribute of the HTML form.
