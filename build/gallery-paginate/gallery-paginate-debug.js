@@ -266,4 +266,4 @@ Y.Paginate = Y.extend(Paginate, Y.Widget, {
 });
 
 
-}, 'gallery-2011.06.29-22-55' ,{requires:['widget','event-flick','event','substitute']});
+}, 'gallery-2011.06.29-23-18' ,{requires:['widget','event-flick','event','substitute']});

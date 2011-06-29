@@ -1097,4 +1097,4 @@ Y.extend(Accordion, Y.Widget,
 Y.Accordion = Accordion;
 
 
-}, '@VERSION@' ,{skinnable:true, optional:['anim-base'], requires:['widget','selector-css3']});
+}, 'gallery-2011.06.29-23-18' ,{skinnable:true, optional:['anim-base'], requires:['widget','selector-css3']});

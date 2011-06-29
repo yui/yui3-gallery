@@ -1149,4 +1149,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, '@VERSION@' ,{skinnable:true, optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr']});
+}, 'gallery-2011.06.29-23-18' ,{skinnable:true, optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr']});

@@ -621,4 +621,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, '@VERSION@' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});
+}, 'gallery-2011.06.29-23-18' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});
