@@ -46,10 +46,17 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  *		and a value.  The default String and Select plugins each return
  *		a single inner array.  A date range plugin would return two inner
  *		arrays, one for the start date and one for the end date.</dd>
+ * <dt><code>validate()</code></dt>
+ * <dd>Optional.  If additional validations are required beyond the basic
+ *		validations encoded in CSS, this function should check them.  If
+ *		the input is not valid, call <code>displayFieldMessage()</code>
+ *		on the QueryBuilder object and return false.  Otherwise, return
+ *		true.</dd>
  * </dl>
  *
  * @module gallery-querybuilder
  * @class QueryBuilder
+ * @extends Widget
  * @constructor
  * @param var_list {Array} List of variables that be included in the query.
  *		Each item in the list is an object containing:
@@ -80,6 +87,7 @@ function QueryBuilder(
 		Y.FormManager =
 		{
 			row_marker_class:    '',
+			field_marker_class:  '',
 			status_marker_class: '',
 			required_class:      ''
 		};
@@ -290,6 +298,7 @@ Y.extend(QueryBuilder, Y.Widget,
 			this.op_list.none = [];
 		}
 
+		this.has_messages = false;
 		this.appendNew();
 	},
 
@@ -454,8 +463,14 @@ Y.extend(QueryBuilder, Y.Widget,
 		var selected_var = this.var_list[ var_menu.get('selectedIndex') ];
 
 		var cells = [];
-		if (selected_var.type != 'none')
+		if (selected_var.type == 'none')
 		{
+			query_row.addClass(this.getClassName('empty'));
+		}
+		else
+		{
+			query_row.removeClass(this.getClassName('empty'));
+
 			this.row_list[row_index].plugin =
 				new QueryBuilder.plugin_mapping[ selected_var.type ](
 					this, this.get('pluginConfig'));
@@ -551,20 +566,98 @@ Y.extend(QueryBuilder, Y.Widget,
 
 		// renumber remaining rows
 
-		for (var i=0; i<this.row_list.length; i++)
+		Y.Array.each(this.row_list, function(row, i)
 		{
-			var var_menu = this.row_list[i].var_menu;
+			var var_menu = row.var_menu;
 			var_menu.setAttribute('name', this.variableName(i));
 
 			var selected_var = this.var_list[ var_menu.get('selectedIndex') ];
 			if (selected_var.type != 'none')
 			{
-				this.row_list[i].plugin.updateName(i);
+				row.plugin.updateName(i);
 			}
-		}
+		},
+		this);
 
 		this.fire('queryChanged', {remove: true});
 		return true;
+	},
+
+	/**
+	 * Validate the fields in each row.
+	 * 
+	 * @return {Boolean} <code>true</code> if all values are valid
+	 */
+	validateFields: function()
+	{
+		this.clearFieldMessages();
+
+		var status = true;
+		Y.Array.each(this.row_list, function(row, i)
+		{
+			var info;
+			row.row.all('input').some(function(n)
+			{
+				info = Y.FormManager.validateFromCSSData(n);
+
+				if (info.error)
+				{
+					this.displayFieldMessage(n, info.error, 'error');
+					status = false;
+					return true;
+				}
+			},
+			this);
+
+			if ((!info || info.keepGoing) && row.plugin && Y.Lang.isFunction(row.plugin.validate))
+			{
+				status = row.plugin.validate() && status;	// status last to guarantee call to validate()
+			}
+		},
+		this);
+
+		return status;
+	},
+
+	clearFieldMessages: function()
+	{
+		this.has_messages = false;
+
+		this.get('contentBox').all('input').each(function(n)
+		{
+			Y.FormManager.clearMessage(n);
+		});
+
+		this.get('contentBox').all('select').each(function(n)
+		{
+			Y.FormManager.clearMessage(n);
+		});
+	},
+
+	/**
+	 * Display a message for the specified field.
+	 * 
+	 * @param e {String|Object} The selector for the element or the element itself
+	 * @param msg {String} The message
+	 * @param type {String} The message type (see Y.FormManager.status_order)
+	 * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+	 * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
+	 */
+	displayFieldMessage: function(
+		/* id/object */	e,
+		/* string */	msg,
+		/* string */	type,
+		/* boolean */	scroll)
+	{
+		if (Y.FormManager.displayMessage(e, msg, type, this.has_messages, scroll))
+		{
+			this.has_messages = true;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	},
 
 	/**
@@ -637,7 +730,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	variableName: function(
 		/* int */	i)
 	{
-		return Y.Lang.substitute(this.var_menu_name_pattern, {i:i});
+		return Y.Lang.sub(this.var_menu_name_pattern, {i:i});
 	},
 
 	//
@@ -654,11 +747,12 @@ Y.extend(QueryBuilder, Y.Widget,
 	{
 		// This must use a select tag!
 
-		var markup = '<select name="{n}" class="formmgr-field {c}" />';
+		var markup = '<select name="{n}" class="{f} {c}" />';
 
-		return Y.Lang.substitute(markup,
+		return Y.Lang.sub(markup,
 		{
 			n: menu_name,
+			f: Y.FormManager.field_marker_class,
 			c: this.getClassName('field')
 		});
 	},
@@ -675,7 +769,7 @@ Y.extend(QueryBuilder, Y.Widget,
 
 		if (!this._controls_markup)
 		{
-			this._controls_markup = Y.Lang.substitute(markup,
+			this._controls_markup = Y.Lang.sub(markup,
 			{
 				ci: this.getClassName('insert'),
 				cr: this.getClassName('remove')
@@ -687,3 +781,20 @@ Y.extend(QueryBuilder, Y.Widget,
 });
 
 Y.QueryBuilder = QueryBuilder;
+
+/**
+ * <p>Environment information.</p>
+ * 
+ * <dl>
+ * <dt>has_bubble_problem</dt>
+ * <dd>True if change events from select elements do not bubble.</dd>
+ * </dl>
+ * 
+ * @property Y.QueryBuilder.Env
+ * @type {Object}
+ * @static
+ */
+Y.QueryBuilder.Env =
+{
+	has_bubble_problem: has_bubble_problem
+};
