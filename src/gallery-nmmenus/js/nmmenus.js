@@ -1,4 +1,4 @@
-YUI.add('nmmenus', function(Y){    
+YUI.add('gallery-nmmenus', function(Y){    
 	
     Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {	 
 		initializer : function( config ) {		
@@ -81,7 +81,10 @@ YUI.add('nmmenus', function(Y){
 									subMenu.setStyle('height', '');																																				
 								}												
 							}
-						})
+						});
+						break;
+						
+						default:
 						break;
 					}
 				}, topLi, this);
@@ -137,7 +140,10 @@ YUI.add('nmmenus', function(Y){
 							configObj.topLi.removeClass('active');																																										
 						}
 					}
-				})
+				});
+				break;
+				
+				default:
 				break;
 			}
 		},
@@ -206,10 +212,10 @@ YUI.add('nmmenus', function(Y){
 									}								
 								}, this)
 							}
-						})
+						});
 					}, this)
 				}
-			})
+			});
 		}
 	
 		        
@@ -245,4 +251,4 @@ YUI.add('nmmenus', function(Y){
 		}
     });
     
-}, '0.1', {requires: ['base-build', 'widget', 'event-mouseenter', 'node', 'transition']});
+}, 'gallery-2011.06.22-20-13', {requires: ['base-build', 'widget', 'event-mouseenter', 'node', 'transition']});
