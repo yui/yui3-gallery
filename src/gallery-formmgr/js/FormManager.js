@@ -289,7 +289,7 @@ FormManager.status_order =
 /**
  * Get the precedence of the given status name.
  * 
- * @method Y.FormManager.getStatusPrecedence
+ * @method getStatusPrecedence
  * @static
  * @param status {String} The name of the status value.
  * @return {int} The position in the <code>status_order</code> array.
@@ -311,7 +311,7 @@ FormManager.getStatusPrecedence = function(
 /**
  * Compare two status values.
  * 
- * @method Y.FormManager.statusTakesPrecedence
+ * @method statusTakesPrecedence
  * @static
  * @param orig_status {String} The name of the original status value.
  * @param new_status {String} The name of the new status value.
@@ -327,7 +327,7 @@ FormManager.statusTakesPrecedence = function(
 /**
  * Get the status of the given fieldset or form row.
  * 
- * @method Y.FormManager.getElementStatus
+ * @method getElementStatus
  * @static
  * @param e {String|Object} The descriptor or DOM element.
  * @return {mixed} The status (String) or <code>false</code>.
@@ -360,7 +360,7 @@ function getId(
  * Trim leading and trailing whitespace from the specified fields, except
  * when a field has the CSS class yiv-no-trim.
  * 
- * @method Y.FormManager.cleanValues
+ * @method cleanValues
  * @static
  * @param e {Array} The fields to clean.
  * @return {boolean} <code>true</code> if there are any file inputs.
@@ -481,6 +481,105 @@ function populateForm1()
 		}
 	}
 }
+
+/**
+ * <p>Exposed for use by Y.QueryBuilder</p>
+ * 
+ * <p>Clear the message for the given field.</p>
+ * 
+ * @method Y.FormManager.clearMessage
+ * @static
+ * @param e {Element|Node} the field
+ */
+FormManager.clearMessage = function(e)
+{
+	var p = Y.one(e).getAncestorByClassName(Y.FormManager.row_marker_class);
+	if (p && p.hasClass(rowStatusPattern()))
+	{
+		p.all('.'+Y.FormManager.status_marker_class).set('innerHTML', '');
+		p.removeClass(rowStatusPattern());
+
+		p.all('.'+Y.FormManager.field_marker_class).removeClass(rowStatusPattern());
+	}
+};
+
+/**
+ * <p>Exposed for use by Y.QueryBuilder</p>
+ * 
+ * <p>Display a message for the form row containing the specified element.
+ * The message will only be displayed if no message with a higher
+ * precedence is already visible. (see Y.FormManager.status_order)</p>
+ * 
+ * @method Y.FormManager.displayMessage
+ * @static
+ * @param e {String|Object} The selector for the element or the element itself
+ * @param msg {String} The message
+ * @param type {String} The message type (see Y.FormManager.status_order)
+ * @param had_messages {boolean} (Optional) <code>true</code> if the form already has messages displayed
+ * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+ * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
+ */
+FormManager.displayMessage = function(
+	/* id/object */	e,
+	/* string */	msg,
+	/* string */	type,
+	/* boolean */	had_messages,
+	/* boolean */	scroll)
+{
+	if (Y.Lang.isUndefined(scroll))
+	{
+		scroll = true;
+	}
+
+	e     = Y.one(e);
+	var p = e.getAncestorByClassName(FormManager.row_marker_class);
+	if (p && FormManager.statusTakesPrecedence(FormManager.getElementStatus(p), type))
+	{
+		var f = p.all('.'+FormManager.field_marker_class);
+		if (f)
+		{
+			f.removeClass(rowStatusPattern());
+		}
+
+		if (msg)
+		{
+			p.one('.'+FormManager.status_marker_class).set('innerHTML', msg);
+		}
+
+		var new_class = FormManager.row_status_prefix + type;
+		p.replaceClass(rowStatusPattern(), new_class);
+
+		f = e.getAncestorByClassName(FormManager.field_marker_class, true);
+		if (f)
+		{
+			f.replaceClass(rowStatusPattern(), new_class);
+		}
+
+		var fieldset = e.getAncestorByTagName('fieldset');
+		if (fieldset && FormManager.statusTakesPrecedence(FormManager.getElementStatus(fieldset), type))
+		{
+			fieldset.removeClass(rowStatusPattern());
+			fieldset.addClass(FormManager.row_status_prefix + type);
+		}
+
+		if (!had_messages && scroll)
+		{
+			p.scrollIntoView();
+			try
+			{
+				e.focus();
+			}
+			catch (ex)
+			{
+				// no way to determine in IE if this will fail
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+};
 
 Y.extend(FormManager, Y.Plugin.Host,
 {
@@ -1034,26 +1133,15 @@ Y.extend(FormManager, Y.Plugin.Host,
 			this.status_node.replaceClass(statusPattern(), FormManager.status_none_class);
 		}
 
-		for (var i=0; i<this.form.elements.length; i++)
+		Y.Array.each(this.form.elements, function(e)
 		{
-			var e = this.form.elements[i];
-
 			var name = e.tagName.toLowerCase();
 			var type = (e.type ? e.type.toLowerCase() : null);
-			if (name == 'button' || type == 'submit' || type == 'reset')
+			if (name != 'button' && type != 'submit' && type != 'reset')
 			{
-				continue;
+				FormManager.clearMessage(e);
 			}
-
-			var p = Y.one(e).getAncestorByClassName(FormManager.row_marker_class);
-			if (p && p.hasClass(rowStatusPattern()))
-			{
-				p.all('.'+FormManager.status_marker_class).set('innerHTML', '');
-				p.removeClass(rowStatusPattern());
-
-				p.all('.'+FormManager.field_marker_class).removeClass(rowStatusPattern());
-			}
-		}
+		});
 
 		Y.one(this.form).all('fieldset').removeClass(rowStatusPattern());
 	},
@@ -1075,55 +1163,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 		/* string */	type,
 		/* boolean */	scroll)
 	{
-		if (Y.Lang.isUndefined(scroll))
+		if (FormManager.displayMessage(e, msg, type, this.has_messages, scroll))
 		{
-			scroll = true;
-		}
-
-		e     = Y.one(e);
-		var p = e.getAncestorByClassName(FormManager.row_marker_class);
-		if (p && FormManager.statusTakesPrecedence(FormManager.getElementStatus(p), type))
-		{
-			var f = p.all('.'+FormManager.field_marker_class);
-			if (f)
-			{
-				f.removeClass(rowStatusPattern());
-			}
-
-			if (msg)
-			{
-				p.one('.'+FormManager.status_marker_class).set('innerHTML', msg);
-			}
-
-			var new_class = FormManager.row_status_prefix + type;
-			p.replaceClass(rowStatusPattern(), new_class);
-
-			f = e.getAncestorByClassName(FormManager.field_marker_class, true);
-			if (f)
-			{
-				f.replaceClass(rowStatusPattern(), new_class);
-			}
-
-			var fieldset = e.getAncestorByTagName('fieldset');
-			if (fieldset && FormManager.statusTakesPrecedence(FormManager.getElementStatus(fieldset), type))
-			{
-				fieldset.removeClass(rowStatusPattern());
-				fieldset.addClass(FormManager.row_status_prefix + type);
-			}
-
-			if (!this.has_messages && scroll)
-			{
-				p.scrollIntoView();
-				try
-				{
-					e.focus();
-				}
-				catch (ex)
-				{
-					// no way to determine in IE if this will fail
-				}
-			}
-
 			this.has_messages = true;
 			if (type == 'error')
 			{
@@ -1132,8 +1173,10 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 			return true;
 		}
-
-		return false;
+		else
+		{
+			return false;
+		}
 	},
 
 	/**
