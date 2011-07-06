@@ -4,4 +4,10 @@
     <description>Split Desktop Build File</description>
     <property file="build.properties" />
     <import file="${builddir}/3.x/bootstrap.xml" description="Default Build Properties and Targets" />
+<!--    
+    <loadfile property="version" srcFile="${basedir}/version.txt">
+	   <filterchain>
+	      <striplinebreaks/>
+	   </filterchain>
+	</loadfile> -->
 </project>

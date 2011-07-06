@@ -39,7 +39,7 @@ var PX = 'px',
         IMG_CLOSE_TPL = '/>',
         BORDERS_COLOR = POUND + '99cccc',
         BORDER_PIX_IMG = 'pix-blue.gif',
-        BORDER_PIX_URL = PATH_TO_IMAGES + BORDER_PIX_IMG,
+        BORDER_PIX_URL = BORDER_PIX_IMG,
         FULL_DESKTOP = {
             wrapper: 'page_wrapper',
             crown: 'crown',
@@ -249,10 +249,9 @@ In case we have fullpath => assume js file is inside root of package basedir (Y.
                         DRAG_HERE_IMG_URL = this.get(PATH_TO_IMAGES_CONF) + this.get(DRAG_HERE_IMG_CONF);
                         Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.main).setStyle(BACKGROUNDIMAGE, 'url("' + DRAG_HERE_IMG_URL + '")');
 
-                        BORDER_PIX_URL = this.get(PATH_TO_IMAGES_CONF) + this.get(BORDER_PIX_CONF);
-
                         if (i === BORDER_PIX_CONF || i === PATH_TO_IMAGES_CONF) {
-                            Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.nw).setStyle(BACKGROUNDIMAGE, BORDER_PIX_URL);
+                        	BORDER_PIX_URL = this.get(PATH_TO_IMAGES_CONF) + this.get(BORDER_PIX_CONF);
+                            Y.one(POUND + DEF_PREFIX + FULL_DESKTOP.nw).setStyle(BACKGROUNDIMAGE, 'url("' + BORDER_PIX_URL + '")');
                         }
                         /* create handle and place it in resizer div */
                         if (i === HANDLE_IMG_CONF || i === PATH_TO_IMAGES_CONF) {
