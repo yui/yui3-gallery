@@ -736,13 +736,19 @@ Y.extend(Accordion, Y.Widget,
 		{
 			args[0].removeChild(args[1]);
 			args[0].removeChild(args[2]);
+
+			if (args[3])
+			{
+				this.fire('remove', index);
+			}
 		}
 
 		var onCompleteArgs =
 		[
 			this.get('contentBox'),
 			this.section_list[index].title,
-			this.section_list[index].clip
+			this.section_list[index].clip,
+			true
 		];
 
 		if (this.get('animateInsertRemove'))
@@ -769,22 +775,26 @@ Y.extend(Accordion, Y.Widget,
 
 			params.node = this.section_list[index].title;
 			var anim    = this._createAnimator(params);
-			anim.on('end', onCompleteRemoveSection, null, onCompleteArgs);
+			anim.on('end', onCompleteRemoveSection, this, onCompleteArgs);
 			anim.run();
 		}
 		else
 		{
-			onCompleteRemoveSection(null, onCompleteArgs);
+			onCompleteArgs[3] = false;
+			onCompleteRemoveSection.call(this, null, onCompleteArgs);
 		}
 
 		this.section_list.splice(index, 1);
+
+		if (!onCompleteArgs[3])
+		{
+			this.fire('remove', index);
+		}
 
 		if (!this.allow_all_closed && this.allSectionsClosed())
 		{
 			this.toggleSection(0);
 		}
-
-		this.fire('remove', index);
 	},
 
 	/**
