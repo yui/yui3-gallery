@@ -2,8 +2,8 @@
     Core Button Styles
 ***/
 .yui3-button {
-	-moz-border-radius: 0.4em;
-	-webkit-border-radius: 0.4em;
+    -moz-border-radius: 0.4em;
+    -webkit-border-radius: 0.4em;
     border: solid 1px;
     cursor: pointer;
     display: inline-block;
@@ -16,15 +16,15 @@
 }
 
 .yui3-button-back {
-	-moz-border-radius: 0 0.4em 0.4em 0;
-	-webkit-border-radius: 0 0.4em 0.4em 0;
-	margin-left:1.5em;
-	padding-right:1.5em;
+    -moz-border-radius: 0 0.4em 0.4em 0;
+    -webkit-border-radius: 0 0.4em 0.4em 0;
+    margin-left:1.5em;
+    padding-right:1.5em;
 }
 
 .yui3-button-back:before {
-	-moz-transform: rotate(-45deg);
-	-webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
     border-bottom-color: transparent;
     border-radius: 0.2em 0 20px 0;
     border-right-color: transparent;
@@ -263,7 +263,7 @@
 }
 
 .yui3-skin-sam .yui3-button-icon {
-    background-image: url("../assets/sam_icons.gif");
+    background-image: url("assets/sam_icons.gif");
 }
 
 /***
@@ -320,12 +320,12 @@
 .yui3-skin-night .yui3-button-disabled:hover {
     -moz-box-shadow: 0 1px #222222;
     -webkit-box-shadow: 0 1px #222222;
-	background: -moz-linear-gradient(
-		0% 100% 90deg, 
-		#343536 0%, 
-		#555658 96%,
-		#3E3F41 100%
-	);
+    background: -moz-linear-gradient(
+        0% 100% 90deg, 
+        #343536 0%, 
+        #555658 96%,
+        #3E3F41 100%
+    );
     background: -webkit-gradient(
         linear,
         left bottom,
@@ -340,12 +340,12 @@
 }
 
 .yui3-skin-night .yui3-button-back:hover:before {
-	background: -moz-linear-gradient(
-		0% 100% 45deg, 
-		#2e2e30 0%, 
-		#46474a 96%,
-		#3d3e3f 100%
-	);
+    background: -moz-linear-gradient(
+        0% 100% 45deg, 
+        #2e2e30 0%, 
+        #46474a 96%,
+        #3d3e3f 100%
+    );
     background: -webkit-gradient(
         linear,
         left bottom,
@@ -359,10 +359,10 @@
 .yui3-skin-night .yui3-button-selected,
 .yui3-skin-night .yui3-button-selected:hover {
     background: -moz-linear-gradient(
-    	0% 100% 90deg, 
-    	#242526 0%, 
-    	#3b3c3d 96%,
-    	#2C2D2F 100%
+        0% 100% 90deg, 
+        #242526 0%, 
+        #3b3c3d 96%,
+        #2C2D2F 100%
     );
     background: -webkit-gradient(
         linear,
@@ -377,10 +377,10 @@
 
 .yui3-skin-night .yui3-button-selected.yui3-button-back:before {
     background: -moz-linear-gradient(
-    	0% 100% 45deg, 
-    	#242526 0%, 
-    	#3b3c3d 96%,
-    	#2C2D2F 100%
+        0% 100% 45deg, 
+        #242526 0%, 
+        #3b3c3d 96%,
+        #2C2D2F 100%
     );
     background: -webkit-gradient(
         linear,
@@ -398,5 +398,5 @@
 }
 
 .yui3-skin-night .yui3-button-icon {
-    background-image: url("../assets/night_icons.gif");
+    background-image: url("assets/night_icons.gif");
 }
