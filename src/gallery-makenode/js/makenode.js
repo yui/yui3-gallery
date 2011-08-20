@@ -1,6 +1,3 @@
-/*jslint white: true, nomen: true, maxerr: 50, indent: 4, regexp:true */
-/*global YUI*/
-
 /**
  * An extension for Widget to create markup from templates, 
  * create CSS classNames, locating elements,
