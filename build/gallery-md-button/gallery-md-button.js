@@ -1,6 +1,10 @@
 YUI.add('gallery-md-button', function(Y) {
 
-"use strict";
+/**
+ * Provides a better button object
+ * @module button
+ */
+ "use strict";
 
 var Lang = Y.Lang,
 	EVENT_PRESS = 'press',
