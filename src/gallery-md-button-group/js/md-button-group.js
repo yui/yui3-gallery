@@ -1,7 +1,7 @@
 /**
 * Provides a container to group buttons.
 * It can hold instances of Y.Button, Y.ButtonToggle or Y.ButtonSeparator.
-* @module button-group
+* @module gallery-md-button-group
 */
 
 "use strict";
@@ -18,7 +18,7 @@ var Lang = Y.Lang,
  * @constructor
  */
 Y.ButtonSeparator = Y.Base.create(
-	'button-separator',
+	'buttonSeparator',
 	Y.Widget,
 	[],
 	{
@@ -45,7 +45,7 @@ Y.ButtonSeparator = Y.Base.create(
 
 
 Y.ButtonGroup = Y.Base.create(
-	'button-group', 
+	'buttonGroup', 
 	Y.Widget, 
 	[Y.WidgetParent,Y.MakeNode], 
 	{

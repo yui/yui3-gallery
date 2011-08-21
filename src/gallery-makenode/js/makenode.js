@@ -5,7 +5,7 @@
  * All of its members are either protected or private.  
  * Developers using MakeNode should use only those marked protected.  
  * <b>Enable the Show Protected checkbox to see them</b>.
- * @module makenode
+ * @module gallery-md-makenode
  * @class MakeNode
  */
 	"use strict";

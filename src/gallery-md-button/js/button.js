@@ -495,7 +495,7 @@ Y.Button = Y.Base.create(
  */
 
 Y.ButtonToggle = Y.Base.create(
-	'button-toggle', 
+	'buttonToggle', 
 	Y.Button, 
 	[], 
 	{

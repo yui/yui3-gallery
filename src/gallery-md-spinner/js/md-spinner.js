@@ -1,6 +1,6 @@
 /**
 * Shows an input box with a set of up/down buttons to change its value.
-* @module spinner
+* @module gallery-md-spinner
 * @class Spinner
 * @constructor
 * @extends Widget
@@ -8,9 +8,7 @@
 */
 "use strict";
 
-var SPINNER = 'Spinner',
-	Lang = Y.Lang,
-	Widget = Y.Widget,
+var Lang = Y.Lang,
 	CBX = 'contentBox',
 	VALUE = 'value',
 	CHANGE = 'Change',
@@ -26,9 +24,9 @@ var SPINNER = 'Spinner',
 	WRAPAROUND = 'wraparound',
 	WRAPPED = 'wrapped';
 	
-Y[SPINNER] = Y.Base.create(
-	SPINNER,
-	Widget,
+Y.Spinner = Y.Base.create(
+	'spinner',
+	Y.Widget,
 	[Y.MakeNode],
 	{
 	

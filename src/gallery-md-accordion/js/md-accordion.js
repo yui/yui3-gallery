@@ -1,11 +1,9 @@
 /**
 * The accordion module creates a control with titles and expandable sections for each
-* @module Accordion
+* @module gallery-md-accordion
 */
 "use strict";
-var ACCORDION = 'Accordion',
-	ACC_PANEL = 'AccordionPanel',
-	Lang = Y.Lang,
+var Lang = Y.Lang,
 
 	BBX = 'boundingBox',
 	BODY = Y.WidgetStdMod.BODY,
@@ -33,8 +31,8 @@ var ACCORDION = 'Accordion',
  * @param cfg {object} (optional) configuration attributes
  */
 	
-Y[ACC_PANEL] = Y.Base.create(
-	ACC_PANEL,
+Y.AccordionPanel = Y.Base.create(
+	'accordionPanel',
 	Y.Widget,
 	[Y.WidgetChild,Y.WidgetStdMod,Y.MakeNode],
 	{
@@ -64,7 +62,7 @@ Y[ACC_PANEL] = Y.Base.create(
 		 
 		renderUI: function () {
 			this.setStdModContent(BODY,this._makeNode());
-			this.setStdModContent(HEADER, this._makeNode(Y[ACC_PANEL]._HEADER_TEMPLATE));
+			this.setStdModContent(HEADER, this._makeNode(Y.AccordionPanel._HEADER_TEMPLATE));
 			this._locateNodes();
 		},
 
@@ -309,8 +307,8 @@ Y[ACC_PANEL] = Y.Base.create(
  * @extends Widget
  * @uses WidgetParent, MakeNode
  */
-Y[ACCORDION] = Y.Base.create(
-	ACCORDION,
+Y.Accordion = Y.Base.create(
+	'accordion',
 	Y.Widget,
 	[Y.WidgetParent, Y.MakeNode],
 	{
@@ -406,7 +404,7 @@ Y[ACCORDION] = Y.Base.create(
 			 * @protected
 			 */
 			defaultChildType: {
-				value: ACC_PANEL
+				value: 'AccordionPanel'
 			},
 			/**
 			 * Whether several panels may be expanded at once.
