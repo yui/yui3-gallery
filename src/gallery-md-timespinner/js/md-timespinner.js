@@ -1,6 +1,5 @@
-/*jslint white: true, nomen: true, maxerr: 50, indent: 4 */
-/*global Y*/
-
+/*js lint white: true, nomen: true, maxerr: 50, indent: 4 */
+/*gl obal Y*/
 /**
 * Shows and accepts a time via a set of spinners.  
 * It can run showing the current time.
@@ -15,14 +14,18 @@ var Spinner = Y.Spinner,
 	CHANGE = 'Change',
 	VALUE = 'value',
 	UI = 'ui',
-	AMPM = 'showAmPm',
+	SHOW_AMPM = 'showAmPm',
 	MIN = 'min',
 	MAX = 'max',
 	INTERVAL = 'interval',
-	SECONDS = 'showSeconds',
+	SHOW_SECONDS = 'showSeconds',
 	RUNNING = 'running',
 	AFTER = 'after',
-	WRAPPED = 'wrapped';
+	WRAPPED = 'wrapped',
+	HOURS = 'hours',
+	MINUTES = 'minutes',
+	SECONDS = 'seconds',
+	AMPM = 'ampm';
 /**
  * The TimeSpinner shows a set of spinners for hour, minute and optionally seconds and AM/PM.
  * @class TimeSpinner
@@ -101,18 +104,21 @@ Y.TimeSpinner = Y.Base.create(
 		 * @protected
 		 */
 		renderUI: function() {
+			Y.log('renderUI', 'info', 'TimeSpinner');
 			var cbx = this.get(CBX);
 				
 			this._hourSp = new Spinner({
 				min:0,
-				max: this.get(AMPM)?11:23,
+				max: this.get(SHOW_AMPM)?11:23,
 				wraparound: true
 			}).render(cbx);
+			this._hourSp.get(BBX).addClass(this._classNames[HOURS]);
 			this._minSp = new Spinner({
 				min:0,
 				max: 59,
 				wraparound: true
 			}).render(cbx);
+			this._minSp.get(BBX).addClass(this._classNames[MINUTES]);
 		},
 		/**
 		 * Sets the listeners for events from the hours and minutes spinners.
@@ -120,9 +126,25 @@ Y.TimeSpinner = Y.Base.create(
 		 * @protected
 		 */
 		bindUI: function () {
-			this._hourSp.after(VALUE + CHANGE, this._afterValueChange, this);
-			this._minSp.after(VALUE + CHANGE, this._afterValueChange, this);
-			this._minSp.after(WRAPPED, this._afterWrapped, this);
+			Y.log('bindUI', 'info', 'TimeSpinner');
+			this._eventHandles = [
+				this._hourSp.after(VALUE + CHANGE, this._afterValueChange, this),
+				this._minSp.after(VALUE + CHANGE, this._afterValueChange, this),
+				this._minSp.after(WRAPPED, this._afterWrapped, this)
+			];
+		},
+		
+		destroy: function () {
+			Y.log('destroy', 'info', 'TimeSpinner');
+			if (this._timer) {
+				this._timer.cancel();
+			}
+			Y.each([].concat(this._eventHandles,this._secondsEventHandles,this._ampmEventHandle), function (eh) {
+				if (eh) {
+					eh.detach();
+				}
+			});
+			Y.TimeSpinner.superclass.destroy.call(this);
 		},
 		
 		/**
@@ -132,6 +154,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetShowSeconds: function(value) {
+			Y.log('_uiSetShowSeconds, value: ' + value, 'info', 'TimeSpinner');
 			if (value) {
 				this._secSp = new Spinner({
 					min:0,
@@ -139,11 +162,20 @@ Y.TimeSpinner = Y.Base.create(
 					wraparound: true
 				}).render();
 				this._minSp.get(BBX).insert(this._secSp.get(BBX), AFTER);
-				this._secSp.after(VALUE + CHANGE, this._afterValueChange, this);
-				this._secSp.after(WRAPPED, this._afterWrapped, this);
+				this._secSp.set(VALUE, this.get(VALUE).getSeconds());
+				this._secSp.get(BBX).addClass(this._classNames[SECONDS]);
+				this._secondsEventHandles = [
+					this._secSp.after(VALUE + CHANGE, this._afterValueChange, this),
+					this._secSp.after(WRAPPED, this._afterWrapped, this)
+				];
 			} else if (this._secSp) {
-				this._secSp.destroy();
-				this._secSp = null;
+				if (this._secSp) {
+					Y.each(this._secondsEventHandles, function (eh) {
+						eh.detach();
+					});
+					this._secSp.destroy();
+					this._secSp = null;
+				}
 			}
 		},
 		/**
@@ -153,12 +185,13 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetShowAmPm: function (value) {
+			Y.log('_uiSetShowAmPm, value: ' + value, 'info', 'TimeSpinner');
 			if (value) {
 				this._ampmSp = new Spinner({
 					min:0,
 					max: 1,
 					formatter: function(value) {
-						return value.toUpperCase()?'PM':'AM';
+						return value?'PM':'AM';
 					},
 					parser: function (value) {
 						switch (value.toUpperCase()) {
@@ -173,11 +206,15 @@ Y.TimeSpinner = Y.Base.create(
 					wraparound: true
 				}).render();
 				(this._secSp?this._secSp.get(BBX):this._minSp.get(BBX)).insert(this._ampmSp.get(BBX), AFTER);
-				this._ampmSp.after(VALUE + CHANGE, this._afterValueChange, this);
-				this._hourSp.set(MAX, 11);
+				this._ampmSp.get(BBX).addClass(this._classNames[SHOW_AMPM]);
+				this._ampmEventHandle = this._ampmSp.after(VALUE + CHANGE, this._afterValueChange, this);
+				this._hourSp.set(MAX, 12);
+				this._hourSp.set(MIN, 1);
+				this._uiSetValue(this.get(VALUE));
 			} else {
 				this._hourSp.set(MAX, 23);
 				if (this._ampmSp) {
+					this._ampmEventHandle.detach();
 					this._ampmSp.destroy();
 					this._ampmSp = null;
 				}
@@ -192,13 +229,13 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetValue: function (value, src) {
+			Y.log('_uiSetValue, value: ' + value + ' src ' + src, 'info', 'TimeSpinner');
 			if (src === UI) {
 				return;
 			}
-			this._setting = true;
 			var hours = value.getHours();
 			if (this._ampmSp) {
-				this._hourSp.set(VALUE, hours >= 12?hours - 12:hours);
+				this._hourSp.set(VALUE, (hours % 12) || 12);
 				this._ampmSp.set(VALUE, hours >= 12?1:0);
 			} else {
 				this._hourSp.set(VALUE, hours);
@@ -207,7 +244,6 @@ Y.TimeSpinner = Y.Base.create(
 			if (this._secSp) {
 				this._secSp.set(VALUE, value.getSeconds());
 			}
-			this._setting = false;
 		},
 		
 		/**
@@ -217,6 +253,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetInterval: function (value) {
+			Y.log('_uiSetInterval, value: ' + value, 'info', 'TimeSpinner');
 			if (this._timer) {
 				this._timer.cancel();
 			}
@@ -231,6 +268,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetRunning: function (value) {
+			Y.log('_uiSetRunning, value: ' + value, 'info', 'TimeSpinner');
 			this._uiSetInterval(value && this.get(INTERVAL));
 			this._frozenTime = Date.now();
 		},
@@ -241,11 +279,9 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_afterValueChange: function () {
-			if (this._setting) {
-				return;
-			}
+			Y.log('_afterValueChange', 'info', 'TimeSpinner');
 			var d = new Date();
-			d.setHours(this._hourSp.get(VALUE) + (this._ampmSp? 12 * this._ampmSp.get(VALUE):0));
+			d.setHours((this._hourSp.get(VALUE) + (this._ampmSp? 12 * this._ampmSp.get(VALUE):0)) % 24);
 			d.setMinutes(this._minSp.get(VALUE));
 			d.setSeconds(this._secSp?this._secSp.get(VALUE):0);
 			this.set(VALUE, d, {src: UI}); 
@@ -259,6 +295,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_afterWrapped: function (ev) {
+			Y.log('_afterWrapped', 'info', 'TimeSpinner');
 			var dir = ev.newVal > ev.prevVal?-1:1;
 			if (ev.target === this._secSp) {
 				this._minSp.set(VALUE, this._minSp.get(VALUE) + dir);
@@ -274,6 +311,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_updateTime: function() {
+			Y.log('_updateTime', 'info', 'TimeSpinner');
 			this._uiSetValue(this._getTime());
 		},
 		/**
@@ -284,7 +322,8 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_getTime: function() {
-			if (get(RUNNING)) {
+			Y.log('_getTime', 'info', 'TimeSpinner');
+			if (this.get(RUNNING)) {
 				return new Date(Date.now() - this._offset);
 			} else {
 				return new Date(this._frozenTime - this._offset);
@@ -298,6 +337,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_setTime: function (value) {
+			Y.log('_setTime, value ' + value, 'info', 'TimeSpinner');
 			this._offset = Date.now() - value.getTime();
 			return value;
 		},
@@ -308,6 +348,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @method start
 		 */
 		start: function () {
+			Y.log('start', 'info', 'TimeSpinner');
 			this.set(RUNNING, true);
 		},
 		/**
@@ -316,10 +357,12 @@ Y.TimeSpinner = Y.Base.create(
 		 * @method stop
 		 */
 		stop: function () {
+			Y.log('stop', 'info', 'TimeSpinner');
 			this.set(RUNNING, false);
 		}
 	},
 	{
+		_CLASS_NAMES: [HOURS, MINUTES, SECONDS, AMPM],
 		ATTRS: {
 			/**
 			 * Whether to show the am/pm indicator or show a 24 hours timer.
@@ -381,8 +424,8 @@ Y.TimeSpinner = Y.Base.create(
 			}
 		},
 		_ATTRS_2_UI: {
-			BIND: [AMPM, SECONDS, VALUE, INTERVAL, RUNNING],
-			SYNC: [AMPM, SECONDS, VALUE, INTERVAL, RUNNING]
+			BIND: [INTERVAL, RUNNING, SHOW_AMPM, SHOW_SECONDS, VALUE],
+			SYNC: [INTERVAL, RUNNING, SHOW_AMPM, SHOW_SECONDS, VALUE]
 		}
 	}
 );
