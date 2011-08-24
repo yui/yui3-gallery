@@ -78,7 +78,6 @@ Y.ButtonGroup = Y.Base.create(
 					}
 				}
 			});
-			this.publish(EVENT_PRESS);
 		},
 		
 
@@ -157,6 +156,9 @@ Y.ButtonGroup = Y.Base.create(
 		_ATTRS_2_UI: {
 			BIND: LABEL,
 			SYNC: LABEL
+		},
+		_PUBLISH: {
+			press:null
 		},
 		ATTRS : {
 			/**

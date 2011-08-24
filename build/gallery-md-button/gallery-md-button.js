@@ -2,7 +2,7 @@ YUI.add('gallery-md-button', function(Y) {
 
 /**
  * Provides a better button object
- * @module button
+ * @module gallery-md-button
  */
  "use strict";
 
@@ -70,22 +70,7 @@ Y.Button = Y.Base.create(
 		 */
 		_prevIconClassName:'',
 
-		/**
-		 * publishes events
-		 * @method initializer
-		 */
-
-		initializer: function () {
 		
-			/**
-			 * Fired when the button is clicked and no href provided
-			 * @event press
-			 */
-
-			this.publish(EVENT_PRESS, {
-				defaultFn: this._defPressFn
-			});
-		},
 		renderUI: function () {
 			this.get(BBX).append(this._makeNode());
 			this._locateNodes(LABEL, ICON);
@@ -334,6 +319,11 @@ Y.Button = Y.Base.create(
 				mouseup: '_onMouseUp'
 			}
 		}, 
+		_PUBLISH: {
+			press: {
+				defaultFn: "_defPressFn"
+			}
+		},
 		ATTRS: {
 			/**
 			 * Label to be shown on the button
@@ -497,7 +487,7 @@ Y.Button = Y.Base.create(
  */
 
 Y.ButtonToggle = Y.Base.create(
-	'button-toggle', 
+	'buttonToggle', 
 	Y.Button, 
 	[], 
 	{
