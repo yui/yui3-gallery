@@ -110,13 +110,15 @@ Y.TimeSpinner = Y.Base.create(
 			this._hourSp = new Spinner({
 				min:0,
 				max: this.get(SHOW_AMPM)?11:23,
-				wraparound: true
+				wraparound: true,
+				'strings.input': this.get('strings.hours')
 			}).render(cbx);
 			this._hourSp.get(BBX).addClass(this._classNames[HOURS]);
 			this._minSp = new Spinner({
 				min:0,
 				max: 59,
-				wraparound: true
+				wraparound: true,
+				'strings.input': this.get('strings.minutes')
 			}).render(cbx);
 			this._minSp.get(BBX).addClass(this._classNames[MINUTES]);
 		},
@@ -159,7 +161,8 @@ Y.TimeSpinner = Y.Base.create(
 				this._secSp = new Spinner({
 					min:0,
 					max: 59,
-					wraparound: true
+					wraparound: true,
+				'strings.input': this.get('strings.seconds')
 				}).render();
 				this._minSp.get(BBX).insert(this._secSp.get(BBX), AFTER);
 				this._secSp.set(VALUE, this.get(VALUE).getSeconds());
@@ -203,7 +206,8 @@ Y.TimeSpinner = Y.Base.create(
 								return false;
 						}
 					},
-					wraparound: true
+					wraparound: true,
+				'strings.input': this.get('strings.ampm')
 				}).render();
 				(this._secSp?this._secSp.get(BBX):this._minSp.get(BBX)).insert(this._ampmSp.get(BBX), AFTER);
 				this._ampmSp.get(BBX).addClass(this._classNames[SHOW_AMPM]);
@@ -426,6 +430,19 @@ Y.TimeSpinner = Y.Base.create(
 			running: {
 				value: true,
 				validator: Lang.isBoolean
+			},
+			
+			/**
+			 * Set of localizable strings to be used as tooltips on the spinners.
+			 * @attribute strings
+			 */
+			strings: {
+				value: {
+					hours:'hours',
+					minutes:'minutes',
+					seconds: 'seconds',
+					ampm: 'am/pm'
+				}
 			}
 		},
 		_ATTRS_2_UI: {
