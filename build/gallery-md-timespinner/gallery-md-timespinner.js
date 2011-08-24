@@ -226,6 +226,7 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetValue: function (value, src) {
+			this._setting = true;
 			if (src === UI) {
 				return;
 			}
@@ -240,6 +241,7 @@ Y.TimeSpinner = Y.Base.create(
 			if (this._secSp) {
 				this._secSp.set(VALUE, value.getSeconds());
 			}
+			this._setting = false;
 		},
 		
 		/**
@@ -273,6 +275,9 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_afterValueChange: function () {
+			if (this._setting) {
+				return;
+			}
 			var d = new Date();
 			d.setHours((this._hourSp.get(VALUE) + (this._ampmSp? 12 * this._ampmSp.get(VALUE):0)) % 24);
 			d.setMinutes(this._minSp.get(VALUE));

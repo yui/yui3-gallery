@@ -67,6 +67,7 @@
 				
 				var suite = new Y.Test.Suite("TestSuite Name");
 
+				
 				suite.add(new Y.Test.Case({
 					name: "tests now",
 					setUp : function () {
@@ -169,6 +170,7 @@
 						A.areEqual('PM',parts.item(3).get(VALUE), 'AMPM are not right');
 					}
 				}));
+			
 				suite.add(new Y.Test.Case({
 
 					name: "Right before noon, spinner running",
