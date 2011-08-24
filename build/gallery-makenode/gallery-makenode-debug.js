@@ -7,7 +7,7 @@ YUI.add('gallery-makenode', function(Y) {
  * All of its members are either protected or private.  
  * Developers using MakeNode should use only those marked protected.  
  * <b>Enable the Show Protected checkbox to see them</b>.
- * @module makenode
+ * @module gallery-makenode
  * @class MakeNode
  */
 	"use strict";
@@ -28,6 +28,7 @@ YUI.add('gallery-makenode', function(Y) {
 		MakeNode = function () {
 			this._makeClassNames();
 			this._concatUIAttrs();
+			this._publishEvents();
 			this.after('render', this._attachEvents, this);
 			this.after('destroy', this._detachEvents, this);
 		};
@@ -301,9 +302,9 @@ YUI.add('gallery-makenode', function(Y) {
 									eh.push(selector.after(type, self[handler.fn], self, handler.args));
 								} else {
 									if (type==='key') {
-										eh.push(Y.on(type, self[handler.fn], selector, handler.args, self));
+										eh.push(Y.after(type, self[handler.fn], selector, handler.args, self));
 									} else {
-										eh.push(Y.on(type, self[handler.fn], selector, self, handler.args));
+										eh.push(Y.after(type, self[handler.fn], selector, self, handler.args));
 									}
 								}
 							}
@@ -313,6 +314,28 @@ YUI.add('gallery-makenode', function(Y) {
 				}, this);
 			}, this);
 			this._eventHandles = eh;
+		},
+		
+		/**
+		 * Publishes the events listed in the _PUBLISH static property of each of the classes in the inheritance chain.
+		 * If an event has been publishes, the properties set in the descendants will override those in the original publisher.
+		 * @method _publishEvents
+		 * @private
+		 */
+		_publishEvents: function () {
+			var cs = this._getClasses(),
+				l = cs.length,
+				i,
+				publisher = function (options, name) {
+					var opts = {};
+					Y.each(options || {}, function (value, opt) {
+						opts[opt] =opt.substr(-2) === 'Fn'?this[value]:value;
+					},this);
+					this.publish(name,opts);
+				};
+			for (i = l -1;i >= 0;i--) {
+				Y.each (cs[i]._PUBLISH || {}, publisher, this);
+			}
 		},
 		/**
 		 * Detaches all the events created by <a href="method__attachEvents"><code>_attachEvents</code></a>
@@ -415,6 +438,20 @@ YUI.add('gallery-makenode', function(Y) {
 	 * or an object with properties <code>fn</code> with a string with the name of the instance method and an <code>args</code> property with extra
 	 * arguments for the listener, such as a key descriptor for <code>key</code> events
 	 * @property _EVENTS
+	 * @type Object
+	 * @static
+	 * @protected
+	 */
+	 
+	/**
+	 * <b>**</b> This is a documentation entry only.
+	 * This property is not defined in this file, it should be defined by the developer. <b>**</b><br/><br/>
+	 * Contains a hash of events to be published.  
+	 * Each element has the name of the event as its key
+	 * and the configuration object as its value.  
+	 * If the event has already been published, the configuration of the event will be modified by the
+	 * configuration set in the new definition.
+	 * @property _PUBLISH
 	 * @type Object
 	 * @static
 	 * @protected
