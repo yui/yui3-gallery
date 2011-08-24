@@ -502,6 +502,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          * 
          * @method _getNodeSize
          * @param {Node} node The node for which the size needs to be computed
+         * @private
          */
         _getNodeSize: function (node) {
             var sz = [],
