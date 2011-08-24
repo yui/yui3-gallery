@@ -2,6 +2,10 @@ YUI.add('gallery-treeble', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-treeble
+ */
+
 /**********************************************************************
  * <p>Hierarchical data source.</p>
  *
@@ -13,11 +17,10 @@ YUI.add('gallery-treeble', function(Y) {
  * <p>The tree must be immutable.  The total number of items available from
  * each DataSource must remain constant.</p>
  * 
- * @module gallery-treeble
  * @class TreebleDataSource
  * @extends DataSource.Local
  * @constructor
- * @param config {Object} Widget configuration
+ * @param config {Object}
  */
 
 function TreebleDataSource()
@@ -472,7 +475,7 @@ function getVisibleSlicesPgAll(
 			var info = getVisibleSlicesPgAll(skip, show, rootDS, node.children,
 											 path.concat(node.index),
 											 node, pre+n, send, slices);
-			if (info instanceof Array)
+			if (Y.Lang.isArray(info))
 			{
 				return info;
 			}
@@ -582,7 +585,7 @@ function findRequest(
 function treeSuccess(e, reqIndex)
 {
 	if (!e.response || e.error ||
-		!(e.response.results instanceof Array))
+		!Y.Lang.isArray(e.response.results))
 	{
 		treeFailure.apply(this, arguments);
 		return;
@@ -946,7 +949,8 @@ Y.TreebleDataSource = TreebleDataSource;
  * <code>dataType</code> and <code>liveData</code>, or it can be <q>free
  * form</q>, e.g., an array of records or an XHR URL.</p>
  *
- * @method Y.Parsers.treebledatasource
+ * @namespace Parsers
+ * @method treebledatasource
  * @param oData {mixed} Data to convert.
  * @return {DataSource} The new data source.
  * @static
@@ -1005,14 +1009,22 @@ Y.namespace("Parsers").treebledatasource = function(oData)
 	return ds;
 };
 /**********************************************************************
+ * Treeble displays a tree of data in a table.
+ *
  * @module gallery-treeble
+ */
+
+/**
+ * Utility functions for displaying tree data in a table.
+ *
+ * @namespace
  * @class Treeble
  */
 
 /**
  * <p>Formatter for open/close twistdown.</p>
  *
- * @method Y.Treeble.twistdownFormatter
+ * @method twistdownFormatter
  * @param sendRequest {Function} Function that reloads DataTable
  * @static
  */
@@ -1020,7 +1032,8 @@ Y.namespace("Treeble").buildTwistdownFormatter = function(sendRequest)
 {
 	return function(o)
 	{
-		o.td.addClass('treeble-nub');
+		var td = o.createCell();
+		td.addClass('treeble-nub');
 
 		var ds  = this.datasource.get('datasource');
 		var key = ds.get('root').treeble_config.childNodesKey;
@@ -1031,19 +1044,19 @@ Y.namespace("Treeble").buildTwistdownFormatter = function(sendRequest)
 			var open  = ds.isOpen(path);
 			var clazz = open ? 'row-open' : 'row-closed';
 
-			o.td.addClass('row-toggle');
-			o.td.replaceClass(/row-(open|closed)/, clazz);
+			td.addClass('row-toggle');
+			td.replaceClass(/row-(open|closed)/, clazz);
 
-			o.td.on('click', function()
+			td.on('click', function()
 			{
 				ds.toggle(path, {}, sendRequest);
 			});
 
-			o.td.set('innerHTML', '<a class="treeble-collapse-nub" href="javascript:void(0);"></a>');
+			td.set('innerHTML', '<a class="treeble-collapse-nub" href="javascript:void(0);"></a>');
 		}
 		else
 		{
-			o.td.set('innerHTML', '');
+			td.set('innerHTML', '');
 		}
 
 		return '';
@@ -1053,7 +1066,7 @@ Y.namespace("Treeble").buildTwistdownFormatter = function(sendRequest)
 /**
  * <p>Default formatter for indented column.</p>
  *
- * @method Y.Treeble.treeValueFormatter
+ * @method treeValueFormatter
  * @static
  */
 Y.namespace("Treeble").treeValueFormatter = function(o)
@@ -1063,4 +1076,4 @@ Y.namespace("Treeble").treeValueFormatter = function(o)
 };
 
 
-}, 'gallery-2011.06.01-20-18' ,{requires:['datasource'], skinnable:true});
+}, 'gallery-2011.08.24-23-44' ,{requires:['datasource','gallery-patch-340-datatable-formatter'], skinnable:true});

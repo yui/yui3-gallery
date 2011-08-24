@@ -11,7 +11,7 @@ Y.mix(Y.DataTable.Base.prototype, {
         var oldTbody = this._tbodyNode,
             parent = oldTbody.get("parentNode"),
             nextSibling = oldTbody.next(),
-            columns = this.get('columnset').keys,
+            columns = this.get('columnset').keys.slice(),
             cellValueTemplate = this.get('tdValueTemplate'),
             rowTemplate = this.get('trTemplate'),
             cellTemplate = this.tdTemplate,
@@ -40,7 +40,7 @@ Y.mix(Y.DataTable.Base.prototype, {
             columns[i] = {
                 column : column,
                 field  : column.get('field'),
-                classes: column.get('classnames'),
+                classnames: column.get('classnames'),
                 headers: column.headers
             };
 
@@ -108,7 +108,7 @@ Y.mix(Y.DataTable.Base.prototype, {
             data.column    = columnData.column;
             data.field     = columnData.field;
             data.formatter = columnData.formatter;
-            data.classes   = columnData.classes;
+            data.classnames= columnData.classnames;
             data.headers   = columnData.headers;
 
             this._addTbodyTdNode(data);
@@ -140,4 +140,4 @@ Y.mix(Y.DataTable.Base.prototype, {
 }, true);
 
 
-}, 'gallery-2011.08.03-21-18' ,{requires:['datatable-base']});
+}, 'gallery-2011.08.24-23-44' ,{requires:['datatable-base']});

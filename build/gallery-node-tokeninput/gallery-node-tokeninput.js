@@ -121,6 +121,8 @@ Y.extend(TokenInput, Y.Plugin.Base, {
                     text : token,
                     token: true
                 }));
+
+                this.fire('addToken', {token: token});
             }
         }, this);
 
@@ -164,12 +166,18 @@ Y.extend(TokenInput, Y.Plugin.Base, {
      * @chainable
      */
     remove: function (index) {
-        var tokens = this.get(TOKENS);
+        var tokens   = this.get(TOKENS).concat(),
+            oldToken = tokens[index];
 
         tokens.splice(index, 1);
 
         this._tokenNodes.item(index).remove(true);
         this._tokenNodes.refresh();
+
+        this.fire('removeToken', {
+            token     : oldToken,
+            tokenIndex: index
+        });
 
         return this.set(TOKENS, tokens, {atomic: true});
     },
@@ -193,7 +201,6 @@ Y.extend(TokenInput, Y.Plugin.Base, {
         this._events.concat([
             this._boundingBox.after({
                 blur : this._afterBlur,
-                click: this._afterFocus, // for FF4, which is buggy
                 focus: this._afterFocus
             }, null, this),
 
@@ -731,8 +738,12 @@ Y.extend(TokenInput, Y.Plugin.Base, {
      * @protected
      */
     _afterBlur: function (e) {
+        var that = this;
+
         if (this.get('tokenizeOnBlur')) {
-            this._tokenizeValue(null, null, {all: true});
+            setTimeout(function () {
+                that._tokenizeValue(null, null, {all: true});
+            }, 100);
         }
     },
 
@@ -1036,4 +1047,4 @@ Y.extend(TokenInput, Y.Plugin.Base, {
 Y.Plugin.TokenInput = TokenInput;
 
 
-}, 'gallery-2010.11.12-20-45' ,{requires:['array-extras', 'classnamemanager', 'event-focus', 'event-valuechange', 'node-event-delegate', 'node-pluginhost', 'node-style', 'plugin'], skinnable:true});
+}, 'gallery-2011.08.24-23-44' ,{requires:['array-extras', 'classnamemanager', 'event-focus', 'event-valuechange', 'node-event-delegate', 'node-pluginhost', 'node-style', 'plugin'], skinnable:true});
