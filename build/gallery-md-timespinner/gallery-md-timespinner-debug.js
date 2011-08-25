@@ -456,4 +456,4 @@ Y.TimeSpinner = Y.Base.create(
 
 
 
-}, '@VERSION@' ,{skinnable:false, requires:['gallery-md-spinner', 'gallery-makenode']});
+}, '@VERSION@' ,{requires:['gallery-md-spinner', 'gallery-makenode'], skinnable:false});

@@ -448,4 +448,5 @@ Y.Accordion = Y.Base.create(
 
 
 
-}, 'gallery-2011.08.24-23-44' ,{optional:['resize-plugin', 'transition'], skinnable:true, requires:['widget', 'widget-parent', 'widget-child', 'widget-stdmod', 'gallery-makenode']});
+
+}, '@VERSION@' ,{skinnable:true, requires:['widget', 'widget-parent', 'widget-child', 'widget-stdmod', 'gallery-makenode'], optional:['resize-plugin', 'transition']});
