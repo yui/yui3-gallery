@@ -1,0 +1,9 @@
+/*
+    In the standard DataTable CSS, the headings receive a padding to accomodate for the sort indicator arrow.
+    The cells do not receive this padding, causing a size mismatch when we use the Scroll plugin.
+    
+    This style will make the cells and headers have equal padding.
+*/
+.yui3-skin-sam .yui3-datatable-sortable .yui3-datatable-liner {
+    padding: 4px 20px 4px 10px;
+}

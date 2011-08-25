@@ -2,7 +2,7 @@ YUI.add('gallery-md-spinner', function(Y) {
 
 /**
 * Shows an input box with a set of up/down buttons to change its value.
-* @module spinner
+* @module gallery-md-spinner
 * @class Spinner
 * @constructor
 * @extends Widget
@@ -10,9 +10,7 @@ YUI.add('gallery-md-spinner', function(Y) {
 */
 "use strict";
 
-var SPINNER = 'Spinner',
-	Lang = Y.Lang,
-	Widget = Y.Widget,
+var Lang = Y.Lang,
 	CBX = 'contentBox',
 	VALUE = 'value',
 	CHANGE = 'Change',
@@ -28,9 +26,9 @@ var SPINNER = 'Spinner',
 	WRAPAROUND = 'wraparound',
 	WRAPPED = 'wrapped';
 	
-Y[SPINNER] = Y.Base.create(
-	SPINNER,
-	Widget,
+Y.Spinner = Y.Base.create(
+	'spinner',
+	Y.Widget,
 	[Y.MakeNode],
 	{
 	
@@ -458,5 +456,4 @@ Y[SPINNER] = Y.Base.create(
 );
 
 
-
-}, '@VERSION@' ,{skinnable:true, requires:['base-build', 'event-key', 'widget', 'node-focusmanager', 'gallery-makenode']});
+}, 'gallery-2011.08.24-23-44' ,{requires:['base-build', 'event-key', 'widget', 'node-focusmanager', 'gallery-makenode'], skinnable:true});

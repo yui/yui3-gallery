@@ -3,12 +3,14 @@
 /**
  * Optimizations for searching DOM tree.
  *
- * @module gallery-node-optimizations
- * @class Y.Node
+ * @module node
+ * @submodule gallery-node-optimizations
+ * @class Node~optimizations
  */
 
-var class_name_re = /^\.([-_a-z0-9]+)$/i;
-var tag_name_re   = /^[a-z]+$/i;
+var tag_class_name_re = /^([a-z]*)\.([-_a-z0-9]+)$/i;
+var class_name_re     = /^\.([-_a-z0-9]+)$/i;
+var tag_name_re       = /^[a-z]+$/i;
 
 /**********************************************************************
  * <p>Patch to speed up search for a single class name or single tag name.
@@ -126,11 +128,11 @@ Y.Node.prototype.all = function(
 {
 	if (Y.Lang.isString(selector))
 	{
-		var m = class_name_re.exec(selector);
+		var m = tag_class_name_re.exec(selector);
 		if (m && m.length)
 		{
-			Y.log('all() calling getElementsByClassName() with ' + m[1], 'info', 'Node');
-			return this.getElementsByClassName(m[1]);
+			Y.log('all() calling getElementsByClassName() with ' + m[2] + ',' + m[1], 'info', 'Node');
+			return this.getElementsByClassName(m[2], m[1]);
 		}
 
 		if (tag_name_re.test(selector))

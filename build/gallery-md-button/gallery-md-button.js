@@ -546,5 +546,4 @@ Y.ButtonToggle = Y.Base.create(
 
 
 
-
-}, '@VERSION@' ,{skinnable:true, requires:['base-build', 'widget', 'gallery-makenode']});
+}, 'gallery-2011.08.24-23-44' ,{requires:['base-build', 'widget', 'gallery-makenode'], skinnable:true});
