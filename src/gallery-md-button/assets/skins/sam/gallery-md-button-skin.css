@@ -8,15 +8,11 @@
 	color: #3a3a3a;
 	padding: 2px 4px;
 	margin: 3px;
-	cursor: pointer;
 	border-radius: 3px;
 	-ms-border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
 	text-decoration: none;
-	display: inline-block;
-	zoom: 1;
-	*display: inline;
 }
 .yui3-skin-sam .yui3-button-focused,
 .yui3-skin-sam .yui3-button-toggle-focused  {
@@ -33,22 +29,8 @@
 	text-shadow: 1px 1px #efefef;
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 	height: 16px;
-	cursor: pointer;
-	display: block;
 }
 
-.yui3-skin-sam .yui3-button-icon-none .yui3-button-icon,
-.yui3-skin-sam .yui3-button-icon-none  .yui3-button-icon,
-.yui3-skin-sam .yui3-button-toggle-icon-none .yui3-button-icon,
-.yui3-skin-sam .yui3-button-toggle-icon-none  .yui3-button-icon   {
-	display: none;
-}
-.yui3-skin-sam .yui3-button-iconright  .yui3-button-icon{
-	float: right;
-}
-.yui3-skin-sam .yui3-button-iconleft  .yui3-button-icon {
-	float: left;
-}
 
 
 .yui3-skin-sam .yui3-button-no-label .yui3-button-label,
@@ -73,12 +55,10 @@
 .yui3-skin-sam .yui3-button-toggle-disabled:hover,
 .yui3-skin-sam .yui3-button-toggle-disabled {
 	background-position: left 0px;
-	cursor: default;
 }
 .yui3-skin-sam .yui3-button-disabled,
 .yui3-skin-sam .yui3-button-toggle-disabled {
 	color: gray;
-	cursor: default;
 }
 
 .yui3-skin-sam .yui3-button-toggle-selected {
