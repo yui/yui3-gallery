@@ -49,11 +49,11 @@ Y.Spinner = Y.Base.create(
 		 * The method also sets up a timer, to support the user holding the mouse
 		 * down on the spinner buttons. The timer is cleared when a mouse up event
 		 * is detected.
-		 * @method _onMouseDown
+		 * @method _afterBoundingBoxMousedown
 		 * @param ev {EventFacade} Event facade produced by the event handler
 		 * @private
 		 */
-		_onMouseDown : function(ev) {
+		_afterBoundingBoxMousedown : function(ev) {
 			var node = ev.target,
 				dir,
 				handled = false,
@@ -89,10 +89,10 @@ Y.Spinner = Y.Base.create(
 		/**
 		 * Document mouse up handler. Clears the timers supporting
 		 * the "mouse held down" behavior.
-		 * @method _onDocMouseUp
+		 * @method _afterDocumentMouseup
 		 * @private
 		 */
-		_onDocMouseUp : function() {
+		_afterDocumentMouseup : function() {
 			this._clearMouseDownTimers();
 		},
 
@@ -132,10 +132,10 @@ Y.Spinner = Y.Base.create(
 		/**
 		 * Simple change handler, to make sure user does not input an invalid value.
 		 * If an error is detected, focus will return to the input box and the input box highlighted briefly.
-		 * @method _onInputChange
+		 * @method _afterInputChange
 		 * @private
 		 */
-		_onInputChange : function() {
+		_afterInputChange : function() {
 			var inputEl = this._inputNode,
 				value = this.get(PARSER)(inputEl.get(VALUE));
 				
@@ -304,19 +304,16 @@ Y.Spinner = Y.Base.create(
 		 * @protected
 		 */
 		_EVENTS: {
-			'.': {
-				key:{
+			boundingBox: [
+				{
+					type: 'key',
 					fn:'_onDirectionKey',
 					args:((!Y.UA.opera) ? "down:" : "press:") + "38, 40, 33, 34"
 				},
-				mousedown: '_onMouseDown'
-			},
-			'..': {
-				mouseup: '_onDocMouseUp'
-			},
-			input: {
-				change:'_onInputChange'
-			}
+				'mousedown'
+			],
+			document: 'mouseup',
+			input: 'change'
 		},
 		ATTRS: {
 			/**

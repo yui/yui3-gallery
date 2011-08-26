@@ -167,12 +167,12 @@ Y.AccordionPanel = Y.Base.create(
 		
 		/**
 		 * Responds to clicks in the header of this panel to toggle it
-		 * @method _onHeaderClick
+		 * @method _afterHEADERClick
 		 * @param ev {EventFacade} uses target to make sure it is the 
 		 * header of this accordion and not that of a nested one
 		 * @private
 		 */ 
-		_onHeaderClick: function (ev) {
+		_afterHEADERClick: function (ev) {
 			if (ev.target === this.getStdModNode(HEADER)) {
 				this.toggle();
 			}
@@ -226,13 +226,10 @@ Y.AccordionPanel = Y.Base.create(
 		 */
 		_EVENTS: {
 			// this HEADER is not a constant called HEADER but the string "HEADER"
-			HEADER: {
-				click: '_onHeaderClick'
-			},
-			// Sorry, can't use constants such as CLOSE here, it's a JavaScript thing.
-			// Same with the event type, can't use a constant CLICK even if I had one.
+			HEADER: 'click',
 			close: {
-				click: 'close'
+				type: 'click',
+				fn: 'close'
 			}
 		},
 		/**
@@ -315,11 +312,11 @@ Y.Accordion = Y.Base.create(
 		/**
 		 * Event listener for child expansion/collapse, ensures that only one is expanded
 		 * at a time if multiExpand is not set.
-		 * @method _afterChildExpanded
+		 * @method _afterTHISAccordionPanel:expandedChange
 		 * @param ev {EventFacade}
 		 * @private
 		 */
-		_afterChildExpanded: function (ev) {
+		'_afterTHISAccordionPanel:expandedChange': function (ev) {
 			var child = ev.target;
 			if (ev.newVal  && !this.get(MULTI_EXPAND)) {
 				this.each(function (panel) {
@@ -332,12 +329,12 @@ Y.Accordion = Y.Base.create(
 		/**
 		 * Listens to the <code>panelClose</code> and destroys the panel
 		 * and removes it from the collection of panels.
-		 * @method
+		 * @method _afterTHISAccordionPanel:panelClose
 		 * @param ev {EventFacade} uses ev.target to locate the panel requesting the close
 		 * @private
 		 */
 		
-		_afterPanelClose: function (ev) {
+		'_afterTHISAccordionPanel:panelClose': function (ev) {
 			var panel = ev.target;
 			if (this.indexOf(panel) >= 0) {
 				this.remove(panel);
@@ -389,10 +386,10 @@ Y.Accordion = Y.Base.create(
 		 * @protected
 		 */
 		_EVENTS: {
-			THIS: {
-				'AccordionPanel:expandedChange': '_afterChildExpanded',
-				'AccordionPanel:panelClose': '_afterPanelClose'
-			}
+			THIS: [
+				'accordionPanel:expandedChange',
+				'accordionPanel:panelClose'
+			]
 		},
 
 		ATTRS: {
