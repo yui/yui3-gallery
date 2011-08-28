@@ -100,6 +100,25 @@ Y.TimeSpinner = Y.Base.create(
 		_frozenTime: 0,
 		
 		/**
+		 * Helper factory to make a single Spinner
+		 * @method _spFact
+		 * @param which {String} ClassName key for the spinner and strings subkey for its title
+		 * @param cfg {object} (optional) configuration attribute overrides
+		 * @param where {Node} (optional) where to render it
+		 * @return {Spinner} Spinner instance
+		 * @private
+		 */
+		_spFact: function (which, cfg, where) {
+			var sp = new Spinner(Y.merge({
+				min: 0,
+				max: 59,
+				wraparound: true,
+				'strings.input': this.get('strings.' + which)
+			},cfg)).render(where);
+			sp.get(BBX).addClass(this._classNames[which]);
+			return sp;
+		},
+		/**
 		 * Renders the hours and minutes spinners. 
 		 * The other two, being optional, are rendered when set.
 		 * @method renderUI
@@ -109,20 +128,8 @@ Y.TimeSpinner = Y.Base.create(
 			Y.log('renderUI', 'info', 'TimeSpinner');
 			var cbx = this.get(CBX);
 				
-			this._hourSp = new Spinner({
-				min:0,
-				max: this.get(SHOW_AMPM)?11:23,
-				wraparound: true,
-				'strings.input': this.get('strings.hours')
-			}).render(cbx);
-			this._hourSp.get(BBX).addClass(this._classNames[HOURS]);
-			this._minSp = new Spinner({
-				min:0,
-				max: 59,
-				wraparound: true,
-				'strings.input': this.get('strings.minutes')
-			}).render(cbx);
-			this._minSp.get(BBX).addClass(this._classNames[MINUTES]);
+			this._hourSp = this._spFact(HOURS, this.get(SHOW_AMPM)?{min:1,max:12}:{max:23}, cbx);
+			this._minSp = this._spFact(MINUTES, null, cbx);
 		},
 		/**
 		 * Sets the listeners for events from the hours and minutes spinners.
@@ -160,15 +167,10 @@ Y.TimeSpinner = Y.Base.create(
 		_uiSetShowSeconds: function(value) {
 			Y.log('_uiSetShowSeconds, value: ' + value, 'info', 'TimeSpinner');
 			if (value) {
-				this._secSp = new Spinner({
-					min:0,
-					max: 59,
-					wraparound: true,
-				'strings.input': this.get('strings.seconds')
-				}).render();
+				this._secSp = this._spFact(SECONDS,{
+					value: this.get(VALUE).getSeconds()
+				});
 				this._minSp.get(BBX).insert(this._secSp.get(BBX), AFTER);
-				this._secSp.set(VALUE, this.get(VALUE).getSeconds());
-				this._secSp.get(BBX).addClass(this._classNames[SECONDS]);
 				this._secondsEventHandles = [
 					this._secSp.after(VALUE + CHANGE, this._afterValueChange, this),
 					this._secSp.after(WRAPPED, this._afterWrapped, this)
@@ -192,9 +194,8 @@ Y.TimeSpinner = Y.Base.create(
 		_uiSetShowAmPm: function (value) {
 			Y.log('_uiSetShowAmPm, value: ' + value, 'info', 'TimeSpinner');
 			if (value) {
-				this._ampmSp = new Spinner({
-					min:0,
-					max: 1,
+				this._ampmSp = this._spFact(AMPM, {
+					max:1,
 					formatter: function(value) {
 						return value?'PM':'AM';
 					},
@@ -207,18 +208,20 @@ Y.TimeSpinner = Y.Base.create(
 							default:
 								return false;
 						}
-					},
-					wraparound: true,
-				'strings.input': this.get('strings.ampm')
-				}).render();
+					}
+				});
 				(this._secSp?this._secSp.get(BBX):this._minSp.get(BBX)).insert(this._ampmSp.get(BBX), AFTER);
-				this._ampmSp.get(BBX).addClass(this._classNames[SHOW_AMPM]);
 				this._ampmEventHandle = this._ampmSp.after(VALUE + CHANGE, this._afterValueChange, this);
-				this._hourSp.set(MAX, 12);
-				this._hourSp.set(MIN, 1);
+				this._hourSp.setAttrs({
+					max: 12,
+					min: 1
+				});
 				this._uiSetValue(this.get(VALUE));
 			} else {
-				this._hourSp.set(MAX, 23);
+				this._hourSp.setAttrs({
+					max: 23,
+					min: 0
+				});
 				if (this._ampmSp) {
 					this._ampmEventHandle.detach();
 					this._ampmSp.destroy();
@@ -440,9 +443,9 @@ Y.TimeSpinner = Y.Base.create(
 			 */
 			strings: {
 				value: {
-					hours:'hours',
-					minutes:'minutes',
-					seconds: 'seconds',
+					hours:HOURS,
+					minutes:MINUTES,
+					seconds: SECONDS,
 					ampm: 'am/pm'
 				}
 			}
