@@ -230,7 +230,7 @@ YUI.add('gallery-makenode', function(Y) {
 				}
 			});
 			
-			cns.content = (cns[DOT] = YCM(this.constructor.NAME.toLowerCase())) + '-content';
+			cns.content = (cns.boundingBox = YCM(this.constructor.NAME.toLowerCase())) + '-content';
 			if (this.getStdModNode) {
 				cns.HEADER = 'yui3-widget-hd';
 				cns.BODY = 'yui3-widget-bd';
@@ -293,14 +293,20 @@ YUI.add('gallery-makenode', function(Y) {
 					Y.each(Y.Array(handlers), function (handler) {
 						if (Lang.isString(handler)) {
 							type = handler;
-							fn = self['_after' + toInitialCap(key) + toInitialCap(type)];
+							fn = '_after' + toInitialCap(key) + toInitialCap(type);
 							args = null;
 						} else if (Lang.isObject(handler)) {
 							type = handler.type;
-							fn = self[handler.fn];
+							fn = handler.fn;
 							args = handler.args;
 						} else {
 							Y.log('Wrong event handler for class: ' + c.NAME + ' key: ' + key,'error','MakeNode');
+						}
+						if (!self[fn]) {
+							Y.log('Listener method not found: ' + fn,'error','MakeNode');
+							return;
+						} else {
+							fn = self[fn];
 						}
 						if (type) {
 							if (Lang.isString(selector)) {
@@ -321,7 +327,7 @@ YUI.add('gallery-makenode', function(Y) {
 								}
 							}
 						} else {
-							Y.log('Wrong event type: ' + type, 'error', 'MakeNode');
+							Y.log('No type found in: ' + c.NAME + ', key: ' + key, 'error', 'MakeNode');
 						}
 					});
 				}, this);
