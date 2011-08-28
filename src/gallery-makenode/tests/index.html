@@ -1,0 +1,233 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Make Node Test</title>
+		<style>
+			td, th {
+				border: thin solid black;
+			}
+		</style>
+
+
+    </head>
+    <body class="yui3-skin-sam yui-skin-sam">
+
+		<div class="yui3-d0">					
+
+			<h1 id="hd">Make Node Test</h1>
+			<p>The following tables have been created out of a single template that contains an assortment of placeholders
+			to show the effects of each.  The columns show the placeholder, what it should produce and the actual value produced.
+			In normal use, these placeholders would produce HTML markup, not strings to be seen by the user, except for the {s} and {_}
+			placeholders.</p>
+			<p>There are two examples with different settings though both using the same template. The examples also show how easy it
+			can be to internationalize an application with these templates.  The first example shows the result without the Intl module loaded
+			while the second has Intl and the ES-es language module loaded.</p>
+			<h2>Example 1</h2>
+			<p>For this table I am using a class subclassed out of Widget and it does not have an 'input' class
+			so the row called 'Child ClassName' fails and the placeholder shows.</p>
+			<p>For this one I also don't have the Intl module loaded so the {s} placeholders come from the untraslated strings attribute</p>
+			<div id="bd1"></div>
+			<hr />
+			<h2>Example 2</h2>
+			<p>This is the same template using the child object which does have an 'input' class defined so it is filled in,
+			however, note that the className of the original element remains the same.</p>
+			<p>The Intl module has been loaded for this table so all strings are correctly filled in.</p>
+			<p>In both cases I have used the element references created from the classNames to locate and color the backgrounds</p>
+			<div id="bd2"></div>
+        
+		</div>        
+
+		<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+		
+
+		<script>
+			YUI({
+				// debug:true,
+				// useBrowserConsole:true,
+				// filter: 'debug',
+				groups: {
+					sp: {
+						base: '../../../build/',
+						modules: {
+							'gallery-makenode': {
+								path: 'gallery-makenode/gallery-makenode-debug.js',
+								requires:['substitute','classnamemanager']
+							}
+						}
+					}
+				}
+			}).use(
+				'node','substitute','base', 'widget', 'gallery-makenode',
+				function(Y) {
+					"use strict";
+					/*
+						The template has the following type of placeholders:
+						{@ attributeName} for attribute values
+						{p propertyName} instance property values
+						{m methodName arg1 arg2 ....} instance method followed by the method name and any number of arguments passed on as strings.  
+						                              the placeholder is replaced by the return value
+						{c className} CSS className generated from the NAME static property of the Base class 
+						              and the names from the CLASS_NAME static property  (see below)
+						{_ module key lang} Calls Y.Intl.get with the given arguments and uses its value.  The lang argument is optional.
+						{s key} string from the strings attribute, using key as the sub-attribute.  
+								This is handy for a single level of strings.  
+								If a deeper structure exists, then use {@ strings.key1.key2. ..} which allows any number of keys
+						{} any other value will be handled just like Y.substitute does, even if it matches a prefix as long
+						   as it doesn't have any extra placeholder arguments.
+						*/
+					var TEMPLATE = [
+						'<table>',
+						'<tr><th>Source of<br/>data<\/th><th>Placeholder</th><th>Should be<\/th><th>returns<\/th><\/tr>',
+						'<tr><th>Attribute<\/th><td>&#123;@ someAttr&#125;</td><td>42<\/td><td>{@ someAttr}<\/td><\/tr>',
+						'<tr><th>Property<\/th><td>&#123;p someProp&#125;</td><td>123<\/td><td>{p someProp}<\/td><\/tr>',
+						'<tr><th>Method<\/th><td>&#123;m someMethod 1 "two" "three"&#125;</td><td>[1] two (three)<\/td><td>{m someMethod 1 "two" "three"}<\/td><\/tr>',
+						'<tr><th>ClassName<\/th><td>&#123;c form&#125;</td><td>yui3-makenodetest-form<\/td><td class="{c form}">{c form}<\/td><\/tr>',
+						'<tr><th>Child ClassName<\/th><td>&#123;c input&#125;</td><td>yui3-childmakenodetest-input<\/td><td class="{c input}">{c input}<\/td><\/tr>',
+						'<tr><th>String<\/th><td>&#123;s someText2&#125;</td><td>algún texto 2<\/td><td>{s someText2}<\/td><\/tr>',
+						'<tr><th>Conditional, nested<\/th><td>&#123;? &#123;p truish&#125; "is true" "is false"&#125;</td><td>is true<\/td><td>{? {p truish} "is true" "is false"}<\/td><\/tr>',
+						'<tr><th>Conditional, nested<\/th><td>&#123;? &#123;p falsy&#125; "is true" "is false"&#125;</td><td>is false<\/td><td>{? {p falsy} "is true" "is false"}<\/td><\/tr>',
+						'<tr><th>Quantity, nested<\/th><td>&#123;1 &#123;p single&#125; "one" "many"&#125;</td><td>one<\/td><td>{1 {p single} "one" "many"}<\/td><\/tr>',
+						'<tr><th>Quantity, nested<\/th><td>&#123;1 &#123;p several&#125; "one" "many"&#125;</td><td>many<\/td><td>{1 {p several} "one" "many"}<\/td><\/tr>',
+						'<tr><th>extra object<\/th><td>&#123;whatever&#125;</td><td>whatever<\/td><td>{whatever}<\/td><\/tr>',
+						'<tr><th>extra object<br />matching prefix<\/th><td>&#123;p&#125;</td><td>works<\/td><td>{p}<\/td><\/tr>',
+						'<\/table>'
+					].join('\n');
+					
+					var SOME_ATTR = 'someAttr',
+						FORM = 'form',
+						INPUT = 'input';
+						
+						
+					var MakeNodeTest = Y.Base.create(
+						'MakeNodeTest',
+						Y.Widget,
+						// here I add the extension
+						[Y.MakeNode],
+						{
+							truish:456,
+							falsy:'',
+							single:1,
+							several:789,
+
+							someProp: 123,
+							someMethod: function (one, two, three) {
+								// make some random formatting to tell the arguments appart
+								return '[' + one + '] ' + two + ' (' + three + ')';
+							},
+							
+							// To render, simply call the makeNode method passing the template and, if need, 
+							// an object with extra properties
+							renderUI: function() {
+								this.get('contentBox').append(this._makeNode(TEMPLATE,{
+									whatever:'whatever',
+									p:'works'
+								}));
+								this._locateNodes();
+								for (var i = 0; i < 5;i++) {
+									this.qty = i;
+									console.log(i, this._substitute('{? {p qty} "{p qty} {1 {p qty} "unit" "units"}" "none"}'));
+								}
+							},
+							_uiSetSomeAttr: function () {
+							}
+						},
+						{
+							// This are the classnames to be used for this template.
+							// MakeNode will use ClassNameManager.getClassName to create CSS classNames
+							// and it will store them in the _classNames instance property.
+							// The items on this array can be used as the keys for the {c} placeholder key.
+							// This entry will make locateElements create the this._formEl property pointing to 
+							// whichever element got the class="{c form}" HTML attribute. 
+							// It will also set this._classNames loaded with  {form:'yui3-makenodetest-form'}
+							
+							_CLASS_NAMES: [FORM],
+							ATTRS: {
+								someAttr: {
+									value: '42'
+								},
+								// default UI strings 
+								strings: {
+									value: {
+										someText1: 'some text 1',
+										someText2: 'some text 2'
+									}
+								}
+							},
+							_ATTRS_2_UI: {
+								BIND: SOME_ATTR,
+								SYNC: SOME_ATTR
+							}
+						}
+					);
+					var ChildMakeNodeTest = Y.Base.create(
+						'ChildMakeNodeTest',
+						MakeNodeTest,
+						[],
+						{
+							renderUI: function () {
+								this.get('contentBox').append(this._makeNode(TEMPLATE,{
+									whatever:'whatever',
+									p:'works'
+								}));
+								// It will try to locate the elements which got the classNames
+								// and store references to them in instance properties prefixed with '_' 
+								// and suffixed with 'El'.  
+								// In this example, it will create a property called _inputEl.
+								this._locateNodes();
+							}
+						},
+						{
+							_CLASS_NAMES: [INPUT]
+						}
+					);
+					
+					var MakeNodeErrors = Y.Base.create(
+						'MakeNodeErrors',
+						Y.Widget,
+						// here I add the extension
+						[Y.MakeNode],
+						{
+						},
+						{
+							_EVENTS: {
+								boundingBox:'click'
+							}
+						}
+					);
+					var makeNodeErrors = new MakeNodeErrors().render();
+					
+					var makeNodeTest = new MakeNodeTest();
+					makeNodeTest.render('#bd1');
+					makeNodeTest._formNode.setStyle('backgroundColor','red');
+					
+					// For the second test I load the 'intl' module and create a few translated strings
+					Y.use('intl', function (Y) {
+						if (Y.Intl.add) {
+							Y.Intl.add('someModule','es_ES',{
+								someText1:'algún texto 1',
+								someText2:'algún texto 2'
+							});
+							Y.Intl.setLang('someModule','es_ES');
+						}
+
+						// see how the original strings are replaced by the translations
+						var childMakeNodeTest = new ChildMakeNodeTest({
+							strings: Y.Intl.get('someModule')
+						});
+						childMakeNodeTest.render('#bd2');
+						childMakeNodeTest._inputNode.setStyle('backgroundColor','green');
+						childMakeNodeTest._formNode.setStyle('backgroundColor','red');
+					});
+
+				}
+			);
+		
+		</script>
+        
+    </body>
+</html>
+
+
+

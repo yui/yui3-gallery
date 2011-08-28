@@ -289,9 +289,9 @@ YUI.add('gallery-makenode', function(Y) {
 				Y.each (c._EVENTS || {}, function (handlers, key) {
 					selector = equivalents[key] || DOT + this._classNames[key];
 					Y.each(Y.Array(handlers), function (handler) {
+						fn = null;
 						if (Lang.isString(handler)) {
 							type = handler;
-							fn = '_after' + toInitialCap(key) + toInitialCap(type);
 							args = null;
 						} else if (Lang.isObject(handler)) {
 							type = handler.type;
@@ -299,12 +299,12 @@ YUI.add('gallery-makenode', function(Y) {
 							args = handler.args;
 						} else {
 						}
-						if (!self[fn]) {
-							return;
-						} else {
-							fn = self[fn];
-						}
 						if (type) {
+							fn = fn || '_after' + toInitialCap(key) + toInitialCap(type);
+							if (!self[fn]) {
+							} else {
+								fn = self[fn];
+							}
 							if (Lang.isString(selector)) {
 								if (type==='key') {
 									eh.push(bbx.delegate(type, fn, args, selector, self));

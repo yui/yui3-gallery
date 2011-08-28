@@ -289,24 +289,24 @@
 				Y.each (c._EVENTS || {}, function (handlers, key) {
 					selector = equivalents[key] || DOT + this._classNames[key];
 					Y.each(Y.Array(handlers), function (handler) {
+						fn = null;
 						if (Lang.isString(handler)) {
 							type = handler;
-							fn = '_after' + toInitialCap(key) + toInitialCap(type);
 							args = null;
 						} else if (Lang.isObject(handler)) {
 							type = handler.type;
 							fn = handler.fn;
 							args = handler.args;
 						} else {
-							Y.log('Wrong event handler for class: ' + c.NAME + ' key: ' + key,'error','MakeNode');
-						}
-						if (!self[fn]) {
-							Y.log('Listener method not found: ' + fn,'error','MakeNode');
-							return;
-						} else {
-							fn = self[fn];
+							Y.log('Bad event handler for class: ' + c.NAME + ' key: ' + key,'error','MakeNode');
 						}
 						if (type) {
+							fn = fn || '_after' + toInitialCap(key) + toInitialCap(type);
+							if (!self[fn]) {
+								Y.log('Listener method not found: ' + fn,'error','MakeNode');
+							} else {
+								fn = self[fn];
+							}
 							if (Lang.isString(selector)) {
 								if (type==='key') {
 									eh.push(bbx.delegate(type, fn, args, selector, self));
