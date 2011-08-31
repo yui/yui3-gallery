@@ -705,4 +705,4 @@ ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 Y.ImageCropper = ImageCropper;
 
 
-}, 'gallery-2011.06.29-23-18' ,{skinnable:true, requires:['widget','resize','gallery-event-arrow']});
+}, 'gallery-2011.08.31-20-57' ,{skinnable:true, requires:['widget','resize','gallery-event-arrow','dd-constrain']});

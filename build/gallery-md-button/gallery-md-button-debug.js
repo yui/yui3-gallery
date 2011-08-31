@@ -81,19 +81,19 @@ Y.Button = Y.Base.create(
 		 * Removes the pressed class.  
 		 * MouseUp is listened to at the document body level since the cursor might have moved
 		 * away from the pressed button when released.
-		 * @method _onMouseUp
+		 * @method _afterDocumentMouseup
 		 * @private
 		 */
-		_onMouseUp: function () {
+		_afterDocumentMouseup: function () {
 			this.get(BBX).removeClass(this._classNames.pressed);
 		},
 
 		/**
 		 * Adds the pressed class to bounding box
-		 * @method _onMouseDown
+		 * @method _afterBoundingBoxMousedown
 		 * @private
 		 */
-		_onMouseDown: function () {
+		_afterBoundingBoxMousedown: function () {
 			if (!this.get(DISABLED)) {
 				this.get(BBX).addClass(this._classNames.pressed);
 			}
@@ -181,11 +181,11 @@ Y.Button = Y.Base.create(
 
 		/**
 		 * Default click event handler
-		 * @method _onClick
+		 * @method _afterBoundingBoxClick
 		 * @param ev {Event Facade}
 		 * @private
 		 */
-		_onClick: function (ev) {
+		_afterBoundingBoxClick: function (ev) {
 			var href = this.get(HREF);
 
 			if (this.get(DISABLED)) {
@@ -311,13 +311,8 @@ Y.Button = Y.Base.create(
 		 * @protected
 		 */
 		_EVENTS: {
-			'.': {
-				click: '_onClick',
-				mousedown: '_onMouseDown'
-			},
-			'..': {
-				mouseup: '_onMouseUp'
-			}
+			boundingBox: ['click','mousedown'],
+			document: 'mouseup'
 		}, 
 		_PUBLISH: {
 			press: {
@@ -546,4 +541,4 @@ Y.ButtonToggle = Y.Base.create(
 
 
 
-}, 'gallery-2011.08.24-23-44' ,{requires:['base-build', 'widget', 'gallery-makenode'], skinnable:true});
+}, 'gallery-2011.08.31-20-57' ,{skinnable:true, requires:['base-build', 'widget', 'gallery-makenode']});
