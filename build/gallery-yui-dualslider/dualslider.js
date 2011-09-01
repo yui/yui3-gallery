@@ -359,7 +359,20 @@ YUI.add('dualslider', function(Y) {
          */
         _resolveThumb: function (e) {
 			//Get distance from thumb
-			var distToThumb = e.clientX - this.thumb.getX() , distToThumb2 = e.clientX - this.thumb2.getX();
+			var mousePos, thumbPos, thumb2Pos;
+			switch (this.axis) {
+				case 'x':
+					mousePos = e.clientX;
+					thumbPos = this.thumb.getX();
+					thumb2Pos = this.thumb2.getX();
+					break;
+				case 'y':
+					mousePos = e.clientY;
+					thumbPos = this.thumb.getY();
+					thumb2Pos = this.thumb2.getY();						
+					break;
+			}
+			var distToThumb = mousePos - thumbPos , distToThumb2 = mousePos - thumb2Pos;
 			
 			//Change negative values to positive
 			if (distToThumb < 0)
