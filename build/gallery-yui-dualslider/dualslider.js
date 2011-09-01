@@ -21,9 +21,6 @@ YUI.add('dualslider', function(Y) {
 		renderUI : function () {
 			var contentBox = this.get( 'contentBox' );
 			
-			//Disable clickable rail
-			this.set('clickableRail', false)
-
 			/**
 			 * The Node instance of the Slider's rail element.  Do not write to
 			 * this property.
@@ -276,13 +273,110 @@ YUI.add('dualslider', function(Y) {
 
             var offset =  this._valueToOffset(this.get( VALUE2 ));
 			
+			this._uiMoveThumb2(offset);
+        },
+		/**
+		 * Moves the thumb2 to pixel offset position along the rail.
+		 *
+		 * @method _uiMoveThumb2
+		 * @param offset {Number} the pixel offset to set as left or top style
+		 * @protected
+		 */
+		_uiMoveThumb2: function ( offset ) {
 			if ( this.thumb2 ) {
 				this.thumb2.setStyle( this._key.minEdge, offset + 'px' );
 
 				this.fire( 'thumbMove', { offset: offset } );
 			}
+		},
+		/**
+         * Default behavior for the railMouseDown event.  Centers the thumb at
+         * the click location and passes control to the DDM to behave as though
+         * the thumb itself were clicked in preparation for a drag operation.
+         *
+         * @method _defRailMouseDownFn
+         * @param e {Event} the EventFacade for the railMouseDown custom event
+         * @protected
+         */
+        _defRailMouseDownFn: function (e) {
+            e = e.ev;
+
+            // Logic that determines which thumb should be used is abstracted
+            // to someday support multi-thumb sliders
+            var dd     = this._resolveThumb(e),
+                i      = this._key.xyIndex,
+                length = parseFloat(this.get('length'), 10),
+                thumb,
+                thumbSize,
+                xy;
+                
+            if (dd) {
+                thumb = dd.get('dragNode');
+                thumbSize = parseFloat(thumb.getStyle(this._key.dim), 10);
+
+                // Step 1. Allow for aligning to thumb center or edge, etc
+                xy = this._getThumbDestination(e, thumb);
+
+                // Step 2. Remove page offsets to give just top/left style val
+                xy = xy[ i ] - this.rail.getXY()[i];
+
+                // Step 3. Constrain within the rail in case of attempt to
+                // center the thumb when clicking on the end of the rail
+                xy = Math.min(
+                        Math.max(xy, 0),
+                        (length - thumbSize));
+
+				var newTarget;
+				if (this._dd == dd) {
+					this._uiMoveThumb(xy);
+					newTarget = this.thumb.one('img') || this.thumb;
+				}
+				else {
+					this._uiMoveThumb2(xy);
+					newTarget = this.thumb2.one('img') || this.thumb2;
+				}					
+
+                // Set e.target for DD's IE9 patch which calls
+                // e.target._node.setCapture() to allow imgs to be dragged.
+                // Without this, setCapture is called from the rail and rail
+                // clicks on other Sliders may have their thumb movements
+                // overridden by a different Slider (the thumb on the wrong
+                // Slider moves).
+                e.target = newTarget;
+
+                // Delegate to DD's natural behavior
+                dd._handleMouseDownEvent(e);
+
+                // TODO: this won't trigger a slideEnd if the rail is clicked
+                // check if dd._move(e); dd._dragThreshMet = true; dd.start();
+                // will do the trick.  Is that even a good idea?
+            }
+        },
+		/**
+         * Resolves which thumb to actuate if any.  Override this if you want to
+         * support multiple thumbs.  By default, returns the Drag instance for
+         * the thumb stored by the Slider.
+         *
+         * @method _resolveThumb
+         * @param e {DOMEvent} the mousedown event object
+         * @return {Y.DD.Drag} the Drag instance that should be moved
+         * @protected
+         */
+        _resolveThumb: function (e) {
+			//Get distance from thumb
+			var distToThumb = e.clientX - this.thumb.getX() , distToThumb2 = e.clientX - this.thumb2.getX();
+			
+			//Change negative values to positive
+			if (distToThumb < 0)
+				distToThumb *= -1;
+			if (distToThumb2 < 0)
+				distToThumb2 *= -1;
+				
+			if (distToThumb < distToThumb2)
+				return this._dd;
+			else
+				return this._dd2;
         }
-		
 	}, {
 
     // Y.SliderBase static properties
