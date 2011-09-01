@@ -136,11 +136,7 @@ YUI.add('dualslider', function(Y) {
 				if (e.newVal < this.getValue())
 					this.set( THUMBSFLIPPED, true);				
 			
-				if ( this.thumb2 ) {
-					this.thumb2.setStyle( this._key.minEdge, offset + 'px' );
-
-					this.fire( 'thumbMove', { offset: offset } );
-				}
+				this._uiMoveThumb2(offset);
             }
         },
 		
