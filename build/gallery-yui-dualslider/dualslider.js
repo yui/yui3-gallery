@@ -8,10 +8,7 @@ YUI.add('dualslider', function(Y) {
 	}
 	
 	Y.DualSlider = Y.extend(DualSlider, Y.Slider, {		
-		
-		renderThumb2: function () {
-			return this.renderThumb();
-		},
+				
 		/**
 		 * Create the DOM structure for the Slider.
 		 *
@@ -43,7 +40,7 @@ YUI.add('dualslider', function(Y) {
 
 			this.rail.appendChild( this.thumb );
 			
-			this.thumb2 = this.renderThumb2();
+			this.thumb2 = this.renderThumb();
 
 			this.rail.appendChild( this.thumb2 );	
 			
@@ -151,23 +148,25 @@ YUI.add('dualslider', function(Y) {
         _defThumbMoveFn: function ( e ) {
 			
 			var previous, value;
-			var thumbPos, thumb2Pos;
+			var railPos, thumbPos, thumb2Pos;
 			var flipped = this.get( THUMBSFLIPPED );
 			var imagePadding = -1;
-			var thumbWidth = this.thumb.getStyle('width').replace('px', '') - 1, thumb2Width = this.thumb2.getStyle('width').replace('px', '') - 1;
+			var thumbWidth = this.thumb.getStyle('width').replace('px', '') - 1, thumb2Width = this.thumb2.getStyle('width').replace('px', '') - 1;			
 			
 			switch (this.axis) {
-				case 'x':						
+				case 'x':
+					railPos = this.rail.getX();
 					thumbPos = this.thumb.getX();
 					thumb2Pos = this.thumb2.getX();
 					break;
 				case 'y':
+					railPos = this.rail.getY();
 					thumbPos = this.thumb.getY();
 					thumb2Pos = this.thumb2.getY();						
 					break;
-			}	
-			
-			if (e.ddEvent && e.ddEvent.currentTarget == e.target._dd) {
+			}
+									
+			if (railPos + e.offset == thumbPos) {
 				previous = this.getValue();
 				value    = this._offsetToValue( e.offset );
 								
@@ -176,7 +175,7 @@ YUI.add('dualslider', function(Y) {
 				else if (flipped && thumbPos < thumb2Pos + thumbWidth)
 						imagePadding = thumbWidth;
 				
-				if (imagePadding != -1) {							
+				if (e.ddEvent && imagePadding != -1) {							
 					switch (this.axis) {
 						case 'x':						
 							this.thumb.setX(thumb2Pos + imagePadding);
@@ -190,7 +189,7 @@ YUI.add('dualslider', function(Y) {
 				else if ( previous !== value && value != this.getValue2() )
 					this.set( VALUE, value, { positioned: true } );							
 			}
-			else if (e.ddEvent && e.ddEvent.currentTarget == e.target._dd2) {
+			else if (railPos + e.offset == thumb2Pos) {
 				previous = this.getValue2();
 				value    = this._offsetToValue( e.offset );
 				
@@ -199,7 +198,7 @@ YUI.add('dualslider', function(Y) {
 				else if (flipped && thumbPos < thumb2Pos + thumb2Width)
 					imagePadding = -thumb2Width;
 				
-				if (imagePadding != -1) {							
+				if (e.ddEvent && imagePadding != -1) {							
 					switch (this.axis) {
 						case 'x':						
 							this.thumb2.setX(thumbPos + imagePadding);
