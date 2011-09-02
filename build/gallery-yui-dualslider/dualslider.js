@@ -146,71 +146,86 @@ YUI.add('dualslider', function(Y) {
          * @protected
          */
         _defThumbMoveFn: function ( e ) {
-			
-			var previous, value;
+						
+			var previous, value;			
 			var railPos, thumbPos, thumb2Pos;
 			var flipped = this.get( THUMBSFLIPPED );
 			var imagePadding = -1;
-			var thumbWidth = this.thumb.getStyle('width').replace('px', '') - 1, thumb2Width = this.thumb2.getStyle('width').replace('px', '') - 1;			
-			
+			var thumbSize;
+			var offsetInsideThumb = false, offsetInsideThumb2 = false;
+				
+			//Get sizes and positions depending on selected axis
 			switch (this.axis) {
-				case 'x':
+				case 'x':					
 					railPos = this.rail.getX();
 					thumbPos = this.thumb.getX();
 					thumb2Pos = this.thumb2.getX();
+					thumbSize = parseInt(this.thumb.getStyle('width'));					
 					break;
 				case 'y':
 					railPos = this.rail.getY();
 					thumbPos = this.thumb.getY();
-					thumb2Pos = this.thumb2.getY();						
+					thumb2Pos = this.thumb2.getY();
+					thumbSize = parseInt(this.thumb.getStyle('height'));								
 					break;
 			}
+			//Determine what thumb was being modified.  Or if they are starting to overlap
+			if (railPos + e.offset >= thumbPos - thumbSize && railPos + e.offset < thumbPos + thumbSize)
+				offsetInsideThumb = true;
+			if (railPos + e.offset >= thumb2Pos - thumbSize && railPos + e.offset < thumb2Pos + thumbSize)
+				offsetInsideThumb2 = true;
+			
+			//Check overlap an prepare padding to reset the thumbs position
+			if (!flipped && thumbPos > thumb2Pos - thumbSize) 
+					imagePadding = -thumbSize;														
+			else if (flipped && thumbPos < thumb2Pos + thumbSize)
+					imagePadding = thumbSize;
 									
-			if (railPos + e.offset == thumbPos) {
+			if (imagePadding == -1 && offsetInsideThumb && !offsetInsideThumb2) {
 				previous = this.getValue();
 				value    = this._offsetToValue( e.offset );
-								
-				if (!flipped && thumbPos > thumb2Pos - thumbWidth) 
-						imagePadding = -thumbWidth;														
-				else if (flipped && thumbPos < thumb2Pos + thumbWidth)
-						imagePadding = thumbWidth;
 				
-				if (e.ddEvent && imagePadding != -1) {							
-					switch (this.axis) {
-						case 'x':						
-							this.thumb.setX(thumb2Pos + imagePadding);
-							break;
-						case 'y':
-							this.thumb.setY(thumb2Pos + imagePadding);					
-							break;
-					}								
-					e.halt();
-				}		
-				else if ( previous !== value && value != this.getValue2() )
-					this.set( VALUE, value, { positioned: true } );							
+				if ( previous !== value && value != this.getValue2() )
+					this.set( VALUE, value, { positioned: true } );		
 			}
-			else if (railPos + e.offset == thumb2Pos) {
+			else if (imagePadding == -1 && offsetInsideThumb2 && !offsetInsideThumb){
 				previous = this.getValue2();
 				value    = this._offsetToValue( e.offset );
 				
-				if (!flipped && thumbPos > thumb2Pos - thumb2Width)
-					imagePadding = thumb2Width;
-				else if (flipped && thumbPos < thumb2Pos + thumb2Width)
-					imagePadding = -thumb2Width;
-				
-				if (e.ddEvent && imagePadding != -1) {							
-					switch (this.axis) {
-						case 'x':						
-							this.thumb2.setX(thumbPos + imagePadding);
-							break;
-						case 'y':
-							this.thumb2.setY(thumbPos + imagePadding);				
-							break;
-					}														
-					e.halt();
-				}				
-				else if ( previous !== value && value != this.getValue() )				
-					this.set( VALUE2, value, { positioned: true } );								
+				if (previous !== value && value != this.getValue())
+					this.set( VALUE2, value, { positioned: true } );	
+			}
+			else if (e.ddEvent) {			
+				switch (e.ddEvent.target) {
+					case this._dd:						
+						if (imagePadding != -1) {							
+							switch (this.axis) {
+								case 'x':						
+									this.thumb.setX(thumb2Pos + imagePadding);
+									break;
+								case 'y':
+									this.thumb.setY(thumb2Pos + imagePadding);					
+									break;
+							}								
+							e.halt();
+						}		
+						break;
+					case this._dd2:
+						if (imagePadding != -1) {
+							//Padding logic is reversed for the second thumb
+							imagePadding *= -1
+							switch (this.axis) {
+								case 'x':						
+									this.thumb2.setX(thumbPos + imagePadding);
+									break;
+								case 'y':
+									this.thumb2.setY(thumbPos + imagePadding);				
+									break;
+							}														
+							e.halt();
+						}
+						break;
+				}
 			}
         },		
 		
