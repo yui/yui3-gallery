@@ -11,13 +11,15 @@
 	"use strict";
 	(function () {
 		// See: http://yuilibrary.com/projects/yui3/ticket/2531032
-		var L = Y.Lang, DUMP = 'dump', SPACE = ' ', LBRACE = '{', RBRACE = '}';
+		var L = Y.Lang, DUMP = 'dump', SPACE = ' ', LBRACE = '{', RBRACE = '}',
+		savedRegExp =  /(~-(\d+)-~)/g;
 		
 		Y.substitute = function(s, o, f, recurse) {
 			var i, j, k, key, v, meta, saved = [], token, dump,
 				lidx = s.length;
-			o = Y.merge({LBRACE:'{',RBRACE:'}'},o);
-			for (;;) {
+
+				o = Y.merge({LBRACE:LBRACE,RBRACE:RBRACE},o);
+				for (;;) {
 				i = s.lastIndexOf(LBRACE, lidx);
 				if (i < 0) {
 					break;
@@ -70,10 +72,10 @@
 							}
 						}
 					}
-				} else if (L.isUndefined(v)) {
+					} else if (L.isUndefined(v)) {
 					// This {block} has no replace string. Save it for later.
 					v = '~-' + saved.length + '-~';
-					saved[saved.length] = token;
+					saved.push(token);
 
 					// break;
 				}
@@ -87,8 +89,8 @@
 			}
 
 			// restore saved {block}s
-			s = s.replace(/(~-(\d+)-~)/g, function () {
-				return saved[parseInt(arguments[2],10)];
+			s = s.replace(savedRegExp, function (str, p1, p2) {
+				return LBRACE + saved[parseInt(p2,10)] + RBRACE;
 			});
 
 			return s;
@@ -101,6 +103,9 @@
 		BBX = 'boundingBox',
 		Lang = Y.Lang,
 		DUPLICATE = ' for "{name}" defined in class {recentDef} also defined in class {prevDef}',
+		parsingRegExp = /^(?:([ \t]+)|("[^"\\]*(?:\\.[^"\\]*)*")|(true)|(false)|(null)|([\-+]?[0-9]*(?:\.[0-9]+)?))/, 
+		quotesRegExp = /\\"/g,
+				
 		/** 
 		 * Creates CSS classNames from suffixes listed in <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a>, 
 		 * stores them in <a href="#property__classNames"><code>this._classNames</code></a>.
@@ -177,9 +182,7 @@
 		 * @private
 		 */
 		_parseMakeNodeArgs: function (arg) {
-			var regexp = /^(?:([ \t]+)|("[^"\\]*(?:\\.[^"\\]*)*")|(true)|(false)|(null)|([\-+]?[0-9]*(?:\.[0-9]+)?))/, 
-				quotesRegExp = /\\"/g,
-				args = [],
+			var args = [],
 				matcher = function (match, i) {
 					if (match !== undefined && i) {
 						switch (i) {
@@ -215,7 +218,7 @@
 				};
 			while (arg.length) {
 				
-				Y.some(regexp.exec(arg), matcher);
+				Y.some(parsingRegExp.exec(arg), matcher);
 			}
 			return args;
 		},
