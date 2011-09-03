@@ -453,5 +453,4 @@ Y.Spinner = Y.Base.create(
 );
 
 
-
-}, '@VERSION@' ,{requires:['base-build', 'event-key', 'widget', 'node-focusmanager', 'gallery-makenode'], skinnable:true});
+}, 'gallery-2011.08.31-20-57' ,{skinnable:true, requires:['base-build', 'event-key', 'widget', 'node-focusmanager', 'gallery-makenode']});

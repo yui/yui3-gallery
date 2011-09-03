@@ -1,86 +1,18 @@
 YUI.add('gallery-checkboxgroups', function(Y) {
 
-var Y_NodeList = Y.NodeList,
-    ArrayProto = Array.prototype,
-    ArrayMethods = [
-        /** Returns a new NodeList combining the given NodeList(s) 
-          * @for NodeList
-          * @method concat
-          * @param {NodeList | Array} valueN Arrays/NodeLists and/or values to
-          * concatenate to the resulting NodeList
-          * @return {NodeList} A new NodeList comprised of this NodeList joined with the input.
-          */
-        'concat',
-        /** Removes the first last from the NodeList and returns it.
-          * @for NodeList
-          * @method pop
-          * @return {Node} The last item in the NodeList.
-          */
-        'pop',
-        /** Adds the given Node(s) to the end of the NodeList. 
-          * @for NodeList
-          * @method push
-          * @param {Node | DOMNode} nodeN One or more nodes to add to the end of the NodeList. 
-          */
-        'push',
-        /** Removes the first item from the NodeList and returns it.
-          * @for NodeList
-          * @method shift
-          * @return {Node} The first item in the NodeList.
-          */
-        'shift',
-        /** Returns a new NodeList comprising the Nodes in the given range. 
-          * @for NodeList
-          * @method slice
-          * @param {Number} begin Zero-based index at which to begin extraction.
-          As a negative index, start indicates an offset from the end of the sequence. slice(-2) extracts the second-to-last element and the last element in the sequence.
-          * @param {Number} end Zero-based index at which to end extraction. slice extracts up to but not including end.
-          slice(1,4) extracts the second element through the fourth element (elements indexed 1, 2, and 3).
-          As a negative index, end indicates an offset from the end of the sequence. slice(2,-1) extracts the third element through the second-to-last element in the sequence.
-          If end is omitted, slice extracts to the end of the sequence.
-          * @return {NodeList} A new NodeList comprised of this NodeList joined with the input.
-          */
-        'slice',
-        /** Changes the content of the NodeList, adding new elements while removing old elements.
-          * @for NodeList
-          * @method splice
-          * @param {Number} index Index at which to start changing the array. If negative, will begin that many elements from the end.
-          * @param {Number} howMany An integer indicating the number of old array elements to remove. If howMany is 0, no elements are removed. In this case, you should specify at least one new element. If no howMany parameter is specified (second syntax above, which is a SpiderMonkey extension), all elements after index are removed.
-          * {Node | DOMNode| element1, ..., elementN 
-          The elements to add to the array. If you don't specify any elements, splice simply removes elements from the array.
-          * @return {NodeList} The element(s) removed.
-          */
-        'splice',
-        /** Adds the given Node(s) to the beginning of the NodeList. 
-          * @for NodeList
-          * @method push
-          * @param {Node | DOMNode} nodeN One or more nodes to add to the NodeList. 
-          */
-        'unshift'
-    ];
-
-
-Y.Array.each(ArrayMethods, function(name) {
-    Y_NodeList.prototype[name] = function() {
-        var args = [],
-            i,
-            arg;
-
-        for (i=0; i<arguments.length; i++) { // use DOM nodes/nodeLists 
-            arg = arguments[i];
-            args.push(arg._node || arg._nodes || arg);
-        }
-        return Y.Node.scrubVal(ArrayProto[name].apply(this._nodes, args));
-    };
-});
 "use strict";
 
 /**********************************************************************
+ * Various behaviors that can be attached to a group of checkboxes.
+ *
+ * @module gallery-checkboxgroups
+ */
+
+/**
  * <p>Base class for enforcing constraints on groups of checkboxes.</p>
  *
  * <p>Derived classes must override <code>enforceConstraints()</code>.</p>
  * 
- * @module gallery-checkboxgroups
  * @class CheckboxGroup
  * @constructor
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
@@ -250,8 +182,8 @@ Y.CheckboxGroup = CheckboxGroup;
  * in "Tog on Interface".  The checkboxes are assumed to be ordered in the
  * order they were added.
  * 
- * @module gallery-checkboxgroups
  * @class AtLeastOneCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
@@ -337,8 +269,8 @@ Y.AtLeastOneCheckboxGroup = AtLeastOneCheckboxGroup;
  * At most one checkbox can be selected.  If one is turned on, the active
  * one is turned off.
  * 
- * @module gallery-checkboxgroups
  * @class AtMostOneCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
@@ -377,8 +309,8 @@ Y.AtMostOneCheckboxGroup = AtMostOneCheckboxGroup;
  * to check all. This check-all box is automatically changed if any other
  * checkbox changes state.
  * 
- * @module gallery-checkboxgroups
  * @class SelectAllCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param select_all_cb {String|Object} The checkbox that triggers "select all"
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
@@ -427,8 +359,8 @@ Y.SelectAllCheckboxGroup = SelectAllCheckboxGroup;
 /**********************************************************************
  * Enables the given list of nodes if any checkboxes are checked.
  * 
- * @module gallery-checkboxgroups
  * @class EnableIfAnyCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  * @param nodes {String|NodeList} The nodes to enable/disable
@@ -460,4 +392,4 @@ Y.extend(EnableIfAnyCheckboxGroup, CheckboxGroup,
 Y.EnableIfAnyCheckboxGroup = EnableIfAnyCheckboxGroup;
 
 
-}, 'gallery-2011.06.01-20-18' ,{requires:['node-base']});
+}, 'gallery-2011.08.31-20-57' ,{requires:['node-base']});

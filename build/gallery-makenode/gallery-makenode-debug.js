@@ -11,93 +11,7 @@ YUI.add('gallery-makenode', function(Y) {
  * @class MakeNode
  */
 	"use strict";
-	(function () {
-		// See: http://yuilibrary.com/projects/yui3/ticket/2531032
-		var L = Y.Lang, DUMP = 'dump', SPACE = ' ', LBRACE = '{', RBRACE = '}';
-		
-		Y.substitute = function(s, o, f, recurse) {
-			var i, j, k, key, v, meta, saved = [], token, dump,
-				lidx = s.length;
-
-			for (;;) {
-				i = s.lastIndexOf(LBRACE, lidx);
-				if (i < 0) {
-					break;
-				}
-				j = s.indexOf(RBRACE, i);
-				if (i + 1 >= j) {
-					break;
-				}
-
-				//Extract key and meta info
-				token = s.substring(i + 1, j);
-				key = token;
-				meta = null;
-				k = key.indexOf(SPACE);
-				if (k > -1) {
-					meta = key.substring(k + 1);
-					key = key.substring(0, k);
-				}
-
-				// lookup the value
-				v = o[key];
-
-				// if a substitution function was provided, execute it
-				if (f) {
-					v = f(key, v, meta);
-				}
-
-				if (L.isObject(v)) {
-					if (!Y.dump) {
-						v = v.toString();
-					} else {
-						if (L.isArray(v)) {
-							v = Y.dump(v, parseInt(meta, 10));
-						} else {
-							meta = meta || '';
-
-							// look for the keyword 'dump', if found force obj dump
-							dump = meta.indexOf(DUMP);
-							if (dump > -1) {
-								meta = meta.substring(4);
-							}
-
-							// use the toString if it is not the Object toString
-							// and the 'dump' meta info was not found
-							if (v.toString === Object.prototype.toString ||
-								dump > -1) {
-								v = Y.dump(v, parseInt(meta, 10));
-							} else {
-								v = v.toString();
-							}
-						}
-					}
-				} else if (L.isUndefined(v)) {
-					// This {block} has no replace string. Save it for later.
-					v = '~-' + saved.length + '-~';
-					saved[saved.length] = token;
-
-					// break;
-				}
-
-				s = s.substring(0, i) + v + s.substring(j + 1);
-
-				if (!recurse) {
-					lidx = i - 1;
-				}
-
-			}
-
-			// restore saved {block}s
-			for (i = saved.length - 1; i >= 0; i = i - 1) {
-				s = s.replace(new RegExp('~-' + i + '-~'), LBRACE +
-					saved[i] + RBRACE, 'g');
-			}
-
-			return s;
-
-		};
-	})();	
+	
 	var WS = /\s+/,
 		NODE = 'Node',
 		DOT = '.',
@@ -181,7 +95,6 @@ YUI.add('gallery-makenode', function(Y) {
 		 */
 		_parseMakeNodeArgs: function (arg) {
 			var regexp = /^(?:([ \t]+)|("[^"\\]*(?:\\.[^"\\]*)*")|(true)|(false)|(null)|([\-+]?[0-9]*(?:\.[0-9]+)?))/, 
-				quotesRegExp = /\\"/g,
 				args = [],
 				matcher = function (match, i) {
 					if (match !== undefined && i) {
@@ -189,7 +102,7 @@ YUI.add('gallery-makenode', function(Y) {
 							case 1:
 								break;
 							case 2:
-								args.push(match.substr(1, match.length - 2).replace(quotesRegExp,'"'));
+								args.push(match.substr(1, match.length - 2).replace('\\"','"'));
 								break;
 							case 3:
 								args.push(true);
@@ -590,5 +503,4 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
-
-}, '@VERSION@' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+}, 'gallery-2011.08.31-20-57' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
