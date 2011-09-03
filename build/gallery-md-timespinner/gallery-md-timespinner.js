@@ -443,4 +443,5 @@ Y.TimeSpinner = Y.Base.create(
 );
 
 
-}, 'gallery-2011.08.31-20-57' ,{requires:['gallery-md-spinner', 'gallery-makenode'], skinnable:false});
+
+}, '@VERSION@' ,{requires:['gallery-md-spinner', 'gallery-makenode'], skinnable:false});

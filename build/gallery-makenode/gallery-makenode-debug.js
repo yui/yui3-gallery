@@ -11,13 +11,103 @@ YUI.add('gallery-makenode', function(Y) {
  * @class MakeNode
  */
 	"use strict";
-	
+	(function () {
+		// See: http://yuilibrary.com/projects/yui3/ticket/2531032
+		var L = Y.Lang, DUMP = 'dump', SPACE = ' ', LBRACE = '{', RBRACE = '}',
+		savedRegExp =  /(~-(\d+)-~)/g;
+		
+		Y.substitute = function(s, o, f, recurse) {
+			var i, j, k, key, v, meta, saved = [], token, dump,
+				lidx = s.length;
+
+				o = Y.merge({LBRACE:LBRACE,RBRACE:RBRACE},o);
+				for (;;) {
+				i = s.lastIndexOf(LBRACE, lidx);
+				if (i < 0) {
+					break;
+				}
+				j = s.indexOf(RBRACE, i);
+				if (i + 1 >= j) {
+					break;
+				}
+
+				//Extract key and meta info
+				token = s.substring(i + 1, j);
+				key = token;
+				meta = null;
+				k = key.indexOf(SPACE);
+				if (k > -1) {
+					meta = key.substring(k + 1);
+					key = key.substring(0, k);
+				}
+
+				// lookup the value
+				v = o[key];
+
+				// if a substitution function was provided, execute it
+				if (f) {
+					v = f(key, v, meta);
+				}
+
+				if (L.isObject(v)) {
+					if (!Y.dump) {
+						v = v.toString();
+					} else {
+						if (L.isArray(v)) {
+							v = Y.dump(v, parseInt(meta, 10));
+						} else {
+							meta = meta || '';
+
+							// look for the keyword 'dump', if found force obj dump
+							dump = meta.indexOf(DUMP);
+							if (dump > -1) {
+								meta = meta.substring(4);
+							}
+
+							// use the toString if it is not the Object toString
+							// and the 'dump' meta info was not found
+							if (v.toString === Object.prototype.toString ||
+								dump > -1) {
+								v = Y.dump(v, parseInt(meta, 10));
+							} else {
+								v = v.toString();
+							}
+						}
+					}
+					} else if (L.isUndefined(v)) {
+					// This {block} has no replace string. Save it for later.
+					v = '~-' + saved.length + '-~';
+					saved.push(token);
+
+					// break;
+				}
+
+				s = s.substring(0, i) + v + s.substring(j + 1);
+
+				if (!recurse) {
+					lidx = i - 1;
+				}
+
+			}
+
+			// restore saved {block}s
+			s = s.replace(savedRegExp, function (str, p1, p2) {
+				return LBRACE + saved[parseInt(p2,10)] + RBRACE;
+			});
+
+			return s;
+
+		};
+	})();	
 	var WS = /\s+/,
 		NODE = 'Node',
 		DOT = '.',
 		BBX = 'boundingBox',
 		Lang = Y.Lang,
 		DUPLICATE = ' for "{name}" defined in class {recentDef} also defined in class {prevDef}',
+		parsingRegExp = /^(?:([ \t]+)|("[^"\\]*(?:\\.[^"\\]*)*")|(true)|(false)|(null)|([\-+]?[0-9]*(?:\.[0-9]+)?))/, 
+		quotesRegExp = /\\"/g,
+				
 		/** 
 		 * Creates CSS classNames from suffixes listed in <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a>, 
 		 * stores them in <a href="#property__classNames"><code>this._classNames</code></a>.
@@ -94,15 +184,14 @@ YUI.add('gallery-makenode', function(Y) {
 		 * @private
 		 */
 		_parseMakeNodeArgs: function (arg) {
-			var regexp = /^(?:([ \t]+)|("[^"\\]*(?:\\.[^"\\]*)*")|(true)|(false)|(null)|([\-+]?[0-9]*(?:\.[0-9]+)?))/, 
-				args = [],
+			var args = [],
 				matcher = function (match, i) {
 					if (match !== undefined && i) {
 						switch (i) {
 							case 1:
 								break;
 							case 2:
-								args.push(match.substr(1, match.length - 2).replace('\\"','"'));
+								args.push(match.substr(1, match.length - 2).replace(quotesRegExp,'"'));
 								break;
 							case 3:
 								args.push(true);
@@ -131,7 +220,7 @@ YUI.add('gallery-makenode', function(Y) {
 				};
 			while (arg.length) {
 				
-				Y.some(regexp.exec(arg), matcher);
+				Y.some(parsingRegExp.exec(arg), matcher);
 			}
 			return args;
 		},
@@ -503,4 +592,5 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
-}, 'gallery-2011.08.31-20-57' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+
+}, '@VERSION@' ,{requires:['substitute', 'classnamemanager'], skinnable:false});

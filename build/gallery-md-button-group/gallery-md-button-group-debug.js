@@ -200,4 +200,5 @@ Y.ButtonGroup = Y.Base.create(
 );
 
 
-}, 'gallery-2011.08.31-20-57' ,{skinnable:true, requires:['base-base', 'widget-parent', 'widget-child', 'gallery-makenode', 'gallery-md-button']});
+
+}, '@VERSION@' ,{requires:['base-base', 'widget-parent', 'widget-child', 'gallery-makenode', 'gallery-md-button'], skinnable:true});
