@@ -713,7 +713,7 @@ function checkFinished()
 	}
 	else if (this._toggle.length > 0)
 	{
-		this.toggle(this._toggle[0], Y.clone(this._callback.request),
+		this.toggle(this._toggle[0], Y.clone(this._callback.request, true),
 		{
 			fn: function()
 			{
@@ -1076,4 +1076,4 @@ Y.namespace("Treeble").treeValueFormatter = function(o)
 };
 
 
-}, 'gallery-2011.08.24-23-44' ,{requires:['datasource','gallery-patch-340-datatable-formatter'], skinnable:true});
+}, 'gallery-2011.09.07-20-35' ,{requires:['datasource','gallery-patch-340-datatable-formatter'], skinnable:true});

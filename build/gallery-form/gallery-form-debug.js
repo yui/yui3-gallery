@@ -289,6 +289,20 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
         return sel;
     },
 
+    /**
+     * @method toJSON
+     * @description Returns a JSON object representing the values of
+     *              the form fields
+     */
+    toJSON : function () {
+        var data = {}; 
+        this.each(function (f) {
+            data[f.get('name')] = (f instanceof Y.CheckboxField) ? f.get('checked') : f.get('value');
+        }); 
+
+        return data;
+    },   
+
     initializer: function(config) {
         this._ioIds = {};
 
@@ -1499,7 +1513,7 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
      */
     _validateChoices: function(val) {
         if (!Y.Lang.isArray(val)) {
-            Y.log('Choice values must be in an array');
+            Y.log('Choice values must be in an array', 'warn');
             return false;
         }
 
@@ -1508,15 +1522,15 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
 
         for (; i < len; i++) {
             if (!Y.Lang.isObject(val[i])) {
-                Y.log('Choice that is not an object cannot be used');
+                Y.log('Choice that is not an object cannot be used', 'warn');
                 delete val[i];
                 continue;
             }
             if (!val[i].label ||
-            !Y.Lang.isString(val[i].label) ||
+            (!Y.Lang.isString(val[i].label) && !Y.Lang.isNumber(val[i].value)) ||
             !val[i].value ||
-            !Y.Lang.isString(val[i].value)) {
-                Y.log('Choice without label and value cannot be used');
+            (!Y.Lang.isString(val[i].value) && !Y.Lang.isNumber(val[i].value))) {
+                Y.log('Choice without label and value cannot be used', 'warn');
                 delete val[i];
                 continue;
             }
@@ -1733,6 +1747,10 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
             }
         },
         this);
+
+        if (!currentVal && !useDefaultOption) {
+            this.set('value', choices[0].value);
+        }
     },
 
     /**
@@ -1940,4 +1958,4 @@ Y.ResetButton = Y.Base.create('reset-button', Y.FormField, [Y.WidgetChild], {
 });
 
 
-}, 'gallery-2011.06.15-19-18' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
+}, 'gallery-2011.09.07-20-35' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
