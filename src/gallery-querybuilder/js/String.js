@@ -81,7 +81,7 @@ QueryBuilder.String.prototype =
 			{
 				if (var_config.autocomplete)
 				{
-					var config    = Y.clone(var_config.autocomplete);
+					var config    = Y.clone(var_config.autocomplete, true);
 					config.render = Y.one('body');
 					this.value_input.plug(Y.Plugin.AutoComplete, config);
 
