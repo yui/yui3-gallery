@@ -245,8 +245,7 @@
 		/**
 		 * Processes the given template and returns a string
 		 * @method _substitute
-		 * @param template {String} (optional) Template to process.  
-		 *        If missing, it will use the first static <a href="#property__TEMPLATE"><code>_TEMPLATE</code></a> property found in the inheritance chain.
+		 * @param template {String} Template to process.  
 		 * @param extras {Object} (optional) Hash of extra values to replace into the template, beyond MakeNode's processing codes.
 		 * @return {String} Template with the placeholders replaced.
 		 * @protected
