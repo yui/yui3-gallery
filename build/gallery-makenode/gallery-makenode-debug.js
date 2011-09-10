@@ -127,7 +127,7 @@ YUI.add('gallery-makenode', function(Y) {
 		 * Contains a hash of CSS classNames generated from the entries in <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a>
 		 * indexed by those same values.
 		 * It will also have the following entries added automatically: <ul>
-		 * <li><code>.</code> The className for the boundingBox</li>
+		 * <li><code>boundingBox</code> The className for the boundingBox</li>
 		 * <li><code>content</code> The className for the contentBox</li>
 		 * <li><code>HEADER</code> The className for the header section of a StdMod if Y.WidgetStdMod has been loaded</li>
 		 * <li><code>BODY</code> The className for the body section of a StdMod if Y.WidgetStdMod has been loaded</li>
@@ -296,7 +296,7 @@ YUI.add('gallery-makenode', function(Y) {
 		 * Looks for static properties called <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a> in each of the classes of the inheritance chain
 		 * and generates CSS classNames based on the <code>_cssPrefix</code> of each class and each of the suffixes listed in each them.
 		 * The classNames generated will be stored in <a href="#property__classNames"><code>this._classNames</code></a> indexed by the suffix.
-		 * It will also store the classNames of the boundingBox ( . )and the contentBox ( content ).  
+		 * It will also store the classNames of the boundingBox ( boundingBox )and the contentBox ( content ).  
 		 * If the WidgetStdMod is used, it will also add the classNames for the three sections ( HEADER, BODY, FOOTER )
 		 * @method _makeClassNames
 		 * @private
