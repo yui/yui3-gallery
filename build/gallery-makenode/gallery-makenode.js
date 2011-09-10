@@ -14,14 +14,13 @@ YUI.add('gallery-makenode', function(Y) {
 	(function () {
 		// See: http://yuilibrary.com/projects/yui3/ticket/2531032
 		var L = Y.Lang, DUMP = 'dump', SPACE = ' ', LBRACE = '{', RBRACE = '}',
-		savedRegExp =  /(~-(\d+)-~)/g;
+		savedRegExp =  /(~-(\d+)-~)/g, lBraceRegExp = /\{LBRACE\}/g, rBraceRegExp = /\{RBRACE\}/g;
 		
 		Y.substitute = function(s, o, f, recurse) {
 			var i, j, k, key, v, meta, saved = [], token, dump,
 				lidx = s.length;
 
-				o = Y.merge({LBRACE:LBRACE,RBRACE:RBRACE},o);
-				for (;;) {
+			for (;;) {
 				i = s.lastIndexOf(LBRACE, lidx);
 				if (i < 0) {
 					break;
@@ -74,7 +73,7 @@ YUI.add('gallery-makenode', function(Y) {
 							}
 						}
 					}
-					} else if (L.isUndefined(v)) {
+				} else if (L.isUndefined(v)) {
 					// This {block} has no replace string. Save it for later.
 					v = '~-' + saved.length + '-~';
 					saved.push(token);
@@ -84,18 +83,18 @@ YUI.add('gallery-makenode', function(Y) {
 
 				s = s.substring(0, i) + v + s.substring(j + 1);
 
-				if (!recurse) {
-					lidx = i - 1;
-				}
+				lidx = recurse?s.length:i - 1;
 
 			}
 
 			// restore saved {block}s
-			s = s.replace(savedRegExp, function (str, p1, p2) {
-				return LBRACE + saved[parseInt(p2,10)] + RBRACE;
-			});
-
-			return s;
+			return s
+				.replace(savedRegExp, function (str, p1, p2) {
+					return LBRACE + saved[parseInt(p2,10)] + RBRACE;
+				})
+				.replace(lBraceRegExp, LBRACE)
+				.replace(rBraceRegExp, RBRACE)
+			;
 
 		};
 	})();	
@@ -317,7 +316,7 @@ YUI.add('gallery-makenode', function(Y) {
 				}
 			});
 			
-			cns.content = (cns.boundingBox = YCM(this.constructor.NAME.toLowerCase())) + '-content';
+			cns.content = (cns[BBX] = YCM(this.constructor.NAME.toLowerCase())) + '-content';
 			if (this.getStdModNode) {
 				cns.HEADER = 'yui3-widget-hd';
 				cns.BODY = 'yui3-widget-bd';
