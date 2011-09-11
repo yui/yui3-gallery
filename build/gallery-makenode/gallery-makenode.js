@@ -83,11 +83,13 @@ YUI.add('gallery-makenode', function(Y) {
 
 				s = s.substring(0, i) + v + s.substring(j + 1);
 
-				lidx = recurse?s.length:i - 1;
+				if (!recurse) {
+					lidx = i - 1;
+				}
 
 			}
+			// restore saved {block}s and replace escaped braces
 
-			// restore saved {block}s
 			return s
 				.replace(savedRegExp, function (str, p1, p2) {
 					return LBRACE + saved[parseInt(p2,10)] + RBRACE;
@@ -140,6 +142,7 @@ YUI.add('gallery-makenode', function(Y) {
 		/**
 		 * Hash listing the template processing codes and the functions to handle each.
 		 * The processing functions will receive a string with the arguments that follow the processing code,
+		 * and the extra, second argument passed on to _makeNode (or _substitute)
 		 * and should return the replacement value for the placeholder.
 		 * @property _templateHandlers
 		 * @type Object
@@ -161,8 +164,8 @@ YUI.add('gallery-makenode', function(Y) {
 			'c': function (arg) {
 				return this._classNames[arg];
 			},
-			's': function (arg) {
-				return this.get('strings')[arg];
+			's': function (arg, extras) {
+				return this._substitute(this.get('strings')[arg], extras);
 			},
 			'?': function(args) {
 				args = this._parseMakeNodeArgs(args);
@@ -257,7 +260,7 @@ YUI.add('gallery-makenode', function(Y) {
 				if (arg) {
 					fn = this._templateHandlers[key.toLowerCase()];
 					if (fn) {
-						return fn.call(this, arg);
+						return fn.call(this, arg, extras);
 					}
 				}
 				return suggested;
