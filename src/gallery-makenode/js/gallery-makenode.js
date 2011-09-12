@@ -115,6 +115,7 @@
 		 * @constructor
 		 */
 		MakeNode = function () {
+			this._eventHandles = [];
 			this._makeClassNames();
 			this._concatUIAttrs();
 			this._publishEvents();
@@ -122,6 +123,14 @@
 			this.after('destroy', this._detachEvents, this);
 		};
 	MakeNode.prototype = {
+		/** 
+		 * An array of event handles returned when attaching listeners to events,
+		 * meant to detach them all when destroying the instance.
+		 * @property _eventHandles
+		 * @type Array
+		 * @private
+		 */	
+		_eventHandles:null,
 		/**
 		 * Contains a hash of CSS classNames generated from the entries in <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a>
 		 * indexed by those same values.
@@ -420,7 +429,7 @@
 					});
 				}, this);
 			}, this);
-			this._eventHandles = eh;
+			this._eventHandles = this._eventHandles.concat(eh);
 		},
 		
 		/**
