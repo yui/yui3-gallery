@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
@@ -48,15 +47,6 @@
 				
 				var suite = new Y.Test.Suite("TestSuite Name");
 
-							// restore saved {block}s
-/*			for (i = saved.length - 1; i >= 0; i = i - 1) {
-				s = s.replace(new RegExp('~-' + i + '-~'), LBRACE +
-					saved[i] + RBRACE, 'g');
-			}
-			
-*/	var saved = ['one','two'];		
-	console.log('asdfasdf asdf ~-0-~ 1234 ~-1-~');
-
 				suite.add(new Y.Test.Case({
 					name: "tests template processor",
 					setUp : function () {
@@ -78,6 +68,13 @@
 						mn.destroy();
 						testNode.setContent('');
 						MN = mn = null;
+					},
+					testConstants : function () {
+						MN._TEMPLATE = '==={LBRACE}p prop{RBRACE}===';
+						mn = new MN();
+						mn.prop = 42;
+						mn.render(testNode);
+						A.areEqual('==={p prop}===',mn.get(CBX).getContent());
 					},
 					testP : function () {
 						MN._TEMPLATE = '==={p prop}===';
@@ -132,6 +129,21 @@
 						mn = new MN();
 						mn.render(testNode);
 						A.areEqual('===this is a test===',mn.get(CBX).getContent());
+						delete MN.ATTRS;
+					},
+					testSNested: function ()  {
+						MN._TEMPLATE = '==={s text}===';
+						MN.ATTRS = {
+							strings: {
+								value: {
+									text: 'My favorite number is {p prop}, the answer to all'
+								}
+							}
+						};
+						mn = new MN();
+						mn.prop = 42;
+						mn.render(testNode);
+						A.areEqual('===My favorite number is 42, the answer to all===',mn.get(CBX).getContent());
 						delete MN.ATTRS;
 					},
 					testWithIntl: function () {

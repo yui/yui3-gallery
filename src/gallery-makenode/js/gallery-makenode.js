@@ -12,14 +12,13 @@
 	(function () {
 		// See: http://yuilibrary.com/projects/yui3/ticket/2531032
 		var L = Y.Lang, DUMP = 'dump', SPACE = ' ', LBRACE = '{', RBRACE = '}',
-		savedRegExp =  /(~-(\d+)-~)/g;
+		savedRegExp =  /(~-(\d+)-~)/g, lBraceRegExp = /\{LBRACE\}/g, rBraceRegExp = /\{RBRACE\}/g;
 		
 		Y.substitute = function(s, o, f, recurse) {
 			var i, j, k, key, v, meta, saved = [], token, dump,
 				lidx = s.length;
 
-				o = Y.merge({LBRACE:LBRACE,RBRACE:RBRACE},o);
-				for (;;) {
+			for (;;) {
 				i = s.lastIndexOf(LBRACE, lidx);
 				if (i < 0) {
 					break;
@@ -72,7 +71,7 @@
 							}
 						}
 					}
-					} else if (L.isUndefined(v)) {
+				} else if (L.isUndefined(v)) {
 					// This {block} has no replace string. Save it for later.
 					v = '~-' + saved.length + '-~';
 					saved.push(token);
@@ -87,13 +86,15 @@
 				}
 
 			}
+			// restore saved {block}s and replace escaped braces
 
-			// restore saved {block}s
-			s = s.replace(savedRegExp, function (str, p1, p2) {
-				return LBRACE + saved[parseInt(p2,10)] + RBRACE;
-			});
-
-			return s;
+			return s
+				.replace(savedRegExp, function (str, p1, p2) {
+					return LBRACE + saved[parseInt(p2,10)] + RBRACE;
+				})
+				.replace(lBraceRegExp, LBRACE)
+				.replace(rBraceRegExp, RBRACE)
+			;
 
 		};
 	})();	
@@ -114,18 +115,28 @@
 		 * @constructor
 		 */
 		MakeNode = function () {
-			this._makeClassNames();
-			this._concatUIAttrs();
-			this._publishEvents();
-			this.after('render', this._attachEvents, this);
-			this.after('destroy', this._detachEvents, this);
+			var self = this;
+			self._eventHandles = [];
+			self._makeClassNames();
+			self._concatUIAttrs();
+			self._publishEvents();
+			self.after('render', self._attachEvents, self);
+			self.after('destroy', self._detachEvents, self);
 		};
 	MakeNode.prototype = {
+		/** 
+		 * An array of event handles returned when attaching listeners to events,
+		 * meant to detach them all when destroying the instance.
+		 * @property _eventHandles
+		 * @type Array
+		 * @private
+		 */	
+		_eventHandles:null,
 		/**
 		 * Contains a hash of CSS classNames generated from the entries in <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a>
 		 * indexed by those same values.
 		 * It will also have the following entries added automatically: <ul>
-		 * <li><code>.</code> The className for the boundingBox</li>
+		 * <li><code>boundingBox</code> The className for the boundingBox</li>
 		 * <li><code>content</code> The className for the contentBox</li>
 		 * <li><code>HEADER</code> The className for the header section of a StdMod if Y.WidgetStdMod has been loaded</li>
 		 * <li><code>BODY</code> The className for the body section of a StdMod if Y.WidgetStdMod has been loaded</li>
@@ -139,6 +150,7 @@
 		/**
 		 * Hash listing the template processing codes and the functions to handle each.
 		 * The processing functions will receive a string with the arguments that follow the processing code,
+		 * and the extra, second argument passed on to _makeNode (or _substitute)
 		 * and should return the replacement value for the placeholder.
 		 * @property _templateHandlers
 		 * @type Object
@@ -160,8 +172,8 @@
 			'c': function (arg) {
 				return this._classNames[arg];
 			},
-			's': function (arg) {
-				return this.get('strings')[arg];
+			's': function (arg, extras) {
+				return this._substitute(this.get('strings')[arg], extras);
 			},
 			'?': function(args) {
 				args = this._parseMakeNodeArgs(args);
@@ -223,6 +235,32 @@
 			return args;
 		},
 		/**
+		 * Enumerates all the values and keys of a given static properties for all classes in the hierarchy, 
+		 * starting with the oldest ancestor (Base).
+		 * @method _forAllXinClasses
+		 * @param x {String} name of the static property to be enumerated
+		 * @param fn {function} function to be called for each value.  
+		 * The function will receive a reference to the class where it occurs, the value of the property 
+		 * and the key or index.
+		 * @private
+		 */
+		
+		_forAllXinClasses: function(x, fn) {
+			var self = this,
+				cs = this._getClasses(),
+				l = cs.length,
+				i, c,
+				caller = function (v, k) {
+					fn.call(self, c, v, k);
+				};
+			for (i = l -1;i >= 0;i--) {
+				c = cs[i];
+				if (c[x]) {
+					Y.each(c[x], caller);
+				}
+			}
+		},
+		/**
 		 * Processes the template given and returns a <code>Y.Node</code> instance.
 		 * @method _makeNode
 		 * @param template {String} (optional) Template to process.  
@@ -245,8 +283,7 @@
 		/**
 		 * Processes the given template and returns a string
 		 * @method _substitute
-		 * @param template {String} (optional) Template to process.  
-		 *        If missing, it will use the first static <a href="#property__TEMPLATE"><code>_TEMPLATE</code></a> property found in the inheritance chain.
+		 * @param template {String} Template to process.  
 		 * @param extras {Object} (optional) Hash of extra values to replace into the template, beyond MakeNode's processing codes.
 		 * @return {String} Template with the placeholders replaced.
 		 * @protected
@@ -257,7 +294,7 @@
 				if (arg) {
 					fn = this._templateHandlers[key.toLowerCase()];
 					if (fn) {
-						return fn.call(this, arg);
+						return fn.call(this, arg, extras);
 					}
 				}
 				return suggested;
@@ -295,7 +332,7 @@
 		 * Looks for static properties called <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a> in each of the classes of the inheritance chain
 		 * and generates CSS classNames based on the <code>_cssPrefix</code> of each class and each of the suffixes listed in each them.
 		 * The classNames generated will be stored in <a href="#property__classNames"><code>this._classNames</code></a> indexed by the suffix.
-		 * It will also store the classNames of the boundingBox ( . )and the contentBox ( content ).  
+		 * It will also store the classNames of the boundingBox ( boundingBox )and the contentBox ( content ).  
 		 * If the WidgetStdMod is used, it will also add the classNames for the three sections ( HEADER, BODY, FOOTER )
 		 * @method _makeClassNames
 		 * @private
@@ -304,20 +341,17 @@
 			var YCM = Y.ClassNameManager.getClassName,
 				defined = {},
 				cns = this._classNames = {};
-			Y.each(this._getClasses(), function (c) {
-				if (c._CLASS_NAMES) {
-					Y.each(c._CLASS_NAMES, function(name) {
-						if (defined[name]) {
-							Y.log(Y.substitute('ClassName' + DUPLICATE, {name:name, recentDef: defined[name], prevDef: c.NAME}), 'warn', 'MakeNode');
-						} else {
-							cns[name] = YCM(c.NAME.toLowerCase(), name);
-							defined[name] = c.NAME;
-						}
-					});
+				
+			this._forAllXinClasses('_CLASS_NAMES', function(c, name) {
+				if (defined[name]) {
+					Y.log(Y.substitute('ClassName' + DUPLICATE, {name:name, recentDef: defined[name], prevDef: c.NAME}), 'warn', 'MakeNode');
+				} else {
+					cns[name] = YCM(c.NAME.toLowerCase(), name);
+					defined[name] = c.NAME;
 				}
 			});
 			
-			cns.content = (cns.boundingBox = YCM(this.constructor.NAME.toLowerCase())) + '-content';
+			cns.content = (cns[BBX] = YCM(this.constructor.NAME.toLowerCase())) + '-content';
 			if (this.getStdModNode) {
 				cns.HEADER = 'yui3-widget-hd';
 				cns.BODY = 'yui3-widget-bd';
@@ -359,9 +393,9 @@
 		 * @private
 		 */
 		_attachEvents: function () {
-			var bbx = this.get(BBX),
-				selector,
-				self = this,
+			var self = this,
+				bbx = self.get(BBX),
+				selector,				
 				eh = [],
 				type, fn, args,
 				toInitialCap = function (name) {
@@ -373,53 +407,53 @@
 					THIS:self,
 					Y:Y
 				};
-				
-			Y.each(this._getClasses(), function (c) {
-				Y.each (c._EVENTS || {}, function (handlers, key) {
-					selector = equivalents[key] || DOT + this._classNames[key];
-					Y.each(Y.Array(handlers), function (handler) {
-						fn = null;
-						if (Lang.isString(handler)) {
-							type = handler;
-							args = null;
-						} else if (Lang.isObject(handler)) {
-							type = handler.type;
-							fn = handler.fn;
-							args = handler.args;
+			self._forAllXinClasses('_EVENTS', function (c, handlers, key) {
+				selector = equivalents[key] || DOT + self._classNames[key];
+				Y.each(Y.Array(handlers), function (handler) {
+					fn = null;
+					if (Lang.isString(handler)) {
+						type = handler;
+						args = null;
+					} else if (Lang.isObject(handler)) {
+						type = handler.type;
+						fn = handler.fn;
+						args = handler.args;
+					} else {
+						Y.log('Bad event handler for class: ' + c.NAME + ' key: ' + key,'error','MakeNode');
+					}
+					if (type) {
+						fn = fn || '_after' + toInitialCap(key) + toInitialCap(type);
+						if (!self[fn]) {
+							Y.log('Listener method not found: ' + fn,'error','MakeNode');
 						} else {
-							Y.log('Bad event handler for class: ' + c.NAME + ' key: ' + key,'error','MakeNode');
+							fn = self[fn];
 						}
-						if (type) {
-							fn = fn || '_after' + toInitialCap(key) + toInitialCap(type);
-							if (!self[fn]) {
-								Y.log('Listener method not found: ' + fn,'error','MakeNode');
+						if (Lang.isString(selector)) {
+							// All the classNames are processed here:
+							if (type==='key') {
+								eh.push(bbx.delegate(type, fn, args, selector, self));
 							} else {
-								fn = self[fn];
+								eh.push(bbx.delegate(type, fn, selector, self, args));
 							}
-							if (Lang.isString(selector)) {
+						} else {
+							if (selector === self || selector === Y) {
+								// the Y and THIS selectors here
+								eh.push(selector.after(type, fn, self, args));
+							} else {
+								// The document and boundingBox here
 								if (type==='key') {
-									eh.push(bbx.delegate(type, fn, args, selector, self));
+									eh.push(Y.after(type, fn, selector, args, self));
 								} else {
-									eh.push(bbx.delegate(type, fn, selector, self, args));
-								}
-							} else {
-								if (selector === self || selector === Y) {
-									eh.push(selector.after(type, fn, self, args));
-								} else {
-									if (type==='key') {
-										eh.push(Y.after(type, fn, selector, args, self));
-									} else {
-										eh.push(Y.after(type, fn, selector, self, args));
-									}
+									eh.push(Y.after(type, fn, selector, self, args));
 								}
 							}
-						} else {
-							Y.log('No type found in: ' + c.NAME + ', key: ' + key, 'error', 'MakeNode');
 						}
-					});
-				}, this);
-			}, this);
-			this._eventHandles = eh;
+					} else {
+						Y.log('No type found in: ' + c.NAME + ', key: ' + key, 'error', 'MakeNode');
+					}
+				});
+			});
+			this._eventHandles = this._eventHandles.concat(eh);
 		},
 		
 		/**
@@ -429,19 +463,13 @@
 		 * @private
 		 */
 		_publishEvents: function () {
-			var cs = this._getClasses(),
-				l = cs.length,
-				i,
-				publisher = function (options, name) {
-					var opts = {};
-					Y.each(options || {}, function (value, opt) {
-						opts[opt] =opt.substr(-2) === 'Fn'?this[value]:value;
-					},this);
-					this.publish(name,opts);
-				};
-			for (i = l -1;i >= 0;i--) {
-				Y.each (cs[i]._PUBLISH || {}, publisher, this);
-			}
+			this._forAllXinClasses('_PUBLISH', function (c, options, name) {
+				var opts = {};
+				Y.each(options || {}, function (value, opt) {
+					opts[opt] =opt.substr(-2) === 'Fn'?this[value]:value;
+				},this);
+				this.publish(name,opts);
+			});
 		},
 		/**
 		 * Detaches all the events created by <a href="method__attachEvents"><code>_attachEvents</code></a>
