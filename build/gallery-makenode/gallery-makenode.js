@@ -117,12 +117,13 @@ YUI.add('gallery-makenode', function(Y) {
 		 * @constructor
 		 */
 		MakeNode = function () {
-			this._eventHandles = [];
-			this._makeClassNames();
-			this._concatUIAttrs();
-			this._publishEvents();
-			this.after('render', this._attachEvents, this);
-			this.after('destroy', this._detachEvents, this);
+			var self = this;
+			self._eventHandles = [];
+			self._makeClassNames();
+			self._concatUIAttrs();
+			self._publishEvents();
+			self.after('render', self._attachEvents, self);
+			self.after('destroy', self._detachEvents, self);
 		};
 	MakeNode.prototype = {
 		/** 
@@ -236,6 +237,32 @@ YUI.add('gallery-makenode', function(Y) {
 			return args;
 		},
 		/**
+		 * Enumerates all the values and keys of a given static properties for all classes in the hierarchy, 
+		 * starting with the oldest ancestor (Base).
+		 * @method _forAllXinClasses
+		 * @param x {String} name of the static property to be enumerated
+		 * @param fn {function} function to be called for each value.  
+		 * The function will receive a reference to the class where it occurs, the value of the property 
+		 * and the key or index.
+		 * @private
+		 */
+		
+		_forAllXinClasses: function(x, fn) {
+			var self = this,
+				cs = this._getClasses(),
+				l = cs.length,
+				i, c,
+				caller = function (v, k) {
+					fn.call(self, c, v, k);
+				};
+			for (i = l -1;i >= 0;i--) {
+				c = cs[i];
+				if (c[x]) {
+					Y.each(c[x], caller);
+				}
+			}
+		},
+		/**
 		 * Processes the template given and returns a <code>Y.Node</code> instance.
 		 * @method _makeNode
 		 * @param template {String} (optional) Template to process.  
@@ -316,15 +343,12 @@ YUI.add('gallery-makenode', function(Y) {
 			var YCM = Y.ClassNameManager.getClassName,
 				defined = {},
 				cns = this._classNames = {};
-			Y.each(this._getClasses(), function (c) {
-				if (c._CLASS_NAMES) {
-					Y.each(c._CLASS_NAMES, function(name) {
-						if (defined[name]) {
-						} else {
-							cns[name] = YCM(c.NAME.toLowerCase(), name);
-							defined[name] = c.NAME;
-						}
-					});
+				
+			this._forAllXinClasses('_CLASS_NAMES', function(c, name) {
+				if (defined[name]) {
+				} else {
+					cns[name] = YCM(c.NAME.toLowerCase(), name);
+					defined[name] = c.NAME;
 				}
 			});
 			
@@ -383,48 +407,48 @@ YUI.add('gallery-makenode', function(Y) {
 					THIS:self,
 					Y:Y
 				};
-				
-			Y.each(this._getClasses(), function (c) {
-				Y.each (c._EVENTS || {}, function (handlers, key) {
-					selector = equivalents[key] || DOT + this._classNames[key];
-					Y.each(Y.Array(handlers), function (handler) {
-						fn = null;
-						if (Lang.isString(handler)) {
-							type = handler;
-							args = null;
-						} else if (Lang.isObject(handler)) {
-							type = handler.type;
-							fn = handler.fn;
-							args = handler.args;
+			this._forAllXinClasses('_EVENTS', function (c, handlers, key) {
+				selector = equivalents[key] || DOT + this._classNames[key];
+				Y.each(Y.Array(handlers), function (handler) {
+					fn = null;
+					if (Lang.isString(handler)) {
+						type = handler;
+						args = null;
+					} else if (Lang.isObject(handler)) {
+						type = handler.type;
+						fn = handler.fn;
+						args = handler.args;
+					} else {
+					}
+					if (type) {
+						fn = fn || '_after' + toInitialCap(key) + toInitialCap(type);
+						if (!self[fn]) {
 						} else {
+							fn = self[fn];
 						}
-						if (type) {
-							fn = fn || '_after' + toInitialCap(key) + toInitialCap(type);
-							if (!self[fn]) {
+						if (Lang.isString(selector)) {
+							// All the classNames are processed here:
+							if (type==='key') {
+								eh.push(bbx.delegate(type, fn, args, selector, self));
 							} else {
-								fn = self[fn];
+								eh.push(bbx.delegate(type, fn, selector, self, args));
 							}
-							if (Lang.isString(selector)) {
+						} else {
+							if (selector === self || selector === Y) {
+								// the Y and THIS selectors here
+								eh.push(selector.after(type, fn, self, args));
+							} else {
+								// The document and boundingBox here
 								if (type==='key') {
-									eh.push(bbx.delegate(type, fn, args, selector, self));
+									eh.push(Y.after(type, fn, selector, args, self));
 								} else {
-									eh.push(bbx.delegate(type, fn, selector, self, args));
-								}
-							} else {
-								if (selector === self || selector === Y) {
-									eh.push(selector.after(type, fn, self, args));
-								} else {
-									if (type==='key') {
-										eh.push(Y.after(type, fn, selector, args, self));
-									} else {
-										eh.push(Y.after(type, fn, selector, self, args));
-									}
+									eh.push(Y.after(type, fn, selector, self, args));
 								}
 							}
-						} else {
 						}
-					});
-				}, this);
+					} else {
+					}
+				});
 			}, this);
 			this._eventHandles = this._eventHandles.concat(eh);
 		},
@@ -436,19 +460,13 @@ YUI.add('gallery-makenode', function(Y) {
 		 * @private
 		 */
 		_publishEvents: function () {
-			var cs = this._getClasses(),
-				l = cs.length,
-				i,
-				publisher = function (options, name) {
-					var opts = {};
-					Y.each(options || {}, function (value, opt) {
-						opts[opt] =opt.substr(-2) === 'Fn'?this[value]:value;
-					},this);
-					this.publish(name,opts);
-				};
-			for (i = l -1;i >= 0;i--) {
-				Y.each (cs[i]._PUBLISH || {}, publisher, this);
-			}
+			this._forAllXinClasses('_PUBLISH', function (c, options, name) {
+				var opts = {};
+				Y.each(options || {}, function (value, opt) {
+					opts[opt] =opt.substr(-2) === 'Fn'?this[value]:value;
+				},this);
+				this.publish(name,opts);
+			});
 		},
 		/**
 		 * Detaches all the events created by <a href="method__attachEvents"><code>_attachEvents</code></a>
