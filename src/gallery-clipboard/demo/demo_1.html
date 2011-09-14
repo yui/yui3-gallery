@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -91,7 +91,15 @@
         
         var node1 = Y.one(".b1"),
             node2 = Y.one(".b2");
-            
+        
+        /* Make sure that the flash interface callback is within a known global name space */
+        window.My = {
+            Global : {
+                foo : "bar"
+            }
+        };
+        Y.ClipBoard.setCallBackGlobal( "My.Global" );
+        
         /* Set up Copy on Node 1 */
         node1.plug(Y.ClipBoard, {
             page : Y.one(".container"),
