@@ -89,10 +89,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
      * @static
      * @type String
      */
-        SWF_MOVIE_NAME     = "ClipBoardCopy.swf",
+        SWF_MOVIE_NAME     = "ClipBoardCopy.swf?r=1",
         COMPONENT_NAME     = "clipboard",
         COMPONENT_NS       = "cp",
-        DEFAULT_GLOBAL     = window,
+        CALLBACK_GLOBAL    = { obj : window, name : ""},
         GLOBAL_HANDLER     = "ClipboardInterfaceFn",
         PROTOCOL           = window.location.href.match(/^https/i) ? 'https://' : 'http://',
         FLASHVARS_TEMPLATE = "id={__MOVIEID__}&ns={__NS__}&width={__WIDTH__}&height={__HEIGHT__}"+
@@ -127,7 +127,24 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
     ClipBoard.NAME = COMPONENT_NAME;
     ClipBoard.NS   = COMPONENT_NAME;
- 
+    ClipBoard.setCallBackGlobal = function( v ) {
+        var tmp = [],
+            n   = 0, i = 0,
+            obj = window, name = '';
+            
+        if ( isString(v) && v !== "window" ) {
+            tmp = ( v.indexOf(".") >= 0 )?v.split(".") : [v];
+            n   = tmp.length;
+            for (;i<n;i++) {
+                if ( obj[tmp[i]] ) {
+                    obj = obj[tmp[i]];
+                    name = name + (( i == 0 )?tmp[i]:"."+tmp[i]);
+                }
+            }
+        }
+        CALLBACK_GLOBAL = { "obj" : obj, "name" : name };
+        return CALLBACK_GLOBAL;
+    };
     ClipBoard.ATTRS = {
         /**
          * The page attribute represents the topmost node where the flash movie will be embeded only
@@ -164,7 +181,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
          * @type Object
          */
         global : {
-            value : DEFAULT_GLOBAL
+            readOnly : true,
+            getter : function() {
+                return { obj : CALLBACK_GLOBAL.obj, name : CALLBACK_GLOBAL.name };
+            }
         },
         /**
          * The domain value that should be allowed in the flash movie
@@ -195,7 +215,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         initializer: function(config) {
             var _this  = this,
                 global = _this.get("global"),
-                fn     = GLOBAL_HANDLER,
+                fn     = !isEmpty(global["name"])?global["name"]+"."+GLOBAL_HANDLER:GLOBAL_HANDLER,
                 dimen;
             if(isEmpty(_this.get("id")))
                 this.set("id",Y.guid(COMPONENT_NAME+"_"));
@@ -210,8 +230,9 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                 
             dimen  = _this.getHostDimensions();
             
-            if(isUndefined(global[fn]))
-                global[fn]  = _this._flashInterface;
+            if ( isUndefined(global["obj"][GLOBAL_HANDLER]) ) {
+                global["obj"][GLOBAL_HANDLER]  = _this._flashInterface;
+            }
             
             _this._host.publish(COMPONENT_NAME+":"+"load", {
                 emitFacade : true,
@@ -517,6 +538,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     });
     
     Y.ClipBoard = ClipBoard;
+    
 
 
-}, 'gallery-2011.08.24-23-44' ,{requires:['node', 'plugin', 'substitute'], skinnable:false});
+}, 'gallery-2011.09.14-20-40' ,{requires:['node', 'plugin', 'substitute'], skinnable:false});
