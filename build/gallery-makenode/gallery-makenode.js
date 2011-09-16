@@ -307,27 +307,32 @@ YUI.add('gallery-makenode', function(Y) {
 		 * or those specifically requested in its arguments and stores references to them
 		 * in properties named after each className key, prefixed with an underscore
 		 * and followed by <code>"Node"</code>.
+		 * If the className key contains a hyphen followed by a lowercase letter, the hyphen will be dropped and the letter capitalized.
+		 * Any other characters invalid for identifiers will be turned into underscores, 
+		 * thus for the <code>no-label-1</code> className key a <code>_noLabel_1Node</code> property will be created.
 		 * @method _locateNodes
-		 * @param arg1,.... {String} (optional) If given, list of className heys of the nodes to be located.
+		 * @param arg1,.... {String} (optional) If given, list of className keys of the nodes to be located.
 		 *        If missing, all the classNames stored in <a href="#property__classNames"><code>this._classNames</code></a> will be located.
 		 * @protected
 		 */
 		_locateNodes: function () {
-			var bbx = this.get(BBX), el;
+			var bbx = this.get(BBX), 
+				self = this,
+				makeName = function (el, name) {
+					if (el) {
+						self['_' + name.replace(/\-([a-z])/g,function (str, p1, p2) {
+							return p1.toUpperCase();
+						}).replace(/\W/g,'_') + NODE] = el;
+					}
+				};
 			if (arguments.length) {
-				Y.each(arguments, function( name) {
-					el = bbx.one(DOT + this._classNames[name]);
-					if (el) {
-						this['_' +  name + NODE] = el;
-					}
-				}, this);
+				Y.each(arguments, function (name) {
+					makeName(bbx.one(DOT + self._classNames[name]),name);
+				});
 			} else {
-				Y.each(this._classNames, function(selector, name) {
-					el = bbx.one(DOT + selector);
-					if (el) {
-						this['_' +  name + NODE] = el;
-					}
-				}, this);
+				Y.each(self._classNames, function(selector, name) {
+					makeName(bbx.one(DOT + selector), name);
+				});
 			}
 		},
 		/**
@@ -393,9 +398,9 @@ YUI.add('gallery-makenode', function(Y) {
 		 * @private
 		 */
 		_attachEvents: function () {
-			var bbx = this.get(BBX),
-				selector,
-				self = this,
+			var self = this,
+				bbx = self.get(BBX),
+				selector,				
 				eh = [],
 				type, fn, args,
 				toInitialCap = function (name) {
@@ -407,8 +412,9 @@ YUI.add('gallery-makenode', function(Y) {
 					THIS:self,
 					Y:Y
 				};
-			this._forAllXinClasses('_EVENTS', function (c, handlers, key) {
-				selector = equivalents[key] || DOT + this._classNames[key];
+			self._forAllXinClasses('_EVENTS', function (c, handlers, key) {
+				selector = equivalents[key] || DOT + self._classNames[key];
+				if (key === 'THIS') {key = 'This';}
 				Y.each(Y.Array(handlers), function (handler) {
 					fn = null;
 					if (Lang.isString(handler)) {
@@ -449,7 +455,7 @@ YUI.add('gallery-makenode', function(Y) {
 					} else {
 					}
 				});
-			}, this);
+			});
 			this._eventHandles = this._eventHandles.concat(eh);
 		},
 		
@@ -571,7 +577,7 @@ YUI.add('gallery-makenode', function(Y) {
 	 * Each entry contains a type of event to be listened to or an array of events.
 	 * Each event can be described by its type (i.e.: <code>"key"</code>, <code>"mousedown"</code>, etc).
 	 * MakeNode will associate this event with a method named <code>"_after"</code> followed by the element identifier with the first character capitalized 
-	 * and the type of event with the first character capitalized (i.e.: <code>_afterBoundingBoxClick</code>, <code>_afterInputBlur</code>, <code>_afterTHISValueChange</code>, etc.)
+	 * and the type of event with the first character capitalized (i.e.: <code>_afterBoundingBoxClick</code>, <code>_afterInputBlur</code>, <code>_afterThisValueChange</code>, etc.)
 	 * Alternatively, the event listener can be described by an object literal containing properties <ul>
 	 * <li><code>type</code> (mandatory) the type of event being listened to</li>
 	 * <li><code>fn</code> the name of the method to handle the event.  
