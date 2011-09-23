@@ -416,7 +416,10 @@ YUI.add('gallery-makenode', function(Y) {
 				};
 			self._forAllXinClasses('_EVENTS', function (c, handlers, key) {
 				selector = equivalents[key] || DOT + self._classNames[key];
+<<<<<<< HEAD:build/gallery-makenode/gallery-makenode-debug.js
 				if (key === 'THIS') {key = 'This';}
+=======
+>>>>>>> 2e37a9950ce223d0e6be266ba3c808549f7e57f0:build/gallery-makenode/gallery-makenode-debug.js
 				Y.each(Y.Array(handlers), function (handler) {
 					fn = null;
 					if (Lang.isString(handler)) {
@@ -626,5 +629,9 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
+<<<<<<< HEAD:build/gallery-makenode/gallery-makenode-debug.js
 
 }, '@VERSION@' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+=======
+}, 'gallery-2011.09.14-20-40' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+>>>>>>> 2e37a9950ce223d0e6be266ba3c808549f7e57f0:build/gallery-makenode/gallery-makenode-debug.js

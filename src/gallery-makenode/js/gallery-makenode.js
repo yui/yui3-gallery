@@ -414,7 +414,10 @@
 				};
 			self._forAllXinClasses('_EVENTS', function (c, handlers, key) {
 				selector = equivalents[key] || DOT + self._classNames[key];
+<<<<<<< HEAD:src/gallery-makenode/js/gallery-makenode.js
 				if (key === 'THIS') {key = 'This';}
+=======
+>>>>>>> 2e37a9950ce223d0e6be266ba3c808549f7e57f0:src/gallery-makenode/js/gallery-makenode.js
 				Y.each(Y.Array(handlers), function (handler) {
 					fn = null;
 					if (Lang.isString(handler)) {
