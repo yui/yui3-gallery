@@ -9,10 +9,10 @@
  * @class MakeNode
  */
 	"use strict";
-	(function () {
+	if (Y.version === '3.4.0') { (function () {
 		// See: http://yuilibrary.com/projects/yui3/ticket/2531032
 		var L = Y.Lang, DUMP = 'dump', SPACE = ' ', LBRACE = '{', RBRACE = '}',
-		savedRegExp =  /(~-(\d+)-~)/g, lBraceRegExp = /\{LBRACE\}/g, rBraceRegExp = /\{RBRACE\}/g;
+			savedRegExp =  /(~-(\d+)-~)/g, lBraceRegExp = /\{LBRACE\}/g, rBraceRegExp = /\{RBRACE\}/g;
 		
 		Y.substitute = function(s, o, f, recurse) {
 			var i, j, k, key, v, meta, saved = [], token, dump,
@@ -97,7 +97,7 @@
 			;
 
 		};
-	})();	
+	})();}	
 	var WS = /\s+/,
 		NODE = 'Node',
 		DOT = '.',
@@ -414,10 +414,7 @@
 				};
 			self._forAllXinClasses('_EVENTS', function (c, handlers, key) {
 				selector = equivalents[key] || DOT + self._classNames[key];
-<<<<<<< HEAD:src/gallery-makenode/js/gallery-makenode.js
 				if (key === 'THIS') {key = 'This';}
-=======
->>>>>>> 2e37a9950ce223d0e6be266ba3c808549f7e57f0:src/gallery-makenode/js/gallery-makenode.js
 				Y.each(Y.Array(handlers), function (handler) {
 					fn = null;
 					if (Lang.isString(handler)) {
