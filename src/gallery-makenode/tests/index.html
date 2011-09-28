@@ -11,7 +11,7 @@
 		
 		<div id="test"></div>
 
-		<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+		<script src="http://yui.yahooapis.com/3.4.1pr1/build/yui/yui-min.js"></script>
 
 		<script>
 			YUI({
@@ -426,6 +426,86 @@
 					
 					}
 				}));		
+				suite.add(new Y.Test.Case({
+					name: "tests after attribute change",
+					setUp : function () {
+						MN = Y.Base.create(
+							'MakeNodeTest',
+							Y.Widget,
+							[Y.MakeNode],
+							{
+								_afterThisValueChange: function (ev) {
+									this.actualValue = ev.newVal;
+								}
+							},
+							{
+								_EVENTS: {
+									THIS: 'valueChange'
+								},
+								ATTRS: {
+									value: {
+										value: 5
+									}
+								}
+							}
+						);
+					},
+					tearDown : function () {
+						if (mn) {
+							mn.destroy();
+						}
+						testNode.setContent('');
+						MN = mn = null;
+					},					
+					testOnInit: function () {
+						mn = new MN({value:42}).render(testNode);
+						A.isUndefined(mn.actualValue,'value should remain undefined');
+					},
+					testSetLater: function () {
+						mn = new MN().render(testNode);
+						mn.set('value',42);
+						A.areEqual(42,mn.actualValue,'value should have changed to 42');
+					}
+				}));
+				
+				suite.add(new Y.Test.Case({
+					setUp : function () {
+						MN = Y.Base.create(
+							'AfterAttributeChange',
+							Y.Base,
+							[],
+							{
+								initializer: function () {
+									this.after('valueChange',this._afterValueChange, this);
+								},
+								_afterValueChange: function (ev) {
+									this.actualValue = ev.newVal;
+								}
+							},
+							{
+								ATTRS: {
+									value: {
+										value: 5
+									}
+								}
+							}
+						);
+					},
+					tearDown : function () {
+						mn.destroy();
+						MN = mn = null;
+					},					
+					testOnInit: function () {
+						mn = new MN({value:42});
+						A.isUndefined(mn.actualValue,'value will remain undefined, but shouldn\'t');
+					},
+					testSetLater: function () {
+						mn = new MN();
+						mn.set('value',42);
+						A.areEqual(42,mn.actualValue,'value should have changed to 42');
+					}
+				}));
+					
 
 
 				Y.Test.Runner.add(suite);
