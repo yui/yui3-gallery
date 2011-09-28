@@ -553,9 +553,11 @@ Y.extend(ColorPicker, Y.Widget, {
 		this.trackBar = args.component;
 		this.trackBarCanvas = ev.target;
 		var offXY = ev.target.getXY(),
+			scrollX = ev.target.get('docScrollX'),
+			scrollY = ev.target.get('docScrollY'),
 			// get position within the square
-			x = ev.clientX - offXY[0],
-			y = ev.clientY - offXY[1];
+			x = ev.clientX + scrollX - offXY[0],
+			y = ev.clientY + scrollY - offXY[1];
 			
 		this.barX = x;
 		this.barY = y;
@@ -573,13 +575,19 @@ Y.extend(ColorPicker, Y.Widget, {
 			x,
 			y,
 			width,
-			height;
+			height,
+			scrollX,
+			scrollY,
+			c;
 			
 		if (this.trackSquare) {
-			offXY = Y.Node.one(this.squareCanvas).getXY();
+			c = Y.Node.one(this.squareCanvas);
+			offXY = c.getXY();
+			scrollX = c.get('docScrollX');
+			scrollY = c.get('docScrollY');
 			// get position within the square
-			x = ev.clientX - offXY[0];
-			y = ev.clientY - offXY[1];
+			x = ev.clientX + scrollX - offXY[0];
+			y = ev.clientY + scrollY - offXY[1];
 			width = this.get('squareWidth');
 			height = this.get('squareHeight');
 				
@@ -592,9 +600,11 @@ Y.extend(ColorPicker, Y.Widget, {
 		}
 		if (this.trackBar) {
 			offXY = this.trackBarCanvas.getXY();
+			scrollX = this.trackBarCanvas.get('docScrollX');
+			scrollY = this.trackBarCanvas.get('docScrollY');
 			// get position within the square
-			x = -this.barPaddingX + ev.clientX - offXY[0];
-			y = -this.barPaddingY + ev.clientY - offXY[1];
+			x = -this.barPaddingX + ev.clientX + scrollX - offXY[0];
+			y = -this.barPaddingY + ev.clientY + scrollY - offXY[1];
 			width = this.get('barWidth');
 			height = this.get('barHeight');
 				
@@ -611,9 +621,11 @@ Y.extend(ColorPicker, Y.Widget, {
 		// mousedown inside square, start tracking position
 		this.trackSquare = true;
 		var offXY = ev.target.getXY(),
+			scrollX = ev.target.get('docScrollX'),
+			scrollY = ev.target.get('docScrollY'),
 			// get position within the square
-			x = ev.clientX - offXY[0],
-			y = ev.clientY - offXY[1];
+			x = ev.clientX + scrollX - offXY[0],
+			y = ev.clientY + scrollY - offXY[1];
 			
 		this.squareX = x;
 		this.squareY = y;
@@ -621,6 +633,9 @@ Y.extend(ColorPicker, Y.Widget, {
 		ev.halt();
 	},
 	updateColor: function () {
+		if (!this.get('showHSLBars')) {
+			return;
+		}
 		var barWidth = this.get('barWidth'),
 			barHeight = this.get('barHeight'),
 			cacheBars = this.get('cacheBars'),
@@ -757,11 +772,13 @@ Y.extend(ColorPicker, Y.Widget, {
 			}
 		}
 		this.renderSquare();
-		this.updateColor();
 		this.updateValues();
-		this.drawThumb(this.hCanvas, 'h', {h: this.color.h, s: 1.0, l: 0.5}, barWidth, barHeight, 1.0, false);
-		this.drawThumb(this.sCanvas, 's', {h: this.color.h, s: 1.0, l: this.color.l}, barWidth, barHeight, 1.0, true);
-		this.drawThumb(this.lCanvas, 'l', {h: this.color.h, s: this.color.s, l: 0.5}, barWidth, barHeight, 1.0, true);
+		if (this.get('showHSLBars')) {
+			this.updateColor();
+			this.drawThumb(this.hCanvas, 'h', {h: this.color.h, s: 1.0, l: 0.5}, barWidth, barHeight, 1.0, false);
+			this.drawThumb(this.sCanvas, 's', {h: this.color.h, s: 1.0, l: this.color.l}, barWidth, barHeight, 1.0, true);
+			this.drawThumb(this.lCanvas, 'l', {h: this.color.h, s: this.color.s, l: 0.5}, barWidth, barHeight, 1.0, true);
+		}
 	},
 	renderSquare: function () {
 		var width = this.get('squareWidth'), height = this.get('squareHeight'),
@@ -864,9 +881,11 @@ Y.extend(ColorPicker, Y.Widget, {
 	},
 	bindUI: function () {
 		Y.on('mousedown', this.onSquareMouseDown, this.squareCanvas, this);
-		Y.on('mousedown', this.onBarMouseDown, this.hCanvas, this, {component: 'h'});
-		Y.on('mousedown', this.onBarMouseDown, this.sCanvas, this, {component: 's'});
-		Y.on('mousedown', this.onBarMouseDown, this.lCanvas, this, {component: 'l'});
+		if (this.get('showHSLBars')) {
+			Y.on('mousedown', this.onBarMouseDown, this.hCanvas, this, {component: 'h'});
+			Y.on('mousedown', this.onBarMouseDown, this.sCanvas, this, {component: 's'});
+			Y.on('mousedown', this.onBarMouseDown, this.lCanvas, this, {component: 'l'});
+		}
 		Y.delegate('keyup', this.onInputKeyUp, this.contentBox, '.' + ColorPicker.CLASSNAME_VALUE, this);
 		Y.delegate('blur', this.onInputBlur, this.contentBox, '.' + ColorPicker.CLASSNAME_VALUE, this);
 		Y.delegate('keydown', this.onInputKeyDown, this.contentBox, '.' + ColorPicker.CLASSNAME_VALUE, this);
@@ -976,4 +995,4 @@ Y.extend(ColorPalette, Y.Widget, {
 Y.ColorPalette = ColorPalette;
 
 
-}, 'gallery-2011.09.14-20-40' ,{requires:['node', 'event', 'widget', 'classnamemanager']});
+}, 'gallery-2011.09.28-20-06' ,{requires:['node', 'event', 'widget', 'classnamemanager']});

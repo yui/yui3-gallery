@@ -294,6 +294,10 @@ YUI.add('gallery-yui-tooltip', function(Y) {
 				
 				if( $target.get('id') === this.get('_tooltipID') ){
 					
+					this.set('visible', true);
+					
+					this._setAlignment($target, this.get('_currentAlignment'));
+					
 					this.show();
 					
 				}
@@ -554,4 +558,4 @@ YUI.add('gallery-yui-tooltip', function(Y) {
 	
 
 
-}, 'gallery-2011.05.12-13-26' ,{requires:['selector-css3','overlay','transition','event-mouseenter']});
+}, 'gallery-2011.09.28-20-06' ,{requires:['selector-css3','overlay','transition','event-mouseenter']});

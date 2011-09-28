@@ -249,17 +249,18 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
             formMethod = this.get('method'),
             submitViaIO = this.get('submitViaIO'),
             io = this.get("io"),
+            ioConfig = this.get('ioConfig') || {},
             transaction,
             cfg;
 
             if (submitViaIO === true) {
-                cfg = {
+                cfg = Y.merge({
                     method: formMethod,
                     form: {
                         id: this.get('contentBox'),
                         upload: (this.get('encodingType') === Y.Form.MULTIPART_ENCODED)
                     }
-                };
+                }, ioConfig);
 
                 transaction = io(formAction, cfg);
                 this._ioIds[transaction.id] = transaction;
@@ -482,6 +483,9 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
          */
         io: {
             value: Y.io
+        },
+
+        ioConfig : {
         }
 
     },
@@ -1379,6 +1383,11 @@ Y.CheckboxField = Y.Base.create('checkbox-field', Y.FormField, [Y.WidgetChild], 
         Y.CheckboxField.superclass.initializer.apply(this, arguments);
     },
 
+    renderUI : function () {
+        this._renderFieldNode();
+        this._renderLabelNode();
+    },
+
     syncUI : function () {
         Y.CheckboxField.superclass.syncUI.apply(this, arguments);
         this._syncChecked();
@@ -1532,10 +1541,6 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
             }
         }
 
-        if (val.length === 0) {
-            return false;
-        }
-
         return true;
     },
 
@@ -1625,6 +1630,9 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
          * @description The choices to render into this field
          */
         choices: {
+            valueFn : function () {
+                return [];
+            },
             validator: function(val) {
                 return this._validateChoices(val);
             }
@@ -1713,7 +1721,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 	 * @description Syncs the option nodes with the choices attribute
 	 */
     _syncOptionNodes: function() {
-        var choices = this.get('choices'),
+        var choices = this.get('choices') || [],
         contentBox = this.get('contentBox'),
         options = contentBox.all('option'),
         useDefaultOption = this.get('useDefaultOption'),
@@ -1744,7 +1752,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
         },
         this);
 
-        if (!currentVal && !useDefaultOption) {
+        if (!currentVal && !useDefaultOption && choices[0]) {
             this.set('value', choices[0].value);
         }
     },
@@ -1954,4 +1962,4 @@ Y.ResetButton = Y.Base.create('reset-button', Y.FormField, [Y.WidgetChild], {
 });
 
 
-}, 'gallery-2011.09.07-20-35' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
+}, 'gallery-2011.09.28-20-06' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
