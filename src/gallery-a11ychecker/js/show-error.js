@@ -87,6 +87,9 @@
             tooltip.on("triggerEnter", onTriggerEnter);
 
         }
+        else {
+            tooltip.set("triggerNodes", ERROR_CLASS_SELECTOR);
+        }
 
         return tooltip; 
     
@@ -100,6 +103,12 @@
         });
         
         Y.all(ERROR_CLASS_SELECTOR).removeClass(ERROR_CLASS_NAME);
+        
+        var tooltip = YUI.a11ychecker.tooltip;
+        
+        if (tooltip) {
+            tooltip.set("triggerNodes", null);
+        }
 
     };
 

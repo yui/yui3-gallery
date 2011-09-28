@@ -78,7 +78,7 @@ function findDupeSibLinks(id, url, level, ignoreYLT) {
 
     var node = Y.one("#" + id),
         parent = node.ancestor(Y.rbind(getParent, null, level)),
-        dupes;
+        dupes = [];
 
     parent.all("a").each(function (v) {
         

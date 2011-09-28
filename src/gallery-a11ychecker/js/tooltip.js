@@ -45,7 +45,6 @@
             // with the default behavior defined in the _defTriggerEnterFn method 
             this.publish("triggerEnter", {defaultFn: this._defTriggerEnterFn, preventable:true});
             this.publish("triggerLeave", {preventable:false});
-            this.publish("a11ychecker:tooltip", { broadcast: 2 });
         },
 
         /*
@@ -64,7 +63,7 @@
          */
         bindUI : function() {
             this.after("delegateChange", this._afterSetDelegate);
-            this.after("nodesChange", this._afterSetNodes);
+            this.after("triggerNodesChange", this._afterSetNodes);
 
             this._bindDelegate();
         },
