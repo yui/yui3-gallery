@@ -312,11 +312,11 @@ Y.Accordion = Y.Base.create(
 		/**
 		 * Event listener for child expansion/collapse, ensures that only one is expanded
 		 * at a time if multiExpand is not set.
-		 * @method _afterTHISAccordionPanel:expandedChange
+		 * @method _afterThisAccordionPanel:expandedChange
 		 * @param ev {EventFacade}
 		 * @private
 		 */
-		'_afterTHISAccordionPanel:expandedChange': function (ev) {
+		'_afterThisAccordionPanel:expandedChange': function (ev) {
 			var child = ev.target;
 			if (ev.newVal  && !this.get(MULTI_EXPAND)) {
 				this.each(function (panel) {
@@ -329,12 +329,12 @@ Y.Accordion = Y.Base.create(
 		/**
 		 * Listens to the <code>panelClose</code> and destroys the panel
 		 * and removes it from the collection of panels.
-		 * @method _afterTHISAccordionPanel:panelClose
+		 * @method _afterThisAccordionPanel:panelClose
 		 * @param ev {EventFacade} uses ev.target to locate the panel requesting the close
 		 * @private
 		 */
 		
-		'_afterTHISAccordionPanel:panelClose': function (ev) {
+		'_afterThisAccordionPanel:panelClose': function (ev) {
 			var panel = ev.target;
 			if (this.indexOf(panel) >= 0) {
 				this.remove(panel);
