@@ -292,6 +292,10 @@
 				
 				if( $target.get('id') === this.get('_tooltipID') ){
 					
+					this.set('visible', true);
+					
+					this._setAlignment($target, this.get('_currentAlignment'));
+					
 					this.show();
 					
 				}
