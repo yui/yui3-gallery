@@ -15,6 +15,11 @@ Y.CheckboxField = Y.Base.create('checkbox-field', Y.FormField, [Y.WidgetChild], 
         Y.CheckboxField.superclass.initializer.apply(this, arguments);
     },
 
+    renderUI : function () {
+        this._renderFieldNode();
+        this._renderLabelNode();
+    },
+
     syncUI : function () {
         Y.CheckboxField.superclass.syncUI.apply(this, arguments);
         this._syncChecked();

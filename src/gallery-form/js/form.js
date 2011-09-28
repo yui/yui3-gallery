@@ -247,17 +247,18 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
             formMethod = this.get('method'),
             submitViaIO = this.get('submitViaIO'),
             io = this.get("io"),
+            ioConfig = this.get('ioConfig') || {},
             transaction,
             cfg;
 
             if (submitViaIO === true) {
-                cfg = {
+                cfg = Y.merge({
                     method: formMethod,
                     form: {
                         id: this.get('contentBox'),
                         upload: (this.get('encodingType') === Y.Form.MULTIPART_ENCODED)
                     }
-                };
+                }, ioConfig);
 
                 transaction = io(formAction, cfg);
                 this._ioIds[transaction.id] = transaction;
@@ -480,6 +481,9 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
          */
         io: {
             value: Y.io
+        },
+
+        ioConfig : {
         }
 
     },
