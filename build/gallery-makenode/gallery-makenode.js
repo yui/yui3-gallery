@@ -469,7 +469,7 @@ YUI.add('gallery-makenode', function(Y) {
 			this._forAllXinClasses('_PUBLISH', function (c, options, name) {
 				var opts = {};
 				Y.each(options || {}, function (value, opt) {
-					opts[opt] =opt.substr(-2) === 'Fn'?this[value]:value;
+					opts[opt] = opt.substr(opt.length - 2) === 'Fn'?this[value]:value;
 				},this);
 				this.publish(name,opts);
 			});
