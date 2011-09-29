@@ -445,5 +445,4 @@ Y.Accordion = Y.Base.create(
 
 
 
-
-}, '@VERSION@' ,{skinnable:true, requires:['widget', 'widget-parent', 'widget-child', 'widget-stdmod', 'gallery-makenode'], optional:['resize-plugin', 'transition']});
+}, 'gallery-2011.09.28-20-06' ,{optional:['resize-plugin', 'transition'], requires:['widget', 'widget-parent', 'widget-child', 'widget-stdmod', 'gallery-makenode'], skinnable:true});

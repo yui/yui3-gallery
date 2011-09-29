@@ -643,5 +643,9 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
+<<<<<<< HEAD:build/gallery-makenode/gallery-makenode.js
 
 }, '@VERSION@' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+=======
+}, 'gallery-2011.09.28-20-06' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+>>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:build/gallery-makenode/gallery-makenode.js

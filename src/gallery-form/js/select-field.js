@@ -69,7 +69,7 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
 	 * @description Syncs the option nodes with the choices attribute
 	 */
     _syncOptionNodes: function() {
-        var choices = this.get('choices'),
+        var choices = this.get('choices') || [],
         contentBox = this.get('contentBox'),
         options = contentBox.all('option'),
         useDefaultOption = this.get('useDefaultOption'),
@@ -99,6 +99,13 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
             }
         },
         this);
+<<<<<<< HEAD:src/gallery-form/js/select-field.js
+=======
+
+        if (!currentVal && !useDefaultOption && choices[0]) {
+            this.set('value', choices[0].value);
+        }
+>>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:src/gallery-form/js/select-field.js
     },
 
     /**

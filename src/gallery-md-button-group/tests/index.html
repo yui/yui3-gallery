@@ -17,6 +17,7 @@
 		<input type="submit" id="submit" value="Submit"/><input type="reset" id="reset" value="Reset" />
 		<p>Toggle button, icon added: <span id="toggle"></span></p>
 		<p>Group of plain buttons with one separator: <span id="multiButton"></span></p>
+		<p>Group of plain buttons with one separator: <span id="multiButton2"></span></p>
 		<p>Group of toggle buttons, some with icons: <span id="multiToggle"></span></p>
 		</form>
 
@@ -24,8 +25,11 @@
 			/*jslint browser: true, nomen: true, maxerr: 50, indent: 4, vars:true */
 			/*global YUI */
 			YUI({
-				filter: 'raw',
-				// combine: false,
+			/*
+				filter: 'debug',
+				combine: false,
+				debug: true,
+			*/
 				groups: {
 					sp: {
 						base: '../../../build/',
@@ -67,6 +71,13 @@
 						{label:'B'},
 						{label:'C'}
 					]})).render('#multiButton'),
+					multiButton2 = (new Y.ButtonGroup({label:'Other set of Plain Buttons',children:[
+						{label:'A'},
+						new Y.ButtonSeparator(),
+						{label:'B'},
+						new Y.ButtonSeparator(),
+						{label:'C'}
+					]})).render('#multiButton2'),
 					multiToggle = (new Y.ButtonGroup({label:'Toggle Buttons',children:[
 						new Y.ButtonToggle({label:'A',icon:'arrow-sw'}),
 						new Y.ButtonToggle({label:'B'}),
@@ -91,6 +102,9 @@
 				});
 				multiButton.after(PRESS, function(ev) {
 					Y.log('multiButton pressed: ' + ev.pressed.get('label') , INFO,'multiButton');
+				});
+				multiButton2.after(PRESS, function(ev) {
+					Y.log('multiButton2 pressed: ' + ev.pressed.get('label') , INFO,'multiButton2');
 				});
 				multiToggle.after('selectionChange', function(ev) {
 					var sel = this.get('selection');
