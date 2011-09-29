@@ -122,8 +122,15 @@
 			self._publishEvents();
 			self.after('render', self._attachEvents, self);
 			self.after('destroy', self._detachEvents, self);
+			if (self.renderUI === Y.Widget.prototype.renderUI) {
+				self.renderUI = self._autoRenderUI;
+			}
 		};
 	MakeNode.prototype = {
+		_autoRenderUI: function () {
+			this.get('contentBox').append(this._makeNode());
+			this._locateNodes();
+		},
 		/** 
 		 * An array of event handles returned when attaching listeners to events,
 		 * meant to detach them all when destroying the instance.
@@ -182,7 +189,22 @@
 			'1': function (args) {
 				args = this._parseMakeNodeArgs(args);
 				return parseInt(args[0],10) ===1?args[1]:args[2];
+			},
+			'n': function (args, extras) {
+				var fn, key, value = this;
+				args = args.split(WS);
+				
+				while (value && args.length) {
+					key = args.shift();
+					fn = this._templateHandlers[key.toLowerCase()];
+					if (!fn) {
+						return;
+					}
+					value =  fn.call(value, args.shift(), extras);
+				}
+				return value;
 			}
+				
 		},
 		/**
 		 * Parses the arguments received by the processor of the <code>{m}</code> placeholder.  
