@@ -1,5 +1,18 @@
 YUI.add('gallery-stdmod', function(Y) {
 
+/**
+* A version of Widget-StdMod that uses the ContentBox of the Widget as its Body section and adds
+* the Header and Footer sections on each side of it instead of having the three of them under the contentBox.
+* This turns quite handy when used along WidgetParent since the later assumes children will be added in the contentBox
+* and thus conflicts with the StdMod sections. (this can also be solved using the property <a href="http://yuilibrary.com/yui/docs/api/classes/WidgetParent.html#property__childrenContainer">_childrenContainer</a>)<br/><br/>
+* For further documentation see <a href="http://yuilibrary.com/yui/docs/api/classes/WidgetStdMod.html">WidgetStdMod</a>
+*
+* @module gallery-stdmod
+* @class StdMod
+* @constructor
+* @extends WidgetStdMod
+*/
+
 "use strict";
 var BBX = 'boundingBox',
 	CBX = 'contentBox',
@@ -28,7 +41,7 @@ StdMod.prototype = {
 			sectionNode = this._findStdModSection(section);
 
 		if (!sectionNode) {
-			if (section === 'body') {
+			if (section === BODY) {
 				sectionNode = contentBox;
 			} else {
 				sectionNode = this._getStdModTemplate(section);
