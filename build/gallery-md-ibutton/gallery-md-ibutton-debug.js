@@ -17,7 +17,7 @@ var Lang = Y.Lang,
 	REGION = 'region',
 	WIDTH = 'width',
 	AUTO = 'auto',
-	BG_POS = 'backgroundPosition';
+	BG_IMG = 'backgroundImage';
 	
 /**
  * The IButton class provides an IPhone style of sliding on/off button
@@ -87,7 +87,7 @@ Y.IButton = Y.Base.create(
 		 * @private
 		 */
 		_endAnim: function () {
-			(this.get(VALUE)?this._labelOffNode:this._labelOnNode).setStyle(BG_POS, 'right bottom');
+			(this.get(VALUE)?this._labelOffNode:this._labelOnNode).setStyle(BG_IMG, 'none');
 		},
 		
 
@@ -147,25 +147,11 @@ Y.IButton = Y.Base.create(
 		 */
 		_uiSetValue: function (value) {
 			var  slidingFx = this._slidingNode.fx;
-			this._labelOnNode.setStyle(BG_POS, 'left -50px');
-			this._labelOffNode.setStyle(BG_POS, 'top right');
+			this._labelOnNode.setStyle(BG_IMG, '');
+			this._labelOffNode.setStyle(BG_IMG, '');
 			slidingFx.set('reverse', value);
 			slidingFx.run();
-		},
-		
-		/**
-		 * Overrides the existing _uiSetDisabled from Widget to turn the opacity to half.
-		 * It could simply be done by CSS, but setStyle takes care of browsers that don't support opacity natively.
-		 * @method _uiSetDisabled
-		 * @param value {Boolean} true if disabled
-		 * @private
-		 */
-		_uiSetDisabled: function (value) {
-			Y.IButton.superclass._uiSetDisabled.apply(this, arguments);
-			this.get(CBX).setStyle('opacity', (value?0.5:1));
 		}
-		
-
 	}, 
 	{
 		/**

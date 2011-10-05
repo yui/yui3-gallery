@@ -68,3 +68,9 @@
 	position: relative;
 	width: 500px;
 }
+.yui3-skin-sam .yui3-ibutton-disabled {
+	zoom:1;
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+	opacity: .5; 
+}
