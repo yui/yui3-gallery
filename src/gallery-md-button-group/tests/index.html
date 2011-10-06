@@ -8,7 +8,7 @@
 				display:none;
 			}
 		</style>
-		<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+		<script src="http://yui.yahooapis.com/3.4.1pr1/build/yui/yui-min.js"></script>
 	</head>
 	<body  class="yui3-skin-sam yui-skin-sam">
 		<p>Plain button, only label set: <span id="plain"></span></p>
@@ -18,24 +18,18 @@
 		<p>Toggle button, icon added: <span id="toggle"></span></p>
 		<p>Group of plain buttons with one separator: <span id="multiButton"></span></p>
 		<p>Group of toggle buttons, some with icons: <span id="multiToggle"></span></p>
+		<p>Group of toggle buttons, one should always remain selected: <span id="oneToggle"></span></p>
 		</form>
-		<p>Source files:</p>
-		<ul>
-			<li><a href="js/button/button.js">button.js</a></li>
-			<li><a href="js/button/assets/skins/sam/button.css">button.css</a></li>
-			<li><a href="js/button-group/button-group.js">button-group.js</a></li>
-			<li><a href="js/button-group/assets/skins/sam/button-group.css">button-group.css</a></li>
-			<li><a href="js/makenode/makenode.js">makenode.js</a></li>
-			<li><A HREF="js/button/assets/skins/sam/background.png">background.png</A></li>
-			<li><A HREF="js/button/assets/skins/sam/background-active.png">background-active.png</A></li>
-			<li><A HREF="js/button/assets/skins/sam/icon-sprite.gif">icon-sprite.gif</A></li>
-		</ul>
+
 		<script>
 			/*jslint browser: true, nomen: true, maxerr: 50, indent: 4, vars:true */
 			/*global YUI */
 			YUI({
-				filter: 'raw',
-				// combine: false,
+			/*
+				filter: 'debug',
+				combine: false,
+				debug: true,
+			*/
 				groups: {
 					sp: {
 						base: '../../../build/',
@@ -81,7 +75,16 @@
 						new Y.ButtonToggle({label:'A',icon:'arrow-sw'}),
 						new Y.ButtonToggle({label:'B'}),
 						new Y.ButtonToggle({label:'C',icon:'arrow-se', iconPosition:'right'})
-					]})).render('#multiToggle');
+					]})).render('#multiToggle'),
+					oneToggle = (new Y.ButtonGroup({
+						label:'Toggle Buttons',
+						alwaysSelected:true,
+						children:[
+							new Y.ButtonToggle({label:'A'}),
+							new Y.ButtonToggle({label:'B'}),
+							new Y.ButtonToggle({label:'C'})
+						]
+					})).render('#oneToggle');
 					
 				toggle.set('icon','webcam');
 				plain.after(PRESS, function(ev) {
@@ -105,6 +108,10 @@
 				multiToggle.after('selectionChange', function(ev) {
 					var sel = this.get('selection');
 					Y.log('multiToggle selected: ' + (sel?sel.get('label'):'none') , INFO,'multiToggle');
+				});
+				oneToggle.after('selectionChange', function(ev) {
+					var sel = this.get('selection');
+					Y.log('multiToggle selected: ' + (sel?sel.get('label'):'none') , INFO,'oneToggle');
 				});
 					
 			});

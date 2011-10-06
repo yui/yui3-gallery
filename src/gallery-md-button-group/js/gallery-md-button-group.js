@@ -87,7 +87,7 @@ Y.ButtonGroup = Y.Base.create(
 		 */
 		bindUI : function() {
 
-			this.on(['button:press','button-toggle:press'], this._onButtonPress ,this);
+			this.on(['button:press','buttonToggle:press'], this._onButtonPress ,this);
 		},
 		/**
 		 * Processes the press event of child Buttons to enforce the <a href="#config__alwaysSelected">_alwaysSelected</a> attribute,
