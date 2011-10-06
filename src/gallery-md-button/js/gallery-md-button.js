@@ -29,7 +29,8 @@ var Lang = Y.Lang,
 /**
  * The Button class provides a fancier type of button. 
  * @class Button
- * @extends Y.Widget, Y.MakeNode
+ * @extends Y.Widget
+ * @uses Y.MakeNode
  * @constructor
  * @param cfg {object} Configuration Attributes
  */
