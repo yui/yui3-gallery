@@ -1,0 +1,29 @@
+      <div class="intro">
+                                  <p>The Deferred module provides syntax enhancement for dealing with asynchronous requests.</p>
+                                  <p>Common use cases for Deferreds are:</p>
+                                  <ul>
+                                  	<li>
+                                  		<p><strong>Multiple IO requests:</strong> making more than one IO request at the same time or in a specific order. This usually means dealing with a lot of events and callbacks.</p>
+                                  		<p>The Deferred module allows you to simply chain the IO calls and have them execute one after the other, or wait for all of them to complete using `Y.when()`.</p>
+                                  	</li>
+                                  	<li>
+                                  		<p><strong>Long animations:</strong> making a complex animation usually requires doing one type of animation after the other. Again, the Deferred module allows you to chain those calls instead of nesting a lot of callbacks.</p>
+                                  	</li>
+                                  </ul>
+                                  <p>A Deferred represents the promise of a certain asynchronous action being completed/resolved or failed/rejected.</p>
+
+</div>
+{{>getting-started}}
+<div>
+				<h2 id="deferred-using">Using Deferred</h2>
+
+				<h3 id="using-deferred-io">Deferred IO requests</h3>
+				<p>
+					
+				</p>
+```
+    // Send the content of a form with a POST request and after that, request a message to be shown
+    Y.io.postForm('post.php?', '#myform').get('message.html').then(function (e) {
+        Y.one('#foo').setContent(e.responseText);
+    });
+```
