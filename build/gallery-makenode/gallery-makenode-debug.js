@@ -113,7 +113,9 @@ YUI.add('gallery-makenode', function(Y) {
 		 * Creates CSS classNames from suffixes listed in <a href="#property__CLASS_NAMES"><code>_CLASS_NAMES</code></a>, 
 		 * stores them in <a href="#property__classNames"><code>this._classNames</code></a>.
 		 * Concatenates <a href="#property__ATTRS_2_UI"><code>_ATTRS_2_UI</code></a> into <code>_UI_ATTRS</code>.
-		 * Sets listeners to render and destroy events to attach/detach UI events
+		 * Sets listeners to render and destroy events to attach/detach UI events.
+		 * If there is no renderUI defined in this class or any of its ancestors (not counting Widget which has a dummy one)
+		 * it will add a default one appending the result of processing _TEMPLATE and then call _locateNodes.
 		 * @constructor
 		 */
 		MakeNode = function () {
@@ -124,8 +126,20 @@ YUI.add('gallery-makenode', function(Y) {
 			self._publishEvents();
 			self.after('render', self._attachEvents, self);
 			self.after('destroy', self._detachEvents, self);
+			if (self.renderUI === Y.Widget.prototype.renderUI) {
+				self.renderUI = self._autoRenderUI;
+			}
 		};
 	MakeNode.prototype = {
+		/**
+		 * Method to be used if no explicit renderUI method is defined.
+		 * @method _autoRenderUI
+		 * @private
+		 */
+		_autoRenderUI: function () {
+			this.get('contentBox').append(this._makeNode());
+			this._locateNodes();
+		},
 		/** 
 		 * An array of event handles returned when attaching listeners to events,
 		 * meant to detach them all when destroying the instance.
@@ -184,7 +198,22 @@ YUI.add('gallery-makenode', function(Y) {
 			'1': function (args) {
 				args = this._parseMakeNodeArgs(args);
 				return parseInt(args[0],10) ===1?args[1]:args[2];
+			},
+			'n': function (args, extras) {
+				var fn, key, value = this;
+				args = args.split(WS);
+				
+				while (value && args.length) {
+					key = args.shift();
+					fn = this._templateHandlers[key.toLowerCase()];
+					if (!fn) {
+						return;
+					}
+					value =  fn.call(value, args.shift(), extras);
+				}
+				return value;
 			}
+				
 		},
 		/**
 		 * Parses the arguments received by the processor of the <code>{m}</code> placeholder.  
@@ -517,6 +546,10 @@ YUI.add('gallery-makenode', function(Y) {
 			Argument arg1 is usually a nested placeholder.</li>
 			<li><code>{1 arg1 arg2 arg3}</code> If arg1 is 1 it returns arg2 otherwise arg3. Used to produce singular/plural text.
 			Argument arg1 is usually a nested placeholder.</li>
+			<li><code>{n p1 arg1 .... pn argn}</code> It will read the value resulting from the processing code <code>p1</code> with argument <code>arg1</code>
+			and use that as the object to process the following processing code.  
+			It takes any number of processing codes and arguments.  
+			It only works with processing codes that take simple identifiers as arguments, ie.: not {m}.
 			<li><code>{}</code> any other value will be	handled just like <code>Y.substitute</code> does. </li>
 		</ul>
 	 * For placeholders containing several arguments they must be separated by white spaces.  
@@ -626,4 +659,4 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
-}, 'gallery-2011.09.28-20-06' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+}, 'gallery-2011.10.06-19-55' ,{requires:['substitute', 'classnamemanager'], skinnable:false});

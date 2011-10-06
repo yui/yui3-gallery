@@ -89,7 +89,7 @@ Y.ButtonGroup = Y.Base.create(
 		 */
 		bindUI : function() {
 
-			this.on(['button:press','button-toggle:press'], this._onButtonPress ,this);
+			this.on(['button:press','buttonToggle:press'], this._onButtonPress ,this);
 		},
 		/**
 		 * Processes the press event of child Buttons to enforce the <a href="#config__alwaysSelected">_alwaysSelected</a> attribute,
@@ -200,4 +200,4 @@ Y.ButtonGroup = Y.Base.create(
 );
 
 
-}, 'gallery-2011.08.31-20-57' ,{skinnable:true, requires:['base-base', 'widget-parent', 'widget-child', 'gallery-makenode', 'gallery-md-button']});
+}, 'gallery-2011.10.06-19-55' ,{skinnable:true, requires:['base-base', 'widget-parent', 'widget-child', 'gallery-makenode', 'gallery-md-button']});

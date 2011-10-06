@@ -8,15 +8,12 @@
 	zoom: 1;
 	*display: inline;
 }
-.yui3-button .yui3-button-icon,
-.yui3-button-toggle .yui3-button-toggle-icon  {
+.yui3-button .yui3-button-icon  {
 	cursor: pointer;
 	display: block;
 }
 .yui3-button-icon-none .yui3-button-icon,
-.yui3-button-icon-none  .yui3-button-icon,
-.yui3-button-toggle-icon-none .yui3-button-icon,
-.yui3-button-toggle-icon-none  .yui3-button-icon   {
+.yui3-button-icon-none  .yui3-button-icon  {
 	display: none;
 }
 .yui3-button-iconright  .yui3-button-icon{
@@ -26,12 +23,9 @@
 	float: left;
 }
 .yui3-button-disabled:hover,
-.yui3-button-disabled,
-.yui3-button-toggle-disabled:hover,
-.yui3-button-toggle-disabled {
+.yui3-button-disabled{
 	cursor: default;
 }
-.yui3-button-disabled,
-.yui3-button-toggle-disabled {
+.yui3-button-disabled{
 	cursor: default;
 }

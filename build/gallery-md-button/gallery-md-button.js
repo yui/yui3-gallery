@@ -31,7 +31,8 @@ var Lang = Y.Lang,
 /**
  * The Button class provides a fancier type of button. 
  * @class Button
- * @extends Y.Widget, Y.MakeNode
+ * @extends Y.Widget
+ * @uses Y.MakeNode
  * @constructor
  * @param cfg {object} Configuration Attributes
  */
@@ -541,4 +542,4 @@ Y.ButtonToggle = Y.Base.create(
 
 
 
-}, 'gallery-2011.08.31-20-57' ,{skinnable:true, requires:['base-build', 'widget', 'gallery-makenode']});
+}, 'gallery-2011.10.06-19-55' ,{skinnable:true, requires:['base-build', 'widget', 'gallery-makenode']});
