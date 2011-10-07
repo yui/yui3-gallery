@@ -6,7 +6,7 @@
 	background: transparent url("sprite.png") no-repeat  left -50px;
 	height: 27px;
 	display: inline-block;
-	padding: 5px 9px 0 5px;
+	padding: 5px 9px 0 5px;  /*  the code assumes the sum of padding-left and padding-right is 14px (9 + 5) */
 	vertical-align:top;
 
 	color: white;
@@ -23,7 +23,7 @@
 	background: transparent url("sprite.png") no-repeat top right;
 	height: 27px;
 	display: inline-block;
-	padding: 5px 5px 0 9px;
+	padding: 5px 5px 0 9px;  /*  the code assumes the sum of padding-left and padding-right is 14px (5 + 9) */
 	vertical-align:top;
 	position: relative;
 	left: -8px;
@@ -69,8 +69,10 @@
 	width: 500px;
 }
 .yui3-skin-sam .yui3-ibutton-disabled {
-	zoom:1;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
-	opacity: .5; 
+   opacity: .5; 
+}
+.yui3-skin-sam .yui3-ibutton-disabled .yui3-ibutton-labelOn,
+.yui3-skin-sam .yui3-ibutton-disabled .yui3-ibutton-labelOff {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
 }
