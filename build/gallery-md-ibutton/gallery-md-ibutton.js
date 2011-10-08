@@ -39,9 +39,10 @@ Y.IButton = Y.Base.create(
 		 * @protected
 		 */
 		renderUI: function () {
-			this.get(CBX).append(this._makeNode());
-			this._locateNodes('sliding',LABEL_ON,'slider',LABEL_OFF);
-			this._slidingNode.plug(Y.Plugin.NodeFX, {
+			var cbx = this.get(CBX);
+			cbx.append(this._makeNode());
+			this._locateNodes(LABEL_ON,'slider',LABEL_OFF, 'leftEdge');
+			cbx.plug(Y.Plugin.NodeFX, {
 				from: {
 					left: 0
 				},
@@ -52,8 +53,8 @@ Y.IButton = Y.Base.create(
 				easing: Y.Easing.easeOut,
 				duration: 0.5
 			});
+			cbx.fx.on('end', this._endAnim, this);
 			this._resize();
-			this._slidingNode.fx.on('end', this._endAnim, this);
 		},
 		/**
 		 * Calculates the size of the button based on the size of the labels.
@@ -61,23 +62,24 @@ Y.IButton = Y.Base.create(
 		 * @private
 		 */
 		_resize: function () {
-			this._labelOnNode.setStyle(WIDTH, AUTO);
-			this._labelOffNode.setStyle(WIDTH, AUTO);
-			this.get(CBX).setStyle(WIDTH,AUTO);
+			var bbx = this.get(BBX),
+				lOn = this._labelOnNode,
+				lOff = this._labelOffNode,
+				w, sliderReg, lReg;
+				
+			lOn.setStyle(WIDTH, AUTO);
+			lOff.setStyle(WIDTH, AUTO);
+			bbx.setStyle(WIDTH,AUTO);
 
-			var onReg = this._labelOnNode.get(REGION),
-				offReg = this._labelOffNode.get(REGION),
-				w = ( Math.max(onReg.width, offReg.width) - 14) + 'px',
-				sliderReg;
+			w = ( Math.max(lOn.get(REGION).width, lOff.get(REGION).width) - 8) + 'px';
 
-			this._labelOnNode.setStyle(WIDTH, w);
-			this._labelOffNode.setStyle(WIDTH, w);
-			onReg = this._labelOnNode.get(REGION);
-			offReg = this._labelOffNode.get(REGION);
+			lOn.setStyle(WIDTH, w);
+			lOff.setStyle(WIDTH, w);
+			lReg = this._leftEdgeNode.get(REGION);
 			sliderReg = this._sliderNode.get(REGION);
 			
-			this.get(CBX).setStyle(WIDTH,sliderReg.right - onReg.left);
-			this._slidingNode.fx.set('to.left', - (sliderReg.left - onReg.left));
+			bbx.setStyle(WIDTH, sliderReg.right - lReg.left);
+			this.get(CBX).fx.set('to.left', - (sliderReg.left - lReg.left));
 		},
 		
 		/**
@@ -146,11 +148,11 @@ Y.IButton = Y.Base.create(
 		 * @private
 		 */
 		_uiSetValue: function (value) {
-			var  slidingFx = this._slidingNode.fx;
+			var  fx = this.get(CBX).fx;
 			this._labelOnNode.setStyle(BG_IMG, '');
 			this._labelOffNode.setStyle(BG_IMG, '');
-			slidingFx.set('reverse', value);
-			slidingFx.run();
+			fx.set('reverse', value);
+			fx.run();
 		}
 	}, 
 	{
@@ -162,15 +164,15 @@ Y.IButton = Y.Base.create(
 		 * @protected
 		 */			
 		_TEMPLATE: [
-			'<div class="{c sliding}">',
-				'<div class="{c labelOn}">{@ labelOn}</div>',
-				'<div class="{c slider}">',
-					'<div class="{c sliderLeft}"></div>',
-					'<div class="{c sliderCenter}"></div>',
-					'<div class="{c sliderRight}"></div>',
-				'</div>',
-				'<div class="{c labelOff}">{@ labelOff}</div>',
-			'</div>'
+			'<div class="{c leftEdge}"></div>',
+			'<div class="{c labelOn}">{@ labelOn}</div>',
+			'<div class="{c slider}">',
+				'<div class="{c sliderLeft}"></div>',
+				'<div class="{c sliderCenter}"></div>',
+				'<div class="{c sliderRight}"></div>',
+			'</div>',
+			'<div class="{c labelOff}">{@ labelOff}</div>',
+			'<div class="{c rightEdge}"></div>'
 		].join(''),
 		
 		/**
@@ -180,7 +182,7 @@ Y.IButton = Y.Base.create(
 		 * @static
 		 * @protected
 		 */
-		_CLASS_NAMES: ['sliding',LABEL_ON,'slider','sliderLeft','sliderCenter','sliderRight',LABEL_OFF],
+		_CLASS_NAMES: [LABEL_ON,'slider','sliderLeft','sliderCenter','sliderRight',LABEL_OFF, 'leftEdge','rightEdge'],
 		/**
 		 * DOM events to be listened to, used by the MakeNode extension
 		 * @property Y.Button._EVENTS
