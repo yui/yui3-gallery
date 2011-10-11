@@ -431,4 +431,4 @@ Y.namespace(NAMESPACE +'.'+CONSTRUCTOR);
 Y[NAMESPACE][CONSTRUCTOR] = Timepicker;
 
 
-}, 'gallery-2010.02.25-22' ,{requires:['oop', 'event-custom', 'attribute', 'base', 'dom', 'classnamemanager', 'widget', 'event']});
+}, '@VERSION@' ,{requires:['oop', 'event-custom', 'attribute', 'base', 'dom', 'classnamemanager', 'widget', 'event']});
