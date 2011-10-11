@@ -366,7 +366,7 @@ Y.extend(Timepicker, Y.Widget, {
               cb.appendChild(parent);
         
               //store for later
-              this.allCells = cb.queryAll('li');
+              this.allCells = cb.all('li');
          
           },
           
