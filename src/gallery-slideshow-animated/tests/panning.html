@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .slideshow{position: relative; height: 250px; width: 393px; overflow: hidden;}
+        .slide { display: none; position: absolute;}
+        .slide.current { display: block; }
+        .inactive {color: #ccc; cursor: default;}
+        .current {font-weight: 700;}
+        .slideshow.panningSlideshow {width: auto; height: auto;}
+        .panningSlideshow .viewer {position: relative; width: 393px; height:212px; overflow: hidden; border: 1px solid red;}
+        .panningSlideshow .container {width:1179px;height:636px;position: absolute;}
+        .panningSlideshow .slide {display: block; float: left; position: relative;}
+        
+    </style>    
+</head>
+<body>
+
+<h2>Slideshow individual with panning transition</h2>
+<p>Blah</p>
+<div class="slideshow panningSlideshow" id="panning_slideshow">
+    <div class="viewer">
+        <div class="container">
+            <img src="media/slide_1.jpg" class="slide current">
+            <img src="media/slide_2.jpg" class="slide">
+            <img src="media/slide_3.jpg" class="slide">
+            <img src="media/slide_4.jpg" class="slide">
+            <img src="media/slide_2.jpg" class="slide">
+            <img src="media/slide_3.jpg" class="slide">
+            <img src="media/slide_4.jpg" class="slide">
+            <img src="media/slide_2.jpg" class="slide">
+            <img src="media/slide_3.jpg" class="slide">
+        </div>
+    </div>
+    <div>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        <a href="" class="slideSelector">5</a>
+        <a href="" class="slideSelector">6</a>
+        <a href="" class="slideSelector">7</a>
+        <a href="" class="slideSelector">8</a>
+        <a href="" class="slideSelector">9</a>
+        &nbsp; <a href="" class="next">next &gt;</a>  
+    </div>
+</div>  
+
+
+<p>Images courtesy of <a href="http://wildzoofari.com">Jim Knox's Wild Zoofari</a></p>
+
+<script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+<script type="text/javascript">
+    YUI({
+        modules: {
+            'gallery-slideshow-base': {
+                fullpath: '../../gallery-slideshow-base/build_tmp/gallery-slideshow-base-debug.js',
+                requires: ['node', 'event', 'widget']
+            },
+            'gallery-slideshow-animated': {
+                fullpath: '../build_tmp/gallery-slideshow-animated-debug.js',
+                requires: ['anim', 'gallery-slideshow-base']
+            }
+        }
+    }).use("gallery-slideshow-animated", "gallery-slideshow-panned", "log", "dump", function(Y) {
+       // Y.log(Y.dump(Y.SlideshowPanned));
+        //var s = new Y.SlideshowPanned({contentBox: '#panning_slideshow'})
+        //s.render();
+        Y.SlideshowAnimated.auto();
+/*        
+        var append_node = Y.one('#man_slideshow_events'),
+            slideshow_events = [
+                'slideshow:slide-selected',
+                'slideshow:before-slide-displayed',
+                'slideshow:slide-displayed',
+                'slideshow:before-slide-hidden',
+                'slideshow:slide-hidden',
+                'slideshow:play-clicked',
+                'slideshow:pause-clicked'
+            ],
+            man_slideshow = new Y.SlideshowAnimated({
+                contentBox: '#man_slideshow',
+                pause_time: 3
+            });
+
+        man_slideshow.render();
+
+        for(var i=0, len=slideshow_events.length;i < len; i++) {
+            man_slideshow.on(slideshow_events[i], function(e) {
+                append_node.append(e.type +' -- slide number: ' + e.slide_number +'<br>');
+            });
+        }
+*/
+    });
+</script>
+</body>
+</html>

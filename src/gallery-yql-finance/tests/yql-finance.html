@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Test gallery-yql-finance</title>
+
+<style>
+    .highlight { background-color: yellow; }
+</style>
+
+<script src="http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js"></script>
+</head>
+
+<body>
+
+	<h1>Test gallery-yql-finance</h1>
+
+	<div id="quotes"></div>
+    <br />
+	<div id="histQuotes"></div>
+    <br />
+	<div id="histQuotes2"></div>
+
+<script type="text/javascript">
+/*global YUI */
+
+"use strict";
+
+YUI({
+    modules: {
+        "gallery-yql-finance": {
+            fullpath: "../../../build/gallery-yql-finance/gallery-yql-finance.js",
+            requires: ["substitute", "yql"]
+        }
+    }
+}).use("node", "json", "gallery-yql-finance", function (Y) {
+    var symbols = ["IBM", "MSFT", "YHOO", "^GSPC", "EUR=X"];
+
+    function display(container, prices) {
+        var asset, content = "", c = Y.one(container);
+
+        for (asset in prices) {
+            if (prices.hasOwnProperty(asset)) {
+                content += asset + " -> ";
+                content += Y.JSON.stringify(prices[asset]);
+                content += "<br />";
+            }
+        }
+        c.setContent(content);    
+    }
+
+    Y.YQL.Finance.getHistoricalQuotes(symbols, function (prices) {
+        display("#histQuotes", prices);
+    }, {
+        columns: ["Close", "Date"]
+    });
+
+    Y.YQL.Finance.getHistoricalQuotes(symbols, function (prices) {
+        display("#histQuotes2", prices);
+    }, {
+        columns: ["Close", "Date"],
+        frequency: "w",
+        startDate: "2010-10-01",
+        endDate: "2010-10-30"
+    });
+
+    Y.YQL.Finance.getQuotes(symbols, function (prices) {
+        display("#quotes", prices);
+    }, {
+        columns: ["Change", "LastTradeDate"]
+    });
+});
+</script>
+
+</body>
+</html>
+

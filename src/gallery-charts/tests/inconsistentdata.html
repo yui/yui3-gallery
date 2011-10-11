@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+/*Supplemental: CSS for the YUI distribution*/
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:0px 0px 0px 0px;
+    padding:0px 0px 0px 0px;
+    width:750px;
+    height:400px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts-min.css">
+<!-- BEGIN EXAMPLE CODE -->	
+</head>		
+<body class="yui3-skin-sam">
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.2/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-charts/gallery-charts-min.js"></script>
+<div id="mychart"></div>
+<script type="text/javascript">            
+    YUI().use('gallery-charts', function (Y) 
+    { 
+        var _domAddClass = Y.DOM.addClass;
+        var myDataValues = [ 
+            {date:"5/1/2010", values:400, expenses:1100, revenue:1500, dog:8230, cat:7005, bird:6500, fish:5200, horse:4500, man:3400, shoe:2010, boat:1400}, 
+            {date:"5/2/2010", values:2000, expenses:3700, revenue:2200, dog:1230, cat:2005, bird:3500, fish:4200, horse:5500, man:6400, shoe:7010, boat:8400}, 
+            {date:"5/3/2010", values:50, expenses:9100, revenue:100, dog:1230, cat:2005, bird:3500, fish:4200, horse:5500, man:6400, shoe:7010, boat:8400}, 
+            {date:"5/4/2010", values:5000, expenses:5000, revenue:2650, dog:1230, cat:2005, bird:3500, fish:4200, horse:5500, man:6400},
+            {date:"5/5/2010", values:200, expenses:1900, revenue:2800, dog:1230, cat:2005, bird:3500, fish:4200}, 
+            {date:"5/6/2010", values:200, expenses:1900, revenue:2800, dog:1230, cat:4005}, 
+            {date:"5/7/2010", values:200, expenses:1900, revenue:2800} 
+        ];
+        var mychart = new Y.Chart({categoryKey:"date", dataProvider:myDataValues, render:"#mychart"});
+    });
+</script>
+</body>
+</html>

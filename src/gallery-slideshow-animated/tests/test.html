@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .slideshow {position: relative; height: 250px; width: 393px; overflow: hidden;}
+        .slide { display: none; position: absolute;}
+        .slide.current { display: block; }
+        .inactive {color: #ccc; cursor: default;}
+        .current {font-weight: 700;}
+        .slideshow.panningSlideshow {width: auto; height: auto;}
+        .panningSlideshow .viewer {position: relative; width: 393px; height:212px; overflow: hidden;}
+        .panningSlideshow .container {width:1179px;height:636px;position: absolute;}
+        .panningSlideshow .slide {display: block; float: left; position: relative;}
+        #man_slideshow {position: relative; height: 212px; width: 393px; overflow: hidden;}
+        .shrinkHorizontalSlideshow {width: 100%;}
+        .shrinkHorizontalSlideshow .slide { display: inline; overflow: hidden; position: relative; float: left;}
+        .shrinkHorizontalSlideshow .slide img { display: inline;}
+        
+    </style>    
+</head>
+<body>
+<h2>Slideshow with images, Default Fade</h2>
+<div class="slideshow">
+    <img src="media/slide_1.jpg" class="slide current pause">
+    <img src="media/slide_2.jpg" class="slide pause">
+    <img src="media/slide_3.jpg" class="slide pause">
+    <img src="media/slide_4.jpg" class="slide pause">
+</div>    
+    
+<h2>Slideshow with images with horizontal transition (current slide not specified)</h2>
+<div class="slideshow horizontalSlideshow">
+    <div class="slide current"><img src="media/slide_1.jpg"></div>
+    <div class="slide"><img src="media/slide_2.jpg"></div>
+    <div class="slide"><img src="media/slide_3.jpg"></div>
+    <div class="slide"><img src="media/slide_4.jpg"></div>
+    <div><a href="" class="play">Play</a> &nbsp; <a href="" class="pause">Pause</a></div>
+</div>
+
+<h2>Slideshow with horizontal cross transition </h2>
+<div class="slideshow horizontalCrossSlideshow">
+    <img src="media/slide_1.jpg" class="slide">
+    <img src="media/slide_2.jpg" class="slide">
+    <img src="media/slide_3.jpg" class="slide  current">
+    <img src="media/slide_4.jpg" class="slide">
+    <div>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        &nbsp; <a href="" class="next">next &gt;</a>  
+    </div>
+</div>  
+
+<h2>Slideshow with vertical slide transition</h2>
+<div class="slideshow verticalSlideshow">
+    <img src="media/slide_1.jpg" class="slide">
+    <img src="media/slide_2.jpg" class="slide">
+    <img src="media/slide_3.jpg" class="slide  current">
+    <img src="media/slide_4.jpg" class="slide">
+    <div>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        &nbsp; <a href="" class="next">next &gt;</a>  
+    </div>
+</div>  
+
+
+<h2>Slideshow individual with vertical cross transition</h2>
+<div class="slideshow verticalCrossSlideshow">
+    <img src="media/slide_1.jpg" class="slide">
+    <img src="media/slide_2.jpg" class="slide">
+    <img src="media/slide_3.jpg" class="slide  current">
+    <img src="media/slide_4.jpg" class="slide">
+    <div>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        &nbsp; <a href="" class="next">next &gt;</a>  
+    </div>
+</div>  
+
+
+
+<h2>Slideshow with panning transition</h2>
+<div class="slideshow panningSlideshow">
+    <div class="viewer">
+        <div class="container">
+            <img src="media/slide_1.jpg" class="slide current">
+            <img src="media/slide_2.jpg" class="slide">
+            <img src="media/slide_3.jpg" class="slide">
+            <img src="media/slide_4.jpg" class="slide">
+            <img src="media/slide_2.jpg" class="slide">
+            <img src="media/slide_3.jpg" class="slide">
+            <img src="media/slide_4.jpg" class="slide">
+            <img src="media/slide_2.jpg" class="slide">
+            <img src="media/slide_3.jpg" class="slide">
+        </div>
+    </div>
+    <div>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        <a href="" class="slideSelector">5</a>
+        <a href="" class="slideSelector">6</a>
+        <a href="" class="slideSelector">7</a>
+        <a href="" class="slideSelector">8</a>
+        <a href="" class="slideSelector">9</a>
+        &nbsp; <a href="" class="next">next &gt;</a>  
+    </div>
+</div>  
+
+
+<h2>Slideshow with new auto of shrinking</h2>
+<div class="slideshow shrinkSlideshow">
+    <div class="viewer">
+        <img src="media/slide_1.jpg" class="slide current">
+        <img src="media/slide_2.jpg" class="slide">
+        <img src="media/slide_3.jpg" class="slide">
+        <img src="media/slide_4.jpg" class="slide">
+    </div>
+    <div>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        &nbsp; <a href="" class="next">next &gt;</a>  
+    </div>
+</div>  
+
+<h2>Slideshow with new auto of horizontal shrinking</h2>
+<div class="slideshow shrinkHorizontalSlideshow">
+        <div class="slide current"><img src="media/name_1.jpg" class="slideSelector"></div>
+        <div class="slide"><img src="media/name_2.jpg" class="slideSelector"></div>
+        <div class="slide"><img src="media/name_3.jpg" class="slideSelector"></div>
+        <div class="slide"><img src="media/name_4.jpg" class="slideSelector"></div>
+</div>  
+
+<!--
+<div id="man_slideshow_events"  style="border: 1px solid #ccc; margin-left: 15px; float: right;">
+    <h2>Manual Slideshow Events</h2>
+</div>
+
+<h2>Manual Slideshow listening for events</h2>
+<div id="man_slideshow">
+    <img src="media/slide_1.jpg" class="slide current">
+    <img src="media/slide_2.jpg" class="slide">
+    <img src="media/slide_3.jpg" class="slide">
+    <img src="media/slide_4.jpg" class="slide">
+    <div>
+        <a href="" class="play">Play</a> &nbsp; <a href="" class="pause">Pause</a><br>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        &nbsp; <a href="" class="next">next &gt;</a>
+    </div>
+</div>  
+-->
+
+
+<p>Images courtesy of <a href="http://wildzoofari.com">Jim Knox's Wild Zoofari</a></p>
+
+<script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+<script type="text/javascript">
+    YUI({
+        modules: {
+            'gallery-slideshow-base': {
+                fullpath: '../../gallery-slideshow-base/build_tmp/gallery-slideshow-base-debug.js',
+                requires: ['node', 'event', 'widget']
+            },
+            'gallery-slideshow-animated': {
+                fullpath: '../build_tmp/gallery-slideshow-animated-debug.js',
+                requires: ['anim', 'gallery-slideshow-base']
+            }
+        }
+    }).use("gallery-slideshow-animated", "log", "dump", function(Y) {
+
+    Y.SlideshowAnimated.auto_shows.shrinkSlideshow = function(show_node, user_attrs) {
+        var show_attrs = {
+            contentBox: show_node,
+            animation_out: { from: { width: 393 }, to: {width: 0} },
+            animation_in: { from: {width: 0 }, to: {width: 393} },
+            reverse_animation: { value: true }
+        };       
+        return new Y.SlideshowAnimated(Y.SlideshowAnimated._auto_merge_attrs(show_attrs, user_attrs));
+    };
+
+    Y.SlideshowAnimated.auto_shows.shrinkHorizontalSlideshow = function(show_node, user_attrs) {
+        var slide = Y.SlideshowAnimated._auto_get_slide(show_node), 
+            width = parseInt(slide.getComputedStyle('width'), 10),
+            new_width = 35,
+            slideshow;
+            
+        if (! width) {
+            if(slide.getStyle('display').toLowerCase() == 'none') {
+                slide.setStyle('display', 'block');
+                width = parseInt(slide.getComputedStyle('width'), 10);
+                slide.setStyle('display', 'none');
+            }
+        }
+
+        show_attrs = {
+            contentBox: show_node,
+            animation_out: { from: { width: width }, to: {width: new_width} },
+            animation_in: { from: {width: new_width }, to: {width: width} }
+        };       
+
+        //show_attrs.reverse_animation = { value: true };
+        slideshow = new Y.SlideshowAnimated(Y.SlideshowAnimated._auto_merge_attrs(show_attrs, user_attrs));
+        show_node.all('.slide').each(function() {
+            if (! this.hasClass('current')){
+                this.setStyle('width', new_width + 'px');
+            } 
+        });
+        return slideshow;
+    };
+    
+    Y.SlideshowAnimated.auto();
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+/*Supplemental: CSS for the YUI distribution*/
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    padding:10px 10px 10px 10px;
+    width:750px;
+    height:350px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts-min.css">
+<!-- BEGIN EXAMPLE CODE -->	
+</head>		
+<body class="yui3-skin-sam">
+<h3>Multiple Series</h3>
+<div id="mychart"></div>
+<h3 style="margin-left:10px">Code Snippet</h3>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.2/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-charts/gallery-charts-min.js"></script>
+<script type="text/javascript">            
+    YUI().use('gallery-charts', function (Y) 
+    { 
+        var myDataValues = [ 
+            {date:"5/1/2010", values:2000, expenses:3700, revenue:2200}, 
+            {date:"5/2/2010", values:50, expenses:9100, revenue:100}, 
+            {date:"5/3/2010", values:400, expenses:1100, revenue:1500}, 
+            {date:"5/4/2010", values:200, expenses:1900, revenue:2800}, 
+            {date:"5/5/2010", values:5000, expenses:5000, revenue:2650}
+        ];
+        var styleDef = {
+            axes:{
+                values:{
+                    label:{
+                        rotation:-45,
+                        color:"#ff0000",
+                        fontSize:"95%"
+                    }
+                },
+                date:{
+                    label:{
+                        rotation:-45,
+                        color: "#ff0000"
+                    }
+                }
+            },
+            series:{
+                values:{
+                    marker:{
+                        fill:{
+                            color:"#ff8888"
+                        },
+                        border:{
+                            color:"#ff0000"
+                        },
+                        over:{
+                            fill:{
+                                color:"#ffffff"
+                            },
+                            border:{
+                                color:"#fe0000"
+                            },
+                            width: 12,
+                            height: 12
+                        }
+                    },
+                    line:{
+                        color:"#ff0000"
+                    }
+                },
+                expenses:{
+                    line:{
+                        color:"#999"
+                    },
+                    marker:
+                    {
+                        fill:{
+                            color:"#eee"
+                        },
+                        border:{
+                            color:"#999"
+                        }
+                    }
+                }
+            }
+        };
+        function tooltipLabelFunction(categoryItem, valueItem, itemIndex, series, seriesIndex)
+        {
+            var color = series.get("styles").line.color,
+                catName = categoryItem.displayName,
+                catValue = categoryItem.axis.get("labelFunction").apply(this, [categoryItem.value, categoryItem.axis.get("labelFormat")]), 
+                seriesName = valueItem.displayName,
+                seriesValue = valueItem.axis.get("labelFunction").apply(this, [valueItem.value, valueItem.axis.get("labelFormat")]),
+                msg = catName + ': ' + catValue + '<br/>';
+                msg += '<font color="' + color + '">' + seriesName + ': ' + seriesValue + '</font>';
+            return msg; 
+        }
+
+        var mychart = new Y.Chart({dataProvider:myDataValues, interactionType:"planar", categoryKey:"date", styles:styleDef, horizontalGridlines:true, verticalGridlines:true, render:"#mychart", tooltip: {labelFunction:tooltipLabelFunction}});
+    });
+</script>
+</body>
+</html>

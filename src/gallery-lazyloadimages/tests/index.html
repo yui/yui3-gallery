@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>LazyLoadImages - YUI Gallery Module Example</title>
+		<meta name="generator" content="TextMate http://macromates.com/">
+		<meta name="author" content="Santhosh Babu Nageshwar Rao"><!-- Date: 2011-02-15 -->
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-debug.js"></script>
+		<script type="text/javascript" src="../../../build/gallery-lazyloadimages/gallery-lazyloadimages-debug.js"></script>
+	</head>
+	<body class="yui3-skin-sam">
+		<h3>LazyLoadImages - YUI Gallery Module Example</h3>
+		<div id="someid">
+			<div>The image should below will be loaded immediately...</div>
+			<img santhosh="http://www.interweb.in/attachments/pc-wallpapers/16215d1222951905-nature-photos-wallpapers-images-beautiful-pictures-nature-444-photos.jpg" width="100" height="100" border="1px"/>
+		</div>
+		<div>
+		<div>The image will be loaded after the page is loaded...</div>
+		<img santhosh="http://www.interweb.in/attachments/pc-wallpapers/16216d1222951929-nature-photos-wallpapers-images-beautiful-pictures-nature-beautiful-photo-555.jpg" border="1px"/>
+		</div>
+		<script type="text/javascript">
+		YUI({gallery: "gallery-2011.05.04-20-03"}).use("node",function(Y){
+			Y.use("gallery-lazyloadimages",function(Y){
+					//Y.LazyloadImages.processnow("#someid");
+					Y.LazyloadImages.processAfterLoad("","santhosh");
+				});
+			});
+		</script>
+		
+	</body>
+</html>

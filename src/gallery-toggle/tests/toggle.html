@@ -1,0 +1,18 @@
+<html>
+	<head>
+		<title>Toggle Test</title>
+		<script src="http://yui.yahooapis.com/3.1.2/build/yui/yui-min.js"></script>
+		<script src="../../../build/gallery-toggle/gallery-toggle-debug.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../build/gallery-toggle/assets/gallery-toggle.css"></link>
+	</head>
+	<body>
+		<div id="mytoggle"></div>
+		<script type="text/javascript">
+			YUI({filter: 'RAW'}).use('gallery-toggle', function(Y) {
+				var mytoggle = new Y.Toggle({ srcNode: "#mytoggle", label: "Options" });
+				mytoggle.render();
+        mytoggle.after('selectedChange',function (e) { Y.log("Toggled " + mytoggle.get('selected') + "!"); });
+			});
+		</script>
+	</body>
+</html>

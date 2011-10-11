@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/strict.dtd"
+    >
+<html lang="en">
+<head>
+    <title>Ratings Widget Tester</title>
+    <link rel="stylesheet" href="../assets/gallery-ratings.css" type="text/css" />
+</head>
+<body>
+  <div class="widget_demo">
+    Widget Basic:
+    <div class="default">default: <span id="myWidget_basic">2.5</span></div>
+    <div class="default-inline">default-inline: <span id="myWidget_inline">2.5</span></div>
+    <div class="small">small: <span id="myWidget_small">2.5</span></div>
+    <div class="small-inline">small-inline: <span id="myWidget_small_inline">2.5</span></div>
+  </div>
+  
+  
+  <script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-min.js"></script>
+  <script type="text/javascript">
+    YUI({modules:  {
+           ratings: {
+               fullpath: '../js/gallery-ratings.js',
+               requires: ['widget','substitute']
+           }
+       }}).use("ratings","event",function(Y) {
+      var ratings = new Y.Ratings({ srcNode: "#myWidget_basic" });
+      ratings.render();
+      var ratings2 = new Y.Ratings({ srcNode: "#myWidget_inline", inline: true });
+      ratings2.render();
+      var ratings3 = new Y.Ratings({ srcNode: "#myWidget_small", skin: "small" });
+      ratings3.render();
+      var ratings4 = new Y.Ratings({ srcNode: "#myWidget_small_inline", skin: "small", inline: true });
+      ratings4.render();
+      
+      Y.on("ratings:ratingChange",function(e){
+        var id = e.target.get("contentBox").get("id");
+        Y.log(id+" New Value: "+e.newVal+" was: "+e.prevVal);
+      });
+    });
+  </script>
+</body>
+</html>

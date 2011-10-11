@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd"> 
+<html>
+    <head>
+        <title>DOM and Node removeClass Performance</title>
+    </head>
+    <body>
+        <h1>DOM and Node removeClass Performance</h1>
+        <p>The performance test below compares 3 types of removeClass:</p>
+        <ul>
+            <li><strong>yui3-node</strong>: the current core implementation, each class is removed using chaining, e.g.: <code>n.removeClass('foo').removeClass('bar');</code></li>
+            <li><strong>removeClasses</strong>: iterates the multiple classes to remove as an array and call the current core implementation (above) for each class, e.g.: <code>n.removeClass('foo bar');</code></li>
+            <li><strong>gallery-dom-node-remveclass</strong>: gallery module that uses regular expression to remove multiple/single classes, e.g.: <code>n.removeClass('foo bar');</code></li>
+        </ul>
+        <p>Each test removes multiple classes including a non-existing class, next it removes a single class, then a class already removed, then a single class again.</p>
+        <p>Choose the number of nodes for each test and the number of times these nodes will be tested.</p>
+        <p><em>* choose a smaller number of nodes if your test gets stucked (old browsers)</em></p>
+        <div># of nodes: <input type="text" id="nodes" value="1000"><br>
+            # of tests: <input type="text" id="tests" value="10"><br>
+            <button id="compare">compare</button>
+        </div>
+        <div id="results"></div>
+        <div id="container"></div>
+        <script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+        <script src="../../../build/gallery-dom-node-removeclass/gallery-dom-node-removeclass-debug.js"></script>
+        <script>
+            YUI.add('removeclasses', function(Y) {
+                var Y_DOM = Y.DOM,
+                    Y_Node = Y.Node;
+
+                Y_DOM.removeClasses = function (node, className) {
+                    if (className) {
+                        Y.Array.each(className.split(' '), function (v) {
+                            Y_DOM.removeClass(node, v);
+                        });
+                    }                 
+                };
+
+                Y_Node.importMethod(Y_DOM, 'removeClasses');
+                Y.NodeList.importMethod(Y_Node.prototype, 'removeClasses');
+            }, '0.0.1', {
+                requires: ['dom', 'node']
+            });
+        </script>
+        <script>
+            YUI().use('node', 'event', function (Y) {
+                Y.one('#compare').on('click', function (e) {
+                    var results = Y.one('#results'),
+                        size = parseInt(Y.one('#nodes').get('value'), 10),
+                        tests = parseInt(Y.one('#tests').get('value'), 10),
+                        res = [],
+
+                        init = function (n) {
+                            var str = '',
+                                container = document.getElementById('container');
+                                
+                            container.innerHTML = '';
+                            while (n--) {
+                                str += '<p id="p' + n + '" class="foo bar baz bat bah moo abc doo xyz arg"></p>';
+                            }
+                            container.innerHTML = str;
+                        },
+
+                        summary = function () {
+                            results.setContent('');
+                            res = res.sort(function (a, b) {return a.avg - b.avg;});
+                            Y.Array.each(res, function (v, i, a) {
+                                results.append('<p>' + v.test + ': ' + v.avg + 'ms' + (i < 2 ? ' (' + ((1 - (v.avg / a[2].avg)) * 100).toFixed(1) + '% faster)' : '') + '</p>');
+                            });
+                            e.target.set('disabled', false).setContent('compare');
+                        };
+
+                    e.target.set('disabled', true).setContent('running...');
+
+                    YUI().use('node', function (Y) {
+                        var t = tests, avg = 0;
+
+                        setTimeout(function () {
+                            var begin, timespan, p, n = size;
+
+                            init(n);
+                            begin = new Date();
+                            while (n--) {
+                                p = Y.one('#p' + n);
+                                p.removeClass('baz').removeClass('moo').removeClass('xyz').removeClass('none').removeClass('foo').removeClass('bat').removeClass('moo').removeClass('arg');
+                            }
+                            timespan = new Date() - begin;
+                            avg += timespan;
+                            if (--t) {
+                                setTimeout(arguments.callee, 50);
+                            } else {
+                                res.push({test: 'yui3-node', avg: (avg / tests)});
+                            }
+                        }, 50);
+                    });
+                    
+                    YUI().use('gallery-dom-node-removeclass', function (Y) {
+                        var t = tests, avg = 0;
+                        
+                        setTimeout(function () {
+                            var begin, timespan, p, n = size;
+
+                            init(n);
+                            begin = new Date();
+                            while (n--) {
+                                p = Y.one('#p' + n);
+                                p.removeClass('baz moo xyz none foo').removeClass('bat').removeClass('moo').removeClass('arg');
+                            }
+                            timespan = new Date() - begin;
+                            avg += timespan;
+                            if (--t) {
+                                setTimeout(arguments.callee, 50);
+                            } else {
+                                res.push({test: 'gallery-dom-node-removeclass', avg: (avg / tests)});
+                            }
+                        }, 50);
+                    });
+
+                    YUI().use('removeclasses', function (Y) {
+                        var t = tests, avg = 0;
+                        
+                        setTimeout(function () {
+                            var begin, timespan, p, n = size;
+
+                            init(n);
+                            begin = new Date();
+                            while (n--) {
+                                p = Y.one('#p' + n);
+                                p.removeClasses('baz moo xyz none foo').removeClasses('bat').removeClasses('moo').removeClasses('arg');
+                            }
+                            timespan = new Date() - begin;
+                            avg += timespan;
+                            if (--t) {
+                                setTimeout(arguments.callee, 50);
+                            } else {
+                                res.push({test: 'removeClasses', avg: (avg / tests)});
+                                summary();
+                            }
+                        }, 50);
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
+

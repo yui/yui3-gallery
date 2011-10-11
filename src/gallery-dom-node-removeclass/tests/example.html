@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd"> 
+<html>
+    <head>
+        <title>DOM and Node removeClass Example</title>
+        <style type="text/css">
+           .box, #container {border:1px solid #000;}
+           #container {width: 535px; height: 90px; padding-left:15px; margin-top:1em;}
+           input {width:350px;}
+           .box {float:left; height:50px; width:50px; background-color:#ccc; color:#888; text-align:center;}
+           .blue #box1 {background-color:blue; color:blue;}
+           .green #box2 {background-color:green; color:green;}
+           .red #box3 {background-color:red; color:red;}
+           .yellow #box4 {background-color:yellow; color:yellow;}
+           .orange #box5 {background-color:orange; color:orange;}
+           .cyan #box6 {background-color:cyan; color:cyan;}
+           .brown #box7 {background-color:brown; color:brown;}
+           .black #box8 {background-color:black; color:black;}
+           .gray #box9 {background-color:gray; color:gray;}
+           .pink #box10 {background-color:pink; color:pink;}
+        </style>
+    </head>
+    <body>
+        <h1>DOM and Node removeClass Example</h1>
+        <p>This example removes multiple classes at once from a node.</p>
+        <p>Enter the classes to be set on container and click set then enter the classes to be removed and click remove.</p>
+        <p>Available classes are: blue, green, red, yellow, orange, cyan, brown, black, gray, pink</p>
+        <div>node classes: <input type="text" id="node-classes" value="blue green red yellow orange cyan brown black gray pink">
+            <button id="set">set</button>
+            <br>
+            remove classes: <input type="text" id="remove-classes" value="green gray yellow cyan purple pink">
+            <button id="remove">remove</button>
+        </div>
+        <div id="container" class="blue green red yellow orange cyan brown black gray pink">
+            <div>container</div>
+            <div id="box1" class="box">blue</div>
+            <div id="box2" class="box">green</div>
+            <div id="box3" class="box">red</div>
+            <div id="box4" class="box">yellow</div>
+            <div id="box5" class="box">orange</div>
+            <div id="box6" class="box">cyan</div>
+            <div id="box7" class="box">brown</div>
+            <div id="box8" class="box">magenta</div>
+            <div id="box9" class="box">gray</div>
+            <div id="box10" class="box">pink</div>
+        </div>
+        <script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+        <script src="../../../build/gallery-dom-node-removeclass/gallery-dom-node-removeclass-debug.js"></script>
+        <script>
+            YUI().use('node', 'event', 'gallery-dom-node-removeclass', function (Y) {
+                Y.one('#set').on('click', function (e) {
+                    Y.one('#container').set('className', Y.one('#node-classes').get('value'));
+                });
+                Y.one('#remove').on('click', function (e) {
+                    var x = Y.one('#container');
+                    var y = Y.one('#remove-classes').get('value');
+                    x.removeClass(Y.one('#remove-classes').get('value'));
+                });
+            });
+        </script>
+    </body>
+</html>
+

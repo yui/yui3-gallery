@@ -1,0 +1,16 @@
+The inspiration behind this project is of course the original Lightbox
+(http://www.huddletogether.com/projects/lightbox2).  This module will begin
+by including a full port of Lightbox to YUI 3 and then I'll add functionality
+as I go to allow for non-image content, additional options, etc.
+
+== CHANGELOG ==
+
+Version 0.9
+------------
+
+03/22/2010
+
+This release is the first official release.  I'm currently supporting everything
+the original Lightbox supports.  The official documentation is located at:
+http://projects.sophomoredev.com/yui-gallery-lightbox.  This project is hosted at Github,
+so feel free to fork it if you'd like to make modifications.

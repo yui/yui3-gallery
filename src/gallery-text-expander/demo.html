@@ -1,0 +1,23 @@
+<html>
+<head></head>
+<body>
+    <form>
+        <textarea></textarea>
+    </form>
+    
+<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+<script type="text/javascript">
+ 
+    YUI({
+        modules: {
+            'gallery-text-expander': {
+                fullpath: 'build_tmp/gallery-text-expander-debug.js',
+                requires: ['plugin']
+            }
+        }
+    }).use("node", 'gallery-text-expander', function(Y) {
+        Y.all("textarea").plug(Y.TextExpander);
+    });
+</script>
+</body>
+</html>

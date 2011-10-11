@@ -1,0 +1,6 @@
+.yui3-skin-xarno .tabView { position: relative; padding:1px; overflow: hidden; font-size: 1em; }
+.yui3-skin-xarno .tabView dt { float: left; margin-right: 1px; position:relative; cursor: pointer; z-index: 1; height: 2em; line-height: 2em; border: 1px solid #ddd; padding:0 1em; top: 2px; }
+.yui3-skin-xarno .tabView dt.active { z-index: 3; cursor: default; border-bottom-color: #fff; top: -1px; }
+.yui3-skin-xarno .tabView dd { float: right; position:relative; margin-top: 2em; margin-left: -100%; width: 100%; display: none; z-index: 2; background: #fff;}
+.yui3-skin-xarno .tabView dd.active { display: block;}
+.yui3-skin-xarno .tabView dd .liner { border: 1px solid #ddd; padding: 5px 12px 5px 10px;}

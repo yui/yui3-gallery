@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Overlay Transition Plugin</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <style>
+        .yui3-overlay { border: 1px solid #000; background: #666; color: #FFF; font-weight: bold; }
+    </style>
+</head>
+<body class="yui3-skin-sam">
+    <button id="start" disabled>Start Tests</button>
+    
+    <script src="http://yui.yahooapis.com/combo?3.4.0pr2/build/yui/yui.js"></script>
+    <script src="../../../build/gallery-overlay-transition/gallery-overlay-transition.js"></script>
+    <script src="tests.js"></script>
+    <script>
+    var Y = YUI(
+        /* 
+            { combine : false, filter : "raw" }
+        //*/
+        ).use("node", "event", "test", "console", "gallery-overlay-transition", "overlay-transition-tests", function(Y) {
+        new Y.Console({
+            verbose : true,
+            height: 600,
+            width: 500,
+            newestOnTop : false,
+            render : true
+        });
+        
+        //add to the testrunner and run
+        Y.Test.Runner.add(Y.Tests.OverlayTransition);
+        
+        Y.one("#start").on("click", function(e) {
+            e.preventDefault();
+            
+            Y.Test.Runner.run();
+        });
+        
+        Y.one("#start").set("disabled", false);
+    });
+    </script>
+</body>
+</html>

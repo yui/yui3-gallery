@@ -1,0 +1,22 @@
+<html>
+<head>
+<title>Bidi-aware text input</title>
+</head>
+<body>
+<script src="../build/yui/yui-min.js"></script>
+<script src="gallery-intl-bidi-min.js"></script>
+<script src="gallery-node-setdir-min.js"></script>
+<script src="gallery-bidi-textinput-min.js"></script>
+<script>
+YUI().use("gallery-bidi-textinput", "node-pluginhost", function(Y) {
+    Y.one("html").append("<input style='position:absolute;width:40%;left:10%' type='text' class='autobidi'>");
+
+    Y.all("input.autobidi").plug(Y.Plugin.BidiTextInput);
+    
+    Y.on("directionChange", function (e) {
+        Y.log('bidi: direction switch happened. dir:'+e.dir+', target:'+e.target);
+    });        
+});
+</script>
+</body>
+</html>

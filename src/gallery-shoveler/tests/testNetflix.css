@@ -1,0 +1,68 @@
+.netflix .yui-shoveler-body {
+	background-color: #EFEEED;
+	border-top: 2px solid #807E7D;
+}
+
+.netflix .yui-shoveler-header {
+	background-color: white;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+.netflix .yui-shoveler-header  h2{
+	display: inline;
+	font-size: 16px;
+	color: #333333;
+	font-weight: bold;
+}
+.netflix .yui-shoveler-body {
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	border-top: none;
+}
+
+.netflix .yui-shoveler-button-left,
+.netflix .yui-shoveler-button-right {
+	height: 37px;
+	width: 25px;
+	background: url("http://cdn-0.nflximg.com/us/ffe/headers/misc_alpha_24_1028.png") no-repeat scroll 0 0 transparent;
+	background-position: -100px -182px;
+}
+
+.netflix .yui-shoveler-button-right {
+	background-position: -600px -182px;
+}
+
+.netflix .yui-shoveler-button-right.yui-shoveler-button-on {
+	background-position: -500px -182px;
+}
+
+.netflix .yui-shoveler-button-left.yui-shoveler-button-on {
+	background-position: -200px -182px;
+}
+
+.netflix .yui-shoveler-button-right.yui-shoveler-disabled {
+	background-position: -400px -182px;
+}
+
+.netflix .yui-shoveler-button-left.yui-shoveler-disabled {
+	background-position: -300px -182px;
+}
+
+.netflix .yui-shoveler-cell img {
+	display: block;
+	margin: auto;
+	border: 1px solid black;
+}
+
+.netflix .yui-shoveler-cell div {
+	text-align: center;
+}
+
+.netflix .yui-shoveler-loading {
+	width: 14px;
+	height: 14px;
+	background-image: url("https://images-na.ssl-images-amazon.com/images/G/01/ui/loadIndicators/loadIndicator-label._V262087968_.gif");
+	background-position: -59px 0;
+}

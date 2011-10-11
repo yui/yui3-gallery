@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Deferred IO test</title>
+</head>
+<body class="yui3-skin-sam">
+	<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
+	<script>
+		YUI({
+			filter: 'raw',
+			modules: {
+				'gallery-deferred': {
+					fullpath: '../build_tmp/gallery-deferred.js',
+					requires: ['event-custom']
+				}
+			},
+			logInclude: {
+				TestRunner: true
+			}
+		}).use('io', 'gallery-deferred', 'test', 'console', function (Y) {
+			
+			var testCase = new Y.Test.Case({
+				name: 'Deferred IO',
+				
+				testDeferredIO: function () {
+					Y.log('Testing if Y.io.get works with a single callback as an event handler for the "complete" event');
+					
+					var test = this;
+					
+					Y.io.get('io-content1.html', function (id, xhr) {
+						test.resume(function () {
+							Y.Assert.areEqual(xhr.responseText, '<div>hello</div>', 'e.responseText should be equal to "<div>hello</div>"');
+						});
+					});
+					
+					this.wait(3000);
+				},
+				
+				testWhen: function () {
+					Y.log('Testing if Y.when waits for all deferred actions to complete');
+					
+					var test = this;
+					
+					Y.when(Y.io.get('io-content1.html'), Y.io.get('io-content2.html')).then(function (a, b) {
+						test.resume(function () {
+							Y.Assert.isTrue(Y.Lang.isArray(a) && Y.Lang.isArray(b), 'arguments of a .then() callback after Y.when are arrays of arguments themselves');
+							Y.Assert.areEqual(a[1].responseText, '<div>hello</div>', 'First response should be equal to "<div>hello</div>"');
+							Y.Assert.areEqual(b[1].responseText, '<div>world</div>', 'Second response should be equal to "<div>world</div>"');
+						});
+					});
+					
+					this.wait(3000);
+				}
+			});
+			
+			new Y.Console({
+				height: 550,
+				width: '90%'
+			}).render();
+			Y.Test.Runner.add(testCase);
+			Y.Test.Runner.run();
+		});
+	</script>
+</body>
+</html>

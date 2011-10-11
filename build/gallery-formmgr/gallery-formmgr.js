@@ -6,6 +6,12 @@ YUI.add('gallery-formmgr', function(Y) {
  * <p>FormManager provides support for initializing a form, pre-validating
  * user input, and displaying messages returned by the server.</p>
  * 
+ * <p>Also see the documentation for gallery-formmgr-css-validation.</p>
+ * 
+ * @module gallery-formmgr
+ */
+
+/**
  * <p><strong>Required Markup Structure</strong></p>
  * 
  * <p>Each element (or tighly coupled set of elements) must be contained by
@@ -91,6 +97,10 @@ YUI.add('gallery-formmgr', function(Y) {
  * <p>More complex pre-validations can be added by overriding
  * <code>postValidateForm()</code>, described below.</p>
  *
+ * <p>Validation normally strips leading and trailing whitespace from every
+ * value.  If you have a special case where this should not be done, add
+ * the CSS class <code>yiv-no-trim</code> to the input field.</p>
+ *
  * <p>Derived classes may also override the following functions:</p>
  *
  * <dl>
@@ -107,7 +117,6 @@ YUI.add('gallery-formmgr', function(Y) {
  *		is a problem.</dd>
  * </dl>
  *
- * @module gallery-formmgr
  * @class FormManager
  * @constructor
  * @param form_name {String} The name attribute of the HTML form.
@@ -123,15 +132,8 @@ function FormManager(
 	/* string */	form_name,
 	/* object */	config)		// {status_node, default_value_map}
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
-	if (!config)
-	{
-		config = {};
-	}
+	config = config || {};
+	FormManager.superclass.constructor.call(this, config);
 
 	this.form_name   = form_name;
 	this.status_node = Y.one(config.status_node);
@@ -171,41 +173,23 @@ function FormManager(
 var class_re_prefix = '(?:^|\\s)(?:';
 var class_re_suffix = ')(?:\\s|$)';
 
-// pre-validation classes
-
-var required_class    = 'yiv-required';
-var length_class_re   = /(?:^|\s+)yiv-length:\[([0-9]+)?,([1-9][0-9]*)?\](?:\s+|$)/;
-var integer_class_re  = /(?:^|\s+)yiv-integer(?::\[([-+]?[0-9]+)?,([-+]?[0-9]+)?\])?(?:\s+|$)/;
-var decimal_class_re  = /(?:^|\s+)yiv-decimal(?::\[([-+]?(?:[0-9]+\.?|[0-9]+\.[0-9]+|\.[0-9]+))?,([-+]?(?:[0-9]+\.?|[0-9]+\.[0-9]+|\.[0-9]+))?\])?(?:\s+|$)/;
-
 /**
- * Regular expression used to determine if a value is an integer.
- * This can be localized, e.g., allow for thousands separator.
- * 
- * @config Y.FormManager.integer_value_re
- * @type {RegExp}
- * @static
- */
-FormManager.integer_value_re = /^[-+]?[0-9]+$/;
-
-/**
- * Regular expression used to determine if a value is a decimal number.
- * This can be localized, e.g., use the correct decimal separator.
- * 
- * @config Y.FormManager.decimal_value_re
- * @type {RegExp}
- * @static
- */
-FormManager.decimal_value_re = /^[-+]?(?:[0-9]+\.?|[0-9]*\.[0-9]+)$/;
-
-/**
- * The CSS class which marks each row of the form.  Typically, each element
- * (or a very tightly coupled set of elements) is placed in a separate row.
+ * The CSS class which marks each row of the form.  Typically, each field
+ * (or a very tightly coupled set of fields) is placed in a separate row.
  * 
  * @property Y.FormManager.row_marker_class
  * @type {String}
  */
 FormManager.row_marker_class = 'formmgr-row';
+
+/**
+ * The CSS class which marks each field in a row of the form.  This enables
+ * messaging when multiple fields are in a single row.
+ * 
+ * @property Y.FormManager.field_marker_class
+ * @type {String}
+ */
+FormManager.field_marker_class = 'formmgr-field';
 
 /**
  * The CSS class which marks the container for the status message within a
@@ -254,115 +238,44 @@ FormManager.status_failure_class = 'formmgr-status-failure';
  */
 FormManager.row_status_prefix = 'formmgr-has';
 
-var status_pattern     = FormManager.status_success_class+'|'+FormManager.status_failure_class;
-var row_status_pattern = FormManager.row_status_prefix + '([^\\s]+)';
-var row_status_regex   = new RegExp(class_re_prefix + row_status_pattern + class_re_suffix);
+// By using functions for the internal values, we allow the above constants
+// to be changed before they are first used.
 
-/**
- * <p>Map of localizable strings used by pre-validation.</p>
- * 
- * <dl>
- * <dt><code>validation_error</code></dt>
- * <dd>Displayed in <code>status_node</code> by <code>notifyErrors()</code> when pre-validation fails.</dd>
- * <dt><code>required_string</code></dt>
- * <dd>Displayed when <code>yiv-required</code> fails on an input field.</dd>
- * <dt><code>required_menu</code></dt>
- * <dd>Displayed when <code>yiv-required</code> fails on a select element.</dd>
- * <dt><code>length_too_short</code>, <code>length_too_long</code>, <code>length_out_of_range</code></dt>
- * <dd>Displayed when <code>yiv-length</code> fails on an input field.</dd>
- * <dt><code>integer</code>, <code>integer_too_small</code>, <code>integer_too_large</code>, <code>integer_out_of_range</code></dt>
- * <dd>Displayed when <code>yiv-integer</code> fails on an input field.</dd>
- * <dt><code>decimal</code>, <code>decimal_too_small</code>, <code>decimal_too_large</code>, <code>decimal_out_of_range</code></dt>
- * <dd>Displayed when <code>yiv-decimal</code> fails on an input field.</dd>
- * </dl>
- * 
- * @config Y.FormManager.Strings
- * @type {Object}
- * @static
- */
-FormManager.Strings =
+var cached_status_pattern;
+var cached_row_status_pattern;
+var cached_row_status_regex;
+
+function statusPattern()
 {
-	validation_error:     'Correct errors in the highlighted fields before continuing.',
-
-	required_string:      'This field requires a value.',
-	required_menu:        'This field is required. Choose a value from the pull-down list.',
-
-	length_too_short:     'Enter text that is at least {min} characters or longer.',
-	length_too_long:      'Enter text that is up to {max} characters long.',
-	length_out_of_range:  'Enter text that is {min} to {max} characters long.',
-
-	integer:              'Enter a whole number (no decimal point).',
-	integer_too_small:    'Enter a number that is {min} or higher (no decimal point).',
-	integer_too_large:    'Enter a number that is {max} or lower (no decimal point).',
-	integer_out_of_range: 'Enter a number between or including {min} and {max} (no decimal point).',
-
-	decimal:              'Enter a number.',
-	decimal_too_small:    'Enter a number that is {min} or higher.',
-	decimal_too_large:    'Enter a number that is {max} or lower.',
-	decimal_out_of_range: 'Enter a number between or including {min} and {max}.'
-};
-
-/**
- * <p>Names of supported status values, highest precedence first.  Default:
- * <code>[ 'error', 'warn', 'success', 'info' ]</code></p>
- * 
- * <p>This is static because it links to CSS rules that define the
- * appearance of each status type:  .formmgr-has{status}</p>
- * 
- * @config Y.FormManager.status_order
- * @type {Array}
- * @static
- */
-FormManager.status_order =
-[
-	'error',
-	'warn',
-	'success',
-	'info'
-];
-
-/**
- * Get the precedence of the given status name.
- * 
- * @method Y.FormManager.getStatusPrecedence
- * @static
- * @param status {String} The name of the status value.
- * @return {int} The position in the <code>status_order</code> array.
- */
-FormManager.getStatusPrecedence = function(
-	/* string */	status)
-{
-	for (var i=0; i<FormManager.status_order.length; i++)
+	if (!cached_status_pattern)
 	{
-		if (status == FormManager.status_order[i])
-		{
-			return i;
-		}
+		cached_status_pattern = FormManager.status_success_class+'|'+FormManager.status_failure_class;
 	}
+	return cached_status_pattern;
+}
 
-	return FormManager.status_order.length;
-};
-
-/**
- * Compare two status values.
- * 
- * @method Y.FormManager.statusTakesPrecendence
- * @static
- * @param orig_status {String} The name of the original status value.
- * @param new_status {String} The name of the new status value.
- * @return {boolean} <code>true</code> if <code>new_status</code> takes precedence over <code>orig_status</code>
- */
-FormManager.statusTakesPrecendence = function(
-	/* string */	orig_status,
-	/* string */	new_status)
+function rowStatusPattern()
 {
-	return (!orig_status || FormManager.getStatusPrecedence(new_status) < FormManager.getStatusPrecedence(orig_status));
-};
+	if (!cached_row_status_pattern)
+	{
+		cached_row_status_pattern = FormManager.row_status_prefix + '([^\\s]+)';
+	}
+	return cached_row_status_pattern;
+}
+
+function rowStatusRegex()
+{
+	if (!cached_row_status_regex)
+	{
+		cached_row_status_regex = new RegExp(class_re_prefix + rowStatusPattern() + class_re_suffix);
+	}
+	return cached_row_status_regex;
+}
 
 /**
  * Get the status of the given fieldset or form row.
  * 
- * @method Y.FormManager.getElementStatus
+ * @method getElementStatus
  * @static
  * @param e {String|Object} The descriptor or DOM element.
  * @return {mixed} The status (String) or <code>false</code>.
@@ -370,15 +283,8 @@ FormManager.statusTakesPrecendence = function(
 FormManager.getElementStatus = function(
 	/* string/object */	e)
 {
-	var m = Y.one(e).get('className').match(row_status_regex);
-	if (m && m.length)
-	{
-		return m[1];
-	}
-	else
-	{
-		return false;
-	}
+	var m = Y.one(e).get('className').match(rowStatusRegex());
+	return (m && m.length > 1 ? m[1] : false);
 };
 
 function getId(
@@ -398,12 +304,6 @@ function getId(
 	}
 }
 
-function hasLimit(
-	/* string */	s)
-{
-	return (!Y.Lang.isUndefined(s) && s.length > 0);
-}
-
 function populateForm1()
 {
 	var collect_buttons = (this.button_list.length === 0);
@@ -412,9 +312,10 @@ function populateForm1()
 	{
 		var e = this.form.elements[i];
 
+		var name = e.tagName.toLowerCase();
 		var type = (e.type ? e.type.toLowerCase() : null);
 		if (collect_buttons &&
-			(type == 'submit' || type == 'reset' || type == 'button'))
+			(type == 'submit' || type == 'reset' || name == 'button'))
 		{
 			this.button_list.push(e);
 		}
@@ -423,8 +324,6 @@ function populateForm1()
 		{
 			continue;
 		}
-
-		var name = e.tagName.toLowerCase();
 
 		var v = this.default_value_map[ e.name ];
 		if (name == 'input' && type == 'file')
@@ -497,7 +396,106 @@ function populateForm1()
 	}
 }
 
-FormManager.prototype =
+/**
+ * <p>Exposed for use by Y.QueryBuilder</p>
+ * 
+ * <p>Clear the message for the given field.</p>
+ * 
+ * @method Y.FormManager.clearMessage
+ * @static
+ * @param e {Element|Node} the field
+ */
+FormManager.clearMessage = function(e)
+{
+	var p = Y.one(e).getAncestorByClassName(Y.FormManager.row_marker_class);
+	if (p && p.hasClass(rowStatusPattern()))
+	{
+		p.all('.'+Y.FormManager.status_marker_class).set('innerHTML', '');
+		p.removeClass(rowStatusPattern());
+
+		p.all('.'+Y.FormManager.field_marker_class).removeClass(rowStatusPattern());
+	}
+};
+
+/**
+ * <p>Exposed for use by Y.QueryBuilder</p>
+ * 
+ * <p>Display a message for the form row containing the specified element.
+ * The message will only be displayed if no message with a higher
+ * precedence is already visible. (see Y.FormManager.status_order)</p>
+ * 
+ * @method Y.FormManager.displayMessage
+ * @static
+ * @param e {String|Object} The selector for the element or the element itself
+ * @param msg {String} The message
+ * @param type {String} The message type (see Y.FormManager.status_order)
+ * @param had_messages {boolean} (Optional) <code>true</code> if the form already has messages displayed
+ * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+ * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
+ */
+FormManager.displayMessage = function(
+	/* id/object */	e,
+	/* string */	msg,
+	/* string */	type,
+	/* boolean */	had_messages,
+	/* boolean */	scroll)
+{
+	if (Y.Lang.isUndefined(scroll))
+	{
+		scroll = true;
+	}
+
+	e     = Y.one(e);
+	var p = e.getAncestorByClassName(FormManager.row_marker_class);
+	if (p && FormManager.statusTakesPrecedence(FormManager.getElementStatus(p), type))
+	{
+		var f = p.all('.'+FormManager.field_marker_class);
+		if (f)
+		{
+			f.removeClass(rowStatusPattern());
+		}
+
+		if (msg)
+		{
+			p.one('.'+FormManager.status_marker_class).set('innerHTML', msg);
+		}
+
+		var new_class = FormManager.row_status_prefix + type;
+		p.replaceClass(rowStatusPattern(), new_class);
+
+		f = e.getAncestorByClassName(FormManager.field_marker_class, true);
+		if (f)
+		{
+			f.replaceClass(rowStatusPattern(), new_class);
+		}
+
+		var fieldset = e.getAncestorByTagName('fieldset');
+		if (fieldset && FormManager.statusTakesPrecedence(FormManager.getElementStatus(fieldset), type))
+		{
+			fieldset.removeClass(rowStatusPattern());
+			fieldset.addClass(FormManager.row_status_prefix + type);
+		}
+
+		if (!had_messages && scroll)
+		{
+			p.scrollIntoView();
+			try
+			{
+				e.focus();
+			}
+			catch (ex)
+			{
+				// no way to determine in IE if this will fail
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+};
+
+Y.extend(FormManager, Y.Plugin.Host,
 {
 	/* *********************************************************************
 	 * Access functions.
@@ -510,7 +508,7 @@ FormManager.prototype =
 	{
 		if (!this.form)
 		{
-			this.form = document.forms[ this.form_name ];
+			this.form = Y.config.doc.forms[ this.form_name ];
 		}
 		return this.form;
 	},
@@ -521,6 +519,15 @@ FormManager.prototype =
 	hasFileInputs: function()
 	{
 		return this.has_file_inputs;
+	},
+
+	/**
+	 * @param node {String|Y.Node} the node in which status should be displayed
+	 */
+	setStatusNode: function(
+		/* Node */	node)
+	{
+		this.status_node = Y.one(node);
 	},
 
 	/**
@@ -609,6 +616,7 @@ FormManager.prototype =
 
 		if (!this.validation_msgs[id] || !this.validation_msgs[id].regex)
 		{
+			Y.error(Y.substitute('No error message provided for regex validation of {id}!', {id:id}), null, 'FormManager');
 		}
 	},
 
@@ -772,10 +780,6 @@ FormManager.prototype =
 			return false;
 		}
 
-		// clear all errors
-
-		this.clearMessages();
-
 		// fill in starting values
 
 		this.populateForm();
@@ -846,202 +850,31 @@ FormManager.prototype =
 		this.clearMessages();
 		var status = true;
 
-		this.has_file_inputs = false;
+		var e                = this.form.elements;
+		this.has_file_inputs = FormManager.cleanValues(e);
 
-		var e = this.form.elements;
 		for (var i=0; i<e.length; i++)
-		{
-			if (e[i].type && e[i].type.toLowerCase() == 'file')
-			{
-				this.has_file_inputs = true;
-			}
-			else if (e[i].type && e[i].type.toLowerCase() == 'select-multiple')
-			{
-				// don't change the value
-			}
-			else if (e[i].value)
-			{
-				e[i].value = Y.Lang.trim(e[i].value);
-			}
-		}
-
-		for (i=0; i<e.length; i++)
 		{
 			var e_id     = e[i].id;
 			var msg_list = this.validation_msgs[e_id];
 
-			var required = Y.one(e[i]).hasClass(required_class);
-			if (required && e[i].value === '')
+			var info = FormManager.validateFromCSSData(e[i], msg_list);
+			if (info.error)
 			{
-				var msg = null;
-				if (msg_list && msg_list.required)
-				{
-					msg = msg_list.required;
-				}
-				else if (e[i].tagName.toLowerCase() == 'select')
-				{
-					msg = FormManager.Strings.required_menu;
-				}
-				else
-				{
-					msg = FormManager.Strings.required_string;
-				}
-				this.displayMessage(e[i], msg, 'error');
+				this.displayMessage(e[i], info.error, 'error');
 				status = false;
 				continue;
 			}
-			else if (!required && e[i].value === '')
+
+			if (info.keepGoing)
 			{
-				continue;
-			}
-
-			if (e[i].className)
-			{
-				var m = e[i].className.match(length_class_re);
-				if (m && m.length)
+				if (this.validation.regex[e_id] &&
+					!this.validation.regex[e_id].test(e[i].value))
 				{
-					var msg     = null;
-					var has_min = (hasLimit(m[1]) && m[1] !== '0');
-					if (has_min && hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.length_out_of_range;
-					}
-					else if (has_min)
-					{
-						msg = FormManager.Strings.length_too_short;
-					}
-					else if (hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.length_too_long;
-					}
-
-					if (hasLimit(m[1]) &&
-						hasLimit(m[2]) &&
-						parseInt(m[1], 10) > parseInt(m[2], 10))
-					{
-					}
-
-					if (e[i].value && hasLimit(m[1]) &&
-						e[i].value.length < parseInt(m[1], 10))
-					{
-						if (msg_list && msg_list.min_length)
-						{
-							msg = msg_list.min_length;
-						}
-						msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
-
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
-					if (e[i].value && hasLimit(m[2]) &&
-						e[i].value.length > parseInt(m[2], 10))
-					{
-						if (msg_list && msg_list.max_length)
-						{
-							msg = msg_list.max_length;
-						}
-						msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
-
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
+					this.displayMessage(e[i], msg_list ? msg_list.regex : null, 'error');
+					status = false;
+					continue;
 				}
-
-				var m = e[i].className.match(integer_class_re);
-				if (m && m.length)
-				{
-					var msg = null;
-					if (msg_list && msg_list.integer)
-					{
-						msg = msg_list.integer;
-					}
-					else if (hasLimit(m[1]) &&
-							 hasLimit(m[2]))
-					{
-						if (parseInt(m[1], 10) > parseInt(m[2], 10))
-						{
-						}
-
-						msg = FormManager.Strings.integer_out_of_range;
-					}
-					else if (hasLimit(m[1]))
-					{
-						msg = FormManager.Strings.integer_too_small;
-					}
-					else if (hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.integer_too_large;
-					}
-					else
-					{
-						msg = FormManager.Strings.integer;
-					}
-					msg = Y.substitute(msg, {min: parseInt(m[1], 10), max: parseInt(m[2], 10)});
-
-					var value = parseInt(e[i].value, 10);
-					if (e[i].value &&
-						(!FormManager.integer_value_re.test(e[i].value) ||
-						 (hasLimit(m[1]) && value < parseInt(m[1], 10)) ||
-						 (hasLimit(m[2]) && value > parseInt(m[2], 10))))
-					{
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
-				}
-
-				var m = e[i].className.match(decimal_class_re);
-				if (m && m.length)
-				{
-					var msg = null;
-					if (msg_list && msg_list.decimal)
-					{
-						msg = msg_list.decimal;
-					}
-					else if (hasLimit(m[1]) &&
-							 hasLimit(m[2]))
-					{
-						if (parseFloat(m[1]) > parseFloat(m[2]))
-						{
-						}
-
-						msg = FormManager.Strings.decimal_out_of_range;
-					}
-					else if (hasLimit(m[1]))
-					{
-						msg = FormManager.Strings.decimal_too_small;
-					}
-					else if (hasLimit(m[2]))
-					{
-						msg = FormManager.Strings.decimal_too_large;
-					}
-					else
-					{
-						msg = FormManager.Strings.decimal;
-					}
-					msg = Y.substitute(msg, {min: parseFloat(m[1], 10), max: parseFloat(m[2], 10)});
-
-					var value = parseFloat(e[i].value);
-					if (e[i].value &&
-						(!FormManager.decimal_value_re.test(e[i].value) ||
-						 (hasLimit(m[1]) && value < parseFloat(m[1])) ||
-						 (hasLimit(m[2]) && value > parseFloat(m[2]))))
-					{
-						this.displayMessage(e[i], msg, 'error');
-						status = false;
-						continue;
-					}
-				}
-			}
-
-			if (this.validation.regex[e_id] &&
-				!this.validation.regex[e_id].test(e[i].value))
-			{
-				this.displayMessage(e[i], msg_list ? msg_list.regex : null, 'error');
-				status = false;
-				continue;
 			}
 
 			var f     = this.validation.fn[e_id];
@@ -1102,7 +935,9 @@ FormManager.prototype =
 	 */
 
 	/**
-	 * Register a button that can be disabled.  Buttons contained within
+	 * Register an object that can be disabled.  The object must support
+	 * the set('disabled', ...) API.  (The exception is DOM nodes, since
+	 * they are automatically wrapped in Y.Node.)  Buttons contained within
 	 * the form DOM element are automatically registered.
 	 * 
 	 * @param el {String|Object} The selector for the element or the element itself
@@ -1112,10 +947,18 @@ FormManager.prototype =
 	{
 		var info =
 		{
-			e: Y.one(el)
+			e: Y.Lang.isString(el) || el.tagName ? Y.one(el) : el
 		};
 
 		this.user_button_list.push(info);
+	},
+
+	/**
+	 * @return {boolean} <code>true</code> if form is enabled
+	 */
+	isFormEnabled: function()
+	{
+		return this.enabled;
 	},
 
 	/**
@@ -1186,7 +1029,7 @@ FormManager.prototype =
 	getRowStatus: function(
 		/* id/object */	e)
 	{
-		var p = Y.one(e).ancestor('.'+FormManager.row_marker_class);
+		var p = Y.one(e).getAncestorByClassName(FormManager.row_marker_class, true);
 		return FormManager.getElementStatus(p);
 	},
 
@@ -1201,21 +1044,20 @@ FormManager.prototype =
 		if (this.status_node)
 		{
 			this.status_node.set('innerHTML', '');
-			this.status_node.replaceClass(status_pattern, FormManager.status_none_class);
+			this.status_node.replaceClass(statusPattern(), FormManager.status_none_class);
 		}
 
-		for (var i=0; i<this.form.elements.length; i++)
+		Y.Array.each(this.form.elements, function(e)
 		{
-			var e = this.form.elements[i];
-			var p = Y.one(e).ancestor('.'+FormManager.row_marker_class);
-			if (p && p.hasClass(row_status_pattern))
+			var name = e.tagName.toLowerCase();
+			var type = (e.type ? e.type.toLowerCase() : null);
+			if (name != 'button' && type != 'submit' && type != 'reset')
 			{
-				p.all('.'+FormManager.status_marker_class).set('innerHTML', '');
-				p.removeClass(row_status_pattern);
+				FormManager.clearMessage(e);
 			}
-		}
+		});
 
-		Y.one(this.form).all('fieldset').removeClass(row_status_pattern);
+		Y.one(this.form).all('fieldset').removeClass(rowStatusPattern());
 	},
 
 	/**
@@ -1226,7 +1068,8 @@ FormManager.prototype =
 	 * @param e {String|Object} The selector for the element or the element itself
 	 * @param msg {String} The message
 	 * @param type {String} The message type (see Y.FormManager.status_order)
-	 * @param scroll {boolean} <code>true</code> if the form row should be scrolled into view
+	 * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+	 * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
 	 */
 	displayMessage: function(
 		/* id/object */	e,
@@ -1234,48 +1077,19 @@ FormManager.prototype =
 		/* string */	type,
 		/* boolean */	scroll)
 	{
-		if (Y.Lang.isUndefined(scroll))
+		if (FormManager.displayMessage(e, msg, type, this.has_messages, scroll))
 		{
-			scroll = true;
-		}
-
-		e     = Y.one(e);
-		var p = e.ancestor('.'+FormManager.row_marker_class);
-		if (p && FormManager.statusTakesPrecendence(FormManager.getElementStatus(p), type))
-		{
-			if (msg)
-			{
-				p.all('.'+FormManager.status_marker_class).set('innerHTML', msg);
-			}
-
-			p.removeClass(row_status_pattern);
-			p.addClass(FormManager.row_status_prefix + type);
-
-			var fieldset = e.ancestor('fieldset');
-			if (fieldset && FormManager.statusTakesPrecendence(FormManager.getElementStatus(fieldset), type))
-			{
-				fieldset.removeClass(row_status_pattern);
-				fieldset.addClass(FormManager.row_status_prefix + type);
-			}
-
-			if (!this.has_messages && scroll && e.get('offsetHeight') > 0)
-			{
-				p.scrollIntoView();
-				try
-				{
-					e.focus();
-				}
-				catch (ex)
-				{
-					// no way to determine in IE if this will fail
-				}
-			}
-
 			this.has_messages = true;
 			if (type == 'error')
 			{
 				this.has_errors = true;
 			}
+
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	},
 
@@ -1326,9 +1140,12 @@ FormManager.prototype =
 		{
 		}
 	}
-};
+});
+
+// static data & functions from gallery-formmgr-css-validation
+Y.aggregate(FormManager, Y.FormManager);
 
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2010.01.13-20' ,{requires:['node-base','substitute']});
+}, 'gallery-2011.08.24-23-44' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});

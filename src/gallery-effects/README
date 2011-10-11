@@ -1,0 +1,37 @@
+Effects is meant to bring the concise API seen in Scriptaculous and other
+animation libraries to YUI while also leveraging the great YUI 3 Anim module.
+
+== CHANGELOG ==
+
+Version 0.7
+-----------
+Added the rest of the Scriptaculous effects, which include SwitchOff, DropOut, Squish.
+
+(Not implemented: Shake, SlideDown, SlideUp, Grow, Shrink, Pulsate, Fold)
+
+Version 0.6.2
+-------------
+Formalized the payload returned by the finish event to include the animation end event with
+the key "animEnd" if the effect is not run in parallel.  If the effect was an instance of a
+parallel effect, which means multiple animations were run, then the "animEnd" property of
+the finish event is null.  In the future this may return an array of the end animation
+events.
+
+Version 0.6.1
+-------------
+Added support for a scroll effect.
+
+Version 0.6
+-----------
+
+Refactored events so that now you can move easily subscribe to two sets of events: setup and
+finish.  The most common use case by far will be finish (in fact it may be the only important
+one), but you have access to either.
+
+Version 0.5
+-----------
+
+This is the first official version and includes basic support for all of the core
+Scriptaculous effects as well as some of the more complex ones.  I plan on releasing
+this as version 1.0 once all of the Scriptaculous effects have been ported over and
+the documentation is complete.  Stay tuned!

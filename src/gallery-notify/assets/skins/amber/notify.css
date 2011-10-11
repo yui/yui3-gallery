@@ -1,0 +1,70 @@
+.yui3-skin-amber .yui3-notify {
+	background:#faf5e8 url('background.gif') left 50% repeat-x;
+	border: 1px solid #fbd065;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	width:400px;
+	margin:0 auto;
+}
+/*
+.yui3-skin-amber .yui3-notify {
+	overflow:auto;
+	max-height:110px;
+}
+*/
+
+.yui3-skin-amber .yui3-notify .yui3-notify-content {
+	margin:10px;
+}
+.yui3-skin-amber .yui3-notify .yui3-notify-content li {
+	padding:4px;
+	position:relative;
+}
+
+.yui3-skin-amber .yui3-notify .yui3-notify-content li:hover {
+	padding:3px;
+	border: 1px solid #ffd263;
+	background-color: #fff;
+}
+
+.yui3-skin-amber .yui3-notify .yui3-notify-content .yui3-notify-message-close {
+	cursor: pointer;
+	position:absolute;
+	right:1px;
+	top:50%;
+	width:30px;
+	height:0;
+	padding-top: 20px;
+	margin-top:-10px;
+	overflow:hidden;
+	background: url('close.png') left 50% no-repeat;
+	display:none;
+}
+
+.yui3-skin-amber .yui3-notify .yui3-notify-content li:hover .yui3-notify-message-close {
+	display:block;
+}
+
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-notice, 
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-alert,
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-error {
+	padding-left: 30px;
+	background-position: 4px 50%;
+	background-repeat: no-repeat;
+}
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-notice:hover, 
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-alert:hover,
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-error:hover {
+	padding-left: 29px;
+}
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-notice {
+	background-image: url('check.png');
+}
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-alert {
+	background-image: url('alert.png');
+	background-position: 2px 50%;
+}
+.yui3-skin-amber .yui3-notify .yui3-notify-content li.yui3-notify-message-flag-error {
+	background-image: url('eks.png');
+}

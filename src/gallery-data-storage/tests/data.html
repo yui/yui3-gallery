@@ -1,0 +1,243 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>gallery-data-storage Tests</title>
+	<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+	<script src="../../../build/gallery-data-storage/gallery-data-storage.js" type="text/javascript"></script>
+</head>
+
+<body class="yui-skin-sam">
+<h1>gallery-data-storage Tests</h1>
+<p><input type="button" value="Run Tests" id="btnRun" disabled=true></p>
+
+<span id="foo"></span>
+
+<span id="baz1" class="bar"></span>
+<span id="baz2" class="bar"></span>
+
+<script type="text/javascript">
+
+    YUI({
+        filter: "debug",
+		combine: false,
+        logInclude:{"TestRunner":true},
+        useConsole: true
+    }).use("console", "test", "dump", "node", "gallery-data-storage", function(Y) {
+        
+        // Set up the page
+        var LANG = Y.Lang,
+            ASSERT = Y.Assert,
+            ARRAYASSERT = Y.ArrayAssert,
+            btnRun = Y.one("#btnRun"),
+            myConsole = new Y.Console().render(),
+			
+			Data = Y.DataStorage;
+           
+        btnRun.set("disabled", false);
+        Y.on("click", function(){
+            Y.Test.Runner.run();
+        }, btnRun);
+
+        Y.Test.Runner.add(new Y.Test.Case({
+            name: "expando",
+        
+            test: function() {
+				ASSERT.isTrue("expando" in Data, "Y.DataStorage is exposing the expando.");
+
+                var obj = {};
+				Data.data(obj);
+				ASSERT.isTrue(Data.expando in obj, "Y.DataStorage.data adds an expando to the object.");
+
+                obj = {};
+				Data.data(obj, "test");
+				ASSERT.isFalse(Data.expando in obj, "Y.DataStorage.data did not add an expando to the object.");
+
+                obj = {};
+				Data.data(obj, "foo", "bar");
+				ASSERT.isTrue(Data.expando in obj, "Y.DataStorage.data adds an expando to the object.");
+
+                var id = obj[Data.expando];
+				ASSERT.isFalse(id in Data.cache, "Y.DataStorage.data did not add an entry to Y.DataStorage.cache.");
+				ASSERT.areSame(id.foo, "bar", "Y.DataStorage.data worked correctly.");
+            }
+        }));
+
+		Y.Test.Runner.add(new Y.Test.Case({
+            name: "Y.DataStorage.data",
+        
+            test: function() {
+                var div = Y.Node.create("<div />");
+				ASSERT.isTrue(Data.data(div, "test") === undefined, "Check for no data exists");
+				
+				Data.data(div, "test", "success");
+				ASSERT.areSame(Data.data(div, "test"), "success", "Check for added data");
+
+				ASSERT.isTrue(Data.data(div, "notexist") === undefined, "Check for no data exists");
+				
+				var data = Data.data(div);
+				Y.ObjectAssert.areEqual(data, { "test" : "success" }, "Return complete data set");
+				
+				Data.data(div, "test", "overwritten");
+				ASSERT.areSame(Data.data(div, "test"), "overwritten", "Check for overwritten data");
+		
+				Data.data(div, "test", undefined);
+				ASSERT.areSame(Data.data(div, "test"), "overwritten", "Check that data wasn't removed");
+				
+				Data.data(div, "test", null);
+				ASSERT.isTrue(Data.data(div, "test") === null, "Check for null data");
+			
+				Data.data(div, { "test": "in", "test2": "in2" });
+				ASSERT.areSame( Data.data(div, "test"), "in", "Verify setting an object in data");
+				ASSERT.areSame( Data.data(div, "test2"), "in2", "Verify setting an object in data");
+
+				var obj = {};
+				Data.data(obj, "prop", true);
+			
+				ASSERT.isTrue( !!obj[Data.expando], "Data is being stored on the object.");
+				ASSERT.isTrue( obj[Data.expando].prop, "Data is being stored on the object.");
+			
+				ASSERT.isTrue(Data.data( obj, "prop" ), "Make sure the right value is retrieved.");
+            }
+        }));
+		
+		Y.Test.Runner.add(new Y.Test.Case({
+            name: ".data()",
+        
+            testOne: function() {
+                var div = Y.one("#foo");
+				div.data("test", "success");
+				Y.ObjectAssert.areEqual(div.data(), { test: "success" }, "data() get the entire data object");
+            },
+			
+			testMany: function() {
+                var els = Y.all(".bar");
+				els.data("test", "success");
+				Y.ObjectAssert.areEqual(Y.one("#baz1").data(), { test: "success" }, "#baz1 should have the entire data object");
+				Y.ObjectAssert.areEqual(Y.one("#baz2").data(), { test: "success" }, "#baz2 should have the entire data object");
+            }
+        }));
+		
+		Y.Test.Runner.add(new Y.Test.Case({
+            name: ".data(String) and .data(String, Object)",
+        
+            test: function() {
+                var div = Y.Node.create("<div/>");
+	
+				ASSERT.isTrue(div.data("test") === undefined, "Check for no data exists");
+			
+				div.data("test", "success");
+				ASSERT.areSame(div.data("test"), "success", "Check for added data");
+			
+				div.data("test", "overwritten");
+				ASSERT.areSame(div.data("test"), "overwritten", "Check for overwritten data");
+			
+				div.data("test", undefined);
+				ASSERT.areSame(div.data("test"), "overwritten", "Check that data wasn't removed");
+			
+				div.data("test", null);
+				ASSERT.isTrue(div.data("test") === null, "Check for null data");
+			
+				ASSERT.isTrue(div.data("notexist") === undefined, "Check for no data exists");
+			
+				div.data("test", "overwritten");
+				var hits = { test: 0 }, gets = { test: 0 };
+
+				/*
+				div.on("setData",function(e, key, value) { hits[key] += value; })
+					.on("setData.foo",function(e, key, value) { hits[key] += value; })
+					.on("getData",function(e, key) { gets[key] += 1; })
+					.on("getData.foo",function(e, key) { gets[key] += 3; });
+				*/
+				
+				div.data("test.foo", 2);
+				ASSERT.areSame(div.data("test"), "overwritten", "Check for original data");
+				ASSERT.areSame(div.data("test.foo"), 2, "Check for namespaced data");
+				ASSERT.areSame(div.data("test.bar"), "overwritten", "Check for unmatched namespace");
+				//ASSERT.areSame(hits.test, 2, "Check triggered setter functions");
+				//ASSERT.areSame(gets.test, 5, "Check triggered getter functions");
+			
+				hits.test = 0;
+				gets.test = 0;
+			
+				div.data("test", 1);
+				ASSERT.areSame(div.data("test"), 1, "Check for original data");
+				ASSERT.areSame(div.data("test.foo"), 2, "Check for namespaced data");
+				ASSERT.areSame(div.data("test.bar"), 1, "Check for unmatched namespace");
+				//ASSERT.areSame(hits.test, 1, "Check triggered setter functions");
+				//ASSERT.areSame(gets.test, 5, "Check triggered getter functions");
+			
+				hits.test = 0;
+				gets.test = 0;
+			
+				//div.on("getData", function(e, key) { return key + "root"; })
+			
+				//ASSERT.areSame(div.data("test"), "testroot", "Check for original data");
+				//ASSERT.areSame(div.data("test.foo"), "testfoo", "Check for namespaced data");
+				//ASSERT.areSame(div.data("test.bar"), "testroot", "Check for unmatched namespace");
+            }
+        }));
+	
+		Y.Test.Runner.add(new Y.Test.Case({
+            name: ".data(Object)",
+        
+            test: function() {
+				var div = Y.Node.create("<div/>");
+
+				div.data({ "test": "in", "test2": "in2" });
+				ASSERT.areSame(div.data("test"), "in", "Verify setting an object in data.");
+				ASSERT.areSame(div.data("test2"), "in2", "Verify setting an object in data.");
+            }
+        }));
+
+		Y.Test.Runner.add(new Y.Test.Case({
+            name: "Y.DataStorage.removeData",
+        
+            test: function() {
+                var div = Y.one("#foo");
+				Data.data(div, "test", "testing");
+				Data.removeData(div, "test");
+				ASSERT.areSame(Data.data(div, "test"), undefined, "Check removal of data");
+            }
+        }));
+		
+		Y.Test.Runner.add(new Y.Test.Case({
+            name: ".removeData()",
+        
+            testOne: function() {
+				var div = Y.get("#foo");
+				div.data("test", "testing");
+				div.removeData("test");
+				ASSERT.areSame( div.data("test"), undefined, "Check removal of data" );
+			
+				div.data("test", "testing");
+				div.data("test.foo", "testing2");
+				div.removeData("test.bar");
+				ASSERT.areSame(div.data("test.foo"), "testing2", "Make sure data is intact");
+				ASSERT.areSame(div.data("test"), "testing", "Make sure data is intact");
+			
+				div.removeData("test");
+				ASSERT.areSame(div.data("test.foo"), "testing2", "Make sure data is intact");
+				ASSERT.areSame(div.data("test"), undefined, "Make sure data is intact");
+			
+				div.removeData("test.foo");
+				ASSERT.areSame(div.data("test.foo"), undefined, "Make sure data is intact");
+            },
+			
+			testMany: function() {
+                var els = Y.all(".bar");
+				els.data({ "test": "success" });
+				Y.ObjectAssert.areEqual(Y.one("#baz1").data(), { test: "success" }, "#baz1 should have the entire data object");
+				Y.ObjectAssert.areEqual(Y.one("#baz2").data(), { test: "success" }, "#baz2 should have the entire data object");
+				
+				els.removeData();
+				ASSERT.isTrue(Y.one("#baz1").data("test") === undefined, "#baz1 should have no data");
+				ASSERT.isTrue(Y.one("#baz2").data("test") === undefined, "#baz2 should have no data");
+            }
+        }));
+		
+		Y.Test.Runner.run();
+    });
+</script>
+</body>
+</html>

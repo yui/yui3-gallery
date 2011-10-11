@@ -1,0 +1,1 @@
+YUI.add("gallery-chipper",function(C){var B=[],D=null;function A(){if(!D){D=C.later(100,null,function(){if(B.length>0){var E=B.pop();if(C.Lang.isFunction(E.destroy)){E.destroy();}}else{D.cancel();D=null;}},null,true);}}C.Chipper={destroy:function(E){B=B.concat(E);A();}};},"gallery-2010.03.18-19",{requires:["yui-later"]});
