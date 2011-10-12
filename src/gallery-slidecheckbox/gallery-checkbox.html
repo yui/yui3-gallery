@@ -1,0 +1,54 @@
+<html>
+<head>
+<style>
+
+</style>
+<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-debug.js"></script>
+<script>
+YUI({
+	filter:'debug'
+	}
+).use('gallery-slidecheckbox',function(Y){
+	var slide = new Y.SlideCheckbox({srcNode:'#c1'}),
+	slide2 = new Y.SlideCheckbox({srcNode:'#c2',strings:{labelOn: 'Pipo De Long',labelOff:'Clown text'}}),
+	slide3 = new Y.SlideCheckbox({srcNode:'#c3',strings:{labelOn: 'Yes',labelOff:'No'}}),
+	slide4 = new Y.SlideCheckbox({srcNode:'#c4',strings:{labelOn: 'Yes',labelOff:'Yes'}}),
+	slide5 = new Y.SlideCheckbox({srcNode:'#c5',strings:{labelOn: 'Long text',labelOff:'Very long text'}}),
+	slide6 = new Y.SlideCheckbox({srcNode:'#c6',strings:{labelOn: 'Very long text',labelOff:'Long text'}});
+	slide.render();
+	slide2.render();
+	slide3.render();
+	slide4.render();
+	slide5.render();
+	slide6.render();
+})
+</script>
+</head>
+<body>
+<form>
+<input type="checkbox" name="myCheck1" class="yesno" id="c1" class="slidecheck"><br/>
+<input type="checkbox" name="myCheck2" class="yesno" checked="CHECKED" id="c2" class="slidecheck"><br/>
+<input type="checkbox" name="myCheck3" class="yesno" CHECKED id="c5" class="slidecheck"><br/>
+<input type="checkbox" name="myCheck4" class="yesno" CHECKED id="c6" class="slidecheck"><br/>
+<input type="checkbox" name="myCheck5" class="yesno" DISABLED id="c3" class="slidecheck">
+<div style="margin-left:100px;">
+<input type="checkbox" name="myCheck6" class="yesno" id="c4" class="slidecheck">
+</div>
+</form>
+<div>
+
+<div class="yui3-slidecheckbox-content">
+	<div class="yui3-slidecheckbox-wrapper">
+		<div class="yui3-slidecheckbox-slider">
+			<div>
+				<span class="yui3-slidecheckbox-labelOn"><label><span>ON</span></label></span>
+				<div class="yui3-slidecheckbox-handle"><span class="edge lt">&nbsp;</span><span class="edge rt">&nbsp;</span></div>
+				<span class="yui3-slidecheckbox-labelOff"><label><span>OFF</span></label></span>
+			</div>
+		</div>
+	</div>
+</div>
+
+</div>
+</body>
+</html>
