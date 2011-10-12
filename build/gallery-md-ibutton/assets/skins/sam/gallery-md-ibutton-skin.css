@@ -1,17 +1,51 @@
 @charset 'UTF-8';
-.yui3-skin-sam .yui3-ibutton-content {
+.yui3-skin-sam .yui3-ibutton{
 	overflow:hidden;
-}
-.yui3-skin-sam .yui3-ibutton-labelOn {
-	background: transparent url("sprite.png") no-repeat  left -50px;
-	height: 27px;
-	display: inline-block;
-	padding: 5px 9px 0 5px;
-	vertical-align:top;
-
-	color: white;
-	text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
 	cursor: pointer;
+}
+.yui3-skin-sam .yui3-ibutton-content {
+	width: 500px;
+	position: relative;
+}
+.yui3-skin-sam .yui3-ibutton-content  div {
+	display: inline-block;
+	position: relative;
+	height: 27px;
+	background-image: url("sprite.png");
+}
+
+.yui3-skin-sam .yui3-ibutton-slider {
+	background-image: none !important;
+}
+
+.yui3-skin-sam .yui3-ibutton-labelOn,
+.yui3-skin-sam .yui3-ibutton-labelOff,
+.yui3-skin-sam .yui3-ibutton-sliderCenter {
+	background-repeat: repeat-x;
+}
+
+.yui3-skin-sam .yui3-ibutton-leftEdge,
+.yui3-skin-sam .yui3-ibutton-rightEdge {
+	width: 5px;
+	background-repeat: no-repeat;
+}
+.yui3-skin-sam .yui3-ibutton-sliderLeft,
+.yui3-skin-sam .yui3-ibutton-sliderRight {
+	width: 4px;
+	background-repeat: no-repeat;
+}
+
+.yui3-skin-sam .yui3-ibutton-leftEdge {
+	background-position:  left -100px;
+}
+.yui3-skin-sam .yui3-ibutton-rightEdge {
+	background-position: left -50px;
+	left: -8px;
+}
+.yui3-skin-sam .yui3-ibutton-labelOn ,
+.yui3-skin-sam .yui3-ibutton-labelOff {
+	padding: 5px 5px 0 5px; 
+	vertical-align:top;
 	font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
 	font-size: 17px;
 	font-weight: bold;
@@ -19,58 +53,37 @@
 	text-transform: uppercase;
 	white-space: nowrap;
 }
+.yui3-skin-sam .yui3-ibutton-labelOn {
+	background-position:  left -150px;
+	color: white;
+	text-shadow: 0 0 2px rgba(0, 0, 0, 0.6);
+}
 .yui3-skin-sam .yui3-ibutton-labelOff {
-	background: transparent url("sprite.png") no-repeat top right;
-	height: 27px;
-	display: inline-block;
-	padding: 5px 5px 0 9px;
-	vertical-align:top;
-	position: relative;
+	background-position: left top;
 	left: -8px;
-
 	color: #8B8B8B;
 	text-align: right;
 	text-shadow: 0 0 2px rgba(255, 255, 255, 0.6);
-	cursor: pointer;
-	font-family: "Helvetica Neue",Arial,Helvetica,sans-serif;
-	font-size: 17px;
-	font-weight: bold;
-	line-height: 17px;
-	text-transform: uppercase;
-	white-space: nowrap;
-
-	}
+}
 .yui3-skin-sam .yui3-ibutton-slider {
-	display: inline-block;
-	position: relative;
 	left: -4px;
 	z-index: 1;
 }
 .yui3-skin-sam .yui3-ibutton-sliderLeft {
-	background: transparent url("sprite.png")  no-repeat left -100px ;
-	width: 4px;
-	height: 27px;
-	display: inline-block;
+	background-position: left -200px;
 }
 .yui3-skin-sam .yui3-ibutton-sliderCenter {
-	background: transparent url("sprite.png") repeat-x left -150px;
-	height: 27px;
+	background-position: left -250px;
 	width: 32px;
-	display: inline-block;
 }
 .yui3-skin-sam .yui3-ibutton-sliderRight {
-	background: transparent url("sprite.png") no-repeat left -200px;
-	height: 27px;
-	width: 4px;
-	display: inline-block;
-}
-.yui3-skin-sam .yui3-ibutton-sliding {
-	position: relative;
-	width: 500px;
+	background-position: left -300px;
 }
 .yui3-skin-sam .yui3-ibutton-disabled {
-	zoom:1;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
-	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
-	opacity: .5; 
+   opacity: 0.5; 
+}
+.yui3-skin-sam .yui3-ibutton-disabled .yui3-ibutton-labelOn,
+.yui3-skin-sam .yui3-ibutton-disabled .yui3-ibutton-labelOff {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
 }
