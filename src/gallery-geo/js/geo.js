@@ -68,10 +68,10 @@ function getCurrentPositionByAPI(callback, scope, opts){
 function getCurrentPositionByGeoIP(callback, scope, opts){
 
     opts = opts || {};
-    var yqlParams = Y.Lang.isNumber(opts.maximumAge) ?
+    var params = Y.Lang.isNumber(opts.maximumAge) ?
         { _maxage: opts.maximumAge } : {};
     
-    Y.YQL("select * from pidgets.geoip", {
+    Y.jsonp("http://freegeoip.net/json/?callback={callback}", {
         on: {
             success: function(response){
                 var results;
@@ -79,16 +79,15 @@ function getCurrentPositionByGeoIP(callback, scope, opts){
                 if (response.error){
                     callback.call(scope, { success: false });
                 } else {
-                    results = response.query.results.Result;
                     callback.call(scope, {
                         success: true,
                         coords: {
-                            latitude: parseFloat(results.latitude),
-                            longitude: parseFloat(results.longitude),
+                            latitude: parseFloat(response.latitude),
+                            longitude: parseFloat(response.longitude),
                             accuracy: Infinity    //TODO: Figure out better value
                         },
                         timestamp: +new Date(),
-                        source: "pidgets.geoip"
+                        source: "freegeoip.net"
                     });   
                 }
             },
@@ -100,7 +99,7 @@ function getCurrentPositionByGeoIP(callback, scope, opts){
             }
         },
         timeout: opts.timeout
-    }, yqlParams);
+    }, params);
 
 }
 
