@@ -1,0 +1,243 @@
+{
+    "project": {
+        "name": "YQL Crypto",
+        "description": "This module provides convenient client side access to YQL's crypto functions."
+    },
+    "files": {
+        "js/yql-crypto.js": {
+            "name": "js/yql-crypto.js",
+            "modules": {
+                "gallery-yql-crypto": 1
+            },
+            "classes": {
+                "YQLCrypto": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-yql-crypto": {
+            "name": "gallery-yql-crypto",
+            "submodules": {},
+            "classes": {
+                "YQLCrypto": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/yql-crypto.js",
+            "line": 1,
+            "description": "This module provides convenient client side access to YQL's crypto functions."
+        }
+    },
+    "classes": {
+        "YQLCrypto": {
+            "name": "YQLCrypto",
+            "shortname": "YQLCrypto",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-yql-crypto",
+            "namespace": "",
+            "file": "js/yql-crypto.js",
+            "line": 58,
+            "static": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/yql-crypto.js",
+            "line": 63,
+            "description": "This method wraps the YQL execute data table which executes inline Javascript on the YQL server.\nYQL Server side Javascript documentation is here: http://developer.yahoo.com/yql/guide/yql-javascript-objects.html",
+            "itemtype": "method",
+            "name": "execute",
+            "params": [
+                {
+                    "name": "code",
+                    "description": "Javascript code to execute on the YQL server.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Passes through to Y.YQL.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 73,
+            "description": "Generates a sha1 hash-based message authentication code.",
+            "itemtype": "method",
+            "name": "hmacSha1",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "secret",
+                    "description": "The secret key.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 83,
+            "description": "Generates a sha256 hash-based message authentication code.",
+            "itemtype": "method",
+            "name": "hmacSha256",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "secret",
+                    "description": "The secret key.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 93,
+            "description": "Generates an md5 hash.",
+            "itemtype": "method",
+            "name": "md5",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 102,
+            "description": "Generates a sha1 hash.",
+            "itemtype": "method",
+            "name": "sha1",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 111,
+            "description": "Generates a universally unique identifier.",
+            "itemtype": "method",
+            "name": "uuid",
+            "params": [
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        }
+    ]
+}
