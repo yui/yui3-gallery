@@ -9,7 +9,7 @@
 				display:none;
 			}
 		</style>
-		<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+		<script src="http://yui.yahooapis.com/3.4.1pr1/build/yui/yui-min.js"></script>
 	</head>
 	<body  class="yui3-skin-sam yui-skin-sam">
 		<p>Plain spinner, default values: <span id="plain"></span></p>
@@ -80,7 +80,7 @@
 							}, this);
 							this.get('contentBox').append(fieldset);
 						},
-						_onClick: function (ev) {
+						_afterRadioClick: function (ev) {
 							this.fire('option',{option: ev.target, value:ev.target.get('value')});
 						}
 					},
@@ -89,9 +89,7 @@
 						RADIO_TEMPLATE: '<div><input class="{c radio}" type="radio" name="{@ name}" value="{value}" />{label}</div>',
 						_CLASS_NAMES:['fieldset','radio'],
 						_EVENTS: {
-							radio: {
-								click: '_onClick'
-							}
+							radio: 'click'
 						},
 						ATTRS: {
 							strings: {
