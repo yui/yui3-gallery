@@ -191,7 +191,7 @@ Y.IButton = Y.Base.create(
 		 * @protected
 		 */
 		_EVENTS: {
-			boundingBox: ['click']
+			boundingBox: 'click'
 		}, 
 		ATTRS: {
 			/**
@@ -258,4 +258,4 @@ Y.IButton = Y.Base.create(
 );
 
 
-}, 'gallery-2011.10.12-20-24' ,{skinnable:true, requires:['base-build', 'widget', 'gallery-makenode', 'anim']});
+}, 'gallery-2011.10.27-17-08' ,{skinnable:true, requires:['base-build', 'widget', 'gallery-makenode', 'anim']});
