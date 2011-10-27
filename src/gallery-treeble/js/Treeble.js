@@ -22,7 +22,7 @@ Y.namespace("Treeble").buildTwistdownFormatter = function(sendRequest)
 {
 	return function(o)
 	{
-		var td = o.createCell();
+		var td = this.createCell(o);
 		td.addClass('treeble-nub');
 
 		var ds  = this.datasource.get('datasource');
