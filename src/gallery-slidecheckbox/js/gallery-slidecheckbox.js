@@ -5,8 +5,7 @@
 	SLIDERWRAP = 'sliderwrap',
 	LABELON = 'labelOn',
 	LABELOFF = 'labelOff',
-	HANDLE = 'handle',
-	MIN_SWIPE = 10;
+	HANDLE = 'handle';
 	;
 	
 	Y[SLIDECHECKBOX] = Y.Base.create(
@@ -22,11 +21,13 @@
 				this.get(CBX).append(this._makeNode()).append(this.src);
 				
 				this._locateNodes();
-				
-				var leftX = this._replacePx(this._labelOnNode.one('span').getStyle('width')),
-				rightX = this._replacePx(this._labelOffNode.one('span').getStyle('width')), 
-				width = this._labelOnNode.get('offsetWidth');
-				
+
+				var leftX = this._labelOnNode.one('span').get('offsetWidth'),
+				rightX = this._labelOffNode.one('span').get('offsetWidth'), 
+				width = this._labelOnNode.get('offsetWidth'),
+				skin = this.getSkinName(),
+				ios5 = skin? skin.indexOf('ios5') > -1 : null;
+
 				if(leftX > rightX){
 					this._labelOffNode.one('span').setStyle('width',leftX);
 				}else{
@@ -36,10 +37,18 @@
 				
 				this.left = -this._labelOnNode.get('offsetWidth') + 3;
 
-				this._slideWrapWidth = 3 * width + 10;
-				this._handleNode.setStyle('width',width - 3);
+				var wrapperWidth = 2 * width;
+				
+				if(ios5){
+					this._slideWrapWidth = 2 * width + 28;
+					this.left = this.left + 11;
+					wrapperWidth = width + 14;
+				}else{
+					this._slideWrapWidth = 3 * width + 10;
+					this._handleNode.setStyle('width',width - 3);
+				}
 				this._sliderwrapNode.setStyle('width',this._slideWrapWidth);
-				this._wrapperNode.setStyle('width',2 * width).all('> .edge').setStyle('backgroundColor',this.get('backgroundColor'));
+				this._wrapperNode.setStyle('width',wrapperWidth);
 			},
 			bindUI : function(){
 				this.disabled = this.src.get('disabled');
@@ -79,8 +88,8 @@
 				},this);
 				cb.on('blur',function(){
 					cb.detach('key');
+					cb.blur();
 				},this);
-				
 			},syncUI : function(){
 				this._sliderwrapNode.setStyle('left',
 					this.src.get('checked')?  0 : this.left
@@ -97,7 +106,7 @@
 				this.to = 0;
 				this._execute();
 			},
-			move : function(left){
+			move : function(){
 				this.from = this._replacePx(this._sliderwrapNode.getComputedStyle('left'));
 				
 				if(this.lastX !== null){
@@ -132,19 +141,12 @@
 			_onClick : function(e){
 				this.move();
 			},
-			/*
-			 * React to changes to the source node that may occur by other components.
-			 */
-			_onChange : function(){
-				
-			},
 			_execute : function(){
+				this.get(CBX).focus();
 				if(this.disabled){
 					return;
 				}
 
-				this.src.set('checked',!this.src.get('checked'));
-				
 				if(this.anim === null){
 					this.anim = new Y.Anim({
 						node: this._sliderwrapNode,
@@ -158,6 +160,7 @@
 				this.anim.set('from',{left:(this.from? this.from : this.baseX)});
 				this.anim.set('to',{left:this.to});
 				this.anim.run();
+				this.src.set('checked',!this.src.get('checked'));
 			},
 			_replacePx : function(el){
 				return parseInt(el.replace('px',''));
@@ -165,7 +168,6 @@
 		},
 		{
 			ATTRS:{
-				backgroundColor : {value:'white'},
 				duration: {value:0.2},
 				strings : {
 					value:{
