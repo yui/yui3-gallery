@@ -2,8 +2,7 @@
 <html lang="en-US">
 <head>
     <title>Injection Engine Tests</title>    
-    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.3.0/build/cssreset/reset-min.css&3.3.0/build/cssfonts/fonts-min.css">
-    <script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-debug.js"></script>
+    <script type="text/javascript" src="http://yui.yahooapis.com/3.4.0/build/yui/yui-debug.js"></script>
 </head>
 <body class="yui3-skin-sam">
 
@@ -352,6 +351,20 @@ YUI({
                     // for non-ie browsers lets test the amount of objects
                     Assert.areEqual(1, demo.all('object').size(), 'Custom parameters should bypass default preloading to honor the custom arguments.');
                 }
+            },
+
+            "test yconfig map feature": function() {
+                var r;
+                this.obj = new Y.InjectionEngine({
+                    foo: 'bar',
+                    lang: 'en',
+                    container: '#demo'
+                });
+                this.obj.YCONFIG_MAP.push('foo');
+                r = this.obj._buildCfg();
+                Assert.areEqual('en', r.lang, 'lang mapping for yui_config is not working correctly.');
+                Assert.isNotUndefined(r.guid, 'object guid mapping for yui_config is not working correctly.');
+                Assert.areEqual('bar', r.foo, 'custom mapping for yui_config is not working correctly.');
             }
 
         }));
