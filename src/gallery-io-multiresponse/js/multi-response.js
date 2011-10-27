@@ -230,11 +230,7 @@ Y.mix(Y.IO.prototype, {
         // not defined in the HTML form.
         io._multi_setAttrs(f, o.id, uri, c.method);
         if (c.data) {
-            var data = c.data;
-            if (L.isObject(data)) {	// bug in 3.4.0: does not auto-stringify for file upload
-                data = Y.QueryString.stringify(data);
-            }
-            fields = io._addData(f, data);
+            fields = io._addData(f, c.data);
         }
         if (c.json) {
             fields.push(io._addJSON(f, c.json));
