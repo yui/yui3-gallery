@@ -431,9 +431,8 @@ YUI.add('gallery-makenode', function(Y) {
 		_attachEvents: function () {
 			var self = this,
 				bbx = self.get(BBX),
-				selector,				
 				eh = [],
-				type, fn, args,
+				type, fn, args, when, target, t,
 				toInitialCap = function (name) {
 					return name.charAt(0).toUpperCase() + name.substr(1);
 				},
@@ -444,45 +443,44 @@ YUI.add('gallery-makenode', function(Y) {
 					Y:Y
 				};
 			self._forAllXinClasses('_EVENTS', function (c, handlers, key) {
-				selector = equivalents[key] || DOT + self._classNames[key];
+				target = equivalents[key] || DOT + self._classNames[key];
 				if (key === 'THIS') {key = 'This';}
 				Y.each(Y.Array(handlers), function (handler) {
-					fn = null;
 					if (Lang.isString(handler)) {
-						type = handler;
-						args = null;
-					} else if (Lang.isObject(handler)) {
+						handler = {type: handler};
+					} 
+					if (Lang.isObject(handler)) {
 						type = handler.type;
-						fn = handler.fn;
+						when = (handler.when || 'after');
+						fn = handler.fn || '_' + when + toInitialCap(key) + toInitialCap(type);
 						args = handler.args;
 					} else {
 						Y.log('Bad event handler for class: ' + c.NAME + ' key: ' + key,'error','MakeNode');
 					}
+					if (!/^(before|after|delegate)$/.test(when)) { Y.log('When can only be before, after or delegate: ' + when, 'error', 'MakeNode'); }
+					when = when.replace('before','on');
 					if (type) {
-						fn = fn || '_after' + toInitialCap(key) + toInitialCap(type);
-						if (!self[fn]) {
-							Y.log('Listener method not found: ' + fn,'error','MakeNode');
-						} else {
+						if (self[fn]) {
 							fn = self[fn];
+						} else {
+							Y.log('Listener method not found: ' + fn,'error','MakeNode');
 						}
-						if (Lang.isString(selector)) {
-							// All the classNames are processed here:
-							if (type==='key') {
-								eh.push(bbx.delegate(type, fn, args, selector, self));
+						if (when === 'delegate') {
+							if (Lang.isString(target)) {
+								if (type === 'key') {
+									eh.push(bbx.delegate(type, fn, args, target, self));
+								} else {
+									eh.push(bbx.delegate(type, fn, target, self, args));
+								}
 							} else {
-								eh.push(bbx.delegate(type, fn, selector, self, args));
+								Y.log('Delegate used on invalid key: ' + key, 'error', 'MakeNode');
 							}
 						} else {
-							if (selector === self || selector === Y) {
-								// the Y and THIS selectors here
-								eh.push(selector.after(type, fn, self, args));
+							t = Lang.isString(target)?Y.all(target):target;
+							if ( type=== 'key') {
+								eh.push(t[when](type, fn, args, self));
 							} else {
-								// The document and boundingBox here
-								if (type==='key') {
-									eh.push(Y.after(type, fn, selector, args, self));
-								} else {
-									eh.push(Y.after(type, fn, selector, self, args));
-								}
+								eh.push(t[when](type, fn, self, args));
 							}
 						}
 					} else {
@@ -614,14 +612,19 @@ YUI.add('gallery-makenode', function(Y) {
 	 * and <code>"FOOTER"</code> identifiers will also be available.<br/>
 	 * Each entry contains a type of event to be listened to or an array of events.
 	 * Each event can be described by its type (i.e.: <code>"key"</code>, <code>"mousedown"</code>, etc).
-	 * MakeNode will associate this event with a method named <code>"_after"</code> followed by the element identifier with the first character capitalized 
-	 * and the type of event with the first character capitalized (i.e.: <code>_afterBoundingBoxClick</code>, <code>_afterInputBlur</code>, <code>_afterThisValueChange</code>, etc.)
-	 * Alternatively, the event listener can be described by an object literal containing properties <ul>
+	 * MakeNode will set 'after' event listeners by default, but can be instructed to listen to 'before' ('on') events
+	 * or do it by delegation on the boundingBox.
+	 * MakeNode will associate this event with a method named <code>"_after"</code>,<code>"_before"</code> or <code>"_delegate"</code> followed by the element identifier with the first character capitalized 
+	 * and the type of event with the first character capitalized (i.e.: <code>_afterBoundingBoxClick</code>, <code>_afterInputBlur</code>, <code>_afterThisValueChange</code>, <code>_beforeFormSubmit</code>, <code>_delegateListItemClick</code>, etc.).<br/>
+	 * Alternatively, the event listener can be described by an object literal containing properties: <ul>
 	 * <li><code>type</code> (mandatory) the type of event being listened to</li>
 	 * <li><code>fn</code> the name of the method to handle the event.  
 	 * Since _EVENTS is static, it has no access to <code>this</code> so the name of the method must be specified</li>
 	 * <li><code>args</code> extra arguments to be passed to the listener, useful, 
-	 * for example as a key descriptor for <code>key</code> events.
+	 * for example as a key descriptor for <code>key</code> events.</li>
+	 * <li><code>when</code> either 'before', 'after' or 'delegate'.  
+	 * MakeNode defaults to set 'after' event listeners but can be told to set 'before' ('on') listeners 
+	 * or to delegate on the BoundingBox the capture of events on inner elements.  Only className keys can be used with 'delegate'.</li></ul>
 	 * <pre>_EVENTS: {
  &nbsp; &nbsp; boundingBox: [
  &nbsp; &nbsp;  &nbsp; &nbsp; {
@@ -632,7 +635,8 @@ YUI.add('gallery-makenode', function(Y) {
  &nbsp; &nbsp;  &nbsp; &nbsp; 'mousedown' &nbsp; &nbsp;  &nbsp; &nbsp; // calls this._afterBoundingBoxMousedown
  &nbsp; &nbsp; ],
  &nbsp; &nbsp; document: 'mouseup', &nbsp; &nbsp; // calls this._afterDocumentMouseup
- &nbsp; &nbsp; input: 'change' &nbsp; &nbsp;  &nbsp; &nbsp; // calls this._afterInputChange
+ &nbsp; &nbsp; input: 'change', &nbsp; &nbsp;  &nbsp; &nbsp; // calls this._afterInputChange
+ &nbsp; &nbsp; form: {type: 'submit', when:'before'}  &nbsp; &nbsp; // calls this._beforeFormSubmit
 },</pre>
 	 * @property _EVENTS
 	 * @type Object
@@ -659,4 +663,4 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
-}, 'gallery-2011.10.06-19-55' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+}, 'gallery-2011.10.27-17-08' ,{requires:['substitute', 'classnamemanager'], skinnable:false});

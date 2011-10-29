@@ -189,7 +189,7 @@ Y.IButton = Y.Base.create(
 		 * @protected
 		 */
 		_EVENTS: {
-			boundingBox: ['click']
+			boundingBox: 'click'
 		}, 
 		ATTRS: {
 			/**

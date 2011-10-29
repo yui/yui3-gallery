@@ -21,8 +21,6 @@ YUI.add('gallery-injection-engine', function(Y) {
 ///////////////////////////////////////////////////////////////////////////
 
 var config,
-    global_yui_config,
-    custom_yui_config,
     documentElem = Y.config.doc.documentElement,
     script = 'script',
     regexUrlDetection = /^(http[s]?:\/\/|\/\/[\w\d]+)/; // supporting http://domain..., https://domain... and //domain...
@@ -34,6 +32,7 @@ var config,
 ///////////////////////////////////////////////////////////////////////////
 
 function InjectionEngine () {
+    Y.log ('Constructor', 'info', 'injection');
     InjectionEngine.superclass.constructor.apply(this, arguments);
 }
 
@@ -154,6 +153,15 @@ Y.mix(InjectionEngine, {
 });
 
 Y.extend(InjectionEngine, Y.Base, {
+    /**
+     * Any basic configuration argument that should be propagated to the iframe YUI_config object
+     * have to be defined as part of the initial config and the name of the property have to be 
+     * included in this property so it will be processed.
+     * @property YCONFIG_MAP
+     * @type Array
+     * @default ['guid', 'lang']
+     */
+    YCONFIG_MAP: ['guid', 'lang'],
 
     /**
      * Construction logic executed during Injection Engine instantiation.
@@ -161,17 +169,16 @@ Y.extend(InjectionEngine, Y.Base, {
      * @method initializer
      * @protected
      */
-    initializer: function (cfg, ycfg) {
-        var instance = this,
-            guid = Y.guid();
+    initializer: function (cfg) {
+        var instance = this;
 
         Y.log ('Initialization', 'info', 'injection');
 
         // storing the injection configuration. This will be passed into the bootstrap engine on ready
-        config = cfg || {};
-
-        // storing the custom YUI_config for the iframe sandbox, usually for debug mode hacking
-        global_yui_config = ycfg || {};
+        config = Y.merge((cfg || {}), {
+            lang: instance.get('lang'),
+            guid: Y.guid() // instance stamp
+        });
 
         // creating dynamic attributes for the sync up
         Y.each(instance.get('dynamicAttrs'), function(name) {
@@ -181,16 +188,10 @@ Y.extend(InjectionEngine, Y.Base, {
             delete config[name];
         });
 
-        // setting the minimal required yui configuration for the iframe
-        custom_yui_config = {
-            lang: instance.get('lang'),
-            guid: guid // instance stamp
-        };
-
         // defining the pipeline to connect bootstrap with injection
         // once the bootstrap finishes the initialization. This is a way to 
         // connect both objects.
-        YUI.Env[guid] = Y.bind(instance._connect, instance);
+        YUI.Env[config.guid] = Y.bind(instance._connect, instance);
 
         // finishing the initialization process async to facilitate 
         // addons to hook into _init/_bind if needed.
@@ -407,7 +408,16 @@ Y.extend(InjectionEngine, Y.Base, {
      * @return {Object} Literal object with the basic YUI_config.
      */
     _buildCfg: function () {
-        return custom_yui_config;
+        var ycfg = {};
+        // mapping all the property names from YCONFIG_MAP with the final YUI_config object
+        Y.each (this.YCONFIG_MAP, function(prop) {
+            ycfg[prop] = config[prop];
+        });
+        // setting the timestamp 0 right before starting the injection process (just in case you want to do some perf)
+        ycfg.t0 = new Date().getTime();
+        // forcing debug mode if needed
+        ycfg.debug = config.debug || false;
+        return ycfg;
     },
 
     /**
@@ -420,22 +430,25 @@ Y.extend(InjectionEngine, Y.Base, {
      * @return {Array} Collection of HTML Fragments to be inserted at the body of the iframe.
      */
     _buildBody: function (config) {
-        var b = [(config.html ? config.html : '<br>')],
+        var b = [(config.html ? config.html : '')],
             J = Y.JSON || (Y.config.win || {}).JSON,
             ycfg = this._buildCfg(),
             yui_config = [];
 
-        // global_yui_config will be transformed into a custom YUI_config object as part of the iframe body, but 
+        // ycfg will be transformed into a custom YUI_config object as part of the iframe body, but 
         // it requires JSON to stringify the configuration. Since this is usually a debug trick, we 
         // decided not to have JSON as a dependency, but as an option.
-        // Also, custom_yui_config contains the basic configuration that is required by the bootstrap engine.
+        // Also, ycfg contains the basic configuration that is required by the bootstrap engine.
         if (J) {
-            yui_config = J.stringify( Y.mix( global_yui_config, custom_yui_config ) );
+            yui_config = J.stringify( ycfg );
         } else {
         // if JSON is not available, we will create a minimum required configuration using string only
             yui_config = [];
             Y.each (Y.Object.keys(ycfg), function (name) {
-                yui_config.push( name + ':"' +  ycfg[name] + '"');
+                var v = ycfg[name];
+                if (!Y.Lang.isUndefined(v)) {
+                    yui_config.push( name + ':' + ( Y.Lang.isBoolean(v) ? v : '"' + v + '"' ) );
+                }
             });
             yui_config = '{' + yui_config.join(',') + '}';
         }
@@ -462,9 +475,6 @@ Y.extend(InjectionEngine, Y.Base, {
             META = instance._buildMeta(config),
             BODY = instance._buildBody(config),
             doc;
-
-        // setting the timestamp 0 right before starting the injection process (just in case you want to do some perf)
-        custom_yui_config.t0 = new Date().getTime();
 
         // setting the bootstrap engine css (usually a full rollout)
         Y.each (CSS, function (value, indx) {
@@ -513,4 +523,4 @@ Y.extend(InjectionEngine, Y.Base, {
 Y.InjectionEngine = InjectionEngine;
 
 
-}, 'gallery-2011.07.06-19-30' ,{requires:['node','base-base']});
+}, 'gallery-2011.10.27-17-03' ,{requires:['node','base-base']});

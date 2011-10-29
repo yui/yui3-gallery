@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <title>Bootstrap Engine Tests</title>    
+    <script type="text/javascript" src="http://yui.yahooapis.com/3.4.0/build/yui/yui-debug.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+    <h1>Bootstrap Engine Tests</h1>
+
+    <div id="demo">
+        <iframe></iframe>
+    </div>
+
+<script type="text/javascript" src="/jute_docs/jute.js"></script>
+<script type="text/javascript" src="../../../build/gallery-bootstrap-engine/gallery-bootstrap-engine-debug.js?coverage=1"></script>
+<script type="text/javascript">
+YUI({
+    useConsoleOutput: true,
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'gallery-bootstrap-engine', 'base', 'jute', function (Y) {
+
+    (new Y.Console({
+        verbose: true,
+        newestOnTop: false,
+        height: '500px',
+        width: '99%',
+        style: 'block'
+    })).render();
+
+    Y.namespace("Tests");
+
+    Y.Tests.BootstrapEngine = (function() {
+
+        var Assert = Y.Assert,
+            ObjectAssert = Y.ObjectAssert;
+
+        var iWin = Y.one('#demo iframe')._node.contentWindow;
+        var iY = YUI({
+            win: iWin,
+            doc: iWin.document
+        }).use('gallery-bootstrap-engine');
+        var obj = new iY.BootstrapEngine({
+            container: '#demo'
+        });
+
+        //-------------------------------------------------------------------------
+        // Base Test Suite
+        //-------------------------------------------------------------------------
+        var suite = new Y.Test.Suite("Bootstrap Engine Tests");
+
+        //-------------------------------------------------------------------------
+        // Communication Tests
+        //-------------------------------------------------------------------------
+        suite.add(new Y.Test.Case({
+
+            name: "Communication Tests",
+
+            //---------------------------------------------
+            // Setup and tear down
+            //---------------------------------------------
+            setUp: function() {
+            },
+
+            tearDown: function() {
+            },
+
+            //---------------------------------------------------------------------
+            // Tests
+            //---------------------------------------------------------------------
+            "test init": function() {
+                Assert.isObject(obj, 'Bootstrap Engine Object was not initialized correctly');
+            },
+
+            "test parent window nodes": function() {
+                Assert.areEqual(Y.one('#demo')._node, obj.get('container')._node, 'Bootstrap Engine Object does not has a reference to the correct container.');
+                Assert.areEqual(Y.one('iframe')._node, obj.get('iframe')._node, 'Bootstrap Engine Object does not has a reference to the correct iframe.');
+            }
+
+        }));
+
+        //return it
+        return suite;
+
+    })();
+
+    //add to the testrunner and run
+    Y.Test.Runner.add(Y.Tests.BootstrapEngine);
+    // executing JUTE is posible to get coverage
+    ( Y.UnitTest ? Y.UnitTest.go() : Y.Test.Runner.run() );
+
+});
+</script>
+</body>
+</html>

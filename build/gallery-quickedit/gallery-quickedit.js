@@ -116,10 +116,10 @@ Y.Column.ATTRS.qeFormatter =
  * function myQuickEditFormatter(o) {
  * &nbsp;&nbsp;var markup =
  * &nbsp;&nbsp;&nbsp;&nbsp;'&lt;input type="text" class="{yiv} quickedit-field quickedit-key:{key}"/&gt;' +
- * &nbsp;&nbsp;&nbsp;&nbsp;Y.Plugin.QuickEdit.error_display_markup;
+ * &nbsp;&nbsp;&nbsp;&nbsp;Y.Plugin.DataTableQuickEdit.error_display_markup;
  *
  * &nbsp;&nbsp;var qe = o.column.get('quickEdit');
- * &nbsp;&nbsp;var td = o.createCell();
+ * &nbsp;&nbsp;var td = this.createCell(o);
  * &nbsp;&nbsp;td.set('innerHTML', Y.Lang.sub(markup, {
  * &nbsp;&nbsp;&nbsp;&nbsp;key: o.column.get('key'),
  * &nbsp;&nbsp;&nbsp;&nbsp;yiv: qe.validation ? (qe.validation.css || '') : ''
@@ -127,7 +127,7 @@ Y.Column.ATTRS.qeFormatter =
  *
  * &nbsp;&nbsp;td.get('firstChild').set('value', extractMyEditableValue(o));
  *
- * &nbsp;&nbsp;Y.Plugin.QuickEdit.copyDownFormatter.call(this, o, td);
+ * &nbsp;&nbsp;Y.Plugin.DataTableQuickEdit.copyDownFormatter.call(this, o, td);
  * };
  * </pre>
  *
@@ -180,7 +180,7 @@ var class_re_prefix        = '(?:^|\\s)(?:',
 /**
  * The CSS class that marks the container for the error message inside a cell.
  *
- * @property Y.Plugin.QuickEdit.error_text_class
+ * @property Y.Plugin.DataTableQuickEdit.error_text_class
  * @type {String}
  */
 QuickEdit.error_text_class = 'quickedit-message-text';
@@ -188,7 +188,7 @@ QuickEdit.error_text_class = 'quickedit-message-text';
 /**
  * The markup for the container for the error message inside a cell.
  *
- * @property Y.Plugin.QuickEdit.error_display_markup
+ * @property Y.Plugin.DataTableQuickEdit.error_display_markup
  * @type {String}
  */
 QuickEdit.error_display_markup = '<div class="quickedit-message-text"></div>';
@@ -207,7 +207,7 @@ QuickEdit.textFormatter = function(o)
 		QuickEdit.error_display_markup;
 
 	var qe = o.column.get('quickEdit');
-	var td = o.createCell();
+	var td = this.createCell(o);
 	td.set('innerHTML', Y.Lang.sub(markup,
 	{
 		key: o.column.get('key'),
@@ -233,7 +233,7 @@ QuickEdit.textareaFormatter = function(o)
 		QuickEdit.error_display_markup;
 
 	var qe = o.column.get('quickEdit');
-	var td = o.createCell();
+	var td = this.createCell(o);
 	td.set('innerHTML', Y.Lang.sub(markup,
 	{
 		key: o.column.get('key'),
@@ -744,4 +744,4 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableQuickEdit = QuickEdit;
 
 
-}, 'gallery-2011.08.24-23-44' ,{skinnable:true, optional:['gallery-scrollintoview'], requires:['datatable-base','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-patch-340-datatable-formatter']});
+}, 'gallery-2011.10.27-17-03' ,{skinnable:true, optional:['gallery-scrollintoview'], requires:['datatable-base','gallery-formmgr-css-validation','gallery-node-optimizations']});

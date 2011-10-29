@@ -32,7 +32,7 @@
 					}
 				}
 			}).use(
-				'node','substitute','base', 'widget', 'gallery-makenode','test', 'console','node-event-simulate', // 'event-simulate',
+				'node','substitute','base', 'widget', 'gallery-makenode','test', 'console','node-event-simulate', 'event-valuechange', // 'event-simulate',
 				function(Y) {
 					"use strict";
 					var A = Y.Assert,
@@ -258,19 +258,30 @@
 								
 								inputChanged: false,
 								buttonClicked: false,
+								inputValueChanged: false,
+								delegatedButtonClick: false,
 								_afterInputChange: function (ev) {
 									this.inputChanged = true;
 								},
 								_afterClick: function (ev) {
 									this.buttonClicked = true;
+								},
+								_afterInputValueChange: function (ev) {
+									this.inputValueChanged = true;
+								},
+								_delegateButtonClick: function (ev) {
+									this.delegatedButtonClick = true;
 								}
 							},
 							{
 								_CLASS_NAMES: [INPUT, FORM, BUTTON],
 								_TEMPLATE: '<input class="{c input}" value="{p value}" /><button class="{c button}">Ok<\/button>',
 								_EVENTS: {
-									input: 'change',
-									button: {type: 'click', fn: '_afterClick'}
+									input: ['change','valueChange'],
+									button: [
+										{type: 'click', fn: '_afterClick'},
+										{type: 'click', when: 'delegate'}
+									]
 								}
 									
 							}
@@ -287,9 +298,16 @@
 						mn.render(testNode);
 						mn._inputNode.simulate('change');
 						mn._buttonNode.simulate('click');
-						A.isTrue(mn.inputChanged);
-						A.isTrue(mn.buttonClicked);
+						A.isTrue(mn.inputChanged, 'inputChanged');
+						A.isTrue(mn.buttonClicked, 'buttonClicked');
+						A.isTrue(mn.delegatedButtonClick, 'delegatedButtonClick');
+						mn._inputNode.focus();
+						mn._inputNode.set('value','whatever');
+						this.wait(function () {
+							A.isTrue(mn.inputValueChanged, 'inputValueChanged');
+						},100);
 					}
+						
 				}));		
 
 				
@@ -469,6 +487,18 @@
 						mn = new MN().render(testNode);
 						mn.set('value',42);
 						A.areEqual(42,mn.actualValue,'value should have changed to 42');
+					},
+					testSetPrevented : function () {
+						MN._EVENTS.THIS = [MN._EVENTS.THIS, {type:'valueChange',when:'before'}];
+						MN.prototype._beforeThisValueChange =  function (ev) {
+							this.beforeValueChanged = true;
+							ev.halt(true);
+						};
+						mn = new MN().render(testNode);
+						mn.set('value',42);
+						A.isTrue(mn.beforeValueChanged, 'beforeValueChanged');
+						A.isUndefined(mn.actualValue,'actualValue should remain undefined');
+						A.areEqual(5,mn.get('value'),'value should have remained at 5');
 					}
 				}));
 				
