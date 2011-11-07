@@ -56,7 +56,7 @@ ComplexNumber.prototype =
 	 */
 	magnitude: function()
 	{
-		return ComplexMath.abs(this);
+		return Math.sqrt(this.r*this.r + this.i*this.i);
 	},
 
 	/**
@@ -171,6 +171,34 @@ ComplexNumber.prototype =
 
 		this.r = - this.r;
 		this.i = - this.i;
+
+		return this;
+	},
+
+	/**
+	 * Negates the imaginary part.
+	 * @chainable
+	 */
+	conjugate: function()
+	{
+		failIfConstant(this);
+
+		this.i = - this.i;
+
+		return this;
+	},
+
+	/**
+	 * Rotates the number around the origin by the specified angle in radians.
+	 * @param angle {number}
+	 * @chainable
+	 */
+	rotate: function(
+		/* float */	angle)
+	{
+		failIfConstant(this);
+
+		this.multiply(ComplexNumber.fromPolar(1, angle));
 
 		return this;
 	},
@@ -398,6 +426,48 @@ var ComplexMath =
 
 	/**
 	 * @param v {number}
+	 * @return {number} phase of the argument
+	 */
+	phase: function(v)
+	{
+		if (ComplexMath.isComplexNumber(v))
+		{
+			return new ComplexNumber(Math.atan2(v.i, v.r), 0);
+		}
+		else
+		{
+			return new ComplexNumber();
+		}
+	},
+
+	/**
+	 * @param v {number}
+	 * @return {number} complex conjugate of the argument
+	 */
+	conjugate: function(v)
+	{
+		if (ComplexMath.isComplexNumber(v))
+		{
+			return new ComplexNumber(v.r, -v.i);
+		}
+		else
+		{
+			return new ComplexNumber(v, 0);
+		}
+	},
+
+	/**
+	 * @param v {number}
+	 * @param a {number} angle in radians
+	 * @return {number} phase of the argument
+	 */
+	rotate: function(v,a)
+	{
+		return ComplexMath.multiply(v, ComplexNumber.fromPolar(1, a));
+	},
+
+	/**
+	 * @param v {number}
 	 * @return {number} inverse hyperbolic cosine of the argument
 	 */
 	acosh: function(v)
@@ -532,7 +602,23 @@ var ComplexMath =
 	 */
 	pow: function(v, e)
 	{
-		return ComplexMath.exp(ComplexMath.multiply(ComplexMath.log(v), e));
+		var c1 = ComplexMath.isComplexNumber(v);
+		if ((c1 && v.r === 0 && v.i === 0) || (!c1 && v === 0))
+		{
+			var c2 = ComplexMath.isComplexNumber(e);
+			if ((c2 && e.r === 0 && e.i === 0) || (!c2 && e === 0))
+			{
+				return new ComplexNumber(1);	// 0 ^ 0
+			}
+			else
+			{
+				return new ComplexNumber();		// 0 ^ x, x != 0
+			}
+		}
+		else
+		{
+			return ComplexMath.exp(ComplexMath.multiply(ComplexMath.log(v), e));
+		}
 	},
 
 	/**
@@ -623,4 +709,4 @@ var ComplexMath =
 Y.ComplexMath = ComplexMath;
 
 
-}, 'gallery-2011.03.16-21-24' ,{requires:['gallery-math']});
+}, 'gallery-2011.04.27-17-14' ,{requires:['gallery-math']});

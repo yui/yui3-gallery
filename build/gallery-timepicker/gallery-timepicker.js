@@ -368,7 +368,7 @@ Y.extend(Timepicker, Y.Widget, {
               cb.appendChild(parent);
         
               //store for later
-              this.allCells = cb.queryAll('li');
+              this.allCells = cb.all('li');
          
           },
           
@@ -429,4 +429,4 @@ Y.namespace(NAMESPACE +'.'+CONSTRUCTOR);
 Y[NAMESPACE][CONSTRUCTOR] = Timepicker;
 
 
-}, 'gallery-2010.02.25-22' ,{requires:['oop', 'event-custom', 'attribute', 'base', 'dom', 'classnamemanager', 'widget', 'event']});
+}, 'gallery-2011.10.12-20-24' ,{requires:['oop', 'event-custom', 'attribute', 'base', 'dom', 'classnamemanager', 'widget', 'event']});

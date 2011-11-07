@@ -5,6 +5,11 @@ Dispatcher
     More info at http://yuilibrary.com/gallery/show/dispatcher
 
 HEAD
+    * Tested on YUI 3.3.0
+    * Fixing the inline script tag execution on FF4:
+      http://yuilibrary.com/forum/viewtopic.php?f=134&t=7529
+
+2011.03.02-20-58
     * Internal refactor to provide access to some of the process during the 
       dispatcher phase through protected methods: _executeScript, _getScript, 
       _setContent, _purgeContent. More info about this here:

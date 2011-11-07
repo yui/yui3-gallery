@@ -117,7 +117,8 @@
                     };
                 }
                 this._callback.format = Y.bind(function(url, proxy) {
-                    return Y.oAuth.signURL(this._opts.key, this._opts.secret, (url + 'callback=' + proxy));
+                    var url = Y.oAuth.signURL(this._opts.key, this._opts.secret, (url + '&callback=' + proxy));
+                    return url;
                 }, this);
             }
             this._send();

@@ -10,6 +10,68 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     toString: function() {
         return this.name;
     },
+
+    /**
+     * @property FormField.FIELD_TEMPLATE
+     * @type String
+     * @description Template used to render the field node
+     */
+    FIELD_TEMPLATE : '<input></input>',
+
+    /**
+     * @property FormField.FIELD_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the field node and style it.
+     */
+    FIELD_CLASS : 'field',
+
+    /**
+     * @property FormField.LABEL_TEMPLATE
+     * @type String
+     * @description Template used to draw a label node
+     */
+    LABEL_TEMPLATE : '<label></label>',
+
+    /**
+     * @property FormField.LABEL_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the label node and style it.
+     */
+    LABEL_CLASS : 'label',
+
+    /**
+     * @property FormField.HINT_TEMPLATE
+     * @type String
+     * @description Optionally a template used to draw a hint node. Derived
+     *     classes can use it to provide additional information about the field
+     */
+    HINT_TEMPLATE : '',
+
+    /**
+     * @property FormField.HINT_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the hint node and style it.
+     */
+    HINT_CLASS : 'hint',
+
+    /**
+     * @property FormField.ERROR_TEMPLATE
+     * @type String
+     * @description Template used to draw an error node
+     */
+    ERROR_TEMPLATE : '<span></span>',
+
+    /**
+     * @property FormField.ERROR_CLASS
+     * @type String
+     * @description CSS class used to locate a placeholder for
+     *     the error node and style it.
+     */
+    ERROR_CLASS : 'error',
+
     /**
      * @property _labelNode
      * @protected
@@ -17,6 +79,14 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description The label node for this form field
      */
     _labelNode: null,
+
+     /**
+     * @property _hintNode
+     * @protected
+     * @type Object
+     * @description The hint node with extra text describing the field
+     */    
+    _hintNode : null,
 
     /**
      * @property _fieldNode
@@ -105,6 +175,35 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     },
 
     /**
+     * @method _renderNode
+     * @protected
+     * @description Helper method to render new nodes, possibly replacing
+     *     markup placeholders.
+     */
+    _renderNode : function (nodeTemplate, nodeClass, nodeBefore) {
+        if (!nodeTemplate) {
+            return null;
+        }
+        var contentBox = this.get('contentBox'),
+            node = Y.Node.create(nodeTemplate),
+            placeHolder = contentBox.one('.' + nodeClass);
+
+        node.addClass(nodeClass);
+
+        if (placeHolder) {
+            placeHolder.replace(node);
+        } else {
+            if (nodeBefore) {
+                contentBox.insertBefore(node, nodeBefore);
+            } else {
+                contentBox.appendChild(node);
+            }
+        }
+
+        return node;
+    },
+
+    /**
      * @method _renderLabelNode
      * @protected
      * @description Draws the form field's label node into the contentBox
@@ -114,11 +213,22 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         labelNode = contentBox.one('label');
 
         if (!labelNode || labelNode.get('for') != this.get('id')) {
-            labelNode = Y.Node.create(Y.FormField.LABEL_TEMPLATE);
-            contentBox.appendChild(labelNode);
+            labelNode = this._renderNode(this.LABEL_TEMPLATE, this.LABEL_CLASS);
         }
 
         this._labelNode = labelNode;
+    },
+
+    /**
+     * @method _renderHintNode
+     * @protected
+     * @description Draws the hint node into the contentBox. If a node is
+     *     found in the contentBox with class HINT_CLASS, it will be
+     *     considered a markup placeholder and replaced with the hint node.
+     */
+    _renderHintNode : function () {
+        this._hintNode = this._renderNode(this.HINT_TEMPLATE,
+                                          this.HINT_CLASS);
     },
 
     /**
@@ -131,8 +241,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         field = contentBox.one('#' + this.get('id'));
 
         if (!field) {
-            field = Y.Node.create(Y.FormField.INPUT_TEMPLATE);
-            contentBox.appendChild(field);
+            field = this._renderNode(this.FIELD_TEMPLATE, this.FIELD_CLASS);
         }
 
         this._fieldNode = field;
@@ -144,16 +253,35 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description Syncs the the label node and this instances attributes
      */
     _syncLabelNode: function() {
+        var label = this.get('label'),
+            required = this.get('required'),
+            requiredLabel = this.get('requiredLabel');
         if (this._labelNode) {
-            this._labelNode.setAttrs({
-                innerHTML: this.get('label')
-            });
+            this._labelNode.set("text", "");
+            if (label) {
+                this._labelNode.append("<span class='caption'>" + label + "</span>"); 
+            }
+            if (required && requiredLabel) {
+                this._labelNode.append("<span class='separator'> </span>");
+                this._labelNode.append("<span class='required'>" + requiredLabel + "</span>");
+            }
             this._labelNode.setAttribute('for', this.get('id') + Y.FormField.FIELD_ID_SUFFIX);
         }
     },
 
     /**
-     * @method _syncLabelNode
+     * @method _syncHintNode
+     * @protected
+     * @description Syncs the hintNode
+     */
+    _syncHintNode : function () {
+        if (this._hintNode) {
+            this._hintNode.set("text", this.get("hint"));
+        }
+    },
+
+    /**
+     * @method _syncFieldNode
      * @protected
      * @description Syncs the fieldNode and this instances attributes
      */
@@ -215,12 +343,9 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description Adds an error node with the supplied message
      */
     _showError: function(errMsg) {
-        var contentBox = this.get('contentBox'),
-        errorNode = Y.Node.create('<span>' + errMsg + '</span>');
+        var errorNode = this._renderNode(this.ERROR_TEMPLATE, this.ERROR_CLASS, this._labelNode);
 
-        errorNode.addClass('error');
-        contentBox.insertBefore(errorNode, this._labelNode);
-
+        errorNode.set("text", errMsg);
         this._errorNode = errorNode;
     },
 
@@ -231,8 +356,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      */
     _clearError: function() {
         if (this._errorNode) {
-            var contentBox = this.get('contentBox');
-            contentBox.removeChild(this._errorNode);
+            this._errorNode.remove();
             this._errorNode = null;
         }
     },
@@ -304,6 +428,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     renderUI: function() {
         this._renderLabelNode();
         this._renderFieldNode();
+        this._renderHintNode();
     },
 
     bindUI: function() {
@@ -360,6 +485,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
     syncUI: function() {
         this.get('boundingBox').removeAttribute('tabindex');
         this._syncLabelNode();
+        this._syncHintNode();
         this._syncFieldNode();
         this._syncError();
         this._syncDisabled();
@@ -425,6 +551,17 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         },
 
         /**
+         * @attribute hint
+         * @type String
+         * @default ""
+         * @description Extra text explaining what the field is about.
+         */
+        hint : {
+            value : '',
+            validator : Y.Lang.isString
+        },
+        
+        /**
          * @attribute validator
          * @type Function
          * @default "function () { return true; }"
@@ -475,6 +612,17 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
         validateInline: {
             value: false,
             validator: Y.Lang.isBoolean
+        },
+
+        /**
+         * @attribute requiredLabel
+         * @type String
+         * @description Text to append to the labal caption for a required
+         *     field, by default nothing will be appended.
+         */
+        requiredLabel : {
+            value : '',
+            validator : Y.Lang.isString
         }
     },
 
@@ -658,20 +806,6 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description Message to display when invalid characters are entered
      */
     INVALID_SPECIAL_CHARS: "Please use only letters and numbers",
-
-    /**
-     * @property FormField.INPUT_TEMPLATE
-     * @type String
-     * @description Template used to draw an input node
-     */
-    INPUT_TEMPLATE: '<input />',
-
-    /**
-     * @property FormField.LABEL_TEMPLATE
-     * @type String
-     * @description Template used to draw a label node
-     */
-    LABEL_TEMPLATE: '<label></label>',
 
     /**
      * @property FormField.REQUIRED_ERROR_TEXT

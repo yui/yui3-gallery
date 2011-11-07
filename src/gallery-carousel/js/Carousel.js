@@ -321,8 +321,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         }
 
         count = this.get("numItems");
-        this.set("numItems", count + 1);
-        this.fire(ITEMADDED_EVENT, { item: item, pos: index });
+        self.set("numItems", count + 1);
+        self.fire(ITEMADDED_EVENT, { item: item, pos: index });
 
         return true;
     },
@@ -558,11 +558,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollBackward: function () {
-        var self = this,
-            scrollIncrement = self.get("scrollIncrement"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem - scrollIncrement);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() - self.get("scrollIncrement"));
     },
 
     /**
@@ -572,11 +569,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollForward: function () {
-        var self = this,
-            scrollIncrement = self.get("scrollIncrement"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem + scrollIncrement);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() + self.get("scrollIncrement"));
     },
 
     /**
@@ -586,11 +580,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollPageBackward: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem - numVisible);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() - self.get("numVisible"));
     },
 
     /**
@@ -600,11 +591,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollPageForward: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
-            selectedItem = self.get("selectedItem");
-
-        self.scrollTo(selectedItem + numVisible);
+        var self = this;
+        self.scrollTo(self.getFirstVisible() + self.get("numVisible"));
     },
 
     /**
@@ -618,33 +606,23 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         var self = this,
             isCircular = self.get("isCircular"),
             numItems = self.get("numItems"),
+            numVisible = self.get("numVisible"),
             attr, cb, first, offset;
 
-        /* Attempt to fix an "out of bounds" index if possible. */
-        if (index < 0) {
-            if (isCircular) {
-                index += numItems;
-            } else {
-                index = 0;
-            }
-        } else if (index > numItems - 1) {
-            if (isCircular) {
-                index = numItems - index;
-            } else {
-                index = numItems - 1;
-            }
+        index = self._getCorrectedIndex(index); // sanitize the value
+        if (isNaN(index)) {
+            return;
         }
-
         offset = self._getOffsetForIndex(index);
         cb = self.get("contentBox");
         attr = self.get("isVertical") ? "top" : "left";
         first = self.getFirstVisible();
         self.fire(BEFORESCROLL_EVENT, { first: first,
-                last: first+self.get("numVisible") });
+                last: first + numVisible });
         cb.setStyle(attr, offset);
         first = self.getFirstVisible(); // ask for the "new" first visible
         self.fire(AFTERSCROLL_EVENT, { first: first,
-                last: first+self.get("numVisible") });
+                last: first + numVisible });
         self.set("selectedItem", index); // assume this is what the user want
     },
 
@@ -737,305 +715,342 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         }
         self._renderContainer();
 
-         Y.log("boundingBox: " + self.get("boundingBox"), "info", Carousel.NAME);
-         Y.log("contentBox: " + self.get("contentBox"), "info", Carousel.NAME);
-     },
+        Y.log("boundingBox: " + self.get("boundingBox"), "info", Carousel.NAME);
+        Y.log("contentBox: " + self.get("contentBox"), "info", Carousel.NAME);
+    },
 
-     /**
-      * Set the initial Carousel UI.
-      *
-      * @method syncUI
-      * @protected
-      */
-     syncUI: function () {
-         var self = this,
-             selectedItem = self.get("selectedItem");
+    /**
+     * Set the initial Carousel UI.
+     *
+     * @method syncUI
+     * @protected
+     */
+    syncUI: function () {
+        var self = this,
+            selectedItem = self.get("selectedItem");
 
-         self._uiSetSelectedItem(selectedItem, true);
-         if (!self.get("hidePagination")) {
-             self._updateNavigation(selectedItem);
-         }
-     },
-
-     /**
-      * Add the Carousel items to the DOM on addItem.
-      *
-      * @method _addItemToDom
-      * @protected
-      */
-     _addItemToDom: function (arg) {
-         var self = this,
-             cb = self.get("contentBox"),
-             item, node, numItems, pos;
-
-         item = arg.item;
-         pos = arg.pos + 1;     // real position has shifted now
-
-         if (item && !cb.contains(item)) {
-             node = self._vtbl.items[pos];
-             if (node) {
-                 cb.insertBefore(item, node);
-             } else {
-                 cb.append(item);
-             }
-             if (self.get("selectedItem") == pos) {
-                 numItems = self.get("numItems");
-                 ++pos;
-                 pos = pos > numItems - 1 ? numItems - 1 : pos;
-                 self.set("selectedItem", pos);
-             }
-             self._redrawUi();
+        self._uiSetSelectedItem(selectedItem, true);
+        if (!self.get("hidePagination")) {
+            self._updateNavigation(selectedItem);
         }
     },
 
-     /**
-      * Handle the "selectedItem" change and trigger the appropriate UI changes.
-      *
-      * @method _afterSelectedItemChange
-      * @param {Event} ev The Event Facade containing the old and new states
-      * @protected
-      */
-     _afterSelectedItemChange: function (ev) {
-         var self = this;
+    /**
+     * Add the Carousel items to the DOM on addItem.
+     *
+     * @method _addItemToDom
+     * @protected
+     */
+    _addItemToDom: function (arg) {
+        var self = this,
+            cb = self.get("contentBox"),
+            item, node, numItems, pos;
 
-         self._uiSetSelectedItem(ev.prevVal, false);
-         self._uiSetSelectedItem(ev.newVal, true);
-         self.fire(ITEMSELECTED_EVENT, { pos: ev.newVal });
-         if (!self.get("hidePagination")) {
-             self._updateNavigation(ev.newVal);
-         }
-     },
+        item = arg.item;
+        pos = arg.pos + 1;      // real position has shifted now
 
-     /**
-      * Return the first visible item given the selected item and the number of
-      * visible items in the view port.
-      *
-      * @method _getFirstVisible
-      * @param {Number} selectedItem The selected item
-      * @param {Number} numVisible The number of visible items in the view port
-      * @return The first visible item
-      * @protected
-      */
-     _getFirstVisible: function (selectedItem, numVisible) {
-         return selectedItem - (selectedItem % numVisible);
-     },
+        if (item && !cb.contains(item)) {
+            node = self._vtbl.items[pos];
+            if (node) {
+                cb.insertBefore(item, node);
+            } else {
+                cb.append(item);
+            }
+            if (self.get("selectedItem") == pos) {
+                numItems = self.get("numItems");
+                ++pos;
+                pos = pos > numItems - 1 ? numItems - 1 : pos;
+                self.set("selectedItem", pos);
+            }
+            self._redrawUi();
+        }
+    },
 
-     /**
-      * Return the absolute offset for the specified index.
-      *
-      * @method _getOffsetForIndex
-      * @param {Number} index The index for which offset needs to be obtained
-      * @return The absolute offset
-      * @protected
-      */
-     _getOffsetForIndex: function (index) {
-         var self = this,
-             item = self._vtbl.item,
-             sz;
+    /**
+     * Handle the "selectedItem" change and trigger the appropriate UI changes.
+     *
+     * @method _afterSelectedItemChange
+     * @param {Event} ev The Event Facade containing the old and new states
+     * @protected
+     */
+    _afterSelectedItemChange: function (ev) {
+        var self = this;
 
-         sz = self.get("isVertical") ? item.vsz : item.hsz;
-         return -sz * index;
-     },
+        self._uiSetSelectedItem(ev.prevVal, false);
+        self._uiSetSelectedItem(ev.newVal, true);
+        self.fire(ITEMSELECTED_EVENT, { pos: ev.newVal });
+        if (!self.get("hidePagination")) {
+            self._updateNavigation(ev.newVal);
+        }
+    },
 
-     /**
-      * Return the size of the given node including border, padding and margin.
-      *
-      * @method _getNodeSize
-      * @param {Node} node The node for which the size needs to be computed
-      * @param {String} which Set to one of height or width
-      * @protected
-      */
-     _getNodeSize: function (node, which) {
-         var sz = 0;
+    /**
+     * Return the correct index for the current configuration.
+     *
+     * @method _getCorrectedIndex
+     * @param {Number} index The index of the item to be scrolled to
+     * @return The corrected index after sanitizing for out of bounds error
+     * @protected
+     */
+    _getCorrectedIndex: function (index) {
+        var self = this,
+            isCircular = self.get("isCircular"),
+            numItems = self.get("numItems"),
+            numVisible = self.get("numVisible"),
+            sentinel = numItems - 1,
+            firstOfLastPage = 0;
 
-         if (node && node.constructor.NAME === "node") {
-             if (which === "height") {
-                 sz = parseInt(node.getComputedStyle("marginTop"), 10) +
-                 parseInt(node.getComputedStyle("paddingTop"), 10) +
-                 parseInt(node.getComputedStyle("borderTopWidth"), 10) +
-                 parseInt(node.getComputedStyle("height"), 10) +
-                 parseInt(node.getComputedStyle("borderBottomWidth"), 10) +
-                 parseInt(node.getComputedStyle("paddingBottom"), 10) +
-                 parseInt(node.getComputedStyle("marginBottom"), 10);
-             } else if (which == "width") {
-                 sz = parseInt(node.getComputedStyle("marginLeft"), 10) +
-                 parseInt(node.getComputedStyle("paddingLeft"), 10) +
-                 parseInt(node.getComputedStyle("borderLeftWidth"), 10) +
-                 parseInt(node.getComputedStyle("width"), 10) +
-                 parseInt(node.getComputedStyle("borderRightWidth"), 10)+
-                 parseInt(node.getComputedStyle("paddingRight"), 10) +
-                 parseInt(node.getComputedStyle("marginRight"), 10);
-             }
-         }
+        // Fix for Issues #2 and #11 - thanks <http://github.com/amasad>
+        if (isCircular) {
+            firstOfLastPage = self.getPageForItem(sentinel) * numVisible;
+        }
+        
+        if (index < 0) {
+            if (isCircular) {
+                index = firstOfLastPage;
+            } else {
+                index = 0;
+            }
+        } else if (index > sentinel) {
+            if (isCircular) {
+                index = 0;
+            } else {
+                index = firstOfLastPage;
+            }
+        }
 
-         return sz;
-     },
+        return index;
+    },
 
-     /**
-      * Handle the item click event.
-      *
-      * @method _onItemClick
-      * @protected
-      */
-     _onItemClick: function (ev) {
-         var self = this,
-             bb = self.get("boundingBox"),
-             container, el, target, i, len, items;
+    /**
+     * Return the first visible item given the selected item and the number of
+     * visible items in the view port.
+     *
+     * @method _getFirstVisible
+     * @param {Number} selectedItem The selected item
+     * @param {Number} numVisible The number of visible items in the view port
+     * @return The first visible item
+     * @protected
+     */
+    _getFirstVisible: function (selectedItem, numVisible) {
+        return selectedItem - (selectedItem % numVisible);
+    },
 
-         target = ev && ev.target ? ev.target : null;
-         if (!target) {
-             return;
-         }
-         ev.preventDefault();
+    /**
+     * Return the absolute offset for the specified index.
+     *
+     * @method _getOffsetForIndex
+     * @param {Number} index The index for which offset needs to be obtained
+     * @return The absolute offset
+     * @protected
+     */
+    _getOffsetForIndex: function (index) {
+        var self = this,
+            item = self._vtbl.item,
+            sz;
 
-         container = bb.one("." + getCN(Carousel.NAME, cpContent));
-         el = target;
-         while (el && el != container) {
-             if (el.hasClass(self.ITEM_CLASS_NAME)) {
-                 break;
-             }
-             el = el.get("parentNode");
-         }
+        sz = self.get("isVertical") ? item.vsz : item.hsz;
+        return -sz * index;
+    },
 
-         if (el) {
-             items = self._vtbl.items;
-             for (i = 0, len = items.length; i < len; ++i) {
-                 if (el == items[i]) {
-                     self.set("selectedItem", i);
-                     break;
-                 }
-             }
-         }
-     },
+    /**
+     * Return the size of the given node including border, padding and margin.
+     *
+     * @method _getNodeSize
+     * @param {Node} node The node for which the size needs to be computed
+     * @param {String} which Set to one of height or width
+     * @protected
+     */
+    _getNodeSize: function (node, which) {
+        var sz = 0;
 
-     /**
-      * Handle the navigation button click event.
-      *
-      * @method _onNavButtonClick
-      * @protected
-      */
-     _onNavButtonClick: function (ev) {
-         var self = this,
-             target;
+        if (node && node.constructor.NAME === "node") {
+            if (which === "height") {
+                sz = parseInt(node.getComputedStyle("marginTop"), 10)         +
+                     parseInt(node.getComputedStyle("paddingTop"), 10)        +
+                     parseInt(node.getComputedStyle("borderTopWidth"), 10)    +
+                     parseInt(node.getComputedStyle("height"), 10)            +
+                     parseInt(node.getComputedStyle("borderBottomWidth"), 10) +
+                     parseInt(node.getComputedStyle("paddingBottom"), 10)     +
+                     parseInt(node.getComputedStyle("marginBottom"), 10);
+            } else if (which == "width") {
+                sz = parseInt(node.getComputedStyle("marginLeft"), 10)        +
+                     parseInt(node.getComputedStyle("paddingLeft"), 10)       +
+                     parseInt(node.getComputedStyle("borderLeftWidth"), 10)   +
+                     parseInt(node.getComputedStyle("width"), 10)             +
+                     parseInt(node.getComputedStyle("borderRightWidth"), 10)  +
+                     parseInt(node.getComputedStyle("paddingRight"), 10)      +
+                     parseInt(node.getComputedStyle("marginRight"), 10);
+            }
+        }
 
-         ev.preventDefault();
-         target = ev && ev.target ? ev.target : null;
-         if (!target) {
-             return;
-         }
+        return sz;
+    },
 
-         if (!target.test(".yui3-carousel-button")) {
-             target = target.ancestor();
-         }
+    /**
+     * Handle the item click event.
+     *
+     * @method _onItemClick
+     * @protected
+     */
+    _onItemClick: function (ev) {
+        var self = this,
+            bb = self.get("boundingBox"),
+            container, el, target, i, itemClass, items, len;
 
-         if (target.hasClass("yui3-carousel-first-button")) {
-             if (canGoBackward) {
-                 self.scrollPageBackward();
-             }
-         } else if (target.hasClass("yui3-carousel-next-button")) {
-             if (canGoForward) {
-                 self.scrollPageForward();
-             }
-         }
-     },
+        target = ev && ev.target ? ev.target : null;
+        if (!target) {
+            return;
+        }
+        ev.preventDefault();
 
-     /**
-      * Handle the navigation item click event.
-      *
-      * @method _onNavItemClick
-      * @protected
-      */
-     _onNavItemClick: function (ev) {
-         var self = this,
-             link, target;
+        container = bb.one("." + getCN(Carousel.NAME, cpContent));
+        el = target;
+        itemClass = getCN(Carousel.NAME, cpItem);
+        while (el && el != container) {
+            if (el.hasClass(itemClass)) {
+                break;
+            }
+            el = el.get("parentNode");
+        }
 
-         target = ev && ev.target ? ev.target : null;
-         if (!target) {
-             return;
-         }
-         ev.preventDefault();
+        if (el) {
+            items = self._vtbl.items;
+            for (i = 0, len = items.length; i < len; ++i) {
+                if (el == items[i]) {
+                    self.set("selectedItem", i);
+                    break;
+                }
+            }
+        }
+    },
 
-         link = target.get("href");
-         if (link) {
-             link = parseInt(link.replace(/.*#(.*)$/, "$1"), 10);
-             if (JS.isNumber(link)) {
-                 self.scrollToPage(link - 1);
-                 self._uiSetNavItem(target.ancestor());
-             }
-         }
-     },
+    /**
+     * Handle the navigation button click event.
+     *
+     * @method _onNavButtonClick
+     * @protected
+     */
+    _onNavButtonClick: function (ev) {
+        var self = this,
+            target;
 
-     /**
-      * Parse the Carousel items and fill out the vtbl structure.
-      *
-      * @method _parseItems
-      * @protected
-      */
-     _parseItems: function () {
-         var self = this,
-             cb, items;
+        ev.preventDefault();
+        target = ev && ev.target ? ev.target : null;
+        if (!target) {
+            return;
+        }
 
-         cb = self.get("contentBox");
-         items = cb.all(self.get("carouselItemEl"));
-         items.each(function (item, i) {
-             if (!self.addItem(item)) {
-                 Y.log("Unable to add parsed item - " + item, "warn",
-                       Carousel.NAME);
-             }
-         }, self);
-     },
+        if (!target.test(".yui3-carousel-button")) {
+            target = target.ancestor();
+        }
 
-     /**
-      * Redraw the Carousel UI after updates.
-      * 
-      * @method _redrawUi
-      * @protected
-      */
-     _redrawUi: function () {
-         var self = this,
-             attr = "left",
-             cb = self.get("contentBox");
+        if (target.hasClass("yui3-carousel-first-button")) {
+            if (canGoBackward) {
+                self.scrollPageBackward();
+            }
+        } else if (target.hasClass("yui3-carousel-next-button")) {
+            if (canGoForward) {
+                self.scrollPageForward();
+            }
+        }
+    },
+
+    /**
+     * Handle the navigation item click event.
+     *
+     * @method _onNavItemClick
+     * @protected
+     */
+    _onNavItemClick: function (ev) {
+        var self = this,
+            link, target;
+
+        target = ev && ev.target ? ev.target : null;
+        if (!target) {
+            return;
+        }
+        ev.preventDefault();
+
+        link = target.get("href");
+        if (link) {
+            link = parseInt(link.replace(/.*#(.*)$/, "$1"), 10);
+            if (JS.isNumber(link)) {
+                self.scrollToPage(link - 1);
+            }
+        }
+    },
+
+    /**
+     * Parse the Carousel items and fill out the vtbl structure.
+     *
+     * @method _parseItems
+     * @protected
+     */
+    _parseItems: function () {
+        var self = this,
+            cb, items;
+
+        cb = self.get("contentBox");
+        items = cb.all(self.get("carouselItemEl"));
+        items.each(function (item, i) {
+            if (!self.addItem(item)) {
+                Y.log("Unable to add parsed item - " + item, "warn",
+                      Carousel.NAME);
+            }
+        }, self);
+    },
+
+    /**
+     * Redraw the Carousel UI after updates.
+     * 
+     * @method _redrawUi
+     * @protected
+     */
+    _redrawUi: function () {
+        var self = this,
+            attr = "left";
          
-         self._renderItems();
-         self._updateNavigation();
-         if (self.get("isVertical")) {
-             self._renderContainer();
-             attr = "top";
-         }
-         cb.setStyle(attr, 0);
-     },
+        self._renderItems();
+        self._updateNavigation();
+        if (self.get("isVertical")) {
+            self._renderContainer();
+            attr = "top";
+        }
+        self.scrollTo(self.get("selectedItem"));
+    },
 
-     /**
-      * Remove the Carousel items from the DOM on removeItem.
-      *
-      * @method _removeItemFromDom
-      * @protected
-      */
-     _removeItemFromDom: function (arg) {
-         var self = this,
-             cb = self.get("contentBox"),
-             item, pos;
+    /**
+     * Remove the Carousel items from the DOM on removeItem.
+     *
+     * @method _removeItemFromDom
+     * @protected
+     */
+    _removeItemFromDom: function (arg) {
+        var self = this,
+            cb = self.get("contentBox"),
+            item, pos;
 
-         item = arg.item;
-         pos = arg.pos;
+        item = arg.item;
+        pos = arg.pos;
 
-         if (item && cb.contains(item)) {
-             item.remove(true);
-             if (self.get("selectedItem") == pos) {
-                 --pos;
-                 pos = pos < 0 ? 0 : pos;
-                 self.set("selectedItem", pos);
-             }
-             /*
-                 An item removal would can result in any of the following cases:
-                 (a) the position of the items would require a change since one of
-                     them would be missing now
-                 (b) the navigation has to be redrawn since the number of items
-                     has changed
-                  (c) the container may have to be redrawn since the height may
-                      have changed for a vertical Carousel
-             */
-             self._redrawUi();
+        if (item && cb.contains(item)) {
+            item.remove(true);
+            if (self.get("selectedItem") == pos) {
+                --pos;
+                pos = pos < 0 ? 0 : pos;
+                self.set("selectedItem", pos);
+            }
+            /*
+                An item removal would can result in any of the following cases:
+                (a) the position of the items would require a change since one
+                    of them would be missing now
+                (b) the navigation has to be redrawn since the number of items
+                    has changed
+                (c) the container may have to be redrawn since the height may
+                    have changed for a vertical Carousel
+            */
+            self._redrawUi();
         }
     },
 
@@ -1086,7 +1101,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     _renderItems: function () {
         var self = this,
             cb = self.get("contentBox"),
-            attr, i, n, node, size;
+            attr, i, itemClass, n, node, size;
 
         if (self.get("isVertical")) {
             attr = "top";
@@ -1096,6 +1111,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             size = self._vtbl.item.hsz;
         }
 
+        itemClass = getCN(Carousel.NAME, cpItem);
         for (i = 0, n = self._vtbl.items.length; i < n; ++i) {
             node = self._vtbl.items[i];
             if (node) {
@@ -1107,7 +1123,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
                     }
                 }
                 node.setStyle(attr, size * i);
-                node.addClass(self.ITEM_CLASS_NAME);
+                node.addClass(itemClass);
             }
         }
     },
@@ -1347,14 +1363,16 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
             if (!isCircular) {
                 btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
                 if (btn) {
-                    btn.addClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
+                    btn.addClass(getCN(Carousel.NAME, "first",
+                            cpButtonDisabled));
                     canGoBackward = false;
                 }
             }
         } else if (currPage !== 0 && currPage == lastPage) {
             btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
-                btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
+                btn.removeClass(getCN(Carousel.NAME, "first",
+                        cpButtonDisabled));
                 canGoBackward = true;
             }
             if (!isCircular) {
@@ -1367,7 +1385,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         } else if (lastPage > 0) {
             btn = bb.one("." + getCN(Carousel.NAME, "first", cpButton));
             if (btn) {
-                btn.removeClass(getCN(Carousel.NAME, "first", cpButtonDisabled));
+                btn.removeClass(getCN(Carousel.NAME, "first",
+                        cpButtonDisabled));
                 canGoBackward = true;
             }
             btn = bb.one("." + getCN(Carousel.NAME, "next", cpButton));

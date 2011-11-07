@@ -20,6 +20,26 @@ YUI.add('gallery-ellipsis', function(Y) {
 * THE SOFTWARE.
 */
 
+    var // the allowable difference when comparing floating point numbers
+        fp_epsilon  = 0.01,
+
+        // floating point comparison
+        fp_equals   = function (a, b) { return Math.abs(a - b) <= fp_epsilon; },
+        fp_greater  = function (a, b) { return a - b >= fp_epsilon; },
+        fp_lesser   = function (a, b) { return a - b <= fp_epsilon; },
+
+        // do a quick feature test to see if native text-overflow: ellipsis is supported
+        nativeRule  = false,
+
+        // remember some native styles if we have support
+        nativeStyles = {
+            'white-space'   : 'nowrap',
+            'overflow'      : 'hidden'
+        },
+
+        // determine whether we want to use currentStyle instead of some buggy .getComputedStyle() results
+        currentStyle = false;
+
     // add this on all Y.Node instances (but only if imported
     Y.DOM.ellipsis = function (node, conf) {
 
@@ -29,13 +49,19 @@ YUI.add('gallery-ellipsis', function(Y) {
         // augment our conf object with some default settings
         Y.mix(conf, {
             // end marker
-            'ellipsis' : ' ...',
+            'ellipsis' : '\u2026',
             
             // for stuff we *really* don't want to wrap, increase this number just in case
             'fudge'    : 3,
 
             // target number of lines to wrap
-            'lines'    : 1
+            'lines'    : 1,
+
+            // whether or not to remember the original text to able to de-truncate
+            'remember' : true,
+
+            // should we use native browser support when it exists? (on by default)
+            'native'   : true
         });
 
         // console.log(conf);
@@ -45,8 +71,11 @@ YUI.add('gallery-ellipsis', function(Y) {
             // the element we're trying to truncate
         var yEl           = Y.one(node),
 
+            // the name of the field we use to store using .setData()
+            dataAttrName  = 'ellipsis-original-text',
+
             // original text
-            originalText  = yEl.getAttribute('originalText') || yEl.get('text'),
+            originalText  = conf.remember && yEl.getData(dataAttrName) || yEl.get('text'),
             
             // keep the current length of the text so far
             currentLength = originalText.length,
@@ -57,16 +86,9 @@ YUI.add('gallery-ellipsis', function(Y) {
             // copy the element so we can string length invisibly
             clone         = Y.one(document.createElement(yEl.get('nodeName'))),
 
-            // the allowable difference when comparing floating point numbers
-            fp_epsilon    = 0.01,
-
-            // floating point comparison
-            fp_equals     = function (a, b) { return Math.abs(a - b) <= fp_epsilon; },
-            fp_greater    = function (a, b) { return a - b >= fp_epsilon; },
-            fp_lesser     = function (a, b) { return a - b <= fp_epsilon; },
-
             // some current values used to cache .getComputedStyle() accesses and compare to our goals
             lineHeight, targetHeight, currentHeight, lastKnownGood;
+
 
         // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         // @ NOTE: I'm intentionally ignoring padding as .getComputedStyle('height') @
@@ -80,9 +102,9 @@ YUI.add('gallery-ellipsis', function(Y) {
             'visibility'    : 'hidden',
             'display'       : 'block',
             'bottom'        : '-10px',
-            'right'         : '-10px',
-            'width'         : yEl.getComputedStyle('width'),
-            'fontSize'      : yEl.getComputedStyle('fontSize'),
+            'left'          : '-10px',
+            'width'         : currentStyle ? node.offsetWidth           : yEl.getComputedStyle('width'),
+            'fontSize'      : currentStyle ? node.currentStyle.fontSize : yEl.getComputedStyle('fontSize'), /* weird IE7 + reset bug */
             'fontFamily'    : yEl.getComputedStyle('fontFamily'),
             'fontWeight'    : yEl.getComputedStyle('fontWeight'),
             'letterSpacing' : yEl.getComputedStyle('letterSpacing'),
@@ -96,7 +118,19 @@ YUI.add('gallery-ellipsis', function(Y) {
         Y.one('body').append(clone);
 
         // get the height of the node with only 1 character of text (should be 1 line)
-        lineHeight    = parseFloat(clone.getComputedStyle('height'), 10);
+        lineHeight    = parseFloat(clone.getComputedStyle('height'));
+
+        // if we have the native support for text-overflow and we only want 1 line with the same style ellipsis
+        if (Y.DOM.ellipsis.nativeSupport && conf['native'] && 1 == conf.lines && '\u2026' === conf.ellipsis) {
+            // console.log('using native!');
+            // apply the styles
+            yEl.setStyles(nativeStyles);
+            // this is needed to trigger the overflow in some browser (*cough* Opera *cough*)
+            yEl.setStyle('height', lineHeight + 'px');
+            // exit early and clean-up
+            clone.remove();
+            return;
+        }
 
         // set overflow back to visible
         clone.setStyle('overflow', 'visible');
@@ -108,7 +142,7 @@ YUI.add('gallery-ellipsis', function(Y) {
         clone.set('text', originalText);
 
         // ok, now that we have a node in the DOM with the right text, measure it's height
-        currentHeight = parseFloat(clone.getComputedStyle('height'), 10);
+        currentHeight = parseFloat(clone.getComputedStyle('height'));
 
         // console.log('lineHeight', lineHeight);
         // console.log('currentHeight', currentHeight);
@@ -136,7 +170,7 @@ YUI.add('gallery-ellipsis', function(Y) {
             clone.set('text', originalText.slice(0, currentLength - conf.ellipsis.length) + conf.ellipsis);
             
             // compute the current height
-            currentHeight = parseFloat(clone.getComputedStyle('height'), 10);
+            currentHeight = parseFloat(clone.getComputedStyle('height'));
 
             // we only want to store values that aren't too big
             if (fp_equals(currentHeight, targetHeight) || fp_lesser(currentHeight, targetHeight)) {
@@ -155,8 +189,8 @@ YUI.add('gallery-ellipsis', function(Y) {
         clone.remove();
         
         // set the original text if we want to ever want to expand past the current truncation
-        if (!yEl.getAttribute('originalText')) {
-            yEl.setAttribute('originalText', originalText);
+        if (conf.remember && !yEl.getData(dataAttrName)) {
+            yEl.setData(dataAttrName, originalText);
         }
 
         // console.log('originalText.length', originalText.length);
@@ -183,5 +217,41 @@ YUI.add('gallery-ellipsis', function(Y) {
     Y.Node.importMethod(Y.DOM, 'ellipsis');
     Y.NodeList.importMethod(Y.Node.prototype, 'ellipsis');
 
+    // must wait to append hidden node
+    Y.on('domready', function () {
 
-}, 'gallery-2011.02.02-21-07' ,{requires:['base','node']});
+        // create a hidden node and try to style it
+        var cloned,
+            hidden  = Y.Node.create('<div style="visibility:hidden;position:absolute;white-space:nowrap;overflow:hidden;"></div>'),
+            rules   = ['textOverflow', 'OTextOverflow'];
+
+        // pseudo feature detection to detect browsers with currentStyle but without a more standards-ish implementation (currently IE6-8)
+        currentStyle = !!(document.body.currentStyle && (window.CSSCurrentStyleDeclaration || !window.CSSStyleDeclaration));
+
+        Y.each(rules, function (rule) {
+            hidden.setStyle(rule, 'ellipsis');
+        });
+
+        // add to DOM
+        Y.one('body').appendChild(hidden);
+
+        // deep clone the node (include attributes)
+        cloned = hidden.cloneNode(true);
+
+        Y.some(rules, function (rule) {
+            if ('ellipsis' === cloned.getStyle(rule)) {
+                nativeRule = rule;
+                nativeStyles[nativeRule] = 'ellipsis';
+                Y.DOM.ellipsis.nativeSupport = true;
+                return true;
+            }
+        });
+
+        // clean-up
+        hidden.remove();
+        hidden = cloned = null;
+
+    });
+
+
+}, 'gallery-2011.04.13-22-38' ,{requires:['base','node']});

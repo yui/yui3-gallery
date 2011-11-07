@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="gallery-user-patch-2529920-2529921" default="local">
+    <description>gallery-user-patch-2529920-2529921</description>
+    <property file="build.properties" />
+    <import file="${builddir}/3.x/bootstrap.xml" description="Default Build Properties and Targets" />
+    
+    <!-- This target added to force NetBeans to recognise the module as a valid target -->
+    <target name="module" depends="all"></target>
+</project>

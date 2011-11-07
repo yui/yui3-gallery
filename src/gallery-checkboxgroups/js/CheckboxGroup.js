@@ -1,11 +1,16 @@
 "use strict";
 
 /**********************************************************************
+ * Various behaviors that can be attached to a group of checkboxes.
+ *
+ * @module gallery-checkboxgroups
+ */
+
+/**
  * <p>Base class for enforcing constraints on groups of checkboxes.</p>
  *
  * <p>Derived classes must override <code>enforceConstraints()</code>.</p>
  * 
- * @module gallery-checkboxgroups
  * @class CheckboxGroup
  * @constructor
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
@@ -14,11 +19,6 @@
 function CheckboxGroup(
 	/* string/Node/NodeList */	cb_list)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	this.cb_list = new Y.NodeList('');
 	this.ev_list = [];
 	this.splice(0, 0, cb_list);

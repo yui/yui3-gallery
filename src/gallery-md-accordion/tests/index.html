@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Accordion test</title>
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.4.1pr1/build/yui/yui-min.js"></script>
+		
+	</head>
+	<body  class="yui3-skin-sam yui-skin-sam">
+		<h1>Algun texto por aqui</h1>
+		<div id="acc"></div>
+		<hr/>
+		<p>alguito más por aquí</p>
+		<script type="text/javascript">
+/*jslint white: true, nomen: true, maxerr: 50, indent: 4 */
+/*global YUI*/
+			YUI({
+				// debug:true,
+				// filter:'debug',
+				// combine:false,
+				groups: {
+					sp: {
+						base: '../../../build/',
+						modules: {
+							"gallery-md-accordion": {
+								path: 'gallery-md-accordion/gallery-md-accordion.js',
+								requires: ['widget', 'widget-parent', 'widget-child', 'widget-stdmod', 'gallery-makenode'],
+								skinnable: true
+							},
+
+							"gallery-makenode": {
+								path: 'gallery-makenode/gallery-makenode.js',
+								requires:['substitute','classnamemanager']
+							}
+						}
+					}
+				}
+			}).use('gallery-md-accordion','resize-plugin', 'transition', function(Y) {
+				"use strict";
+			
+				var acc = new Y.Accordion({
+					children:[
+						{label:'one', expanded:true, content:'this is the content  <br/> of the first'},
+						{label:'two', expanded:true, content:'this is the content  <br/> of the second'},
+						{label:'three', expanded:true, content:'this is the content  <br/> of the third'}
+					],
+					multiExpand:false,
+					closeable: true
+				}).render('#acc'),
+					child1 = acc.item(0),
+					child2 = acc.item(1),
+					child3 = acc.item(2);
+				// acc.set('resizeable', false);	
+			});
+		</script>
+	</body>
+</html>

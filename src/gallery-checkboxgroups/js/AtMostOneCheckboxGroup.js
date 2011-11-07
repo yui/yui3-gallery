@@ -2,8 +2,8 @@
  * At most one checkbox can be selected.  If one is turned on, the active
  * one is turned off.
  * 
- * @module gallery-checkboxgroups
  * @class AtMostOneCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */

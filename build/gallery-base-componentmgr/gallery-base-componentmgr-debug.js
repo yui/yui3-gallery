@@ -97,7 +97,8 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 				});
 			}
 			
-			Y.before(this._destroyComponents, this.constructor.prototype, 'destructor', this);
+//			this.after('destroy', this._destroyComponents);
+			Y.before(this._destroyComponents, this, '_destroyHierarchy', this);
 		},
 		
 		// *** Public Methods *** //
@@ -337,7 +338,17 @@ YUI.add('gallery-base-componentmgr', function(Y) {
 		
 	};
 	
+	/**
+	 * Alias for useComponent
+	 * 
+	 * @method use
+	 * @alias useComponent
+	 */
+	ComponentMgr.prototype.use = ComponentMgr.prototype.useComponent;
+	
+	// *** Namespace *** //
+	
 	Y.BaseComponentMgr = ComponentMgr;
 
 
-}, 'gallery-2011.01.26-20-33' ,{requires:['base-base', 'collection']});
+}, 'gallery-2011.05.04-20-03' ,{requires:['base-base', 'collection']});

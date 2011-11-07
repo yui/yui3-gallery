@@ -3,8 +3,8 @@
  * to check all. This check-all box is automatically changed if any other
  * checkbox changes state.
  * 
- * @module gallery-checkboxgroups
  * @class SelectAllCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param select_all_cb {String|Object} The checkbox that triggers "select all"
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage

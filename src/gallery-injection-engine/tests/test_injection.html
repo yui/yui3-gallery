@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <title>Injection Engine Tests</title>    
+    <script type="text/javascript" src="http://yui.yahooapis.com/3.4.0/build/yui/yui-debug.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+    <h1>Injection Engine Tests</h1>
+
+    <div id="demo">
+    </div>
+
+<script type="text/javascript" src="/jute_docs/jute.js"></script>
+<script type="text/javascript" src="../../../build/gallery-injection-engine/gallery-injection-engine-debug.js?coverage=1"></script>
+<script type="text/javascript">
+YUI({
+    useConsoleOutput: true,
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'gallery-injection-engine', 'node', 'base', 'jute', function (Y) {
+
+    (new Y.Console({
+        verbose: true,
+        newestOnTop: false,
+        height: '500px',
+        width: '99%',
+        style: 'block'
+    })).render();
+
+    Y.namespace("Tests");
+
+    Y.Tests.InjectionEngine = (function() {
+
+        var Assert = Y.Assert,
+            ObjectAssert = Y.ObjectAssert,
+            dummyJS = 'http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js',
+            dummyCSS = 'http://yui.yahooapis.com/3.3.0/build/cssreset/reset-min.css';
+
+        //-------------------------------------------------------------------------
+        // Base Test Suite
+        //-------------------------------------------------------------------------
+        var suite = new Y.Test.Suite("Injection Engine Tests");
+
+        //-------------------------------------------------------------------------
+        // Communication Tests
+        //-------------------------------------------------------------------------
+        suite.add(new Y.Test.Case({
+
+            name: "Communication Tests",
+
+            //---------------------------------------------
+            // Setup and tear down
+            //---------------------------------------------
+            setUp: function() {
+            },
+
+            tearDown: function() {
+                if (this.obj) {
+                    this.obj.destroy();
+                    this.obj = null;
+                }
+                if (Y.one('iframe')) {
+                    Y.one('iframe').remove();
+                }
+            },
+
+            //---------------------------------------------------------------------
+            // Tests
+            //---------------------------------------------------------------------
+            "test init": function() {
+                this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: dummyJS,
+                    container: '#demo'
+                });
+                Assert.isFunction(this.obj.boot, 'Injection Engine Object was not initialized correctly');
+            },
+
+            "test attribute propagation": function() {
+                var b,
+                    dummy = new (Y.Base.create('dummy-bootstrap-engine', Y.Base, [], {}, {
+                        ATTRS: {
+                          foo: {},
+                          bar: {},
+                          invalid: {
+                              value: true
+                          },
+                          container: {
+                              value: 1
+                          }
+                       }
+                    }));
+                b = this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: dummyJS,
+                    container: '#demo',
+                    dynamicAttrs: ['foo', 'bar'],
+                    foo: 1,
+                    bar: 2
+                });
+                b.boot();
+                // setting some more attributes in the middle
+                b.set('bar', 3).set('js', 4);
+                // simulating the callback
+                b._connect(dummy);
+                
+                // testing default value
+                Assert.areEqual(1, dummy.get('foo'), 'Dynamic attributes are not being propagated on ready (flush).');
+                Assert.areEqual(3, dummy.get('bar'), 'Dynamic attributes that were changed are not being propagated on ready (flush).');
+                Assert.areEqual('#demo', dummy.get('container'), 'Static attributes are not being propagated on ready.');
+                Assert.areEqual(dummyJS, dummy.get('js'), 'Static attributes changed before _connnect should not be propagated on ready.');
+                
+                // setting some attributes
+                b.set('foo', 4).set('invalid', 5).set('css', 6);
+                // testing custom value
+                Assert.areEqual(4, dummy.get('foo'), 'Dynamic attributes are not being propagated.');
+                Assert.areEqual(true, dummy.get('invalid'), 'Non-dynamic attributes are being incorrectly propagated.');
+                Assert.areEqual(dummyCSS, dummy.get('css'), 'Static attributes are being incorrectly propagated onChange.');
+            },
+
+            "test custom events": function() {
+                var flag, e1, e2, e3, e4,
+                    b,
+                    dummy = new (Y.Base.create('dummy-bootstrap-engine', Y.Base, [], {}, {
+                        ATTRS: {
+                          foo: {},
+                          bar: {},
+                          invalid: {
+                              value: true
+                          },
+                          container: {
+                              value: 1
+                          }
+                       }
+                    }));
+                b = this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: dummyJS,
+                    container: '#demo',
+                    dynamicEvents: [
+                        'foo', 
+                        {
+                            name: 'bar', 
+                            rename: 'bar2'
+                        }, 
+                        {
+                            name: 'bar',
+                            rename: 'bar2'
+                        },
+                        {
+                            name: 'baz',
+                            fn: function (ev, name, o) {
+                                flag = ev.a;
+                                e3 = 'baz';
+                                return false; // avoiding firing the regular event
+                            }
+                        },
+                        {
+                            name: 'qux',
+                            rename: 'qux2',
+                            fn: function (ev, name, o) {
+                                return true;
+                            }
+                        }
+                    ]
+                });
+                // some listeners before the boot
+                b.on('foo', function() {
+                    e1 = 'foo';
+                });
+                
+                b.boot();
+                // some listeners before the connect
+                b.on('bar2', function () {
+                    e2 = 'bar';
+                });
+                
+                // simulating the callback
+                b._connect(dummy);
+                // some lazy listeners
+                b.on ('baz', function () {
+                    e3 = 'this should never gets executed';
+                });
+                b.on ('qux2', function () {
+                    e4 = 'qux';
+                });
+                
+                // firing some events
+                dummy.fire('foo');
+                Assert.areEqual('foo', e1, 'A regular event is not propagated correctly.');
+                dummy.fire('bar');
+                Assert.areEqual('bar', e2, 'The rename configuration is not working correctly.');
+                dummy.fire('baz', {
+                    a: 1
+                });
+                Assert.areEqual('baz', e3, 'custom function that returns nothing is not working as expected.');
+                Assert.areEqual(1, flag, 'Custom attribute passed to a regular event is not accessible in the custom function.');
+                dummy.fire('qux');
+                Assert.areEqual('qux', e4, 'Renamed events with custom function return true is not working as expected.');
+            }
+
+        }));
+
+        //-------------------------------------------------------------------------
+        // IFrame Tests
+        //-------------------------------------------------------------------------
+        suite.add(new Y.Test.Case({
+
+            name: "IFrame Tests",
+
+            //---------------------------------------------
+            // Setup and tear down
+            //---------------------------------------------
+            setUp: function() {
+            },
+
+            tearDown: function() {
+                if (this.obj) {
+                    this.obj.destroy();
+                    this.obj = null;
+                }
+                if (Y.one('iframe')) {
+                    Y.one('iframe').remove();
+                }
+                Y.one('#demo').setContent('');
+            },
+
+            //---------------------------------------------------------------------
+            // Tests
+            //---------------------------------------------------------------------
+            "test iframe creation": function() {
+                this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: dummyJS,
+                    container: '#demo'
+                });
+                this.obj.boot();
+                var iframe = Y.one('#demo iframe');
+                Assert.isObject(iframe, 'Injection Engine Object is not creating the iframe on boot.');
+            },
+
+            "test inherited values": function() {
+                this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: dummyJS,
+                    container: '#demo'
+                });
+                this.obj.boot();
+                var idoc = Y.one('#demo iframe')._node.contentWindow.document;
+                Assert.areEqual('en-US', idoc.documentElement.lang, 'Injection Engine is not collecting the current lang from the HOST page.');
+                Assert.areEqual('ltr', idoc.documentElement.dir, 'Injection Engine is not collecting the current dir from the HOST page.');
+            },
+
+            "test custom body": function() {
+                this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: [dummyJS, 'a=1;'],
+                    container: '#demo'
+                });
+                this.obj.boot();
+                var iWin = Y.one('#demo iframe')._node.contentWindow;
+                iY = YUI({
+                    win: iWin,
+                    doc: iWin.document
+                }).use('node');
+                // the readiness of the iframe is async
+                this.wait(function() {
+                    Assert.areEqual(3, iY.all('body script').size(), 'The config and the js attributes were not added as JS tags in the body of the iframe.');
+                    Assert.areEqual(1, iY.all('head link').size(), 'The css attribute was not added as a LINK tag in the head of the iframe.');
+                }, 500);
+            },
+
+            "test no css tag and no js tag": function() {
+                this.obj = new Y.InjectionEngine({
+                    css: null,
+                    js: null,
+                    container: '#demo'
+                });
+                this.obj.boot();
+                var iWin = Y.one('#demo iframe')._node.contentWindow;
+                iY = YUI({
+                    win: iWin,
+                    doc: iWin.document
+                }).use('node');
+                // the readiness of the iframe is async
+                this.wait(function() {
+                    Assert.areEqual(1, iY.all('body script').size(), 'The config and the js attributes were not added as JS tags in the body of the iframe.');
+                    Assert.areEqual(0, iY.all('head link').size(), 'The css attribute was not added as a LINK tag in the head of the iframe.');
+                }, 500);
+            },
+
+            "test html fragment injection": function() {
+                this.obj = new Y.InjectionEngine({
+                    html: '<p>dummy</p>',
+                    container: '#demo'
+                });
+                this.obj.boot();
+                var iWin = Y.one('#demo iframe')._node.contentWindow;
+                iY = YUI({
+                    win: iWin,
+                    doc: iWin.document
+                }).use('node');
+                var p = iY.one('p');
+                // the readiness of the iframe is async
+                Assert.isObject(p, 'The html fragment is not been injected correctly.');
+                Assert.areEqual(0, iY.one('body').get('children').indexOf(p), 'The html fragment is not been injected at the top of the body.');
+            },
+
+            "test url detection system": function() {
+                this.obj = new Y.InjectionEngine({
+                    css: null,
+                    js: null,
+                    container: '#demo'
+                });
+                Assert.isString(this.obj._testFullURL("/bla"), 'The URL detection method fails: root relative path should not match.');
+                Assert.isString(this.obj._testFullURL("./bla"), 'The URL detection method fails: relative path should not match.');
+                Assert.isString(this.obj._testFullURL("../bla"), 'The URL detection method fails: parent path should not match.');
+                Assert.isObject(this.obj._testFullURL("http://adfads"), 'The URL detection method fails: http:// not detected.');
+                Assert.isObject(this.obj._testFullURL("https://adfads"), 'The URL detection method fails: https:// not detected.');
+                Assert.isObject(this.obj._testFullURL("//a"), 'The URL detection method fails: full path without protocol not detected.');
+                Assert.isString(this.obj._testFullURL("/* comment */"), 'The URL detection method fails: comments should not match.');
+                // objects
+                Assert.isNull(this.obj._testFullURL({}), 'The URL detection method fails: Objects without the url property should not match.');
+                Assert.isNull(this.obj._testFullURL({url:''}), 'The URL detection method fails: Objects with empty url, null or undefined should not match.');
+                Assert.isObject(this.obj._testFullURL({url:'j'}), 'The URL detection method fails: Objects with url attribute should be preserved.');
+            },
+
+            "test preload default feature": function() {
+                var demo = Y.one('#demo');
+                this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: ["function(){}", dummyJS],
+                    container: '#demo'
+                });
+                Assert.isObject(this.obj.preload(), 'preload should support chaining.');
+                if (!Y.UA.ie) {
+                    // for non-ie browsers lets test the amount of objects
+                    Assert.areEqual(2, demo.all('object').size(), 'for non-ie browsers object tags should be created to do the preload.');
+                }
+            },
+
+            "test preload custom feature": function() {
+                var demo = Y.one('#demo');
+                this.obj = new Y.InjectionEngine({
+                    css: dummyCSS,
+                    js: ["function(){}", dummyJS],
+                    container: '#demo'
+                });
+                Assert.isObject(this.obj.preload(dummyJS), 'preload should support chaining.');
+                if (!Y.UA.ie) {
+                    // for non-ie browsers lets test the amount of objects
+                    Assert.areEqual(1, demo.all('object').size(), 'Custom parameters should bypass default preloading to honor the custom arguments.');
+                }
+            },
+
+            "test yconfig map feature": function() {
+                var r;
+                this.obj = new Y.InjectionEngine({
+                    foo: 'bar',
+                    lang: 'en',
+                    container: '#demo'
+                });
+                this.obj.YCONFIG_MAP.push('foo');
+                r = this.obj._buildCfg();
+                Assert.areEqual('en', r.lang, 'lang mapping for yui_config is not working correctly.');
+                Assert.isNotUndefined(r.guid, 'object guid mapping for yui_config is not working correctly.');
+                Assert.areEqual('bar', r.foo, 'custom mapping for yui_config is not working correctly.');
+            }
+
+        }));
+
+        //return it
+        return suite;
+
+    })();
+
+    //add to the testrunner and run
+    Y.Test.Runner.add(Y.Tests.InjectionEngine);
+    // executing JUTE is posible to get coverage
+    ( Y.UnitTest ? Y.UnitTest.go() : Y.Test.Runner.run() );
+
+});
+</script>
+</body>
+</html>

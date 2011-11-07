@@ -23,7 +23,7 @@ function JSONRPC(config) {
         context: this,
         method: 'POST'
     }, config);
-    
+
     // default preload false if methods are specified, else true.
     if (!('preload' in config)) {
         config.preload = !methods;
@@ -46,7 +46,8 @@ Y.JSONRPC = Y.mix(JSONRPC, {
 
     defaults: {
         version: 2,
-        sync: false
+        sync: false,
+        contentType: 'application/json'
     },
 
     // Static methods to avoid name collision with the remote API
@@ -66,16 +67,7 @@ Y.JSONRPC = Y.mix(JSONRPC, {
     },
 
     init: function () {
-        var config   = this._config,
-            defaults = JSONRPC.defaults;
-
-        if (!('version' in config)) {
-            config.version = defaults.version;
-        }
-
-        if (!('sync' in config)) {
-            config.sync = defaults.sync;
-        }
+        Y.mix(this._config, JSONRPC.defaults);
 
         this.publish('dispatch', {
             emitFacade: true,
@@ -95,7 +87,7 @@ Y.JSONRPC = Y.mix(JSONRPC, {
                 config = this._config,
                 ioConfig = {
                     headers: {
-                        'Content-Type': 'application/json; charset=utf-8'
+                        'Content-Type': config.contentType + '; charset=utf-8'
                     },
                     method: config.method,
                     sync: config.sync,
@@ -111,6 +103,10 @@ Y.JSONRPC = Y.mix(JSONRPC, {
 
             if (params) {
                 data.params = params;
+            }
+
+            if (config.serverParams) {
+                Y.mix(data, config.serverParams);
             }
 
             if (config.version > 1) {
@@ -165,7 +161,7 @@ Y.JSONRPC = Y.mix(JSONRPC, {
 
             Y.io(config.url, {
                 headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
+                    'Content-Type': config.contentType + '; charset=utf-8'
                 },
                 sync: config.sync,
                 on: {
@@ -205,10 +201,10 @@ Y.JSONRPC = Y.mix(JSONRPC, {
 
 Y.augment(JSONRPC, Y.EventTarget);
 
-Y.jsonrpc = function (url, method, params, callback) {
+Y.jsonrpc = function (url, method, params, callback, config) {
     if (url && method) {
         // TODO: allow version config
-        return new Y.JSONRPC({ url: url, preload: false })
+        return new Y.JSONRPC(Y.mix(config, { url: url, preload: false }, true))
             .exec(method, params, callback);
     }
 };

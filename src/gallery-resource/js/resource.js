@@ -174,36 +174,6 @@
 			return this._request;
 		},
 				
-		HEAD : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: HEAD }));
-		},
-		
-		OPTIONS : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: OPTIONS }));
-		},
-		
-		GET : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: GET }));
-		},
-		
-		POST : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: POST }));
-		},
-		
-		PUT : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: PUT }));
-		},
-		
-		DELETE : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: DELETE }));
-		},
-		
 		// *** Private Methods *** //
 		
 		_defRequestFn : function (e) {
@@ -235,7 +205,7 @@
 				
 				params = Y.clone(e.params, true);
 				
-				uri = Y.substitute(uri, params, function(k ,v){
+				uri = Y.substitute(uri, params, function(k, v){
 					delete params[k];
 					return v;
 				});
@@ -338,6 +308,15 @@
 			this.fire(E_FAILURE, payLoad);
 		}
 		
+	});
+	
+	Y.each([HEAD, OPTIONS, GET, POST, PUT, DELETE], function(method){
+		Resource.prototype[method] = function(config){
+			if (isFunction(config)) {
+				config = { on: { success: config } };
+			}
+			return this.sendRequest(Y.merge(config, { method: method }));
+		};
 	});
 	
 	Y.Resource = Resource;

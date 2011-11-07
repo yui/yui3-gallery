@@ -172,10 +172,11 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
      * @param {Node} n A reference to the original SCRIPT tag Node, in case you want to get more specific attributes
      */
     _executeScript: function (text, jsNode) {
-        var d = ( jsNode ? jsNode.get('ownerDocument') : null ) || Y.one('doc'),
+        var doc = Y.config.doc,
+            d = ( jsNode ? jsNode.get('ownerDocument') : null ) || doc,
             h = d.one('head') || d.get('documentElement'),
             // creating a new script node to execute the inline javascrip code
-            newScript = Y.Node.create('<' + SC + '></' + SC + '>');
+            newScript = Y.one(doc.createElement(SC));
 
         Y.log('inline script tag: ' + text, 'info', DISPATCHER);
         if (text) {
@@ -271,6 +272,15 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
             q.add({
                 fn: function() {
                     instance._purgeContent();
+                    /**
+                     * Notification event right after purging all the event listeners associated to the 
+                     * Node that will be updated to avoid memory leaks. At this point, you can also destroy
+                     * any object associated to that content. Immidiately after this, the new content will be
+                     * injected. Use this event to clean up the mess before injecting new content.
+                     *
+                     * @event purge
+                     * @param n {Node} a reference to the Node that was updated.
+                     */
                     instance.fire(DISPATCHER_PURGE, n);
                 }
             });
@@ -279,6 +289,15 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
         q.add({
             fn: function() {
                 instance._setContent(o.content);
+                /**
+                 * Notification event right before starting the execution of the script tags associated
+                 * to the current content. At this point, the content (without script tags) was already
+                 * injected within the node, so, you can enhance that content right before process to the
+                 * execution process.
+                 *
+                 * @event beforeExecute
+                 * @param n {Node} a reference to the Node that was updated.
+                 */
                 instance.fire(DISPATCHER_BEFOREEXECUTE, n);
             }
         });
@@ -297,7 +316,14 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
         });
         q.add({
             fn: function() {
-                instance.fire(DISPATCHER_READY);
+                /**
+                 * Notification event when the new content gets injected and scripts loaded and executed
+                 * as well. This is the event that you should listen for to continue your programm after 
+                 * dispatcher finishes the whole process.
+                 *
+                 * @event ready
+                 */
+                 instance.fire(DISPATCHER_READY);
             }
         });
         // executing the queue
@@ -344,6 +370,14 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
             failure: function(tid, o) {
                 Y.log('Failure: ' + uri, 'warn', DISPATCHER);
                 _propagateIOEvent ('failure', defIOConfig, arguments);
+                /**
+                 * Notification event when dispatcher fails to load the new url
+                 * using io, or fails to load an external script using Y.Get.script.
+                 * Use this event to fallback if an error occur.
+                 *
+                 * @event error
+                 * @param o {object} error object from IO or Get.
+                 */
                 instance.fire(DISPATCHER_ERROR, o);
             },
             end: function() {
@@ -461,9 +495,25 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
                 var instance = this;
                 Y.log('setting status to ' + v, 'info', DISPATCHER);
                 if (v) {
+                    /**
+                     * Notification event when dispatcher starts the loading process
+                     * using io. Equivalent to Y.on('io:start'). Right before this event, dispatcher 
+                     * adds the loading class from the node. This event will be triggered before the 
+                     * function defined under attribute "ioConfig.start". 
+                     *
+                     * @event fetch
+                     */
                     instance.fire(DISPATCHER_FETCH);
                     instance.get(ATTR_NODE).addClass(CLASS_DISPATCHER_LOADING);
                 } else {
+                    /**
+                     * Notification event when dispatcher finishes the loading process
+                     * using io. Equivalent to Y.on('io:end'). Right after this event, dispatcher 
+                     * removes the loading class from the node.This event will be triggered before the 
+                     * function defined under attribute "ioConfig.end".
+                     *
+                     * @event load
+                     */
                     instance.fire(DISPATCHER_LOAD);
                     instance.get(ATTR_NODE).removeClass(CLASS_DISPATCHER_LOADING);
                 }

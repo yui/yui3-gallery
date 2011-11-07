@@ -56,16 +56,9 @@
 	overflow: auto;
 }
 
-/* hack for 3.0 -- unnecessary once srcNode becomes available in 3.1 */
-
 .yui3-accordion ul.yui3-accordion-content
 {
 	margin: 0;
 	border: 0;
 	padding: 0;
-}
-
-.yui3-accordion ul.yui3-accordion-content li
-{
-	display:none;
 }

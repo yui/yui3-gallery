@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DataTable Patch Rollup Demo</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"
+        charset="utf-8"></script>
+        <style type="text/css" media="screen">
+            body { font: 14px Gotham, "Helvetica Neue", sans-serif; }
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <h2>DataTable Patch Rollup Demo</h2>
+        <p>This demonstration shows a DataTable instance which has been patched with the following:
+        </p>
+        <ul>
+            <li>#2529808 - DataTableScroll causes error using asynchronous datasource</li>
+            <li>#2529920 - TD reference is not passed to cell formatter function</li>
+            <li>#2529921 - "{value}" token is shown when the record data is null or not defined</li>
+            <li>#2529943 - DataTableSort creates a hardcoded value for the title attribute "title"</li>
+            <li>#2529968 - DataTable creates a padded caption node, even with no caption attribute value</li>
+            <li>#2529975 - DataTableDataSource creates a new instance of Y.RecordSet, breaking DataTableSort after the first response</li>
+            <li>#2530026 - DataTable creates a bogus id for TR node children of THEAD</li>
+            <li>#2530294 - DataTableScroll + DataTableSort create a column size mismatch on render, and after sort</li>
+        </ul>
+        <div id="testsubject"></div>
+        <script type="text/javascript">
+        (function() {
+            YUI({
+                //combine: false,
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'min',
+                allowRollup: false,
+                groups : {
+                    userpatch: {
+                        combine: false,
+                        base : '../../../build/',
+                        root : '../../../build',
+                        modules : {
+                            'gallery-user-patch-datatable-rollup' : {
+                                path: '/gallery-user-patch-datatable-rollup/gallery-user-patch-datatable-rollup-debug.js',
+                                skinnable: true
+                            }
+                            /*
+                            'gallery-user-patch-2529808' : {
+                                path: '/gallery-user-patch-2529808/gallery-user-patch-2529808-debug.js'
+                            },
+                            'gallery-user-patch-2529920-2529921' : {
+                                path: '/gallery-user-patch-2529920-2529921/gallery-user-patch-2529920-2529921-debug.js'
+                            },
+                            'gallery-user-patch-2529943' : {
+                                path: '/gallery-user-patch-2529943/gallery-user-patch-2529943-debug.js'
+                            },
+                            'gallery-user-patch-2529968' : {
+                                path: '/gallery-user-patch-2529968/gallery-user-patch-2529968-debug.js'
+                            },
+                            'gallery-user-patch-2529975' : {
+                                path: '/gallery-user-patch-2529975/gallery-user-patch-2529975-debug.js'
+                            },
+                            'gallery-user-patch-2530026' : {
+                                path: '/gallery-user-patch-2530026/gallery-user-patch-2530026-debug.js'
+                            },
+                            'gallery-user-patch-2530294' : {
+                                path: '/gallery-user-patch-2530294/gallery-user-patch-2530294-debug.js'
+                                ,skinnable: true
+                                ,requires: ['gallery-user-patch-2529808'] // enforce loading order to make sure we override the other patch
+                            }*/
+                        }
+                    }
+                }
+        }).use("console", "test", "dump", "datatable"
+//            , "gallery-user-patch-2529808"
+//            , "gallery-user-patch-2529920-2529921"
+//            , "gallery-user-patch-2529943"
+//            , "gallery-user-patch-2529968"
+//            , "gallery-user-patch-2529975"
+//            , "gallery-user-patch-2530026"
+//            , "gallery-user-patch-2530294"
+            , "gallery-user-patch-datatable-rollup"
+            , function(Y) {
+
+                var myConsole = new Y.Console().render(),
+                    testBasic = new Y.Test.Case({ 
+                        name: "Patch Rollup Test",
+
+                        setUp: function() {
+                            this.mockresponse = {
+                                response: {
+                                    results: [
+                                        { "id" : "100", "name" : "Joe", "last":"Johnson"},
+                                        { "id" : "200", "name" : "Mark", "last":"Smith" },
+                                        { "id" : "300", "name" : "Andrew", "last":"Newton" }
+                                    ]
+                                }
+                            };
+
+                            this.testDataSource = new Y.DataSource.Local({ source: this.mockresponse.response.results });
+
+                            this.testDataTable = new Y.DataTable.Base({
+                                columnset : [ { key: "id", sortable: true }, { key: "name", label:"f", sortable: true }
+                                    , { key: "last", label: "l", sortable: true }],
+                                summary : "User patched DataTable Instance",
+                                plugins : [
+                                    { fn: Y.Plugin.DataTableDataSource, cfg: { datasource: this.testDataSource } }
+                                    , { fn: Y.Plugin.DataTableSort }                                
+                                    , { fn: Y.Plugin.DataTableScroll, cfg: { height: '200px' } }
+
+                                ]
+                            });
+                        },
+
+                        tearDown: function() {
+                            //this.testDataTable.destroy();
+                            delete this.testDataTable;
+                        },
+
+                        "test rollup renders" : function() {
+                            this.testDataTable.render();
+                            this.testDataTable.datasource.load();
+                        }
+                    }),
+                    suite = new Y.Test.Suite({name:"Rollup test suite"});
+                    
+                suite.add(testBasic);
+
+                Y.Test.Runner.setName("Test Runner");
+                Y.Test.Runner.add(suite);
+                Y.Test.Runner.run();
+            });
+        })();
+        </script>
+    </body>
+</html>

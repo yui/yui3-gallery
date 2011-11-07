@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>#2529920, #2529921 defect test suite</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"
+        charset="utf-8"></script>
+        <style type="text/css" media="screen">
+            body { font: 14px Gotham, "Helvetica Neue", sans-serif; }
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <h2>#2529920, #2529921 defect test suite</h2>
+        <p>1. The DataTable cell formatter is not given a reference to the TD node, but the documentation states so.</p>
+        <p>2. The DataTable will produce template tokens if the record does not contain any value for that token.</p>
+        <p>
+            <input type="button" value="Run Tests (Patched)" id="btnRun" onClick="testFn('gallery-user-patch-2529920-2529921')();">
+            <input type="button" value="Run Tests (Unpatched)" id="btnRun" onClick="testFn(null)();">
+        </p>
+        <div id="testsubject"></div>
+        <script type="text/javascript">
+        var testFn = function(patchname) {    
+            return function() {
+                YUI({
+                    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'min',
+                    allowRollup: false,
+                       modules : {
+                        'gallery-user-patch-2529920-2529921' : {
+                           'fullpath' : '../../../build/gallery-user-patch-2529920-2529921/gallery-user-patch-2529920-2529921.js',
+                           'requires' : ['datatable']
+                        }
+                    }
+                }).use("console", "test", "dump", "datatable", patchname, function(Y) {
+                    var myConsole = new Y.Console().render(),
+                        testBasic = new Y.Test.Case({ 
+                            name: "Patch Ticket 2529920-2529921 Test",
+
+                            setUp: function() {
+
+                                this.mockresponse = {
+                                    response: {
+                                        results: [
+                                            { "id" : "1", "name" : "Joe" },
+                                            { "id" : "2", "name" : null },
+                                            { "id" : "3", "name" : "Andrew" }
+                                        ]
+                                    }
+                                };
+
+                                this.testDataTable = new Y.DataTable.Base({
+                                    columnset : [ 
+                                        { key:"id", sortable: true },
+                                        { key:"name", sortable: true }
+                                    ],
+                                    summary : "User patched DataTable Instance",
+                                    recordset : this.mockresponse.response.results
+                                });
+                            },
+
+                            tearDown: function() {
+                                this.testDataTable.destroy();
+
+                                delete this.testDataTable;
+                            },
+
+                            "test formatter receives a td node reference" : function() {
+
+                               var testFormatter = function(o) {
+                                   Y.Assert.isNotUndefined(o.td, "test o.td is a valid object");
+
+                                   return o.value;
+                               };
+
+                               var columnSet = [ 
+                                    { key:"id", sortable: true, formatter: testFormatter },
+                                    { key:"name", sortable: true }
+                               ];
+
+                               this.testDataTable.set('caption', 'test formatter receives a td node reference');
+                               this.testDataTable.set('columnset', columnSet);
+                               this.testDataTable.render('#testsubject');
+                            },
+
+                            "test null value in recordset does not produce a template token" : function() {
+                                this.testDataTable.set('caption', 'test null value in recordset does not produce a template token');
+                                this.testDataTable.render('#testsubject');
+
+                                var tbodyNode = Y.one('.yui3-datatable-data'),
+                                    trNodes = tbodyNode.all('tr'),
+                                    nameNull = trNodes.item(1).all('.yui3-datatable-liner').item(1),
+                                    templateMatch = nameNull.get('innerHTML').match( /\{value\}/ );
+
+                                Y.Assert.areNotEqual(templateMatch, '{value}');
+                            }
+
+                        }),
+                        suite = new Y.Test.Suite({name:"Patch Ticket 2529920-2529921 Test Suite"});
+                    
+                    suite.add(testBasic);
+
+                    Y.Test.Runner.setName("Test Runner");
+                    Y.Test.Runner.add(suite);
+                    Y.Test.Runner.run();
+                });
+            };
+        };
+        </script>
+    </body>
+</html>

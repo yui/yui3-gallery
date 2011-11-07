@@ -2,7 +2,7 @@ YUI.add('gallery-yplate', function(Y) {
 
 /**
  * The module "yplate" provides simple and flexible templating using YUI.
- * Based on work by aefxx for jQote2 (http://aefxx.com/) which is licensed  Dual licensed under the WTFPL v2 or MIT (X11) licenses.
+ * Based on work by aefxx for jQote2 (http://aefxx.com/) which is "Dual licensed under the WTFPL v2 or MIT (X11) licenses".
  */
 Y.yplate = function (return_core) {
 /**
@@ -199,42 +199,13 @@ function ycacheadd(cid, compiledcache){
 function ycacheview(cid){
   return core.platecacheview(cid);
 }
-/**
- * apply cached template to data, return array of html string
- */
-function yplatecacheText(cid, data, tag){
-  var pfn = core.platecompile(cid, null, tag, true);/* throws exception when problem. */
-  return core.plateapply(pfn, data);
-}
-/**
- * apply template to data, return YUI 3 Node[NodeList 
- */
-function yplatecache(cid, data, tag){
-  var txt = yplatecacheText(cid, data, tag), nodes = new Y.all(""),
-  i, isArr = Y.Lang.isArray(txt), s = txt.length;
-   if(isArr) {
-    for(i=0; i<s; i++) {
-      nodes.push(Y.Node.create(txt[i]));
-    }
-  } else {
-    nodes = Y.Node.create(txt);
-  }
-  return nodes;
-}
-/**
- * apply template to data, return array of html string 
- */
-function yplateText(candidate, data, cid, tag) {
-  var pfn = ycachecompile(candidate, cid, tag, true);
-  return core.plateapply(pfn, data);
-}
 
 /**
  * apply template to data, return YUI 3 Node|NodeList 
  */
 function yplate(candidate, data, cid, tag){
   var txt = yplateText(candidate, data, cid, tag), nodes = new Y.all(""),
-  i, isArr = Y.Lang.isArray(txt), s = txt.length;
+  i, isArr = Y.Lang.isArray(txt) && txt.length > 1, s = txt.length;
   if(isArr) {
     for(i=0; i<s; i++) {
       nodes.push(Y.Node.create(txt[i]));
@@ -244,6 +215,39 @@ function yplate(candidate, data, cid, tag){
   }
   return nodes;
 }
+
+/**
+ * apply template to data, return YUI 3 Node[NodeList 
+ */
+function yplatecache(cid, data, tag){
+  var txt = yplatecacheText(cid, data, tag), nodes = new Y.all(""),
+  i, isArr = Y.Lang.isArray(txt) && txt.length > 1, s = txt.length;
+   if(isArr) {
+    for(i=0; i<s; i++) {
+      nodes.push(Y.Node.create(txt[i]));
+    }
+  } else {
+    nodes = Y.Node.create(txt);
+  }
+  return nodes;
+}
+
+/**
+ * apply template to data, return array of html string 
+ */
+function yplateText(candidate, data, cid, tag) {
+  var pfn = ycachecompile(candidate, cid, tag, true);
+  return core.plateapply(pfn, data);
+}
+
+/**
+ * apply cached template to data, return array of html string
+ */
+function yplatecacheText(cid, data, tag){
+  var pfn = core.platecompile(cid, null, tag, true);/* throws exception when problem. */
+  return core.plateapply(pfn, data);
+}
+
 /**
  * changes the current/default tag used by this instance
  */
@@ -267,4 +271,4 @@ return {
 
 
 
-}, 'gallery-2011.02.18-23-10' ,{requires:['node']});
+}, 'gallery-2011.06.08-20-04' ,{requires:['node']});

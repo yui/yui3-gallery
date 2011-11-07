@@ -1,8 +1,8 @@
 /**********************************************************************
  * Enables the given list of nodes if any checkboxes are checked.
  * 
- * @module gallery-checkboxgroups
  * @class EnableIfAnyCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  * @param nodes {String|NodeList} The nodes to enable/disable
