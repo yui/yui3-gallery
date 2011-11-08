@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>widget-fold</title>
+</head>
+<body style="margin:0;padding:0" class="yui3-skin-sam">
+  <div id="pre"></div>
+  <div id="widget"></div>
+  <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
+  <script src="../../../build/gallery-widget-fold/gallery-widget-fold.js"></script>
+  <script>
+var Y = YUI({ filter: "raw" }).use("test", "console", "gallery-widget-fold", "node", "widget", function (Y) {
+  
+  var TestRunner = Y.Test.Runner,
+      yConsole = new Y.Console({ newestOnTop: false, render: true });
+  
+  TestRunner.add(new Y.Test.Case({
+    name: "Widget Fold Test",
+    //---------------------------------------------
+		// Setup and tear down
+		//---------------------------------------------
+		setUp: function () {
+		  var dist = 200,
+          padding = 50,
+          pre = Y.one("#pre"),
+          container = Y.one("#widget"),
+          widget = new Y.Widget({
+            srcNode: container
+          });
+      
+      pre.setStyle("height", (container.get("winHeight") + dist + padding) + "px");
+      widget.plug(Y.WidgetFoldPlugin, {
+        foldDistance: dist
+      });
+			this.widget = widget;
+		},
+		tearDown: function () {
+		  this.widget.unplug(Y.WidgetFoldPlugin);
+			this.widget.destroy();
+			Y.one("body").scrollIntoView();
+			delete this.widget;
+		},
+		//---------------------------------------------
+		// Tests
+		//---------------------------------------------
+		"should render on page scroll" : function () {
+		  Y.Assert.isTrue(! this.widget.get("rendered"));
+		  this.widget.after("renderedChange", function (event) {
+		    // finishing the test inside the render event was causin some fits
+		    setTimeout(Y.bind(function () {
+          this.resume(function () {
+    		    Y.Assert.isTrue(event.newVal);
+          });
+		    }, this), 100);
+      }, this);
+      this.widget.get("srcNode").scrollIntoView();
+		  this.wait(100000);
+		}
+	}));
+	TestRunner.run();
+	
+});
+  </script>
+</body>
+</html>
