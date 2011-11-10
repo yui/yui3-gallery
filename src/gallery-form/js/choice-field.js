@@ -59,6 +59,7 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
         Y.Array.each(choices,
         function(c, i, a) {
             var cfg = {
+                checked : c.checked,
                 value: c.value,
                 id: (this.get('id') + '_choice' + i),
                 name: this.get('name'),
@@ -75,19 +76,23 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
         var choices = this.get('value').split(',');
 
         if (choices && choices.length > 0) {
-            Y.Array.each(choices, function(choice) {
-                this._fieldNode.each(function(node, index, list) {
-                    if (Y.Lang.trim(node.get('value')) == Y.Lang.trim(choice)) {
-                        node.set('checked', true);
-                        return true;
-                    }
-                }, this);
-            }, this);
+            choices = Y.Array.map(choices, function(choice) {
+                return Y.Lang.trim(choice);
+            });
+
+            this._fieldNode.each(function(node, index, list) {
+                var nodeValue = Y.Lang.trim(node.get('value'));
+                if (!!~Y.Array.indexOf(choices, nodeValue)) {
+                    node.set('checked', true);
+                } else {
+                    node.set('checked', false);
+                }
+            });
         }
     },
 
     /**
-     * @method _afterChoiceChange
+     * @method _afterChoicesChange
      * @description When the available choices for the choice field change,
      *     the old ones are removed and the new ones are rendered.
      */
@@ -108,19 +113,27 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
 
     bindUI: function() {
         this._fieldNode.on('change', Y.bind(function(e) {
-            var value = '';
+            var value = '',
+                type = this.get('multi') ? 'checkbox' : 'radio';
+
             this._fieldNode.each(function(node, index, list) {
-                if (node.get('checked') === true) {
+                if (node.get('type') == type && node.get('checked') === true) {
                     if (value.length > 0) {
                         value += ',';
                     }
                     value += node.get('value');
                 }
             }, this);
-            this.set('value', value);
+            this.set('value', value, {fromUI : true});
         },
         this));
         this.after('choicesChange', this._afterChoicesChange);
+
+        this.after('valueChange', function (e) {
+            if (!e.fromUI) {
+                this._syncFieldNode();
+            }
+        });
     }
 
 },

@@ -16,7 +16,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @type String
      * @description Template used to render the field node
      */
-    FIELD_TEMPLATE : '<input></input>',
+    FIELD_TEMPLATE : '<input>',
 
     /**
      * @property FormField.FIELD_CLASS
@@ -286,7 +286,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description Syncs the fieldNode and this instances attributes
      */
     _syncFieldNode: function() {
-        var nodeType = this.name.split('-')[0];
+        var nodeType = this.INPUT_TYPE || this.name.split('-')[0];
         if (!nodeType) {
             return;
         }
