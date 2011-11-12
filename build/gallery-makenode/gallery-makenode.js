@@ -470,7 +470,7 @@ YUI.add('gallery-makenode', function(Y) {
 							} else {
 							}
 						} else {
-							t = Lang.isString(target)?Y.all(target):target;
+							t = Lang.isString(target)?bbx.all(target):target;
 							if ( type=== 'key') {
 								eh.push(t[when](type, fn, args, self));
 							} else {
@@ -656,4 +656,4 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
-}, 'gallery-2011.10.27-17-08' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+}, '@VERSION@' ,{requires:['substitute', 'classnamemanager'], skinnable:false});

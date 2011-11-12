@@ -474,7 +474,7 @@
 								Y.log('Delegate used on invalid key: ' + key, 'error', 'MakeNode');
 							}
 						} else {
-							t = Lang.isString(target)?Y.all(target):target;
+							t = Lang.isString(target)?bbx.all(target):target;
 							if ( type=== 'key') {
 								eh.push(t[when](type, fn, args, self));
 							} else {
