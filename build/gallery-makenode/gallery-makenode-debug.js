@@ -476,7 +476,7 @@ YUI.add('gallery-makenode', function(Y) {
 								Y.log('Delegate used on invalid key: ' + key, 'error', 'MakeNode');
 							}
 						} else {
-							t = Lang.isString(target)?Y.all(target):target;
+							t = Lang.isString(target)?bbx.all(target):target;
 							if ( type=== 'key') {
 								eh.push(t[when](type, fn, args, self));
 							} else {
@@ -663,4 +663,4 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
-}, 'gallery-2011.10.27-17-08' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+}, 'gallery-2011.11.17-14-56' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
