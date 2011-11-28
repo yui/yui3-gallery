@@ -66,9 +66,10 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     },
 
     initializer: function() {
-        this.publish('submit', { preventable: true });
-
-        this.after('submit', this._defSubmitFn, this);
+        this.publish('submit', {
+            defaultFn: this._defSubmitFn,
+            preventable: true
+        });
     },
 
     setupDelegates: function() {
@@ -177,7 +178,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     _defSubmitFn: function(e) {
         var form   = e.form,
             dialog = e.dialog;
-        Y.log('_defSubmitFn');
+
         dialog.hide();
         form.submit();
     }
