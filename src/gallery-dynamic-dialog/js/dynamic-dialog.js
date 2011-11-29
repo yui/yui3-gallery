@@ -128,6 +128,9 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
         });
 
         panel.render( this.container );
+        // XX The classes are based on the listed classes, but we want to add
+        // this in. Didn't see a way via the API in Widget.js.
+        panel.get('boundingBox').addClass('yui3-dynamic-dialog');
 
         contentBox = panel.get('contentBox');
         form       = contentBox.one('form');
@@ -148,6 +151,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                     e.preventDefault();
                     e.dialog = this;
                     e.form   = form;
+                    e.async  = template.getAttribute('async') || false;
+
                     Y.log('dialog: ' + e.dialog);
                     submitFn(e);
                 },
@@ -172,15 +177,29 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     },
 
     _defSubmitButtonFn: function(e) {
-        this.fire('submit', { dialog: e.dialog, form: e.form });
+        this.fire('submit', { dialog: e.dialog, form: e.form, async: e.async || false });
     },
 
     _defSubmitFn: function(e) {
         var form   = e.form,
-            dialog = e.dialog;
+            dialog = e.dialog,
+            async  = e.async,
+            cfg    = {};
 
-        dialog.hide();
-        form.submit();
+        if ( !async ) {
+            dialog.hide();
+            Y.log('not what you wanted. try again.');
+            //form.submit();
+            return;
+        }
+        cfg.method = form.get('action');
+        cfg.form   = { id: form };
+        cfg.on = {
+            success: function() { Y.log('success'); },
+            failure: function() { Y.log('failure'); }
+        };
+
+        Y.io( form.getAttribute('action'), cfg );
     }
 
 }, {
