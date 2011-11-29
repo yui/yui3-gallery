@@ -89,33 +89,53 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
         var target   = e.currentTarget,
             source   = target.get('tagName') === 'A' ?
                         target.get('href') : target.get('target'),
+            attrs    = {},
             id       = source.substr( source.indexOf('#') ),
             template = Y.one(id),
-            overlay  = this.panels[id];
+            overlay  = this.panels[id],
+
+            dom_attrs  = target.get('attributes'),
+            data_attrs = [];
         
-        Y.log('trigger: ' + template);
+        dom_attrs.each( function(el) {
+            var name = el.get('name');
+            if ( name.match(/^data-/) ) {
+                var value = target.getAttribute(name);
+                // We have a value, so remove the data- prefix and stuff it
+                // into the attrs objject.
+                if ( value !== null ) {
+                    attrs[ name.substr(5) ] = value;
+                }
+            }
+        });
+
         /* If we have an overlay or a template, do stuff */
         if ( overlay || template ) {
             e.preventDefault();
             Y.log('Checking for overlay: ' + overlay);
             if ( !overlay ) {
                 Y.log('Constructing overlay from ' + target + ' using template ' + template);
-                overlay = this._setupDialog(target, template);
+                overlay = this._setupDialog(target, template, attrs);
+            }
+            else if ( template ) {
+                overlay.setStdModContent(
+                    Y.WidgetStdMod.BODY,
+                    sub( template.getContent(), attrs )
+                );
             }
             Y.log('Got overlay: ' + overlay);
             overlay.show();
         }
     },
 
-    _setupDialog: function(element, template) {
+    _setupDialog: function(element, template, attrs) {
         var self    = this,
             title   = element.getAttribute('title') || template.getAttribute('title') || '',
-            attrs   = {},
             content = sub( template.getContent(), attrs ),
             modal   = element.getAttribute('data-modal') || template.getAttribute('data-modal') || this.get('modal'),
             panel   = null,
             buttons = this.BUTTONS,
-
+            async   = template.getAttribute('data-async') === 'true',
             submitFn   = Y.bind( this._defSubmitButtonFn, this ),
             contentBox = null,
             form       = null;
@@ -151,9 +171,10 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                     e.preventDefault();
                     e.dialog = this;
                     e.form   = form;
-                    e.async  = template.getAttribute('async') || false;
+                    e.async  = async;
 
                     Y.log('dialog: ' + e.dialog);
+                    Y.log('isAsync: ' + e.async);
                     submitFn(e);
                 },
                 section: Y.WidgetStdMod.FOOTER
@@ -184,6 +205,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
         var form   = e.form,
             dialog = e.dialog,
             async  = e.async,
+            action = form.getAttribute('action'),
             cfg    = {};
 
         if ( !async ) {
@@ -192,8 +214,10 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             //form.submit();
             return;
         }
-        cfg.method = form.get('action');
-        cfg.form   = { id: form };
+
+        cfg.method  = form.get('action') || 'POST';
+        cfg.form    = { id: form };
+        cfg.context = this;
         cfg.on = {
             success: function() { Y.log('success'); },
             failure: function() { Y.log('failure'); }
