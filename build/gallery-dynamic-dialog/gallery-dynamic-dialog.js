@@ -38,7 +38,6 @@ show a dialog from a template on the page.
 
 @class DynamicDialog
 **/
-
 var DynamicDialog,
 
     Panel    = Y.Panel,
@@ -50,6 +49,7 @@ var DynamicDialog,
     Oeach    = Y.Object.each;
 
 DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
+    IO_FAILURE_CLASS: 'yui3-dynamic-dialog-io-failure',
     BUTTONS: {
         OK:     'Ok',
         CANCEL: 'Cancel',
@@ -99,6 +99,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             var name = el.get('name');
             if ( name.match(/^data-/) ) {
                 var value = target.getAttribute(name);
+                // We have a value, so remove the data- prefix and stuff it
+                // into the attrs objject.
                 if ( value !== null ) {
                     attrs[ name.substr(5) ] = value;
                 }
@@ -162,9 +164,14 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                 classNames: [ 'yui3-dynamic-dialog-submit' ],
                 action: function(e) {
                     e.preventDefault();
-                    e.dialog = this;
-                    e.form   = form;
                     e.async  = async;
+                    e.dialog = this;
+
+                    /* We find the form again, since the content may be replaced */
+                    e.form   = this.get('contentBox').one('form');
+                    if ( !e.form ) {
+                        throw "Form disappeared, was the dialog content replaced incorrectly?";
+                    }
 
                     submitFn(e);
                 },
@@ -193,8 +200,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     },
 
     _defSubmitFn: function(e) {
-        var form   = e.form,
-            dialog = e.dialog,
+        var dialog = e.dialog,
+            form   = e.form,
             async  = e.async,
             action = form.getAttribute('action'),
             cfg    = {};
@@ -205,13 +212,68 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             return;
         }
 
-        cfg.method  = form.get('action') || 'POST';
+        cfg.method  = form.get('method') || 'POST';
         cfg.form    = { id: form };
         cfg.context = this;
+        cfg.arguments = {
+            dialog: dialog,
+            form:   form
+        };
         cfg.on = {
+            success: this._ioSuccess,
+            failure: this._ioFailure
         };
 
-        Y.io( form.getAttribute('action'), cfg );
+        Y.io( action, cfg );
+    },
+
+    _ioSuccess: function(id, o, args) {
+        args.response = o;
+        this.fire( 'ioSuccess', args );
+    },
+
+    _ioFailure: function(id, o, args) {
+        var dialog    = args.dialog,
+            form      = args.form,
+            bounding  = dialog.get('boundingBox'),
+            className = this.IO_FAILURE_CLASS;
+        bounding.addClass(className);
+
+        this._shakeNode(bounding,
+            Y.bind( function() {
+                this.removeClass( className )
+            }, bounding )
+        );
+
+        /* After a bit, remove the class automatically? */
+        if ( o.responseText ) {
+            dialog.setStdModContent( Y.WidgetStdMod.BODY, o.responseText );
+        }
+    },
+
+    _shakeNode: function(node, callback) {
+        var curX = node.getX(),
+            curY = node.getY(),
+            forwardX = curX + 5,
+            anim;
+
+        node.get('clientX');
+        anim = new Y.Anim({
+            node: node,
+            to: {
+                xy: [ forwardX, curY ]
+            },
+            duration: 0.01,
+            iterations: 10,
+            direction: 'alternate'
+        });
+        if ( callback && typeof callback === 'function' ) {
+            anim.on('end', callback);
+        }
+
+        anim.run();
+
+        return anim;
     }
 
 }, {
@@ -225,4 +287,4 @@ Y.DynamicDialog = DynamicDialog;
 
 
 
-}, '@VERSION@' ,{requires:['substitute','widget','base','panel','io','io-form','event-delegate']});
+}, '@VERSION@' ,{requires:['anim','substitute','widget','base','panel','io','io-form','event-delegate']});
