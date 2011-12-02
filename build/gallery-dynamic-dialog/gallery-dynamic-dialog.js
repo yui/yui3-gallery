@@ -90,6 +90,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             attrs    = {},
             id       = source.substr( source.indexOf('#') ),
             template = Y.one(id),
+            async    = template ? template.getAttribute('data-async') === 'true' : false,
             overlay  = this.panels[id],
 
             dom_attrs  = target.get('attributes'),
@@ -119,6 +120,31 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                     Y.WidgetStdMod.BODY,
                     sub( template.getContent(), attrs )
                 );
+            }
+
+            var form = overlay.get('contentBox').one('form');
+            if ( form ) {
+                var submitFn = Y.bind( this._defSubmitButtonFn, this );
+
+                /* Detach previously used form listener and replace it */
+                if ( overlay.formListener ) {
+                    overlay.formListener.detach();
+                }
+                overlay.formListener = form.on('submit', function(e) {
+                    e.preventDefault();
+
+                    e.async   = async;
+                    e.dialog  = this;
+                    e.trigger = target;
+
+                    /* We find the form again, since the content may be replaced */
+                    e.form = this.get('contentBox').one('form');
+                    if ( !e.form ) {
+                        throw "Form disappeared, was the dialog content replaced incorrectly?";
+                    }
+
+                    submitFn(e);
+                }, overlay);
             }
             overlay.trigger = target;
             overlay.show();
@@ -180,6 +206,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                 },
                 section: Y.WidgetStdMod.FOOTER
             });
+
         }
         /* Otherwise, just a simple Hide button */
         else {
@@ -203,7 +230,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             dialog:  e.dialog,
             trigger: e.trigger,
             form:    e.form,
-            async:    e.async || false
+            async:   e.async || false
         });
     },
 
