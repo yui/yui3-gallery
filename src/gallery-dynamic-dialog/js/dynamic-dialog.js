@@ -93,7 +93,13 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
             dom_attrs  = target.get('attributes'),
             data_attrs = [];
-        
+
+        Y.log('_triggerEventFn'); 
+        Y.log(target);
+        Y.log(id);
+        Y.log(template);
+        Y.log(overlay);
+
         dom_attrs.each( function(el) {
             var name = el.get('name');
             if ( name.match(/^data-/) ) {
@@ -121,6 +127,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                 );
             }
             Y.log('Got overlay: ' + overlay);
+            overlay.trigger = target;
             overlay.show();
         }
     },
@@ -166,18 +173,16 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                 classNames: [ 'yui3-dynamic-dialog-submit' ],
                 action: function(e) {
                     e.preventDefault();
-                    e.async  = async;
-                    e.dialog = this;
+                    e.async   = async;
+                    e.dialog  = this;
+                    e.trigger = this.trigger;
 
                     /* We find the form again, since the content may be replaced */
-                    e.form   = this.get('contentBox').one('form');
+                    e.form = this.get('contentBox').one('form');
                     if ( !e.form ) {
                         throw "Form disappeared, was the dialog content replaced incorrectly?";
                     }
 
-                    Y.log('dialog: ' + e.dialog);
-                    Y.log('form: ' + e.dialog);
-                    Y.log('isAsync: ' + e.async);
                     submitFn(e);
                 },
                 section: Y.WidgetStdMod.FOOTER
@@ -201,15 +206,22 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     },
 
     _defSubmitButtonFn: function(e) {
-        this.fire('submit', { dialog: e.dialog, form: e.form, async: e.async || false });
+        this.fire('submit', {
+            dialog:  e.dialog,
+            trigger: e.trigger,
+            form:    e.form,
+            async:    e.async || false
+        });
     },
 
     _defSubmitFn: function(e) {
-        var dialog = e.dialog,
-            form   = e.form,
-            async  = e.async,
-            action = form.getAttribute('action'),
-            cfg    = {};
+        var dialog  = e.dialog,
+            form    = e.form,
+            async   = e.async,
+            trigger = e.trigger || dialog.trigger,
+            action  = form.getAttribute('action'),
+            method  = form.getAttribute('method') || 'POST',
+            cfg     = {};
 
         if ( !async ) {
             dialog.hide();
@@ -218,12 +230,16 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             return;
         }
 
-        cfg.method  = form.get('method') || 'POST';
+        Y.log('Form method: ' + form.getAttribute('method') + ' == ' + method );
+        Y.log( form.get('parentNode').getContent() );
+
+        cfg.method  = method.toUpperCase();
         cfg.form    = { id: form };
         cfg.context = this;
         cfg.arguments = {
-            dialog: dialog,
-            form:   form
+            dialog:  dialog,
+            form:    form,
+            trigger: trigger
         };
         cfg.on = {
             success: this._ioSuccess,
@@ -235,6 +251,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     },
 
     _ioSuccess: function(id, o, args) {
+        args.dialog.hide();
         Y.log('Success');
         args.response = o;
         this.fire( 'ioSuccess', args );
@@ -245,6 +262,10 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             form      = args.form,
             bounding  = dialog.get('boundingBox'),
             className = this.IO_FAILURE_CLASS;
+
+        args.response = o;
+        this.fire('ioFailure', args);
+
         Y.log('io:failure');
         Y.log(o);
         bounding.addClass(className);
