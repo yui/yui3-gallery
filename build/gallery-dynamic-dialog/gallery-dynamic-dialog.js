@@ -49,6 +49,9 @@ var DynamicDialog,
     Oeach    = Y.Object.each;
 
 DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
+    DIALOG_CLASS:     'open-dialog',
+    REMOTE_CLASS:     'remote-dialog',
+    REMOTE_FAILURE_TEXT: '<p>There was a problem fetching the dialog content. Sorry.</p>',
     IO_FAILURE_CLASS: 'yui3-dynamic-dialog-io-failure',
     BUTTONS: {
         OK:     'Ok',
@@ -83,18 +86,73 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
         );
     },
 
+    /* For 3.5.0, the pjax module will likely make all this stupid.
+    This method basically re-fires 'e' by calling _triggerEventFn with
+    a populated `e.template`.
+    */
+    _fetchDialogContent: function(e) {
+        var target   = e.currentTarget,
+            source   = target.get('tagName') === 'A' ?
+                        target.get('href') : target.get('target'),
+            async    = target.getAttribute('data-async') === 'true',
+            title    = (target.getAttribute('title') || ''),
+            callback = Y.bind(this._triggerEventFn, this),
+            error    = this.REMOTE_FAILURE_TEXT,
+            cfg      = {
+                method: 'GET',
+                on: {
+                    success: function(id, o) {
+                        var fragment = Y.one(Y.config.doc.createDocumentFragment());
+                        fragment.append('<div>' + o.responseText + '</div>');
+                        fragment = fragment.one('div');
+
+                        fragment.setAttribute('data-async', async);
+                        fragment.setAttribute('title', title);
+
+                        e.dialogId = target.get('id');
+                        e.template = fragment;
+
+                        callback(e);
+                    },
+                    failure: function(id, o) {
+                        var fragment = Y.one(Y.config.doc.createDocumentFragment());
+                        fragment.append('<div>' + error + '</div>');
+                        fragment = fragment.one('div');
+
+                        fragment.setAttribute('data-async', async);
+                        fragment.setAttribute('title', title);
+
+                        e.dialogId = target.get('id');
+                        e.template = fragment;
+
+                        callback(e);
+                    }
+                }
+            };
+        Y.io( source, cfg );
+    },
+
     _triggerEventFn: function(e) {
         var target   = e.currentTarget,
             source   = target.get('tagName') === 'A' ?
                         target.get('href') : target.get('target'),
             attrs    = {},
-            id       = source.substr( source.indexOf('#') ),
-            template = Y.one(id),
+            id       = e.dialogId || source.substr( source.indexOf('#') ),
+            template = e.template || Y.one(id),
             async    = template ? template.getAttribute('data-async') === 'true' : false,
             overlay  = this.panels[id],
 
             dom_attrs  = target.get('attributes'),
             data_attrs = [];
+
+        /* If we don't have a template, fetch it! */
+        if ( target.hasClass( this.REMOTE_CLASS ) && !template ) {
+            /* Now we pause. The contents of the dialog are not from the template
+               but from an XHR call.
+            */
+            e.preventDefault();
+            return this._fetchDialogContent(e);
+        }
 
 
         dom_attrs.each( function(el) {
@@ -245,7 +303,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
         if ( !async ) {
             dialog.hide();
-            //form.submit();
+            form.submit();
             return;
         }
 
@@ -285,7 +343,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
         this._shakeNode(bounding,
             Y.bind( function() {
-                this.removeClass( className )
+                this.removeClass( className );
             }, bounding )
         );
 
