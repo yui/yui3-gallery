@@ -113,7 +113,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
                         e.dialogId = target.get('id');
                         e.template = fragment;
-
+                        e.preventDefault = function() { };
                         callback(e);
                     },
                     failure: function(id, o) {
@@ -126,6 +126,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
                         e.dialogId = target.get('id');
                         e.template = fragment;
+                        e.preventDefault = function() { };
 
                         callback(e);
                     }
@@ -157,7 +158,6 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
         }
 
         Y.log('_triggerEventFn'); 
-
         dom_attrs.each( function(el) {
             var name = el.get('name');
             if ( name.match(/^data-/) ) {
@@ -226,7 +226,6 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             submitFn   = Y.bind( this._defSubmitButtonFn, this ),
             contentBox = null,
             form       = null;
-
         panel = new Panel({
             headerContent:  title,
             bodyContent:    content,
