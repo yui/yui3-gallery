@@ -72,6 +72,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             defaultFn: this._defSubmitFn,
             preventable: true
         });
+
+        this.publish('show', { preventable: false });
     },
 
     setupDelegates: function() {
@@ -204,8 +206,10 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
                     submitFn(e);
                 }, overlay);
             }
+
             overlay.trigger = target;
             overlay.show();
+            this.fire('show', { dialog: overlay, trigger: target });
         }
     },
 
