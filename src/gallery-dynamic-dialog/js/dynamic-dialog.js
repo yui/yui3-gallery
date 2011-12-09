@@ -135,13 +135,22 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
         Y.io( source, cfg );
     },
 
+    open: function(selector) {
+        var node = Y.one(selector);
+        this._dialogFromNode(node);
+    }
+
     _triggerEventFn: function(e) {
         var target   = e.currentTarget,
-            source   = target.get('tagName') === 'A' ?
+        this._dialogFromNode(target, e);
+    }
+
+    _dialogFromNode: function(target, opts) {
+        var source   = target.get('tagName') === 'A' ?
                         target.get('href') : target.get('target'),
             attrs    = {},
-            id       = e.dialogId || source.substr( source.indexOf('#') ),
-            template = e.template || Y.one(id),
+            id       = opts.dialogId || source.substr( source.indexOf('#') ),
+            template = opts.template || Y.one(id),
             async    = template ? template.getAttribute('data-async') === 'true' : false,
             overlay  = this.panels[id],
 
