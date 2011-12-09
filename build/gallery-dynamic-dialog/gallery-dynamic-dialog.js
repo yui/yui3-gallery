@@ -135,7 +135,21 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
         Y.io( source, cfg );
     },
 
+    open: function(selector) {
+        var node = Y.one(selector),
+            e    = {
+                currentTarget:  node,
+                preventDefault: function() { },
+                halt:           function() { }
+            };
+        this._dialogFromNode(e);
+    },
+
     _triggerEventFn: function(e) {
+        this._dialogFromNode(e);
+    },
+
+    _dialogFromNode: function(e) {
         var target   = e.currentTarget,
             source   = target.get('tagName') === 'A' ?
                         target.get('href') : target.get('target'),

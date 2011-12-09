@@ -23,13 +23,13 @@ show a dialog from a template on the page.
   // These are the defaults. Any link with open-dialog as a class
   // will find a node from the href="#dialog-template-id" and open it.
   dialogs.setupDelegates({
-     'a.open-dialog':   'openDialog',
+     'a.open-dialog':   'click',
      // This will fetch the href and display the results in the dialog.
      // Your backend will have to know how to send partial renders out.
-     'a.remote-dialog': 'openRemoteDialog'
+     'a.remote-dialog': 'click'
   });
 
-  dialog.on('openDialog', function(e) {
+  dialog.on('show', function(e) {
     // Immediately close it! This is absurd!
     e.dialog.hide();
   });
@@ -136,21 +136,26 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     },
 
     open: function(selector) {
-        var node = Y.one(selector);
-        this._dialogFromNode(node);
-    }
+        var node = Y.one(selector),
+            e    = {
+                currentTarget:  node,
+                preventDefault: function() { },
+                halt:           function() { }
+            };
+        this._dialogFromNode(e);
+    },
 
     _triggerEventFn: function(e) {
-        var target   = e.currentTarget,
-        this._dialogFromNode(target, e);
-    }
+        this._dialogFromNode(e);
+    },
 
-    _dialogFromNode: function(target, opts) {
-        var source   = target.get('tagName') === 'A' ?
+    _dialogFromNode: function(e) {
+        var target   = e.currentTarget,
+            source   = target.get('tagName') === 'A' ?
                         target.get('href') : target.get('target'),
             attrs    = {},
-            id       = opts.dialogId || source.substr( source.indexOf('#') ),
-            template = opts.template || Y.one(id),
+            id       = e.dialogId || source.substr( source.indexOf('#') ),
+            template = e.template || Y.one(id),
             async    = template ? template.getAttribute('data-async') === 'true' : false,
             overlay  = this.panels[id],
 
