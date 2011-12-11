@@ -86,7 +86,10 @@ YUI.add('gallery-slidecheckbox', function(Y) {
 				cb.on('focus',function(){
 					cb.on('key',this.goLeft,'down:37',this);
 					cb.on('key',this.goRight,'down:39',this);
-					cb.on('key',this.move,'down:32',this);
+					cb.on('key',function(e){
+						e.preventDefault();
+						this.move();
+					},'down:32',this);
 				},this);
 				cb.on('blur',function(){
 					cb.detach('key');
@@ -140,10 +143,11 @@ YUI.add('gallery-slidecheckbox', function(Y) {
 				return null;
 			},
 			_onClick : function(e){
+				e.preventDefault();
 				this.move();
 			},
 			_execute : function(){
-				this.get(CBX).focus();
+				this.focus();
 				if(this.disabled){
 					return;
 				}
@@ -200,4 +204,4 @@ YUI.add('gallery-slidecheckbox', function(Y) {
 	);
 
 
-}, 'gallery-2011.10.27-17-03' ,{skinnable:true, requires:['node-base', 'anim-base', 'anim-easing', 'base-build', 'event-key', 'event-move', 'widget', 'node-style', 'gallery-makenode', 'dd-drag', 'dd-constrain']});
+}, 'gallery-2011.11.10-16-24' ,{skinnable:true, requires:['node-base', 'anim-base', 'anim-easing', 'base-build', 'event-key', 'event-move', 'widget', 'node-style', 'gallery-makenode', 'dd-drag', 'dd-constrain']});

@@ -1,0 +1,308 @@
+{
+    "project": {
+        "name": "Composite-Image",
+        "description": "Object to handle raw multidimensional multichannel image data."
+    },
+    "files": {
+        "js/composite-image.js": {
+            "name": "js/composite-image.js",
+            "modules": {
+                "gallery-composite-image": 1
+            },
+            "classes": {
+                "Composite.Image": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Composite": 1
+            }
+        }
+    },
+    "modules": {
+        "gallery-composite-image": {
+            "name": "gallery-composite-image",
+            "submodules": {},
+            "classes": {
+                "Composite.Image": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Composite": 1
+            },
+            "tag": "module",
+            "file": "js/composite-image.js",
+            "line": 4
+        }
+    },
+    "classes": {
+        "Composite.Image": {
+            "name": "Composite.Image",
+            "shortname": "Image",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-composite-image",
+            "namespace": "Composite",
+            "file": "js/composite-image.js",
+            "line": 15,
+            "description": "Image Class",
+            "is_constructor": 1,
+            "extends": "Base",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration Object.",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/composite-image.js",
+            "line": 29,
+            "description": "Defines the color space for the image.\n\nAn image can have as many channels as needed.  3 or 4 channels is most common.\nUsually the first channel is the red color component, the second is green, the third is blue, and the fourth is alpha.\n\nThere are various ways to represent the value of a channel.\nValues can either be stored as integers or floating-point numbers.\nValues may be constrained within a minimum and maximum value.\n\nMost commonly red, green, and blue channels are represented by integers between 0 and 255.\nIn this case the values 0, 0, 0 represent black and the values 255, 255, 255 represent white.\n\nThe alpha channel is commonly stored as a floating-point value from 0 to 1.\n1 represents a completely visible pixel while 0 is completely transparent.\n\nValues are not required to be constrained.  For example, sometimes it is interesting or useful to store colors which have brightness beyond white.\n\nThis attribute should be set to an array of objects.  This array represents the channels in order.  This array should have at least one element.\nThis should not be a sparse array.  Each object must have a mode property.  The mode property must be set to either 'f' for floating-point values\nor 'i' for integer values.  Each object may include the optional maximum and/or minimum properties.  Each object may include the optional blackValue\nand/or whiteValue properties.  If undefined, blackValue will default to 0 and whiteValue will default to 255 when mode is set to 'i' or 1 otherwise.",
+            "itemtype": "attribute",
+            "name": "channels",
+            "default": "[{maximum: 255, minimum: 0, mode:'i'}, {maximum: 255, minimum: 0, mode:'i'}, {maximum: 255, minimum: 0, mode:'i'}, {maximum: 1, minimum: 0, mode:'f'}]",
+            "type": "Array",
+            "writeonce": "",
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 77,
+            "description": "Defines the pixel dimensions of the image.\n\nAn image can have as many dimensions as needed.  2 dimensions is most common.\nUsually the first dimension is width and the second is height.",
+            "itemtype": "attribute",
+            "name": "dimensions",
+            "default": "[512, 512]",
+            "type": "Array",
+            "writeonce": "",
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 95,
+            "description": "Contains the number of pixels in the image.",
+            "itemtype": "attribute",
+            "name": "pixelCount",
+            "readonly": "",
+            "type": "Number",
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 109,
+            "description": "Clears the image.\nThis method is chainable.",
+            "itemtype": "method",
+            "name": "clear",
+            "chainable": 1,
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 125,
+            "description": "Returns a new identical image.",
+            "itemtype": "method",
+            "name": "clone",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 141,
+            "description": "Invokes a function for each pixel in the image.\nThis method is chainable.",
+            "itemtype": "method",
+            "name": "eachPixel",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "pixelParameters",
+                    "description": "This object contains the following members\n<ul>\n    <li>\n        ctx - Object - Optional scope with which to call fn.\n    </li>\n    <li>\n        fn - Function - This function is invoked once per pixel.\n        This function will receive an object with the following parameters\n        <ul>\n            <li>\n                at - Array of image pixel coordinates.\n            </li>\n            <li>\n                chs - Array of image channel definitions.\n            </li>\n            <li>\n                dims - Array of image dimension lengths.\n            </li>\n            <li>\n                img - Reference to this image.\n            </li>\n            <li>\n                pch - Array of pixel channel indices.\n            </li>\n            <li>\n                pcnt - Number of pixels in this image.\n            </li>\n            <li>\n                pix - Integer index of this pixel.\n            </li>\n            <li>\n                pxl - Array of pixel channel values.\n            </li>\n        </ul>\n        If this function returns true, eachPixel will stop and ignore the remaining pixels.\n    </li>\n    <li>\n        pch - Array - Optional array of channel indexes.  If undefined, pixels will contain all channels in order.\n    </li>\n</ul>",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "This function is invoked after the function has been invoked for each pixel in the image.\nThis function will receive an object with the following members\n<ul>\n    <li>\n        chs - Array of image channel definitions.\n    </li>\n    <li>\n        dims - Array of image dimension lengths.\n    </li>\n    <li>\n        img - Reference to this image.\n    </li>\n    <li>\n        pcnt - Number of pixels in this image.\n    </li>\n    <li>\n        pix - The last integer pixel index processed.  If eachPixel was not stopped early, this value should be equal to pcnt and not a valid pixel index.\n    </li>\n</ul>",
+                    "type": "Function"
+                },
+                {
+                    "name": "contextObject",
+                    "description": "Optional scope with which to call the callback function.",
+                    "type": "Object"
+                }
+            ],
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 262,
+            "description": "Converts a pixel index to an at array.",
+            "itemtype": "method",
+            "name": "getAt",
+            "params": [
+                {
+                    "name": "pixelIndex",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 271,
+            "description": "Accessor method to get a pixel from the image.",
+            "itemtype": "method",
+            "name": "getPixel",
+            "params": [
+                {
+                    "name": "at",
+                    "description": "Array containing pixel coordinates.  The length of this array should match the number of dimensions of the image.",
+                    "type": "Array"
+                },
+                {
+                    "name": "pixelChannels",
+                    "description": "Optional array of channel indexes.  If undefined, returned pixel will contain all channels in order.",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 303,
+            "description": "Converts an at array to a pixel index.",
+            "itemtype": "method",
+            "name": "getPixelIndex",
+            "params": [
+                {
+                    "name": "at",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 347,
+            "description": "Accessor method to set a pixel in the image.\nThis method is chainable.",
+            "itemtype": "method",
+            "name": "setPixel",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "at",
+                    "description": "Array containing pixel coordinates.  The length of this array should match the number of dimensions of the image.",
+                    "type": "Array"
+                },
+                {
+                    "name": "pixel",
+                    "description": "Array containing the pixel's channel values.",
+                    "type": "Array"
+                },
+                {
+                    "name": "pixelChannels",
+                    "description": "Optional array of channel indexes.  If undefined, the given pixel is assumed to contain all channels in order.",
+                    "type": "Array"
+                }
+            ],
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 381,
+            "description": "Conforms the given value to the channel's specifications.",
+            "itemtype": "method",
+            "name": "conformChannelValue",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "channel",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "static": 1,
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 408,
+            "description": "Call this function with the length of each dimension followed by the number of channels.\nReturns a function which accepts a pixel index and returns an at array.",
+            "itemtype": "method",
+            "name": "_getGetAtFunction",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "Function"
+            },
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        },
+        {
+            "file": "js/composite-image.js",
+            "line": 443,
+            "description": "Call this function with the length of each dimension.\nReturns a function which accepts dimension indices and returns a pixel index.",
+            "itemtype": "method",
+            "name": "_getGetPixelIndexFunction",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "Function"
+            },
+            "class": "Composite.Image",
+            "module": "gallery-composite-image",
+            "namespace": "Composite"
+        }
+    ]
+}

@@ -290,6 +290,20 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
         return sel;
     },
 
+    /**
+     * @method toJSON
+     * @description Returns a JSON object representing the values of
+     *              the form fields
+     */
+    toJSON : function () {
+        var data = {}; 
+        this.each(function (f) {
+            data[f.get('name')] = (f instanceof Y.CheckboxField) ? f.get('checked') : f.get('value');
+        }); 
+
+        return data;
+    },   
+
     initializer: function(config) {
         this._ioIds = {};
 
@@ -533,7 +547,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @type String
      * @description Template used to render the field node
      */
-    FIELD_TEMPLATE : '<input></input>',
+    FIELD_TEMPLATE : '<input>',
 
     /**
      * @property FormField.FIELD_CLASS
@@ -803,7 +817,7 @@ Y.FormField = Y.Base.create('form-field', Y.Widget, [Y.WidgetParent, Y.WidgetChi
      * @description Syncs the fieldNode and this instances attributes
      */
     _syncFieldNode: function() {
-        var nodeType = this.name.split('-')[0];
+        var nodeType = this.INPUT_TYPE || this.name.split('-')[0];
         if (!nodeType) {
             return;
         }
@@ -1407,7 +1421,7 @@ Y.CheckboxField = Y.Base.create('checkbox-field', Y.FormField, [Y.WidgetChild], 
  * @constructor
  * @description A Radio field node
  */
-Y.RadioField = Y.Base.create('radio-field', Y.FormField, [Y.WidgetChild]);
+Y.RadioField = Y.Base.create('radio-field', Y.CheckboxField, [Y.WidgetChild]);
 /**
  * @class HiddenField
  * @extends FormField
@@ -1547,6 +1561,7 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
         Y.Array.each(choices,
         function(c, i, a) {
             var cfg = {
+                checked : c.checked,
                 value: c.value,
                 id: (this.get('id') + '_choice' + i),
                 name: this.get('name'),
@@ -1563,19 +1578,23 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
         var choices = this.get('value').split(',');
 
         if (choices && choices.length > 0) {
-            Y.Array.each(choices, function(choice) {
-                this._fieldNode.each(function(node, index, list) {
-                    if (Y.Lang.trim(node.get('value')) == Y.Lang.trim(choice)) {
-                        node.set('checked', true);
-                        return true;
-                    }
-                }, this);
-            }, this);
+            choices = Y.Array.map(choices, function(choice) {
+                return Y.Lang.trim(choice);
+            });
+
+            this._fieldNode.each(function(node, index, list) {
+                var nodeValue = Y.Lang.trim(node.get('value'));
+                if (!!~Y.Array.indexOf(choices, nodeValue)) {
+                    node.set('checked', true);
+                } else {
+                    node.set('checked', false);
+                }
+            });
         }
     },
 
     /**
-     * @method _afterChoiceChange
+     * @method _afterChoicesChange
      * @description When the available choices for the choice field change,
      *     the old ones are removed and the new ones are rendered.
      */
@@ -1596,19 +1615,27 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
 
     bindUI: function() {
         this._fieldNode.on('change', Y.bind(function(e) {
-            var value = '';
+            var value = '',
+                type = this.get('multi') ? 'checkbox' : 'radio';
+
             this._fieldNode.each(function(node, index, list) {
-                if (node.get('checked') === true) {
+                if (node.get('type') == type && node.get('checked') === true) {
                     if (value.length > 0) {
                         value += ',';
                     }
                     value += node.get('value');
                 }
             }, this);
-            this.set('value', value);
+            this.set('value', value, {fromUI : true});
         },
         this));
         this.after('choicesChange', this._afterChoicesChange);
+
+        this.after('valueChange', function (e) {
+            if (!e.fromUI) {
+                this._syncFieldNode();
+            }
+        });
     }
 
 },
@@ -1955,8 +1982,7 @@ Y.ResetButton = Y.Base.create('reset-button', Y.FormField, [Y.WidgetChild], {
 });
 
 
-<<<<<<< HEAD:build/gallery-form/gallery-form-debug.js
+}, 'gallery-2011.11.10-16-24' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe', 'collection']});
 }, 'gallery-2011.06.15-19-18' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
 =======
-}, 'gallery-2011.09.28-20-06' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
 >>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:build/gallery-form/gallery-form-debug.js

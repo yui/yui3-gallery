@@ -661,4 +661,4 @@ YUI.add('gallery-makenode', function(Y) {
 		
 
 
-}, '@VERSION@' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
+}, 'gallery-2011.11.17-14-56' ,{requires:['substitute', 'classnamemanager'], skinnable:false});
