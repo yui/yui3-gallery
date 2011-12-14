@@ -1,0 +1,1 @@
+YUI.add("gallery-delay",function(a){(function(c){var b=c.later;c.delay=function(d,e){if(e>0){return function(){return b(e,this,d,arguments);};}return d;};}(a));},"gallery-2011.12.14-21-12",{requires:["yui-later"],skinnable:false});

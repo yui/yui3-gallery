@@ -44,7 +44,7 @@ NodePrototype.wrapInner = function(html) {
         container.setContent(this.getContent());
         this.setContent('');
     }
-    this.append(wrapper);
+    return this.append(wrapper);
 };
 
 Y.NodeList.importMethod(NodePrototype, 'wrapInner');
@@ -56,7 +56,7 @@ Y.NodeList.importMethod(NodePrototype, 'wrapInner');
  * @static
  */
 Y.Node.frag = function() {
-    return new Y.Node(document.createDocumentFragment());
+    return new Y.Node(Y.config.doc.createDocumentFragment());
 };
 
 /**
@@ -115,7 +115,18 @@ NodePrototype.prevAll = function(selector) {
     return siblings.filter(selector);
 };
 
+/**
+ * Inserts the current node as the first child element of the given node
+ * @method prependTo
+ * @param {Node} The node to prepend to
+ * @chainable 
+ */
+NodePrototype.prependTo = function(node) {
+    Y.one(node).insert(this, 0);
+    return this;
+};
+
 domNode = undefined;
 
 
-}, 'gallery-2011.02.09-21-32' ,{requires:['node']});
+}, 'gallery-2011.12.14-21-12' ,{requires:['node']});
