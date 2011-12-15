@@ -242,6 +242,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             buttons = this.BUTTONS,
             async   = template.getAttribute('data-async') === 'true',
             submitFn   = Y.bind( this._defSubmitButtonFn, this ),
+            closeLabel = this.get('closeLabel'),
             contentBox = null,
             form       = null;
         panel = new Panel({
@@ -249,7 +250,15 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             bodyContent:    content,
             modal:          modal,
             centered:       true,
-            zIndex:         zIndex
+            zIndex:         zIndex,
+            buttons       : [
+                {
+                    value: closeLabel,
+                    section: Y.WidgetStdMod.HEADER,
+                    classNames: [ 'closer' ],
+                    action: function(e) { this.hide(); }
+                }
+            ]
         });
 
         panel.render( this.container );
@@ -410,8 +419,9 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
 }, {
     ATTRS: { 
-       modal : { value: false },
-       zIndex: { value: 1 }
+        modal       : { value: false },
+        zIndex      : { value: 1 },
+        closeLabel  : { value: "✕" }
     }
 });
 
