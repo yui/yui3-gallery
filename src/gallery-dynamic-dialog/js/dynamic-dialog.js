@@ -235,6 +235,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             title   = element.getAttribute('title') || template.getAttribute('title') || '',
             content = sub( template.getContent(), attrs ),
             modal   = element.getAttribute('data-modal') || template.getAttribute('data-modal') || this.get('modal'),
+            zIndex  = element.getAttribute('data-zindex') || this.get('zIndex'),
             panel   = null,
             buttons = this.BUTTONS,
             async   = template.getAttribute('data-async') === 'true',
@@ -245,7 +246,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             headerContent:  title,
             bodyContent:    content,
             modal:          modal,
-            centered:       true
+            centered:       true,
+            zIndex:         zIndex
         });
 
         panel.render( this.container );
@@ -406,7 +408,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
 }, {
     ATTRS: { 
-       modal: { value: false } 
+       modal : { value: false },
+       zIndex: { value: 1 }
     }
 });
 

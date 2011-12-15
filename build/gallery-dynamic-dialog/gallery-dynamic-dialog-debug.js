@@ -25,13 +25,13 @@ show a dialog from a template on the page.
   // These are the defaults. Any link with open-dialog as a class
   // will find a node from the href="#dialog-template-id" and open it.
   dialogs.setupDelegates({
-     'a.open-dialog':   'openDialog',
+     'a.open-dialog':   'click',
      // This will fetch the href and display the results in the dialog.
      // Your backend will have to know how to send partial renders out.
-     'a.remote-dialog': 'openRemoteDialog'
+     'a.remote-dialog': 'click'
   });
 
-  dialog.on('openDialog', function(e) {
+  dialog.on('show', function(e) {
     // Immediately close it! This is absurd!
     e.dialog.hide();
   });
@@ -237,6 +237,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             title   = element.getAttribute('title') || template.getAttribute('title') || '',
             content = sub( template.getContent(), attrs ),
             modal   = element.getAttribute('data-modal') || template.getAttribute('data-modal') || this.get('modal'),
+            zIndex  = element.getAttribute('data-zindex') || this.get('zIndex'),
             panel   = null,
             buttons = this.BUTTONS,
             async   = template.getAttribute('data-async') === 'true',
@@ -247,7 +248,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
             headerContent:  title,
             bodyContent:    content,
             modal:          modal,
-            centered:       true
+            centered:       true,
+            zIndex:         zIndex
         });
 
         panel.render( this.container );
@@ -408,7 +410,8 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
 
 }, {
     ATTRS: { 
-       modal: { value: false } 
+       modal : { value: false },
+       zIndex: { value: 1 }
     }
 });
 
