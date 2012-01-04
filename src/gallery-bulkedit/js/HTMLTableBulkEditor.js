@@ -180,9 +180,9 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 
 			var row_markup = '<th class="{cell} {prefix}{key}">{label}</th>';
 
-			Y.Array.each(this.get('columns'), function(column)
+			s = Y.Array.reduce(this.get('columns'), s, function(s, column)
 			{
-				s += Y.Lang.sub(row_markup,
+				return s + Y.Lang.sub(row_markup,
 				{
 					cell:   cell_class,
 					prefix: cell_class_prefix,
