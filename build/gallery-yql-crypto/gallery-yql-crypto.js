@@ -9,22 +9,12 @@ YUI.add('gallery-yql-crypto', function(Y) {
     'use strict';
     
     var _base64Decode = Y.Base64.decode,
-        _execute,
-        _getResult,
+        _execute = Y.YQL.execute,
+        _getResult = _execute.getResult,
         _hash,
         _hmac,
         _bind = Y.bind,
         _toHex;
-    
-    _execute = function (code, callbackFunction, params, opts) {
-        Y.YQL("SELECT * FROM execute WHERE code = '" + code.replace(/'/g, '\\\'') + "'", callbackFunction, params, opts);
-    };
-    
-    _getResult = function (result) {
-        result = result && result.query;
-        result = result && result.results;
-        return result && result.result;
-    };
     
     _hash = function (hash, string, callbackFunction, params, opts) {
         _execute('response.object = y.crypto.encode' + hash + '("' + String(string || '').replace(/"/g, '\\"') + '");', function (result) {
@@ -126,4 +116,4 @@ YUI.add('gallery-yql-crypto', function(Y) {
 }(Y));
 
 
-}, 'gallery-2011.10.27-17-03' ,{requires:['gallery-base64', 'yql'], skinnable:false});
+}, 'gallery-2012.01.11-21-03' ,{requires:['gallery-base64', 'gallery-yql-execute'], skinnable:false});
