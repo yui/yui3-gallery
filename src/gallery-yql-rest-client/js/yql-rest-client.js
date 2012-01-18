@@ -6,11 +6,15 @@
 (function (Y) {
     'use strict';
     
-    var _each = Y.each,
+    var _lang = Y.Lang,
+        
+        _each = Y.each,
         _execute = Y.YQL.execute,
         _getResult = _execute.getResult,
-        _isArray = Y.Lang.isArray,
-        _quotedString;
+        _isArray = _lang.isArray,
+        _isObject = _lang.isObject,
+        _quotedString,
+        _stringify = Y.QueryString.stringify;
     
     /**
      * @class YQLRESTClient
@@ -33,7 +37,8 @@
          *         content
          *     </dt>
          *     <dd>
-         *         The body content of a POST or PUT request.
+         *         The body content of a POST or PUT request.  This can be an object or a string.  If an
+         *         object is used, contentType is assumed to be application/x-www-form-urlencoded.
          *     </dd>
          *     <dt>
          *         contentType
@@ -139,6 +144,11 @@
             
             if (accept) {
                 code.push('accept("' + _quotedString(accept) + '")');
+            }
+            
+            if (_isObject(content)) {
+                content = _stringify(content);
+                contentType = 'application/x-www-form-urlencoded';
             }
             
             if (contentType) {
