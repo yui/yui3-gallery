@@ -16,21 +16,35 @@ to render the table content.
 @module datatable-core
 **/
 
-var INVALID    = Y.Attribute.INVALID_VALUE,
+var INVALID = Y.Attribute.INVALID_VALUE,
 
-    Lang       = Y.Lang,
-    isFunction = Lang.isFunction,
-    isObject   = Lang.isObject,
-    isArray    = Lang.isArray,
-    isString   = Lang.isString,
-    isNumber   = Lang.isNumber,
+    Lang         = Y.Lang,
+    isFunction   = Lang.isFunction,
+    isObject     = Lang.isObject,
+    isArray      = Lang.isArray,
+    isString     = Lang.isString,
+    isNumber     = Lang.isNumber,
+    fromTemplate = Lang.sub,
 
-    toArray    = Y.Array,
+    toArray = Y.Array,
 
-    keys       = Y.Object.keys,
+    keys = Y.Object.keys,
 
     Table;
     
+// TODO: add this to Y.Object
+function flatten(o) {
+    var flat = {},
+        key;
+
+    for (key in o) {
+        // Not doing a hasOwnProperty check on purpose
+        flat[key] = o[key];
+    }
+
+    return flat;
+}
+
 /**
 Class extension providing the core API and structure for the DataTable Widget.
 
@@ -264,19 +278,51 @@ Y.mix(Table.prototype, {
     attribute is set.
 
     @property CAPTION_TEMPLATE
-    @type {String}
-    @default '<caption></caption>'
+    @type {HTML}
+    @default '<caption/>'
     **/
-    CAPTION_TEMPLATE: '<caption></caption>',
+    CAPTION_TEMPLATE: '<caption/>',
 
     /**
     The HTML template used to create the table Node.
 
     @property TABLE_TEMPLATE
-    @type {String}
-    @default '<table></table>'
+    @type {HTML}
+    @default '<table/>'
     **/
-    TABLE_TEMPLATE  : '<table></table>',
+    TABLE_TEMPLATE  : '<table class="{classes}"/>',
+
+    /**
+    HTML template used to create table's `<tbody>` if configured with a
+    `bodyView`.
+
+    @property TBODY_TEMPLATE
+    @type {HTML}
+    @default '<tbody class="{classes}"/>'
+    **/
+    TBODY_TEMPLATE: '<tbody class="{classes}"/>',
+
+    /**
+    Template used to create the table's `<tfoot>` if configured with a
+    `footerView`.
+
+    @property TFOOT_TEMPLATE
+    @type {HTML}
+    @default '<tfoot class="{classes}"/>'
+    **/
+    TFOOT_TEMPLATE:
+        '<tfoot class="{classes}"/',
+
+    /**
+    Template used to create the table's `<thead>` if configured with a
+    `headerView`.
+
+    @property THEAD_TEMPLATE
+    @type {HTML}
+    @default '<thead class="{classes}"/>'
+    **/
+    THEAD_TEMPLATE:
+        '<thead class="{classes}"/>',
 
     /**
     The object or instance of the class assigned to `bodyView` that is
@@ -421,6 +467,16 @@ Y.mix(Table.prototype, {
         return this.body && this.body.getCell && this.body.getRow(index);
     },
 
+    /**
+    Updates the UI with the current attribute state.
+
+    @method syncUI
+    **/
+    syncUI: function () {
+        this._uiSetCaption(this.get('caption'));
+        this._uiSetSummary(this.get('summary'));
+    },
+
     // -- Protected and private properties and methods ------------------------
 
     /**
@@ -500,14 +556,14 @@ Y.mix(Table.prototype, {
     //_viewConfig: null,
 
     /**
-    Relays `captionChange` events to `\_uiUpdateCaption`.
+    Relays `captionChange` events to `\_uiSetCaption`.
 
     @method _afterCaptionChange
     @param {EventFacade} e The `captionChange` event object
     @protected
     **/
     _afterCaptionChange: function (e) {
-        this._uiUpdateCaption(e.newVal);
+        this._uiSetCaption(e.newVal);
     },
 
     /**
@@ -520,17 +576,18 @@ Y.mix(Table.prototype, {
     **/
     _afterColumnsChange: function (e) {
         this._setColumnMap(e.newVal);
+        this._setDisplayColumns(e.newVal);
     },
 
     /**
-    Relays `summaryChange` events to `\_uiUpdateSummary`.
+    Relays `summaryChange` events to `\_uiSetSummary`.
 
     @method _afterSummaryChange
     @param {EventFacade} e The `summaryChange` event object
     @protected
     **/
     _afterSummaryChange: function (e) {
-        this._uiUpdateSummary(e.newVal);
+        this._uiSetSummary(e.newVal);
     },
 
     /**
@@ -574,6 +631,172 @@ Y.mix(Table.prototype, {
 
         return Y.Base.create('record', Y.Model, [], null, { ATTRS: ATTRS });
     },
+
+    /**
+    Creates the `<table>`.
+
+    @method _createTable
+    @return {Node} The `<table>` node
+    @protected
+    **/
+    _createTable: function () {
+        return Y.Node.create(fromTemplate(this.TABLE_TEMPLATE, {
+            classes: this.getClassName('table')
+        }));
+    },
+
+    /**
+    Creates a `<tbody>` node from the `TBODY_TEMPLATE`.
+
+    @method _createTBody
+    @protected
+    **/
+    _createTBody: function () {
+        return Y.Node.create(fromTemplate(this.TBODY_TEMPLATE, {
+            classes: this.getClassName('data')
+        }));
+    },
+
+    /**
+    Creates a `<tfoot>` node from the `TFOOT_TEMPLATE`.
+
+    @method _createTFoot
+    @protected
+    **/
+    _createTFoot: function () {
+        return Y.Node.create(fromTemplate(this.TFOOT_TEMPLATE, {
+            classes: this.getClassName('footer')
+        }));
+    },
+
+    /**
+    Creates a `<thead>` node from the `THEAD_TEMPLATE`.
+
+    @method _createTHead
+    @protected
+    **/
+    _createTHead: function () {
+        return Y.Node.create(fromTemplate(this.THEAD_TEMPLATE, {
+            classes: this.getClassName('columns')
+        }));
+    },
+
+    /**
+    Calls `render()` on the `bodyView` class instance and inserts the view's
+    container into the `<table>`.
+
+    Assigns the instance's `body` property from `e.view` and the `_tbodyNode`
+    from the view's `container` attribute.
+
+    @method _defRenderBodyFn
+    @param {EventFacade} e The renderBody event
+    @protected
+    **/
+    _defRenderBodyFn: function (e) {
+        e.view.render();
+
+        this.body = e.view;
+        this._tbodyNode = e.view.get('container');
+
+        this._tableNode.append(this._tbodyNode);
+    },
+
+    /**
+    Calls `render()` on the `footerView` class instance and inserts the view's
+    container into the `<table>`.
+
+    Assigns the instance's `foot` property from `e.view` and the `_tfootNode`
+    from the view's `container` attribute.
+
+    @method _defRenderFooterFn
+    @param {EventFacade} e The renderFooter event
+    @protected
+    **/
+    _defRenderFooterFn: function (e) {
+        e.view.render();
+
+        this.foot = e.view;
+        this._tfootNode = e.view.get('container');
+
+        this._tableNode.insertBefore(this._tfootNode,
+            this._tableNode.one('> tbody'));
+    },
+
+    /**
+    Calls `render()` on the `headerView` class instance and inserts the view's
+    container into the `<table>`.
+
+    Assigns the instance's `head` property from `e.view` and the `_theadNode`
+    from the view's `container` attribute.
+
+    @method _defRenderHeaderFn
+    @param {EventFacade} e The renderHeader event
+    @protected
+    **/
+    _defRenderHeaderFn: function (e) {
+        e.view.render();
+
+        this.head = e.view;
+        this._theadNode = e.view.get('container');
+
+        this._tableNode.insertBefore(this._theadNode,
+            this._tableNode.one('> tfoot, > tbody'));
+    },
+
+    /**
+    Renders the `<table>`, `<caption>`, and `<colgroup>`.
+
+    Assigns the generated table to the `\_tableNode` property.
+
+    @method _defRenderTableFn
+    @param {EventFacade} e The renderTable event
+    @protected
+    **/
+    _defRenderTableFn: function (e) {
+        var view, config;
+
+        this._tableNode = this._createTable();
+
+        if (e.headerView) {
+            config = flatten(e.headerConfig || {});
+            config.container = this._createTHead();
+
+            view = new e.headerView(config);
+            view.addTarget(this);
+
+            this.fire('renderHeader', { view: view });
+        }
+
+        if (e.footerView) {
+            config = flatten(e.footerConfig || {});
+            config.container = this._createTFoot();
+
+            view = new e.footerView(config);
+            view.addTarget(this);
+
+            this.fire('renderFooter', { view: view });
+        }
+
+        if (e.bodyView) {
+            config = flatten(e.bodyConfig || {});
+            config.container = this._createTBody();
+
+            view = new e.bodyView(config);
+            view.addTarget(this);
+
+            this.fire('renderBody', { view: view });
+        }
+
+    },
+
+    /**
+    Contains column configuration objects for those columns believed to be intended for display in the `<tbody>`. Populated by `\_setDisplayColumns`.
+
+    @property _displayColumns
+    @type {Object[]}
+    @value undefined (initially not set)
+    **/
+    //_displayColumns: null,
 
     /**
     The getter for the `columns` attribute.  Returns the array of column
@@ -649,6 +872,8 @@ Y.mix(Table.prototype, {
         }
 
         this._setColumnMap(columns);
+
+        this._setDisplayColumns(columns);
     },
 
     /**
@@ -685,6 +910,36 @@ Y.mix(Table.prototype, {
         }
 
         this.data = data;
+
+        this.data.addTarget(this);
+    },
+
+    /**
+    Publishes core events.
+
+    @method _initEvents
+    @protected
+    **/
+    _initEvents: function () {
+        this.publish({
+            // Y.bind used to allow late binding for method override support
+            renderTable : {
+                fireOnce: true,
+                defaultFn: Y.bind('_defRenderTableFn', this)
+            },
+            renderHeader: {
+                fireOnce: true,
+                defaultFn: Y.bind('_defRenderHeaderFn', this)
+            },
+            renderBody  : {
+                fireOnce: true,
+                defaultFn: Y.bind('_defRenderBodyFn', this)
+            },
+            renderFooter: {
+                fireOnce: true,
+                defaultFn: Y.bind('_defRenderFooterFn', this)
+            }
+        });
     },
 
     /**
@@ -701,6 +956,8 @@ Y.mix(Table.prototype, {
         this._initData();
 
         this._initViewConfig();
+
+        this._initEvents();
 
         this.after('columnsChange', this._afterColumnsChange);
     },
@@ -863,105 +1120,6 @@ Y.mix(Table.prototype, {
     },
 
     /**
-    Delegates rendering the table `<tbody>` to the configured `bodyView`.
-
-    @method _renderBody
-    @protected
-    **/
-    _renderBody: function () {
-        var BodyView = this.get('bodyView');
-
-        // TODO: use a _viewConfig object that can be mixed onto by class
-        // extensions, then pass that to either the view constructor or setAttrs
-        if (BodyView) {
-            // Can't use merge because it doesn't iterate prototype properties,
-            // so would miss the configs from _viewConfig.
-            Y.mix(this._bodyConfig, {
-                container: this._tableNode,
-                columns  : this.get('columns'),
-                modelList: this.data
-            }, true);
-
-            this.body = new BodyView(this._bodyConfig);
-
-            this.body.addTarget(this);
-            this.body.render();
-        }
-    },
-
-    /**
-    Delegates rendering the table `<tfoot>` to the configured `footerView`.
-
-    @method _renderFooter
-    @protected
-    **/
-    _renderFooter: function (table, data) {
-        var FooterView = this.get('footerView');
-        
-        if (FooterView) {
-            // Can't use merge because it doesn't iterate prototype properties,
-            // so would miss the configs from _viewConfig.
-            Y.mix(this._footerConfig, {
-                container: this._tableNode,
-                columns  : this.get('columns'),
-                modelList: this.data
-            }, true);
-
-            this.foot = new FooterView(this._footerConfig);
-
-            this.foot.addTarget(this);
-            this.foot.render();
-        }
-    },
-
-    /**
-    Delegates rendering the table `<thead>` to the configured `headerView`.
-
-    @method _renderHeader
-    @protected
-    **/
-    _renderHeader: function () {
-        var HeaderView = this.get('headerView');
-        
-        if (HeaderView) {
-            // Can't use merge because it doesn't iterate prototype properties,
-            // so would miss the configs from _viewConfig.
-            Y.mix(this._headerConfig, {
-                container: this._tableNode,
-                columns  : this.get('columns'),
-                modelList: this.data
-            }, true);
-
-            this.head = new HeaderView(this._headerConfig);
-
-            this.head.addTarget(this);
-            this.head.render();
-        }
-        // TODO: If there's no HeaderView, should I remove an existing <thead>?
-    },
-
-    /**
-    Creates the table and caption and assigns the table's summary attribute.
-
-    Assigns the generated table to the `\_tableNode` property.
-
-    @method _renderTable
-    @protected
-    **/
-    _renderTable: function () {
-        var caption = this.get('caption');
-
-        if (!this._tableNode) {
-            this._tableNode = Y.Node.create(this.TABLE_TEMPLATE);
-        }
-        this._tableNode.addClass(this.getClassName('table'));
-
-        this._uiUpdateSummary(this.get('summary'));
-
-        this._uiUpdateCaption(caption);
-    },
-
-    /**
     Builds the table and attaches it to the DOM.  This requires the host class
     to provide a `contentBox` attribute.  This is typically provided by Widget.
 
@@ -973,13 +1131,20 @@ Y.mix(Table.prototype, {
             table;
 
         if (contentBox) {
-            this._renderTable();
+            // _viewConfig is the prototype for _headerConfig et al.
+            this._viewConfig.columns   = this.get('columns');
+            this._viewConfig.modelList = this.data;
 
-            this._renderHeader();
+            this.fire('renderTable', {
+                headerView  : this.get('headerView'),
+                headerConfig: this._headerConfig,
 
-            this._renderFooter();
+                bodyView    : this.get('bodyView'),
+                bodyConfig  : this._bodyConfig,
 
-            this._renderBody();
+                footerView  : this.get('footerView'),
+                footerConfig: this._footerConfig
+            });
 
             table = this._tableNode;
 
@@ -1072,6 +1237,36 @@ Y.mix(Table.prototype, {
     },
 
     /**
+    Stores an array of columns intended for display in the `\_displayColumns`
+    property.  This method assumes that if a column configuration object does
+    not have children, it is a display column.
+
+    @method _setDisplayColumns
+    @param {Object[]} columns Column config array to extract display columns from
+    @protected
+    **/
+    _setDisplayColumns: function (columns) {
+        function extract(cols) {
+            var display = [],
+                i, len, col;
+
+            for (i = 0, len = cols.length; i < len; ++i) {
+                col = cols[i];
+
+                if (col.children) {
+                    display.push.apply(display, extract(col.children));
+                } else {
+                    display.push(col);
+                }
+            }
+
+            return display;
+        }
+
+        this._displayColumns = extract(columns);
+    },
+
+    /**
     Relays the value assigned to the deprecated `recordset` attribute to the
     `data` attribute.  If a Recordset instance is passed, the raw object data
     will be culled from it.
@@ -1128,11 +1323,11 @@ Y.mix(Table.prototype, {
     Creates, removes, or updates the table's `<caption>` element per the input
     value.  Empty values result in the caption being removed.
 
-    @method _uiUpdateCaption
+    @method _uiSetCaption
     @param {HTML} htmlContent The content to populate the table caption
     @protected
     **/
-    _uiUpdateCaption: function (htmlContent) {
+    _uiSetCaption: function (htmlContent) {
         var caption = this._tableNode.one('> caption');
 
         if (htmlContent) {
@@ -1170,11 +1365,30 @@ Y.mix(Table.prototype, {
     /**
     Updates the table's `summary` attribute with the input value.
 
-    @method _uiUpdateSummary
+    @method _uiSetSummary
     @protected
     **/
-    _uiUpdateSummary: function (summary) {
+    _uiSetSummary: function (summary) {
         this._tableNode.setAttribute('summary', summary || '');
+    },
+
+    /**
+    Sets the `boundingBox` and table width per the input value.
+
+    @method _uiSetWidth
+    @param {Number|String} width The width to make the table
+    @protected
+    **/
+    _uiSetWidth: function (width) {
+        if (isNumber(width)) {
+            // DEF_UNIT from Widget
+            width += this.DEF_UNIT;
+        }
+
+        if (isString(width)) {
+            this._uiSetDim('width', width);
+            this._tableNode.setStyle('width', width);
+        }
     },
 
     /**
@@ -1189,7 +1403,7 @@ Y.mix(Table.prototype, {
         return val === null || (isFunction(val) && val.prototype.render);
     }
 });
-}, 'gallery-2012.01.11-21-03', { requires: ['model-list'] });
+}, 'gallery-2012.01.18-21-09', { requires: ['model-list'] });
 
 YUI.add('gallery-datatable-350-preview-head', function (Y) {
 /**
@@ -1255,8 +1469,8 @@ column object properties to populate them.
 @namespace DataTable
 @extends View
 **/
-var fromTemplate = Y.Lang.sub,
-    Lang = Y.Lang,
+var Lang = Y.Lang,
+    fromTemplate = Lang.sub,
     isArray = Lang.isArray,
     toArray = Y.Array,
 
@@ -1272,15 +1486,10 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
 
     @property CELL_TEMPLATE
     @type {HTML}
-    @default '<th id="{_yuid}" abbr="{abbr} colspan="{colspan}" rowspan="{rowspan}"><div class="{linerClass}">{content}</div></th>'
+    @default '<th id="{_yuid}" abbr="{abbr} colspan="{colspan}" rowspan="{rowspan}">{content}</th>'
     **/
     CELL_TEMPLATE :
-        '<th id="{_yuid}" abbr="{abbr}" ' +
-                'colspan="{colspan}" rowspan="{rowspan}">' +
-            '<div class="{linerClass}">' +
-                '{content}' +
-            '</div>' +
-        '</th>',
+        '<th id="{_yuid}" abbr="{abbr}" colspan="{colspan}" rowspan="{rowspan}">{content}</th>',
 
     /**
     The data representation of the header rows to render.  This is assigned by
@@ -1317,16 +1526,6 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
     ROW_TEMPLATE:
         '<tr>{content}</tr>',
 
-    /**
-    Template used to create the table's thead markup.
-
-    @property THEAD_TEMPLATE
-    @type {HTML}
-    @default '<thead class="{classes}">{content}</thead>'
-    **/
-    THEAD_TEMPLATE:
-        '<thead class="{classes}">{content}</thead>',
-
 
     // -- Public methods ------------------------------------------------------
 
@@ -1350,57 +1549,34 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
     },
 
     /**
-    Creates the `<thead>` Node by assembling markup generated by populating the
-    `THEAD\_TEMPLATE`, `ROW\_TEMPLATE`, and `CELL\_TEMPLATE` templates with
-    content from the `columns` property.
+    Creates the `<thead>` Node content by assembling markup generated by
+    populating the `ROW\_TEMPLATE` and `CELL\_TEMPLATE` templates with content
+    from the `columns` property.
     
     @method render
     @return {HeaderView} The instance
     @chainable
     **/
     render: function () {
-        var table    = this.get('container'),
+        var thead    = this.get('container'),
             columns  = this.columns,
-            thead    = this.source._theadNode,
             defaults = {
-                            abbr: '',
-                            colspan: 1,
-                            rowspan: 1,
-                            // TODO: remove dependence on this.source
-                            linerClass: this.getClassName('liner')
-                       },
-            existing, i, len, j, jlen, col, html;
+                abbr: '',
+                colspan: 1,
+                rowspan: 1
+            },
+            i, len, j, jlen, col, html, content;
 
-        table = Y.one(table);
-
-        if (table && table.get('tagName') !== 'TABLE') {
-            table = table.one('table');
-        }
-
-        if (!table) {
-            return this;
-        }
-
-        // TODO: limit to correctly classed thead?  Then I would need to
-        // replace a found thead without the class.
-        existing = table.one('> thead');
-
-        if (existing) {
-            if (!existing.compareTo(thead)) {
-                existing.replace(thead);
-            } else {
-                this._theadNode = existing;
-            }
-        } else {
-            thead = '';
+        if (thead && columns) {
+            html = '';
 
             if (columns.length) {
                 for (i = 0, len = columns.length; i < len; ++i) {
-                    html = '';
+                    content = '';
 
                     for (j = 0, jlen = columns[i].length; j < jlen; ++j) {
                         col = columns[i][j];
-                        html += fromTemplate(this.CELL_TEMPLATE,
+                        content += fromTemplate(this.CELL_TEMPLATE,
                             Y.merge(
                                 defaults,
                                 col, {
@@ -1411,19 +1587,13 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
                             ));
                     }
 
-                    thead += fromTemplate(this.ROW_TEMPLATE, {
-                        content: html
+                    html += fromTemplate(this.ROW_TEMPLATE, {
+                        content: content
                     });
                 }
             }
 
-            this._theadNode = thead = Y.Node.create(
-                fromTemplate(this.THEAD_TEMPLATE, {
-                    classes: this.getClassName('columns'),
-                    content: thead
-                }));
-            
-            table.insertBefore(thead, table.one('> tfoot, > tbody'));
+            thead.setContent(html);
         }
 
         this.bindUI();
@@ -1451,11 +1621,6 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
     **/
     _afterColumnsChange: function (e) {
         this.columns = this._parseColumns(e.newVal);
-
-        if (this._theadNode) {
-            this._theadNode.remove().destroy(true);
-            delete this._theadNode;
-        }
 
         this.render();
     },
@@ -1687,7 +1852,7 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
         return columns;
     }
 });
-}, 'gallery-2012.01.11-21-03', { requires: ['view', 'gallery-datatable-350-preview-core'] });
+}, 'gallery-2012.01.18-21-09', { requires: ['view', 'gallery-datatable-350-preview-core'] });
 
 YUI.add('gallery-datatable-350-preview-body', function (Y) {
 /**
@@ -1765,8 +1930,8 @@ advisable to always return `false` from your `nodeFormatter`s_.
 **/
 var Lang         = Y.Lang,
     isArray      = Lang.isArray,
+    fromTemplate = Lang.sub,
     htmlEscape   = Y.Escape.html,
-    fromTemplate = Y.Lang.sub,
     toArray      = Y.Array,
     bind         = Y.bind,
     YObject      = Y.Object,
@@ -1782,17 +1947,9 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
 
     @property CELL_TEMPLATE
     @type {HTML}
-    @default
-        '<td headers="{headers}" class="{classes}">
-            '<div class="{linerClass}">{content}</div>
-        </td>'
+    @default '<td headers="{headers}" class="{classes}">{content}</td>'
     **/
-    CELL_TEMPLATE:
-        '<td headers="{headers}" class="{classes}">' +
-            '<div class="{linerClass}">' +
-                '{content}' +
-            '</div>' +
-        '</td>',
+    CELL_TEMPLATE: '<td headers="{headers}" class="{classes}">{content}</td>',
 
     /**
     CSS class applied to even rows.  This is assigned at instantiation after
@@ -1826,7 +1983,7 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     @default '<tr id="{clientId}" class="{rowClasses}">{content}</tr>'
     **/
     ROW_TEMPLATE :
-        '<tr id="{clientId}" class="{rowClasses}">' +
+        '<tr role="row" id="{rowId}" class="{rowClasses}">' +
             '{content}' +
         '</tr>',
 
@@ -1842,15 +1999,6 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     //TODO: should this be protected?
     //source: null,
 
-    /**
-    HTML template used to create table's `<tbody>`.
-
-    @property TBODY_TEMPLATE
-    @type {HTML}
-    @default '<tbody class="{classes}">{content}</tbody>'
-    **/
-    TBODY_TEMPLATE: '<tbody class="{classes}">{content}</tbody>',
-
     // -- Public methods ------------------------------------------------------
 
     /**
@@ -1863,10 +2011,11 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     @return {Node}
     **/
     getCell: function (row, col) {
-        var el = null;
+        var el    = null,
+            tbody = this.get('container');
 
-        if (this._tbodyNode) {
-            el = this._tbodyNode.getDOMNode().rows[+row];
+        if (tbody) {
+            el = tbody.getDOMNode().rows[+row];
             el && (el = el.cells[+col]);
         }
         
@@ -1900,24 +2049,19 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     @param {Number} row Zero based index of the row
     @return {Node}
     **/
-    // TODO: Support index as clientId => _tbodyNode.one('> #' + index)?
+    // TODO: Support index as clientId => container.one('> #' + index)?
     getRow: function (index) {
-        var el;
+        var tbody = this.get('container');
 
-        if (this._tbodyNode) {
-            el = this._tbodyNode.getDOMNode().rows[+index];
-        }
-
-        return Y.one(el);
+        return Y.one(tbody && tbody.getDOMNode().rows[+index]);
     },
 
     /**
-    Creates the table's `<tbody>` Node by assembling markup generated by
-    populating the `TBODY\_TEMPLATE`, `ROW\_TEMPLATE`, and `CELL\_TEMPLATE`
-    templates with content from the `columns` property and `modelList`
-    attribute.
+    Creates the table's `<tbody>` content by assembling markup generated by
+    populating the `ROW\_TEMPLATE`, and `CELL\_TEMPLATE` templates with content
+    from the `columns` property and `modelList` attribute.
 
-    The rendering process happens in four stages:
+    The rendering process happens in three stages:
 
     1. A row template is assembled from the `columns` property (see
        `\_createRowTemplate`)
@@ -1927,11 +2071,9 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
        `formatter`s, the function is called to generate cell content. Cells
        with `nodeFormatter`s are ignored. For all other cells, the data value
        from the Model attribute for the given column key is used.  The
-       accumulated row markup is then inserted into the `TBODY_TEMPLATE`.
+       accumulated row markup is then inserted into the container.
 
-    3. The `<tbody>` Node is created from the HTML string.
-
-    4. If any column is configured with a `nodeFormatter`, the `modelList` is
+    3. If any column is configured with a `nodeFormatter`, the `modelList` is
        iterated again to apply the `nodeFormatter`s.
 
     Supported properties of the column objects include:
@@ -1995,48 +2137,20 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     @chainable
     **/
     render: function () {
-        var table    = this.get('container'),
-            data     = this.get('modelList'),
-            columns  = this.columns,
-            tbody    = this._tbodyNode,
-            existing;
-
-        table =  Y.one(table);
-
-        if (table && table.get('tagName') !== 'TABLE') {
-            table = table.one('table');
-        }
-
-        if (!table) {
-            return this;
-        }
-
-        existing = table.one('> .' + this.getClassName('data'));
+        var tbody   = this.get('container'),
+            data    = this.get('modelList'),
+            columns = this.columns;
 
         // Needed for mutation
         this._createRowTemplate(columns);
 
-        if (existing) {
-            if (tbody) {
-                if (!existing.compareTo(tbody)) {
-                    existing.replace(tbody);
-                }
-            } else {
-                this._tbodyNode = existing;
-            }
-        } else if (data) {
-            tbody = Y.Node.create(this._createDataHTML(columns));
+        if (tbody && data) {
+            tbody.setContent(this._createDataHTML(columns));
 
             this._applyNodeFormatters(tbody, columns);
-
-            table.append(tbody);
-
-            this._tbodyNode = tbody;
         }
 
-        if (this._tbodyNode) {
-            this.bindUI();
-        }
+        this.bindUI();
 
         return this;
     },
@@ -2059,11 +2173,6 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     _afterColumnsChange: function (e) {
         this.columns = this._parseColumns(e.newVal);
 
-        if (this._tbodyNode) {
-            this._tbodyNode.remove().destroy(true);
-            delete this._tbodyNode;
-        }
-
         this.render();
     },
     
@@ -2078,11 +2187,6 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     **/
     _afterDataChange: function (e) {
         // Baseline view will just rerender the tbody entirely
-        if (this._tbodyNode) {
-            this._tbodyNode.remove().destroy(true);
-            delete this._tbodyNode;
-        }
-
         this.render();
     },
 
@@ -2168,7 +2272,7 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
 
         if (!handles.dataChange) {
             handles.dataChange = 
-                data.after(['*:change', '*:add', '*:remove', '*:destroy', '*:reset'],
+                data.after(['*:change', 'add', 'remove', 'reset'],
                     bind('_afterDataChange', this));
         }
     },
@@ -2206,10 +2310,7 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
             }, this);
         }
 
-        return fromTemplate(this.TBODY_TEMPLATE, {
-            classes: this.getClassName('data'),
-            content: html
-        });
+        return html;
     },
 
     /**
@@ -2246,16 +2347,15 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     **/
     _createRowHTML: function (model, index) {
         var data    = model.getAttrs(),
-            // To prevent formatters from leaking changes when more than one
-            // column refer to the same key
-            values  = YObject(data),
+            values  = {
+                rowId: data.clientId,
+                // TODO: Be consistent and change to row-classes? This could be
+                // clobbered by a column named 'row'.
+                rowClasses: (index % 2) ? this.CLASS_ODD : this.CLASS_EVEN
+            },
             source  = this.source || this,
             columns = this.columns,
             i, len, col, token, value, formatterData;
-
-        // TODO: Be consistent and change to row-classes? This could be
-        // clobbered by a column named 'row'.
-        values.rowClasses = (index % 2) ? this.CLASS_ODD : this.CLASS_EVEN;
 
         for (i = 0, len = columns.length; i < len; ++i) {
             col   = columns[i];
@@ -2290,9 +2390,8 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
                 }
             }
 
-            if ((value === undefined || value === '') &&
-                col.emptyCellValue) {
-                value = col.emptyCellValue;
+            if ((value === undefined || value === '')) {
+                value = col.emptyCellValue || '';
             }
 
             values[token] = col.allowHTML ? value : htmlEscape(value);
@@ -2315,7 +2414,6 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     _createRowTemplate: function (columns) {
         var html         = '',
             cellTemplate = this.CELL_TEMPLATE,
-            linerClass   = this.getClassName('liner'),
             tokens       = {},
             i, len, col, key, token, tokenValues;
 
@@ -2326,7 +2424,6 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
             if (key) {
                 if (tokens[key]) {
                     token = key + (tokens[key]++);
-                    col._renderToken = token;
                 } else {
                     token = key;
                     tokens[key] = 1;
@@ -2335,10 +2432,11 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
                 token = col.name || col._yuid;
             }
 
+            col._renderToken = token;
+
             tokenValues = {
                 content   : '{' + token + '}',
                 headers   : col.headers.join(' '),
-                linerClass: linerClass,
                 // TODO: should this be getClassName(token)? Both?
                 classes   : this.getClassName(key) + ' {' + token + '-classes}'
             };
@@ -2395,7 +2493,6 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
 
         this.source  = config.source;
         this.columns = this._parseColumns(config.columns);
-        this._tbodyNode = config.tbodyNode;
 
         this._eventHandles = {};
 
@@ -2456,7 +2553,7 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     **/
     //_rowTemplate: null
 });
-}, 'gallery-2012.01.11-21-03', { requires: ['view', 'gallery-datatable-350-preview-core'] });
+}, 'gallery-2012.01.18-21-09', { requires: ['view', 'gallery-datatable-350-preview-core'] });
 
 YUI.add('gallery-datatable-350-preview-base', function (Y) {
 /**
@@ -2719,7 +2816,7 @@ Y.DataTable.Base = Y.Base.create('datatable', Y.Widget, [Y.DataTable.Core],
 Y.DataTable = Y.mix(
     Y.Base.create('datatable', Y.DataTable.Base, []), // Create the class
     Y.DataTable); // Migrate static and namespaced classes
-}, 'gallery-2012.01.11-21-03', { requires: ['model-list', 'view', 'base-build', 'widget', 'escape', 'gallery-datatable-350-preview-core'] });
+}, 'gallery-2012.01.18-21-09', { requires: ['model-list', 'view', 'base-build', 'widget', 'escape', 'gallery-datatable-350-preview-core'] });
 
 YUI.add('gallery-datatable-350-preview-mutable', function (Y) {
 var toArray = Y.Array,
@@ -3101,10 +3198,10 @@ Y.mix(Mutable.prototype, {
     **/
     initializer: function () {
         this.publish({
-            addColumn:    { defaultFn: this._defAddColumnFn },
-            removeColumn: { defaultFn: this._defRemoveColumnFn },
-            moveColumn:   { defaultFn: this._defMoveColumnFn },
-            modifyColumn: { defaultFn: this._defModifyColumnFn }
+            addColumn:    { defaultFn: Y.bind('_defAddColumnFn', this) },
+            removeColumn: { defaultFn: Y.bind('_defRemoveColumnFn', this) },
+            moveColumn:   { defaultFn: Y.bind('_defMoveColumnFn', this) },
+            modifyColumn: { defaultFn: Y.bind('_defModifyColumnFn', this) }
         });
     }
 });
@@ -3127,7 +3224,9 @@ named method for readability.
 Mutable.prototype.addRows = Mutable.prototype.addRow;
 
 // Add feature APIs to public Y.DataTable class
-Y.Base.mix(Y.DataTable, [Mutable]);
+if (YLang.isFunction(Y.DataTable)) {
+    Y.Base.mix(Y.DataTable, [Mutable]);
+}
 
 /**
 Fired by the `addColumn` method.
@@ -3164,13 +3263,884 @@ Fired by the `moveColumn` method.
 @param {Object} index The destination index to move to
 **/
 
-}, 'gallery-2012.01.11-21-03', { requires: ['gallery-datatable-350-preview-base'] });
+}, 'gallery-2012.01.18-21-09', { requires: ['gallery-datatable-350-preview-base'] });
+
+YUI.add('gallery-datatable-350-preview-column-widths', function (Y) {
+/**
+Adds basic, programmatic column width support to DataTable. Note, this does not
+add support for truncated columns.  Due to the way HTML tables render, column
+width is more like `min-width`.  Column content wider than the assigned width
+will cause the column to expand, though if a table width is set, the overall
+width will be respected by reducing the width of other columns if possible.
+
+To set a column width, either add a `width` value to the column configuration
+or call the `setColumnWidth(id, width)` method.
+
+Note, assigning column widths is possible without this module, as each cell is
+decorated with a class appropriate for that column which you can statically
+target in your site's CSS.  To achieve forced column widths with truncation,
+either add a column `formatter` or update the table's `bodyView`'s
+`CELL_TEMPLATE` to include a `<div>` liner (by convention, assigned a classname
+"yui3-datatable-liner"), then set the width and overflow for those `<div>`s in
+your CSS.  For example, to give the column "foo" an absolute width, add this to
+your site CSS:
+
+```
+.yui3-datatable .yui3-datatable-foo .yui3-datatable-liner {
+    overflow: hidden;
+    width: 125px;
+}
+```
+
+and assign a `formatter` for the "foo" column in your JavaScript:
+
+```
+var table = new Y.DataTable({
+    columns: [
+        {
+            key: 'foo',
+            formatter: '<div class="yui3-datatable-liner">{value}</div>',
+            allowHTML: true
+        },
+        ...
+    ],
+    ...
+});
+```
+
+To add a liner to all columns, either provide a custom `bodyView` to the
+DataTable constructor or update the default `bodyView`'s `CELL_TEMPLATE` like
+so:
+
+```
+table.on('renderBody', function (e) {
+    e.view.CELL_TEMPLATE = e.view.CELL_TEMPLATE.replace(/\{content\}/,
+            '<div class="yui3-datatable-liner">{content}</div>');
+});
+```
+
+Keep in mind that DataTable skins apply cell `padding`, so assign your CSS
+`width`s accordingly or override the `padding` style for that column's `<td>`s
+to 0, and add `padding` to the liner `<div>`'s styles.
+
+@module datatable-column-widths
+**/
+var isNumber = Y.Lang.isNumber,
+    arrayIndex = Y.Array.indexOf;
+
+Y.Features.add('table', 'badColWidth', {
+    test: function () {
+        var body = Y.one('body'),
+            node, broken;
+
+        if (body) {
+            // In modern browsers, <col style="width:X"> will make columns,
+            // *including padding and borders* X wide. The cell content width
+            // is reduced.  In old browsers and all Opera versions to date, the
+            // col's width style is passed to the cells, which causes cell
+            // padding/border to bloat the rendered width.
+            node = body.insertBefore(
+                '<table style="position:absolute;visibility:hidden;border:0 none">' +
+                    '<colgroup><col style="width:9px"></colgroup>' +
+                    '<tbody><tr>' +
+                        '<td style="' +
+                            'padding:0 4px;' +
+                            'font:normal 2px/2px arial;' +
+                            'border:0 none">' +
+                        '.' + // Just something to give the cell dimension
+                    '</td></tr></tbody>' +
+                '</table>',
+                body.get('firstChild'));
+
+            broken = node.one('td').getComputedStyle('width') !== '1px';
+
+            node.remove(true);
+        }
+
+        return broken;
+    }
+});
+
+/**
+Class extension for DataTable to add support for assigning column widths.
+
+@class DataTable.ColumnWidths
+**/
+function ColumnWidths() {}
+
+Y.mix(ColumnWidths.prototype, {
+    /**
+    The HTML template used to create the table's `<col>`s.
+
+    @property COL_TEMPLATE
+    @type {HTML}
+    @default '<col/>'
+    **/
+    COL_TEMPLATE: '<col/>',
+
+    /**
+    The HTML template used to create the table's `<colgroup>`.
+
+    @property COLGROUP_TEMPLATE
+    @type {HTML}
+    @default '<colgroup/>'
+    **/
+    COLGROUP_TEMPLATE: '<colgroup/>',
+
+    /**
+    Assigns the style width of the `<col>` representing the column identifed by
+    `id` and updates the column configuration.
+
+    Pass the empty string for `width` to return a column to auto sizing.
+
+    This does not trigger a `columnsChange` event today, but I can be convinced
+    that it should.
+
+    @method setColumnWidth
+    @param {Number|String|Object} id The column config object or key, name, or
+            index of a column in the host's `\_displayColumns` array.
+    @param {Number|String} width CSS width value. Numbers are treated as pixels
+    **/
+    setColumnWidth: function (id, width) {
+        var col = this.getColumn(id),
+            index = col && arrayIndex(this._displayColumns, col);
+
+        if (index > -1) {
+            if (isNumber(width)) {
+                width += 'px';
+            }
+
+            col.width = width;
+
+            this._setColumnWidth(index, width);
+        }
+    },
+
+    //----------------------------------------------------------------------------
+    // Protected properties and methods
+    //----------------------------------------------------------------------------
+
+    /**
+    Renders the table's `<colgroup>` and populates the `\_colgroupNode` property.
+
+    @method _createColumnGroup
+    @protected
+    **/
+    _createColumnGroup: function () {
+        return Y.Node.create(this.COLGROUP_TEMPLATE);
+    },
+
+    /**
+    Hooks up to the rendering lifecycle to also render the `<colgroup>` and
+    subscribe to `columnChange` events.
+
+    @method initializer
+    @protected
+    **/
+    initializer: function (config) {
+        this.after('renderTable', function (e) {
+            this._uiSetColumns();
+
+            this.after('columnsChange', this._uiSetColumns);
+        });
+    },
+
+    /**
+    Sets a columns's `<col>` element width style. This is needed to get around
+    browser rendering differences.
+
+    The colIndex corresponds to the item index of the `<col>` in the table's
+    `<colgroup>`.
+
+    To unset the width, pass a falsy value for the `width`.
+
+    @method _setColumnWidth
+    @param {Number} colIndex The display column index
+    @param {Number|String} width The desired width
+    @protected
+    **/
+    // TODO: move this to a conditional module
+    _setColumnWidth: function (colIndex, width) {
+        // Opera (including Opera Next circa 1/13/2012) and IE7- pass on the
+        // width style to the cells directly, allowing padding and borders to
+        // expand the rendered width.  Chrome 16, Safari 5.1.1, and FF 3.6+ all
+        // make the rendered width equal the col's style width, reducing the
+        // cells' calculated width.
+        var colgroup  = this._colgroupNode,
+            col       = colgroup && colgroup.all('col').item(colIndex),
+            firstRow, cell, getCStyle;
+
+        if (col) {
+            if (width && isNumber(width)) {
+                width += 'px';
+            }
+
+            col.setStyle('width', width);
+
+            // Adjust the width for browsers that make
+            // td.style.width === col.style.width
+            if  (width && Y.Features.test('table', 'badColWidth')) {
+                firstRow = this._tbodyNode && this._tbodyNode.one('tr');
+                cell     = firstRow && firstRow.all('td').item(colIndex);
+                
+                if (cell) {
+                    getCStyle = function (prop) {
+                        return parseInt(cell.getComputedStyle(prop), 10)|0;
+                    };
+
+                    col.setStyle('width',
+                        // I hate this
+                        parseInt(width, 10) -
+                        getCStyle('paddingLeft') -
+                        getCStyle('paddingRight') -
+                        getCStyle('borderLeftWidth') -
+                        getCStyle('borderRightWidth') + 'px');
+
+                }
+            }
+        }
+    },
+
+    /**
+    Populates the table's `<colgroup>` with a `<col>` per item in the `columns`
+    attribute without children.  It is assumed that these are the columns that
+    have data cells renderered for them.
+
+    @method _uiSetColumns
+    @protected
+    **/
+    _uiSetColumns: function () {
+        var template = this.COL_TEMPLATE,
+            colgroup = this._colgroupNode,
+            columns  = this._displayColumns,
+            i, len;
+
+        if (!colgroup) {
+            colgroup = this._colgroupNode = this._createColumnGroup();
+
+            this._tableNode.insertBefore(
+                colgroup,
+                this._tableNode.one('> thead, > tfoot, > tbody'));
+        } else {
+            colgroup.empty();
+        }
+
+        for (i = 0, len = columns.length; i < len; ++i) {
+
+            colgroup.append(template);
+
+            this._setColumnWidth(i, columns[i].width);
+        }
+    }
+}, true);
+
+Y.DataTable.ColumnWidths = ColumnWidths;
+
+Y.Base.mix(Y.DataTable, [ColumnWidths]);
+}, 'gallery-2012.01.18-21-09', { requires: ['gallery-datatable-350-preview-base'] });
+
+YUI.add('gallery-datatable-350-preview-scroll', function (Y) {
+// TODO: split this into a plugin and a class extension to add the ATTRS (ala
+// Plugin.addHostAttr()
+
+/**
+Adds the ability to make the table rows scrollable while preserving the header
+placement.
+
+There are two types of scrolling, horizontal (x) and vertical (y).  Horizontal
+scrolling is achieved by wrapping the entire table in a scrollable container.
+Vertical scrolling is achieved by splitting the table headers and data into two
+separate tables, the latter of which is wrapped in a vertically scrolling
+container.  In this case, column widths of header cells and data cells are kept
+in sync programmatically.
+
+Since the split table synchronization can be costly at runtime, the split is only done if the data in the table stretches beyond the configured `height` value.
+
+To activate or deactivate scrolling, set the `scrollable` attribute to one of
+the following values:
+
+ * `false` - (default) Scrolling is disabled.
+ * `true` or 'xy' - If `height` is set, vertical scrolling will be activated, if
+            `width` is set, horizontal scrolling will be activated.
+ * 'x' - Activate horizontal scrolling only. Requires the `width` attribute is
+         also set.
+ * 'y' - Activate vertical scrolling only. Requires the `height` attribute is
+         also set.
+
+ @module @datatable-scroll
+ @class DataTable.Scrollable
+ @for DataTable
+**/
+var YLang = Y.Lang,
+    isString = YLang.isString,
+    isNumber = YLang.isNumber,
+    isArray  = YLang.isArray,
+
+    Scrollable;
+
+Y.DataTable.Scrollable = Scrollable = function () {};
+
+Scrollable.ATTRS = {
+    /**
+    Activates or deactivates scrolling in the table.  Acceptable values are:
+
+     * `false` - (default) Scrolling is disabled.
+     * `true` or 'xy' - If `height` is set, vertical scrolling will be activated, if
+                `width` is set, horizontal scrolling will be activated.
+     * 'x' - Activate horizontal scrolling only. Requires the `width` attribute is
+             also set.
+     * 'y' - Activate vertical scrolling only. Requires the `height` attribute is
+             also set.
+
+    @attribute scrollable
+    @type {String|Boolean}
+    @value false
+    **/
+    scrollable: {
+        value: false,
+        setter: '_setScrollable'
+    }
+};
+
+Y.mix(Scrollable.prototype, {
+    /**
+    Template for the `<div>` that is used to contain the rows when the table is
+    vertically scrolling.
+
+    @property SCROLLING_CONTAINER_TEMPLATE
+    @type {HTML}
+    @value '<div class="{classes}"><table></table></div>'
+    **/
+    SCROLLING_CONTAINER_TEMPLATE: '<div class="{classes}"><table></table></div>',
+
+    /**
+    Scrolls a given row or cell into view if the table is scrolling.  Pass the
+    `clientId` of a Model from the DataTable's `data` ModelList or its row
+    index to scroll to a row or a [row index, column index] array to scroll to
+    a cell.  Alternately, to scroll to any element contained within the table's
+    scrolling areas, pass its ID, or the Node itself (though you could just as
+    well call `node.scrollIntoView()` yourself, but hey, whatever).
+
+    @method scrollTo
+    @param {String|Number|Number[]|Node} id A row clientId, row index, cell
+            coordinate array, id string, or Node
+    **/
+    scrollTo: function (id) {
+        var target;
+
+        if (id && this._tbodyNode && (this._yScrollNode || this._xScrollNode)) {
+            if (isArray(id)) {
+                target = this.getCell(id);
+            } else if (isNumber(id)) { 
+                target = this.getRow(id);
+            } else if (isString(id)) {
+                target = this._tbodyNode.one('#' + id);
+            } else if (id instanceof Y.Node &&
+                    // TODO: ancestor(yScrollNode, xScrollNode)
+                    id.ancestor('.yui3-datatable') === this.get('boundingBox')) {
+                target = id;
+            }
+
+            target && target.scrollIntoView();
+        }
+    },
+
+    //----------------------------------------------------------------------------
+    // Protected properties and methods
+    //----------------------------------------------------------------------------
+    /**
+    Relays changes in the table structure or content to trigger a reflow of the
+    scrolling setup.
+
+    @method _afterContentChange
+    @param {EventFacade} e The relevant change event (ignored)
+    @protected
+    **/
+    _afterContentChange: function (e) {
+        this._mergeYScrollContent();
+        this._syncScrollUI();
+    },
+
+    /**
+    Reacts to changes in the `scrollable` attribute by updating the `\_xScroll`
+    and `\_yScroll` properties and syncing the scrolling structure accordingly.
+
+    @method _afterScrollableChange
+    @param {EventFacade} e The relevant change event (ignored)
+    @protected
+    **/
+    _afterScrollableChange: function (e) {
+        this._uiSetScrollable();
+        this._syncScrollUI();
+    },
+
+    /**
+    Syncs the scrolling structure if the table is configured to scroll vertically.
+
+    @method _afterScrollHeightChange
+    @param {EventFacade} e The relevant change event (ignored)
+    @protected
+    **/
+    _afterScrollHeightChange: function (e) {
+        this._yScroll && this._syncScrollUI();
+    },
+
+    /**
+    Attaches internal subscriptions to keep the scrolling structure up to date
+    with changes in the table's `data`, `columns`, `caption`, or `height`.  The
+    `width is taken care of already.
+
+    This executes after the table's native `bindUI` method.
+
+    @method _bindScrollUI
+    @protected
+    **/
+    _bindScrollUI: function () {
+        this.after([
+            'dataChange',
+            'columnsChange',
+            'captionChange',
+            'heightChange'],
+            Y.bind('_afterContentChange', this));
+
+        this.data.after([
+            'add', 'remove', 'reset', '*:change'],
+            Y.bind('_afterContentChange', this));
+    },
+
+    /**
+    Calculates the height of the div containing the vertically scrolling rows.
+    The height is produced by subtracting the `offsetHeight` of the scrolling
+    `<div>` from the `clientHeight` of the `contentBox`.
+
+    @method _calcScrollHeight
+    @protected
+    **/
+    _calcScrollHeight: function () {
+        var scrollNode = this._yScrollNode;
+
+        return this.get('contentBox').get('clientHeight') -
+               scrollNode.get('offsetTop') -
+               // To account for padding and borders of the scroll div
+               scrollNode.get('offsetHeight') +
+               scrollNode.get('clientHeight');
+    },
+
+    /**
+    Populates the `\_yScrollNode` property by creating the `<div>` Node described
+    by the `SCROLLING_CONTAINER_TEMPLATE`.
+
+    @method _createYScrollNode
+    @protected
+    **/
+    _createYScrollNode: function () {
+        if (!this._yScrollNode) {
+            this._yScrollNode = Y.Node.create(
+                Y.Lang.sub(this.SCROLLING_CONTAINER_TEMPLATE, {
+                    classes: this.getClassName('data','container')
+                }));
+        }
+    },
+
+    /**
+    Assigns style widths to all columns based on their current `offsetWidth`s.
+    This faciliates creating a clone of the `<colgroup>` so column widths are
+    the same after the table is split in to header and data tables.
+
+    @method _fixColumnWidths
+    @protected
+    **/
+    _fixColumnWidths: function () {
+        var tbody     = this._tbodyNode,
+            table     = tbody.get('parentNode'),
+            firstRow  = tbody.one('tr'),
+            cells     = firstRow && firstRow.all('td'),
+            scrollbar = Y.DOM.getScrollbarWidth(),
+            widths    = [], i, len, cell;
+
+        if (cells) {
+            // The thead and tbody need to be in the same table to accurately
+            // calculate column widths.
+            this._tableNode.appendChild(this._tbodyNode);
+
+            i = cells.size() - 1;
+            cell = cells.item(i);
+
+            // FIXME? This may be fragile if the table has a fixed width and
+            // increasing the size of the last column would push the overall
+            // width beyond the configured width.
+            // bump up the width of the last column to account for the scrollbar.
+            this._setColumnWidth(i,
+                (cell.get('offsetWidth') + scrollbar) + 'px');
+
+            // Avoid assignment without scrollbar adjustment
+            cells.pop();
+
+            // Two passes so assigned widths don't cause subsequent width changes
+            // which would cost reflows.
+            widths = cells.get('offsetWidth');
+
+            for (i = 0, len = widths.length; i < len; ++i) {
+                this._setColumnWidth(i, widths[i] + 'px');
+            }
+
+            table.appendChild(this._tbodyNode);
+        }
+    },
+
+    /**
+    Sets up event handlers and AOP advice methods to bind the DataTable's natural
+    behaviors with the scrolling APIs and state.
+
+    @method initializer
+    @param {Object} config The config object passed to the constructor (ignored)
+    @protected
+    **/
+    initializer: function () {
+        this._setScrollProperties();
+
+        this.after(['scrollableChange', 'heightChange', 'widthChange'],
+            this._setScrollProperties);
+
+        Y.Do.after(this._bindScrollUI, this, 'bindUI');
+        Y.Do.after(this._syncScrollUI, this, 'syncUI');
+    },
+
+    /**
+    Merges the header and data tables back into one table if they are split.
+
+    @method _mergeYScrollContent
+    @protected
+    **/
+    _mergeYScrollContent: function () {
+        this.get('boundingBox').removeClass(this.getClassName('scrollable-y'));
+
+        if (this._yScrollNode) {
+            this._tableNode.append(this._tbodyNode);
+
+            this._yScrollNode.remove().destroy(true);
+            this._yScrollNode = null;
+
+            this._removeHeaderScrollPadding();
+
+            this._setARIARoles();
+        }
+
+        this._uiSetWidth(this.get('width'));
+        this._uiSetColumns();
+    },
+
+    /**
+    Removes the additional padding added to the last cells in each header row to
+    allow the scrollbar to fit below.
+
+    @method _removeHeaderScrollPadding
+    @protected
+    **/
+    _removeHeaderScrollPadding: function () {
+        var rows = this._theadNode.all('> tr').getDOMNodes(),
+            cell, i, len;
+
+        // The last cell in all rows of the table headers
+        for (i = 0, len = rows.length; i < len; i += (cell.rowSpan || 1)) {
+            cell = Y.one(rows[i].cells[rows[i].cells.length - 1])
+                .setStyle('paddingRight', '');
+        }
+    },
+
+    /**
+    Moves the ARIA "grid" role from the table to the `contentBox` and adds the
+    "presentation" role to both header and data tables to support the two
+    tables reporting as one table for screen readers.
+
+    @method _setARIARoles
+    @protected
+    **/
+    _setARIARoles: function () {
+        var contentBox = this.get('contentBox');
+
+        if (this._yScrollNode) {
+            this._tableNode.setAttribute('role', 'presentation');
+            this._yScrollNode.one('> table').setAttribute('role', 'presentation');
+            contentBox.setAttribute('role', 'grid');
+        } else {
+            this._tableNode.setAttribute('role', 'grid');
+            contentBox.removeAttribute('role');
+        }
+    },
+
+    /**
+    Adds additional padding to the current amount of right padding on each row's
+    last cell to account for the width of the scrollbar below.
+
+    @method _setHeaderScrollPadding
+    @protected
+    **/
+    _setHeaderScrollPadding: function () {
+        var rows = this._theadNode.all('> tr').getDOMNodes(),
+            padding, cell, i, len;
+
+        cell = Y.one(rows[0].cells[rows[0].cells.length - 1]);
+
+        padding = (Y.DOM.getScrollbarWidth() +
+                   parseInt(cell.getComputedStyle('paddingRight'), 10)) + 'px';
+
+        // The last cell in all rows of the table headers
+        for (i = 0, len = rows.length; i < len; i += (cell.rowSpan || 1)) {
+            cell = Y.one(rows[i].cells[rows[i].cells.length - 1])
+                .setStyle('paddingRight', padding);
+        }
+    },
+
+    /**
+    Accepts (case insensitive) values "x", "y", "xy", `true`, and `false`.
+    `true` is translated to "xy" and upper case values are converted to lower
+    case.  All other values are invalid.
+
+    @method _setScrollable
+    @param {String|Boolea} val Incoming value for the `scrollable` attribute
+    @return {String}
+    @protected
+    **/
+    _setScrollable: function (val) {
+        if (val === true) {
+            val = 'xy';
+        }
+
+        if (isString(val)) {
+            val = val.toLowerCase();
+        }
+
+        return (val === false || val === 'y' || val === 'x' || val === 'xy') ?
+            val :
+            Y.Attribute.INVALID_VALUE;
+    },
+
+    /**
+    Assigns the `\_xScroll` and `\_yScroll` properties to true if an
+    appropriate value is set in the `scrollable` attribute and the `height`
+    and/or `width` is set.
+
+    @method _setScrollProperties
+    @protected
+    **/
+    _setScrollProperties: function () {
+        var scrollable = this.get('scrollable') || '',
+            width      = this.get('width'),
+            height     = this.get('height');
+
+        this._xScroll = width  && scrollable.indexOf('x') > -1;
+        this._yScroll = height && scrollable.indexOf('y') > -1;
+    },
+
+    /**
+    Clones the fixed (see `\_fixColumnWidths` method) `<colgroup>` for use by the
+    table in the vertical scrolling container.  The last column's width is reduced
+    by the width of the scrollbar (which is offset by additional padding on the
+    last header cell(s) in the header table - see `\_setHeaderScrollPadding`).
+
+    @method _setYScrollColWidths
+    @protected
+    **/
+    _setYScrollColWidths: function () {
+        var scrollNode = this._yScrollNode,
+            table      = scrollNode && scrollNode.one('> table'),
+            // hack to account for right border
+            colgroup, lastCol;
+
+        if (table) {
+            scrollNode.all('colgroup,col').remove();
+            colgroup = this._colgroupNode.cloneNode(true);
+            colgroup.set('id', Y.stamp(colgroup));
+
+            // Browsers with proper support for column widths need the
+            // scrollbar width subtracted from the last column.
+            if (!Y.Features.test('table', 'badColWidth')) {
+                lastCol = colgroup.all('col').pop();
+
+                // Subtract the scrollbar width added to the last col
+                lastCol.setStyle('width',
+                    (parseInt(lastCol.getStyle('width'), 10) - 1 -
+                    Y.DOM.getScrollbarWidth()) + 'px');
+            }
+
+            table.insertBefore(colgroup, table.one('> thead, > tfoot, > tbody'));
+        }
+    },
+
+    /**
+    Splits the unified table with headers and data into two tables, the latter
+    contained within a vertically scrollable container `<div>`.
+
+    @method _splitYScrollContent
+    @protected
+    **/
+    _splitYScrollContent: function () {
+        var table = this._tableNode,
+            scrollNode = this._yScrollTable,
+            scrollbar  = Y.DOM.getScrollbarWidth(),
+            scrollTable, width;
+            
+        this.get('boundingBox').addClass(this.getClassName('scrollable-y'));
+
+        if (!scrollNode) {
+            // I don't want to take into account the added paddingRight done in
+            // _setHeaderScrollPadding for the data cells that will be
+            // scrolling below
+            this._fixColumnWidths();
+
+            this._setHeaderScrollPadding();
+
+            // lock the header table width in case the removal of the tbody would
+            // allow the table to shrink (such as when the tbody data causes a
+            // browser horizontal scrollbar).
+            width = parseInt(table.getComputedStyle('width'), 10);
+            table.setStyle('width', width + 'px');
+
+            this._createYScrollNode();
+            scrollNode  = this._yScrollNode;
+            scrollTable = scrollNode.one('table');
+            
+            scrollTable.append(this._tbodyNode);
+
+            table.insert(scrollNode, 'after');
+
+            scrollNode.setStyles({
+                height: this._calcScrollHeight() + 'px',
+                        // FIXME: Lazy hack to account for scroll node borders
+                width : (width - 2) + 'px'
+            });
+
+            scrollTable.setStyle('width', (width - scrollbar - 1) + 'px');
+            this._setARIARoles();
+        }
+
+        this._setYScrollColWidths();
+    },
+
+    /**
+    Calls `\_mergeYScrollContent` or `\_splitYScrollContent` depending on the
+    current widget state, accounting for current state.  That is, if the table
+    needs to be split, but is already, nothing happens.
+
+    @method _syncScrollUI
+    @protected
+    **/
+    _syncScrollUI: function () {
+        var scrollable  = this._xScroll || this._yScroll,
+            cBox        = this.get('contentBox'),
+            node        = this._yScrollNode || cBox,
+            table       = node.one('table'),
+            overflowing = this._yScroll &&
+                           (table.get('scrollHeight') > node.get('clientHeight'));
+
+        this._uiSetScrollable();
+
+        if (scrollable) {
+            // Only split the table if the content is longer than the height
+            if (overflowing) {
+                this._splitYScrollContent();
+            } else {
+                this._mergeYScrollContent();
+            }
+        } else {
+            this._mergeYScrollContent();
+        }
+
+        // TODO: fix X scroll.  I'll need to split tables here as well for the
+        // caption if there is one present, so the horizontal scroll happens
+        // under the stationary caption.
+        // Also, similarly, only activate the x scrolling if the table is wider
+        // than the configured width.
+    },
+
+    /**
+    Overrides the default Widget `\_uiSetWidth` to assign the width to either
+    the table or the `contentBox` (for horizontal scrolling) in addition to the
+    native behavior of setting the width of the `boundingBox`.
+
+    @method _uiSetWidth
+    @param {String|Number} width CSS width value or number of pixels
+    @protected
+    **/
+    _uiSetWidth: function (width) {
+        var scrollable = parseInt(width, 10) &&
+                         (this.get('scrollable')||'').indexOf('x') > -1;
+
+        if (isNumber(width)) {
+            width += this.DEF_UNIT;
+        }
+
+        this._uiSetDim('width', width);
+        this._tableNode.setStyle('width', scrollable ? '' : width);
+        // FIXME: this allows the caption to scroll out of view
+        this.get('contentBox').setStyle('width', scrollable ? width : '');
+
+        if (this._yScrollNode) {
+            this._mergeYScrollContent();
+            this._syncScrollUI();
+        }
+    },
+
+    /**
+    Assigns the appropriate class to the `boundingBox` to identify the DataTable
+    as horizontally scrolling, vertically scrolling, or both (adds both classes).
+
+    Classes added are "yui3-datatable-scrollable-x" or "...-y"
+
+    @method _uiSetScrollable
+    @protected
+    **/
+    _uiSetScrollable: function () {
+        // Initially add classes.  These may be purged by _syncScrollUI.
+        this.get('boundingBox')
+            .toggleClass(this.getClassName('scrollable','x'), this._xScroll)
+            .toggleClass(this.getClassName('scrollable','y'), this._yScroll);
+    }
+
+    /**
+    Indicates horizontal table scrolling is enabled.
+
+    @property _xScroll
+    @type {Boolean}
+    @default undefined (not initially set)
+    @private
+    **/
+    //_xScroll,
+
+    /**
+    Indicates vertical table scrolling is enabled.
+
+    @property _yScroll
+    @type {Boolean}
+    @default undefined (not initially set)
+    @private
+    **/
+    //_yScroll,
+
+    /**
+    Overflow Node used to contain the data rows in a vertically scrolling table.
+
+    @property _yScrollNode
+    @type {Node}
+    @default undefined (not initially set)
+    @protected
+    **/
+    //_yScrollNode
+
+    // TODO: Add _xScrollNode
+}, true);
+
+Y.Base.mix(Y.DataTable, [Scrollable]);
+}, 'gallery-2012.01.18-21-09', { requires: ['gallery-datatable-350-preview-base', 'gallery-datatable-350-preview-column-widths', 'dom-screen'] });
 
 Y.use('gallery-datatable-350-preview-core', 
       'gallery-datatable-350-preview-head', 
       'gallery-datatable-350-preview-body', 
       'gallery-datatable-350-preview-base', 
-      'gallery-datatable-350-preview-mutable');
+      'gallery-datatable-350-preview-mutable',
+      'gallery-datatable-350-preview-column-widths', 
+      'gallery-datatable-350-preview-scroll');
 
 
-}, 'gallery-2012.01.11-21-03' ,{requires:['base-build', 'widget', 'model-list', 'view', 'escape']});
+}, 'gallery-2012.01.18-21-09' ,{requires:['base-build', 'widget', 'model-list', 'view', 'escape', 'dom-screen']});
