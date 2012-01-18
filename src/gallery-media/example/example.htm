@@ -15,6 +15,10 @@
             console.log(result.media + " now " + (result.matches ? "matches" : "doesn't match"));
         });
         
+        Y.Media.on("screen and (max-width:700px)", function(result) {
+            console.log(result.media + " now " + (result.matches ? "matches" : "doesn't match"));
+        });
+        
     });
     
     </script>

@@ -25,8 +25,8 @@ var mediaList   = {},                   //list of media queries to track
     controller  = new Y.Event.Target(), //custom events for media queries
     UA          = YUI.Env.UA,           //user agent info
     div,                                //HTML element used to track media queries
-    nativeListenerSupport =             //determines native listener support
-        win.matchMedia && (!UA.webkit || UA.webkit > 536);
+    style,                              //HTML element used to inject style rules
+    nativeListenerSupport = !!win.matchMedia; //determines native listener support
 
 //-------------------------------------------------------------------------
 // Private functions
@@ -105,6 +105,20 @@ Y.Media.matches = function(query){
 Y.Media.on = function(query, listener, context) {
 
     if (nativeListenerSupport && !mediaList[query]) {
+        
+        /**
+         * Chrome/Safari are strange. They only track media query changes if
+         * there are media queries in CSS with at least one rule. So, this
+         * injects a style into the page so changes are tracked.
+         */
+        if (YUI.Env.UA.webkit) {
+            if (!style) {
+                style = document.createElement("style");
+                document.getElementsByTagName("head")[0].appendChild(style);
+            }
+            
+            style.appendChild(document.createTextNode("@media " + query + " { .-yui-m {} }"));                
+        }
 
         //need to cache MediaQueryList or else Firefox loses the event handler
         mediaList[query] = win.matchMedia(query);
