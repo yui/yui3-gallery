@@ -43,14 +43,14 @@
             "module": "gallery-yql-crypto",
             "namespace": "",
             "file": "js/yql-crypto.js",
-            "line": 58,
+            "line": 56,
             "static": 1
         }
     },
     "classitems": [
         {
             "file": "js/yql-crypto.js",
-            "line": 63,
+            "line": 61,
             "description": "This method wraps the YQL execute data table which executes inline Javascript on the YQL server.\nYQL Server side Javascript documentation is here: http://developer.yahoo.com/yql/guide/yql-javascript-objects.html",
             "itemtype": "method",
             "name": "execute",
@@ -81,8 +81,8 @@
         },
         {
             "file": "js/yql-crypto.js",
-            "line": 73,
-            "description": "Generates a sha1 hash-based message authentication code.",
+            "line": 71,
+            "description": "Generates a sha1 hash-based message authentication code.\nThe result is expressed as a hex value.",
             "itemtype": "method",
             "name": "hmacSha1",
             "params": [
@@ -117,8 +117,44 @@
         },
         {
             "file": "js/yql-crypto.js",
-            "line": 83,
-            "description": "Generates a sha256 hash-based message authentication code.",
+            "line": 82,
+            "description": "Generates a sha1 hash-based message authentication code.\nThe result is expressed as a base 64 encoded value.",
+            "itemtype": "method",
+            "name": "hmacSha1",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "secret",
+                    "description": "The secret key.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 93,
+            "description": "Generates a sha256 hash-based message authentication code.\nThe result is expressed as a hex value.",
             "itemtype": "method",
             "name": "hmacSha256",
             "params": [
@@ -153,8 +189,44 @@
         },
         {
             "file": "js/yql-crypto.js",
-            "line": 93,
-            "description": "Generates an md5 hash.",
+            "line": 104,
+            "description": "Generates a sha256 hash-based message authentication code.\nThe result is expressed as a base 64 encoded value.",
+            "itemtype": "method",
+            "name": "hmacSha256",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "secret",
+                    "description": "The secret key.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 115,
+            "description": "Generates an md5 hash.\nThe result is expressed as a hex value.",
             "itemtype": "method",
             "name": "md5",
             "params": [
@@ -184,8 +256,39 @@
         },
         {
             "file": "js/yql-crypto.js",
-            "line": 102,
-            "description": "Generates a sha1 hash.",
+            "line": 125,
+            "description": "Generates an md5 hash.\nThe result is expressed as a base 64 encoded value.",
+            "itemtype": "method",
+            "name": "md5",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 135,
+            "description": "Generates a sha1 hash.\nThe result is expressed as a hex value.",
             "itemtype": "method",
             "name": "sha1",
             "params": [
@@ -215,7 +318,38 @@
         },
         {
             "file": "js/yql-crypto.js",
-            "line": 111,
+            "line": 145,
+            "description": "Generates a sha1 hash.\nThe result is expressed as a base 64 encoded value.",
+            "itemtype": "method",
+            "name": "sha1",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "The message to hash.",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The result value is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "params",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLCrypto",
+            "module": "gallery-yql-crypto"
+        },
+        {
+            "file": "js/yql-crypto.js",
+            "line": 155,
             "description": "Generates a universally unique identifier.",
             "itemtype": "method",
             "name": "uuid",
