@@ -52,7 +52,7 @@ DynamicDialog = Y.Base.create('dynamicDialog', Y.Base, [], {
     REMOTE_FAILURE_TEXT: '<p>There was a problem fetching the dialog content. Sorry.</p>',
     IO_FAILURE_CLASS: 'yui3-dynamic-dialog-io-failure',
     BUTTONS: {
-        OK:     'Ok',
+        OK:     'OK',
         CANCEL: 'Cancel',
         SUBMIT: 'Submit'
     },
