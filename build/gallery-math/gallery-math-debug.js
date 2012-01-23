@@ -17,18 +17,15 @@ Y.mix(Math,
 	 */
 	add: function()
 	{
-		var s = 0;
-		Y.Array.each(arguments, function(v)
+		return Y.Array.reduce(Y.Array(arguments), 0, function(s, v)
 		{
 			if (Y.Lang.isArray(v))
 			{
 				v = Math.add.apply(this, v);
 			}
 
-			s += v;
+			return s + v;
 		});
-
-		return s;
 	},
 
 	/**
@@ -36,20 +33,17 @@ Y.mix(Math,
 	 */
 	addReciprocals: function()
 	{
-		var s = 0;
-		Y.Array.each(arguments, function(v)
+		return Y.Array.reduce(Y.Array(arguments), 0, function(s, v)
 		{
 			if (Y.Lang.isArray(v))
 			{
-				s += Math.addReciprocals.apply(this, v);
+				return s + Math.addReciprocals.apply(this, v);
 			}
 			else
 			{
-				s += 1/v;
+				return s + 1/v;
 			}
 		});
-
-		return s;
 	},
 
 	/**
@@ -65,18 +59,15 @@ Y.mix(Math,
 	 */
 	multiply: function()
 	{
-		var p = 1;
-		Y.Array.each(arguments, function(v)
+		return Y.Array.reduce(Y.Array(arguments), 1, function(p, v)
 		{
 			if (Y.Lang.isArray(v))
 			{
 				v = Math.multiply.apply(this, v);
 			}
 
-			p *= v;
+			return p * v;
 		});
-
-		return p;
 	},
 
 	/**
@@ -156,4 +147,4 @@ Y.mix(Math,
 });
 
 
-}, 'gallery-2011.03.16-21-24' );
+}, 'gallery-2012.01.04-22-09' ,{requires:['array-extras']});

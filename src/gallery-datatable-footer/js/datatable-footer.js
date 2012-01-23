@@ -3,8 +3,6 @@
  * @module datatable
  * @submodule datatable-footer
  */
-YUI.add('gallery-datatable-footer', function(Y) {
-	
 	var YNode = Y.Node,
 	    YLang = Y.Lang,
 	    YCreate = Y.Node.create,
@@ -567,8 +565,3 @@ YUI.add('gallery-datatable-footer', function(Y) {
 
 	Y.namespace('Plugin');
 	Y.Plugin.DataTableFooter = DataTableFooter;
-
-}, '@VERSION@' ,{
-	requires:[ "datatable-base", "datatype", "plugin" ]
-});
-	

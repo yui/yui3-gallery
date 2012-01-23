@@ -117,9 +117,41 @@ Y.Node.prototype.getAncestorByTagName = function(
  * <p>Patch to speed up search for a single class name or single tag name.
  * To use a regular expression, call getElementsByClassName().</p>
  * 
+ * @method one
+ * @param fn {String|Function} selector string or boolean method for testing elements
+ * @return {Node}
+ */
+
+var orig_one = Y.Node.prototype.one;
+
+Y.Node.prototype.one = function(
+	/* string */ selector)
+{
+	if (Y.Lang.isString(selector))
+	{
+		var m = tag_class_name_re.exec(selector);
+		if (m && m.length)
+		{
+			Y.log('one() calling getElementsByClassName() with ' + m[2] + ',' + m[1], 'info', 'Node');
+			return this.getFirstElementByClassName(m[2], m[1]);
+		}
+
+		if (tag_name_re.test(selector))
+		{
+			Y.log('one() calling getElementsByTagName() with ' + selector, 'info', 'Node');
+			return this.getElementsByTagName(selector).item(0);
+		}
+	}
+
+	return orig_one.apply(this, arguments);
+};
+
+/**********************************************************************
+ * <p>Patch to speed up search for a single class name or single tag name.
+ * To use a regular expression, call getElementsByClassName().</p>
+ * 
  * @method all
  * @param fn {String|Function} selector string or boolean method for testing elements
- * @param test_self {Boolean} pass true to include the element itself in the scan
  * @return {Node}
  */
 
@@ -163,31 +195,48 @@ Y.Node.prototype.getElementsByClassName = function(
 {
 	var descendants = this.getElementsByTagName(tag_name || '*');
 
-	var list  = null;
+	var list  = new Y.NodeList();
 	var count = descendants.size();
 	for (var i=0; i<count; i++)
 	{
 		var e = descendants.item(i);
 		if (Y.DOM.hasClass(Y.Node.getDOMNode(e), class_name))
 		{
-			if (!list)
-			{
-				list = new Y.NodeList(e);	// can't construct empty list
-			}
-			else
-			{
-				list.push(e);
-			}
+			list.push(e);
 		}
-	}
-
-	if (!list)	// can't construct empty list
-	{
-		list = new Y.NodeList('#surely-this-cannot-possibly-exist-on-your-page');
 	}
 
 	return list;
 };
 
+/**********************************************************************
+ * <p>Searches for one descendant by class name.  Unlike Y.one(), this
+ * function accepts a regular expression.</p>
+ * 
+ * @method getFirstElementByClassName
+ * @param class_name {String|Regexp} class to search for
+ * @param tag_name {String} optional tag name to filter by
+ * @return {Node}
+ */
 
-}, 'gallery-2011.08.24-23-44' ,{requires:['node-base']});
+Y.Node.prototype.getFirstElementByClassName = function(
+	/* string */	class_name,
+	/* string */	tag_name)
+{
+	var descendants = this.getElementsByTagName(tag_name || '*');
+
+	var count = descendants.size();
+	for (var i=0; i<count; i++)
+	{
+		var e = descendants.item(i);
+		if (Y.DOM.hasClass(Y.Node.getDOMNode(e), class_name))
+		{
+			return e;
+		}
+	}
+
+	return null;
+};
+
+
+}, 'gallery-2012.01.04-22-09' ,{requires:['node-base']});

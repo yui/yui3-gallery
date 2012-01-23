@@ -1,0 +1,14 @@
+{
+    "name": "Async Command Delay Plugin",
+    "description": "Delay the execution of the command function for an amount of time after execute is called.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js",
+            "../gallery-async/js",
+            "../gallery-async-command/js"
+        ],
+        "outdir": "./api"
+    }
+}

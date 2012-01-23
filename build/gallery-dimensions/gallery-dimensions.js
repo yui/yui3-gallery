@@ -110,15 +110,11 @@ Y.Node.prototype.insideHeight = function()
 
 Y.Node.prototype.horizMarginBorderPadding = function()
 {
-	var w = 0;
-
-	Y.each(the_horiz_styles, function(style)
+	return Y.Array.reduce(the_horiz_styles, 0, function(w, style)
 	{
-		w += this.parseDimensionStyle(style);
+		return w + this.parseDimensionStyle(style);
 	},
 	this);
-
-	return w;
 };
 
 /**********************************************************************
@@ -128,15 +124,11 @@ Y.Node.prototype.horizMarginBorderPadding = function()
 
 Y.Node.prototype.vertMarginBorderPadding = function()
 {
-	var h = 0;
-
-	Y.each(the_vert_styles, function(style)
+	return Y.Array.reduce(the_vert_styles, 0, function(h, style)
 	{
-		h += this.parseDimensionStyle(style);
+		return h + this.parseDimensionStyle(style);
 	},
 	this);
-
-	return h;
 };
 
 /**********************************************************************
@@ -164,4 +156,4 @@ Y.Node.prototype.parseDimensionStyle = function(
 };
 
 
-}, 'gallery-2011.07.06-19-30' ,{requires:['node-style']});
+}, 'gallery-2012.01.04-22-09' ,{requires:['node-style','array-extras']});
