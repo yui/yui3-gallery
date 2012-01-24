@@ -302,9 +302,7 @@
 			if (!template) {
 				Y.some(this._getClasses(), function (c) {
 					template = c._TEMPLATE;
-					if (template) {
-						return true;
-					}
+					return !!template;
 				});
 			}
 			return Y.Node.create(this._substitute(template, extras));

@@ -290,20 +290,6 @@ Y.Form = Y.Base.create('form', Y.Widget, [Y.WidgetParent], {
         return sel;
     },
 
-    /**
-     * @method toJSON
-     * @description Returns a JSON object representing the values of
-     *              the form fields
-     */
-    toJSON : function () {
-        var data = {}; 
-        this.each(function (f) {
-            data[f.get('name')] = (f instanceof Y.CheckboxField) ? f.get('checked') : f.get('value');
-        }); 
-
-        return data;
-    },   
-
     initializer: function(config) {
         this._ioIds = {};
 
@@ -1533,9 +1519,9 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
                 continue;
             }
             if (!val[i].label ||
-            (!Y.Lang.isString(val[i].label) && !Y.Lang.isNumber(val[i].value)) ||
+            !Y.Lang.isString(val[i].label) ||
             !val[i].value ||
-            (!Y.Lang.isString(val[i].value) && !Y.Lang.isNumber(val[i].value))) {
+            !Y.Lang.isString(val[i].value)) {
                 delete val[i];
                 continue;
             }
@@ -1764,10 +1750,13 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
             }
         },
         this);
+<<<<<<< HEAD:build/gallery-form/gallery-form.js
+=======
 
         if (!currentVal && !useDefaultOption && choices[0]) {
             this.set('value', choices[0].value);
         }
+>>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:build/gallery-form/gallery-form.js
     },
 
     /**
@@ -1976,3 +1965,6 @@ Y.ResetButton = Y.Base.create('reset-button', Y.FormField, [Y.WidgetChild], {
 
 
 }, 'gallery-2011.11.10-16-24' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe', 'collection']});
+}, 'gallery-2011.06.15-19-18' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
+=======
+>>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:build/gallery-form/gallery-form.js

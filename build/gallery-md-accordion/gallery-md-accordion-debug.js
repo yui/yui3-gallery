@@ -445,4 +445,9 @@ Y.Accordion = Y.Base.create(
 
 
 
+<<<<<<< HEAD:build/gallery-md-accordion/gallery-md-accordion-debug.js
+
+}, '@VERSION@' ,{skinnable:true, requires:['widget', 'widget-parent', 'widget-child', 'widget-stdmod', 'gallery-makenode'], optional:['resize-plugin', 'transition']});
+=======
 }, 'gallery-2011.09.28-20-06' ,{optional:['resize-plugin', 'transition'], requires:['widget', 'widget-parent', 'widget-child', 'widget-stdmod', 'gallery-makenode'], skinnable:true});
+>>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:build/gallery-md-accordion/gallery-md-accordion-debug.js

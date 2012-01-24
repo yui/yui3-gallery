@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Input Fields Test</title>
+
+
+    </head>
+    <body class="yui3-skin-sam yui-skin-sam">
+
+		
+		<div id="test"></div>
+		<div id="other"></div>
+
+		<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+
+		<script>
+			YUI({
+				// debug:true,
+				// useBrowserConsole:true,
+				// filter: 'debug',
+				groups: {
+					sp: {
+						base: '../../../build/',
+						modules: {
+							'gallery-makenode': {
+								path: 'gallery-makenode/gallery-makenode-debug.js',
+								requires:['substitute','classnamemanager']
+							},
+							'gallery-md-inputfield': {
+								path: 'gallery-md-inputfield/gallery-md-inputfield-debug.js',
+								requires:['gallery-makenode','widget-child','event-valuechange']
+							}
+						}
+					}
+				}
+			}).use(
+				'node','substitute','base', 'widget','test', 'console','node-event-simulate', 'gallery-md-inputfield', 'panel', 'datatype',
+				function(Y) {
+					"use strict";
+					var A = Y.Assert,
+						iFld,
+						test = Y.one('#test');
+
+					Y.DataTypes = {
+						euro: {
+							UI: {
+								formatter: function (value) {
+									return Y.DataType.Number.format(value,{
+										prefix: "€",
+										thousandsSeparator: ".",
+										decimalSeparator: ",",
+										decimalPlaces: 2,
+										suffix: " (EUR)"
+									});
+								},
+								parser: function (value) {
+									return parseFloat(value.replace(/[€\.]|(EUR)/g,'').replace(/,/g,'.'));
+								}
+							}
+						}
+					};
+
+						
+					new Y.Console().render();
+					
+					var iFld1 = new Y.InputField({
+						idInput:'a123',
+						label:'hola',
+						errorMsg: 'aquí hay un error'
+					}).render('#other');
+							
+							
+					var suite = new Y.Test.Suite("TestSuite Name");
+
+					suite.add(new Y.Test.Case({
+						name: "tests template processor",
+						setUp : function () {
+						},
+						tearDown : function () {
+							iFld.destroy();
+							iFld = null;
+						},
+						testLabel : function () {
+							iFld = new Y.InputField({
+								label:'hola'
+							}).render(test);
+							A.areEqual(
+								'hola',
+								test.one('label').getContent(), 
+								'label should be hola'
+							);
+							iFld.set('label','hello');
+							A.areEqual(
+								'hello',
+								test.one('label').getContent(), 
+								'label should be hello'
+							);
+						},
+						
+						testNoId : function () {
+							iFld = new Y.InputField({
+								label:'hola'
+							}).render(test);
+							A.areEqual(
+								test.one('label').get('for'), 
+								test.one('input').get('id'),
+								'for in label should reference id in input'
+							);
+							A.areEqual(
+								iFld._inputNode._yuid,
+								test.one('input').get('id'),
+								'id in input should default to _yuid'
+							);
+						},
+						testId : function () {
+							iFld = new Y.InputField({
+								idInput:'a123',
+								label:'hola'
+							}).render(test);
+							A.areEqual(
+								'a123', 
+								test.one('input').get('id'),
+								'for in label should be a123'
+							);
+							A.areEqual(
+								'a123',
+								test.one('input').get('id'),
+								'id in input should be a123'
+							);
+							iFld.set('idInput','b456');
+							A.areEqual(
+								'b456', 
+								test.one('input').get('id'),
+								'for in label should be b456'
+							);
+							A.areEqual(
+								'b456',
+								test.one('input').get('id'),
+								'id in input should be b456'
+							);
+						},
+						testType : function () {
+							var input;
+							iFld = new Y.InputField({
+								type: 'euro',
+								value:123456.789
+							}).render(test);
+							input = test.one('input');
+							A.areEqual(
+								'€123.456,79 (EUR)',
+								input.get('value'),
+								'value should be formatted in Euros'
+							);
+							input.focus();
+							input.set('value','€1.234.567,89');
+							test.one('label').focus();
+							this.wait(function () {
+								A.areEqual(
+									1234567.89,
+									iFld.get('value'),
+									'value should be stripped of formatting'
+								);
+								A.isNumber(iFld.get('value'),'value should be a number');
+							},100);
+							
+						}
+					}));
+								
+							
+					
+					Y.Test.Runner.add(suite);
+
+					Y.Test.Runner.run();
+					
+
+				}
+			);
+
+		</script>
+        
+    </body>
+</html>

@@ -890,7 +890,7 @@ QueryBuilder.String.prototype =
 			{
 				if (var_config.autocomplete)
 				{
-					var config    = Y.clone(var_config.autocomplete, true);
+					var config    = Y.clone(var_config.autocomplete);
 					config.render = Y.one('body');
 					this.value_input.plug(Y.Plugin.AutoComplete, config);
 
@@ -1157,4 +1157,8 @@ QueryBuilder.plugin_mapping =
 };
 
 
+<<<<<<< HEAD
+}, 'gallery-2011.06.29-23-18' ,{skinnable:true, optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr']});
+=======
 }, 'gallery-2012.01.04-22-09' ,{skinnable:true, optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr']});
+>>>>>>> 5d2f0411bc8fa5b1ae8171af0f3962d880a77177

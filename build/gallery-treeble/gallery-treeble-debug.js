@@ -713,7 +713,7 @@ function checkFinished()
 	}
 	else if (this._toggle.length > 0)
 	{
-		this.toggle(this._toggle[0], Y.clone(this._callback.request, true),
+		this.toggle(this._toggle[0], Y.clone(this._callback.request),
 		{
 			fn: function()
 			{

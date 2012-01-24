@@ -17,7 +17,6 @@ value for `root` when sub-classing Model, and only provide a value for `url`
 when sub-classing ModelList.
 
 @example
-
     var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
         root : '/user'
     }, {
@@ -27,22 +26,22 @@ when sub-classing ModelList.
     });
 
     var Users = Y.Base.create('users', Y.ModelList, [Y.ModelSync.REST], {
-        model : User,
-        url   : '/user'
+        model   : User,
+        url     : '/user'
     });
 
 @class ModelSync.REST
-@extensionfor Model ModelList
+@extension Model ModelList
 **/
 
 var RESTSync,
 
-    Lang       = Y.Lang,
-    sub        = Lang.sub,
-    isValue    = Lang.isValue,
-    isString   = Lang.isString,
-    isNumber   = Lang.isNumber,
-    isFunction = Lang.isFunction;
+    Lang        = Y.Lang,
+    sub         = Lang.sub,
+    isValue     = Lang.isValue,
+    isString    = Lang.isString,
+    isNumber    = Lang.isNumber,
+    isFunction  = Lang.isFunction;
 
 // *** RESTSync *** //
 
@@ -73,13 +72,13 @@ specific headers will take presidence.
 @static
 @default
     {
-        'Accept'      : 'application/json',
-        'Content-Type': 'application/json'
+        'Accept'        : 'application/json',
+        'Content-Type'  : 'application/json'
     }
 **/
 RESTSync.HTTP_HEADERS = {
-    'Accept'      : 'application/json',
-    'Content-Type': 'application/json'
+    'Accept'        : 'application/json',
+    'Content-Type'  : 'application/json'
 };
 
 /**
@@ -123,7 +122,6 @@ RESTSync.prototype = {
     '/'; if the `root` does not end with a slash, neither will the XHR URLs.
 
     @example
-
         var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
             root : '/user/'
         }, {
@@ -161,7 +159,6 @@ RESTSync.prototype = {
     can use simple replacement tokens:
 
     @example
-
         '/user/{id}'
 
     **Note:** String substitution on the `url` property will only happen for
@@ -181,7 +178,6 @@ RESTSync.prototype = {
     properties like this:
 
     @example
-
         var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
             root : '/users',
             url  : '/user/{id}'
@@ -351,7 +347,6 @@ RESTSync.prototype = {
     https://github.com/yui/yui3/blob/master/src/app/js/controller.js
 
     @example
-
         model.root = '/foo'
         model._joinURL('bar');  // => '/foo/bar'
         model._joinURL('/bar'); // => '/foo/bar'
@@ -384,4 +379,8 @@ RESTSync.prototype = {
 Y.namespace('ModelSync').REST = RESTSync;
 
 
+<<<<<<< HEAD
+}, 'gallery-2011.08.24-23-44' ,{requires:['io-base', 'json-stringify'], skinnable:false});
+=======
 }, 'gallery-2012.01.04-22-09' ,{requires:['model', 'model-list', 'io-base', 'json-stringify'], skinnable:false});
+>>>>>>> 5d2f0411bc8fa5b1ae8171af0f3962d880a77177

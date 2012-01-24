@@ -12,32 +12,17 @@ YQL.
 **Note:** that `read` is the only `sync()` action that is supported at this
 time, you will not be able to `save()` data to YQL.
 
-@example
-
-    var Photo = Y.Base.create('photo', Y.Model, [Y.ModelSync.YQL], {
-        query : 'SELECT * FROM flickr.photos.info WHERE photo_id={id}',
-        parse : function (results) {
-            return results && results.photo;
-        }
-    }, {
-        ATTRS : {
-            title       : {},
-            description : {}
-        }
-    });
+@TODO: Example
 
 @class ModelSync.YQL
-@extensionfor Model ModelList
+@extension Model ModelList
 **/
 
 var YQLSync,
 
-    Lang       = Y.Lang,
-    sub        = Lang.sub,
-    isValue    = Lang.isValue,
-    isFunction = Lang.isFunction,
-
-    noop       = function () {};
+    Lang    = Y.Lang,
+    sub     = Lang.sub,
+    isValue = Lang.isValue;
 
 // *** YQLSYnc *** //
 
@@ -54,7 +39,6 @@ YQLSync.prototype = {
     replacement tokens:
 
     @example
-
         'SELECT * FROM flickr.photos.info WHERE photo_id={id}'
 
     @property query
@@ -107,7 +91,7 @@ YQLSync.prototype = {
     @method sync
     @param {String} action Sync action to perform. May be one of the following:
 
-      * read: Load an existing model.
+      * read  : Load an existing model.
 
     @param {Object} [options] Sync options.
     @param {callback} [callback] Called when the sync operation finishes.
@@ -120,9 +104,6 @@ YQLSync.prototype = {
         called on a Model or ModelList.
     **/
     sync : function (action, options, callback) {
-        isFunction(callback) || (callback = noop);
-
-        // Only read is supported.
         if (action !== 'read') {
             // TODO: return some error dingus here.
             return callback(null);
@@ -142,9 +123,7 @@ YQLSync.prototype = {
                 callback(r.error, r);
             } else {
                 results = r.query.results;
-                if (cache && results) {
-                    cache.add(query, results);
-                }
+                cache && cache.add(query, results);
                 callback(null, results);
             }
         });

@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Field Grouping Test</title>
+
+
+    </head>
+    <body class="yui3-skin-sam yui-skin-sam">
+
+		
+		<div id="test"></div>
+		<div id="other"></div>
+
+		<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
+
+		<script>
+			YUI({
+				// debug:true,
+				// useBrowserConsole:true,
+				// filter: 'debug',
+				groups: {
+					sp: {
+						base: '../../../build/',
+						modules: {
+							'gallery-makenode': {
+								path: 'gallery-makenode/gallery-makenode-debug.js',
+								requires:['substitute','classnamemanager']
+							},
+							'gallery-md-inputfield': {
+								path: 'gallery-md-inputfield/gallery-md-inputfield-debug.js',
+								requires:['gallery-makenode','widget-child','event-valuechange']
+							},
+							'gallery-md-fieldgroup': {
+								path: 'gallery-md-fieldgroup/gallery-md-fieldgroup-debug.js',
+								requires:['gallery-makenode','widget-child','widget-parent']
+							}							
+						}
+					}
+				}
+			}).use(
+				'node','substitute','base', 'widget','test', 'console','node-event-simulate', 
+				'gallery-md-inputfield', 'panel', 'datatype','gallery-md-fieldgroup',
+				function(Y) {
+					"use strict";
+					var A = Y.Assert,
+						fGrp,
+						test = Y.one('#test');
+
+					new Y.Console().render();
+					
+					var iFld1 = new Y.FieldGroup({
+						label:'hola',
+						children: [
+							{label: 'one'},
+							{label: 'two'}
+						]
+					}).render('#other');
+							
+							
+					var suite = new Y.Test.Suite("TestSuite Name");
+
+					suite.add(new Y.Test.Case({
+						name: "tests template processor",
+						setUp : function () {
+						},
+						tearDown : function () {
+							fGrp.destroy();
+							fGrp = null;
+						},
+						testLabel : function () {
+						}
+					}));
+								
+							
+					
+					Y.Test.Runner.add(suite);
+
+					Y.Test.Runner.run();
+					
+
+				}
+			);
+
+		</script>
+        
+    </body>
+</html>

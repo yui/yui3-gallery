@@ -1845,6 +1845,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
 
 }());
 
+
 /**
  * Provides AccordionItem class
  *
@@ -2957,4 +2958,5 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
 
 
 
-}, 'gallery-2011.03.23-22-20' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});
+
+}, '@VERSION@' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});

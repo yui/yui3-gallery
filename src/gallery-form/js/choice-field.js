@@ -20,7 +20,7 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
      */
     _validateChoices: function(val) {
         if (!Y.Lang.isArray(val)) {
-            Y.log('Choice values must be in an array', 'warn');
+            Y.log('Choice values must be in an array');
             return false;
         }
 
@@ -29,15 +29,15 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
 
         for (; i < len; i++) {
             if (!Y.Lang.isObject(val[i])) {
-                Y.log('Choice that is not an object cannot be used', 'warn');
+                Y.log('Choice that is not an object cannot be used');
                 delete val[i];
                 continue;
             }
             if (!val[i].label ||
-            (!Y.Lang.isString(val[i].label) && !Y.Lang.isNumber(val[i].value)) ||
+            !Y.Lang.isString(val[i].label) ||
             !val[i].value ||
-            (!Y.Lang.isString(val[i].value) && !Y.Lang.isNumber(val[i].value))) {
-                Y.log('Choice without label and value cannot be used', 'warn');
+            !Y.Lang.isString(val[i].value)) {
+                Y.log('Choice without label and value cannot be used');
                 delete val[i];
                 continue;
             }

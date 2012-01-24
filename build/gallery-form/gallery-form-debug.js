@@ -1522,7 +1522,7 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
      */
     _validateChoices: function(val) {
         if (!Y.Lang.isArray(val)) {
-            Y.log('Choice values must be in an array', 'warn');
+            Y.log('Choice values must be in an array');
             return false;
         }
 
@@ -1531,15 +1531,15 @@ Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.Wi
 
         for (; i < len; i++) {
             if (!Y.Lang.isObject(val[i])) {
-                Y.log('Choice that is not an object cannot be used', 'warn');
+                Y.log('Choice that is not an object cannot be used');
                 delete val[i];
                 continue;
             }
             if (!val[i].label ||
-            (!Y.Lang.isString(val[i].label) && !Y.Lang.isNumber(val[i].value)) ||
+            !Y.Lang.isString(val[i].label) ||
             !val[i].value ||
-            (!Y.Lang.isString(val[i].value) && !Y.Lang.isNumber(val[i].value))) {
-                Y.log('Choice without label and value cannot be used', 'warn');
+            !Y.Lang.isString(val[i].value)) {
+                Y.log('Choice without label and value cannot be used');
                 delete val[i];
                 continue;
             }
@@ -1768,10 +1768,13 @@ Y.SelectField = Y.Base.create('select-field', Y.ChoiceField, [Y.WidgetParent, Y.
             }
         },
         this);
+<<<<<<< HEAD:build/gallery-form/gallery-form-debug.js
+=======
 
         if (!currentVal && !useDefaultOption && choices[0]) {
             this.set('value', choices[0].value);
         }
+>>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:build/gallery-form/gallery-form-debug.js
     },
 
     /**
@@ -1980,3 +1983,6 @@ Y.ResetButton = Y.Base.create('reset-button', Y.FormField, [Y.WidgetChild], {
 
 
 }, 'gallery-2011.11.10-16-24' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe', 'collection']});
+}, 'gallery-2011.06.15-19-18' ,{requires:['node', 'widget-base', 'widget-htmlparser', 'io-form', 'widget-parent', 'widget-child', 'base-build', 'substitute', 'io-upload-iframe']});
+=======
+>>>>>>> 8ed03c42f05602fa40006acbdac2d666ba27e729:build/gallery-form/gallery-form-debug.js
