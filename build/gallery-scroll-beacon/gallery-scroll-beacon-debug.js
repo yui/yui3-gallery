@@ -58,15 +58,13 @@ Y.Event.define(EVENT_TYPE, {
     },
 
     _checkBeacon: function(node, subscription, notifier) {
-        var ev;
         subscription._nodeList.each(function(targetNode, i) {
             if (Y.DOM.inViewportRegion(Y.Node.getDOMNode(targetNode), false)) {
                 if (!subscription._inViewport) {
-                    ev = new Y.DOMEventFacade(EVENT_TYPE, node);
-                    ev.type = EVENT_TYPE;
-                    ev.currentTarget = node;
-                    ev.target = targetNode;
-                    notifier.fire(ev);
+                    notifier.fire({
+                        target: targetNode,
+                        currentTarget: node
+                    });
                 }
                 subscription._inViewport = true;
             } else {
@@ -101,4 +99,4 @@ Y.Event.define(EVENT_TYPE, {
 });
 
 
-}, 'gallery-2011.03.16-21-24' ,{requires:['event','event-custom','event-simulate','node'], skinnable:false});
+}, 'gallery-2012.02.01-21-35' ,{requires:['event','event-custom','event-simulate','node'], skinnable:false});

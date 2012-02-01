@@ -418,7 +418,7 @@ Y.mix(Table.prototype, {
     @return {Object} the column configuration object
     **/
     getColumn: function (name) {
-        var col, columns, stack, entry, i, len, cols;
+        var col, columns, i, len, cols;
 
         if (isObject(name) && !isArray(name)) {
             // TODO: support getting a column from a DOM node - this will cross
@@ -445,28 +445,6 @@ Y.mix(Table.prototype, {
             }
 
             return (cols && cols[i]) || null;
-        } else if (isString(name)) {
-            stack = [[columns, 0]];
-            while (stack.length) {
-                entry = stack[stack.length - 1];
-                cols  = entry[0];
-                for (i = entry[1], len = cols.length; i < len; ++i) {
-                    col = cols[i];
-                    // Only need to check against name because the initial
-                    // col = get('columns.' + name) would get it from the key map
-                    if (col.name === name) {
-                        return col;
-                    } else if (col.children) {
-                        entry[1] = i + 1;
-                        stack.push([col.children, 0]);
-                        break;
-                    }
-                }
-
-                if (i > len) {
-                    stack.pop();
-                }
-            }
         }
 
         return null;
@@ -1086,6 +1064,13 @@ Y.mix(Table.prototype, {
     has a `children` property, it will be iterated, adding any nested column
     keys to the returned map. There is no limit to the levels of nesting.
 
+    All columns are assigned a `_yuid` stamp and `_id` property corresponding
+    to the column's configured `name` or `key` property.  If the same `name` or
+    `key` appears in multiple columns, subsequent appearances will have their
+    `_id` appended with an incrementing number (e.g. if column "foo" is
+    included in the `columns` attribute twice, the first will get `_id` of
+    "foo", and the second an `_id` of "foo1").
+
     The result is an object map with column keys as the property name and the
     corresponding column object as the associated value.
 
@@ -1161,7 +1146,11 @@ Y.mix(Table.prototype, {
             this._viewConfig.columns   = this.get('columns');
             this._viewConfig.modelList = this.data;
 
-            contentBox.setAttribute('role', 'grid');
+            contentBox.setAttrs({
+                'role'         : 'grid',
+                'aria-readonly': true // until further notice
+            });
+
 
             this.fire('renderTable', {
                 headerView  : this.get('headerView'),
@@ -1358,40 +1347,34 @@ Y.mix(Table.prototype, {
     @protected
     **/
     _uiSetCaption: function (htmlContent) {
-        var caption = this._tableNode.one('> caption');
+        var table   = this._tableNode,
+            caption = this._captionNode,
+            captionId;
 
         if (htmlContent) {
-            if (!this._captionNode) {
-                this._captionNode = Y.Node.create(
+            if (!caption) {
+                this._captionNode = caption = Y.Node.create(
                     fromTemplate(this.CAPTION_TEMPLATE, {
                         className: this.getClassName('caption')
                     }));
+
+                captionId = Y.stamp(caption);
+
+                caption.set('id', captionId);
+
+                table.prepend(this._captionNode);
+
+                table.setAttribute('aria-describedby', captionId);
             }
 
-            this._captionNode.setContent(htmlContent);
+            caption.setContent(htmlContent);
 
-            if (caption) {
-                if (!caption.compareTo(this._captionNode)) {
-                    caption.replace(this._captionNode);
-                }
-            } else {
-                this._tableNode.prepend(this._captionNode);
-            }
+        } else if (caption) {
+            caption.remove(true);
 
-            this._captionNode = caption;
-        } else {
-            if (this._captionNode) {
-                if (caption && caption.compareTo(this._captionNode)) {
-                    caption = null;
-                }
+            delete this._captionNode;
 
-                this._captionNode.remove(true);
-                delete this._captionNode;
-            }
-
-            if (caption) {
-                caption.remove(true);
-            }
+            table.removeAttribute('aria-describedby');
         }
     },
 
@@ -1436,7 +1419,7 @@ Y.mix(Table.prototype, {
         return val === null || (isFunction(val) && val.prototype.render);
     }
 });
-}, 'gallery-2012.01.25-21-14', { requires: ['model-list'] });
+}, 'gallery-2012.02.01-21-35', { requires: ['model-list'] });
 
 YUI.add('gallery-datatable-350-preview-head', function (Y) {
 /**
@@ -1477,21 +1460,22 @@ This would translate to the following visualization:
 
 Supported properties of the column objects include:
 
-  * `label`    - The HTML content of the header cell.
-  * `key`      - If `label` is not specified, the `key` is used for content.
-  * `children` - Array of columns to appear below this column in the next
-                 row.
-  * `abbr`     - The content of the 'abbr' attribute of the `<th>`
+  * `label`     - The HTML content of the header cell.
+  * `key`       - If `label` is not specified, the `key` is used for content.
+  * `children`  - Array of columns to appear below this column in the next
+                  row.
+  * `abbr`      - The content of the 'abbr' attribute of the `<th>`
+  * `className` - Adds this string of CSS classes to the column header
 
 Through the life of instantiation and rendering, the column objects will have
 the following properties added to them:
 
-  * `colspan` - To supply the `<th>` attribute
-  * `rowspan` - To supply the `<th>` attribute
-  * `parent`  - If the column is a child of another column, this points to
+  * `_colspan` - To supply the `<th>` attribute
+  * `_rowspan` - To supply the `<th>` attribute
+  * `_parent`  - If the column is a child of another column, this points to
     its parent column
-  * `_yuid`   - A unique YUI generated id used as the `<th>`'s 'id' for
-    reference in the data `<td>`'s 'headers' attribute.
+  * `_yuid`    - (Added by DataTable) A unique YUI generated id used as the
+    `<th>`'s 'id' for reference in the data `<td>`'s 'headers' attribute.
 
 The column object is also used to provide values for {placeholder} tokens in the
 instance's `CELL_TEMPLATE`, so you can modify the template and include other
@@ -1519,10 +1503,10 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
 
     @property CELL_TEMPLATE
     @type {HTML}
-    @default '<th id="{_yuid}" abbr="{abbr} colspan="{colspan}" rowspan="{rowspan}" class="{className}" {headers}>{content}</th>'
+    @default '<th id="{_yuid}" abbr="{abbr} colspan="{_colspan}" rowspan="{_rowspan}" class="{className}" role="columnheader" {_headers}>{content}</th>'
     **/
     CELL_TEMPLATE :
-        '<th id="{_yuid}" abbr="{abbr}" colspan="{colspan}" rowspan="{rowspan}" class="{className}" scope="col" role="columnheader" {headers}>{content}</th>',
+        '<th id="{_yuid}" abbr="{abbr}" colspan="{_colspan}" rowspan="{_rowspan}" class="{className}" role="columnheader" {_headers}>{content}</th>',
 
     /**
     The data representation of the header rows to render.  This is assigned by
@@ -1595,10 +1579,10 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
             columns  = this.columns,
             defaults = {
                 abbr: '',
-                colspan: 1,
-                rowspan: 1
+                _colspan: 1,
+                _rowspan: 1
             },
-            i, len, j, jlen, col, className, html, content, values;
+            i, len, j, jlen, col, html, content, values;
 
         if (thead && columns) {
             html = '';
@@ -1609,25 +1593,28 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
 
                     for (j = 0, jlen = columns[i].length; j < jlen; ++j) {
                         col = columns[i][j];
-                        className = this.getClassName('header');
                         values = Y.merge(
                             defaults,
                             col, {
-                                className: className,
+                                className: this.getClassName('header'),
                                 content  : col.label || col.key ||
                                            ("Column " + (j + 1)),
                                 headers  : ''
                             }
                         );
 
+                        if (col.className) {
+                            values.className += ' ' + col.className;
+                        }
+
                         if (col._id) {
                             values.className +=
                                 ' ' + this.getClassName('col', col._id);
                         }
 
-                        if (col.parent) {
-                            values.headers =
-                                'headers="' + col.parent.headers.join(' ') + '"';
+                        if (col._parent) {
+                            values._headers =
+                                'headers="' + col._parent._headers.join(' ') + '"';
                         }
 
                         content += fromTemplate(this.CELL_TEMPLATE, values);
@@ -1823,7 +1810,7 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
                         // break to let the while loop process the children
                         break;
                     } else {
-                        col.colspan = 1;
+                        col._colspan = 1;
                     }
                 }
 
@@ -1833,15 +1820,15 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
                         entry  = stack[stack.length - 2];
                         parent = entry[0][entry[1]];
 
-                        parent.colspan = 0;
+                        parent._colspan = 0;
 
                         for (i = 0, len = row.length; i < len; ++i) {
                             // Can't use .length because in 3+ rows, colspan
                             // needs to aggregate the colspans of children
-                            parent.colspan += row[i].colspan;
+                            parent._colspan += row[i]._colspan;
 
                             // Assign the parent column for ease of navigation
-                            row[i].parent = parent;
+                            row[i]._parent = parent;
                         }
                     }
                     stack.pop();
@@ -1869,12 +1856,12 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
                     entry[1] = i;
 
                     // collect the IDs of parent cols
-                    col.headers = [col._yuid];
+                    col._headers = [col._yuid];
 
                     for (j = stack.length - 2; j >= 0; --j) {
                         parent = stack[j][0][stack[j][1]];
 
-                        col.headers.unshift(parent._yuid);
+                        col._headers.unshift(parent._yuid);
                     }
 
                     if (children && children.length) {
@@ -1884,7 +1871,7 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
                         stack.push([children, -1]);
                         break;
                     } else {
-                        col.rowspan = rowSpan - stack.length + 1;
+                        col._rowspan = rowSpan - stack.length + 1;
                     }
                 }
 
@@ -1898,7 +1885,7 @@ Y.namespace('DataTable').HeaderView = Y.Base.create('tableHeader', Y.View, [], {
         return columns;
     }
 });
-}, 'gallery-2012.01.25-21-14', { requires: ['view', 'gallery-datatable-350-preview-core'] });
+}, 'gallery-2012.02.01-21-35', { requires: ['view', 'gallery-datatable-350-preview-core'] });
 
 YUI.add('gallery-datatable-350-preview-body', function (Y) {
 /**
@@ -1936,6 +1923,7 @@ Supported properties of the column objects include:
   * `allowHTML` - Set to `true` if a column value, `formatter`, or
     `emptyCellValue` can contain HTML.  This defaults to `false` to protect
     against XSS.
+  * `className` - Space delimited CSS classes to add to all `<td>`s in a column.
 
 Column `formatter`s are passed an object (`o`) with the following properties:
 
@@ -1946,6 +1934,8 @@ Column `formatter`s are passed an object (`o`) with the following properties:
   * `className` - Initially empty string to allow `formatter`s to add CSS 
     classes to the cell's `<td>`.
   * `rowindex` - The zero-based row number.
+  * `rowClass` - Initially empty string to allow `formatter`s to add CSS
+    classes to the cell's containing row `<tr>`.
 
 They may return a value or update `o.value` to assign specific HTML content.  A
 returned value has higher precedence.
@@ -2029,10 +2019,10 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
 
     @property ROW_TEMPLATE
     @type {HTML}
-    @default '<tr id="{clientId}" class="{rowClasses}">{content}</tr>'
+    @default '<tr id="{clientId}" class="{rowClass}">{content}</tr>'
     **/
     ROW_TEMPLATE :
-        '<tr role="row" id="{rowId}" class="{rowClasses}">' +
+        '<tr role="row" id="{rowId}" class="{rowClass}">' +
             '{content}' +
         '</tr>',
 
@@ -2141,6 +2131,11 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
       * `emptyCellValue` - String (HTML) value to use if the Model data for a
         column, or the content generated by a `formatter`, is the empty string
         or `undefined`.
+      * `allowHTML` - Set to `true` if a column value, `formatter`, or
+        `emptyCellValue` can contain HTML.  This defaults to `false` to protect
+        against XSS.
+      * `className` - Space delimited CSS classes to add to all `<td>`s in a
+        column.
 
     Column `formatter`s are passed an object (`o`) with the following
     properties:
@@ -2153,6 +2148,8 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
       * `className` - Initially empty string to allow `formatter`s to add CSS 
         classes to the cell's `<td>`.
       * `rowindex` - The zero-based row number.
+      * `rowClass` - Initially empty string to allow `formatter`s to add CSS
+        classes to the cell's containing row `<tr>`.
 
     They may return a value or update `o.value` to assign specific HTML
     content.  A returned value has higher precedence.
@@ -2367,7 +2364,7 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     supplemented by other template values to the instance's `_rowTemplate` (see
     `_createRowTemplate`).  The generated string is then returned.
 
-    The data from Model's attributes is fetched by `getAttrs` and this data
+    The data from Model's attributes is fetched by `toJSON` and this data
     object is appended with other properties to supply values to {placeholders}
     in the template.  For a template generated from a Model with 'foo' and 'bar'
     attributes, the data object would end up with the following properties
@@ -2375,15 +2372,16 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
 
       * `clientID` - From Model, used the assign the `<tr>`'s 'id' attribute.
       * `foo` - The value to populate the 'foo' column cell content.  This
-        value will be the result of the column's `formatter` if assigned, and
-        will default from '' or `undefined` to the value of the column's
-        `emptyCellValue` if assigned.
+        value will be the value stored in the Model's `foo` attribute, or the
+        result of the column's `formatter` if assigned.  If the value is '' or
+        `undefined`, and the column's `emptyCellValue` is assigned, that value
+        will be used.
       * `bar` - Same for the 'bar' column cell content.
       * `foo-className` - String of CSS classes to apply to the `<td>`.
       * `bar-className` - Same.
-      * `rowClasses`  - String of CSS classes to apply to the `<tr>`. This will
-        default to the odd/even class per the specified index, but can be
-        accessed and ammended by any column formatter via `o.data.rowClasses`.
+      * `rowClass`      - String of CSS classes to apply to the `<tr>`. This
+        will be the odd/even class per the specified index plus any additional
+        classes assigned by column formatters (via `o.rowClass`).
 
     Because this object is available to formatters, any additional properties
     can be added to fill in custom {placeholders} in the `_rowTemplate`.
@@ -2397,8 +2395,8 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     _createRowHTML: function (model, index) {
         var data    = model.toJSON(),
             values  = {
-                rowId: model.get('clientId'),
-                rowClasses: (index % 2) ? this.CLASS_ODD : this.CLASS_EVEN
+                rowId   : model.get('clientId'),
+                rowClass: (index % 2) ? this.CLASS_ODD : this.CLASS_EVEN
             },
             source  = this.source || this,
             columns = this.columns,
@@ -2418,12 +2416,15 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
                     column   : col,
                     record   : model,
                     className: '',
+                    rowClass : '',
                     rowindex : index
                 };
 
                 if (typeof col.formatter === 'string') {
-                    // TODO: look for known formatters by string name
-                    value = fromTemplate(col.formatter, formatterData);
+                    if (value !== undefined) {
+                        // TODO: look for known formatters by string name
+                        value = fromTemplate(col.formatter, formatterData);
+                    }
                 } else {
                     // Formatters can either return a value
                     value = col.formatter.call(source, formatterData);
@@ -2434,6 +2435,7 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
                     }
 
                     values[token + '-className'] = formatterData.className;
+                    values.rowClass += ' ' + formatterData.rowClass;
                 }
             }
 
@@ -2442,6 +2444,8 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
             }
 
             values[token] = col.allowHTML ? value : htmlEscape(value);
+
+            values.rowClass = values.rowClass.replace(/\s+/g, ' ');
         }
 
         return fromTemplate(this._rowTemplate, values);
@@ -2470,15 +2474,16 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
 
             tokenValues = {
                 content  : '{' + token + '}',
-                headers  : col.headers.join(' '),
+                headers  : (col._headers || []).join(' '),
                 className: this.getClassName('col', token) + ' ' +
+                           (col.className || '') + ' ' +
                            this.getClassName('cell') +
                            ' {' + token + '-className}'
             };
 
             if (col.nodeFormatter) {
                 // Defer all node decoration to the formatter
-                tokenValues.content   = '';
+                tokenValues.content = '';
             }
 
             html += fromTemplate(cellTemplate, tokenValues);
@@ -2587,7 +2592,7 @@ Y.namespace('DataTable').BodyView = Y.Base.create('tableBody', Y.View, [], {
     **/
     //_rowTemplate: null
 });
-}, 'gallery-2012.01.25-21-14', { requires: ['view', 'gallery-datatable-350-preview-core'] });
+}, 'gallery-2012.02.01-21-35', { requires: ['view', 'gallery-datatable-350-preview-core'] });
 
 YUI.add('gallery-datatable-350-preview-base', function (Y) {
 /**
@@ -2850,7 +2855,7 @@ Y.DataTable.Base = Y.Base.create('datatable', Y.Widget, [Y.DataTable.Core],
 Y.DataTable = Y.mix(
     Y.Base.create('datatable', Y.DataTable.Base, []), // Create the class
     Y.DataTable); // Migrate static and namespaced classes
-}, 'gallery-2012.01.25-21-14', { requires: ['model-list', 'view', 'base-build', 'widget', 'escape', 'gallery-datatable-350-preview-core'] });
+}, 'gallery-2012.02.01-21-35', { requires: ['model-list', 'view', 'base-build', 'widget', 'escape', 'gallery-datatable-350-preview-core'] });
 
 YUI.add('gallery-datatable-350-preview-mutable', function (Y) {
 var toArray = Y.Array,
@@ -2882,6 +2887,22 @@ the DataTable instance.
 
 Y.namespace('DataTable').Mutable = Mutable = function () {};
 
+/**
+Controls whether `addRow`, `removeRow`, and `modifyRow` should trigger the
+underlying Model's sync layer by default.
+
+When `true`, it is unnecessary to pass the "sync" configuration property to
+those methods to trigger per-operation sync.
+
+
+@attribute autoSync
+@type {Boolean}
+@default `false`
+**/
+Mutable.ATTRS = {
+    autoSync: {}
+};
+
 Y.mix(Mutable.prototype, {
     /**
     Adds the column configuration to the DataTable's `columns` configuration.
@@ -2895,8 +2916,9 @@ Y.mix(Mutable.prototype, {
     attribute, updating it, and calling 
     `table.set('columns', _updatedColumnsDefs_)`
 
-    @example
-    // Becomes last column
+    For example:
+
+    <pre><code>// Becomes last column
     table.addColumn('name');
 
     // Inserted after the current second column, moving the current third column
@@ -2909,6 +2931,7 @@ Y.mix(Mutable.prototype, {
     //   1, --  in the second child's children
     //   3 ] -- as the fourth child column
     table.addColumn({ key: 'age', sortable: true }, [ 2, 1, 3 ]);
+    </code></pre>
 
     @method addColumn
     @param {Object|String} config The new column configuration object
@@ -2937,8 +2960,9 @@ Y.mix(Mutable.prototype, {
     /**
     Updates an existing column definition. Fires the `modifyColumn` event.
 
-    @example
-    // Add a formatter to the existing 'price' column definition
+    For example:
+
+    <pre><code>// Add a formatter to the existing 'price' column definition
     table.modifyColumn('price', { formatter: currencyFormatter });
 
     // Change the label on a header cell in a set of nested headers three rows
@@ -2947,6 +2971,7 @@ Y.mix(Mutable.prototype, {
     //   1,  -- the second child
     //   3 ] -- the fourth child column
     table.modifyColumn([2, 1, 3], { label: 'Experience' });
+    </code></pre>
 
     @method modifyColumn
     @param {String|Number|Number[]|Object} name The column key, name, index, or
@@ -3020,14 +3045,45 @@ Y.mix(Mutable.prototype, {
 
     This relays all parameters to the `data` ModelList's `add` method.
 
+    If a configuration object is passed as a second argument, and that object
+    has `sync: true` set, the underlying Model will be `save()`d.
+
+    If the DataTable's `autoSync` attribute is set to `true`, the additional
+    argument is not needed.
+
+    If syncing and the last argument is a function, that function will be used
+    as a callback to the Model's `save()` method.
+
     @method addRow
     @param {Object} data The data or Model instance for the new record
+    @param {Object} [config]* Configuration to pass along
+    @param {Function} [callback] Callback function for Model's `save()`
+      @param {Error|null} callback.err If an error occurred or validation
+        failed, this parameter will contain the error. If the sync operation
+        succeeded, _err_ will be `null`.
+      @param {Any} callback.response The server's response. This value will
+        be passed to the `parse()` method, which is expected to parse it and
+        return an attribute hash.
     @return {DataTable}
     @chainable
     **/
-    addRow: function () {
+    addRow: function (data, config) {
+        var sync = (config && ('sync' in config)) ?
+                config.sync :
+                this.get('autoSync'),
+            models, i, len, args;
+
         if (this.data) {
-            this.data.add.apply(this.data, arguments);
+            models = this.data.add.apply(this.data, arguments);
+
+            if (sync) {
+                models = toArray(models);
+                args   = toArray(arguments, 1, true);
+
+                for (i = 0, len = models.length; i < len; ++i) {
+                    models[i].save.apply(models[i], args);
+                }
+            }
         }
 
         return this;
@@ -3041,14 +3097,35 @@ Y.mix(Mutable.prototype, {
     After locating the target Model, this relays the Model and all other passed
     arguments to the `data` ModelList's `remove` method.
 
+    If a configuration object is passed as a second argument, and that object
+    has `sync: true` set, the underlying Model will be destroyed, passing
+    `{ delete: true }` to trigger calling the Model's sync layer.
+
+    If the DataTable's `autoSync` attribute is set to `true`, the additional
+    argument is not needed.
+
+    If syncing and the last argument is a function, that function will be used
+    as a callback to the Model's `destroy()` method.
+
     @method removeRow
     @param {Object|String|Number} id The Model instance or identifier 
+    @param {Object} [config]* Configuration to pass along
+    @param {Function} [callback] Callback function for Model's `save()`
+      @param {Error|null} callback.err If an error occurred or validation
+        failed, this parameter will contain the error. If the sync operation
+        succeeded, _err_ will be `null`.
+      @param {Any} callback.response The server's response. This value will
+        be passed to the `parse()` method, which is expected to parse it and
+        return an attribute hash.
     @return {DataTable}
     @chainable
     **/
-    removeRow: function (id) {
+    removeRow: function (id, config) {
         var modelList = this.data,
-            model;
+            sync      = (config && ('sync' in config)) ?
+                            config.sync :
+                            this.get('autoSync'),
+            models, model, i, len, args;
 
         // TODO: support removing via DOM element. This should be relayed to View
         if (isObject(id) && id instanceof this.get('recordType')) {
@@ -3060,8 +3137,25 @@ Y.mix(Mutable.prototype, {
         }
 
         if (model) {
-            modelList.remove.apply(modelList,
-                [model].concat(toArray(arguments, 1, true)));
+            args = toArray(arguments, 1, true);
+
+            models = modelList.remove.apply(modelList,
+                [model].concat(args));
+
+            if (sync) {
+                if (!isObject(args[0])) {
+                    args.unshift({});
+                }
+
+                args[0]['delete'] = true;
+
+                models = toArray(models);
+
+                for (i = 0, len = models.length; i < len; ++i) {
+                    model = models[i];
+                    model.destroy.apply(model, args);
+                }
+            }
         }
 
         return this;
@@ -3075,14 +3169,35 @@ Y.mix(Mutable.prototype, {
     After locating the target Model, this relays the all other passed
     arguments to the Model's `setAttrs` method.
 
+    If a configuration object is passed as a second argument, and that object
+    has `sync: true` set, the underlying Model will be `save()`d.
+
+    If the DataTable's `autoSync` attribute is set to `true`, the additional
+    argument is not needed.
+
+    If syncing and the last argument is a function, that function will be used
+    as a callback to the Model's `save()` method.
+
     @method modifyRow
     @param {Object|String|Number} id The Model instance or identifier 
+    @param {Object} data New data values for the Model
+    @param {Object} [config]* Configuration to pass along to `setAttrs()`
+    @param {Function} [callback] Callback function for Model's `save()`
+      @param {Error|null} callback.err If an error occurred or validation
+        failed, this parameter will contain the error. If the sync operation
+        succeeded, _err_ will be `null`.
+      @param {Any} callback.response The server's response. This value will
+        be passed to the `parse()` method, which is expected to parse it and
+        return an attribute hash.
     @return {DataTable}
     @chainable
     **/
-    modifyRow: function (id, data) {
+    modifyRow: function (id, data, config) {
         var modelList = this.data,
-            model;
+            sync      = (config && ('sync' in config)) ?
+                            config.sync :
+                            this.get('autoSync'),
+            model, args;
 
         if (isObject(id) && id instanceof this.get('recordType')) {
             model = id;
@@ -3093,7 +3208,13 @@ Y.mix(Mutable.prototype, {
         }
 
         if (model && isObject(data)) {
-            model.setAttrs.apply(model, toArray(arguments, 1, true));
+            args = toArray(arguments, 1, true);
+
+            model.setAttrs.apply(model, args);
+
+            if (sync) {
+                model.save.apply(model, args);
+            }
         }
 
         return this;
@@ -3250,8 +3371,25 @@ This relays all parameters to the `data` ModelList's `add` method.
 Technically, this is an alias to `addRow`, but please use the appropriately
 named method for readability.
 
+If a configuration object is passed as a second argument, and that object
+has `sync: true` set, the underlying Models will be `save()`d.
+
+If the DataTable's `autoSync` attribute is set to `true`, the additional
+argument is not needed.
+
+If syncing and the last argument is a function, that function will be used
+as a callback to each Model's `save()` method.
+
 @method addRows
 @param {Object[]} data The data or Model instances to add
+@param {Object} [config]* Configuration to pass along
+@param {Function} [callback] Callback function for each Model's `save()`
+  @param {Error|null} callback.err If an error occurred or validation
+    failed, this parameter will contain the error. If the sync operation
+    succeeded, _err_ will be `null`.
+  @param {Any} callback.response The server's response. This value will
+    be passed to the `parse()` method, which is expected to parse it and
+    return an attribute hash.
 @return {DataTable}
 @chainable
 **/
@@ -3297,7 +3435,7 @@ Fired by the `moveColumn` method.
 @param {Object} index The destination index to move to
 **/
 
-}, 'gallery-2012.01.25-21-14', { requires: ['gallery-datatable-350-preview-base'] });
+}, 'gallery-2012.02.01-21-35', { requires: ['gallery-datatable-350-preview-base'] });
 
 YUI.add('gallery-datatable-350-preview-column-widths', function (Y) {
 /**
@@ -3431,6 +3569,8 @@ Y.mix(ColumnWidths.prototype, {
     @param {Number|String|Object} id The column config object or key, name, or
             index of a column in the host's `_displayColumns` array.
     @param {Number|String} width CSS width value. Numbers are treated as pixels
+    @return {DataTable}
+    @chainable
     **/
     setColumnWidth: function (id, width) {
         var col = this.getColumn(id),
@@ -3445,6 +3585,8 @@ Y.mix(ColumnWidths.prototype, {
 
             this._setColumnWidth(index, width);
         }
+
+        return this;
     },
 
     //----------------------------------------------------------------------------
@@ -3568,12 +3710,9 @@ Y.mix(ColumnWidths.prototype, {
 Y.DataTable.ColumnWidths = ColumnWidths;
 
 Y.Base.mix(Y.DataTable, [ColumnWidths]);
-}, 'gallery-2012.01.25-21-14', { requires: ['gallery-datatable-350-preview-base'] });
+}, 'gallery-2012.02.01-21-35', { requires: ['gallery-datatable-350-preview-base'] });
 
 YUI.add('gallery-datatable-350-preview-scroll', function (Y) {
-// TODO: split this into a plugin and a class extension to add the ATTRS (ala
-// Plugin.addHostAttr()
-
 /**
 Adds the ability to make the table rows scrollable while preserving the header
 placement.
@@ -3634,15 +3773,6 @@ Scrollable.ATTRS = {
 };
 
 Y.mix(Scrollable.prototype, {
-    /**
-    Template for the `<div>` that is used to contain the rows when the table is
-    vertically scrolling.
-
-    @property SCROLLING_CONTAINER_TEMPLATE
-    @type {HTML}
-    @value '<div class="{className}"><table class="{tableClassName}"></table></div>'
-    **/
-    SCROLLING_CONTAINER_TEMPLATE: '<div class="{className}"><table class="{tableClassName}"></table></div>',
 
     /**
     Scrolls a given row or cell into view if the table is scrolling.  Pass the
@@ -3655,6 +3785,8 @@ Y.mix(Scrollable.prototype, {
     @method scrollTo
     @param {String|Number|Number[]|Node} id A row clientId, row index, cell
             coordinate array, id string, or Node
+    @return {DataTable}
+    @chainable
     **/
     scrollTo: function (id) {
         var target;
@@ -3674,11 +3806,92 @@ Y.mix(Scrollable.prototype, {
 
             target && target.scrollIntoView();
         }
+
+        return this;
     },
 
     //----------------------------------------------------------------------------
     // Protected properties and methods
     //----------------------------------------------------------------------------
+
+    /**
+    Template for the `<table>` that is used to fix the caption in place when
+    the table is horizontally scrolling.
+
+    @property _CAPTION_TABLE_TEMPLATE
+    @type {HTML}
+    @value '<table class="{className}" role="presentation"></table>'
+    @protected
+    **/
+    _CAPTION_TABLE_TEMPLATE: '<table class="{className}" role="presentation"></table>',
+
+    /**
+    Template for the virtual scrollbar needed in "xy" scrolling setups.
+
+    @property _SCROLLBAR_TEMPLATE
+    @type {HTML}
+    @value '<div class="{className}"><div></div></div>'
+    @protected
+    **/
+    _SCROLLBAR_TEMPLATE: '<div class="{className}"><div></div></div>',
+
+    /**
+    Template for the `<div>` that is used to contain the table when the table is
+    horizontally scrolling.
+
+    @property _X_SCROLLER_TEMPLATE
+    @type {HTML}
+    @value '<div class="{className}"></div>'
+    @protected
+    **/
+    _X_SCROLLER_TEMPLATE: '<div class="{className}"></div>',
+
+    /**
+    Template for the `<div>` that is used to contain the rows when the table is
+    vertically scrolling.
+
+    @property _Y_SCROLLER_TEMPLATE
+    @type {HTML}
+    @value '<div class="{className}"><table class="{tableClassName}" role="presentation"></table></div>'
+    @protected
+    **/
+    _Y_SCROLLER_TEMPLATE: '<div class="{className}"><table class="{tableClassName}" role="presentation"></table></div>',
+    /**
+    Creates a vertical scrollbar absolutely positioned over the right edge of the 
+    `_xScrollNode` to relay scrolling to the `_xScrollNode` (masked) below.
+    Without this, the `_yScrollNode`'s scrollbar would not be visible until the
+    `_xScrollNode` was scrolled to the far right.
+
+    @method _addVirtualScrollbar
+    @protected
+    **/
+    _addVirtualScrollbar: function () {
+        var scroller       = this._yScrollNode,
+            scrollbarWidth = Y.DOM.getScrollbarWidth() + 'px',
+            scrollbar      = Y.Node.create(
+                Y.Lang.sub(this._SCROLLBAR_TEMPLATE, {
+                    className: this.getClassName('virtual', 'scrollbar')
+                }));
+
+        this._scrollbarNode = scrollbar;
+
+        scrollbar.setStyles({
+            height: scroller.get('clientHeight') + 'px',
+            width : scrollbarWidth,
+            bottom : scrollbarWidth
+        });
+
+        scrollbar.one('div')
+            .setStyle('height', scroller.get('scrollHeight') + 'px');
+
+        this._virtualScrollHandle = new Y.EventHandle([
+            scrollbar.on('scroll', Y.rbind('_syncVirtualScroll', this)),
+            scroller.on('scroll', Y.rbind('_syncVirtualScroll', this))
+        ]);
+
+        this.get('contentBox').appendChild(scrollbar);
+    },
+
     /**
     Relays changes in the table structure or content to trigger a reflow of the
     scrolling setup.
@@ -3688,7 +3901,10 @@ Y.mix(Scrollable.prototype, {
     @protected
     **/
     _afterContentChange: function (e) {
+        this._mergeXScrollContent();
         this._mergeYScrollContent();
+
+        this._uiSetWidth(this.get('width'));
         this._syncScrollUI();
     },
 
@@ -3758,8 +3974,24 @@ Y.mix(Scrollable.prototype, {
     },
 
     /**
+    Populates the `_xScrollNode` property by creating the `<div>` Node described
+    by the `_X_SCROLLER_TEMPLATE`.
+
+    @method _createXScrollNode
+    @protected
+    **/
+    _createXScrollNode: function () {
+        if (!this._xScrollNode) {
+            this._xScrollNode = Y.Node.create(
+                Y.Lang.sub(this._X_SCROLLER_TEMPLATE, {
+                    className: this.getClassName('x','scroller')
+                }));
+        }
+    },
+
+    /**
     Populates the `_yScrollNode` property by creating the `<div>` Node described
-    by the `SCROLLING\_CONTAINER_TEMPLATE`.
+    by the `_Y_SCROLLER_TEMPLATE`.
 
     @method _createYScrollNode
     @protected
@@ -3767,7 +3999,7 @@ Y.mix(Scrollable.prototype, {
     _createYScrollNode: function () {
         if (!this._yScrollNode) {
             this._yScrollNode = Y.Node.create(
-                Y.Lang.sub(this.SCROLLING_CONTAINER_TEMPLATE, {
+                Y.Lang.sub(this._Y_SCROLLER_TEMPLATE, {
                     className: this.getClassName('y','scroller'),
                     tableClassName: this.getClassName('y', 'scroll', 'table')
                 }));
@@ -3839,13 +4071,53 @@ Y.mix(Scrollable.prototype, {
     },
 
     /**
+    Merges the caption and content tables back into one table if they are split.
+
+    @method _mergeXScrollContent
+    @protected
+    **/
+    _mergeXScrollContent: function () {
+        var scrollNode = this._xScrollNode,
+            captionTable;
+
+        this.get('boundingBox').removeClass(this.getClassName('scrollable', 'x'));
+
+        if (scrollNode) {
+            if (this._captionNode) {
+                captionTable = this._captionNode && this._captionNode.ancestor(
+                    '.' + this.getClassName('caption', 'table'));
+
+                this._tableNode.insertBefore(this._captionNode,
+                    this._tableNode.get('firstChild'));
+
+                if (captionTable) {
+                    captionTable.remove().destroy(true);
+                }
+
+            }
+
+            scrollNode.replace(scrollNode.get('childNodes').toFrag());
+
+            this._xScrollNode = null;
+
+            if (this._scrollbarNode) {
+                this._virtualScrollHandle.detach();
+                this._virtualScrollHandle = null;
+
+                this._scrollbarNode.remove().destroy(true);
+                this._scrollbarNode = null;
+            }
+        }
+    },
+
+    /**
     Merges the header and data tables back into one table if they are split.
 
     @method _mergeYScrollContent
     @protected
     **/
     _mergeYScrollContent: function () {
-        this.get('boundingBox').removeClass(this.getClassName('scrollable-y'));
+        this.get('boundingBox').removeClass(this.getClassName('scrollable', 'y'));
 
         if (this._yScrollNode) {
             this._tableNode.append(this._tbodyNode);
@@ -3854,11 +4126,8 @@ Y.mix(Scrollable.prototype, {
             this._yScrollNode = null;
 
             this._removeHeaderScrollPadding();
-
-            this._setARIARoles();
         }
 
-        this._uiSetWidth(this.get('width'));
         this._uiSetColumns();
     },
 
@@ -3877,27 +4146,6 @@ Y.mix(Scrollable.prototype, {
         for (i = 0, len = rows.length; i < len; i += (cell.rowSpan || 1)) {
             cell = Y.one(rows[i].cells[rows[i].cells.length - 1])
                 .setStyle('paddingRight', '');
-        }
-    },
-
-    /**
-    Moves the ARIA "grid" role from the table to the `contentBox` and adds the
-    "presentation" role to both header and data tables to support the two
-    tables reporting as one table for screen readers.
-
-    @method _setARIARoles
-    @protected
-    **/
-    _setARIARoles: function () {
-        var contentBox = this.get('contentBox');
-
-        if (this._yScrollNode) {
-            this._tableNode.setAttribute('role', 'presentation');
-            this._yScrollNode.one('> table').setAttribute('role', 'presentation');
-            contentBox.setAttribute('role', 'grid');
-        } else {
-            this._tableNode.setAttribute('role', 'grid');
-            contentBox.removeAttribute('role');
         }
     },
 
@@ -4001,6 +4249,38 @@ Y.mix(Scrollable.prototype, {
     },
 
     /**
+    Splits the data table from its caption if it has one and wraps the table in
+    a horizontally scrollable container `<div>`.
+
+    @method _splitXScrollContent
+    @protected
+    **/
+    _splitXScrollContent: function () {
+        var captionTable;
+
+        this._createXScrollNode();
+
+        this._tableNode.wrap(this._xScrollNode);
+
+        if (this._yScrollNode) {
+            this._xScrollNode.append(this._yScrollNode);
+        }
+
+        if (this._captionNode) {
+            captionTable = Y.Node.create(
+                Y.Lang.sub(this._CAPTION_TABLE_TEMPLATE, {
+                    className: this.getClassName('caption', 'table')
+                }));
+
+            captionTable.setStyle('width', this.get('width'));
+            captionTable.insertBefore(this._captionNode,
+                captionTable.get('firstChild'));
+
+            this.get('contentBox').insertBefore(captionTable, this._xScrollNode);
+        }
+    },
+
+    /**
     Splits the unified table with headers and data into two tables, the latter
     contained within a vertically scrollable container `<div>`.
 
@@ -4010,10 +4290,9 @@ Y.mix(Scrollable.prototype, {
     _splitYScrollContent: function () {
         var table = this._tableNode,
             scrollNode = this._yScrollTable,
-            scrollbar  = Y.DOM.getScrollbarWidth(),
             scrollTable, width;
             
-        this.get('boundingBox').addClass(this.getClassName('scrollable-y'));
+        this.get('boundingBox').addClass(this.getClassName('scrollable','y'));
 
         if (!scrollNode) {
             // I don't want to take into account the added paddingRight done in
@@ -4044,33 +4323,31 @@ Y.mix(Scrollable.prototype, {
             });
 
             scrollTable.setStyle('width', scrollNode.get('clientWidth') + 'px');
-            this._setARIARoles();
         }
 
         this._setYScrollColWidths();
     },
 
     /**
-    Calls `_mergeYScrollContent` or `_splitYScrollContent` depending on the
-    current widget state, accounting for current state.  That is, if the table
-    needs to be split, but is already, nothing happens.
+    Splits or merges the table for X and Y scrolling depending on the current
+    widget state.  If the table needs to be split, but is already, does nothing.
 
     @method _syncScrollUI
     @protected
     **/
     _syncScrollUI: function () {
-        var scrollable  = this._xScroll || this._yScroll,
-            cBox        = this.get('contentBox'),
+        var cBox        = this.get('contentBox'),
             node        = this._yScrollNode || cBox,
-            table       = node.one('table'),
-            overflowing = this._yScroll &&
-                           (table.get('scrollHeight') > node.get('clientHeight'));
+            table       = node.one('table');
+
+        this._uiSetDim('width', '');
+        this._tableNode.setStyle('width', '');
 
         this._uiSetScrollable();
 
-        if (scrollable) {
+        if (this._yScroll) {
             // Only split the table if the content is longer than the height
-            if (overflowing) {
+            if (table.get('scrollHeight') > node.get('clientHeight')) {
                 this._splitYScrollContent();
             } else {
                 this._mergeYScrollContent();
@@ -4079,11 +4356,47 @@ Y.mix(Scrollable.prototype, {
             this._mergeYScrollContent();
         }
 
-        // TODO: fix X scroll.  I'll need to split tables here as well for the
-        // caption if there is one present, so the horizontal scroll happens
-        // under the stationary caption.
-        // Also, similarly, only activate the x scrolling if the table is wider
-        // than the configured width.
+        if (this._xScroll) {
+            // Only split the table if the content is wider than the config width
+            if (table.get('scrollWidth') > parseInt(this.get('width'), 10)) {
+                this._splitXScrollContent();
+
+                if (this._yScrollNode) {
+                    this._yScrollNode.setStyle('height',
+                        (this._yScrollNode.get('offsetHeight') -
+                         Y.DOM.getScrollbarWidth()) + 'px');
+
+                    // Only add virtual scrollbar if the OS+browser renders
+                    // scrollbars.
+                    if (Y.DOM.getScrollbarWidth()) {
+                        this._addVirtualScrollbar();
+                    }
+                }
+            } else {
+                this._mergeXScrollContent();
+            }
+        } else {
+            this._mergeXScrollContent();
+        }
+
+        this._uiSetDim('width', this.get('width'));
+    },
+
+    /**
+    Keeps the `_yScrollNode` scroll position in sync with the `_scrollbarNode`
+    in an "xy" scroll configuration.
+
+    @method _syncVirtualScroll
+    @param {DOMEventFacade} e The scroll event
+    @param {Object} details subscription details, including which of the two
+        scrolling elements is being scrolled
+    @protected
+    **/
+    _syncVirtualScroll: function (e) {
+        var move = (e.currentTarget === this._scrollbarNode) ?
+                    this._yScrollNode : this._scrollbarNode;
+
+        move.set('scrollTop', e.currentTarget.get('scrollTop'));
     },
 
     /**
@@ -4096,21 +4409,19 @@ Y.mix(Scrollable.prototype, {
     @protected
     **/
     _uiSetWidth: function (width) {
-        var scrollable = parseInt(width, 10) &&
-                         (this.get('scrollable')||'').indexOf('x') > -1;
+        var scrollable = this._xScrollNode || this._yScrollNode;
 
         if (isNumber(width)) {
             width += this.DEF_UNIT;
         }
 
-        this._uiSetDim('width', width);
-        this._tableNode.setStyle('width', scrollable ? '' : width);
-        // FIXME: this allows the caption to scroll out of view
-        this.get('contentBox').setStyle('width', scrollable ? width : '');
-
-        if (this._yScrollNode) {
+        if (scrollable) {
+            this._mergeXScrollContent();
             this._mergeYScrollContent();
             this._syncScrollUI();
+        } else {
+            this._uiSetDim('width', width);
+            this._tableNode.setStyle('width', width);
         }
     },
 
@@ -4164,7 +4475,760 @@ Y.mix(Scrollable.prototype, {
 }, true);
 
 Y.Base.mix(Y.DataTable, [Scrollable]);
-}, 'gallery-2012.01.25-21-14', { requires: ['gallery-datatable-350-preview-base', 'gallery-datatable-350-preview-column-widths', 'dom-screen'] });
+}, 'gallery-2012.02.01-21-35', { requires: ['gallery-datatable-350-preview-base', 'gallery-datatable-350-preview-column-widths', 'dom-screen'] });
+
+YUI.add('gallery-datatable-350-preview-sort', function (Y) {
+/**
+Adds support for sorting the table data by API methods `table.sort(...)` or
+`table.toggleSort(...)` or by clicking on column headers in the rendered UI.
+
+Sorting by the API is enabled automatically when this module is `use()`d.  To
+enable UI triggered sorting, set the DataTable's `sortable` attribute to
+`true`.
+
+<pre><code>
+var table = new Y.DataTable({
+    columns: [ 'id', 'username', 'name', 'birthdate' ],
+    data: [ ... ],
+    sortable: true
+});
+
+table.render('#table');
+</code></pre>
+
+Setting `sortable` to `true` will enable UI sorting for all columns.  To enable
+UI sorting for certain columns only, set `sortable` to an array of column keys,
+or just add `sortable: true` to the respective column configuration objects.
+This uses the default setting of `sortable: auto` for the DataTable instance.
+
+<pre><code>
+var table = new Y.DataTable({
+    columns: [
+        'id',
+        { key: 'username',  sortable: true },
+        { key: 'name',      sortable: true },
+        { key: 'birthdate', sortable: true }
+    ],
+    data: [ ... ]
+    // sortable: 'auto' is the default
+});
+
+// OR
+var table = new Y.DataTable({
+    columns: [ 'id', 'username', 'name', 'birthdate' ],
+    data: [ ... ],
+    sortable: [ 'username', 'name', 'birthdate' ]
+});
+</code></pre>
+
+To disable UI sorting for all columns, set `sortable` to `false`.  This still
+permits sorting via the API methods.
+
+As new records are inserted into the table's `data` ModelList, they will be inserted at the correct index to preserve the sort order.
+
+The current sort order is stored in the `sortBy` attribute.  Assigning this value at instantiation will automatically sort your data.
+
+Sorting is done by a simple value comparison using &lt; and &gt; on the field
+value.  If you need custom sorting, add a sort function in the column's
+`sortFn` property.  Columns whose content is generated by formatters, but don't
+relate to a single `key`, require a `sortFn` to be sortable.
+
+<pre><code>
+function nameSort(a, b) {
+    var aa = a.get('lastName'),
+        bb = a.get('lastName');
+
+    if (aa === bb) {
+        aa = a.get('firstName');
+        bb = b.get('firstName');
+    }
+
+    return (aa > bb) ? 1 : (aa < bb) ? -1 : 0;
+}
+
+var table = new Y.DataTable({
+    columns: [ 'id', 'username', { key: name, sortFn: nameSort }, 'birthdate' ],
+    data: [ ... ],
+    sortable: [ 'username', 'name', 'birthdate' ]
+});
+</code></pre>
+
+See the user guide for more details.
+
+@module datatable-sort
+@class DataTable.Sortable
+@for DataTable
+**/
+var YLang     = Y.Lang,
+    isBoolean = YLang.isBoolean,
+    isString  = YLang.isString,
+    isArray   = YLang.isArray,
+    isObject  = YLang.isObject,
+
+    toArray     = Y.Array,
+
+    dirMap = {
+        asc : 1,
+        desc: -1,
+        "1" : 1,
+        "-1": -1
+    };
+
+
+function Sortable() {}
+
+Sortable.ATTRS = {
+    // Which columns in the UI should suggest and respond to sorting interaction
+    // pass an empty array if no UI columns should show sortable, but you want the
+    // table.sort(...) API
+    /**
+    Controls which column headers can trigger sorting by user clicks.
+
+    Acceptable values are:
+
+     * "auto" - (default) looks for `sortable: true` in the column configurations
+     * `true` - all columns are enabled
+     * `false - no UI sortable is enabled
+     * {String[]} - array of key names to give sortable headers
+
+    @attribute sortable
+    @type {String|String[]|Boolean}
+    @default "auto"
+    **/
+    sortable: {
+        value: 'auto',
+        validator: '_validateSortable'
+    },
+
+    /**
+    The current sort configuration to maintain in the data.
+
+    Accepts column `key` strings or objects with a single property, the column
+    `key`, with a value of 1, -1, "asc", or "desc".  E.g. `{ username: 'asc'
+    }`.  String values are assumed to be ascending.
+
+    Example values would be:
+
+     * `"username"` - sort by the data's `username` field or the `key`
+       associated to a column with that `name`.
+     * `{ username: "desc" }` - sort by `username` in descending order.
+       Alternately, use values "asc", 1 (same as "asc"), or -1 (same as "desc").
+     * `["lastName", "firstName"]` - ascending sort by `lastName`, but for
+       records with the same `lastName`, ascending subsort by `firstName`.
+       Array can have as many items as you want.
+     * `[{ lastName: -1 }, "firstName"]` - descending sort by `lastName`,
+       ascending subsort by `firstName`. Mixed types are ok.
+
+    @attribute sortBy
+    @type {String|String[]|Object|Object[]}
+    **/
+    sortBy: {
+        validator: '_validateSortBy',
+        getter: '_getSortBy'
+    },
+
+    /**
+    Strings containing language for sorting tooltips.
+
+    @attribute strings
+    @type {Object}
+    @default (strings for current lang configured in the YUI instance config)
+    **/
+    strings: {
+        valueFn: function () {
+            return Y.Intl.get('datatable-sort');
+        }
+    }
+};
+
+Y.mix(Sortable.prototype, {
+
+    /**
+    Sort the data in the `data` ModelList and refresh the table with the new
+    order.
+
+    Acceptable values for `fields` are `key` strings or objects with a single
+    property, the column `key`, with a value of 1, -1, "asc", or "desc".  E.g.
+    `{ username: 'asc' }`.  String values are assumed to be ascending.
+
+    Example values would be:
+
+     * `"username"` - sort by the data's `username` field or the `key`
+       associated to a column with that `name`.
+     * `{ username: "desc" }` - sort by `username` in descending order.
+       Alternately, use values "asc", 1 (same as "asc"), or -1 (same as "desc").
+     * `["lastName", "firstName"]` - ascending sort by `lastName`, but for
+       records with the same `lastName`, ascending subsort by `firstName`.
+       Array can have as many items as you want.
+     * `[{ lastName: -1 }, "firstName"]` - descending sort by `lastName`,
+       ascending subsort by `firstName`. Mixed types are ok.
+
+    @method sort
+    @param {String|String[]|Object|Object[]} fields The field(s) to sort by
+    @param {Object} [payload] Extra `sort` event payload you want to send along
+    @return {DataTable}
+    @chainable
+    **/
+    sort: function (fields, payload) {
+        return this.fire('sort', Y.merge((payload || {}), {
+            sortBy: fields || this.get('sortBy')
+        }));
+    },
+
+    /**
+    Reverse the current sort direction of one or more fields currently being
+    sorted by.
+
+    Pass the `key` of the column or columns you want the sort order reversed
+    for.
+
+    @method toggleSort
+    @param {String|String[]} fields The field(s) to reverse sort order for
+    @param {Object} [payload] Extra `sort` event payload you want to send along
+    @return {DataTable}
+    @chainable
+    **/
+    toggleSort: function (columns, payload) {
+        var current = this._sortBy,
+            sortBy = [],
+            i, len, j, col, index;
+
+        // To avoid updating column configs or sortBy directly
+        for (i = 0, len = current.length; i < len; ++i) {
+            col = {};
+            col[current[i]._id] = current[i].sortDir;
+            sortBy.push(col);
+        }
+
+        if (columns) {
+            columns = toArray(columns);
+
+            for (i = 0, len = columns.length; i < len; ++i) {
+                col = columns[i];
+                index = -1;
+
+                for (j = sortBy.length - 1; i >= 0; --i) {
+                    if (sortBy[j][col]) {
+                        sortBy[j][col] *= -1;
+                        break;
+                    }
+                }
+            }
+        } else {
+            for (i = 0, len = sortBy.length; i < len; ++i) {
+                for (col in sortBy[i]) {
+                    if (sortBy[i].hasOwnProperty(col)) {
+                        sortBy[i][col] *= -1;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return this.fire('sort', Y.merge((payload || {}), {
+            sortBy: sortBy
+        }));
+    },
+
+    //--------------------------------------------------------------------------
+    // Protected properties and methods
+    //--------------------------------------------------------------------------
+    /**
+    Applies the sorting logic to the new ModelList if the `newVal` is a new
+    ModelList.
+
+    @method _afterDataChange
+    @param {EventFacade} e the `dataChange` event
+    @protected
+    **/
+    _afterDataChange: function (e) {
+        // object values always trigger a change event, but we only want to
+        // call _initSortFn if the value passed to the `data` attribute was a
+        // new ModelList, not a set of new data as an array, or even the same
+        // ModelList.
+        if (e.prevVal !== e.newVal || e.newVal.hasOwnProperty('_compare')) {
+            this._initSortFn();
+        }
+    },
+
+    /**
+    Sorts the `data` ModelList based on the new `sortBy` configuration.
+
+    @method _afterSortByChange
+    @param {EventFacade} e The `sortByChange` event
+    @protected
+    **/
+    _afterSortByChange: function (e) {
+        // Can't use a setter because it's a chicken and egg problem. The
+        // columns need to be set up to translate, but columns are initialized
+        // from Core's initializer.  So construction-time assignment would
+        // fail.
+        this._setSortBy();
+
+        // Don't sort unless sortBy has been set
+        if (this._sortBy.length) {
+            if (!this.data.comparator) {
+                 this.data.comparator = this._sortComparator;
+            }
+
+            this.data.sort();
+        }
+    },
+
+    /**
+    Subscribes to state changes that warrant updating the UI, and adds the
+    click handler for triggering the sort operation from the UI.
+
+    @method _bindSortUI
+    @protected
+    **/
+    _bindSortUI: function () {
+        this.after(['sortableChange', 'sortByChange', 'columnsChange'],
+            this._uiSetSortable);
+
+        if (this._theadNode) {
+            this._sortHandle = this._theadNode.delegate('click',
+                Y.rbind('_onUITriggerSort', this),
+                '.' + this.getClassName('sortable', 'column'));
+        }
+    },
+            
+    /**
+    Sets the `sortBy` attribute from the `sort` event's `e.sortBy` value.
+
+    @method _defSortFn
+    @param {EventFacade} e The `sort` event
+    @protected
+    **/
+    _defSortFn: function (e) {
+        this.set.apply(this, ['sortBy', e.sortBy].concat(e.details));
+    },
+
+    /**
+    Removes the click subscription from the header for sorting.
+
+    @method destructor
+    @protected
+    **/
+    destructor: function () {
+        if (this._sortHandle) {
+            this._sortHandle.detach();
+        }
+    },
+
+    /**
+    Getter for the `sortBy` attribute.
+    
+    Supports the special subattribute "sortBy.state" to get a normalized JSON
+    version of the current sort state.  Otherwise, returns the last assigned
+    value.
+
+    For example:
+
+    <pre><code>var table = new Y.DataTable({
+        columns: [ ... ],
+        data: [ ... ],
+        sortBy: 'username'
+    });
+
+    table.get('sortBy'); // 'username'
+    table.get('sortBy.state'); // { key: 'username', dir: 1 }
+
+    table.sort(['lastName', { firstName: "desc" }]);
+    table.get('sortBy'); // ['lastName', { firstName: "desc" }]
+    table.get('sortBy.state'); // [{ key: "lastName", dir: 1 }, { key: "firstName", dir: -1 }]
+    </code></pre>
+
+    @method _getSortBy
+    @param {String|String[]|Object|Object[]} val The current sortBy value
+    @param {String} detail String passed to `get(HERE)`. to parse subattributes
+    @protected
+    **/
+    _getSortBy: function (val, detail) {
+        var state, i, len, col;
+
+        // "sortBy." is 7 characters. Used to catch 
+        detail = detail.slice(7);
+
+        // TODO: table.get('sortBy.asObject')? table.get('sortBy.json')?
+        if (detail === 'state') {
+            state = [];
+
+            for (i = 0, len = this._sortBy.length; i < len; ++i) {
+                col = this._sortBy[i];
+                state.push({
+                    column: col._id,
+                    dir: col.sortDir
+                });
+            }
+
+            // TODO: Always return an array?
+            return { state: (state.length === 1) ? state[0] : state };
+        } else {
+            return val;
+        }
+    },
+
+    /**
+    Sets up the initial sort state and instance properties.  Publishes events
+    and subscribes to attribute change events to maintain internal state.
+
+    @method initializer
+    @protected
+    **/
+    initializer: function () {
+        var boundParseSortable = Y.bind('_parseSortable', this);
+
+        this._parseSortable();
+
+        this._setSortBy();
+
+        this._initSortFn();
+
+        this.after({
+            renderHeader  : Y.bind('_renderSortable', this),
+            dataChange    : Y.bind('_afterDataChange', this),
+            sortByChange  : Y.bind('_afterSortByChange', this),
+            sortableChange: boundParseSortable,
+            columnsChange : boundParseSortable
+        });
+
+        this.publish('sort', {
+            defaultFn: Y.bind('_defSortFn', this)
+        });
+    },
+
+    /**
+    Creates a `_compare` function for the `data` ModelList to allow custom
+    sorting by multiple fields.
+
+    @method _initSortFn
+    @protected
+    **/
+    _initSortFn: function () {
+        var self = this;
+
+        // TODO: This should be a ModelList extension.
+        // FIXME: Modifying a component of the host seems a little smelly
+        // FIXME: Declaring inline override to leverage closure vs
+        // compiling a new function for each column/sortable change or
+        // binding the _compare implementation to this, resulting in an
+        // extra function hop during sorting. Lesser of three evils?
+        this.data._compare = function (a, b) {
+            var cmp = 0,
+                i, len, col, dir, aa, bb;
+
+            for (i = 0, len = self._sortBy.length; !cmp && i < len; ++i) {
+                col = self._sortBy[i];
+                dir = col.sortDir;
+
+                if (col.sortFn) {
+                    cmp = col.sortFn(a, b) * dir;
+                } else {
+                    // FIXME? Requires columns without sortFns to have key
+                    aa = a.get(col.key);
+                    bb = b.get(col.key);
+
+                    cmp = (aa > bb) ? dir : ((aa < bb) ? -dir : 0);
+                }
+            }
+
+            return cmp;
+        };
+
+        if (this._sortBy.length) {
+            this.data.comparator = this._sortComparator;
+
+            // TODO: is this necessary? Should it be elsewhere?
+            this.data.sort();
+        } else {
+            // Leave the _compare method in place to avoid having to set it
+            // up again.  Mistake?
+            delete this.data.comparator;
+        }
+    },
+
+    /**
+    Fires the `sort` event in response to user clicks on sortable column
+    headers.
+
+    @method _onUITriggerSort
+    @param {DOMEventFacade} e The `click` event
+    @protected
+    **/
+    _onUITriggerSort: function (e) {
+        var id = e.currentTarget.get('id'),
+            config = {},
+            dir    = 1,
+            column;
+
+        e.preventDefault();
+
+        // TODO: if (e.ctrlKey) { /* subsort */ }
+        if (id) {
+            Y.Array.each(this._displayColumns, function (col) {
+                if (id === col._yuid) {
+                    column = col._id;
+                    // Flip current sortDir or default to 1 (asc)
+                    dir    = -(col.sortDir|0) || 1;
+                }
+            });
+
+            if (column) {
+                config[column] = dir;
+
+                this.fire('sort', {
+                    originEvent: e,
+                    sortBy: [config]
+                });
+            }
+        }
+    },
+
+    /**
+    Normalizes the possible input values for the `sortable` attribute, storing
+    the results in the `_sortable` property.
+
+    @method _parseSortable
+    @protected
+    **/
+    _parseSortable: function () {
+        var sortable = this.get('sortable'),
+            columns  = [],
+            i, len, col;
+
+        if (isArray(sortable)) {
+            for (i = 0, len = sortable.length; i < len; ++i) {
+                col = sortable[i];
+
+                // isArray is called because arrays are objects, but will rely
+                // on getColumn to nullify them for the subsequent if (col)
+                if (!isObject(col, true) || isArray(col)) {
+                    col = this.getColumn(col);
+                }
+
+                if (col) {
+                    columns.push(col);
+                }
+            }
+        } else if (sortable) {
+            columns = this._displayColumns.slice();
+
+            if (sortable === 'auto') {
+                for (i = columns.length - 1; i >= 0; --i) {
+                    if (!columns[i].sortable) {
+                        columns.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        this._sortable = columns;
+    },
+
+    /**
+    Initial application of the sortable UI.
+
+    @method _renderSortable
+    @protected
+    **/
+    _renderSortable: function () {
+        this._uiSetSortable();
+
+        this._bindSortUI();
+    },
+
+    /**
+    Parses the current `sortBy` attribute into a normalized structure for the
+    `data` ModelList's `_compare` method.  Also updates the column
+    configurations' `sortDir` properties.
+
+    @method _setSortBy
+    @protected
+    **/
+    _setSortBy: function () {
+        var columns     = this._displayColumns,
+            sortBy      = this.get('sortBy') || [],
+            sortedClass = ' ' + this.getClassName('sorted'),
+            i, len, name, dir, field, column;
+
+        this._sortBy = [];
+
+        // Purge current sort state from column configs
+        for (i = 0, len = columns.length; i < len; ++i) {
+            column = columns[i];
+
+            delete column.sortDir;
+
+            if (column.className) {
+                // TODO: be more thorough
+                column.className = column.className.replace(sortedClass, '');
+            }
+        }
+
+        sortBy = toArray(sortBy);
+
+        for (i = 0, len = sortBy.length; i < len; ++i) {
+            name = sortBy[i];
+            dir  = 1;
+
+            if (isObject(name)) {
+                field = name;
+                // Have to use a for-in loop to process sort({ foo: -1 })
+                for (name in field) {
+                    if (field.hasOwnProperty(name)) {
+                        dir = dirMap[field[name]];
+                        break;
+                    }
+                }
+            }
+
+            if (name) {
+                // Allow sorting of any model field and any column
+                // FIXME: this isn't limited to model attributes, but there's no
+                // convenient way to get a list of the attributes for a Model
+                // subclass *including* the attributes of its superclasses.
+                column = this.getColumn(name) || { _id: name, key: name };
+
+                if (column) {
+                    column.sortDir = dir;
+
+                    if (!column.className) {
+                        column.className = '';
+                    }
+
+                    column.className += sortedClass;
+
+                    this._sortBy.push(column);
+                }
+            }
+        }
+    },
+
+    /**
+    Array of column configuration objects of those columns that need UI setup
+    for user interaction.
+
+    @property _sortable
+    @type {Object[]}
+    @protected
+    **/
+    //_sortable: null,
+
+    /**
+    Array of column configuration objects for those columns that are currently
+    being used to sort the data.  Fake column objects are used for fields that
+    are not rendered as columns.
+
+    @property _sortBy
+    @type {Object[]}
+    @protected
+    **/
+    //_sortBy: null,
+
+    /**
+    Replacement `comparator` for the `data` ModelList that defers sorting logic
+    to the `_compare` method.  The deferral is accomplished by returning `this`.
+
+    @method _sortComparator
+    @param {Model} item The record being evaluated for sort position
+    @return {Model} The record
+    @protected
+    **/
+    _sortComparator: function (item) {
+        // Defer sorting to ModelList's _compare
+        return item;
+    },
+
+    /**
+    Applies the appropriate classes to the `boundingBox` and column headers to
+    indicate sort state and sortability.
+
+    Also currently wraps the header content of sortable columns in a `<div>`
+    liner to give a CSS anchor for sort indicators.
+
+    @method _uiSetSortable
+    @protected
+    **/
+    _uiSetSortable: function () {
+        var columns       = this._sortable || [],
+            sortableClass = this.getClassName('sortable', 'column'),
+            ascClass      = this.getClassName('sorted'),
+            descClass     = this.getClassName('sorted', 'desc'),
+            linerClass    = this.getClassName('sort', 'liner'),
+            i, len, col, node, content;
+
+        this.get('boundingBox').toggleClass(
+            this.getClassName('sortable'),
+            columns.length);
+
+        // TODO: this.head.render() + decorate cells?
+        this._theadNode.all('.' + sortableClass)
+            .removeClass(sortableClass)
+            .removeClass(ascClass)
+            .removeClass(descClass)
+            .each(function (th) {
+                var liner = th.one('.' + linerClass);
+
+                if (liner) {
+                    liner.replace(liner.get('childNodes').toFrag());
+                }
+            });
+
+        for (i = 0, len = columns.length; i < len; ++i) {
+            col  = columns[i];
+            node = this._theadNode.one('#' + col._yuid);
+
+            if (node) {
+                node.addClass(sortableClass);
+                if (col.sortDir) {
+                    node.addClass(ascClass);
+
+                    if (col.sortDir === -1) {
+                        node.addClass(descClass);
+                    }
+                }
+
+                Y.Node.create('<div class="' + linerClass + '"></div>')
+                    .append(node.get('childNodes').toFrag())
+                    .appendTo(node);
+            }
+        }
+    },
+
+    /**
+    Allows values `true`, `false`, "auto", or arrays of column names through.
+
+    @method _validateSortable
+    @param {Any} val The input value to `set("sortable", VAL)`
+    @return {Boolean}
+    @protected
+    **/
+    _validateSortable: function (val) {
+        return val === 'auto' || isBoolean(val) || isArray(val);
+    },
+
+    /**
+    Allows strings, arrays of strings, objects, or arrays of objects.
+
+    @method _validateSortBy
+    @param {String|String[]|Object|Object[]} val The new `sortBy` value
+    @return {Boolean}
+    @protected
+    **/
+    _validateSortBy: function (val) {
+        return val === null ||
+               isString(val) ||
+               isObject(val, true) ||
+               (isArray(val) && (isString(val[0]) || isObject(val, true)));
+    }
+
+}, true);
+
+Y.DataTable.Sortable = Sortable;
+
+Y.Base.mix(Y.DataTable, [Sortable]);
+}, 'gallery-2012.02.01-21-35', { requires: ['gallery-datatable-350-preview-base'] });
 
 Y.use('gallery-datatable-350-preview-core', 
       'gallery-datatable-350-preview-head', 
@@ -4172,7 +5236,8 @@ Y.use('gallery-datatable-350-preview-core',
       'gallery-datatable-350-preview-base', 
       'gallery-datatable-350-preview-mutable',
       'gallery-datatable-350-preview-column-widths', 
-      'gallery-datatable-350-preview-scroll');
+      'gallery-datatable-350-preview-scroll',
+      'gallery-datatable-350-preview-sort');
 
 
-}, 'gallery-2012.01.25-21-14' ,{requires:['base-build', 'widget', 'model-list', 'view', 'escape', 'dom-screen']});
+}, 'gallery-2012.02.01-21-35' ,{requires:['base-build', 'widget', 'model-list', 'view', 'escape', 'dom-screen']});
