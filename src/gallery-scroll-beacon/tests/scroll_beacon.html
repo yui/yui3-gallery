@@ -9,7 +9,7 @@
         <!-- <script type="text/javascript" src="http://localhost/3.3.0/build/yui/yui-min.js"></script> -->
 
         <script type="text/javascript" src="http://yui.yahooapis.com/combo?3.3.0/build/yui/yui-min.js"></script>
-        <script type="text/javascript" src="../build_tmp/gallery-scroll-beacon-debug.js"></script>
+        <!-- <script type="text/javascript" src="../build_tmp/gallery-scroll-beacon-debug.js"></script> -->
 
         <style type="text/css" media="screen">
 #demo{
@@ -48,7 +48,8 @@
 YUI({
     //filter: 'raw',
     //combine: false,
-    scrollBeaconInterval: 200
+    gallery: 'gallery-2011.03.16-21-24',
+    scrollBeaconIntervay: 200
 }).use('gallery-scroll-beacon', 'node', function(Y) {
     var list = Y.one('#list');
 
