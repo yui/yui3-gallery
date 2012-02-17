@@ -640,6 +640,19 @@ var AutoComplete = A.Component.create(
 			},
 
 			/**
+			 * Descructor lifecycle implementation for the Autocomplete class.
+			 * Purges events attached to the node (and all child nodes).
+			 *
+			 * @method destructor
+			 * @protected
+			 */
+			destructor: function() {
+				var instance = this;
+
+				instance.overlay.destroy();
+			},
+
+			/**
 			 * An overridable method that is executed before the result container is shown.
 			 * The method can return false to prevent the container from being shown.
 			 *
@@ -2093,4 +2106,4 @@ var AutoComplete = A.Component.create(
 A.AutoComplete = AutoComplete;
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:true, requires:['gallery-aui-base','gallery-aui-overlay-base','datasource','dataschema','gallery-aui-form-combobox']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-base','gallery-aui-overlay-base','datasource','dataschema','gallery-aui-form-combobox'], skinnable:true});

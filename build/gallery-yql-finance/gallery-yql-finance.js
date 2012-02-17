@@ -1,19 +1,9 @@
 YUI.add('gallery-yql-finance', function(Y) {
 
-
-    var YQLFinance = function (symbols, callback, params) {
-        if (!params) {
-            params = {};
-        }
-
-        this._params = params;
-        this._callback = callback;
+    var YQLFinance = function () {
     };
 
     YQLFinance.prototype = {
-
-        _callback: null,
-        _params: null,
 
         makeArray: function (symbols, columns, rows) {
             var i, j, k, count, nSymbols, nCols, prices = {};
@@ -41,7 +31,10 @@ YUI.add('gallery-yql-finance', function(Y) {
             var sql = 'select {COLUMNS} from yahoo.finance.quotes ' +
                     'where symbol in ({SYMBOLS})',
                 defaultColumns = ["Change"],
-                query, symbolList = "", i, n;
+                query,
+                symbolList = "",
+                i,
+                n;
 
             params = params || {};
             params.columns = params.columns || defaultColumns;
@@ -62,8 +55,8 @@ YUI.add('gallery-yql-finance', function(Y) {
                 var prices = null;
 
                 if (!data.hasOwnProperty("error") &&
-                    data.query.hasOwnProperty("results") &&
-                    data.query.results) {
+                        data.query.hasOwnProperty("results") &&
+                        data.query.results) {
                     prices = Y.YQL.Finance.makeArray(symbols,
                             params.columns, data.query.results.quote);
                 }
@@ -82,8 +75,18 @@ YUI.add('gallery-yql-finance', function(Y) {
                     ' | sort(field="{SORT_COLS}", descending="{SORT_DESC}")',
                 defaultColumns = ["Date", "Open", "High", "Low", "Close",
                     "Volume", "AdjClose"],
-                query, histUrls = "", i, n,
-                now, ddNow, mmNow, yyNow, startDate, endDate;
+                defaultMaxAge = 3600, // 1 hour
+                query,
+                jsonpConfig,
+                histUrls = "",
+                i,
+                n,
+                now,
+                ddNow,
+                mmNow,
+                yyNow,
+                startDate,
+                endDate;
 
             now = new Date();
             ddNow = now.getDate();
@@ -99,6 +102,7 @@ YUI.add('gallery-yql-finance', function(Y) {
             params.endDate = params.endDate || endDate;
             params.sortCols = params.sortCols || "Date";
             params.sortDesc = params.sortDesc || "false";
+            params.maxAge = params.maxAge || defaultMaxAge;
 
             n = symbols.length;
             for (i = 0; i < n; i += 1) {
@@ -119,22 +123,29 @@ YUI.add('gallery-yql-finance', function(Y) {
                 SORT_DESC: params.sortDesc
             });
 
-            Y.YQL(query, function (data) {
-                var prices = null;
 
-                if (!data.hasOwnProperty("error") &&
-                    data.query.hasOwnProperty("results") &&
-                    data.query.results) {
-                    prices = Y.YQL.Finance.makeArray(symbols,
-                            params.columns, data.query.results.row);
+            jsonpConfig = {
+                allowCache: true,
+                on: {
+                    success: function (data) {
+                        var prices = null;
+
+                        if (!data.hasOwnProperty("error") &&
+                                data.query.hasOwnProperty("results") &&
+                                data.query.results) {
+                            prices = Y.YQL.Finance.makeArray(symbols,
+                                    params.columns, data.query.results.row);
+                        }
+                        callback(prices);
+                    }
                 }
-                callback(prices);
-            });
+            };
+
+            Y.YQL(query, jsonpConfig, { "_maxage": params.maxAge });
         }
     };
 
     Y.YQL.Finance = new YQLFinance();
 
 
-
-}, 'gallery-2010.11.17-21-32' ,{requires:['substitute','yql']});
+}, 'gallery-2011.06.01-20-18' ,{requires:['substitute','yql']});

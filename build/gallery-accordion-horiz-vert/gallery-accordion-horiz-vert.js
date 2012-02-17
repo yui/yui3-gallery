@@ -7,10 +7,14 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 	section_min_size = (use_nonzero_empty_div ? 1 : 0);
 
 /**********************************************************************
- * <p>Class to manage an accordion, either horizontally or vertically.
+ * <p>Widget to manage an accordion, either horizontally or vertically.
  * Allows either multiple open sections or only a single open section.
- * Provides option to always force at lease one item to be open.</p>
+ * Provides option to always force at least one item to be open.</p>
  * 
+ * @module gallery-accordion-horiz-vert
+ */
+
+/**
  * <p>An accordion can be constructed from existing markup or from strings
  * containing HTML.  Existing markup can be provided either by setting
  * <code>contentBox</code> or by specifying CSS selectors.  See the
@@ -35,7 +39,6 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
  * opacity.  IE6 doesn't always render correctly with opacity set, so if
  * animation is turned off, we don't use opacity at all.</p>
  * 
- * @module gallery-accordion-horiz-vert
  * @class Accordion
  * @constructor
  * @param config {Object} Widget configuration
@@ -43,11 +46,6 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 
 function Accordion(config)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	config = config || {};
 	if (Y.Lang.isUndefined(config.tabIndex))
 	{
@@ -261,12 +259,12 @@ Accordion.HTML_PARSER =
 {
 	titles: function(content_box)
 	{
-		return content_box.all('li div:nth-child(1)');
+		return content_box.all('li > div:nth-child(1)');
 	},
 
 	sections: function(content_box)
 	{
-		return content_box.all('li div:nth-child(2)');
+		return content_box.all('li > div:nth-child(2)');
 	}
 };
 
@@ -334,6 +332,8 @@ Y.extend(Accordion, Y.Widget,
 	initializer: function(config)
 	{
 		this.section_list = [];
+
+		this.get('allowAllClosed');	// force init of this.allow_all_closed
 
 		if (this.get('horizontal'))
 		{
@@ -417,6 +417,8 @@ Y.extend(Accordion, Y.Widget,
 		else
 		{
 		}
+
+		this.get('contentBox').all('> li').remove();
 	},
 
 	/**
@@ -467,8 +469,16 @@ Y.extend(Accordion, Y.Widget,
 		if (el && this.get('replaceTitleContainer'))
 		{
 			var p = t.get('parentNode');
+			var n = t.get('nextSibling');
 			p.removeChild(t);
-			p.appendChild(el);
+			if (n)
+			{
+				p.insertBefore(el, n);
+			}
+			else
+			{
+				p.appendChild(el);
+			}
 
 			this.section_list[index].title = el;
 
@@ -528,8 +538,16 @@ Y.extend(Accordion, Y.Widget,
 			var display = d.getStyle('display');
 
 			var p = d.get('parentNode');
+			var n = d.get('nextSibling');
 			p.removeChild(d);
-			p.appendChild(el);
+			if (n)
+			{
+				p.insertBefore(el, n);
+			}
+			else
+			{
+				p.appendChild(el);
+			}
 
 			this.section_list[index].content = el;
 
@@ -719,13 +737,19 @@ Y.extend(Accordion, Y.Widget,
 		{
 			args[0].removeChild(args[1]);
 			args[0].removeChild(args[2]);
+
+			if (args[3])
+			{
+				this.fire('remove', index);
+			}
 		}
 
 		var onCompleteArgs =
 		[
 			this.get('contentBox'),
 			this.section_list[index].title,
-			this.section_list[index].clip
+			this.section_list[index].clip,
+			true
 		];
 
 		if (this.get('animateInsertRemove'))
@@ -752,27 +776,31 @@ Y.extend(Accordion, Y.Widget,
 
 			params.node = this.section_list[index].title;
 			var anim    = this._createAnimator(params);
-			anim.on('end', onCompleteRemoveSection, null, onCompleteArgs);
+			anim.on('end', onCompleteRemoveSection, this, onCompleteArgs);
 			anim.run();
 		}
 		else
 		{
-			onCompleteRemoveSection(null, onCompleteArgs);
+			onCompleteArgs[3] = false;
+			onCompleteRemoveSection.call(this, null, onCompleteArgs);
 		}
 
 		this.section_list.splice(index, 1);
+
+		if (!onCompleteArgs[3])
+		{
+			this.fire('remove', index);
+		}
 
 		if (!this.allow_all_closed && this.allSectionsClosed())
 		{
 			this.toggleSection(0);
 		}
-
-		this.fire('remove', index);
 	},
 
 	/**
 	 * @param {String|Node} any element inside the section or title
-	 * @return {int|null} the index of the containing section or <code>false</code> if not found
+	 * @return {int} the index of the containing section, or -1 if not found
 	 */
 	findSection: function(
 		/* string|element */	el)
@@ -791,7 +819,7 @@ Y.extend(Accordion, Y.Widget,
 			}
 		}
 
-		return false;
+		return -1;
 	},
 
 	/**
@@ -1077,6 +1105,143 @@ Y.extend(Accordion, Y.Widget,
 });
 
 Y.Accordion = Accordion;
+/**
+ * @module gallery-accordion-horiz-vert
+ */
+
+/**********************************************************************
+ * <p>Plugin for Y.Accordion that detects that the widget has a fixed size
+ * in the relevant dimension (width or height) and adjusts the open
+ * sections to fit.</p>
+ * 
+ * <p>If/when the widget is given a fixed size, all animations are turned
+ * off.</p>
+ * 
+ * @namespace Plugin
+ * @class FixedSizeAccordion
+ */
+function FixedSizeAccordionPlugin()
+{
+	FixedSizeAccordionPlugin.superclass.constructor.apply(this, arguments);
+}
+
+FixedSizeAccordionPlugin.NAME = "FixedSizeAccordionPlugin";
+FixedSizeAccordionPlugin.NS   = "fixedsize";
+
+FixedSizeAccordionPlugin.ATTRS =
+{
+};
+
+var animation_attrs =
+[
+	'animateRender',
+	'animateInsertRemove',
+	'animateOpenClose'
+];
+
+var total_size =
+{
+	width:  'totalWidth',
+	height: 'totalHeight'
+};
+
+var overflow =
+{
+	width:  'overflowX',
+	height: 'overflowY'
+};
+
+var surrounding =
+{
+	width:  'horizMarginBorderPadding',
+	height: 'vertMarginBorderPadding'
+};
+
+function off(
+	/* string */	name)
+{
+	this.set(name, false);
+	this.modifyAttr(name, { readOnly: true });
+}
+
+function adjust()
+{
+	var host = this.get('host');
+	if (!this.init_fixed_size)
+	{
+		Y.Array.each(animation_attrs, off, host);
+
+		if (!host.get('rendered'))
+		{
+			this.afterHostEvent('render', adjust, this);
+		}
+
+		this.onHostEvent('insert', function()
+		{
+			Y.later(1, this, adjust);	// may be modified after insertion
+		},
+		this);
+
+		this.onHostEvent('remove', adjust, this);
+		this.onHostEvent('open', adjust, this);
+		this.onHostEvent('close', adjust, this);
+
+		this.init_fixed_size = true;
+	}
+
+	var dim   = host.slide_style_name;
+	var total = host.get('boundingBox').parseDimensionStyle(dim);
+	var count = host.getSectionCount();
+	var open  = [];
+	for (var i=0; i<count; i++)
+	{
+		total -= host.getTitle(i)[ total_size[dim] ]();
+		if (host.isSectionOpen(i))
+		{
+			open.push(i);
+		}
+	}
+
+	count     = open.length;
+	var size  = Math.floor(total / count);
+	var extra = total % count;
+	for (i=0; i<count; i++)
+	{
+		var section = host.getSection(open[i]);
+		var size1   = size - section[ surrounding[dim] ]();
+		if (i === count-1)
+		{
+			size1 += extra;
+		}
+
+		section.setStyle(dim, size1+'px');
+		section.setStyle(overflow[dim], 'auto');
+	}
+}
+
+Y.extend(FixedSizeAccordionPlugin, Y.Plugin.Base,
+{
+	initializer: function(config)
+	{
+		var host = this.get('host');
+		var dim  = host.slide_style_name;
+
+		this.init_fixed_size = false;
+		if (host.get(dim))
+		{
+			adjust.call(this);
+		}
+
+		this.afterHostEvent(dim+'Change', function()
+		{
+			Y.later(1, this, adjust);
+		},
+		this);
+	}
+});
+
+Y.namespace("Plugin");
+Y.Plugin.FixedSizeAccordion = FixedSizeAccordionPlugin;
 
 
-}, 'gallery-2010.06.02-18-59' ,{optional:['anim-base'], requires:['widget','selector-css3']});
+}, 'gallery-2011.07.06-19-30' ,{skinnable:true, optional:['anim-base'], requires:['widget','selector-css3','plugin','gallery-dimensions']});

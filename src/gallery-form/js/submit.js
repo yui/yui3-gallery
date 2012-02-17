@@ -6,5 +6,5 @@
  * @description A submit button
  */
 Y.SubmitButton = Y.Base.create('submit-button', Y.FormField, [Y.WidgetChild], {
-	_renderLabelNode : function () {}
+    _renderLabelNode : function () {}
 });

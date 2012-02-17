@@ -24,6 +24,7 @@ var Lang = Y.Lang,
 
     BEFOREITEMADD = "beforeItemAdd",
     ITEMADDED = "itemAdded",
+    ITEMCHOSEN = 'itemChosen',
     BEFOREITEMREMOVE = "beforeItemRemove",
     ITEMREMOVED = "itemRemoved",
     BEFOREITEMERESIZED = "beforeItemResized",
@@ -235,6 +236,8 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @param config {Object} Configuration object literal for the Accordion
      */
     initializer: function( config ) {
+        this._initEvents();
+
         this.after( "render", Y.bind( this._afterRender, this ) );
     },
 
@@ -263,6 +266,45 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
         }
     },
 
+    /**
+     * Binds an event to Accordion's contentBox.
+     *
+     * @method _bindItemChosenEvent
+     * @protected
+     */
+    _bindItemChosenEvent: function(itemChosenEvent) {
+        var contentBox;
+
+        contentBox = this.get( CONTENT_BOX );
+        contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), '.yui3-widget-hd' );
+    },
+
+    /**
+     * Publishes Accordion's events
+     *
+     * @method _initEvents
+     * @protected
+     */
+    _initEvents: function(){
+        /**
+         * Signals that an item has been chosen by user, i.e. there was interaction with this item.
+         * The developer may prevent the action which follows (expanding, collapsing, closing, etc.) by preventing the default function, bound to this event.
+         *
+         * @event itemChosen
+         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+         *  <dl>
+         *      <dt>item</dt>
+         *          <dd>An <code>AccordionItem</code> item on which user has clicked or pressed key</dd>
+         *      <dt>srcIconAlwaysVisible <code>Boolean</code></dt>
+         *          <dd>True if user has clicked on 'set as always visible' icon</dd>
+         *      <dt>srcIconClose <code>Boolean</code></dt>
+         *          <dd>True if user has clicked on 'close' icon</dd>
+         *  </dl>
+         */
+        this.publish( ITEMCHOSEN, {
+            defaultFn: this._onItemChosen
+        });
+    },
 
     /**
      * Contains items for collapsing
@@ -442,12 +484,23 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      *
      * @method _onItemChosen
      * @protected
-     * @param item {Y.AccordionItem} The item on which user has clicked or pressed key
-     * @param srcIconAlwaysVisible {Boolean} True if the user has clicked on always visible icon
-     * @param srcIconClose {Boolean} True if the user has clicked on close icon
+     * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
+     *  <dl>
+     *      <dt>item</dt>
+     *          <dd>An <code>AccordionItem</code> item on which user has clicked or pressed key</dd>
+     *      <dt>srcIconAlwaysVisible {Boolean}</dt>
+     *          <dd>True if user has clicked on 'set as always visible' icon</dd>
+     *      <dt>srcIconClose {Boolean}</dt>
+     *          <dd>True if user has clicked on 'close' icon</dd>
+     *  </dl>
      */
-    _onItemChosen: function( item, srcIconAlwaysVisible, srcIconClose ){
-        var toBeExcluded, alwaysVisible, expanded, collapseOthersOnExpand;
+    _onItemChosen: function( event ){
+        var toBeExcluded, alwaysVisible, expanded, collapseOthersOnExpand,
+            item, srcIconAlwaysVisible, srcIconClose;
+
+        item = event.item;
+        srcIconAlwaysVisible = event.srcIconAlwaysVisible;
+        srcIconClose = event.srcIconClose;
 
         toBeExcluded = {};
         collapseOthersOnExpand = this.get( COLLAPSEOTHERSONEXPAND );
@@ -1320,7 +1373,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
          */
         contentBox.set( "id", srcNodeId );
 
-        itemsDom = srcNode.queryAll( "> ." + C_ITEM );
+        itemsDom = srcNode.all( "> ." + C_ITEM );
 
         itemsDom.each( function( itemNode, index, itemsDom ){
             var newItem;
@@ -1338,18 +1391,26 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
 
 
     /**
-     * Add listener to <code>itemChosen</code> event in Accordion's content box
+     * Add listener(s) to <code>itemChosen</code> event in Accordion's content box.
+     * If itemChosen is an Array, this function will invoke multiple times _bindItemChosenEvent
      *
      * @method bindUI
      * @protected
      */
     bindUI: function(){
-        var contentBox, itemChosenEvent;
+        var i, itemChosenEvent, length;
 
-        contentBox = this.get( CONTENT_BOX );
-        itemChosenEvent = this.get( 'itemChosen' );
+        itemChosenEvent = this.get( ITEMCHOSEN );
 
-        contentBox.delegate( itemChosenEvent, Y.bind( this._onItemChosenEvent, this ), '.yui3-widget-hd' );
+        if( Lang.isArray(itemChosenEvent) ){
+            length = itemChosenEvent.length;
+
+            for( i = 0; i < length; i++ ) {
+                this._bindItemChosenEvent(itemChosenEvent[i]);
+            }
+        } else {
+            this._bindItemChosenEvent(itemChosenEvent);
+        }
     },
 
 
@@ -1374,7 +1435,11 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
         srcIconAlwaysVisible = (iconAlwaysVisible === e.target);
         srcIconClose = (iconClose === e.target);
 
-        this._onItemChosen( item, srcIconAlwaysVisible, srcIconClose );
+        this.fire( ITEMCHOSEN, {
+            item: item,
+            srcIconAlwaysVisible: srcIconAlwaysVisible, 
+            srcIconClose: srcIconClose
+        });
     },
 
 
@@ -1507,7 +1572,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @return {Y.AccordionItem} The removed item or null if not found
      */
     removeItem: function( p_item ){
-        var items, bb, item = null, itemIndex;
+        var items, bb, item = null, itemIndex, allowed;
 
         items = this.get( ITEMS );
 
@@ -1520,10 +1585,13 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
         }
 
         if( itemIndex >= 0 ){
-
-            this.fire( BEFOREITEMREMOVE, {
+            allowed = this.fire( BEFOREITEMREMOVE, {
                 item: p_item
             });
+
+            if( !allowed ){
+                return null;
+            }
 
             item = items.splice( itemIndex, 1 )[0];
 
@@ -1642,16 +1710,18 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
     ATTRS : {
         /**
          * @description The event on which Accordion should listen for user interactions.
-         * The value can be also mousedown or mouseup. Mousedown event can be used if
-         * drag&drop is not enabled
+         * The value can be also 'mousedown', 'mouseup' or ['mouseenter','click'].
+         * Mousedown event can be used if drag&drop is not enabled.
          *
          * @attribute itemChosen
          * @default click
-         * @type String
+         * @type String|Array
          */
         itemChosen: {
             value: "click",
-            validator: Lang.isString
+            validator: function( value ) {
+                return Lang.isString(value) || Lang.isArray(value);
+            }
         },
 
         /**

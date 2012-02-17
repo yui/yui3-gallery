@@ -41,7 +41,7 @@ Y.extend(RangeSeries, Y.CartesianSeries, {
 			yMin = yAxis.get("minimum"),
 			xScaleFactor = dataWidth / (xMax - xMin),
 			yScaleFactor = dataHeight / (yMax - yMin),
-			dataLength = xData.length, 	
+            dataLength = xData.length,	
             i,
             yValues;
         xOffset *= 0.5;
@@ -119,7 +119,7 @@ Y.extend(RangeSeries, Y.CartesianSeries, {
             left = xcoords[i] + offset;
             this.drawMarker(graphic, hloc, left, style);
         }
- 	}
+    }
 });
 
 Y.RangeSeries = RangeSeries;

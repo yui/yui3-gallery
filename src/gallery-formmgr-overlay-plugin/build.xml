@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Form Manager Overlay Plugin" default="local">
+    <description>Form Manager Overlay Plugin build file</description>
+    <property file="build.properties" />
+    <import file="${builddir}/3.x/bootstrap.xml" />
+</project>

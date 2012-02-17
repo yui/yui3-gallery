@@ -3,72 +3,70 @@ var L = Y.Lang;
 Y.Plugin.TransitionOverlay = Y.Base.create("overlayTransitionPlugin", Y.Plugin.Base, [], {
 
     _showing : false,
-    _argsShow : null,
-    _argsHide : null,
+    _styleCache : false,
 
     initializer : function(config) {
-        this.doBefore("_uiSetVisible", this._uiAnimSetVisible); // Override default _uiSetVisible method
-
-        var host = this.get("host"),
-            bb = host.get("boundingBox"),
-            duration = this.get("duration"),
-            easing = this.get("easing");
+        var t = this,
+            eventArgs = { preventable : false, emitFacade : false, bubbles : false };
         
-        this.publish("start", { preventable : false });
-        this.publish("end",   { preventable : false });
+        // Override default _uiSetVisible method
+        t.doBefore("_uiSetVisible", t._uiAnimSetVisible); 
         
-        this._argsShow = Y.merge({ duration : duration, easing : easing }, this.get("show"));
-        this._argsHide = Y.merge({ duration : duration, easing : easing }, this.get("hide"));
+        //cache references
+        t._host = t.get("host");
+        t._bb = t._host.get("boundingBox");
         
-        //hack around some limitations in the transition module, also support both 3.2.0pr1 & 3.2.0 events (changed between them)
-        bb.on([ "transition:start", "transitionstart" ], Y.bind(function(o) {
-            this.fire("start", this._showing);
-            
-            if(this._showing) {
-                this._uiSetVisible(true);
-            }
-        }, this));
-
-        bb.on([ "transition:end", "transitionend" ], Y.bind(function(o) {
-            this.fire("end", this._showing);
-            
-            if(!this._showing) {
-                this._uiSetVisible(false);
-            }
-        }, this));
+        t.publish({
+            start : eventArgs,
+            end   : eventArgs
+        });
         
         //if the first visible change is from hidden to showing, handle that
-        if(this.get("styleOverride")) {
-            host.once("visibleChange", function(o) {
-                if(o.newVal && !o.prevVal) {
-                    this._applyDefaultStyle();
-                }
-            }, this);
+        if(t.get("styleOverride")) {
+            t._styleCache = {};
+            
+            t._host.once("visibleChange", function(o) {
+                (o.newVal && !o.prevVal) && t._applyDefaultStyle();
+            }, t);
         }
     },
-
+    
     destructor : function() {
-        this._argsShow = this._argsHide = null;
+        this._host = this._bb = null;
     },
     
     _applyDefaultStyle : function() {
         var hide = this.get("hide"),
-            host = this.get("host"),
-            bbox = host.get("boundingBox");
+            bb = this._bb;
+        
+        //cache the previous versions of our style
+        Y.Object.each(hide, function(v, p) {
+            var style = bb.getComputedStyle(p);
+            
+            //if we asked for an invalid property it'll return the bounding box Node, so check for that first
+            (style !== bb) && (this._styleCache[p] = style);
+        }, this);
         
         //apply default hidden style
-        if(!host.get("visible")) {
-            bbox.setStyles(hide);
-        }
+        (!this._host.get("visible")) && bb.setStyles(hide);
     },
     
     _uiAnimSetVisible : function(val) {
-        var host = this.get("host");
+        var host = this._host,
+            showing;
         
         if (host.get("rendered")) {
             this._showing = val;
             
-            host.get("boundingBox").transition((val) ? this._argsShow : this._argsHide);
+            this.fire("start", val);
+            
+            val && this._uiSetVisible(true);
+            
+            this._bb.transition((val) ? this.get("show") : this.get("hide"), Y.bind(function() {
+                this.fire("end", val);
+                
+                (!val) && this._uiSetVisible(false);
+            }, this));
             
             return new Y.Do.Prevent("AnimPlugin prevented default show/hide");
         }
@@ -78,15 +76,22 @@ Y.Plugin.TransitionOverlay = Y.Base.create("overlayTransitionPlugin", Y.Plugin.B
      * The original Widget _uiSetVisible implementation
      */
     _uiSetVisible : function(val) {
-        var host = this.get("host");
-        
-        host.get("boundingBox").toggleClass(host.getClassName("hidden"), !val);
+        this._bb.toggleClass(this._host.getClassName("hidden"), !val);
+    },
+    
+    _optionsMerge : function(value) {
+        return Y.merge(this.getAttrs([ "duration", "easing" ]), value);
     }
 }, {
     NS : "transitionPlugin",
     ATTRS : {
-        duration : { value : 0.25 },
-        easing : { value : "ease-in" },
+        duration : { 
+            value : 0.25 
+        },
+        
+        easing : {
+            value : "ease-in"
+        },
         
         styleOverride : { 
             value : true,
@@ -94,17 +99,17 @@ Y.Plugin.TransitionOverlay = Y.Base.create("overlayTransitionPlugin", Y.Plugin.B
         },
         
         hide : {
-            value : { opacity : 0 },
-            setter : function(value) {
-                return Y.merge(this.get("duration"), value);
-            }
+            value : { 
+                opacity : 0 
+            },
+            setter : "_optionsMerge"
         },
 
         show : {
-            value : { opacity : 1 },
-            setter : function(value) {
-                return Y.merge(this.get("duration"), value);
-            }
+            value : { 
+                opacity : 1 
+            },
+            setter : "_optionsMerge"
         }
     }
 });

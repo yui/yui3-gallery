@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>CSS3 Transition Synthetic Event Tests</title>
+        <link type="text/css" rel="stylesheet" href="styles.css">
+        <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/3.4.1/build/cssfonts/fonts-min.css" />
+    </head>
+
+    <body class="yui3-skin-sam yui-skin-sam">
+        <header>
+            <h1>CSS3 Transition Synthetic Events</h1>
+        </header>
+
+        <div id="transition">Unicorns</div>
+
+        <button id="trigger">Start</button>
+
+        <div id="log"></div>
+
+        <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js" charset="utf-8"></script>
+        <script src="../../../build/gallery-event-transition/gallery-event-transition.js"></script>
+        <script src="../tests/transition-tests.js"></script>
+
+        <script>
+            YUI({debug: true}).use('gallery-event-transition-tests', 'console', function(Y) {
+                Y.Event.Transition.Tests.run();
+            });
+        </script>
+    </body>
+</html>

@@ -1,3 +1,8 @@
+/**
+ * @module gallery-querybuilder
+ * @namespace QueryBuilder
+ */
+
 /**********************************************************************
  * <p>Plugin for choosing from a list of values.  In the
  * <code>var_list</code> configuration, specify <code>value_list</code> as
@@ -6,9 +11,11 @@
  * 
  * <p>There must be exactly one operator specified for this plugin.</p>
  * 
- * @module gallery-querybuilder
- * @class QueryBuilder.Select
- * @constructor
+ * <p>The <code>value</code> argument passed to
+ * <code>QueryBuilder.appendNew()</code> must be a string: the value of the
+ * menu item to select.</p>
+ * 
+ * @class Select
  */
 
 QueryBuilder.Select = function(
@@ -55,6 +62,22 @@ QueryBuilder.Select.prototype =
 		return [ value_cell ];
 	},
 
+	postCreate: function(
+		/* int */		query_index,
+		/* object */	var_config,
+		/* array */		op_list,
+		/* array */		value)
+	{
+		try
+		{
+			this.value_menu.focus();
+		}
+		catch (e)
+		{
+			// IE will complain if field is invisible, instead of just ignoring it
+		}
+	},
+
 	destroy: function()
 	{
 		this.value_menu = null;
@@ -78,14 +101,14 @@ QueryBuilder.Select.prototype =
 		return [ [ this.db_query_equals, this.value_menu.get('value') ] ];
 	},
 
-	/**********************************************************************
+	/* *********************************************************************
 	 * Form element names.
 	 */
 
 	valueName: function(
 		/* int */	i)
 	{
-		return Y.Lang.substitute(this.val_input_name_pattern, {i:i});
+		return Y.Lang.sub(this.val_input_name_pattern, {i:i});
 	},
 
 	//
@@ -97,11 +120,12 @@ QueryBuilder.Select.prototype =
 	{
 		// This must use a select tag!
 
-		var markup = '<select name="{n}" class="formmgr-field {c}" />';
+		var markup = '<select name="{n}" class="{f} {c}" />';
 
-		return Y.Lang.substitute(markup,
+		return Y.Lang.sub(markup,
 		{
 			n: menu_name,
+			f: Y.FormManager.field_marker_class,
 			c: this.qb.getClassName('field')
 		});
 	}

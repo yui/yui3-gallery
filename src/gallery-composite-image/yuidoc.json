@@ -1,0 +1,10 @@
+{
+    "name": "Composite-Image",
+    "description": "Object to handle raw multidimensional multichannel image data.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [ "./js" ],
+        "outdir": "./api"
+    }
+}

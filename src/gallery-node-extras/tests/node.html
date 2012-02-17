@@ -1,0 +1,173 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Node Test Suite</title>
+
+<script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+
+</head>
+<body class="yui3-skin-sam">
+    <div id="test-frag">
+        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+        <p>Lorem ipsum dolor <em>sit</em>.</p>
+    </div>
+    <div id="test-computed">test computed style</div>
+    <div id="test-nodes">
+        <ul>
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+            <li>item 4</li>
+        </ul>
+        <ol>
+            <li class="bar">item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+            <li class="bar">item 4</li>
+        </ol>
+    </div>
+
+    <ol id="test-swap">
+        <li>item 1</li>
+        <li>item 2</li>
+        <li>item 3</li>
+        <li>item 4</li>
+    </ol>
+
+    <ul id="test-outerHTML">
+        <li>item 1</li>
+        <li>item 2</li>
+        <li><select><option value="1">option 1</option><option value="2">option 2</option></select></li>
+    </ul>
+
+    <div id="test-nextAll">
+        <p>p</p>
+        <div>div</div>
+        <p>p</p>
+        <p class="start">p</p>
+        <div>div</div>
+        <p>p</p>
+        <div>div</div>
+    </div>
+    
+<div id="yui-log"></div>
+<script type="text/javascript">
+    YUI({base: '../../../../yui3/build/', filter: 'raw', groups: { gallery: { base: '../../../build/', modules: { 'gallery-node-extras': { path: 'gallery-node-extras/gallery-node-extras.js' }}}}}).use('node', 'gallery-node-extras', 'test', function(Y) {
+var Assert = Y.Assert,
+    ArrayAssert = Y.ArrayAssert,
+    suite = new Y.Test.Suite("yuisuite");
+
+var byId = function(id) {
+    return document.getElementById(id);
+};
+
+var $ = Y.Selector.query;
+
+suite.add( new Y.Test.Case({
+    name: 'Node frag',
+    "frag should return a Document Fragment Node": function() {
+        var node = Y.Node.frag();
+        Y.Assert.areEqual(11, node.get('nodeType'));
+    }
+}));
+
+suite.add( new Y.Test.Case({
+    name: 'Node outerHTML',
+    "outerHTML of a fragment should return the fragment": function() {
+            Y.Assert.areEqual("<p>oops</p>", Y.Node.create("<p>oops</p>").get('outerHTML'));
+        },
+        // In the following test, I allow the result to be one of several options because of how IE will
+        // tend to return outerHTML. Since either output can be sent to Y.Node.create to create a new DOM
+        // fragment which is functionally identical to the earlier fragment, I find this behaviour acceptable
+        "outerHTML of a node not a valid child of a div should return the appropriate string": function() {
+            var node = Y.one("#test-outerHTML li"),
+                node2 = Y.one("#test-outerHTML option"),
+                liExpected = [ "<li>item 1</li>", // Firefox, Chrome, etc
+                               "<li>item 1"], // IE
+                optionExpected = ['<option value="1">option 1</option>', // Firefox, Chrome, etc
+                                  '<option value=1>option 1</option>']; // IE
+                
+            ArrayAssert.contains(node.get('outerHTML'), liExpected, "Failed to process LI");
+            ArrayAssert.contains(node2.get('outerHTML'), optionExpected, "Failed to process OPTION");
+        }
+    }));
+
+    suite.add( new Y.Test.Case({
+        name: 'Node one and all',
+        'one with no arguments should return the first child': function() {
+            var node = Y.one('#test-swap'),
+                oneNoArgs = node.one(),
+                oneChildSelector = node.one('> *');
+
+            Y.Assert.areEqual(oneNoArgs, oneChildSelector);
+        },
+        'all with no arugemnts should return all children': function() {
+            var node = Y.one('#test-swap'),
+                allNoArgs = node.all(),
+                allChildSelector = node.all('> *');
+
+            Y.Assert.areEqual(allNoArgs.size(), allChildSelector.size());
+            Y.ArrayAssert.itemsAreEqual(allNoArgs._nodes, allChildSelector._nodes);
+        }
+    }));
+
+    suite.add( new Y.Test.Case({
+        name: 'Node WrapInner',
+        "Node.wrapInner should create a simple wrapper around a Node's contents": function() {
+            var node = Y.one('#test-frag'), nl;
+            node.wrapInner('<div class="inner" />');
+            nl = node.all('> *');
+            Y.Assert.areEqual(1, nl.size());
+            Y.Assert.isTrue(nl.item(0).test('.inner'));
+        },
+        "test Node.wrapInner creating a multi-layered wrapper around text node": function() {
+            var node = Y.one('#test-computed'), nl;
+            node.wrapInner('<div class="outer"><div class="inner" /></div>');
+            nl = node.all('> *');
+            Y.Assert.areEqual(1, nl.size());
+            Y.Assert.isTrue(nl.item(0).test('.outer'));
+            nl = nl.item(0).all('> *');
+            Y.Assert.areEqual(1, nl.size());
+            Y.Assert.isTrue(nl.item(0).test('.inner'));
+            Y.Assert.areEqual('test computed style', nl.item(0).getContent());
+        },
+        "test NodeList.wrapInner": function() {
+            var list = Y.all("#test-nodes li");
+            list.wrapInner("<span class='test' />");
+            list.each(function(n) {
+                Y.Assert.isTrue(n.one('> *').test('span.test'));
+            });
+        }
+    }));
+
+    suite.add( new Y.Test.Case({
+        name: 'Node nextAll/prevAll',
+        "nextAll/prevAll  should return a NodeList": function() {
+            var start = Y.one("#test-nextAll .start");
+            
+            Assert.isInstanceOf(Y.NodeList, start.nextAll('p'), "nextAll");
+            Assert.isInstanceOf(Y.NodeList, start.prevAll('p'), "prevAll");
+        },
+        "the length of the NodeList returned by nextAll should be correct": function() {
+            var start = Y.one("#test-nextAll .start");
+
+            Assert.areEqual(1, start.nextAll('p').size());
+            Assert.areEqual(2, start.nextAll('div').size());
+        },
+        "the length of the NodeList returned by prevAll should be correct": function() {
+            var start = Y.one("#test-nextAll .start");
+
+            Assert.areEqual(2, start.prevAll('p').size(), "p check");
+            Assert.areEqual(1, start.prevAll('div').size(), "div check");
+        }
+    }));
+
+    Y.Test.Runner.add(suite);
+
+    Y.on('load', function() {
+            Y.Test.Runner.run();
+    }, window);
+});
+</script>
+</body>
+</html>

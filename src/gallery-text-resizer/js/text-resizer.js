@@ -80,7 +80,7 @@ Y.namespace('Text').Resizer = Y.Base.create('text-resize', Y.Plugin.Base, [], {
 
   _update : function() {
     Y.log('_update', 'info', 'Y.Text.Resizer');
-    Y.one('body').setStyle('fontSize', this.get('currentSize') + this.get('unit'));
+    Y.one(this.get('targetNode')).setStyle('fontSize', this.get('currentSize') + this.get('unit'));
   },
 
   _save : function(size) {
@@ -122,6 +122,10 @@ Y.namespace('Text').Resizer = Y.Base.create('text-resize', Y.Plugin.Base, [], {
 
     cookieName : {
       value : 'YUI_TEXT_RESIZER'
+    },
+    
+    targetNode : {
+      value : 'body'
     }
   }
 });

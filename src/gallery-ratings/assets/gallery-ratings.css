@@ -1,13 +1,23 @@
 /* Some CSS provided by KomodoMedia.com. Used with permission */
-.yui3-ratings { display: inline; }
-.yui3-ratings .yui3-star-rating,
-.yui3-ratings .yui3-star-rating a:hover,
-.yui3-ratings .yui3-star-rating a:active,
-.yui3-ratings .yui3-star-rating a:focus,
-.yui3-ratings .yui3-star-rating .yui3-current-rating{
+.yui3-gallery-ratings, .yui3-gallery-ratings .yui3-gallery-ratings-star-list li {
+  display: inline;
+}
+.yui3-gallery-ratings-content {
+  display:none;
+}
+/* inline rating */
+.yui3-gallery-ratings .yui3-gallery-ratings-inline {
+  display:inline-block;
+  vertical-align: middle;
+}
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list,
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list a:hover,
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list a:active,
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list a:focus,
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list .yui3-gallery-ratings-current{
   background: url(star.gif) left -1000px repeat-x;
 }
-.yui3-ratings .yui3-star-rating{
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list{
   position:relative;
   width:125px;
   height:25px;
@@ -22,11 +32,8 @@
   vertical-align: middle;
 }
 
-.yui3-ratings .yui3-star-rating li{
-  display: inline;
-}
-.yui3-ratings .yui3-star-rating a,
-.yui3-ratings .yui3-star-rating .yui3-current-rating{
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list a,
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list .yui3-gallery-ratings-current{
   position:absolute;
   top:0;
   left:0;
@@ -37,13 +44,13 @@
   overflow:hidden;
   border: none;
 }
-.yui3-ratings .yui3-star-rating a:hover {
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list a:hover {
   background-position: left bottom;
 }
-.yui3-ratings a.yui3-zero-stars, 
-.yui3-ratings a.yui3-zero-stars:hover,
-.yui3-ratings a.yui3-zero-stars:active,
-.yui3-ratings a.yui3-zero-stars:focus {
+.yui3-gallery-ratings a.clearRating, 
+.yui3-gallery-ratings a.clearRating:hover,
+.yui3-gallery-ratings a.clearRating:active,
+.yui3-gallery-ratings a.clearRating:focus {
   background-image: url(blck25_1.gif);
   background-repeat: no-repeat;
   background-position: left top;
@@ -58,57 +65,26 @@
   vertical-align: middle;
   z-index: 7;
 }
-.yui3-ratings .yui3-star-rating a.yui3-one-star{
-  width:20%;
-  z-index:6;
-}
-.yui3-ratings .yui3-star-rating a.yui3-two-stars{
-  width:40%;
-  z-index:5;
-}
-.yui3-ratings .yui3-star-rating a.yui3-three-stars{
-  width:60%;
-  z-index:4;
-}
-.yui3-ratings .yui3-star-rating a.yui3-four-stars{
-  width:80%;
-  z-index:3;
-}
-.yui3-ratings .yui3-star-rating a.yui3-five-stars{
-  width:100%;
-  z-index:2;
-}
-.yui3-ratings .yui3-star-rating .yui3-current-rating{
+.yui3-gallery-ratings .yui3-gallery-ratings-star-list .yui3-gallery-ratings-current{
   z-index:1;
   background-position: left center;
 }
 
-/* inline rating */
-.yui3-ratings .yui3-inline-rating{
-  display:-moz-inline-block;
-  display:-moz-inline-box;
-  display:inline-block;
-  vertical-align: middle;
-}
-
 /* small rating */
-.yui3-ratings .yui3-small-star{
-  width:50px;
-  height:10px;
-}
-.yui3-ratings .yui3-small-star,
-.yui3-ratings .yui3-small-star a:hover,
-.yui3-ratings .yui3-small-star a:active,
-.yui3-ratings .yui3-small-star a:focus,
-.yui3-ratings .yui3-small-star .yui3-current-rating{
+.yui3-gallery-ratings .yui3-gallery-ratings-small-star ul,
+.yui3-gallery-ratings .yui3-gallery-ratings-small-star ul a:hover,
+.yui3-gallery-ratings .yui3-gallery-ratings-small-star ul a:active,
+.yui3-gallery-ratings .yui3-gallery-ratings-small-star ul a:focus,
+.yui3-gallery-ratings .yui3-gallery-ratings-small-star ul .yui3-gallery-ratings-current{
   background-image: url(star_small.gif);
   line-height: 10px;
   height: 10px;
 }
-.yui3-ratings a.yui3-zero-stars.yui3-small-star {
+.yui3-gallery-ratings .yui3-gallery-ratings-small-star a.clearRating {
   background-image: url(blck10_1.gif);
   height: 10px;
   width: 10px;
   line-height: 10px;
   vertical-align: middle;
 }
+

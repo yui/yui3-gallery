@@ -17,6 +17,7 @@ YUI.add('gallery-idletimer', function(Y) {
 var idle    = false,        //indicates if the user is idle
     tId     = -1,           //timeout ID
     enabled = false,        //indicates if the idle timer is enabled
+    doc = Y.config.doc,     //shortcut for document object
     timeout = 30000;        //the amount of time (ms) before the user is considered idle
 
 //-------------------------------------------------------------------------
@@ -28,7 +29,7 @@ var idle    = false,        //indicates if the user is idle
  * @param {Event} event A DOM2-normalized event object.
  * @return {void}
  */
-function handleUserEvent(){
+function handleUserEvent(event){
 
     //clear any existing timeout
     clearTimeout(tId);
@@ -36,10 +37,14 @@ function handleUserEvent(){
     //if the idle timer is enabled
     if (enabled){
     
-        //if it's idle, that means the user is no longer idle
-        if (idle){
-            toggleIdleState();           
-        } 
+        if (/visibilitychange/.test(event.type)){
+            toggleIdleState(doc.hidden || doc.msHidden || doc.webkitHidden);
+        } else {
+            //if it's idle, that means the user is no longer idle
+            if (idle){
+                toggleIdleState();           
+            } 
+        }
 
         //set a new timeout
         tId = setTimeout(toggleIdleState, timeout);
@@ -48,15 +53,26 @@ function handleUserEvent(){
 
 /* (intentionally not documented)
  * Toggles the idle state and fires an appropriate event.
+ * @param {Boolean} force (Optional) the value to set idle to.
  * @return {void}
  */
-function toggleIdleState(){
+function toggleIdleState(force){
 
-    //toggle the state
-    idle = !idle;
+    var changed = false;
+    if (typeof force != "undefined"){
+        if (force != idle){
+            idle = force;
+            changed = true;
+        }
+    } else {
+        idle = !idle;
+        changed = true;
+    }
     
-    //fire appropriate event
-    Y.IdleTimer.fire(idle ? "idle" : "active");            
+    if (changed){
+        //fire appropriate event
+        Y.IdleTimer.fire(idle ? "idle" : "active");    
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -113,8 +129,12 @@ Y.IdleTimer = {
         }
         
         //assign appropriate event handlers
-        Y.on("mousemove", handleUserEvent, document);
-        Y.on("keydown", handleUserEvent, document);
+        Y.on("mousemove", handleUserEvent, doc);
+        Y.on("keydown", handleUserEvent, doc);
+
+        //need to add the old-fashioned way
+        doc.addEventListener("msvisibilitychange", handleUserEvent, false)
+        doc.addEventListener("webkitvisibilitychange", handleUserEvent, false)
         
         //set a timeout to toggle state
         tId = setTimeout(toggleIdleState, timeout);
@@ -136,8 +156,12 @@ Y.IdleTimer = {
         clearTimeout(tId);
         
         //detach the event handlers
-        Y.detach("mousemove", handleUserEvent, document);
-        Y.detach("keydown", handleUserEvent, document);
+        Y.detach("mousemove", handleUserEvent, doc);
+        Y.detach("keydown", handleUserEvent, doc);
+
+        doc.removeEventListener("msvisibilitychange", handleUserEvent, false)
+        doc.removeEventListener("webkitvisibilitychange", handleUserEvent, false)
+      
     }
 
 };
@@ -146,4 +170,4 @@ Y.IdleTimer = {
 Y.augment(Y.IdleTimer, Y.Event.Target);
 
 
-}, 'gallery-2009.10.28-14' ,{requires:['event','event-custom']});
+}, 'gallery-2011.08.03-21-18' ,{requires:['event','event-custom']});

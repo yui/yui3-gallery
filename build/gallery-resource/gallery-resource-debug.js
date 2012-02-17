@@ -1,10 +1,10 @@
 YUI.add('gallery-resource', function(Y) {
 
-	/*!
-	 * Resource - A RESTful wrapper around Y.io
+	/**
+	 * Resource ??? A RESTful wrapper around Y.io
 	 * 
 	 * Oddnut Software
-	 * Copyright (c) 2009 Eric Ferraiuolo - http://eric.ferraiuolo.name
+	 * Copyright (c) 2009-2011 Eric Ferraiuolo - http://eric.ferraiuolo.name
 	 * YUI BSD License - http://developer.yahoo.com/yui/license.html
 	 */
 	
@@ -48,35 +48,31 @@ YUI.add('gallery-resource', function(Y) {
 		
 		ATTRS : {
 			
-			uri : {
-				validator : isString
-			},
-			
-			headers : {
-				validator : isObject
-			},
-			
-			timeout : {
-				validator : isNumber
-			},
-			
-			entityTranslators : {
-				validator : isObject
-			}
+			uri					: { validator: isString },
+			headers				: { validator: isObject },
+			timeout				: { validator: isNumber },
+			entityTranslators	: { validator: isObject }
 			
 		},
 		
 		ENTITY_TRANSLATORS : {
+			
 			JSON	: {
 				contentType	: 'application/json; charset=UTF-8',
 				serialize	: Y.JSON.stringify,
-				deserialize	: Y.JSON.parse
+				deserialize	: function(r){
+					if (r.responseText) {
+						return Y.JSON.parse(r.responseText);
+					}
+				}
 			},
+			
 			FORM	: {
 				contentType	: 'application/x-www-form-urlencoded; charset=UTF-8',
 				serialize	: Y.QueryString.stringify,
 				deserialize	: null
 			}
+			
 		},
 		
 		NO_ENTITY_METHODS : [GET, HEAD, DELETE],
@@ -107,9 +103,9 @@ YUI.add('gallery-resource', function(Y) {
 			config = config || {};
 			
 			this.publish(E_REQUEST, { defaultFn: this._defRequestFn });
-			this.publish(E_RESPONSE, { preventable: false });
-			this.publish(E_SUCCESS, { preventable: false });
-			this.publish(E_FAILURE, { preventable: false });
+			this.publish(E_RESPONSE);
+			this.publish(E_SUCCESS);
+			this.publish(E_FAILURE);
 			
 			Y.each(Resource.ENTITY_TRANSLATORS, Y.bind(this.registerEntityTranslator, this));	// default translators
 			Y.each(config[ENTITY_TRANSLATORS], Y.bind(this.registerEntityTranslator, this));	// instance translators
@@ -180,36 +176,6 @@ YUI.add('gallery-resource', function(Y) {
 			return this._request;
 		},
 				
-		HEAD : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: HEAD }));
-		},
-		
-		OPTIONS : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: OPTIONS }));
-		},
-		
-		GET : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: GET }));
-		},
-		
-		POST : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: POST }));
-		},
-		
-		PUT : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: PUT }));
-		},
-		
-		DELETE : function (config) {
-			
-			return this.sendRequest(Y.merge(config, { method: DELETE }));
-		},
-		
 		// *** Private Methods *** //
 		
 		_defRequestFn : function (e) {
@@ -241,7 +207,7 @@ YUI.add('gallery-resource', function(Y) {
 				
 				params = Y.clone(e.params, true);
 				
-				uri = Y.substitute(uri, params, function(k ,v){
+				uri = Y.substitute(uri, params, function(k, v){
 					delete params[k];
 					return v;
 				});
@@ -274,12 +240,13 @@ YUI.add('gallery-resource', function(Y) {
 					failure		: this._onFailure
 				},
 				'arguments'	: {
-					request	: {
+					resource	: this,
+					request		: {
 						method	: e.method,	// method
 						params	: e.params,	// original params
 						entity	: e.entity	// original entity
 					},
-					on		: on
+					on			: on
 				}
 			});
 		},
@@ -289,35 +256,42 @@ YUI.add('gallery-resource', function(Y) {
 			var methodResponse = args.request.method.toLowerCase()+'Response',
 				payLoad = { txId: txId, request: args.request, response: r };
 			
-			this.fire(E_RESPONSE, payLoad);
-			this.fire(methodResponse, Y.merge(payLoad, { preventable: false }));
+			this.getEvent(E_RESPONSE).applyConfig({ defaultFn: function(e){
+				this.publish(methodResponse, { defaultFn: function(e){
+					if (args.on && isFunction(args.on.response)) {
+						args.on.response(payLoad);
+					}
+				}}).fire(payLoad);
+			}}, true);
 			
-			if (args.on && isFunction(args.on.response)) {
-				args.on.response(payLoad);
-			}
+			this.fire(E_RESPONSE, payLoad);
 		},
 		
 		_onSuccess : function (txId, r, args) {
 			
 			var methodSuccess = args.request.method.toLowerCase()+'Success',
-				entity = r.responseText,
 				translator = this.getEntityTranslator(r.getResponseHeader('Content-Type')),
-				payLoad;
+				entity, payLoad;
 			
-			if (entity && translator && translator.deserialize) {
+			if (r && translator && translator.deserialize) {
 				try {
-					entity = translator.deserialize(entity);
-				} catch (err) {}
+					entity = translator.deserialize(r);
+				} catch (err) {
+					Y.error(err);
+				}
 			}
 			
 			payLoad = { txId: txId, request: args.request, response: r, entity: entity };
 			
-			this.fire(E_SUCCESS, payLoad);
-			this.fire(methodSuccess, Y.merge(payLoad, { preventable: false }));
+			this.getEvent(E_SUCCESS).applyConfig({ defaultFn: function(e){
+				this.publish(methodSuccess, { defaultFn: function(e){
+					if (args.on && isFunction(args.on.success)) {
+						args.on.success(payLoad);
+					}
+				}}).fire(payLoad);
+			}}, true);
 			
-			if (args.on && isFunction(args.on.success)) {
-				args.on.success(payLoad);
-			}
+			this.fire(E_SUCCESS, payLoad);
 		},
 		
 		_onFailure : function (txId, r, args) {
@@ -325,17 +299,29 @@ YUI.add('gallery-resource', function(Y) {
 			var methodFailure = args.request.method.toLowerCase()+'Failure',
 				payLoad = { txId: txId, request: args.request, response: r };
 			
-			this.fire(E_FAILURE, payLoad);
-			this.fire(methodFailure, Y.merge(payLoad, { preventable: false }));
+			this.getEvent(E_FAILURE).applyConfig({ defaultFn: function(e){
+				this.publish(methodFailure, { defaultFn: function(e){
+					if (args.on && isFunction(args.on.failure)) {
+						args.on.failure(payLoad);
+					}
+				}}).fire(payLoad);
+			}}, true);
 			
-			if (args.on && isFunction(args.on.failure)) {
-				args.on.failure(payLoad);
-			}
+			this.fire(E_FAILURE, payLoad);
 		}
 		
+	});
+	
+	Y.each([HEAD, OPTIONS, GET, POST, PUT, DELETE], function(method){
+		Resource.prototype[method] = function(config){
+			if (isFunction(config)) {
+				config = { on: { success: config } };
+			}
+			return this.sendRequest(Y.merge(config, { method: method }));
+		};
 	});
 	
 	Y.Resource = Resource;
 
 
-}, 'gallery-2010.03.30-17-26' ,{requires:['base-base', 'io-base', 'querystring-stringify-simple', 'substitute', 'json']});
+}, 'gallery-2011.05.04-20-03' ,{requires:['base-base', 'io-base', 'querystring-stringify-simple', 'substitute', 'json']});

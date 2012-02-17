@@ -142,6 +142,21 @@ var TreeData = A.Component.create(
 			},
 
 			/**
+			 * Descructor lifecycle implementation for the TreeData class.
+			 * Purges events attached to the node (and all child nodes).
+			 *
+			 * @method destructor
+			 * @protected
+			 */
+			destructor: function() {
+				var instance = this;
+
+				instance.eachChildren(function(node) {
+					node.destroy();
+				}, true);
+			},
+
+			/**
 			 * Get a TreeNode by id.
 			 *
 			 * @method getNodeById
@@ -822,4 +837,4 @@ var TreeData = A.Component.create(
 A.TreeData = TreeData;
 
 
-}, 'gallery-2010.08.18-17-12' ,{requires:['gallery-aui-base'], skinnable:false});
+}, 'gallery-2011.02.09-21-32' ,{skinnable:false, requires:['gallery-aui-base']});

@@ -1,0 +1,262 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Node Test Suite</title>
+
+<script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+
+<style type="text/css">
+body {
+    font:13px/1.22 arial;
+}
+
+#doc {
+    min-height:200px;
+    width:1000px;
+    border:10px solid red;
+    padding:1em;
+}
+
+#get-style {
+    background:#ccc;
+    float:left;
+    font-size:10px;
+    height:10em;
+    padding:15px 0;
+    width:200px;
+}
+
+.mask {
+    background:#ccc;
+    position:absolute;
+    top:0;
+    left:0;
+    overflow:hidden;
+}
+
+#test-xy {
+    background:green;
+    position:absolute;
+    height:10px;
+    width:10px;
+}
+
+#test-computed {
+    border: medium solid #000;
+    position:relative;
+    width:50%;
+    margin:auto;
+    padding:10px;
+    z-index: 2;
+    zoom:1;
+}
+
+#test-scroll {
+    height: 100px;
+    width: 100px;
+    overflow:auto;
+}
+
+#test-scroll p {
+    height:1000px;
+    width:1000px;
+}
+
+button {
+    display:block;
+}
+
+.yui3-skin-sam .yui-console-entry-pass .yui-console-entry-cat {
+    background: #070;
+    color: #fff;
+}
+.yui3-skin-sam .yui-console-entry-fail .yui-console-entry-cat {
+    background: #700;
+    color: #fff;
+}
+</style>
+
+</head>
+<body class="yui3-skin-sam">
+    <div id="test-append"></div>
+    <div id="test-xy"></div>
+    <div id="test-remove"></div>
+    <div id="test-replace"><p>replace me</p></div>
+    <div id="test-scroll">
+        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+    </div>
+    <div id="test-frag">
+        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+        <p>Lorem ipsum dolor <em>sit</em>.</p>
+    </div>
+    <div id="doc" class="doc-wrap">
+        <a href="http://www.yahoo.com/foo" id="link-1">Yahoo!</a>
+        <a href="foo.html" id="link-2" tabIndex="-1">foo</a>
+        <form id="test-form" class="test-class" action="#">
+            <label for="test-text-value"><em>label</em></label>
+            <input name="test-text-value" id="test-text-value" value="text value">
+            <input name="test-text-novalue">
+    
+            <textarea name="test-textarea-value" value="textarea value"></textarea>
+            <textarea name="test-textarea-novalue"></textarea>
+            <textarea name="test-textarea-textvalue">textarea text</textarea>
+
+            <button name="test-button-value" value="button value">button</button>
+            <button name="test-button-novalue"></button>
+            <button name="test-button-textvalue">button text</button>
+
+        </form><div id="test-class">test class</div>
+        <div id="test-prop" tabindex="4">text<em id="test-contains">test<span></span></em><strong>node</strong></div>
+        <div id="set-style"><div class="bar" id="bar">setStyle</div>foo<div>blah</div></div>
+        <div id="get-style">getStyle</div>
+        <div id="baz">baz</div>
+        text
+        <div id="test-extras">extras</div>
+        <div id="test-children">foo <span>bar</span> <strong>baz</strong> </div>
+        <div id="test-empty-children"></div>
+    </div>
+    <div id="inline-style" style="color: green">inline style</div>
+    <div id="foo" aria-checked="true"></div>
+    <div id="test-computed">test computed style</div>
+    <form id="form.foo@bar:baz">
+        <select id="test-select" name="test-select">
+            <option value="0">foo</option>
+            <option value="1">bar</option>
+            <option>baz</option>
+        </select>
+    </form>
+    <div id="test-nodes">
+        <ul>
+            <li>item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+            <li>item 4</li>
+        </ul>
+        <ol>
+            <li class="bar">item 1</li>
+            <li>item 2</li>
+            <li>item 3</li>
+            <li class="bar">item 4</li>
+        </ol>
+    </div>
+
+    <table id="test-table">
+        <tr><td id="test-td"><div><div>grandchild of td</div></div></td></tr>
+    </table>
+
+    <ol>
+        <li>item 1</li>
+        <li>item 2</li>
+        <li>item 3</li>
+        <li>item 4</li>
+    </ol>
+<div id="test-insert-html">foo</div>
+<div id="test:colon">
+    <h2>test</h2>
+</div>
+
+<ol id="test-swap">
+    <li>item 1</li>
+    <li>item 2</li>
+    <li>item 3</li>
+    <li>item 4</li>
+</ol>
+
+<div id="_funky:id{$400}">
+    <h2>test</h2>
+</div>
+
+<div id="yui-log"></div>
+<script type="text/javascript">
+        YUI({base: '../../../../yui3/build/', filter: 'raw', groups: { gallery: { base: '../../../build/', modules: { 'gallery-nodelist-extras': { path: 'gallery-nodelist-extras/gallery-nodelist-extras.js' }}}}}).use('node', 'gallery-nodelist-extras', 'test', function(Y) {
+    var Assert = Y.Assert,
+        ArrayAssert = Y.ArrayAssert,
+        suite = new Y.Test.Suite("yuisuite");
+
+    var byId = function(id) {
+        return document.getElementById(id);
+    };
+
+    var $ = Y.Selector.query;
+
+    suite.add( new Y.Test.Case({
+        name: 'NodeList Filtering',
+        "filter nodelist with a string should filter using selector": function() {
+            var list = Y.all("#test-nodes li"),
+                filteredList = list.filter(".bar"),
+                rejectList = list.reject(".bar");
+            Assert.areEqual(list.size(), 8, "Expected 8 li's under #test-nodes");
+            Assert.areEqual(filteredList.size(), 2, "Expected 2 li's in filtered NodeList");
+            Assert.areEqual(rejectList.size(), 6, "Expected 6 li's in reject NodeList");
+            Assert.areEqual(list.size(), filteredList.size() + rejectList.size(), "Symmetry Test");
+        },
+        "filter NodeList with a function should iterate over the list exectuing a boolean function on each": function() {
+            var list = Y.all("#test-select option"),
+                filterFunc = function(node) {
+                    return Y.Lang.isNumber(+node.get('value'));
+                },
+                filteredList = list.filter(filterFunc),
+                rejectList = list.reject(filterFunc);
+
+            Assert.areEqual(list.size(), 3, "Expected 3 options under #test-select.");
+            Assert.areEqual(filteredList.size(), 2, "Expected 2 options after filtering.");
+            Assert.areEqual(rejectList.size(), 1, "Expected 1 option in reject NodeList");
+            Assert.areEqual(list.size(), filteredList.size() + rejectList.size(), "Symmetry Test");
+        },
+        "NodeList.first should return the same as Y.one": function() {
+            var optFromNode = Y.one("#test-select option"),
+                optFromFirst = Y.all("#test-select option").first();
+            
+            Assert.isInstanceOf(Y.Node, optFromFirst, "First did not return a Y.Node");
+            Assert.areEqual(optFromNode, optFromFirst);
+        },
+        "NodeList.first with a numeric argument should return a new NodeList containing the first 'x' items in the NodeList": function() {
+            var nl = Y.all("#test-select option"),
+                sublist = nl.first(3);
+
+            Assert.areEqual(3, sublist.size());
+            Assert.areEqual(nl.item(0), sublist.item(0));
+            Assert.areEqual(nl.item(1), sublist.item(1));
+            Assert.areEqual(nl.item(2), sublist.item(2));
+        },
+        "NodeList.last with a numeric argument should return a new NodeList containing the last 'x' items in the NodeList": function() {
+            var nl = Y.all("#test-select option"),
+                sublist = nl.last(3),
+                length = nl.size();
+
+            Assert.areEqual(3, sublist.size());
+            Assert.areEqual(nl.item(length-1), sublist.item(2));
+            Assert.areEqual(nl.item(length-2), sublist.item(1));
+            Assert.areEqual(nl.item(length-3), sublist.item(0));
+        },
+        "NodeList.last should return the same as Y.one with the :last-child modifier": function() {
+            var optFromNode = Y.one("#test-select option:last-child"),
+                optFromLast = Y.all("#test-select option").last();
+
+            Assert.isInstanceOf(Y.Node, optFromLast, "Last did not return a Y.Node");
+            Assert.areEqual(optFromNode, optFromLast);
+        },
+        "NodeList.first with a function should return a Y.Node": function() {
+            var optFromNode = Y.one("#test-select option"),
+                optFromFirst = Y.all("#test-select option").first(function(node) { return true; });
+            
+            Assert.isInstanceOf(Y.Node, optFromFirst, "First did not return a Y.Node");
+            Assert.areEqual(optFromNode.get('yuid'), optFromFirst.get('yuid'));
+        },
+        "NodeList.last with a function should return a Y.Node": function() {
+            var optFromNode = Y.one("#test-select option:last-child"),
+                optFromLast = Y.all("#test-select option").last(function(node) { return true; });
+
+            Assert.isInstanceOf(Y.Node, optFromLast, "Last did not return a Y.Node");
+            Assert.areEqual(optFromNode.get('yuid'), optFromLast.get('yuid'));
+        }
+    })); 
+    Y.Test.Runner.add(suite);
+
+    Y.on('load', function() {
+            Y.Test.Runner.run();
+    }, window);
+});
+</script>
+</body>
+</html>

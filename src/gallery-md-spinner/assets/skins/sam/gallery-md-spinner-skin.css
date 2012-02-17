@@ -1,0 +1,13 @@
+@charset 'UTF-8';
+.yui3-spinner input.yui3-spinner-inputError  {
+	background-color:red;
+}
+
+.yui3-spinner .yui3-spinner-up {
+	background:transparent url(arrows.png) no-repeat 50% -3px;
+}
+
+.yui3-spinner .yui3-spinner-down {
+	background:transparent url(arrows.png) no-repeat 50% -54px;
+ }
+

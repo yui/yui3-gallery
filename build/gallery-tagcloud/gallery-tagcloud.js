@@ -1,6 +1,5 @@
 YUI.add('gallery-tagcloud', function(Y) {
 
-
     function highlight(node, text) {
         var skip = 0, pos, i, spannode, middlebit, endbit, middleclone;
 
@@ -43,8 +42,7 @@ YUI.add('gallery-tagcloud', function(Y) {
     Y.NodeList.importMethod(Y.Node.prototype, "removeHighlight");
 
     function tagCloud(node, outId, options) {
-        var out, cloud = {}, cl = [], max = 0, i, n, t,
-            tags = Y.one(node).get("text").replace(/\W/g, ' ').split(' ');
+        var out, cloud = {}, cl = [], max = 0, i, n, t, tags;
 
         outId = outId || "#dynacloud";
 
@@ -52,6 +50,12 @@ YUI.add('gallery-tagcloud', function(Y) {
         options.max = options.max || 20;
         options.scale = options.scale || 4;
         options.sort = options.sort === undefined ? true : options.sort;
+        options.fieldDelimeter = options.fieldDelimeter || ' ';
+        options.fieldRegex = options.fieldRegex || new RegExp(/\W/g);
+
+        tags = Y.one(node).get("text")
+            .replace(options.fieldRegex, options.fieldDelimeter)
+            .split(options.fieldDelimeter);
 
         n = tags.length;
         for (i = 0; i < n; i += 1) {
@@ -87,8 +91,7 @@ YUI.add('gallery-tagcloud', function(Y) {
             Y.one("body").append('<p id="dynacloud"><\/p>');
             out = Y.one(outId);
         }
-
-        out.get('children').remove(true);
+        out.empty(true);
 
         n = Math.min(options.max, cl.length);
         for (i = 0; i < n; i += 1) {
@@ -109,5 +112,4 @@ YUI.add('gallery-tagcloud', function(Y) {
     Y.Node.addMethod("tagCloud", tagCloud);
 
 
-
-}, 'gallery-2010.11.12-20-45' ,{requires:['node']});
+}, 'gallery-2011.02.16-20-31' ,{requires:['node']});

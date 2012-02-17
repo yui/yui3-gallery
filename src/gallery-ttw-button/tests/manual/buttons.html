@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>TipTheWeb Tip Button Tests</title>
+</head>
+
+<body>
+
+    <h1>TipTheWeb Tip Button Tests</h1>
+    
+    <ul>
+        <li><a class="ttw-button ttw-button-small" href="http://tiptheweb.org/tip/">Tip</a></li>
+        <li><a class="ttw-button ttw-button-large" href="http://tiptheweb.org/tip/?link=http://yuilibrary.com/">Tip YUI</a></li>
+        <li><a class="ttw-button ttw-button-large" href="http://tiptheweb.org/tip/?link=http://github.com/yui/&title=YAY">Tip YUI on GitHub</a></li>
+    </ul>
+    
+    <script src="http://yui.yahooapis.com/3.4.0pr1/build/yui/yui-min.js"></script>
+    <script>
+        YUI({
+        
+            combine : false,
+            filter  : 'RAW',
+            modules : {
+                'gallerycss-ttw-button-css' : {
+                    type    : 'css',
+                    fullpath: '../../../../build/gallerycss-ttw-button-css/gallerycss-ttw-button-css-min.css'
+                },
+                'gallery-ttw-button' : {
+                    type        : 'js',
+                    fullpath    : '../../../../build/gallery-ttw-button/gallery-ttw-button.js',
+                    requires    : ['gallerycss-ttw-button-css', 'node-base', 'node-event-delegate', 'align-plugin', 'querystring-parse-simple', 'querystring-stringify-simple']
+                }
+            }
+        
+        }).use('gallery-ttw-button');
+    </script>
+
+</body>
+</html>

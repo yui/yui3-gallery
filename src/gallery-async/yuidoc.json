@@ -1,0 +1,13 @@
+{
+    "name": "Async",
+    "description": "\"Synchronous programming is disrespectful and should not be employed in applications which are used by people.\" - Douglas Crockford",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js",
+            "../gallery-async-command/js"
+        ],
+        "outdir": "./api"
+    }
+}

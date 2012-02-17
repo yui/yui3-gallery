@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Array Unnest Tests
+        </title>
+        <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js">
+        </script>
+        <style type="text/css">
+            #console .yui3-console-entry {
+                padding: 2px;
+                margin: 0;
+                min-height: 0;
+            }
+
+            #console .yui3-console-entry-fail .yui3-console-entry-cat {
+                background-color: red;
+            }
+
+            #console .yui3-console-entry-pass .yui3-console-entry-cat {
+                background-color: green;
+            }
+
+            #console .yui3-console-entry-perf .yui3-console-entry-cat {
+                background-color: blue;
+            }
+
+            #console {
+                position: static;
+            }
+
+            html, body {
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="testbed" class="yui3-skin-foo">
+        </div>
+        <p>
+            <button id="runButton" type="button">
+                Run Tests
+            </button>
+        </p>
+        <script>
+            YUI({
+                useBrowserConsole:false,
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'min',
+                modules: {
+                    'gallery-array-unnest': {
+                        fullpath: '../../../build/gallery-array-unnest/gallery-array-unnest-min.js'
+                    }
+                }
+            }).use('console', 'test', 'gallery-array-unnest', function (Y) {
+                var assert = Y.Assert,
+                    assertAreSame = assert.areSame,
+                    assertIsArray = assert.isArray,
+                    assertItemsAreSame = Y.ArrayAssert.itemsAreSame,
+                    console,
+                    runButtonNode = Y.one('#runButton'),
+                    test = Y.Test,
+                    testRunner = test.Runner,
+                    testSuite = new test.Suite('Array Unnest Tests'),
+                    unnest = Y.Array.unnest;
+                    
+                if (!runButtonNode) {
+                    return;
+                }
+
+                testSuite.add(new test.Case({
+                    name : 'Array Unnest Tests',
+                    'test:depth1': function() {
+                        var array = unnest([
+                            0,
+                            1,
+                            2,
+                            [
+                                3,
+                                4,
+                                5
+                            ],
+                            [
+                                6,
+                                [
+                                    7,
+                                    [
+                                        8,
+                                        9
+                                    ]
+                                ]
+                            ]
+                        ]);
+                        
+                        assertIsArray(array);
+                        assertAreSame(array.length, 8);
+                        
+                        (function (lastItem) {
+                            assertIsArray(lastItem);
+                            assertAreSame(lastItem[0], 7);
+                            assertIsArray(lastItem[1]);
+                            assertAreSame(lastItem[1][0], 8);
+                            assertAreSame(lastItem[1][1], 9);
+                        }(array.pop()));
+                        
+                        Y.each(array, function (value, index) {
+                            assertAreSame(value,  index);
+                        });
+                    },
+                    'test:depth3': function () {
+                        assertItemsAreSame(unnest([
+                            0,
+                            1,
+                            2,
+                            [
+                                3,
+                                4,
+                                5
+                            ],
+                            [
+                                6,
+                                [
+                                    7,
+                                    [
+                                        8,
+                                        9
+                                    ]
+                                ]
+                            ]
+                        ], 3), [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9
+                        ]);
+                    }
+                }));
+
+                testRunner.setName('Array Unnest Tests');
+                testRunner.add(testSuite);
+                testRunner.enableLogging();
+
+                runButtonNode.on('click', function() {
+                    if (!console) {
+                        console = new Y.Console({
+                            entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">' +
+                                '<span class="{entry_cat_class}">' +
+                                    '{label}' +
+                                '</span>' +
+                                '<span class="{entry_content_class}">' +
+                                    '{message}' +
+                                '</span>' +
+                            '</pre>',
+                            height: '90%',
+                            id: 'console',
+                            newestOnTop: false,
+                            printTimeout: 0,
+                            verbose: false,
+                            width: '100%'
+                        }).render();
+                    }
+                    
+                    testRunner.run();
+                });
+            });
+        </script>
+    </body>
+</html>

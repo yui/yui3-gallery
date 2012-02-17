@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+/*Supplemental: CSS for the YUI distribution*/
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+</style>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssfonts/fonts-min.css">
+<!-- BEGIN EXAMPLE CODE -->	
+</head>		
+<body class="yui3-skin-sam">
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script type="text/javascript">            
+<script type="text/javascript">            
+    YUI({gallery: 'gallery-2011.02.18-23-10',
+            groups: {
+                gallery: {
+                    base: 'http://yui.yahooapis.com/combo?gallery-2011.02.18-23-10/build/',
+                    patterns: {'gallery-': {}},
+                    modules:
+                    {
+                        "gallery-graphics": {
+                            "requires": ["node", "event-custom", "base"],
+                            "plugins": {
+                                "gallery-graphics-canvas": {
+                                    "path": "gallery-graphics-canvas/gallery-graphics-canvas.js",
+                                    "condition": {
+                                        "test": function(Y) {
+                                            var canvas = document.createElement("canvas");
+                                            return (!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") && (canvas && canvas.getContext && canvas.getContext("2d")));
+                                        }, 
+                                        "trigger": "gallery-graphics"
+                                    }
+                                }, 
+                                "gallery-graphics-svg": {
+                                    "path": "gallery-graphics-svg/gallery-graphics-svg.js",
+                                    "condition": {
+                                        "test": function(Y) {
+                                            return (document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1"));
+                                        }, 
+                                        "trigger": "gallery-graphics"
+                                    }
+                                }, 
+                                "gallery-graphics-vml": {
+                                    "path": "gallery-graphics-vml/gallery-graphics-vml.js",
+                                    "condition": {
+                                        "test": function(Y) {
+                                        var canvas = document.createElement("canvas");
+                                        return (!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") && (!canvas || !canvas.getContext || !canvas.getContext("2d")));
+                                        }, 
+                                        "trigger": "gallery-graphics"
+                                    }
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+    }).use('gallery-graphics', function (Y) 
+    {
+        //put your code here
+    });
+</script>
+</body>
+</html>

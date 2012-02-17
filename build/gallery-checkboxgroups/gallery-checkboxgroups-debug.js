@@ -2,36 +2,29 @@ YUI.add('gallery-checkboxgroups', function(Y) {
 
 "use strict";
 
-var Direction =
-{
-	SLIDE_UP:   0,
-	SLIDE_DOWN: 1
-};
-
 /**********************************************************************
+ * Various behaviors that can be attached to a group of checkboxes.
+ *
+ * @module gallery-checkboxgroups
+ */
+
+/**
  * <p>Base class for enforcing constraints on groups of checkboxes.</p>
  *
  * <p>Derived classes must override <code>enforceConstraints()</code>.</p>
  * 
- * @module gallery-checkboxgroups
  * @class CheckboxGroup
  * @constructor
- * @param cb_list {String|Object|Array} The list of checkboxes to manage
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
 
 function CheckboxGroup(
-	/* string/object/array */	cb_list)
+	/* string/Node/NodeList */	cb_list)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
-	this.cb_list = [];
+	this.cb_list = new Y.NodeList('');
 	this.ev_list = [];
 	this.splice(0, 0, cb_list);
 
-	this.direction     = Direction.SLIDE_UP;
 	this.ignore_change = false;
 }
 
@@ -45,7 +38,7 @@ function checkboxChanged(
 CheckboxGroup.prototype =
 {
 	/**
-	 * @return {Array} List of managed checkboxes
+	 * @return {NodeList} List of managed checkboxes
 	 */
 	getCheckboxList: function()
 	{
@@ -58,12 +51,12 @@ CheckboxGroup.prototype =
 	 * 
 	 * @param start {Int} Insertion index
 	 * @param delete_count {Int} Number of items to remove, starting from <code>start</code>
-	 * @param cb_list {String|Object|Array} The list of checkboxes to insert at <code>start</code>
+	 * @param cb_list {String|Node|NodeList} The list of checkboxes to insert at <code>start</code>
 	 */
 	splice: function(
 		/* int */					start,
 		/* int */					delete_count,
-		/* string/object/array */	cb_list)
+		/* string/Node/NodeList */	cb_list)
 	{
 		for (var i=start; i<delete_count; i++)
 		{
@@ -72,24 +65,23 @@ CheckboxGroup.prototype =
 
 		if (Y.Lang.isString(cb_list))
 		{
-			var node_list = Y.all(cb_list);
-
-			cb_list = [];
-			node_list.each(function(cb)
-			{
-				this.push(cb);
-			},
-			cb_list);
+			cb_list = Y.all(cb_list);
 		}
 
-		if (cb_list && Y.Lang.isNumber(cb_list.length))
+		if (cb_list instanceof Y.NodeList)
 		{
-			for (i=0; i<cb_list.length; i++)
+			cb_list.each(function(cb, i)
 			{
 				var j=start+i, k=(i===0 ? delete_count : 0);
-				this.cb_list.splice(j, k, Y.one(cb_list[i]));
-				this.ev_list.splice(j, k, this.cb_list[j].on('click', checkboxChanged, this));
-			}
+				this.cb_list.splice(j, k, cb);
+				this.ev_list.splice(j, k, cb.on('click', checkboxChanged, this));
+			},
+			this);
+		}
+		else if (cb_list instanceof Y.Node)
+		{
+			this.cb_list.splice(start, delete_count, cb_list);
+			this.ev_list.splice(start, delete_count, cb_list.on('click', checkboxChanged, this));
 		}
 		else
 		{
@@ -101,21 +93,21 @@ CheckboxGroup.prototype =
 	checkboxChanged: function(
 		/* checkbox */	cb)
 	{
-		if (this.ignore_change || !this.cb_list.length || this.allDisabled())
+		if (this.ignore_change || this.cb_list.isEmpty() || this.allDisabled())
 		{
 			return;
 		}
 
 		cb = Y.one(cb);
 
-		var count = this.cb_list.length;
-		for (var i=0; i<count; i++)
+		this.cb_list.each(function(cb1, i)
 		{
-			if (cb == this.cb_list[i])
+			if (cb1 == cb)
 			{
 				this.enforceConstraints(this.cb_list, i);
 			}
-		}
+		},
+		this);
 	},
 
 	/**
@@ -125,8 +117,8 @@ CheckboxGroup.prototype =
 	 * @param index {Int} The index of the checkbox that changed
 	 */
 	enforceConstraints: function(
-		/* array */	cb_list,
-		/* int */	index)
+		/* NodeList */	cb_list,
+		/* int */		index)
 	{
 	},
 
@@ -135,10 +127,11 @@ CheckboxGroup.prototype =
 	 */
 	allChecked: function()
 	{
-		var count = this.cb_list.length;
+		var count = this.cb_list.size();
 		for (var i=0; i<count; i++)
 		{
-			if (!this.cb_list[i].get('disabled') && !this.cb_list[i].get('checked'))
+			var cb = this.cb_list.item(i);
+			if (!cb.get('disabled') && !cb.get('checked'))
 			{
 				return false;
 			}
@@ -152,10 +145,10 @@ CheckboxGroup.prototype =
 	 */
 	allUnchecked: function()
 	{
-		var count = this.cb_list.length;
+		var count = this.cb_list.size();
 		for (var i=0; i<count; i++)
 		{
-			if (this.cb_list[i].get('checked'))
+			if (this.cb_list.item(i).get('checked'))
 			{
 				return false;
 			}
@@ -169,10 +162,10 @@ CheckboxGroup.prototype =
 	 */
 	allDisabled: function()
 	{
-		var count = this.cb_list.length;
+		var count = this.cb_list.size();
 		for (var i=0; i<count; i++)
 		{
-			if (!this.cb_list[i].get('disabled'))
+			if (!this.cb_list.item(i).get('disabled'))
 			{
 				return false;
 			}
@@ -189,23 +182,30 @@ Y.CheckboxGroup = CheckboxGroup;
  * in "Tog on Interface".  The checkboxes are assumed to be ordered in the
  * order they were added.
  * 
- * @module gallery-checkboxgroups
  * @class AtLeastOneCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
- * @param cb_list {String|Object|Array} The list of checkboxes to manage
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
 
 function AtLeastOneCheckboxGroup(
-	/* string/object/array */	cb_list)
+	/* string/Node/NodeList */	cb_list)
 {
+	this.direction = AtLeastOneDirection.SLIDE_UP;
 	AtLeastOneCheckboxGroup.superclass.constructor.call(this, cb_list);
 }
 
-function getNextActiveIndex(
-	/* array */	cb_list,
-	/* int */	index)
+var AtLeastOneDirection =
 {
-	if (cb_list.length < 2)
+	SLIDE_UP:   0,
+	SLIDE_DOWN: 1
+};
+
+function getNextActiveIndex(
+	/* NodeList */	cb_list,
+	/* int */		index)
+{
+	if (cb_list.size() < 2)
 		{
 		return index;
 		}
@@ -215,23 +215,23 @@ function getNextActiveIndex(
 		{
 		if (new_index === 0)
 			{
-			this.direction = Direction.SLIDE_DOWN;
+			this.direction = AtLeastOneDirection.SLIDE_DOWN;
 			}
-		else if (new_index == cb_list.length-1)
+		else if (new_index == cb_list.size()-1)
 			{
-			this.direction = Direction.SLIDE_UP;
+			this.direction = AtLeastOneDirection.SLIDE_UP;
 			}
 
-		if (this.direction == Direction.SLIDE_UP)
+		if (this.direction == AtLeastOneDirection.SLIDE_UP)
 			{
 			new_index = Math.max(0, new_index-1);
 			}
 		else
 			{
-			new_index = Math.min(cb_list.length-1, new_index+1);
+			new_index = Math.min(cb_list.size()-1, new_index+1);
 			}
 		}
-		while (cb_list[new_index].get('disabled'));
+		while (cb_list.item(new_index).get('disabled'));
 
 	return new_index;
 }
@@ -239,12 +239,12 @@ function getNextActiveIndex(
 Y.extend(AtLeastOneCheckboxGroup, CheckboxGroup,
 {
 	enforceConstraints: function(
-		/* array */	cb_list,
-		/* int */	index)
+		/* NodeList */	cb_list,
+		/* int */		index)
 	{
-		if (cb_list[index].get('checked') || !this.allUnchecked())
+		if (cb_list.item(index).get('checked') || !this.allUnchecked())
 		{
-			this.direction = Direction.SLIDE_UP;
+			this.direction = AtLeastOneDirection.SLIDE_UP;
 			return;
 		}
 
@@ -259,7 +259,7 @@ Y.extend(AtLeastOneCheckboxGroup, CheckboxGroup,
 		// turn the new checkbox on
 
 		this.ignore_change = true;
-		cb_list[new_index].set('checked', true);
+		cb_list.item(new_index).set('checked', true);
 		this.ignore_change = false;
 	}
 });
@@ -269,14 +269,14 @@ Y.AtLeastOneCheckboxGroup = AtLeastOneCheckboxGroup;
  * At most one checkbox can be selected.  If one is turned on, the active
  * one is turned off.
  * 
- * @module gallery-checkboxgroups
  * @class AtMostOneCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
- * @param cb_list {String|Object|Array} The list of checkboxes to manage
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
 
 function AtMostOneCheckboxGroup(
-	/* string/object/array */	cb_list)
+	/* string/Node/NodeList */	cb_list)
 {
 	AtMostOneCheckboxGroup.superclass.constructor.call(this, cb_list);
 }
@@ -284,20 +284,20 @@ function AtMostOneCheckboxGroup(
 Y.extend(AtMostOneCheckboxGroup, CheckboxGroup,
 {
 	enforceConstraints: function(
-		/* array */	cb_list,
+		/* NodeList */	cb_list,
 		/* int */	index)
 	{
-		if (!cb_list[index].get('checked'))
+		if (!cb_list.item(index).get('checked'))
 		{
 			return;
 		}
 
-		var count = cb_list.length;
+		var count = cb_list.size();
 		for (var i=0; i<count; i++)
 		{
 			if (i != index)
 			{
-				cb_list[i].set('checked', false);
+				cb_list.item(i).set('checked', false);
 			}
 		}
 	}
@@ -309,16 +309,16 @@ Y.AtMostOneCheckboxGroup = AtMostOneCheckboxGroup;
  * to check all. This check-all box is automatically changed if any other
  * checkbox changes state.
  * 
- * @module gallery-checkboxgroups
  * @class SelectAllCheckboxGroup
+ * @extends CheckboxGroup
  * @constructor
  * @param select_all_cb {String|Object} The checkbox that triggers "select all"
- * @param cb_list {String|Object|Array} The list of checkboxes to manage
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
  */
 
 function SelectAllCheckboxGroup(
-	/* string/object */			select_all_cb,
-	/* string/object/array */	cb_list)
+	/* string/Node */			select_all_cb,
+	/* string/Node/NodeList */	cb_list)
 {
 	this.select_all_cb = Y.one(select_all_cb);
 	this.select_all_cb.on('click', this.toggleSelectAll, this);
@@ -336,24 +336,60 @@ Y.extend(SelectAllCheckboxGroup, CheckboxGroup,
 	toggleSelectAll: function()
 	{
 		var checked = this.select_all_cb.get('checked');
-		for (var i=0; i<this.cb_list.length; i++)
+		var count   = this.cb_list.size();
+		for (var i=0; i<count; i++)
 		{
-			if (!this.cb_list[i].get('disabled'))
+			var cb = this.cb_list.item(i);
+			if (!cb.get('disabled'))
 			{
-				this.cb_list[i].set('checked', checked);
+				cb.set('checked', checked);
 			}
 		}
 	},
 
 	enforceConstraints: function(
-		/* array */	cb_list,
-		/* int */	index)
+		/* NodeList */	cb_list,
+		/* int */		index)
 	{
 		this.select_all_cb.set('checked', this.allChecked());
 	}
 });
 
 Y.SelectAllCheckboxGroup = SelectAllCheckboxGroup;
+/**********************************************************************
+ * Enables the given list of nodes if any checkboxes are checked.
+ * 
+ * @class EnableIfAnyCheckboxGroup
+ * @extends CheckboxGroup
+ * @constructor
+ * @param cb_list {String|Node|NodeList} The list of checkboxes to manage
+ * @param nodes {String|NodeList} The nodes to enable/disable
+ */
+
+function EnableIfAnyCheckboxGroup(
+	/* string/Node/NodeList */	cb_list,
+	/* string/NodeList */		nodes)
+{
+	this.nodes = Y.Lang.isString(nodes) ? Y.all(nodes) : nodes;
+	EnableIfAnyCheckboxGroup.superclass.constructor.call(this, cb_list);
+	this.enforceConstraints(this.cb_list, 0);
+}
+
+Y.extend(EnableIfAnyCheckboxGroup, CheckboxGroup,
+{
+	enforceConstraints: function(
+		/* NodeList */	cb_list,
+		/* int */		index)
+	{
+		var disable = this.allUnchecked();
+		this.nodes.each(function(node)
+		{
+			node.set('disabled', disable);
+		});
+	}
+});
+
+Y.EnableIfAnyCheckboxGroup = EnableIfAnyCheckboxGroup;
 
 
-}, 'gallery-2010.05.26-19-47' ,{requires:['node-base']});
+}, 'gallery-2011.08.31-20-57' ,{requires:['node-base']});

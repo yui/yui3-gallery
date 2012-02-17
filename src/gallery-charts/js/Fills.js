@@ -1,3 +1,9 @@
+/**
+ * Utility class used for drawing area fills.
+ *
+ * @class Fills
+ * @constructor
+ */
 function Fills(cfg)
 {
     var attrs = {
@@ -19,59 +25,65 @@ function Fills(cfg)
 }
 
 Fills.prototype = {
-	/**
-	 * @private
-	 */
-	drawFill: function(xcoords, ycoords)
-	{
+    /**
+     * Draws fill
+     *
+     * @method drawFill
+     * @protected
+     */
+    drawFill: function(xcoords, ycoords)
+    {
         if(xcoords.length < 1) 
-		{
-			return;
-		}
+        {
+            return;
+        }
         var len = xcoords.length,
-			firstX = xcoords[0],
-			firstY = ycoords[0],
+            firstX = xcoords[0],
+            firstY = ycoords[0],
             lastValidX = firstX,
-			lastValidY = firstY,
-			nextX,
-			nextY,
-			i = 1,
-			styles = this.get("styles").area,
-			graphic = this.get("graphic"),
+            lastValidY = firstY,
+            nextX,
+            nextY,
+            i = 1,
+            styles = this.get("styles").area,
+            graphic = this.get("graphic"),
             color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
         graphic.clear();
         graphic.beginFill(color, styles.alpha);
         graphic.moveTo(firstX, firstY);
         for(; i < len; i = ++i)
-		{
-			nextX = xcoords[i];
-			nextY = ycoords[i];
-			if(isNaN(nextY))
-			{
-				lastValidX = nextX;
-				lastValidY = nextY;
-				continue;
-			}
+        {
+            nextX = xcoords[i];
+            nextY = ycoords[i];
+            if(isNaN(nextY))
+            {
+                lastValidX = nextX;
+                lastValidY = nextY;
+                continue;
+            }
             graphic.lineTo(nextX, nextY);
             lastValidX = nextX;
-			lastValidY = nextY;
+            lastValidY = nextY;
         }
         graphic.end();
-	},
+    },
 	
     /**
-	 * @private
-	 */
-	drawAreaSpline: function()
-	{
+     * Draws a fill for a spline
+     *
+     * @method drawAreaSpline
+     * @protected
+     */
+    drawAreaSpline: function()
+    {
         if(this.get("xcoords").length < 1) 
-		{
-			return;
-		}
+        {
+            return;
+        }
         var xcoords = this.get("xcoords"),
-			ycoords = this.get("ycoords"),
+            ycoords = this.get("ycoords"),
             curvecoords = this.getCurveControlPoints(xcoords, ycoords),
-			len = curvecoords.length,
+            len = curvecoords.length,
             cx1,
             cx2,
             cy1,
@@ -79,15 +91,15 @@ Fills.prototype = {
             x,
             y,
             i = 0,
-			firstX = xcoords[0],
+            firstX = xcoords[0],
             firstY = ycoords[0],
             styles = this.get("styles").area,
-			graphic = this.get("graphic"),
+            graphic = this.get("graphic"),
             color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
         graphic.beginFill(color, styles.alpha);
         graphic.moveTo(firstX, firstY);
         for(; i < len; i = ++i)
-		{
+        {
             x = curvecoords[i].endx;
             y = curvecoords[i].endy;
             cx1 = curvecoords[i].ctrlx1;
@@ -108,19 +120,22 @@ Fills.prototype = {
         }
         graphic.lineTo(firstX, firstY);
         graphic.end();
-	},
+    },
     
     /**
-	 * @private
-	 */
-	drawStackedAreaSpline: function()
-	{
+     * Draws a a stacked area spline
+     *
+     * @method drawStackedAreaSpline
+     * @protected
+     */
+    drawStackedAreaSpline: function()
+    {
         if(this.get("xcoords").length < 1) 
-		{
-			return;
-		}
+        {
+            return;
+        }
         var xcoords = this.get("xcoords"),
-			ycoords = this.get("ycoords"),
+            ycoords = this.get("ycoords"),
             curvecoords,
             order = this.get("order"),
             type = this.get("type"),
@@ -128,7 +143,7 @@ Fills.prototype = {
             seriesCollection = graph.seriesTypes[type],
             prevXCoords,
             prevYCoords,
-			len,
+            len,
             cx1,
             cx2,
             cy1,
@@ -136,19 +151,19 @@ Fills.prototype = {
             x,
             y,
             i = 0,
-			firstX,
+            firstX,
             firstY,
             styles = this.get("styles").area,
-			graphic = this.get("graphic"),
+            graphic = this.get("graphic"),
             color = styles.color || this._getDefaultColor(this.get("graphOrder"), "slice");
-		firstX = xcoords[0];
+        firstX = xcoords[0];
         firstY = ycoords[0];
         curvecoords = this.getCurveControlPoints(xcoords, ycoords);
         len = curvecoords.length;
         graphic.beginFill(color, styles.alpha);
         graphic.moveTo(firstX, firstY);
         for(; i < len; i = ++i)
-		{
+        {
             x = curvecoords[i].endx;
             y = curvecoords[i].endy;
             cx1 = curvecoords[i].ctrlx1;
@@ -192,13 +207,20 @@ Fills.prototype = {
         }
         graphic.lineTo(firstX, firstY);
         graphic.end();
-	},
+    },
     
     /**
      * @private
      */
     _defaults: null,
 
+    /**
+     * Concatanates coordinate array with correct coordinates for closing an area fill.
+     *
+     * @method _getClosingPoints
+     * @return Array
+     * @protected
+     */
     _getClosingPoints: function()
     {
         var xcoords = this.get("xcoords").concat(),
@@ -223,8 +245,11 @@ Fills.prototype = {
     },
 
     /**
-     * @private
      * Concatenates coordinate array with the correct coordinates for closing an area stack.
+     *
+     * @method _getStackedClosingPoints
+     * @return Array
+     * @protected
      */
     _getStackedClosingPoints: function()
     {
@@ -269,6 +294,9 @@ Fills.prototype = {
         return [allXCoords, allYCoords];
     },
 
+    /**
+     * @private
+     */
     _getAreaDefaults: function()
     {
         return {

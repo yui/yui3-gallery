@@ -1,0 +1,14 @@
+{
+    "name": "Async Command Clone Plugin",
+    "description": "Y.AsyncCommand instances are designed to be one time use only. This plugin adds a clone method to help facilitate running the same command many times.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js",
+            "../gallery-async/js",
+            "../gallery-async-command/js"
+        ],
+        "outdir": "./api"
+    }
+}

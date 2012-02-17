@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * @module gallery-treeble
+ */
+
 /**********************************************************************
  * <p>Hierarchical data source.</p>
  *
@@ -11,11 +15,10 @@
  * <p>The tree must be immutable.  The total number of items available from
  * each DataSource must remain constant.</p>
  * 
- * @module gallery-treeble
  * @class TreebleDataSource
  * @extends DataSource.Local
  * @constructor
- * @param config {Object} Widget configuration
+ * @param config {Object}
  */
 
 function TreebleDataSource()
@@ -53,6 +56,11 @@ TreebleDataSource.ATTRS =
 	 * <dd>(semi-optional) The name of the key inside a node which contains
 	 *		the data used to construct the DataSource for retrieving the children.
 	 *		This config is only required if you provide a custom parser.</dd>
+	 * <dt>nodeOpenKey</dt>
+	 * <dd>(optional) The name of the key inside a node which contains
+	 *		the initial open state of the node.  If it is true, the node will
+	 *		automatically be opened the first time it is shown.  (After that,
+	 *		it will remember the state set by the user.)</dd>
 	 * <dt>startIndexExpr</dt>
 	 * <dd>(optional) OGNL expression telling how to extract the startIndex
 	 *		from the received data, e.g., <code>.meta.startIndex</code>.
@@ -132,10 +140,13 @@ TreebleDataSource.ATTRS =
 function populateOpen(
 	/* object */	parent,
 	/* array */		open,
-	/* array */		data,
-	/* int */		startIndex,
-	/* string */	childNodesKey)
+	/* object */	req)
 {
+	var data          = req.data;
+	var startIndex    = req.start;
+	var childNodesKey = req.ds.treeble_config.childNodesKey;
+	var nodeOpenKey   = req.ds.treeble_config.nodeOpenKey;
+
 	for (var j=0; j<open.length; j++)
 	{
 		if (open[j].index >= startIndex)
@@ -144,7 +155,7 @@ function populateOpen(
 		}
 	}
 
-	uniqueIdKey = this.get('uniqueIdKey');
+	var uniqueIdKey = this.get('uniqueIdKey');
 
 	var result = true;
 	for (var k=0; k<data.length; k++)
@@ -179,15 +190,21 @@ function populateOpen(
 				parent:     parent
 			};
 
+			var cached_item = null;
 			if (uniqueIdKey)
 			{
-				var cached_item = this._open_cache[ data[k][ uniqueIdKey ] ];
+				cached_item = this._open_cache[ data[k][ uniqueIdKey ] ];
 				if (cached_item)
 				{
 					item.open       = cached_item.open;
 					item.childTotal = cached_item.childTotal;
 					this._redo      = this._redo || item.open;
 				}
+			}
+
+			if (!cached_item && nodeOpenKey && data[k][ nodeOpenKey ])
+			{
+				this._toggle.push(req.path.concat(i));
 			}
 
 			open.splice(j, 0, item);
@@ -456,7 +473,7 @@ function getVisibleSlicesPgAll(
 			var info = getVisibleSlicesPgAll(skip, show, rootDS, node.children,
 											 path.concat(node.index),
 											 node, pre+n, send, slices);
-			if (info instanceof Array)
+			if (Y.Lang.isArray(info))
 			{
 				return info;
 			}
@@ -566,7 +583,7 @@ function findRequest(
 function treeSuccess(e, reqIndex)
 {
 	if (!e.response || e.error ||
-		!(e.response.results instanceof Array))
+		!Y.Lang.isArray(e.response.results))
 	{
 		treeFailure.apply(this, arguments);
 		return;
@@ -599,7 +616,7 @@ function treeSuccess(e, reqIndex)
 
 	var parent = (req.path.length > 0 ? getNode.call(this, req.path) : null);
 	var open   = (parent !== null ? parent.children : this._open);
-	if (!populateOpen.call(this, parent, open, req.data, req.start, req.ds.treeble_config.childNodesKey))
+	if (!populateOpen.call(this, parent, open, req))
 	{
 		treeFailure.apply(this, arguments);
 		return;
@@ -629,7 +646,7 @@ function treeFailure(e, reqIndex)
 
 	this._callback.error    = e.error;
 	this._callback.response = e.response;
-	Y.DataSource.Local.issueCallback(this._callback);
+	this.fire('response', this._callback);
 }
 
 function setNodeInfo(
@@ -692,6 +709,18 @@ function checkFinished()
 		Y.Lang.later(0, this, requestTree);
 		return;
 	}
+	else if (this._toggle.length > 0)
+	{
+		this.toggle(this._toggle[0], Y.clone(this._callback.request, true),
+		{
+			fn: function()
+			{
+				Y.Lang.later(0, this, requestTree);
+			},
+			scope: this
+		});
+		return;
+	}
 
 	var response = {};
 	Y.mix(response, this._topResponse);
@@ -726,7 +755,7 @@ function checkFinished()
 	}
 
 	this._callback.response = response;
-	Y.DataSource.Local.issueCallback(this._callback);
+	this.fire('response', this._callback);
 }
 
 function toggleSuccess(e, node, completion)
@@ -762,7 +791,7 @@ function complete(f)
 	}
 	else if (f && f.fn)
 	{
-		f.fn.apply(f.scope || window, f.args);
+		f.fn.apply(f.scope || window, Y.Lang.isUndefined(f.args) ? [] : f.args);
 	}
 }
 
@@ -810,6 +839,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 
 		this._open       = [];
 		this._open_cache = {};
+		this._toggle     = [];
 		this._req        = [];
 	},
 
@@ -884,21 +914,19 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	{
 		if (this._callback)
 		{
-			var r = this._callback.request;
-			for (var key in r)
+			Y.Object.some(this._callback.request, function(value, key)
 			{
-				if (!r.hasOwnProperty(key) ||
-					key == 'startIndex' || key == 'resultCount')
+				if (key == 'startIndex' || key == 'resultCount')
 				{
-					continue;
+					return false;
 				}
 
-				if (r[key] !== e.request[key])
+				if (value !== e.request[key])
 				{
 					this._open = [];
-					break;
+					return true;
 				}
-			}
+			});
 		}
 
 		this._callback = e;
@@ -907,7 +935,8 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 
 	_cancelAllRequests: function()
 	{
-		this._req = [];
+		this._req    = [];
+		this._toggle = [];
 	}
 });
 
@@ -918,7 +947,8 @@ Y.TreebleDataSource = TreebleDataSource;
  * <code>dataType</code> and <code>liveData</code>, or it can be <q>free
  * form</q>, e.g., an array of records or an XHR URL.</p>
  *
- * @method Y.Parsers.treebledatasource
+ * @namespace Parsers
+ * @method treebledatasource
  * @param oData {mixed} Data to convert.
  * @return {DataSource} The new data source.
  * @static

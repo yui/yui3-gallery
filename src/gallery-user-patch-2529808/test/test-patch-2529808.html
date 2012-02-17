@@ -1,0 +1,67 @@
+<html>
+<head>
+    <link type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssfonts/fonts-min.css" />
+    <script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+    <script type="text/javascript" src="../../../build/gallery-user-patch-2529808/gallery-user-patch-2529808.js"></script>
+</head>
+<body>
+
+<div class="yui3-skin-sam">
+    <h1>Test for gallery-user-patch-2529808</h1>
+    <h2>Scrollable YUI 3.3.0 DataTable with delayed loading of data via DataSource</h2>
+    <div>If datatable is populated with data, patch works!</div>
+    <div>If nothing shows up, patch fails.</div>
+    <div id="datatable"></div>
+    <br clear="all">
+    <div id="datatable2"></div>
+</div>
+
+
+
+
+<script type="text/javascript">
+
+YUI({
+    filter:"debug"
+}).use('datasource', 'datatable', 'gallery-user-patch-2529808', function(Y) {
+    
+    
+    var myDataSource = new Y.DataSource.Get({
+        source:"http://query.yahooapis.com/v1/public/yql?format=json&"});
+ 
+    myDataSource.plug(Y.Plugin.DataSourceJSONSchema, {
+        schema: {
+            resultListLocator: "query.results.place",
+            resultFields: ["name","woeid"]
+        }
+    });
+    var columnSet2 = [ "name", "woeid" ];
+
+    
+    // render datatable before load
+
+    var dataTable2 = new Y.DataTable.Base({
+        caption:"DataTable with DataSource and Scroll plugins",
+        columnset:columnSet2
+    })
+        .plug(Y.Plugin.DataTableScroll, {height: "200px"})
+        .plug(Y.Plugin.DataTableDataSource, {datasource:myDataSource})
+        .render("#datatable2")
+        ;
+
+    // now load data
+    dataTable2.datasource.load(
+    {
+        request:"q=select%20*%20from%20geo.counties%20where%20place%3D%22TN%22"
+
+    });
+
+});
+
+
+</script>
+
+
+
+</body>
+</html>

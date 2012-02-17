@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Media Example</title>
+    <script src="http://yui.yahooapis.com/combo?3.4.0/build/yui/yui-min.js"></script>
+    <script src="../../../build/gallery-media/gallery-media.js"></script>
+<body>
+
+
+    <script type="text/javascript">
+    
+    YUI().use("gallery-media", function(Y){
+        
+        console.log(Y.Media.matches("screen and (max-width:600px)"));
+        Y.Media.on("screen and (max-width:600px)", function(result) {
+            console.log(result.media + " now " + (result.matches ? "matches" : "doesn't match"));
+        });
+        
+        Y.Media.on("screen and (max-width:700px)", function(result) {
+            console.log(result.media + " now " + (result.matches ? "matches" : "doesn't match"));
+        });
+        
+    });
+    
+    </script>
+</body>
+</html>

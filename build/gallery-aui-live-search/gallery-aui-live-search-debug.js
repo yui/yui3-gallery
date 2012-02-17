@@ -309,7 +309,11 @@ var LiveSearch = A.Component.create(
 				var instance = this;
 				var index = [];
 
-				instance.get(NODES).each(function(node) {
+				var nodes = instance.get(NODES);
+
+				nodes.refresh();
+
+				nodes.each(function(node) {
 					var content = L.trim(
 						instance.get(DATA).apply(instance, [node]).toLowerCase()
 					);
@@ -370,7 +374,7 @@ var LiveSearch = A.Component.create(
 				// replace on the query '*' to '', on a regex empty match with everything like *
 				query = query.replace(STAR, BLANK);
 
-				query = L.escapeRegEx(query);
+				query = A.Lang.String.escapeRegEx(query);
 
 				return query;
 			},
@@ -432,4 +436,4 @@ var LiveSearch = A.Component.create(
 A.LiveSearch = LiveSearch;
 
 
-}, 'gallery-2010.08.18-17-12' ,{skinnable:false, requires:['gallery-aui-base']});
+}, 'gallery-2011.02.09-21-32' ,{requires:['gallery-aui-base'], skinnable:false});

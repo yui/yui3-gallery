@@ -47,6 +47,7 @@ DISPATCHER_PURGE = 'purge',
 DISPATCHER_BEFOREEXECUTE = 'beforeExecute',
 DISPATCHER_LOAD = 'load',
 DISPATCHER_READY = 'ready',
+DISPATCHER_ERROR = 'error',
 
 //  Attribute keys
 ATTR_URI = 'uri',
@@ -98,7 +99,7 @@ function _parseContent(content, normalize) {
 
 function _propagateIOEvent (ev, cfg, args) {
     if (cfg && cfg.on && cfg.on[ev]) {
-    	cfg.on[ev].apply(cfg.context || Y, args);
+        cfg.on[ev].apply(cfg.context || Y, args);
     }
 }
 
@@ -131,40 +132,117 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
     _io: null,
 
     initializer: function(config) {
+        var instance = this;
         config = config || {};
         Y.log('Initializer', 'info', DISPATCHER);
-        this._queue = new Y.AsyncQueue();
+        instance._queue = new Y.AsyncQueue();
 
-        this.after(ATTR_CONTENT + "Change",
-            function(e) {
-                this._dispatch(e.newVal);
-            },
-            this);
+        instance.after(ATTR_CONTENT + "Change", function(e) {
+            instance._dispatch(e.newVal);
+        });
 
-        this.after(ATTR_URI + "Change",
-            function(e) {
-                this._fetch(e.newVal);
-            },
-            this);
+        instance.after(ATTR_URI + "Change", function(e) {
+            instance._fetch(e.newVal);
+        });
 
         // making the trick for content and uri in case the user want to set up thru config
         if (config[ATTR_CONTENT]) {
-            this._dispatch(this.get(ATTR_CONTENT));
+            instance._dispatch(instance.get(ATTR_CONTENT));
         }
         if (config[ATTR_URI]) {
-            this._fetch(this.get(ATTR_URI));
+            instance._fetch(instance.get(ATTR_URI));
         }
 
     },
 
     destructor: function() {
-        this.stop();
-        this._queue = null;
-        this._io = null;
+        var instance = this;
+        instance.stop();
+        instance._queue = null;
+        instance._io = null;
     },
-    
+
     //  Protected methods
-    
+
+    /**
+     * @method _executeScript
+     * @description Inject an inline script into the page as part of the dispatcher process. 
+     * @protected
+     * @param {string} text Script code that should be executed
+     * @param {Node} n A reference to the original SCRIPT tag Node, in case you want to get more specific attributes
+     */
+    _executeScript: function (text, jsNode) {
+        var doc = Y.config.doc,
+            d = ( jsNode ? jsNode.get('ownerDocument') : null ) || doc,
+            h = d.one('head') || d.get('documentElement'),
+            // creating a new script node to execute the inline javascrip code
+            newScript = Y.one(doc.createElement(SC));
+
+        Y.log('inline script tag: ' + text, 'info', DISPATCHER);
+        if (text) {
+            newScript._node.text = text;
+        }
+        h.appendChild(newScript);
+        // removing script nodes as part of the clean up process
+        newScript.remove();
+        if (jsNode) {
+            jsNode.remove();
+        }
+    },
+
+    /**
+     * @method _getScript
+     * @description Inject an external script into the page as part of the dispatcher process. Due
+     * the async nature of this routine, we need to run the queue after the execution.
+     * @protected
+     * @param {string} src URI of the script that need to be injected
+     * @param {Node} n A reference to the original SCRIPT tag Node, in case you want to get more specific attributes
+     */
+    _getScript: function (src, jsNode) {
+        var instance = this,
+            q = instance._queue;
+        Y.log('external script tag: ' + src, 'info', DISPATCHER);
+        Y.Get.script(src, {
+            autopurge: true, //removes the script node immediately after executing it
+            onFailure: function(o) {
+                Y.log('external script tag fails to load: ' + src, 'error', DISPATCHER);
+                // notifying that an error has occurred 
+                instance.fire(DISPATCHER_ERROR, o);
+            },
+            onEnd: function(o) {
+                // continuing the async execution
+                if (q) {
+                    q.run();
+                }
+            }
+        });
+    },
+
+    /**
+     * @method _setContent
+     * @description Set a new content into the dispatcher host node.
+     * @protected
+     * @param {string} content HTML code that will replace the current content
+     */    
+    _setContent: function (content) {
+        var n = this.get(ATTR_NODE);
+        Y.log('setting new content: ' + content, 'info', DISPATCHER);
+        n.setContent(content);
+    },
+
+    /**
+     * @method _purgeContent
+     * @description Purge all the child node in preparation for a new content to be injected.
+     * @protected
+     */    
+    _purgeContent: function() {
+        var n = this.get(ATTR_NODE);
+        Y.log('purging children collection', 'info', DISPATCHER);
+        n.get('children').each(function(c) {
+            c.purge(true);
+        });
+    },
+
     /**
      * @method _dispatch
      * @description Dispatch a content into the code, parsing out the scripts, 
@@ -174,13 +252,13 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
      * @return null
      */
     _dispatch: function(content) {
-        var that = this,
-        o = _parseContent(content, this.get(ATTR_NORMALIZE)),
-        q = this._queue,
-        n = this.get(ATTR_NODE);
+        var instance = this,
+            o = _parseContent(content, instance.get(ATTR_NORMALIZE)),
+            q = instance._queue,
+            n = instance.get(ATTR_NODE);
 
         // stopping any previous process, just in case...
-        this.stop();
+        instance.stop();
 
         if (!n) {
             Y.log('Dispatcher requires a NODE to dispatch the content', 'error', DISPATCHER);
@@ -190,72 +268,66 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
         Y.log('dispatching a new content', 'info', DISPATCHER);
 
         // autopurging children collection
-        if (this.get(ATTR_AUTOPURGE)) {
+        if (instance.get(ATTR_AUTOPURGE)) {
             q.add({
                 fn: function() {
-                    Y.log('purging children collection', 'info', DISPATCHER);
-                    n.get('children').each(function(c) {
-                        c.purge(true);
-                    });
-                    that.fire(DISPATCHER_PURGE, n);
+                    instance._purgeContent();
+                    /**
+                     * Notification event right after purging all the event listeners associated to the 
+                     * Node that will be updated to avoid memory leaks. At this point, you can also destroy
+                     * any object associated to that content. Immidiately after this, the new content will be
+                     * injected. Use this event to clean up the mess before injecting new content.
+                     *
+                     * @event purge
+                     * @param n {Node} a reference to the Node that was updated.
+                     */
+                    instance.fire(DISPATCHER_PURGE, n);
                 }
             });
         }
         // injecting new content
         q.add({
             fn: function() {
-                Y.log('setting new content: ' + o.content, 'info', DISPATCHER);
-                n.setContent(o.content);
-                that.fire(DISPATCHER_BEFOREEXECUTE, n);
+                instance._setContent(o.content);
+                /**
+                 * Notification event right before starting the execution of the script tags associated
+                 * to the current content. At this point, the content (without script tags) was already
+                 * injected within the node, so, you can enhance that content right before process to the
+                 * execution process.
+                 *
+                 * @event beforeExecute
+                 * @param n {Node} a reference to the Node that was updated.
+                 */
+                instance.fire(DISPATCHER_BEFOREEXECUTE, n);
             }
         });
         // executing JS blocks before the injection
         o.js.each(function(jsNode) {
             if (jsNode && jsNode.get('src')) {
                 q.add({
-                    fn: function() {
-                        Y.log('external script tag: ' + jsNode.get('src'), 'info', DISPATCHER);
-                        //q.next();
-                        Y.Get.script(jsNode.get('src'), {
-                            onFailure: function(o) {
-                                Y.log('external script tag fail to load: ' + jsNode.get('src'), 'error', DISPATCHER);
-                            },
-                            onEnd: function(o) {
-                                o.purge();
-                                //removes the script node immediately after executing it
-                                q.run();
-                            }
-                        });
-                    },
+                    fn: Y.bind(instance._getScript, instance, jsNode.get('src'), jsNode),
                     autoContinue: false
                 });
             } else {
                 q.add({
-                    fn: function() {
-                        // inject js;
-                        Y.log('inline script tag: ' + jsNode.get('innerHTML'), 'info', DISPATCHER);
-                        var d = jsNode.get('ownerDocument'),
-                        h = d.one('head') || d.get('documentElement'),
-                        // creating a new script node to execute the inline javascrip code
-                        newScript = Y.Node.create('<' + SC + '></' + SC + '>');
-                        if (jsNode._node.text) {
-                            newScript._node.text = jsNode._node.text;
-                        }
-                        h.appendChild(newScript);
-                        // removing script nodes as part of the clean up process
-                        newScript.remove();
-                        jsNode.remove();
-                    }
+                    fn: Y.bind(instance._executeScript, instance, jsNode._node.text, jsNode)
                 });
             }
         });
         q.add({
             fn: function() {
-                that.fire(DISPATCHER_READY);
+                /**
+                 * Notification event when the new content gets injected and scripts loaded and executed
+                 * as well. This is the event that you should listen for to continue your programm after 
+                 * dispatcher finishes the whole process.
+                 *
+                 * @event ready
+                 */
+                 instance.fire(DISPATCHER_READY);
             }
         });
         // executing the queue
-        this._queue.run();
+        instance._queue.run();
     },
     
     /**
@@ -267,10 +339,11 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
     */
     
     _fetch: function(uri) {
-        var defIOConfig = this.get("ioConfig") || {}, 
+        var instance = this,
+            defIOConfig = instance.get("ioConfig") || {}, 
             cfg;
         // stopping any previous process, just in case...
-        this.stop();
+        instance.stop();
 
         if (!uri) {
             return false;
@@ -285,27 +358,36 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
             
         cfg.on = {
             start: function() {
-                this._set(ATTR_LOADING, true);
+                instance._set(ATTR_LOADING, true);
                 Y.log('Start Loading', 'info', DISPATCHER);
                 _propagateIOEvent ('start', defIOConfig, arguments);
             },
             success: function(tid, o) {
                 Y.log('Success: ' + o.responseText, 'info', DISPATCHER);
-                this.set(ATTR_CONTENT, o.responseText);
+                instance.set(ATTR_CONTENT, o.responseText);
                 _propagateIOEvent ('success', defIOConfig, arguments);
             },
             failure: function(tid, o) {
                 Y.log('Failure: ' + uri, 'warn', DISPATCHER);
                 _propagateIOEvent ('failure', defIOConfig, arguments);
+                /**
+                 * Notification event when dispatcher fails to load the new url
+                 * using io, or fails to load an external script using Y.Get.script.
+                 * Use this event to fallback if an error occur.
+                 *
+                 * @event error
+                 * @param o {object} error object from IO or Get.
+                 */
+                instance.fire(DISPATCHER_ERROR, o);
             },
             end: function() {
-                this._set(ATTR_LOADING, false);
+                instance._set(ATTR_LOADING, false);
                 Y.log('End Loading', 'info', DISPATCHER);
                 _propagateIOEvent ('end', defIOConfig, arguments);
             }
         };
-        cfg.context = this;
-        return (this._io = Y.io(uri, cfg));
+        cfg.context = instance;
+        return (instance._io = Y.io(uri, cfg));
     },
 
     //  Public methods
@@ -317,11 +399,12 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
      * @return  {object} reference for chaining
      */
     stop: function() {
-        this._queue.stop();
-        if (this._io) {
-            this._io.abort();
+        var instance = this;
+        instance._queue.stop();
+        if (instance._io) {
+            instance._io.abort();
         }
-        return this;
+        return instance;
     }
 
 }, {
@@ -409,13 +492,30 @@ Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
             validator: isBoolean,
             readOnly: true,
             setter: function(v) {
+                var instance = this;
                 Y.log('setting status to ' + v, 'info', DISPATCHER);
                 if (v) {
-                    this.fire(DISPATCHER_FETCH);
-                    this.get(ATTR_NODE).addClass(CLASS_DISPATCHER_LOADING);
+                    /**
+                     * Notification event when dispatcher starts the loading process
+                     * using io. Equivalent to Y.on('io:start'). Right before this event, dispatcher 
+                     * adds the loading class from the node. This event will be triggered before the 
+                     * function defined under attribute "ioConfig.start". 
+                     *
+                     * @event fetch
+                     */
+                    instance.fire(DISPATCHER_FETCH);
+                    instance.get(ATTR_NODE).addClass(CLASS_DISPATCHER_LOADING);
                 } else {
-                    this.fire(DISPATCHER_LOAD);
-                    this.get(ATTR_NODE).removeClass(CLASS_DISPATCHER_LOADING);
+                    /**
+                     * Notification event when dispatcher finishes the loading process
+                     * using io. Equivalent to Y.on('io:end'). Right after this event, dispatcher 
+                     * removes the loading class from the node.This event will be triggered before the 
+                     * function defined under attribute "ioConfig.end".
+                     *
+                     * @event load
+                     */
+                    instance.fire(DISPATCHER_LOAD);
+                    instance.get(ATTR_NODE).removeClass(CLASS_DISPATCHER_LOADING);
                 }
                 return v;
             }

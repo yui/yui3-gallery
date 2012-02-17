@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YQL Model Sync Photo Test</title>
+</head>
+<body>
+
+    <h1>YQL Model Sync Photo Test</h1>
+    <p>Open up your <code>console</code>.</p>
+
+    <script src="../../../../../yui3/build/yui/yui.js"></script>
+    <script>
+    YUI({
+        allowRollup : false,
+        filter      : 'raw',
+        modules     : {
+            "gallery-model-sync-yql": {
+                "fullpath": "../../../../build/gallery-model-sync-yql/gallery-model-sync-yql.js",
+                "requires": ["yql"]
+            }
+        }
+    }).use('model', 'model-list', 'gallery-model-sync-yql', function (Y) {
+
+        var Photo, Photos, photo, photos;
+
+        // *** Photo Model *** //
+
+        Photo = Y.Base.create('photo', Y.Model, [Y.ModelSync.YQL], {
+            query : 'SELECT * FROM flickr.photos.info WHERE photo_id={id}',
+
+            parse : function (results) {
+                return results && results.photo;
+            }
+        }, {
+            ATTRS : {
+                title       : {},
+                description : {}
+            }
+        });
+
+        // *** Photos ModelList *** //
+
+        Photos = Y.Base.create('photos', Y.ModelList, [Y.ModelSync.YQL], {
+            model : Photo,
+            query : 'SELECT * FROM flickr.photos.search WHERE text="{text}"',
+            parse : function (results) {
+                return (results && results.photo) || [];
+            }
+        });
+
+        // A Photo
+        photo = new Photo({ id: '3804864763' }).load(function () {
+            Y.log(photo.get('title'));
+            Y.log(photo.get('description'));
+        });
+
+        // A list of Photos
+        photos = new Photos().load({ text: 'Boston' }, function () {
+            Y.log(photos.size());
+            photos.each(function (photo) {
+                Y.log(photo.get('title'));
+            });
+        });
+
+    });
+    </script>
+
+</body>
+</html>

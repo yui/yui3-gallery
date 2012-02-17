@@ -17,7 +17,6 @@ var L = A.Lang,
 	isString = L.isString,
 
 	APPEND = 'append',
-	CREATE_DOCUMENT_FRAGMENT = 'createDocumentFragment',
 	DOCUMENT_ELEMENT = 'documentElement',
 	FIRST_CHILD = 'firstChild',
 	HEAD = 'head',
@@ -193,7 +192,7 @@ var ParseContent = A.Component.create(
 			 */
 			_clean: function(content) {
 				var output = {};
-				var fragment = A.getDoc().invoke(CREATE_DOCUMENT_FRAGMENT);
+				var fragment = A.Node.create('<div></div>');
 
 				// instead of fix all tags to "XHTML"-style, make the firstChild be a valid non-empty tag
 				fragment.append('<div>_</div>');
@@ -216,7 +215,7 @@ var ParseContent = A.Component.create(
 				// remove padding node
 				fragment.get(FIRST_CHILD).remove();
 
-				output.fragment = fragment;
+				output.fragment = fragment.get('childNodes').toFrag();
 
 				return output;
 			},
@@ -273,4 +272,4 @@ var ParseContent = A.Component.create(
 A.namespace('Plugin').ParseContent = ParseContent;
 
 
-}, 'gallery-2010.08.18-17-12' ,{requires:['async-queue','gallery-aui-base','plugin'], skinnable:false});
+}, 'gallery-2011.02.09-21-32' ,{skinnable:false, requires:['async-queue','gallery-aui-base','plugin']});

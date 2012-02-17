@@ -1,9 +1,21 @@
+/**
+ * VMLGraphics is a fallback drawing api used for basic drawing operations when SVG is not available.
+ *
+ * @class VMLGraphics
+ * @constructor
+ */
 var VMLGraphics = function(config) {
     
     this.initializer.apply(this, arguments);
 };
 
 VMLGraphics.prototype = {
+    /**
+     * Indicates whether or not the instance will size itself based on its contents.
+     *
+     * @property autoSize 
+     * @type String
+     */
     initializer: function(config) {
         config = config || {};
         var w = config.width || 0,
@@ -14,7 +26,10 @@ VMLGraphics.prototype = {
     },
 
     /** 
-     *Specifies a bitmap fill used by subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) for the object.
+     * Specifies a bitmap fill used by subsequent calls to other drawing methods.
+     * 
+     * @method beginBitmapFill
+     * @param {Object} config
      */
     beginBitmapFill: function(config) {
        
@@ -41,11 +56,15 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * Specifes a solid fill used by subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) for the object.
+     * Specifes a solid fill used by subsequent calls to other drawing methods.
+     *
+     * @method beginFill
+     * @param {String} color Hex color value for the fill.
+     * @param {Number} alpha Value between 0 and 1 used to specify the opacity of the fill.
      */
     beginFill: function(color, alpha) {
         if (color) {
-            if (alpha) {
+            if (Y.Lang.isNumber(alpha)) {
                 this._fillProps = {
                     type:"solid",
                     opacity: alpha
@@ -58,7 +77,10 @@ VMLGraphics.prototype = {
     },
 
     /** 
-     *Specifies a gradient fill used by subsequent calls to other Graphics methods (such as lineTo() or drawCircle()) for the object.
+     * Specifies a gradient fill used by subsequent calls to other drawing methods.
+     *
+     * @method beginGradientFill
+     * @param {Object} config
      */
     beginGradientFill: function(config) {
         var type = config.type,
@@ -78,9 +100,10 @@ VMLGraphics.prototype = {
         for(;i < len; ++i)
         {
             alpha = alphas[i];
+            alpha = Y.Lang.isNumber(alpha) ? alpha : 1;
             oi = i > 0 ? i + 1 : "";
             alphas[i] = Math.round(alpha * 100) + "%";
-            fill["opacity" + oi] = alphas[i];
+            fill["opacity" + oi] = alpha;
         }
         if(type === "linear")
         {
@@ -136,6 +159,8 @@ VMLGraphics.prototype = {
 
     /**
      * Clears the graphics object.
+     *
+     * @method clear
      */
     clear: function() {
         this._path = '';
@@ -143,7 +168,9 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * Removes all nodes
+     * Removes all nodes.
+     *
+     * @method destroy
      */
     destroy: function()
     {
@@ -152,6 +179,10 @@ VMLGraphics.prototype = {
     },
 
     /**
+     * Removes all child nodes.
+     *
+     * @method _removeChildren
+     * @param node
      * @private
      */
     _removeChildren: function(node)
@@ -168,11 +199,25 @@ VMLGraphics.prototype = {
         }
     },
 
+    /**
+     * Shows and and hides a the graphic instance.
+     *
+     * @method toggleVisible
+     * @param val {Boolean} indicates whether the instance should be visible.
+     */
     toggleVisible: function(val)
     {
         this._toggleVisible(this.node, val);
     },
 
+    /**
+     * Toggles visibility
+     *
+     * @method _toggleVisible
+     * @param {HTMLElement} node element to toggle
+     * @param {Boolean} val indicates visibilitye
+     * @private
+     */
     _toggleVisible: function(node, val)
     {
         var children = Y.one(node).get("children"),
@@ -191,7 +236,15 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * Draws a bezier curve
+     * Draws a bezier curve.
+     *
+     * @method curveTo
+     * @param {Number} cp1x x-coordinate for the first control point.
+     * @param {Number} cp1y y-coordinate for the first control point.
+     * @param {Number} cp2x x-coordinate for the second control point.
+     * @param {Number} cp2y y-coordinate for the second control point.
+     * @param {Number} x x-coordinate for the end point.
+     * @param {Number} y y-coordinate for the end point.
      */
     curveTo: function(cp1x, cp1y, cp2x, cp2y, x, y) {
         this._shape = "shape";
@@ -200,26 +253,42 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * Draws a quadratic bezier curve
+     * Draws a quadratic bezier curve.
+     *
+     * @method quadraticCurveTo
+     * @param {Number} cpx x-coordinate for the control point.
+     * @param {Number} cpy y-coordinate for the control point.
+     * @param {Number} x x-coordinate for the end point.
+     * @param {Number} y y-coordinate for the end point.
      */
     quadraticCurveTo: function(cpx, cpy, x, y) {
         this._path += ' qb ' + cpx + ", " + cpy + ", " + x + ", " + y;
     },
 
     /**
-     * Draws a circle
+     * Draws a circle.
+     *
+     * @method drawCircle
+     * @param {Number} x y-coordinate
+     * @param {Number} y x-coordinate
+     * @param {Number} r radius
      */
-	drawCircle: function(x, y, r) {
+    drawCircle: function(x, y, r) {
         this._width = this._height = r * 2;
         this._x = x - r;
         this._y = y - r;
         this._shape = "oval";
-        //this._path += ' ar ' + this._x + ", " + this._y + ", " + (this._x + this._width) + ", " + (this._y + this._height) + ", " + this._x + " " + this._y + ", " + this._x + " " + this._y;
         this._draw();
-	},
+    },
 
     /**
-     * Draws an ellipse
+     * Draws an ellipse.
+     *
+     * @method drawEllipse
+     * @param {Number} x x-coordinate
+     * @param {Number} y y-coordinate
+     * @param {Number} w width
+     * @param {Number} h height
      */
     drawEllipse: function(x, y, w, h) {
         this._width = w;
@@ -227,12 +296,17 @@ VMLGraphics.prototype = {
         this._x = x;
         this._y = y;
         this._shape = "oval";
-        //this._path += ' ar ' + this._x + ", " + this._y + ", " + (this._x + this._width) + ", " + (this._y + this._height) + ", " + this._x + " " + this._y + ", " + this._x + " " + this._y;
         this._draw();
     },
 
     /**
-     * Draws a rectangle
+     * Draws a rectangle.
+     *
+     * @method drawRect
+     * @param {Number} x x-coordinate
+     * @param {Number} y y-coordinate
+     * @param {Number} w width
+     * @param {Number} h height
      */
     drawRect: function(x, y, w, h) {
         this._x = x;
@@ -248,7 +322,15 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * Draws a rectangle with rounded corners
+     * Draws a rectangle with rounded corners.
+     * 
+     * @method drawRect
+     * @param {Number} x x-coordinate
+     * @param {Number} y y-coordinate
+     * @param {Number} w width
+     * @param {Number} h height
+     * @param {Number} ew width of the ellipse used to draw the rounded corners
+     * @param {Number} eh height of the ellipse used to draw the rounded corners
      */
     drawRoundRect: function(x, y, w, h, ew, eh) {
         this._x = x;
@@ -265,8 +347,18 @@ VMLGraphics.prototype = {
         this.lineTo(x + ew, y);
         this.quadraticCurveTo(x, y, x, y + eh);
         this._draw();
-	},
+    },
 
+    /**
+     * Draws a wedge.
+     * 
+     * @param {Number} x			x-coordinate of the wedge's center point
+     * @param {Number} y			y-coordinate of the wedge's center point
+     * @param {Number} startAngle	starting angle in degrees
+     * @param {Number} arc			sweep of the wedge. Negative values draw clockwise.
+     * @param {Number} radius		radius of wedge. If [optional] yRadius is defined, then radius is the x radius.
+     * @param {Number} yRadius		[optional] y radius for wedge.
+     */
     drawWedge: function(x, y, startAngle, arc, radius, yRadius)
     {
         this._drawingComplete = false;
@@ -281,8 +373,12 @@ VMLGraphics.prototype = {
     },
 
     /**
+     * Generates a path string for a wedge shape
+     *
+     * @method _getWedgePath
+     * @param {Object} config attributes used to create the path
+     * @return String
      * @private
-     * @description Generates a path string for a wedge shape
      */
     _getWedgePath: function(config)
     {
@@ -303,6 +399,11 @@ VMLGraphics.prototype = {
         return path;
     },
     
+    /**
+     * Completes a drawing operation. 
+     *
+     * @method end
+     */
     end: function() {
         if(this._shape)
         {
@@ -312,25 +413,37 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * @private
-     * Not implemented
      * Specifies a gradient to use for the stroke when drawing lines.
+     * Not implemented
+     *
+     * @method lineGradientStyle
+     * @private
      */
     lineGradientStyle: function() {
         Y.log('lineGradientStyle not implemented', 'warn', 'graphics-canvas');
     },
     
     /**
-     * Specifies a line style used for subsequent calls to drawing methods
+     * Specifies a line style used for subsequent calls to drawing methods.
+     * 
+     * @method lineStyle
+     * @param {Number} thickness indicates the thickness of the line
+     * @param {String} color hex color value for the line
+     * @param {Number} alpha Value between 0 and 1 used to specify the opacity of the fill.
      */
     lineStyle: function(thickness, color, alpha, pixelHinting, scaleMode, caps, joints, miterLimit) {
         this._stroke = 1;
         this._strokeWeight = thickness * 0.7;
         this._strokeColor = color;
+        this._strokeOpacity = Y.Lang.isNumber(alpha) ? alpha : 1;
     },
 
     /**
      * Draws a line segment using the current line style from the current drawing position to the specified x and y coordinates.
+     * 
+     * @method lineTo
+     * @param {Number} point1 x-coordinate for the end point.
+     * @param {Number} point2 y-coordinate for the end point.
      */
     lineTo: function(point1, point2, etc) {
         var args = arguments,
@@ -350,13 +463,21 @@ VMLGraphics.prototype = {
 
     /**
      * Moves the current drawing position to specified x and y coordinates.
+     *
+     * @method moveTo
+     * @param {Number} x x-coordinate for the end point.
+     * @param {Number} y y-coordinate for the end point.
      */
     moveTo: function(x, y) {
         this._path += ' m ' + Math.round(x) + ', ' + Math.round(y);
     },
 
     /**
-     * Sets the size of the graphics object
+     * Sets the size of the graphics object.
+     * 
+     * @method setSize
+     * @param w {Number} width to set for the instance.
+     * @param h {Number} height to set for the instance.
      */
     setSize: function(w, h) {
         w = Math.round(w);
@@ -368,6 +489,13 @@ VMLGraphics.prototype = {
         this._canvasHeight = h;
     },
    
+    /**
+     * Sets the positon of the graphics object.
+     *
+     * @method setPosition
+     * @param {Number} x x-coordinate for the object.
+     * @param {Number} y y-coordinate for the object.
+     */
     setPosition: function(x, y)
     {
         x = Math.round(x);
@@ -377,7 +505,10 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * @private
+     * Adds the graphics node to the dom.
+     * 
+     * @method render
+     * @param {HTMLElement} parentNode node in which to render the graphics node into.
      */
     render: function(parentNode) {
         var w = Math.max(parentNode.offsetWidth || 0, this._canvasWidth),
@@ -391,13 +522,16 @@ VMLGraphics.prototype = {
 
     /**
      * @private
-     * Reference to current vml shape
      */
     _shape: null,
 
     /**
-     * @private
      * Updates the size of the graphics object
+     *
+     * @method _trackSize
+     * @param {Number} w width
+     * @param {Number} h height
+     * @private
      */
     _trackSize: function(w, h) {
         if (w > this._width) {
@@ -409,12 +543,15 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * @private
      * Clears the properties
+     *
+     * @method _initProps
+     * @private
      */
     _initProps: function() {
         this._fillColor = null;
         this._strokeColor = null;
+        this._strokeOpacity = null;
         this._strokeWeight = 0;
         this._fillProps = null;
         this._path = '';
@@ -428,8 +565,10 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * @private
      * Clears path properties
+     * 
+     * @method _clearPath
+     * @private
      */
     _clearPath: function()
     {
@@ -442,14 +581,17 @@ VMLGraphics.prototype = {
     },
 
     /**
+     * Completes a shape
+     *
+     * @method _draw
      * @private 
-     * Completes a vml shape
      */
     _draw: function()
     {
         var shape = this._createGraphicNode(this._shape),
             w = Math.round(this._width),
             h = Math.round(this._height),
+            strokeNode,
             fillProps = this._fillProps;
             this.setSize(w, h);
         if(this._path)
@@ -483,6 +625,12 @@ VMLGraphics.prototype = {
         if (this._stroke && this._strokeWeight > 0) {
             shape.strokeColor = this._strokeColor;
             shape.strokeWeight = this._strokeWeight;
+            if(Y.Lang.isNumber(this._strokeOpacity) && this._strokeOpacity < 1)
+            {    
+                strokeNode = this._createGraphicNode("stroke");
+                shape.appendChild(strokeNode);
+                strokeNode.opacity = this._strokeOpacity;
+            }
         } else {
             shape.stroked = false;
         }
@@ -497,8 +645,10 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * @private
      * Returns ths actual fill object to be used in a drawing or shape
+     *
+     * @method _getFill
+     * @private
      */
     _getFill: function() {
         var fill = this._createGraphicNode("fill"),
@@ -550,8 +700,10 @@ VMLGraphics.prototype = {
     },
 
     /**
-     * @private
      * Creates a group element
+     *
+     * @method _createGraphics
+     * @private
      */
     _createGraphics: function() {
         var group = this._createGraphicNode("group");
@@ -561,8 +713,13 @@ VMLGraphics.prototype = {
     },
 
     /**
+     * Creates a graphic node
+     *
+     * @method _createGraphicNode
+     * @param {String} type node type to create
+     * @param {String} pe specified pointer-events value
+     * @return HTMLElement
      * @private
-     * Creates a vml node.
      */
     _createGraphicNode: function(type)
     {
@@ -570,6 +727,14 @@ VMLGraphics.prototype = {
     
     },
     
+    /**
+     * Converts a shape type to the appropriate vml node type.
+     *
+     * @method _getNodeShapeType
+     * @param {String} type The shape to convert.
+     * @return String
+     * @private
+     */
     _getNodeShapeType: function(type)
     {
         var shape = "shape";
@@ -580,6 +745,13 @@ VMLGraphics.prototype = {
         return shape;
     },
 
+    /**
+     * Used to convert certain shape types to the appropriate vml node type.
+     *
+     * @property _typeConversionHash
+     * @type Object
+     * @private
+     */
     _typeConversionHash: {
         circle: "oval",
         ellipse: "oval",
@@ -587,20 +759,32 @@ VMLGraphics.prototype = {
     },
     
     /**
-     * Returns a shape.
+     * Creates a Shape instance and adds it to the graphics object.
+     *
+     * @method getShape
+     * @param {Object} config Object literal of properties used to construct a Shape.
+     * @return Shape
      */
     getShape: function(config) {
         config.graphic = this;
         return new Y.Shape(config); 
     },
 
+    /**
+     * Adds a child to the <code>node</code>.
+     *
+     * @method addChild
+     * @param {HTMLElement} element to add
+     * @private
+     */
     addChild: function(child)
     {
         this.node.appendChild(child);
     }
 };
 
-if (Y.UA.ie) {
+if(DRAWINGAPI == "vml")
+{
     var sheet = document.createStyleSheet();
     sheet.addRule(".vmlgroup", "behavior:url(#default#VML)", sheet.rules.length);
     sheet.addRule(".vmlgroup", "display:inline-block", sheet.rules.length);
@@ -612,87 +796,8 @@ if (Y.UA.ie) {
     sheet.addRule(".vmlrect", "behavior:url(#default#VML)", sheet.rules.length);
     sheet.addRule(".vmlrect", "display:block", sheet.rules.length);
     sheet.addRule(".vmlfill", "behavior:url(#default#VML)", sheet.rules.length);
+    sheet.addRule(".vmlstroke", "behavior:url(#default#VML)", sheet.rules.length);
     Y.log('using VML');
     Y.Graphic = VMLGraphics;
-}
-else
-{
-    var UID = '_yuid',
-        NODE_NAME = 'nodeName',
-        _addClass = Y.Node.prototype.addClass,
-        node_toString = Y.Node.prototype.toString,
-        nodeList_toString = Y.NodeList.prototype.toString;
-    Y.Node.prototype.addClass = function(className) {
-       var node = this._node;
-       if(node.tagName.indexOf("svg") > -1)
-       {    
-            if(node.className && node.className.baseVal)
-            {
-                node.className.baseVal = Y.Lang.trim([node.className.baseVal, className].join(' '));
-            }
-            else
-            {
-                node.setAttribute("class", className);
-            }
-        }
-        else
-        {
-            _addClass.apply(this, arguments);
-        }
-        return this;
-    };
-
-    Y.Node.prototype.toString = function() {
-        var node = this._node,
-            str;
-        if(node && node.className && node.className.baseVal)
-        {
-            if(typeof node.className.baseVal == "string")
-            {
-                str = node[NODE_NAME] + "." + node.className.baseVal.replace(' ', '.');
-            }
-            else
-            {
-                str = this[UID] + ': not bound to any nodes';
-            }
-        }
-        else
-        {
-            str = node_toString.apply(this, arguments);
-        }
-        return str;
-    };
-
-    Y.NodeList.prototype.toString = function() {
-        var nodes = this._nodes,
-            node,
-            str;
-        if (nodes && nodes[0]) {
-            node = nodes[0];
-        }    
-        if(node && node.className && node.className.baseVal)
-        {
-            if(typeof node.className.baseVal == "string")
-            {
-                str = node[NODE_NAME];
-                if(node.id)
-                {
-                    str += "#" + node.id;
-                }
-                str += "." + node.className.baseVal.replace(' ', '.');
-            }
-            else
-            {
-                str = this[UID] + ': not bound to any nodes';
-            }
-        }
-        else
-        {
-            str = nodeList_toString.apply(this, arguments);
-        }
-        return str;
-    };
-
-    Y.NodeList.importMethod(Y.Node.prototype, ['addClass']);
 }
 

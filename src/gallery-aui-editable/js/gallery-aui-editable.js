@@ -5,6 +5,7 @@
  */
 
 var Lang = A.Lang,
+	LString = Lang.String,
 	isFunction = Lang.isFunction,
 
 	getClassName = A.ClassNameManager.getClassName,
@@ -142,9 +143,6 @@ var Editable = A.Component.create(
 					if (!node) {
 						A.error('AUI.Editable: Invalid Node Given: ' + value);
 					}
-					else {
-						node = node.item(0);
-					}
 
 					return node;
 				}
@@ -183,9 +181,6 @@ var Editable = A.Component.create(
 
 					if (!node) {
 						A.error('AUI.Editable: Invalid renderTo Given: ' + value);
-					}
-					else {
-						node = node.item(0);
 					}
 
 					return node;
@@ -646,7 +641,7 @@ var Editable = A.Component.create(
 					value = instance._toText(value);
 				}
 
-				instance.inputNode.set('value', value);
+				instance.inputNode.set('value', LString.unescapeEntities(value));
 			},
 
 			/**

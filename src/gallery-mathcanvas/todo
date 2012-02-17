@@ -1,0 +1,18 @@
+set constants, so show in Constants menu
+
+uif
+	render as part of canvas
+	invalid value simply displays red border -- need regex for number, since parseFloat('1.2.3') gives 1.2
+
+sqrt(2)^(2^((2/3)^(2^2))) or 2^log(3/2,27) or log(3/2,27) - 2/3 looks wrong
+2^2^2 - too much space between opening paren and base
+log2(2) - base too close to open paren
+
+|| (nary parallel)
+variable should draw all but first char as subscript
+smarter parenthesizing, e.g., 5+2/7
+
+test expand selection:  (3^2)/(5+2/7)
+
+http://www.thegalaxytabforum.com/index.php?/topic/621-detecting-android-tablets-with-javascript/
+http://www.ignitebyte.net/scrwidth.htm

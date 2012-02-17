@@ -9,7 +9,7 @@
     .highlight { background-color: yellow; }
 </style>
 
-<script src="http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
 <script src="../../../build/gallery-tagcloud/gallery-tagcloud.js"></script>
 </head>
 
@@ -21,13 +21,19 @@
         DynaCloud - a dynamic JavaScript tag/keyword cloud with jQuery</a>
     <br /> <br />
 
-    <div id="myTagCloud"></div>
 
 	<div id="text" class="dynacloud">
         First Second SECOND Third THIRD THIRD Fourth FOURTH FOURTH FOURTH
         Fifth FIFTH FIFTH FIFTH FIFTH Sixth SIXTH SIXTH SIXTH SIXTH SIXTH
 	</div>
 
+	<div id="text2" class="dynacloud">
+        First,Second,SECOND,Third,THIRD,THIRD,Fourth,FOURTH,FOURTH,FOURTH
+        Fifth,FIFTH,FIFTH,FIFTH,FIFTH,Sixth,SIXTH,SIXTH,SIXTH,SIXTH,SIXTH
+	</div>
+
+    <div id="myTagCloud"></div>
+    <div id="myTagCloud2"></div>
 
 <script type="text/javascript">
 /*global YUI */
@@ -36,7 +42,13 @@
 
 YUI().use("gallery-tagcloud", function (Y) {
     Y.on("domready", function () {
-        Y.one("#text").tagCloud("#myTagCloud", { sort: false });
+        Y.one("#text").tagCloud("#myTagCloud", { 
+            sort: false 
+        });
+        Y.one("#text2").tagCloud("#myTagCloud2", { 
+            sort: false,
+            fieldDelimeter: ','
+        });
         Y.one("#text").tagCloud();
     });
 });

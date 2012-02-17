@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+/*Supplemental: CSS for the YUI distribution*/
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mycanvas {
+    width:500px;
+    height:350px;
+}
+BODY {
+    background-color: #9aa
+}
+</style>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.3.0/build/cssfonts/fonts-min.css">
+<!-- BEGIN EXAMPLE CODE -->	
+</head>		
+<body class="yui3-skin-sam">
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<div style="z-index:10;position:absolute;left:500px;top:20px">
+<button type="button" id="loadgraphics">Load Graphics</button><br/>
+<button type="button" id="updateElements">Update Graphics</button><br/>
+</div>
+<div id="mycanvas" style="backround-color:#9aa;overflow:visible;position:absolute;top:50px;left:100px;border:1px solid"></div>
+<script type="text/javascript">            
+    YUI({gallery: 'gallery-2011.03.16-21-24',
+            groups: {
+                gallery: {
+                    base: 'http://yui.yahooapis.com/combo?gallery-2011.03.16-21-24/build/',
+                    patterns: {'gallery-': {}},
+                    modules:
+                    {
+                        "gallery-graphics": {
+                            "requires": ["node", "event-custom", "base"],
+                            "plugins": {
+                                "gallery-graphics-canvas": {
+                                    "path": "gallery-graphics-canvas/gallery-graphics-canvas.js",
+                                    "condition": {
+                                        "test": function(Y) {
+                                            var canvas = document.createElement("canvas");
+                                            return (!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") && (canvas && canvas.getContext && canvas.getContext("2d")));
+                                        }, 
+                                        "trigger": "gallery-graphics"
+                                    }
+                                }, 
+                                "gallery-graphics-svg": {
+                                    "path": "gallery-graphics-svg/gallery-graphics-svg.js",
+                                    "condition": {
+                                        "test": function(Y) {
+                                            return (document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1"));
+                                        }, 
+                                        "trigger": "gallery-graphics"
+                                    }
+                                }, 
+                                "gallery-graphics-vml": {
+                                    "path": "gallery-graphics-vml/gallery-graphics-vml.js",
+                                    "condition": {
+                                        "test": function(Y) {
+                                        var canvas = document.createElement("canvas");
+                                        return (!document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#BasicStructure", "1.1") && (!canvas || !canvas.getContext || !canvas.getContext("2d")));
+                                        }, 
+                                        "trigger": "gallery-graphics"
+                                    }
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+    }).use('gallery-graphics', function (Y) 
+    {
+    var mygraphic,
+        myline,
+        mycircle,
+        myrect,
+        myellipse;
+        function loadGraphics(e)
+        {
+            mygraphic = new Y.Graphic();
+            mygraphic.render(Y.one("#mycanvas"));
+            myline = new Y.Path({stroke: {
+                weight: 1,
+                color: "#ff0000",
+                alpha: 1,
+                dashstyle: [3, 4]
+            }
+            });
+            mygraphic.addShape(myline);
+            myline.moveTo(-190, -190);
+            
+            myline.lineTo(60, 120);
+            myline.moveTo(0, 200);
+            myline.lineTo(60, 120);
+            myline.end();
+            myrect = new Y.Rect({stroke: {
+                    color:"#000",
+                    weight: 1
+                },
+                width:40,
+                height:50
+            });
+            
+            mygraphic.addShape(myrect);
+            myrect.set("fill", {color:"#fc0"});
+            myellipse = new Y.Ellipse({stroke: {
+                    color: "#ddd",
+                    weight: 2
+                },
+                fill: {
+                    color:"#f00"
+                },
+                width: 100,
+                height: 30,
+                x:100,
+                y:50
+            });
+            mygraphic.addShape(myellipse);
+            
+            mycircle = new Y.Circle({stroke: {
+                    color:"#ff0",
+                    weight: 1
+                },
+                fill: {
+                    color:"#00f"
+                },
+                radius: 12,
+                x: -5,
+                y: -5
+            });
+            mygraphic.addShape(mycircle);
+        }
+
+        function updateElements(e)
+        {
+            myrect.rotate(120);
+            mycircle.translate(50, 50);
+            mycircle.set("x", 300);
+            myline.translate(100, 100);
+            myellipse.set("x", 200);
+            myellipse.set("y", 200);
+            myline.clear();
+            myline.moveTo(-190, -190);
+            myline.lineTo.apply(myline, [[0, 0], [10, 20], [10, 150], [40, 300], [50, 100], [60, 180]]);
+            myline.end();
+            mycircle.translate(-5, -5);
+
+        }
+        Y.on("click", loadGraphics, "#loadgraphics");
+        Y.on("click", updateElements, "#updateElements");
+  });
+</script>
+</body>
+</html>

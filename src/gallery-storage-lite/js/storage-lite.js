@@ -37,15 +37,19 @@ storageMode;
 // -- Implementation -----------------------------------------------------------
 
 // Determine the best available storage mode.
-if (w.localStorage) {
-    storageMode = MODE_HTML5;
-} else if (w.globalStorage) {
-    storageMode = MODE_GECKO;
-} else if (w.openDatabase && navigator.userAgent.indexOf('Chrome') === -1) {
-    storageMode = MODE_DB;
-} else if (Y.UA.ie >= 5) {
-    storageMode = MODE_USERDATA;
-} else {
+try {
+    if (w.localStorage) {
+        storageMode = MODE_HTML5;
+    } else if (w.globalStorage) {
+        storageMode = MODE_GECKO;
+    } else if (w.openDatabase && navigator.userAgent.indexOf('Chrome') === -1) {
+        storageMode = MODE_DB;
+    } else if (Y.UA.ie >= 5) {
+        storageMode = MODE_USERDATA;
+    } else {
+        storageMode = MODE_NOOP;
+    }
+} catch (ex) {
     storageMode = MODE_NOOP;
 }
 

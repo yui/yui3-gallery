@@ -5,10 +5,14 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 	section_min_size = (use_nonzero_empty_div ? 1 : 0);
 
 /**********************************************************************
- * <p>Class to manage an accordion, either horizontally or vertically.
+ * <p>Widget to manage an accordion, either horizontally or vertically.
  * Allows either multiple open sections or only a single open section.
- * Provides option to always force at lease one item to be open.</p>
+ * Provides option to always force at least one item to be open.</p>
  * 
+ * @module gallery-accordion-horiz-vert
+ */
+
+/**
  * <p>An accordion can be constructed from existing markup or from strings
  * containing HTML.  Existing markup can be provided either by setting
  * <code>contentBox</code> or by specifying CSS selectors.  See the
@@ -33,7 +37,6 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
  * opacity.  IE6 doesn't always render correctly with opacity set, so if
  * animation is turned off, we don't use opacity at all.</p>
  * 
- * @module gallery-accordion-horiz-vert
  * @class Accordion
  * @constructor
  * @param config {Object} Widget configuration
@@ -41,11 +44,6 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 
 function Accordion(config)
 {
-	if (arguments.length === 0)	// derived class prototype
-	{
-		return;
-	}
-
 	config = config || {};
 	if (Y.Lang.isUndefined(config.tabIndex))
 	{
@@ -259,12 +257,12 @@ Accordion.HTML_PARSER =
 {
 	titles: function(content_box)
 	{
-		return content_box.all('li div:nth-child(1)');
+		return content_box.all('li > div:nth-child(1)');
 	},
 
 	sections: function(content_box)
 	{
-		return content_box.all('li div:nth-child(2)');
+		return content_box.all('li > div:nth-child(2)');
 	}
 };
 
@@ -332,6 +330,8 @@ Y.extend(Accordion, Y.Widget,
 	initializer: function(config)
 	{
 		this.section_list = [];
+
+		this.get('allowAllClosed');	// force init of this.allow_all_closed
 
 		if (this.get('horizontal'))
 		{
@@ -416,6 +416,8 @@ Y.extend(Accordion, Y.Widget,
 		{
 			Y.log('ignoring titles & sections', 'info', 'Accordion');
 		}
+
+		this.get('contentBox').all('> li').remove();
 	},
 
 	/**
@@ -466,8 +468,16 @@ Y.extend(Accordion, Y.Widget,
 		if (el && this.get('replaceTitleContainer'))
 		{
 			var p = t.get('parentNode');
+			var n = t.get('nextSibling');
 			p.removeChild(t);
-			p.appendChild(el);
+			if (n)
+			{
+				p.insertBefore(el, n);
+			}
+			else
+			{
+				p.appendChild(el);
+			}
 
 			this.section_list[index].title = el;
 
@@ -527,8 +537,16 @@ Y.extend(Accordion, Y.Widget,
 			var display = d.getStyle('display');
 
 			var p = d.get('parentNode');
+			var n = d.get('nextSibling');
 			p.removeChild(d);
-			p.appendChild(el);
+			if (n)
+			{
+				p.insertBefore(el, n);
+			}
+			else
+			{
+				p.appendChild(el);
+			}
 
 			this.section_list[index].content = el;
 
@@ -718,13 +736,19 @@ Y.extend(Accordion, Y.Widget,
 		{
 			args[0].removeChild(args[1]);
 			args[0].removeChild(args[2]);
+
+			if (args[3])
+			{
+				this.fire('remove', index);
+			}
 		}
 
 		var onCompleteArgs =
 		[
 			this.get('contentBox'),
 			this.section_list[index].title,
-			this.section_list[index].clip
+			this.section_list[index].clip,
+			true
 		];
 
 		if (this.get('animateInsertRemove'))
@@ -751,27 +775,31 @@ Y.extend(Accordion, Y.Widget,
 
 			params.node = this.section_list[index].title;
 			var anim    = this._createAnimator(params);
-			anim.on('end', onCompleteRemoveSection, null, onCompleteArgs);
+			anim.on('end', onCompleteRemoveSection, this, onCompleteArgs);
 			anim.run();
 		}
 		else
 		{
-			onCompleteRemoveSection(null, onCompleteArgs);
+			onCompleteArgs[3] = false;
+			onCompleteRemoveSection.call(this, null, onCompleteArgs);
 		}
 
 		this.section_list.splice(index, 1);
+
+		if (!onCompleteArgs[3])
+		{
+			this.fire('remove', index);
+		}
 
 		if (!this.allow_all_closed && this.allSectionsClosed())
 		{
 			this.toggleSection(0);
 		}
-
-		this.fire('remove', index);
 	},
 
 	/**
 	 * @param {String|Node} any element inside the section or title
-	 * @return {int|null} the index of the containing section or <code>false</code> if not found
+	 * @return {int} the index of the containing section, or -1 if not found
 	 */
 	findSection: function(
 		/* string|element */	el)
@@ -790,7 +818,7 @@ Y.extend(Accordion, Y.Widget,
 			}
 		}
 
-		return false;
+		return -1;
 	},
 
 	/**

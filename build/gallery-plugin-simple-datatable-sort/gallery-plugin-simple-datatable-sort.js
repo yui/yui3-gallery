@@ -63,8 +63,8 @@ Y.Plugin.SDTSort= Y.Base.create('sdt-sort', Y.Plugin.Base, [], {
    * @chainable
    */
   sortBy : function(key) {
-  this._sortCell = this._host.get('boundingBox').one('th.yui3-sdt-col-' + key);
-  this._newKey = true;
+	this._sortCell = this._host.get('boundingBox').one('th.yui3-sdt-col-' + key);
+	this._newKey = true;
     this.set(SORT.KEY, key);
     return this;
   },
@@ -309,4 +309,4 @@ Y.Plugin.SDTSort= Y.Base.create('sdt-sort', Y.Plugin.Base, [], {
 });
 
 
-}, 'gallery-2010.12.10-17-31' ,{requires:['plugin','event','selector-css3']});
+}, 'gallery-2011.03.11-23-49' ,{requires:['plugin','event','selector-css3']});

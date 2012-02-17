@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<timeline>
+  <version>0.15.0</version>
+  <categories>
+    <category>
+      <name>first</name>
+      <color>255,0,0</color>
+      <font_color>0,0,0</font_color>
+    </category>
+  </categories>
+  <events>
+    <event>
+      <start>2012-1-10 23:17:0</start>
+      <end>2012-1-10 23:17:0</end>
+      <text>fuzzy, show time</text>
+      <fuzzy>True</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <category>first</category>
+    </event>
+    <event>
+      <start>2012-1-17 13:2:0</start>
+      <end>2012-1-17 13:2:0</end>
+      <text>show time</text>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <description>description here</description>
+      <icon>iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAABNBJREFUWIWdl01sVUUUx3/n9tFniK+Uohj6QWrCdw0LFxqFFSEiroDgBuNCElcupOjGFbBW6cqYKCpxocaYgAnRjUD8oBoeG4KIuCCttA2FQuS9FvrBu8fFfNyZ++4DcZLJnDt3Zs45//M/Z+4VgGWHhnckiQyJSH8igggkiSBieiJkchLIdq24PSJejkayZxBEGAEGq3vXHZeug8M7RDjmFOYNCJWYOYL5/20AAKrsTECHKGiqdiyYy+bDtw9ubo+qO0uHEqC/aNl/PzB+VtSM6ifc4GW3SpX+kgICDDyxmNOvb3wojx7UTo/UOfDjBNMLKaiiAqLiDVcgcYt/v3aH4dHaQymozTU4Oz59XwMOv9CHaoaKqvqOKrL0wBl1hNvc38GxVzcAcPH6HQ7/MkF9vkHfkjJ9S8rsfmoZvR3tXsGWo5fYtb4LBCbqC7zxzHJ6Kub9t5f/oaeyiHd/neTyzdmMgGbw4UjAE4IzozWu3p4DYN+JK+zf3M22VZ3U5hr8drVObbYRedhdWWRQGJump7IIgPqcWVOdmGG8vsCfU3dxOgwSGo2WA4qqSY+Pzl5j+9ounlvZwdcXpvj03HXE5n5t7l4TzJem7lIdn6Y6McMH1eu8s3kFlXIbW/orfHjuhnfONIn2qkKCZa2b+Or8DYZHa7y4ZilHqpOOrcXJ4ViumYefn5+iOj5DpdzGpam7Nt72PRpxQFFK7mAVg8Tt2Xu899MY29d2oaiLWmBmrN+/UYPlWG0emKY23zBEE4kLSICCYkMAIGrViTn4+79ukYh4JXn4jE4bwEiRMWK8vhCooaUjBgHJfHUxEwSVTM48LsDBwhsa0Rz34t0lRUHFbxFxtDSoODkoYwECGRJiqJyDPDQkNCY0wO1xajSzWCPrmzdjsyfkQOx5JoeuRAaEHuC3KJKLf6F677ALYWZoPFPMJDUI2CWSqRdHrOypOAvVoQCICWUxAm6D0xMgEHoRWh+SRykmoVuXegQ9fhHcLWmsloTGE7F2x7GP/Y8PiBAo8DxfRZrCqDYNs7hjlYfkCaBtgsAYG4YrM1+aFCvSdEbiSyThdZnJqS+hefNtJfalFdKc/NrTj9NTaae70t50FbteCj10FMzDqYgtVnkAbLaok2MUnu2tUCm3MbB8MYdOXWWsNt+UBUmR17G1xpu0CIFwnUUpTc1zT6Wdbas7eXngMY6cm2Tf890WUXOWQyspUtjKoOZKGECfZmdU2ts4smsVAL1L2untML0nCoW9jh+MgOkd5Tb6OsstOID3btvqpXyzZx0Dyxf7dYObujlw8m8Ov/QkaapRl9LbpzT8hs//bIgIG1c8yhd71rMyZwDA7dkGFydn6Os0n22t2vs/j4NAbbbBx9Vrfl7a3jqp7k+n1c/Fl69soPORUi6Rg/KcS/Cisg3w5okrHN29hq2fXPBzSZRKOMLFXDjxx82C47RQvF/7bPcavrt8y5LQdJH9P2QIQJP3rX6xBAEhlh0yFgLJQVSETEmVEdD+eNp/HWSjuzRwH7C24qmgovYuygq3/7iR7F4oAGokAQZVQVNtqmx+TMN6oORrhK+Y7n2qHmIja8FeRVUHE4a2Hgd2Kow4RfkUjDdnilzRSW0N8M/BGc4gTaOzRlJl562Dm47/C0gd6J+rayRLAAAAAElFTkSuQmCC</icon>
+    </event>
+    <event>
+      <start>2012-1-4 0:0:0</start>
+      <end>2012-1-4 0:0:0</end>
+      <text>Period, locked,</text>
+      <fuzzy>False</fuzzy>
+      <locked>True</locked>
+      <ends_today>False</ends_today>
+      <description>no category</description>
+    </event>
+    <event>
+      <start>2012-1-14 0:0:0</start>
+      <end>2012-1-15 13:36:43</end>
+      <text>shwo time, ends today</text>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>True</ends_today>
+    </event>
+    <event>
+      <start>2012-1-2 0:0:0</start>
+      <end>2012-1-15 13:36:43</end>
+      <text>no time, ends today</text>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>True</ends_today>
+    </event>
+    <event>
+      <start>2012-1-1 0:0:0</start>
+      <end>2012-1-2 0:0:0</end>
+      <text>1</text>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+    </event>
+    <event>
+      <start>2012-1-1 0:0:0</start>
+      <end>2012-2-1 0:0:0</end>
+      <text>Jan</text>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+    </event>
+    <event>
+      <start>2012-1-1 0:0:0</start>
+      <end>2013-1-1 0:0:0</end>
+      <text>2012</text>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+    </event>
+  </events>
+  <view>
+    <displayed_period>
+      <start>2011-12-22 21:31:28</start>
+      <end>2012-2-4 19:20:26</end>
+    </displayed_period>
+    <hidden_categories>
+      <name>first</name>
+    </hidden_categories>
+  </view>
+</timeline>
