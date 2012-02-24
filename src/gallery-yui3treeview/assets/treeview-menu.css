@@ -13,7 +13,8 @@
 }
 
 .yui3-treeleaf-content,
-.yui3-treeview-label-content {
+.yui3-treeview-label-content,
+.yui3-toggle {
     background: url(tree_view_icons_blue_01_arrow_beside_folders.gif) no-repeat;
 }
 
@@ -21,9 +22,12 @@
     background-position: 0 -3px;
 }
 
-.yui3-treeview .yui3-tree-collapsed .yui3-treeview-content {
+
+.yui3-tree-collapsed .yui3-treeleaf,
+.yui3-tree-collapsed .yui3-treeview  {
     display : none;
 }
+
 
 .yui3-treeview  .yui3-treeview-content {
     margin-left: 22px;
@@ -37,4 +41,3 @@
     background-position: 0 -162px;
     padding-left: 38px;
 }
-

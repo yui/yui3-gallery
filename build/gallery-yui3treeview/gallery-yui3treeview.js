@@ -6,10 +6,19 @@ var getClassName = Y.ClassNameManager.getClassName,
         TREELEAF = 'treeleaf',
         CONTENT_BOX = "contentBox",
         BOUNDING_BOX = "boundingBox",
-        INNERHTML = "innerHTML",
-        _instances = {},
         TRUE = true,
-        FALSE = false,
+        WIDGET = Y.Widget,
+        VALUE = "value",
+        CONTENT = "content",
+        Widget = Y.Widget,
+        Node = Y.Node,
+        SRC_NODE = "srcNode",
+        ID = "id",
+        DESTROYED = "destroyed",
+        BODY = "body",
+        Handlebars = Y.Handlebars,
+        _getClassName = Y.ClassNameManager.getClassName,
+        _getWidgetClassName = Y.Widget.getClassName,
         classNames = {
             loading : getClassName(TREEVIEW,'loading'),
             tree : getClassName(TREE),
@@ -20,17 +29,309 @@ var getClassName = Y.ClassNameManager.getClassName,
             leaf : getClassName(TREELEAF)
         };
 
-        
+
 /**
- * Treeview widget. Provides a tree style widget, with a hierachical representation of it's components.
- * It extends WidgetParent and WidgetChild, please refer to it's documentation for more info.   
- * @class TreeView
- * @constructor
- * @uses WidgetParent, WidgetChild
- * @extends Widget
- * @param {Object} config User configuration object.
+ * Provides the WidgetHTMLRenderer extensions, which overrides the base Widget API 
+ * to allow widgets to be rendered purely using HTML from templates, without any Node references. 
+ * 
+ * This allows Widgets to be rendered on the server, and also optimizes rendering 
+ * in high-scale applications such as TreeView.
+ * 
+ * NOTE: When applied, Node references to boundingBox and contentBox won't be 
+ * available until the Widget is rendered.
+ * 
+ * Although not required of widget implementors, the Widget base class uses
+ * Handlebars to render it's boundingBox and contentBox templates. If overriding
+ * the CONTENT_TEMPLATE or BOUNDING_TEMPLATE values, you should use Handlebars 
+ * token syntax, and maintain tokens used by the default templates.
+ *
+ * @module widget-htmlrenderer
  */
-    Y.TreeView = Y.Base.create("treeview", Y.Widget, [Y.WidgetParent, Y.WidgetChild], {
+
+
+/**
+ * WidgetHTMLRenderer is an Extension for Widget, to be used with Y.Base.create or
+ * Y.Base.mix and provides a renderHTML method which can be used to generate the 
+ * initial markup for the widget purely from templates, without creating Node 
+ * references.
+ *
+ * When mixed in, renderHTML() will generate the markup for the widget and the 
+ * caller is responsible for adding it to the DOM. 
+ *
+ * Widget developers need to implement a renderUI(buffer) method which writes
+ * string content to the buffer passed in. This buffer gets added as the contents
+ * of the contentBox.
+ *
+ * render() will generate boundingBox and contentBox node references, and invoke 
+ * bindUI() and syncUI() to bind them.
+ *
+ * If render() is called and renderHTML() hasn't been invoked already, 
+ * it will be invoked, before bindUI and syncUI are called.
+ *
+ * @class WidgetHTMLRenderer
+ */
+Y.WidgetHTMLRenderer = function() {};
+
+Y.WidgetHTMLRenderer.prototype = {
+
+    /**
+     * Generates the markup for the widget. 
+     * 
+     * Widget implementers need to implement a renderUI(buffer) method which
+     * writes string content to the buffer (array) passed in. The buffers contents
+     * get added as the contents of the contentBox.
+     *
+     * @method renderHTML
+     * @public
+     * @param appendTarget {Node|Array}. Optional. The array or node to push content to.
+     * @return {HTML} The rendered HTML string for the widget
+     */
+    renderHTML: function(appendTarget) {
+
+        var boxBuffer,
+            contentBuffer,
+            context,
+            renderedContent;
+
+
+        if (!this.get(DESTROYED)) {
+
+            context = {};
+
+            contentBuffer = [];
+            this.renderUI(contentBuffer, context);
+
+            context.content = contentBuffer.join("");
+
+            boxBuffer = [];
+            this._renderUI(boxBuffer, context);
+
+            renderedContent = boxBuffer.join("");
+
+            if (appendTarget) {
+                if (Node && appendTarget instanceof Node) {
+                    appendTarget.append(renderedContent);
+                } else {
+                    appendTarget.push(renderedContent);
+                }
+            }
+
+            this._renderedUI = true;
+        }
+
+        return renderedContent;
+    },
+
+    /**
+     * Internal method which wraps renderHTML with the default parent node for the 
+     * widget. Used by the renderer to support the case where renderHTML hasn't been
+     * invoked already when render() is called. 
+     *
+     * @method _renderHTML
+     * @private
+     */
+    _renderHTML: function() {
+
+        // HACK - Widget should extract this logic into a method for easy reuse
+        var defParentNode = this.DEF_PARENT_NODE,
+            parentNode = this._parentNode || (defParentNode && Node.one(defParentNode)),
+            buffer = parentNode || [],
+            content;
+
+        this.renderHTML(buffer);
+
+        if (!parentNode) {
+            content = buffer.join();
+            Node.one(BODY).insert(content, 0);
+        }
+    },
+
+    /**
+     * Renders the template for the Widget's bounding/content boxes.
+     *
+     * @method _renderUI
+     * @param {Array} buffer The buffer to write the rendered template to. Will ultimately be Array.join'd
+     * @param {Object} context The context, passed to Handlebars.
+     * @protected
+     */
+    _renderUI: function(buffer, context) {
+        this._renderBox(buffer, context);
+    },
+
+    /**
+     * Renders the templates for the Widget's bounding/content boxes
+     *
+     * @method _renderBox
+     * @param {Array} The buffer to write the rendered template to. Will ultimately be Array.join'd
+     * @param {Object} The context, passed to Handlebars.
+     * @protected
+     */
+    _renderBox: function(buffer, context) {
+
+        context.id = this.get(ID);
+        
+        this._renderBoxClassNames(context);
+
+        if (this.CONTENT_TEMPLATE) {
+            context.contentBox = Handlebars.render(this.CONTENT_TEMPLATE, context); 
+        } else {
+            context.contentBox = context.content;
+        }
+
+        buffer.push(Handlebars.render(this.BOUNDING_TEMPLATE, context));
+
+        this._mapInstance(context.id);
+    },
+
+    /**
+     * Utility method to add the boundingClasses and contentClasses property values
+     * to the Handlebars context passed in. Similar to _renderBoxClassNames() on 
+     * the Node based renderer.
+     * 
+     * @method _renderBoxClassNames
+     * @param {Object} context The Handlebars context object on which the 
+     * boundingClasses and contentClasses properties get added.
+     */
+    _renderBoxClassNames: function(context) {
+
+        var classes = this._getClasses(),
+            cl,
+            i,
+            contentClass = this.getClassName(CONTENT),
+            boundingClasses = [];
+
+        boundingClasses[boundingClasses.length] = _getWidgetClassName();
+
+        for (i = classes.length-3; i >= 0; i--) {
+            cl = classes[i];
+            boundingClasses[boundingClasses.length] = cl.CSS_PREFIX || _getClassName(cl.NAME.toLowerCase());
+        }
+
+        if (this.CONTENT_TEMPLATE === null) {
+            boundingClasses.push(contentClass);
+        } else {
+            context.contentClasses = contentClass;
+        }
+
+        context.boundingClasses = boundingClasses.join(" ");
+    },
+
+    /**
+     * Sync method, used to generate the boundingBox and contentBox node references,
+     * after they've been added to the DOM. This method is invoked by render(),
+     * prior to invoking bindUI()/syncUI() so that Node references are available 
+     * for event binding and incremental updates.
+     *
+     * @method syncRenderedBoxes
+     */
+    syncRenderedBoxes : function() {
+
+        var bb = Y.Node.one("#" + this.get(ID)),
+            cb = (this.CONTENT_TEMPLATE === null) ? bb : bb.one("." + this.getClassName(CONTENT));
+
+        this._set("boundingBox", bb);
+        this._set("contentBox", cb);
+    },
+
+    /**
+     * Overrides the base Widget renderer implementation to invoke:
+     * 
+     * - renderHTML() if it hasn't been invoked already. For the common use case it will have already been called to generate the markup string for the Widget.
+     * - bindUI()
+     * - syncUI()
+     *
+     * The renderer will invoke syncRenderedBoxes() before calling bindUI()/syncUI()
+     * to establish the contentBox and boundingBox Node references, which don't 
+     * exist prior to render() call. 
+     * 
+     * This method is invoked by render() and is not chained 
+     * automatically for the class hierarchy (unlike initializer, destructor) 
+     * so it should be chained manually for subclasses if required.
+     *
+     * @method renderer
+     * @protected
+     */
+    renderer: function() {
+
+        if (!this._renderedUI) {
+            this._renderHTML();
+        }
+
+        // We need to setup bb/cb references, before bind/sync for backwards compat
+        this.syncRenderedBoxes();
+
+        this._bindUI();
+        this.bindUI();
+
+        this._syncUI();
+        this.syncUI();
+    },
+
+    /**
+     * The Handlebars template to use to render the basic boundingBox HTML.
+     * 
+     * When overriding this value, tokens should be maintained.
+     * 
+     * @property BOUNDING_TEMPLATE
+     * @type String 
+     */
+    BOUNDING_TEMPLATE : '<div id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</div>',
+
+    /**
+     * The Handlebars template to use to render the basic contentBox HTML.
+     * 
+     * When overriding this value, tokens should be maintained.
+     * 
+     * @property CONTENT_TEMPLATE
+     * @type String 
+     */
+    CONTENT_TEMPLATE : '<div class="{{contentClasses}}">{{{content}}}</div>',
+
+    /**
+     * Helper method to set the bounding/content box.
+     * 
+     * Overrides the base Widget implementation to avoid creating a Node 
+     * instance from the box templates. Node references to the boundingBox
+     * and contentBox will be created during widget.render().
+     *
+     * @method _setBox
+     * @private
+     *
+     * @param {String} id The node's id attribute
+     * @param {Node|String} node The node reference
+     * @param {String} template HTML string template for the node
+     * @return {Node} The node
+     */
+    _setBox : function(id, node) {
+        // We don't want to create a new node        
+        node = Node.one(node);
+
+        if (node && !node.get(ID)) {
+            node.set(ID, id || Y.guid());
+        }
+
+        return node;
+    }
+};
+
+ /**
+ *  YUI3 Treeview
+ *
+ * @module gallery-yui3treeview
+ */
+
+    Y.Treeview = Y.Base.create("treeview", WIDGET, [Y.WidgetParent, Y.WidgetChild, Y.WidgetHTMLRenderer], {
+    
+       BOUNDING_TEMPLATE : '<ul id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</ul>',
+        
+        CONTENT_TEMPLATE : null,
+        
+        TREEVIEWLABEL_TEMPLATE : "<a class='{{treelabelClassName}}' role='treeitem' href='javascript:void(0);'><span class={{labelcontentClassName}}>{{{label}}}</span></a>",
+    
+        EXPANDCONTROL_TEMPLATE : "<span class='{labelcontentClassName}'>{label}</span>",
+        
+        _populated : null,
+
         /**
          * Initializer lifecycle implementation for the Treeview class. 
          * <p>Registers the Treeview instance. It subscribes to the onParentChange 
@@ -44,128 +345,169 @@ var getClassName = Y.ClassNameManager.getClassName,
          */
         initializer : function (config) {
             
-            this.after('parentChange', this._onParentChange,this);
+            this.lazyLoad = config.lazyLoad;
+            
+            //this.after('parentChange', this._onParentChange,this);
             this.publish('toggleTreeState', { 
                 defaultFn: this._toggleTreeState
             });
-            _instances[Y.stamp(this.get(BOUNDING_BOX))] = this;
-
+        },
+        
+        renderUI: function (contentBuffer) {
+            var label = this.get("label"),
+                labelContent,
+                isBranch = this.get("depth") > -1,
+                handlebars = Y.Handlebars,
+                treelabelClassName = this.getClassName("treelabel"),
+                labelcontentClassName = classNames.labelcontent;
+                
+                
+            this.BOUNDING_TEMPLATE = isBranch ? '<li id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</li>' : '<ul id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</ul>';
+            this.CONTENT_TEMPLATE = isBranch ? '<ul id="{{id}}" class="{{contentClasses}}">{{{content}}}</ul>' : null;
+            labelContent = handlebars.render(this.TREEVIEWLABEL_TEMPLATE, {label:label, treelabelClassName : treelabelClassName, labelcontentClassName : labelcontentClassName});
+            contentBuffer.push(labelContent);
         },
         
         /**
-         * Flag to determine if the tree is being rendered from markup or not
-         * @property _renderFromMarkup
-         * @protected
-         */ 
-        _renderFromMarkup : FALSE,
+        * Utility method to add the boundingClasses and contentClasses property values
+        * to the Handlebars context passed in. Similar to _renderBoxClassNames() on
+        * the Node based renderer.
+        *
+        * @method _renderBoxClassNames
+        * @param {Object} context The Handlebars context object on which the
+        * boundingClasses and contentClasses properties get added.
+        */
+        _renderBoxClassNames: function(context) {
+            var classes = this._getClasses(),
+                cl,
+                i,
+                contentClass = this.getClassName(CONTENT),
+                boundingClasses = [];
+                
+                boundingClasses[boundingClasses.length] = Widget.getClassName();
+                
+                
+            for (i = classes.length-3; i >= 0; i--) {
+                cl = classes[i];
+                boundingClasses[boundingClasses.length] = Y.ClassNameManager.getClassName(cl.NAME.toLowerCase()) || this.getClassName(cl.NAME.toLowerCase());
+            }
+            
+            
+            
+            if (this.CONTENT_TEMPLATE === null) {
+                boundingClasses.push(contentClass);
+                boundingClasses.push(classNames.collapsed);
+            } else {
+                context.contentClasses = contentClass + " " + classNames.collapsed;
+            }
+            
+            context.boundingClasses = boundingClasses.join(" ");
+        },
+
+    
+    
+        bindUI: function() {
+            if (this.isRoot()) {
+                this.get("boundingBox").on("click",this._onViewEvents,this);
+                
+                
+               /*
+ this.get("boundingBox").on("click", function(e) {
+                            var widget = Y.Widget.getByNode(e.target);
+                            // Optional - Maybe we can render here, or when user asks for a child, 
+                            // so we can use get("boundingBox")/get("contentBox")?
+                            // widget.render();
+                            // console.log(widget.get("id") + ":" + widget.get("boundingBox").get("className"));
+                            console.log(widget.get("id") + ":" + widget.name);
+                        });
+*/
+
+                    }
+        },
         
-        /**
-         * It fires each time there is parent change. In this case, we use it to dinamically change
-         * the boundingbox to be a semantic li rather than the default div.
-         * It also does some rendering operations.
-         * @method _onParentChange
+         /**
+         * Handles all the internal treeview events. In this case, all it does it fires the
+         * collaped/expand event when a treenode is clicked
+         * @method onViewEvents
          * @protected
          */
-        _onParentChange : function () {
-            var isTree = this.get("depth") > -1,
-                tag = isTree ? "<li></li>" : "<div></div>",
-                treeLabelHtml,
-                boundingBox = this.get(BOUNDING_BOX),
-                labelContainer,
-                label,
-                toggleControlHtml,
-                treelabelClassName = this.getClassName("treelabel"),
-                treeLabeltokens;
-                
-                //We get the anchor to retrieve the label, we add the classname
-                if (this._renderFromMarkup) {
-                    labelContainer = boundingBox.one(":first-child");
-                    labelContainer.set("role","treeitem");
-                    labelContainer.addClass(treelabelClassName);
-                    label = labelContainer.get(INNERHTML);
-                    toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{labelcontentClassName:classNames.labelcontent, label : label});
-                    labelContainer.set(INNERHTML,toggleControlHtml);
-                    this.set("label",label);
-                    this._renderFromMarkup = FALSE;
-                } else {
-                    label = this.get("label");
-                    treeLabelHtml = Y.substitute(this.TREEVIEWLABEL_TEMPLATE, {treelabelClassName : treelabelClassName});
-                    treeLabelHtml = Y.Node.create(treeLabelHtml);
-                    toggleControlHtml = Y.substitute(this.EXPANDCONTROL_TEMPLATE,{labelcontentClassName:classNames.labelcontent, label : label});
-                    treeLabelHtml.append(toggleControlHtml);
-                    this._set(CONTENT_BOX,Y.Node.create("<ul></ul>"));
-                    this._set(BOUNDING_BOX, Y.Node.create(tag));
-                    boundingBox = this.get(BOUNDING_BOX).setContent(treeLabelHtml);
-                    //Since we changed the boundigbox we need to update the _instance
-                    _instances[Y.stamp(boundingBox)] = this;
+        _onViewEvents : function (event) {
+            var target = event.target,
+                keycode = event.keyCode,
+                classes,
+                className,
+                i,
+                cLength;
+            
+            classes = target.get("className").split(" ");
+            cLength = classes.length;
+            
+            event.preventDefault();
+            
+
+            for (i=0;i<cLength;i++) {
+                className = classes[i];
+                switch (className) {
+                    case classNames.labelcontent :
+                        this.fire('toggleTreeState',{actionNode:target});
+                        break;
+                    case classNames.treeLabel :
+                        if (keycode === 39) {
+                            this._expandTree(target);
+                        } else if (keycode === 37) {
+                            this._collapseTree(target);
+                        }
+                        break;
+                }
+            }
+        },
+    
+    
+        _renderChildren: function (contentBuffer) {
+            // Left this as a string on purpose, since the other buffer was 
+            // confusing you. 
+            // But you can see how you could replace the
+            //    childrenHTML = ""; childrenHTML += child.renderHTML(); with
+            //    childrenHTML = [], childrenHTML.push(child.renderHTML());
+    
+            if (this.lazyLoad) {
+            
+            } else {
+                this._onLazyRenderChildren(contentBuffer);
+            }
+        },
+        
+        _onLazyRenderChildren : function (widget,tree) {
+            var childrenHTML = "";
+            
+                if (widget.each) {
+                    widget.each(function (child) {
+                        childrenHTML += child.renderHTML();
+                    });
                 }
                 
-                boundingBox.set("role","presentation");
-        },   
-    
-        CONTENT_TEMPLATE :  "<div></div>",
-        
-        BOUNDING_TEMPLATE : '<ul></ul>',
-                              
-        TREEVIEWLABEL_TEMPLATE : "<a class={treelabelClassName} role='treeitem' href='#'></a>",
-        
-        EXPANDCONTROL_TEMPLATE : "<span class={labelcontentClassName}>{label}</span>",
-        
-        /**
-         * In charge of attaching events. 
-         * Plugs the NodeFocusManager for keyboard support, add an event to handle collapse events
-         * @method bindUI
-         * @protected
-         */
-        bindUI: function() {
-            var boundingBox,
-                contentBox;
-            
-            if (this.isRoot()) {
-                boundingBox = this.get(BOUNDING_BOX);
-                contentBox = this.get(CONTENT_BOX);
-                boundingBox.on("click",this.onViewEvents,this);
-                boundingBox.on("keydown",this.onViewEvents,this);
-                boundingBox.plug(Y.Plugin.NodeFocusManager, {
-                    descendants: ".yui3-treeleaf-content, .yui3-treeview-treelabel",
-                    keys: {
-                        next: "down:40",    // Down arrow
-                        previous: "down:38" // Up arrow 
-                    },
-                    circular: true
-                });
-            }
-            
- 
-        }, 
-    
-    
-        /**
-         * Add class collapsed to all trees
-         * @method renderUI
-         * @protected
-         */
-        renderUI : function() {
-            if (!this.isRoot()) {
-                this.get(BOUNDING_BOX).addClass(classNames.collapsed);   
-            }
-            
-            var src = this.get('srcNode'),
-                items = this._items;
-            
-            if (items.length === 1 && (items[0] instanceof Y.TreeView)) {
-              items[0].get(BOUNDING_BOX).addClass("yui3-singletree"); 
-            }
+                if (tree && tree.set) {
+                    tree.append(childrenHTML);
+                }
         },
         
+                
         /**
          * Toggles the collapsed/expanded class
          * @method _toggleTreeState
          * @protected
          */
         _toggleTreeState : function (target) {
-            var tree = target.actionNode.ancestor('.'+classNames.treeview);   
+        
+            var tree = target.actionNode.ancestor('.yui3-treeview-content'),
+                widget = Y.Widget.getByNode(target.actionNode);
             
+            
+            if (this.lazyLoad && !tree.hasClass("rendered")) {
+                this._onLazyRenderChildren(widget,tree);
+                tree.addClass("rendered");
+
+            }
             tree.toggleClass(classNames.collapsed);
         },
         
@@ -182,6 +524,8 @@ var getClassName = Y.ClassNameManager.getClassName,
             }
         },
         
+        
+        
         /**
          * Expands the tree
          * @method _expandTree
@@ -193,162 +537,80 @@ var getClassName = Y.ClassNameManager.getClassName,
             if (tree.hasClass(classNames.collapsed)) {
                 tree.toggleClass(classNames.collapsed);
             }
-        },
-            
-        /**
-         * Handles all the internal treeview events. In this case, all it does it fires the
-         * collaped/expand event when a treenode is clicked
-         * @method onViewEvents
-         * @protected
-         */
-        onViewEvents : function (event) {
-            var target = event.target,
-                keycode = event.keyCode,
-                classes,
-                className,
-                i,
-                cLength;
-            
-            classes = target.get("className").split(" ");
-            cLength = classes.length;
-            
-            event.preventDefault();
-            
-            
-            for (i=0;i<cLength;i++) {
-                className = classes[i];
-                switch (className) {
-                    case classNames.labelcontent :
-                        this.fire('toggleTreeState',{actionNode:target});
-                        break;
-                    case classNames.treeLabel :
-                        if (keycode === 39) {
-                            this._expandTree(target);
-                        } else if (keycode === 37) {
-                            this._collapseTree(target);
-                        }
-                        break;
-                }
-            }
-        }
-    }, 
-        
-        { 
-            NAME : "treeview",
-            ATTRS : {
-                /**
-                 * @attribute defaultChildType
-                 * @type String
-                 * @readOnly
-                 * @default child type definition
-                 */
-                defaultChildType: {  
-                    value: "TreeLeaf",
-                    readOnly:TRUE
-                },
-                /**
-                 * @attribute label
-                 * @type Number
-                 *
-                 * @description TreeView node label 
-                 */
-                label : {
-                    validator: Y.Lang.isString
-                },
-                /**
-                 * @attribute index
-                 * @type Number
-                 * @readOnly
-                 *
-                 * @description Number representing the Widget's ordinal position in its 
-                 * parent Widget.
-                 */
-                loadOnDemand : {
-                    value : null
-                }
-            },
-            HTML_PARSER: {
-                
-                children : function (srcNode) {
-                    var leafs = srcNode.all("> li"),
-                        isContained = srcNode.ancestor("ul"),
-                        subTree,
-                        children = [];
-                        
-                        
-                        
-                    if (leafs.size() > 0 || isContained) {
-                        this._renderFromMarkup = true;
-                    } else {
-                        this.CONTENT_TEMPLATE = null;
-                    }
-                    
-                    leafs.each(function(node) {
-                        var 
-                            leafContent = node.one(":first-child"),
-                            child = {
-                                srcNode : leafContent,
-                                boundingBox :node,
-                                contentBox : leafContent,
-                                type : null
-                            };
-                            
-                       subTree = node.one("> ul"); 
-                        
-                        if (subTree){
-                            child.type = "TreeView";
-                            child.contentBox = subTree;
-                            child.srcNode = subTree;
-                        }
-                        
-                        children.push(child);
-                    });
-                    return children;
-                }      
-            }
-        }
-    );
-    
-    /**
-     * TreeLeaf widget. Default child type for TreeView.
-     * It extends  WidgetChild, please refer to it's documentation for more info.   
-     * @class TreeLeaf
-     * @constructor
-     * @uses WidgetChild
-     * @extends Widget
-     * @param {Object} config User configuration object.
-     */
-    Y.TreeLeaf = Y.Base.create("treeleaf", Y.Widget, [Y.WidgetChild], {
-
-        
-        CONTENT_TEMPLATE : "<span></span>",
-        
-        BOUNDING_TEMPLATE : "<li></li>",
-        
-        initializer : function () {
-            _instances[Y.stamp(this.get(BOUNDING_BOX))] = this;
-        },
-        
-        renderUI: function () {
-            this.get(CONTENT_BOX).setContent(this.get("label"));
-            this.get(BOUNDING_BOX).set("role","treeitem");
         }
     }, {
-        NAME : "TreeLeaf",
-        ATTRS : {
-            label : {
-                validator: Y.Lang.isString
+    
+        ATTRS: {
+            label: {
+                value:"Default Parent Label"
             },
-            tabIndex: {
-                value: -1
-            }        
-        },
-        HTML_PARSER: {
-            label : function (srcNode) {
-                return srcNode.get(INNERHTML);
-            }      
-        }        
+            defaultChildType: {  
+                value: "TreeLeaf"
+            },
+            boundingBox: {
+                getter : function(val) {
+                    if (this.get("initialized") && !this.get("rendered") && !this._handling && this._populated) {
+                        this._handling = TRUE;
+                        this.render();
+                        val = this._state.get(BOUNDING_BOX, VALUE);
+                    }
+                    return val;
+                }
+            },
+            contentBox: {
+                getter : function(val) {
+                    
+                    if (this.get("initialized") && !this.get("rendered") && !this._handling && this._populated) {
+                        this._handling = TRUE;
+                        this.render();
+                        val = this._state.get(CONTENT_BOX, VALUE);
+                    }
+                    return val;
+                }
+            }
+        }
+    });
+    
+     Y.TreeLeaf = Y.Base.create("treeleaf", WIDGET, [Y.WidgetChild,Y.WidgetHTMLRenderer], {
+    
+    
+        BOUNDING_TEMPLATE : '<li id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</li>',
+    
+        CONTENT_TEMPLATE : null,
+    
+    
+        renderUI: function (contentBuffer) {
+            contentBuffer.push(this.get("label"));
+        }
+    }, {
+    
+        ATTRS: {
+            label: {
+                value:"Default Child Label"
+            },
+            boundingBox: {
+                getter : function(val) {
+                    if (this.get("initialized") && !this.get("rendered") && !this._handling && this.get("parent")._populated) {
+                        this._handling = TRUE;
+                        this.render();
+                        val = this._state.get(BOUNDING_BOX, VALUE);
+                    }
+                    return val;
+                }
+            },
+            contentBox: {
+                getter : function(val) {
+                    if (this.get("initialized") && !this.get("rendered") && !this._handling && this.get("parent")._populated) {
+                        this._handling = TRUE;
+                        this.render();
+                        val = this._state.get(CONTENT_BOX, VALUE);
+                    }
+                    return val;
+                }
+            }
+
+        }
     });
 
 
-}, 'gallery-2011.01.03-18-30' ,{requires:['substitute', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager']});
+}, '@VERSION@' ,{requires:['base', 'widget', 'widget-parent', 'widget-child', 'node-focusmanager', 'handlebars']});
