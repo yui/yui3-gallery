@@ -12,40 +12,50 @@ YQL.
 **Note:** that `read` is the only `sync()` action that is supported at this
 time, you will not be able to `save()` data to YQL.
 
-@example
-
     var Photo = Y.Base.create('photo', Y.Model, [Y.ModelSync.YQL], {
-        query : 'SELECT * FROM flickr.photos.info WHERE photo_id={id}',
-        parse : function (results) {
+        query: 'SELECT * FROM flickr.photos.info WHERE photo_id={id}',
+        parse: function (results) {
             return results && results.photo;
         }
     }, {
-        ATTRS : {
-            title       : {},
-            description : {}
+        ATTRS: {
+            title      : {},
+            description: {}
         }
     });
 
 @class ModelSync.YQL
-@extensionfor Model ModelList
+@extensionfor Model
+@extensionfor ModelList
 **/
 
-var YQLSync,
+var Lang = Y.Lang,
 
-    Lang       = Y.Lang,
     sub        = Lang.sub,
     isValue    = Lang.isValue,
     isFunction = Lang.isFunction,
 
-    noop       = function () {};
+    noop = function () {};
 
-// *** YQLSYnc *** //
+// -- YQLSYnc ------------------------------------------------------------------
 
-YQLSync = function () {};
+function YQLSync() {}
+
+/**
+Properties that shouldn't be turned into ad-hoc attributes when passed to a
+Model or ModelList constructor.
+
+@property _NON_ATTRS_CFG
+@type Array
+@default ['query']
+@static
+@protected
+**/
+YQLSync._NON_ATTRS_CFG = ['query'];
 
 YQLSync.prototype = {
 
-    // *** Public Properties *** //
+    // -- Public Properties ----------------------------------------------------
 
     /**
     A String which is the YQL query. The query will be passed to `buildQuery()`
@@ -54,14 +64,13 @@ YQLSync.prototype = {
     replacement tokens:
 
     @example
-
         'SELECT * FROM flickr.photos.info WHERE photo_id={id}'
 
     @property query
     @type String
-    @default ''
+    @default ""
     **/
-    query : '',
+    query: '',
 
     /**
     A Y.Cache instance to be used to store the YQL query results. You may wish
@@ -72,14 +81,14 @@ YQLSync.prototype = {
     @default undefined
     **/
 
-    // *** Lifecycle Methods *** //
+    // -- Lifecycle Methods ----------------------------------------------------
 
-    initializer : function (config) {
+    initializer: function (config) {
         config || (config = {});
         isValue(config.query) && (this.query = config.query);
     },
 
-    // *** Public Methods *** //
+    // -- Public Methods -------------------------------------------------------
 
     /**
     Returns a processed YQL query by taking the `query` String and substituting
@@ -90,10 +99,10 @@ YQLSync.prototype = {
     @param {Object} [options] Sync options.
     @return {String} The query to be sent to YQL.
     **/
-    buildQuery : function (options) {
+    buildQuery: function (options) {
         options || (options = {});
         return sub(this.query, Y.merge(options,
-            (this instanceof Y.Model) && { id: this.get('id') }));
+            (this instanceof Y.Model) && {id: this.get('id')}));
     },
 
     /**
@@ -107,7 +116,7 @@ YQLSync.prototype = {
     @method sync
     @param {String} action Sync action to perform. May be one of the following:
 
-      * read: Load an existing model.
+      * **read**: Load an existing model.
 
     @param {Object} [options] Sync options.
     @param {callback} [callback] Called when the sync operation finishes.
@@ -132,8 +141,8 @@ YQLSync.prototype = {
             cache   = this.cache,
             results = cache && cache.retrieve(query);
 
+        // Return cached results if we got ’em.
         if (results) {
-            // return cached results if we got ’em
             return callback(null, results.response);
         }
 
@@ -142,9 +151,12 @@ YQLSync.prototype = {
                 callback(r.error, r);
             } else {
                 results = r.query.results;
+
+                // Cache the results.
                 if (cache && results) {
                     cache.add(query, results);
                 }
+
                 callback(null, results);
             }
         });
@@ -152,6 +164,6 @@ YQLSync.prototype = {
 
 };
 
-// *** Namespace *** //
+// -- Namespace ----------------------------------------------------------------
 
 Y.namespace('ModelSync').YQL = YQLSync;
