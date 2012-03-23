@@ -1,0 +1,77 @@
+{
+    "project": {
+        "name": "Model List Difference",
+        "description": "Creates a model list that is the difference of two or more other model lists."
+    },
+    "files": {
+        "js/model-list-difference.js": {
+            "name": "js/model-list-difference.js",
+            "modules": {
+                "gallery-model-list-difference": 1
+            },
+            "classes": {},
+            "fors": {
+                "ModelList": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-model-list-difference": {
+            "name": "gallery-model-list-difference",
+            "submodules": {},
+            "classes": {
+                "ModelList": 1
+            },
+            "fors": {
+                "ModelList": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/model-list-difference.js",
+            "line": 1,
+            "description": "Creates a model list that is the difference of two or more other model lists."
+        }
+    },
+    "classes": {
+        "ModelList": {
+            "name": "ModelList",
+            "shortname": "ModelList",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-model-list-difference",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/model-list-difference.js",
+            "line": 19,
+            "description": "Creates a model list that is the difference of two or more other model lists.\nThe new model list stays up to date as the source lists change.",
+            "itemtype": "method",
+            "name": "difference",
+            "params": [
+                {
+                    "name": "modelListType",
+                    "description": "Optional.  The first argument determines\nthe type of model list that is created; it may be a constructor function or a string namespace\nto a constructor function stored on Y. If the first argument is an instance of ModelList, its\nconstructor is used.",
+                    "type": "Function|Object|String"
+                },
+                {
+                    "name": "modelLists",
+                    "description": "1-n ModelList objects to difference.  Order is important.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "static": 1,
+            "class": "ModelList",
+            "module": "gallery-model-list-difference"
+        }
+    ]
+}

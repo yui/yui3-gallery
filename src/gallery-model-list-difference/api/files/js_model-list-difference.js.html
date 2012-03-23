@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;model-list-difference.js - Model List Difference</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><img src="..&#x2F;assets/css/logo.png"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/ModelList.html">ModelList</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-model-list-difference.html">gallery-model-list-difference</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1 class="file-heading">File: js&#x2F;model-list-difference.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+ * Creates a model list that is the difference of two or more other model lists.
+ * @module gallery-model-list-difference
+ *&#x2F;
+(function (Y) {
+    &#x27;use strict&#x27;;
+
+    var _Array = Y.Array,
+        _ModelList = Y.ModelList,
+
+        _filter = _Array.filter,
+        _indexOf = _Array.indexOf,
+        _invoke = _Array.invoke,
+        _isString = Y.Lang.isString,
+        _reduce = _Array.reduce,
+        _reduceFn,
+        _unnest = _Array.unnest;
+
+    &#x2F;**
+     * Creates a model list that is the difference of two or more other model lists.
+     * The new model list stays up to date as the source lists change.
+     * @method difference
+     * @for ModelList
+     * @param {Function|Object|String} modelListType Optional.  The first argument determines
+     * the type of model list that is created; it may be a constructor function or a string namespace
+     * to a constructor function stored on Y. If the first argument is an instance of ModelList, its
+     * constructor is used.
+     * @param {Object} modelLists 1-n ModelList objects to difference.  Order is important.
+     * @return {Object}
+     * @static
+     *&#x2F;
+    Y.ModelList.difference = function () {
+        var modelList,
+            modelLists = _unnest(arguments),
+            modelListType = modelLists.shift(),
+
+            updateModelList = function () {
+                return modelList.reset(_reduce(_invoke(modelLists, &#x27;toArray&#x27;), 0, _reduceFn));
+            };
+
+        if (_isString(modelListType)) {
+            modelListType = Y.namespace(modelListType);
+        } else if (modelListType instanceof _ModelList) {
+            modelLists.unshift(modelListType);
+            modelListType = modelListType.constructor;
+        }
+
+        modelList = new modelListType();
+
+        _invoke(modelLists, &#x27;after&#x27;, [
+            &#x27;add&#x27;,
+            &#x27;remove&#x27;,
+            &#x27;reset&#x27;
+        ], updateModelList);
+
+        return updateModelList();
+    };
+    
+    _reduceFn = function (previousArray, currentArray) {
+        if (!previousArray) {
+            return currentArray;
+        }
+        
+        return _filter(previousArray, function (value) {
+            return _indexOf(currentArray, value) === -1;
+        });
+    };
+}(Y));
+    </pre>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
