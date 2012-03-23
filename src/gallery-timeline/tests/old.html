@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Timeline Viewer</title>
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
+		<style>
+			#canvas,#canvas1,#canvas2,#canvas3 {
+				
+				width:600px;
+				height: 200px;
+			}
+		</style>
+    </head>
+    <body>
+		<h1>Timeline Viewer</h1>
+		<h3>See comments below</h3>
+		<p>canvas</p>
+		<div id="canvas"></div>
+		<p>canvas1</p>
+		<div id="canvas1"></div>
+		<p>canvas2</p>
+		<div id="canvas2"></div>
+		<p>canvas3</p>
+		<div id="canvas3"></div>
+		<p>The graphics above were generated from data files produced by the timeline software at: <a href="http://thetimelineproj.sourceforge.net/">The Timeline Project</a>. 
+			The file was hand modified and the bars above represent the random result of various tests. Four different ways of creating the graphs are shown above,
+			and a couple of them are modified 3 seconds after the software is loaded.  The second graph is redrawn in the fourth place.  
+			The graph then becomes inactive, just a passive image</p>
+			You can scroll by either using the mouse wheel or dragging the graph. <br/> 
+			You can zoom by using the same operations along the Control key.<br/>
+			The bars that do have descriptions have a small icon in the top right corner and the cursor changes shape.<br/>
+			Clicking one of those will show the description and any icon it might contain.<br/>
+			Fuzzy time bars have rounded borders.<br/>
+			Leaving the mouse resting over a bar will show its text, just in case the one inside the bar has become illegible due to the size of the bar.<br/>
+			<p>This is a viewer, not an editor, as the original program is. 
+				Programs running on a browser cannot write into the server without support from a server-side program 
+				so this viewer would not be able to write back into the server any changes to the timeline.  
+				However, it will be possible to add to the same web page a form to enter new bars and edit existing ones and, provided of a suitable server-side script,
+			to store those changes in the server.</p>
+			<p>The component is hosted at:  <a href="http://yuilibrary.com/gallery/show/timeline">http://yuilibrary.com/gallery/show/timeline</a></p>
+			<p>You may change the xml file or use any timeline file created by the original program.  You only need to change the extension of the data file from .timeline to .xml,
+			since the browser reads the file based on its extension.   If the file was to be read from a server-side program, it could be called anything, as long as the
+			server-side script identifies it with the proper Content-type.
+			</p>
+			<p>*** This is a work in progress ***</p>
+				
+			
+
+		<script>
+			YUI({
+				gallery:'gallery-2012.01.25-21-14',
+//				groups: {
+//					local: {
+//						base:'../../../build/',
+//						modules: {
+//							'gallery-timeline': {
+//								path:'gallery-timeline/gallery-timeline.js',
+//								requires:['node','io-base','base','event-mousewheel', 'event-gestures','classnamemanager'],
+//								skinnable:true,
+//								lang:['es','en']
+//							}
+//						}
+//					}
+//				},
+				lang:'es'
+			}).use('gallery-timeline','intl', function (Y) {
+				"use strict";
+
+				var timeline = new Y.Timeline({
+					container:'#canvas',
+					url:'myOwnTimeline.xml'
+				});
+				
+				var timeline1 = new Y.Timeline();
+				timeline1.load('myOwnTimeline.xml');
+				timeline1.render('#canvas1');
+
+				new Y.Timeline().load('myOwnTimeline.xml').render('#canvas2');
+
+				window.setTimeout(function () {
+					timeline.load('myOwnTimeline1.xml');
+					timeline1.render('#canvas3');
+					
+				},3000);
+				
+			});
+		</script>
+    </body>
+</html>

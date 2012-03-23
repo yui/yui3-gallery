@@ -30,6 +30,7 @@ var Lang = Y.Lang,
 	PX = 'px',	
 	STRINGS = 'strings',
 	TIMELINE = 'timeline',
+	SHOW_DESCR = 'showDescr',
 	cName = function() {
 		return Y.ClassNameManager.getClassName.apply(this, [TIMELINE].concat(Y.Array(arguments)));
 	},
@@ -44,12 +45,41 @@ Y.Timeline = Y.Base.create(
 	[],
 	{
 		/**
+		 * Stores the events to display.It contains the following properties, those starting with underscore are used internally:<ul>
+		 * <li><b>start</b>: {timestamp} start time in milliseconds</li>
+		 * <li><b>end</b>: {timestamp} end time in milliseconds</li>
+		 * <li><b>text</b>: {string} text to be shown on the bar</li>
+		 * <li><b>fuzzy</b>: {Boolean} the start and end days are uncertain </li>
+		 * <li><b>locked</b>: {Boolean} the event cannot be edited (not relevant for this viewer </li>
+		 * <li><b>endsToday</b>: {Boolean} the end day is today</li>
+		 * <li><b>description</b>: {string} extended description</li>
+		 * <li><b>icon</b>: {string} Base64-encoded image to go along the extended description</li>
+		 * <li><b>category</b>: {string} the category this event belongs to</li>
+		 * <li><b>_bar</b>: {Y.Node} reference to the Node for the bar representing this event</li>
+		 * <li><b>_pointer</b>: {Y.Node} for point events, reference to the Node for the date pointer</li>
+		 * <li><b>_isPoint</b>: {Boolean} signals that the event is a point event or a range event that has become too narrow to be displayed as a range</li>
+		 * </ul>
+		 * @property _events
+		 * @type Object []
+		 * @default null
+		 */
+		_events: null,
+		/**
+		 * Display mode for the bars, to help calculate its location and handle crowding.  
+		 * Can be standard (0), , compact (1) or overlappying (2)
+		 * @property _mode
+		 * @type {integer}
+		 * @default 0
+		 */
+		_mode: 0,
+		/**
 		 * Sets up listeners to respond to setting the URL,the CONTAINER or to the arrival of the timeline file.
 		 * @method initializer
 		 * @param cfg {Object} configuration attributes
 		 * @protected
 		 */
 		initializer: function (cfg) {
+			this._events = [];
 			this.set(STRINGS, Y.Intl.get('gallery-' + TIMELINE));
 			this.after(URL + CHANGE, this._load);
 			this.after(CONTAINER + CHANGE, this._render);
@@ -60,6 +90,9 @@ Y.Timeline = Y.Base.create(
 			if (cfg && cfg[CONTAINER]) {
 				this._render();
 			}
+			this.publish(SHOW_DESCR, {
+				defaultFn: this._defShowDescr
+			});
 		},
 		/**
 		 * Returns the boolean value of a given tag in an XML document
@@ -163,7 +196,7 @@ Y.Timeline = Y.Base.create(
 		 */
 		_xmlReadView: function (view) {
 			var range = this._readEl(view,'displayed_period'),
-				h = [],
+				cats = this.get(CATEGORIES),
 				hiddenCat = this._readEl(view, 'hidden_categories').firstChild;
 
 			if (range) {
@@ -171,10 +204,9 @@ Y.Timeline = Y.Base.create(
 				this.set(END, this._readDate(range, END));
 			}
 			while (hiddenCat) {
-				h.push(hiddenCat.textContent);
+				cats[hiddenCat.textContent].hidden = true;
 				hiddenCat = hiddenCat.nextChild;
 			}
-			this.set('hiddenCats', h);
 		},
 		/**
 		 * Reads the events to show
@@ -183,9 +215,9 @@ Y.Timeline = Y.Base.create(
 		 * @private
 		 */
 		_xmlReadEvents: function (events) {
-			this.events = [];
+			this._events = [];
 			Y.each(events.children, function (event) {
-				this.events.push({						
+				this._events.push({						
 					start: this._readDate(event, START),
 					end: this._readDate(event,END),
 					text: this._readValue(event,'text'),
@@ -261,31 +293,39 @@ Y.Timeline = Y.Base.create(
 				height = this._height,
 				scale = rightEdge / ( end - start),
 				cats = this.get(CATEGORIES),
-				bar, width, left, added = false, region, pointer,hasNoCategory = false;
+				bar, width, left, changed = false, region, pointer,hasNoCategory = false,
+				TODAY = this.get(STRINGS).today,
+				formatDate = function(date) {
+					return Y.DataType.Date.format(new Date(date), {format:'%x'});
+				};
 
-			Y.each(this.events, function(event) {
-				bar = event.bar || BLOCK_TEMPLATE.cloneNode();
-				pointer = event.pointer;
+			Y.each(this._events, function(event) {
+				if (event.category && cats[event.category].hidden) {
+					return;
+				}
+				bar = event._bar || BLOCK_TEMPLATE.cloneNode();
+				pointer = event._pointer;
 				left = Math.round((event.start - start) * scale);
 				width = Math.round(((event.endsToday?Date.now():event.end) - event.start) * scale);
 				if (left + width < 0 || left > rightEdge) {
-					if (event.bar) {
-						event.bar.remove(true);
-						event.bar = null;
+					if (event._bar) {
+						event._bar.remove(true);
+						event._bar = null;
 						if (pointer) {
 							pointer.remove(true);
-							event.pointer = pointer = null;
+							event._pointer = pointer = null;
 						}
 					}
+					changed = true;
 					return;
 				}
-				event.isPoint = width === 0;
+				event._isPoint = width === 0;
 				bar.setStyles({
 					left: left +PX,
 					width: width?width + PX:'auto'
 				});
-				if (!event.bar) {
-					event.bar = bar;
+				if (!event._bar) {
+					event._bar = bar;
 					if (event.category) {
 						bar.setStyles({
 							backgroundColor: cats[event.category].color,
@@ -295,7 +335,7 @@ Y.Timeline = Y.Base.create(
 						hasNoCategory = true;
 					}
 					bar.setContent(event.text);
-					bar.set('title', event.text);
+					bar.set('title', event.text + ': ' + formatDate(event.start) + ' - ' +  (event.endsToday?TODAY:formatDate(event.end)));
 					if (event.fuzzy) {
 						bar.addClass(cName('fuzzy'));
 					}
@@ -306,19 +346,20 @@ Y.Timeline = Y.Base.create(
 				}
 				if (!bar.inDoc()) {
 					container.append(bar);
-					added = true;
+					changed = true;
 				}
-				if (event.isPoint) {
+				if (event._isPoint) {
 					region = this._getRegion(bar);
 					bar.setStyle(LEFT, region.left - region.width / 2 + PX);
 					if (!pointer) {
-						event.pointer = pointer = POINTER_TEMPLATE.cloneNode();
+						event._pointer = pointer = POINTER_TEMPLATE.cloneNode();
 						pointer.setStyle(TOP, height / 2 + PX);
 					}
 				} else {
 					if (pointer) {
 						pointer.remove(true);
-						event.pointer = pointer = null;
+						event._pointer = pointer = null;
+						changed = true;
 					}
 				}
 				if (pointer) {
@@ -329,7 +370,7 @@ Y.Timeline = Y.Base.create(
 				}
 
 			},this);
-			if (added) {
+			if (changed) {
 				this._locate();
 			}
 			container.one('.' + cName('noCat')).setStyle('display',hasNoCategory?'block':'none');
@@ -344,23 +385,37 @@ Y.Timeline = Y.Base.create(
 			var width, left, region,
 				middle = this._height / 2,
 				points = [], ranges = [],levels, isPoint,
+				mode = this._mode, highest = 0, lowest = 0,
 				move = function(bar, levels, i, isPoint) {
-					bar.setStyle(TOP, middle + (isPoint? 30 * i + 15:  -30 * (i+1) - 15 ) + PX);
+					var top;
+					switch (mode) {
+						case 0:
+							top = isPoint? 30 * i + 15:  -30 * (i+1) - 15;
+							break;
+						case 1:
+							top = isPoint? 15 * i + 10:  -15 * (i+1) - 10;
+							break;
+						case 2:
+							top = isPoint? 5 * i + 10:  -5 * (i+1) - 10;
+							break;
+					}
+					highest = Math.min(highest, top);
+					lowest = Math.max(lowest, top);
+					bar.setStyle(TOP, middle + top + PX);
 					if (!levels[i]) {
 						levels[i] = [];
 					}
 					levels[i].push({left:left, width:width});
-					var pointer = bar.getData(EVENT).pointer;
+					var pointer = bar.getData(EVENT)._pointer;
 					if (pointer) {
 						pointer.setStyle('height', 30 * i + 15);
 					}
 				};
-
 			this.get(CONTAINER).all('div.' + cName('bar')).each(function(bar) {
 				region = this._getRegion(bar); 
 				width = region.width;
 				left = region.left;
-				isPoint = bar.getData(EVENT).isPoint;
+				isPoint = bar.getData(EVENT)._isPoint;
 				levels = (isPoint?points:ranges);
 				// This is to determine container to place it so that it does not overlap with any existing bar
 				if (!Y.some(levels, function (level, i) {
@@ -374,8 +429,25 @@ Y.Timeline = Y.Base.create(
 				},this)) {
 					move(bar, levels, levels.length, isPoint);
 				}
+				
 
-			},this);				
+			},this);
+			highest = Math.max(-highest, lowest);
+			if (highest > middle) {
+				if (mode < 2) {
+					this._mode += 1;
+					this._locate();
+					this.get(CONTAINER).addClass(cName('compact'));
+				}
+			} else if (highest < middle / 3 ) {
+				if (mode) {
+					this._mode -=1;
+					if (this._mode === 0) {
+						this.get(CONTAINER).removeClass(cName('compact'));
+					}
+					this._locate();
+				}
+			}
 		},
 		/**
 		 * Draws the grid, adjusting the interval in between lines from an hour to ten thousand years
@@ -437,7 +509,7 @@ Y.Timeline = Y.Base.create(
 						if (label[2] === 0) {
 							label[3] = date.getFullYear();
 						}
-						label[2] = this.get(STRINGS).months[label[2]];
+						label[2] = Y.DataType.Date.format(date, {format: '%b'});
 					} 
 				}
 
@@ -478,9 +550,10 @@ Y.Timeline = Y.Base.create(
 			container.addClass(cName());
 
 			container.setContent('');
-			Y.each(this.events, function (event) {
-				delete event.pointer;
-				delete event.bar;
+			Y.each(this._events, function (event) {
+				delete event._pointer;
+				delete event._bar;
+				delete event._isPoint;
 			});
 
 
@@ -493,7 +566,9 @@ Y.Timeline = Y.Base.create(
 			container.append(Y.Node.create('<div class="' + cName('divider') + '"/>'));
 			var cats = container.appendChild(Y.Node.create(Lang.sub(CATEGORIES_TEMPLATE,this.get(STRINGS))));
 			Y.each(this.get(CATEGORIES), function (cat, name) {
-				cats.append(Y.Node.create('<p style="color:' + cat.fontColor + ';background-color:' + cat.color + '">' + name + '</p>'));
+				if (!cat.hidden) {
+					cats.append(Y.Node.create('<p style="color:' + cat.fontColor + ';background-color:' + cat.color + '">' + name + '</p>'));
+				}
 			});
 			this._descr = container.appendChild(Y.Node.create('<div class="' + cName('descr') + '"/>'));
 
@@ -501,6 +576,16 @@ Y.Timeline = Y.Base.create(
 			this._resize(container);
 
 			container.delegate('click',this._showDescr,'div.' + cName('bar'),this);
+			container.delegate(
+				'hover', 
+				function(ev) {
+					ev.target.setStyle('zIndex', 9);
+				},
+				function(ev) {
+					ev.target.setStyle('zIndex', 0);
+				},
+				'div.' + cName('bar')
+			);
 			container.on('gesturemovestart', this._startMove, {}, this);
 			container.on('gesturemove', this._dragMove, {}, this);
 			container.on('gesturemoveend', this._dragMove, {}, this);
@@ -523,8 +608,20 @@ Y.Timeline = Y.Base.create(
 		 */
 		_showDescr: function(ev) {
 			var bar = ev.target,
-				event = bar.getData(EVENT),
-				barRegion = this._getRegion(bar),
+				event = bar.getData(EVENT);
+			this.fire(SHOW_DESCR, {
+				bar: bar,
+				event: event,
+				callback: this.showDescr
+			});
+		},
+		_defShowDescr: function (ev) {
+			var bar = ev.bar,
+				event = ev.event;
+			this.showDescr(bar, event);
+		},
+		showDescr: function (bar, event) {
+			var	barRegion = this._getRegion(bar),
 				descr = this._descr,
 				descrRegion,
 				barMidPoint = barRegion.left + barRegion.width /2,
@@ -623,7 +720,11 @@ Y.Timeline = Y.Base.create(
 	{
 		ATTRS: {
 			/**
-			 * Stores the categories, indexed by category name.
+			 * Stores the categories, indexed by category name.  Each category contains:<ul>
+			 * <li><b>color</b>: {string} Background color for the bar in #rrggbb format</li>
+			 * <li><b>fontColor</b>: {string} Color for the text in the bar in #rrggbb format</li>
+			 * <li><b>hidden</b>: {Boolean} Events in this category should not be shown</li>
+			 * </ul> 
 			 * @attribute categories
 			 * @type {Object}
 			 * @default {}
@@ -632,16 +733,6 @@ Y.Timeline = Y.Base.create(
 			categories: {
 				validator: Lang.isObject,
 				value:{}					
-			},
-			/**
-			 * Array of the names of the categories hidden
-			 * @attribute hiddenCats
-			 * @type {Array}
-			 * @default []
-			 */
-			hiddenCats: {
-				validator: Lang.isArray,
-				value:[]
 			},
 			/**
 			 * Start time (left edge) of the current timeline, in miliseconds
@@ -701,7 +792,7 @@ Y.Timeline = Y.Base.create(
 				value: {
 					categories:'Categories',
 					noCategory: '-no category-',
-					months: ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']
+					today: 'today'
 				}
 			}
 

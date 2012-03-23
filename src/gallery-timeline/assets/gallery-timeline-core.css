@@ -13,6 +13,11 @@
 	text-overflow: ellipsis;
 	z-index: 5;
 	cursor: default;
+	text-align: center;
+}
+.yui3-timeline-compact .yui3-timeline-bar {
+	height:10px;
+	font-size: x-small;
 }
 .yui3-timeline-hasDescr {
 	background:#eee url(resize-nw.png) top right no-repeat;
