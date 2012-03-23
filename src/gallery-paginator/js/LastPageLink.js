@@ -7,7 +7,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the link to jump to the last page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.LastPageLink
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -20,8 +19,8 @@ Paginator.ui.LastPageLink = function (p) {
     p.after('rowsPerPageChange',this.update,this);
     p.after('totalRecordsChange',this.update,this);
 
-	p.after('lastPageLinkClassChange', this.rebuild, this);
-	p.after('lastPageLinkLabelChange', this.rebuild, this);
+    p.after('lastPageLinkClassChange', this.rebuild, this);
+    p.after('lastPageLinkLabelChange', this.rebuild, this);
 };
 
 /**

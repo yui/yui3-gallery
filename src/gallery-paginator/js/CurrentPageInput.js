@@ -7,7 +7,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * Generates an input field for setting the current page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.CurrentPageInput
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to

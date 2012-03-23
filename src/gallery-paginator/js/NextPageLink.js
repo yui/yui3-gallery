@@ -7,7 +7,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the link to jump to the next page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.NextPageLink
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -20,8 +19,8 @@ Paginator.ui.NextPageLink = function (p) {
     p.after('rowsPerPageChange', this.update,this);
     p.after('totalRecordsChange', this.update,this);
 
-	p.after('nextPageLinkClassChange', this.rebuild, this);
-	p.after('nextPageLinkLabelChange', this.rebuild, this);
+    p.after('nextPageLinkClassChange', this.rebuild, this);
+    p.after('nextPageLinkLabelChange', this.rebuild, this);
 };
 
 /**

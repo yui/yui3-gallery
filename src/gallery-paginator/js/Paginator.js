@@ -6,9 +6,13 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
- * The Paginator widget provides a set of controls to navigate through paged
- * data.
- *
+ * The Paginator widget provides a set of controls to navigate through
+ * paged data.
+ * 
+ * @module gallery-paginator
+ */
+
+/**
  * To instantiate a Paginator, pass a configuration object to the contructor.
  * The configuration object should contain the following properties:
  * <ul>
@@ -16,8 +20,8 @@ http://developer.yahoo.net/yui/license.txt
  *   <li>totalRecords : <em>n</em> (int or Paginator.VALUE_UNLIMITED)</li>
  * </ul>
  *
- * @module gallery-paginator
  * @class Paginator
+ * @extends Widget
  * @constructor
  * @param config {Object} Object literal to set instance and ui component
  * configuration.
@@ -83,7 +87,7 @@ Y.mix(Paginator, {
      *
      * @method Paginator.isNumeric
      * @param v {Number|String} value to be checked for number or numeric string
-     * @returns {Boolean} true if the input is coercable into a finite number
+     * @return {Boolean} true if the input is coercable into a finite number
      * @static
      */
     isNumeric : function (v) {

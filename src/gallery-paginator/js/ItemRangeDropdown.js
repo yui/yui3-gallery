@@ -7,7 +7,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to display a menu for selecting the range of items to display.
  *
- * @module gallery-paginator
  * @class Paginator.ui.ItemRangeDropdown
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to

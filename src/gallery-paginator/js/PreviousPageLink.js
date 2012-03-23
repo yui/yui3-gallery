@@ -7,7 +7,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the link to jump to the previous page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.PreviousPageLink
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to

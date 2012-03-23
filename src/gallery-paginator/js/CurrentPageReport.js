@@ -8,7 +8,6 @@ http://developer.yahoo.net/yui/license.txt
  * ui Component to generate the textual report of current pagination status.
  * E.g. "Now viewing page 1 of 13".
  *
- * @module gallery-paginator
  * @class Paginator.ui.CurrentPageReport
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to

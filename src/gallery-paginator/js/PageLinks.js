@@ -7,7 +7,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the page links
  *
- * @module gallery-paginator
  * @class Paginator.ui.PageLinks
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
