@@ -20,14 +20,14 @@ Y.mix(Y.Object,
 	 * value.  The function receives the value, the key, and the object
 	 * itself as parameters (in that order).
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param f {Function} the function to execute on each item
 	 * @param c {Object} optional context object
 	 * @param proto {Boolean} include prototype properties
-	 * @return {Boolean} `true` if every item in the array returns `true` from the supplied function, `false` otherwise
+	 * @return {Boolean} true if every item in the array returns true from the supplied function, false otherwise
 	 * @static
 	 */
 	every: function(o, f, c, proto)
@@ -49,8 +49,8 @@ Y.mix(Y.Object,
 	 * returned a truthy value.  The function receives the value, the key,
 	 * and the object itself as parameters (in that order).
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param f {Function} the function to execute on each item
@@ -81,14 +81,14 @@ Y.mix(Y.Object,
 	 * receives the value, the key, and the object itself as parameters (in
 	 * that order).
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param f {Function} the function to execute on each item
 	 * @param c {Object} optional context object
 	 * @param proto {Boolean} include prototype properties
-	 * @return {Mixed} the first item for which the supplied function returns `true`, or `null` if it never returns `true`
+	 * @return {Mixed} the first item for which the supplied function returns true, or null if it never returns true
 	 * @static
 	 */
 	find: function(o, f, c, proto)
@@ -109,13 +109,13 @@ Y.mix(Y.Object,
 	 * Executes the supplied function on each item in the object, searching
 	 * for the first item that matches the supplied function.
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param v {Mixed} the value to search for
 	 * @param proto {Boolean} include prototype properties
-	 * @return {String} key of an item strictly equal to _v_, or null if not found
+	 * @return {String} key of an item strictly equal to v, or null if not found
 	 * @static
 	 */
 	keyOf: function(o, v, proto)
@@ -163,8 +163,8 @@ Y.mix(Y.Object,
 	 * returns a new object with the results.  The function receives the
 	 * value, the key, and the object itself as parameters (in that order).
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param f {String} the function to invoke
@@ -190,18 +190,18 @@ Y.mix(Y.Object,
 
 	/**
 	 * Partitions an object into two new objects, one with the items for
-	 * which the supplied function returns `true`, and one with the items
-	 * for which the function returns `false`.  The function receives the
+	 * which the supplied function returns true, and one with the items
+	 * for which the function returns false.  The function receives the
 	 * value, the key, and the object itself as parameters (in that order).
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param f {Function} the function to execute on each item
 	 * @param c {Object} optional context object
 	 * @param proto {Boolean} include prototype properties
-	 * @return {Object} object with two properties: `matches` and `rejects`. Each is an object containing the items that were selected or rejected by the test function (or an empty object if none).
+	 * @return {Object} object with two properties: matches and rejects. Each is an object containing the items that were selected or rejected by the test function (or an empty object if none).
 	 * @static
 	 */
 	partition: function(o, f, c, proto)
@@ -230,10 +230,11 @@ Y.mix(Y.Object,
 	 * the object into a single value.  The function receives the value
 	 * returned by the previous iteration (or the initial value if this is
 	 * the first iteration), the value being iterated, the key, and the
-	 * object itself as parameters (in that order).
+	 * object itself as parameters (in that order).  The function must
+	 * return the updated value.
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param init {Mixed} the initial value
@@ -264,8 +265,8 @@ Y.mix(Y.Object,
 	 * returned a falsey value.  The function receives the value, the key,
 	 * and the object itself as parameters (in that order).
 	 *
-	 * By default, only properties owned by _obj_ are enumerated. To include
-	 * prototype properties, set the _proto_ parameter to `true`.
+	 * By default, only properties owned by obj are enumerated. To include
+	 * prototype properties, set the proto parameter to true.
 	 *
 	 * @param o {Object} the object to iterate
 	 * @param f {Function} the function to execute on each item
