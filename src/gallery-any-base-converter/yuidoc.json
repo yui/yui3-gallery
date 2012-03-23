@@ -1,0 +1,12 @@
+{
+    "name": "Any Base Converter",
+    "description": "Y.AnyBaseConverter is an object that will convert numbers to and from a positional notation with a custom alphabet and base.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

@@ -1,0 +1,145 @@
+{
+    "project": {
+        "name": "Any Base Converter",
+        "description": "Y.AnyBaseConverter is an object that will convert numbers to and from a positional notation with a custom alphabet and base."
+    },
+    "files": {
+        "js/any-base-converter.js": {
+            "name": "js/any-base-converter.js",
+            "modules": {
+                "gallery-any-base-converter": 1
+            },
+            "classes": {
+                "AnyBaseConverter": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-any-base-converter": {
+            "name": "gallery-any-base-converter",
+            "submodules": {},
+            "classes": {
+                "AnyBaseConverter": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/any-base-converter.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "AnyBaseConverter": {
+            "name": "AnyBaseConverter",
+            "shortname": "AnyBaseConverter",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-any-base-converter",
+            "namespace": "",
+            "file": "js/any-base-converter.js",
+            "line": 20,
+            "description": "AnyBaseConverter is an object that will convert numbers to and from a positional notation with a custom alphabet and base.",
+            "extends": "Base",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration Object.",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/any-base-converter.js",
+            "line": 27,
+            "description": "Converts a string from a custom base and returns a number.",
+            "itemtype": "method",
+            "name": "from",
+            "params": [
+                {
+                    "name": "any",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "value",
+                "type": "Number"
+            },
+            "class": "AnyBaseConverter",
+            "module": "gallery-any-base-converter"
+        },
+        {
+            "file": "js/any-base-converter.js",
+            "line": 62,
+            "description": "Converts a number to a custom base and returns a string.",
+            "itemtype": "method",
+            "name": "to",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "any",
+                "type": "String"
+            },
+            "class": "AnyBaseConverter",
+            "module": "gallery-any-base-converter"
+        },
+        {
+            "file": "js/any-base-converter.js",
+            "line": 103,
+            "description": "The string of characters to use as single-digit numbers. The length of this string determines\nthe base of the result. Each character should be unique within the string or else it will be\nimpossible to correctly convert a string back into a number. Currently, non-BMP characters are\nnot supported.",
+            "itemtype": "attribute",
+            "name": "alphabet",
+            "default": "'0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~'",
+            "type": "String",
+            "class": "AnyBaseConverter",
+            "module": "gallery-any-base-converter"
+        },
+        {
+            "file": "js/any-base-converter.js",
+            "line": 126,
+            "description": "Used as a reverse lookup for a character index in alphabet.",
+            "itemtype": "attribute",
+            "name": "lookup",
+            "access": "protected",
+            "tagname": "",
+            "readonly": "",
+            "type": "Object",
+            "class": "AnyBaseConverter",
+            "module": "gallery-any-base-converter"
+        },
+        {
+            "file": "js/any-base-converter.js",
+            "line": 137,
+            "description": "A single character string to prepend to negative values. This character should not be in the alphabet.\nCurrently, non-BMP characters are not supported.",
+            "itemtype": "attribute",
+            "name": "minusSign",
+            "default": "'-'",
+            "type": "String",
+            "class": "AnyBaseConverter",
+            "module": "gallery-any-base-converter"
+        },
+        {
+            "file": "js/any-base-converter.js",
+            "line": 147,
+            "description": "A single character string to insert between the integer and fractional parts of the number.\nThis character should not be in the alphabet.  Currently, non-BMP characters are not supported.",
+            "itemtype": "attribute",
+            "name": "radixPoint",
+            "default": "'.'",
+            "type": "String",
+            "class": "AnyBaseConverter",
+            "module": "gallery-any-base-converter"
+        }
+    ]
+}
