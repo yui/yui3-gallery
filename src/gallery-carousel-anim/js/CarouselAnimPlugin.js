@@ -117,7 +117,7 @@ Y.CarouselAnimPlugin = Y.extend(CarouselAnimPlugin, Y.Plugin.Base, {
             if (carousel && animation.speed > 0) {
                 index = carousel._getCorrectedIndex(index);
                 if (isNaN(index)) {
-                    return;
+                    return new Y.Do.Prevent();
                 }
                 cb = carousel.get("contentBox");
                 isVertical = carousel.get("isVertical");
