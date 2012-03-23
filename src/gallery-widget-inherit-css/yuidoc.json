@@ -1,0 +1,12 @@
+{
+    "name": "Widget Inherit Css",
+    "description": "Allows a Widget subclass to inherit css from the superclass.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

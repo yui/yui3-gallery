@@ -1,0 +1,51 @@
+{
+    "project": {
+        "name": "Widget Inherit Css",
+        "description": "Allows a Widget subclass to inherit css from the superclass."
+    },
+    "files": {
+        "js/widget-inherit-css.js": {
+            "name": "js/widget-inherit-css.js",
+            "modules": {
+                "gallery-widget-inherit-css": 1
+            },
+            "classes": {
+                "WidgetInheritCss": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-widget-inherit-css": {
+            "name": "gallery-widget-inherit-css",
+            "submodules": {},
+            "classes": {
+                "WidgetInheritCss": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/widget-inherit-css.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "WidgetInheritCss": {
+            "name": "WidgetInheritCss",
+            "shortname": "WidgetInheritCss",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-widget-inherit-css",
+            "namespace": "",
+            "file": "js/widget-inherit-css.js",
+            "line": 29,
+            "description": "Allows a Widget subclass to inherit css from the superclass.",
+            "is_constructor": 1
+        }
+    },
+    "classitems": []
+}
