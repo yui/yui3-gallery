@@ -866,21 +866,27 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 
         if (node && node.constructor.NAME === "node") {
             if (which === "height") {
-                sz = parseInt(node.getComputedStyle("marginTop"), 10)         +
-                     parseInt(node.getComputedStyle("paddingTop"), 10)        +
-                     parseInt(node.getComputedStyle("borderTopWidth"), 10)    +
-                     parseInt(node.getComputedStyle("height"), 10)            +
-                     parseInt(node.getComputedStyle("borderBottomWidth"), 10) +
-                     parseInt(node.getComputedStyle("paddingBottom"), 10)     +
-                     parseInt(node.getComputedStyle("marginBottom"), 10);
+                sz = node.get("offsetHeight");
+                if (sz === 0) { // height hasn't been computed yet
+                    sz = parseInt(node.getStyle("marginTop"), 10)         +
+                         parseInt(node.getStyle("paddingTop"), 10)        +
+                         parseInt(node.getStyle("borderTopWidth"), 10)    +
+                         parseInt(node.getStyle("height"), 10)            +
+                         parseInt(node.getStyle("borderBottomWidth"), 10) +
+                         parseInt(node.getStyle("paddingBottom"), 10)     +
+                         parseInt(node.getStyle("marginBottom"), 10);
+                }
             } else if (which == "width") {
-                sz = parseInt(node.getComputedStyle("marginLeft"), 10)        +
-                     parseInt(node.getComputedStyle("paddingLeft"), 10)       +
-                     parseInt(node.getComputedStyle("borderLeftWidth"), 10)   +
-                     parseInt(node.getComputedStyle("width"), 10)             +
-                     parseInt(node.getComputedStyle("borderRightWidth"), 10)  +
-                     parseInt(node.getComputedStyle("paddingRight"), 10)      +
-                     parseInt(node.getComputedStyle("marginRight"), 10);
+                sz = node.get("offsetWidth");
+                if (sz === 0) {
+                    sz = parseInt(node.getStyle("marginLeft"), 10)        +
+                         parseInt(node.getStyle("paddingLeft"), 10)       +
+                         parseInt(node.getStyle("borderLeftWidth"), 10)   +
+                         parseInt(node.getStyle("width"), 10)             +
+                         parseInt(node.getStyle("borderRightWidth"), 10)  +
+                         parseInt(node.getStyle("paddingRight"), 10)      +
+                         parseInt(node.getStyle("marginRight"), 10);
+                }
             }
         }
 
