@@ -1,0 +1,12 @@
+{
+    "name": "Soon",
+    "description": "Similar to Y.later, but sooner.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

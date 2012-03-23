@@ -1,0 +1,71 @@
+{
+    "project": {
+        "name": "Soon",
+        "description": "Similar to Y.later, but sooner."
+    },
+    "files": {
+        "js/soon.js": {
+            "name": "js/soon.js",
+            "modules": {
+                "gallery-lazy-load": 1
+            },
+            "classes": {},
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-lazy-load": {
+            "name": "gallery-lazy-load",
+            "submodules": {},
+            "classes": {
+                "YUI": 1
+            },
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/soon.js",
+            "line": 7,
+            "description": "Similar to Y.later, but sooner.\n\nbased on setImmediate.js. https://github.com/NobleJS/setImmediate\n\nCopyright (c) 2011 Barnesandnoble.com, llc and Donavon West\n\nhttps://github.com/NobleJS/setImmediate/blob/master/MIT-LICENSE.txt"
+        }
+    },
+    "classes": {
+        "YUI": {
+            "name": "YUI",
+            "shortname": "YUI",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-lazy-load",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/soon.js",
+            "line": 47,
+            "description": "Y.soon accepts a callback function. The callback function will be called once, as soon as possible,\nin a future turn of the JavaScript event loop.  If the function requires a specific execution\ncontext or arguments, wrap it with Y.bind.  Y.soon returns an object with a cancel method. If the\ncancel method is called before the callback function, the callback function won't be called.\n\nbased on setImmediate.js. https://github.com/NobleJS/setImmediate\n\nCopyright (c) 2011 Barnesandnoble.com, llc and Donavon West\n\nhttps://github.com/NobleJS/setImmediate/blob/master/MIT-LICENSE.txt",
+            "itemtype": "method",
+            "name": "soon",
+            "params": [
+                {
+                    "name": "callback",
+                    "description": "function",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "\n<dl>\n    <dt>\n        cancel\n    </dt>\n    <dd>\n        If the cancel method is called before the callback function,\n        the callback function won't be called.\n    </dd>\n</dl>",
+                "type": "Object"
+            },
+            "class": "YUI",
+            "module": "gallery-lazy-load"
+        }
+    ]
+}
