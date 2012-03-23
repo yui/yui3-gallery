@@ -13,7 +13,9 @@
  * paginateChildren:true.</p>
  * 
  * <p>The tree must be immutable.  The total number of items available from
- * each DataSource must remain constant.</p>
+ * each DataSource must remain constant.  (The one exception to this rule
+ * is that filtering and sorting are allowed.  This is done by detecting
+ * that the request parameters have changed.)</p>
  * 
  * @class TreebleDataSource
  * @extends DataSource.Local
@@ -914,6 +916,8 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	{
 		if (this._callback)
 		{
+			// wipe out all state if the request parameters change
+
 			Y.Object.some(this._callback.request, function(value, key)
 			{
 				if (key == 'startIndex' || key == 'resultCount')
