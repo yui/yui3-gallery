@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE>Satyam's GalleryModel</TITLE>
+</HEAD>
+<BODY>
+<H1>Satyam's GalleryModel model</H1>
+<P>After stumbling over a few issues with the standard YUI Model
+component and adding patch over patch to the standard one, I found
+out that the patches were so large as to make the patched files
+irrelevant so I decided to release a separate version as a YUI
+Gallery component. Though GalleryModel is still compatible with View,
+it is not compatible with ModelList.  At a later stage I expect to
+include a subclass to ModelList that can accept either Model or
+GalleryModel instances though, as I'll show later, it might be
+unnecessary.</P>
+<H2>Why a separate Model?</H2>
+<P>Though Model works nicely in new applications, it is not easy to
+use when dealing with legacy data fetched from existing SQL
+databases. There are several features quite standard in existing
+databases that it does not support, but it is one crucial detail that
+made GalleryModel incompatible with Model which is that mixing both
+data fields and information about those fields as Attributes and thus
+in the same namespace puts artificial limits on the field names,
+forcing unnecessary aliasing of existing names, and prevents us from
+using attributes in our own models, for fear of colliding with field
+names. Moreover, Model devotes several dozen lines to override
+Attribute's <CODE>set</CODE> and <CODE>setAttrs</CODE>
+methods, further proof that Attributes is not the right place for
+data. Thus, the first order of business was to separate data storage
+from other Model attributes and to provide methods to access that
+data. GalleryModel uses <CODE>getValue</CODE>,
+<CODE>setValue</CODE> and its plurals to access the
+data. There is no need to define a data field before using it,
+whatever is set will become part of the data in the field.</P>
+<H3>Methods setValue and getValue</H3>
+<P>Not using attributes for storing data fields does prevent us from
+listening to its change events, using setters, getters or validators.
+This, however, is well provided for by the <CODE>change</CODE>
+method. The <CODE>setValue</CODE> method fires this
+event and setting a before (<CODE>on</CODE>) listener
+allows us to change the value finally set or even prevent its
+setting. 
+</P>
+<PRE>myModel.on('change', function (ev) {
+    switch (ev.name) {
+        // fieldOne will have its values doubled
+        case 'fieldOne':
+            ev.newVal *= 2;
+            break;
+        // fieldTwo will reject even values
+        case 'fieldTwo':
+            if (ev.newVal === Math.floor(ev.newVal / 2) * 2) {
+                ev.halt();
+            }
+        break;
+    }
+});</PRE><P>
+A centralized place to deal with changes in any of the fields is
+quite handy. Contrary to regular attributes where the meaning or
+purpose of each attribute might be totally different from that of
+other attribute (for example, the <CODE>clientId</CODE>
+attribute is defined by Model while the <CODE>initialized</CODE>
+attribute comes from Base and they serve completely unrelated
+purposes), all data fields are likely to be handled in a similar way
+since they are all data. Moreover, the <CODE>setValues</CODE>
+method fires the <CODE>change</CODE> event once for
+the whole set of changes and then fires it once for each individual
+field. This allows for validating values when they depend on one
+another. If there is a <CODE>name</CODE> property in
+the event façade, it is a single-field event and there will be
+<CODE>prevVal</CODE> and <CODE>newVal</CODE>
+properties with the current and new values for the named field. If
+there is no <CODE>name</CODE>, there will be <CODE>prevVals</CODE>
+and <CODE>newVals</CODE> (both plural) properties.
+Thus, the simple validator/setter code above is actually valid even
+in the case of setting multiple values at once. Care must be taken in
+the default case not to reject <CODE>ev.name ===
+undefined</CODE>, which would be the case in a call to <CODE>setValues</CODE>.</P>
+<H3>isNew and isModified</H3>
+<P>Having the attributes free for better users, I switched the <CODE>isNew</CODE>
+and <CODE>isModified</CODE> methods to read-only
+attributes. As I mentioned, I wanted to separate data from the
+information about that data, the data being handled by <CODE>setValue</CODE>
+and <CODE>getValue</CODE> and the information about
+it via attributes. Thus, it made sense that <CODE>isNew</CODE>
+and <CODE>isModified</CODE> became attributes, so
+that they can also benefit from the change events fired on all
+attributes. Additionally, those same attributes can be used to query
+the status of each individual field by using the field name as a
+sub-attribute. Thus, <CODE>myModel.get('isNew')</CODE>
+gives the status of the whole model while
+<CODE>myModel.get('isNew.fieldOne')</CODE> returns
+the status of field <CODE>fieldOne</CODE>.</P>
+<P>The <CODE>isNew</CODE> attribute does not rely on
+the existence of a value for the primary key field, a dangerous
+assumption in many cases. For example, a record using the Social
+Security Number (SSN) as a primary key will ask the operator for its
+value and thus would not be <I>undefined</I> even
+for a newly created record. The standard Model would report
+such a record as not being new and call <CODE>sync()</CODE>
+with action set to <CODE>'update'</CODE> instead of
+<CODE>'create'</CODE> as it should for a new record. 
+</P>
+<H3>primaryKeys</H3>
+<P>GalleryModel makes no assumptions upon what the name of the
+primary key should be, or whether there are any, one or many. It
+provides a <CODE>primaryKeys</CODE> attribute which,
+as it name implies, assumes multiple-field primary keys. It defaults
+to no primary keys and can be set to a string containing the name of
+the primary key field, or an array of field names. Following on the
+previous example, the SSN is just one of many documents that can be
+used to identify a person, thus, many tables use a combination of
+document type (SSN, passport, drivers license) and document
+number/value as a primary key. 
+</P>
+<P>The <CODE>primaryKeys</CODE> attribute will always
+return an array and it defaults to an empty array meaning no primary
+keys at all. As with <CODE>isNew</CODE> and
+<CODE>isModified</CODE>, using a field name as a
+sub-attribute allows us to ask whether a particular field is a
+primary key. Thus, <CODE>myModel.get('primaryKeys')
+</CODE>might return <CODE>['docType', 'doc']</CODE>
+while <CODE>myModel.get('primaryKeys.firstName')</CODE>
+would then return <I>false</I>, since <CODE>firstName</CODE>
+is not part of the primary key for that model.</P>
+<P>Primary key field values cannot be changed, <CODE>setValue</CODE>
+will fail to set a primary key field, unless <I>undefined</I>; once
+set, it won't change. 
+</P>
+<P>Method <CODE>getPKValues</CODE> returns an object
+with the field names and values of the fields that make the primary
+key of the record. 
+</P>
+<P><CODE>primaryKeys</CODE> can only be set once.</P>
+<H3>getValues and getChangedValues</H3>
+<P>Method getValues returns an object with the field names and values
+of all the data fields in the model, such as:</P>
+<P>{docType: 'SSN', doc:'123-456-7890', firstName:'John',
+lastName:'Doe'}</P>
+<P>Method <CODE>getChangedValues</CODE> returns only
+those fields that have changed since loaded from or last saved to the
+remote source, in other words, since last synched against the remote
+source. For each field it returns an object containing <CODE>prevVal</CODE>
+and <CODE>newVal</CODE> properties. 
+</P>
+<P>{firstName: {prevVal:'John', newVal:'Jeff'}}</P>
+<P>The previous value is useful for shared databases where multiple
+users might be trying to change the same record. A simple way to
+prevent it is to include the previous value of the field to be
+changed as part of the UPDATE statement so that the change will fail
+if the affected field has been changed since last read, for example:</P>
+<P>UPDATE stock SET qty=3 WHERE prodID = '123456' and qty=5</P>
+<P>If no records are affected by the SQL statement above it means
+that the item is no longer in the database or, more likely, that the
+quantity has already been changed by some other user and there are no
+longer 5 units in stock. (from a database point of view there are far
+better ways to solve this issue, but as an example it clearly shows
+the problem).</P>
+<P>Since primary key fields can never change, they will never be
+returned by <CODE>getChangedValues</CODE>.</P>
+<H3>Method toJSON</H3>
+<P>Model uses method <CODE>toJSON</CODE> to return
+the values of all data fields. In GalleryModel you use <CODE>getValues</CODE>
+which is what <CODE>toJSON</CODE> defaults to.
+However, GalleryModel expects you would redefine <CODE>toJSON</CODE>
+to suit whatever format your remote source expects while <CODE>getValues</CODE>
+remains untouched.</P>
+<P>Once again, Model mixes up two separate features. Just as it
+assumes that if the single primary key field it provides is
+<I>undefined</I>, the record must be new, which is not always the
+case, here, it assumes <CODE>toJSON</CODE> to be the
+means of obtaining the model raw values. This should not be so.
+<CODE>toJSON</CODE> is more like <CODE>toString</CODE>,
+a standard interface that other code can call. As with <CODE>toString</CODE>,
+<CODE>toJSON</CODE> is meant to be redefined by the
+implementor to return whatever it is he/she means to have serialized
+into JSON, thus, it must be separated from <CODE>getValues</CODE>,
+which should not be so freely redefined.</P>
+<P>Initially, <CODE>toJSON</CODE> calls <CODE>getValues</CODE>,
+however, it can be easily redefined like this:</P>
+<PRE>toJSON: function() {
+    return {
+        keys: this.getPKValues(),
+        values: this.getChangedValues()
+    };
+}</PRE><P>
+By the way, though the return value of <CODE>toJSON</CODE>
+should be suitable to pass to <CODE>Y.JSON.stringify</CODE>,
+toJSON needs not be called directly. You rarely call <CODE>toString</CODE>,
+you safely assume that <CODE>toString</CODE> will be
+called if a string representation of the object is needed. Likewise,
+you do:</P>
+<P>Y.JSON.stringify(myModel)</P>
+<P>and not 
+</P>
+<P><STRIKE>Y.JSON.stringify(myModel.toJSON())</STRIKE></P>
+<P>It is the JSON serializer the one that will go and look for a
+<CODE>toJSON</CODE> method and use it if any exists. 
+</P>
+<H3>The loaded and saved event</H3>
+<P>The first change is somewhat semantic, these events signal
+something that has already occurred, the remote operation has already
+happened with any side effects it might have had; hence they have
+been renamed to their past tense. There are no other changes to the
+<CODE>saved</CODE> event. However, there are two
+changes to the <CODE>loaded</CODE> event. 
+</P>
+<P>First, the <CODE>loaded</CODE> event may fire in a
+call to <CODE>save</CODE> and after the <CODE>saved</CODE>
+event if the response from the server contains any data, which is
+indicated by the <CODE>parser</CODE> method returning
+a non-<I>falsy</I> value. This allows to consistently intercept all
+values loaded, be it from explicitly calling <CODE>load</CODE>
+or as a side effect of saving.</P>
+<P>Second, the <CODE>loaded</CODE> event is
+preventable, so that the values loaded can be ignored. This would be
+most unusual in a <CODE>load</CODE> operation but can
+be useful if it happens in response to a call to the <CODE>save</CODE>
+method. The event façade to <CODE>loaded</CODE>
+provides the <CODE>action</CODE> property to tell
+them apart. Preventing the <CODE>loaded</CODE> event
+when fired by a <CODE>save</CODE> operation does not
+affect the saving nor the firing of the <CODE>saved</CODE>
+event since both had already happened.</P>
+<H2>Extensions</H2>
+<P>The GalleryModel component is provided with several extensions
+that can augment a subclass derived from GalleryModel by using the
+following code:</P>
+<PRE>var myModel = Y.Base.create('my-model', Y.GalleryModel,
+    [Y.GalleryModelChronologicalUndo, Y.GalleryModelMultiRecord],
+    // … 
+)
+ </PRE><H3>
+Undo</H3>
+<P>Two separate undo extensions are included, the simplest
+Y.GalleryModelSimpleUndo returns any field or all fields to its
+previous value. It has only one level of undo per field. The <CODE>undo</CODE>
+method accepts the name of the field to be undone; if not specified,
+all fields will be undone, whatever that might mean. Since different
+fields might have been modified a different number of times, applying
+one level of undo to all of them will result in possibly inconsistent
+states.</P>
+<P>The Y.GalleryModelChronologicalUndo provides a full, though
+possibly costly, undo facility. It will apply undoes in strict
+reverse chronological order up to the last load or save of the
+record. Multi-field changes (using <CODE>setValues</CODE>)
+will be undone in a single step. Changes saved to the remote source
+cannot be undone. The undo stack is reset on any synching to the
+remote source. To undo all changes since the record was synched,
+GalleryModel provides the <CODE>reset</CODE> method,
+which will do it in just one step.</P>
+<H3>Multiple Records</H3>
+<P>The Y.GalleryModelMultiRecord extension allows a single instance
+of GalleryModel to store multiple records using the Flyweight
+pattern. Records will be stored in shelves and only one at a time is
+exposed as a normal record would. To change the record being exposed,
+the <CODE>index</CODE> attribute allows moving about
+the shelves. 
+</P>
+<P>This extension also captures the <CODE>loaded</CODE>
+event so that if the parsed response to a load from the server is an
+array, all its items will be added to the shelves. Upon loading, the
+last record loaded will be the current. The shelves are not emptied
+before loading, call the <CODE>empty</CODE> method to
+start from zero. If the response contains a single item, only the
+exposed record is affected. 
+</P>
+<P>Methods <CODE>each</CODE> and <CODE>eachModified</CODE>
+are provided to loop through the records. The latter is faster than
+using <CODE>each</CODE> and then checking the
+<CODE>isModified</CODE> attribute. The function will
+receive the index of the record being shown and executes in the
+context of the model instance. Since shelving a record takes time, if
+the callback function has not modified the record, returning exactly
+<I>false</I> will save that time. 
+</P>
+<P>The Y.GalleryModelSortedMultiRecord further enhances the
+multi-record model by ensuring that it is always kept sorted as
+defined by the <CODE>sortField</CODE> and <CODE>sortDir</CODE>
+attributes. The <CODE>sortField</CODE> attribute is
+normally the name of a field to sort the records by. The <CODE>sortDir</CODE>
+attribute can be either <CODE>'asc'</CODE> or <CODE>'desc'</CODE>.
+Whenever either of these attributes is changed the records will be
+re-sorted. New records are placed in their proper order
+automatically. 
+</P>
+<P>The <CODE>sortField</CODE> attribute can also be
+set to a function. This function will receive an object with the
+values for the record to be sorted and it should return a string with
+the value or values of the field or fields to be compared to
+determine the sorted order. This allows for multiple field sorting as
+well as to process the values in any way needed before comparing
+them. The function should not alter the object received since, in
+order to improve performance, what it gets is the original, not a
+clone. The <CODE>sortField</CODE> function should not
+expect <CODE>this</CODE> to contain any valid value.</P>
+<P>Existing records will also be re-arranged when setting a value if
+the name of the field changed is the same as that set in <CODE>sortField</CODE>.
+If <CODE>sortField</CODE> contains a function a new
+position for the record will always be recalculated since it cannot
+know a priori that the record need not move.</P>
+<P>The <CODE>find</CODE> methods locates a record by
+the value of the field named in <CODE>sortField</CODE>
+only if it is a string and not a function. It will return the index
+of the record found or <EM>null</EM> if not. By default it will make
+the found record current unless asked not to by setting the second
+argument to <EM>false</EM>. If there are several records with the
+same value for the field, it may return any of them.</P>
+<H3>Conclusion</H3>
+<P>GalleryModel solves several deficiencies the standard Model has,
+specially as related to existing database tables. Data fields and
+information about them is now clearly separate and not all mixed up
+into regular YUI attributes. Unfortunately this has meant making it
+incompatible with Y.Model and, though Y.View can work with
+GalleryModel since it never made any assumptions about Y.Model;
+Y.ModelList, however, needs to be changed and though I plan to do it
+eventually, I am not sure it will be needed.  With the
+multiple-record extension, there might not be a need for many of the
+functions provided by ModelList.  ModelList might still be used to
+gather instances of models from different subclasses, that is, that
+don't represent occurrences of the same type of record, which can be
+better represented by a multi-record GalleryModel.  
+</P>
+</BODY>
+</HTML>

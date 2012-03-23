@@ -1,0 +1,32 @@
+{
+    "name"    : "gallery-md-model",
+    "description " : "Improved Model",
+    "type"    : "js",
+    "version" : "1.0.0",
+    "sourceDir"   : "js",
+    "sourceFiles" : [
+        "gallery-md-model.js"
+    ],
+    "buildDir"  : "../../build/gallery-md-model/",
+    "assetsDir" : "assets",
+    "details" : {
+        "use"        : null,      
+        "supersedes" : null,
+        "requires"   : ["base"],
+        "optional"   : null,
+        "after"      : null,
+        "after_map"  : {},
+        "lang"       : null,
+        "skinnable"  : false
+    },
+    "tasks": {
+    	"jslint": {
+			"browser": true,
+			"white": false, 
+			"nomen": true, 
+			"maxerr": 50,
+			"indent": 4,
+			"predef": ["YUI"]
+		}
+	}
+}
