@@ -32,6 +32,7 @@ var em_div = null,
 
 /**********************************************************************
  * @method emToPx
+ * @param em_count {Number} the number of em's to convert (defaults to 1)
  * @return {Number} the size of one em in pixels
  * @static
  */
@@ -50,7 +51,7 @@ Y.Node.emToPx = function(
 		em_div.style.height     = '10em';
 		Y.config.doc.body.appendChild(em_div);
 	}
-	return em_count * (em_div.offsetWidth / 10.0);
+	return (em_count || 1) * (em_div.offsetWidth / 10.0);
 };
 
 /**********************************************************************
