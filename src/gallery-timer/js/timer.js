@@ -1,4 +1,15 @@
 /**
+ * Losely modeled after AS3's Timer class. Provides a simple interface start,
+ *   pause, resume, and stop a defined timer set with a custom callback method.
+ *
+ * @author Anthony Pipkin
+ * @version 1.1.0
+ * @module timer
+ * @class Y.Timer
+ * @extends Y.Base
+ */
+
+/**
  * Local constants
  */
 var STATUS_RUNNING = 'running',
@@ -12,15 +23,32 @@ var STATUS_RUNNING = 'running',
     EVENT_TIMER  = 'timer';
     
 
-/**
- * Y.Timer : Losely modeled after AS3's Timer class. Provides a
- *           simple interface start, pause, resume, and stop a
- *           defined timer set with a custom callback method.
- *
- * @author Anthony Pipkin
- * @version 1.1.0
- */
 Y.Timer = Y.Base.create('timer', Y.Base, [] , {
+  
+    /**
+     * Fires when Y.Timer is started
+     * @event start
+     */
+
+    /**
+     * Fires when Y.Timer is stopped
+     * @event stop
+     */
+
+    /**
+     * Fires when Y.Timer is paused
+     * @event pause
+     */
+
+    /**
+     * Fires when Y.Timer is resumed
+     * @event resume
+     */
+
+    /**
+     * Fires at every interval of Y.Timer
+     * @event timer
+     */
 
     //////   P U B L I C   //////
 
@@ -31,13 +59,12 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
      *
      * @method initializer
      * @protected
-     * @param confit {Object} Configuration object literal for
+     * @param config {Object} Configuration object literal for
      *     the Timer
      * @since 1.0.0
      */
     initializer : function(config){
       this.after('statusChange',this._afterStatusChange,this);
-	  //this.publish(EVENT_TIMER);
       this.publish(EVENT_START ,  { defaultFn : this._defStartFn });
       this.publish(EVENT_STOP ,   { defaultFn : this._defStopFn });
       this.publish(EVENT_PAUSE ,  { defaultFn : this._defPauseFn });
@@ -112,13 +139,22 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
     //////   P R O T E C T E D   //////
 
     /**
-     * Local Date object for internal time measurement
-     *
-     * @property
+     * Internal timer
+     * 
+     * @property {Y.later} _timerObj
      * @protected
      * @since 1.0.0
      */
-    _date : new Date(),
+    _timerObj : null,
+
+		/**
+		 * Resume length
+		 *
+		 * @property _remainingLength
+		 * @protected
+		 * @since 1.2.0
+		 */
+		_remainingLength: null,
 
     /**
      * Checks to see if a new Timer is to be created. If so, calls
@@ -132,15 +168,23 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
      */
     _makeTimer : function() {
       Y.log('Timer::_makeTimer','info');
-      var id = null,
+      var timerObj = this._timerObj,
           repeat = this.get('repeatCount');
 
-      if(repeat === 0 || repeat > this.get('step')) {
-        id = Y.later(this.get('length'), this, this._timer);
+      if (timerObj) {
+				timerObj.cancel();
+				timerObj = null;
+				this._timerObj = null;
       }
 
-      this.set('timer', id);
-      this.set('start', this._date.getTime());
+      if(repeat === 0 || repeat > this.get('step')) {
+        timerObj = Y.later(this._remainingLength, this, this._timer);
+      }
+
+			this._timerObj = timerObj;
+      this.set('timer', timerObj);
+      this.set('start', (new Date()).getTime());
+			this.set('stop', this.get('start'));
     },
 
     /**
@@ -152,9 +196,20 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
      */
     _destroyTimer : function() {
       Y.log('Timer::_destroyTimer','info');
-      this.get('timer').cancel();
-      this.set('stop', this._date.getTime());
+      var timerObj = this._timerObj;
+      
+      if (timerObj) {
+				timerObj.cancel();
+				timerObj = null;
+				this._timerObj = null;
+      }
+      
+      this.set('timer', null);
+      this.set('stop', (new Date()).getTime());
       this.set('step', 0);
+
+			this._remainingLength = this._remainingLength - (this.get('stop') - this.get('start'));
+
     },
 
     /**
@@ -174,9 +229,11 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
 
       this.set('step', ++step);
 
-      if(repeat > 0 && repeat <= step) {
+      if(repeat > 0 && repeat <= step) { // repeat at 0 is infinite loop
+				this._remainingLength = 0;
         this.stop();
       }else{
+				this._remainingLength = this.get('length');
         this._makeTimer();
       }
 
@@ -193,12 +250,12 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
      */
     _afterStatusChange : function(e){
       Y.log('Timer::_afterStatusChange','info');
-      switch (this.get('status')) {
+      switch(e.newVal) {
         case STATUS_RUNNING:
           this._makeTimer();
           break;
         case STATUS_STOPPED: // overflow intentional
-        case STATUS_PAUSED:
+				case STATUS_PAUSED:
           this._destroyTimer();
           break;
       }
@@ -214,6 +271,8 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
     _defStartFn : function(e) {
       Y.log('Timer::_defStartFn','info');
       var delay = this.get('startDelay');
+
+			this._remainingLength = this.get('length');
 
       if(delay > 0) {
         Y.later(delay, this, function(){
@@ -233,6 +292,8 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
      */
     _defStopFn : function(e) {
       Y.log('Timer::_defStopFn','info');
+
+			this._remainingLength = 0;
       this.set('status', STATUS_STOPPED);
     },
 
@@ -258,11 +319,7 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
      */
     _defResumeFn : function(e) {
       Y.log('Timer::_defResumeFn','info');
-      var remaining = this.get('length') - (this.get('stop') - this.get('start'));
-      Y.later(remaining, this, function(){
-        this._executeCallback();
-        this.set('status',STATUS_RUNNING);
-      });
+			this.set('status',STATUS_RUNNING);
     },
 
     /**
@@ -287,11 +344,33 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
     */
    _executeCallback : function() {
       Y.log('Timer::_executeCallback','info');
-	  var callback = this.get('callback');
-	  if (Y.Lang.isFunction(callback)) {
-        (this.get('callback'))();
-	  }
-   }
+      var callback = this.get('callback');
+      if (Y.Lang.isFunction(callback)) {
+				(this.get('callback'))();
+      }
+   },
+
+	 /**
+		* Returns the time from `now` if the timer is running and returns remaining
+		* 	time from `stop` if the timer has stopped.
+		* @method _remainingGetter
+		* @protected
+		* @since 1.2.0
+		*/
+	 _remainingGetter: function(){
+			Y.log('Timer::_remainingGetter', 'info');
+			var status = this.get('status'),
+					length = this._remainingLength,
+					maxTime = (new Date()).getTime();
+
+			if (status === STATUS_STOPPED) {
+				return 0;
+			} else if (status === STATUS_PAUSED) {
+				return length;
+			} else {
+				return length - ( maxTime - this.get('start') );
+			}
+	 }
 
 },{
     /**
@@ -331,6 +410,18 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
             }
         },
 
+				/**
+				 * Get remaining milliseconds
+				 *
+				 * @attribute remaining
+				 * @type Number
+				 * @since 1.2.0
+				 */
+				remaining: {
+					readonly: true,
+					getter: '_remainingGetter'
+				},
+
         /**
          * Number of times the Timer should fire before it stops
          *  - 1.1.0 - added lazyAdd false to prevent starting from
@@ -361,7 +452,7 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
 
         /**
          * Timer status
-         *  - 1.1.0 - Changed from state to STATUS_ state was left
+         *  - 1.1.0 - Changed from state to status. state was left
          *            from legacy code
          * @attribute status
          * @default STATUS_STOPPED
@@ -448,3 +539,4 @@ Y.Timer = Y.Base.create('timer', Y.Base, [] , {
         TIMER  : EVENT_TIMER
     }
 });
+
