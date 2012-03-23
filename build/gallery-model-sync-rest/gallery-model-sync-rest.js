@@ -16,43 +16,48 @@ transmit JSON data via RESTful HTTP. In most cases you'll only need to provide a
 value for `root` when sub-classing Model, and only provide a value for `url`
 when sub-classing ModelList.
 
-@example
-
     var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
-        root : '/user'
+        root: '/user'
     }, {
-        ATTRS : {
-            name : {}
+        ATTRS: {
+            name: {}
         }
     });
 
     var Users = Y.Base.create('users', Y.ModelList, [Y.ModelSync.REST], {
-        model : User,
-        url   : '/user'
+        model: User,
+        url  : '/user'
     });
 
 @class ModelSync.REST
-@extensionfor Model ModelList
+@extensionfor Model
+@extensionfor ModelList
 **/
 
-var RESTSync,
+var Lang = Y.Lang,
 
-    Lang       = Y.Lang,
     sub        = Lang.sub,
     isValue    = Lang.isValue,
     isString   = Lang.isString,
     isNumber   = Lang.isNumber,
     isFunction = Lang.isFunction;
 
-// *** RESTSync *** //
+// -- RESTSync -----------------------------------------------------------------
 
-RESTSync = function () {};
+ function RESTSync() {}
 
 /**
 Static hash lookup table of RESTful HTTP methods corresponding to CRUD actions.
 
 @property HTTP_METHODS
 @type Object
+@default
+    {
+        'create': 'POST',
+        'read'  : 'GET',
+        'update': 'PUT',
+        'delete': 'DELETE'
+    }
 @static
 **/
 RESTSync.HTTP_METHODS = {
@@ -108,9 +113,21 @@ was overridden.
 **/
 RESTSync.EMULATE_HTTP = false;
 
+/**
+Properties that shouldn't be turned into ad-hoc attributes when passed to a
+Model or ModelList constructor.
+
+@property _NON_ATTRS_CFG
+@type Array
+@default ['url']
+@static
+@protected
+**/
+RESTSync._NON_ATTRS_CFG = ['url'];
+
 RESTSync.prototype = {
 
-    // *** Public Properties *** //
+    // -- Public Properties ----------------------------------------------------
 
     /**
     A String which represents the root or collection part of the URL space which
@@ -123,20 +140,19 @@ RESTSync.prototype = {
     '/'; if the `root` does not end with a slash, neither will the XHR URLs.
 
     @example
-
         var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
-            root : '/user/'
+            root: '/user/'
         }, {
-            ATTRS : {
-                name : {}
+            ATTRS: {
+                name: {}
             }
         });
 
-        var myUser = new User({ id: '123' });
-        myUser.load(); // will GET the User data from: /user/123/
+        var myUser = new User({id: '123'});
+        myUser.load(); // Will GET the User data from: /user/123/
 
-        var newUser = new User({ name: 'Eric Ferraiuolo' });
-        newUser.save(); // will POST the User data to: /user/
+        var newUser = new User({name: 'Eric Ferraiuolo'});
+        newUser.save(); // Will POST the User data to: /user/
 
     When sub-classing Y.ModelList, usually you'll want to ignore configuring the
     `root` and instead just set the `url` to a String; but if you just specify a
@@ -144,24 +160,24 @@ RESTSync.prototype = {
 
     @property root
     @type String
-    @default ''
+    @default ""
     **/
-    root : '',
+    root: '',
 
     /**
     A Function or String which is used to generate or specify the URL for the
     XHRs. While, this property can be defined for each Model/ModelList instance,
-    usually you'll want to use a Function or String pattern instead.
+    usually you'll want to use a Function or String-pattern instead.
 
     If the `url` property is a Function, it should return the String that should
-    be used as the URL. The Function will be called before each request.
+    be used as the URL. The Function will be called before each request and will
+    be passed the sync `action` which is currently being performed.
 
     If the `url` property is a String, it will be processed by `Y.Lang.sub()`;
     this is useful when the URLs for a Model type match a specific pattern and
     can use simple replacement tokens:
 
     @example
-
         '/user/{id}'
 
     **Note:** String substitution on the `url` property will only happen for
@@ -181,31 +197,28 @@ RESTSync.prototype = {
     properties like this:
 
     @example
-
         var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
-            root : '/users',
-            url  : '/user/{id}'
+            root: '/users',
+            url : '/user/{id}'
         }, {
-            ATTRS : {
-                name : {}
+            ATTRS: {
+                name: {}
             }
         });
 
-        var myUser = new User({ id: '123' });
+        var myUser = new User({id: '123'});
         myUser.load(); // Will GET the User data from: /user/123
 
-        var newUser = new User({ name: 'Eric Ferraiuolo' });
+        var newUser = new User({name: 'Eric Ferraiuolo'});
         newUser.save(); // Will POST the User data to: /users
 
     When sub-classing Y.ModelList, you probably just need to specify a simple
     String for the `url` property and leave `root` to be the default value.
 
-    @property
+    @property url
     @type Function|String
-    @method url
-    @return {String} URL to for the XHR to the server.
     **/
-    url : function () {
+    url: function () {
         var root = this.root,
             url;
 
@@ -222,14 +235,14 @@ RESTSync.prototype = {
         return this._joinURL(url);
     },
 
-    // *** Lifecycle Methods *** //
+    // -- Lifecycle Methods ----------------------------------------------------
 
-    initializer : function (config) {
+    initializer: function (config) {
         config || (config = {});
         isValue(config.url) && (this.url = config.url);
     },
 
-    // *** Public Methods *** //
+    // -- Public Methods -------------------------------------------------------
 
     /**
     Communicates with a RESTful HTTP server by sending and receiving JSON data
@@ -240,10 +253,10 @@ RESTSync.prototype = {
     @method sync
     @param {String} action Sync action to perform. May be one of the following:
 
-      * create: Store a newly-created model for the first time.
-      * delete: Delete an existing model.
-      * read  : Load an existing model.
-      * update: Update an existing model.
+      * **create**: Store a newly-created model for the first time.
+      * **read**  : Load an existing model.
+      * **update**: Update an existing model.
+      * **delete**: Delete an existing model.
 
     @param {Object} [options] Sync options.
       @param {Object} [options.headers] The HTTP headers to mix with the default
@@ -258,10 +271,10 @@ RESTSync.prototype = {
         be passed to the parse() method, which is expected to parse it and
         return an attribute hash.
     **/
-    sync : function (action, options, callback) {
+    sync: function (action, options, callback) {
         options || (options = {});
 
-        var url     = this._getURL(),
+        var url     = this._getURL(action),
             method  = RESTSync.HTTP_METHODS[action],
             headers = Y.merge(RESTSync.HTTP_HEADERS, options.headers),
             timeout = options.timeout || RESTSync.HTTP_TIMEOUT,
@@ -269,7 +282,7 @@ RESTSync.prototype = {
 
         // Prepare the content if we are sending data to the server.
         if (method === 'POST' || method === 'PUT') {
-            entity = Y.JSON.stringify(this);
+            entity = this._serialize();
         } else {
             // Remove header, no content is being sent.
             delete headers['Content-Type'];
@@ -278,6 +291,7 @@ RESTSync.prototype = {
         // Setup HTTP emulation for older servers if we need it.
         if (RESTSync.EMULATE_HTTP &&
                 (method === 'PUT' || method === 'DELETE')) {
+
             // Pass along original method type in the headers.
             headers['X-HTTP-Method-Override'] = method;
             // Fall-back to using POST method type.
@@ -286,17 +300,19 @@ RESTSync.prototype = {
 
         // Setup and send the XHR.
         Y.io(url, {
-            method  : method,
-            headers : headers,
-            data    : entity,
-            timeout : timeout,
-            on      : {
-                success : function (txId, res) {
+            method : method,
+            headers: headers,
+            data   : entity,
+            timeout: timeout,
+
+            on: {
+                success: function (txId, res) {
                     if (isFunction(callback)) {
                         callback(null, res.responseText);
                     }
                 },
-                failure : function (txId, res) {
+
+                failure: function (txId, res) {
                     if (isFunction(callback)) {
                         callback({
                             code: res.status,
@@ -308,7 +324,7 @@ RESTSync.prototype = {
         });
     },
 
-    // *** Protected Methods *** //
+    // -- Protected Methods ----------------------------------------------------
 
     /**
     Helper method to return the URL to use when making the XHR to the server.
@@ -316,19 +332,21 @@ RESTSync.prototype = {
     This method correctly handles variations of the `url` property/method.
 
     @method _getURL
-    @return {String} the URL for the XHR
+    @param {String} action Sync action to perform.
+    @return {String} the URL for the XHR.
     @protected
     **/
-    _getURL : function () {
+    _getURL: function (action) {
         var url = this.url,
             data;
 
         if (isFunction(url)) {
-            return this.url();
+            return this.url(action);
         }
 
         if (this instanceof Y.Model) {
             data = {};
+
             Y.Object.each(this.toJSON(), function (v, k) {
                 if (isString(v) || isNumber(v)) {
                     // URL-encode any String or Number values.
@@ -351,7 +369,6 @@ RESTSync.prototype = {
     https://github.com/yui/yui3/blob/master/src/app/js/controller.js
 
     @example
-
         model.root = '/foo'
         model._joinURL('bar');  // => '/foo/bar'
         model._joinURL('/bar'); // => '/foo/bar'
@@ -375,13 +392,33 @@ RESTSync.prototype = {
         return root && root.charAt(root.length - 1) === '/' ?
                 root + url :
                 root + '/' + url;
-    }
+    },
 
+    /**
+    Serializes `this` model to be used as the HTTP request entity body. By
+    default this model will be serialized to a JSON string via its `toJSON()`
+    method.
+
+    You can override this method when the HTTP server expects a different
+    representation of this model's data that is different from the default JSON
+    serialization.
+
+    **Note:** A model's `toJSON()` method can also be overridden; if you just
+    need to modify which attributes are serialized to JSON, that's a better
+    place to start.
+
+    @method _serialize
+    @return {String} serialized HTTP request entity body
+    @protected
+    **/
+    _serialize: function () {
+        return Y.JSON.stringify(this);
+    }
 };
 
-// *** Namespace *** //
+// -- Namespace ----------------------------------------------------------------
 
 Y.namespace('ModelSync').REST = RESTSync;
 
 
-}, 'gallery-2012.01.04-22-09' ,{requires:['model', 'model-list', 'io-base', 'json-stringify'], skinnable:false});
+}, 'gallery-2012.03.23-18-00' ,{requires:['model', 'model-list', 'io-base', 'json-stringify'], skinnable:false});

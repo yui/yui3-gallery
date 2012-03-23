@@ -15,7 +15,9 @@ YUI.add('gallery-treeble', function(Y) {
  * paginateChildren:true.</p>
  * 
  * <p>The tree must be immutable.  The total number of items available from
- * each DataSource must remain constant.</p>
+ * each DataSource must remain constant.  (The one exception to this rule
+ * is that filtering and sorting are allowed.  This is done by detecting
+ * that the request parameters have changed.)</p>
  * 
  * @class TreebleDataSource
  * @extends DataSource.Local
@@ -916,6 +918,8 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	{
 		if (this._callback)
 		{
+			// wipe out all state if the request parameters change
+
 			Y.Object.some(this._callback.request, function(value, key)
 			{
 				if (key == 'startIndex' || key == 'resultCount')
@@ -1015,11 +1019,20 @@ Y.namespace("Parsers").treebledatasource = function(oData)
  */
 
 /**
- * Utility functions for displaying tree data in a table.
+ * Extension to DataTable for displaying tree data.
  *
  * @namespace
  * @class Treeble
+ * @extends DataTable
+ * @constructor
+ * @param config {Object}
  */
+function Treeble()
+{
+	Treeble.superclass.constructor.apply(this, arguments);
+}
+
+Treeble.NAME = "datatable";		// same styling
 
 /**
  * <p>Formatter for open/close twistdown.</p>
@@ -1028,12 +1041,11 @@ Y.namespace("Parsers").treebledatasource = function(oData)
  * @param sendRequest {Function} Function that reloads DataTable
  * @static
  */
-Y.namespace("Treeble").buildTwistdownFormatter = function(sendRequest)
+Treeble.buildTwistdownFormatter = function(sendRequest)
 {
 	return function(o)
 	{
-		var td = this.createCell(o);
-		td.addClass('treeble-nub');
+		o.td.addClass('treeble-nub');
 
 		var ds  = this.datasource.get('datasource');
 		var key = ds.get('root').treeble_config.childNodesKey;
@@ -1044,22 +1056,18 @@ Y.namespace("Treeble").buildTwistdownFormatter = function(sendRequest)
 			var open  = ds.isOpen(path);
 			var clazz = open ? 'row-open' : 'row-closed';
 
-			td.addClass('row-toggle');
-			td.replaceClass(/row-(open|closed)/, clazz);
+			o.td.addClass('row-toggle');
+			o.td.replaceClass(/row-(open|closed)/, clazz);
 
-			td.on('click', function()
+			o.td.on('click', function()
 			{
 				ds.toggle(path, {}, sendRequest);
 			});
 
-			td.set('innerHTML', '<a class="treeble-collapse-nub" href="javascript:void(0);"></a>');
-		}
-		else
-		{
-			td.set('innerHTML', '');
+			o.cell.set('innerHTML', '<a class="treeble-collapse-nub" href="javascript:void(0);"></a>');
 		}
 
-		return '';
+		return true;	// keep the Y.Node instances
 	};
 };
 
@@ -1069,11 +1077,29 @@ Y.namespace("Treeble").buildTwistdownFormatter = function(sendRequest)
  * @method treeValueFormatter
  * @static
  */
-Y.namespace("Treeble").treeValueFormatter = function(o)
+Treeble.treeValueFormatter = function(o)
 {
 	var depth_class = 'treeble-depth-'+o.data._yui_node_depth;
 	return '<span class="'+depth_class+'">'+o.value+'</span>';
 };
 
+Y.extend(Treeble, Y.DataTable,
+{
+	plug: function(plugin, config)
+	{
+		if (plugin === Y.Plugin.DataTableDataSource)
+		{
+			var recordType = this.get('recordType');
+			recordType.ATTRS[ config.datasource.get('root').treeble_config.childNodesKey ] = {};
+			recordType.ATTRS._yui_node_path  = {};
+			recordType.ATTRS._yui_node_depth = {};
+		}
 
-}, 'gallery-2011.10.27-17-03' ,{requires:['datasource'], skinnable:true});
+		Treeble.superclass.plug.apply(this, arguments);
+	}
+});
+
+Y.Treeble = Treeble;
+
+
+}, 'gallery-2012.03.23-18-00' ,{requires:['datasource'], skinnable:true});

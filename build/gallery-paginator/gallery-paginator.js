@@ -8,9 +8,13 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
- * The Paginator widget provides a set of controls to navigate through paged
- * data.
- *
+ * The Paginator widget provides a set of controls to navigate through
+ * paged data.
+ * 
+ * @module gallery-paginator
+ */
+
+/**
  * To instantiate a Paginator, pass a configuration object to the contructor.
  * The configuration object should contain the following properties:
  * <ul>
@@ -18,8 +22,8 @@ http://developer.yahoo.net/yui/license.txt
  *   <li>totalRecords : <em>n</em> (int or Paginator.VALUE_UNLIMITED)</li>
  * </ul>
  *
- * @module gallery-paginator
  * @class Paginator
+ * @extends Widget
  * @constructor
  * @param config {Object} Object literal to set instance and ui component
  * configuration.
@@ -85,7 +89,7 @@ Y.mix(Paginator, {
      *
      * @method Paginator.isNumeric
      * @param v {Number|String} value to be checked for number or numeric string
-     * @returns {Boolean} true if the input is coercable into a finite number
+     * @return {Boolean} true if the input is coercable into a finite number
      * @static
      */
     isNumeric : function (v) {
@@ -865,7 +869,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * Generates an input field for setting the current page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.CurrentPageInput
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -990,7 +993,6 @@ http://developer.yahoo.net/yui/license.txt
  * ui Component to generate the textual report of current pagination status.
  * E.g. "Now viewing page 1 of 13".
  *
- * @module gallery-paginator
  * @class Paginator.ui.CurrentPageReport
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -1147,7 +1149,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the link to jump to the first page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.FirstPageLink
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -1314,7 +1315,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to display a menu for selecting the range of items to display.
  *
- * @module gallery-paginator
  * @class Paginator.ui.ItemRangeDropdown
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -1459,7 +1459,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the link to jump to the last page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.LastPageLink
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -1472,8 +1471,8 @@ Paginator.ui.LastPageLink = function (p) {
     p.after('rowsPerPageChange',this.update,this);
     p.after('totalRecordsChange',this.update,this);
 
-	p.after('lastPageLinkClassChange', this.rebuild, this);
-	p.after('lastPageLinkLabelChange', this.rebuild, this);
+    p.after('lastPageLinkClassChange', this.rebuild, this);
+    p.after('lastPageLinkLabelChange', this.rebuild, this);
 };
 
 /**
@@ -1658,7 +1657,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the link to jump to the next page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.NextPageLink
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -1671,8 +1669,8 @@ Paginator.ui.NextPageLink = function (p) {
     p.after('rowsPerPageChange', this.update,this);
     p.after('totalRecordsChange', this.update,this);
 
-	p.after('nextPageLinkClassChange', this.rebuild, this);
-	p.after('nextPageLinkLabelChange', this.rebuild, this);
+    p.after('nextPageLinkClassChange', this.rebuild, this);
+    p.after('nextPageLinkLabelChange', this.rebuild, this);
 };
 
 /**
@@ -1828,7 +1826,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the page links
  *
- * @module gallery-paginator
  * @class Paginator.ui.PageLinks
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -2077,7 +2074,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the link to jump to the previous page.
  *
- * @module gallery-paginator
  * @class Paginator.ui.PreviousPageLink
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -2222,7 +2218,6 @@ http://developer.yahoo.net/yui/license.txt
 /**
  * ui Component to generate the rows-per-page dropdown
  *
- * @module gallery-paginator
  * @class Paginator.ui.RowsPerPageDropdown
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -2413,7 +2408,6 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
 /**********************************************************************
  * Adds per-page error notification to Paginator.ui.PageLinks.
  *
- * @module gallery-paginator
  * @class Paginator.ui.ValidationPageLinks
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
@@ -2424,7 +2418,7 @@ Paginator.ui.ValidationPageLinks = function(
 {
 	Paginator.ui.ValidationPageLinks.superclass.constructor.call(this, p);
 
-    p.after('pageStatusChange', this.rebuild, this);
+	p.after('pageStatusChange', this.rebuild, this);
 };
 
 var vpl_status_prefix = 'yui3-has';
@@ -2433,7 +2427,7 @@ var vpl_status_prefix = 'yui3-has';
  * Array of status strings for each page.  If the status value for a page
  * is not empty, it is used to build a CSS class for the page:
  * yui3-has&lt;status&gt;
- * 
+ *
  * @attribute pageStatus
  */
 Paginator.ATTRS.pageStatus =
@@ -2442,8 +2436,8 @@ Paginator.ATTRS.pageStatus =
 	validator: Y.Lang.isArray
 };
 
-Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks, 
-{ 
+Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
+{
 	update: function(e)
 	{
 		if (e && e.prevVal === e.newVal)
@@ -2482,8 +2476,8 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 			this.container.set('innerHTML', content);
 		}
 	}
-	
+
 });
 
 
-}, 'gallery-2011.04.13-22-38' ,{requires:['widget','event-key','substitute'], skinnable:true});
+}, 'gallery-2012.03.23-18-00' ,{requires:['widget','event-key','substitute'], skinnable:true});
