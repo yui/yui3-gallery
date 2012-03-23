@@ -51,7 +51,7 @@ Y.mix(Y,
 	 * @param f {Function} the function to execute on each item
 	 * @param c {Object} optional context object
 	 * @param proto {Boolean} if true, prototype properties are iterated on objects
-	 * @return {Boolean} `true` if every item in the array returns `true` from the supplied function, `false` otherwise
+	 * @return {Boolean} true if every item in the array returns true from the supplied function, false otherwise
 	 * @static
 	 */
 	every: function(o, f, c, proto)
@@ -91,7 +91,7 @@ Y.mix(Y,
 	 * @param f {Function} the function to execute on each item
 	 * @param c {Object} optional context object
 	 * @param proto {Boolean} if true, prototype properties are iterated on objects
-	 * @return {Mixed} the first item for which the supplied function returns `true`, or `null` if it never returns `true`
+	 * @return {Mixed} the first item for which the supplied function returns true, or null if it never returns true
 	 * @static
 	 */
 	find: function(o, f, c, proto)
@@ -120,8 +120,8 @@ Y.mix(Y,
 
 	/**
 	 * Partitions an object into two new objects, one with the items for
-	 * which the supplied function returns `true`, and one with the items
-	 * for which the function returns `false`.  The function receives the
+	 * which the supplied function returns true, and one with the items
+	 * for which the function returns false.  The function receives the
 	 * value, the key, and the object itself as parameters (in that order).
 	 *
 	 * Supports arrays, objects, and NodeLists.
@@ -130,7 +130,7 @@ Y.mix(Y,
 	 * @param f {Function} the function to execute on each item
 	 * @param c {Object} optional context object
 	 * @param proto {Boolean} if true, prototype properties are iterated on objects
-	 * @return {Object} object with two properties: `matches` and `rejects`. Each is an array or object containing the items that were selected or rejected by the test function (or an empty object if none).
+	 * @return {Object} object with two properties: matches and rejects. Each is an array or object containing the items that were selected or rejected by the test function (or an empty object if none).
 	 * @static
 	 */
 	partition: function(o, f, c, proto)
@@ -143,7 +143,8 @@ Y.mix(Y,
 	 * the object into a single value.  The function receives the value
 	 * returned by the previous iteration (or the initial value if this is
 	 * the first iteration), the value being iterated, the key, and the
-	 * object itself as parameters (in that order).
+	 * object itself as parameters (in that order).  The function must
+	 * return the updated value.
 	 *
 	 * Supports arrays, objects, and NodeLists.
 	 *
