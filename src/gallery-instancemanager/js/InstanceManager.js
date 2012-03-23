@@ -25,7 +25,8 @@ InstanceManager.prototype =
 	/**
 	 * Retrieve an object.
 	 * 
-	 * @param id {String} The id of the object to retrieve.
+	 * @param id {String} the id of the object to retrieve
+	 * @return {Mixed} the stored object, or false if the slot is empty
 	 */
 	get: function(
 		/* string */	id)
@@ -44,7 +45,8 @@ InstanceManager.prototype =
 	/**
 	 * Retrieve an object only if it has already been constructed.
 	 * 
-	 * @param id {String} The id of the object to retrieve.
+	 * @param id {String} the id of the object to retrieve
+	 * @return {Mixed} the stored object, or false if the slot is empty
 	 */
 	getIfConstructed: function(
 		/* string */	id)
@@ -55,10 +57,10 @@ InstanceManager.prototype =
 	/**
 	 * Store an object or ctor+args.
 	 * 
-	 * @param id {String} The id of the object.
-	 * @param objOrCtor {Object|Function} The object or the object's constructor or a factory method.
-	 * @param args {Array} The array of arguments to pass to the constructor.
-	 * @return {boolean} false if the id has already been used
+	 * @param id {String} the id of the object
+	 * @param objOrCtor {Object|Function} the object or the object's constructor or a factory method
+	 * @param args {Array} the array of arguments to pass to the constructor
+	 * @return {Boolean} false if the id has already been used
 	 */
 	put: function(
 		/* string */	id,
@@ -90,8 +92,8 @@ InstanceManager.prototype =
 	/**
 	 * Remove an object.
 	 * 
-	 * @param id {String} The id of the object.
-	 * @return {mixed} the object that was removed or <code>false</code> if the slot was empty
+	 * @param id {String} the id of the object
+	 * @return {mixed} the object that was removed, or false if the slot was empty
 	 */
 	remove: function(
 		/* string */	id)
@@ -117,10 +119,18 @@ InstanceManager.prototype =
 	},
 
 	/**
+	 * Returns list of all stored keys.
+	 */
+	keys: function()
+	{
+		return Y.Object.keys(this._map);
+	},
+
+	/**
 	 * Call a function on every object.
 	 * 
-	 * @param behavior {Function|String|Object} The function to call or the name of the function or an object {fn:,scope:}
-	 * @param arguments {Array} The arguments to pass to the function.
+	 * @param behavior {Function|String|Object} the function to call or the name of the function or an object {fn:,scope:}
+	 * @param arguments {Array} the arguments to pass to the function
 	 * @param skip_unconstructed {boolean} Optional.  Pass <code>true</code> to skip unconstructed slots.
 	 */
 	applyToAll: function(
