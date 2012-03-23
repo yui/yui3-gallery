@@ -10,7 +10,7 @@ var fs      = require('fs'),
 
 // *** Collection *** //
 
-Collection = function () {
+function Collection() {
     this._lastId = 0;
     this.items   = {};
 };
@@ -99,8 +99,8 @@ app.post('/data/:collection', function (req, res) {
 // Lookup specific item on a collection and set it on the request then continue,
 // or error out with a 404.
 app.all('/data/:collection/:id', function (req, res, next) {
-    var id      = req.params.id,
-        item    = req.collection.item(id);
+    var id   = req.params.id,
+        item = req.collection.item(id);
 
     if (item) {
         req.item = item;

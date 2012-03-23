@@ -177,7 +177,25 @@ suite.add(new Y.Test.Case({
 
         model.root = '/model/';
         Assert.areSame('/model/123/', model.url());
+    },
+    'url() should return a URL determined from the sync action' : function () {
+        var model = new this.TestModel({ id: 123 });
+
+        model.url = function(action) { return '/model/' + action; };
+
+        Assert.areSame('/model/read', model._getURL('read'));
+    },
+    '_serialize() can modify the data' : function () {
+        var model = new this.TestModel({ id: 123 });
+
+        model._serialize = function() {
+          var data = this.toJSON();
+          return Y.JSON.stringify({ body: data });
+        };
+
+        Assert.areSame(Y.JSON.stringify({ body: { id: 123 } }), model._serialize());
     }
+
 }));
 
 Y.Test.Runner.add(suite);
