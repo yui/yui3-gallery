@@ -45,14 +45,12 @@
 </style>
 
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.1/build/cssreset/reset-min.css">
-<link rel="stylesheet" type="text/css" href="../../../../yui3-gallery/build/gallery-carousel-circular/gallery-carousel-circular.css">
+<link rel="stylesheet" type="text/css" href="../../../../yui3-gallery/build/gallery-carousel-circular/assets/gallery-carousel-circular.css">
 <script type="text/javascript" src="http://yui.yahooapis.com/3.3.0pr3/build/yui/yui.js"></script>
 
 </head>
 
 <body class="yui3-skin-sam  yui-skin-sam">
-
-
 			
 <div class="playground">
 <h1 class='title'>YUI3 Gallery Circular Carousel example: Constructing by providing markup</h1>
@@ -70,6 +68,8 @@
         <li>10</li>
         <li>11</li>
         <li>12</li>
+        <li>13</li>
+        <li>14</li>
  </ul>
 <span class='next'>Next</span>
 </div>
@@ -81,26 +81,26 @@
         modules: {
              "gallery-carousel-circular": {
                 fullpath : "../../../../yui3-gallery/build/gallery-carousel-circular/gallery-carousel-circular.js",
-                requires : ["substitute", "widget", "widget-child", "widget-parent"]
+                requires : ["substitute", "widget", "widget-parent","node-base", "node-event-delegate", "transition", "event-move"]
             }
         },
-        filter:"raw",
-        combine : false
      }).use("gallery-carousel-circular", function (Y) {
-
     var carousel = new Y.CircularCarousel({
                    srcNode: '#carousel',
                    contentBox: '#carousel',
                    boundingBox : '#carousel',
-                   type : 'CircularCarousel'
+                   type : 'CircularCarousel',
+                   totalNodes : '14',
+                   numNodesToDisplay : '3'
+
     });
         carousel.render();
     
     Y.one('.prev').on('click', function(){
-       Y.fire('carousel:goPrev');
+       carousel.fire('goPrev');
     });
     Y.one('.next').on('click', function(){
-       Y.fire('carousel:goNext');
+       carousel.fire('goNext');
     });
 });
     
