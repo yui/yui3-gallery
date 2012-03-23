@@ -1,0 +1,91 @@
+{
+    "project": {
+        "name": "Array Iterate",
+        "description": "Iterate through an array."
+    },
+    "files": {
+        "js/array-iterate.js": {
+            "name": "js/array-iterate.js",
+            "modules": {
+                "gallery-async-pause": 1
+            },
+            "classes": {},
+            "fors": {
+                "Array": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-async-pause": {
+            "name": "gallery-async-pause",
+            "submodules": {},
+            "classes": {
+                "Array": 1
+            },
+            "fors": {
+                "Array": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/array-iterate.js",
+            "line": 1,
+            "description": "Iterate through an array."
+        }
+    },
+    "classes": {
+        "Array": {
+            "name": "Array",
+            "shortname": "Array",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-async-pause",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/array-iterate.js",
+            "line": 10,
+            "itemtype": "method",
+            "name": "iterate",
+            "params": [
+                {
+                    "name": "array",
+                    "description": "the array to iterate",
+                    "type": "Array"
+                },
+                {
+                    "name": "startIndex",
+                    "description": "(Optional) The first index to iterate.\nIf left undefined, iteration will either start at the beginning of the array if incrementBy\nis positive or at the end of the array if incrementBy is negative.",
+                    "type": "Number"
+                },
+                {
+                    "name": "incrementBy",
+                    "description": "the interval by which the array will be iterated. Must be a non-zero integer.\nNegative values cause the array to be iterated backwards.",
+                    "type": "Number"
+                },
+                {
+                    "name": "iterationFunction",
+                    "description": "the function to call on each iteration. This function will receive three\narguments: value, index, and array. If this function returns a truthy value, iteration will be terminated.",
+                    "type": "Function"
+                },
+                {
+                    "name": "contextObject",
+                    "description": "(Optional) the context that will become this in the iterationFunction",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "will return true if iteration was terminated early, otherwise it will return false.",
+                "type": "Boolean"
+            },
+            "static": 1,
+            "class": "Array",
+            "module": "gallery-async-pause"
+        }
+    ]
+}
