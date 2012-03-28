@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Button test</title>
+        <script type="text/javascript" src="http://yui.yahooapis.com/3.5.0pr2/build/yui/yui.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.5.0pr2/build/cssreset/reset-min.css&3.5.0pr2/build/cssfonts/fonts-min.css&3.5.0pr2/build/cssbase/base-min.css&3.5.0pr2/build/cssgrids/grids-min.css" />
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.5.0pr2/build/cssbutton/cssbutton.css" />
+        <style>
+            body {
+                width:700px;
+                margin:auto;
+            }
+        </style>
+            
+
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="toolbar">
+            <button id="toggle0" class="yui3-button yui3-button-toggle">toggle</button>
+            <p>You should be able to toggle this one and get the selected state logged on each click</p>
+            <hr/>
+            <button id="regular" class="yui3-button">normal button</button>
+            <p>This is a normal button, clicks get logged, no selected attribute,
+            on click the log will always show undefined</p>
+            <hr/>
+            <span id="group" class="yui3-button-group-exclusive">
+                <button id="toggle1" class="yui3-button yui3-button-toggle">1</button>
+                <button id="toggle2" class="yui3-button yui3-button-toggle">2</button>
+                <button id="toggle3" class="yui3-button yui3-button-toggle">3</button>
+
+            </span>
+            <p>Group of mutually exclusive buttons, only one active at a time.  
+            It starts with the 2 selected and after 3 seconds none will.  All changes get logged.</p>
+            <hr/>
+            <span id="preselectedgroup" class="yui3-button-group-exclusive">
+                <button id="toggle11" class="yui3-button yui3-button-toggle">A</button>
+                <button id="toggle12" class="yui3-button yui3-button-toggle">B</button>
+                <button id="toggle13" class="yui3-button yui3-button-toggle yui3-button-selected">C</button>
+
+            </span>
+            <p>Mutually exclusive buttons, button C is preselected via existing markup.</p>
+            <hr/>
+            <select id="select">
+                <option>one</option>
+                <option>two</option>
+                <option>three</option>
+                <option>four</option>
+            </select>
+            <p>This is a plain dropdown whose options have a selected attribute which is handled normally 
+            and does not get messed up with that of the toggle buttons or button groups.
+            Initially the three label should show. The state of the selected option will be logged by showing an X
+            in the position of the one selected.</p>
+        </div>
+        <script type="text/javascript" src="../../../build/gallery-button-plugin/gallery-button-plugin.js"></script>
+        <script type="text/javascript" >
+            YUI({
+                filter:'raw'	
+                			
+            }).use('gallery-button-plugin','node','event','console', function (Y) {
+                "use strict";
+                
+                
+                new Y.Console().render();
+    
+                /*
+                 * usage examples below:
+                 */
+    
+                Y.ButtonPlugin.addToggles('#toolbar');
+                
+                var t1 = Y.one('#toggle0');
+                
+                t1.on('click', function (){
+                    Y.log('click on toggle, selected: '  + this.get('selected'));
+                });
+
+                Y.on('click', function() {
+                    Y.log('click on regular, selected ' + this.get('selected'));
+                },'#regular');
+                Y.log('before toggle, selected: ' + t1.get('selected'));
+                t1.set('selected',true);
+                Y.log('after toggle, selected: ' + t1.get('selected'));
+                
+                // Select the second button
+                Y.one('#group').set('selected','#toggle2');
+                
+                Y.delegate('click', function(ev) {
+                    var selected = ev.container.get('selected');
+                    Y.log('group click, selected: ' + (selected?selected.getContent():'none'));
+                },'#group', 'button.yui3-button-toggle');
+                
+                window.setTimeout(function() {
+                    // unselect it
+                    Y.one('#group').set('selected',null);
+                },3000);
+
+                Y.delegate('click', function(ev) {
+                    var selected = ev.container.get('selected');
+                    Y.log('group click, selected: ' + (selected?selected.getContent():'none'));
+                },'#preselectedgroup', 'button.yui3-button-toggle');
+                 
+                // This has no effect on the regular button 
+                Y.one('#regular').set('selected',true);
+                // The return is undefined
+                Y.log('regular button has no selected: ' + Y.one('#regular').get('selected'));
+                
+                // The regular 'selected' attribute works fine with other nodes
+                Y.one('#select').get('children').item(2).set('selected',true);
+                
+                Y.one('#select').on('change', function () {
+                    var sel = '';
+                    this.get('children').each(function(option) {
+                        sel += (option.get('selected')?'X':'-');
+                    });
+                    Y.log('regular select box changed: ' + sel);
+                });
+            });
+        </script>
+    </body>
+</html>
+
