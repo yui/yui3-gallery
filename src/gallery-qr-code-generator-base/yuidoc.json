@@ -1,0 +1,12 @@
+{
+    "name": "QR Code Generator Base",
+    "description": "",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}
