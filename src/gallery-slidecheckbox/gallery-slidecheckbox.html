@@ -4,7 +4,8 @@
 <style>
 .yui3-slidecheckbox-wrapper > .edge{background-color:#F5F5F5 !important;}
 </style>
-<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-debug.js"></script>
+<!--<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-debug.js"></script>-->
+<script src="http://yui.yahooapis.com/3.5.0pr4/build/yui/yui-debug.js"></script>
 <script>
 YUI({
 	base: './',
@@ -18,11 +19,13 @@ YUI({
 				type: 'css'
 			},
 			'gallery-slidecheckbox':{
-				fullpath:'../../build/gallery-slidecheckbox/gallery-slidecheckbox-debug.js',
+				//fullpath:'../../build/gallery-slidecheckbox/gallery-slidecheckbox-debug.js',
+				fullpath:'build_tmp/gallery-slidecheckbox-debug.js',
 				requires:['node-base','anim-base','anim-easing','base-build','event-key', 'node-style', 'gallery-makenode','dd-drag','dd-constrain','gallery-slidecheckbox-core-css','gallery-slidecheckbox-css','widget-position'],
 				skinnable:['sam','green','ios5','ios5-green']
 			}
 		},
+	//gallery:'gallery-2011.11.10-16-24',
 	skin:{
 		overrides:{
 			'gallery-slidecheckbox':['ios5']
@@ -33,19 +36,26 @@ YUI({
 ).use('gallery-slidecheckbox',function(Y){
 	var slide = new Y.SlideCheckbox({srcNode:'#c1'}),
 	slide2 = new Y.SlideCheckbox({srcNode:'#c2',strings:{labelOn: 'Pipo De Long',labelOff:'Clown text'}}),
-	slide3 = new Y.SlideCheckbox({srcNode:'#c3',strings:{labelOn: 'Yes',labelOff:'No'}}),
-	slide5 = new Y.SlideCheckbox({srcNode:'#c5',strings:{labelOn: 'Long text',labelOff:'Very long text'}}),
-	slide6 = new Y.SlideCheckbox({srcNode:'#c6',strings:{labelOn: 'Very long text',labelOff:'Long text'}});
+	slide3 = new Y.SlideCheckbox({srcNode:'#c3',strings:{labelOn: 'Yes',labelOff:'No'}});
+	
+	Y.all('.slidecheck1').each(function(node){
+		new Y.SlideCheckbox({srcNode:node,strings:{labelOn: 'Long text',labelOff:'Very long text'}}).render();
+	});
+	
 	slide.render();
 	slide2.render();
 	slide3.render();
-	slide5.render();
-	slide6.render();
+
+	Y.one('#a1').on('click',function(){
+		var c = Y.one('#c1');
+		c.set('checked',!c.get('checked'));	
+	});
 });
 function reset(){
 	var src = document.getElementById('c4');
 	src.checked = !src.checked;
 }
+
 </script>
 </head>
 <body style="background-color:#F5F5F5;">
@@ -53,11 +63,11 @@ function reset(){
 <div class="yui3-skin-ios5">
 <input type="checkbox" name="myCheck1" class="yesno" id="c1" class="slidecheck"><br/>
 <input type="checkbox" name="myCheck2" class="yesno" checked="CHECKED" id="c2" class="slidecheck"><br/>
-<input type="checkbox" name="myCheck3" class="yesno" CHECKED id="c5" class="slidecheck"><br/>
-<input type="checkbox" name="myCheck4" class="yesno" CHECKED id="c6" class="slidecheck"><br/>
-
+<input type="checkbox" name="myCheck3" class="yesno slidecheck1" CHECKED id="c5"><br/>
+<input type="checkbox" name="myCheck4" class="yesno slidecheck1" CHECKED id="c6"><br/>
 Disabled:<br/>
 <input type="checkbox" name="myCheck5" class="yesno" DISABLED id="c3" class="slidecheck"><br/>
+<a href="javascript:void(0);" id="a1">Change Slide Checkbox under the hood</a> - <a href="javascript:alert(document.getElementById('c1').checked);">Check value</a>
 </div>
 </form>
 
