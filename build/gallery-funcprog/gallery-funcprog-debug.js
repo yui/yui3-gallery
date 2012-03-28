@@ -185,4 +185,4 @@ Y.mix(Y,
 });
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['array-extras','gallery-object-extras'], optional:['gallery-nodelist-extras2']});
+}, 'gallery-2012.03.28-20-16' ,{requires:['oop','array-extras','gallery-object-extras'], optional:['gallery-nodelist-extras2']});

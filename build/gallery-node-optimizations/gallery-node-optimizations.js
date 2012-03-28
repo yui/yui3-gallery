@@ -129,7 +129,7 @@ Y.Node.prototype.getAncestorByTagName = function(
 	return Y.one(e);
 };
 
-/**********************************************************************
+/*
  * <p>Patch to speed up search for a single class name or single tag name.
  * To use a regular expression, call getElementsByClassName().</p>
  * 
@@ -137,11 +137,10 @@ Y.Node.prototype.getAncestorByTagName = function(
  * @param fn {String|Function} selector string or boolean method for testing elements
  * @return {Node}
  */
-
+/*
 var orig_one = Y.Node.prototype.one;
 
-Y.Node.prototype.one = function(
-	/* string */ selector)
+Y.Node.prototype.one = function(selector)
 {
 	if (Y.Lang.isString(selector))
 	{
@@ -164,8 +163,8 @@ Y.Node.prototype.one = function(
 
 	return orig_one.apply(this, arguments);
 };
-
-/**********************************************************************
+*/
+/*
  * <p>Patch to speed up search for a single class name or single tag name.
  * To use a regular expression, call getElementsByClassName().</p>
  * 
@@ -173,11 +172,10 @@ Y.Node.prototype.one = function(
  * @param fn {String|Function} selector string or boolean method for testing elements
  * @return {Node}
  */
-
+/*
 var orig_all = Y.Node.prototype.all;
 
-Y.Node.prototype.all = function(
-	/* string */ selector)
+Y.Node.prototype.all = function(selector)
 {
 	if (Y.Lang.isString(selector))
 	{
@@ -195,7 +193,7 @@ Y.Node.prototype.all = function(
 
 	return orig_all.apply(this, arguments);
 };
-
+*/
 /**********************************************************************
  * <p>Searches for descendants by class name.  Unlike Y.all(), this
  * function accepts a regular expression.</p>
@@ -283,4 +281,4 @@ Y.Node.prototype.getFirstElementByClassName = function(
 };
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['node-base']});
+}, 'gallery-2012.03.28-20-16' ,{requires:['node-base']});

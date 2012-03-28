@@ -69,7 +69,6 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 						position:'absolute',
 						top:node.getComputedStyle('height'),
 						width:menuDimensions[0],
-						opacity:1
 					});
 					// start transition
 					subMenu.transition({
@@ -251,4 +250,4 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 });
 
 
-}, 'gallery-2011.07.06-19-30' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
+}, 'gallery-2012.03.28-20-16' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
