@@ -364,6 +364,82 @@ var mode_regex          = /\bFIT_TO_[A-Z_]+/,
 	the_dd_nubs    = {};
 */
 
+function init()
+{
+	this.viewport =
+	{
+		w:   0,
+		h:   0,
+		bcw: 0
+	};
+
+	// find header, body, footer
+
+	var page_blocks = Y.one('body').get('children');
+
+	var list = page_blocks.filter('.'+PageLayout.page_header_class);
+	if (list.size() > 1)
+	{
+		throw Error('There must be at most one div with class ' + PageLayout.page_header_class);
+	}
+	this.header_container = (list.isEmpty() ? null : list.item(0));
+
+	list = page_blocks.filter('.'+PageLayout.page_body_class);
+	if (list.size() != 1)
+	{
+		throw Error('There must be exactly one div with class ' + PageLayout.page_body_class);
+	}
+	this.body_container = list.item(0);
+
+	this.body_horiz_mbp = this.body_container.horizMarginBorderPadding();
+	this.body_vert_mbp  = this.body_container.vertMarginBorderPadding();
+
+	var m = this.body_container.get('className').match(mode_regex);
+	if (m && m.length)
+	{
+		this.set('mode', PageLayout[ m[0] ]);
+	}
+
+	list = page_blocks.filter('.'+PageLayout.page_footer_class);
+	if (list.size() > 1)
+	{
+		throw Error('There must be at most one div with class ' + PageLayout.page_footer_class);
+	}
+	this.footer_container = (list.isEmpty() ? null : list.item(0));
+
+	Y.one(Y.config.win).on('resize', resize, this);
+
+	updateFitClass.call(this);
+	reparentFooter.call(this);
+	this.rescanBody();
+
+	// stay in sync
+
+	this.after('modeChange', function()
+	{
+		updateFitClass.call(this);
+
+		if (this.body_container)
+		{
+			this.body_container.scrollTop = 0;
+		}
+
+		reparentFooter.call(this);
+		resize.call(this);
+	});
+
+	this.after('minWidthChange', resize);
+	this.after('minHeightChange', resize);
+
+	this.after('stickyFooterChange', function()
+	{
+		reparentFooter.call(this);
+		resize.call(this);
+	});
+
+	this.after('matchColumnHeightsChange', resize);
+}
+
 /*
  * Normalize the list of sizes so they add up to 100%.
  */
@@ -549,7 +625,7 @@ function resize()
 		this.footer_container.setStyle('visibility', 'visible');
 	}
 
-	Y.Lang.later(100, this, checkViewportSize);
+	Y.later(100, this, checkViewportSize);
 }
 
 /*
@@ -645,79 +721,7 @@ Y.extend(PageLayout, Y.Base,
 {
 	initializer: function()
 	{
-		this.viewport =
-		{
-			w:   0,
-			h:   0,
-			bcw: 0
-		};
-
-		// find header, body, footer
-
-		var page_blocks = Y.one('body').get('children');
-
-		var list = page_blocks.filter('.'+PageLayout.page_header_class);
-		if (list.size() > 1)
-		{
-			throw Error('There must be at most one div with class ' + PageLayout.page_header_class);
-		}
-		this.header_container = (list.isEmpty() ? null : list.item(0));
-
-		list = page_blocks.filter('.'+PageLayout.page_body_class);
-		if (list.size() != 1)
-		{
-			throw Error('There must be exactly one div with class ' + PageLayout.page_body_class);
-		}
-		this.body_container = list.item(0);
-
-		this.body_horiz_mbp = this.body_container.horizMarginBorderPadding();
-		this.body_vert_mbp  = this.body_container.vertMarginBorderPadding();
-
-		var m = this.body_container.get('className').match(mode_regex);
-		if (m && m.length)
-		{
-			this.set('mode', PageLayout[ m[0] ]);
-		}
-
-		list = page_blocks.filter('.'+PageLayout.page_footer_class);
-		if (list.size() > 1)
-		{
-			throw Error('There must be at most one div with class ' + PageLayout.page_footer_class);
-		}
-		this.footer_container = (list.isEmpty() ? null : list.item(0));
-
-		Y.one(Y.config.win).on('resize', resize, this);
-//		SDom.textResizeEvent.subscribe(resize, null, this);
-
-		updateFitClass.call(this);
-		reparentFooter.call(this);
-		this.rescanBody();
-
-		// stay in sync
-
-		this.after('modeChange', function()
-		{
-			updateFitClass.call(this);
-
-			if (this.body_container)
-			{
-				this.body_container.scrollTop = 0;
-			}
-
-			reparentFooter.call(this);
-			resize.call(this);
-		});
-
-		this.after('minWidthChange', resize);
-		this.after('minHeightChange', resize);
-
-		this.after('stickyFooterChange', function()
-		{
-			reparentFooter.call(this);
-			resize.call(this);
-		});
-
-		this.after('matchColumnHeightsChange', resize);
+		Y.on('domready', init, this);
 	},
 
 	/**
@@ -1022,7 +1026,7 @@ Y.extend(PageLayout, Y.Base,
 		el = Y.one(el);
 
 		if ((this.header_container && this.header_container.contains(el)) ||
-			this.body_container.contains(el) ||
+			(this.body_container && this.body_container.contains(el)) ||
 			(this.footer_container && this.footer_container.contains(el)))
 		{
 			if (this.refresh_timer)
