@@ -67,7 +67,6 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 						position:'absolute',
 						top:node.getComputedStyle('height'),
 						width:menuDimensions[0],
-						opacity:1
 					});
 					// start transition
 					subMenu.transition({
