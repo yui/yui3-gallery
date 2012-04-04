@@ -50,7 +50,7 @@ Treeble.buildTwistdownFormatter = function(sendRequest)
 				ds.toggle(path, {}, sendRequest);
 			});
 
-			o.cell.set('innerHTML', '<a class="treeble-collapse-nub" href="javascript:void(0);"></a>');
+			o.cell.set('innerHTML', '<a class="treeble-expand-nub" href="javascript:void(0);"></a>');
 		}
 
 		return true;	// keep the Y.Node instances
