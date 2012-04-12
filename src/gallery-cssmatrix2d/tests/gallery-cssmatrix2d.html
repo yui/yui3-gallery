@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            CSSMatrix2d Tests
+        </title>
+        <script src="http://yui.yahooapis.com/3.5.0pre5/build/yui/yui-min.js">
+        </script>
+        <style type="text/css">
+            #console .yui3-console-entry {
+                padding: 2px;
+                margin: 0;
+                min-height: 0;
+            }
+
+            #console .yui3-console-entry-fail .yui3-console-entry-cat {
+                background-color: red;
+            }
+
+            #console .yui3-console-entry-pass .yui3-console-entry-cat {
+                background-color: green;
+            }
+
+            #console .yui3-console-entry-perf .yui3-console-entry-cat {
+                background-color: blue;
+            }
+
+            #console {
+                position: static;
+            }
+
+            html, body {
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="testbed" class="yui3-skin-foo">
+        </div>
+        <p>
+            <button id="runButton" type="button">
+                Run Tests
+            </button>
+        </p>
+        <script>
+            YUI({
+                useBrowserConsole:false,
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'min',
+                modules: {
+                    'gallery-cssmatrix2d': {
+                        fullpath: '../../../build/gallery-cssmatrix2d/gallery-cssmatrix2d-min.js',
+                        requires: [
+                            'yui'
+                        ]
+                    }
+                }
+            }).use('console', 'test', 'gallery-cssmatrix2d', function (Y) {
+                'use strict';
+                
+                var assert = Y.Assert,
+                    assertAreSame = assert.areSame,
+                    assertIsObject = assert.isObject,
+                    console,
+                    runButtonNode = Y.one('#runButton'),
+                    matrixStringA = 'matrix(75.494772, 23.153692, -14.6913742, -20.620151, -98.468445, -51.235547)',
+                    matrixStringB = 'matrix(-43.425083, 44.8555788, 48.791271, -87.6294, -11.1900331, -19.602279)',
+                    test = Y.Test,
+                    testRunner = test.Runner,
+                    testSuite = new test.Suite('Async Command Tests'),
+                    
+                    assertAreNear = function (a, b) {
+                        assertAreSame(Math.abs(a - b) < 0.0001, true);
+                    };
+                    
+                if (!runButtonNode) {
+                    return;
+                }
+
+                testSuite.add(new test.Case({
+                    name: 'Async Command Tests',
+                    'test:01-instantiate': function () {
+                        var matrix = new Y.CSSMatrix2d();
+                        
+                        assertIsObject(matrix);
+                        assertAreSame(matrix instanceof Y.CSSMatrix2d, true);
+                    },
+                    'test:02-defaultValues': function () {
+                        var matrix = new Y.CSSMatrix2d();
+                        
+                        assertAreSame(matrix.a, 1);
+                        assertAreSame(matrix.b, 0);
+                        assertAreSame(matrix.c, 0);
+                        assertAreSame(matrix.d, 1);
+                        assertAreSame(matrix.e, 0);
+                        assertAreSame(matrix.f, 0);
+                    },
+                    'test:03-toStringWithDefaults': function () {
+                        var matrix = new Y.CSSMatrix2d();
+                        
+                        assertAreSame(matrix.toString(), 'matrix(1, 0, 0, 1, 0, 0)');
+                    },
+                    'test:04-setMatrixValueA': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                    },
+                    'test:05-setMatrixValueB': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                    },
+                    'test:06-setMatrixValueToStringA': function () {
+                        assertAreSame(new Y.CSSMatrix2d().setMatrixValue(matrixStringA).toString(), matrixStringA);
+                    },
+                    'test:07-setMatrixValueToStringB': function () {
+                        assertAreSame(new Y.CSSMatrix2d().setMatrixValue(matrixStringB).toString(), matrixStringB);
+                    },
+                    'test:08-inverseA': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            
+                            inverse = matrixA.inverse();
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreSame(inverse.a, 0.0169496382701715);
+                        assertAreSame(inverse.b, 0.019032193509104938);
+                        assertAreSame(inverse.c, -0.012076219925922473);
+                        assertAreSame(inverse.d, -0.062056241813606104);
+                        assertAreSame(inverse.e, 1.0502727901793403);
+                        assertAreSame(inverse.f, -1.305414994303724);
+                    },
+                    'test:09-inverseB': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            
+                            inverse = matrixB.inverse();
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreSame(inverse.a, -0.05420084918375052);
+                        assertAreSame(inverse.b, -0.027744232661511287);
+                        assertAreSame(inverse.c, -0.030178551045134398);
+                        assertAreSame(inverse.d, -0.026859437294730403);
+                        assertAreSame(inverse.e, -1.1980776738167425);
+                        assertAreSame(inverse.f, -0.836965065450723);
+                    },
+                    'test:10-inverseFailure': function () {
+                        var failure = 'inverse should throw when the matrix is not inversable.';
+                        
+                        try {
+                            new Y.CSSMatrix().inverse();
+                        } catch (exception) {
+                            failure = null;
+                        }
+                        
+                        if (failure) {
+                            throw failure;
+                        }
+                    },
+                    'test:11-A*B': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            
+                            product = matrixA.multiply(matrixB);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreSame(product.a, -3937.356833274463);
+                        assertAreSame(product.b, -1930.3798049048348);
+                        assertAreSame(product.c, 4970.882186056692);
+                        assertAreSame(product.d, 2936.629521061932);
+                        assertAreSame(product.e, -655.2730265951515);
+                        assertAreSame(product.f, 93.87582605692376);
+                    },
+                    'test:12-B*A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            
+                            product = matrixB.multiply(matrixA);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreSame(product.a, -2148.668679143544);
+                        assertAreSame(product.b, 1357.4175566892338);
+                        assertAreSame(product.c, -368.10923148286247);
+                        assertAreSame(product.d, 1147.941366931013);
+                        assertAreSame(product.e, 1764.9629053956985);
+                        assertAreSame(product.f, 53.27886927083337);
+                    },
+                    'test:13-rotateClockwise40A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            rotated = matrixA.rotate(40);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(rotated.a, 48.388917);
+                        assertAreNear(rotated.b, 4.48238);
+                        assertAreNear(rotated.c, -59.78135);
+                        assertAreNear(rotated.d, -30.678858);
+                        assertAreNear(rotated.e, -98.468445);
+                        assertAreNear(rotated.f, -51.235547);
+                    },
+                    'test:14-rotateClockwise40B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            rotated = matrixB.rotate(40);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(rotated.a, -1.903119);
+                        assertAreNear(rotated.b, -21.965726);
+                        assertAreNear(rotated.c, 65.289387);
+                        assertAreNear(rotated.d, -95.960625);
+                        assertAreNear(rotated.e, -11.190033);
+                        assertAreNear(rotated.f, -19.602279);
+                    },
+                    'test:15-rotateClockwise320A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            rotated = matrixA.rotate(320);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(rotated.a, 67.275784);
+                        assertAreNear(rotated.b, 30.991135);
+                        assertAreNear(rotated.c, 37.272858);
+                        assertAreNear(rotated.d, -0.913046);
+                        assertAreNear(rotated.e, -98.468445);
+                        assertAreNear(rotated.f, -51.235547);
+                    },
+                    'test:16-rotateClockwise320B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            rotated = matrixB.rotate(320);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(rotated.a, -64.627968);
+                        assertAreNear(rotated.b, 90.688459);
+                        assertAreNear(rotated.c, 9.463177);
+                        assertAreNear(rotated.d, -38.295405);
+                        assertAreNear(rotated.e, -11.190033);
+                        assertAreNear(rotated.f, -19.602279);
+                    },
+                    'test:17-rotateCounterClockwise40A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            rotated = matrixA.rotate(-40);
+                            
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(rotated.a, 67.275784);
+                        assertAreNear(rotated.b, 30.991135);
+                        assertAreNear(rotated.c, 37.272858);
+                        assertAreNear(rotated.d, -0.913046);
+                        assertAreNear(rotated.e, -98.468445);
+                        assertAreNear(rotated.f, -51.235547);
+                    },
+                    'test:18-rotateCounterClockwise40B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            rotated = matrixB.rotate(-40);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(rotated.a, -64.627968);
+                        assertAreNear(rotated.b, 90.688459);
+                        assertAreNear(rotated.c, 9.463177);
+                        assertAreNear(rotated.d, -38.295405);
+                        assertAreNear(rotated.e, -11.190033);
+                        assertAreNear(rotated.f, -19.602279);
+                    },
+                    'test:19-rotateCounterClockwise320A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            rotated = matrixA.rotate(-320);
+                            
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(rotated.a, 48.388917);
+                        assertAreNear(rotated.b, 4.48238);
+                        assertAreNear(rotated.c, -59.78135);
+                        assertAreNear(rotated.d, -30.678858);
+                        assertAreNear(rotated.e, -98.468445);
+                        assertAreNear(rotated.f, -51.235547);
+                    },
+                    'test:20-rotateCounterClockwise320B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            rotated = matrixB.rotate(-320);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(rotated.a, -1.903119);
+                        assertAreNear(rotated.b, -21.965726);
+                        assertAreNear(rotated.c, 65.289387);
+                        assertAreNear(rotated.d, -95.960625);
+                        assertAreNear(rotated.e, -11.190033);
+                        assertAreNear(rotated.f, -19.602279);
+                    },
+                    'test:21-scale5A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(5);
+                            
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, 377.47386);
+                        assertAreNear(scaled.b, 115.76846);
+                        assertAreNear(scaled.c, -73.456871);
+                        assertAreNear(scaled.d, -103.100755);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:22-scale5B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(5);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, -217.125415);
+                        assertAreNear(scaled.b, 224.277894);
+                        assertAreNear(scaled.c, 243.956355);
+                        assertAreNear(scaled.d, -438.147);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:23-scale.2A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(.2);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, 15.098954);
+                        assertAreNear(scaled.b, 4.630738);
+                        assertAreNear(scaled.c, -2.938275);
+                        assertAreNear(scaled.d, -4.12403);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:24-scale.2B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(.2);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, -8.685017);
+                        assertAreNear(scaled.b, 8.971116);
+                        assertAreNear(scaled.c, 9.758254);
+                        assertAreNear(scaled.d, -17.52588);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:25-scale-5A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(-5);
+                            
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, -377.47386);
+                        assertAreNear(scaled.b, -115.76846);
+                        assertAreNear(scaled.c, 73.456871);
+                        assertAreNear(scaled.d, 103.100755);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:26-scale-5B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(-5);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, 217.125415);
+                        assertAreNear(scaled.b, -224.277894);
+                        assertAreNear(scaled.c, -243.956355);
+                        assertAreNear(scaled.d, 438.147);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:27-scale-.2A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(-.2);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, -15.098954);
+                        assertAreNear(scaled.b, -4.630738);
+                        assertAreNear(scaled.c, 2.938275);
+                        assertAreNear(scaled.d, 4.12403);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:28-scale-.2B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(-.2);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, 8.685017);
+                        assertAreNear(scaled.b, -8.971116);
+                        assertAreNear(scaled.c, -9.758254);
+                        assertAreNear(scaled.d, 17.52588);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:29-scale5,.2A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(5, .2);
+                            
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, 377.47386);
+                        assertAreNear(scaled.b, 115.76846);
+                        assertAreNear(scaled.c, -2.938275);
+                        assertAreNear(scaled.d, -4.12403);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:30-scale5,.2B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(5, .2);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, -217.125415);
+                        assertAreNear(scaled.b, 224.277894);
+                        assertAreNear(scaled.c, 9.758254);
+                        assertAreNear(scaled.d, -17.52588);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:31-scale.2,5A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(.2, 5);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, 15.098954);
+                        assertAreNear(scaled.b, 4.630738);
+                        assertAreNear(scaled.c, -73.456871);
+                        assertAreNear(scaled.d, -103.100755);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:32-scale.2,5B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(.2, 5);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, -8.685017);
+                        assertAreNear(scaled.b, 8.971116);
+                        assertAreNear(scaled.c, 243.956355);
+                        assertAreNear(scaled.d, -438.147);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:33-scale-5,-.2A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(-5, -.2);
+                            
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, -377.47386);
+                        assertAreNear(scaled.b, -115.76846);
+                        assertAreNear(scaled.c, 2.938275);
+                        assertAreNear(scaled.d, 4.12403);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:34-scale-5,-.2B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(-5, -.2);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, 217.125415);
+                        assertAreNear(scaled.b, -224.277894);
+                        assertAreNear(scaled.c, -9.758254);
+                        assertAreNear(scaled.d, 17.52588);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:35-scale-.2,-5A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            scaled = matrixA.scale(-.2, -5);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(scaled.a, -15.098954);
+                        assertAreNear(scaled.b, -4.630738);
+                        assertAreNear(scaled.c, 73.456871);
+                        assertAreNear(scaled.d, 103.100755);
+                        assertAreNear(scaled.e, -98.468445);
+                        assertAreNear(scaled.f, -51.235547);
+                    },
+                    'test:36-scale-.2,-5B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            scaled = matrixB.scale(-.2, -5);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(scaled.a, 8.685017);
+                        assertAreNear(scaled.b, -8.971116);
+                        assertAreNear(scaled.c, -243.956355);
+                        assertAreNear(scaled.d, 438.147);
+                        assertAreNear(scaled.e, -11.190033);
+                        assertAreNear(scaled.f, -19.602279);
+                    },
+                    'test:37-skewX40A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewX(40);
+                            
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 75.494772);
+                        assertAreNear(skewed.b, 23.153692);
+                        assertAreNear(skewed.c, 48.656261);
+                        assertAreNear(skewed.d, -1.191897);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:38-skewX40B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewX(40);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -43.425083);
+                        assertAreNear(skewed.b, 44.855579);
+                        assertAreNear(skewed.c, 12.3533);
+                        assertAreNear(skewed.d, -49.9911);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:39-skewX320A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewX(320);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 75.494772);
+                        assertAreNear(skewed.b, 23.153692);
+                        assertAreNear(skewed.c, -78.03901);
+                        assertAreNear(skewed.d, -40.048405);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:40-skewX320B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewX(320);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -43.425083);
+                        assertAreNear(skewed.b, 44.855579);
+                        assertAreNear(skewed.c, 85.229242);
+                        assertAreNear(skewed.d, -125.2677);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:41-skewX-40A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewX(-40);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 75.494772);
+                        assertAreNear(skewed.b, 23.153692);
+                        assertAreNear(skewed.c, -78.03901);
+                        assertAreNear(skewed.d, -40.048405);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:42-skewX-40B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewX(-40);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -43.425083);
+                        assertAreNear(skewed.b, 44.855579);
+                        assertAreNear(skewed.c, 85.229242);
+                        assertAreNear(skewed.d, -125.2677);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:43-skewX-320A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewX(-320);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 75.494772);
+                        assertAreNear(skewed.b, 23.153692);
+                        assertAreNear(skewed.c, 48.656261);
+                        assertAreNear(skewed.d, -1.191897);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:44-skewX-320B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewX(-320);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -43.425083);
+                        assertAreNear(skewed.b, 44.855579);
+                        assertAreNear(skewed.c, 12.3533);
+                        assertAreNear(skewed.d, -49.9911);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:45-skewY40A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewY(40);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 63.167245);
+                        assertAreNear(skewed.b, 5.851331);
+                        assertAreNear(skewed.c, -14.691374);
+                        assertAreNear(skewed.d, -20.620151);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:46-skewY40B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewY(40);
+                            
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -2.484345);
+                        assertAreNear(skewed.b, -28.674218);
+                        assertAreNear(skewed.c, 48.791271);
+                        assertAreNear(skewed.d, -87.6294);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:47-skewY320A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewY(320);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 87.822299);
+                        assertAreNear(skewed.b, 40.456053);
+                        assertAreNear(skewed.c, -14.691374);
+                        assertAreNear(skewed.d, -20.620151);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:48-skewY320B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewY(320);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -84.365821);
+                        assertAreNear(skewed.b, 118.385376);
+                        assertAreNear(skewed.c, 48.791271);
+                        assertAreNear(skewed.d, -87.6294);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:49-skewY-40A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewY(-40);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 87.822299);
+                        assertAreNear(skewed.b, 40.456053);
+                        assertAreNear(skewed.c, -14.691374);
+                        assertAreNear(skewed.d, -20.620151);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:50-skewY-40B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewY(-40);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -84.365821);
+                        assertAreNear(skewed.b, 118.385376);
+                        assertAreNear(skewed.c, 48.791271);
+                        assertAreNear(skewed.d, -87.6294);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:51-skewY-320A': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            skewed = matrixA.skewY(-320);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(skewed.a, 63.167245);
+                        assertAreNear(skewed.b, 5.851331);
+                        assertAreNear(skewed.c, -14.691374);
+                        assertAreNear(skewed.d, -20.620151);
+                        assertAreNear(skewed.e, -98.468445);
+                        assertAreNear(skewed.f, -51.235547);
+                    },
+                    'test:52-skewY-320B': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            skewed = matrixB.skewY(-320);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(skewed.a, -2.484345);
+                        assertAreNear(skewed.b, -28.674218);
+                        assertAreNear(skewed.c, 48.791271);
+                        assertAreNear(skewed.d, -87.6294);
+                        assertAreNear(skewed.e, -11.190033);
+                        assertAreNear(skewed.f, -19.602279);
+                    },
+                    'test:53-translateA': function () {
+                        var matrixA = new Y.CSSMatrix2d().setMatrixValue(matrixStringA),
+                            translated = matrixA.translate(123.456, -789.012);
+                        
+                        assertAreSame(matrixA.a, 75.494772);
+                        assertAreSame(matrixA.b, 23.153692);
+                        assertAreSame(matrixA.c, -14.6913742);
+                        assertAreSame(matrixA.d, -20.620151);
+                        assertAreSame(matrixA.e, -98.468445);
+                        assertAreSame(matrixA.f, -51.235547);
+                        
+                        assertAreNear(translated.a, 75.494772);
+                        assertAreNear(translated.b, 23.153692);
+                        assertAreNear(translated.c, -14.691374);
+                        assertAreNear(translated.d, -20.620151);
+                        assertAreNear(translated.e, 20813.484667);
+                        assertAreNear(translated.f, 19076.773233);
+                    },
+                    'test:54-translateB': function () {
+                        var matrixB = new Y.CSSMatrix2d().setMatrixValue(matrixStringB),
+                            translated = matrixB.translate(123.456, -789.012);
+                        
+                        assertAreSame(matrixB.a, -43.425083);
+                        assertAreSame(matrixB.b, 44.8555788);
+                        assertAreSame(matrixB.c, 48.791271);
+                        assertAreSame(matrixB.d, -87.6294);
+                        assertAreSame(matrixB.e, -11.1900331);
+                        assertAreSame(matrixB.f, -19.602279);
+                        
+                        assertAreNear(translated.a, -43.425083);
+                        assertAreNear(translated.b, 44.855579);
+                        assertAreNear(translated.c, 48.791271);
+                        assertAreNear(translated.d, -87.6294);
+                        assertAreNear(translated.e, -43869.175394);
+                        assertAreNear(translated.f, 74658.73621);
+                    }
+                }));
+
+                testRunner.setName('CSSMatrix2d Tests');
+                testRunner.add(testSuite);
+                testRunner.enableLogging();
+
+                runButtonNode.on('click', function() {
+                    if (!console) {
+                        console = new Y.Console({
+                            entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">' +
+                                '<span class="{entry_cat_class}">' +
+                                    '{label}' +
+                                '</span>' +
+                                '<span class="{entry_content_class}">' +
+                                    '{message}' +
+                                '</span>' +
+                            '</pre>',
+                            height: '90%',
+                            id: 'console',
+                            newestOnTop: false,
+                            printTimeout: 0,
+                            verbose: false,
+                            width: '100%'
+                        }).render();
+                    }
+                    
+                    testRunner.run();
+                });
+            });
+        </script>
+    </body>
+</html>
