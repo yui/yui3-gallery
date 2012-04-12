@@ -7,7 +7,9 @@ YUI.add('gallery-neon', function(Y) {
  * sign.</p>
  * 
  * @module gallery-neon
- * @class Y.Plugin.Neon
+ * @namespace Plugin
+ * @class Neon
+ * @extends Plugin.Base
  * @constructor
  * @param config {Object} configuration
  */
@@ -154,7 +156,14 @@ Y.extend(Neon, Y.Plugin.Base,
 {
 	initializer: function(config)
 	{
-		this.get('host').show = show;
+		var host       = this.get('host');
+		this.orig_show = host.show;
+		host.show      = show;
+	},
+
+	destructor: function()
+	{
+		this.get('host').show = this.orig_show;
 	}
 });
 
@@ -162,4 +171,4 @@ Y.namespace("Plugin");
 Y.Plugin.Neon = Neon;
 
 
-}, 'gallery-2011.02.23-19-01' ,{requires:['node-style','node-pluginhost','anim-easing','plugin']});
+}, 'gallery-2012.04.12-13-50' ,{requires:['node-style','node-pluginhost','anim-easing','plugin']});

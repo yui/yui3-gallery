@@ -9,7 +9,7 @@ YUI.add('gallery-datatable-row-expansion', function(Y) {
  *
  * @module gallery-datatable-row-expansion
  * @namespace Plugin
- * @class RowExpansion
+ * @class DataTableRowExpansion
  * @extends Plugin.Base
  * @constructor
  * @param config {Object} configuration
@@ -165,6 +165,32 @@ var shift_map =
 	previous: [ 0, -1]
 };
 
+/*
+Returns the `<td>` Node from the given row and column index.  Alternately,
+the `seed` can be a Node.  If so, the nearest ancestor cell is returned.
+If the `seed` is a cell, it is returned.  If there is no cell at the given
+coordinates, `null` is returned.
+
+Optionally, include an offset array or string to return a cell near the
+cell identified by the `seed`.  The offset can be an array containing the
+number of rows to shift followed by the number of columns to shift, or one
+of "above", "below", "next", or "previous".
+
+<pre><code>// Previous cell in the previous row
+var cell = table.getCell(e.target, [-1, -1]);
+
+// Next cell
+var cell = table.getCell(e.target, 'next');
+var cell = table.getCell(e.taregt, [0, 1];</pre></code>
+
+@method getCell
+@param {Number[]|Node} seed Array of row and column indexes, or a Node that
+   is either the cell itself or a descendant of one.
+@param {Number[]|String} [shift] Offset by which to identify the returned
+   cell Node
+@return {Node}
+@since 3.5.0
+**/
 function getCell(seed, shift)
 {
 	var tbody = this.get('container'),
@@ -239,16 +265,54 @@ function getCell(seed, shift)
 	return (cell || null);
 }
 
-function replaceGetCell()
+/*
+Returns the `<tr>` Node from the given row index, Model, or Model's
+`clientId`.  If the rows haven't been rendered yet, or if the row can't be
+found by the input, `null` is returned.
+
+@method getRow
+@param {Number|String|Model} id Row index, Model instance, or clientId
+@return {Node}
+@since 3.5.0
+**/
+function getRow(id)
 {
-	var table = this.get('host');
-	if (!(table.body instanceof Y.DataTable.BodyView) ||
-		table.body.getCell === getCell)
+	var tbody = this.get('container') || null;
+
+	if (id)
 	{
-		return;
+		id = this._idMap[id.get ? id.get('clientId') : id] || id;
 	}
 
-	table.body.getCell = getCell;
+	return tbody &&
+		Y.one(Y.Lang.isNumber(id) ? this.getCell([id,0]).ancestor() : '#' + id);
+}
+
+function replaceGetters()
+{
+	var body = this.get('host').body;
+	if (body instanceof Y.DataTable.BodyView)
+	{
+		this.orig_getCell = body.getCell;
+		this.orig_getRow  = body.getRow;
+
+		body.getCell = getCell;
+		body.getRow  = getRow;
+	}
+}
+
+function restoreGetters()
+{
+	var body = this.get('host').body;
+	if (this.orig_getCell)
+	{
+		body.getCell = this.orig_getCell;
+	}
+
+	if (this.orig_getRow)
+	{
+		body.getRow = this.orig_getRow;
+	}
 }
 
 Y.extend(RowExpansion, Y.Plugin.Base,
@@ -264,12 +328,17 @@ Y.extend(RowExpansion, Y.Plugin.Base,
 		analyzeColumns.call(this);
 		this.afterHostEvent('columnsChange', analyzeColumns);
 
-		this.afterHostEvent('renderTable', replaceGetCell);
+		this.afterHostEvent('renderTable', replaceGetters);
+	},
+
+	destructor: function()
+	{
+		restoreGetters.call(this);
 	}
 });
 
 Y.namespace("Plugin");
-Y.Plugin.RowExpansion = RowExpansion;
+Y.Plugin.DataTableRowExpansion = RowExpansion;
 
 
-}, 'gallery-2012.04.10-14-57' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations','gallery-math']});
+}, 'gallery-2012.04.12-13-50' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations','gallery-math'], skinnable:true});
