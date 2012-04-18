@@ -1118,7 +1118,6 @@ ModelRelate.prototype = {
             var relName = o[RELS];
             
             if (relName) {
-                console.log('removing relationship', relName);
                 this.removeRelationship(relName);
             }
 
@@ -1142,4 +1141,4 @@ ModelRelate.prototype = {
 Y.ModelRelate = ModelRelate;
 
 
-}, 'gallery-2012.04.12-13-50' ,{requires:['base', 'event-custom', 'array-extras', 'model-list', 'gallery-model-store']});
+}, 'gallery-2012.04.18-20-14' ,{requires:['base', 'event-custom', 'array-extras', 'model-list', 'gallery-model-store']});

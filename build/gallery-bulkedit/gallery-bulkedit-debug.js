@@ -2172,16 +2172,7 @@ Y.extend(BulkEditor, Y.Widget,
 
 function cleanHTML(s)
 {
-	if (!s)
-	{
-		return '';
-	}
-
-	return s.toString()
-			.replace(/<\/?script>/ig, '')
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;');
+	return (s ? Y.Escape.html(s) : '');
 }
 
 BulkEditor.error_msg_markup = Y.Lang.sub('<div class="{c}"></div>',
@@ -2641,4 +2632,4 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 Y.HTMLTableBulkEditor = HTMLTableBulkEditor;
 
 
-}, 'gallery-2012.03.23-18-00' ,{skinnable:true, optional:['datasource','dataschema','gallery-paginator'], requires:['widget','datasource-local','gallery-busyoverlay','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-scrollintoview','array-extras','gallery-object-extras']});
+}, 'gallery-2012.04.18-20-14' ,{skinnable:true, optional:['datasource','dataschema','gallery-paginator'], requires:['widget','datasource-local','gallery-busyoverlay','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-scrollintoview','array-extras','gallery-funcprog','escape']});
