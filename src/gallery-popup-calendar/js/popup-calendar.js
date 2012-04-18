@@ -8,168 +8,198 @@
  */
 
 var INPUT = 'input',
-	TABINDEX = "tabindex";
+    TABINDEX = "tabindex";
 
 Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition, Y.WidgetPositionAlign, Y.WidgetAutohide], {
 
-	/*
-	 * Adds tabindex to input elements if flag is set
-	 *
-	 * @method initializer
-	 * @private
-	 */
-	initializer: function() {
-		Y.log('initializer', 'info', this.name);
+    /*
+     * Adds tabindex to input elements if flag is set
+     *
+     * @method initializer
+     * @private
+     */
+    initializer: function() {
+        Y.log('initializer', 'info', this.name);
 
-		this._bindEvents();
+        this._bindEvents();
+        this.setHideOn();
 
-		if(this.get('autoTabIndexFormElements')) {
-			this.get(INPUT).ancestor('form').all(INPUT).setAttribute(TABINDEX, '1');
-		}			
-	},
+        this.set('tabIndex', 0);
 
-	/*
-	 * Detaches all events added to the input node
-	 *
-	 * @method destructor
-	 * @private
-	 */
-	destructor: function() {
-		Y.log('destructor', 'info', this.name);
+        if(this.get('autoTabIndexFormElements')) {
+            this.get(INPUT).ancestor('form').all(INPUT).setAttribute(TABINDEX, '1');
+        }           
+    },
 
-		this.get(INPUT).detachAll();
-	},		
+    /*
+     * Binds events used by the module 
+     *
+     * @method _bindEvents
+     * @private
+     */
+    _bindEvents: function() {
+        Y.log('_bindEvents', 'info', this.name);
 
-	/*
-	 * Binds events used by the module 
-	 *
-	 * @method _bindEvents
-	 * @private
-	 */
-	_bindEvents: function() {
-		Y.log('_bindEvents', 'info', this.name);
+        var input = this.get(INPUT);
 
-		var input = this.get(INPUT);
+        input.on('focus', this.showCalendar, this);
+        input.on('keydown', this.testKey, this);
+        this.on('selectionChange', this._emitDate, this);
+        this.after('autoFocusOnFieldFocusChange', this.setHideOn, this);
+    },
 
-		input.on('focus', this.showCalendar, this);
-		input.on('keydown', this.testKey, this);
-		this.on('selectionChange', this._emitDate, this);
-	},
 
-	/*
-	 * Sets correct tabindex on popup calendar
-	 *
-	 * @method _setPopupTabindex
-	 * @private
-	 */
-	_setPopupTabindex: function() {
-		Y.log('_setPopupTabindex', 'info', this.name);
+    /*
+     * Sets correct tabindex on popup calendar
+     *
+     * @method _setPopupTabindex
+     * @private
+     */
+    _setPopupTabindex: function() {
+        Y.log('_setPopupTabindex', 'info', this.name);
 
-		var input = this.get(INPUT),
-			inputTabIndex = input.getAttribute(TABINDEX);
+        var input = this.get(INPUT),
+            inputTabIndex = input.getAttribute(TABINDEX);
 
-		this.get(INPUT).insert(this.get('boundingBox'), 'after');
+        this.get(INPUT).insert(this.get('boundingBox'), 'after');
 
-		if (inputTabIndex === "") { inputTabIndex = "0"; }
-		this.get('contentBox').setAttribute(TABINDEX, inputTabIndex);
-	},
+        if (inputTabIndex === "") { inputTabIndex = "0"; }
+        this.get('boundingBox').setAttribute(TABINDEX, inputTabIndex);
+    },
 
-	/*
-	 * Emits the selected date event
-	 *
-	 * @method _emitDate
-	 * @param e {object} selectionChange event object from Calendar
-	 * @private
-	 */
-	_emitDate: function(e) {
-		Y.log('emitDate', 'info', this.name);
+    /*
+     * Emits the selected date event
+     *
+     * @method _emitDate
+     * @param e {object} selectionChange event object from Calendar
+     * @private
+     */
+    _emitDate: function(e) {
+        Y.log('_emitDate', 'info', this.name);
 
-		this.fire('dateSelected', e);
-		this.hideCalendar();
-	},
+        this.fire('dateSelected', e);
+        this.hideCalendar();
+    },
 
-	/*
-	 * Tests the keycode on keydown to determine when to hide the calendar
-	 *
-	 * @method _testKey
-	 * @param e {object} keydown event from the input
-	 * @private
-	 */
-	_testKey: function(e) {
-		if (e.keyCode === 9) { this.hideCalendar(); }
-	},		
+    /*
+     * Tests the keycode on keydown to determine when to hide the calendar
+     *
+     * @method _testKey
+     * @param e {object} keydown event from the input
+     * @private
+     */
+    _testKey: function(e) {
+        Y.log('_testKey', 'info', this.name);
 
-	/*
-	 * Shows or renders the calendar
-	 *
-	 * @method showCalendar
-	 * @public
-	 */
-	showCalendar: function() {
-		Y.log('showCalendar', 'info', this.name);
+        if (e.keyCode === 9) { this.hideCalendar(); }
+    },     
 
-		if (this.get('rendered')) {
-			this.show() 
-		} else {
-			this.render();
-			this._setPopupTabindex();
-		}
+    /*
+     * Detaches all events added to the input node
+     *
+     * @method destructor
+     * @private
+     */
+    destructor: function() {
+        Y.log('destructor', 'info', this.name);
 
-		if (this.get('autoFocusOnFieldFocus')) { this.focus(); }
-	},
+        this.get(INPUT).detachAll();
+    },
 
-	/*
-	 * Hides the calendar - does not remove from dom.
-	 *
-	 * @method hideCalendar
-	 * @public
-	 */
-	hideCalendar: function() {
-		Y.log('hideCalendar', 'info', this.name);
+    /*
+     * Depending on the nagivation method we hide on
+     * different events for cross browser compatibility
+     *
+     * @method _setHideOn
+     * @public
+     */
+    setHideOn: function() {
+        Y.log('_setHideOn', 'info', this.name);
+        var hideEvents = [
+            { eventName: 'mousedownoutside' },
+            { eventName: 'key', node: Y.one('document'), keyCode: 'esc'}
+        ];
 
-		this.hide();
-	}
+        if (this.get('autoFocusOnFieldFocus')) {
+            hideEvents.push({ eventName: 'keyupoutside'});
+        } else {
+            hideEvents.push({ eventName: 'keydownoutside'});
+        }
+
+        this.set('hideOn', hideEvents);
+    },      
+
+    /*
+     * Shows or renders the calendar
+     *
+     * @method showCalendar
+     * @public
+     */
+    showCalendar: function() {
+        Y.log('showCalendar', 'info', this.name);
+
+        if (this.get('rendered')) {
+            this.show() 
+        } else {
+            this.render();
+            this._setPopupTabindex();
+        }
+
+        if (this.get('autoFocusOnFieldFocus')) { this.focus(); }
+    },
+
+    /*
+     * Hides the calendar - does not remove from dom.
+     *
+     * @method hideCalendar
+     * @public
+     */
+    hideCalendar: function() {
+        Y.log('hideCalendar', 'info', this.name);
+
+        this.hide();
+    }
 
 } , {
-	ATTRS: {
+    ATTRS: {
 
-		/*
-		 * Y.Node object of the input node
-		 *
-		 * @attribute input
-		 * @type Y.Node
-		 * @default null
-		 * @public
-		 */
-		input: {
-			value: null
-		},
+        /*
+         * Y.Node object of the input node
+         *
+         * @attribute input
+         * @type Y.Node
+         * @default null
+         * @public
+         */
+        input: {
+            value: null
+        },
 
-		/*
-		 * If the user is to autofocus on the calendar
-		 * when they enter the input box
-		 *
-		 * @attribute autoFocusOnFieldFocus
-		 * @type bool
-		 * @default true
-		 * @public
-		 */
-		autoFocusOnFieldFocus: {
-			value: true
-		},
+        /*
+         * If the user is to autofocus on the calendar
+         * when they enter the input box
+         *
+         * @attribute autoFocusOnFieldFocus
+         * @type bool
+         * @default false
+         * @public
+         */
+        autoFocusOnFieldFocus: {
+            value: false
+        },
 
-		/*
-		 * Automatically sets all of the input fields in 
-		 * the form to 1 for keyboard navigation cross browser
-		 * when the developer forgets to do it manually
-		 *
-		 * @attribute autoTabIndexFormElements
-		 * @type bool
-		 * @default true
-		 * @public
-		 */
-		autoTabIndexFormElements: {
-			value: true
-		}
-	}
+        /*
+         * Automatically sets all of the input fields in 
+         * the form to 1 for keyboard navigation cross browser
+         * when the developer forgets to do it manually
+         *
+         * @attribute autoTabIndexFormElements
+         * @type bool
+         * @default false
+         * @public
+         */
+        autoTabIndexFormElements: {
+            value: false
+        }
+    }
 });
