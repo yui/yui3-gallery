@@ -1,6 +1,7 @@
 var isNativeSupport = ('placeholder' in document.createElement('input')),
     txtPlaceHolderInstalled = 'phok',
     txtPlaceHolderFocusStyle = 'phfocus',
+    cntInstall,
     fNull = function () {},
 
     handleFocus = function (E) {
@@ -46,14 +47,21 @@ var isNativeSupport = ('placeholder' in document.createElement('input')),
         } else {
             handleBlur({currentTarget: O});
         }
+        cntInstall++;
     };
 
 Y.namespace('zui').placeholder = {
+    isNative: isNativeSupport,
     install: isNativeSupport ? fNull : function (R) {
-        var nodes = R.each ? R : Y.all(R);
+        var nodes = (R && R.each) ? R : Y.all(R ? R : 'input, textarea');
+
+        cntInstall = 0;
+
         if (!nodes) {
-            return;
+            return [0, 0];
         }
         nodes.each(installPH);
+
+        return [nodes.size(), cntInstall];
     }
 };

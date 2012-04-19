@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <title>Test ZUI Placeholder</title>
+</head>
+<body>
+<form>
+ <input id="test1" type="button" />
+ <input id="test2" type="text" placeholder="test 2" />
+ <input id="test3" type="text" placeholder="" />
+ <input id="test4" type="text" value="test4" />
+ <input id="test5" type="text" placeholder="test 5" value="test5" />
+</form>
+
+<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-zui-placeholder/gallery-zui-placeholder-debug.js"></script> 
+<script>
+
+YUI().use('test', 'gallery-zui-placeholder', function (Y) {
+    var testSuite = new Y.Test.Suite('ZUI placeholder');
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test nativeSupport detection',
+
+        testFirefox: function () {
+            if (Y.UA.gecko > 5) {
+                Y.Assert.areSame(Y.zui.placeholder.isNative, true);
+            }
+        },
+
+        testChrome: function () {
+            if (Y.UA.chrome > 10) {
+                Y.Assert.areSame(Y.zui.placeholder.isNative, true);
+            }
+        },
+
+        testIE: function () {
+            if (Y.UA.ie > 1 && Y.UA.ie < 9) {
+                Y.Assert.areSame(Y.zui.placeholder.isNative, false);
+            }
+        }
+
+    }));
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test install placeholder',
+
+        testInitializeWithID: function () {
+            Y.Assert.areSame(Y.zui.placeholder.install('#test1'), Y.zui.placeholder.isNative ? undefined : [1, 0]);
+        }
+    }));
+    
+    Y.Test.Runner.add(testSuite);
+    Y.Test.Runner.run();
+});
+</script>
+</body></html>
