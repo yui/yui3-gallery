@@ -5,7 +5,7 @@
 		<link rel="stylesheet" type="text/css" href="../assets/treeview-menu.css">
 	</head>
 	<body class="yui3-skin-sam">
-		   
+		   <div id="myTree"></div>
   
         <script src="http://yui.yahooapis.com/3.5.0pr2/build/yui/yui-min.js"></script>
         <script src="../../../build/gallery-yui3treeview/gallery-yui3treeview.js"></script>
@@ -20,6 +20,7 @@
             var tree = new Y.Treeview({
                id: "tree",
                lazyLoad: true,
+               srcNode : "#myTree",
                children: [
                    {  id: "leaf-1", label: "Leaf One" },
                    { id: "leaf-2", label: "Leaf Two" },

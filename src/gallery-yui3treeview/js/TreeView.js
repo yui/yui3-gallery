@@ -1,21 +1,60 @@
-
- /**
- *  YUI3 Treeview
- *
+/**
+ * The Treeview component is a UI widget that allows users
+ * to create a hierarchical-like structure of elements.
+ * Extendes Y.WidgetParent, Y.WidgetChild, Y.WidgetHTMLRenderer
+ * Treeview can be generated either by configuration object or exisiting markup to
+ * provide progressive enhancement.
  * @module gallery-yui3treeview
  */
-
     Y.Treeview = Y.Base.create("treeview", WIDGET, [Y.WidgetParent, Y.WidgetChild, Y.WidgetHTMLRenderer], {
     
-       BOUNDING_TEMPLATE : '<ul id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</ul>',
+        /**
+         * Property defining the markup template for bounding box.
+         *
+         * @property BOUNDING_TEMPLATE
+         * @type String
+        */
+        BOUNDING_TEMPLATE : '<ul id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</ul>',
         
+            
+        /**
+         * Property defining the markup template for content box.          
+         *
+         * @property CONTENT_TEMPLATE
+         * @type String
+        */
         CONTENT_TEMPLATE : null,
         
+        
+        /**
+         * Property defining the markup template for the trewview label .
+         *
+         * @property TREEVIEWLABEL_TEMPLATE
+         * @type String
+        */
         TREEVIEWLABEL_TEMPLATE : "<a class='{{treelabelClassName}}' role='treeitem' href='javascript:void(0);'><span class={{labelcontentClassName}}>{{{label}}}</span></a>",
-    
+        
+        /**
+         * Property defining the markup template for the expand controller.
+         *
+         * @property EXPANDCONTROL_TEMPLATE
+         * @type String
+        */
         EXPANDCONTROL_TEMPLATE : "<span class='{labelcontentClassName}'>{label}</span>",
         
-        _populated : null,
+        /**
+         * Flag to indicate whether a tree has been populated with it's children or not.
+         *
+         * @property _populated
+         * @type Boolean
+        */
+        
+         /**
+         * Flag to indicate whether a content Box/Bounding box has been returned from the getter attribute.
+         *
+         * @property _handling
+         * @type Boolean
+        */
 
         /**
          * Initializer lifecycle implementation for the Treeview class. 
@@ -38,6 +77,13 @@
             });
         },
         
+        
+        /**
+         * renderUI implementation
+         *
+         * Creates a visual representation of the treeview based on existing parameters. 
+         * @method renderUI
+        */  
         renderUI: function (contentBuffer) {
             var label = this.get("label"),
                 labelContent,
@@ -89,28 +135,21 @@
             context.boundingClasses = boundingClasses.join(" ");
         },
 
-    
-    
+        /**
+         * bindUI implementation
+         *
+         * Assigns listeners to relevant events that change the state
+         * of the treeview.
+         * @method bindUI
+        */ 
         bindUI: function() {
+            //only attaching to the root element
             if (this.isRoot()) {
                 this.get("boundingBox").on("click",this._onViewEvents,this);
-                
-                
-               /*
- this.get("boundingBox").on("click", function(e) {
-                            var widget = Y.Widget.getByNode(e.target);
-                            // Optional - Maybe we can render here, or when user asks for a child, 
-                            // so we can use get("boundingBox")/get("contentBox")?
-                            // widget.render();
-                            // console.log(widget.get("id") + ":" + widget.get("boundingBox").get("className"));
-                            console.log(widget.get("id") + ":" + widget.name);
-                        });
-*/
-
-                    }
+            }
         },
         
-         /**
+        /**
          * Handles all the internal treeview events. In this case, all it does it fires the
          * collaped/expand event when a treenode is clicked
          * @method onViewEvents
@@ -127,9 +166,6 @@
             classes = target.get("className").split(" ");
             cLength = classes.length;
             
-            event.preventDefault();
-            
-
             for (i=0;i<cLength;i++) {
                 className = classes[i];
                 switch (className) {
@@ -147,35 +183,49 @@
             }
         },
     
-    
+       /**
+        * Renders all child Widgets for the parent.  
+        * <p>
+        * This method in invoked after renderUI is invoked for the Widget class
+        * using YUI's aop infrastructure. 
+        * OVERWRITE : Overwritting for string rendering mode, if lazyLoad is enabled
+        * it will not prepare the children strings until is needed.
+        * </p>
+        * @param {Object} The contentBuffer 
+        * @method _renderChildren
+        * @protected
+        */ 
         _renderChildren: function (contentBuffer) {
-            // Left this as a string on purpose, since the other buffer was 
-            // confusing you. 
-            // But you can see how you could replace the
-            //    childrenHTML = ""; childrenHTML += child.renderHTML(); with
-            //    childrenHTML = [], childrenHTML.push(child.renderHTML());
-    
-            if (this.lazyLoad) {
-            
-            } else {
+            if (!this.lazyLoad) {
                 this._onLazyRenderChildren(contentBuffer);
             }
         },
         
-        _onLazyRenderChildren : function (widget,tree) {
+        /**
+        *  
+        * <p>
+        * This method in invoked on demand when children are required
+        * to display
+        * </p>
+        * @method _onLazyRenderChildren
+        * @param {Object} treeWidget, the widget Object 
+        * @param {Y.Node} treeNode 
+        * @protected
+        */ 
+        _onLazyRenderChildren : function (treeWidget,treeNode) {
             var childrenHTML = "";
             
-                if (widget.each) {
-                    widget.each(function (child) {
+                if (treeWidget.each) {
+                    treeWidget.each(function (child) {
                         childrenHTML += child.renderHTML();
                     });
                 }
                 
-                if (tree && tree.set) {
-                    tree.append(childrenHTML);
+                if (treeNode && treeNode.Node) {
+                    treeNode.append(childrenHTML);
+                    this._populated = true;
                 }
         },
-        
                 
         /**
          * Toggles the collapsed/expanded class
@@ -184,16 +234,15 @@
          */
         _toggleTreeState : function (target) {
         
-            var tree = target.actionNode.ancestor('.yui3-treeview-content'),
-                widget = Y.Widget.getByNode(target.actionNode);
+            var treeNode = target.actionNode.ancestor('.yui3-treeview-content'),
+                treeWidget = Y.Widget.getByNode(target.actionNode);
             
             
-            if (this.lazyLoad && !tree.hasClass("rendered")) {
-                this._onLazyRenderChildren(widget,tree);
-                tree.addClass("rendered");
-
+            if (this.lazyLoad && !treeNode.hasClass("rendered")) {
+                this._onLazyRenderChildren(treeWidget,treeNode);
+                treeNode.addClass("rendered");
             }
-            tree.toggleClass(classNames.collapsed);
+            treeNode.toggleClass(classNames.collapsed);
         },
         
         /**
@@ -209,8 +258,6 @@
             }
         },
         
-        
-        
         /**
          * Expands the tree
          * @method _expandTree
@@ -224,14 +271,33 @@
             }
         }
     }, {
-    
         ATTRS: {
+            /**
+             * The label attribute for the tree.
+             *
+             * @attribute label
+             * @type String
+             */
             label: {
                 value:"Default Parent Label"
             },
+            
+            /**
+             * The default children type.
+             *
+             * @attribute defaultChildType
+             * @type String
+             */
             defaultChildType: {  
                 value: "TreeLeaf"
             },
+            
+            /**
+             * Specifying a custom getter for the Bounding box so that
+             * it's only rendered when needed. 
+             * @attribute boundingBox
+             * @type BoundingBox
+             */
             boundingBox: {
                 getter : function(val) {
                     if (this.get("initialized") && !this.get("rendered") && !this._handling && this._populated) {
@@ -242,9 +308,15 @@
                     return val;
                 }
             },
+            
+            /**
+             * Specifying a custom getter for the Content box so that
+             * it's only rendered when needed. 
+             * @attribute contentBox
+             * @type contentBox
+             */
             contentBox: {
                 getter : function(val) {
-                    
                     if (this.get("initialized") && !this.get("rendered") && !this._handling && this._populated) {
                         this._handling = TRUE;
                         this.render();
@@ -256,23 +328,46 @@
         }
     });
     
-     Y.TreeLeaf = Y.Base.create("treeleaf", WIDGET, [Y.WidgetChild,Y.WidgetHTMLRenderer], {
+    /**
+    *  Treeleaf component of Treeview. Defines a Y.Widget that extends from Y.WidgetChild,
+    * this is the default child type of a tree unless specified otherwise.
+    * @module Y.TreeLeaf
+    */
+    Y.TreeLeaf = Y.Base.create("treeleaf", WIDGET, [Y.WidgetChild,Y.WidgetHTMLRenderer], {
     
     
         BOUNDING_TEMPLATE : '<li id="{{id}}" class="{{boundingClasses}}">{{{contentBox}}}</li>',
     
         CONTENT_TEMPLATE : null,
     
-    
+        /**
+         * renderUI implementation
+         *
+         * Creates a visual representation of the treeview based on existing parameters. 
+         * @method renderUI
+        */  
         renderUI: function (contentBuffer) {
             contentBuffer.push(this.get("label"));
         }
     }, {
     
         ATTRS: {
+            /**
+             * The label attribute for the tree.
+             *
+             * @attribute label
+             * @type String
+             */
             label: {
                 value:"Default Child Label"
             },
+            
+            /**
+             * Specifying a custom getter for the Bounding box so that
+             * it's only rendered when needed. 
+             * @attribute boundingBox
+             * @type BoundingBox
+             */
             boundingBox: {
                 getter : function(val) {
                     if (this.get("initialized") && !this.get("rendered") && !this._handling && this.get("parent")._populated) {
@@ -283,6 +378,13 @@
                     return val;
                 }
             },
+            
+            /**
+             * Specifying a custom getter for the Content box so that
+             * it's only rendered when needed. 
+             * @attribute contentBox
+             * @type contentBox
+             */
             contentBox: {
                 getter : function(val) {
                     if (this.get("initialized") && !this.get("rendered") && !this._handling && this.get("parent")._populated) {
