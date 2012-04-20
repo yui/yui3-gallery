@@ -82,12 +82,12 @@ Y.namespace('zui').placeholder = {
             return [0, 0];
         }
 
-        if (isInstalled(parent)) {
-            return [1, 0];
-        }
-
         if (!parent.delegate) {
             return [-1, -1];
+        }
+
+        if (isInstalled(parent)) {
+            return [1, 0];
         }
 
         parent.delegate('focus', handleFocus, R);
