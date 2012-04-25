@@ -5,7 +5,9 @@
  * sign.</p>
  * 
  * @module gallery-neon
- * @class Y.Plugin.Neon
+ * @namespace Plugin
+ * @class Neon
+ * @extends Plugin.Base
  * @constructor
  * @param config {Object} configuration
  */
@@ -152,7 +154,14 @@ Y.extend(Neon, Y.Plugin.Base,
 {
 	initializer: function(config)
 	{
-		this.get('host').show = show;
+		var host       = this.get('host');
+		this.orig_show = host.show;
+		host.show      = show;
+	},
+
+	destructor: function()
+	{
+		this.get('host').show = this.orig_show;
 	}
 });
 

@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CSSMatrix2d - CSSMatrix2d</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><img src="..&#x2F;assets/css/logo.png"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/CSSMatrix2d.html">CSSMatrix2d</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-cssmatrix2d.html">gallery-cssmatrix2d</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1>CSSMatrix2d Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files&#x2F;js_cssmatrix2d.js.html#l14"><code>js&#x2F;cssmatrix2d.js:14</code></a>
+        </div>
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>This represents the matrix used by 2d CSS transforms.  It helps
+perform all of the necessary matrix calculations.  This is sort of an
+implementation of the CSSMatrix object defined in this spec:
+http://www.w3.org/TR/css3-2d-transforms/#cssmatrix-interface
+The matrix defined in the spec is a 3x2 matrix.  I'm not exactly an
+expert at matrix math, but most of the operations required by the
+spec only work with square matrices.  The spec doesn't explain how a
+3x2 matrix is supposed to do these things.  In order to make the math
+work correctly, this object internally treats it as the 4x4 matrix
+defined in the 3d CSS transforms spec here:
+http://www.w3.org/TR/css3-3d-transforms/#cssmatrix-interface
+and it converts the 3x2 matrix into a 4x4 matrix by following the
+examples provided in this spec:
+http://www.w3.org/TR/2012/WD-css3-transforms-20120403/
+Other implementations of these specs, like the WebKitCSSMatrix object
+and others that have copied it, attempt to combine both the 2d and 3d
+versions of CSSMatrix into the same object.  This implementation
+only borrows ideas from the 3d version to make the math make sense,
+but only the 2d functionality is implemented.  Since only the 6 2d
+matrix items out of the total 16 3d matrix items are mutable, and the
+remaining 3d matrix items are known to be either 0 or 1, most of the
+complicated 4x4 matrix math is factored down and reduced, becoming
+much more efficient.</p>
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_CSSMatrix2d" class="method item">
+    <h3 class="name"><code>CSSMatrix2d</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l14"><code>js&#x2F;cssmatrix2d.js:14</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_inverse">inverse</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_multiply">multiply</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_rotate">rotate</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_rotateRad">rotateRad</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_scale">scale</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setMatrixValue">setMatrixValue</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_skewX">skewX</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_skewXRad">skewXRad</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_skewY">skewY</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_skewYRad">skewYRad</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_toString">toString</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_translate">translate</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property_a">a</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_b">b</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_c">c</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_d">d</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_e">e</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_f">f</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_inverse" class="method item">
+    <h3 class="name"><code>inverse</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l86"><code>js&#x2F;cssmatrix2d.js:86</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, the inverse of this one.
+This matrix is not modified.
+This method will throw if the matrix can not be inverted.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    inverse
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_multiply" class="method item">
+    <h3 class="name"><code>multiply</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>other</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l118"><code>js&#x2F;cssmatrix2d.js:118</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, the product of this one multiplied by
+another one.  Neither this matrix nor the other one is
+modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">other</code>
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    product
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_rotate" class="method item">
+    <h3 class="name"><code>rotate</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>angle</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l149"><code>js&#x2F;cssmatrix2d.js:149</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, rotated the given angle clockwise.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">angle</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The angle specified in degrees.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    rotated
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_rotateRad" class="method item">
+    <h3 class="name"><code>rotateRad</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>angle</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l159"><code>js&#x2F;cssmatrix2d.js:159</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, rotated the given angle clockwise.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">angle</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The angle specified in radians.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    rotated
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_scale" class="method item">
+    <h3 class="name"><code>scale</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>x</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>y</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l176"><code>js&#x2F;cssmatrix2d.js:176</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, scaled horizontally and vertically.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">x</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The horizontal scale factor.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">y</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The vertical scale factor.  Optional.  If
+undefined, x will be used for both the horizontal and
+vertical scale factor.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    scaled.
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_setMatrixValue" class="method item">
+    <h3 class="name"><code>setMatrixValue</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrixValue</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l194"><code>js&#x2F;cssmatrix2d.js:194</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets the matrix based on a matrix string provided by the DOM.
+The string is expected to be like 'matrix(a, b, c, d, e, f)'.
+This format isn't specifically checked for, so other similar
+strings might be accepted.  If 6 values can not be read from
+from the string, this method will do nothing.  Invalid values
+could result in NaN being assigned to matrix items.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrixValue</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_skewX" class="method item">
+    <h3 class="name"><code>skewX</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>angle</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l223"><code>js&#x2F;cssmatrix2d.js:223</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, skewed horizontally.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">angle</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The horizontal skew angle specified in
+degrees.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    skewed.
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_skewXRad" class="method item">
+    <h3 class="name"><code>skewXRad</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>angle</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l234"><code>js&#x2F;cssmatrix2d.js:234</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, skewed horizontally.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">angle</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The horizontal skew angle specified in radians.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    skewed.
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_skewY" class="method item">
+    <h3 class="name"><code>skewY</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>angle</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l248"><code>js&#x2F;cssmatrix2d.js:248</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, skewed vertically.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">angle</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The vertical skew angle specified in degrees.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    skewed.
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_skewYRad" class="method item">
+    <h3 class="name"><code>skewYRad</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>angle</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l258"><code>js&#x2F;cssmatrix2d.js:258</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, skewed vertically.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">angle</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The vertical skew angle specified in radians.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    skewed.
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_toString" class="method item">
+    <h3 class="name"><code>toString</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l272"><code>js&#x2F;cssmatrix2d.js:272</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a string 'matrix(a, b, c, d, e, f)' which can be used by the
+DOM for 2d CSS transforms.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_translate" class="method item">
+    <h3 class="name"><code>translate</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>x</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>y</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l283"><code>js&#x2F;cssmatrix2d.js:283</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns a new matrix, translated horizontally and vertically.
+This matrix is not modified.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">x</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The horizontal translation amount.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">y</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The vertical translation amount.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/CSSMatrix2d.html" class="crosslink">CSSMatrix2d</a></span>:
+                    
+                    translated.
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_a" class="property item">
+    <h3 class="name"><code>a</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l44"><code>js&#x2F;cssmatrix2d.js:44</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The 1,1 position in the matrix.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 1</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_b" class="property item">
+    <h3 class="name"><code>b</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l51"><code>js&#x2F;cssmatrix2d.js:51</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The 2,1 position in the matrix.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_c" class="property item">
+    <h3 class="name"><code>c</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l58"><code>js&#x2F;cssmatrix2d.js:58</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The 1,2 position in the matrix.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_d" class="property item">
+    <h3 class="name"><code>d</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l65"><code>js&#x2F;cssmatrix2d.js:65</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The 2,2 position in the matrix.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 1</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_e" class="property item">
+    <h3 class="name"><code>e</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l72"><code>js&#x2F;cssmatrix2d.js:72</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The 1,4 position in the matrix.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_f" class="property item">
+    <h3 class="name"><code>f</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_cssmatrix2d.js.html#l79"><code>js&#x2F;cssmatrix2d.js:79</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The 2,4 position in the matrix.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 0</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

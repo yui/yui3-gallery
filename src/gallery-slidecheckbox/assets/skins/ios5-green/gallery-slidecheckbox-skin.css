@@ -1,5 +1,6 @@
 .yui3-slidecheckbox-content,.yui3-slidecheckbox-content > div{height:28px;}
 .yui3-slidecheckbox .edge,.yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-image:url(slider.png);background-color:transparent;height:28px;display:block;-moz-user-select:none;-khtml-user-select:none;}
+.yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-color:transparent;}
 .yui3-slidecheckbox-handle{width:28px;background:none;}
 .yui3-slidecheckbox-handle span{height:28px;width:14px;}
 .yui3-slidecheckbox-handle .lt{background-position:0 0;left:-14px;}

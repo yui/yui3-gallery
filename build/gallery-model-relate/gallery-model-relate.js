@@ -1109,10 +1109,18 @@ ModelRelate.prototype = {
     @private
     **/
     _destroyRelationships: function() {
-        var relationships = this._state.data[RELS];
+        var state = this._state.data;
+        
+        // check each object in the state data for a 
+        // relationship property.  if it has one, remove
+        // that relationship
+        Y.each(state, function(o, n) {
+            var relName = o[RELS];
+            
+            if (relName) {
+                this.removeRelationship(relName);
+            }
 
-        Y.each(relationships, function(name) {
-            this.removeRelationship(name);
         }, this);
     },
 
@@ -1133,4 +1141,4 @@ ModelRelate.prototype = {
 Y.ModelRelate = ModelRelate;
 
 
-}, 'gallery-2011.11.17-14-56' ,{requires:['base', 'event-custom', 'array-extras', 'model-list', 'gallery-model-store']});
+}, 'gallery-2012.04.18-20-14' ,{requires:['base', 'event-custom', 'array-extras', 'model-list', 'gallery-model-store']});

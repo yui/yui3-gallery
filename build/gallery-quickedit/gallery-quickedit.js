@@ -245,41 +245,6 @@ QuickEdit.readonlyLinkFormatter = function(o)
 	return (o.value || '');		// don't need to check for zero
 };
 
-function getSiblingTdEl(
-	/* Node */	el,
-	/* int */	dir)
-{
-	var tr = null;
-	this._tbodyNode.get('children').some(function(node)
-	{
-		if (node.contains(el))
-		{
-			tr = node;
-			return true;
-		}
-	});
-
-	if (!tr)
-	{
-		return null;
-	}
-
-	var cell = el.getAncestorByTagName('td', true);
-
-	var col_index = -1;
-	tr.get('children').some(function(node, index)
-	{
-		if (node === cell)
-		{
-			col_index = index;
-			return true;
-		}
-	});
-
-	tr = (dir < 0 ? tr.previous() : tr.next());
-	return tr ? tr.get('children').item(col_index) : null;
-}
-
 /**
  * Copy value from first cell to all other cells in the column.
  *
@@ -303,7 +268,7 @@ function copyDown(e)
 
 	while (1)
 	{
-		cell = getSiblingTdEl.call(this, cell, +1);
+		cell = this.getCell(cell, 'below');
 		if (!cell)
 		{
 			break;
@@ -363,7 +328,7 @@ function wrapFormatter(editFmt, origFmt)
  */
 function moveFocus(e)
 {
-	var cell = getSiblingTdEl.call(this, e.target, e.charCode == 38 ? -1 : +1);
+	var cell = this.getCell(e.target, e.charCode == 38 ? 'above' : 'below');
 	if (cell)
 	{
 		var input = cell.one('.quickedit-field');
@@ -771,4 +736,4 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableQuickEdit = QuickEdit;
 
 
-}, 'gallery-2012.03.23-18-00' ,{skinnable:true, optional:['gallery-scrollintoview'], requires:['datatable-base','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-funcprog']});
+}, 'gallery-2012.04.04-17-55' ,{skinnable:true, optional:['gallery-scrollintoview'], requires:['datatable-base','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-funcprog']});

@@ -1064,7 +1064,7 @@ Treeble.buildTwistdownFormatter = function(sendRequest)
 				ds.toggle(path, {}, sendRequest);
 			});
 
-			o.cell.set('innerHTML', '<a class="treeble-collapse-nub" href="javascript:void(0);"></a>');
+			o.cell.set('innerHTML', '<a class="treeble-expand-nub" href="javascript:void(0);"></a>');
 		}
 
 		return true;	// keep the Y.Node instances
@@ -1102,4 +1102,4 @@ Y.extend(Treeble, Y.DataTable,
 Y.Treeble = Treeble;
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['datasource'], skinnable:true});
+}, 'gallery-2012.04.04-17-55' ,{requires:['datasource'], skinnable:true});

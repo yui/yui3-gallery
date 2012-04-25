@@ -1186,16 +1186,7 @@ Y.extend(BulkEditor, Y.Widget,
 
 function cleanHTML(s)
 {
-	if (!s)
-	{
-		return '';
-	}
-
-	return s.toString()
-			.replace(/<\/?script>/ig, '')
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;');
+	return (s ? Y.Escape.html(s) : '');
 }
 
 BulkEditor.error_msg_markup = Y.Lang.sub('<div class="{c}"></div>',

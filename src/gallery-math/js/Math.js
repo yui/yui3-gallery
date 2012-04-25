@@ -11,7 +11,15 @@
 Y.mix(Math,
 {
 	/**
-	 * @return {number} sum of all the arguments (either passed separately or as an array)
+	 * @return {Number} +1 if value > 0, -1 if value < 0, else zero
+	 */
+	sign: function(v)
+	{
+		return (v < 0 ? -1 : (v > 0 ? +1 : 0));
+	},
+
+	/**
+	 * @return {Number} sum of all the arguments (either passed separately or as an array)
 	 */
 	add: function()
 	{
@@ -27,7 +35,7 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @return {number} sum of the reciprocals of all the arguments (either passed separately or as an array)
+	 * @return {Number} sum of the reciprocals of all the arguments (either passed separately or as an array)
 	 */
 	addReciprocals: function()
 	{
@@ -45,7 +53,7 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @return {number} net value of N resistors in parallel (either passed separately or as an array)
+	 * @return {Number} net value of N resistors in parallel (either passed separately or as an array)
 	 */
 	parallel: function()
 	{
@@ -53,7 +61,7 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @return {number} product of all the arguments (either passed separately or as an array)
+	 * @return {Number} product of all the arguments (either passed separately or as an array)
 	 */
 	multiply: function()
 	{
@@ -69,8 +77,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param a {number} angle in degrees
-	 * @return {number} angle in radians
+	 * @param a {Number} angle in degrees
+	 * @return {Number} angle in radians
 	 */
 	degreesToRadians: function(a)
 	{
@@ -78,8 +86,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param a {number} angle in radians
-	 * @return {number} angle in degrees
+	 * @param a {Number} angle in radians
+	 * @return {Number} angle in degrees
 	 */
 	radiansToDegrees: function(a)
 	{
@@ -87,8 +95,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param v {number}
-	 * @return {number} inverse hyperbolic cosine
+	 * @param v {Number}
+	 * @return {Number} inverse hyperbolic cosine
 	 */
 	acosh: function(v)
 	{
@@ -96,8 +104,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param v {number}
-	 * @return {number} inverse hyperbolic sine
+	 * @param v {Number}
+	 * @return {Number} inverse hyperbolic sine
 	 */
 	asinh: function(v)
 	{
@@ -105,8 +113,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param v {number}
-	 * @return {number} inverse hyperbolic tangent
+	 * @param v {Number}
+	 * @return {Number} inverse hyperbolic tangent
 	 */
 	atanh: function(v)
 	{
@@ -114,8 +122,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param v {number}
-	 * @return {number} hyperbolic cosine
+	 * @param v {Number}
+	 * @return {Number} hyperbolic cosine
 	 */
 	cosh: function(v)
 	{
@@ -124,8 +132,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param v {number}
-	 * @return {number} hyperbolic sine
+	 * @param v {Number}
+	 * @return {Number} hyperbolic sine
 	 */
 	sinh: function(v)
 	{
@@ -134,8 +142,8 @@ Y.mix(Math,
 	},
 
 	/**
-	 * @param v {number}
-	 * @return {number} hyperbolic sine
+	 * @param v {Number}
+	 * @return {Number} hyperbolic sine
 	 */
 	tanh: function(v)
 	{

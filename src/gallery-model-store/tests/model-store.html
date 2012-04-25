@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<title>Model Store Tests</title>
+<body class="yui3-skin-sam">
+    <h1>Model Store Tests</h1>
+    <div id="log"></div>
+</body>
+</html>
+<script src="../../../../yui3/build/yui/yui-min.js"></script>
+<script>
+YUI({
+    allowRollup: false,
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'min',
+    modules: {
+        'gallery-model-store' : {
+            fullpath: '../../../build/gallery-model-store/gallery-model-store-min.js',
+            requires: ['base', 'model', 'model-list']
+        },
+
+        'model-store-tests': {
+            fullpath: 'model-store-tests.js',
+            requires: ['test', 'model', 'model-list', 'gallery-model-store']
+        }
+    },
+    useBrowserConsole: false
+}).use(
+    'model-store-tests',
+    'test-console',
+
+function (Y) {
+    new Y.Test.Console({
+        filters: {
+            pass: true,
+            fail: true
+        }
+    }).render('#log');
+
+    Y.Test.Runner.run();
+});
+</script>
