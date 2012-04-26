@@ -139,10 +139,13 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
         Y.log('showCalendar', 'info', this.name);
 
         if (this.get('rendered')) {
-            this.show() 
+            this.show();
         } else {
             this.render();
             this._setPopupTabindex();
+            this.setCalendarPosition();
+            this.get('contentBox').setStyle('height', this.get('height'));
+            this.get('boundingBox').setStyle('z-index', '1000');
         }
 
         if (this.get('autoFocusOnFieldFocus')) { this.focus(); }
@@ -158,6 +161,22 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
         Y.log('hideCalendar', 'info', this.name);
 
         this.hide();
+    },
+
+    /*
+     * Aligns the calendar to the input box. Because of an
+     * issue with when align is run this needs to be run 
+     * after render has happened.
+     *
+     * @method setCalendarPosition
+     * @public
+     */
+    setCalendarPosition: function() {
+        Y.log('setCalendarPosition', 'info', this.name);
+        if (this.get('align') === null) {
+            this.set('align', this.get('_align'));            
+        }
+        this.show();
     }
 
 } , {
@@ -200,6 +219,36 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
          */
         autoTabIndexFormElements: {
             value: false
+        },
+
+        /* 
+         * Presets the visibility to false to avoid a flash of
+         * content in the wrong position
+         * 
+         * @attribute visible
+         * @type bool
+         * @default false
+         * @public
+         */
+        visible: {
+            value: false
+        },
+
+        /*
+         * Align default setting
+         *
+         * @attribute _align
+         * @type object
+         * @default object
+         * @private
+         */
+        _align: {
+            valueFn: function() {
+                return {
+                    node: this.get('input'),
+                    points: [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.TR]
+                };
+            }
         }
     }
 });
