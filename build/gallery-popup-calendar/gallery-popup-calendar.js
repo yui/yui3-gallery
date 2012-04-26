@@ -133,10 +133,13 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
     showCalendar: function() {
 
         if (this.get('rendered')) {
-            this.show() 
+            this.show();
         } else {
             this.render();
             this._setPopupTabindex();
+            this.setCalendarPosition();
+            this.get('contentBox').setStyle('height', this.get('height'));
+            this.get('boundingBox').setStyle('z-index', '1000');
         }
 
         if (this.get('autoFocusOnFieldFocus')) { this.focus(); }
@@ -151,6 +154,21 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
     hideCalendar: function() {
 
         this.hide();
+    },
+
+    /*
+     * Aligns the calendar to the input box. Because of an
+     * issue with when align is run this needs to be run 
+     * after render has happened.
+     *
+     * @method setCalendarPosition
+     * @public
+     */
+    setCalendarPosition: function() {
+        if (this.get('align') === null) {
+            this.set('align', this.get('_align'));            
+        }
+        this.show();
     }
 
 } , {
@@ -193,9 +211,39 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
          */
         autoTabIndexFormElements: {
             value: false
+        },
+
+        /* 
+         * Presets the visibility to false to avoid a flash of
+         * content in the wrong position
+         * 
+         * @attribute visible
+         * @type bool
+         * @default false
+         * @public
+         */
+        visible: {
+            value: false
+        },
+
+        /*
+         * Align default setting
+         *
+         * @attribute _align
+         * @type object
+         * @default object
+         * @private
+         */
+        _align: {
+            valueFn: function() {
+                return {
+                    node: this.get('input'),
+                    points: [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.TR]
+                };
+            }
         }
     }
 });
 
 
-}, 'gallery-2012.04.18-20-14' ,{skinnable:true, requires:['calendar', 'widget-position', 'widget-position-align', 'widget-autohide']});
+}, 'gallery-2012.04.26-15-49' ,{skinnable:true, requires:['calendar', 'widget-position', 'widget-position-align', 'widget-autohide']});

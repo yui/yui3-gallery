@@ -156,7 +156,7 @@ Y.mix(PaginatorCore.prototype, {
 }, true);
 
 Y.namespace('Paginator').Core = PaginatorCore;
-}, 'gallery-2012.04.12-13-50');
+}, 'gallery-2012.04.26-15-49');
 YUI.add('lang/gallery-paginator-dev-preview-simple-view', function (Y) {
 Y.Intl.add('paginator-simple-view', '', 
 {
@@ -165,7 +165,7 @@ Y.Intl.add('paginator-simple-view', '',
     next    : 'next',
     previous: 'previous'
 }
-);}, 'gallery-2012.04.12-13-50');
+);}, 'gallery-2012.04.26-15-49');
 
 YUI.add('lang/gallery-paginator-dev-preview-simple-view_en', function (Y) {
 Y.Intl.add('paginator-simple-view', 'en', 
@@ -175,7 +175,7 @@ Y.Intl.add('paginator-simple-view', 'en',
     next    : 'next',
     previous: 'previous'
 }
-);}, 'gallery-2012.04.12-13-50');
+);}, 'gallery-2012.04.26-15-49');
 
 YUI.add('gallery-paginator-dev-preview-simple-view', function (Y) {
 var getClass = Y.ClassNameManager.getClassName,
@@ -207,8 +207,9 @@ Y.Paginator.SimpleView = Y.Base.create(PAGINATOR, Y.View, [], {
     },
 
     _bindUI: function () {
-        if (!this._pageChangeHandle) {
-            this._pageChangeHandle = this.get('host').after('pageChange',
+        if (!this._changeHandles) {
+            this._changeHandles = this.get('host').after(
+                ['pageChange', 'totalItemsChange', 'itemsPerPageChange'],
                 this.render, this);
         }
     },
@@ -248,9 +249,9 @@ Y.Paginator.SimpleView = Y.Base.create(PAGINATOR, Y.View, [], {
     events: events,
 
     destructor: function () {
-        if (this._pageChangeHandle) {
-            this._pageChangeHandle.detach();
-            delete this._pageChangeHandle;
+        if (this._changeHandles) {
+            this._changeHandles.detach();
+            delete this._changeHandles;
         }
     },
 
@@ -338,7 +339,7 @@ Y.Paginator.SimpleView = Y.Base.create(PAGINATOR, Y.View, [], {
         }
     }
 });
-}, 'gallery-2012.04.12-13-50', { requires: ['view', 'intl', 'gallery-paginator-dev-preview-core'] });
+}, 'gallery-2012.04.26-15-49', { requires: ['view', 'intl', 'gallery-paginator-dev-preview-core'] });
 
 YUI.add('gallery-paginator-dev-preview-base', function (Y) {
 /**
@@ -448,7 +449,7 @@ Y.Paginator.Base = Y.Base.create('paginator', Y.Widget, [ Y.Paginator.Core ], {
 Y.Paginator = Y.mix(
     Y.Base.create('paginator', Y.Paginator.Base, []), // Create the class
     Y.Paginator); // Migrate static and namespaced classes
-}, 'gallery-2012.04.12-13-50', { requires: ['base-build', 'gallery-paginator-dev-preview-core', 'gallery-paginator-dev-preview-simple-view'] });
+}, 'gallery-2012.04.26-15-49', { requires: ['base-build', 'gallery-paginator-dev-preview-core', 'gallery-paginator-dev-preview-simple-view'] });
 
 Y.use('gallery-paginator-dev-preview-core', 
       'lang/gallery-paginator-dev-preview-simple-view',
@@ -457,4 +458,4 @@ Y.use('gallery-paginator-dev-preview-core',
       'gallery-paginator-dev-preview-base');
 
 
-}, 'gallery-2012.04.12-13-50' ,{requires:['base-build', 'widget', 'view', 'intl']});
+}, 'gallery-2012.04.26-15-49' ,{requires:['base-build', 'widget', 'view', 'intl']});

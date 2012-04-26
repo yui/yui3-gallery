@@ -2480,4 +2480,4 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 });
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['widget','event-key','substitute'], skinnable:true});
+}, 'gallery-2012.04.26-15-49' ,{requires:['widget','event-key','substitute'], skinnable:true});
