@@ -1,20 +1,20 @@
 YUI.add('gallery-nmmenus', function(Y) {
 
-Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {	 
-	initializer : function( config ) {		
+Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], { 
+	initializer : function( config ) {
 		// add hasSubMenu class to all submenus
 		Y.all('#' + this.get('menudivid') + ' ul li ul').each(function(submenu) {
 			submenu.get('parentNode').one('.topLink').addClass('hasSubMenu');
 		});
-							
+
 		if (this.get('ajaxLoadFunc')) {	
 			// invoke custom function that sets up JS observers for menu items
 		        this.get('ajaxLoadFunc').call(null, this, this);
-		}			
+		}
 		
 		// init variables for menuItemPulsate function
 		this.set('pulsesleft', this.get('pulses'));
-		this.set('pulseduration', this.get('pulseduration') / this.get('pulses'));									
+		this.set('pulseduration', this.get('pulseduration') / this.get('pulses'));
 		
 		if (!this.get('nopulsate') && !this.get('ajaxLoadFunc')) {
 			// no custom AJAX stuff set, trigger menu item pulsate
@@ -24,28 +24,28 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 		// make sure that top level menu items are not erronously marked as active
 		Y.all('#' + this.get('menudivid') + ' .topLink').each(function(node) {
 			if (!node.hasClass('hasSubMenu')) {	
-				// make sure top level links are marked as inactive on mouseleave			
+				// make sure top level links are marked as inactive on mouseleave
 				Y.on('mouseleave', function(e) {
 					node.get('parentNode').removeClass('active');
 				}, node);
 			}
 		});
-				
+
 		Y.all('#' + this.get('menudivid') + ' .hasSubMenu').each(function(node, idx) {
-			var topLi = node.get('parentNode'),			
-				subMenu = topLi.one('ul');		
-									
+			var topLi = node.get('parentNode'),
+				subMenu = topLi.one('ul');
+
 			// establish mouseenter observer
-			Y.on('mouseenter', function(e) {					
-				// make sure all other menus do not have .active class set											
-				Y.all('#' + this.get('menudivid') + ' .hasSubMenu').get('parentNode').removeClass('active');																																												
+			Y.on('mouseenter', function(e) {
+				// make sure all other menus do not have .active class set
+				Y.all('#' + this.get('menudivid') + ' .hasSubMenu').get('parentNode').removeClass('active');
 				
 				// mark menu as active
 				topLi.addClass('active');
 				
 				// calculate menu dimensions
-				var menuDimensions = this.calcMenuDimensions(subMenu);				
-									
+				var menuDimensions = this.calcMenuDimensions(subMenu);
+
 				switch (this.get('anim')) {
 					case 'fade':
 					subMenu.setStyles({
@@ -68,17 +68,17 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 						display:'block',
 						position:'absolute',
 						top:node.getComputedStyle('height'),
-						width:menuDimensions[0],
+						width:menuDimensions[0]
 					});
 					// start transition
 					subMenu.transition({
 						height:menuDimensions[1],
 						duration:this.get('inDuration'),
 						easing:'ease-out',
-						on : {								
-							end:function() {									
-								subMenu.setStyle('height', '');																																				
-							}												
+						on : {
+							end:function() {
+								subMenu.setStyle('height', '');
+							}
 						}
 					});
 					break;
@@ -89,12 +89,12 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 			}, topLi, this);
 			
 			Y.on('mouseleave', function(e) {
-				// hide menu				
+				// hide menu
 				this.hideNavMenu.call(this, {
-					topLi:topLi	
+					topLi:topLi
 				});
-			}, topLi, this);							
-		}, this);		
+			}, topLi, this);
+		}, this);
 	},
 
 	calcMenuDimensions : function(subMenu) {
@@ -103,9 +103,9 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 			display: 'block',
 			height:''
 		});
-		var menuHeight = subMenu.getComputedStyle('height'),
-			menuWidth = subMenu.getComputedStyle('width');
-		subMenu.setStyle('display', 'none');		
+		var menuHeight = subMenu.getComputedStyle('height');
+		var menuWidth = subMenu.getComputedStyle('width');
+		subMenu.setStyle('display', 'none');
 		
 		return [menuWidth, menuHeight];
 	},
@@ -122,21 +122,21 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 				on : {
 					end:function() {
 						configObj.subMenu.setStyle('height', '0px');
-						configObj.topLi.removeClass('active');						
+						configObj.topLi.removeClass('active');
 					}
-				}									
-			});	
+				}
+			});
 			break;
 
-			case 'blind':				
+			case 'blind':
 			configObj.subMenu.transition({
 				height:'0px',
 				duration:this.get('outDuration'),
-				easing:'ease-out',							
-				on : {					
-					end:function() {							
+				easing:'ease-out',
+				on : {
+					end:function() {
 						configObj.subMenu.setStyle('display', 'none');
-						configObj.topLi.removeClass('active');																																										
+						configObj.topLi.removeClass('active');
 					}
 				}
 			});
@@ -164,15 +164,15 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 				e.preventDefault();
 				if (e.target.hasClass('topLink')) {
 					// top level link, do not init pulsate
-					window.location.href = e.target.get('href');	
+					window.location.href = e.target.get('href');
 				}
 				else {
 					this.menuItemPulsate(e.target.get('id'), function() {
 						window.location.href = e.target.get('href');
-					});	
-				}			
-			}, this), node, 'a');		
-		}, this);		
+					});
+				}
+			}, this), node, 'a');
+		}, this);
 	},
 		
 	menuItemPulsate : function(ID, callbackFunc, callbackArgs) {
@@ -192,10 +192,10 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 									this.menuItemPulsate.call(this, ID, callbackFunc, callbackArgs);
 								}
 								else {
-									// reset pulsesleft var									
+									// reset pulsesleft var
 									this.set('pulsesleft', this.get('pulses'));
 									
-									// hide menu									
+									// hide menu
 									this.hideNavMenu.call(this, {
 										topLi:Y.one('#' + this.get('menudivid') + ' li.active')	
 									});
@@ -206,8 +206,8 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 									else {
 										// no custom JS load trigger, just navigate to href
 										window.location.href = Y.one('#' + ID).get('pathname');
-									}	
-								}								
+									}
+								}
 							}, this)
 						}
 					});
@@ -217,8 +217,8 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 	}
 
 	        
-   }, {
-       ATTRS : { 
+}, {
+    ATTRS : { 
 		anim : {
 			value : 'fade'
 		},
@@ -250,4 +250,4 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 });
 
 
-}, 'gallery-2012.03.28-20-16' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
+}, 'gallery-2012.05.02-20-10' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
