@@ -128,7 +128,7 @@ Y.namespace('zui').placeholder = {
      * use this method to install placeholder on nodes
      * @method install
      * @param elements {NodeList || Node || HTMLElement || cssString} Optional. The elements to install placeholder support
-     * @return {Array} An array contains [TotalElements, InstalledElements] when no native placeholder support. return undefined when the browser suppports placeholder natively.
+     * @return {Array} An array contains [TotalElements, InstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find nodes 
      * @static
      */
     install: isNativeSupport ? fNull : function (R) {
@@ -144,6 +144,13 @@ Y.namespace('zui').placeholder = {
         return [nodes.size(), cntInstall];
     },
 
+    /**
+     * use this method to uninstall placeholder on nodes
+     * @method uninstall
+     * @param elements {NodeList || Node || HTMLElement || cssString} Optional. The elements to remove placeholder support
+     * @return {Array} An array contains [TotalElements, UninstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find nodes 
+     * @static
+     */
     uninstall: isNativeSupport ? fNull : function (R) {
         var nodes = (R && R.each) ? R : Y.all(R || 'input, textarea');
 
@@ -157,6 +164,14 @@ Y.namespace('zui').placeholder = {
         return [nodes.size(), cntInstall];
     },
 
+    /**
+     * use this method to install placeholder on node with event delegate
+     * @method installDelegate
+     * @param element {Node || HTMLElement || cssString} Optional. The parent element to install placeholder support
+     * @param elements {NodeList || Node || HTMLElement || cssString} Optional. The child elements to handle placeholder
+     * @return {Array} An array contains [1, InstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find parent node. Return [-1, -1] when 'node-event-delegate' not loaded.
+     * @static
+     */
     installDelegate: isNativeSupport ? fNull : function (P, R) {
         var parent = P ? Y.one(P) : Y.one('body'),
             children = R || 'input, textarea';
@@ -185,6 +200,14 @@ Y.namespace('zui').placeholder = {
         return [1, cntInstall];
     },
 
+    /**
+     * use this method to uninstall placeholder on node with event delegate
+     * @method uninstallDelegate
+     * @param element {Node || HTMLElement || cssString} Optional. The parent element to uninstall placeholder support
+     * @param elements {NodeList || Node || HTMLElement || cssString} Optional. The child elements to unhandle placeholder
+     * @return {Array} An array contains [1, UninstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find parent node. Return [-1, -1] when 'node-event-delegate' not loaded.
+     * @static
+     */
     uninstallDelegate:  isNativeSupport ? fNull : function (P, R) {
         var parent = P ? Y.one(P) : Y.one('body'),
             id = parent ? parent.get('id') : 0,

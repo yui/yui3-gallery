@@ -58,10 +58,12 @@ YUI({combine: false}).use('test', 'console', 'node-event-delegate', 'gallery-zui
 
             if (Y.zui.placeholder.isNative) {
                 Y.Assert.isUndefined(ret);
+                Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
             } else {
                 Y.Assert.isObject(ret);
                 Y.Assert.areSame(1, ret[0]);
                 Y.Assert.areSame(12, ret[1]);
+                Y.Assert.areSame('', Y.one('#test6').get('value'));
             }
 
             Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
@@ -72,7 +74,6 @@ YUI({combine: false}).use('test', 'console', 'node-event-delegate', 'gallery-zui
             Y.Assert.isFalse(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.areSame('', Y.one('#test2').get('value'));
             Y.Assert.areSame('test5', Y.one('#test5').get('value'));
-            Y.Assert.areSame('', Y.one('#test6').get('value'));
         },
 
         testUninstallDelegateTwice: function () {
