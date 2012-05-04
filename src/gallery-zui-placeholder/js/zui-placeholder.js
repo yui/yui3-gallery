@@ -9,6 +9,7 @@ var isNativeSupport = ('placeholder' in document.createElement('input')),
     clsPlaceHolderBlur = 'zui-phblur',
     cntInstall,
     fNull = function () {},
+    detachMap = {},
 
     handleFocus = function (E) {
         E.currentTarget.removeClass(clsPlaceHolderBlur);
@@ -21,6 +22,10 @@ var isNativeSupport = ('placeholder' in document.createElement('input')),
     handleBlur = function (E) {
         var v = E.currentTarget.get('value'),
             p = E.currentTarget.getAttribute('placeholder');
+
+        if (p === '') {
+            return;
+        }
 
         if (v === '') {
             E.currentTarget.set('value', p);
@@ -41,6 +46,17 @@ var isNativeSupport = ('placeholder' in document.createElement('input')),
         O.setAttribute(txtPlaceHolderInstalled, '1');
     },
 
+    initPH = function (O) {
+        // if is already focused, run handleFocus 1 time
+        if (O.compareTo(document.activeElement)) {
+            handleFocus({currentTarget: O});
+        } else {
+            handleBlur({currentTarget: O});
+        }
+
+        cntInstall += 1;
+    },
+
     installPH = function (O) {
         // only install once
         if (isInstalled(O)) {
@@ -56,14 +72,7 @@ var isNativeSupport = ('placeholder' in document.createElement('input')),
         O.on('focus', handleFocus);
         O.on('blur', handleBlur);
 
-        // if is already focused, run handleFocus 1 time
-        if (O.compareTo(document.activeElement)) {
-            handleFocus({currentTarget: O});
-        } else {
-            handleBlur({currentTarget: O});
-        }
-
-        cntInstall += 1;
+        initPH(O);
     },
 
     uninstallPH = function (O) {
@@ -139,6 +148,7 @@ Y.namespace('zui').placeholder = {
         var nodes = (R && R.each) ? R : Y.all(R || 'input, textarea');
 
         cntInstall = 0;
+
         if (!nodes) {
             return [0, 0];
         }
@@ -148,7 +158,10 @@ Y.namespace('zui').placeholder = {
     },
 
     installDelegate: isNativeSupport ? fNull : function (P, R) {
-        var parent = P ? Y.one(P) : Y.one('body');
+        var parent = P ? Y.one(P) : Y.one('body'),
+            children = R || 'input, textarea';
+
+        cntInstall = 0;
 
         if (!parent) {
             return [0, 0];
@@ -162,9 +175,45 @@ Y.namespace('zui').placeholder = {
             return [1, 0];
         }
 
-        parent.delegate('focus', handleFocus, R);
-        parent.delegate('blur', handleFocus, R);
+        detachMap[parent.get('id')] = [
+            parent.delegate('focus', handleFocus, children),
+            parent.delegate('blur', handleFocus, children)
+        ];
 
-        return [1, 1];
+        parent.all(children).each(initPH);
+
+        return [1, cntInstall];
+    },
+
+    uninstallDelegate:  isNativeSupport ? fNull : function (P, R) {
+        var parent = P ? Y.one(P) : Y.one('body'),
+            id = parent ? parent.get('id') : 0,
+            children = R || 'input, textarea',
+            detach = 0;
+
+        if (!parent) {
+            return [0, 0];
+        }
+
+        if (!parent.delegate) {
+            return [-1, -1];
+        }
+
+        if (!isInstalled(parent, 1)) {
+            return [1, 0];
+        }
+
+        if (detachMap[id]) {
+            parent.detach(detachMap[id][0]);
+            parent.detach(detachMap[id][1]);
+            delete detachMap[id];
+            parent.all(children).each(function (O) {
+                detach += 1;
+                handleFocus({currentTarget: O});
+            });
+            return [1, detach];
+        }
+
+        return [1, -1];
     }
 };
