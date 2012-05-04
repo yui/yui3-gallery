@@ -30,7 +30,9 @@ YUI.add('gallery-layout', function(Y) {
  * <p>If the body content is a single module, it expands as the content
  * expands (fit-to-content) until it would push the footer below the fold.
  * Then it switches to fit-to-viewport so the scrollbar appears on the
- * module instead of the entire viewport.</p>
+ * module instead of the entire viewport.  (If you do not want this
+ * behavior in a particular case, add the class FORCE_FIT to
+ * layout-bd.)</p>
  * 
  * <p>Note that a non-zero margin-top on the top element or a non-zero
  * margin-bottom on the bottom element inside any container will break the
@@ -195,6 +197,27 @@ PageLayout.ATTRS =
  * @param height {Number} new height in pixels
  * @param width {Number} new width in pixels
  */
+
+/**
+ * @property Y.PageLayout.fit_to_viewport_class
+ * @type {String}
+ * @default "FIT_TO_VIEWPORT"
+ */
+PageLayout.fit_to_viewport_class = 'FIT_TO_VIEWPORT';
+
+/**
+ * @property Y.PageLayout.fit_to_content_class
+ * @type {String}
+ * @default "FIT_TO_CONTENT"
+ */
+PageLayout.fit_to_content_class = 'FIT_TO_CONTENT';
+
+/**
+ * @property Y.PageLayout.force_fit_class
+ * @type {String}
+ * @default "FORCE_FIT"
+ */
+PageLayout.force_fit_class = 'FORCE_FIT';
 
 /**
  * @property Y.PageLayout.page_header_class
@@ -789,13 +812,13 @@ Y.extend(PageLayout, Y.Base,
 				var nub = module.getFirstElementByClassName(collapse_nub_pattern);
 				if (nub)
 				{
-					Y.on('PageLayoutCollapse|click', collapseModule, nub, this);
+					nub.on('PageLayoutCollapse|click', collapseModule, this);
 				}
 
 				nub = module.getFirstElementByClassName(expand_nub_pattern);
 				if (nub)
 				{
-					Y.on('PageLayoutCollapse|click', expandModule, nub, this);
+					nub.on('PageLayoutCollapse|click', expandModule, this);
 				}
 			},
 			this);
@@ -856,7 +879,8 @@ Y.extend(PageLayout, Y.Base,
 			normalizeSizes(this.body_info.outers, plugin_data.outer_size);
 
 		this.single_module = false;
-		if (this.body_info.outers.size() == 1 && this.body_info.modules[0].size() == 1)
+		if (this.body_info.outers.size() == 1 && this.body_info.modules[0].size() == 1 &&
+			!this.body_container.hasClass(PageLayout.force_fit_class))
 		{
 			plugin_data        = plugin_info.row;
 			this.single_module = true;
@@ -1126,4 +1150,4 @@ Y.extend(PageLayout, Y.Base,
 Y.PageLayout = PageLayout;
 
 
-}, 'gallery-2012.03.28-20-16' ,{skinnable:true, optional:['gallery-layout-rows','gallery-layout-cols'], requires:['base','gallery-funcprog','gallery-node-optimizations','gallery-dimensions','gallery-nodelist-extras2']});
+}, 'gallery-2012.04.26-15-49' ,{skinnable:true, optional:['gallery-layout-rows','gallery-layout-cols'], requires:['base','gallery-funcprog','gallery-node-optimizations','gallery-dimensions','gallery-nodelist-extras2']});

@@ -6,7 +6,6 @@
 	LABELON = 'labelOn',
 	LABELOFF = 'labelOff',
 	HANDLE = 'handle';
-	;
 	
 	Y[SLIDECHECKBOX] = Y.Base.create(
 	SLIDECHECKBOX,
@@ -93,10 +92,6 @@
 					cb.detach('key');
 					cb.blur();
 				},this);
-				
-				this.src.on('change',function(e){
-					alert(this.src.get('checked'));
-				});
 			},syncUI : function(){
 				this._sliderwrapNode.setStyle('left',
 					this.src.get('checked')?  0 : this.left
@@ -154,7 +149,7 @@
 				if(this.disabled){
 					return;
 				}
-
+				this.src.set('checked',!this.src.get('checked'));
 				if(this.anim === null){
 					this.anim = new Y.Anim({
 						node: this._sliderwrapNode,
@@ -168,7 +163,7 @@
 				this.anim.set('from',{left:(this.from? this.from : this.baseX)});
 				this.anim.set('to',{left:this.to});
 				this.anim.run();
-				this.src.set('checked',!this.src.get('checked'));
+
 				Y.log("New value: " + this.src.get('checked'));
 			},
 			_replacePx : function(el){

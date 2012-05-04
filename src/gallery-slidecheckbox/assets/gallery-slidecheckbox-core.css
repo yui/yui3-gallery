@@ -1,3 +1,4 @@
+.yui3-slidecheckbox{display:inline-block;}
 .yui3-slidecheckbox-content,.yui3-slidecheckbox-content > div{height:27px;}
 .yui3-slidecheckbox-content{position:relative;}
 .yui3-slidecheckbox-content > div{position:relative;border-radius: 4px;-moz-border-radius:4px;overflow:hidden;}

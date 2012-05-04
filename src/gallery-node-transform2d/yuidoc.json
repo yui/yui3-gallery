@@ -1,0 +1,12 @@
+{
+    "name": "Node Transform 2d",
+    "description": "",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

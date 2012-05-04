@@ -1,0 +1,392 @@
+{
+    "project": {
+        "name": "Node Transform 2d",
+        "description": ""
+    },
+    "files": {
+        "js/node-transform2d.js": {
+            "name": "js/node-transform2d.js",
+            "modules": {
+                "gallery-node-transform2d": 1
+            },
+            "classes": {},
+            "fors": {
+                "Node": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-node-transform2d": {
+            "name": "gallery-node-transform2d",
+            "submodules": {},
+            "classes": {
+                "Node": 1
+            },
+            "fors": {
+                "Node": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/node-transform2d.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "Node": {
+            "name": "Node",
+            "shortname": "Node",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-node-transform2d",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/node-transform2d.js",
+            "line": 13,
+            "description": "Helper method to get the node's current 2d transfom matrix.",
+            "itemtype": "method",
+            "name": "getMatrix",
+            "return": {
+                "description": "",
+                "type": "CSSMatrix2d"
+            },
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 22,
+            "description": "Transforms the node by the inverse of the nodes current 2d transform\nmatrix.",
+            "itemtype": "method",
+            "name": "inverseTransform",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 48,
+            "description": "Transforms the node by multiplying the nodes current 2d transform\nmatrix with another matrix.",
+            "itemtype": "method",
+            "name": "multiplyMatrix",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "matrix",
+                    "description": "The matrix to multiply.",
+                    "type": "CSSMatrix2d"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 65,
+            "description": "Rotates the node clockwise.",
+            "itemtype": "method",
+            "name": "rotate",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The angle specified in degrees.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 81,
+            "description": "Rotates the node clockwise.",
+            "itemtype": "method",
+            "name": "rotateRad",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The angle specified in radians.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 97,
+            "description": "Scales the node horizontally and vertically.",
+            "itemtype": "method",
+            "name": "scale",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "scaleFactor",
+                    "description": "The horizontal and vertical scale factor.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 113,
+            "description": "Scales the node horizontally and vertically.",
+            "itemtype": "method",
+            "name": "scaleXY",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "scaleFactorX",
+                    "description": "The horizontal scale factor.",
+                    "type": "Number"
+                },
+                {
+                    "name": "scaleFactorY",
+                    "description": "The vertical scale factor.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 130,
+            "description": "Skews the node horizontally.",
+            "itemtype": "method",
+            "name": "skewX",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The horizontal skew angle specified in degrees.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 146,
+            "description": "Skews the node horizontally.",
+            "itemtype": "method",
+            "name": "skewXRad",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The horizontal skew angle specified in radians.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 162,
+            "description": "Skews the node vertically.",
+            "itemtype": "method",
+            "name": "skewY",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The vertical skew angle specified in degrees.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 178,
+            "description": "Skews the node vertically.",
+            "itemtype": "method",
+            "name": "skewYRad",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The vertical skew angle specified in radians.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 194,
+            "description": "Transforms the node by the given matrix.",
+            "itemtype": "method",
+            "name": "transform",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "matrix",
+                    "description": "The 2d transform matrix.",
+                    "type": "CSSMatrix2d"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        },
+        {
+            "file": "js/node-transform2d.js",
+            "line": 226,
+            "description": "Translates the node horizontally and vertically.",
+            "itemtype": "method",
+            "name": "translate",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "x",
+                    "description": "The amount to translate horizontally.",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "The amount to translate vertically.",
+                    "type": "Number"
+                },
+                {
+                    "name": "transitionConfig",
+                    "description": "Optional.  If defined, and if the\ntransition module is available, a transition will be used to\ntransform the node.  This object is passed along to the transition\nmethod.",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Optional.  Whether or not\ntransition is used, the callback function, if defined, will get\ncalled when the transform is complete.",
+                    "type": "Function"
+                }
+            ],
+            "class": "Node",
+            "module": "gallery-node-transform2d"
+        }
+    ]
+}

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;mutex.js - Mutex</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><img src="..&#x2F;assets/css/logo.png"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Mutex.html">Mutex</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-mutex.html">gallery-mutex</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1 class="file-heading">File: js&#x2F;mutex.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+ * @module gallery-mutex
+ *&#x2F;
+(function (Y) {
+    &#x27;use strict&#x27;;
+    
+    &#x2F;**
+    * Most people believe that Since JavaScript does not provide a
+    * multi-threaded shared memory environment, JavaScript is completely
+    * free from concurrency issues.  This is true at a low level;
+    * JavaScript developers don&#x27;t need to worry about race conditions
+    * between multiple processes or threads writing to the same memory
+    * location.  At a higher level, asynchronous operations still allow for
+    * similar problems to occur.
+    * 
+    * Imagine a function that does the following:
+    * &lt;ol&gt;
+    *     &lt;li&gt;
+    *         Check the value of a variable.
+    *     &lt;&#x2F;li&gt;
+    *     &lt;li&gt;
+    *         If the value is undefined:
+    *         &lt;ol&gt;
+    *             &lt;li&gt;
+    *                 Make a request to a server.
+    *             &lt;&#x2F;li&gt;
+    *             &lt;li&gt;
+    *                 Receive data.
+    *             &lt;li&gt;
+    *                 Set the value of the variable.
+    *             &lt;&#x2F;li&gt;
+    *         &lt;&#x2F;ol&gt;
+    *     &lt;&#x2F;li&gt;
+    *     &lt;li&gt;
+    *         Pass the variable to a callback function.
+    *     &lt;&#x2F;li&gt;
+    * &lt;&#x2F;ol&gt;
+    * 
+    * It seems common for web applications to lazy load data like this as
+    * needed.  Now imagine that there are several separate modules within a
+    * web application which all require this data.  It&#x27;s possible for the
+    * first module to call this function, the function sees that the value
+    * is undefined, and sends a request to a server.  Then before the
+    * request returns, the second module calls this function, the function
+    * sees that the value is undefined and sends a request to a server.
+    * Then before both of those requests return, the third module calls
+    * this function, the function sees that the value is undefined and sends
+    * a request to a server.  In this case, three requests are made to a server
+    * for the same data.
+    * 
+    * It would be far better if the second and third calls to the function
+    * just waited for the first request to complete.  Y.Mutex makes it
+    * easier to accomplish this functionality.
+    * 
+    * Y.Mutex provides a concept of locking a resource.  Once an exclusive
+    * resource lock is obtained, other parts of an application which
+    * attempt to access the same resource, will have to wait until that
+    * resource is unlocked.
+    * 
+    * The function above could be rewritten as follows:
+    * &lt;ol&gt;
+    *     &lt;li&gt;
+    *         Obtain an exclusive lock for a variable.
+    *     &lt;&#x2F;li&gt;
+    *     &lt;li&gt;
+    *         Check the value of the variable.
+    *     &lt;&#x2F;li&gt;
+    *     &lt;li&gt;
+    *         If the value is undefined:
+    *         &lt;ol&gt;
+    *             &lt;li&gt;
+    *                 Make a request to a server.
+    *             &lt;&#x2F;li&gt;
+    *             &lt;li&gt;
+    *                 Receive data.
+    *             &lt;li&gt;
+    *                 Set the value of the variable.
+    *             &lt;&#x2F;li&gt;
+    *         &lt;&#x2F;ol&gt;
+    *     &lt;&#x2F;li&gt;
+    *     &lt;li&gt;
+    *         Unlock the variable.
+    *     &lt;&#x2F;li&gt;
+    *     &lt;li&gt;
+    *         Pass the variable to a callback function.
+    *     &lt;&#x2F;li&gt;
+    * &lt;&#x2F;ol&gt;
+    * 
+    * This way, second or third or more calls to the function, before the
+    * first request is complete, will always wait for the request to
+    * complete instead of sending multiple unnecessary requests.
+    * 
+    * Just like locking in multi threaded applications, there are
+    * disadvantages and dangers to locking.  There is a small amount of
+    * overhead added to every resource access, even when the chances for
+    * concurrency issues are very small.  Once a lock is obtained, it must
+    * be unlocked; so error handling and time outs are important to ensure
+    * that the entire application doesn&#x27;t break when something goes wrong.
+    * It is possible to cause a deadlock when locking multiple resources at
+    * once.
+    * 
+    * One advantage Y.Mutex has in JavaScript over other multi threaded
+    * applications, the locks are asynchronous.  The application is not
+    * blocked while waiting to acquire a lock.  Even if a deadlock occurs,
+    * other parts of the application are not affected.  Y.Mutex also
+    * provides multiple ways to cancel a particular lock, so there are
+    * extra possibilities to recover from locking errors.
+    * 
+    * Y.Mutex offers exclusive locks, shared locks, and upgradable locks.
+    * When a resource is locked by an exclusive lock, Y.Mutex guarantees
+    * that no other locks will be granted for the resource until the
+    * resource is unlocked.  When a resource is locked by a shared lock,
+    * Y.Mutex allows the resource to be locked by an unlimited number of
+    * other shared locks at the same time and&#x2F;or one single upgradable
+    * lock.  When a resource is locked by multiple shared locks, an
+    * exclusive lock can not be obtained until all of the shared locks have
+    * been unlocked.  An upgradable lock can be upgraded to act as an
+    * exclusive lock.  Shared locks are generally used when just reading
+    * values.  Exclusive locks are generally used when writing values.
+    * 
+    * Y.Mutex provides a way to deal with asynchronous concurrency issues,
+    * but it does not prevent them.  If code from part of an application
+    * uses Y.Mutex to lock a resource, there is nothing stopping code from
+    * another part of the application from ignoring the lock and accessing
+    * the resource directly.  Y.Mutex does not handle real multi threaded or
+    * multi process concurrency issues.
+    * @class Mutex
+    * @static
+    *&#x2F;
+    var _Mutex = Y.namespace(&#x27;Mutex&#x27;),
+        
+        _isEmpty = Y.Object.isEmpty,
+        _later = Y.later,
+        _soon = Y.soon;
+        
+    Y.mix(_Mutex, {
+        &#x2F;**
+         * Obtains an exclusive lock on a resource.
+         * @method exclusive
+         * @param {String} resourceName The name of the resource to lock.
+         * @param {Function} callbackFunction The function that gets called when
+         * the lock is obtained.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed to ever be called.  The callback function is passed
+         * one argument, the unlock function which must be called to release the
+         * lock.
+         * @param {Number} timeout Optional.  The approximate time in
+         * milliseconds to wait after the callback function has been called.
+         * Once the timeout has expired, if the callback function hasn&#x27;t yet
+         * called the unlock function, the lock will be automatically released.
+         * This does not halt, stop, or prevent anything that the callback
+         * function might still be doing asynchronously; it just releases the
+         * lock.  Using timeout is one way to reduce the possibility of
+         * deadlocks, but it comes with the risk of allowing concurrent access
+         * to the resource.
+         * @return {Object} cancelObject An object with a cancel method.  When
+         * the cancel method is called, if the callback function hasn&#x27;t yet
+         * called the unlock function, the lock will be automatically released.
+         * This does not halt, stop, or prevent anything that the callback
+         * function might still be doing asynchronously; it just releases the
+         * lock.  Using the cancel method is one way to reduce the possibiliy of
+         * deadlocks, but it comes with the risk of allowing concurrent access
+         * to the resource.  The cancelObject also has a mode property set to
+         * &#x27;exclusive&#x27;.
+         * @static
+         *&#x2F;
+        exclusive: function (resourceName, callbackFunction, timeout) {
+            var _locks = _Mutex._locks,
+                
+                guid = Y.guid(),
+                lock = _locks[resourceName],
+                queue,
+                
+                unlock = function () {
+                    _Mutex._unlockExclusive(guid, resourceName);
+                },
+                
+                lockDetails = [
+                    guid,
+                    resourceName,
+                    callbackFunction,
+                    timeout,
+                    unlock
+                ];
+                
+            if (!lock) {
+                lock = {};
+                _locks[resourceName] = lock;
+            }
+            
+            if (lock.e || lock.s || lock.u) {
+                queue = lock.eq;
+                
+                if (!queue) {
+                    queue = [];
+                    lock.eq = queue;
+                }
+                
+                queue.push(lockDetails);
+            } else {
+                _Mutex._lockExclusive.apply(_Mutex, lockDetails);
+            }
+
+            return {
+                cancel: unlock,
+                mode: &#x27;exclusive&#x27;
+            };
+        },
+        &#x2F;**
+         * Obtains a shared lock on a resource.
+         * @method shared
+         * @param {String} resourceName The name of the resource to lock.
+         * @param {Function} callbackFunction The function that gets called when
+         * the lock is obtained.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed to ever be called.  The callback function is passed
+         * one argument, the unlock function which must be called to release the
+         * lock.
+         * @param {Number} timeout Optional.  The approximate time in
+         * milliseconds to wait after the callback function has been called.
+         * Once the timeout has expired, if the callback function hasn&#x27;t yet
+         * called the unlock function, the lock will be automatically released.
+         * This does not halt, stop, or prevent anything that the callback
+         * function might still be doing asynchronously; it just releases the
+         * lock.  Using timeout is one way to reduce the possibility of
+         * deadlocks, but it comes with the risk of allowing concurrent access
+         * to the resource.
+         * @return {Object} cancelObject An object with a cancel method.  When
+         * the cancel method is called, if the callback function hasn&#x27;t yet
+         * called the unlock function, the lock will be automatically released.
+         * This does not halt, stop, or prevent anything that the callback
+         * function might still be doing asynchronously; it just releases the
+         * lock.  Using the cancel method is one way to reduce the possibiliy of
+         * deadlocks, but it comes with the risk of allowing concurrent access
+         * to the resource.  The cancelObject also has a mode property set to
+         * &#x27;shared&#x27;.
+         * @static
+         *&#x2F;
+        shared: function (resourceName, callbackFunction, timeout) {
+            var _locks = _Mutex._locks,
+                
+                guid = Y.guid(),
+                lock = _locks[resourceName],
+                queue,
+                
+                unlock = function () {
+                    _Mutex._unlockShared(guid, resourceName);
+                },
+                
+                lockDetails = [
+                    guid,
+                    resourceName,
+                    callbackFunction,
+                    timeout,
+                    unlock
+                ];
+                
+            if (!lock) {
+                lock = {};
+                _locks[resourceName] = lock;
+            }
+            
+            if (lock.e || lock.eq || lock.ue) {
+                queue = lock.sq;
+                
+                if (!queue) {
+                    queue = [];
+                    lock.sq = queue;
+                }
+                
+                queue.push(lockDetails);
+            } else {
+                _Mutex._lockShared.apply(_Mutex, lockDetails);
+            }
+
+            return {
+                cancel: unlock,
+                mode: &#x27;shared&#x27;
+            };
+        },
+        &#x2F;**
+         * Obtains an upgradable lock on a resource.  When an upgradable lock is
+         * obtained, it begins in shared mode and it allows other shared locks
+         * to be granted for the resource.  An upgradable lock can at any time
+         * be upgraded to exclusive mode.  When upgraded to exclusive mode, new
+         * shared locks will not be granted and the upgradable lock will wait
+         * until all existing shared locks are unlocked.  Then it will resume,
+         * exclusively holding the only lock on the resource.  It can then at
+         * any time return to shared mode allowing more shared locks to be
+         * granted.
+         * @method upgradable
+         * @param {String} resourceName The name of the resource to lock.
+         * @param {Function} callbackFunction The function that gets called when
+         * the lock is obtained.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed to ever be called.  The callback function is passed
+         * two arguments.  The first argument is the unlock function which must
+         * be called to release the lock.  The second argument is the exclusive
+         * function which may be called to switch the upgradable lock to
+         * exclusive mode.  The exclusive function accepts a callback function
+         * as its only argument.  This callback function gets called once
+         * exclusivity is achieved.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed ever to be called.  The callback function is passed
+         * one argument, the shared function which may be called to switch the
+         * upgradable lock back to shared mode.  The shared function accepts a
+         * callback function as its only argument.  This callback function gets
+         * called once exclusivity is revoked.  It is guaranteed not to be
+         * called synchronously.  It is guaranteed not to be called more than
+         * once.  It is not guaranteed ever to be called.  The callback function
+         * is passed one argument, the exclusive function which may be called to
+         * switch the upgradable lock to exclusive mode.
+         * @param {Number} timeout Optional.  The approximate time in
+         * milliseconds to wait after the callback function has been called.
+         * Once the timeout has expired, if the callback function hasn&#x27;t yet
+         * called the unlock function, the lock will be automatically released.
+         * This does not halt, stop, or prevent anything that the callback
+         * function might still be doing asynchronously; it just releases the
+         * lock.  Using timeout is one way to reduce the possibility of
+         * deadlocks, but it comes with the risk of allowing concurrent access
+         * to the resource.
+         * @return {Object} cancelObject An object with a cancel method.  When
+         * the cancel method is called, if the callback function hasn&#x27;t yet
+         * called the unlock function, the lock will be automatically released.
+         * This does not halt, stop, or prevent anything that the callback
+         * function might still be doing asynchronously; it just releases the
+         * lock.  Using the cancel method is one way to reduce the possibiliy of
+         * deadlocks, but it comes with the risk of allowing concurrent access
+         * to the resource.  The cancelObject also has a mode property set to
+         * &#x27;upgradable&#x27;.
+         * @static
+         *&#x2F;
+        upgradable: function (resourceName, callbackFunction, timeout) {
+            var _locks = _Mutex._locks,
+                
+                guid = Y.guid(),
+                lock = _locks[resourceName],
+                queue,
+                
+                unlock = function () {
+                    _Mutex._unlockUpgradable(guid, resourceName);
+                },
+                
+                lockDetails = [
+                    guid,
+                    resourceName,
+                    callbackFunction,
+                    timeout,
+                    unlock
+                ];
+                
+            if (!lock) {
+                lock = {};
+                _locks[resourceName] = lock;
+            }
+            
+            if (lock.e || lock.eq || lock.u) {
+                queue = lock.uq;
+                
+                if (!queue) {
+                    queue = [];
+                    lock.uq = queue;
+                }
+                
+                queue.push(lockDetails);
+            } else {
+                _Mutex._lockUpgradable.apply(_Mutex, lockDetails);
+            }
+
+            return {
+                cancel: unlock,
+                mode: &#x27;upgradable&#x27;
+            };
+        },
+        &#x2F;**
+         * Cancels the time out timer on a currently held lock.
+         * @method _cancelTimer
+         * @param {String} guid The lock&#x27;s internal id.  If this is not the id
+         * of a lock currently held on this resource, with a time out, this
+         * method will do nothing.
+         * @param {String} resourceName The name of the locked resource.
+         * @protected
+         * @static
+         *&#x2F;
+        _cancelTimer: function (guid, resourceName) {
+            var lock = _Mutex._locks[resourceName],
+                timers = lock &amp;&amp; lock.t,
+                
+                timer = timers &amp;&amp; timers[guid];
+            
+            if (timer) {
+                timer.cancel();
+                delete timers[guid];
+                
+                if (_isEmpty(timers)) {
+                    delete lock.t;
+                }
+            }
+        },
+        &#x2F;**
+         * Immediately grants an exclusive lock on a resource.
+         * @method _lockExclusive
+         * @param {String} guid The lock&#x27;s internal id.
+         * @param {String} resourceName The name of the resource to lock.
+         * @param {Function} callbackFunction The function that gets called when
+         * the lock is obtained.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed to ever be called.  The callback function is passed
+         * one argument, the unlock function which must be called to release the
+         * lock.
+         * @param {Number} timeout The approximate time in milliseconds to wait
+         * after the callback function has been called.  Once the timeout has
+         * expired, if the callback function hasn&#x27;t yet called the unlock
+         * function, the lock will be automatically released.  This does not
+         * halt, stop, or prevent anything that the callback function might
+         * still be doing asynchronously; it just releases the lock.  Using
+         * timeout is one way to reduce the possibility of deadlocks, but it
+         * comes with the risk of allowing concurrent access to the resource.
+         * @param {Function} unlock The function that will unlock this lock.
+         * @protected
+         * @static
+         *&#x2F;
+        _lockExclusive: function (guid, resourceName, callbackFunction, timeout, unlock) {
+            var _locks = _Mutex._locks,
+                
+                lock = _locks[resourceName];
+            
+            if (!lock) {
+                lock = {};
+                _locks[resourceName] = lock;
+            }
+            
+            lock.e = guid;
+                
+            _soon(function () {
+                if (timeout) {
+                    var timers = lock.t;
+                    
+                    if (!timers) {
+                        timers = {};
+                        lock.t = timers;
+                    }
+                    
+                    timers[guid] = _later(timeout, null, unlock);
+                }
+
+                callbackFunction(unlock);
+            });
+        },
+        &#x2F;**
+         * Immediately grants locks on a resource as needed, based upon
+         * currently held locks and the queue of locks waiting to be granted.
+         * @method _lockQueue
+         * @param {String} resourceName The name of the resource to lock.
+         * @protected
+         * @static
+         *&#x2F;
+        _lockQueue: function (resourceName) {
+            var _locks = _Mutex._locks,
+                
+                lock = _locks[resourceName],
+                lockDetails,
+                queue;
+            
+            if (!lock || lock.e) {
+                return;
+            }
+            
+            if (!lock.s &amp;&amp; !lock.u) {
+                queue = lock.eq;
+                
+                if (queue) {
+                    lockDetails = queue.shift();
+
+                    if (!queue.length) {
+                        delete lock.eq;
+                    }
+
+                    if (lockDetails) {
+                        _Mutex._lockExclusive.apply(_Mutex, lockDetails);
+                        return;
+                    }
+                }
+            }
+            
+            if (lock.u) {
+                if (lock.ue &amp;&amp; !lock.s) {
+                    lock.ue();
+                    return;
+                }
+            }
+            
+            if (lock.eq) {
+                return;
+            }
+            
+            queue = lock.uq;
+
+            if (queue) {
+                lockDetails = queue.shift();
+
+                if (!queue.length) {
+                    delete lock.uq;
+                }
+
+                if (lockDetails) {
+                    _Mutex._lockUpgradable.apply(_Mutex, lockDetails);
+                }
+            }
+            
+            queue = lock.sq;
+            
+            if (queue) {
+                while (queue.length) {
+                    _Mutex._lockShared.apply(_Mutex, queue.shift());
+                }
+                
+                delete lock.sq;
+            }
+            
+            if (_isEmpty(lock)) {
+                delete _locks[resourceName];
+            }
+        },
+        &#x2F;**
+         * An object containing the state of currently held and queued locks.
+         * @property _locks
+         * @protected
+         * @static
+         *&#x2F;
+        _locks: {},
+        &#x2F;**
+         * Immediately grants a shared lock on a resource.
+         * @method _lockShared
+         * @param {String} guid The lock&#x27;s internal id.
+         * @param {String} resourceName The name of the resource to lock.
+         * @param {Function} callbackFunction The function that gets called when
+         * the lock is obtained.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed to ever be called.  The callback function is passed
+         * one argument, the unlock function which must be called to release the
+         * lock.
+         * @param {Number} timeout The approximate time in milliseconds to wait
+         * after the callback function has been called.  Once the timeout has
+         * expired, if the callback function hasn&#x27;t yet called the unlock
+         * function, the lock will be automatically released.  This does not
+         * halt, stop, or prevent anything that the callback function might
+         * still be doing asynchronously; it just releases the lock.  Using
+         * timeout is one way to reduce the possibility of deadlocks, but it
+         * comes with the risk of allowing concurrent access to the resource.
+         * @param {Function} unlock The function that will unlock this lock.
+         * @protected
+         * @static
+         *&#x2F;
+        _lockShared: function (guid, resourceName, callbackFunction, timeout, unlock) {
+            var _locks = _Mutex._locks,
+                
+                lock = _locks[resourceName],
+                locks;
+            
+            if (!lock) {
+                lock = {};
+                _locks[resourceName] = lock;
+            }
+            
+            locks = lock.s;
+            
+            if (!locks) {
+                locks = {};
+                lock.s = locks;
+            }
+            
+            locks[guid] = true;
+                
+            _soon(function () {
+                if (timeout) {
+                    var timers = lock.t;
+                    
+                    if (!timers) {
+                        timers = {};
+                        lock.t = timers;
+                    }
+                    
+                    timers[guid] = _later(timeout, null, unlock);
+                }
+
+                callbackFunction(unlock);
+            });
+        },
+        &#x2F;**
+         * Immediately grants an upgradable lock on a resource.
+         * @method _lockUpgradable
+         * @param {String} guid The lock&#x27;s internal id.
+         * @param {String} resourceName The name of the resource to lock.
+         * @param {Function} callbackFunction The function that gets called when
+         * the lock is obtained.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed to ever be called.  The callback function is passed
+         * two arguments.  The first argument is the unlock function which must
+         * be called to release the lock.  The second argument is the exclusive
+         * function which may be called to switch the upgradable lock to
+         * exclusive mode.  The exclusive function accepts a callback function
+         * as its only argument.  This callback function gets called once
+         * exclusivity is achieved.  It is guaranteed not to be called
+         * synchronously.  It is guaranteed not to be called more than once.  It
+         * is not guaranteed ever to be called.  The callback function is passed
+         * one argument, the shared function which may be called to switch the
+         * upgradable lock back to shared mode.  The shared function accepts a
+         * callback function as its only argument.  This callback function gets
+         * called once exclusivity is revoked.  It is guaranteed not to be
+         * called synchronously.  It is guaranteed not to be called more than
+         * once.  It is not guaranteed ever to be called.  The callback function
+         * is passed one argument, the exclusive function which may be called to
+         * switch the upgradable lock to exclusive mode.
+         * @param {Number} timeout The approximate time in milliseconds to wait
+         * after the callback function has been called.  Once the timeout has
+         * expired, if the callback function hasn&#x27;t yet called the unlock
+         * function, the lock will be automatically released.  This does not
+         * halt, stop, or prevent anything that the callback function might
+         * still be doing asynchronously; it just releases the lock.  Using
+         * timeout is one way to reduce the possibility of deadlocks, but it
+         * comes with the risk of allowing concurrent access to the resource.
+         * @param {Function} unlock The function that will unlock this lock.
+         * @protected
+         * @static
+         *&#x2F;
+        _lockUpgradable: function (guid, resourceName, callbackFunction, timeout, unlock) {
+            var _locks = _Mutex._locks,
+                
+                lock = _locks[resourceName];
+            
+            if (!lock) {
+                lock = {};
+                _locks[resourceName] = lock;
+            }
+            
+            lock.u = guid;
+                
+            _soon(function () {
+                var exclusive,
+                    shared,
+                    timers;
+                    
+                exclusive = function (callbackFunction) {
+                    var lock = _locks[resourceName] || {},
+                    
+                        exclusive = function () {
+                            var lock = _locks[resourceName] || {};
+                            
+                            if (lock.u !== guid) {
+                                return;
+                            }
+                            
+                            lock.e = guid;
+                            delete lock.u;
+                            delete lock.ue;
+                            
+                            _soon(function () {
+                                callbackFunction(shared);
+                            });
+                        };
+
+                    if (lock.u !== guid) {
+                        return;
+                    }
+                    
+                    if (lock.s) {
+                        lock.ue = exclusive();
+                    } else {
+                        exclusive();
+                    }
+                };
+                
+                shared = function (callbackFunction) {
+                    var lock = _locks[resourceName] || {};
+                            
+                    if (lock.e !== guid) {
+                        return;
+                    }
+                    
+                    lock.u = guid;
+                    delete lock.e;
+                    
+                    _Mutex._lockQueue(resourceName);
+                    
+                    _soon(function () {
+                        callbackFunction(exclusive);
+                    });
+                };
+                
+                if (timeout) {
+                    timers = lock.t;
+                    
+                    if (!timers) {
+                        timers = {};
+                        lock.t = timers;
+                    }
+                    
+                    timers[guid] = _later(timeout, null, unlock);
+                }
+
+                callbackFunction(unlock, exclusive);
+            });
+        },
+        &#x2F;**
+         * Unlocks a currently held exclusive lock on a resource and processes
+         * the next locks in queue as needed.
+         * @method _unlockExclusive
+         * @param {String} guid The lock&#x27;s internal id.  If this is not the id
+         * of an exclusive lock currently held on this resource, this method
+         * will do nothing.
+         * @param {String} resourceName The name of the locked resource.
+         * @protected
+         * @static
+         *&#x2F;
+        _unlockExclusive: function (guid, resourceName) {
+            _Mutex._cancelTimer(guid, resourceName);
+            
+            var lock = _Mutex._locks[resourceName] || {};
+                
+            if (lock.e !== guid) {
+                return;
+            }
+            
+            delete lock.e;
+
+            _Mutex._lockQueue(resourceName);
+        },
+        &#x2F;**
+         * Unlocks a currently held shared lock on a resource and processes the
+         * next locks in queue as needed.
+         * @method _unlockShared
+         * @param {String} guid The lock&#x27;s internal id.  If this is not the id
+         * of a shared lock currently held on this resource, this method will do
+         * nothing.
+         * @param {String} resourceName The name of the locked resource.
+         * @protected
+         * @static
+         *&#x2F;
+        _unlockShared: function (guid, resourceName) {
+            _Mutex._cancelTimer(guid, resourceName);
+            
+            var lock = _Mutex._locks[resourceName] || {},
+                locks = lock.s;
+                
+            if (!locks || !locks[guid]) {
+                return;
+            }
+            
+            delete locks[guid];
+            
+            if (_isEmpty(locks)) {
+                delete lock.s;
+            }
+
+            _Mutex._lockQueue(resourceName);
+        },
+        &#x2F;**
+         * Unlocks a currently held upgradable lock on a resource and processes
+         * the next locks in queue as needed.
+         * @method _unlockUpgradable
+         * @param {String} guid The lock&#x27;s internal id.  If this is not the id
+         * of an upgradable lock currently held on this resource, this method
+         * will do nothing.
+         * @param {String} resourceName The name of the locked resource.
+         * @protected
+         * @static
+         *&#x2F;
+        _unlockUpgradable: function (guid, resourceName) {
+            _Mutex._cancelTimer(guid, resourceName);
+            
+            var lock = _Mutex._locks[resourceName] || {};
+            
+            if (lock.e === guid) {
+                delete lock.e;
+            } else if (lock.u === guid) {
+                delete lock.u;
+                delete lock.ue;
+            } else {
+                return;
+            }
+
+            _Mutex._lockQueue(resourceName);
+        }
+    });
+}(Y));
+    </pre>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
