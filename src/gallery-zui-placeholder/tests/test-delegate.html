@@ -27,36 +27,58 @@
 <script type="text/javascript" src="../../../build/gallery-zui-placeholder/gallery-zui-placeholder-debug.js"></script> 
 <script>
 
-YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
+YUI({combine: false}).use('test', 'console', 'node-event-delegate', 'gallery-zui-placeholder', function (Y) {
     var testSuite = new Y.Test.Suite('ZUI placeholder');
 
-    testSuite.add(new Y.Test.Case({
-        name: 'Test nativeSupport detection',
-
-        testFirefox: function () {
-            if (Y.UA.gecko > 5) {
-                Y.Assert.isTrue(Y.zui.placeholder.isNative);
-            }
-        },
-
-        testChrome: function () {
-            if (Y.UA.chrome > 10) {
-                Y.Assert.isTrue(Y.zui.placeholder.isNative);
-            }
-        },
-
-        testIE: function () {
-            if (Y.UA.ie > 1 && Y.UA.ie < 9) {
-                Y.Assert.isFalse(Y.zui.placeholder.isNative);
-            }
-        }
-    }));
+    // only show console when not in yeti
+    if (top == self) {
+        new Y.Console().render();
+    }
 
     testSuite.add(new Y.Test.Case({
-        name: 'Test install placeholder',
+        name: 'Test install/uninstall delegate placeholder',
 
-        testInstallWithIDNoPlaceholder: function () {
-            var ret = Y.zui.placeholder.install('#test1');
+        testInstallDelegate: function () {
+            var ret = Y.zui.placeholder.installDelegate();
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(1, ret[0]);
+                Y.Assert.areSame(12, ret[1]);
+            }
+
+            Y.zui.placeholder.uninstallDelegate();
+        },
+
+        testUninstallDelegate: function () {
+            var ret0 = Y.zui.placeholder.installDelegate(),
+                ret = Y.zui.placeholder.uninstallDelegate();
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(1, ret[0]);
+                Y.Assert.areSame(12, ret[1]);
+            }
+
+            Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.areSame('', Y.one('#test2').get('value'));
+            Y.Assert.areSame('test5', Y.one('#test5').get('value'));
+            Y.Assert.areSame('', Y.one('#test6').get('value'));
+        },
+
+        testUninstallDelegateTwice: function () {
+            var ret0 = Y.zui.placeholder.installDelegate(),
+                ret1 = Y.zui.placeholder.uninstallDelegate(),
+                ret = Y.zui.placeholder.uninstallDelegate();
 
             if (Y.zui.placeholder.isNative) {
                 Y.Assert.isUndefined(ret);
@@ -64,88 +86,6 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
                 Y.Assert.isObject(ret);
                 Y.Assert.areSame(1, ret[0]);
                 Y.Assert.areSame(0, ret[1]);
-            }
-        },
-
-        testInstallWithIDHasPlaceholder: function () {
-            var ret = Y.zui.placeholder.install('#test2');
-
-            if (Y.zui.placeholder.isNative) {
-                Y.Assert.isUndefined(ret);
-            } else {
-                Y.Assert.isObject(ret);
-                Y.Assert.areSame(1, ret[0]);
-                Y.Assert.areSame(1, ret[1]);
-            }
-        },
-
-        testInstallWithIDHasEmptyPlaceholder: function () {
-            var ret = Y.zui.placeholder.install('#test3');
-
-            if (Y.zui.placeholder.isNative) {
-                Y.Assert.isUndefined(ret);
-            } else {
-                Y.Assert.isObject(ret);
-                Y.Assert.areSame(1, ret[0]);
-                Y.Assert.areSame(0, ret[1]);
-            }
-        },
-
-        testInstallManyElements: function () {
-            var ret = Y.zui.placeholder.install('#test4, #test5');
-
-            if (Y.zui.placeholder.isNative) {
-                Y.Assert.isUndefined(ret);
-            } else {
-                Y.Assert.isObject(ret);
-                Y.Assert.areSame(2, ret[0]);
-                Y.Assert.areSame(1, ret[1]);
-            }
-        },
-
-        testInstallDupeElements: function () {
-            var ret = Y.zui.placeholder.install('form input');
-
-            if (Y.zui.placeholder.isNative) {
-                Y.Assert.isUndefined(ret);
-            } else {
-                Y.Assert.isObject(ret);
-                Y.Assert.areSame(6, ret[0]);
-                Y.Assert.areSame(1, ret[1]);
-            }
-        },
-
-        testInstallDelegateError: function () {
-            var ret = Y.zui.placeholder.installDelegate('div', 'input');
-
-            if (Y.zui.placeholder.isNative) {
-                Y.Assert.isUndefined(ret);
-            } else {
-                Y.Assert.isObject(ret);
-                Y.Assert.areSame(-1, ret[0]);
-                Y.Assert.areSame(-1, ret[1]);
-            }
-        },
-
-        testUninstall: function () {
-            var ret = Y.zui.placeholder.uninstall('form input');
-
-            if (Y.zui.placeholder.isNative) {
-                Y.Assert.isUndefined(ret);
-            } else {
-                Y.Assert.isObject(ret);
-                Y.Assert.areSame(6, ret[0]);
-                Y.Assert.areSame(3, ret[1]);
-                Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
-                Y.Assert.isFalse(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
-                Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
-                Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
-                Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
-                Y.Assert.isFalse(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
-                Y.Assert.areSame('', Y.one('#test2').get('value'));
-                Y.Assert.areSame('test4', Y.one('#test4').get('value'));
-                Y.Assert.areSame('test5', Y.one('#test5').get('value'));
-                Y.Assert.areSame('', Y.one('#test6').get('value'));
             }
         }
     }));
@@ -153,17 +93,16 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
     testSuite.add(new Y.Test.Case({
         name: 'Test focus/blur placeholder',
 
-        testFocusPlaceholder: function () {
+        testResetFormAndFocusButton: function () {
             if (Y.zui.placeholder.isNative) {
                 return;
             }
 
-            var ret = Y.zui.placeholder.install('form input');
-            Y.Assert.isObject(ret);
-            Y.Assert.areSame(6, ret[0]);
-            Y.Assert.areSame(3, ret[1]);
-
+            self.focus();
+            Y.one('form').reset();
+            Y.zui.placeholder.installDelegate('form');
             Y.one('#test1').focus();
+
             Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.isTrue(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
@@ -172,27 +111,20 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
             Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.areSame('test 2', Y.one('#test2').get('value'));
             Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+
+            Y.zui.placeholder.uninstallDelegate('form');
         },
 
-        testNotInstalledPlaceholder: function () {
+        testFocusPlaceholder: function () {
             if (Y.zui.placeholder.isNative) {
                 return;
             }
 
-            Y.Assert.isFalse(Y.one('#test7').hasClass(Y.zui.placeholder.clsBlur));
-            Y.Assert.isFalse(Y.one('#test8').hasClass(Y.zui.placeholder.clsBlur));
-            Y.Assert.isFalse(Y.one('#test9').hasClass(Y.zui.placeholder.clsBlur));
-            Y.Assert.isFalse(Y.one('#test10').hasClass(Y.zui.placeholder.clsBlur));
-            Y.Assert.isFalse(Y.one('#test11').hasClass(Y.zui.placeholder.clsBlur));
-            Y.Assert.isFalse(Y.one('#test12').hasClass(Y.zui.placeholder.clsBlur));
-        },
-
-        testFocusChangePlaceholder: function () {
-            if (Y.zui.placeholder.isNative) {
-                return;
-            }
-
+            self.focus();
             Y.one('#test2').focus();
+            Y.one('form').reset();
+            Y.zui.placeholder.installDelegate('form');
+
             Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.isFalse(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
@@ -201,6 +133,48 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
             Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.areSame('', Y.one('#test2').get('value'));
             Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+
+            Y.zui.placeholder.uninstallDelegate('form');
+        },
+
+        testNotInstalledPlaceholder: function () {
+            if (Y.zui.placeholder.isNative) {
+                return;
+            }
+
+            Y.zui.placeholder.installDelegate('form');
+
+            Y.Assert.isFalse(Y.one('#test7').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test8').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test9').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test10').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test11').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test12').hasClass(Y.zui.placeholder.clsBlur));
+
+            Y.zui.placeholder.uninstallDelegate('form');
+        },
+
+        testFocusChangePlaceholder: function () {
+            if (Y.zui.placeholder.isNative) {
+                return;
+            }
+
+            self.focus();
+            Y.one('form').reset();
+            Y.one('#test1').focus();
+            Y.zui.placeholder.installDelegate('form');
+            Y.one('#test2').focus();
+
+            Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.areSame('', Y.one('#test2').get('value'));
+            Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+
+            Y.zui.placeholder.uninstallDelegate('form');
         },
 
         testFocusNoPlaceholder: function () {
@@ -209,6 +183,7 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
             }
 
             self.focus();
+            Y.zui.placeholder.installDelegate('form');
             Y.one('#test3').focus();
 
             Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
@@ -219,6 +194,8 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
             Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.areSame('test 2', Y.one('#test2').get('value'));
             Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+
+            Y.zui.placeholder.uninstallDelegate('form');
         },
 
         testFocusOnDiv: function () {
@@ -227,6 +204,7 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
             }
 
             self.focus();
+            Y.zui.placeholder.installDelegate('form');
             Y.one('div').focus();
 
             Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
@@ -237,6 +215,8 @@ YUI({combine: false}).use('test', 'gallery-zui-placeholder', function (Y) {
             Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
             Y.Assert.areSame('test 2', Y.one('#test2').get('value'));
             Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+
+            Y.zui.placeholder.uninstallDelegate('form');
         }
     }));
 
