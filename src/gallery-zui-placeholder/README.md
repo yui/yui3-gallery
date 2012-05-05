@@ -11,7 +11,7 @@ Description
 
 Simplest way to enable placeholder support in IE: Y.zui.placeholder.install().
 
-You do not need to provider more congifuration to ZUI placeholder, just use 
+You do not need to provide more congifuration to ZUI placeholder, just use 
 standard html5 placeholder attribute. ZUI placeholder will scan for this 
 attribute then change classname and value when focus status changed.
 
@@ -36,6 +36,11 @@ Known Issue
 
 Code Sample
 -----------
+
+
+    // You may need to include css file
+    // <link rel="stylesheet" type="text/css" href="../../../build/gallery-zui-placeholder/assets/gallery-zui-placeholder-core.css"></link>
+    // or define your own style on 'input.zui-phblur, textarea.zui-phblur'
 
     // Install placeholder for all input and textarea exist in this page
     Y.zui.placeholder.install();
