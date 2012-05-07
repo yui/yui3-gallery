@@ -42,6 +42,9 @@ Code Sample
     // <link rel="stylesheet" type="text/css" href="../../../build/gallery-zui-placeholder/assets/gallery-zui-placeholder-core.css"></link>
     // or define your own style on 'input.zui-phblur, textarea.zui-phblur'
 
+    // use html5 placeholder attribute in input or textarea
+    // <input id="test" type="text" placeholder="Please input text here" value="" />
+
     // Install placeholder for all input and textarea exist in this page
     Y.zui.placeholder.install();
 
