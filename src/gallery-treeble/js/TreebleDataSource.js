@@ -724,8 +724,8 @@ function checkFinished()
 		return;
 	}
 
-	var response = {};
-	Y.mix(response, this._topResponse);
+	var response = { meta:{} };
+	Y.mix(response, this._topResponse, true);
 	response.results = [];
 	response         = Y.clone(response, true);
 
@@ -941,6 +941,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	{
 		this._req    = [];
 		this._toggle = [];
+		delete this._topResponse;
 	}
 });
 
