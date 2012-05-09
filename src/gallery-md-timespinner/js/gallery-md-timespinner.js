@@ -236,11 +236,11 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetValue: function (value, src) {
-			this._setting = true;
 			Y.log('_uiSetValue, value: ' + value + ' src ' + src, 'info', 'TimeSpinner');
 			if (src === UI) {
 				return;
 			}
+			this._setting = true;
 			var hours = value.getHours();
 			if (this._ampmSp) {
 				this._hourSp.set(VALUE, (hours % 12) || 12);
