@@ -403,7 +403,7 @@ Y.extend(BulkEditor, Y.Widget,
 	getRecordId: function(
 		/* object/element */	obj)
 	{
-		if (Y.Lang.isObject(obj) && !(obj instanceof Y.Node))
+		if (Y.Lang.isObject(obj) && !obj._node)
 		{
 			return obj[ this.get('ds').get('uniqueIdKey') ];
 		}
@@ -430,7 +430,7 @@ Y.extend(BulkEditor, Y.Widget,
 		{
 			var id = id_prefix + id_separator + record;
 		}
-		else if (record instanceof Y.Node)
+		else if (record && record._node)
 		{
 			return record.getAncestorByClassName(BulkEditor.record_container_class, true);
 		}
@@ -464,7 +464,7 @@ Y.extend(BulkEditor, Y.Widget,
 		/* string/object/element */	record,
 		/* string */				key)
 	{
-		if (record instanceof Y.Node)
+		if (record && record._node)
 		{
 			record = this.getRecordId(record);
 		}
