@@ -1,6 +1,6 @@
 /*
- * The Popup Calendar extends the YUI Calendar component 
- * to add popup functionality to input forms. 
+ * The Popup Calendar extends the YUI Calendar component
+ * to add popup functionality to input forms.
  *
  * @module popup-calendar
  * @class PopupCalendar
@@ -18,8 +18,12 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
      * @method initializer
      * @private
      */
-    initializer: function() {
+    initializer: function(cfg) {
         Y.log('initializer', 'info', this.name);
+            var input = cfg.input,
+            minDataDate = input.getData('min-date'),
+            maxDataDate = input.getData('max-date'),
+            minDate, maxDate;
 
         this._bindEvents();
         this.setHideOn();
@@ -28,11 +32,35 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
 
         if(this.get('autoTabIndexFormElements')) {
             this.get(INPUT).ancestor('form').all(INPUT).setAttribute(TABINDEX, '1');
-        }           
+        }
+
+        if (minDataDate) {
+            minDate = new Date(minDataDate);
+            if (minDate.toString() == "Invalid Date") {
+                minDate = new Date();
+            }
+            this.set('startDate', minDate);
+            this.set('minimumDate', minDate);
+
+            if (!cfg.date) {
+                this.set('date', new Date(minDate));
+            }
+        }
+
+        if (maxDataDate) {
+            maxDate = new Date(maxDataDate);
+            this.set('maximumDate', maxDate);
+            this.set('endDate', maxDate);
+        }
+
+        this.set('customRenderer', {
+            rules: this._buildDisabledRule(),
+            filterFunction: this.filterFunction
+        });
     },
 
     /*
-     * Binds events used by the module 
+     * Binds events used by the module
      *
      * @method _bindEvents
      * @private
@@ -92,7 +120,79 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
         Y.log('_testKey', 'info', this.name);
 
         if (e.keyCode === 9) { this.hideCalendar(); }
-    },     
+    },
+
+    /*
+     * Builds the disabled dates rule because Calendar doesn't do this automatically
+     *
+     * @method _buildDisabledRule
+     * @param date {object} javascript date object
+     * @param type {string} 'start' or 'end' used for popup-calendar group
+     * @private
+     */
+    _buildDisabledRule: function(date, type) {
+        Y.log('_buildDisabledRule', 'info', this.name);
+
+        var min = this.get('startDate'),
+            max = this.get('endDate'),
+            rules = {}, dayRule = "", minDayRule = "",
+            day, month, year, minDay, minMonth, minYear, maxDay, maxMonth, maxYear;
+
+        if (min !== null) {
+            minDay = min.getUTCDate();
+            minMonth = min.getUTCMonth();
+            minYear = min.getUTCFullYear();
+        }
+
+        if (max !== null) {
+            maxDay = max.getUTCDate();
+            maxMonth = max.getUTCMonth();
+            maxYear = max.getUTCFullYear();
+        }
+
+        if (type) {
+
+            day = date.getUTCDate() + '';
+            month = date.getUTCMonth() + '';
+            year = date.getUTCFullYear() + '';
+
+            rules[year] = {};
+            rules[year][month] = {};
+
+            if (type === "start") {
+
+                dayRule = day + "-31";
+                if (minDay != 1 && minMonth == month) {
+                    dayRule = "1-" + (minDay-1) + "," + dayRule;
+                }
+
+            } else if (type === "end") {
+
+                if (minDay > day && minMonth == month) {
+                    day = minDay;
+                }
+                dayRule = "1-" + (day-1);
+
+            }
+
+            rules[year][month][dayRule] = "disabledDates";
+
+        }
+
+        rules[minYear] = rules[minYear] || {};
+        rules[maxYear] = rules[maxYear] || {};
+
+        rules[minYear][minMonth] = rules[minYear][minMonth] || {};
+        rules[maxYear][maxMonth] = rules[minYear][maxMonth] || {};
+
+        minDayRule = '1-' + (minDay-1);
+        maxDayRule = (maxDay+1) + '-31';
+
+        rules[minYear][minMonth][minDayRule] = "disabledDates";
+        rules[maxYear][maxMonth][maxDayRule] = "disabledDates";
+
+        return rules;
+    },
 
     /*
      * Detaches all events added to the input node
@@ -127,7 +227,7 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
         }
 
         this.set('hideOn', hideEvents);
-    },      
+    },
 
     /*
      * Shows or renders the calendar
@@ -165,7 +265,7 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
 
     /*
      * Aligns the calendar to the input box. Because of an
-     * issue with when align is run this needs to be run 
+     * issue with when align is run this needs to be run
      * after render has happened.
      *
      * @method setCalendarPosition
@@ -174,7 +274,7 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
     setCalendarPosition: function() {
         Y.log('setCalendarPosition', 'info', this.name);
         if (this.get('align') === null) {
-            this.set('align', this.get('_align'));            
+            this.set('align', this.get('_align'));
         }
         this.show();
     }
@@ -208,7 +308,7 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
         },
 
         /*
-         * Automatically sets all of the input fields in 
+         * Automatically sets all of the input fields in
          * the form to 1 for keyboard navigation cross browser
          * when the developer forgets to do it manually
          *
@@ -221,10 +321,10 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
             value: false
         },
 
-        /* 
+        /*
          * Presets the visibility to false to avoid a flash of
          * content in the wrong position
-         * 
+         *
          * @attribute visible
          * @type bool
          * @default false
@@ -232,6 +332,42 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
          */
         visible: {
             value: false
+        },
+
+        /*
+         * String value of the rules for disabled dates
+         *
+         * @attribute disabledDatesRule
+         * @type string
+         * @default "disabledDates"
+         * @public
+         */
+        disabledDatesRule: {
+           value: "disabledDates"
+        },
+
+        /*
+         * Full calendar start date
+         *
+         * @attribute startDate
+         * @type Date object
+         * @default null
+         * @public
+         */
+        startDate: {
+            value: null
+        },
+
+        /*
+         * Full calendar end date
+         *
+         * @attribute endDate
+         * @type Date object
+         * @default null
+         * @public
+         */
+        endDate: {
+            value: null
         },
 
         /*
