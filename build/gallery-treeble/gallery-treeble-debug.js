@@ -726,8 +726,8 @@ function checkFinished()
 		return;
 	}
 
-	var response = {};
-	Y.mix(response, this._topResponse);
+	var response = { meta:{} };
+	Y.mix(response, this._topResponse, true);
 	response.results = [];
 	response         = Y.clone(response, true);
 
@@ -943,6 +943,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	{
 		this._req    = [];
 		this._toggle = [];
+		delete this._topResponse;
 	}
 });
 
@@ -1052,14 +1053,13 @@ Treeble.buildTwistdownFormatter = function(sendRequest)
 
 		if (o.data[key])
 		{
-			var path  = o.data._yui_node_path;
-			var open  = ds.isOpen(path);
-			var clazz = open ? 'row-open' : 'row-closed';
+			var path = o.data._yui_node_path;
 
 			o.td.addClass('row-toggle');
-			o.td.replaceClass(/row-(open|closed)/, clazz);
+			o.td.replaceClass('row-(open|closed)',
+				ds.isOpen(path) ? 'row-open' : 'row-closed');
 
-			o.td.on('click', function()
+			YUI.Env.add(Y.Node.getDOMNode(o.td), 'click', function()
 			{
 				ds.toggle(path, {}, sendRequest);
 			});
@@ -1067,7 +1067,7 @@ Treeble.buildTwistdownFormatter = function(sendRequest)
 			o.cell.set('innerHTML', '<a class="treeble-expand-nub" href="javascript:void(0);"></a>');
 		}
 
-		return true;	// keep the Y.Node instances
+		return false;	// discard Y.Node instances
 	};
 };
 
@@ -1080,6 +1080,8 @@ Treeble.buildTwistdownFormatter = function(sendRequest)
 Treeble.treeValueFormatter = function(o)
 {
 	var depth_class = 'treeble-depth-'+o.data._yui_node_depth;
+	o.rowClass     += ' ' + depth_class;
+	o.className    += ' treeble-value';
 	return '<span class="'+depth_class+'">'+o.value+'</span>';
 };
 
@@ -1102,4 +1104,4 @@ Y.extend(Treeble, Y.DataTable,
 Y.Treeble = Treeble;
 
 
-}, 'gallery-2012.04.04-17-55' ,{requires:['datasource'], skinnable:true});
+}, 'gallery-2012.05.09-20-27' ,{requires:['datasource'], skinnable:true});

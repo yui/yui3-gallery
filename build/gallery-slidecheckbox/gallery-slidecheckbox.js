@@ -203,4 +203,4 @@ YUI.add('gallery-slidecheckbox', function(Y) {
 	);
 
 
-}, 'gallery-2012.04.26-15-49' ,{skinnable:true, requires:['node-base', 'anim-base', 'anim-easing', 'base-build', 'event-key', 'event-move', 'widget', 'node-style', 'gallery-makenode', 'dd-drag', 'dd-constrain']});
+}, 'gallery-2012.05.09-20-27' ,{skinnable:true, requires:['node-base', 'anim-base', 'anim-easing', 'base-build', 'event-key', 'event-move', 'widget', 'node-style', 'gallery-makenode', 'dd-drag', 'dd-constrain']});

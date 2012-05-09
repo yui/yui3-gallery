@@ -238,11 +238,11 @@ Y.TimeSpinner = Y.Base.create(
 		 * @private
 		 */
 		_uiSetValue: function (value, src) {
-			this._setting = true;
 			Y.log('_uiSetValue, value: ' + value + ' src ' + src, 'info', 'TimeSpinner');
 			if (src === UI) {
 				return;
 			}
+			this._setting = true;
 			var hours = value.getHours();
 			if (this._ampmSp) {
 				this._hourSp.set(VALUE, (hours % 12) || 12);
@@ -458,4 +458,4 @@ Y.TimeSpinner = Y.Base.create(
 );
 
 
-}, 'gallery-2011.08.31-20-57' ,{requires:['gallery-md-spinner', 'gallery-makenode'], skinnable:false});
+}, 'gallery-2012.05.09-20-27' ,{requires:['gallery-md-spinner', 'gallery-makenode'], skinnable:false});

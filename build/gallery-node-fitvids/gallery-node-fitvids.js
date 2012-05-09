@@ -164,4 +164,4 @@ Y.namespace('Plugin').NodeFitVids = Y.Base.create('NodeFitVids', Y.Plugin.Base, 
 });
 
 
-}, 'gallery-2012.04.26-15-49' ,{skinnable:false, requires:['plugin', 'base-build', 'node-base', 'node-style', 'node-pluginhost', 'classnamemanager']});
+}, 'gallery-2012.05.09-20-27' ,{skinnable:true, requires:['plugin', 'base-build', 'node-base', 'node-style', 'node-pluginhost', 'classnamemanager']});

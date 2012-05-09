@@ -132,9 +132,9 @@ Y.FormManager.validateFromCSSData = function(
 {
 	var Strings = Y.FormManager.Strings;
 
-	if (e instanceof Y.Node)
+	if (e._node)
 	{
-		e = Y.Node.getDOMNode(e);
+		e = e._node;
 	}
 
 	var required = Y.DOM.hasClass(e, required_class);
@@ -387,4 +387,4 @@ Y.FormManager.statusTakesPrecedence = function(
 };
 
 
-}, 'gallery-2011.08.24-23-44' ,{requires:['substitute']});
+}, 'gallery-2012.05.09-20-27' ,{requires:['substitute']});

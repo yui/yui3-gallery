@@ -58,6 +58,9 @@ version: 2.8.0r4
 	padding: 2px 6px;
 	text-decoration: none;
 }
+.yui3-skin-sam .yui3-paginator-page.disabled {
+	color: #a6a6a6;
+}
 .yui3-skin-sam .yui3-paginator-current-page {
 	background-color: transparent;
 	border: none;

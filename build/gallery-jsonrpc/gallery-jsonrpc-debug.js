@@ -12,10 +12,8 @@ rpc.foo('bar', 'baz', function (response) {});
 rpc.foo('bar', 'baz', { on: { success: function (data) {}, ... } });
 */
 
-var isObject   = Y.Lang.isObject,
-    isFunction = Y.Lang.isFunction,
-    toArray    = Y.Array,
-    NOOP       = function () {};
+var isFunction = Y.Lang.isFunction,
+    toArray    = Y.Array;
 
 function JSONRPC(config) {
     var methods = config && config.methods,
@@ -57,9 +55,11 @@ Y.JSONRPC = Y.mix(JSONRPC, {
         if (force || !rpc[name]) {
             rpc[name] = function () {
                 var args = toArray(arguments, 0, true),
+                    last = args[args.length - 1],
                     callback;
                     
-                if (isObject(args[args.length - 1])) {
+                if (isFunction(last) ||
+                    (last && last.on && (last.on.success || last.on.failure))) {
                     callback = args.pop();
                 }
 
@@ -206,10 +206,12 @@ Y.augment(JSONRPC, Y.EventTarget);
 Y.jsonrpc = function (url, method, params, callback, config) {
     if (url && method) {
         // TODO: allow version config
-        return new Y.JSONRPC(Y.mix(config, { url: url, preload: false }, true))
+        return new Y.JSONRPC(Y.mix({ url: url, preload: false }, config))
             .exec(method, params, callback);
     }
 };
 
+Y.mix(Y.namespace('RPC'), { JSON: Y.JSONRPC, json: Y.jsonrpc});
 
-}, 'gallery-2011.10.12-20-24' ,{requires:['io-base', 'event-custom', 'json']});
+
+}, 'gallery-2012.05.09-20-27' ,{requires:['io-base', 'event-custom', 'json']});

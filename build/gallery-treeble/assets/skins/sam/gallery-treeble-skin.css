@@ -1,6 +1,11 @@
 .yui3-skin-sam .yui3-datatable td.treeble-nub
 {
 	border-right-color: transparent;
+	cursor: pointer;
+}
+.yui3-skin-sam .yui3-datatable td.treeble-value
+{
+	border-left-color: transparent;
 }
 
 .yui3-skin-sam .yui3-datatable .row-toggle a.treeble-expand-nub

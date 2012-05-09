@@ -289,7 +289,7 @@ function getId(
 	{
 		return e.replace(/^#/, '');
 	}
-	else if (e instanceof Y.Node)
+	else if (e._node)
 	{
 		return e.get('id');
 	}
@@ -838,7 +838,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
-	 * Validate the form.
+	 * @return {Boolean} true if all validation checks passed
 	 */
 	validateForm: function()
 	{
@@ -1144,4 +1144,4 @@ Y.aggregate(FormManager, Y.FormManager);
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});
+}, 'gallery-2012.05.09-20-27' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});
