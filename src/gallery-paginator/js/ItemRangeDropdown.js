@@ -20,6 +20,7 @@ Paginator.ui.ItemRangeDropdown = function(
 	p.after('recordOffsetChange', this.update,  this);
 	p.after('rowsPerPageChange',  this.update,  this);
 	p.after('totalRecordsChange', this.update,  this);
+	p.after('disabledChange',     this.update,  this);
 
 	p.after('itemRangeDropdownClassChange', this.update, this);
 };
@@ -55,7 +56,7 @@ Paginator.ui.ItemRangeDropdown.prototype =
 	 */
 	destroy: function()
 	{
-		this.span.remove(true);
+		this.span.remove().destroy(true);
 		this.span       = null;
 		this.menu       = null;
 		this.page_count = null;
@@ -71,6 +72,10 @@ Paginator.ui.ItemRangeDropdown.prototype =
 	render: function(
 		id_base)
 	{
+		if (this.span) {
+			this.span.remove().destroy(true);
+		}
+
 		this.span = Y.Node.create(
 			'<span id="'+id_base+'-item-range">' +
 			Y.substitute(this.paginator.get('itemRangeDropdownTemplate'),
@@ -135,6 +140,7 @@ Paginator.ui.ItemRangeDropdown.prototype =
 
 		this.span.set('className', this.paginator.get('itemRangeDropdownClass'));
 		this.menu.set('selectedIndex', page-1);
+		this.menu.set('disabled', this.paginator.get('disabled'));
 	},
 
 	_onChange: function(e)

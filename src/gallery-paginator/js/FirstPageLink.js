@@ -18,6 +18,7 @@ Paginator.ui.FirstPageLink = function (p) {
     p.after('recordOffsetChange',this.update,this);
     p.after('rowsPerPageChange',this.update,this);
     p.after('totalRecordsChange',this.update,this);
+    p.after('disabledChange',this.update,this);
 
     p.after('firstPageLinkLabelChange',this.rebuild,this);
     p.after('firstPageLinkClassChange',this.rebuild,this);
@@ -96,6 +97,11 @@ Paginator.ui.FirstPageLink.prototype = {
             c     = p.get('firstPageLinkClass'),
             label = p.get('firstPageLinkLabel');
 
+        if (this.link) {
+            this.link.remove(true);
+            this.span.remove(true);
+        }
+
         this.link = Y.Node.create(
             '<a href="#" id="'+id_base+'-first-link">'+label+'</a>');
         this.link.set('className', c);
@@ -120,7 +126,7 @@ Paginator.ui.FirstPageLink.prototype = {
         }
 
         var par = this.current ? this.current.get('parentNode') : null;
-        if (this.paginator.getCurrentPage() > 1) {
+        if (this.paginator.getCurrentPage() > 1 && !this.paginator.get('disabled')) {
             if (par && this.current === this.span) {
                 par.replaceChild(this.link,this.current);
                 this.current = this.link;

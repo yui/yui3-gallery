@@ -42,12 +42,14 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 
 		var curr_markup = '<span class="{link} {curr} {status}">{label}</span>';
 		var link_markup = '<a href="#" class="{link} {status}" page="{page}">{label}</a>';
+		var dis_markup  = '<span class="{link} disabled {status}" page="{page}">{label}</span>';
 
 		if (this.current !== currentPage || !currentPage || e.rebuild)
 		{
-			var linkClass    = this.paginator.get('pageLinkClass');
-			var status       = this.paginator.get('pageStatus');
-			var labelBuilder = this.paginator.get('pageLabelBuilder');
+			var linkClass    = this.paginator.get('pageLinkClass'),
+				status       = this.paginator.get('pageStatus'),
+				labelBuilder = this.paginator.get('pageLabelBuilder'),
+				disabled     = this.paginator.get('disabled');
 
 			var range =
 				Paginator.ui.PageLinks.calculateRange(
@@ -56,7 +58,7 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 			var content = '';
 			for (var i=range[0]; i<=range[1]; i++)
 			{
-				content += Y.Lang.sub(i === currentPage ? curr_markup : link_markup,
+				content += Y.Lang.sub(i === currentPage ? curr_markup : disabled ? dis_markup : link_markup,
 				{
 					link:   linkClass,
 					curr:   (i === currentPage ? this.paginator.get('currentPageClass') : ''),

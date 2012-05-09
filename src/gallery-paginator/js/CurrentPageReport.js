@@ -128,6 +128,10 @@ Paginator.ui.CurrentPageReport.prototype = {
      * @return {HTMLElement}
      */
     render : function (id_base) {
+        if (this.span) {
+            this.span.remove(true);
+        }
+
         this.span = Y.Node.create(
             '<span id="'+id_base+'-page-report"></span>');
         this.span.set('className', this.paginator.get('pageReportClass'));

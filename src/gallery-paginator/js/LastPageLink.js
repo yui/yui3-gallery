@@ -18,6 +18,7 @@ Paginator.ui.LastPageLink = function (p) {
     p.after('recordOffsetChange',this.update,this);
     p.after('rowsPerPageChange',this.update,this);
     p.after('totalRecordsChange',this.update,this);
+    p.after('disabledChange',this.update,this);
 
     p.after('lastPageLinkClassChange', this.rebuild, this);
     p.after('lastPageLinkLabelChange', this.rebuild, this);
@@ -106,6 +107,12 @@ Paginator.ui.LastPageLink.prototype = {
             label = p.get('lastPageLinkLabel'),
             last  = p.getTotalPages();
 
+        if (this.link) {
+            this.link.remove(true);
+            this.span.remove(true);
+            this.na.remove(true);
+        }
+
         this.link = Y.Node.create(
             '<a href="#" id="'+id_base+'-last-link">'+label+'</a>');
         this.link.set('className', c);
@@ -145,17 +152,15 @@ Paginator.ui.LastPageLink.prototype = {
         }
 
         var par   = this.current ? this.current.get('parentNode') : null,
-            after = this.link;
+            after = this.link,
+            total = this.paginator.getTotalPages();
 
         if (par) {
-            switch (this.paginator.getTotalPages()) {
-                case Paginator.VALUE_UNLIMITED :
-                    after = this.na;
-                    break;
-
-                case this.paginator.getCurrentPage() :
-                    after = this.span;
-                    break;
+            if (total === Paginator.VALUE_UNLIMITED) {
+                after = this.na;
+            } else if (total === this.paginator.getCurrentPage() ||
+                        this.paginator.get('disabled')) {
+                after = this.span;
             }
 
             if (this.current !== after) {
