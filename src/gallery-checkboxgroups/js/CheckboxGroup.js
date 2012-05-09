@@ -76,7 +76,7 @@ CheckboxGroup.prototype =
 			},
 			this);
 		}
-		else if (cb_list instanceof Y.Node)
+		else if (cb_list && cb_list._node)
 		{
 			this.cb_list.splice(start, delete_count, cb_list);
 			this.ev_list.splice(start, delete_count, cb_list.on('click', checkboxChanged, this));
