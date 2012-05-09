@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<script src="http://yui.yahooapis.com/combo?3.5.0/build/yui/yui-debug.js"></script>
+</head>
+<body>
+<script>
+YUI({
+	base: './',
+	modules:{
+			'gallery-twitter-widget-css':{
+				fullpath:'assets/skins/sam/gallery-twitter-widget-skin.css',
+				type: 'css'
+			},
+			'gallery-twitter-widget-core-css':{
+				fullpath:'assets/gallery-twitter-widget-core.css',
+				type: 'css'
+			},
+			'gallery-twitter-widget':{
+				fullpath:'build_tmp/gallery-twitter-widget-debug.js',
+				requires:['widget-base', 'substitute', 'gallery-torelativetime', 'jsonp', 'base-build', 'gallery-twitter-widget-css', 'gallery-twitter-widget-core-css' ],
+				skinnable:['sam']
+			}
+		},
+	filter:'debug'
+	}
+).use('gallery-twitter-widget', function(Y) {
+ 
+    new Y.Twitter.Status({
+        boundingBox    	: '#twitter-feed',
+        key       		: 'freelas_net',
+		strings			: {title:''},
+        count          	: 3,
+		showPhoto		:false,
+        refreshSeconds 	: 1000
+    }).render();
+	
+	new Y.Twitter.Status({
+        boundingBox    	: '#hashtag-feed',
+		isQuery			: true,
+        key      		: '#yui3',
+		strings			: {title:''},
+        count          	: 5,
+        refreshSeconds 	: 1000
+    }).render();
+	
+	new Y.Twitter.Status({
+        boundingBox    	: '#options',
+		isQuery			: true,
+        key       		: '#freelas',
+		showHandle		:false,
+		strings			: {title:'Search for:'},
+        count          	: 5,
+        refreshSeconds 	: 1000
+    }).render();
+ 
+	new Y.Twitter.Status({
+        boundingBox    	: '#noskin',
+		isQuery			: true,
+        key       		: '#freelas',
+		showHandle		:false,
+		hideSkin		 :true,
+		showTime		: false,
+		strings			: {title:''},
+        count          	: 5,
+        refreshSeconds 	: 1000
+    }).render();
+});
+</script>
+<div style="width:300px;">
+	<div id="twitter-feed">
+
+	</div>
+</div>
+<p></p>
+<div id="hashtag-feed">
+
+</div>
+<p></p>
+<div id="options">
+
+</div>
+<p></p>
+<div id="noskin">
+
+</div>
+</body>
+</html>
