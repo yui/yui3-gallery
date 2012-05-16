@@ -15,45 +15,45 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  * be used for numbers) and Select (which provides a menu of options).  The
  * plugin API allows defining additional data types, e.g., date range or
  * multi-select.  Every plugin must be registered in
- * <code>Y.QueryBuilder.plugin_mapping</code>.  Plugins must implement the
- * following functions:</p>
+ * `Y.QueryBuilder.plugin_mapping`.  Plugins must implement the following
+ * functions:</p>
  *
  * <dl>
- * <dt><code>constructor(qb, config)</code></dt>
+ * <dt>`constructor(qb, config)`</dt>
  * <dd>The arguments passed to the constructor are the QueryBuilder instance
- *		and the <code>pluginConfig</code> set on the QueryBuilder instance.
+ *		and the `pluginConfig` set on the QueryBuilder instance.
  *		At the minimum, this function should initalize form field name patterns
- *		using <code>config.field_prefix</code>.</dd>
- * <dt><code>create(query_index, var_config, op_list, value)</code><dt>
+ *		using `config.field_prefix`.</dd>
+ * <dt>`create(query_index, var_config, op_list, value)`<dt>
  * <dd>This function must create the additional cells for the query row and
  *		populate these cells appropriately.  (The QueryBuilder widget will
- *		insert the cells into the table.)  <code>var_config</code> is the
- *		item from the QueryBuilder's <code>var_list</code> that the user
- *		selected.  <code>op_list</code> is the item from the QueryBuilder's
- *		<code>operators</code> which matches the variable selected by the
- *		user.  <code>value</code> is optional.  If specified, it is the
+ *		insert the cells into the table.)  `var_config` is the
+ *		item from the QueryBuilder's `var_list` that the user
+ *		selected.  `op_list` is the item from the QueryBuilder's
+ *		`operators` which matches the variable selected by the
+ *		user.  `value` is optional.  If specified, it is the
  *		initial value(s) to be displayed by the plugin.</dd>
- * <dt><code>postCreate(query_index, var_config, op_list, value)</code></dt>
+ * <dt>`postCreate(query_index, var_config, op_list, value)`</dt>
  * <dd>Optional.  If it exists, it will be called after the cells returned by
- *		<code>create()</code> have been inserted into the table.  The arguments
- *		are the same as <code>create()</code>.</dd>
- * <dt><code>destroy()</code></dt>
+ *		`create()` have been inserted into the table.  The arguments
+ *		are the same as `create()`.</dd>
+ * <dt>`destroy()`</dt>
  * <dd>Destroy the plugin.  (The QueryBuilder widget will remove the cells
  *		and purge all events.)</dd>
- * <dt><code>updateName(new_index)</code></dt>
+ * <dt>`updateName(new_index)`</dt>
  * <dd>Update the names of the form fields managed by the plugin.</dd>
- * <dt><code>set(query_index, data)</code></dt>
+ * <dt>`set(query_index, data)`</dt>
  * <dd>Set the displayed value(s) by extracting values from data (a map)
  *		based on the current names of the plugin's form fields.</dd>
- * <dt><code>toDatabaseQuery()</code></dt>
+ * <dt>`toDatabaseQuery()`</dt>
  * <dd>Return an array of arrays.  Each inner array contains an operation
  *		and a value.  The default String and Select plugins each return
  *		a single inner array.  A date range plugin would return two inner
  *		arrays, one for the start date and one for the end date.</dd>
- * <dt><code>validate()</code></dt>
+ * <dt>`validate()`</dt>
  * <dd>Optional.  If additional validations are required beyond the basic
  *		validations encoded in CSS, this function should check them.  If
- *		the input is not valid, call <code>displayFieldMessage()</code>
+ *		the input is not valid, call `displayFieldMessage()`
  *		on the QueryBuilder object and return false.  Otherwise, return
  *		true.</dd>
  * </dl>
@@ -62,21 +62,11 @@ var has_bubble_problem = (0 < Y.UA.ie && Y.UA.ie < 9);
  * @extends Widget
  * @constructor
  * @param var_list {Array} List of variables that be included in the query.
- *		Each item in the list is an object containing:
- *		<dl>
- *		<dt>name</dt>
- *		<dd>The name of the variable.  Set as the <code>value</code> for the select option.</dd>
- *		<dt>type</dt>
- *		<dd>The variable type.  Used to determine which plugin to instantiate.
- *			Must match a key in <code>Y.QueryBuilder.plugin_mapping</code>.
- *			(You can add new plugins to this global mapping.)</dd>
- *		<dt>text</dt>
- *		<dd>The text displayed when the variable is selected.</dd>
- *		<dt>plugin-specific configuration</dt>
- *		<dd>Plugins may defines additional configuration.</dd>
- *		</dl>
- * @param operators {Object} Map of variable types to list of operators.
- *		Each operator is an object defining <code>value</code> and <code>text</code>.
+ * @param var_list.name {String} The name of the variable.  Set as the `value` for the select option.
+ * @param var_list.type {String} The variable type.  Used to determine which plugin to instantiate. Must match a key in `Y.QueryBuilder.plugin_mapping`. (You can add new plugins to this global mapping.)
+ * @param var_list.text {String} The text displayed when the variable is selected.
+ * @param var_list.** {Mixed} plugin-specific configuration
+ * @param operators {Object} Map of variable types to list of operators. Each operator is an object defining `value` and `text`.
  * @param config {Object} Widget configuration
  */
 
@@ -119,7 +109,7 @@ QueryBuilder.ATTRS =
 	/**
 	 * The prompt displayed when a new item is added to the query.
 	 *
-	 * @config chooseVarPrompt
+	 * @attribute chooseVarPrompt
 	 * @type {String}
 	 * @default "Choose a variable"
 	 * @writeonce
@@ -135,7 +125,7 @@ QueryBuilder.ATTRS =
 	 * All generated form field names start with this prefix.  This avoids
 	 * conflicts if you have more than one QueryBuilder on a page.
 	 *
-	 * @config fieldPrefix
+	 * @attribute fieldPrefix
 	 * @type {String}
 	 * @default ""
 	 * @writeonce
@@ -150,7 +140,7 @@ QueryBuilder.ATTRS =
 	/**
 	 * Configuration passed to plugins when they are constructed.
 	 *
-	 * @config pluginConfig
+	 * @attribute pluginConfig
 	 * @type {Object}
 	 * @default {}
 	 * @writeonce
@@ -166,7 +156,7 @@ QueryBuilder.ATTRS =
 /**
  * @event queryChanged
  * @description Fires when the query is modified.
- * @param info {Object} <code>remove</code> is <code>true</code> if a row was removed
+ * @param info {Object} `remove` is `true` if a row was removed
  */
 
 function initVarList()
@@ -273,6 +263,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Reset the query.
 	 *
+	 * @method reset
 	 * @param var_list {Array} If specified, the list of available variables is replaced.
 	 * @param operators {Object} If specified, the operators for all variable types will be replaced.
 	 */
@@ -308,6 +299,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Append a new query condition to the table.
 	 *
+	 * @method appendNew
 	 * @param name {String} If specified, this variable is selected.
 	 * @param value {Mixed} If specified, this value is selected.  Refer to the appropriate plugin documentation to figure out what data to pass.
 	 * @return {Object} plugin that was created for the row, if any
@@ -432,6 +424,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Set the value of the specified row.
 	 *
+	 * @method update
 	 * @param row_index {int} The index of the row
 	 * @param value {Mixed} If specified, the value to set (Refer to the appropriate plugin documentation to figure out what data to pass.)
 	 */
@@ -527,8 +520,9 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Removes the specified row.
 	 *
+	 * @method remove
 	 * @param row_index {int} The index of the row
-	 * @return {boolean} <code>true</code> if successful
+	 * @return {boolean} `true` if successful
 	 */
 	remove: function(
 		/* int */	row_index)
@@ -589,7 +583,8 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Validate the fields in each row.
 	 * 
-	 * @return {Boolean} <code>true</code> if all values are valid
+	 * @method validateFields
+	 * @return {Boolean} `true` if all values are valid
 	 */
 	validateFields: function()
 	{
@@ -622,6 +617,9 @@ Y.extend(QueryBuilder, Y.Widget,
 		return status;
 	},
 
+	/**
+	 * @method clearFieldMessages
+	 */
 	clearFieldMessages: function()
 	{
 		this.has_messages = false;
@@ -640,10 +638,11 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Display a message for the specified field.
 	 * 
+	 * @method displayFieldMessage
 	 * @param e {String|Object} The selector for the element or the element itself
 	 * @param msg {String} The message
 	 * @param type {String} The message type (see Y.FormManager.status_order)
-	 * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+	 * @param scroll {boolean} (Optional) `true` if the form row should be scrolled into view
 	 * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
 	 */
 	displayFieldMessage: function(
@@ -666,6 +665,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Returns plugin used for the specified row, if any.
 	 *
+	 * @method getPlugin
 	 * @param row_index {int} The index of the row
 	 * @return {Object} the plugin for the row, if any
 	 */
@@ -676,6 +676,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	},
 
 	/**
+	 * @method toDatabaseQuery
 	 * @return {Array} list of [var, op, value] tuples suitable for a database query
 	 */
 	toDatabaseQuery: function()
@@ -704,6 +705,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	 */
 
 	/**
+	 * @method _createContainer
 	 * @protected
 	 * @return {DOM element} container for one piece of a query row
 	 */
@@ -715,6 +717,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	/**
 	 * Fires the queryChanged event.
 	 *
+	 * @method _notifyChanged
 	 * @protected
 	 */
 	_notifyChanged: function()
@@ -727,6 +730,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	 */
 
 	/**
+	 * @method variableName
 	 * @param i {int} query row index
 	 * @return {String} name for the select form element listing the available query variables
 	 */
@@ -741,6 +745,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	//
 
 	/**
+	 * @method _variablesMenu
 	 * @protected
 	 * @param menu_name {String} name for the select form element
 	 * @return {String} markup for the query variable menu
@@ -761,6 +766,7 @@ Y.extend(QueryBuilder, Y.Widget,
 	},
 
 	/**
+	 * @method _rowControls
 	 * @protected
 	 * @return {String} markup for the row controls (insert and remove)
 	 */
@@ -793,7 +799,7 @@ Y.QueryBuilder = QueryBuilder;
  * <dd>True if change events from select elements do not bubble.</dd>
  * </dl>
  * 
- * @property Y.QueryBuilder.Env
+ * @property Env
  * @type {Object}
  * @static
  */

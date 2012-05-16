@@ -1,6 +1,8 @@
 /**
  * @module gallery-querybuilder
- * @namespace
+ */
+
+/**
  * @class QueryBuilder
  */
 
@@ -17,7 +19,7 @@
  * <dd>Generic list of values.</dd>
  * </dl>
  *
- * @property Y.QueryBuilder.plugin_mapping
+ * @property plugin_mapping
  * @type {Object}
  * @static
  */

@@ -1,6 +1,5 @@
 /**
  * @module gallery-querybuilder
- * @namespace QueryBuilder
  */
 
 /**********************************************************************
@@ -15,6 +14,7 @@
  * <code>QueryBuilder.appendNew()</code> must be a string: the value of the
  * menu item to select.</p>
  * 
+ * @namespace QueryBuilder
  * @class Select
  */
 

@@ -1,6 +1,5 @@
 /**
  * @module gallery-querybuilder
- * @namespace QueryBuilder
  */
 
 /**********************************************************************
@@ -21,6 +20,7 @@
  * <code>QueryBuilder.appendNew()</code> must be an array with two
  * elements: <code>[ operator_name, value ]</code>.</p>
  * 
+ * @namespace QueryBuilder
  * @class String
  */
 
