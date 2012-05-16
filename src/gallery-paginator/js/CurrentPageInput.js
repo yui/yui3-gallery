@@ -5,6 +5,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * Generates an input field for setting the current page.
  *
  * @class Paginator.ui.CurrentPageInput

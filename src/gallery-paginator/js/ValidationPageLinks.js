@@ -1,3 +1,7 @@
+/**
+ * @module gallery-paginator
+ */
+
 /**********************************************************************
  * Adds per-page error notification to Paginator.ui.PageLinks.
  *

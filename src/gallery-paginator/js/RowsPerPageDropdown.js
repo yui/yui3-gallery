@@ -5,6 +5,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * ui Component to generate the rows-per-page dropdown
  *
  * @class Paginator.ui.RowsPerPageDropdown

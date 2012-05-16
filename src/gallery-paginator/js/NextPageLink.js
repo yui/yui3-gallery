@@ -5,6 +5,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * ui Component to generate the link to jump to the next page.
  *
  * @class Paginator.ui.NextPageLink

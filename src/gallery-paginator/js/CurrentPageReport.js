@@ -5,6 +5,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * ui Component to generate the textual report of current pagination status.
  * E.g. "Now viewing page 1 of 13".
  *
