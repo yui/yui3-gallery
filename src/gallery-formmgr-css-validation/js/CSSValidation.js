@@ -7,26 +7,30 @@
  * <p>The following classes can be applied to a form element for
  * pre-validation:</p>
  *
- *	<dl>
- *	<dt><code>yiv-required</code></dt>
- *		<dd>Value must not be empty.</dd>
+ * <dl>
+ * <dt><code>yiv-required</code></dt>
+ * <dd>Value must not be empty.</dd>
  *
- *	<dt><code>yiv-length:[x,y]</code></dt>
- *		<dd>String must be at least x characters and at most y characters.
- *		At least one of x and y must be specified.</dd>
+ * <dt><code>yiv-length:[x,y]</code></dt>
+ * <dd>String must be at least x characters and at most y characters.
+ * At least one of x and y must be specified.</dd>
  *
- *	<dt><code>yiv-integer:[x,y]</code></dt>
- *		<dd>The integer value must be at least x and at most y.
- *		x and y are both optional.</dd>
+ * <dt><code>yiv-integer:[x,y]</code></dt>
+ * <dd>The integer value must be at least x and at most y.
+ * x and y are both optional.</dd>
  *
- *	<dt><code>yiv-decimal:[x,y]</code></dt>
- *		<dd>The decimal value must be at least x and at most y.  Exponents are
- *		not allowed.  x and y are both optional.</dd>
- *	</dl>
+ * <dt><code>yiv-decimal:[x,y]</code></dt>
+ * <dd>The decimal value must be at least x and at most y.  Exponents are
+ * not allowed.  x and y are both optional.</dd>
+ * </dl>
  *
  * <p>If we ever need to allow exponents, we can use yiv-float.</p>
  *
- * @module gallery-formmgr-css-validation
+ * @module gallery-formmgr
+ * @submodule gallery-formmgr-css-validation
+ */
+
+/**
  * @class FormManager
  */
 
@@ -43,7 +47,7 @@ var decimal_class_re  = /(?:^|\s+)yiv-decimal(?::\[([-+]?(?:[0-9]+\.?|[0-9]+\.[0
  * Regular expression used to determine if a value is an integer.
  * This can be localized, e.g., allow for thousands separator.
  * 
- * @property Y.FormManager.integer_value_re
+ * @property integer_value_re
  * @type {RegExp}
  * @static
  */
@@ -53,7 +57,7 @@ Y.FormManager.integer_value_re = /^[-+]?[0-9]+$/;
  * Regular expression used to determine if a value is a decimal number.
  * This can be localized, e.g., use the correct decimal separator.
  * 
- * @property Y.FormManager.decimal_value_re
+ * @property decimal_value_re
  * @type {RegExp}
  * @static
  */
@@ -77,7 +81,7 @@ Y.FormManager.decimal_value_re = /^[-+]?(?:[0-9]+\.?|[0-9]*\.[0-9]+)$/;
  * <dd>Displayed when <code>yiv-decimal</code> fails on an input field.</dd>
  * </dl>
  * 
- * @property Y.FormManager.Strings
+ * @property Strings
  * @type {Object}
  * @static
  */
@@ -328,14 +332,14 @@ Y.FormManager.cleanValues = function(
 };
 
 /**
- * <p>Names of supported status values, highest precedence first.  Default:
- * <code>[ 'error', 'warn', 'success', 'info' ]</code></p>
+ * <p>Names of supported status values, highest precedence first.</p>
  * 
  * <p>This is static because it links to CSS rules that define the
  * appearance of each status type:  .formmgr-has{status}</p>
  * 
- * @property Y.FormManager.status_order
+ * @property status_order
  * @type {Array}
+ * @default [ 'error', 'warn', 'success', 'info' ]
  * @static
  */
 Y.FormManager.status_order =
