@@ -12,6 +12,7 @@ YUI.add('gallery-deferred', function(Y) {
 var Lang = Y.Lang,
 	YArray = Y.Array,
 	AP = Array.prototype,
+	SLICE = AP.slice,
 	PUSH = AP.push,
 	
 	RESOLVED = 1,
@@ -42,7 +43,7 @@ Y.mix(Promise.prototype, {
 	 */
 	then: function (doneCallbacks, failCallbacks) {
 		if (doneCallbacks) {
-			doneCallbacks = Promise._flatten(doneCallbacks)
+			doneCallbacks = Promise._flatten(doneCallbacks);
 			if (this.status === RESOLVED) {
 				YArray.each(doneCallbacks, function (callback) {
 					callback.apply(this, this._args);
@@ -52,7 +53,7 @@ Y.mix(Promise.prototype, {
 			}
 		}
 		if (failCallbacks) {
-			failCallbacks = Promise._flatten(failCallbacks)
+			failCallbacks = Promise._flatten(failCallbacks);
 			if (this.status === REJECTED) {
 				YArray.each(failCallbacks, function (callback) {
 					callback.apply(this, this._args);
@@ -178,18 +179,14 @@ Promise._flatten = function (arr) {
 Y.Promise = Promise;
 
 /**
- * Methods for working with asynchronous calls
- * @class YUI~deferred
- * @static
- */
-
-/**
  * Returns a promise for a (possibly) asynchronous call.
  * Calls a given function that receives the new promise as parameter and must call resolve()
  * or reject() at a certain point
- * @method Y.defer
+ * @method defer
  * @param {Function} fn A function that encloses an async call.
  * @return {Promise} a promise
+ * @static
+ * @for YUI
  */
 Y.defer = function (fn, context) {
 	var promise = new Y.Promise();
@@ -198,10 +195,12 @@ Y.defer = function (fn, context) {
 };
 
 /**
- * @method Y.when
- * @description Waits for a series of asynchronous calls to be completed
+ * Waits for a series of asynchronous calls to be completed
+ * @method when
  * @param {Promise|Array|Function} deferred Any number of Promise instances or arrays of instances. If a function is provided, it is executed at once
  * @return {Promise} a promise
+ * @static
+ * @for YUI
  */
 Y.when = function () {
 	var deferreds = Y.Promise._flatten(YArray(arguments)),
@@ -210,8 +209,8 @@ Y.when = function () {
 		rejected = 0;
 			
 	return Y.defer(function (promise) {
-		function notify(_args) {
-			args.push(YArray(_args));
+		function notify(i, _args) {
+			args[i] = _args;
 			if (resolved + rejected === deferreds.length) {
 				if (rejected > 0) {
 					promise.reject.apply(promise, args);
@@ -220,123 +219,173 @@ Y.when = function () {
 				}
 			}
 		}
-			
-		function done() {
+		
+		function done(index) {
 			resolved++;
-			notify(arguments);
+			notify(index, SLICE.call(arguments, 1));
 		}
 		
-		function fail() {
+		function fail(index) {
 			rejected++;
-			notify(arguments);
+			notify(index, SLICE.call(arguments, 1));
 		}
 
-		YArray.each(deferreds, function (deferred) {
+		YArray.each(deferreds, function (deferred, i) {
 			if (Y.Lang.isFunction(deferred)) {
-				done(deferred());
+				done(i, deferred());
 			} else {
-				deferred.then(done, fail);
+				deferred.then(Y.bind(done, deferred, i), Y.bind(fail, deferred, i));
 			}
 		});
 	});
 };
 
-	/**
-	 * Represents the promise of an IO request being completed
-	 * @class io.Request
-	 * @constructor
-	 * @extends Promise
-	 */
-	function Request() {
-		Request.superclass.constructor.apply(this, arguments);
-	}
-	Y.extend(Request, Y.Promise, null, {
-		NAME: 'io-request'
-	});
-	/**
-	 * Makes a new GET HTTP request
-	 * @method get
-	 * @param {String} uri Path to the request resource
-	 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-	 * @chainable
-	 */
-	/**
-	 * Makes a new POST HTTP request
-	 * @method post
-	 * @param {String} uri Path to the request resource
-	 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-	 * @chainable
-	 */
-	/**
-	 * Makes a new POST HTTP request sending the content of a form
-	 * @method postForm
-	 * @param {String} uri Path to the request resource
-	 * @param {String} id The id of the form to serialize and send in the request
-	 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-	 * @chainable
-	 */
-	/**
-	 * Makes a new GET HTTP request and parses the result as JSON data
-	 * @method getJSON
-	 * @param {String} uri Path to the request resource
-	 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-	 * @chainable
-	 */
-	/**
-	 * Makes a new JSONP request
-	 * @method jsonp
-	 * @param {String} uri Path to the jsonp service
-	 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-	 * @chainable
-	 */
-	if (Y.io) {
-		Y.mix(Y.io, {
-			
-			Request: Request,
-			
-			/**
-			 * Utility function for normalizing an IO configuration object.
-			 * If a function is providad instead of a configuration object, the function is used
-			 * as a 'complete' event handler.
-			 * @method _normalizeConfig
-			 * @for Y.io
-			 * @private
-			 * @static
-			 */
-			_normalizeConfig: function (config, args) {
-				if (Y.Lang.isFunction(config)) {
-					config = { on: { complete: config } };
+/**
+ * Represents the promise of an IO request being completed
+ * @class io.Request
+ * @constructor
+ * @extends Promise
+ */
+function Request() {
+	Request.superclass.constructor.apply(this, arguments);
+}
+Y.extend(Request, Y.Promise, null, {
+	NAME: 'io-request'
+});
+/**
+ * Makes a new GET HTTP request
+ * @method get
+ * @param {String} uri Path to the request resource
+ * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+ * @chainable
+ */
+/**
+ * Makes a new POST HTTP request
+ * @method post
+ * @param {String} uri Path to the request resource
+ * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+ * @chainable
+ */
+/**
+ * Makes a new POST HTTP request sending the content of a form
+ * @method postForm
+ * @param {String} uri Path to the request resource
+ * @param {String} id The id of the form to serialize and send in the request
+ * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+ * @chainable
+ */
+/**
+ * Makes a new GET HTTP request and parses the result as JSON data
+ * @method getJSON
+ * @param {String} uri Path to the request resource
+ * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+ * @chainable
+ */
+/**
+ * Makes a new JSONP request
+ * @method jsonp
+ * @param {String} uri Path to the jsonp service
+ * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+ * @chainable
+ */
+if (Y.io) {
+	Y.mix(Y.io, {
+		
+		Request: Request,
+		
+		/**
+		 * Utility function for normalizing an IO configuration object.
+		 * If a function is providad instead of a configuration object, the function is used
+		 * as a 'complete' event handler.
+		 * @method _normalizeConfig
+		 * @for io
+		 * @private
+		 * @static
+		 */
+		_normalizeConfig: function (config, args) {
+			if (Y.Lang.isFunction(config)) {
+				config = { on: { complete: config } };
+			} else {
+				config = config || {};
+				config.on = config.on || {};
+			}
+			return Y.mix(config, args, true);
+		},
+		/**
+		 * Takes an object with "success" and "failure" properties, such as one
+		 * from a IO configuration, and registers those callbacks as promise handlers
+		 * @method _eventsToCallbacks
+		 * @for io
+		 * @private
+		 * @static  
+		 * @param {io.Request} request
+		 * @param {Object} Object with "success" and/or "failure" properties
+		 */
+		_eventsToCallbacks: function (request, events) {
+			Y.each(events, function (callback, eventName) {
+				if (eventName === 'success') {
+					request.done(callback);
+				} else if (eventName === 'failure') {
+					request.fail(callback);
 				} else {
-					config = config || {};
-					config.on = config.on || {};
+					request.always(callback);
 				}
-				return Y.mix(config, args, true);
-			},
+			});
+		},
+		/**
+		 * Creates an IO promise instead of a plain promise like Y.defer
+		 * @method defer
+		 * @for io
+		 * @static
+		 * @param {Function} function to make into a deferred
+		 * @return {io.Request} request
+		 */
+		defer: function (fn) {
+			var request = new Y.io.Request();
+			fn.call(this, request);
+			return request;
+		},
+		
+        /**
+         * Add a deferred function to Y.io and add it as a method of Y.Request
+         * @method addMethod
+         * @for io
+         * @static
+         * @param {String} name Name of the method
+         * @param {Function} fn Method
+         */
+		addMethod: function (name, fn) {
+			Y.io[name] = fn;
+			Request.prototype[name] = fn;
+		},
+		
+		/**
+		 * Adds multiple methods to Y.io and Y.Request from an object
+		 * @method addMethods
+		 * @for io
+		 * @static
+		 * @param {Obejct} methods Key/value pairs of names and functions
+		 */
+		addMethods: function (methods) {
+			Y.each(methods, function (fn, name) {
+				Y.io.addMethod(name, fn);
+			});
+		}
+	});
+
+	Y.io.addMethods({
+		/**
+		 * Makes an IO request and returns a new io.Request object for it.
+		 * It also normalizes callbacks as event handlers with an EventFacade
+		 * @method _deferIO
+		 * @for io
+		 * @private
+		 * @static
+		 */
+		_deferIO: function (uri, config) {
+			config = Y.io._normalizeConfig(config);
 			
-			_eventsToCallbacks: function (request, events) {
-				Y.each(events, function (callback, eventName) {
-					if (eventName === 'success') {
-						request.done(callback);
-					} else if (eventName === 'failure') {
-						request.fail(callback);
-					} else {
-						request.always(callback);
-					}
-				});
-			},
-			
-			/**
-			 * Makes an IO request and returns a new io.Request object for it.
-			 * It also normalizes callbacks as event handlers with an EventFacade
-			 * @method _defer
-			 * @for Y.io
-			 * @private
-			 * @static
-			 */
-			_defer: function (uri, config) {
-				config = Y.io._normalizeConfig(config);
-				var request = new Y.io.Request();
-				
+			return this.defer(function (request) {
 				if (config.on) {
 					Y.io._eventsToCallbacks(request, config.on);
 				}
@@ -356,120 +405,162 @@ Y.when = function () {
 					failure: Y.bind(request.reject, request)
 				};
 				
-				return Y.mix(request, Y.io(uri, config));
-			},
-			
-	        /**
-	         * Add a deferred function to Y.io and add it as a method of Y.Request
-	         * @method addMethod
-	         * @for Y.io
-	         * @static
-	         * @param {String} name Name of the method
-	         * @param {Function} fn Method
-	         */
-			addMethod: function (name, fn) {
-				Y.io[name] = fn;
-				Request.prototype[name] = function () {
-					return Y.io[name].apply(Y.io, arguments);
-				};
-			},
-			
-			/**
-			 * Adds multiple methods to Y.io and Y.Request from an object
-			 * @method addMethods
-			 * @for Y.io
-			 * @static
-			 * @param {Obejct} methods Key/value pairs of names and functions
-			 */
-			addMethods: function (methods) {
-				Y.each(methods, function (fn, name) {
-					Y.io.addMethod(name, fn);
-				});
-			}
-		});
-	
-		Y.io.addMethods({
-			/**
-			 * Makes a new GET HTTP request
-			 * @method get
-			 * @param {String} uri Path to the request resource
-			 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-			 * @return io.Request
-			 * @for Y.io
-			 * @static
-			 */
-			get: function (uri, config) {
-				return Y.io._defer(uri, Y.io._normalizeConfig(config, {
-					method: 'GET'
-				}));
-			},
-			
-			/**
-			 * Makes a new POST HTTP request
-			 * @method post
-			 * @param {String} uri Path to the request resource
-			 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-			 * @return io.Request
-			 * @for Y.io
-			 * @static
-			 */
-			post: function (uri, data, config) {
-				return Y.io._defer(uri, Y.io._normalizeConfig(config, {
-					method: 'POST',
-					data: data
-				}));
-			},
-			
-			/**
-			 * Makes a new POST HTTP request sending the content of a form
-			 * @method postForm
-			 * @param {String} uri Path to the request resource
-			 * @param {String} id The id of the form to serialize and send in the request
-			 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-			 * @return io.Request
-			 * @for Y.io
-			 * @static
-			 */
-			postForm: function (uri, id, config) {
-				return Y.io._defer(uri, Y.io._normalizeConfig(config, {
-					method: 'POST',
-					form: { id: id }
-				}));
-			}
-		});
-		
-		if (Y.JSON) {
-			/**
-			 * Makes a new GET HTTP request and parses the result as JSON data
-			 * @method getJSON
-			 * @param {String} uri Path to the request resource
-			 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-			 * @return io.Request
-			 * @for Y.io
-			 * @static
-			 */
-			Y.io.addMethod('getJSON', function (uri, config) {
-				config = Y.io._normalizeConfig(config);
-				config.parser = Y.JSON.parse;
-				
-				return Y.io._defer(uri, config);
+				Y.mix(request, Y.io(uri, config));
 			});
+		},
+		/**
+		 * Normalizes the Y.Get API so that it looks the same to the Y.io methods
+		 * @method _deferGet
+		 * @param {String} 
+		 * @for io
+		 * @private
+		 * @static
+		 */
+		_deferGet: function (method, uri, config) {
+			var callback;
+			if (Y.Lang.isFunction(config)) {
+				callback = config;
+				config = {};
+			}
+			if (!config) {
+				config = {};
+			}
+			return this.defer(function (request) {
+				if (callback) {
+					request.then(callback);
+				}
+				if (config.on) {
+					Y.io._eventsToCallbacks(request, config.on);
+					config.on = null;
+				}
+				Y.Get[method](uri, config, function (err) {
+					if (err) {
+						request.reject(err);
+					} else {
+						request.resolve();
+					}
+				});
+			});
+		},
+		
+		/**
+		 * Makes a new GET HTTP request
+		 * @method get
+		 * @param {String} uri Path to the request resource
+		 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+		 * @return {io.Request}
+		 * @for io
+		 * @static
+		 */
+		get: function (uri, config) {
+			return this._deferIO(uri, Y.io._normalizeConfig(config, {
+				method: 'GET'
+			}));
+		},
+		
+		/**
+		 * Makes a new POST HTTP request
+		 * @method post
+		 * @param {String} uri Path to the request resource
+		 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+		 * @return {io.Request}
+		 * @for io
+		 * @static
+		 */
+		post: function (uri, data, config) {
+			return this._deferIO(uri, Y.io._normalizeConfig(config, {
+				method: 'POST',
+				data: data
+			}));
+		},
+		
+		/**
+		 * Makes a new POST HTTP request sending the content of a form
+		 * @method postForm
+		 * @for io
+		 * @static
+		 * @param {String} uri Path to the request resource
+		 * @param {String} id The id of the form to serialize and send in the request
+		 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+		 * @return {io.Request}
+		 */
+		postForm: function (uri, id, config) {
+			return this._deferIO(uri, Y.io._normalizeConfig(config, {
+				method: 'POST',
+				form: { id: id }
+			}));
+		},
+		/**
+		 * Alias for Y.io.js
+		 * @method script
+		 * @for io
+		 * @static
+		 */
+		script: function () {
+			return this.js.apply(this, arguments);
+		},
+		/**
+		 * Loads a script through Y.Get.script
+		 * All its options persist, but it also accepts an "on" object
+		 * with "success" and "failure" properties like the rest of the Y.io methods
+		 * @method js
+		 * @for io
+		 * @static
+		 * @param {String} uri Path to the request resource
+		 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+		 * @return {io.Request}
+		 */
+		js: function (uri, config) {
+			return this._deferGet('js', uri, config);
+		},
+		/**
+		 * Loads a stylesheet through Y.Get.css
+		 * All its options persist, but it also accepts an "on" object
+		 * with "success" and "failure" properties like the rest of the Y.io methods
+		 * @method css
+		 * @for io
+		 * @static
+		 * @param {String} uri Path to the request resource
+		 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+		 * @return {io.Request}
+		 */
+		css: function (uri, config) {
+			return this._deferGet('css', uri, config);
 		}
+	});
+	
+	if (Y.JSON) {
+		/**
+		 * Makes a new GET HTTP request and parses the result as JSON data
+		 * @method getJSON
+		 * @for io
+		 * @static
+		 * @param {String} uri Path to the request resource
+		 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+		 * @return {io.Request}
+		 */
+		Y.io.addMethod('getJSON', function (uri, config) {
+			config = Y.io._normalizeConfig(config);
+			config.parser = Y.JSON.parse;
+			
+			return this._deferIO(uri, config);
+		});
+	}
 
-		if (Y.jsonp) {
-			/**
-			 * Makes a new JSONP request
-			 * @method jsonp
-			 * @param {String} uri Path to the jsonp service
-			 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
-			 * @return io.Request
-			 * @for Y.io
-			 * @static
-			 */
-			Y.io.addMethod('jsonp', function (uri, config) {
-				config = Y.io._normalizeConfig(config);
-				var request = new Y.io.Request();
-				
+	if (Y.jsonp) {
+		/**
+		 * Makes a new JSONP request
+		 * @method jsonp
+		 * @for io
+		 * @static
+		 * @param {String} uri Path to the jsonp service
+		 * @param {Function|Object} config Either a callback for the complete event or a full configuration option
+		 * @return {io.Request}
+		 */
+		Y.io.addMethod('jsonp', function (uri, config) {
+			config = Y.io._normalizeConfig(config);
+			
+			return this.defer(function (request) {
 				if (config.on) {
 					Y.io._eventsToCallbacks(request, config.on);
 				}
@@ -480,97 +571,290 @@ Y.when = function () {
 				};
 				
 				Y.jsonp(uri, config);
-				
-				return request;
 			});
-		}
+		});
 	}
+}
 
-	if (Y.Node && Y.Plugin) {
+/**
+ * A deferred plugin for Node that has methods for dealing with asynchronous calls such as transition()
+ * @class Plugin.NodeDeferred
+ * @constructor
+ * @extends Promise
+ * @param {Object} config An object literal containing plugin configuration
+ */
+function NodeDeferred(config) {
+	NodeDeferred.superclass.constructor.apply(this, arguments);
+	this.host = config.host;
+}
+
+if (Y.Node && Y.Plugin) {
+	
+	Y.extend(NodeDeferred, Y.Promise, null, {
 		/**
-		 * A deferred plugin for Node that has methods for dealing with asynchronous calls such as transition()
-		 * @class Node.Promise
-		 * @constructor
-		 * @extends Promise
-		 * @param {Object} config An object literal containing plugin configuration
+		 * Plugin namespace
+		 * @property {String} NS
+		 * @default 'deferred'
+		 * @static
 		 */
-		function NodeDeferred(config) {
-			NodeDeferred.superclass.constructor.apply(this, arguments);
-			this.host = config.host;
-		}
-
-		Y.extend(NodeDeferred, Y.Promise, null, {
-			/**
-			 * Plugin namespace
-			 * @property {String} NS
-			 * @default 'deferred'
-			 * @static
-			 */
-			NS: 'deferred',
-			
-			/**
-			 * Imports a method from Y.Node so that they return instances of this same plugin representing promises
-			 * @method deferMethod
-			 * @param {String} method Name of the method to import from Y.Node
-			 * @static
-			 */
-			deferMethod: function (method) {
-				NodeDeferred.prototype[method] = function () {
-					// this.host[NS] === this means this is the first time the plugin is instanciated and plugged
-					// in that case it should be resolved, because it doesn't represent any promises yet
-					if (this.host.deferred === this) {
-						this.resolve();
+		NS: 'deferred',
+		
+		/**
+		 * Imports a method from Y.Node so that they return instances of this same plugin representing promises
+		 * @method deferMethod
+		 * @param {String} method Name of the method to import from Y.Node
+		 * @static
+		 */
+		deferMethod: function (method) {
+			NodeDeferred.prototype[method] = function () {
+				var args,
+					deferred,
+					callback;
+				// this.host[NS] === this means this is the first time the plugin is instanciated and plugged
+				// in that case it should be resolved, because it doesn't represent any promises yet
+				if (this.host.deferred === this) {
+					this.resolve();
+				}
+				
+				if (this.host[method]) {
+					args = YArray(arguments);
+					
+					if (Lang.isFunction(args[args.length - 1])) {
+						callback = args.pop();
 					}
 					
-					if (this.host[method]) {
-						var args = Y.Array(arguments),
-							deferred,
-							callback;
-							
-						if (Y.Lang.isFunction(args[args.length - 1])) {
-							callback = args.pop();
-						}
-						
-						deferred = this.defer(function (promise) {
-							this.host[method].apply(this.host, args.concat([Y.bind(promise.resolve, promise)]));
-						});
-						if (callback) {
-							deferred.done(callback);
-						}
-						return deferred;
-						
-					} else {
-						if (Y.instanceOf(this.host, Y.NodeList) && method == 'load') {
-							Y.error('NodeList doesn\'t have a ' + method + '() method');
-						} else {
-							Y.error('Missing required module for ' + method);
-						}
+					deferred = this.defer(function (promise) {
+						this.host[method].apply(this.host, args.concat([Y.bind(promise.resolve, promise)]));
+					});
+					if (callback) {
+						deferred.done(callback);
 					}
-					return this;
-				};
-			},
-			/**
-			 * Imports a method from Y.Node making it chainable but not returning promises
-			 * @method importMethod
-			 * @param {String} method Name of the method to import from Y.Node
-			 * @static
-			 */
-			importMethod: function(method) {
-				NodeDeferred.prototype[method] = function () {
-					this.host[method].apply(this.host, arguments);
-					return this;
-				};
-			}
-		});
-		
-		Y.each(['hide', 'load', 'show', 'transition', 'once', 'onceAfter'], NodeDeferred.deferMethod);
-		Y.each(['addClass', 'append', 'appendTo', 'blur', 'clearData', 'destroy', 'empty', 'focus', 'insert',
-				'insertBefore', 'plug', 'prepend', 'remove', 'removeAttribute', 'removeChild', 'removeClass', 'replaceChild',
-				'replaceClass', 'select', 'set', 'setAttrs', 'setContent', 'setData', 'setStyle', 'setStyles', 
-				'setX', 'setXY', 'setY', 'simulate', 'swapXY', 'toggleClass', 'unplug', 'wrap', 'unwrap'], NodeDeferred.importMethod);
-		
-		Y.Plugin.NodeDeferred = NodeDeferred;
-	}
+					return deferred;
+					
+				} else {
+					if (method == 'load' && Y.instanceOf(this.host, Y.NodeList)) {
+						Y.error('NodeList doesn\'t have a ' + method + '() method');
+					} else {
+						Y.error('Missing required module for ' + method);
+					}
+				}
+				return this;
+			};
+		},
+		/**
+		 * Imports a method from Y.Node making it chainable but not returning promises
+		 * @method importMethod
+		 * @param {String} method Name of the method to import from Y.Node
+		 * @static
+		 */
+		importMethod: function(method) {
+			NodeDeferred.prototype[method] = function () {
+				var args = arguments;
+				return this.done(function () {
+					this.host[method].apply(this.host, args);
+				});
+			};
+		}
+	});
+	
+	/**
+	 * Deferred version of the Node method
+	 * @method hide
+	 * @return {NodeDeferred}
+	 */
+	/**
+	 * Deferred version of the Node method
+	 * @method load
+	 * @return {NodeDeferred}
+	 */
+	/**
+	 * Deferred version of the Node method
+	 * @method show
+	 * @return {NodeDeferred}
+	 */
+	/**
+	 * Deferred version of the Node method
+	 * @method transition
+	 * @return {NodeDeferred}
+	 */
+	/**
+	 * Deferred version of the Node method
+	 * @method once
+	 * @return {NodeDeferred}
+	 */
+	/**
+	 * Deferred version of the Node method
+	 * @method onceAfter
+	 * @return {NodeDeferred}
+	 */
+	Y.each(['hide', 'load', 'show', 'transition', 'once', 'onceAfter'], NodeDeferred.deferMethod);
+	/**
+	 * Same as the Node method 
+	 * @method addClass
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method append
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method appendTo
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method blur
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method clearData
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method destroy
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method empty
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method focus
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method insert
+	 * @chainable
+	 */
+	Y.each(['addClass', 'append', 'appendTo', 'blur', 'clearData', 'destroy', 'empty', 'focus', 'insert',
+	/**
+	 * Same as the Node method 
+	 * @method insertBefore
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method prepend
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method remove
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method removeAttribute
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method removeChild
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method removeClass
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method replaceChild
+	 * @chainable
+	 */
+			'insertBefore', 'prepend', 'remove', 'removeAttribute', 'removeChild', 'removeClass', 'replaceChild',
+	/**
+	 * Same as the Node method 
+	 * @method replaceClass
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method select
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method set
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method setAttrs
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method setContent
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method setData
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method setStyle
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method setStyles
+	 * @chainable
+	 */
+			'replaceClass', 'select', 'set', 'setAttrs', 'setContent', 'setData', 'setStyle', 'setStyles', 
+	/**
+	 * Same as the Node method 
+	 * @method setX
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method setXY
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method setY
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method simulate
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method swapXY
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method toggleClass
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method wrap
+	 * @chainable
+	 */
+	/**
+	 * Same as the Node method 
+	 * @method unwrap
+	 * @chainable
+	 */
+			'setX', 'setXY', 'setY', 'simulate', 'swapXY', 'toggleClass', 'wrap', 'unwrap'], NodeDeferred.importMethod);
+	
+	Y.Plugin.NodeDeferred = NodeDeferred;
+}
 
 
-}, 'gallery-2011.10.06-19-55' ,{optional:['node','plugin','node-load','transition','io-base','json','jsonp'], requires:['event-custom']});
+}, 'gallery-2012.05.16-20-37' ,{optional:['node','plugin','node-load','transition','io-base','json','jsonp']});

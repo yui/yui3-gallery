@@ -2,15 +2,19 @@ YUI.add('gallery-exprbuilder', function(Y) {
 
 "use strict";
 
-/**********************************************************************
+/**
+ * @module gallery-exprbuilder
+ */
+
+/**
  * Widget which helps user to build a query expression.
  * 
- * @module gallery-exprbuilder
+ * @main gallery-exprbuilder
  * @class ExpressionBuilder
+ * @extends Widget
  * @constructor
  * @param config {Object} Widget configuration
  */
-
 function ExpressionBuilder(config)
 {
 	ExpressionBuilder.superclass.constructor.call(this, config);
@@ -23,7 +27,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The id of the textarea form field.
 	 * 
-	 * @config fieldId
+	 * @attribute fieldId
 	 * @type {String}
 	 * @default Y.guid()
 	 * @writeonce
@@ -38,7 +42,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The name of the textarea form field.
 	 * 
-	 * @config fieldName
+	 * @attribute fieldName
 	 * @type {String}
 	 * @default ""
 	 * @writeonce
@@ -53,7 +57,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The FormManager to use when validating the constructed expression.
 	 * 
-	 * @config formMgr
+	 * @attribute formMgr
 	 * @type {Y.FormManager}
 	 * @default null
 	 * @writeonce
@@ -71,7 +75,7 @@ ExpressionBuilder.ATTRS =
 	 * the expression. {value} will be replaced by the value entered by the
 	 * user.
 	 * 
-	 * @config queryBuilder
+	 * @attribute queryBuilder
 	 * @type {Y.QueryBuilder}
 	 * @default null
 	 * @writeonce
@@ -88,7 +92,7 @@ ExpressionBuilder.ATTRS =
 	 * multiple values, and the values must be combined with something
 	 * other than AND.
 	 * 
-	 * @config combinatorMap
+	 * @attribute combinatorMap
 	 * @type {Object}
 	 * @default null
 	 */
@@ -100,7 +104,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The label for the Insert Parentheses button.
 	 * 
-	 * @config parenLabel
+	 * @attribute parenLabel
 	 * @type {String}
 	 * @default "()"
 	 * @writeonce
@@ -115,7 +119,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The label for the AND button.
 	 * 
-	 * @config andLabel
+	 * @attribute andLabel
 	 * @type {String}
 	 * @default "AND"
 	 * @writeonce
@@ -130,7 +134,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The label for the OR button.
 	 * 
-	 * @config orLabel
+	 * @attribute orLabel
 	 * @type {String}
 	 * @default "OR"
 	 * @writeonce
@@ -145,7 +149,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The label for the NOT button.
 	 * 
-	 * @config notLabel
+	 * @attribute notLabel
 	 * @type {String}
 	 * @default "NOT"
 	 * @writeonce
@@ -160,7 +164,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The label for the Clear button.
 	 * 
-	 * @config clearLabel
+	 * @attribute clearLabel
 	 * @type {String}
 	 * @default "Clear"
 	 * @writeonce
@@ -175,7 +179,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The label for the Insert button.
 	 * 
-	 * @config insertLabel
+	 * @attribute insertLabel
 	 * @type {String}
 	 * @default "Insert"
 	 * @writeonce
@@ -190,7 +194,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The label for the Reset button.
 	 * 
-	 * @config resetLabel
+	 * @attribute resetLabel
 	 * @type {String}
 	 * @default "Cancel"
 	 * @writeonce
@@ -206,7 +210,7 @@ ExpressionBuilder.ATTRS =
 	 * The error message for an unclosed parenthesis. <q>context</q> is
 	 * replaced by the portion of the expression that generated the error.
 	 * 
-	 * @config tooManyParensError
+	 * @attribute tooManyParensError
 	 * @type {String}
 	 * @default 'The expression contains an extra closing parenthesis at "{context}".'
 	 */
@@ -219,7 +223,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The error message for an unmatched single quote.
 	 * 
-	 * @config unmatchedSingleQuoteError
+	 * @attribute unmatchedSingleQuoteError
 	 * @type {String}
 	 * @default 'The expression contains an unmatched single quote.'
 	 */
@@ -232,7 +236,7 @@ ExpressionBuilder.ATTRS =
 	/**
 	 * The error message for an unclosed parenthesis.
 	 * 
-	 * @config unclosedParenError
+	 * @attribute unclosedParenError
 	 * @type {String}
 	 * @default 'The expression contains an unclosed parenthesis.'
 	 */
@@ -246,7 +250,7 @@ ExpressionBuilder.ATTRS =
 	 * The error message when the user forgets to select a variable for
 	 * insertion.
 	 * 
-	 * @config noVariableSelectedError
+	 * @attribute noVariableSelectedError
 	 * @type {String}
 	 * @default 'Please choose a variable.'
 	 */
@@ -473,6 +477,8 @@ Y.extend(ExpressionBuilder, Y.Widget,
 
 	/**
 	 * Clears the expression.
+	 * 
+	 * @method clear
 	 */
 	clear: function()
 	{
@@ -483,8 +489,9 @@ Y.extend(ExpressionBuilder, Y.Widget,
 	/**
 	 * Validate the expression.
 	 * 
+	 * @method _validateExpression
 	 * @protected
-	 * @return {boolean} <code>true</code> if the expression has balanced parens and single quotes
+	 * @return {Boolean} <code>true</code> if the expression has balanced parens and single quotes
 	 */
 	_validateExpression: function(form, e, form_mgr)
 	{
@@ -554,6 +561,7 @@ Y.extend(ExpressionBuilder, Y.Widget,
 	//
 
 	/**
+	 * @method _field
 	 * @protected
 	 * @return {String} markup for the textarea and basic buttons
 	 */
@@ -593,6 +601,7 @@ Y.extend(ExpressionBuilder, Y.Widget,
 	},
 
 	/**
+	 * @method _query
 	 * @protected
 	 * @return {String} markup for the QueryBuilder
 	 */
@@ -621,4 +630,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2011.06.29-23-18' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});
+}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});

@@ -2,17 +2,23 @@ YUI.add('gallery-math', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-math
+ */
+
 /**********************************************************************
  * <p>Augments built-in JavaScript Math namespace with additional
  * mathematical functions.</p>
  * 
- * @module gallery-math
+ * @main gallery-math
  * @class Math
  */
 
 Y.mix(Math,
 {
 	/**
+	 * @method sign
+	 * @static
 	 * @return {Number} +1 if value > 0, -1 if value < 0, else zero
 	 */
 	sign: function(v)
@@ -21,6 +27,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method add
+	 * @static
 	 * @return {Number} sum of all the arguments (either passed separately or as an array)
 	 */
 	add: function()
@@ -37,6 +45,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method addReciprocals
+	 * @static
 	 * @return {Number} sum of the reciprocals of all the arguments (either passed separately or as an array)
 	 */
 	addReciprocals: function()
@@ -55,6 +65,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method parallel
+	 * @static
 	 * @return {Number} net value of N resistors in parallel (either passed separately or as an array)
 	 */
 	parallel: function()
@@ -63,6 +75,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method multiply
+	 * @static
 	 * @return {Number} product of all the arguments (either passed separately or as an array)
 	 */
 	multiply: function()
@@ -79,6 +93,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method degreesToRadians
+	 * @static
 	 * @param a {Number} angle in degrees
 	 * @return {Number} angle in radians
 	 */
@@ -88,6 +104,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method radiansToDegrees
+	 * @static
 	 * @param a {Number} angle in radians
 	 * @return {Number} angle in degrees
 	 */
@@ -97,6 +115,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method acosh
+	 * @static
 	 * @param v {Number}
 	 * @return {Number} inverse hyperbolic cosine
 	 */
@@ -106,6 +126,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method asinh
+	 * @static
 	 * @param v {Number}
 	 * @return {Number} inverse hyperbolic sine
 	 */
@@ -115,6 +137,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method atanh
+	 * @static
 	 * @param v {Number}
 	 * @return {Number} inverse hyperbolic tangent
 	 */
@@ -124,6 +148,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method cosh
+	 * @static
 	 * @param v {Number}
 	 * @return {Number} hyperbolic cosine
 	 */
@@ -134,6 +160,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method sinh
+	 * @static
 	 * @param v {Number}
 	 * @return {Number} hyperbolic sine
 	 */
@@ -144,6 +172,8 @@ Y.mix(Math,
 	},
 
 	/**
+	 * @method tanh
+	 * @static
 	 * @param v {Number}
 	 * @return {Number} hyperbolic sine
 	 */
@@ -155,4 +185,4 @@ Y.mix(Math,
 });
 
 
-}, 'gallery-2012.04.10-14-57' ,{requires:['array-extras']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['array-extras']});

@@ -2,14 +2,18 @@ YUI.add('gallery-mathcanvas', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Manages all the bounding rectangles for an expression.</p>
  * 
  * <p>Each item contains rect (top,left,bottom,right), midline,
  * font_size(%), func.</p>
  * 
- * @namespace MathCanvas
  * @class RectList
+ * @namespace MathCanvas
  * @constructor
  */
 
@@ -19,6 +23,7 @@ function RectList()
 }
 
 /**
+ * @method width
  * @static
  * @param r {Rect} rectangle
  * @return width
@@ -29,6 +34,7 @@ RectList.width = function(r)
 };
 
 /**
+ * @method height
  * @static
  * @param r {Rect} rectangle
  * @return height
@@ -39,6 +45,7 @@ RectList.height = function(r)
 };
 
 /**
+ * @method xcenter
  * @static
  * @param r {Rect} rectangle
  * @return horizontal center
@@ -49,6 +56,7 @@ RectList.xcenter = function(r)
 };
 
 /**
+ * @method ycenter
  * @static
  * @param r {Rect} rectangle
  * @return vertical center
@@ -59,6 +67,7 @@ RectList.ycenter = function(r)
 };
 
 /**
+ * @method area
  * @static
  * @param r {Rect} rectangle
  * @return area
@@ -69,6 +78,7 @@ RectList.area = function(r)
 };
 
 /**
+ * @method containsPt
  * @static
  * @param r {Rect} rectangle
  * @param xy {point} point
@@ -81,6 +91,7 @@ RectList.containsPt = function(r, xy)
 };
 
 /**
+ * @method containsRect
  * @static
  * @param r1 {Rect}
  * @param r2 {Rect}
@@ -93,6 +104,7 @@ RectList.containsRect = function(r1, r2)
 };
 
 /**
+ * @method cover
  * @static
  * @param r1 {Rect} rectangle
  * @param r2 {Rect} rectangle
@@ -113,6 +125,7 @@ RectList.cover = function(r1, r2)
 RectList.prototype =
 {
 	/**
+	 * @method add
 	 * @param r {Rect}
 	 * @param midline {int}
 	 * @param font_size {int} percentage
@@ -137,6 +150,7 @@ RectList.prototype =
 	},
 
 	/**
+	 * @method get
 	 * @param index {int}
 	 * @return item at index
 	 */
@@ -147,6 +161,7 @@ RectList.prototype =
 	},
 
 	/**
+	 * @method find
 	 * @param f {MathFunction} search target
 	 * @return data for specified MathFunction, or null if not found
 	 */
@@ -160,6 +175,7 @@ RectList.prototype =
 	},
 
 	/**
+	 * @method findIndex
 	 * @param f {MathFunction} search target
 	 * @return index of item for specified MathFunction, or -1 if not found
 	 */
@@ -172,6 +188,7 @@ RectList.prototype =
 	/**
 	 * Shift the specified rect and all rects inside it.
 	 * 
+	 * @method shift
 	 * @param index {int}
 	 * @param dx {int} horizontal shift
 	 * @param dy {int} vertical shift
@@ -211,6 +228,7 @@ RectList.prototype =
 	/**
 	 * Set the midline of the specified rectangle.
 	 * 
+	 * @method setMidline
 	 * @param index {int}
 	 * @param y {int} midline
 	 */
@@ -222,6 +240,7 @@ RectList.prototype =
 	},
 
 	/**
+	 * @method getBounds
 	 * @return the bounding rect of all the rects in the list
 	 */
 	getBounds: function()
@@ -230,13 +249,14 @@ RectList.prototype =
 	},
 
 	/**
-	 * 	Returns the index of the smallest rectangle that contains both
-	 * 	startPt and currPt.  Returns -1 if there is no such rectangle.  If
-	 * 	startPt is inside the bounding rectangle and currPt is outside, we
-	 * 	return the index of the bounding rectangle.
+	 * Returns the index of the smallest rectangle that contains both
+	 * startPt and currPt.  Returns -1 if there is no such rectangle.  If
+	 * startPt is inside the bounding rectangle and currPt is outside, we
+	 * return the index of the bounding rectangle.
 	 * 	
-	 * 	@param start_pt {point} point where the drag started
-	 * 	@param curr_pt {point} current cursor location
+	 * @method getSelection
+	 * @param start_pt {point} point where the drag started
+	 * @param curr_pt {point} current cursor location
 	 */
 	getSelection: function(
 		/* point */	start_pt,
@@ -272,6 +292,7 @@ RectList.prototype =
 	/**
 	 * Returns the index of the smallest rectangle enclosing the given one.
 	 * 
+	 * @method getParent
 	 * @param index {int}
 	 */
 	getParent: function(
@@ -292,6 +313,10 @@ RectList.prototype =
 		return this.list.length-1;
 	}
 };
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Base class for all functions rendered by MathCanvas.</p>
  * 
@@ -299,7 +324,6 @@ RectList.prototype =
  * the default rendering which displays the output from toString(), implement
  * prepareToRender() and render().</p>
  * 
- * @namespace
  * @class MathFunction
  * @constructor
  */
@@ -312,6 +336,7 @@ function MathFunction()
 MathFunction.prototype =
 {
 	/**
+	 * @method getParent
 	 * @return {MathFunction} parent function or null
 	 */
 	getParent: function()
@@ -323,6 +348,7 @@ MathFunction.prototype =
 	 * Add the layout information for this object and its descendants to
 	 * rect_list.
 	 *
+	 * @method prepareToRender
 	 * @param canvas {MathCanvas} the drawing canvas
 	 * @param top_left {point} x,y coordinates of the top left of the bounding box
 	 * @param font_size {float} percentage of the base font size
@@ -351,6 +377,7 @@ MathFunction.prototype =
 	/**
 	 * Draw this object and its descendants.
 	 * 
+	 * @method render
 	 * @param canvas {MathCanvas} the drawing canvas
 	 * @param rect_list {RectList} layout information
 	 */
@@ -378,9 +405,10 @@ MathFunction.prototype =
 	 */
 
 	/**
+	 * @method parenthesizeForPrint
+	 * @protected
 	 * @param f {MathFunction}
 	 * @return {boolean} true if f needs to parenthesize us
-	 * @protected
 	 */
 	parenthesizeForPrint: function(
 		/* MathFunction */	f)
@@ -389,9 +417,10 @@ MathFunction.prototype =
 	},
 
 	/**
+	 * @method parenthesizeForRender
+	 * @protected
 	 * @param f {MathFunction}
 	 * @return {boolean} true if f needs to parenthesize us
-	 * @protected
 	 */
 	parenthesizeForRender: function(
 		/* MathFunction */	f)
@@ -433,6 +462,10 @@ MathFunction.updateProduct = function(
 };
 
 Y.MathFunction = MathFunction;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Constant value</p>
  * 
@@ -467,11 +500,20 @@ function MathValue(
 
 Y.extend(MathValue, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function()
 	{
 		return this.value;
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this.value;
@@ -479,6 +521,10 @@ Y.extend(MathValue, MathFunction,
 });
 
 MathFunction.Value = MathValue;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Variable value</p>
  * 
@@ -498,6 +544,11 @@ function MathVariable(
 
 Y.extend(MathVariable, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -510,6 +561,10 @@ Y.extend(MathVariable, MathFunction,
 		return (v instanceof MathFunction ? v.evaluate(var_list) : v);
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this.name;
@@ -517,6 +572,10 @@ Y.extend(MathVariable, MathFunction,
 });
 
 MathFunction.Variable = MathVariable;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Pi</p>
  * 
@@ -533,11 +592,20 @@ function MathPi()
 
 Y.extend(MathPi, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function()
 	{
 		return Math.PI;
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return '\u03c0';
@@ -545,6 +613,10 @@ Y.extend(MathPi, MathFunction,
 });
 
 MathFunction.Pi = MathPi;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>e</p>
  * 
@@ -561,11 +633,20 @@ function MathE()
 
 Y.extend(MathE, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function()
 	{
 		return Math.E;
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return 'e';
@@ -573,6 +654,10 @@ Y.extend(MathE, MathFunction,
 });
 
 MathFunction.E = MathE;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>i (square root of -1)</p>
  * 
@@ -589,11 +674,20 @@ function MathI()
 
 Y.extend(MathI, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function()
 	{
 		return Y.ComplexMath.I;
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return 'i';
@@ -601,6 +695,10 @@ Y.extend(MathI, MathFunction,
 });
 
 MathFunction.I = MathI;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Function that takes one or more arguments.</p>
  * 
@@ -644,6 +742,7 @@ function MathFunctionWithArgs(
 Y.extend(MathFunctionWithArgs, MathFunction,
 {
 	/**
+	 * @method getArgCount
 	 * @return {int} number of arguments
 	 */
 	getArgCount: function()
@@ -652,6 +751,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method getArg
 	 * @return {MathFunction} requested argument, or undefined
 	 */
 	getArg: function(
@@ -661,6 +761,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method appendArg
 	 * @param f {MathFunction}
 	 */
 	appendArg: function(
@@ -671,6 +772,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method removeArg
 	 * @param f {MathFunction}
 	 */
 	removeArg: function(
@@ -687,6 +789,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	/**
 	 * If origArg is an argument, replaces origArg with newArg.
 	 * 
+	 * @method replaceArg
 	 * @param origArg {MathFunction} original argument
 	 * @param newArg {MathFunction} new argument
 	 */
@@ -704,9 +807,10 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method evaluateArgs
+	 * @protected
 	 * @param var_list {Object} map of variable names to values or MathFunctions
 	 * @return list of argument values, from calling evaluate()
-	 * @protected
 	 */
 	evaluateArgs: function(
 		/* map */	var_list)
@@ -717,6 +821,14 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 		});
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -787,6 +899,11 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 		return rect_list.add(r, midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -823,6 +940,10 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 		}
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this.name + '(' + this.args.join(',') + ')';
@@ -831,9 +952,10 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	/**
 	 * Print an argument, with parentheses if necessary.
 	 * 
+	 * @method _printArg
+	 * @protected
 	 * @param index {number|MathFunction} argument index or MathFunction
 	 * @return {string} the string representation of the argument
-	 * @protected
 	 */
 	_printArg: function(
 		/* int */	index)
@@ -851,6 +973,10 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 });
 
 MathFunction.FunctionWithArgs = MathFunctionWithArgs;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Negate a number.</p>
  * 
@@ -869,12 +995,25 @@ function MathNegate(
 
 Y.extend(MathNegate, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
 		return Y.ComplexMath.subtract(0, this.args[0].evaluate(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -913,6 +1052,11 @@ Y.extend(MathNegate, MathFunctionWithArgs,
 		return rect_list.add(total_rect, arg_info.midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -930,6 +1074,10 @@ Y.extend(MathNegate, MathFunctionWithArgs,
 		}
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return '-' + this._printArg(0);
@@ -937,6 +1085,10 @@ Y.extend(MathNegate, MathFunctionWithArgs,
 });
 
 MathFunction.Negate = MathNegate;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Sum of values.</p>
  * 
@@ -953,12 +1105,25 @@ function MathSum()
 
 Y.extend(MathSum, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
 		return Y.ComplexMath.add(this.evaluateArgs(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1039,6 +1204,11 @@ Y.extend(MathSum, MathFunctionWithArgs,
 		return rect_list.add(total_rect, total_midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1077,6 +1247,10 @@ Y.extend(MathSum, MathFunctionWithArgs,
 		this);
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return Y.Array.reduce(this.args, '', function(s, arg, index)
@@ -1098,6 +1272,10 @@ Y.extend(MathSum, MathFunctionWithArgs,
 });
 
 MathFunction.Sum = MathSum;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Product of values.</p>
  * 
@@ -1114,12 +1292,25 @@ function MathProduct()
 
 Y.extend(MathProduct, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
 		return Y.ComplexMath.multiply(this.evaluateArgs(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1176,6 +1367,11 @@ Y.extend(MathProduct, MathFunctionWithArgs,
 		return rect_list.add(total_rect, total_midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1206,6 +1402,10 @@ Y.extend(MathProduct, MathFunctionWithArgs,
 		this);
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return Y.Array.reduce(this.args, '', function(s, arg, index)
@@ -1222,6 +1422,10 @@ Y.extend(MathProduct, MathFunctionWithArgs,
 });
 
 MathFunction.Product = MathProduct;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Quotient of values.</p>
  * 
@@ -1242,6 +1446,11 @@ function MathQuotient(
 
 Y.extend(MathQuotient, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1249,6 +1458,14 @@ Y.extend(MathQuotient, MathFunctionWithArgs,
 									this.args[1].evaluate(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1307,6 +1524,11 @@ Y.extend(MathQuotient, MathFunctionWithArgs,
 		return rect_list.add(total_rect, total_midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1327,6 +1549,10 @@ Y.extend(MathQuotient, MathFunctionWithArgs,
 		this.args[1].render(context, rect_list);
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this._printArg(0) + '/' + this._printArg(1);
@@ -1334,6 +1560,10 @@ Y.extend(MathQuotient, MathFunctionWithArgs,
 });
 
 MathFunction.Quotient = MathQuotient;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Magnitude (absolute value) of a number.</p>
  * 
@@ -1352,12 +1582,25 @@ function MathMagnitude(
 
 Y.extend(MathMagnitude, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
 		return Y.ComplexMath.abs(this.args[0].evaluate(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1383,6 +1626,11 @@ Y.extend(MathMagnitude, MathFunctionWithArgs,
 		return rect_list.add(r, arg_info.midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1399,6 +1647,10 @@ Y.extend(MathMagnitude, MathFunctionWithArgs,
 });
 
 MathFunction.Magnitude = MathMagnitude;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Phase of a complex number.</p>
  * 
@@ -1417,6 +1669,11 @@ function MathPhase(
 
 Y.extend(MathPhase, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1425,6 +1682,10 @@ Y.extend(MathPhase, MathFunctionWithArgs,
 });
 
 MathFunction.Phase = MathPhase;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Conjugate of a complex number.</p>
  * 
@@ -1443,12 +1704,25 @@ function MathConjugate(
 
 Y.extend(MathConjugate, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
 		return Y.ComplexMath.conjugate(this.args[0].evaluate(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1469,6 +1743,11 @@ Y.extend(MathConjugate, MathFunctionWithArgs,
 		return rect_list.add(r, arg_info.midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1480,6 +1759,10 @@ Y.extend(MathConjugate, MathFunctionWithArgs,
 });
 
 MathFunction.Conjugate = MathConjugate;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Rotate a complex number around the origin.</p>
  * 
@@ -1498,6 +1781,11 @@ function MathRotate(
 
 Y.extend(MathRotate, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1507,6 +1795,10 @@ Y.extend(MathRotate, MathFunctionWithArgs,
 });
 
 MathFunction.Rotate = MathRotate;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Real part of a complex number.</p>
  * 
@@ -1525,6 +1817,11 @@ function MathRealPart(
 
 Y.extend(MathRealPart, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1534,6 +1831,10 @@ Y.extend(MathRealPart, MathFunctionWithArgs,
 });
 
 MathFunction.RealPart = MathRealPart;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Imaginary part of a complex number.</p>
  * 
@@ -1552,6 +1853,11 @@ function MathImaginaryPart(
 
 Y.extend(MathImaginaryPart, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1561,6 +1867,10 @@ Y.extend(MathImaginaryPart, MathFunctionWithArgs,
 });
 
 MathFunction.ImaginaryPart = MathImaginaryPart;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Minimum.</p>
  * 
@@ -1577,6 +1887,11 @@ function MathMin()
 
 Y.extend(MathMin, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1585,6 +1900,10 @@ Y.extend(MathMin, MathFunctionWithArgs,
 });
 
 MathFunction.Min = MathMin;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Maximum.</p>
  * 
@@ -1601,6 +1920,11 @@ function MathMax()
 
 Y.extend(MathMax, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1609,6 +1933,10 @@ Y.extend(MathMax, MathFunctionWithArgs,
 });
 
 MathFunction.Max = MathMax;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Square root.</p>
  * 
@@ -1627,12 +1955,25 @@ function MathSquareRoot(
 
 Y.extend(MathSquareRoot, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
 		return Y.ComplexMath.sqrt(this.args[0].evaluate(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1660,6 +2001,11 @@ Y.extend(MathSquareRoot, MathFunctionWithArgs,
 		return rect_list.add(r, arg_info.midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1669,6 +2015,12 @@ Y.extend(MathSquareRoot, MathFunctionWithArgs,
 		this.args[0].render(context, rect_list);
 	},
 
+	/**
+	 * @method _drawSquareRoot
+	 * @private
+	 * @param context {Context2d}
+	 * @param rect {Object}
+	 */
 	_drawSquareRoot: function(
 		/* Context2d */		context,
 		/* rect */			rect)
@@ -1694,6 +2046,10 @@ Y.extend(MathSquareRoot, MathFunctionWithArgs,
 });
 
 MathFunction.SquareRoot = MathSquareRoot;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Exponential.</p>
  * 
@@ -1714,6 +2070,11 @@ function MathExponential(
 
 Y.extend(MathExponential, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1721,6 +2082,14 @@ Y.extend(MathExponential, MathFunctionWithArgs,
 								 this.args[1].evaluate(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1776,6 +2145,11 @@ Y.extend(MathExponential, MathFunctionWithArgs,
 		return rect_list.add(total_rect, b_arg_info.midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1790,6 +2164,10 @@ Y.extend(MathExponential, MathFunctionWithArgs,
 		this.args[1].render(context, rect_list);
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this._printArg(0) + '^' + this._printArg(1);
@@ -1797,6 +2175,10 @@ Y.extend(MathExponential, MathFunctionWithArgs,
 });
 
 MathFunction.Exponential = MathExponential;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Logarithm.</p>
  * 
@@ -1817,6 +2199,11 @@ function MathLogarithm(
 
 Y.extend(MathLogarithm, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1825,6 +2212,14 @@ Y.extend(MathLogarithm, MathFunctionWithArgs,
 			Y.ComplexMath.log(this.args[0].evaluate(var_list)));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -1876,6 +2271,11 @@ Y.extend(MathLogarithm, MathFunctionWithArgs,
 		return rect_list.add(total_rect, v_arg_info.midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -1892,6 +2292,10 @@ Y.extend(MathLogarithm, MathFunctionWithArgs,
 });
 
 MathFunction.Logarithm = MathLogarithm;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Natural logarithm.</p>
  * 
@@ -1910,6 +2314,11 @@ function MathNaturalLog(
 
 Y.extend(MathNaturalLog, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1918,6 +2327,10 @@ Y.extend(MathNaturalLog, MathFunctionWithArgs,
 });
 
 MathFunction.NaturalLog = MathNaturalLog;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Trigonometric sine.</p>
  * 
@@ -1936,6 +2349,11 @@ function MathSine(
 
 Y.extend(MathSine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1944,6 +2362,10 @@ Y.extend(MathSine, MathFunctionWithArgs,
 });
 
 MathFunction.Sine = MathSine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Trigonometric cosine.</p>
  * 
@@ -1962,6 +2384,11 @@ function MathCosine(
 
 Y.extend(MathCosine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1970,6 +2397,10 @@ Y.extend(MathCosine, MathFunctionWithArgs,
 });
 
 MathFunction.Cosine = MathCosine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Trigonometric tangent.</p>
  * 
@@ -1988,6 +2419,11 @@ function MathTangent(
 
 Y.extend(MathTangent, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -1996,6 +2432,10 @@ Y.extend(MathTangent, MathFunctionWithArgs,
 });
 
 MathFunction.Tangent = MathTangent;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse trigonometric sine.</p>
  * 
@@ -2014,6 +2454,11 @@ function MathArcsine(
 
 Y.extend(MathArcsine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2022,6 +2467,10 @@ Y.extend(MathArcsine, MathFunctionWithArgs,
 });
 
 MathFunction.Arcsine = MathArcsine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse trigonometric cosine.</p>
  * 
@@ -2040,6 +2489,11 @@ function MathArccosine(
 
 Y.extend(MathArccosine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2048,6 +2502,10 @@ Y.extend(MathArccosine, MathFunctionWithArgs,
 });
 
 MathFunction.Arccosine = MathArccosine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse trigonometric cosine.</p>
  * 
@@ -2066,6 +2524,11 @@ function MathArctangent(
 
 Y.extend(MathArctangent, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2074,6 +2537,10 @@ Y.extend(MathArctangent, MathFunctionWithArgs,
 });
 
 MathFunction.Arctangent = MathArctangent;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse trigonometric cosine.</p>
  * 
@@ -2094,6 +2561,11 @@ function MathArctangent2(
 
 Y.extend(MathArctangent2, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2103,6 +2575,10 @@ Y.extend(MathArctangent2, MathFunctionWithArgs,
 });
 
 MathFunction.Arctangent2 = MathArctangent2;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Hyperbolic cosine.</p>
  * 
@@ -2121,6 +2597,11 @@ function MathHyperbolicCosine(
 
 Y.extend(MathHyperbolicCosine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2129,6 +2610,10 @@ Y.extend(MathHyperbolicCosine, MathFunctionWithArgs,
 });
 
 MathFunction.HyperbolicCosine = MathHyperbolicCosine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Hyperbolic sine.</p>
  * 
@@ -2147,6 +2632,11 @@ function MathHyperbolicSine(
 
 Y.extend(MathHyperbolicSine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2155,6 +2645,10 @@ Y.extend(MathHyperbolicSine, MathFunctionWithArgs,
 });
 
 MathFunction.HyperbolicSine = MathHyperbolicSine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Hyperbolic tangent.</p>
  * 
@@ -2173,6 +2667,11 @@ function MathHyperbolicTangent(
 
 Y.extend(MathHyperbolicTangent, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2181,6 +2680,10 @@ Y.extend(MathHyperbolicTangent, MathFunctionWithArgs,
 });
 
 MathFunction.HyperbolicTangent = MathHyperbolicTangent;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse hyperbolic cosine.</p>
  * 
@@ -2199,6 +2702,11 @@ function MathInverseHyperbolicCosine(
 
 Y.extend(MathInverseHyperbolicCosine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2207,6 +2715,10 @@ Y.extend(MathInverseHyperbolicCosine, MathFunctionWithArgs,
 });
 
 MathFunction.InverseHyperbolicCosine = MathInverseHyperbolicCosine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse hyperbolic sine.</p>
  * 
@@ -2225,6 +2737,11 @@ function MathInverseHyperbolicSine(
 
 Y.extend(MathInverseHyperbolicSine, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2233,6 +2750,10 @@ Y.extend(MathInverseHyperbolicSine, MathFunctionWithArgs,
 });
 
 MathFunction.InverseHyperbolicSine = MathInverseHyperbolicSine;
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse hyperbolic tangent.</p>
  * 
@@ -2251,6 +2772,11 @@ function MathInverseHyperbolicTangent(
 
 Y.extend(MathInverseHyperbolicTangent, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -2777,17 +3303,19 @@ if (typeof module !== 'undefined' && require.main === module) {
   exports.main(typeof process !== 'undefined' ? process.argv.slice(1) : require("system").args);
 }
 }
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * Displays an arithmetical expression the way you would write it on paper.
  * 
- * @module gallery-mathcanvas
- * @namespace
+ * @main gallery-mathcanvas
  * @class MathCanvas
  * @extends Widget
  * @constructor
  * @param config {Object} Widget configuration
  */
-
 function MathCanvas(
 	/* object */	config)
 {
@@ -2801,7 +3329,7 @@ MathCanvas.ATTRS =
 	/**
 	 * The function to display.
 	 * 
-	 * @config func
+	 * @attribute func
 	 * @type {Y.MathFunction|String}
 	 */
 	func:
@@ -2817,7 +3345,7 @@ MathCanvas.ATTRS =
 	/**
 	 * The font name to use.
 	 * 
-	 * @config fontName
+	 * @attribute fontName
 	 * @type {String}
 	 */
 	fontName:
@@ -2829,7 +3357,7 @@ MathCanvas.ATTRS =
 	/**
 	 * The font size to use, in em's.
 	 * 
-	 * @config fontSize
+	 * @attribute fontSize
 	 * @type {number}
 	 */
 	fontSize:
@@ -2842,7 +3370,7 @@ MathCanvas.ATTRS =
 	 * The minimum width of the canvas.  If the expression is wider, the
 	 * width will increase to fit.
 	 * 
-	 * @config minWidth
+	 * @attribute minWidth
 	 * @type {Integer}
 	 */
 	minWidth:
@@ -2855,7 +3383,7 @@ MathCanvas.ATTRS =
 	 * The minimum height of the canvas.  If the expression is taller, the
 	 * height will increase to fit.
 	 * 
-	 * @config minHeight
+	 * @attribute minHeight
 	 * @type {Integer}
 	 */
 	minHeight:
@@ -3122,6 +3650,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Shows touch keyboard.
+	 * 
+	 * @method showKeyboard
 	 */
 	showKeyboard: function()
 	{
@@ -3150,6 +3680,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Hides touch keyboard.
+	 * 
+	 * @method hideKeyboard
 	 */
 	hideKeyboard: function()
 	{
@@ -3178,6 +3710,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Expands the selection up one level of the parse tree.
+	 * 
+	 * @method expandSelection
 	 */
 	expandSelection: function()
 	{
@@ -3194,6 +3728,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Deletes the selected sub-expression.
+	 * 
+	 * @method deleteSelection
 	 */
 	deleteSelection: function()
 	{
@@ -3204,6 +3740,7 @@ Y.extend(MathCanvas, Y.Widget,
 	},
 
 	/**
+	 * @method deleteFunction
 	 * @param f {MathFunction} function to remove from the overall expression
 	 */
 	deleteFunction: function(
@@ -3248,8 +3785,11 @@ Y.extend(MathCanvas, Y.Widget,
 		this._renderExpression();
 	},
 
-	/*
+	/**
 	 * Renders the expression.
+	 * 
+	 * @method _renderExpression
+	 * @protected
 	 */
 	_renderExpression: function()
 	{
@@ -3444,8 +3984,8 @@ Y.MathCanvas.Parser   = MathParser;
 /**********************************************************************
  * Parser used to convert a string expression into Y.MathFunction
  * 
- * @namespace MathCanvas
  * @class Parser
+ * @namespace MathCanvas
  */
 
 /**
@@ -3458,4 +3998,4 @@ Y.MathCanvas.Parser   = MathParser;
  */
 
 
-}, 'gallery-2012.01.04-22-09' ,{skinnable:true, requires:['widget','collection','node-screen','gallery-complexnumber','gallery-canvas','gallery-node-optimizations','anim-base','array-extras']});
+}, 'gallery-2012.05.16-20-37' ,{skinnable:true, requires:['widget','collection','node-screen','gallery-complexnumber','gallery-canvas','gallery-node-optimizations','anim-base','array-extras']});

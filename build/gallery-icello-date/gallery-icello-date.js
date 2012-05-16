@@ -1,5 +1,7 @@
 YUI.add('gallery-icello-date', function(Y) {
 
+'use strict';
+
 Y.namespace('Icello.Date');
 
 Y.Icello.Date.addMonths = function (date, months) {
@@ -42,4 +44,4 @@ Y.Icello.Date.formatShortDate = function (date) {
 };
 
 
-}, 'gallery-2012.04.04-17-55' ,{requires:['datatype-date-math'], skinnable:false});
+}, 'gallery-2012.05.16-20-37' ,{requires:['datatype-date-math'], skinnable:false});

@@ -2,12 +2,16 @@ YUI.add('gallery-console-test', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-console-test
+ */
+
 /**********************************************************************
  * <p>Adds a menu of registered unit test suites to the YUI 3 Console.</p>
  *
- * @module gallery-console-test
- * @namespace Plugin
+ * @main gallery-console-test
  * @class ConsoleTest
+ * @namespace Plugin
  * @extends Plugin.Base
  */
 
@@ -116,4 +120,4 @@ Y.namespace("Plugin");
 Y.Plugin.ConsoleTest = ConsoleTest;
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['console','plugin','test'], skinnable:true});
+}, 'gallery-2012.05.16-20-37' ,{requires:['console','plugin','test'], skinnable:true});

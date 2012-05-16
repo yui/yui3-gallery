@@ -2,10 +2,14 @@ YUI.add('gallery-chipper', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-chipper
+ */
+
 /**********************************************************************
  * <p>Destroys objects asynchronously.</p>
  * 
- * @module gallery-chipper
+ * @main gallery-chipper
  * @class Chipper
  */
 
@@ -42,7 +46,7 @@ Y.Chipper =
 	 * Throw objects into the chipper.  If an object does not implement
 	 * destroy(), it is ignored.
 	 * 
-	 * @method Y.Chipper.destroy
+	 * @method destroy
 	 * @static
 	 * @param objs {Object/Array} The object(s) to destroy.
 	 */
@@ -55,4 +59,4 @@ Y.Chipper =
 };
 
 
-}, 'gallery-2010.03.18-19' ,{requires:['yui-later']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['yui-later']});

@@ -3,12 +3,12 @@ YUI.add('gallery-anim-class', function(Y) {
 "use strict";
 
 /**********************************************************************
- * <p>Adds CSS class animation to Y.Anim, so you can specify cssClass in
- * from and/or to.  At the end of the animation, the from class is replaced
- * by the to class, and all the individual styles used during the animation
- * are removed.</p>
+ * <p>Adds CSS class animation to `Y.Anim`, so you can specify `cssClass`
+ * in `from` and/or `to`.  At the end of the animation, the `from` class is
+ * replaced by the `to` class, and all the individual styles used during
+ * the animation are removed.</p>
  * 
- * <p>Explicit entries in from or to override values set by cssClass.</p>
+ * <p>Explicit entries in `from` or `to` override values set by cssClass.</p>
  * 
  * @module gallery-anim-class
  */
@@ -213,4 +213,4 @@ Y.Anim.prototype._end = function()
 };
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['anim-base','node-style','gallery-funcprog']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['anim-base','node-style','gallery-funcprog']});

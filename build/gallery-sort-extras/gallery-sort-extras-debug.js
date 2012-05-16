@@ -2,10 +2,14 @@ YUI.add('gallery-sort-extras', function(Y) {
 
 "use strict";
 
-/**********************************************************************
+/**
+ * @module gallery-sort-extras
+ */
+
+/**
  * <p>Utilities for sorting.</p>
  * 
- * @module gallery-sort-extras
+ * @main gallery-sort-extras
  * @class Sort
  */
 
@@ -17,11 +21,12 @@ var Sort = Y.namespace('Sort');
  * Utility function for extracting the same value from both comparator
  * arguments.
  *
+ * @method drill
+ * @static
  * @param key {Array} path to element stored in both a and b
  * @param a {Object} first object to compare
  * @param b {Object} second object to compare
  * @return {Array} values extracted from a and b
- * @static
  */
 Sort.drill = function(key, a,b)
 {
@@ -42,10 +47,11 @@ Sort.drill = function(key, a,b)
  * The default behavior for sorting strings.  Provided for cases where one
  * needs to compare object members.
  *
+ * @method compareAsString
+ * @static
  * @param a {String} first string to compare
  * @param b {String} second string to compare
  * @return {Number} -1,0,+1 based on comparing the strings
- * @static
  */
 Sort.compareAsString = function(a,b)
 {
@@ -53,10 +59,11 @@ Sort.compareAsString = function(a,b)
 };
 
 /**
+ * @method compareAsStringNoCase
+ * @static
  * @param a {String} first string to compare
  * @param b {String} second string to compare
  * @return {Number} -1,0,+1 based on comparing the strings when ignoring case
- * @static
  */
 Sort.compareAsStringNoCase = function(a,b)
 {
@@ -69,10 +76,11 @@ Sort.compareAsStringNoCase = function(a,b)
  * The default behavior for sorting numbers.  Provided for cases where one
  * needs to compare object members.
  *
+ * @method compareAsNumber
+ * @static
  * @param a {Number} first number to compare
  * @param b {Number} second number to compare
  * @return {Number} -1,0,+1 based on comparing the values
- * @static
  */
 Sort.compareAsNumber = function(a,b)
 {
@@ -81,15 +89,16 @@ Sort.compareAsNumber = function(a,b)
 
 /**
  * <p>Sort by an object member:
- * sort(Y.bind(Y.Sort.compareKey, null, Y.Sort.compareAs*, key_or_path))</p>
+ * `sort(Y.bind(Y.Sort.compareKey, null, Y.Sort.compareAs*, key_or_path))`</p>
  * 
  * <p>Key can be an array, to drill deep inside the objects, e.g.,
- * ['foo','bar','baz'] translates to a.foo.bar.baz</p>
+ * `['foo','bar','baz']` translates to a.foo.bar.baz</p>
  *
+ * @method compareKey
+ * @static
  * @param f {Function} comparator
  * @param key {String|Array} object key or path to the value which should be compared
  * @return {Number} -1,0,+1 based on comparing the values
- * @static
  */
 Sort.compareKey = function(f, key, a,b)
 {
@@ -105,11 +114,12 @@ Sort.compareKey = function(f, key, a,b)
 };
 
 /**
- * Flip the sort order:  sort(Y.Sort.flip(comparator));
+ * Flip the sort order:  `sort(Y.Sort.flip(comparator))`
  *
+ * @method flip
+ * @static
  * @param f {Function} original comparator which takes 2 arguments
  * @return {Function} new comparator that inverts the sort order
- * @static
  */
 Sort.flip = function(f)
 {
@@ -120,4 +130,4 @@ Sort.flip = function(f)
 };
 
 
-}, 'gallery-2012.04.26-15-49' ,{requires:['oop']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['oop']});

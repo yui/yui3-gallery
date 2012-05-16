@@ -1,13 +1,21 @@
 YUI.add('gallery-busyoverlay', function(Y) {
 
-/**********************************************************************
+"use strict";
+
+/**
+ * @module gallery-busyoverlay
+ */
+
+/**
  * A plugin for Y.Node or Y.Widget that creates an overlaying div.
  * Especially useful for a widget that is waiting for an AJAX response.
  * 
- * @module gallery-busyoverlay
- * @namespace Plugin
+ * @main gallery-busyoverlay
  * @class BusyOverlay
+ * @namespace Plugin
  * @extends Plugin.Base
+ * @constructor
+ * @param config {Object} configuration
  */
 function BusyOverlayPlugin(config)
 {
@@ -22,7 +30,7 @@ BusyOverlayPlugin.ATTRS =
 	/**
 	 * CSS class to apply to the overlay.
 	 *
-	 * @config css
+	 * @attribute css
 	 * @type {String}
 	 * @default "yui3-component-busy"
 	 */
@@ -71,6 +79,7 @@ Y.extend(BusyOverlayPlugin, Y.Plugin.Base,
 	},
 
 	/**
+	 * @method isVisible
 	 * @return {Boolean} true if the overlay is visible
 	 */
 	isVisible: function()
@@ -80,6 +89,8 @@ Y.extend(BusyOverlayPlugin, Y.Plugin.Base,
 
 	/**
 	 * Show the overlay.
+	 * 
+	 * @method show
 	 */
 	show: function()
 	{
@@ -88,6 +99,8 @@ Y.extend(BusyOverlayPlugin, Y.Plugin.Base,
 
 	/**
 	 * Hide the overlay.
+	 * 
+	 * @method hide
 	 */
 	hide: function()
 	{
@@ -96,6 +109,8 @@ Y.extend(BusyOverlayPlugin, Y.Plugin.Base,
 
 	/**
 	 * Toggle the visibility of the overlay.
+	 * 
+	 * @method toggleVisible
 	 */
 	toggleVisible: function()
 	{
@@ -105,6 +120,7 @@ Y.extend(BusyOverlayPlugin, Y.Plugin.Base,
 	/**
 	 * Set the visibility of the overlay.
 	 * 
+	 * @method setVisible
 	 * @param visible {Boolean}
 	 */
 	setVisible: function(
@@ -138,6 +154,7 @@ Y.extend(BusyOverlayPlugin, Y.Plugin.Base,
 	},
 
 	/**
+	 * @method getTargetNode
 	 * @return {Node} node to overlay
 	 */
 	getTargetNode: function()
@@ -151,4 +168,4 @@ Y.namespace("Plugin");
 Y.Plugin.BusyOverlay = BusyOverlayPlugin;
 
 
-}, 'gallery-2011.08.24-23-44' ,{requires:['plugin','node-pluginhost','node-screen','node-style'], skinnable:true});
+}, 'gallery-2012.05.16-20-37' ,{requires:['plugin','node-pluginhost','node-screen','node-style'], skinnable:true});

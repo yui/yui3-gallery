@@ -867,6 +867,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * Generates an input field for setting the current page.
  *
  * @class Paginator.ui.CurrentPageInput
@@ -994,6 +998,10 @@ Copyright (c) 2009, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
+
+/**
+ * @module gallery-paginator
+ */
 
 /**
  * ui Component to generate the textual report of current pagination status.
@@ -1155,6 +1163,10 @@ Copyright (c) 2009, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
+
+/**
+ * @module gallery-paginator
+ */
 
 /**
  * ui Component to generate the link to jump to the first page.
@@ -1329,6 +1341,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * ui Component to display a menu for selecting the range of items to display.
  *
  * @class Paginator.ui.ItemRangeDropdown
@@ -1477,6 +1493,10 @@ Copyright (c) 2009, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
+
+/**
+ * @module gallery-paginator
+ */
 
 /**
  * ui Component to generate the link to jump to the last page.
@@ -1682,6 +1702,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * ui Component to generate the link to jump to the next page.
  *
  * @class Paginator.ui.NextPageLink
@@ -1855,6 +1879,10 @@ Copyright (c) 2009, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
+
+/**
+ * @module gallery-paginator
+ */
 
 /**
  * ui Component to generate the page links
@@ -2114,6 +2142,10 @@ http://developer.yahoo.net/yui/license.txt
 */
 
 /**
+ * @module gallery-paginator
+ */
+
+/**
  * ui Component to generate the link to jump to the previous page.
  *
  * @class Paginator.ui.PreviousPageLink
@@ -2262,6 +2294,10 @@ Copyright (c) 2009, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
+
+/**
+ * @module gallery-paginator
+ */
 
 /**
  * ui Component to generate the rows-per-page dropdown
@@ -2460,6 +2496,10 @@ Paginator.ui.RowsPerPageDropdown.prototype = {
         }
     }
 };
+/**
+ * @module gallery-paginator
+ */
+
 /**********************************************************************
  * Adds per-page error notification to Paginator.ui.PageLinks.
  *
@@ -2537,4 +2577,4 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 });
 
 
-}, 'gallery-2012.05.09-20-27' ,{requires:['widget','event-key','substitute'], skinnable:true});
+}, 'gallery-2012.05.16-20-37' ,{requires:['widget','event-key','substitute'], skinnable:true});

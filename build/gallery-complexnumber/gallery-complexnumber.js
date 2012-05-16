@@ -2,16 +2,18 @@ YUI.add('gallery-complexnumber', function(Y) {
 
 "use strict";
 
-/**********************************************************************
- * <p>Class for representing a complex number.</p>
- * 
+/**
  * @module gallery-complexnumber
- * @class Y.ComplexNumber
- * @constructor
- * @param real {number} the real component (default: 0)
- * @param imag {number} the imaginary component (default: 0)
  */
 
+/**********************************************************************
+ * Class for representing a complex number.
+ * 
+ * @class ComplexNumber
+ * @constructor
+ * @param real=0 {number} the real component
+ * @param imag=0 {number} the imaginary component
+ */
 function ComplexNumber(real, imag)
 {
 	this.r = real || 0;
@@ -21,6 +23,7 @@ function ComplexNumber(real, imag)
 /**
  * Construct a ComplexNumber from polar coordinates.
  * 
+ * @method fromPolar
  * @static
  * @param magnitude {number}
  * @param phase {number}
@@ -36,6 +39,7 @@ ComplexNumber.fromPolar = function(magnitude, phase)
 ComplexNumber.prototype =
 {
 	/**
+	 * @method real
 	 * @return {number} real component
 	 */
 	real: function()
@@ -44,6 +48,7 @@ ComplexNumber.prototype =
 	},
 
 	/**
+	 * @method imag
 	 * @return {number} imaginary component
 	 */
 	imag: function()
@@ -52,6 +57,7 @@ ComplexNumber.prototype =
 	},
 
 	/**
+	 * @method magnitude
 	 * @return {number} length of the vector in the complex plane
 	 */
 	magnitude: function()
@@ -60,6 +66,7 @@ ComplexNumber.prototype =
 	},
 
 	/**
+	 * @method phase
 	 * @return {number} angle of the vector (in radians) in the complex plane relative to the positive real axis
 	 */
 	phase: function()
@@ -69,6 +76,8 @@ ComplexNumber.prototype =
 
 	/**
 	 * Equivalent of += operator.
+	 * 
+	 * @method add
 	 * @param v {number}
 	 * @chainable
 	 */
@@ -91,6 +100,8 @@ ComplexNumber.prototype =
 
 	/**
 	 * Equivalent of -= operator.
+	 * 
+	 * @method subtract
 	 * @param v {number}
 	 * @chainable
 	 */
@@ -113,6 +124,8 @@ ComplexNumber.prototype =
 
 	/**
 	 * Equivalent of *= operator.
+	 * 
+	 * @method multiply
 	 * @param v {number}
 	 * @chainable
 	 */
@@ -139,8 +152,10 @@ ComplexNumber.prototype =
 
 	/**
 	 * Equivalent of /= operator.
-	 * @param v {number}
+	 * 
+	 * @method divide
 	 * @chainable
+	 * @param v {number}
 	 */
 	divide: function(v)
 	{
@@ -163,6 +178,8 @@ ComplexNumber.prototype =
 
 	/**
 	 * Equivalent of unary minus operator.
+	 * 
+	 * @method negate
 	 * @chainable
 	 */
 	negate: function()
@@ -177,6 +194,8 @@ ComplexNumber.prototype =
 
 	/**
 	 * Negates the imaginary part.
+	 * 
+	 * @method conjugate
 	 * @chainable
 	 */
 	conjugate: function()
@@ -190,8 +209,10 @@ ComplexNumber.prototype =
 
 	/**
 	 * Rotates the number around the origin by the specified angle in radians.
-	 * @param angle {number}
+	 * 
+	 * @method rotate
 	 * @chainable
+	 * @param angle {number}
 	 */
 	rotate: function(
 		/* float */	angle)
@@ -229,13 +250,18 @@ ComplexNumber.prototype =
 
 Y.ComplexNumber = ComplexNumber;
 /**********************************************************************
- * <p>This collection of functions provides the complex number equivalent
- * of the built-in JavaScript Math namespace, along with the basic
- * arithmetic operations (since JavaScript does not support operator
- * overloading).</p>
- * 
+ * Support for complex numbers.
+ *
  * @module gallery-complexnumber
- * @class Y.ComplexMath
+ * @main gallery-complexnumber
+ */
+
+/**
+ * This collection of functions provides the complex number equivalent of
+ * the built-in JavaScript Math namespace, along with the basic arithmetic
+ * operations (since JavaScript does not support operator overloading).
+ * 
+ * @class ComplexMath
  */
 
 function failIfConstant(v)
@@ -250,15 +276,27 @@ var ComplexMath =
 {
 	/**
 	 * Zero.
+	 * 
+	 * @property ZERO
+	 * @type {ComplexNumber}
+	 * @static
+	 * @final
 	 */
 	ZERO: new ComplexNumber(),
 
 	/**
 	 * Square root of -1.
+	 * 
+	 * @property I
+	 * @type {ComplexNumber}
+	 * @static
+	 * @final
 	 */
 	I: new ComplexNumber(0,1),
 
 	/**
+	 * @method isComplexNumber
+	 * @static
 	 * @return {boolean} true if the argument is a ComplexNumber
 	 */
 	isComplexNumber: function(v)
@@ -268,6 +306,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method add
+	 * @static
 	 * @return {number} sum of all the arguments (either passed separately or as an array)
 	 */
 	add: function()
@@ -287,6 +327,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method addReciprocals
+	 * @static
 	 * @return {number} sum of the reciprocals of all the arguments (either passed separately or as an array)
 	 */
 	addReciprocals: function()
@@ -308,6 +350,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method parallel
+	 * @static
 	 * @return {number} net value of N impedances in parallel (either passed separately or as an array)
 	 */
 	parallel: function()
@@ -316,6 +360,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method subtract
+	 * @static
 	 * @param v1 {number}
 	 * @param v2 {number}
 	 * @return {number} v1-v2
@@ -343,6 +389,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method multiply
+	 * @static
 	 * @return {number} product of all the arguments (either passed separately or as an array)
 	 */
 	multiply: function()
@@ -362,6 +410,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method divide
+	 * @static
 	 * @param v1 {number}
 	 * @param v2 {number}
 	 * @return {number} v1/v2
@@ -393,6 +443,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method negative
+	 * @static
 	 * @param v {number}
 	 * @return {number} negative of the argument
 	 */
@@ -409,6 +461,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method abs
+	 * @static
 	 * @param v {number}
 	 * @return {number} absolute value (magnitude) of the argument
 	 */
@@ -425,6 +479,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method phase
+	 * @static
 	 * @param v {number}
 	 * @return {number} phase of the argument
 	 */
@@ -441,6 +497,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method conjugate
+	 * @static
 	 * @param v {number}
 	 * @return {number} complex conjugate of the argument
 	 */
@@ -457,6 +515,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method rotate
+	 * @static
 	 * @param v {number}
 	 * @param a {number} angle in radians
 	 * @return {number} phase of the argument
@@ -467,6 +527,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method acosh
+	 * @static
 	 * @param v {number}
 	 * @return {number} inverse hyperbolic cosine of the argument
 	 */
@@ -487,6 +549,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method asinh
+	 * @static
 	 * @param v {number}
 	 * @return {number} inverse hyperbolic sine of the argument
 	 */
@@ -506,6 +570,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method atanh
+	 * @static
 	 * @param v {number}
 	 * @return {number} inverse hyperbolic tangent of the argument
 	 */
@@ -525,6 +591,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method cos
+	 * @static
 	 * @param v {number}
 	 * @return {number} cosine of the argument
 	 */
@@ -543,6 +611,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method cosh
+	 * @static
 	 * @param v {number}
 	 * @return {number} hyperbolic cosine of the argument
 	 */
@@ -562,6 +632,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method exp
+	 * @static
 	 * @param v {number}
 	 * @return {number} e raised to the argument
 	 */
@@ -580,6 +652,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method log
+	 * @static
 	 * @param v {number}
 	 * @return {number} natural logarithm of the argument
 	 */
@@ -596,6 +670,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method pow
+	 * @static
 	 * @param v {number} value
 	 * @param e {number} exponent
 	 * @return {number} value raised to the exponent
@@ -622,6 +698,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method sin
+	 * @static
 	 * @param v {number}
 	 * @return {number} sine of the argument
 	 */
@@ -640,6 +718,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method sinh
+	 * @static
 	 * @param v {number}
 	 * @return {number} hyperbolic sine of the argument
 	 */
@@ -659,6 +739,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method sqrt
+	 * @static
 	 * @param v {number}
 	 * @return {number} square root of the argument
 	 */
@@ -671,6 +753,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method tan
+	 * @static
 	 * @param v {number}
 	 * @return {number} tangent of the argument
 	 */
@@ -687,6 +771,8 @@ var ComplexMath =
 	},
 
 	/**
+	 * @method tanh
+	 * @static
 	 * @param v {number}
 	 * @return {number} hyperbolic tangent of the argument
 	 */
@@ -709,4 +795,4 @@ var ComplexMath =
 Y.ComplexMath = ComplexMath;
 
 
-}, 'gallery-2011.04.27-17-14' ,{requires:['gallery-math']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-math']});

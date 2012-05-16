@@ -2,18 +2,21 @@ YUI.add('gallery-datatable-state', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-datatable-state
+ */
+
 /**********************************************************************
  * <p>Plugin for DataTable to preserve state, either on a single page or
  * across pages.</p>
  *
- * @module gallery-datatable-state
- * @namespace Plugin
+ * @main gallery-datatable-state
  * @class DataTableState
+ * @namespace Plugin
  * @extends Plugin.Base
  * @constructor
  * @param config {Object} configuration
  */
-
 function State(
 	/* object */ config)
 {
@@ -30,7 +33,7 @@ State.ATTRS =
 	 * unique value for each record.  The saved state is index by the value
 	 * of this column.
 	 *
-	 * @config uniqueIdKey
+	 * @attribute uniqueIdKey
 	 * @type {String}
 	 */
 	uniqueIdKey:
@@ -53,7 +56,7 @@ State.ATTRS =
 	 * </dl>
 	 * If a value should not be maintained when paginating, specify temp:true.
 	 *
-	 * @config save
+	 * @attribute save
 	 * @type {Array}
 	 */
 	save:
@@ -67,7 +70,7 @@ State.ATTRS =
 	 * this is not specified, temp:true will have no effect in the "save"
 	 * configuration.
 	 * 
-	 * @config paginator
+	 * @attribute paginator
 	 * @type {Paginator}
 	 */
 	paginator:
@@ -271,6 +274,7 @@ Y.extend(State, Y.Plugin.Base,
 	},
 
 	/**
+	 * @method getState
 	 * @return {Object} state for each row, indexed by uniqueIdKey and column key
 	 */
 	getState: function()
@@ -284,4 +288,4 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableState = State;
 
 
-}, 'gallery-2012.04.26-15-49' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations']});

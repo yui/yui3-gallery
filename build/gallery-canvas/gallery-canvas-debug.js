@@ -2,6 +2,10 @@ YUI.add('gallery-canvas', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-canvas
+ */
+
 function mirror(r, s, name)
 {
 	r[name] = function()
@@ -15,18 +19,14 @@ function mirror(r, s, name)
  * the native 2d context, plus some extras, documented below.  Just like
  * Y.Node, use get() and set() to modify attributes.</p>
  * 
- * @module gallery-canvas
- * @class Y.Canvas.Context2d
+ * @main gallery-canvas
+ * @class Context2d
+ * @namespace Canvas
  * @constructor
  * @param node {Y.Node} the canvas element
- * @param config {Object} configuration
- *		<dl>
- *		<dt>pixelAlign<dt>
- *		<dd>Optional. Default: true. Pass true to get thinner, cleaner strokes.
- *			Pass false to get the default rendering.</dd>
- *		</dl>
+ * @param config {Object}
+ * @param config.pixelAlign=true {Boolean} Pass true to get thinner, cleaner strokes. Pass false to get the default rendering.
  */
-
 function Context2d(node, config)
 {
 	this.context = node.invoke('getContext', '2d');
@@ -57,6 +57,7 @@ Context2d.prototype =
 	 * Get an attribute.  This accepts all attributes of the context and
 	 * the special name "pixelAlign".
 	 * 
+	 * @method get
 	 * @param name {String} the attribute name
 	 * @return {Mixed} the attribute value
 	 */
@@ -77,6 +78,7 @@ Context2d.prototype =
 	 * Set an attribute.  This accepts all attributes of the context and
 	 * the special name "pixelAlign".
 	 * 
+	 * @method set
 	 * @param name {String} the attribute name
 	 * @param value {Mixed} the attribute value
 	 */
@@ -106,6 +108,7 @@ Context2d.prototype =
 	 * Move relative to the current pen location (set via moveTo or move).
 	 * This only works when the transformation matrix is constant!
 	 * 
+	 * @method move
 	 * @param dx {int}
 	 * @param dy {int}
 	 */
@@ -125,6 +128,7 @@ Context2d.prototype =
 	 * Move relative to the current pen location.
 	 * This only works when the transformation matrix is constant!
 	 * 
+	 * @method line
 	 * @param dx {int}
 	 * @param dy {int}
 	 */
@@ -163,6 +167,7 @@ Context2d.prototype =
 	 * Define a rectangle with rounded corners.  You must call stroke(),
 	 * fill(), etc. afterwards.
 	 * 
+	 * @method roundedRect
 	 * @param top {int}
 	 * @param left {int}
 	 * @param bottom {int}
@@ -199,6 +204,7 @@ Context2d.prototype =
 	/**
 	 * Draw a polygon from a set of deltas.  
 	 * 
+	 * @method poly
 	 * @param list {Array} List of deltas (dx,dy).  You can omit values that are zero.
 	 */
 	poly: function(list)
@@ -215,4 +221,4 @@ Y.namespace('Canvas');
 Y.Canvas.Context2d = Context2d;
 
 
-}, 'gallery-2011.02.18-23-10' ,{requires:['node-base']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['node-base']});

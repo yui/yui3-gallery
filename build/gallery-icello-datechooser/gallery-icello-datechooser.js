@@ -1,5 +1,10 @@
 YUI.add('gallery-icello-datechooser', function(Y) {
 
+'use strict';
+
+/** 
+* @module gallery-icello-datechooser
+*/
 var getCN = Y.ClassNameManager.getClassName,
     CBX = 'contentBox',
     BASENAME = 'icello-datechooser',
@@ -101,18 +106,43 @@ var getCN = Y.ClassNameManager.getClassName,
 
 Y.namespace('Icello');
 
+/** 
+* @class DateChooser
+* @extends Widget
+* @constructor
+* @namespace Icello
+*/
 Y.Icello.DateChooser = Y.Base.create(
     BASENAME,
     Y.Widget,
     [Y.WidgetPosition, Y.WidgetStack, Y.WidgetPositionAlign, Y.WidgetPositionConstrain, Y.WidgetAutohide],
-    { //instance members
+    {
         initializer: function () {
-            this._navdate = null;
-            this._monthsL = null;
-            this._weekdaysL = null;
-            this._inputNodeHandle = null;
-            this._monthsL = this._getMonthsL(this.get('date'));
-            this._weekdaysL = this._getWeekdaysL(this.get('date'));
+
+            /** 
+            * The Date that the user has navigated to but not chosen necessarily
+            * @property navdate
+            * @type Date
+            * @private
+            */
+            this.navdate = null;
+
+            /** 
+            * The Array of month abbreviations
+            * @property monthsL
+            * @type Array
+            * @private
+            */
+            this.monthsL = this.getMonthsL(this.get('date'));
+
+            /** 
+            * The Array of weekday abbreviations
+            * @property weekdaysL
+            * @private
+            */
+            this.weekdaysL = this.getWeekdaysL(this.get('date'));
+
+            this.inputNodeHandle = null;
 
             this.set('align', {
                 node: this.get('inputNode'),
@@ -121,107 +151,107 @@ Y.Icello.DateChooser = Y.Base.create(
         },
         destructor: function () {
 
-            if (this._inputNodeHandle) {
-                this._inputNodeHandle.detach();
+            if (this.inputNodeHandle) {
+                this.inputNodeHandle.detach();
             }
         },
         renderUI: function () {
-            this._syncDates();
-            this._renderViewMonth();
+            this.syncDates();
+            this.renderViewMonth();
         },
         bindUI: function () {
-            this._inputNodeHandle = this.get('inputNode').on('click', Y.bind(this._inputNodeClick, this));
-            this.on('click', Y.bind(this._clickHandler, this));
+            this.inputNodeHandle = this.get('inputNode').on('click', Y.bind(this.inputNodeClick, this));
+            this.on('click', Y.bind(this.onClick, this));
             this.set('hideOn', [{ eventName: 'clickoutside'}]);
-            this.after('dateChange', this._handlerAfterDateChange);
+            this.after('dateChange', this.afterDateChange);
         },
         syncUI: function () {
 
         },
-        _clickHandler: function (e) {
+        onClick: function (e) {
             var n = e.domEvent.target;
 
             if (n.hasClass(styles.viewmonth.css_day)) {
-                this._dayChosenHandler(n.getContent());
+                this.onDayChoose(n.getContent());
             } else if (n.hasClass(styles.viewmonth.css_nextmonth)) {
-                this._monthChosenHandler(IDate.addMonths(this._navdate, 1));
+                this.onMonthChoose(IDate.addMonths(this.navdate, 1));
             } else if (n.hasClass(styles.viewmonth.css_prevmonth)) {
-                this._monthChosenHandler(IDate.addMonths(this._navdate, -1));
+                this.onMonthChoose(IDate.addMonths(this.navdate, -1));
             } else if (n.hasClass(styles.viewmonth.css_monthyear)) {
-                this._yearChosenHandler(this._navdate);
+                this.onYearChoose(this.navdate);
             } else if (n.hasClass(styles.viewyear.css_nextyear)) {
-                this._yearChosenHandler(YDate.addYears(this._navdate, 1));
+                this.onYearChoose(YDate.addYears(this.navdate, 1));
             } else if (n.hasClass(styles.viewyear.css_prevyear)) {
-                this._yearChosenHandler(YDate.addYears(this._navdate, -1));
+                this.onYearChoose(YDate.addYears(this.navdate, -1));
             } else if (n.hasClass(styles.viewyear.css_month)) {
-                this._monthChosenHandler(this._getMonthChosenFromContent(n.getContent()));
+                this.onMonthChoose(this.getMonthChosenFromContent(n.getContent()));
             } else if (n.hasClass(styles.viewyear.css_year)) {
-                this._decadeChosenHandler(new Date(parseInt(n.getContent(), 10), this._navdate.getMonth(), this._navdate.getDate()));
+                this.onDecadeChoose(new Date(parseInt(n.getContent(), 10), this.navdate.getMonth(), this.navdate.getDate()));
             } else if (n.hasClass(styles.viewdecade.css_year)) {
-                this._yearChosenHandler(new Date(parseInt(n.getContent(), 10), this._navdate.getMonth(), this._navdate.getDate()));
+                this.onYearChoose(new Date(parseInt(n.getContent(), 10), this.navdate.getMonth(), this.navdate.getDate()));
             } else if (n.hasClass(styles.viewdecade.css_nextdecade)) {
-                this._decadeChosenHandler(YDate.addYears(this._navdate, 10));
+                this.onDecadeChoose(YDate.addYears(this.navdate, 10));
             } else if (n.hasClass(styles.viewdecade.css_prevdecade)) {
-                this._decadeChosenHandler(YDate.addYears(this._navdate, -10));
+                this.onDecadeChoose(YDate.addYears(this.navdate, -10));
             }
 
             e.domEvent.halt(true);
         },
-        _getMonthChosenFromContent: function (content) {
+        getMonthChosenFromContent: function (content) {
 
             var monthIndex = -1;
-            Y.Array.each(this._monthsL, function (v, i) {
+            Y.Array.each(this.monthsL, function (v, i) {
                 if (v === content) {
                     monthIndex = i;
                 }
             });
 
-            return new Date(this._navdate.getFullYear(), monthIndex, this._navdate.getDate());
+            return new Date(this.navdate.getFullYear(), monthIndex, this.navdate.getDate());
         },
-        _dayChosenHandler: function (dayChosen) {
-            var date = this._navdate,
+        onDayChoose: function (dayChosen) {
+            var date = this.navdate,
                 year = date.getFullYear(),
                 month = date.getMonth(),
                 newDate = new Date(year, month, dayChosen),
                 newDateDsp = (month + 1) + '/' + dayChosen + '/' + year;
 
             this.set('date', newDate, {source: UI_SRC});
-            this._navdate = this.get('date');
+            this.navdate = this.get('date');
 
             this.get('inputNode').set('value', newDateDsp);
 
-            this._renderViewMonth();
+            this.renderViewMonth();
 
             this.hide();
-            this.fire('daySelect', { navdate: this._navdate });
+            this.fire('daySelect', { navdate: this.navdate });
         },
-        _monthChosenHandler: function (newDate) {
+        onMonthChoose: function (newDate) {
 
-            this._navdate = newDate;
-            this._renderViewMonth();
-            this.fire('monthSelect', { navdate: this._navdate });
+            this.navdate = newDate;
+            this.renderViewMonth();
+            this.fire('monthSelect', { navdate: this.navdate });
         },
-        _yearChosenHandler: function (newDate) {
+        onYearChoose: function (newDate) {
 
-            this._navdate = newDate;
-            this._renderViewYear();
-            this.fire('yearSelect', { navdate: this._navdate });
+            this.navdate = newDate;
+            this.renderViewYear();
+            this.fire('yearSelect', { navdate: this.navdate });
         },
-        _decadeChosenHandler: function (newDate) {
+        onDecadeChoose: function (newDate) {
 
-            this._navdate = newDate;
-            this._renderViewDecade();
-            this.fire('decadeSelect', { navdate: this._navdate });
+            this.navdate = newDate;
+            this.renderViewDecade();
+            this.fire('decadeSelect', { navdate: this.navdate });
         },
-        _handlerAfterDateChange: function (e) {
+        afterDateChange: function (e) {
             if (e.source === UI_SRC) {
                 return;
             }
 
-            this._navdate = e.newVal;
-            this._dayChosenHandler(this._navdate.getDate());
+            this.navdate = e.newVal;
+            this.onDayChoose(this.navdate.getDate());
         },
-        _inputNodeClick: function () {
+        inputNodeClick: function () {
 
             var hasDateChanged = false,
                 oldDate = null,
@@ -232,41 +262,41 @@ Y.Icello.DateChooser = Y.Base.create(
                 this.fire('inputClickHide');
             } else {
                 oldDate = this.get('date');
-                this._syncDates();
+                this.syncDates();
                 newDate = this.get('date');
 
                 hasDateChanged = !YDate.areEqual(oldDate, newDate);
                 if (hasDateChanged) {
-                    this._renderViewMonth();
+                    this.renderViewMonth();
                 }
 
                 this.show();
                 this.fire('inputClickShow');
             }
         },
-        _syncDates: function () {
+        syncDates: function () {
             this.set('date', this.get('inputNode').get('value'), {source: UI_SRC});
-            this._navdate = this.get('date');
+            this.navdate = this.get('date');
         },
-        _renderViewMonth: function () {
+        renderViewMonth: function () {
             var contentBox = this.get(CBX);
             contentBox.empty();
-            contentBox.appendChild(this._getViewMonthHTML());
+            contentBox.appendChild(this.getViewMonthHTML());
         },
-        _renderViewYear: function () {
+        renderViewYear: function () {
             var contentBox = this.get(CBX);
             contentBox.empty();
-            contentBox.appendChild(this._getViewYearHTML());
+            contentBox.appendChild(this.getViewYearHTML());
         },
-        _renderViewDecade: function () {
+        renderViewDecade: function () {
             var contentBox = this.get(CBX);
             contentBox.empty();
-            contentBox.appendChild(this._getViewDecadeHTML());
+            contentBox.appendChild(this.getViewDecadeHTML());
         },
-        _getViewMonthHTML: function () {
+        getViewMonthHTML: function () {
 
             var data = {},
-                navdate = this._navdate,
+                navdate = this.navdate,
                 t = templates.viewmonth;
 
             Y.mix(data, styles.viewmonth);
@@ -278,17 +308,17 @@ Y.Icello.DateChooser = Y.Base.create(
             data.t_headerlabel = sub(t.headerlabel, data);
             data.t_header = sub(t.header, data);
 
-            data.weekdays = this._getViewMonthWeekdays();
+            data.weekdays = this.getViewMonthWeekdays();
             data.t_weekdayrow = sub(t.weekdayrow, data);
-            data.rows = this._getViewMonthRows();
+            data.rows = this.getViewMonthRows();
             data.t_grid = sub(t.grid, data);
 
             return sub(t.content, data);
         },
-        _getViewYearHTML: function () {
+        getViewYearHTML: function () {
 
             var data = {},
-                navdate = this._navdate,
+                navdate = this.navdate,
                 t = templates.viewyear;
 
             Y.mix(data, styles.viewyear);
@@ -299,15 +329,15 @@ Y.Icello.DateChooser = Y.Base.create(
             data.t_headerlabel = sub(t.headerlabel, data);
             data.t_header = sub(t.header, data);
 
-            data.rows = this._getViewYearRows();
+            data.rows = this.getViewYearRows();
             data.t_grid = sub(t.grid, data);
 
             return sub(t.content, data);
         },
-        _getViewDecadeHTML: function () {
+        getViewDecadeHTML: function () {
 
             var data = {},
-                navdate = this._navdate,
+                navdate = this.navdate,
                 t = templates.viewdecade,
                 decadeFirstYear = fnGetDecadeFirstYear(navdate.getFullYear()),
                 decadeLastYear = decadeFirstYear + 9;
@@ -320,14 +350,14 @@ Y.Icello.DateChooser = Y.Base.create(
             data.t_headerlabel = sub(t.headerlabel, data);
             data.t_header = sub(t.header, data);
 
-            data.rows = this._getViewDecadeRows();
+            data.rows = this.getViewDecadeRows();
             data.t_grid = sub(t.grid, data);
 
             return sub(t.content, data);
         },
-        _getViewMonthWeekdays: function () {
+        getViewMonthWeekdays: function () {
 
-            var weekdays = this._weekdaysL,
+            var weekdays = this.weekdaysL,
                 t_weekday = templates.viewmonth.weekday,
                 css_weekday = styles.viewmonth.css_weekday,
                 sb = [];
@@ -338,7 +368,7 @@ Y.Icello.DateChooser = Y.Base.create(
 
             return sb.join('');
         },
-        _getWeekdaysL: function (todayDate) {
+        getWeekdaysL: function (todayDate) {
 
             var weekdays = [],
                 today_num = YDate.format(todayDate, { format: '%w' }),
@@ -353,12 +383,12 @@ Y.Icello.DateChooser = Y.Base.create(
             }
             return weekdays;
         },
-        _getViewMonthRows: function () {
+        getViewMonthRows: function () {
 
             var sb = [],
                 sbColumns = [],
                 date = this.get('date'),
-                navdate = this._navdate,
+                navdate = this.navdate,
                 dLastMonth = IDate.addMonths(navdate, -1),
                 dFirstDayOfMonth = new Date(navdate.getFullYear(), navdate.getMonth(), 1),
                 indexFirstDayOfMonth = dFirstDayOfMonth.getDay(),
@@ -402,7 +432,7 @@ Y.Icello.DateChooser = Y.Base.create(
 
             return sb.join('');
         },
-        _getMonthsL: function (todayDate) {
+        getMonthsL: function (todayDate) {
 
             var months = [],
                 today_num = YDate.format(todayDate, { format: '%m' }),
@@ -419,13 +449,13 @@ Y.Icello.DateChooser = Y.Base.create(
 
             return months;
         },
-        _getViewYearRows: function () {
+        getViewYearRows: function () {
 
             var sb = [],
                 sbColumns = [],
                 date = this.get('date'),
-                navdate = this._navdate,
-                monthsDspArray = this._monthsL,
+                navdate = this.navdate,
+                monthsDspArray = this.monthsL,
                 i = 0,
                 row = -1,
                 column = -1,
@@ -452,12 +482,12 @@ Y.Icello.DateChooser = Y.Base.create(
 
             return sb.join('');
         },
-        _getViewDecadeRows: function () {
+        getViewDecadeRows: function () {
 
             var sb = [],
                 sbColumns = [],
                 date = this.get('date'),
-                navdate = this._navdate,
+                navdate = this.navdate,
                 decadeFirstYear = fnGetDecadeFirstYear(navdate.getFullYear()),
                 decadeLastYear = decadeFirstYear + 9,
                 currYear = decadeFirstYear - 1,
@@ -491,6 +521,12 @@ Y.Icello.DateChooser = Y.Base.create(
     },
     { //static members
         ATTRS: {
+            /** 
+            * The optional selected date of the calendar.
+            * @attribute date
+            * @type Date
+            * @default today date
+            */
             date: {
                 value: new Date(),
                 validator: function (val) {
@@ -521,6 +557,11 @@ Y.Icello.DateChooser = Y.Base.create(
                 value: '225px',
                 readOnly: true
             },
+            /** 
+            * The input type text element.
+            * @attribute inputNode
+            * @type Node|String
+            */
             inputNode: {
                 writeOnce: 'initOnly',
                 setter: function (nodeOrId) {
@@ -543,4 +584,4 @@ Y.Icello.DateChooser = Y.Base.create(
 
 
 
-}, 'gallery-2012.04.04-17-55' ,{skinnable:true, requires:['widget', 'widget-position', 'widget-stack', 'widget-position-align', 'widget-position-constrain', 'widget-autohide', 'datatype-date', 'datatype-date-math', 'substitute', 'datatype-date-format', 'gallery-icello-date']});
+}, 'gallery-2012.05.16-20-37' ,{skinnable:true, requires:['widget', 'widget-position', 'widget-stack', 'widget-position-align', 'widget-position-constrain', 'widget-autohide', 'datatype-date', 'datatype-date-math', 'substitute', 'datatype-date-format', 'gallery-icello-date']});

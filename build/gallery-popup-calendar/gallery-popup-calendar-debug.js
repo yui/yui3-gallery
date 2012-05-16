@@ -37,10 +37,7 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
         }
 
         if (minDataDate) {
-            minDate = new Date(minDataDate);
-            if (minDate.toString() == "Invalid Date") {
-                minDate = new Date();
-            }
+            minDate = this.normalizeIsoDate(minDataDate);
             this.set('startDate', minDate);
             this.set('minimumDate', minDate);
 
@@ -50,7 +47,7 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
         }
 
         if (maxDataDate) {
-            maxDate = new Date(maxDataDate);
+            maxDate = this.normalizeIsoDate(maxDataDate);
             this.set('maximumDate', maxDate);
             this.set('endDate', maxDate);
         }
@@ -59,6 +56,26 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
             rules: this._buildDisabledRule(),
             filterFunction: this.filterFunction
         });
+    },
+
+    /*
+     * Normalizes the date for cross browser support
+     *
+     * @method normalizeIsoDate
+     * @public
+     */
+    normalizeIsoDate: function(date) {
+        Y.log('normalizeIsoDate', 'info', this.name);
+        var dateString = date.replace(/-/g, '/'),
+            normalizedDate;
+
+        normalizedDate = new Date(dateString);
+
+        if (normalizedDate == "Invalid Date" || isNaN(normalizedDate)) {
+            return new Date();
+        }
+
+        return normalizedDate
     },
 
     /*
@@ -392,4 +409,4 @@ Y.PopupCalendar = Y.Base.create('popup-calendar', Y.Calendar, [Y.WidgetPosition,
 });
 
 
-}, 'gallery-2012.05.09-20-27' ,{skinnable:true, requires:['calendar', 'widget-position', 'widget-position-align', 'widget-autohide']});
+}, 'gallery-2012.05.16-20-37' ,{skinnable:true, requires:['calendar', 'widget-position', 'widget-position-align', 'widget-autohide']});

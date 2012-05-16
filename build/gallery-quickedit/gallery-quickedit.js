@@ -3,6 +3,10 @@ YUI.add('gallery-quickedit', function(Y) {
 "use strict";
 
 /**
+ * @module gallery-quickedit
+ */
+
+/**
  * <p>The QuickEdit plugin provides a new mode for DataTable where all
  * values in the table can be edited simultaneously, controlled by the
  * column configuration.  Each editable cell contains an input field.  If
@@ -110,9 +114,9 @@ YUI.add('gallery-quickedit', function(Y) {
  * function. The work should normally be done inline in the formatter
  * function, but the name of the sample function makes the point clear.</p>
  *
- * @module gallery-quickedit
- * @namespace Plugin
+ * @main gallery-quickedit
  * @class DataTableQuickEdit
+ * @namespace Plugin
  * @extends Plugin.Base
  * @constructor
  * @param config {Object} Object literal to set component configuration.
@@ -150,7 +154,8 @@ var quick_edit_re          = /quickedit-key:([^\s]+)/,
 /**
  * The CSS class that marks the container for the error message inside a cell.
  *
- * @property Y.Plugin.DataTableQuickEdit.error_text_class
+ * @property error_text_class
+ * @static
  * @type {String}
  */
 QuickEdit.error_text_class = 'quickedit-message-text';
@@ -158,7 +163,8 @@ QuickEdit.error_text_class = 'quickedit-message-text';
 /**
  * The markup for the container for the error message inside a cell.
  *
- * @property Y.Plugin.DataTableQuickEdit.error_display_markup
+ * @property error_display_markup
+ * @static
  * @type {String}
  */
 QuickEdit.error_display_markup = '<div class="quickedit-message-text"></div>';
@@ -166,7 +172,8 @@ QuickEdit.error_display_markup = '<div class="quickedit-message-text"></div>';
 /**
  * The CSS class that marks the "Copy Down" button inside a cell.
  *
- * @property Y.Plugin.DataTableQuickEdit.copy_down_button_class
+ * @property copy_down_button_class
+ * @static
  * @type {String}
  */
 QuickEdit.copy_down_button_class = 'quickedit-copy-down';
@@ -177,6 +184,7 @@ QuickEdit.copy_down_button_class = 'quickedit-copy-down';
  *
  * @method textFormatter
  * @static
+ * @param o {Object} standard DataTable formatter data
  */
 QuickEdit.textFormatter = function(o)
 {
@@ -200,6 +208,7 @@ QuickEdit.textFormatter = function(o)
  *
  * @method textareaFormatter
  * @static
+ * @param o {Object} standard DataTable formatter data
  */
 QuickEdit.textareaFormatter = function(o)
 {
@@ -225,6 +234,7 @@ QuickEdit.textareaFormatter = function(o)
  *
  * @method readonlyEmailFormatter
  * @static
+ * @param o {Object} standard DataTable formatter data
  */
 QuickEdit.readonlyEmailFormatter = function(o)
 {
@@ -239,17 +249,19 @@ QuickEdit.readonlyEmailFormatter = function(o)
  *
  * @method readonlyLinkFormatter
  * @static
+ * @param o {Object} standard DataTable formatter data
  */
 QuickEdit.readonlyLinkFormatter = function(o)
 {
 	return (o.value || '');		// don't need to check for zero
 };
 
-/**
+/*
  * Copy value from first cell to all other cells in the column.
  *
- * @param e {Event} triggering event
+ * @method copyDown
  * @private
+ * @param e {Event} triggering event
  */
 function copyDown(e)
 {
@@ -321,10 +333,8 @@ function wrapFormatter(editFmt, origFmt)
 	};
 }
 
-/**
+/*
  * Shift the focus up/down within a column.
- *
- * @private
  */
 function moveFocus(e)
 {
@@ -341,7 +351,7 @@ function moveFocus(e)
 	}
 }
 
-/**
+/*
  * Parse the column configuration for easy lookup.
  */
 function parseColumns()
@@ -374,12 +384,13 @@ function parseColumns()
 	this.column_map  = map;
 }
 
-/**
+/*
  * Validate the given form fields.
  *
+ * @method validateElements
+ * @private
  * @param e {Array} Array of form fields.
  * @return {boolean} true if all validation checks pass
- * @private
  */
 function validateElements(
 	/* NodeList */ list)
@@ -451,6 +462,8 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 	/**
 	 * Switch to QuickEdit mode.  Columns that have quickEdit defined will
 	 * be editable.  If the table has paginators, you must hide them.
+	 * 
+	 * @method start
 	 */
 	start: function()
 	{
@@ -516,6 +529,8 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 	 * Stop QuickEdit mode.  THIS DISCARDS ALL DATA!  If you want to save
 	 * the data, call getChanges() BEFORE calling this function.  If the
 	 * table has paginators, you must show them.
+	 * 
+	 * @method cancel
 	 */
 	cancel: function()
 	{
@@ -561,6 +576,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 	 * if the value did not change, include the key "changesAlwaysInclude"
 	 * in the plugin configuration and pass an array of column keys.
 	 *
+	 * @method getChanges
 	 * @return {mixed} array of objects if all validations pass, false otherwise
 	 */
 	getChanges: function()
@@ -612,6 +628,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 	/**
 	 * Validate the QuickEdit data.
 	 *
+	 * @method validate
 	 * @return {boolean} true if all validation checks pass
 	 */
 	validate: function()
@@ -638,6 +655,8 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 
 	/**
 	 * Clear all validation messages in QuickEdit mode.
+	 * 
+	 * @method clearMessages
 	 */
 	clearMessages: function()
 	{
@@ -658,6 +677,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 	 * Display a message for a QuickEdit field.  If an existing message with
 	 * a higher precedence is already visible, it will not be replaced.
 	 *
+	 * @method displayMessage
 	 * @param e {Element} form field
 	 * @param msg {String} message to display
 	 * @param type {String} message type: error, warn, success, info
@@ -704,10 +724,11 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 	/**
 	 * Return the status of the field.
 	 *
+	 * @method _getElementStatus
+	 * @protected
 	 * @param e {Node} form field
 	 * @param r {RegExp} regex to match against className
 	 * @return {String}
-	 * @protected
 	 */
 	_getElementStatus: function(
 		/* Node */	e,
@@ -720,9 +741,10 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 	/**
 	 * Return the column key for the specified field.
 	 * 
+	 * @method _getColumnKey
+	 * @protected
 	 * @param e {Node} form field
 	 * @return {String}
-	 * @protected
 	 */
 	_getColumnKey: function(
 		/* Node */ e)
@@ -736,4 +758,4 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableQuickEdit = QuickEdit;
 
 
-}, 'gallery-2012.04.04-17-55' ,{skinnable:true, optional:['gallery-scrollintoview'], requires:['datatable-base','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-funcprog']});
+}, 'gallery-2012.05.16-20-37' ,{skinnable:true, optional:['gallery-scrollintoview'], requires:['datatable-base','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-funcprog']});

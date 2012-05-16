@@ -4,8 +4,7 @@ YUI.add('gallery-io-multiresponse', function(Y) {
  * <p>Extends the IO base class to enable multiple responses using an
  * iframe as the transport medium.</p>
  * 
- * @module io
- * @submodule io-multiresponse
+ * @module gallery-io-multiresponse
  */
 
 /**
@@ -358,4 +357,4 @@ Y.io = function(uri, c) {
 Y.mix(Y.io, orig_io);
 
 
-}, 'gallery-2011.10.27-17-03' ,{requires:['io-upload-iframe'], optional:['json-stringify']});
+}, 'gallery-2012.05.16-20-37' ,{requires:['io-upload-iframe'], optional:['json-stringify']});

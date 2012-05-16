@@ -2,6 +2,10 @@ YUI.add('gallery-instancemanager', function(Y) {
 
 "use strict";
 
+/**
+ * @module gallery-instancemanager
+ */
+
 /**********************************************************************
  * <p>Stores instances of JavaScript components.  Allows a constructor or
  * factory method to be passed in place of an instance.  This enables lazy
@@ -11,11 +15,10 @@ YUI.add('gallery-instancemanager', function(Y) {
  * attached to DOM id's, e.g., YUI Buttons built on top of HTML
  * buttons.</p>
  * 
- * @module gallery-instancemanager
+ * @main gallery-instancemanager
  * @class InstanceManager
  * @constructor
  */
-
 function InstanceManager()
 {
 	this._map          = { };
@@ -27,6 +30,7 @@ InstanceManager.prototype =
 	/**
 	 * Retrieve an object.
 	 * 
+	 * @method get
 	 * @param id {String} the id of the object to retrieve
 	 * @return {Mixed} the stored object, or false if the slot is empty
 	 */
@@ -47,6 +51,7 @@ InstanceManager.prototype =
 	/**
 	 * Retrieve an object only if it has already been constructed.
 	 * 
+	 * @method getIfConstructed
 	 * @param id {String} the id of the object to retrieve
 	 * @return {Mixed} the stored object, or false if the slot is empty
 	 */
@@ -59,6 +64,7 @@ InstanceManager.prototype =
 	/**
 	 * Store an object or ctor+args.
 	 * 
+	 * @method put
 	 * @param id {String} the id of the object
 	 * @param objOrCtor {Object|Function} the object or the object's constructor or a factory method
 	 * @param args {Array} the array of arguments to pass to the constructor
@@ -94,6 +100,7 @@ InstanceManager.prototype =
 	/**
 	 * Remove an object.
 	 * 
+	 * @method remove
 	 * @param id {String} the id of the object
 	 * @return {mixed} the object that was removed, or false if the slot was empty
 	 */
@@ -114,6 +121,8 @@ InstanceManager.prototype =
 
 	/**
 	 * Remove all objects.
+	 * 
+	 * @method clear
 	 */
 	clear: function()
 	{
@@ -122,6 +131,8 @@ InstanceManager.prototype =
 
 	/**
 	 * Returns list of all stored keys.
+	 * 
+	 * @method keys
 	 */
 	keys: function()
 	{
@@ -131,6 +142,7 @@ InstanceManager.prototype =
 	/**
 	 * Call a function on every object.
 	 * 
+	 * @method applyToAll
 	 * @param behavior {Function|String|Object} the function to call or the name of the function or an object {fn:,scope:}
 	 * @param arguments {Array} the arguments to pass to the function
 	 * @param skip_unconstructed {boolean} Optional.  Pass <code>true</code> to skip unconstructed slots.
@@ -178,4 +190,4 @@ InstanceManager.prototype =
 Y.InstanceManager = InstanceManager;
 
 
-}, 'gallery-2012.03.23-18-00' );
+}, 'gallery-2012.05.16-20-37' );

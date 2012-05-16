@@ -18,10 +18,6 @@ when sub-classing ModelList.
 
     var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
         root: '/user'
-    }, {
-        ATTRS: {
-            name: {}
-        }
     });
 
     var Users = Y.Base.create('users', Y.ModelList, [Y.ModelSync.REST], {
@@ -44,7 +40,7 @@ var Lang = Y.Lang,
 
 // -- RESTSync -----------------------------------------------------------------
 
- function RESTSync() {}
+function RESTSync() {}
 
 /**
 Static hash lookup table of RESTful HTTP methods corresponding to CRUD actions.
@@ -71,16 +67,16 @@ RESTSync.HTTP_METHODS = {
 Default headers used with all XHRs.
 
 These headers will be merged with any request-specific headers, and the request-
-specific headers will take presidence.
+specific headers will take precedence.
 
 @property HTTP_HEADERS
 @type Object
-@static
 @default
     {
         'Accept'      : 'application/json',
         'Content-Type': 'application/json'
     }
+@static
 **/
 RESTSync.HTTP_HEADERS = {
     'Accept'      : 'application/json',
@@ -88,23 +84,25 @@ RESTSync.HTTP_HEADERS = {
 };
 
 /**
-Default number of milliseconds before the XHR will timeout/abort.
+The number of milliseconds before the XHR will timeout/abort. This defaults to
+30 seconds.
 
-This can be overridden on a per-request basis.
+**Note:** This can be overridden on a per-request basis. See `sync()` method.
 
 @property HTTP_TIMEOUT
 @type Number
+@default 30000
 @static
-@default undefined
 **/
+RESTSync.HTTP_TIMEOUT = 30000;
 
 /**
 Static flag to use the HTTP POST method instead of PUT or DELETE.
 
 If the server-side HTTP framework isn't RESTful, setting this flag to `true`
 will cause all PUT and DELETE requests to instead use the POST HTTP method, and
-add a X-HTTP-Method-Override HTTP header with the value of the method type which
-was overridden.
+add a `X-HTTP-Method-Override` HTTP header with the value of the method type
+which was overridden.
 
 @property EMULATE_HTTP
 @type Boolean
@@ -114,16 +112,43 @@ was overridden.
 RESTSync.EMULATE_HTTP = false;
 
 /**
+A request authenticity token to validate HTTP requests made by this extension
+with the server when the request results in changing persistent state. This
+allows you to protect your server from CSRF attacks.
+
+A CSRF token provided by the server can be embedded in the HTML document and
+assigned to `YUI.Env.CSRF_TOKEN` like this:
+
+    <script>
+        YUI.Env.CSRF_TOKEN = {{session.authenticityToken}};
+    </script>
+
+The above should come after YUI see file so that `YUI.Env` has been defined.
+
+**Note:** This can be overridden on a per-request basis. See `sync()` method.
+
+When a value for the CSRF token is provided, either statically or via `options`
+passed to the `save()` and `destroy()` methods, the applicable HTTP requests
+will have a `X-CSRF-Token` header added with the token value.
+
+@property CSRF_TOKEN
+@type String
+@default YUI.Env.CSRF_TOKEN
+@static
+**/
+RESTSync.CSRF_TOKEN = YUI.Env.CSRF_TOKEN;
+
+/**
 Properties that shouldn't be turned into ad-hoc attributes when passed to a
 Model or ModelList constructor.
 
 @property _NON_ATTRS_CFG
 @type Array
-@default ['url']
+@default ['root', 'url']
 @static
 @protected
 **/
-RESTSync._NON_ATTRS_CFG = ['url'];
+RESTSync._NON_ATTRS_CFG = ['root', 'url'];
 
 RESTSync.prototype = {
 
@@ -142,10 +167,6 @@ RESTSync.prototype = {
     @example
         var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
             root: '/user/'
-        }, {
-            ATTRS: {
-                name: {}
-            }
         });
 
         var myUser = new User({id: '123'});
@@ -200,10 +221,6 @@ RESTSync.prototype = {
         var User = Y.Base.create('user', Y.Model, [Y.ModelSync.REST], {
             root: '/users',
             url : '/user/{id}'
-        }, {
-            ATTRS: {
-                name: {}
-            }
         });
 
         var myUser = new User({id: '123'});
@@ -222,11 +239,12 @@ RESTSync.prototype = {
         var root = this.root,
             url;
 
-        if (this instanceof Y.ModelList || this.isNew()) {
+        if (this._isYUIModelList || this.isNew()) {
             return root;
         }
 
         url = this.getAsURL('id');
+
         if (root && root.charAt(root.length - 1) === '/') {
             // Add trailing-slash because root has a trailing-slash.
             url += '/';
@@ -258,11 +276,16 @@ RESTSync.prototype = {
       * **update**: Update an existing model.
       * **delete**: Delete an existing model.
 
-    @param {Object} [options] Sync options.
+    @param {Object} [options] Sync options:
+      @param {String} [options.csrfToken] The authenticity token used by the
+        server to verify the validity of this request and protected against CSRF
+        attacks. This overrides the default provided by the `CSRF_TOKEN` static
+        property.
       @param {Object} [options.headers] The HTTP headers to mix with the default
         headers specified by the `headers` property.
       @param {Number} [options.timeout] The number of milliseconds before the
-        request will timeout and be aborted.
+        request will timeout and be aborted. This overrides the default provided
+        by the `HTTP_TIMEOUT` static property.
     @param {callback} [callback] Called when the sync operation finishes.
       @param {Error|null} callback.err If an error occurred, this parameter will
         contain the error. If the sync operation succeeded, _err_ will be
@@ -274,10 +297,11 @@ RESTSync.prototype = {
     sync: function (action, options, callback) {
         options || (options = {});
 
-        var url     = this._getURL(action),
-            method  = RESTSync.HTTP_METHODS[action],
-            headers = Y.merge(RESTSync.HTTP_HEADERS, options.headers),
-            timeout = options.timeout || RESTSync.HTTP_TIMEOUT,
+        var url       = this._getURL(action),
+            method    = RESTSync.HTTP_METHODS[action],
+            headers   = Y.merge(RESTSync.HTTP_HEADERS, options.headers),
+            timeout   = options.timeout || RESTSync.HTTP_TIMEOUT,
+            csrfToken = options.csrfToken || RESTSync.CSRF_TOKEN,
             entity;
 
         // Prepare the content if we are sending data to the server.
@@ -294,8 +318,16 @@ RESTSync.prototype = {
 
             // Pass along original method type in the headers.
             headers['X-HTTP-Method-Override'] = method;
+
             // Fall-back to using POST method type.
             method = 'POST';
+        }
+
+        // Add CSRF token to HTTP request headers if one is specified.
+        if (csrfToken &&
+                (method === 'POST' || method === 'PUT' || method === 'DELETE')) {
+
+            headers['X-CSRF-Token'] = csrfToken;
         }
 
         // Setup and send the XHR.
@@ -344,7 +376,7 @@ RESTSync.prototype = {
             return this.url(action);
         }
 
-        if (this instanceof Y.Model) {
+        if (this._isYUIModel) {
             data = {};
 
             Y.Object.each(this.toJSON(), function (v, k) {
@@ -365,8 +397,8 @@ RESTSync.prototype = {
     Joins the `root` URL to the specified _url_, normalizing leading/trailing
     `/` characters.
 
-    Copied from YUI 3's `Y.Controller` Class: by Ryan Grove (Yahoo! Inc.)
-    https://github.com/yui/yui3/blob/master/src/app/js/controller.js
+    Copied from YUI 3's `Y.Router` Class: by Ryan Grove (Yahoo! Inc.)
+    http://yuilibrary.com/yui/docs/api/classes/Router.html#method__joinURL
 
     @example
         model.root = '/foo'
@@ -408,7 +440,7 @@ RESTSync.prototype = {
     place to start.
 
     @method _serialize
-    @return {String} serialized HTTP request entity body
+    @return {String} serialized HTTP request entity body.
     @protected
     **/
     _serialize: function () {
@@ -421,4 +453,4 @@ RESTSync.prototype = {
 Y.namespace('ModelSync').REST = RESTSync;
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['model', 'model-list', 'io-base', 'json-stringify'], skinnable:false});
+}, 'gallery-2012.05.16-20-37' ,{requires:['model', 'model-list', 'io-base', 'json-stringify'], skinnable:false});

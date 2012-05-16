@@ -1,16 +1,22 @@
 YUI.add('gallery-iterable-extras', function(Y) {
 
+"use strict";
+
+/**
+ * @module gallery-iterable-extras
+ */
+
 /**********************************************************************
  * <p>Functional programming support for iterable classes.  The class must
  * implement the iterator() (which must return an object that implements
  * next() and atEnd()) and newInstance() methods.</p>
  * 
- * <p>Iterable classes must mix these functions:  <code>Y.mix(SomeClass,
- * Y.Iterable, false, null, 4);</code>  Passing false as the third argument
+ * <p>Iterable classes must mix these functions:  `Y.mix(SomeClass,
+ * Y.Iterable, false, null, 4);`  Passing false as the third argument
  * allows your class to provide optimized implementations of individual
  * functions.</p>
  * 
- * @module gallery-iterable-extras
+ * @main gallery-iterable-extras
  * @class Iterable
  */
 
@@ -256,4 +262,4 @@ Y.Iterable =
 };
 
 
-}, 'gallery-2012.03.23-18-00' ,{optional:['gallery-funcprog']});
+}, 'gallery-2012.05.16-20-37' ,{optional:['gallery-funcprog']});
