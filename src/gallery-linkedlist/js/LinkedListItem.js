@@ -1,15 +1,16 @@
 "use strict";
 
+/**
+ * @module gallery-linkedlist
+ */
+
 /**********************************************************************
  * Item stored by LinkedList.
  * 
  * @class LinkedListItem
- */
-
-/**
  * @method constructor
- * @param value {Mixed} value to store
  * @private
+ * @param value {Mixed} value to store
  */
 
 function LinkedListItem(
@@ -22,6 +23,7 @@ function LinkedListItem(
 LinkedListItem.prototype =
 {
 	/**
+	 * @method prev
 	 * @return {LinkedListItem} previous item or null
 	 */
 	prev: function()
@@ -30,6 +32,7 @@ LinkedListItem.prototype =
 	},
 
 	/**
+	 * @method next
 	 * @return {LinkedListItem} next item or null
 	 */
 	next: function()
