@@ -1,10 +1,13 @@
 "use strict";
 
-/**********************************************************************
+/**
+ * @module gallery-dimensions
+ */
+
+/**
  * Functions for measuring the size of a node.
  * 
- * @module node
- * @submodule gallery-dimensions
+ * @main gallery-dimensions
  * @class Node~dimensions
  */
 
@@ -32,9 +35,9 @@ var em_div = null,
 
 /**********************************************************************
  * @method emToPx
+ * @static
  * @param em_count {Number} the number of em's to convert (defaults to 1)
  * @return {Number} the size of one em in pixels
- * @static
  */
 
 Y.Node.emToPx = function(
