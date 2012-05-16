@@ -1,6 +1,8 @@
 var main = null;
 
-YUI().use('gallery-icello-button', 'node-event-simulate', function (Y) {
+YUI().use('gallery-icello-button', 'selector-css3', 'node-event-simulate', function (Y) {
+    'use strict';
+
     var Button = Y.Icello.Button,
         appendOption = function (ddl, item) {
 			var option_str = Y.Lang.sub('<option value="{value}">{text}</option>', item),
@@ -12,141 +14,137 @@ YUI().use('gallery-icello-button', 'node-event-simulate', function (Y) {
 
 			ddl.append(option);
 		};
-		
-	
+
     Y.on('domready', function (e) {
         Y.log('', 'info', 'domready');
-        
+
         function Main() {
-                Y.log('', 'info', 'Main');
-                this.buttonsBoxDefaultMsg = null;
+            Y.log('', 'info', 'Main');
+            this.buttonsBoxDefaultMsg = null;
 
-                this.input = {
-                    allButtons: [],
-                    allButtonsLabels: [],
-                    allButtonsDsp: Y.one('#allButtonsDsp'),
-                    btnSave: new Button({
-                        srcNode: '#btnSave',
-                        icon: Button.ICONS.DISK,
-                        disabled: true,
-                        title: 'Save'
-                    }),
-                    btnSearch: new Button({
-                        srcNode: '#btnSearch',
-                        icon: Button.ICONS.SEARCH,
-                        title: 'Search'
-                    }),
-                    buttonsBox: Y.one('#buttonsBox'),
-                    ddlCssIcons: Y.one('#ddlCssIcons')
-                };
+            this.input = {
+                allButtons: [],
+                allButtonsDsp: Y.one('#allButtonsDsp'),
+                btnSave: null,
+                btnSearch: null,
+                buttonsBox: Y.one('#buttonsBox'),
+                ddlCssIcons: Y.one('#ddlCssIcons')
             };
-            Main.prototype = {
-                _allButtonsDspHandler: function (e) {
-                    Y.log('', 'info', 'Main _allButtonsDspHandler');
+        }
+        Main.prototype = {
+            onAllButtonsDspClick: function (e) {
+                Y.log('', 'info', 'Main onAllButtonsDspClick');
+                var btn = e.currentTarget,
+                    data = btn.getData(),
+                    newBtn = null;
 
-                    var labels = this.input.allButtonsLabels;
+                if (data.label === '') {
+                    data.label = data.icon;
+                } else {
+                    data.label = '';
+                }
 
-                    Y.Array.each(this.input.allButtons, function (btn, i) {
-                        if (e.currentTarget.one('span').hasClass(btn.get('icon'))) {
-                            if (btn.get('label')) {
-                                btn.set('label', '');
-                            }
-                            else {
-                                btn.set('label', labels[i]);
-                            }
-                            btn.syncUI();
-                        }
-                    });
-                },
-                _btnSaveHandler: function (e) {
-                    Y.log('no preventDefault call needed', 'info', 'Main _btnSaveHandler');
-                },
-                _btnSearchHandler: function (e) {
-                    Y.log('no preventDefault call needed', 'info', 'Main _btnSearchHandler');
-                },
-                _ddlCssIconsChangeHandler: function (e) {
-                    var option = e.target.one('option:checked');
-                    var v = option.get('value');
-                    var t = option.getContent();
-                    Y.log(t, 'info', 'Main _ddlCssIconsChangeHandler');
-                    Y.log(v, 'info', 'Main _ddlCssIconsChangeHandler');
+                newBtn = Button.getNode(data);
+                newBtn.setData(data);
 
-                    this.input.buttonsBox.empty(true);
+                this.input.allButtons[data.index] = newBtn;
+                btn.replace(newBtn);
+            },
+            onBtnSaveClick: function (e) {
+                Y.log('', 'info', 'Main onBtnSaveClick');
+                e.preventDefault();
+            },
+            onBtnSearchClick: function (e) {
+                Y.log('', 'info', 'Main onBtnSearchClick');
+                e.preventDefault();
+            },
+            onDdlCssIconsChange: function (e) {
+                var option = e.target.one('option:checked'),
+                    v = option.get('value'),
+                    t = option.getContent(),
+                    btn = null;
 
-                    if (v == '') {
-                        this.input.btnSave.disable();
+                Y.log(t, 'info', 'Main onDdlCssIconsChange');
+                Y.log(v, 'info', 'Main onDdlCssIconsChange');
 
-                        this.input.buttonsBox.setContent(this.buttonsBoxDefaultMsg);
-                        return;
+                this.input.buttonsBox.empty(true);
+
+                if (v === '') {
+                    this.input.btnSave.disable();
+
+                    this.input.buttonsBox.setContent(this.buttonsBoxDefaultMsg);
+                    return;
+                }
+
+                this.input.btnSave.enable();
+
+                btn = Button.getNode({ label: t, icon: v, title: t});
+                this.input.buttonsBox.append(btn);
+            },
+            loadIconKeys: function () {
+                Y.log('', 'info', 'Main loadIconKeys');
+
+                var ddl = this.input.ddlCssIcons,
+                    allButtonsDsp = this.input.allButtonsDsp,
+                    allButtonsTbl = Y.Node.create('<table></table>'),
+                    allButtonsTblBody = Y.Node.create('<tbody></tbody>'),
+                    allButtons = this.input.allButtons,
+                    allButtonsTr = null,
+                    i = 1;
+
+
+                allButtonsDsp.append(allButtonsTbl);
+                allButtonsTbl.append(allButtonsTblBody);
+
+                appendOption(ddl, {text: 'Please Select', value: ''});
+
+                Y.Object.each(Button.ICONS, function (value, name) {
+                    var btn = null,
+                        td = null;
+
+                    appendOption(ddl, {text: name, value: value});
+
+                    btn = Button.getNode({ icon: value, title: name });
+                    btn.setData({icon: name, index: i, label: '', title: name});
+
+                    td = Y.Node.create('<td></td>');
+
+                    if (i % 25 === 1) {
+                        allButtonsTr = Y.Node.create('<tr></tr>');
+                        allButtonsTblBody.append(allButtonsTr);
                     }
 
-                    this.input.btnSave.enable();
+                    allButtonsTr.append(td);
+                    td.append(btn);
 
-                    var btn = new Button({ label: t, icon: v, title: t});
-                    btn.render(this.input.buttonsBox);
-                },
-                _loadIconKeys: function () {
-                    Y.log('', 'info', 'Main _loadIconKeys');
+                    allButtons.push(btn);
 
-                    var ddl = this.input.ddlCssIcons;
+                    i += 1;
+                });
+            },
+            init: function () {
+                Y.log('', 'info', 'Main init');
 
-                    var allButtonsDsp = this.input.allButtonsDsp;
-                    var allButtonsTbl = Y.Node.create('<table></table>');
-                    var allButtonsTblBody = Y.Node.create('<tbody></tbody>');
-                    var allButtons = this.input.allButtons;
-                    var allButtonsLabels = this.input.allButtonsLabels;
+                var input = this.input;
 
+                this.loadIconKeys();
 
-                    allButtonsDsp.append(allButtonsTbl);
-                    allButtonsTbl.append(allButtonsTblBody);
-                    var allButtonsTr = null;
+                this.buttonsBoxDefaultMsg = this.input.buttonsBox.getContent();
 
-                    appendOption(ddl, {text:'Please Select', value:''});
-                    var i = 1;
-                    Y.Object.each(Button.ICONS, function (value, name) {
-                        appendOption(ddl, {text:name, value:value});
+                input.ddlCssIcons.on('change', Y.bind(this.onDdlCssIconsChange, this));
 
-                        var btn = new Button({ icon: value, title:name });
-                        var td = Y.Node.create('<td></td>');
+                input.allButtonsDsp.delegate('click', Y.bind(this.onAllButtonsDspClick, this), 'button');
 
-                        if (i % 25 == 1) {
-                            allButtonsTr = Y.Node.create('<tr></tr>');
-                            allButtonsTblBody.append(allButtonsTr);
-                        }
+                input.btnSave = Button.renderNode('#btnSave');
+                input.btnSearch = Button.renderNode('#btnSearch');
 
-                        allButtonsTr.append(td);
-                        btn.render(td);
+                input.btnSave.on('click', Y.bind(this.onBtnSaveClick, this));
+                input.btnSearch.on('click', Y.bind(this.onBtnSearchClick, this));
+            }
+        };
 
-                        allButtons.push(btn);
-                        allButtonsLabels.push(name);
+        main = new Main();
+        main.init();
 
-
-                        i += 1;
-                    });
-                },
-                init: function () {
-                    Y.log('', 'info', 'Main init');
-
-                    var input = this.input;
-
-                    this._loadIconKeys();
-
-                    this.buttonsBoxDefaultMsg = this.input.buttonsBox.getContent();
-
-                    input.ddlCssIcons.on('change', Y.bind(this._ddlCssIconsChangeHandler, this));
-
-                    input.btnSave.on('click', Y.bind(this._btnSaveHandler, this));
-                    input.btnSearch.on('click', Y.bind(this._btnSearchHandler, this));
-
-                    input.allButtonsDsp.delegate('click', Y.bind(this._allButtonsDspHandler, this), 'button');
-
-                    input.btnSave.render();
-                    input.btnSearch.render();
-                }
-            };
-
-            main = new Main();
-            main.init();
-        
     });
 });

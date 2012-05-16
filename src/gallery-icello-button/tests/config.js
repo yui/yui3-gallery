@@ -7,7 +7,7 @@ YUI_config = {
             modules: {
                 'gallery-icello-button': {
                     skinnable: true,
-                    requires: ['base-build', 'widget']
+                    requires: ['classnamemanager', 'node']
                 }
             }
         }
