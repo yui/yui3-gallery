@@ -1,14 +1,20 @@
 "use strict";
 
 /**
+ * @module gallery-formmgr-overlay-plugin
+ */
+
+/**
  * A simple plugin for Y.Overlay which attaches a Y.FormManager to the
  * &lt;form&gt; inside the overlay.  Before the overlay is shown,
  * prepareForm() is called to insert the default values.  (If this returns
  * false, the overlay is not shown.)  After the overlay is shown, focus is
  * set to the first field.
  *
- * @module gallery-formmgr-overlay-plugin
- * @class Y.Plugin.OverlayForm
+ * @main gallery-formmgr-overlay-plugin
+ * @class OverlayForm
+ * @namespace Plugin
+ * @extends Plugin.Base
  */
 function OverlayFormPlugin()
 {
@@ -21,7 +27,7 @@ OverlayFormPlugin.NS   = "form";
 OverlayFormPlugin.ATTRS =
 {
 	/**
-	 * @config formmgr
+	 * @attribute formmgr
 	 * @type {Y.FormManager}
 	 * @writeonce
 	 */
