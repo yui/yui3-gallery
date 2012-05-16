@@ -38,23 +38,45 @@ TodoList = Y.TodoList = Y.Base.create('todoList', Y.ModelList, [Y.ModelSync.REST
     }
 });
 
-// -- Todo app view ------------------------------------------------------------
-TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
-    container: Y.one('#todo-app'),
-    inputNode: Y.one('#new-todo'),
-    template : Y.one('#todo-stats-template').getContent(),
+// -- Todo App View ------------------------------------------------------------
 
+// The TodoAppView class extends Y.View and customizes it to represent the
+// main shell of the application, including the new item input field and the
+// list of todo items.
+//
+// This class also takes care of initializing a TodoList instance and creating
+// and rendering a TodoView instance for each todo item when the list is
+// initially loaded or reset.
+
+TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
+    // This is where we attach DOM events for the view. The `events` object is a
+    // mapping of selectors to an object containing one or more events to attach
+    // to the node(s) matching each selector.
     events: {
-        '#new-todo'  : {keypress: 'createTodo'},
+        // Handle <enter> keypresses on the "new todo" input field.
+        '#new-todo': {keypress: 'createTodo'},
+
+        // Clear all completed items from the list when the "Clear" link is
+        // clicked.
         '.todo-clear': {click: 'clearDone'},
 
+        // Add and remove hover states on todo items.
         '.todo-item': {
             mouseover: 'hoverOn',
             mouseout : 'hoverOff'
         }
     },
 
+    // The `template` property is a convenience property for holding a
+    // template for this view. In this case, we'll use it to store the
+    // contents of the #todo-stats-template element, which will serve as the
+    // template for the statistics displayed at the bottom of the list.
+    template: Y.one('#todo-stats-template').getContent(),
+
+    // The initializer runs when a TodoAppView instance is created, and gives
+    // us an opportunity to set up the view.
     initializer: function () {
+        // Create a new TodoList instance to hold the todo items.
         var list = this.todoList = new TodoList();
 
         // Update the display when a new item is added to the list, or when the
@@ -63,7 +85,7 @@ TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
         list.after('reset', this.reset, this);
 
         // Re-render the stats in the footer whenever an item is added, removed
-        // or changed.
+        // or changed, or when the entire list is reset.
         list.after(['add', 'reset', 'remove', 'todoModel:doneChange'],
                 this.render, this);
 
@@ -71,19 +93,25 @@ TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
         list.load();
     },
 
+    // The render function is called whenever a todo item is added, removed, or
+    // changed, thanks to the list event handler we attached in the initializer
+    // above.
     render: function () {
         var todoList = this.todoList,
-            stats    = this.container.one('#todo-stats'),
+            stats    = this.get('container').one('#todo-stats'),
             numRemaining, numDone;
 
+        // If there are no todo items, then clear the stats.
         if (todoList.isEmpty()) {
             stats.empty();
             return this;
         }
 
+        // Figure out how many todo items are completed and how many remain.
         numDone      = todoList.done().length;
         numRemaining = todoList.remaining().length;
 
+        // Update the statistics.
         stats.setContent(Y.Lang.sub(this.template, {
             numDone       : numDone,
             numRemaining  : numRemaining,
@@ -91,6 +119,8 @@ TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
             remainingLabel: numRemaining === 1 ? 'task' : 'tasks'
         }));
 
+        // If there are no completed todo items, don't show the "Clear
+        // completed items" link.
         if (!numDone) {
             stats.one('.todo-clear').remove();
         }
@@ -104,7 +134,10 @@ TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
     // todo item is added to the list.
     add: function (e) {
         var view = new TodoView({model: e.model});
-        this.container.one('#todo-list').append(view.render().container);
+
+        this.get('container').one('#todo-list').append(
+            view.render().get('container')
+        );
     },
 
     // Removes all finished todo items from the list.
@@ -113,24 +146,38 @@ TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
 
         e.preventDefault();
 
+        // Remove all finished items from the list, but do it silently so as not
+        // to re-render the app view after each item is removed.
         this.todoList.remove(done, {silent: true});
 
+        // Destroy each removed TodoModel instance.
         Y.Array.each(done, function (todo) {
-            todo.destroy({'delete': true});
+            // Passing {remove: true} to the todo model's `destroy()` method
+            // tells it to delete itself from localStorage as well.
+            todo.destroy({remove: true});
         });
 
+        // Finally, re-render the app view.
         this.render();
     },
 
     // Creates a new todo item when the enter key is pressed in the new todo
     // input field.
     createTodo: function (e) {
-        if (e.keyCode === 13) { // enter key
-            this.todoList.create({
-                text: this.inputNode.get('value')
-            });
+        var inputNode, value;
 
-            this.inputNode.set('value', '');
+        if (e.keyCode === 13) { // enter key
+            inputNode = this.get('inputNode');
+            value     = Y.Lang.trim(inputNode.get('value'));
+
+            if (!value) { return; }
+
+            // This tells the list to create a new TodoModel instance with the
+            // specified text and automatically save it to localStorage in a
+            // single step.
+            this.todoList.create({text: value});
+
+            inputNode.set('value', '');
         }
     },
 
@@ -151,42 +198,88 @@ TodoAppView = Y.TodoAppView = Y.Base.create('todoAppView', Y.View, [], {
 
         Y.Array.each(e.models, function (model) {
             var view = new TodoView({model: model});
-            fragment.append(view.render().container);
+            fragment.append(view.render().get('container'));
         });
 
-        this.container.one('#todo-list').setContent(fragment);
+        this.get('container').one('#todo-list').setContent(fragment);
+    }
+}, {
+    ATTRS: {
+        // The container node is the wrapper for this view. All the view's
+        // events will be delegated from the container. In this case, the
+        // #todo-app node already exists on the page, so we don't need to create
+        // it.
+        container: {
+            valueFn: function () {
+                return '#todo-app';
+            }
+        },
+
+        // This is a custom attribute that we'll use to hold a reference to the
+        // "new todo" input field.
+        inputNode: {
+            valueFn: function () {
+                return Y.one('#new-todo');
+            }
+        }
     }
 });
 
 // -- Todo item view -----------------------------------------------------------
+
+// The TodoView class extends Y.View and customizes it to represent the content
+// of a single todo item in the list. It also handles DOM events on the item to
+// allow it to be edited and removed from the list.
+
 TodoView = Y.TodoView = Y.Base.create('todoView', Y.View, [], {
-    container: '<li class="todo-item"/>',
-    template : Y.one('#todo-item-template').getContent(),
+    // This customizes the HTML used for this view's container node.
+    containerTemplate: '<li class="todo-item"/>',
 
+    // Delegated DOM events to handle this view's interactions.
     events: {
+        // Toggle the "done" state of this todo item when the checkbox is
+        // clicked.
         '.todo-checkbox': {click: 'toggleDone'},
-        '.todo-content' : {click: 'edit'},
 
+        // When the text of this todo item is clicked or focused, switch to edit
+        // mode to allow editing.
+        '.todo-content': {
+            click: 'edit',
+            focus: 'edit'
+        },
+
+        // On the edit field, when enter is pressed or the field loses focus,
+        // save the current value and switch out of edit mode.
         '.todo-input'   : {
             blur    : 'save',
             keypress: 'enter'
         },
 
+        // When the remove icon is clicked, delete this todo item.
         '.todo-remove': {click: 'remove'}
     },
 
+    // The template property holds the contents of the #todo-item-template
+    // element, which will be used as the HTML template for each todo item.
+    template: Y.one('#todo-item-template').getContent(),
+
     initializer: function () {
-        var model = this.model;
+        // The model property is set to a TodoModel instance by TodoAppView when
+        // it instantiates this TodoView.
+        var model = this.get('model');
 
         // Re-render this view when the model changes, and destroy this view
         // when the model is destroyed.
         model.after('change', this.render, this);
-        model.after('destroy', this.destroy, this);
+
+        model.after('destroy', function () {
+            this.destroy({remove: true});
+        }, this);
     },
 
     render: function () {
-        var container = this.container,
-            model     = this.model,
+        var container = this.get('container'),
+            model     = this.get('model'),
             done      = model.get('done');
 
         container.setContent(Y.Lang.sub(this.template, {
@@ -195,7 +288,7 @@ TodoView = Y.TodoView = Y.Base.create('todoView', Y.View, [], {
         }));
 
         container[done ? 'addClass' : 'removeClass']('todo-done');
-        this.inputNode = container.one('.todo-input');
+        this.set('inputNode', container.one('.todo-input'));
 
         return this;
     },
@@ -204,8 +297,8 @@ TodoView = Y.TodoView = Y.Base.create('todoView', Y.View, [], {
 
     // Toggles this item into edit mode.
     edit: function () {
-        this.container.addClass('editing');
-        this.inputNode.focus();
+        this.get('container').addClass('editing');
+        this.get('inputNode').focus();
     },
 
     // When the enter key is pressed, focus the new todo input field. This
@@ -222,19 +315,20 @@ TodoView = Y.TodoView = Y.Base.create('todoView', Y.View, [], {
         e.preventDefault();
 
         this.constructor.superclass.remove.call(this);
-        this.model.destroy({'delete': true});
+        this.get('model').destroy({'delete': true});
     },
 
     // Toggles this item out of edit mode and saves it.
     save: function () {
-        this.container.removeClass('editing');
-        this.model.set('text', this.inputNode.get('value')).save();
+        this.get('container').removeClass('editing');
+        this.get('model').set('text', this.get('inputNode').get('value')).save();
     },
 
     // Toggles the `done` state on this item's model.
     toggleDone: function () {
-        this.model.toggleDone();
+        this.get('model').toggleDone();
     }
 });
+
 
 }, '@VERSION@', {requires: ["event-focus", "json", "model", "model-list", "view", "gallery-model-sync-rest"]});
