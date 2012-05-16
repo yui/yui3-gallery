@@ -1,15 +1,24 @@
 "use strict";
 
-/**********************************************************************
+/**
+ * @module gallery-scrollintoview
+ */
+
+/**
  * <p>Only scrolls the browser if the object is not currently visible.</p>
  * 
  * <p>This requires that all scrollable elements have position:relative.
  * Otherwise, this algorithm will skip over them with unpredictable
  * results.</p>
  * 
- * @chainable
+ * @main gallery-scrollintoview
+ * @class Node~scrollIntoView
  */
 
+/**
+ * @method scrollIntoView
+ * @chainable
+ */
 Y.Node.prototype.scrollIntoView = function()
 {
 	var ancestor = Y.Node.getDOMNode(this.get('offsetParent'));
