@@ -4,6 +4,7 @@
  * Various behaviors that can be attached to a group of checkboxes.
  *
  * @module gallery-checkboxgroups
+ * @main gallery-checkboxgroups
  */
 
 /**
@@ -36,6 +37,7 @@ function checkboxChanged(
 CheckboxGroup.prototype =
 {
 	/**
+	 * @method getCheckboxList
 	 * @return {NodeList} List of managed checkboxes
 	 */
 	getCheckboxList: function()
@@ -47,6 +49,7 @@ CheckboxGroup.prototype =
 	 * Same functionality as <code>Array.splice()</code>.  Operates on the
 	 * list of managed checkboxes.
 	 * 
+	 * @method splice
 	 * @param start {Int} Insertion index
 	 * @param delete_count {Int} Number of items to remove, starting from <code>start</code>
 	 * @param cb_list {String|Node|NodeList} The list of checkboxes to insert at <code>start</code>
@@ -88,6 +91,13 @@ CheckboxGroup.prototype =
 		}
 	},
 
+	/**
+	 * Call this if you modify the checkbox programmatically, since that
+	 * will not fire a click event.
+	 * 
+	 * @method checkboxChanged
+	 * @param cb {Node|String} checkbox that was modified
+	 */
 	checkboxChanged: function(
 		/* checkbox */	cb)
 	{
@@ -111,6 +121,7 @@ CheckboxGroup.prototype =
 	/**
 	 * Derived classes must override this function to implement the desired behavior.
 	 * 
+	 * @method enforceConstraints
 	 * @param cb_list {String|Object|Array} The list of checkboxes
 	 * @param index {Int} The index of the checkbox that changed
 	 */
@@ -121,6 +132,7 @@ CheckboxGroup.prototype =
 	},
 
 	/**
+	 * @method allChecked
 	 * @return {boolean} <code>true</code> if all checkboxes are checked
 	 */
 	allChecked: function()
@@ -139,6 +151,7 @@ CheckboxGroup.prototype =
 	},
 
 	/**
+	 * @method allUnchecked
 	 * @return {boolean} <code>true</code> if all checkboxes are unchecked
 	 */
 	allUnchecked: function()
@@ -156,6 +169,7 @@ CheckboxGroup.prototype =
 	},
 
 	/**
+	 * @method allDisabled
 	 * @return {boolean} <code>true</code> if all checkboxes are disabled
 	 */
 	allDisabled: function()

@@ -1,3 +1,7 @@
+/**
+ * @module gallery-checkboxgroups
+ */
+
 /**********************************************************************
  * Enables the given list of nodes if any checkboxes are checked.
  * 
@@ -19,6 +23,11 @@ function EnableIfAnyCheckboxGroup(
 
 Y.extend(EnableIfAnyCheckboxGroup, CheckboxGroup,
 {
+	/**
+	 * @method enforceConstraints
+	 * @param cb_list {String|Object|Array} The list of checkboxes
+	 * @param index {Int} The index of the checkbox that changed
+	 */
 	enforceConstraints: function(
 		/* NodeList */	cb_list,
 		/* int */		index)
