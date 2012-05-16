@@ -1,11 +1,15 @@
 "use strict";
 
+/**
+ * @module gallery-console-test
+ */
+
 /**********************************************************************
  * <p>Adds a menu of registered unit test suites to the YUI 3 Console.</p>
  *
- * @module gallery-console-test
- * @namespace Plugin
+ * @main gallery-console-test
  * @class ConsoleTest
+ * @namespace Plugin
  * @extends Plugin.Base
  */
 
