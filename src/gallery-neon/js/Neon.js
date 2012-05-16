@@ -1,17 +1,20 @@
 "use strict";
 
+/**
+ * @module gallery-neon
+ */
+
 /**********************************************************************
  * <p>Overrides Y.Node.show() to make it look like a flickering neon
  * sign.</p>
  * 
- * @module gallery-neon
- * @namespace Plugin
+ * @main gallery-neon
  * @class Neon
+ * @namespace Plugin
  * @extends Plugin.Base
  * @constructor
  * @param config {Object} configuration
  */
-
 function Neon(
 	/* object */ config)
 {
@@ -26,7 +29,7 @@ Neon.ATTRS =
 	/**
 	 * Background (starting) color.  Must be parseable by Y.Color.toRGB().
 	 * 
-	 * @config backgroundColor
+	 * @attribute backgroundColor
 	 * @type {String}
 	 */
 	backgroundColor:
@@ -37,7 +40,7 @@ Neon.ATTRS =
 	/**
 	 * Text (ending) color.  Must be parseable by Y.Color.toRGB().
 	 * 
-	 * @config textColor
+	 * @attribute textColor
 	 * @type {String}
 	 */
 	textColor:
@@ -49,7 +52,7 @@ Neon.ATTRS =
 	 * Text shadow *template* for setting text-shadow CSS3 property.  Use
 	 * {color} to mark where color should be inserted.
 	 * 
-	 * @config textShadow
+	 * @attribute textShadow
 	 * @type {String}
 	 */
 	textShadow:
@@ -60,7 +63,7 @@ Neon.ATTRS =
 	/**
 	 * The number of flickers before the text stays visible.
 	 * 
-	 * @config flickerCount
+	 * @attribute flickerCount
 	 * @type {int}
 	 * @default 10
 	 */
@@ -73,7 +76,7 @@ Neon.ATTRS =
 	/**
 	 * The easing to apply to the color animation.
 	 * 
-	 * @config easing
+	 * @attribute easing
 	 * @type {Function}
 	 * @default Y.Easing.easeIn
 	 */
