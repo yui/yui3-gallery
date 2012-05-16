@@ -202,6 +202,8 @@ function populateOpen(
 					item.childTotal = cached_item.childTotal;
 					this._redo      = this._redo || item.open;
 				}
+
+				this._open_cache[ data[k][ uniqueIdKey ] ] = item;
 			}
 
 			if (!cached_item && nodeOpenKey && data[k][ nodeOpenKey ])
@@ -210,7 +212,6 @@ function populateOpen(
 			}
 
 			open.splice(j, 0, item);
-			this._open_cache[ data[k][ uniqueIdKey ] ] = item;
 		}
 
 		j++;
@@ -797,6 +798,28 @@ function complete(f)
 	}
 }
 
+function compareRequests(r1, r2)
+{
+	var k1 = Y.Object.keys(r1),
+		k2 = Y.Object.keys(r2);
+
+	if (k1.length != k2.length)
+	{
+		return false;
+	}
+
+	for (var i=0; i<k1.length; i++)
+	{
+		var k = k1[i];
+		if (k != 'startIndex' && k != 'resultCount' && r1[k] !== r2[k])
+		{
+			return false;
+		}
+	}
+
+	return true;
+}
+
 Y.extend(TreebleDataSource, Y.DataSource.Local,
 {
 	initializer: function(config)
@@ -914,23 +937,11 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 
 	_defRequestFn: function(e)
 	{
-		if (this._callback)
+		// wipe out all state if the request parameters change
+
+		if (this._callback && !compareRequests(this._callback.request, e.request))
 		{
-			// wipe out all state if the request parameters change
-
-			Y.Object.some(this._callback.request, function(value, key)
-			{
-				if (key == 'startIndex' || key == 'resultCount')
-				{
-					return false;
-				}
-
-				if (value !== e.request[key])
-				{
-					this._open = [];
-					return true;
-				}
-			});
+			this._open = [];
 		}
 
 		this._callback = e;
