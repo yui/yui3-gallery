@@ -10,8 +10,9 @@
  * <p>If/when the widget is given a fixed size, all animations are turned
  * off.</p>
  * 
- * @namespace Plugin
  * @class FixedSizeAccordion
+ * @namespace Plugin
+ * @constructor
  */
 function FixedSizeAccordionPlugin()
 {
