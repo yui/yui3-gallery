@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Real part of a complex number.</p>
  * 
@@ -16,6 +20,11 @@ function MathRealPart(
 
 Y.extend(MathRealPart, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{

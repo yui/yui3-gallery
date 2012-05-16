@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Product of values.</p>
  * 
@@ -14,12 +18,25 @@ function MathProduct()
 
 Y.extend(MathProduct, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
 		return Y.ComplexMath.multiply(this.evaluateArgs(var_list));
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -76,6 +93,11 @@ Y.extend(MathProduct, MathFunctionWithArgs,
 		return rect_list.add(total_rect, total_midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -106,6 +128,10 @@ Y.extend(MathProduct, MathFunctionWithArgs,
 		this);
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return Y.Array.reduce(this.args, '', function(s, arg, index)

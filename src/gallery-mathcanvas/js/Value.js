@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Constant value</p>
  * 
@@ -32,11 +36,20 @@ function MathValue(
 
 Y.extend(MathValue, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function()
 	{
 		return this.value;
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this.value;

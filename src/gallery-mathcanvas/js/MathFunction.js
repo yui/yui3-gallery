@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Base class for all functions rendered by MathCanvas.</p>
  * 
@@ -5,7 +9,6 @@
  * the default rendering which displays the output from toString(), implement
  * prepareToRender() and render().</p>
  * 
- * @namespace
  * @class MathFunction
  * @constructor
  */
@@ -18,6 +21,7 @@ function MathFunction()
 MathFunction.prototype =
 {
 	/**
+	 * @method getParent
 	 * @return {MathFunction} parent function or null
 	 */
 	getParent: function()
@@ -29,6 +33,7 @@ MathFunction.prototype =
 	 * Add the layout information for this object and its descendants to
 	 * rect_list.
 	 *
+	 * @method prepareToRender
 	 * @param canvas {MathCanvas} the drawing canvas
 	 * @param top_left {point} x,y coordinates of the top left of the bounding box
 	 * @param font_size {float} percentage of the base font size
@@ -57,6 +62,7 @@ MathFunction.prototype =
 	/**
 	 * Draw this object and its descendants.
 	 * 
+	 * @method render
 	 * @param canvas {MathCanvas} the drawing canvas
 	 * @param rect_list {RectList} layout information
 	 */
@@ -84,9 +90,10 @@ MathFunction.prototype =
 	 */
 
 	/**
+	 * @method parenthesizeForPrint
+	 * @protected
 	 * @param f {MathFunction}
 	 * @return {boolean} true if f needs to parenthesize us
-	 * @protected
 	 */
 	parenthesizeForPrint: function(
 		/* MathFunction */	f)
@@ -95,9 +102,10 @@ MathFunction.prototype =
 	},
 
 	/**
+	 * @method parenthesizeForRender
+	 * @protected
 	 * @param f {MathFunction}
 	 * @return {boolean} true if f needs to parenthesize us
-	 * @protected
 	 */
 	parenthesizeForRender: function(
 		/* MathFunction */	f)

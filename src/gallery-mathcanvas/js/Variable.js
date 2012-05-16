@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Variable value</p>
  * 
@@ -17,6 +21,11 @@ function MathVariable(
 
 Y.extend(MathVariable, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{
@@ -29,6 +38,10 @@ Y.extend(MathVariable, MathFunction,
 		return (v instanceof MathFunction ? v.evaluate(var_list) : v);
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this.name;

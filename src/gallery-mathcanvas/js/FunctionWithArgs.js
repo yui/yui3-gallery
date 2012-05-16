@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Function that takes one or more arguments.</p>
  * 
@@ -41,6 +45,7 @@ function MathFunctionWithArgs(
 Y.extend(MathFunctionWithArgs, MathFunction,
 {
 	/**
+	 * @method getArgCount
 	 * @return {int} number of arguments
 	 */
 	getArgCount: function()
@@ -49,6 +54,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method getArg
 	 * @return {MathFunction} requested argument, or undefined
 	 */
 	getArg: function(
@@ -58,6 +64,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method appendArg
 	 * @param f {MathFunction}
 	 */
 	appendArg: function(
@@ -68,6 +75,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method removeArg
 	 * @param f {MathFunction}
 	 */
 	removeArg: function(
@@ -84,6 +92,7 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	/**
 	 * If origArg is an argument, replaces origArg with newArg.
 	 * 
+	 * @method replaceArg
 	 * @param origArg {MathFunction} original argument
 	 * @param newArg {MathFunction} new argument
 	 */
@@ -101,9 +110,10 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	},
 
 	/**
+	 * @method evaluateArgs
+	 * @protected
 	 * @param var_list {Object} map of variable names to values or MathFunctions
 	 * @return list of argument values, from calling evaluate()
-	 * @protected
 	 */
 	evaluateArgs: function(
 		/* map */	var_list)
@@ -114,6 +124,14 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 		});
 	},
 
+	/**
+	 * @method prepareToRender
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param top_left {point} x,y coordinates of the top left of the bounding box
+	 * @param font_size {float} percentage of the base font size
+	 * @param rect_list {RectList} layout information
+	 * @return {int} index of this items info in rect_list
+	 */
 	prepareToRender: function(
 		/* Context2d */		context,
 		/* point */			top_left,
@@ -184,6 +202,11 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 		return rect_list.add(r, midline, font_size, this);
 	},
 
+	/**
+	 * @method render
+	 * @param canvas {MathCanvas} the drawing canvas
+	 * @param rect_list {RectList} layout information
+	 */
 	render: function(
 		/* Context2d */	context,
 		/* RectList */	rect_list)
@@ -220,6 +243,10 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 		}
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return this.name + '(' + this.args.join(',') + ')';
@@ -228,9 +255,10 @@ Y.extend(MathFunctionWithArgs, MathFunction,
 	/**
 	 * Print an argument, with parentheses if necessary.
 	 * 
+	 * @method _printArg
+	 * @protected
 	 * @param index {number|MathFunction} argument index or MathFunction
 	 * @return {string} the string representation of the argument
-	 * @protected
 	 */
 	_printArg: function(
 		/* int */	index)

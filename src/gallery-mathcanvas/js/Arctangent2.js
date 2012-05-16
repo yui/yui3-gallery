@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Inverse trigonometric cosine.</p>
  * 
@@ -18,6 +22,11 @@ function MathArctangent2(
 
 Y.extend(MathArctangent2, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{

@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>Maximum.</p>
  * 
@@ -14,6 +18,11 @@ function MathMax()
 
 Y.extend(MathMax, MathFunctionWithArgs,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function(
 		/* map */	var_list)
 	{

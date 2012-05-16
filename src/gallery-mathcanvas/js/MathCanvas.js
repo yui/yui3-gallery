@@ -1,14 +1,16 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * Displays an arithmetical expression the way you would write it on paper.
  * 
- * @module gallery-mathcanvas
- * @namespace
+ * @main gallery-mathcanvas
  * @class MathCanvas
  * @extends Widget
  * @constructor
  * @param config {Object} Widget configuration
  */
-
 function MathCanvas(
 	/* object */	config)
 {
@@ -22,7 +24,7 @@ MathCanvas.ATTRS =
 	/**
 	 * The function to display.
 	 * 
-	 * @config func
+	 * @attribute func
 	 * @type {Y.MathFunction|String}
 	 */
 	func:
@@ -38,7 +40,7 @@ MathCanvas.ATTRS =
 	/**
 	 * The font name to use.
 	 * 
-	 * @config fontName
+	 * @attribute fontName
 	 * @type {String}
 	 */
 	fontName:
@@ -50,7 +52,7 @@ MathCanvas.ATTRS =
 	/**
 	 * The font size to use, in em's.
 	 * 
-	 * @config fontSize
+	 * @attribute fontSize
 	 * @type {number}
 	 */
 	fontSize:
@@ -63,7 +65,7 @@ MathCanvas.ATTRS =
 	 * The minimum width of the canvas.  If the expression is wider, the
 	 * width will increase to fit.
 	 * 
-	 * @config minWidth
+	 * @attribute minWidth
 	 * @type {Integer}
 	 */
 	minWidth:
@@ -76,7 +78,7 @@ MathCanvas.ATTRS =
 	 * The minimum height of the canvas.  If the expression is taller, the
 	 * height will increase to fit.
 	 * 
-	 * @config minHeight
+	 * @attribute minHeight
 	 * @type {Integer}
 	 */
 	minHeight:
@@ -343,6 +345,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Shows touch keyboard.
+	 * 
+	 * @method showKeyboard
 	 */
 	showKeyboard: function()
 	{
@@ -371,6 +375,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Hides touch keyboard.
+	 * 
+	 * @method hideKeyboard
 	 */
 	hideKeyboard: function()
 	{
@@ -399,6 +405,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Expands the selection up one level of the parse tree.
+	 * 
+	 * @method expandSelection
 	 */
 	expandSelection: function()
 	{
@@ -415,6 +423,8 @@ Y.extend(MathCanvas, Y.Widget,
 
 	/**
 	 * Deletes the selected sub-expression.
+	 * 
+	 * @method deleteSelection
 	 */
 	deleteSelection: function()
 	{
@@ -425,6 +435,7 @@ Y.extend(MathCanvas, Y.Widget,
 	},
 
 	/**
+	 * @method deleteFunction
 	 * @param f {MathFunction} function to remove from the overall expression
 	 */
 	deleteFunction: function(
@@ -469,8 +480,11 @@ Y.extend(MathCanvas, Y.Widget,
 		this._renderExpression();
 	},
 
-	/*
+	/**
 	 * Renders the expression.
+	 * 
+	 * @method _renderExpression
+	 * @protected
 	 */
 	_renderExpression: function()
 	{
@@ -665,8 +679,8 @@ Y.MathCanvas.Parser   = MathParser;
 /**********************************************************************
  * Parser used to convert a string expression into Y.MathFunction
  * 
- * @namespace MathCanvas
  * @class Parser
+ * @namespace MathCanvas
  */
 
 /**

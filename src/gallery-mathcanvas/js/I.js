@@ -1,3 +1,7 @@
+/**
+ * @module gallery-mathcanvas
+ */
+
 /**********************************************************************
  * <p>i (square root of -1)</p>
  * 
@@ -14,11 +18,20 @@ function MathI()
 
 Y.extend(MathI, MathFunction,
 {
+	/**
+	 * @method evaluate
+	 * @param var_list {Object} map of variable names to values or MathFunctions
+	 * @return the value of the function
+	 */
 	evaluate: function()
 	{
 		return Y.ComplexMath.I;
 	},
 
+	/**
+	 * @method toString
+	 * @return text representation of the function
+	 */
 	toString: function()
 	{
 		return 'i';
