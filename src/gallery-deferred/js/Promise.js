@@ -10,6 +10,7 @@
 var Lang = Y.Lang,
 	YArray = Y.Array,
 	AP = Array.prototype,
+	SLICE = AP.slice,
 	PUSH = AP.push,
 	
 	RESOLVED = 1,
@@ -40,7 +41,7 @@ Y.mix(Promise.prototype, {
 	 */
 	then: function (doneCallbacks, failCallbacks) {
 		if (doneCallbacks) {
-			doneCallbacks = Promise._flatten(doneCallbacks)
+			doneCallbacks = Promise._flatten(doneCallbacks);
 			if (this.status === RESOLVED) {
 				YArray.each(doneCallbacks, function (callback) {
 					callback.apply(this, this._args);
@@ -50,7 +51,7 @@ Y.mix(Promise.prototype, {
 			}
 		}
 		if (failCallbacks) {
-			failCallbacks = Promise._flatten(failCallbacks)
+			failCallbacks = Promise._flatten(failCallbacks);
 			if (this.status === REJECTED) {
 				YArray.each(failCallbacks, function (callback) {
 					callback.apply(this, this._args);

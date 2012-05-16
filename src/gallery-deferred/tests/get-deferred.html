@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Deferred Get test</title>
+</head>
+<body class="yui3-skin-sam">
+	<div id="test"></div>
+	<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui.js"></script>
+	<script>
+		YUI({
+			filter: 'raw',
+			modules: {
+				'gallery-deferred': {
+					fullpath: '../build_tmp/gallery-deferred.js',
+					requires: ['event-custom']
+				}
+			},
+			logInclude: {
+				TestRunner: true
+			}
+		}).use('io', 'gallery-deferred', 'test', 'console', function (Y) {
+			
+			var testCase = new Y.Test.Case({
+				name: 'Deferred Get',
+				
+				testDeferredScript: function () {
+					Y.log('Testing if Y.io.js works with a single callback as an event handler for the "success" event');
+					
+					var test = this;
+					
+					Y.io.js('some-script.js', function () {
+						test.resume(function () {
+							Y.Assert.areEqual(window.Y_GET_LOADED_SCRIPT, true, 'Y_GET_LOADED_SCRIPT should be declared');
+						});
+					});
+					
+					this.wait(3000);
+				},
+				
+				testDeferredCSS: function () {
+					Y.log('Testing if Y.io.css works with a single callback as an event handler for the "success" event');
+					
+					var test = this;
+					
+					Y.io.css('some-sheet.css', function () {
+						test.resume(function () {
+							Y.Assert.areEqual(Y.one('#test').getComputedStyle('height'), '100px', 'height of control node should be set to 100px');
+						});
+					});
+					
+					this.wait(3000);
+				},
+				
+				testPromiseChaining: function () {
+					Y.log('Testing if several Y.io methods can be chained and executed one after the other');
+					
+					var test = this;
+					
+					Y.io.css('some-sheet2.css').script('some-script2.js').get('io-content1.html').then(function (id, xhr) {
+						test.resume(function () {
+							Y.Assert.areEqual(Y.one('#test').getComputedStyle('width'), '100px', 'width of control node should be set to 100px');
+							Y.Assert.areEqual(window.Y_GET_LOADED_SCRIPT_2, true, 'Y_GET_LOADED_SCRIPT_2 should be declared');
+							Y.Assert.areEqual(xhr.responseText, '<div>hello</div>', 'response should be equal to "<div>hello</div>"');
+						});
+					});
+					
+					this.wait(3000);
+				}
+			});
+			
+			new Y.Console({
+				height: 550,
+				width: '90%'
+			}).render();
+			Y.Test.Runner.add(testCase);
+			Y.Test.Runner.run();
+		});
+	</script>
+</body>
+</html>
