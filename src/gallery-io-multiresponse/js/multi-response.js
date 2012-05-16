@@ -2,8 +2,7 @@
  * <p>Extends the IO base class to enable multiple responses using an
  * iframe as the transport medium.</p>
  * 
- * @module io
- * @submodule io-multiresponse
+ * @module gallery-io-multiresponse
  */
 
 /**
