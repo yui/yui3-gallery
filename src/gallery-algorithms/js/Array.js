@@ -1,16 +1,20 @@
 "use strict";
 
 /**
+ * @module gallery-algorithms
+ */
+
+/**
  * <p>Useful algorithms not provided by browsers.</p>
  *
- * @module gallery-algorithms
- * @class Y.Array
+ * @main gallery-algorithms
+ * @class Array~algorithms
  */
 
 /**********************************************************************
  * <p>Swaps two elements.</p>
  * 
- * @method Y.Array.swap
+ * @method swap
  * @static
  * @param list {Array} the list on which to operate
  * @param i {int} first index
@@ -26,7 +30,7 @@ Y.Array.swap = function(list,i,j)
 /**********************************************************************
  * <p>A -1,0,+1 comparator for case-sensitive string comparison.</p>
  * 
- * @method Y.Array.compareStringsCaseSensitive
+ * @method compareStringsCaseSensitive
  * @static
  * @param s1 {String} first string
  * @param s2 {String} second string
@@ -47,7 +51,7 @@ Y.Array.compareStringsCaseSensitive = function(s1, s2)
 /**********************************************************************
  * <p>A -1,0,+1 comparator for case-insensitive string comparison.</p>
  * 
- * @method Y.Array.compareStringsCaseInsensitive
+ * @method compareStringsCaseInsensitive
  * @static
  * @param s1 {String} first string
  * @param s2 {String} second string
@@ -62,7 +66,7 @@ Y.Array.compareStringsCaseInsensitive = function(s1, s2)
  * <p>Converts a -1,0,+1 comparator into a boolean comparator, for use by
  * Y.Array.find().</p>
  * 
- * @method Y.Array.compareForFind
+ * @method compareForFind
  * @static
  * @param f {Function} -1,0,+1 comparator function
  * @return {Function} function that returns true if the arguments are equal
@@ -78,13 +82,13 @@ Y.Array.compareForFind = function(f)
 /*
 quick sort history:
 
-  Copyright (c) 2006 John Lindal
-  Copyright (c) 2003 Scandinavian Digital Systems AB
+	Copyright (c) 2006 John Lindal
+	Copyright (c) 2003 Scandinavian Digital Systems AB
 
-  Adapted from http://www.digsys.se
+	Adapted from http://www.digsys.se
 
-  Freeware: The source code and its methods and algorithms may be
-            used as desired without restrictions.
+	Freeware: The source code and its methods and algorithms may be
+			  used as desired without restrictions.
 */
 
 function qsort1(list,i1,i2,compare)
@@ -158,10 +162,10 @@ function qsortRange(list,first,last,compare)
 /**********************************************************************
  * <p>Quick sort the given list.</p>
  * 
- * @method Y.Array.quickSort
+ * @method quickSort
  * @static
  * @param list {Array} the list to search (sorted on the compare function)
- * @param compare {Function} the comparison function (default: Y.Array.compareStringsCaseSensitive)
+ * @param compare=Y.Array.compareStringsCaseSensitive {Function} the comparison function
  */
 Y.Array.quickSort = function(list,compare)
 {
@@ -178,11 +182,11 @@ binary search history:
 /**********************************************************************
  * <p>Binary search.</p>
  * 
- * @method Y.Array.binarySearch
+ * @method binarySearch
  * @static
  * @param list {Array} the list to search (sorted on the compare function)
  * @param target {Mixed} the object to search for
- * @param compare {Function} the comparison function (default: Y.Array.compareStringsCaseSensitive)
+ * @param compare=Y.Array.compareStringsCaseSensitive {Function} the comparison function
  * @return {int} index of matched item or -1 if no match
  */
 Y.Array.binarySearch = function(list, target, compare)

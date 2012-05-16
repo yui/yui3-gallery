@@ -8,7 +8,7 @@ if (Y.ArrayList)
 	 * Useful algorithms that are not provided by browsers.  Available if
 	 * Y.ArrayList (collection) is loaded.
 	 * 
-	 * @class Y.ArrayList
+	 * @class ArrayList~extras
 	 */
 
 	Y.mix(Y.ArrayList,
@@ -16,7 +16,7 @@ if (Y.ArrayList)
 		/**
 		 * <p>Swap two elements.</p>
 		 * 
-		 * @method Y.ArrayList.swap
+		 * @method swap
 		 * @param i {int} first index
 		 * @param j {int} second index
 		 */
@@ -28,7 +28,7 @@ if (Y.ArrayList)
 		/**
 		 * <p>Set comparison function.</p>
 		 * 
-		 * @method Y.ArrayList.setComparator
+		 * @method setComparator
 		 * @param compare {Function} the -1,0,+1 comparison function to use when sorting and searching
 		 */
 		setComparator: function(compare)
@@ -39,7 +39,7 @@ if (Y.ArrayList)
 		/**
 		 * <p>Quick sort the given list, using the function passed to setComparator().</p>
 		 * 
-		 * @method Y.ArrayList.quickSort
+		 * @method quickSort
 		 */
 		quickSort: function()
 		{
@@ -49,7 +49,7 @@ if (Y.ArrayList)
 		/**
 		 * <p>Binary search, using the function passed to setComparator().</p>
 		 * 
-		 * @method Y.ArrayList.binarySearch
+		 * @method binarySearch
 		 * @param target {Mixed} the object to search for
 		 * @return {int} index of matched item or -1 if no match
 		 */
