@@ -7,6 +7,7 @@
  * <p>Also see the documentation for gallery-formmgr-css-validation.</p>
  * 
  * @module gallery-formmgr
+ * @main gallery-formmgr
  */
 
 /**
@@ -53,22 +54,22 @@
  * <p>The following classes can be applied to a form element for
  * pre-validation:</p>
  *
- *	<dl>
- *	<dt><code>yiv-required</code></dt>
- *		<dd>Value must not be empty.</dd>
+ * <dl>
+ * <dt><code>yiv-required</code></dt>
+ * <dd>Value must not be empty.</dd>
  *
- *	<dt><code>yiv-length:[x,y]</code></dt>
- *		<dd>String must be at least x characters and at most y characters.
- *		At least one of x and y must be specified.</dd>
+ * <dt><code>yiv-length:[x,y]</code></dt>
+ * <dd>String must be at least x characters and at most y characters.
+ * At least one of x and y must be specified.</dd>
  *
- *	<dt><code>yiv-integer:[x,y]</code></dt>
- *		<dd>The integer value must be at least x and at most y.
- *		x and y are both optional.</dd>
+ * <dt><code>yiv-integer:[x,y]</code></dt>
+ * <dd>The integer value must be at least x and at most y.
+ * x and y are both optional.</dd>
  *
- *	<dt><code>yiv-decimal:[x,y]</code></dt>
- *		<dd>The decimal value must be at least x and at most y.  Exponents are
- *		not allowed.  x and y are both optional.</dd>
- *	</dl>
+ * <dt><code>yiv-decimal:[x,y]</code></dt>
+ * <dd>The decimal value must be at least x and at most y.  Exponents are
+ * not allowed.  x and y are both optional.</dd>
+ * </dl>
  *
  * <p>If we ever need to allow exponents, we can use yiv-float.</p>
  *
@@ -77,13 +78,13 @@
  *
  * <dl>
  * <dt><code>setRegex()</code></dt>
- *		<dd>Sets the regular expression that must match in order for the value
- *		to be acceptable.</dd>
+ * <dd>Sets the regular expression that must match in order for the value
+ * to be acceptable.</dd>
  *
  * <dt><code>setFunction()</code></dt>
- *		<dd>Sets the function that must return true in order for the value to
- *		be acceptable.  The function is called in the scope of the Form
- *		object with the arguments:  the form and the element.</dd>
+ * <dd>Sets the function that must return true in order for the value to
+ * be acceptable.  The function is called in the scope of the Form
+ * object with the arguments:  the form and the element.</dd>
  * </dl>
  *
  * <p><code>setErrorMessages()</code> specifies the error message to be
@@ -103,16 +104,16 @@
  *
  * <dl>
  * <dt><code>prePrepareForm</code>(arguments passed to prepareForm)</dt>
- *		<dd>Called before filling in default values for the form elements.
- *		Return false to cancel dialog.</dd>
+ * <dd>Called before filling in default values for the form elements.
+ * Return false to cancel dialog.</dd>
  *
  * <dt><code>postPrepareForm</code>(arguments passed to prepareForm)</dt>
- *		<dd>Called after filling in default values for the form elements.</dd>
+ * <dd>Called after filling in default values for the form elements.</dd>
  *
  * <dt><code>postValidateForm</code>(form)</dt>
- *		<dd>Called after performing the basic pre-validations.  Returns
- *		true if the form contents are acceptable.  Reports error if there
- *		is a problem.</dd>
+ * <dd>Called after performing the basic pre-validations.  Returns
+ * true if the form contents are acceptable.  Reports error if there
+ * is a problem.</dd>
  * </dl>
  *
  * @class FormManager
@@ -170,7 +171,7 @@ function FormManager(
  * The CSS class which marks each row of the form.  Typically, each field
  * (or a very tightly coupled set of fields) is placed in a separate row.
  * 
- * @property Y.FormManager.row_marker_class
+ * @property row_marker_class
  * @type {String}
  */
 FormManager.row_marker_class = 'formmgr-row';
@@ -179,7 +180,7 @@ FormManager.row_marker_class = 'formmgr-row';
  * The CSS class which marks each field in a row of the form.  This enables
  * messaging when multiple fields are in a single row.
  * 
- * @property Y.FormManager.field_marker_class
+ * @property field_marker_class
  * @type {String}
  */
 FormManager.field_marker_class = 'formmgr-field';
@@ -188,7 +189,7 @@ FormManager.field_marker_class = 'formmgr-field';
  * The CSS class which marks the container for the status message within a
  * row of the form.
  * 
- * @property Y.FormManager.status_marker_class
+ * @property status_marker_class
  * @type {String}
  */
 FormManager.status_marker_class = 'formmgr-message-text';
@@ -196,7 +197,7 @@ FormManager.status_marker_class = 'formmgr-message-text';
 /**
  * The CSS class placed on <code>status_node</code> when it is empty.
  * 
- * @property Y.FormManager.status_none_class
+ * @property status_none_class
  * @type {String}
  */
 FormManager.status_none_class = 'formmgr-status-hidden';
@@ -206,7 +207,7 @@ FormManager.status_none_class = 'formmgr-status-hidden';
  * <code>displayFormMessage()</code> is called with
  * <code>error=false</code>.
  * 
- * @property Y.FormManager.status_success_class
+ * @property status_success_class
  * @type {String}
  */
 FormManager.status_success_class = 'formmgr-status-success';
@@ -216,7 +217,7 @@ FormManager.status_success_class = 'formmgr-status-success';
  * <code>displayFormMessage()</code> is called with
  * <code>error=true</code>.
  * 
- * @property Y.FormManager.status_failure_class
+ * @property status_failure_class
  * @type {String}
  */
 FormManager.status_failure_class = 'formmgr-status-failure';
@@ -224,9 +225,9 @@ FormManager.status_failure_class = 'formmgr-status-failure';
 /**
  * The prefix for all CSS classes placed on a form row when pre-validation
  * fails.  The full CSS class is formed by appending the value from
- * <code>Y.FormManager.status_order</code>.
+ * `Y.FormManager.status_order`.
  * 
- * @property Y.FormManager.row_status_prefix
+ * @property row_status_prefix
  * @type {String}
  */
 FormManager.row_status_prefix = 'formmgr-has';
@@ -394,7 +395,7 @@ function populateForm1()
  * 
  * <p>Clear the message for the given field.</p>
  * 
- * @method Y.FormManager.clearMessage
+ * @method clearMessage
  * @static
  * @param e {Element|Node} the field
  */
@@ -417,7 +418,7 @@ FormManager.clearMessage = function(e)
  * The message will only be displayed if no message with a higher
  * precedence is already visible. (see Y.FormManager.status_order)</p>
  * 
- * @method Y.FormManager.displayMessage
+ * @method displayMessage
  * @static
  * @param e {String|Object} The selector for the element or the element itself
  * @param msg {String} The message
@@ -495,6 +496,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 */
 
 	/**
+	 * @method getForm
 	 * @return {DOM} The form DOM element.
 	 */
 	getForm: function()
@@ -507,6 +509,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
+	 * @method hasFileInputs
 	 * @return {boolean} <code>true</code> if the form contains file inputs.  These require special treatment when submitting via XHR.
 	 */
 	hasFileInputs: function()
@@ -515,6 +518,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
+	 * @method setStatusNode
 	 * @param node {String|Y.Node} the node in which status should be displayed
 	 */
 	setStatusNode: function(
@@ -526,6 +530,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Set the default values for all form elements.
 	 * 
+	 * @method setDefaultValues
 	 * @param default_value_map {Object} Mapping of form element names to values.
 	 */
 	setDefaultValues: function(
@@ -537,6 +542,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Set the default values for a single form element.
 	 * 
+	 * @method setDefaultValue
 	 * @param field_name {String} The form element name.
 	 * @param default_value {String|Int|Float} The default value.
 	 */
@@ -549,6 +555,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 	/**
 	 * Store the current form values in <code>default_value_map</code>.
+	 * 
+	 * @method saveCurrentValuesAsDefault
 	 */
 	saveCurrentValuesAsDefault: function()
 	{
@@ -564,13 +572,14 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Set the validation function for a form element.
 	 * 
+	 * @method setFunction
 	 * @param id {String|Object} The selector for the element or the element itself
 	 * @param f {Function|String|Object}
-	 *		The function to call after basic validations succeed.  If this
-	 *		is a String, it is resolved in the scope of the FormManager
-	 *		object.  If this is an object, it must be <code>{fn:,
-	 *		scope:}</code>.  The function will then be invoked in the
-	 *		specified scope.
+	 *  The function to call after basic validations succeed.  If this
+	 *  is a String, it is resolved in the scope of the FormManager
+	 *  object.  If this is an object, it must be `{fn:,
+	 *  scope:}`.  The function will then be invoked in the
+	 *  specified scope.
 	 */
 	setFunction: function(
 		/* string */				id,
@@ -584,9 +593,10 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 * 
 	 * <p><strong>Since there is no default message for failed regular
 	 * expression validation, this function will complain if you have not
-	 * already called <code>setErrorMessages()</code> or
-	 * <code>addErrorMessage</code> to specify an error message.</strong></p>
+	 * already called `setErrorMessages()` or
+	 * `addErrorMessage` to specify an error message.</strong></p>
 	 * 
+	 * @method setRegex
 	 * @param id {String|Object} The selector for the element or the element itself
 	 * @param regex {String|RegExp} The regular expression to use
 	 * @param flags {String} If regex is a String, these are the flags used to construct a RegExp.
@@ -618,20 +628,22 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 * override the default messages for individual elements</p>
 	 * 
 	 * <p>The valid error types are:</p>
-	 *	<dl>
-	 *	<dt><code>required</code></dt>
-	 *	<dt><code>min_length</code></dt>
-	 *		<dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
-	 *	<dt><code>max_length</code></dt>
-	 *		<dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
-	 *	<dt><code>integer</code></dt>
-	 *		<dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
-	 *	<dt><code>decimal</code></dt>
-	 *		<dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
-	 *	<dt><code>regex</code></dt>
-	 *		<dd>This <string>must</strong> be set for elements which validate with regular expressions.</dd>
-	 *	</dl>
+	 * <dl>
+	 * <dt><code>required</code></dt>
+	 * <dd>&nbsp;</dd>
+	 * <dt><code>min_length</code></dt>
+	 * <dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
+	 * <dt><code>max_length</code></dt>
+	 * <dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
+	 * <dt><code>integer</code></dt>
+	 * <dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
+	 * <dt><code>decimal</code></dt>
+	 * <dd><code>{min}</code> and <code>{max}</code> are replaced</dd>
+	 * <dt><code>regex</code></dt>
+	 * <dd>This <string>must</strong> be set for elements which validate with regular expressions.</dd>
+	 * </dl>
 	 * 
+	 * @method setErrorMessages
 	 * @param id {String|Object} The selector for the element or the element itself
 	 * @param map {Object} Map of error types to error messages.
 	 */
@@ -645,6 +657,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Set one particular error message for a form element.
 	 * 
+	 * @method addErrorMessage
 	 * @param id {String|Object} The selector for the element or the element itself
 	 * @param error_type {String} The error message type.  Refer to setErrorMessages() for details.
 	 * @param msg {String} The error message
@@ -664,6 +677,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 	/**
 	 * Reset all values in the form to the defaults specified in the markup.
+	 * 
+	 * @method clearForm
 	 */
 	clearForm: function()
 	{
@@ -674,6 +689,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 	/**
 	 * Reset all values in the form to the defaults passed to the constructor.
+	 * 
+	 * @method populateForm
 	 */
 	populateForm: function()
 	{
@@ -692,8 +709,10 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
-	 * Hook for performing additional actions after
-	 * <code>populateForm()</code> completes.
+	 * Hook for performing additional actions after `populateForm()`
+	 * completes.
+	 * 
+	 * @method postPopulateForm
 	 */
 	postPopulateForm: function()
 	{
@@ -702,7 +721,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Check if form values have been modified.
 	 * 
-	 * @return {boolean} <code>false</code> if all form elements have the default values passed to the constructor
+	 * @method isChanged
+	 * @return {boolean} `false` if all form elements have the default values passed to the constructor
 	 */
 	isChanged: function()
 	{
@@ -762,6 +782,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Prepare the form for display.
 	 * 
+	 * @method prepareForm
 	 * @return {boolean} <code>true</code> if both pre & post hooks are happy
 	 */
 	prepareForm: function()
@@ -783,6 +804,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Hook called before <code>prepareForm()</code> executes.
 	 * 
+	 * @method prePrepareForm
 	 * @return {boolean} <code>false</code> cancels <code>prepareForm()</code>.
 	 */
 	prePrepareForm: function()
@@ -793,6 +815,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Hook called after <code>prepareForm()</code> executes.
 	 * 
+	 * @method postPrepareForm
 	 * @return {boolean} Return value from this function is returned by <code>prepareForm()</code>.
 	 */
 	postPrepareForm: function()
@@ -803,6 +826,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Set focus to first input field.  If a page contains multiple forms,
 	 * only call this for one of them.
+	 * 
+	 * @method initFocus
 	 */
 	initFocus: function()
 	{
@@ -836,6 +861,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
+	 * @method validateForm
 	 * @return {Boolean} true if all validation checks passed
 	 */
 	validateForm: function()
@@ -911,11 +937,11 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
-	 * Hook called at the end of <code>validateForm()</code>.  This is the
-	 * best place to put holistic validations that touch multiple form
-	 * elements.
+	 * Hook called at the end of `validateForm()`.  This is the best place
+	 * to put holistic validations that touch multiple form elements.
 	 * 
-	 * @return {boolean} <code>false</code> if validation fails
+	 * @method postValidateForm
+	 * @return {boolean} `false` if validation fails
 	 */
 	postValidateForm: function(
 		/* DOM element */	form)
@@ -933,6 +959,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 * they are automatically wrapped in Y.Node.)  Buttons contained within
 	 * the form DOM element are automatically registered.
 	 * 
+	 * @method registerButton
 	 * @param el {String|Object} The selector for the element or the element itself
 	 */
 	registerButton: function(
@@ -947,6 +974,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
+	 * @method isFormEnabled
 	 * @return {boolean} <code>true</code> if form is enabled
 	 */
 	isFormEnabled: function()
@@ -956,6 +984,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 	/**
 	 * Enable all the registered buttons.
+	 * 
+	 * @method enableForm
 	 */
 	enableForm: function()
 	{
@@ -964,6 +994,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 	/**
 	 * Disable all the registered buttons.
+	 * 
+	 * @method disableForm
 	 */
 	disableForm: function()
 	{
@@ -973,6 +1005,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Set the enabled state all the registered buttons.
 	 * 
+	 * @method setFormEnabled
 	 * @param enabled {boolean} <code>true</code> to enable the form, <code>false</code> to disable the form
 	 */
 	setFormEnabled: function(
@@ -998,6 +1031,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 */
 
 	/**
+	 * @method hasMessages
 	 * @return {boolean} <code>true</code> if there are any messages displayed, of any type
 	 */
 	hasMessages: function()
@@ -1006,6 +1040,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
+	 * @method hasErrors
 	 * @return {boolean} <code>true</code> if there are any error messages displayed
 	 */
 	hasErrors: function()
@@ -1016,6 +1051,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Get the message type displayed for the row containing the specified element.
 	 * 
+	 * @method getRowStatus
 	 * @param e {String|Object} The selector for the element or the element itself
 	 * @return {mixed} The status (String) or <code>false</code>.
 	 */
@@ -1028,6 +1064,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 	/**
 	 * Clear all messages in <code>status_node</code> and the form rows.
+	 * 
+	 * @method clearMessages
 	 */
 	clearMessages: function()
 	{
@@ -1058,6 +1096,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 * The message will only be displayed if no message with a higher
 	 * precedence is already visible. (see Y.FormManager.status_order)
 	 * 
+	 * @method displayMessage
 	 * @param e {String|Object} The selector for the element or the element itself
 	 * @param msg {String} The message
 	 * @param type {String} The message type (see Y.FormManager.status_order)
@@ -1090,6 +1129,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 * Displays a generic message in <code>status_node</code> stating that
 	 * the form data failed to validate.  Override this if you want to get
 	 * fancy.
+	 * 
+	 * @method notifyErrors
 	 */
 	notifyErrors: function()
 	{
@@ -1099,6 +1140,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	/**
 	 * Display a message in <code>status_node</code>.
 	 * 
+	 * @method displayFormMessage
 	 * @param msg {String} The message
 	 * @param error {boolean} <code>true</code> if the message is an error
 	 * @param scroll {boolean} <code>true</code> if <code>status_node</code> should be scrolled into view
