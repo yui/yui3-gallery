@@ -19,7 +19,8 @@ YUI.add('gallery-treeble', function(Y) {
  * is that filtering and sorting are allowed.  This is done by detecting
  * that the request parameters have changed.)</p>
  * 
- * @class TreebleDataSource
+ * @namespace DataSource
+ * @class Treeble
  * @extends DataSource.Local
  * @constructor
  * @param config {Object}
@@ -83,7 +84,7 @@ TreebleDataSource.ATTRS =
 	 *		<code>totalRecordsExpr</code> takes priority.</dd>
 	 * </dl>
 	 * 
-	 * @config root
+	 * @attribute root
 	 * @type {DataSource}
 	 * @writeonce
 	 */
@@ -97,7 +98,7 @@ TreebleDataSource.ATTRS =
 	 * nodes into the list.  The default (<code>false</code>) is to
 	 * paginate only root nodes, so all children are visible.
 	 * 
-	 * @config paginateChildren
+	 * @attribute paginateChildren
 	 * @type {boolean}
 	 * @default false
 	 * @writeonce
@@ -114,7 +115,7 @@ TreebleDataSource.ATTRS =
 	 * across the entire tree.  If this is not specified, then all nodes
 	 * will close when the data is sorted.
 	 * 
-	 * @config uniqueIdKey
+	 * @attribute uniqueIdKey
 	 * @type {String}
 	 */
 	uniqueIdKey:
@@ -871,6 +872,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	},
 
 	/**
+	 * @method isOpen
 	 * @param path {Array} Path to node
 	 * @return {boolean} true if the node is open
 	 */
@@ -896,6 +898,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	 * DataSource.  Any code that assumes the node has been opened must be
 	 * passed in as a completion function.
 	 * 
+	 * @method toggle
 	 * @param path {Array} Path to the node
 	 * @param request {Object} {sort,dir,startIndex,resultCount}
 	 * @param completion {Function|Object} Function to call when the operation completes.  Can be object: {fn,scope,args}
@@ -959,17 +962,24 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 });
 
 Y.TreebleDataSource = TreebleDataSource;
+Y.namespace('DataSource').Treeble = TreebleDataSource;
+/**
+ * @module gallery-treeble
+ */
 
 /**
  * <p>Converts data to a DataSource.  Data can be an object containing both
  * <code>dataType</code> and <code>liveData</code>, or it can be <q>free
  * form</q>, e.g., an array of records or an XHR URL.</p>
  *
- * @namespace Parsers
+ * @class Parsers
+ */
+
+/**
  * @method treebledatasource
+ * @static
  * @param oData {mixed} Data to convert.
  * @return {DataSource} The new data source.
- * @static
  */
 Y.namespace("Parsers").treebledatasource = function(oData)
 {
@@ -1028,12 +1038,12 @@ Y.namespace("Parsers").treebledatasource = function(oData)
  * Treeble displays a tree of data in a table.
  *
  * @module gallery-treeble
+ * @main gallery-treeble
  */
 
 /**
  * Extension to DataTable for displaying tree data.
  *
- * @namespace
  * @class Treeble
  * @extends DataTable
  * @constructor
@@ -1050,8 +1060,8 @@ Treeble.NAME = "datatable";		// same styling
  * <p>Formatter for open/close twistdown.</p>
  *
  * @method twistdownFormatter
- * @param sendRequest {Function} Function that reloads DataTable
  * @static
+ * @param sendRequest {Function} Function that reloads DataTable
  */
 Treeble.buildTwistdownFormatter = function(sendRequest)
 {
@@ -1115,4 +1125,4 @@ Y.extend(Treeble, Y.DataTable,
 Y.Treeble = Treeble;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['datasource'], skinnable:true});
+}, 'gallery-2012.05.23-19-56' ,{requires:['datasource'], skinnable:true});

@@ -8,8 +8,11 @@ YUI.add('gallery-iterable-extras', function(Y) {
 
 /**********************************************************************
  * <p>Functional programming support for iterable classes.  The class must
- * implement the iterator() (which must return an object that implements
- * next() and atEnd()) and newInstance() methods.</p>
+ * implement the `iterator` and `newInstance` methods.</p>
+ * 
+ * <p>For most methods, the iterator only needs to implement `next` and
+ * `atEnd`.  Backwards iterators like `reduceRight` require `prev` and
+ * `atBeginning`.</p>
  * 
  * <p>Iterable classes must mix these functions:  `Y.mix(SomeClass,
  * Y.Iterable, false, null, 4);`  Passing false as the third argument
@@ -206,6 +209,40 @@ Y.Iterable =
 	},
 
 	/**
+	 * Executes the supplied function on each item in the list, starting
+	 * from the end and folding the list into a single value.  The function
+	 * receives the value returned by the previous iteration (or the
+	 * initial value if this is the first iteration), the value being
+	 * iterated, the index, and the list itself as parameters (in that
+	 * order).  The function must return the updated value.
+	 *
+	 * @method reduceRight
+	 * @param init {Mixed} the initial value
+	 * @param f {String} the function to invoke
+	 * @param c {Object} optional context object
+	 * @return {Mixed} final result from iteratively applying the given function to each item in the list
+	 */
+	reduceRight: function(init, f, c)
+	{
+		var result = init;
+
+		var iter = this.iterator(), i = 0;
+		while (!iter.atEnd())
+		{
+			iter.next();
+			i++;
+		}
+
+		while (!iter.atBeginning())
+		{
+			i--;
+			result = f.call(c, result, iter.prev(), i, this);
+		}
+
+		return result;
+	},
+
+	/**
 	 * Executes the supplied function on each item in the list.  Returns a
 	 * new list containing the items for which the supplied function
 	 * returned a falsey value.  The function receives the value, the
@@ -260,6 +297,93 @@ Y.Iterable =
 		return false;
 	}
 };
+/**
+ * @module gallery-iterable-extras
+ */
+
+/**********************************************************************
+ * Iterator for an array.  Useful for any class that manages an array and
+ * wants to mix in `Y.Iterable`.  Safe, but not stable, when the array is
+ * modified during iteration.
+ *
+ * @class ArrayIterator
+ * @method constructor
+ * @param list {Array}
+ */
+
+function ArrayIterator(
+	/* array */    list)
+{
+	this._list = list;
+	this.moveToBeginning();
+}
+
+ArrayIterator.prototype =
+{
+	/**
+	 * @method atBeginning
+	 * @return {Boolean} true if at the beginning
+	 */
+	atBeginning: function()
+	{
+		return (this._next <= 0);
+	},
+
+	/**
+	 * @method atEnd
+	 * @return {Boolean} true if at the end
+	 */
+	atEnd: function()
+	{
+		return (this._next >= this._list.length);
+	},
+
+	/**
+	 * Move to the beginning of the list.
+	 * 
+	 * @method moveToBeginning
+	 */
+	moveToBeginning: function()
+	{
+		this._next = 0;
+	},
+
+	/**
+	 * Move to the end of the list.
+	 * 
+	 * @method moveToEnd
+	 */
+	moveToEnd: function()
+	{
+		this._next = this._list.length;
+	},
+
+	/**
+	 * @method next
+	 * @return {Mixed} next value in the list or undefined if at the end
+	 */
+	next: function()
+	{
+		if (this._next < this._list.length)
+		{
+			return this._list[ this._next++ ];
+		}
+	},
+
+	/**
+	 * @method prev
+	 * @return {Mixed} previous value in the list or undefined if at the beginning
+	 */
+	prev: function()
+	{
+		if (this._next > 0)
+		{
+			return this._list[ --this._next ];
+		}
+	}
+};
+
+Y.ArrayIterator = ArrayIterator;
 
 
-}, 'gallery-2012.05.16-20-37' ,{optional:['gallery-funcprog']});
+}, 'gallery-2012.05.23-19-56' ,{optional:['gallery-funcprog']});

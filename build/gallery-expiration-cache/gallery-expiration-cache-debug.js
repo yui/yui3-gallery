@@ -14,10 +14,10 @@ YUI.add('gallery-expiration-cache', function(Y) {
  * @class ExpirationCache
  * @constructor
  * @param config {Object}
- * @param config.store {Object} Data store which implements get,put,remove,clear,keys.  If not specified, a new instance of `Y.InstanceManager` is created.
- * @param config.meta {Function} Attaches meta data to an item when it is added to the cache.  It receives the value as an argument.  If not specified, the default is to timestamp the item.
- * @param config.expire {Function} (Required) Returns true if the item has expired.  It receives the meta data and the value as arguments.  If a number is specified, it is assumed to be a duration in milliseconds.
- * @param config.stats {Boolean} Pass true if you want to collect basic statistics.  Pass a function if you want to control what information is stored for each key.  The function receives the key, the value, and the stat object.
+ * @param [config.store] {Object} Data store which implements get,put,remove,clear,keys.  If not specified, a new instance of `Y.InstanceManager` is created.
+ * @param [config.meta] {Function} Attaches meta data to an item when it is added to the cache.  It receives the value as an argument.  If not specified, the default is to timestamp the item.
+ * @param config.expire {Function} Returns true if the item has expired.  It receives the meta data and the value as arguments.  If a number is specified, it is assumed to be a duration in milliseconds.
+ * @param [config.stats] {Boolean} Pass true if you want to collect basic statistics.  Pass a function if you want to control what information is stored for each key.  The function receives the key, the value, and the stat object.
  */
 function ExpirationCache(config)
 {
@@ -194,4 +194,4 @@ ExpirationCache.prototype =
 Y.ExpirationCache = ExpirationCache;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-instancemanager']});
+}, 'gallery-2012.05.23-19-56' ,{requires:['gallery-instancemanager']});

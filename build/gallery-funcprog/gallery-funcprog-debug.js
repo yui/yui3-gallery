@@ -172,6 +172,30 @@ Y.mix(Y,
 	},
 
 	/**
+	 * Executes the supplied function on each item in the object, starting
+	 * from the "end" and folding the object into a single value.  The
+	 * function receives the value returned by the previous iteration (or
+	 * the initial value if this is the first iteration), the value being
+	 * iterated, the key, and the object itself as parameters (in that
+	 * order).  The function must return the updated value.
+	 *
+	 * Supports arrays, objects, and NodeLists.
+	 *
+	 * @method reduceRight
+	 * @static
+	 * @param o {Mixed} the object to iterate
+	 * @param init {Mixed} the initial value
+	 * @param f {String} the function to invoke
+	 * @param c {Object} optional context object
+	 * @param proto {Boolean} if true, prototype properties are iterated on objects
+	 * @return {Mixed} final result from iteratively applying the given function to each item in the object
+	 */
+	reduceRight: function(o, init, f, c, proto)
+	{
+		return dispatch('reduceRight', o, init, f, c, proto);
+	},
+
+	/**
 	 * Executes the supplied function on each item in the object.  Returns
 	 * a new object containing the items for which the supplied function
 	 * returned a falsey value.  The function receives the value, the key,
@@ -232,5 +256,40 @@ Y.mix(Y.Array,
 	}
 });
 
+/**
+ * Executes the supplied function on each item in the array, starting
+ * from the end and folding the list into a single value.  The function
+ * receives the value returned by the previous iteration (or the
+ * initial value if this is the first iteration), the value being
+ * iterated, the index, and the list itself as parameters (in that
+ * order).  The function must return the updated value.
+ *
+ * @method reduceRight
+ * @param init {Mixed} the initial value
+ * @param f {String} the function to invoke
+ * @param c {Object} optional context object
+ * @return {Mixed} final result from iteratively applying the given function to each item in the array
+ */
+Y.Array.reduceRight = Y.Lang._isNative(Array.prototype.reduceRight) ?
+	function(a, init, f, c)
+	{
+		return Array.prototype.reduceRight.call(a, function(init, item, i, a)
+		{
+			return f.call(c, init, item, i, a);
+		},
+		init);
+	}
+	:
+	function(a, init, f, c)
+	{
+		var result = init;
+		for (var i=a.length-1; i>=0; i--)
+		{
+			result = f.call(c, result, a[i], i, a);
+		}
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['oop','array-extras','gallery-object-extras'], optional:['gallery-nodelist-extras2']});
+		return result;
+	};
+
+
+}, 'gallery-2012.05.23-19-56' ,{requires:['oop','array-extras','gallery-object-extras'], optional:['gallery-nodelist-extras2']});

@@ -515,7 +515,7 @@ Y.extend(Paginator, Y.Widget,
     /**
      * Get the start and end record indexes of the specified page.
      * @method getPageRecords
-     * @param page {number} (optional) The page (current page if not specified)
+     * @param [page] {number} The page (current page if not specified)
      * @return {Array} [start_index, end_index]
      */
     getPageRecords : function (page) {
@@ -1969,8 +1969,8 @@ Paginator.ATTRS.pageLabelBuilder =
  * @static
  * @method calculateRange
  * @param {int} currentPage  The current page
- * @param {int} totalPages   (optional) Maximum number of pages
- * @param {int} numPages     (optional) Preferred number of pages in range
+ * @param {int} [totalPages] Maximum number of pages
+ * @param {int} [numPages]   Preferred number of pages in range
  * @return {Array} [start_page_number, end_page_number]
  */
 Paginator.ui.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
@@ -2577,4 +2577,4 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 });
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['widget','event-key','substitute'], skinnable:true});
+}, 'gallery-2012.05.23-19-56' ,{requires:['widget','event-key','substitute'], skinnable:true});

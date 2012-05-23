@@ -1,326 +1,142 @@
-/***
-    Core Button Styles
-***/
 .yui3-button {
-    /* To prevent the bg color from leaking outside the border */    
-    -webkit-background-clip: padding-box;     
-       -moz-background-clip: padding;
-            background-clip: padding-box;
-            
-    background-repeat: repeat-x;
-       -moz-border-radius: 0.4em; /* FF1-3.6 */
-    -webkit-border-radius: 0.4em; /* Saf3-4, iOS 1-3.2, Android <1.6 */
-            border-radius: 0.4em; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */
-    border: solid 1px;
-    cursor: pointer;
+    /* Structure */
     display: inline-block;
-    
-    *display: inline; zoom: 1; /*IE6 inline block */
-    
-    height: 2em;
-    line-height: 2em;
-    margin: 1em;
-    padding: 0 1em;
-    position: relative;
+    *display: inline; /*IE 6/7*/
+    zoom: 1;
+    font-size: 100%; 
+    *font-size: 90%; /*IE 6/7 - To reduce IE's oversized button text*/
+    *overflow: visible; /*IE 6/7 - Because of IE's overly large left/right padding on buttons */
+    padding: 0.4em 1em 0.45em;
+    line-height: normal;
+    white-space: nowrap;
+    vertical-align: baseline;
     text-align: center;
-    
-    -webkit-transition: background-position 0.1s linear;  /* Saf3.2+, Chrome */
-       -moz-transition: background-position 0.1s linear;  /* FF4+ */
-        -ms-transition: background-position 0.1s linear;  /* IE10? */
-         -o-transition: background-position 0.1s linear;  /* Opera 10.5+ */
-            transition: background-position 0.1s linear;
-    
-    -webkit-user-select: none;
-       -moz-user-select: none;
-            user-select: none;
+    cursor: pointer;
     -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+
+    /* Presentation */
+    color: #444; /* rgba not supported (IE 8) */
+    color: rgba(0, 0, 0, 0.80); /* rgba supported */
+    *color: #444; /* IE 6 & 7 */
+    border: 1px solid #999;  /*IE 6/7/8*/
+    border: none rgba(0, 0, 0, 0);  /*IE9 + everything else*/
+    background-color: #E6E6E6;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#80ffffff', endColorstr='#00ffffff', GradientType=0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255,255,255, 0.30)), color-stop(40%, rgba(255,255,255, 0.15)), to(transparent));
+    background-image: -webkit-linear-gradient(rgba(255,255,255, 0.30), rgba(255,255,255, 0.15) 40%, transparent);
+    background-image: -moz-linear-gradient(top, rgba(255,255,255, 0.30), rgba(255,255,255, 0.15) 40%, transparent);
+    background-image: -ms-linear-gradient(rgba(255,255,255, 0.30), rgba(255,255,255, 0.15) 40%, transparent);
+    background-image: -o-linear-gradient(rgba(255,255,255, 0.30), rgba(255,255,255, 0.15) 40%, transparent);
+    background-image: linear-gradient(rgba(255,255,255, 0.30), rgba(255,255,255, 0.15) 40%, transparent);
+    text-decoration: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset, 0 2px 0 rgba(255,255,255, 0.30) inset, 0 1px 2px rgba(0,0,0, 0.15);
+    -moz-box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset, 0 2px 0 rgba(255,255,255, 0.30) inset, 0 1px 2px rgba(0,0,0, 0.15);
+    box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset, 0 2px 0 rgba(255,255,255, 0.30) inset, 0 1px 2px rgba(0,0,0, 0.15);
+
+    /* Transitions */
+    -webkit-transition: 0.1s linear -webkit-box-shadow;
+    -moz-transition: 0.1s linear -moz-box-shadow;
+    -ms-transition: 0.1s linear box-shadow;
+    -o-transition: 0.1s linear box-shadow;
+    transition: 0.1s linear box-shadow;
 }
 
-.yui3-button-back:before {
-    border-bottom-color: transparent;
-       -moz-border-radius: 0.2em 0 20px 0; /* FF1-3.6 */
-    -webkit-border-radius: 0.2em 0 20px 0; /* Saf3-4, iOS 1-3.2, Android <1.6 */
-            border-radius: 0.2em 0 20px 0; /* Opera 10.5, IE9, Saf5, Chrome, FF4, iOS 4, Android 2.1+ */
-    border-right-color: transparent;
-    border-style: solid;
-    border-width: 1px 0 0 1px;
-    content: "";
-    height: 1.44em;
-    left: -0.80em;
-    position: absolute;
-    top: 0.23em;
-    
-    -webkit-transform: rotate(-45deg);  /* Saf3.1+, Chrome  */
-       -moz-transform: rotate(-45deg);  /* FF3.5+ */
-        -ms-transform: rotate(-45deg);  /* IE9  */
-         -o-transform: rotate(-45deg);  /* Opera 10.5  */
-            transform: rotate(-45deg);  
-               filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.7071067811865476, M12=0.7071067811865475, M21=-0.7071067811865475, M22=0.7071067811865476, sizingMethod='auto expand');/* IE6–IE9 */
-                 zoom: 1;
-
-    width: 1.44em;
+a.yui3-button {
+    color: rgba(0,0,0, 0.80);
+    color: #444;
+    text-decoration:none;
 }
 
+.yui3-button-hover,
 .yui3-button:hover {
-    border-style: solid;
-    border-width: 1px;
-    -webkit-transition: background-position 0.1s linear;  /* Saf3.2+, Chrome */
-       -moz-transition: background-position 0.1s linear;  /* FF4+ */
-        -ms-transition: background-position 0.1s linear;  /* IE10? */
-         -o-transition: background-position 0.1s linear;  /* Opera 10.5+ */
-            transition: background-position 0.1s linear;
-    background-position: 0 -1em;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#26000000', GradientType=0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0.05)), to(rgba(0,0,0, 0.15)));
+    background-image: -webkit-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.15));
+    background-image: -moz-linear-gradient(top, transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.15));
+    background-image: -ms-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.15));
+    background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.15));
+    background-image: linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.15));
 }
 
-.yui3-button-icon {
-    background-repeat: no-repeat;
-    display: inline-block;
-    height: 20px;
-    vertical-align: middle;
-    width: 20px;
-}
-
-.yui3-button-disabled {
-    cursor: default;
-}
-
-.yui3-button-disabled .yui3-button-icon {
-    filter: alpha(opacity=30);
-    opacity: .3;
-}
-
+.yui3-button-active,
 .yui3-button:active {
-            box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05); /* Opera 10.5, IE9, FF4+, Chrome 10+ */
-       -moz-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05); /* FF3.5 - 3.6 */
-    -webkit-box-shadow: inset 0 3px 7px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05); /* Saf3.0+, Chrome */
+    border: inset 1px solid #999;  /*IE 6/7/8*/
+    border: none rgba(0, 0, 0, 0);  /*IE9 + everything else*/
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1A000000', endColorstr='#26000000', GradientType=0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(rgba(0,0,0, 0.10)), to(rgba(0,0,0, 0.15)));
+    background-image: -webkit-linear-gradient(rgba(0,0,0, 0.10), rgba(0,0,0, 0.15));
+    background-image: -moz-linear-gradient(top, rgba(0,0,0, 0.10), rgba(0,0,0, 0.15));
+    background-image: -ms-linear-gradient(rgba(0,0,0, 0.10), rgba(0,0,0, 0.15));
+    background-image: -o-linear-gradient(rgba(0,0,0, 0.10), rgba(0,0,0, 0.15));
+    background-image: linear-gradient(rgba(0,0,0, 0.10), rgba(0,0,0, 0.15));
+    -webkit-box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset, 0 2px 4px rgba(0,0,0, 0.30) inset;
+    -moz-box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset, 0 2px 4px rgba(0,0,0, 0.30) inset;
+    box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset, 0 2px 4px rgba(0,0,0, 0.30) inset;
 }
 
-.yui3-button-back:hover, 
-.yui3-button-disabled:hover {
-    background-position: 0 0;
-}
-
-.yui3-button-back:active{
-            box-shadow: none;  /* Opera 10.5, IE9, FF4+, Chrome 10+ */
-       -moz-box-shadow: none; /* FF3.5 - 3.6 */
-    -webkit-box-shadow: none; /* Saf3.0+, Chrome */
-}
-
-/***
-    Icons
-***/
-.yui3-button-icon-bold          {background-position: 0 0px;}
-.yui3-button-icon-italic        {background-position: 0 -36px;}
-.yui3-button-icon-underline     {background-position: 0 -72px;}
-.yui3-button-icon-strikethrough {background-position: 0 -108px;}
-.yui3-button-icon-superscript   {background-position: 0 -144px;}
-.yui3-button-icon-subscript     {background-position: 0 -180px;}
-.yui3-button-icon-forecolor     {background-position: 0 -216px;}
-.yui3-button-icon-backcolor     {background-position: 0 -252px;}
-.yui3-button-icon-TBD           {background-position: 0 -288px;}
-.yui3-button-icon-justifyleft   {background-position: 0 -324px;}
-.yui3-button-icon-justifycenter {background-position: 0 -360px;}
-.yui3-button-icon-justifyright  {background-position: 0 -396px;}
-.yui3-button-icon-justifyfull   {background-position: 0 -432px;}
-.yui3-button-icon-unorderedlist {background-position: 0 -468px;}
-.yui3-button-icon-orderedlist   {background-position: 0 -504px;}
-.yui3-button-icon-TBD           {background-position: 0 -540px;}
-.yui3-button-icon-TBD           {background-position: 0 -576px;}
-.yui3-button-icon-TBD           {background-position: 0 -612px;}
-.yui3-button-icon-TBD           {background-position: 0 -648px;}
-.yui3-button-icon-unindent      {background-position: 0 -684px;}
-.yui3-button-icon-indent        {background-position: 0 -720px;}
-.yui3-button-icon-insertimage   {background-position: 1px -756px;}
-.yui3-button-icon-createlink    {background-position: 0 -792px;}
-.yui3-button-icon-TBD           {background-position: 0 -828px;}
-.yui3-button-icon-block         {background-position: 0 -864px;}
-.yui3-button-icon-inline        {background-position: 0 -900px;}
-.yui3-button-icon-floatright    {background-position: 0 -936px;}
-.yui3-button-icon-floatleft     {background-position: 0 -972px;}
-.yui3-button-icon-smiley        {background-position: 0 -1008px;}
-.yui3-button-icon-hiddenelements {background-position: 0 -1044px;}
-.yui3-button-icon-removeformat  {background-position: 0 -1080px;}
-.yui3-button-icon-TBD           {background-position: 0 -1116px;}
-.yui3-button-icon-TBD           {background-position: 0 -1152px;}
-.yui3-button-icon-TBD           {background-position: 0 -1188px;}
-.yui3-button-icon-TBD           {background-position: 0 -1224px;}
-.yui3-button-icon-TBD           {background-position: 0 -1260px;}
-.yui3-button-icon-TBD           {background-position: 0 -1296px;}
-
-
-/***
-    Skin: Sam
-***/
-.yui3-skin-sam .yui3-button {
-    background-color: #d8d8da;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#d8d8da)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(top, #ffffff, #d8d8da); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(top, #ffffff, #d8d8da); /* FF3.6 */
-    background-image:     -ms-linear-gradient(top, #ffffff, #d8d8da); /* IE10 */
-    background-image:      -o-linear-gradient(top, #ffffff, #d8d8da); /* Opera 11.10+ */
-    background-image:         linear-gradient(top, #ffffff, #d8d8da);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#d8d8da'); /* IE6–IE9 */
-    border-color: #808080;
-    color: #000;
-}
- 
-
-.yui3-skin-sam .yui3-button:hover {
-    background-color: #bfdaff;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#bfdaff)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(top, #ffffff, #bfdaff); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(top, #ffffff, #bfdaff); /* FF3.6 */
-    background-image:     -ms-linear-gradient(top, #ffffff, #bfdaff); /* IE10 */
-    background-image:      -o-linear-gradient(top, #ffffff, #bfdaff); /* Opera 11.10+ */
-    background-image:         linear-gradient(top, #ffffff, #bfdaff);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#bfdaff'); /* IE6–IE9 */
-    border-color: #7d98b8;
-}
-
-.yui3-skin-sam .yui3-button-selected,
-.yui3-skin-sam .yui3-button-selected:hover {
-    background-color: #2647a0;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#426fd9), to(#2647a0)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(top, #426fd9, #2647a0); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(top, #426fd9, #2647a0); /* FF3.6 */
-    background-image:     -ms-linear-gradient(top, #426fd9, #2647a0); /* IE10 */
-    background-image:      -o-linear-gradient(top, #426fd9, #2647a0); /* Opera 11.10+ */
-    background-image:         linear-gradient(top, #426fd9, #2647a0);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#426fd9', EndColorStr='#2647a0'); /* IE6–IE9 */
-    color: #fff;
-}
-
-
-.yui3-skin-sam .yui3-button-back:before {
-    /*TODO: Check the rotation on this */ background-image: -webkit-gradient(linear, left top, left bottom, from(#d8d8da), to(#ffffff)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(45deg, #d8d8da, #ffffff); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(45deg, #d8d8da, #ffffff); /* FF3.6 */
-    background-image:     -ms-linear-gradient(45deg, #d8d8da, #ffffff); /* IE10 */
-    background-image:      -o-linear-gradient(45deg, #d8d8da, #ffffff); /* Opera 11.10+ */
-    background-image:         linear-gradient(45deg, #d8d8da, #ffffff);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#d8d8da', EndColorStr='#ffffff'); /* IE6–IE9 */
-    border-color: #808080;
-}
-
-.yui3-skin-sam .yui3-button-back:hover:before {
-    /*TODO: Check the rotation on this */ background-image: -webkit-gradient(linear, left top, left bottom, from(#bfdaff), to(#ffffff)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(45deg, #bfdaff, #ffffff); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(45deg, #bfdaff, #ffffff); /* FF3.6 */
-    background-image:     -ms-linear-gradient(45deg, #bfdaff, #ffffff); /* IE10 */
-    background-image:      -o-linear-gradient(45deg, #bfdaff, #ffffff); /* Opera 11.10+ */
-    background-image:         linear-gradient(45deg, #bfdaff, #ffffff);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#bfdaff', EndColorStr='#ffffff'); /* IE6–IE9 */
-    border-color: #7d98b8;
-}
-
-.yui3-skin-sam .yui3-button-selected.yui3-button-back:before {
-    /*TODO: Check the rotation on this */ background-image: -webkit-gradient(linear, left top, left bottom, from(#2647a0), to(#426fd9)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(45deg, #2647a0, #426fd9); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(45deg, #2647a0, #426fd9); /* FF3.6 */
-    background-image:     -ms-linear-gradient(45deg, #2647a0, #426fd9); /* IE10 */
-    background-image:      -o-linear-gradient(45deg, #2647a0, #426fd9); /* Opera 11.10+ */
-    background-image:         linear-gradient(45deg, #2647a0, #426fd9);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#2647a0', EndColorStr='#426fd9'); /* IE6–IE9 */
-}
-
-.yui3-skin-sam .yui3-button-disabled,
-.yui3-skin-sam .yui3-button-disabled:hover{
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#e6e6e7)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e7); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(top, #ffffff, #e6e6e7); /* FF3.6 */
-    background-image:     -ms-linear-gradient(top, #ffffff, #e6e6e7); /* IE10 */
-    background-image:      -o-linear-gradient(top, #ffffff, #e6e6e7); /* Opera 11.10+ */
-    background-image:         linear-gradient(top, #ffffff, #e6e6e7);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#e6e6e7'); /* IE6–IE9 */
-    border-color: #ccc;
-    color: #ccc;
+.yui3-button[disabled],
+.yui3-button-disabled,
+.yui3-button-disabled:hover,
+.yui3-button-disabled:active {
     cursor: default;
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+    filter: alpha(opacity=55);
+    -khtml-opacity: 0.55;
+    -moz-opacity: 0.55;
+    opacity: 0.55;
+    -webkit-box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset;
+    -moz-box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset;
+    box-shadow: 0 0 0 1px rgba(0,0,0, 0.25) inset;
 }
 
-.yui3-skin-sam .yui3-button-disabled.yui3-button-back:before {
-    /*TODO: Check the rotation on this */ background-image: -webkit-gradient(linear, left top, left bottom, from(#e6e6e7), to(#ffffff)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(top, #e6e6e7, #ffffff); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(top, #e6e6e7, #ffffff); /* FF3.6 */
-    background-image:     -ms-linear-gradient(top, #e6e6e7, #ffffff); /* IE10 */
-    background-image:      -o-linear-gradient(top, #e6e6e7, #ffffff); /* Opera 11.10+ */
-    background-image:         linear-gradient(top, #e6e6e7, #ffffff);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#e6e6e7', EndColorStr='#ffffff'); /* IE6–IE9 */
-    border-color: #ccc;
+/* Firefox: Get rid of the inner focus border */
+.yui3-button::-moz-focus-inner{
+    padding: 0;
+    border: 0;
 }
 
-.yui3-skin-sam .yui3-button-icon {
-    background-image: url("assets/sam_icons.gif");
+/* Firefox: Add a border around a focused button */
+.yui3-button:-moz-focusring {
+    outline: thin dotted;
 }
 
-
-/***
-    Skin: Night
-***/
-.yui3-skin-night .yui3-button {
-    background-color: #2C2D2F;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#3E3F41), to(#2C2D2F)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(top, #3E3F41, #2C2D2F); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(top, #3E3F41, #2C2D2F); /* FF3.6 */
-    background-image:     -ms-linear-gradient(top, #3E3F41, #2C2D2F); /* IE10 */
-    background-image:      -o-linear-gradient(top, #3E3F41, #2C2D2F); /* Opera 11.10+ */
-    background-image:         linear-gradient(top, #3E3F41, #2C2D2F);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#3E3F41', EndColorStr='#2C2D2F'); /* IE6–IE9 */
-       -moz-box-shadow: 0px 1px 1px #222; /* FF3.5 - 3.6 */
-    -webkit-box-shadow: 0px 1px 1px #222; /* Saf3.0+, Chrome */
-            box-shadow: 0px 1px 1px #222; /* Opera 10.5, IE9, FF4+, Chrome 10+ */
-    border-color: #0c0c0c;
+/* Sam */
+.yui3-skin-sam .yui3-button-primary,
+.yui3-skin-sam .yui3-button-selected {
+    background-color: #345FCB;
     color: #fff;
+    -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset, 0 2px 0 rgba(255, 255, 255, 0.17) inset, 0 1px 2px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset, 0 2px 0 rgba(255, 255, 255, 0.17) inset, 0 1px 2px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset, 0 2px 0 rgba(255, 255, 255, 0.17) inset, 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.yui3-skin-sam .yui3-button:-moz-focusring {
+    outline-color: rgba(0, 0, 0, 0.85);
 }
 
-.yui3-skin-night .yui3-button-selected,
-.yui3-skin-night .yui3-button-selected:hover {
-    background-color: #242526;
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#2C2D2F), to(#242526)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(top, #2C2D2F, #242526); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(top, #2C2D2F, #242526); /* FF3.6 */
-    background-image:     -ms-linear-gradient(top, #2C2D2F, #242526); /* IE10 */
-    background-image:      -o-linear-gradient(top, #2C2D2F, #242526); /* Opera 11.10+ */
-    background-image:         linear-gradient(top, #2C2D2F, #242526);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#2C2D2F', EndColorStr='#242526'); /* IE6–IE9 */
+/* Night */
+.yui3-skin-night .yui3-button {
+    border: 0px;
+    background-color: #343536;
+    color: #DCDCDC;
+    -webkit-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset, 0 2px 0 rgba(255, 255, 255, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset, 0 2px 0 rgba(255, 255, 255, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25) inset, 0 2px 0 rgba(255, 255, 255, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.yui3-skin-night .yui3-button-primary,
+.yui3-skin-night .yui3-button-selected {
+    background-color: #747576;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
 }
 
-.yui3-skin-night .yui3-button-back:before {
-    /*TODO: Check the rotation on this */background-image: -webkit-gradient(linear, left top, left bottom, from(#2C2D2F), to(#3E3F41)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(45deg, #2C2D2F, #3E3F41); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(45deg, #2C2D2F, #3E3F41); /* FF3.6 */
-    background-image:     -ms-linear-gradient(45deg, #2C2D2F, #3E3F41); /* IE10 */
-    background-image:      -o-linear-gradient(45deg, #2C2D2F, #3E3F41); /* Opera 11.10+ */
-    background-image:         linear-gradient(45deg, #2C2D2F, #3E3F41);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#2C2D2F', EndColorStr='#3E3F41'); /* IE6–IE9 */
-    border-color: #0c0c0c;
+.yui3-skin-night .yui3-button:-moz-focusring {
+    outline-color: rgba(255, 255, 255, 0.85);
 }
-
-.yui3-skin-night .yui3-button-back:hover:before {
-    /*TODO: Check the rotation on this */background-image: -webkit-gradient(linear, left top, left bottom, from(#2e2e30), to(#3d3e3f)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(45deg, #2e2e30, #3d3e3f); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(45deg, #2e2e30, #3d3e3f); /* FF3.6 */
-    background-image:     -ms-linear-gradient(45deg, #2e2e30, #3d3e3f); /* IE10 */
-    background-image:      -o-linear-gradient(45deg, #2e2e30, #3d3e3f); /* Opera 11.10+ */
-    background-image:         linear-gradient(45deg, #2e2e30, #3d3e3f);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#2e2e30', EndColorStr='#3d3e3f'); /* IE6–IE9 */
-}
-
-.yui3-skin-night .yui3-button-selected.yui3-button-back:before {
-    background-color: #2B2D2D;
-    /*TODO: Check the rotation on this */background-image: -webkit-gradient(linear, left top, left bottom, from(#242526), to(#2C2D2F)); /* Saf4+, Chrome */
-    background-image: -webkit-linear-gradient(45deg, #242526, #2C2D2F); /* Chrome 10+, Saf5.1+ */
-    background-image:    -moz-linear-gradient(45deg, #242526, #2C2D2F); /* FF3.6 */
-    background-image:     -ms-linear-gradient(45deg, #242526, #2C2D2F); /* IE10 */
-    background-image:      -o-linear-gradient(45deg, #242526, #2C2D2F); /* Opera 11.10+ */
-    background-image:         linear-gradient(45deg, #242526, #2C2D2F);
-              filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#242526', EndColorStr='#2C2D2F'); /* IE6–IE9 */
-}
-
-.yui3-skin-night .yui3-button-disabled,
-.yui3-skin-night .yui3-button-disabled:hover {
-    color: #666;
-}
-
-.yui3-skin-night .yui3-button-icon {
-    background-image: url("assets/night_icons.gif");
-}
+/* YUI CSS Detection Stamp */
+#yui3-css-stamp.gallerycss-cssbutton { display: none; }

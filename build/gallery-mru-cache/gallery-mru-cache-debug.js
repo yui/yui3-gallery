@@ -18,10 +18,10 @@ YUI.add('gallery-mru-cache', function(Y) {
  * @class MRUCache
  * @constructor
  * @param config {Object}
- * @param config.metric {Function} (Required) Computes the metric for an item.  It receives the value as an argument and must return a positive number.
- * @param config.limit {Number} (Required) Maximum allowed value of the metric.  Items are dropped off the end of the MRU list until the metric is less than or equal to the limit.
- * @param config.meta {Function} Attaches meta data to an item when it is added to the cache.  It receives the value as an argument.
- * @param config.stats {Boolean} Pass true if you want to collect basic statistics.  Pass a function if you want to control what information is stored for each key.  The function receives the key, the value, and the stat object.
+ * @param config.metric {Function} Computes the metric for an item.  It receives the value as an argument and must return a positive number.
+ * @param config.limit {Number} Maximum allowed value of the metric.  Items are dropped off the end of the MRU list until the metric is less than or equal to the limit.
+ * @param [config.meta] {Function} Attaches meta data to an item when it is added to the cache.  It receives the value as an argument.
+ * @param [config.stats] {Boolean} Pass true if you want to collect basic statistics.  Pass a function if you want to control what information is stored for each key.  The function receives the key, the value, and the stat object.
  */
 function MRUCache(config)
 {
@@ -197,4 +197,4 @@ MRUCache.prototype =
 Y.MRUCache = MRUCache;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-linkedlist']});
+}, 'gallery-2012.05.23-19-56' ,{requires:['gallery-linkedlist']});

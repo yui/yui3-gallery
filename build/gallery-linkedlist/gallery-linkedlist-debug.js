@@ -261,7 +261,7 @@ LinkedListIterator.prototype =
  * @main gallery-linkedlist
  * @class LinkedList
  * @constructor
- * @param list {Mixed} (Optional) any scalar or iterable list
+ * @param [list] {Mixed} any scalar or iterable list
  */
 
 function LinkedList(list)
@@ -710,4 +710,4 @@ Y.mix(LinkedList, Y.Iterable, false, null, 4);
 Y.LinkedList = LinkedList;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-iterable-extras'], optional:['gallery-funcprog']});
+}, 'gallery-2012.05.23-19-56' ,{requires:['gallery-iterable-extras'], optional:['gallery-funcprog']});

@@ -31,10 +31,11 @@ PLDTModule.NS   = "layout";
 PLDTModule.ATTRS =
 {
 	/**
-	 * (Required) Instance of Y.PageLayout
+	 * Instance of Y.PageLayout
 	 * 
 	 * @attribute layout
 	 * @type {PageLayout}
+	 * @required
 	 * @writeonce
 	 */
 	layout:
@@ -84,4 +85,4 @@ Y.namespace("Plugin");
 Y.Plugin.PageLayoutDataTableModule = PLDTModule;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-layout','datatable-scroll','plugin']});
+}, 'gallery-2012.05.23-19-56' ,{requires:['gallery-layout','datatable-scroll','plugin']});

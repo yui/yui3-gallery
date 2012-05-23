@@ -33,10 +33,11 @@ RowExpansion.NS   = "rowexpander";
 RowExpansion.ATTRS =
 {
 	/**
-	 * (Required) String template or function that returns a string.
+	 * String template or function that returns a string.
 	 *
 	 * @attribute template
 	 * @type {String|Function}
+	 * @required
 	 */
 	template:
 	{
@@ -48,12 +49,13 @@ RowExpansion.ATTRS =
 	},
 
 	/**
-	 * (Required) Id of a column (usually not displayed) that yields a
+	 * Id of a column (usually not displayed) that yields a
 	 * unique value for each record.  Used to maintain the twistdown state
 	 * when paginating.
 	 *
 	 * @attribute uniqueIdKey
 	 * @type {String}
+	 * @required
 	 */
 	uniqueIdKey:
 	{
@@ -347,4 +349,4 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableRowExpansion = RowExpansion;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations','gallery-math'], skinnable:true});
+}, 'gallery-2012.05.23-19-56' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations','gallery-math'], skinnable:true});
