@@ -119,14 +119,14 @@ function hasLimit(
  * @method validateFromCSSData
  * @static
  * @param e {Element|Node} The field to validate.
- * @param msg_list {Map} (Optional) Map of message types to custom messages.
- * @return {Object} Status:
- *		<dl>
- *		<dt>keepGoing</dt>
- *		<dd>(Boolean) <code>true</code> if further validation should be done.</dd>
- *		<dt>error</dt>
- *		<dd>(String) The error message, if any.</dd>
- *		</dl>
+ * @param [msg_list] {Map} Map of message types to custom messages.
+ * @return {Object} Status
+ * <dl>
+ * <dt>keepGoing</dt>
+ * <dd>(Boolean) <code>true</code> if further validation should be done.</dd>
+ * <dt>error</dt>
+ * <dd>(String) The error message, if any.</dd>
+ * </dl>
  */
 Y.FormManager.validateFromCSSData = function(
 	/* element */	e,
