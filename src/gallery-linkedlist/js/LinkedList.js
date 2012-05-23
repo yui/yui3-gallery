@@ -14,7 +14,7 @@
  * @main gallery-linkedlist
  * @class LinkedList
  * @constructor
- * @param list {Mixed} (Optional) any scalar or iterable list
+ * @param [list] {Mixed} any scalar or iterable list
  */
 
 function LinkedList(list)
