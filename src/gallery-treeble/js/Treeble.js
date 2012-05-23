@@ -2,12 +2,12 @@
  * Treeble displays a tree of data in a table.
  *
  * @module gallery-treeble
+ * @main gallery-treeble
  */
 
 /**
  * Extension to DataTable for displaying tree data.
  *
- * @namespace
  * @class Treeble
  * @extends DataTable
  * @constructor
@@ -24,8 +24,8 @@ Treeble.NAME = "datatable";		// same styling
  * <p>Formatter for open/close twistdown.</p>
  *
  * @method twistdownFormatter
- * @param sendRequest {Function} Function that reloads DataTable
  * @static
+ * @param sendRequest {Function} Function that reloads DataTable
  */
 Treeble.buildTwistdownFormatter = function(sendRequest)
 {

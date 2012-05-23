@@ -17,7 +17,8 @@
  * is that filtering and sorting are allowed.  This is done by detecting
  * that the request parameters have changed.)</p>
  * 
- * @class TreebleDataSource
+ * @namespace DataSource
+ * @class Treeble
  * @extends DataSource.Local
  * @constructor
  * @param config {Object}
@@ -81,7 +82,7 @@ TreebleDataSource.ATTRS =
 	 *		<code>totalRecordsExpr</code> takes priority.</dd>
 	 * </dl>
 	 * 
-	 * @config root
+	 * @attribute root
 	 * @type {DataSource}
 	 * @writeonce
 	 */
@@ -95,7 +96,7 @@ TreebleDataSource.ATTRS =
 	 * nodes into the list.  The default (<code>false</code>) is to
 	 * paginate only root nodes, so all children are visible.
 	 * 
-	 * @config paginateChildren
+	 * @attribute paginateChildren
 	 * @type {boolean}
 	 * @default false
 	 * @writeonce
@@ -112,7 +113,7 @@ TreebleDataSource.ATTRS =
 	 * across the entire tree.  If this is not specified, then all nodes
 	 * will close when the data is sorted.
 	 * 
-	 * @config uniqueIdKey
+	 * @attribute uniqueIdKey
 	 * @type {String}
 	 */
 	uniqueIdKey:
@@ -869,6 +870,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	},
 
 	/**
+	 * @method isOpen
 	 * @param path {Array} Path to node
 	 * @return {boolean} true if the node is open
 	 */
@@ -894,6 +896,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 	 * DataSource.  Any code that assumes the node has been opened must be
 	 * passed in as a completion function.
 	 * 
+	 * @method toggle
 	 * @param path {Array} Path to the node
 	 * @param request {Object} {sort,dir,startIndex,resultCount}
 	 * @param completion {Function|Object} Function to call when the operation completes.  Can be object: {fn,scope,args}
@@ -957,68 +960,4 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 });
 
 Y.TreebleDataSource = TreebleDataSource;
-
-/**
- * <p>Converts data to a DataSource.  Data can be an object containing both
- * <code>dataType</code> and <code>liveData</code>, or it can be <q>free
- * form</q>, e.g., an array of records or an XHR URL.</p>
- *
- * @namespace Parsers
- * @method treebledatasource
- * @param oData {mixed} Data to convert.
- * @return {DataSource} The new data source.
- * @static
- */
-Y.namespace("Parsers").treebledatasource = function(oData)
-{
-	if (!oData)
-	{
-		return null;
-	}
-
-	var type = oData.dataType;
-	if (type)
-	{
-		// use it
-	}
-	else if (Y.Lang.isString(oData))
-	{
-		type = 'IO';
-	}
-	else if (Y.Lang.isFunction(oData))
-	{
-		type = 'Function';
-	}
-	else
-	{
-		type = 'Local';
-	}
-
-	var src            = oData.dataType ? oData.liveData : oData;
-	var treeble_config = this.get('host').treeble_config;
-	if (type == 'Local')
-	{
-		treeble_config = Y.clone(treeble_config, true);
-		delete treeble_config.startIndexExpr;
-		delete treeble_config.totalRecordsExpr;
-	}
-	else if (type == 'Function')
-	{
-		src = Y.Lang.isString(src) ? window[ src ] : src;
-	}
-
-	var ds            = new Y.DataSource[ type ]({ source: src });
-	ds.treeble_config = treeble_config;
-
-	if (ds.treeble_config.schemaPluginConfig)
-	{
-		ds.plug(Y.clone(ds.treeble_config.schemaPluginConfig, true));
-	}
-
-	if (ds.treeble_config.cachePluginConfig)
-	{
-		ds.plug(Y.clone(ds.treeble_config.cachePluginConfig, true));
-	}
-
-	return ds;
-};
+Y.namespace('DataSource').Treeble = TreebleDataSource;
