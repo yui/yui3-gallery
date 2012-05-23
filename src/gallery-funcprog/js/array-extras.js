@@ -37,3 +37,38 @@ Y.mix(Y.Array,
 		return index;
 	}
 });
+
+/**
+ * Executes the supplied function on each item in the array, starting
+ * from the end and folding the list into a single value.  The function
+ * receives the value returned by the previous iteration (or the
+ * initial value if this is the first iteration), the value being
+ * iterated, the index, and the list itself as parameters (in that
+ * order).  The function must return the updated value.
+ *
+ * @method reduceRight
+ * @param init {Mixed} the initial value
+ * @param f {String} the function to invoke
+ * @param c {Object} optional context object
+ * @return {Mixed} final result from iteratively applying the given function to each item in the array
+ */
+Y.Array.reduceRight = Y.Lang._isNative(Array.prototype.reduceRight) ?
+	function(a, init, f, c)
+	{
+		return Array.prototype.reduceRight.call(a, function(init, item, i, a)
+		{
+			return f.call(c, init, item, i, a);
+		},
+		init);
+	}
+	:
+	function(a, init, f, c)
+	{
+		var result = init;
+		for (var i=a.length-1; i>=0; i--)
+		{
+			result = f.call(c, result, a[i], i, a);
+		}
+
+		return result;
+	};

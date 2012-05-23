@@ -170,6 +170,30 @@ Y.mix(Y,
 	},
 
 	/**
+	 * Executes the supplied function on each item in the object, starting
+	 * from the "end" and folding the object into a single value.  The
+	 * function receives the value returned by the previous iteration (or
+	 * the initial value if this is the first iteration), the value being
+	 * iterated, the key, and the object itself as parameters (in that
+	 * order).  The function must return the updated value.
+	 *
+	 * Supports arrays, objects, and NodeLists.
+	 *
+	 * @method reduceRight
+	 * @static
+	 * @param o {Mixed} the object to iterate
+	 * @param init {Mixed} the initial value
+	 * @param f {String} the function to invoke
+	 * @param c {Object} optional context object
+	 * @param proto {Boolean} if true, prototype properties are iterated on objects
+	 * @return {Mixed} final result from iteratively applying the given function to each item in the object
+	 */
+	reduceRight: function(o, init, f, c, proto)
+	{
+		return dispatch('reduceRight', o, init, f, c, proto);
+	},
+
+	/**
 	 * Executes the supplied function on each item in the object.  Returns
 	 * a new object containing the items for which the supplied function
 	 * returned a falsey value.  The function receives the value, the key,
