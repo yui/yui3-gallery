@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>QueryBuilderExtras Test</title>
+<script type="text/javascript"
+	src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+<script type="text/javascript"
+	src="../../../build/gallery-querybuilder-extras/gallery-querybuilder-extras.js"></script>
+<link
+	href="../../../build/gallery-querybuilder-extras/assets/skins/sam/gallery-querybuilder-extras-skin.css"
+	rel="stylesheet" type="text/css" />
+</head>
+<body class="yui3-skin-sam">
+	<div id="query"></div>
+	<button id="btn">Validate</button>
+</body>
+
+<script>
+
+
+    
+    
+	YUI({debug:true})
+			.use(
+					"gallery-querybuilder-extras",
+					function(Y) {
+						var var_list = [ {
+							name : 'url',
+							type : 'string',
+							text : 'URL',
+							validation : 'yiv-length:[,3000]'
+						}, {
+							name : 'impressions',
+							type : 'number',
+							text : 'Impressions (1000s)',
+							validation : 'yiv-integer'
+						}, {
+							name : 'ctr',
+							type : 'number',
+							text : 'Click-through rate (%)',
+							validation : 'yiv-decimal:[0,]'
+						}, {
+							name : 'flag',
+							type : 'select',
+							text : 'Flagged',
+							value_list : [ {
+								value : "true",
+								text : 'True'
+							}, {
+								value : "false",
+								text : 'False'
+							} ]
+						}, {
+							name : 'date',
+							type : 'calendar',
+							format : "%F",
+							text : 'date',
+							date_format:'%c',
+							calendar_config: {
+						            height  : "215px",
+						            width   : "200px",
+						            visible : true,
+						            showPrevMonth : true,
+						            showNextMonth : true,
+						            date : new Date()
+						     }
+						}, {
+							name : 'submission_status',
+							type : 'select',
+							text : 'Status',
+							value_list : [ {
+								value : "I",
+								text : 'Action Required'
+							}, {
+								value : "S",
+								text : 'Submitted'
+							}, {
+								value : "A",
+								text : 'Submission Accepted'
+							}, {
+								value : "B",
+								text : 'Submission Auto-Accepted'
+							} ]
+						} ];
+
+						var ops = {
+							string : [ {
+								value : 'equal',
+								text : 'Is'
+							}, {
+								value : 'contains',
+								text : 'Contains'
+							}, {
+								value : 'starts-with',
+								text : 'Starts with'
+							}, {
+								value : 'ends-with',
+								text : 'Ends with'
+							} ],
+
+							number : [
+									{
+										value : 'equal',
+										text : '= Equals'
+									},
+									{
+										value : 'less',
+										text : '< Less than'
+									},
+									{
+										value : 'less-equal',
+										text : '<= Less than or equal to' 
+								    },
+                                    { 
+								    	value: 'greater',   
+								    	text: '> Greater than'
+									}, {
+										value : 'greater-equal',
+										text : '>= Greater than or equal to'
+									} ],
+							calendar : [ {
+								value : 'equal',
+								text : 'Is'
+							}, {
+								value : 'between',
+								text : 'Between',
+								start_date : new Date(79,5,24),
+								end_date : new Date(79,5,24),
+								multipleValue : true
+							}
+
+							],
+
+							select : [ 'EQUALS' ]
+						};
+
+						var query = new Y.QueryBuilder(var_list, ops);
+						query.render('#query');
+						Y.on('click', query.validateFields, '#btn', query);
+
+					});
+</script>
+
+
+
+</html>
