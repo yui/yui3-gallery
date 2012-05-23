@@ -31,10 +31,11 @@ RowExpansion.NS   = "rowexpander";
 RowExpansion.ATTRS =
 {
 	/**
-	 * (Required) String template or function that returns a string.
+	 * String template or function that returns a string.
 	 *
 	 * @attribute template
 	 * @type {String|Function}
+	 * @required
 	 */
 	template:
 	{
@@ -46,12 +47,13 @@ RowExpansion.ATTRS =
 	},
 
 	/**
-	 * (Required) Id of a column (usually not displayed) that yields a
+	 * Id of a column (usually not displayed) that yields a
 	 * unique value for each record.  Used to maintain the twistdown state
 	 * when paginating.
 	 *
 	 * @attribute uniqueIdKey
 	 * @type {String}
+	 * @required
 	 */
 	uniqueIdKey:
 	{
