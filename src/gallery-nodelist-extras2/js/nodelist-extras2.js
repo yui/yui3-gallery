@@ -131,5 +131,29 @@ Y.mix(Y.NodeList.prototype,
 			return f.call(c || node, acc, node, index, this);
 		},
 		this);
+	},
+
+	/**
+	 * Executes the supplied function on each Node in the NodeList,
+	 * starting at the end and folding the NodeList into a single value.
+	 * The function receives the value returned by the previous iteration
+	 * (or the initial value if this is the first iteration), the Node
+	 * being iterated, the index, and the NodeList itself as parameters (in
+	 * that order).  The function must return the updated value.
+	 *
+	 * @method reduceRight
+	 * @param init {Mixed} the initial value
+	 * @param f {String} the function to invoke
+	 * @param c {Object} optional context object
+	 * @return {Mixed} final result from iteratively applying the given function to each Node in the NodeList
+	 */
+	reduceRight: function(init, f, c)
+	{
+		return Y.Array.reduceRight(this._nodes, init, function(acc, node, index)
+		{
+			node = Y.one(node);
+			return f.call(c || node, acc, node, index, this);
+		},
+		this);
 	}
 });
