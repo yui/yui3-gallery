@@ -27,12 +27,13 @@ State.NS   = "state";
 State.ATTRS =
 {
 	/**
-	 * (Required) Id of a column (usually not displayed) that yields a
+	 * Id of a column (usually not displayed) that yields a
 	 * unique value for each record.  The saved state is index by the value
 	 * of this column.
 	 *
 	 * @attribute uniqueIdKey
 	 * @type {String}
+	 * @required
 	 */
 	uniqueIdKey:
 	{
@@ -40,7 +41,7 @@ State.ATTRS =
 	},
 
 	/**
-	 * (Required) List of objects specifying the values to be saved before
+	 * List of objects specifying the values to be saved before
 	 * the table is re-rendered.  Each object must define:
 	 * <dl>
 	 * <dt>column</dt>
@@ -56,6 +57,7 @@ State.ATTRS =
 	 *
 	 * @attribute save
 	 * @type {Array}
+	 * @required
 	 */
 	save:
 	{
@@ -64,7 +66,7 @@ State.ATTRS =
 	},
 
 	/**
-	 * (Optional) Paginator that triggers clearing of temporary state.  If
+	 * Paginator that triggers clearing of temporary state.  If
 	 * this is not specified, temp:true will have no effect in the "save"
 	 * configuration.
 	 * 
