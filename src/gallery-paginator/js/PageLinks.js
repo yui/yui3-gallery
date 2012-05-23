@@ -93,8 +93,8 @@ Paginator.ATTRS.pageLabelBuilder =
  * @static
  * @method calculateRange
  * @param {int} currentPage  The current page
- * @param {int} totalPages   (optional) Maximum number of pages
- * @param {int} numPages     (optional) Preferred number of pages in range
+ * @param {int} [totalPages] Maximum number of pages
+ * @param {int} [numPages]   Preferred number of pages in range
  * @return {Array} [start_page_number, end_page_number]
  */
 Paginator.ui.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {

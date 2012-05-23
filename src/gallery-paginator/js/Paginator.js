@@ -513,7 +513,7 @@ Y.extend(Paginator, Y.Widget,
     /**
      * Get the start and end record indexes of the specified page.
      * @method getPageRecords
-     * @param page {number} (optional) The page (current page if not specified)
+     * @param [page] {number} The page (current page if not specified)
      * @return {Array} [start_index, end_index]
      */
     getPageRecords : function (page) {
