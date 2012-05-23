@@ -423,8 +423,8 @@ FormManager.clearMessage = function(e)
  * @param e {String|Object} The selector for the element or the element itself
  * @param msg {String} The message
  * @param type {String} The message type (see Y.FormManager.status_order)
- * @param had_messages {boolean} (Optional) <code>true</code> if the form already has messages displayed
- * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+ * @param [had_messages] {boolean} `true` if the form already has messages displayed
+ * @param [scroll] {boolean} `true` if the form row should be scrolled into view
  * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
  */
 FormManager.displayMessage = function(
@@ -1100,7 +1100,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 * @param e {String|Object} The selector for the element or the element itself
 	 * @param msg {String} The message
 	 * @param type {String} The message type (see Y.FormManager.status_order)
-	 * @param scroll {boolean} (Optional) <code>true</code> if the form row should be scrolled into view
+	 * @param [scroll] {boolean} `true` if the form row should be scrolled into view
 	 * @return {boolean} true if the message was displayed, false if a higher precedence message was already there
 	 */
 	displayMessage: function(
