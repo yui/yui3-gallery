@@ -1,0 +1,13 @@
+{
+    "name": "ZUI character counter",
+    "description": "ZUI chcarcter counter is a plugin to calculate character size, and feedback when user exceeds max/min limitation.",
+    "version": "0.0.1",
+    "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-charcount-plugin",
+    "options": {
+        "linkNatives": "true",        
+        "attributesEmit": "true",
+        "selleck": "true",
+        "paths": ["./js"],
+        "outdir": "./api"
+    }
+}

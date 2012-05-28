@@ -1,0 +1,34 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <title>Test ZUI Character Counter</title>
+</head>
+<body class="yui3-skin-sam">
+<form>
+ <input id="test" type="text" value="" />
+ <input id="test" type="submit" value="Send" />
+</form>
+<link rel="stylesheet" type="text/css" href="../../../build/gallery-zui-placeholder/assets/gallery-zui-charcount-plugin-core.css"></link>
+<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-zui-placeholder/gallery-zui-charcount-plugin-debug.js"></script> 
+<script>
+YUI({combine: false}).use('test', 'gallery-zui-charcount-plugin', function (Y) {
+    var testSuite = new Y.Test.Suite('ZUI placeholder');
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test character counting',
+
+        testPlug: function () {
+            Y.Assert.isFalse(Y.zui.placeholder.isNative);
+        }
+    }));
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test status change'
+    }));
+
+    Y.Test.Runner.add(testSuite);
+    Y.Test.Runner.run();
+});
+</script>
+</body></html>
