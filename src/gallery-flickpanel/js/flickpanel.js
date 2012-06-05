@@ -1,3 +1,4 @@
+
 'use strict';
 
 /**
@@ -32,15 +33,6 @@ Y.extend(FlickPanelPlugin, Y.Plugin.Base, {
         this.trackingDirection = null;
         this.flickPanelNode.append(FlickPanelPlugin.PULL_TAB_MARKUP);
         this.pullTab = this.root.one('.pullTab');
-        if (Y.UA.webkit) {
-            this.vendorPrefix = '-webkit-';
-        } else if (Y.UA.gecko) {
-            this.vendorPrefix = '-moz-';
-        } else if (Y.UA.opera) {
-            this.vendorPrefix = '-o-';
-        } else {
-            this.vendorPrefix = '';
-        }
 
         // flickPanel tracks along with input
         // also triggers toggle at end of input, so a click will also initiate toggle
@@ -141,15 +133,30 @@ Y.extend(FlickPanelPlugin, Y.Plugin.Base, {
     },
 
     _slidePanels: function (xPos, useTransition) {
-        var prefix = this.vendorPrefix;
-        this.flickPanelNode.setStyle(prefix + 'transform', 'translate3d(' + xPos + 'px,0,0)');
-        if (this.animateMain) {
-            this.mainNode.setStyle(prefix + 'transform', 'translate3d(' + xPos + 'px,0,0)');
+        var prefix,
+            transitionProperty,
+            transformProperty;
+        if (Y.UA.webkit) {
+            prefix = '-webkit-';
+        } else if (Y.UA.gecko) {
+            prefix = '-moz-';
+        } else if (Y.UA.opera) {
+            prefix = '-o-';
+        } else if (Y.UA.ie) {
+            prefix = '-ms-';
+        } else {
+            prefix = '';
         }
+        transitionProperty = (Y.UA.gecko) ? 'MozTransition' : prefix + 'transition';
+        transformProperty = (Y.UA.gecko) ? 'MozTransform' : prefix + 'transform';
         if (useTransition) {
-            this.flickPanelNode.setStyle(prefix + 'transition', prefix + 'transform .25s ease-out ');
-            this.mainNode.setStyle(prefix + 'transition', prefix + 'transform .25s ease-out');
+            this.flickPanelNode.setStyle(transitionProperty, prefix + 'transform .25s ease-out');
+            this.mainNode.setStyle(transitionProperty, prefix + 'transform .25s ease-out');
         }
+        if (this.animateMain) {
+            this.mainNode.setStyle(transformProperty, 'translate3d(' + xPos + 'px,0,0)');
+        }
+        this.flickPanelNode.setStyle(transformProperty, 'translate3d(' + xPos + 'px,0,0)');
     },
 
     _openPanel: function () {
