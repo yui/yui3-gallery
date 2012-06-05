@@ -1,0 +1,102 @@
+body {
+    margin: 0 auto;
+    font-family: "Helveitca Neue", helvetica, clean, sans-serif;
+}
+ul, li {
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.uninited .master {
+    display: none;
+}
+    header {
+        display: block;
+        width: 100%;
+        top: 0px;
+        left: 0px;
+        background: black;
+        color: white;
+        z-index: 2;
+        height: 8.4em;
+    }
+        .brand {
+            font-size: 1.6em;
+            font-weight: bold;
+            padding: .75em;
+        }
+        .verticals {
+            display: block;
+            background: lightgray;
+            text-align: center;
+        }
+            .verticals li {
+                color: black;
+                display: inline-block;
+                font-size: 1.6em;
+                padding: .75em 1.5em .75em 1.5em;
+            }
+    .main {
+        display: block;
+        overflow: hidden;
+        position: relative;
+        -webkit-user-select: none;
+    }
+    .flickPanel {
+        position: absolute;
+        z-index: 1;
+        top: 0px;
+        background: darkgray;
+        color: white;
+        display: inline-block;
+        width: 15em;
+        height: 100%;
+        border-right: 0em solid gray;
+        left: -15em;
+    }
+        .flickPanel li {
+            padding: 1em;
+            padding-left: 1.5em;
+            border-top: 1px solid lightgray;
+            border-bottom: 1px solid gray;
+            font-size: 1.6em;
+        }
+            .flickPanel li:first-child {
+                border-top: 0;
+            }
+    
+    #web {
+        width: 52.4em;
+        max-width: 524px;
+        margin: 0 auto;
+        border-left: 1px dotted gray;
+        border-right: 1px dotted gray;
+        -webkit-user-select: text;
+    }
+        #web .res {
+            font-size: 1.8em;
+        }
+
+.pullTab {
+    position: absolute;
+    top: 0px;
+    right: -22px;
+    width: 22px;
+    height: 100%;
+    background: gray;
+    font-size: 1px;
+    color: black;
+    opacity: .1;
+    -webkit-user-select: none;
+}
+    .pullTab .gripper {
+        position: absolute;
+        top: 180px;
+        width: 22px;
+        height: 44px;
+        background: black;
+        font-size: 1px;
+        color: black;
+        cursor: pointer;
+    }
