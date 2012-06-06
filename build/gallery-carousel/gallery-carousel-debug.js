@@ -24,17 +24,17 @@ function Carousel() {
 
 // Some useful abbreviations
 var getCN = Y.ClassNameManager.getClassName,
-    JS = Y.Lang,
-    Node = Y.Node,
+    JS    = Y.Lang,
+    Node  = Y.Node,
     canGoBackward = false,
-    canGoForward = true,
+    canGoForward  = true,
 
     // Custom class prefixes
-    cpButton = "button",
+    cpButton         = "button",
     cpButtonDisabled = "button-disabled",
     cpContent = "content",
-    cpItem = "item",
-    cpNav = "nav",
+    cpItem    = "item",
+    cpNav     = "nav",
     cpNavItem = "nav-item",
 
     // Carousel custom events
@@ -294,7 +294,10 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     addItem: function (node, pos) {
-        var self = this, count, index, item;
+        var self = this,
+            count,
+            index,
+            item;
 
         if (JS.isString(node)) {
             item = Node.create(Y.substitute(self.ITEM_TEMPLATE, {
@@ -344,7 +347,9 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
     addItems: function (items) {
         var self = this,
             rv = false,
-            item, i, n;
+            item,
+            i,
+            n;
 
         if (!JS.isArray(items)) {
             return false;
@@ -415,8 +420,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     getFirstVisible: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
+        var self         = this,
+            numVisible   = self.get("numVisible"),
             selectedItem = self.get("selectedItem");
 
         return self._getFirstVisible(selectedItem, numVisible);
@@ -469,9 +474,10 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     getItems: function (pos) {
-        var self = this,
+        var self  = this,
             items = [],
-            i, n;
+            i,
+            n;
 
         if (JS.isUndefined(pos)) { // return everything
             for (i = 0, n = self._vtbl.items.length; i < n; ++i) {
@@ -507,11 +513,12 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     getVisibleItems: function () {
-        var self = this,
-            numVisible = self.get("numVisible"),
+        var self         = this,
+            numVisible   = self.get("numVisible"),
             firstVisible = self.getFirstVisible(),
             rv = [],
-            i, n;
+            i,
+            n;
 
         for (i = firstVisible, n = firstVisible + numVisible; i < n; ++i) {
             rv.push(self._vtbl.items[i]);
@@ -529,7 +536,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     removeItem: function (index) {
         var self = this,
-            item, count;
+            item,
+            count;
 
         if (index < 0 || index > self._vtbl.items.length - 1) {
             Y.log("Index " + index + " out of bounds", "error",
@@ -561,6 +569,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     scrollBackward: function () {
         var self = this;
+        
         self.scrollTo(self.getFirstVisible() - self.get("scrollIncrement"));
     },
 
@@ -572,6 +581,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     scrollForward: function () {
         var self = this;
+        
         self.scrollTo(self.getFirstVisible() + self.get("scrollIncrement"));
     },
 
@@ -583,6 +593,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     scrollPageBackward: function () {
         var self = this;
+        
         self.scrollTo(self.getFirstVisible() - self.get("numVisible"));
     },
 
@@ -594,6 +605,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     scrollPageForward: function () {
         var self = this;
+        
         self.scrollTo(self.getFirstVisible() + self.get("numVisible"));
     },
 
@@ -605,20 +617,24 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @public
      */
     scrollTo: function (index) {
-        var self = this,
+        var self       = this,
             isCircular = self.get("isCircular"),
-            numItems = self.get("numItems"),
+            numItems   = self.get("numItems"),
             numVisible = self.get("numVisible"),
-            attr, cb, first, offset;
+            attr,
+            cb,
+            first,
+            offset;
 
         index = self._getCorrectedIndex(index); // sanitize the value
         if (isNaN(index)) {
             return;
         }
+        
         offset = self._getOffsetForIndex(index);
-        cb = self.get("contentBox");
-        attr = self.get("isVertical") ? "top" : "left";
-        first = self.getFirstVisible();
+        cb     = self.get("contentBox");
+        attr   = self.get("isVertical") ? "top" : "left";
+        first  = self.getFirstVisible();
         self.fire(BEFORESCROLL_EVENT, { first: first,
                 last: first + numVisible });
         cb.setStyle(attr, offset);
@@ -637,7 +653,48 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     scrollToPage: function (page) {
         var self = this;
+        
         self.scrollTo(page * self.get("numVisible"));
+    },
+
+    /**
+     * Start auto scrolling the Carousel after "autoPlayInterval" milliseconds.
+     *
+     * @method startAutoPlay
+     * @public
+     */
+    startAutoPlay: function () {
+        var self = this,
+            timer;
+
+        if (JS.isUndefined(self._autoPlayTimer)) {
+            timer = self.get("autoPlayInterval");
+            if (timer <= 0) {
+                return;
+            }
+            Y.log("Starting auto scroll", "info", Carousel.NAME);
+            self._isAutoPlayInProgress = true;
+            self._autoPlayTimer = setInterval(function () {
+                self.scrollPageForward();
+            }, timer);
+        }
+    },
+
+    /**
+     * Stop auto scrolling the Carousel.
+     *
+     * @method stopAutoPlay
+     * @public
+     */
+    stopAutoPlay: function () {
+        var self = this;
+
+        if (!JS.isUndefined(self._autoPlayTimer)) {
+            Y.log("Stopping auto scroll", "info", Carousel.NAME);
+            clearTimeout(self._autoPlayTimer);
+            delete self._autoPlayTimer;
+            self._isAutoPlayInProgress = false;
+        }
     },
 
     /* Overridable protected methods. */
@@ -650,7 +707,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     bindUI: function () {
         var self = this,
-            bb = self.get("boundingBox");
+            bb   = self.get("boundingBox");
 
         self.after("selectedItemChange", self._afterSelectedItemChange);
         self.on(ITEMADDED_EVENT, self._addItemToDom);
@@ -728,7 +785,7 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     syncUI: function () {
-        var self = this,
+        var self         = this,
             selectedItem = self.get("selectedItem");
 
         self._uiSetSelectedItem(selectedItem, true);
@@ -745,8 +802,11 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _addItemToDom: function (arg) {
         var self = this,
-            cb = self.get("contentBox"),
-            item, node, numItems, pos;
+            cb   = self.get("contentBox"),
+            item,
+            node,
+            numItems,
+            pos;
 
         item = arg.item;
         pos = arg.pos + 1;      // real position has shifted now
@@ -795,15 +855,15 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _getCorrectedIndex: function (index) {
-        var self = this,
+        var self       = this,
             isCircular = self.get("isCircular"),
-            numItems = self.get("numItems"),
+            numItems   = self.get("numItems"),
             numVisible = self.get("numVisible"),
-            sentinel = numItems - 1,
+            sentinel   = numItems - 1,
             firstOfLastPage = 0;
 
-        // Fix for Issues #2 and #11 - thanks <http://github.com/amasad>
-        if (isCircular) {
+        // Prevent Carousel to scroll beyond its bounds
+        if (!isCircular) {
             firstOfLastPage = self.getPageForItem(sentinel) * numVisible;
         }
         
@@ -903,18 +963,24 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _onItemClick: function (ev) {
         var self = this,
-            bb = self.get("boundingBox"),
-            container, el, target, i, itemClass, items, len;
+            bb   = self.get("boundingBox"),
+            container,
+            el,
+            i,
+            itemClass,
+            items,
+            len,
+            target;
 
         target = ev && ev.target ? ev.target : null;
         if (!target) {
             return;
         }
-        ev.preventDefault();
 
         container = bb.one("." + getCN(Carousel.NAME, cpContent));
-        el = target;
+        el        = target;
         itemClass = getCN(Carousel.NAME, cpItem);
+        
         while (el && el != container) {
             if (el.hasClass(itemClass)) {
                 break;
@@ -972,7 +1038,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _onNavItemClick: function (ev) {
         var self = this,
-            link, target;
+            link,
+            target;
 
         target = ev && ev.target ? ev.target : null;
         if (!target) {
@@ -997,7 +1064,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _parseItems: function () {
         var self = this,
-            cb, items;
+            cb,
+            items;
 
         cb = self.get("contentBox");
         items = cb.all(self.get("carouselItemEl"));
@@ -1016,8 +1084,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      * @protected
      */
     _redrawUi: function () {
-        var self = this,
-            attr = "left";
+        var attr = "left",
+            self = this;
          
         self._renderItems();
         self._updateNavigation();
@@ -1036,11 +1104,12 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _removeItemFromDom: function (arg) {
         var self = this,
-            cb = self.get("contentBox"),
-            item, pos;
+            cb   = self.get("contentBox"),
+            item,
+            pos;
 
         item = arg.item;
-        pos = arg.pos;
+        pos  = arg.pos;
 
         if (item && cb.contains(item)) {
             item.remove(true);
@@ -1070,14 +1139,16 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _renderContainer: function () {
         var self = this,
-            bb = self.get("boundingBox"),
+            bb   = self.get("boundingBox"),
             hidePagination = self.get("hidePagination"),
-            numVisible = self.get("numVisible"),
-            revealAmount = self.get("revealAmount"),
-            navsz = 0, nav, val;
+            numVisible     = self.get("numVisible"),
+            revealAmount   = self.get("revealAmount"),
+            navsz = 0,
+            nav,
+            val;
 
         if (!hidePagination) {
-            nav = bb.one("." + getCN(Carousel.NAME, cpNav));
+            nav   = bb.one("." + getCN(Carousel.NAME, cpNav));
             navsz = self._getNodeSize(nav, "height");
         }
 
@@ -1108,8 +1179,13 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _renderItems: function () {
         var self = this,
-            cb = self.get("contentBox"),
-            attr, i, itemClass, n, node, size;
+            cb   = self.get("contentBox"),
+            attr,
+            i,
+            itemClass,
+            n,
+            node,
+            size;
 
         if (self.get("isVertical")) {
             attr = "top";
@@ -1144,11 +1220,15 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _renderNavigation: function () {
         // TODO: check useMenuForNav and render a SELECT
-        var self = this,
-            bb = self.get("boundingBox"),
-            cb = self.get("contentBox"),
+        var self  = this,
+            bb    = self.get("boundingBox"),
+            cb    = self.get("contentBox"),
             items = [],
-            i, nav, numPages, s, t;
+            i,
+            nav,
+            numPages,
+            s,
+            t;
 
         numPages = Math.ceil(self.get("numItems") / self.get("numVisible"));
         if (numPages < 1) {
@@ -1231,7 +1311,8 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _uiSetNavItem: function (node) {
         var self = this,
-            bb, clazz;
+            bb,
+            clazz;
 
         if (!node) {
             return;
@@ -1321,10 +1402,17 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
      */
     _updateNavigation: function (selectedItem) {
         var self = this,
-            bb = self.get("boundingBox"),
+            bb   = self.get("boundingBox"),
             isCircular = self.get("isCircular"),
-            btn, currPage, i, lastPage, numPages, pageContainer,
-            pages, s, t;
+            btn,
+            currPage,
+            i,
+            lastPage,
+            numPages,
+            pageContainer,
+            pages,
+            s,
+            t;
 
         selectedItem = selectedItem || self.get("selectedItem");
         self._uiSetSelectedItem(selectedItem, true);
@@ -1473,4 +1561,4 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
 });
 
 
-}, 'gallery-2012.03.23-18-00' ,{skinnable:true, requires:['widget']});
+}, 'gallery-2012.06.06-19-59' ,{skinnable:true, requires:['widget']});
