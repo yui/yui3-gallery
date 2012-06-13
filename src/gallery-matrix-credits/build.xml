@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Matrix Credits" default="local">
+    <description>Matrix Credits build file</description>
+    <property file="build.properties" />
+    <import file="${builddir}/3.x/bootstrap.xml" />
+</project>
