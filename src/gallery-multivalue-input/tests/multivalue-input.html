@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<script type="text/javascript"
+	src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+<script type="text/javascript"
+	src="../../../build/gallery-multivalue-input/gallery-multivalue-input-debug.js"></script>
+<link
+	href="../../../build/gallery-multivalue-input/assets/skins/sam/gallery-multivalue-input-skin.css"
+	rel="stylesheet" type="text/css" />
+<title>Insert title here</title>
+</head>
+<body class="yui3-skin-sam">
+	<input type='text' id="ac-input"></input>
+	<script>
+YUI({debug:true}).use('autocomplete', 'autocomplete-filters', 'autocomplete-highlighters',"gallery-multivalue-input", function (Y) {
+  var states = [
+    'Alabama',
+    'Alaska',
+    'Arizona',
+    'Arkansas',
+    'California',
+    'Colorado',
+    'Connecticut',
+    'Delaware',
+    'Florida',
+    'Georgia',
+    'Hawaii',
+    'Idaho',
+    'Illinois',
+    'Indiana',
+    'Iowa',
+    'Kansas',
+    'Kentucky',
+    'Louisiana',
+    'Maine',
+    'Maryland',
+    'Massachusetts',
+    'Michigan',
+    'Minnesota',
+    'Mississippi',
+    'Missouri',
+    'Montana',
+    'Nebraska',
+    'Nevada',
+    'New Hampshire',
+    'New Jersey',
+    'New Mexico',
+    'New York',
+    'North Dakota',
+    'North Carolina',
+    'Ohio',
+    'Oklahoma',
+    'Oregon',
+    'Pennsylvania',
+    'Rhode Island',
+    'South Carolina',
+    'South Dakota',
+    'Tennessee',
+    'Texas',
+    'Utah',
+    'Vermont',
+    'Virginia',
+    'Washington',
+    'West Virginia',
+    'Wisconsin',
+    'Wyoming'
+  ];
+
+ 
+  var node = Y.one('#ac-input');
+  node.plug(Y.Plugin.AutoComplete, {
+	    resultFilters    : 'phraseMatch',
+	    resultHighlighter: 'phraseMatch',
+	    source           : states
+  })
+  node.plug(Y.MultiValueInput,{values:["Mayank"]});
+});
+</script>
+</body>
+</html>
