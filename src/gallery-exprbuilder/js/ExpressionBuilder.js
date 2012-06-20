@@ -76,6 +76,7 @@ ExpressionBuilder.ATTRS =
 	 * @attribute queryBuilder
 	 * @type {Y.QueryBuilder}
 	 * @default null
+	 * @required
 	 * @writeonce
 	 */
 	queryBuilder:
@@ -386,22 +387,24 @@ function resetQB(e)
 
 function setValidation(f)
 {
-	if (f)
+	if (!f)
 	{
-		var self = this;
-
-		var orig_validateForm = f.validateForm;
-		f.validateForm = function()
-		{
-			resetQB.call(self);
-			orig_validateForm.apply(this, arguments);
-		};
-
-		f.setFunction(this.get('fieldId'), function(form, e)
-		{
-			return self._validateExpression(form, e, this);
-		});
+		return;
 	}
+
+	var self = this;
+
+	var orig_validateForm = f.validateForm;
+	f.validateForm = function()
+	{
+		resetQB.call(self);
+		orig_validateForm.apply(this, arguments);
+	};
+
+	f.setFunction(this.get('fieldId'), function(form, e)
+	{
+		return self._validateExpression(form, e, this);
+	});
 }
 
 Y.extend(ExpressionBuilder, Y.Widget,
@@ -570,11 +573,11 @@ Y.extend(ExpressionBuilder, Y.Widget,
 				'<textarea id="{tid}" name="{tn}" class="{ff} {ta}"></textarea>' +
 			'</div>' +
 			'<div class="{fctl}">' +
-				'<button class="{pc}">{paren}</button>' +
-				'<button class="{ac}">{and}</button>' +
-				'<button class="{oc}">{or}</button>' +
-				'<button class="{nc}">{not}</button>' +
-				'<button class="{cc}">{clear}</button>' +
+				'<button class="yui3-button {pc}">{paren}</button>' +
+				'<button class="yui3-button {ac}">{and}</button>' +
+				'<button class="yui3-button {oc}">{or}</button>' +
+				'<button class="yui3-button {nc}">{not}</button>' +
+				'<button class="yui3-button {cc}">{clear}</button>' +
 			'</div>';
 
 		return Y.Lang.substitute(markup,
@@ -608,8 +611,8 @@ Y.extend(ExpressionBuilder, Y.Widget,
 		var markup =
 			'<div class="{qb}"></div>' +
 			'<div class="{qbctl} {fr}">' +
-				'<button class="{ic}">{insert}</button>' +
-				'<button class="{rc}">{reset}</button>' +
+				'<button class="yui3-button {ic}">{insert}</button>' +
+				'<button class="yui3-button {rc}">{reset}</button>' +
 			'</div>';
 
 		return Y.Lang.substitute(markup,
