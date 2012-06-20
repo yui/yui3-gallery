@@ -1,0 +1,12 @@
+{
+    "name": "Model List Union",
+    "description": "Creates a model list that is the union of two or more other model lists.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

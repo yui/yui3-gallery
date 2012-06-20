@@ -1,3 +1,7 @@
+/**
+ * Creates a model list that is the union of two or more other model lists.
+ * @module gallery-model-list-union
+ */
 (function (Y) {
     'use strict';
 
@@ -8,6 +12,20 @@
         _isString = Y.Lang.isString,
         _unnest = _Array.unnest;
 
+    /**
+     * Creates a model list that is the union of two or more other model lists.
+     * The new model list stays up to date as the source lists change.
+     * @method union
+     * @for ModelList
+     * @param {Function|Object|String} modelListType Optional.  The first
+     * argument determines the type of model list that is created; it may be a
+     * constructor function or a string namespace to a constructor function
+     * stored on Y. If the first argument is an instance of ModelList, its
+     * constructor is used.
+     * @param {Object} modelLists 1-n ModelList objects to union.
+     * @return {Object}
+     * @static
+     */
     Y.ModelList.union = function () {
         var modelList,
             modelLists = _unnest(arguments),
