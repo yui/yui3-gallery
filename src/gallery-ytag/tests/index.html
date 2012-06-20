@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>Test File</title>
+        <script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript">
+        var Y = YUI({
+            modules: {
+                'gallery-event-inserted': {
+                    fullpath: '../../../build/gallery-event-inserted/gallery-event-inserted.js'
+                },
+                'gallery-ytag': {
+                    fullpath: '../../../build/gallery-ytag/gallery-ytag.js'
+                }
+            }
+        })
+        </script>
+    </head>
+    <body>
+        <h1>YTag</h1>
+
+        <h2>Test Tags</h2>
+        <ybutton data-label="TEST"></ybutton>
+        <ybutton data-label="DISABLE" data-disabled="false"></ybutton>
+        <ydial></ydial>
+
+        <script type="text/javascript">
+        YUI.add('ytag-ybutton', function(Y) {
+            Y.namespace('YTag.Tags').ybutton = Y.Base.create('ybutton', Y.YTag.Plugin, [], {
+                initializer: function(config) {
+                    var node = this.get('host');
+                    node.append('<div></div>');
+                    this._button = new Y.Button(Y.merge(this.getData(), {
+                        srcNode: node.one('div'),
+                        render: true
+                    }));
+                }
+            }, {});
+        }, '', {requires: ['button']});
+
+        YUI.add('ytag-ydial', function(Y) {
+            Y.namespace('YTag.Tags').ydial = Y.Base.create('ydial', Y.YTag.Plugin, [], {
+                initializer: function(config) {
+                    var node = this.get('host');
+                    node.append('<div class="yui3-skin-sam"></div>');
+                    this._button = new Y.Dial(Y.merge(this.getData(), {
+                        srcNode: node.one('div'),
+                        render: true
+                    }));
+                }
+            }, {});
+        }, '', {requires: ['dial']});
+
+        Y.use('gallery-ytag', function(Y) {
+            Y.YTag.register('ybutton');
+            Y.YTag.register('ydial');
+        });
+        </script>
+    </body>
+</html>
