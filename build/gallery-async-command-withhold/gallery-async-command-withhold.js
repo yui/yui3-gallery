@@ -3,42 +3,43 @@ YUI.add('gallery-async-command-withhold', function(Y) {
 /**
  * @module gallery-async-command-withhold
  */
-(function (Y) {
+(function (Y, moduleName) {
     'use strict';
     
-    var _delay = Y.delay,
+    var _string_withhold = 'withhold',
         
-        _class;
+        _Plugin = Y.Plugin,
+        
+        _delay = Y.delay;
 
     /**
      * Asynchronous command withhold plugin.
      * @class AsyncCommandWithhold
-     * @extends Y.Plugin.Base
-     * @namespace Y.Plugin
+     * @extends Plugin.Base
+     * @namespace Plugin
      * @param {Object} config Configuration Object.
      */
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Plugin.Base, {
+    _Plugin.AsyncCommandWithhold = Y.Base.create(moduleName, _Plugin.Base, [], {
         initializer: function () {
-            this.onHostEvent([
+            var me = this;
+            
+            me.onHostEvent([
                 'failure',
                 'success'
             ], function (eventFacade) {
                 eventFacade.preventDefault();
                 
-                var args = arguments,
-                    target = eventFacade.target,
-                    targetEvent = target.getEvent(eventFacade.type);
+                var targetEvent = eventFacade.target.getEvent(eventFacade.type);
                 
-                _delay(targetEvent.defaultFn, this.get('withhold')).apply(targetEvent, args);
-            }, this);
+                _delay(targetEvent.defaultFn, me.get(_string_withhold)).apply(targetEvent, arguments);
+            });
         }
     }, {
         ATTRS: {
             /**
-             * Approximate delay in milliseconds to wait between the time the command function
-             * reports completion and when the completed status is updated.
+             * Approximate delay in milliseconds to wait between the time the
+             * command function reports completion and when the completed status
+             * is updated.
              * @attribute withhold
              * @default 0
              * @initonly
@@ -49,12 +50,9 @@ YUI.add('gallery-async-command-withhold', function(Y) {
                 writeOnce: 'initOnly'
             }
         },
-        NAME: 'async-command-withhold',
-        NS: 'withhold'
+        NS: _string_withhold
     });
-
-    Y.Plugin.AsyncCommandWithhold = _class;
-}(Y));
+}(Y, arguments[1]));
 
 
-}, 'gallery-2012.01.11-21-03' ,{requires:['gallery-async-command', 'gallery-delay', 'plugin'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['gallery-async-command', 'gallery-delay', 'plugin'], skinnable:false});

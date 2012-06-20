@@ -1,96 +1,190 @@
 YUI.add('gallery-google-maps-loader', function(Y) {
 
-'use strict';
+/**
+ * @module gallery-google-maps-loader
+ */
+(function (Y, moduleName) {
+    'use strict';
 
-var _loaded = false,
+    var _Base = Y.Base,
+    
+        _isArray = Y.Lang.isArray;
 
-    _class;
-
-_class = function (config) {
-    _class.superclass.constructor.call(this, config);
-};
-
-_class.ATTRS = {
-    source: {
-        value: 'http://maps.google.com/maps/api/js'
-    },
-    timeout: {
-        value: 30000
-    }
-};
-
-_class.NAME = 'GoogleMapsLoader';
-
-Y.extend(_class, Y.Base, {
-    initializer: function () {
-        this.publish('failure');
-        this.publish('success', {
-            fireOnce: true
-        });
-        this.publish('timeout');
-    },
-    isLoaded: function () {
-        return _loaded;
-    },
-    load: function (parameters) {
-        if (_loaded) {
-            return;
-        }
-
-        if (!parameters) {
-            parameters = {};
-        }
-        
-        var language = parameters.language,
-            libraries = parameters.libraries,
-            region = parameters.region,
-            sensor = parameters.sensor,
-            timeout = parameters.timeout || this.get('timeout'),
-            url = (parameters.source || this.get('source')) + '?callback={callback}',
-            version = parameters.version;
-
-        if (language) {
-            url += '&language=' + language;
-        }
-
-        if (libraries) {
-            if (Y.Lang.isArray(libraries)) {
-                libraries = libraries.join(',');
+    /**
+     * @class GoogleMapsLoader
+     * @constructor
+     * @extends Base
+     * @param {Object} config Configuration object.
+     */
+    Y.GoogleMapsLoader = _Base.create(moduleName, _Base, [], {
+        initializer: function () {
+            var me = this;
+            
+            /**
+             * Fired when JSONP fails.
+             * @event failure
+             */
+            me.publish('failure');
+            
+            /**
+             * Fired when JSONP succeeds.
+             * @event success
+             * @fireOnce
+             */
+            me.publish('success', {
+                fireOnce: true
+            });
+            
+            /**
+             * Fired when JSONP times out.
+             * @event timeout
+             */
+            me.publish('timeout');
+        },
+        /**
+         * Loads the Google Maps JavaScript API through JSONP.  Does nothing if
+         * this object has already loaded it.
+         * @method load
+         * @chainable
+         * @param {Object} parameters An optional object with the following
+         * optional properties:
+         * <dl>
+         *     <dt>
+         *         language
+         *     </dt>
+         *     <dd>
+         *         The language code to override the browser's default language.
+         *     </dd>
+         *     <dt>
+         *         libraries
+         *     </dt>
+         *     <dd>
+         *         An array or comma separated string of library names.
+         *     </dd>
+         *     <dt>
+         *         region
+         *     </dt>
+         *     <dd>
+         *         A Unicode region subtag identifier to override the default
+         *         region.
+         *     </dd>
+         *     <dt>
+         *         sensor
+         *     </dt>
+         *     <dd>
+         *         Set this to a truthy value if your application determines the
+         *         user's location via a sensor.
+         *     </dd>
+         *     <dt>
+         *         source
+         *     </dt>
+         *     <dd>
+         *         Location of the Google Maps JavaScript API to override the attribute.
+         *     </dd>
+         *     <dt>
+         *         timeout
+         *     </dt>
+         *     <dd>
+         *         Timeout in milliseconds to override the attribute.
+         *     </dd>
+         *     <dt>
+         *         version
+         *     </dt>
+         *     <dd>
+         *         The version of the Google Maps JavaScript API to load.
+         *     </dd>
+         * </dl>
+         */
+        load: function (parameters) {
+            var me = this;
+            
+            if (me.get('loaded')) {
+                return me;
             }
 
-            url += '&libraries=' + libraries;
-        }
+            parameters = parameters || {};
 
-        if (region) {
-            url += '&region=' + region;
-        }
+            var language = parameters.language,
+                libraries = parameters.libraries,
+                region = parameters.region,
+                sensor = parameters.sensor,
+                timeout = parameters.timeout || me.get('timeout'),
+                url = (parameters.source || me.get('source')) + '?callback={callback}',
+                version = parameters.version;
 
-        url += '&sensor=' + (sensor ? 'true' : 'false');
+            if (language) {
+                url += '&language=' + language;
+            }
 
-        if (version) {
-            url += '&v=' + version;
-        }
-
-        Y.jsonp(url, {
-            context: this,
-            on: {
-                failure: function () {
-                    this.fire('failure');
-                },
-                success: function () {
-                    _loaded = true;
-                    this.fire('success');
-                },
-                timeout: function () {
-                    this.fire('timeout');
+            if (libraries) {
+                if (_isArray(libraries)) {
+                    libraries = libraries.join(',');
                 }
+
+                url += '&libraries=' + libraries;
+            }
+
+            if (region) {
+                url += '&region=' + region;
+            }
+
+            url += '&sensor=' + (sensor ? 'true' : 'false');
+
+            if (version) {
+                url += '&v=' + version;
+            }
+
+            Y.jsonp(url, {
+                on: {
+                    failure: function () {
+                        me.fire('failure');
+                    },
+                    success: function () {
+                        me._set('loaded', true);
+                        me.fire('success');
+                    },
+                    timeout: function () {
+                        me.fire('timeout');
+                    }
+                },
+                timeout: timeout
+            });
+            
+            return me;
+        }
+    }, {
+        ATTRS: {
+            /**
+             * @attribute loaded
+             * @default false
+             * @readOnly
+             * @type Boolean
+             */
+            loaded: {
+                readOnly: true,
+                value: false
             },
-            timeout: timeout
-        });
-    }
-});
+            /**
+             * The location of the Google Maps JavaScrpt API.
+             * @attribute source
+             * @default 'http://maps.google.com/maps/api/js'
+             * @type String
+             */
+            source: {
+                value: 'http://maps.google.com/maps/api/js'
+            },
+            /**
+             * The timeout in milliseconds used by JSONP.
+             * @attribute timeout
+             * @default 30000
+             * @type Number
+             */
+            timeout: {
+                value: 30000
+            }
+        }
+    });
+}(Y, arguments[1]));
 
-Y.GoogleMapsLoader = new _class();
 
-
-}, 'gallery-2011.03.09-21-14' ,{requires:['base', 'jsonp'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['base', 'jsonp'], skinnable:false});

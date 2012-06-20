@@ -19,15 +19,17 @@ YUI.add('gallery-model-list-difference', function(Y) {
         _unnest = _Array.unnest;
 
     /**
-     * Creates a model list that is the difference of two or more other model lists.
-     * The new model list stays up to date as the source lists change.
+     * Creates a model list that is the difference of two or more other model
+     * lists.  The new model list stays up to date as the source lists change.
      * @method difference
      * @for ModelList
-     * @param {Function|Object|String} modelListType Optional.  The first argument determines
-     * the type of model list that is created; it may be a constructor function or a string namespace
-     * to a constructor function stored on Y. If the first argument is an instance of ModelList, its
+     * @param {Function|Object|String} modelListType Optional.  The first
+     * argument determines the type of model list that is created; it may be a
+     * constructor function or a string namespace to a constructor function
+     * stored on Y. If the first argument is an instance of ModelList, its
      * constructor is used.
-     * @param {Object} modelLists 1-n ModelList objects to difference.  Order is important.
+     * @param {Object} modelLists 1-n ModelList objects to difference.  Order is
+     * important.
      * @return {Object}
      * @static
      */
@@ -70,4 +72,4 @@ YUI.add('gallery-model-list-difference', function(Y) {
 }(Y));
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['array-extras', 'array-invoke', 'gallery-array-unnest', 'model-list'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['array-extras', 'array-invoke', 'gallery-array-unnest', 'model-list'], skinnable:false});

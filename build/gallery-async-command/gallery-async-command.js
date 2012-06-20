@@ -3,120 +3,128 @@ YUI.add('gallery-async-command', function(Y) {
 /**
  * @module gallery-async-command
  */
-(function (Y) {
+(function (Y, moduleName) {
     'use strict';
     
-    var _createCompleteFunction,
+    var _string_args = 'args',
+        _string_complete = 'complete',
+        _string_failure = 'failure',
+        _string_initOnly = 'initOnly',
+        _string_start = 'start',
+        _string_success = 'success',
+        
+        _Base = Y.Base,
+        
+        _createCompleteFunction,
+        _false = false,
         _isArray = Y.Lang.isArray,
-    
-        _class;
+        _true = true;
     
     /**
-     * Asynchronous command class.
-     * @class AsyncCommand
-     * @extends Y.Base
-     * @namespace Y
-     * @param {Object} config Configuration Object.
-     */
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Base, {
+    * Asynchronous command class.
+    * @class AsyncCommand
+    * @extends Base
+    * @param {Object} config Configuration Object.
+    */
+    Y.AsyncCommand = _Base.create(moduleName, _Base, [], {
         initializer: function () {
             var me = this;
-            
+
             /**
-             * Fired when the command function completes.
-             * @event complete
-             * @fireonce
-             * @param error Optional error value.
-             * @param {Boolean} failed Indicates the failed status of the command.
-             * @param value Optional return value from the command function.
-             */
-            me.publish('complete', {
+            * Fired when the command function completes.
+            * @event complete
+            * @fireonce
+            * @param error Optional error value.
+            * @param {Boolean} failed Indicates the failed status of the
+            * command.
+            * @param value Optional return value from the command function.
+            */
+            me.publish(_string_complete, {
                 defaultFn: function () {
-                    me._set('completed', true);
+                    me._set('completed', _true);
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
+
             /**
-             * Fired when the command function fails.
-             * @event failure
-             * @fireonce
-             * @param error Optional error value.
-             * @protected
-             */
-            me.publish('failure', {
+            * Fired when the command function fails.
+            * @event failure
+            * @fireonce
+            * @param error Optional error value.
+            * @protected
+            */
+            me.publish(_string_failure, {
                 defaultFn: function (eventFacade) {
                     var error = eventFacade.error;
-                    
+
                     me._set('error', error);
-                    me._set('failed', true);
-                    
-                    me.fire('complete', {
+                    me._set('failed', _true);
+
+                    me.fire(_string_complete, {
                         error: error,
-                        failed: true
+                        failed: _true
                     });
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
+
             /**
-             * Fired when the command function starts.
-             * @event start
-             * @fireonce
-             * @protected
-             */
-            me.publish('start', {
+            * Fired when the command function starts.
+            * @event start
+            * @fireonce
+            * @protected
+            */
+            me.publish(_string_start, {
                 defaultFn: function () {
-                    me._set('started', true);
-                    me.get('fn').apply(me.get('ctx'), me.get('args'));
+                    me._set('started', _true);
+                    me.get('fn').apply(me.get('ctx'), me.get(_string_args));
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
+
             /**
-             * Fired when the command function succeeds.
-             * @event success
-             * @fireonce
-             * @param value Optional return value from the command function.
-             * @protected
-             */
-            me.publish('success', {
+            * Fired when the command function succeeds.
+            * @event success
+            * @fireonce
+            * @param value Optional return value from the command function.
+            * @protected
+            */
+            me.publish(_string_success, {
                 defaultFn: function (eventFacade) {
                     var value = eventFacade.value;
-                    
+
                     me._set('value', value);
-                    
-                    me.fire('complete', {
-                        failed: false,
+
+                    me.fire(_string_complete, {
+                        failed: _false,
                         value: value
                     });
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
-            me.get('args').unshift(_createCompleteFunction(me));
+
+            me.get(_string_args).unshift(_createCompleteFunction(me));
         },
         /**
-         * Execute the command function.
-         * @method run
-         * @chainable
-         */
+        * Execute the command function.
+        * @method run
+        * @chainable
+        */
         run: function () {
-            this.fire('start');
+            this.fire(_string_start);
             return this;
         }
     }, {
         ATTRS: {
             /**
-             * Array of arguments to be passed to the command function.
-             * A special callback function is automatically added as the first argument.
-             * @attribute args
-             * @default []
-             * @initonly
-             * @type Array
-             */
+            * Array of arguments to be passed to the command function.
+            * A special callback function is automatically added as the first
+            * argument.
+            * @attribute args
+            * @default []
+            * @initonly
+            * @type Array
+            */
             args: {
                 setter: function (args) {
                     if (!_isArray(args)) {
@@ -124,105 +132,107 @@ YUI.add('gallery-async-command', function(Y) {
                             args
                         ];
                     }
-                    
+
                     return args;
                 },
                 value: [],
-                writeOnce: 'initOnly'
+                writeOnce: _string_initOnly
             },
             /**
-             * Boolean value indicating the completed status of the command.
-             * @attribute completed
-             * @default false
-             * @readonly
-             * @type Boolean
-             */
+            * Boolean value indicating the completed status of the command.
+            * @attribute completed
+            * @default false
+            * @readonly
+            * @type Boolean
+            */
             completed: {
-                readOnly: true,
-                value: false
+                readOnly: _true,
+                value: _false
             },
             /**
-             * Execution context for the command function.
-             * @attribute ctx
-             * @initonly
-             */
+            * Execution context for the command function.
+            * @attribute ctx
+            * @initonly
+            */
             ctx: {
-                writeOnce: 'initOnly'
+                value: null,
+                writeOnce: _string_initOnly
             },
             /**
-             * Error value passed to the failure event.
-             * @attribute error
-             * @readonly
-             */
+            * Error value passed to the failure event.
+            * @attribute error
+            * @readonly
+            */
             error: {
-                readOnly: true
+                readOnly: _true,
+                value: null
             },
             /**
-             * Boolean value indicating the failed status of the command.
-             * @attribute failed
-             * @default false
-             * @readonly
-             * @type Boolean
-             */
+            * Boolean value indicating the failed status of the command.
+            * @attribute failed
+            * @default false
+            * @readonly
+            * @type Boolean
+            */
             failed: {
-                readOnly: true,
-                value: false
+                readOnly: _true,
+                value: _false
             },
             /**
-             * The command function to execute.  This function receives a special success callback function as
-             * the first parameter.  The success callback function has a method parameter called fail.  One of 
-             * these callback functions must be called in order to complete the command.
-             * @attribute fn
-             * @initonly
-             * @type Function
-             */
+            * The command function to execute.  This function receives a special
+            * success callback function as the first parameter.  The success
+            * callback function has a method parameter called fail.  One of
+            * these callback functions must be called in order to complete the
+            * command.
+            * @attribute fn
+            * @initonly
+            * @type Function
+            */
             fn: {
                 value: function (success) {
                     success();
                 },
-                writeOnce: 'initOnly'
+                writeOnce: _string_initOnly
             },
             /**
-             * Boolean value indicating the started status of the command.
-             * @attribute started
-             * @default false
-             * @readonly
-             * @type Boolean
-             */
+            * Boolean value indicating the started status of the command.
+            * @attribute started
+            * @default false
+            * @readonly
+            * @type Boolean
+            */
             started: {
-                readOnly: true,
-                value: false
+                readOnly: _true,
+                value: _false
             },
             /**
-             * Value passed to the success event.
-             * @attribute value
-             * @readonly
-             */
+            * Value passed to the success event.
+            * @attribute value
+            * @readonly
+            */
             value: {
-                readOnly: true
+                readOnly: _true,
+                value: null
             }
-        },
-        NAME: 'async-command'
+        }
     });
     
     _createCompleteFunction = function (asyncCommand) {
         var successFunction = function (value) {
-            asyncCommand.fire('success', {
+            asyncCommand.fire(_string_success, {
                 value: value
             });
         };
         
         successFunction.fail = function (error) {
-            asyncCommand.fire('failure', {
+            asyncCommand.fire(_string_failure, {
                 error: error
             });
         };
         
         return successFunction;
     };
-    
-    Y.AsyncCommand = _class;
-}(Y));
+}(Y, arguments[1]));
 
 
-}, 'gallery-2012.01.11-21-03' ,{requires:['base'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['base'], skinnable:false});

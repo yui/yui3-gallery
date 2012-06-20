@@ -132,4 +132,4 @@ Y.Event.define('selectionchange', {
 });
 
 
-}, 'gallery-2012.06.06-19-59' ,{requires:['event-move'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['event-move'], skinnable:false});

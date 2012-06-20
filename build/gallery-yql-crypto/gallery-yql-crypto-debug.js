@@ -61,8 +61,10 @@ YUI.add('gallery-yql-crypto', function(Y) {
      */
     Y.YQLCrypto = {
         /**
-         * This method wraps the YQL execute data table which executes inline Javascript on the YQL server.
-         * YQL Server side Javascript documentation is here: http://developer.yahoo.com/yql/guide/yql-javascript-objects.html
+         * This method wraps the YQL execute data table which executes inline
+         * Javascript on the YQL server.  YQL Server side Javascript
+         * documentation is here:
+         * http://developer.yahoo.com/yql/guide/yql-javascript-objects.html
          * @method execute
          * @param {String} code Javascript code to execute on the YQL server. 
          * @param {Function} callbackFunction Passes through to Y.YQL.
@@ -76,7 +78,8 @@ YUI.add('gallery-yql-crypto', function(Y) {
          * @method hmacSha1
          * @param {String} string The message to hash.
          * @param {String} secret The secret key.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -84,10 +87,11 @@ YUI.add('gallery-yql-crypto', function(Y) {
         /**
          * Generates a sha1 hash-based message authentication code.
          * The result is expressed as a base 64 encoded value.
-         * @method hmacSha1
+         * @method hmacSha1_b64
          * @param {String} string The message to hash.
          * @param {String} secret The secret key.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -98,7 +102,8 @@ YUI.add('gallery-yql-crypto', function(Y) {
          * @method hmacSha256
          * @param {String} string The message to hash.
          * @param {String} secret The secret key.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -106,10 +111,11 @@ YUI.add('gallery-yql-crypto', function(Y) {
         /**
          * Generates a sha256 hash-based message authentication code.
          * The result is expressed as a base 64 encoded value.
-         * @method hmacSha256
+         * @method hmacSha256_b64
          * @param {String} string The message to hash.
          * @param {String} secret The secret key.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -119,7 +125,8 @@ YUI.add('gallery-yql-crypto', function(Y) {
          * The result is expressed as a hex value.
          * @method md5
          * @param {String} string The message to hash.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -127,9 +134,10 @@ YUI.add('gallery-yql-crypto', function(Y) {
         /**
          * Generates an md5 hash.
          * The result is expressed as a base 64 encoded value.
-         * @method md5
+         * @method md5_b64
          * @param {String} string The message to hash.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -139,7 +147,8 @@ YUI.add('gallery-yql-crypto', function(Y) {
          * The result is expressed as a hex value.
          * @method sha1
          * @param {String} string The message to hash.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -147,9 +156,10 @@ YUI.add('gallery-yql-crypto', function(Y) {
         /**
          * Generates a sha1 hash.
          * The result is expressed as a base 64 encoded value.
-         * @method sha1
+         * @method sha1_b64
          * @param {String} string The message to hash.
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -157,7 +167,8 @@ YUI.add('gallery-yql-crypto', function(Y) {
         /**
          * Generates a universally unique identifier.
          * @method uuid
-         * @param {Function} callbackFunction  The result value is the only parameter.
+         * @param {Function} callbackFunction  The result value is the only
+         * parameter.
          * @param {Object} params (optional) Passes through to Y.YQL.
          * @param {Object} opts (optional) Passes through to Y.YQL.
          */
@@ -170,4 +181,4 @@ YUI.add('gallery-yql-crypto', function(Y) {
 }(Y));
 
 
-}, 'gallery-2012.01.18-21-09' ,{requires:['gallery-base64', 'gallery-yql-execute'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['gallery-base64', 'gallery-yql-execute'], skinnable:false});

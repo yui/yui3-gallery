@@ -12,20 +12,20 @@ YUI.add('gallery-gravatar-url', function(Y) {
         _trim = Y.Lang.trim;
     
     /**
-     * @class gravatarUrl
-     */
-    
-    /**
+     * Create a gravatar image url.
      * @method gravatarUrl
+     * @for YUI
      * @param {Object} options An object with the following optional properties:
      * <dl>
      *     <dt>
      *         defaultImage
      *     </dt>
      *     <dd>
-     *         This could be a string url to an image to use when there is no matching gravatar image or it could be one of the following values:
-     *         '404', 'mm', 'identicon', 'monsterid', 'wavatar', or 'retro'
-     *         Refer to gravatar's documentation: http://en.gravatar.com/site/implement/images/
+     *         This could be a string url to an image to use when there is no
+     *         matching gravatar image or it could be one of the following
+     *         values: '404', 'mm', 'identicon', 'monsterid', 'wavatar', or
+     *         'retro'  Refer to gravatar's documentation:
+     *         http://en.gravatar.com/site/implement/images/
      *     </dd>
      *     <dt>
      *         email
@@ -37,33 +37,38 @@ YUI.add('gallery-gravatar-url', function(Y) {
      *         force
      *     </dt>
      *     <dd>
-     *         If this is a truthy value, it will force the default image to load even if there is a matching gravatar image.
+     *         If this is a truthy value, it will force the default image to
+     *         load even if there is a matching gravatar image.
      *     </dd>
      *     <dt>
      *         rating
      *     </dt>
      *     <dd>
-     *         The maximum image rating that is allowed to load.  It could be one of the following values:
-     *         'g', 'pg', 'r', 'x'  Defaults to 'g'.
-     *         Refer to gravatar's documentation: http://en.gravatar.com/site/implement/images/
+     *         The maximum image rating that is allowed to load.  It could be
+     *         one of the following values:  'g', 'pg', 'r', 'x'  Defaults to
+     *         'g'.  Refer to gravatar's documentation:
+     *         http://en.gravatar.com/site/implement/images/
      *     </dd>
      *     <dt>
      *         secure
      *     </dt>
      *     <dd>
-     *         If this is a truthy value, the url will use the secure https protocol.
+     *         If this is a truthy value, the url will use the secure https
+     *         protocol.
      *     </dd>
      *     <dt>
      *         size
      *     </dt>
      *     <dd>
-     *         An integer representing the height and width of the image in pixels.  Values from 1 to 512 inclusive are supported.
+     *         An integer representing the height and width of the image in
+     *         pixels.  Values from 1 to 512 inclusive are supported.
      *         Gravatar images are square.
      *     </dd>
      * </dl>
-     * @param {Function} callbackFunction This function receives the gravatar url as its only parameter.
-     * @param {Object} contextObject (optional) An object to provide as the execution context for the callback function.
-     * @static
+     * @param {Function} callbackFunction This function receives the gravatar
+     * url as its only parameter.
+     * @param {Object} contextObject (optional) An object to provide as the
+     * execution context for the callback function.
      */
     Y.gravatarUrl = function (options, callbackFunction, contextObject) {
         var defaultImage = options.defaultImage,
@@ -112,4 +117,4 @@ YUI.add('gallery-gravatar-url', function(Y) {
 }(Y));
 
 
-}, 'gallery-2011.10.27-17-03' ,{requires:['gallery-yql-crypto', 'querystring-stringify-simple'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['gallery-yql-crypto', 'querystring-stringify-simple'], skinnable:false});

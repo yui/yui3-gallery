@@ -3,52 +3,55 @@ YUI.add('gallery-async-pause', function(Y) {
 /**
  * @module gallery-async-pause
  */
-(function (Y) {
+(function (Y, moduleName) {
     'use strict';
     
-    var _DoPrevent = Y.Do.Prevent,
+    var _string__args = '_args',
+        _string__resumed = '_resumed',
+        _string_host = 'host',
+        _string_paused = 'paused',
         
-        _class;
+        _false = false,
+        _true = true,
+        
+        _DoPrevent = Y.Do.Prevent,
+        _Plugin = Y.Plugin;
 
     /**
      * Asynchronous command runner pause plugin.
      * @class AsyncPause
-     * @extends Y.Plugin.Base
-     * @namespace Y.Plugin
+     * @extends Plugin.Base
+     * @namespace Plugin
      * @param {Object} config Configuration Object.
      */
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Plugin.Base, {
+    _Plugin.AsyncPause = Y.Base.create(moduleName, _Plugin.Base, [], {
         initializer: function () {
             var me = this;
                 
-            if (me.get('host').get('mode') !== 'queue') {
-                return;
+            if (me.get(_string_host).get('mode') === 'queue') {
+                me.beforeHostMethod('_runQueue', function () {
+                    if (me.get(_string_paused)) {
+                        me._set(_string__args, arguments);
+                        return new _DoPrevent(_string_paused);
+                    }
+
+                    return null;
+                });
             }
-            
-            me.beforeHostMethod('_runQueue', function () {
-                if (me.get('paused')) {
-                    me._set('_args', arguments);
-                    return new _DoPrevent('paused');
-                }
-                
-                return null;
-            });
         },
         /**
-         * Pause the run.  Does not stop a command that is currently running, the run will pause
-         * before the next command runs.
+         * Pause the run.  Does not stop a command that is currently running,
+         * the run will pause before the next command runs.
          * @method pause
          * @chainable
          */
         pause: function () {
-            this._set('paused', true);
-            return this;
+            return this._set(_string_paused, _true);
         },
         /**
-         * Resumes a paused run.  If a command is currently running, the paused state may not be updated
-         * immediately.  Resume does nothing if the run is not paused or not started yet or already complete.
+         * Resumes a paused run.  If a command is currently running, the paused
+         * state may not be updated immediately.  Resume does nothing if the run
+         * is not paused or not started yet or already complete.
          * @method resume
          * @chainable
          */
@@ -57,25 +60,25 @@ YUI.add('gallery-async-pause', function(Y) {
                 completeListener,
                 me = this,
                 
-                args = this.get('_args'),
-                host = this.get('host'),
+                args = me.get(_string__args),
+                host = me.get(_string_host),
                 runQueue = host._runQueue,
                 
                 resume = function (args) {
                     me._setAttrs({
-                        paused: false,
+                        paused: _false,
                         _args: null,
-                        _resumed: false
+                        _resumed: _false
                     });
                     runQueue.apply(host, args);
                 };
             
-            if (!me.get('paused') || me.get('_resumed')) {
+            if (!me.get(_string_paused) || me.get(_string__resumed)) {
                 return me;
             }
             
             if (!host.get('started') || host.get('completed')) {
-                me._set('paused', false);
+                me._set(_string_paused, _false);
                 return me;
             }
 
@@ -84,7 +87,7 @@ YUI.add('gallery-async-pause', function(Y) {
                 return me;
             }
             
-            me._set('resumed', true);
+            me._set(_string__resumed, _true);
             
             argsChangeListener = me.once('_argsChange', function (eventFacade) {
                 completeListener.detach();
@@ -107,8 +110,8 @@ YUI.add('gallery-async-pause', function(Y) {
              * @type Boolean
              */
             paused: {
-                readonly: true,
-                value: false
+                readonly: _true,
+                value: _false
             },
             /**
              * Paused _runQueue arguments.
@@ -118,7 +121,8 @@ YUI.add('gallery-async-pause', function(Y) {
              * @type Array
              */
             _args: {
-                readOnly: true
+                readOnly: _true,
+                value: null
             },
             /**
              * Boolean value indicating the resumed status of the run.
@@ -128,15 +132,13 @@ YUI.add('gallery-async-pause', function(Y) {
              * @type Array
              */
             _resumed: {
-                readOnly: true
+                readOnly: _true,
+                value: _false
             }
         },
-        NAME: 'async-pause',
         NS: 'pause'
     });
-
-    Y.Plugin.AsyncPause = _class;
-}(Y));
+}(Y, arguments[1]));
 
 
-}, 'gallery-2012.01.11-21-03' ,{requires:['gallery-async', 'plugin'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['gallery-async', 'plugin'], skinnable:false});

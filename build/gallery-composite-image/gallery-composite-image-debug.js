@@ -31,28 +31,43 @@ YUI.add('gallery-composite-image', function(Y) {
         /**
          * Defines the color space for the image.
          *
-         * An image can have as many channels as needed.  3 or 4 channels is most common.
-         * Usually the first channel is the red color component, the second is green, the third is blue, and the fourth is alpha.
+         * An image can have as many channels as needed.  3 or 4 channels is
+         * most common.  Usually the first channel is the red color component,
+         * the second is green, the third is blue, and the fourth is alpha.
          *
          * There are various ways to represent the value of a channel.
          * Values can either be stored as integers or floating-point numbers.
          * Values may be constrained within a minimum and maximum value.
          *
-         * Most commonly red, green, and blue channels are represented by integers between 0 and 255.
-         * In this case the values 0, 0, 0 represent black and the values 255, 255, 255 represent white.
+         * Most commonly red, green, and blue channels are represented by
+         * integers between 0 and 255.  In this case the values 0, 0, 0
+         * represent black and the values 255, 255, 255 represent white.
          *
-         * The alpha channel is commonly stored as a floating-point value from 0 to 1.
-         * 1 represents a completely visible pixel while 0 is completely transparent.
+         * The alpha channel is commonly stored as a floating-point value from 0
+         * to 1.  1 represents a completely visible pixel while 0 is completely
+         * transparent.
          *
-         * Values are not required to be constrained.  For example, sometimes it is interesting or useful to store colors which have brightness beyond white.
+         * Values are not required to be constrained.  For example, sometimes it
+         * is interesting or useful to store colors which have brightness beyond
+         * white.
          *
-         * This attribute should be set to an array of objects.  This array represents the channels in order.  This array should have at least one element.
-         * This should not be a sparse array.  Each object must have a mode property.  The mode property must be set to either 'f' for floating-point values
-         * or 'i' for integer values.  Each object may include the optional maximum and/or minimum properties.  Each object may include the optional blackValue
-         * and/or whiteValue properties.  If undefined, blackValue will default to 0 and whiteValue will default to 255 when mode is set to 'i' or 1 otherwise.
+         * This attribute should be set to an array of objects.  This array
+         * represents the channels in order.  This array should have at least
+         * one element.  This should not be a sparse array.  Each object must
+         * have a mode property.  The mode property must be set to either 'f'
+         * for floating-point values or 'i' for integer values.  Each object may
+         * include the optional maximum and/or minimum properties.  Each object
+         * may include the optional blackValue and/or whiteValue properties.  If
+         * undefined, blackValue will default to 0 and whiteValue will default
+         * to 255 when mode is set to 'i' or 1 otherwise.
          * 
          * @attribute channels
-         * @default [{maximum: 255, minimum: 0, mode:'i'}, {maximum: 255, minimum: 0, mode:'i'}, {maximum: 255, minimum: 0, mode:'i'}, {maximum: 1, minimum: 0, mode:'f'}]
+         * @default [
+         *     {maximum: 255, minimum: 0, mode:'i'},
+         *     {maximum: 255, minimum: 0, mode:'i'},
+         *     {maximum: 255, minimum: 0, mode:'i'},
+         *     {maximum: 1, minimum: 0, mode:'f'}
+         * ]
          * @type Array
          * @writeOnce
          */
@@ -79,8 +94,9 @@ YUI.add('gallery-composite-image', function(Y) {
         /**
          * Defines the pixel dimensions of the image.
          *
-         * An image can have as many dimensions as needed.  2 dimensions is most common.
-         * Usually the first dimension is width and the second is height.
+         * An image can have as many dimensions as needed.  2 dimensions is most
+         * common.  Usually the first dimension is width and the second is
+         * height.
          *
          * @attribute dimensions
          * @default [512, 512]
@@ -145,14 +161,16 @@ YUI.add('gallery-composite-image', function(Y) {
          * This method is chainable.
          * @method eachPixel
          * @chainable
-         * @param {Object} pixelParameters This object contains the following members
+         * @param {Object} pixelParameters This object contains the following
+         * members
          * <ul>
          *     <li>
          *         ctx - Object - Optional scope with which to call fn.
          *     </li>
          *     <li>
          *         fn - Function - This function is invoked once per pixel.
-         *         This function will receive an object with the following parameters
+         *         This function will receive an object with the following
+         *         parameters
          *         <ul>
          *             <li>
          *                 at - Array of image pixel coordinates.
@@ -179,14 +197,17 @@ YUI.add('gallery-composite-image', function(Y) {
          *                 pxl - Array of pixel channel values.
          *             </li>
          *         </ul>
-         *         If this function returns true, eachPixel will stop and ignore the remaining pixels.
+         *         If this function returns true, eachPixel will stop and ignore
+         *         the remaining pixels.
          *     </li>
          *     <li>
-         *         pch - Array - Optional array of channel indexes.  If undefined, pixels will contain all channels in order.
+         *         pch - Array - Optional array of channel indexes.  If
+         *         undefined, pixels will contain all channels in order.
          *     </li>
          * </ul>
-         * @param {Function} callbackFunction This function is invoked after the function has been invoked for each pixel in the image.
-         * This function will receive an object with the following members
+         * @param {Function} callbackFunction This function is invoked after the
+         * function has been invoked for each pixel in the image.  This function
+         * will receive an object with the following members
          * <ul>
          *     <li>
          *         chs - Array of image channel definitions.
@@ -201,10 +222,13 @@ YUI.add('gallery-composite-image', function(Y) {
          *         pcnt - Number of pixels in this image.
          *     </li>
          *     <li>
-         *         pix - The last integer pixel index processed.  If eachPixel was not stopped early, this value should be equal to pcnt and not a valid pixel index.
+         *         pix - The last integer pixel index processed.  If eachPixel
+         *         was not stopped early, this value should be equal to pcnt and
+         *         not a valid pixel index.
          *     </li>
          * </ul>
-         * @param {Object} contextObject Optional scope with which to call the callback function.
+         * @param {Object} contextObject Optional scope with which to call the
+         * callback function.
          */
         eachPixel: function (pixelParameters, callbackFunction, contextObject) {
             var ctx = pixelParameters.ctx,
@@ -273,8 +297,10 @@ YUI.add('gallery-composite-image', function(Y) {
         /**
          * Accessor method to get a pixel from the image.
          * @method getPixel
-         * @param {Array} at Array containing pixel coordinates.  The length of this array should match the number of dimensions of the image.
-         * @param {Array} pixelChannels Optional array of channel indexes.  If undefined, returned pixel will contain all channels in order.
+         * @param {Array} at Array containing pixel coordinates.  The length of
+         * this array should match the number of dimensions of the image.
+         * @param {Array} pixelChannels Optional array of channel indexes.  If
+         * undefined, returned pixel will contain all channels in order.
          * @return {Array}
          */
         getPixel: function (at, pixelChannels) {
@@ -351,9 +377,12 @@ YUI.add('gallery-composite-image', function(Y) {
          * This method is chainable.
          * @method setPixel
          * @chainable
-         * @param {Array} at Array containing pixel coordinates.  The length of this array should match the number of dimensions of the image.
+         * @param {Array} at Array containing pixel coordinates.  The length of
+         * this array should match the number of dimensions of the image.
          * @param {Array} pixel Array containing the pixel's channel values.
-         * @param {Array} pixelChannels Optional array of channel indexes.  If undefined, the given pixel is assumed to contain all channels in order.
+         * @param {Array} pixelChannels Optional array of channel indexes.  If
+         * undefined, the given pixel is assumed to contain all channels in
+         * order.
          */
         setPixel: function (at, pixel, pixelChannels) {
             var i,
@@ -408,8 +437,9 @@ YUI.add('gallery-composite-image', function(Y) {
     });
 
     /**
-     * Call this function with the length of each dimension followed by the number of channels.
-     * Returns a function which accepts a pixel index and returns an at array.
+     * Call this function with the length of each dimension followed by the
+     * number of channels.  Returns a function which accepts a pixel index and
+     * returns an at array.
      * @method _getGetAtFunction
      * @private
      * @return Function
@@ -444,7 +474,8 @@ YUI.add('gallery-composite-image', function(Y) {
 
     /**
      * Call this function with the length of each dimension.
-     * Returns a function which accepts dimension indices and returns a pixel index.
+     * Returns a function which accepts dimension indices and returns a pixel
+     * index.
      * @method _getGetPixelIndexFunction
      * @private
      * @return Function
@@ -479,4 +510,4 @@ YUI.add('gallery-composite-image', function(Y) {
 }(Y));
 
 
-}, 'gallery-2011.11.17-14-56' ,{requires:['base'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['base'], skinnable:false});

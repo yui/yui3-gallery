@@ -2,7 +2,7 @@ YUI.add('gallery-array-iterate', function(Y) {
 
 /**
  * Iterate through an array.
- * @module gallery-async-pause
+ * @module gallery-array-iterate
  */
 (function (Y) {
     'use strict';
@@ -14,14 +14,20 @@ YUI.add('gallery-array-iterate', function(Y) {
          * @for Array
          * @param {Array} array the array to iterate
          * @param {Number} startIndex (Optional) The first index to iterate.
-         * If left undefined, iteration will either start at the beginning of the array if incrementBy
-         * is positive or at the end of the array if incrementBy is negative.
-         * @param {Number} incrementBy the interval by which the array will be iterated. Must be a non-zero integer.
-         * Negative values cause the array to be iterated backwards.
-         * @param {Function} iterationFunction the function to call on each iteration. This function will receive three
-         * arguments: value, index, and array. If this function returns a truthy value, iteration will be terminated.
-         * @param {Object} contextObject (Optional) the context that will become this in the iterationFunction
-         * @returns {Boolean} will return true if iteration was terminated early, otherwise it will return false.
+         * If left undefined, iteration will either start at the beginning of
+         * the array if incrementBy is positive or at the end of the array if
+         * incrementBy is negative.
+         * @param {Number} incrementBy the interval by which the array will be
+         * iterated. Must be a non-zero integer. Negative values cause the array
+         * to be iterated backwards.
+         * @param {Function} iterationFunction the function to call on each
+         * iteration. This function will receive three arguments: value, index,
+         * and array. If this function returns a truthy value, iteration will be
+         * terminated.
+         * @param {Object} contextObject (Optional) the context that will become
+         * this in the iterationFunction
+         * @returns {Boolean} will return true if iteration was terminated
+         * early, otherwise it will return false.
          * @static
          */
         iterate = function (array, startIndex, incrementBy, iterationFunction, contextObject) {
@@ -45,4 +51,4 @@ YUI.add('gallery-array-iterate', function(Y) {
 }(Y));
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['yui'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['yui'], skinnable:false});

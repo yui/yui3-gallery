@@ -14,7 +14,7 @@ YUI.add('gallery-soon', function(Y) {
  * Copyright (c) 2011 Barnesandnoble.com, llc and Donavon West
  * 
  * https://github.com/NobleJS/setImmediate/blob/master/MIT-LICENSE.txt
- * @module gallery-lazy-load
+ * @module gallery-soon
  */
 (function (Y) {
     'use strict';
@@ -47,10 +47,12 @@ YUI.add('gallery-soon', function(Y) {
     };
     
     /**
-     * Y.soon accepts a callback function. The callback function will be called once, as soon as possible,
-     * in a future turn of the JavaScript event loop.  If the function requires a specific execution
-     * context or arguments, wrap it with Y.bind.  Y.soon returns an object with a cancel method. If the
-     * cancel method is called before the callback function, the callback function won't be called.
+     * Y.soon accepts a callback function. The callback function will be called
+     * once, as soon as possible, in a future turn of the JavaScript event loop.
+     * If the function requires a specific execution context or arguments, wrap
+     * it with Y.bind.  Y.soon returns an object with a cancel method. If the
+     * cancel method is called before the callback function, the callback
+     * function won't be called.
      * 
      * based on setImmediate.js. https://github.com/NobleJS/setImmediate
      * 
@@ -90,6 +92,7 @@ YUI.add('gallery-soon', function(Y) {
         
         Y.Array.some([
             'setImmediate',
+            // TODO: Determine if these prefixes are accurate.
             'mozSetImmediate',
             'msSetImmediate',
             'oSetImmediate',
@@ -224,7 +227,8 @@ YUI.add('gallery-soon', function(Y) {
     }
     
     /*
-     * Stores a callback function by id and returns an object with a cancel method.
+     * Stores a callback function by id and returns an object with a cancel
+     * method.
      * @method _store
      * @param {String} id
      * @param {Function} callbackFunction
@@ -235,8 +239,8 @@ YUI.add('gallery-soon', function(Y) {
      *         cancel
      *     </dt>
      *     <dd>
-     *         If the cancel method is called before the callback function,
-     *         the callback function won't be called.
+     *         If the cancel method is called before the callback function, the
+     *         callback function won't be called.
      *     </dd>
      * </dl>
      */
@@ -254,4 +258,4 @@ YUI.add('gallery-soon', function(Y) {
 }(Y));
 
 
-}, 'gallery-2012.03.23-18-00' ,{requires:['node-base'], skinnable:false});
+}, 'gallery-2012.06.20-20-07' ,{requires:['node-base'], skinnable:false});
