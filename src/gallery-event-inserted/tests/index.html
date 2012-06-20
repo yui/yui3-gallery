@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Test Page</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript">
+        var Y = YUI({
+            modules: {
+                'gallery-event-inserted': {
+                    fullpath: '../../../build/gallery-event-inserted/gallery-event-inserted.js'
+                }
+            }
+        })
+        </script>
+    </head>
+    <body>
+        <myelement></myelement>
+
+        <script type="text/javascript">
+        Y.use('gallery-event-inserted', function(Y) {
+            Y.on('inserted', function(e) {
+                console.log('inserted - ', e.target);
+            }, 'myelement');
+         
+            Y.one('body').append('<myelement></myelement>');
+        });
+        </script>
+    </body>
+</html>
