@@ -1,0 +1,174 @@
+{
+    "project": {
+        "name": "YQL REST Client OAuth",
+        "description": "This module is a REST client supporting OAuth signatures."
+    },
+    "files": {
+        "js/yql-rest-client-oauth.js": {
+            "name": "js/yql-rest-client-oauth.js",
+            "modules": {
+                "gallery-yql-rest-client-oauth": 1
+            },
+            "classes": {
+                "YQLRESTClient": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-yql-rest-client-oauth": {
+            "name": "gallery-yql-rest-client-oauth",
+            "submodules": {},
+            "classes": {
+                "YQLRESTClient": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/yql-rest-client-oauth.js",
+            "line": 1,
+            "description": "This module is a REST client supporting OAuth signatures."
+        }
+    },
+    "classes": {
+        "YQLRESTClient": {
+            "name": "YQLRESTClient",
+            "shortname": "YQLRESTClient",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-yql-rest-client-oauth",
+            "namespace": "",
+            "file": "js/yql-rest-client-oauth.js",
+            "line": 6,
+            "static": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/yql-rest-client-oauth.js",
+            "line": 11,
+            "description": "Sends a REST request.",
+            "itemtype": "method",
+            "name": "request",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "Request parameters object.\n<dl>\n    <dt>\n        accept\n    </dt>\n    <dd>\n        Specifies the type of content to send in the response using the\n        Accept HTTP header.  This tells YQL what kind of data format you want\n        returned, as well as how to parse it.\n    </dd>\n    <dt>\n        content\n    </dt>\n    <dd>\n        The body content of a POST or PUT request.  This can be an object or\n        a string.  If an object is used, contentType is assumed to be\n        application/x-www-form-urlencoded.\n    </dd>\n    <dt>\n        contentType\n    </dt>\n    <dd>\n        Specifies the content-type of the body content of a POST or PUT\n        request.\n    </dd>\n    <dt>\n        fallbackCharsets\n    </dt>\n    <dd>\n        Overrides the list of fallback character sets, which is set to\n        \"utf-8, iso-8859-1\" by default, for decoding the returned response.\n        YQL attempts to decode the response using the character sets listed\n        here when the response either does not specify the character set or\n        specifies an incorrect character set that results in a failed\n        decoding.  This value may be an array of strings or one string with\n        comma separated values.\n    </dd>\n    <dt>\n        forceCharset\n    </dt>\n    <dd>\n        Forces YQL to use the character set specified. Using this overrides\n        both the character set specified by the response and the fallback\n        character sets. \n    </dd>\n    <dt>\n        headers\n    </dt>\n    <dd>\n        Adds HTTP headers to the request.\n    </dd>\n    <dt>\n        jsonCompat\n    </dt>\n    <dd>\n        Set this value to 'new' to get \"lossless\" JSON when making a REST\n        call to a Web service.  jsonCompat: 'new' must also be set in the\n        yqlParams object.\n    </dd>\n    <dt>\n        method\n    </dt>\n    <dd>\n        The HTTP method to use.  Must be one of 'DELETE', 'GET', 'HEAD',\n        'POST' or 'PUT'.\n    </dd>\n    <dt>\n        oAuth\n    </dt>\n    <dd>\n        oAuth is an object with the following members:\n        <dl>\n            <dt>\n                consumer\n            </dt>\n            <dd>\n                an object with two members: key and secret\n            </dd>\n            <dt>\n                signatureMethod\n            </dt>\n            <dd>\n                must be either 'HMAC-SHA1' or 'PLAINTEXT'\n            </dd>\n            <dt>\n                token\n            </dt>\n            <dd>\n                an optional object with three optional members: key,\n                verifier, and secret.\n            </dd>\n        </dl>\n    </dd>\n    <dt>\n        query\n    </dt>\n    <dd>\n        Query parameters to add to the request.\n    </dd>\n    <dt>\n        timeout\n    </dt>\n    <dd>\n        Specifies the request timeout in milliseconds. This is useful when\n        you want to cancel requests that take longer than expected. \n    </dd>\n    <dt>\n        url\n    </dt>\n    <dd>\n        Provides a URL endpoint to query.  The url scheme and host must be\n        lower case.  If you are using the default port, there must not be a\n        port specified in the url.  Querystring parameters must be defined in\n        the query member and not part of the url string.\n    </dd>\n</dl>",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The response object is the only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "yqlParams",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "yqlOpts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLRESTClient",
+            "module": "gallery-yql-rest-client-oauth"
+        },
+        {
+            "file": "js/yql-rest-client-oauth.js",
+            "line": 218,
+            "description": "Creates the OAuth Authorization Header",
+            "itemtype": "method",
+            "name": "_buildAuthorizationHeader",
+            "params": [
+                {
+                    "name": "oAuthParams",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "YQLRESTClient",
+            "module": "gallery-yql-rest-client-oauth"
+        },
+        {
+            "file": "js/yql-rest-client-oauth.js",
+            "line": 233,
+            "description": "Performs the more strict version of URL Encode required by OAuth.",
+            "itemtype": "method",
+            "name": "_encode",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "YQLRESTClient",
+            "module": "gallery-yql-rest-client-oauth"
+        },
+        {
+            "file": "js/yql-rest-client-oauth.js",
+            "line": 250,
+            "description": "Performs paramater sorting and normalization required by OAuth.",
+            "itemtype": "method",
+            "name": "_normalizeParameters",
+            "params": [
+                {
+                    "name": "content",
+                    "description": "Parameters from POST or PUT body content",
+                    "type": "Object"
+                },
+                {
+                    "name": "oAuthParams",
+                    "description": "Parameters from OAuth",
+                    "type": "Object"
+                },
+                {
+                    "name": "query",
+                    "description": "Parameters from the query string.",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "YQLRESTClient",
+            "module": "gallery-yql-rest-client-oauth"
+        },
+        {
+            "file": "js/yql-rest-client-oauth.js",
+            "line": 298,
+            "description": "Generates a random string containing digits and upper-case letters.",
+            "itemtype": "method",
+            "name": "_randomString",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "YQLRESTClient",
+            "module": "gallery-yql-rest-client-oauth"
+        }
+    ]
+}

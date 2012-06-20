@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>YQLRESTClient - YQL REST Client OAuth</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><img src="..&#x2F;assets/css/logo.png"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/YQLRESTClient.html">YQLRESTClient</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-yql-rest-client-oauth.html">gallery-yql-rest-client-oauth</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1>YQLRESTClient Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files&#x2F;js_yql-rest-client-oauth.js.html#l6"><code>js&#x2F;yql-rest-client-oauth.js:6</code></a>
+        </div>
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method private">
+                                <a href="#method__buildAuthorizationHeader">_buildAuthorizationHeader</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__encode">_encode</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__normalizeParameters">_normalizeParameters</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__randomString">_randomString</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_request">request</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__buildAuthorizationHeader" class="method item private">
+    <h3 class="name"><code>_buildAuthorizationHeader</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>oAuthParams</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_yql-rest-client-oauth.js.html#l218"><code>js&#x2F;yql-rest-client-oauth.js:218</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Creates the OAuth Authorization Header</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">oAuthParams</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__encode" class="method item private">
+    <h3 class="name"><code>_encode</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>string</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_yql-rest-client-oauth.js.html#l233"><code>js&#x2F;yql-rest-client-oauth.js:233</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Performs the more strict version of URL Encode required by OAuth.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">string</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__normalizeParameters" class="method item private">
+    <h3 class="name"><code>_normalizeParameters</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>content</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>oAuthParams</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>query</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_yql-rest-client-oauth.js.html#l250"><code>js&#x2F;yql-rest-client-oauth.js:250</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Performs paramater sorting and normalization required by OAuth.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">content</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Parameters from POST or PUT body content</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">oAuthParams</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Parameters from OAuth</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">query</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Parameters from the query string.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__randomString" class="method item private">
+    <h3 class="name"><code>_randomString</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_yql-rest-client-oauth.js.html#l298"><code>js&#x2F;yql-rest-client-oauth.js:298</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Generates a random string containing digits and upper-case letters.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_request" class="method item">
+    <h3 class="name"><code>request</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>params</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>yqlParams</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>yqlOpts</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_yql-rest-client-oauth.js.html#l11"><code>js&#x2F;yql-rest-client-oauth.js:11</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sends a REST request.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">params</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Request parameters object.</p>
+
+<dl>
+    <dt>
+        accept
+    </dt>
+    <dd>
+        Specifies the type of content to send in the response using the
+        Accept HTTP header.  This tells YQL what kind of data format you want
+        returned, as well as how to parse it.
+    </dd>
+    <dt>
+        content
+    </dt>
+    <dd>
+        The body content of a POST or PUT request.  This can be an object or
+        a string.  If an object is used, contentType is assumed to be
+        application/x-www-form-urlencoded.
+    </dd>
+    <dt>
+        contentType
+    </dt>
+    <dd>
+        Specifies the content-type of the body content of a POST or PUT
+        request.
+    </dd>
+    <dt>
+        fallbackCharsets
+    </dt>
+    <dd>
+        Overrides the list of fallback character sets, which is set to
+        "utf-8, iso-8859-1" by default, for decoding the returned response.
+        YQL attempts to decode the response using the character sets listed
+        here when the response either does not specify the character set or
+        specifies an incorrect character set that results in a failed
+        decoding.  This value may be an array of strings or one string with
+        comma separated values.
+    </dd>
+    <dt>
+        forceCharset
+    </dt>
+    <dd>
+        Forces YQL to use the character set specified. Using this overrides
+        both the character set specified by the response and the fallback
+        character sets. 
+    </dd>
+    <dt>
+        headers
+    </dt>
+    <dd>
+        Adds HTTP headers to the request.
+    </dd>
+    <dt>
+        jsonCompat
+    </dt>
+    <dd>
+        Set this value to 'new' to get "lossless" JSON when making a REST
+        call to a Web service.  jsonCompat: 'new' must also be set in the
+        yqlParams object.
+    </dd>
+    <dt>
+        method
+    </dt>
+    <dd>
+        The HTTP method to use.  Must be one of 'DELETE', 'GET', 'HEAD',
+        'POST' or 'PUT'.
+    </dd>
+    <dt>
+        oAuth
+    </dt>
+    <dd>
+        oAuth is an object with the following members:
+        <dl>
+            <dt>
+                consumer
+            </dt>
+            <dd>
+                an object with two members: key and secret
+            </dd>
+            <dt>
+                signatureMethod
+            </dt>
+            <dd>
+                must be either 'HMAC-SHA1' or 'PLAINTEXT'
+            </dd>
+            <dt>
+                token
+            </dt>
+            <dd>
+                an optional object with three optional members: key,
+                verifier, and secret.
+            </dd>
+        </dl>
+    </dd>
+    <dt>
+        query
+    </dt>
+    <dd>
+        Query parameters to add to the request.
+    </dd>
+    <dt>
+        timeout
+    </dt>
+    <dd>
+        Specifies the request timeout in milliseconds. This is useful when
+        you want to cancel requests that take longer than expected. 
+    </dd>
+    <dt>
+        url
+    </dt>
+    <dd>
+        Provides a URL endpoint to query.  The url scheme and host must be
+        lower case.  If you are using the default port, there must not be a
+        port specified in the url.  Querystring parameters must be defined in
+        the query member and not part of the url string.
+    </dd>
+</dl>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The response object is the only parameter.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">yqlParams</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>(optional) Passes through to Y.YQL.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">yqlOpts</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>(optional) Passes through to Y.YQL.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
