@@ -1,0 +1,12 @@
+{
+    "name": "Lazy Load",
+    "description": "A little helper function for when you want to load more modules into an existing Y instance.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

@@ -1,0 +1,77 @@
+{
+    "project": {
+        "name": "Lazy Load",
+        "description": "A little helper function for when you want to load more modules into an existing Y instance."
+    },
+    "files": {
+        "js/lazy-load.js": {
+            "name": "js/lazy-load.js",
+            "modules": {
+                "gallery-lazy-load": 1
+            },
+            "classes": {},
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-lazy-load": {
+            "name": "gallery-lazy-load",
+            "submodules": {},
+            "classes": {
+                "YUI": 1
+            },
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/lazy-load.js",
+            "line": 1,
+            "description": "A little helper function for when you want to load more modules into an\nexisting Y instance."
+        }
+    },
+    "classes": {
+        "YUI": {
+            "name": "YUI",
+            "shortname": "YUI",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-lazy-load",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/lazy-load.js",
+            "line": 23,
+            "description": "A little helper function for when you want to load more modules into an\nexisting Y instance.",
+            "itemtype": "method",
+            "name": "lazyLoad",
+            "params": [
+                {
+                    "name": "modules",
+                    "description": "1-n modules to bind (uses arguments array).",
+                    "type": "String",
+                    "multiple": true
+                },
+                {
+                    "name": "*callback",
+                    "description": "callback function executed when the instance\nhas the required functionality.  If included, it must be the last\nparameter.  This function receives two arguments:\n<dl>\n    <dt>\n        errors\n    </dt>\n    <dd>\n        This will be an array of error objects if something went wrong.\n       This will be null if everything is okay.\n    </dd>\n    <dt>\n        attached\n    </dt>\n    <dd>\n        This is an object.  This object's keys are the names of modules\n        that were attached to this YUI instance during this load.\n        (Virtual rollups aren't listed here.)\n    </dd>\n</dl>",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "the YUI instance.",
+                "type": "YUI"
+            },
+            "class": "YUI",
+            "module": "gallery-lazy-load"
+        }
+    ]
+}

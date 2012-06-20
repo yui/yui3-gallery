@@ -1,3 +1,9 @@
+/**
+ * A little helper function for when you want to load more modules into an
+ * existing Y instance.
+ * @module gallery-lazy-load
+ */
+
 (function (Y) {
     'use strict';
     
@@ -14,6 +20,34 @@
         _isFunction = _Lang.isFunction,
         _use = Y.use;
     
+    /**
+     * A little helper function for when you want to load more modules into an
+     * existing Y instance.
+     * @method lazyLoad
+     * @for YUI
+     * @param modules* {String} 1-n modules to bind (uses arguments array).
+     * @param *callback {Function} callback function executed when the instance
+     * has the required functionality.  If included, it must be the last
+     * parameter.  This function receives two arguments:
+     * <dl>
+     *     <dt>
+     *         errors
+     *     </dt>
+     *     <dd>
+     *         This will be an array of error objects if something went wrong.
+     *         This will be null if everything is okay.
+     *     </dd>
+     *     <dt>
+     *         attached
+     *     </dt>
+     *     <dd>
+     *         This is an object.  This object's keys are the names of modules
+     *         that were attached to this YUI instance during this load.
+     *         (Virtual rollups aren't listed here.)
+     *     </dd>
+     * </dl>
+     * @return {YUI} the YUI instance.
+     */
     Y.lazyLoad = function () {
         var args = _Array(arguments),
             alreadyAttached = {},
