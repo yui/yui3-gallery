@@ -1,5 +1,6 @@
 /**
- * gallery-qr-code-generator-base is a slightly low-level utility for generating QR Codes.
+ * gallery-qr-code-generator-base is a slightly low-level utility for generating
+ * QR Codes.
  * @module gallery-qr-code-generator-base
  */
 
@@ -2987,8 +2988,8 @@
         ],
         
         /**
-         * This class shouldn't be used directly.
-         * It is intended as an interface to implement a specific data encoding mode.
+         * This class shouldn't be used directly.  It is intended as an
+         * interface to implement a specific data encoding mode.
          * @class Data
          * @constructor
          * @extends Base
@@ -2998,7 +2999,8 @@
         _Data = _YBase.create('qr-code-data', _YBase, [], {
             /**
              * This is an abstract method that should be implemented to return a
-             * properly formatted binary string for a specific data encoding mode.
+             * properly formatted binary string for a specific data encoding
+             * mode.
              * @method toBinaryString
              * @for QrCode.Data
              * @param {Number|String} version
@@ -3007,8 +3009,9 @@
         }, {
             ATTRS: {
                 /**
-                 * When extending this class, the value of type should be specifically defined.
-                 * Make sure the type is also set on the Y.QrCode.Data.Type object.
+                 * When extending this class, the value of type should be
+                 * specifically defined.  Make sure the type is also set on the
+                 * Y.QrCode.Data.Type object.
                  * @attribute type
                  * @initOnly
                  * @type String
@@ -3048,22 +3051,28 @@
          */
         _GeneratorBase = _YBase.create('qr-code-generator-base', _YBase, [], {
             /**
-             * Performs a mask operation that inverts some data bits.  QR Codes apply
-             * one of eight possible masks to the raw data matrix.  Decoders benefit
-             * when a mask is used to reduce the occurence of ambiguous patterns
-             * within the data matrix.
+             * Performs a mask operation that inverts some data bits.  QR Codes
+             * apply one of eight possible masks to the raw data matrix.
+             * Decoders benefit when a mask is used to reduce the occurence of
+             * ambiguous patterns within the data matrix.
              * @method applyMask
              * @chainable
              * @for QrCode.GeneratorBase
-             * @param {[Boolean]} matrix The array to write the results to.  Existing data will be overwritten.
-             * @param {[Boolean]} dataMatrix An array with the source data.  Non-data elements should be undefined.
-             * @param {Function} maskFunction A function that accepts x and y coordinates and returns true or false.
-             * The x and y coordinates passed to the mask function do not account for the quiet zone region.
-             * When the mask function returns true, the data at that position is inverted.
+             * @param {[Boolean]} matrix The array to write the results to.
+             * Existing data will be overwritten.
+             * @param {[Boolean]} dataMatrix An array with the source data.
+             * Non-data elements should be undefined.
+             * @param {Function} maskFunction A function that accepts x and y
+             * coordinates and returns true or false.  The x and y coordinates
+             * passed to the mask function do not account for the quiet zone
+             * region.  When the mask function returns true, the data at that
+             * position is inverted.
              * @param {Number} quietZoneSize The size of the quiet zone region.
-             * @param {Number} size The square root of the length of matrix.  (dataMatrix and matrix should be the same size.)
-             * @param {Function} callbackFunction This function will be called once the mask has been applied.
-             * It is guaranteed to be called in a future turn of the event loop.  The modified matrix will be
+             * @param {Number} size The square root of the length of matrix.
+             * (dataMatrix and matrix should be the same size.)
+             * @param {Function} callbackFunction This function will be called
+             * once the mask has been applied.  It is guaranteed to be called in
+             * a future turn of the event loop.  The modified matrix will be
              * passed as the only argument.
              */
             applyMask: function (matrix, dataMatrix, maskFunction, quietZoneSize, size, callbackFunction) {
@@ -3110,18 +3119,21 @@
                 return this;
             },
             /**
-             * Alignment patterns are distinct patterns used to help decoders overcome
-             * distortion and perspective when viewing a QR Code.  They are made up of
-             * a 5x5 square of dark values surrounding a 3x3 square of light values
-             * surrounding a single dark value.
+             * Alignment patterns are distinct patterns used to help decoders
+             * overcome distortion and perspective when viewing a QR Code.  They
+             * are made up of a 5x5 square of dark values surrounding a 3x3
+             * square of light values surrounding a single dark value.
              * @method drawAlignmentPattern
              * @chainable
              * @param {[Boolean]} matrix The array to write to.
-             * @param {Number} centerX The x coordinate of the center of the alignment pattern.
-             * @param {Number} centerY The y coordinate of the center of the alignment pattern.
+             * @param {Number} centerX The x coordinate of the center of the
+             * alignment pattern.
+             * @param {Number} centerY The y coordinate of the center of the
+             * alignment pattern.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Boolean} overwrite When set to true, the alignment pattern will replace
-             * any existing data in the matrix at that location.
+             * @param {Boolean} overwrite When set to true, the alignment
+             * pattern will replace any existing data in the matrix at that
+             * location.
              */
             drawAlignmentPattern: function (matrix, centerX, centerY, size, overwrite) {
                 var endX = centerX + 2,
@@ -3146,19 +3158,22 @@
                 return this;
             },
             /**
-             * Finder patterns are distinct patterns placed in three corners of a QR code.
-             * Finder patterns help decoders determine position, scale, and orientation.
-             * They are made up of a 9x9 square of light values surrounding a 7x7 square
-             * of dark values surrounding a 5x5 square of light values surrounding a 3x3
-             * square filled with dark values.
+             * Finder patterns are distinct patterns placed in three corners of
+             * a QR code.  Finder patterns help decoders determine position,
+             * scale, and orientation.  They are made up of a 9x9 square of
+             * light values surrounding a 7x7 square of dark values surrounding
+             * a 5x5 square of light values surrounding a 3x3 square filled with
+             * dark values.
              * @method drawFinderPattern
              * @chainable
              * @param {[Boolean]} matrix The array to write to.
-             * @param {Number} centerX The x coordinate of the center of the finder pattern.
-             * @param {Number} centerY The y coordinate of the center of the finder pattern.
+             * @param {Number} centerX The x coordinate of the center of the
+             * finder pattern.
+             * @param {Number} centerY The y coordinate of the center of the
+             * finder pattern.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Boolean} overwrite When set to true, the finder pattern will replace
-             * any existing data in the matrix at that location.
+             * @param {Boolean} overwrite When set to true, the finder pattern
+             * will replace any existing data in the matrix at that location.
              */
             drawFinderPattern: function (matrix, centerX, centerY, size, overwrite) {
                 var endX = centerX + 3,
@@ -3183,20 +3198,25 @@
                 return this;
             },
             /**
-             * The error correction level and the id of the mask that has been applied to the
-             * data matrix are encoded together as a 5 bit value.  This value gets 10 error
-             * correction bits appended to it, created by a (15, 5) BCH code.  The final 15 bit
-             * format information codeword has specific locations reserved for it within the
-             * matrix.  QR Codes contain the format information twice for additional redundancy.
+             * The error correction level and the id of the mask that has been
+             * applied to the data matrix are encoded together as a 5 bit value.
+             * This value gets 10 error correction bits appended to it, created
+             * by a (15, 5) BCH code.  The final 15 bit format information
+             * codeword has specific locations reserved for it within the
+             * matrix.  QR Codes contain the format information twice for
+             * additional redundancy.
              * @method drawFormatInformation
              * @chainable
              * @param {[Boolean]} matrix The array to write to.
-             * @param {String} binaryString A string conatining 15 '1' or '0' characters.
-             * @param {Boolean} micro Set this to true for a Micro QR Code or false for a QR Code.
+             * @param {String} binaryString A string conatining 15 '1' or '0'
+             * characters.
+             * @param {Boolean} micro Set this to true for a Micro QR Code or
+             * false for a QR Code.
              * @param {Number} quietZoneSize The size of the quiet zone region.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Boolean} overwrite When set to true, the format information will replace
-             * any existing data in the matrix at that location.
+             * @param {Boolean} overwrite When set to true, the format
+             * information will replace any existing data in the matrix at that
+             * location.
              */
             drawFormatInformation: function (matrix, binaryString, micro, quietZoneSize, size, overwrite) {
                 var i,
@@ -3269,15 +3289,17 @@
                 return true;
             },
             /**
-             * The quiet zone region is a padding of light values around the outside of a
-             * QR Code.  It helps separate the QR Code from other visual elements.
+             * The quiet zone region is a padding of light values around the
+             * outside of a QR Code.  It helps separate the QR Code from other
+             * visual elements.
              * @method drawQuietZone
              * @chainable
              * @param {[Boolean]} matrix The array to write to.
              * @param {Number} quietZoneSize The size of the quiet zone region.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Boolean} overwrite When set to true, the quiet zone region will replace
-             * any existing data in the matrix at that location.
+             * @param {Boolean} overwrite When set to true, the quiet zone
+             * region will replace any existing data in the matrix at that
+             * location.
              */
             drawQuietZone: function (matrix, quietZoneSize, size, overwrite) {
                 var farQuietZoneCoordinate = size - quietZoneSize,
@@ -3317,16 +3339,17 @@
                 return this;
             },
             /**
-             * The timing pattern is a row and column of alternating dark and light values.
-             * The timing pattern allows decoders to determine the version of the QR Code as
-             * well as the pixel density and coordinate system.
+             * The timing pattern is a row and column of alternating dark and
+             * light values.  The timing pattern allows decoders to determine
+             * the version of the QR Code as well as the pixel density and
+             * coordinate system.
              * @method drawTimingPattern
              * @chainable
              * @param {[Boolean]} matrix The array to write to.
              * @param {Number} coordinate The row and column index to write to.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Boolean} overwrite When set to true, the timing pattern will replace
-             * any existing data in the matrix at that location.
+             * @param {Boolean} overwrite When set to true, the timing patter
+             * will replace any existing data in the matrix at that location.
              */
             drawTimingPattern: function (matrix, coordinate, size, overwrite) {
                 var i,
@@ -3350,19 +3373,22 @@
                 return this;
             },
             /**
-             * QR Codes version 7 and higher contain the version number as a 6 bit
-             * value.  This value gets 12 error correction bits appended to it, created
-             * by an (18, 6) Golay code.  The final 18 bit version information codeword
-             * has specific locations reserved for it within the matrix.  QR Codes
-             * contain the version information twice for additional redundancy.
+             * QR Codes version 7 and higher contain the version number as a 6
+             * bit value.  This value gets 12 error correction bits appended to
+             * it, created by an (18, 6) Golay code.  The final 18 bit version
+             * information codeword has specific locations reserved for it
+             * within the matrix.  QR Codes contain the version information
+             * twice for additional redundancy.
              * @method drawVersionInformation
              * @chainable
              * @param {[Boolean]} matrix The array to write to.
-             * @param {String} binaryString A string conatining 18 '1' or '0' characters.
+             * @param {String} binaryString A string conatining 18 '1' or '0'
+             * characters.
              * @param {Number} quietZoneSize The size of the quiet zone region.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Boolean} overwrite When set to true, the version information will replace
-             * any existing data in the matrix at that location.
+             * @param {Boolean} overwrite When set to true, the version
+             * information will replace any existing data in the matrix at that
+             * location.
              */
             drawVersionInformation: function (matrix, binaryString, quietZoneSize, size, overwrite) {
                 var i,
@@ -3401,17 +3427,19 @@
                 return this;
             },
             /**
-             * Several potential matrices are generated during the masking process.
-             * This method searches a matrix for negative features and generates a
-             * penalty score.  This score is used to determine which matrix to keep.
+             * Several potential matrices are generated during the masking
+             * process.  This method searches a matrix for negative features and
+             * generates a penalty score.  This score is used to determine which
+             * matrix to keep.
              * @method evaluateMatrix
              * @chainable
              * @param {[Boolean]} matrix The array to examine.
              * @param {Number} quietZoneSize The size of the quiet zone region.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Function} callbackFunction This function will be called once the matrix has been
-             * evaluated.  It is guaranteed to be called in a future turn of the event loop.  The score
-             * will be passed as the only argument.
+             * @param {Function} callbackFunction This function will be called
+             * once the matrix has been evaluated.  It is guaranteed to be
+             * called in a future turn of the event loop.  The score will be
+             * passed as the only argument.
              */
             evaluateMatrix: function (matrix, quietZoneSize, size, callbackFunction) {
                 var coordinate = size - quietZoneSize - 1,
@@ -3551,19 +3579,21 @@
                 return this;
             },
             /**
-             * Several potential matrices are generated during the masking process.
-             * This method searches for dark values along the non timing pattern edges.
-             * Dark values along these edges make it easier for decoders to determine
-             * the difference between data and the quiet zone region.  The matrix is
-             * given a score used to determine which matrix to keep.
+             * Several potential matrices are generated during the masking
+             * process.  This method searches for dark values along the non
+             * timing pattern edges.  Dark values along these edges make it
+             * easier for decoders to determine the difference between data and
+             * the quiet zone region.  The matrix is given a score used to
+             * determine which matrix to keep.
              * @method evaluateMicroMatrix
              * @chainable
              * @param {[Boolean]} matrix The array to examine.
              * @param {Number} quietZoneSize The size of the quiet zone region.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Function} callbackFunction This function will be called once the matrix has been
-             * evaluated.  It is guaranteed to be called in a future turn of the event loop.  The score
-             * will be passed as the only argument.
+             * @param {Function} callbackFunction This function will be called
+             * once the matrix has been evaluated.  It is guaranteed to be
+             * called in a future turn of the event loop.  The score will be
+             * passed as the only argument.
              */
             evaluateMicroMatrix: function (matrix, quietZoneSize, size, callbackFunction) {
                 _soon(function () {
@@ -3593,15 +3623,16 @@
                 return this;
             },
             /**
-             * This method formats the given data into the final binary string used
-             * to create a data matrix.
+             * This method formats the given data into the final binary string
+             * used to create a data matrix.
              * @method formatBinaryString
              * @chainable
              * @param {String} binaryString A string of '1' and '0' characters.
-             * @param {Function} callbackFunction This function will be called once the binary
-             * string has been formated.  It is guaranteed to be called in a future turn of the
-             * event loop.  If an error occurs, the error message will be passed as the first
-             * argument.  The formatted binary string is passed as the second argument.
+             * @param {Function} callbackFunction This function will be called
+             * once the binary string has been formated.  It is guaranteed to be
+             * called in a future turn of the event loop.  If an error occurs,
+             * the error message will be passed as the first argument.  The
+             * formatted binary string is passed as the second argument.
              */
             formatBinaryString: function (binaryString, callbackFunction) {
                 var blockCount,
@@ -3790,10 +3821,11 @@
              * Generate a QR Code matrix.
              * @method generate
              * @chainable
-             * @param {Function} callbackFunction This function will be called once the matrix 
-             * has been generated.  It is guaranteed to be called in a future turn of the
-             * event loop.  If an error occurs, the error message will be passed as the first
-             * argument.  The matrix is passed as the second argument.  The square root of the
+             * @param {Function} callbackFunction This function will be called
+             * once the matrix has been generated.  It is guaranteed to be
+             * called in a future turn of the event loop.  If an error occurs,
+             * the error message will be passed as the first argument.  The
+             * matrix is passed as the second argument.  The square root of the
              * length of the matrix is passed as the third argument.
              */
             generate: function (callbackFunction) {
@@ -3847,16 +3879,18 @@
              * This method creates a new matrix containing only raw data bits.
              * @method generateDataMatrix
              * @chainable
-             * @param {[Boolean]} matrix An array without any data bits defined.  This matrix is
-             * only used to position data bits around other features that are already present.
-             * This matrix is not modified.
+             * @param {[Boolean]} matrix An array without any data bits defined.
+             * This matrix is only used to position data bits around other
+             * features that are already present.  This matrix is not modified.
              * @param {String} binaryString A string of '1' and '0' characters.
-             * @param {Number} coordinate The coordinate of the vertical timing pattern.
+             * @param {Number} coordinate The coordinate of the vertical timing
+             * pattern.
              * @param {Number} quietZoneSize The size of the quiet zone region.
              * @param {Number} size The square root of the length of matrix.
-             * @param {Function} callbackFunction This function will be called once the dataMatrix 
-             * has been generated.  It is guaranteed to be called in a future turn of the
-             * event loop.  The dataMatrix is passed as the only argument.
+             * @param {Function} callbackFunction This function will be called
+             * once the dataMatrix has been generated.  It is guaranteed to be
+             * called in a future turn of the event loop.  The dataMatrix is
+             * passed as the only argument.
              */
             generateDataMatrix: function (matrix, binaryString, coordinate, quietZoneSize, size, callbackFunction) {
                 // Split the binary string into 8 bit codewords.
@@ -3930,15 +3964,18 @@
                 return this;
             },
             /**
-             * Generates a block of error correction codewords based on a block of data codewords.
+             * Generates a block of error correction codewords based on a block
+             * of data codewords.
              * @method generateErrorCorrectionBlock
              * @chainable
-             * @param {[String]} dataBlock Array of strings of '1' and '0' characters, 8 characters long each.
-             * @param {Number} errorCorrectionBlockLength The number of 8 bit codewords to generate 
-             * in the error correction block.
-             * @param {Function} callbackFunction This function will be called once the error correction block 
-             * has been generated.  It is guaranteed to be called in a future turn of the event loop.
-             * The error correction block is passed as the only argument.
+             * @param {[String]} dataBlock Array of strings of '1' and '0'
+             * characters, 8 characters long each.
+             * @param {Number} errorCorrectionBlockLength The number of 8 bit
+             * codewords to generate in the error correction block.
+             * @param {Function} callbackFunction This function will be called
+             * once the error correction block has been generated.  It is
+             * guaranteed to be called in a future turn of the event loop. The
+             * error correction block is passed as the only argument.
              */
             generateErrorCorrectionBlock: function (dataBlock, errorCorrectionBlockLength, callbackFunction) {
                 var coefficientRun = [],
@@ -4011,10 +4048,11 @@
              * @method generateMatrix
              * @chainable
              * @param {String} binaryString A string of '1' and '0' characters.
-             * @param {Function} callbackFunction This function will be called once the matrix
-             * has been generated.  It is guaranteed to be called in a future turn of the event
-             * loop.  The matrix is passed as the first argument.  The square root of the length
-             * of the matrix is passed as the second argument.
+             * @param {Function} callbackFunction This function will be called
+             * once the matrix has been generated.  It is guaranteed to be
+             * called in a future turn of the event loop.  The matrix is passed
+             * as the first argument.  The square root of the length of the
+             * matrix is passed as the second argument.
              */
             generateMatrix: function (binaryString, callbackFunction) {
                 var me = this,
@@ -4266,9 +4304,10 @@
              * to a string of '1' and '0' characters.
              * @method getBinaryString
              * @chainable
-             * @param {Function} callbackFunction This function will be called once the binary string
-             * has been created.  It is guaranteed to be called in a future turn of the event loop.
-             * The binary string is passed as the only argument.
+             * @param {Function} callbackFunction This function will be called
+             * once the binary string has been created.  It is guaranteed to be
+             * called in a future turn of the event loop. The binary string is
+             * passed as the only argument.
              */
             getBinaryString: function (callbackFunction) {
                 var me = this,
@@ -4305,9 +4344,10 @@
         }, {
             ATTRS: {
                 /**
-                 * Input data must be wrapped up in data objects.  A single data object or
-                 * an array is acceptable.  Data objects are responsible for encoding raw
-                 * values into one of the data encoding modes supported by QR codes.
+                 * Input data must be wrapped up in data objects.  A single data
+                 * object or an array is acceptable.  Data objects are
+                 * responsible for encoding raw values into one of the data
+                 * encoding modes supported by QR codes.
                  * @attribute data
                  * @default []
                  * @initOnly
@@ -4327,15 +4367,16 @@
                     writeOnce: _string_initOnly
                 },
                 /**
-                 * QR Codes use error correction when encoding data.  Error correction
-                 * allows a code to be successfully scanned even if part of the code is
-                 * damaged, missing, or scanned incorrectly.  There are four different
-                 * error correction modes.
+                 * QR Codes use error correction when encoding data.  Error
+                 * correction allows a code to be successfully scanned even if
+                 * part of the code is damaged, missing, or scanned incorrectly.
+                 * There are four different error correction modes.
                  * Mode H can recover from 30% data loss.
                  * Mode L can recover from 7% data loss.
                  * Mode M can recover from 15% data loss.
                  * Mode Q can recover from 25% data loss.
-                 * The more error correction added, the less data the QR Code can hold.
+                 * The more error correction added, the less data the QR Code
+                 * can hold.
                  * @attribute errorCorrection
                  * @default 'M',
                  * @initOnly
@@ -4353,18 +4394,20 @@
                     writeOnce: _string_initOnly
                 },
                 /**
-                 * QR Codes apply one of eight possible masks to the raw data matrix.
-                 * Decoders benefit when a mask is used to reduce the occurence of
-                 * ambiguous patterns within the data matrix.  When this attribute is
-                 * set to null, the data matrix will be have all 8 masks applied to it.
-                 * Each one will be evaluated and the one with the fewest ambiguous
-                 * patterns will be used.  When this attribute is set to a value from 0
-                 * to 7, only that specific mask will be applied and used.  This
-                 * improves the performace of the encoding process by cutting out a
-                 * complex step but manually selecting a mask is not recommended because
-                 * it can negatively affect decoder performance and/or accuracy.  Using
-                 * different masks on the same data can result in QR Codes that appear
-                 * very different, so some choose to select a mask for aesthetic reasons.
+                 * QR Codes apply one of eight possible masks to the raw data
+                 * matrix.  Decoders benefit when a mask is used to reduce the
+                 * occurence of ambiguous patterns within the data matrix.  When
+                 * this attribute is set to null, the data matrix will be have
+                 * all 8 masks applied to it.  Each one will be evaluated and
+                 * the one with the fewest ambiguous patterns will be used.
+                 * When this attribute is set to a value from 0 to 7, only that
+                 * specific mask will be applied and used.  This improves the
+                 * performace of the encoding process by cutting out a complex
+                 * step but manually selecting a mask is not recommended because
+                 * it can negatively affect decoder performance and/or accuracy.
+                 * Using different masks on the same data can result in QR Codes
+                 * that appear very different, so some choose to select a mask
+                 * for aesthetic reasons.
                  * @attribute mask
                  * @default null
                  * @initOnly
@@ -4375,11 +4418,11 @@
                     writeOnce: _string_initOnly
                 },
                 /**
-                 * There are 40 different versions of QR Codes. A QR Code's version
-                 * is just a confusing way to specify how big it is.  A version 1 QR
-                 * Code is a 25x25 grid.  That size increases by 4 up to the 181x181
-                 * grid of a version 40 QR code.  The larger the grid, the more data
-                 * the QR Code can hold.
+                 * There are 40 different versions of QR Codes. A QR Code's
+                 * version is just a confusing way to specify how big it is.  A
+                 * version 1 QR Code is a 25x25 grid.  That size increases by 4
+                 * up to the 181x181 grid of a version 40 QR code.  The larger
+                 * the grid, the more data the QR Code can hold.
                  * @attribute version
                  * @default '1'
                  * @initOnly
@@ -4786,10 +4829,10 @@
         });
     
     /**
-     * Converts a decimal non-negative integer to a string containing '1' and '0' characters.
-     * If the number does not fit within the given length, null is returned.  If the number is
-     * smaller than the given length, it is padded with '0' and a string with the given length
-     * is returned.
+     * Converts a decimal non-negative integer to a string containing '1' and
+     * '0' characters.  If the number does not fit within the given length, null
+     * is returned.  If the number is smaller than the given length, it is
+     * padded with '0' and a string with the given length is returned.
      * @method numberToBinaryString
      * @for QrCode
      * @param {Number} number

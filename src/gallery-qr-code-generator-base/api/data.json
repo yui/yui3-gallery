@@ -64,7 +64,7 @@
             "tag": "module",
             "file": "js/qr-code-generator-base.js",
             "line": 1,
-            "description": "gallery-qr-code-generator-base is a slightly low-level utility for generating QR Codes."
+            "description": "gallery-qr-code-generator-base is a slightly low-level utility for generating\nQR Codes."
         }
     },
     "classes": {
@@ -79,7 +79,7 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "",
             "file": "js/qr-code-generator-base.js",
-            "line": 6,
+            "line": 7,
             "static": 1
         },
         "QrCode.Data": {
@@ -93,8 +93,8 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "QrCode",
             "file": "js/qr-code-generator-base.js",
-            "line": 2989,
-            "description": "This class shouldn't be used directly.\nIt is intended as an interface to implement a specific data encoding mode.",
+            "line": 2990,
+            "description": "This class shouldn't be used directly.  It is intended as an\ninterface to implement a specific data encoding mode.",
             "is_constructor": 1,
             "extends": "Base",
             "params": [
@@ -116,7 +116,7 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "QrCode",
             "file": "js/qr-code-generator-base.js",
-            "line": 3041,
+            "line": 3044,
             "description": "This class provides utility methods for generating QR Codes.",
             "is_constructor": 1,
             "extends": "Base",
@@ -139,7 +139,7 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "QrCode",
             "file": "js/qr-code-generator-base.js",
-            "line": 4395,
+            "line": 4438,
             "description": "This class encodes a value in alphanumeric mode.  Alphanumeric mode\nencodes strings containing only numeric characters, capital-letter\ncharacters, space, dollar sign, percent sign, asterisk, plus sign,\nhyphen-minus, full stop, solidus, and colon.\n0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:",
             "is_constructor": 1,
             "extends": "QrCode.Data",
@@ -162,7 +162,7 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "QrCode",
             "file": "js/qr-code-generator-base.js",
-            "line": 4514,
+            "line": 4557,
             "description": "This class encodes a value in byte mode.  Byte mode encodes strings\nas raw binary data.",
             "is_constructor": 1,
             "extends": "QrCode.Data",
@@ -185,7 +185,7 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "QrCode",
             "file": "js/qr-code-generator-base.js",
-            "line": 4600,
+            "line": 4643,
             "description": "This class encodes a value in numeric mode.  Numeric mode encodes\nstrings containing only numeric characters.\n0123456789",
             "is_constructor": 1,
             "extends": "QrCode.Data",
@@ -208,7 +208,7 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "QrCode",
             "file": "js/qr-code-generator-base.js",
-            "line": 4680,
+            "line": 4723,
             "description": "This class sets the extended channel interpretation mode indicator\nfor the ucs2 character set.  While this is a Data object, it does not\ndirectly encode data.  Instead, it sets a flag in the data stream\nwhich tells a decoder how to interpret the data that follows.  Ucs2\nis an interesting character set because JavaScript strings are\nhandled in ucs2.  Combined with the ByteData object and a character\nwidth set to 16, any JavaScript string can be precisely encoded.\nUnfortunately it appears that many decoders lack support for the ucs2\ncharacter set.  Android's standard Barcode Scanner application does\nprovide support, but the font used to display the result is not able\nto render the entire range of unicode characters.",
             "is_constructor": 1,
             "extends": "QrCode.Data",
@@ -231,7 +231,7 @@
             "module": "gallery-qr-code-generator-base",
             "namespace": "QrCode",
             "file": "js/qr-code-generator-base.js",
-            "line": 4735,
+            "line": 4778,
             "description": "This class sets the extended channel interpretation mode indicator\nfor the utf8 character set.  While this is a Data object, it does not\ndirectly encode data.  Instead, it sets a flag in the data stream\nwhich tells a decoder how to interpret the data that follows.  Utf8\nis a widely supported character set, so this may be a good choice if\nyou need to encode characters that are not supported in alphanumeric\nmode.  Note that JavaScript strings do not use utf8 characters.  This\nmodule does not provide the functionality required to convert\ncharacters to utf8.",
             "is_constructor": 1,
             "extends": "QrCode.Data",
@@ -247,8 +247,8 @@
     "classitems": [
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 2999,
-            "description": "This is an abstract method that should be implemented to return a\nproperly formatted binary string for a specific data encoding mode.",
+            "line": 3000,
+            "description": "This is an abstract method that should be implemented to return a\nproperly formatted binary string for a specific data encoding\nmode.",
             "itemtype": "method",
             "name": "toBinaryString",
             "params": [
@@ -268,8 +268,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3009,
-            "description": "When extending this class, the value of type should be specifically defined.\nMake sure the type is also set on the Y.QrCode.Data.Type object.",
+            "line": 3011,
+            "description": "When extending this class, the value of type should be\nspecifically defined.  Make sure the type is also set on the\nY.QrCode.Data.Type object.",
             "itemtype": "attribute",
             "name": "type",
             "initonly": "",
@@ -280,7 +280,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3022,
+            "line": 3025,
             "description": "The value to encode.",
             "itemtype": "attribute",
             "name": "value",
@@ -291,7 +291,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3032,
+            "line": 3035,
             "description": "This object lists all supported data encoding modes.",
             "itemtype": "property",
             "name": "Type",
@@ -303,25 +303,25 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3050,
-            "description": "Performs a mask operation that inverts some data bits.  QR Codes apply\none of eight possible masks to the raw data matrix.  Decoders benefit\nwhen a mask is used to reduce the occurence of ambiguous patterns\nwithin the data matrix.",
+            "line": 3053,
+            "description": "Performs a mask operation that inverts some data bits.  QR Codes\napply one of eight possible masks to the raw data matrix.\nDecoders benefit when a mask is used to reduce the occurence of\nambiguous patterns within the data matrix.",
             "itemtype": "method",
             "name": "applyMask",
             "chainable": 1,
             "params": [
                 {
                     "name": "matrix",
-                    "description": "The array to write the results to.  Existing data will be overwritten.",
+                    "description": "The array to write the results to.\nExisting data will be overwritten.",
                     "type": "[Boolean]"
                 },
                 {
                     "name": "dataMatrix",
-                    "description": "An array with the source data.  Non-data elements should be undefined.",
+                    "description": "An array with the source data.\nNon-data elements should be undefined.",
                     "type": "[Boolean]"
                 },
                 {
                     "name": "maskFunction",
-                    "description": "A function that accepts x and y coordinates and returns true or false.\nThe x and y coordinates passed to the mask function do not account for the quiet zone region.\nWhen the mask function returns true, the data at that position is inverted.",
+                    "description": "A function that accepts x and y\ncoordinates and returns true or false.  The x and y coordinates\npassed to the mask function do not account for the quiet zone\nregion.  When the mask function returns true, the data at that\nposition is inverted.",
                     "type": "Function"
                 },
                 {
@@ -331,12 +331,12 @@
                 },
                 {
                     "name": "size",
-                    "description": "The square root of the length of matrix.  (dataMatrix and matrix should be the same size.)",
+                    "description": "The square root of the length of matrix.\n(dataMatrix and matrix should be the same size.)",
                     "type": "Number"
                 },
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the mask has been applied.\nIt is guaranteed to be called in a future turn of the event loop.  The modified matrix will be\npassed as the only argument.",
+                    "description": "This function will be called\nonce the mask has been applied.  It is guaranteed to be called in\na future turn of the event loop.  The modified matrix will be\npassed as the only argument.",
                     "type": "Function"
                 }
             ],
@@ -346,8 +346,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3112,
-            "description": "Alignment patterns are distinct patterns used to help decoders overcome\ndistortion and perspective when viewing a QR Code.  They are made up of\na 5x5 square of dark values surrounding a 3x3 square of light values\nsurrounding a single dark value.",
+            "line": 3121,
+            "description": "Alignment patterns are distinct patterns used to help decoders\novercome distortion and perspective when viewing a QR Code.  They\nare made up of a 5x5 square of dark values surrounding a 3x3\nsquare of light values surrounding a single dark value.",
             "itemtype": "method",
             "name": "drawAlignmentPattern",
             "chainable": 1,
@@ -359,12 +359,12 @@
                 },
                 {
                     "name": "centerX",
-                    "description": "The x coordinate of the center of the alignment pattern.",
+                    "description": "The x coordinate of the center of the\nalignment pattern.",
                     "type": "Number"
                 },
                 {
                     "name": "centerY",
-                    "description": "The y coordinate of the center of the alignment pattern.",
+                    "description": "The y coordinate of the center of the\nalignment pattern.",
                     "type": "Number"
                 },
                 {
@@ -374,7 +374,7 @@
                 },
                 {
                     "name": "overwrite",
-                    "description": "When set to true, the alignment pattern will replace\nany existing data in the matrix at that location.",
+                    "description": "When set to true, the alignment\npattern will replace any existing data in the matrix at that\nlocation.",
                     "type": "Boolean"
                 }
             ],
@@ -384,8 +384,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3148,
-            "description": "Finder patterns are distinct patterns placed in three corners of a QR code.\nFinder patterns help decoders determine position, scale, and orientation.\nThey are made up of a 9x9 square of light values surrounding a 7x7 square\nof dark values surrounding a 5x5 square of light values surrounding a 3x3\nsquare filled with dark values.",
+            "line": 3160,
+            "description": "Finder patterns are distinct patterns placed in three corners of\na QR code.  Finder patterns help decoders determine position,\nscale, and orientation.  They are made up of a 9x9 square of\nlight values surrounding a 7x7 square of dark values surrounding\na 5x5 square of light values surrounding a 3x3 square filled with\ndark values.",
             "itemtype": "method",
             "name": "drawFinderPattern",
             "chainable": 1,
@@ -397,12 +397,12 @@
                 },
                 {
                     "name": "centerX",
-                    "description": "The x coordinate of the center of the finder pattern.",
+                    "description": "The x coordinate of the center of the\nfinder pattern.",
                     "type": "Number"
                 },
                 {
                     "name": "centerY",
-                    "description": "The y coordinate of the center of the finder pattern.",
+                    "description": "The y coordinate of the center of the\nfinder pattern.",
                     "type": "Number"
                 },
                 {
@@ -412,7 +412,7 @@
                 },
                 {
                     "name": "overwrite",
-                    "description": "When set to true, the finder pattern will replace\nany existing data in the matrix at that location.",
+                    "description": "When set to true, the finder pattern\nwill replace any existing data in the matrix at that location.",
                     "type": "Boolean"
                 }
             ],
@@ -422,8 +422,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3185,
-            "description": "The error correction level and the id of the mask that has been applied to the\ndata matrix are encoded together as a 5 bit value.  This value gets 10 error\ncorrection bits appended to it, created by a (15, 5) BCH code.  The final 15 bit\nformat information codeword has specific locations reserved for it within the\nmatrix.  QR Codes contain the format information twice for additional redundancy.",
+            "line": 3200,
+            "description": "The error correction level and the id of the mask that has been\napplied to the data matrix are encoded together as a 5 bit value.\nThis value gets 10 error correction bits appended to it, created\nby a (15, 5) BCH code.  The final 15 bit format information\ncodeword has specific locations reserved for it within the\nmatrix.  QR Codes contain the format information twice for\nadditional redundancy.",
             "itemtype": "method",
             "name": "drawFormatInformation",
             "chainable": 1,
@@ -435,12 +435,12 @@
                 },
                 {
                     "name": "binaryString",
-                    "description": "A string conatining 15 '1' or '0' characters.",
+                    "description": "A string conatining 15 '1' or '0'\ncharacters.",
                     "type": "String"
                 },
                 {
                     "name": "micro",
-                    "description": "Set this to true for a Micro QR Code or false for a QR Code.",
+                    "description": "Set this to true for a Micro QR Code or\nfalse for a QR Code.",
                     "type": "Boolean"
                 },
                 {
@@ -455,7 +455,7 @@
                 },
                 {
                     "name": "overwrite",
-                    "description": "When set to true, the format information will replace\nany existing data in the matrix at that location.",
+                    "description": "When set to true, the format\ninformation will replace any existing data in the matrix at that\nlocation.",
                     "type": "Boolean"
                 }
             ],
@@ -465,8 +465,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3271,
-            "description": "The quiet zone region is a padding of light values around the outside of a\nQR Code.  It helps separate the QR Code from other visual elements.",
+            "line": 3291,
+            "description": "The quiet zone region is a padding of light values around the\noutside of a QR Code.  It helps separate the QR Code from other\nvisual elements.",
             "itemtype": "method",
             "name": "drawQuietZone",
             "chainable": 1,
@@ -488,7 +488,7 @@
                 },
                 {
                     "name": "overwrite",
-                    "description": "When set to true, the quiet zone region will replace\nany existing data in the matrix at that location.",
+                    "description": "When set to true, the quiet zone\nregion will replace any existing data in the matrix at that\nlocation.",
                     "type": "Boolean"
                 }
             ],
@@ -498,8 +498,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3319,
-            "description": "The timing pattern is a row and column of alternating dark and light values.\nThe timing pattern allows decoders to determine the version of the QR Code as\nwell as the pixel density and coordinate system.",
+            "line": 3341,
+            "description": "The timing pattern is a row and column of alternating dark and\nlight values.  The timing pattern allows decoders to determine\nthe version of the QR Code as well as the pixel density and\ncoordinate system.",
             "itemtype": "method",
             "name": "drawTimingPattern",
             "chainable": 1,
@@ -521,7 +521,7 @@
                 },
                 {
                     "name": "overwrite",
-                    "description": "When set to true, the timing pattern will replace\nany existing data in the matrix at that location.",
+                    "description": "When set to true, the timing patter\nwill replace any existing data in the matrix at that location.",
                     "type": "Boolean"
                 }
             ],
@@ -531,8 +531,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3352,
-            "description": "QR Codes version 7 and higher contain the version number as a 6 bit\nvalue.  This value gets 12 error correction bits appended to it, created\nby an (18, 6) Golay code.  The final 18 bit version information codeword\nhas specific locations reserved for it within the matrix.  QR Codes\ncontain the version information twice for additional redundancy.",
+            "line": 3375,
+            "description": "QR Codes version 7 and higher contain the version number as a 6\nbit value.  This value gets 12 error correction bits appended to\nit, created by an (18, 6) Golay code.  The final 18 bit version\ninformation codeword has specific locations reserved for it\nwithin the matrix.  QR Codes contain the version information\ntwice for additional redundancy.",
             "itemtype": "method",
             "name": "drawVersionInformation",
             "chainable": 1,
@@ -544,7 +544,7 @@
                 },
                 {
                     "name": "binaryString",
-                    "description": "A string conatining 18 '1' or '0' characters.",
+                    "description": "A string conatining 18 '1' or '0'\ncharacters.",
                     "type": "String"
                 },
                 {
@@ -559,7 +559,7 @@
                 },
                 {
                     "name": "overwrite",
-                    "description": "When set to true, the version information will replace\nany existing data in the matrix at that location.",
+                    "description": "When set to true, the version\ninformation will replace any existing data in the matrix at that\nlocation.",
                     "type": "Boolean"
                 }
             ],
@@ -569,8 +569,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3403,
-            "description": "Several potential matrices are generated during the masking process.\nThis method searches a matrix for negative features and generates a\npenalty score.  This score is used to determine which matrix to keep.",
+            "line": 3429,
+            "description": "Several potential matrices are generated during the masking\nprocess.  This method searches a matrix for negative features and\ngenerates a penalty score.  This score is used to determine which\nmatrix to keep.",
             "itemtype": "method",
             "name": "evaluateMatrix",
             "chainable": 1,
@@ -592,7 +592,7 @@
                 },
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the matrix has been\nevaluated.  It is guaranteed to be called in a future turn of the event loop.  The score\nwill be passed as the only argument.",
+                    "description": "This function will be called\nonce the matrix has been evaluated.  It is guaranteed to be\ncalled in a future turn of the event loop.  The score will be\npassed as the only argument.",
                     "type": "Function"
                 }
             ],
@@ -602,8 +602,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3553,
-            "description": "Several potential matrices are generated during the masking process.\nThis method searches for dark values along the non timing pattern edges.\nDark values along these edges make it easier for decoders to determine\nthe difference between data and the quiet zone region.  The matrix is\ngiven a score used to determine which matrix to keep.",
+            "line": 3581,
+            "description": "Several potential matrices are generated during the masking\nprocess.  This method searches for dark values along the non\ntiming pattern edges.  Dark values along these edges make it\neasier for decoders to determine the difference between data and\nthe quiet zone region.  The matrix is given a score used to\ndetermine which matrix to keep.",
             "itemtype": "method",
             "name": "evaluateMicroMatrix",
             "chainable": 1,
@@ -625,7 +625,7 @@
                 },
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the matrix has been\nevaluated.  It is guaranteed to be called in a future turn of the event loop.  The score\nwill be passed as the only argument.",
+                    "description": "This function will be called\nonce the matrix has been evaluated.  It is guaranteed to be\ncalled in a future turn of the event loop.  The score will be\npassed as the only argument.",
                     "type": "Function"
                 }
             ],
@@ -635,8 +635,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3595,
-            "description": "This method formats the given data into the final binary string used\nto create a data matrix.",
+            "line": 3625,
+            "description": "This method formats the given data into the final binary string\nused to create a data matrix.",
             "itemtype": "method",
             "name": "formatBinaryString",
             "chainable": 1,
@@ -648,7 +648,7 @@
                 },
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the binary\nstring has been formated.  It is guaranteed to be called in a future turn of the\nevent loop.  If an error occurs, the error message will be passed as the first\nargument.  The formatted binary string is passed as the second argument.",
+                    "description": "This function will be called\nonce the binary string has been formated.  It is guaranteed to be\ncalled in a future turn of the event loop.  If an error occurs,\nthe error message will be passed as the first argument.  The\nformatted binary string is passed as the second argument.",
                     "type": "Function"
                 }
             ],
@@ -658,7 +658,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3789,
+            "line": 3820,
             "description": "Generate a QR Code matrix.",
             "itemtype": "method",
             "name": "generate",
@@ -666,7 +666,7 @@
             "params": [
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the matrix \nhas been generated.  It is guaranteed to be called in a future turn of the\nevent loop.  If an error occurs, the error message will be passed as the first\nargument.  The matrix is passed as the second argument.  The square root of the\nlength of the matrix is passed as the third argument.",
+                    "description": "This function will be called\nonce the matrix has been generated.  It is guaranteed to be\ncalled in a future turn of the event loop.  If an error occurs,\nthe error message will be passed as the first argument.  The\nmatrix is passed as the second argument.  The square root of the\nlength of the matrix is passed as the third argument.",
                     "type": "Function"
                 }
             ],
@@ -676,7 +676,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3846,
+            "line": 3878,
             "description": "This method creates a new matrix containing only raw data bits.",
             "itemtype": "method",
             "name": "generateDataMatrix",
@@ -684,7 +684,7 @@
             "params": [
                 {
                     "name": "matrix",
-                    "description": "An array without any data bits defined.  This matrix is\nonly used to position data bits around other features that are already present.\nThis matrix is not modified.",
+                    "description": "An array without any data bits defined.\nThis matrix is only used to position data bits around other\nfeatures that are already present.  This matrix is not modified.",
                     "type": "[Boolean]"
                 },
                 {
@@ -694,7 +694,7 @@
                 },
                 {
                     "name": "coordinate",
-                    "description": "The coordinate of the vertical timing pattern.",
+                    "description": "The coordinate of the vertical timing\npattern.",
                     "type": "Number"
                 },
                 {
@@ -709,7 +709,7 @@
                 },
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the dataMatrix \nhas been generated.  It is guaranteed to be called in a future turn of the\nevent loop.  The dataMatrix is passed as the only argument.",
+                    "description": "This function will be called\nonce the dataMatrix has been generated.  It is guaranteed to be\ncalled in a future turn of the event loop.  The dataMatrix is\npassed as the only argument.",
                     "type": "Function"
                 }
             ],
@@ -719,25 +719,25 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 3932,
-            "description": "Generates a block of error correction codewords based on a block of data codewords.",
+            "line": 3966,
+            "description": "Generates a block of error correction codewords based on a block\nof data codewords.",
             "itemtype": "method",
             "name": "generateErrorCorrectionBlock",
             "chainable": 1,
             "params": [
                 {
                     "name": "dataBlock",
-                    "description": "Array of strings of '1' and '0' characters, 8 characters long each.",
+                    "description": "Array of strings of '1' and '0'\ncharacters, 8 characters long each.",
                     "type": "[String]"
                 },
                 {
                     "name": "errorCorrectionBlockLength",
-                    "description": "The number of 8 bit codewords to generate \nin the error correction block.",
+                    "description": "The number of 8 bit\ncodewords to generate in the error correction block.",
                     "type": "Number"
                 },
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the error correction block \nhas been generated.  It is guaranteed to be called in a future turn of the event loop.\nThe error correction block is passed as the only argument.",
+                    "description": "This function will be called\nonce the error correction block has been generated.  It is\nguaranteed to be called in a future turn of the event loop. The\nerror correction block is passed as the only argument.",
                     "type": "Function"
                 }
             ],
@@ -747,7 +747,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4009,
+            "line": 4046,
             "description": "Generates a matrix which represents the given data.",
             "itemtype": "method",
             "name": "generateMatrix",
@@ -760,7 +760,7 @@
                 },
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the matrix\nhas been generated.  It is guaranteed to be called in a future turn of the event\nloop.  The matrix is passed as the first argument.  The square root of the length\nof the matrix is passed as the second argument.",
+                    "description": "This function will be called\nonce the matrix has been generated.  It is guaranteed to be\ncalled in a future turn of the event loop.  The matrix is passed\nas the first argument.  The square root of the length of the\nmatrix is passed as the second argument.",
                     "type": "Function"
                 }
             ],
@@ -770,7 +770,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4230,
+            "line": 4268,
             "description": "Each QR Code version has specific requirements for the position\nof alignment patterns.  This method returns the center position\nof each required alignment pattern.",
             "itemtype": "method",
             "name": "getAlignmentPatternCoordinates",
@@ -791,7 +791,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4264,
+            "line": 4302,
             "description": "Converts the value of the data attribute\nto a string of '1' and '0' characters.",
             "itemtype": "method",
             "name": "getBinaryString",
@@ -799,7 +799,7 @@
             "params": [
                 {
                     "name": "callbackFunction",
-                    "description": "This function will be called once the binary string\nhas been created.  It is guaranteed to be called in a future turn of the event loop.\nThe binary string is passed as the only argument.",
+                    "description": "This function will be called\nonce the binary string has been created.  It is guaranteed to be\ncalled in a future turn of the event loop. The binary string is\npassed as the only argument.",
                     "type": "Function"
                 }
             ],
@@ -809,7 +809,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4291,
+            "line": 4330,
             "description": "Returns the proper size of a matrix for this version.",
             "itemtype": "method",
             "name": "getSize",
@@ -823,8 +823,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4307,
-            "description": "Input data must be wrapped up in data objects.  A single data object or\nan array is acceptable.  Data objects are responsible for encoding raw\nvalues into one of the data encoding modes supported by QR codes.",
+            "line": 4346,
+            "description": "Input data must be wrapped up in data objects.  A single data\nobject or an array is acceptable.  Data objects are\nresponsible for encoding raw values into one of the data\nencoding modes supported by QR codes.",
             "itemtype": "attribute",
             "name": "data",
             "default": "[]",
@@ -836,8 +836,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4329,
-            "description": "QR Codes use error correction when encoding data.  Error correction\nallows a code to be successfully scanned even if part of the code is\ndamaged, missing, or scanned incorrectly.  There are four different\nerror correction modes.\nMode H can recover from 30% data loss.\nMode L can recover from 7% data loss.\nMode M can recover from 15% data loss.\nMode Q can recover from 25% data loss.\nThe more error correction added, the less data the QR Code can hold.",
+            "line": 4369,
+            "description": "QR Codes use error correction when encoding data.  Error\ncorrection allows a code to be successfully scanned even if\npart of the code is damaged, missing, or scanned incorrectly.\nThere are four different error correction modes.\nMode H can recover from 30% data loss.\nMode L can recover from 7% data loss.\nMode M can recover from 15% data loss.\nMode Q can recover from 25% data loss.\nThe more error correction added, the less data the QR Code\ncan hold.",
             "itemtype": "attribute",
             "name": "errorCorrection",
             "default": "'M',",
@@ -849,8 +849,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4355,
-            "description": "QR Codes apply one of eight possible masks to the raw data matrix.\nDecoders benefit when a mask is used to reduce the occurence of\nambiguous patterns within the data matrix.  When this attribute is\nset to null, the data matrix will be have all 8 masks applied to it.\nEach one will be evaluated and the one with the fewest ambiguous\npatterns will be used.  When this attribute is set to a value from 0\nto 7, only that specific mask will be applied and used.  This\nimproves the performace of the encoding process by cutting out a\ncomplex step but manually selecting a mask is not recommended because\nit can negatively affect decoder performance and/or accuracy.  Using\ndifferent masks on the same data can result in QR Codes that appear\nvery different, so some choose to select a mask for aesthetic reasons.",
+            "line": 4396,
+            "description": "QR Codes apply one of eight possible masks to the raw data\nmatrix.  Decoders benefit when a mask is used to reduce the\noccurence of ambiguous patterns within the data matrix.  When\nthis attribute is set to null, the data matrix will be have\nall 8 masks applied to it.  Each one will be evaluated and\nthe one with the fewest ambiguous patterns will be used.\nWhen this attribute is set to a value from 0 to 7, only that\nspecific mask will be applied and used.  This improves the\nperformace of the encoding process by cutting out a complex\nstep but manually selecting a mask is not recommended because\nit can negatively affect decoder performance and/or accuracy.\nUsing different masks on the same data can result in QR Codes\nthat appear very different, so some choose to select a mask\nfor aesthetic reasons.",
             "itemtype": "attribute",
             "name": "mask",
             "default": "null",
@@ -862,8 +862,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4377,
-            "description": "There are 40 different versions of QR Codes. A QR Code's version\nis just a confusing way to specify how big it is.  A version 1 QR\nCode is a 25x25 grid.  That size increases by 4 up to the 181x181\ngrid of a version 40 QR code.  The larger the grid, the more data\nthe QR Code can hold.",
+            "line": 4420,
+            "description": "There are 40 different versions of QR Codes. A QR Code's\nversion is just a confusing way to specify how big it is.  A\nversion 1 QR Code is a 25x25 grid.  That size increases by 4\nup to the 181x181 grid of a version 40 QR code.  The larger\nthe grid, the more data the QR Code can hold.",
             "itemtype": "attribute",
             "name": "version",
             "default": "'1'",
@@ -875,7 +875,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4408,
+            "line": 4451,
             "description": "Returns a properly formatted binary string for alphanumeric data.",
             "itemtype": "method",
             "name": "toBinaryString",
@@ -896,7 +896,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4489,
+            "line": 4532,
             "itemtype": "attribute",
             "name": "type",
             "default": "'alphanumeric'",
@@ -908,7 +908,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4499,
+            "line": 4542,
             "itemtype": "attribute",
             "name": "value",
             "initonly": "",
@@ -919,7 +919,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4524,
+            "line": 4567,
             "description": "Returns a properly formatted binary string for byte data.",
             "itemtype": "method",
             "name": "toBinaryString",
@@ -940,7 +940,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4567,
+            "line": 4610,
             "description": "The number of bits used to encode each character.",
             "itemtype": "attribute",
             "name": "characterWidth",
@@ -953,7 +953,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4578,
+            "line": 4621,
             "itemtype": "attribute",
             "name": "type",
             "default": "'byte'",
@@ -965,7 +965,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4588,
+            "line": 4631,
             "itemtype": "attribute",
             "name": "value",
             "initonly": "",
@@ -976,7 +976,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4611,
+            "line": 4654,
             "description": "Returns a properly formatted binary string for numeric data.",
             "itemtype": "method",
             "name": "toBinaryString",
@@ -997,7 +997,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4655,
+            "line": 4698,
             "itemtype": "attribute",
             "name": "type",
             "default": "'numeric'",
@@ -1009,7 +1009,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4665,
+            "line": 4708,
             "itemtype": "attribute",
             "name": "value",
             "initonly": "",
@@ -1020,7 +1020,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4699,
+            "line": 4742,
             "description": "Returns a properly formatted binary string for ucs2 data.",
             "itemtype": "method",
             "name": "toBinaryString",
@@ -1041,7 +1041,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4711,
+            "line": 4754,
             "itemtype": "attribute",
             "name": "type",
             "default": "'ucs2'",
@@ -1053,7 +1053,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4721,
+            "line": 4764,
             "description": "This object does not require a value.",
             "itemtype": "attribute",
             "name": "value",
@@ -1066,7 +1066,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4752,
+            "line": 4795,
             "description": "Returns a properly formatted binary string for utf8 data.",
             "itemtype": "method",
             "name": "toBinaryString",
@@ -1087,7 +1087,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4764,
+            "line": 4807,
             "itemtype": "attribute",
             "name": "type",
             "default": "'utf8'",
@@ -1099,7 +1099,7 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4774,
+            "line": 4817,
             "description": "This object does not require a value.",
             "itemtype": "attribute",
             "name": "value",
@@ -1112,8 +1112,8 @@
         },
         {
             "file": "js/qr-code-generator-base.js",
-            "line": 4788,
-            "description": "Converts a decimal non-negative integer to a string containing '1' and '0' characters.\nIf the number does not fit within the given length, null is returned.  If the number is\nsmaller than the given length, it is padded with '0' and a string with the given length\nis returned.",
+            "line": 4831,
+            "description": "Converts a decimal non-negative integer to a string containing '1' and\n'0' characters.  If the number does not fit within the given length, null\nis returned.  If the number is smaller than the given length, it is\npadded with '0' and a string with the given length is returned.",
             "itemtype": "method",
             "name": "numberToBinaryString",
             "params": [
