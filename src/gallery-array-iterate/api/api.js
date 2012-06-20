@@ -4,12 +4,12 @@ YUI.add("yuidoc-meta", function(Y) {
         "Array"
     ],
     "modules": [
-        "gallery-async-pause"
+        "gallery-array-iterate"
     ],
     "allModules": [
         {
-            "displayName": "gallery-async-pause",
-            "name": "gallery-async-pause",
+            "displayName": "gallery-array-iterate",
+            "name": "gallery-array-iterate",
             "description": "Iterate through an array."
         }
     ]
