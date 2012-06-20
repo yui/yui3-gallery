@@ -1,0 +1,12 @@
+{
+    "name": "Audio",
+    "description": "Utility to create an HTML 5 audio element.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}
