@@ -1,0 +1,105 @@
+{
+    "project": {
+        "name": "YQL REST Client",
+        "description": "This is a simple REST client supporting DELETE, GET, HEAD, POST, and PUT."
+    },
+    "files": {
+        "js/yql-rest-client.js": {
+            "name": "js/yql-rest-client.js",
+            "modules": {
+                "gallery-yql-rest-client": 1
+            },
+            "classes": {
+                "YQLRESTClient": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-yql-rest-client": {
+            "name": "gallery-yql-rest-client",
+            "submodules": {},
+            "classes": {
+                "YQLRESTClient": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/yql-rest-client.js",
+            "line": 1,
+            "description": "This module is a REST client."
+        }
+    },
+    "classes": {
+        "YQLRESTClient": {
+            "name": "YQLRESTClient",
+            "shortname": "YQLRESTClient",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-yql-rest-client",
+            "namespace": "",
+            "file": "js/yql-rest-client.js",
+            "line": 19,
+            "static": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/yql-rest-client.js",
+            "line": 24,
+            "description": "Sends a REST request.",
+            "itemtype": "method",
+            "name": "request",
+            "params": [
+                {
+                    "name": "params",
+                    "description": "Request parameters object.\n<dl>\n    <dt>\n        accept\n    </dt>\n    <dd>\n        Specifies the type of content to send in the response using\n        the Accept HTTP header.  This tells YQL what kind of data\n        format you want returned, as well as how to parse it.\n    </dd>\n    <dt>\n        content\n    </dt>\n    <dd>\n        The body content of a POST or PUT request.  This can be an\n        object or a string.  If an object is used, contentType is\n        assumed to be application/x-www-form-urlencoded.\n    </dd>\n    <dt>\n        contentType\n    </dt>\n    <dd>\n        Specifies the content-type of the body content of a POST or\n        PUT request.\n    </dd>\n    <dt>\n        fallbackCharsets\n    </dt>\n    <dd>\n        Overrides the list of fallback character sets, which is set\n        to \"utf-8, iso-8859-1\" by default, for decoding the returned\n        response. YQL attempts to decode the response using the\n        character sets listed here when the response either does not\n        specify the character set or specifies an incorrect character\n        set that results in a failed decoding.  This value may be an\n        array of strings or one string with comma separated values.\n    </dd>\n    <dt>\n        forceCharset\n    </dt>\n    <dd>\n        Forces YQL to use the character set specified. Using this\n        overrides both the character set specified by the response\n        and the fallback character sets. \n    </dd>\n    <dt>\n        headers\n    </dt>\n    <dd>\n        Adds HTTP headers to the request.\n    </dd>\n    <dt>\n        jsonCompat\n    </dt>\n    <dd>\n        Set this value to 'new' to get \"lossless\" JSON when making a\n        REST call to a Web service.  jsonCompat: 'new' must also be\n        set in the yqlParams object.\n    </dd>\n    <dt>\n        matrix\n    </dt>\n    <dd>\n        Adds matrix parameters to the request. \n    </dd>\n    <dt>\n        method\n    </dt>\n    <dd>\n        The HTTP method to use.  Must be one of 'DELETE', 'GET',\n        'HEAD', 'POST' or 'PUT'.\n    </dd>\n    <dt>\n        paths\n    </dt>\n    <dd>\n        Array of paths to append to the url.\n    </dd>\n    <dt>\n        query\n    </dt>\n    <dd>\n        Query parameters to add to the request.\n    </dd>\n    <dt>\n        timeout\n    </dt>\n    <dd>\n        Specifies the request timeout in milliseconds. This is useful\n        when you want to cancel requests that take longer than\n        expected. \n    </dd>\n    <dt>\n        url\n    </dt>\n    <dd>\n        Provides a URL endpoint to query.\n    </dd>\n</dl>",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "The response object is the only\nparameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "yqlParams",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "yqlOpts",
+                    "description": "(optional) Passes through to Y.YQL.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YQLRESTClient",
+            "module": "gallery-yql-rest-client"
+        },
+        {
+            "file": "js/yql-rest-client.js",
+            "line": 230,
+            "description": "Escapes \" characters.",
+            "itemtype": "method",
+            "name": "_quotedString",
+            "params": [
+                {
+                    "name": "string",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "YQLRESTClient",
+            "module": "gallery-yql-rest-client"
+        }
+    ]
+}
