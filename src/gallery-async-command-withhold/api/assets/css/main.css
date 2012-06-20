@@ -36,6 +36,10 @@ a {
     text-decoration: none;
 }
 
+.hidden {
+    display: none;
+}
+
 a:hover { text-decoration: underline; }
 
 /* "Jump to Table of Contents" link is shown to assistive tools, but hidden from
@@ -204,8 +208,8 @@ th {
 .toc li li { font-weight: normal; }
 
 /* -- Intro and Example Boxes ----------------------------------------------- */
+/*
 .intro, .example { margin-bottom: 2em; }
-
 .example {
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
@@ -215,10 +219,10 @@ th {
     box-shadow: 0 0 5px #bfbfbf;
     padding: 1em;
 }
-
 .intro {
     background: none repeat scroll 0 0 #F0F1F8; border: 1px solid #D4D8EB; padding: 0 1em;
 }
+*/
 
 /* -- Other Styles ---------------------------------------------------------- */
 
@@ -268,13 +272,6 @@ th {
     text-align: right;
 }
 
-
-a.external {
-    background-image: url(external-small.png);
-    background-repeat: no-repeat;
-    background-position: 0 0;
-    padding-left: 16px;
-}
 
 #classdocs .item {
     border-bottom: 1px solid #466899;
@@ -761,48 +758,3 @@ kbd .cmd { font-family: Monaco, Helvetica; }
     font-weight: bold;
 }
 
-
-.yui3-widget, .yui3-tabview .yui3-tabview-content .yui3-tabview-list {
-    margin-right: 5px;
-    border-color: #DDD;
-    border-width: 0 0 1px;
-}
-.yui3-skin-sam .yui3-tab-selected .yui3-tab-label, .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:focus, .yui3-skin-sam .yui3-tab-selected .yui3-tab-label:hover {
-    color: #fff !important;
-    background: #2647A0;
-    -x-system-font: none;
-    font-family: arial,helvetica,clean,sans-serif;
-    font-size: 13px;
-    font-size-adjust: none;
-    font-stretch: normal;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: normal;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-topleft: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-top-left-radius: 5px;
-}
-.yui3-skin-sam .yui3-tab-label {
-    -x-system-font: none;
-    font-family: arial,helvetica,clean,sans-serif;
-    font-size: 13px;
-    font-size-adjust: none;
-    font-stretch: normal;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: normal;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-topleft: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-top-left-radius: 5px;
-}
-.yui3-widget, .yui3-tabview .yui3-tabview-content .yui3-tabview-panel {
-    background: #FFFFFF;
-    -moz-border-radius-topright: 5px;
-    -moz-border-radius-bottomright: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -webkit-border-top-right-radius: 5px;
-    -webkit-border-bottom-right-radius: 5px;
-    -webkit-border-bottom-left-radius: 5px;
-}
