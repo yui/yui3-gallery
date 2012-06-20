@@ -1,47 +1,49 @@
 /**
  * @module gallery-async-command-timeout
  */
-(function (Y) {
+(function (Y, moduleName) {
     'use strict';
     
-    var _invoke = Y.Array.invoke,
-        _later = Y.later,
+    var _string_timeout = 'timeout',
         
-        _class;
+        _Plugin = Y.Plugin,
+        
+        _invoke = Y.Array.invoke,
+        _later = Y.later;
 
     /**
      * Asynchronous command timeout plugin.
      * @class AsyncCommandTimeout
-     * @extends Y.Plugin.Base
-     * @namespace Y.Plugin
+     * @extends Plugin.Base
+     * @namespace Plugin
      * @param {Object} config Configuration Object.
      */
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Plugin.Base, {
+    _Plugin.AsyncCommandTimeout = Y.Base.create(moduleName, _Plugin.Base, [], {
         destructor: function () {
-            _invoke(this._subscriptions, 'detach');
+            var me = this;
             
-            if (this._timer) {
-                this._timer.cancel();
-                delete this._timer;
+            _invoke(me._subs, 'detach');
+            
+            if (me._timer) {
+                me._timer.cancel();
+                delete me._timer;
             }
         },
         initializer: function () {
             var me = this,
                 host = me.get('host'),
-                timeout = me.get('timeout');
+                timeout = me.get(_string_timeout);
             
             if (!timeout) {
                 return;
             }
             
-            me._subscriptions = [
+            me._subs = [
                 host.on('start', function () {
                     me._timer = _later(timeout, host, host.fire, [
                         'failure',
                         {
-                            error: 'timeout'
+                            error: _string_timeout
                         }
                     ]);
                 }),
@@ -72,9 +74,6 @@
                 writeOnce: 'initOnly'
             }
         },
-        NAME: 'async-command-timeout',
-        NS: 'timeout'
+        NS: _string_timeout
     });
-
-    Y.Plugin.AsyncCommandTimeout = _class;
-}(Y));
+}(Y, arguments[1]));

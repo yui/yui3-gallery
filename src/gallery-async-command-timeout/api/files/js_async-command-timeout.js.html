@@ -38,9 +38,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/Y.AsyncCommand.html">Y.AsyncCommand</a></li>
+                <li><a href="..&#x2F;classes/AsyncCommand.html">AsyncCommand</a></li>
             
-                <li><a href="..&#x2F;classes/Y.Plugin.AsyncCommandTimeout.html">Y.Plugin.AsyncCommandTimeout</a></li>
+                <li><a href="..&#x2F;classes/Plugin.AsyncCommandTimeout.html">Plugin.AsyncCommandTimeout</a></li>
             
             </ul>
 
@@ -86,47 +86,49 @@
 &#x2F;**
  * @module gallery-async-command-timeout
  *&#x2F;
-(function (Y) {
+(function (Y, moduleName) {
     &#x27;use strict&#x27;;
     
-    var _invoke = Y.Array.invoke,
-        _later = Y.later,
+    var _string_timeout = &#x27;timeout&#x27;,
         
-        _class;
+        _Plugin = Y.Plugin,
+        
+        _invoke = Y.Array.invoke,
+        _later = Y.later;
 
     &#x2F;**
      * Asynchronous command timeout plugin.
      * @class AsyncCommandTimeout
-     * @extends Y.Plugin.Base
-     * @namespace Y.Plugin
+     * @extends Plugin.Base
+     * @namespace Plugin
      * @param {Object} config Configuration Object.
      *&#x2F;
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Plugin.Base, {
+    _Plugin.AsyncCommandTimeout = Y.Base.create(moduleName, _Plugin.Base, [], {
         destructor: function () {
-            _invoke(this._subscriptions, &#x27;detach&#x27;);
+            var me = this;
             
-            if (this._timer) {
-                this._timer.cancel();
-                delete this._timer;
+            _invoke(me._subs, &#x27;detach&#x27;);
+            
+            if (me._timer) {
+                me._timer.cancel();
+                delete me._timer;
             }
         },
         initializer: function () {
             var me = this,
                 host = me.get(&#x27;host&#x27;),
-                timeout = me.get(&#x27;timeout&#x27;);
+                timeout = me.get(_string_timeout);
             
             if (!timeout) {
                 return;
             }
             
-            me._subscriptions = [
+            me._subs = [
                 host.on(&#x27;start&#x27;, function () {
                     me._timer = _later(timeout, host, host.fire, [
                         &#x27;failure&#x27;,
                         {
-                            error: &#x27;timeout&#x27;
+                            error: _string_timeout
                         }
                     ]);
                 }),
@@ -157,12 +159,9 @@
                 writeOnce: &#x27;initOnly&#x27;
             }
         },
-        NAME: &#x27;async-command-timeout&#x27;,
-        NS: &#x27;timeout&#x27;
+        NS: _string_timeout
     });
-
-    Y.Plugin.AsyncCommandTimeout = _class;
-}(Y));
+}(Y, arguments[1]));
     </pre>
 </div>
 

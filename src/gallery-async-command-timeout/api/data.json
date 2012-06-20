@@ -10,11 +10,11 @@
                 "gallery-async-command-timeout": 1
             },
             "classes": {
-                "Y.Plugin.AsyncCommandTimeout": 1
+                "Plugin.AsyncCommandTimeout": 1
             },
             "fors": {},
             "namespaces": {
-                "Y.Plugin": 1
+                "Plugin": 1
             }
         },
         "../gallery-async-command/js/async-command.js": {
@@ -23,12 +23,10 @@
                 "gallery-async-command": 1
             },
             "classes": {
-                "Y.AsyncCommand": 1
+                "AsyncCommand": 1
             },
             "fors": {},
-            "namespaces": {
-                "Y": 1
-            }
+            "namespaces": {}
         }
     },
     "modules": {
@@ -36,11 +34,11 @@
             "name": "gallery-async-command-timeout",
             "submodules": {},
             "classes": {
-                "Y.Plugin.AsyncCommandTimeout": 1
+                "Plugin.AsyncCommandTimeout": 1
             },
             "fors": {},
             "namespaces": {
-                "Y.Plugin": 1
+                "Plugin": 1
             },
             "tag": "module",
             "file": "js/async-command-timeout.js",
@@ -50,32 +48,30 @@
             "name": "gallery-async-command",
             "submodules": {},
             "classes": {
-                "Y.AsyncCommand": 1
+                "AsyncCommand": 1
             },
             "fors": {},
-            "namespaces": {
-                "Y": 1
-            },
+            "namespaces": {},
             "tag": "module",
             "file": "../gallery-async-command/js/async-command.js",
             "line": 1
         }
     },
     "classes": {
-        "Y.Plugin.AsyncCommandTimeout": {
-            "name": "Y.Plugin.AsyncCommandTimeout",
-            "shortname": "Y.Plugin.AsyncCommandTimeout",
+        "Plugin.AsyncCommandTimeout": {
+            "name": "Plugin.AsyncCommandTimeout",
+            "shortname": "Plugin.AsyncCommandTimeout",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
             "module": "gallery-async-command-timeout",
-            "namespace": "Y.Plugin",
+            "namespace": "Plugin",
             "file": "js/async-command-timeout.js",
-            "line": 12,
+            "line": 14,
             "description": "Asynchronous command timeout plugin.",
-            "extends": "Y.Plugin.Base",
+            "extends": "Plugin.Base",
             "params": [
                 {
                     "name": "config",
@@ -84,20 +80,20 @@
                 }
             ]
         },
-        "Y.AsyncCommand": {
-            "name": "Y.AsyncCommand",
-            "shortname": "Y.AsyncCommand",
+        "AsyncCommand": {
+            "name": "AsyncCommand",
+            "shortname": "AsyncCommand",
             "classitems": [],
             "plugins": [],
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
             "module": "gallery-async-command",
-            "namespace": "Y",
+            "namespace": "",
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 12,
+            "line": 21,
             "description": "Asynchronous command class.",
-            "extends": "Y.Base",
+            "extends": "Base",
             "params": [
                 {
                     "name": "config",
@@ -110,20 +106,20 @@
     "classitems": [
         {
             "file": "js/async-command-timeout.js",
-            "line": 61,
+            "line": 63,
             "description": "Approximate timeout in milliseconds to wait for success before\nthe command automatically fails.  Must be a non-negative integer.\nA value of 0 disables the timeout.",
             "itemtype": "attribute",
             "name": "timeout",
             "default": "0",
             "initonly": "",
             "type": "Number",
-            "class": "Y.Plugin.AsyncCommandTimeout",
+            "class": "Plugin.AsyncCommandTimeout",
             "module": "gallery-async-command-timeout",
-            "namespace": "Y.Plugin"
+            "namespace": "Plugin"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 25,
+            "line": 31,
             "description": "Fired when the command function completes.",
             "itemtype": "event",
             "name": "complete",
@@ -135,7 +131,7 @@
                 },
                 {
                     "name": "failed",
-                    "description": "Indicates the failed status of the command.",
+                    "description": "Indicates the failed status of the\ncommand.",
                     "type": "Boolean"
                 },
                 {
@@ -143,13 +139,12 @@
                     "description": "Optional return value from the command function."
                 }
             ],
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 40,
+            "line": 47,
             "description": "Fired when the command function fails.",
             "itemtype": "event",
             "name": "failure",
@@ -162,26 +157,24 @@
             ],
             "access": "protected",
             "tagname": "",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 62,
+            "line": 69,
             "description": "Fired when the command function starts.",
             "itemtype": "event",
             "name": "start",
             "fireonce": "",
             "access": "protected",
             "tagname": "",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 76,
+            "line": 83,
             "description": "Fired when the command function succeeds.",
             "itemtype": "event",
             "name": "success",
@@ -194,117 +187,107 @@
             ],
             "access": "protected",
             "tagname": "",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 99,
+            "line": 106,
             "description": "Execute the command function.",
             "itemtype": "method",
             "name": "run",
             "chainable": 1,
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 110,
-            "description": "Array of arguments to be passed to the command function.\nA special callback function is automatically added as the first argument.",
+            "line": 117,
+            "description": "Array of arguments to be passed to the command function.\nA special callback function is automatically added as the first\nargument.",
             "itemtype": "attribute",
             "name": "args",
             "default": "[]",
             "initonly": "",
             "type": "Array",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 131,
+            "line": 139,
             "description": "Boolean value indicating the completed status of the command.",
             "itemtype": "attribute",
             "name": "completed",
             "default": "false",
             "readonly": "",
             "type": "Boolean",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
-        },
-        {
-            "file": "../gallery-async-command/js/async-command.js",
-            "line": 142,
-            "description": "Execution context for the command function.",
-            "itemtype": "attribute",
-            "name": "ctx",
-            "initonly": "",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
             "line": 150,
+            "description": "Execution context for the command function.",
+            "itemtype": "attribute",
+            "name": "ctx",
+            "initonly": "",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 159,
             "description": "Error value passed to the failure event.",
             "itemtype": "attribute",
             "name": "error",
             "readonly": "",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 158,
+            "line": 168,
             "description": "Boolean value indicating the failed status of the command.",
             "itemtype": "attribute",
             "name": "failed",
             "default": "false",
             "readonly": "",
             "type": "Boolean",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 169,
-            "description": "The command function to execute.  This function receives a special success callback function as\nthe first parameter.  The success callback function has a method parameter called fail.  One of \nthese callback functions must be called in order to complete the command.",
+            "line": 179,
+            "description": "The command function to execute.  This function receives a special\nsuccess callback function as the first parameter.  The success\ncallback function has a method parameter called fail.  One of\nthese callback functions must be called in order to complete the\ncommand.",
             "itemtype": "attribute",
             "name": "fn",
             "initonly": "",
             "type": "Function",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 183,
+            "line": 195,
             "description": "Boolean value indicating the started status of the command.",
             "itemtype": "attribute",
             "name": "started",
             "default": "false",
             "readonly": "",
             "type": "Boolean",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         },
         {
             "file": "../gallery-async-command/js/async-command.js",
-            "line": 194,
+            "line": 206,
             "description": "Value passed to the success event.",
             "itemtype": "attribute",
             "name": "value",
             "readonly": "",
-            "class": "Y.AsyncCommand",
-            "module": "gallery-async-command",
-            "namespace": "Y"
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
         }
     ]
 }
