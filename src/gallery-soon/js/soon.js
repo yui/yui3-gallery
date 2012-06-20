@@ -12,7 +12,7 @@
  * Copyright (c) 2011 Barnesandnoble.com, llc and Donavon West
  * 
  * https://github.com/NobleJS/setImmediate/blob/master/MIT-LICENSE.txt
- * @module gallery-lazy-load
+ * @module gallery-soon
  */
 (function (Y) {
     'use strict';
@@ -45,10 +45,12 @@
     };
     
     /**
-     * Y.soon accepts a callback function. The callback function will be called once, as soon as possible,
-     * in a future turn of the JavaScript event loop.  If the function requires a specific execution
-     * context or arguments, wrap it with Y.bind.  Y.soon returns an object with a cancel method. If the
-     * cancel method is called before the callback function, the callback function won't be called.
+     * Y.soon accepts a callback function. The callback function will be called
+     * once, as soon as possible, in a future turn of the JavaScript event loop.
+     * If the function requires a specific execution context or arguments, wrap
+     * it with Y.bind.  Y.soon returns an object with a cancel method. If the
+     * cancel method is called before the callback function, the callback
+     * function won't be called.
      * 
      * based on setImmediate.js. https://github.com/NobleJS/setImmediate
      * 
@@ -88,6 +90,7 @@
         
         Y.Array.some([
             'setImmediate',
+            // TODO: Determine if these prefixes are accurate.
             'mozSetImmediate',
             'msSetImmediate',
             'oSetImmediate',
@@ -222,7 +225,8 @@
     }
     
     /*
-     * Stores a callback function by id and returns an object with a cancel method.
+     * Stores a callback function by id and returns an object with a cancel
+     * method.
      * @method _store
      * @param {String} id
      * @param {Function} callbackFunction
@@ -233,8 +237,8 @@
      *         cancel
      *     </dt>
      *     <dd>
-     *         If the cancel method is called before the callback function,
-     *         the callback function won't be called.
+     *         If the cancel method is called before the callback function, the
+     *         callback function won't be called.
      *     </dd>
      * </dl>
      */

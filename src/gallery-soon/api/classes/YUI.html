@@ -44,7 +44,7 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="..&#x2F;modules/gallery-lazy-load.html">gallery-lazy-load</a></li>
+                <li><a href="..&#x2F;modules/gallery-soon.html">gallery-soon</a></li>
             
             </ul>
         </div>
@@ -186,10 +186,12 @@
     </div>
 
     <div class="description">
-        <p>Y.soon accepts a callback function. The callback function will be called once, as soon as possible,
-in a future turn of the JavaScript event loop.  If the function requires a specific execution
-context or arguments, wrap it with Y.bind.  Y.soon returns an object with a cancel method. If the
-cancel method is called before the callback function, the callback function won't be called.</p>
+        <p>Y.soon accepts a callback function. The callback function will be called
+once, as soon as possible, in a future turn of the JavaScript event loop.
+If the function requires a specific execution context or arguments, wrap
+it with Y.bind.  Y.soon returns an object with a cancel method. If the
+cancel method is called before the callback function, the callback
+function won't be called.</p>
 
 <p>based on setImmediate.js. https://github.com/NobleJS/setImmediate</p>
 

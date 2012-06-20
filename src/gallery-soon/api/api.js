@@ -4,12 +4,12 @@ YUI.add("yuidoc-meta", function(Y) {
         "YUI"
     ],
     "modules": [
-        "gallery-lazy-load"
+        "gallery-soon"
     ],
     "allModules": [
         {
-            "displayName": "gallery-lazy-load",
-            "name": "gallery-lazy-load",
+            "displayName": "gallery-soon",
+            "name": "gallery-soon",
             "description": "Similar to Y.later, but sooner.\n\nbased on setImmediate.js. https://github.com/NobleJS/setImmediate\n\nCopyright (c) 2011 Barnesandnoble.com, llc and Donavon West\n\nhttps://github.com/NobleJS/setImmediate/blob/master/MIT-LICENSE.txt"
         }
     ]
