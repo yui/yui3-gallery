@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>js&#x2F;async-command-clone.js - Async Command Clone Plugin</title>
+    <title>Plugin.AsyncCommandClone - Async Command Clone Plugin</title>
     <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
@@ -83,47 +83,147 @@
 
             <div class="apidocs">
                 <div id="docs-main" class="content">
-                    <h1 class="file-heading">File: js&#x2F;async-command-clone.js</h1>
+                    <h1>Plugin.AsyncCommandClone Class</h1>
+<div class="box meta">
+    
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-&#x2F;**
- * @module gallery-async-command-clone
- *&#x2F;
-(function (Y, moduleName) {
-    &#x27;use strict&#x27;;
     
-    var _Plugin = Y.Plugin;
+        <div class="extends">
+            Extends Plugin.Base
+        </div>
     
-    &#x2F;**
-     * Asynchronous command clone plugin.
-     * @class AsyncCommandClone
-     * @extends Plugin.Base
-     * @namespace Plugin
-     * @param {Object} config Configuration Object.
-     *&#x2F;
-    _Plugin.AsyncCommandClone = Y.Base.create(moduleName, _Plugin.Base, [], {
-        &#x2F;**
-         * Clones the host AsyncCommand instance in a new unused state.
-         * @method clone
-         * @return {AsyncCommand}
-         *&#x2F;
-        clone: function () {
-            var config = this.get(&#x27;host&#x27;).getAttrs([
-                &#x27;args&#x27;,
-                &#x27;ctx&#x27;,
-                &#x27;fn&#x27;
-            ]);
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files&#x2F;js_async-command-clone.js.html#l9"><code>js&#x2F;async-command-clone.js:9</code></a>
+        </div>
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>Asynchronous command clone plugin.</p>
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
             
-            config.args = config.args.slice(1);
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_clone">clone</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
             
-            return new Y.AsyncCommand(config);
-        }
-    }, {
-        NS: &#x27;clone&#x27;
-    });
-}(Y, arguments[1]));
-    </pre>
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_clone" class="method item">
+    <h3 class="name"><code>clone</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/AsyncCommand.html" class="crosslink">AsyncCommand</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_async-command-clone.js.html#l17"><code>js&#x2F;async-command-clone.js:17</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Clones the host AsyncCommand instance in a new unused state.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/AsyncCommand.html" class="crosslink">AsyncCommand</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
 </div>
 
                 </div>

@@ -1,19 +1,19 @@
 /**
  * @module gallery-async-command-clone
  */
-(function (Y) {
+(function (Y, moduleName) {
     'use strict';
-
+    
+    var _Plugin = Y.Plugin;
+    
     /**
      * Asynchronous command clone plugin.
      * @class AsyncCommandClone
-     * @extends Y.Plugin.Base
-     * @namespace Y.Plugin
+     * @extends Plugin.Base
+     * @namespace Plugin
      * @param {Object} config Configuration Object.
      */
-    var _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Plugin.Base, {
+    _Plugin.AsyncCommandClone = Y.Base.create(moduleName, _Plugin.Base, [], {
         /**
          * Clones the host AsyncCommand instance in a new unused state.
          * @method clone
@@ -31,9 +31,6 @@
             return new Y.AsyncCommand(config);
         }
     }, {
-        NAME: 'async-command-clone',
         NS: 'clone'
     });
-
-    Y.Plugin.AsyncCommandClone = _class;
-}(Y));
+}(Y, arguments[1]));
