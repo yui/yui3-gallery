@@ -1,9 +1,9 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "Y.Async",
-        "Y.AsyncCommand",
-        "Y.Plugin.AsyncProgress"
+        "Async",
+        "AsyncCommand",
+        "Plugin.AsyncProgress"
     ],
     "modules": [
         "gallery-async",

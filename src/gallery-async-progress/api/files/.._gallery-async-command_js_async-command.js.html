@@ -38,11 +38,11 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/Y.Async.html">Y.Async</a></li>
+                <li><a href="..&#x2F;classes/Async.html">Async</a></li>
             
-                <li><a href="..&#x2F;classes/Y.AsyncCommand.html">Y.AsyncCommand</a></li>
+                <li><a href="..&#x2F;classes/AsyncCommand.html">AsyncCommand</a></li>
             
-                <li><a href="..&#x2F;classes/Y.Plugin.AsyncProgress.html">Y.Plugin.AsyncProgress</a></li>
+                <li><a href="..&#x2F;classes/Plugin.AsyncProgress.html">Plugin.AsyncProgress</a></li>
             
             </ul>
 
@@ -90,120 +90,128 @@
 &#x2F;**
  * @module gallery-async-command
  *&#x2F;
-(function (Y) {
+(function (Y, moduleName) {
     &#x27;use strict&#x27;;
     
-    var _createCompleteFunction,
+    var _string_args = &#x27;args&#x27;,
+        _string_complete = &#x27;complete&#x27;,
+        _string_failure = &#x27;failure&#x27;,
+        _string_initOnly = &#x27;initOnly&#x27;,
+        _string_start = &#x27;start&#x27;,
+        _string_success = &#x27;success&#x27;,
+        
+        _Base = Y.Base,
+        
+        _createCompleteFunction,
+        _false = false,
         _isArray = Y.Lang.isArray,
-    
-        _class;
+        _true = true;
     
     &#x2F;**
-     * Asynchronous command class.
-     * @class AsyncCommand
-     * @extends Y.Base
-     * @namespace Y
-     * @param {Object} config Configuration Object.
-     *&#x2F;
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Base, {
+    * Asynchronous command class.
+    * @class AsyncCommand
+    * @extends Base
+    * @param {Object} config Configuration Object.
+    *&#x2F;
+    Y.AsyncCommand = _Base.create(moduleName, _Base, [], {
         initializer: function () {
             var me = this;
-            
+
             &#x2F;**
-             * Fired when the command function completes.
-             * @event complete
-             * @fireonce
-             * @param error Optional error value.
-             * @param {Boolean} failed Indicates the failed status of the command.
-             * @param value Optional return value from the command function.
-             *&#x2F;
-            me.publish(&#x27;complete&#x27;, {
+            * Fired when the command function completes.
+            * @event complete
+            * @fireonce
+            * @param error Optional error value.
+            * @param {Boolean} failed Indicates the failed status of the
+            * command.
+            * @param value Optional return value from the command function.
+            *&#x2F;
+            me.publish(_string_complete, {
                 defaultFn: function () {
-                    me._set(&#x27;completed&#x27;, true);
+                    me._set(&#x27;completed&#x27;, _true);
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
+
             &#x2F;**
-             * Fired when the command function fails.
-             * @event failure
-             * @fireonce
-             * @param error Optional error value.
-             * @protected
-             *&#x2F;
-            me.publish(&#x27;failure&#x27;, {
+            * Fired when the command function fails.
+            * @event failure
+            * @fireonce
+            * @param error Optional error value.
+            * @protected
+            *&#x2F;
+            me.publish(_string_failure, {
                 defaultFn: function (eventFacade) {
                     var error = eventFacade.error;
-                    
+
                     me._set(&#x27;error&#x27;, error);
-                    me._set(&#x27;failed&#x27;, true);
-                    
-                    me.fire(&#x27;complete&#x27;, {
+                    me._set(&#x27;failed&#x27;, _true);
+
+                    me.fire(_string_complete, {
                         error: error,
-                        failed: true
+                        failed: _true
                     });
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
+
             &#x2F;**
-             * Fired when the command function starts.
-             * @event start
-             * @fireonce
-             * @protected
-             *&#x2F;
-            me.publish(&#x27;start&#x27;, {
+            * Fired when the command function starts.
+            * @event start
+            * @fireonce
+            * @protected
+            *&#x2F;
+            me.publish(_string_start, {
                 defaultFn: function () {
-                    me._set(&#x27;started&#x27;, true);
-                    me.get(&#x27;fn&#x27;).apply(me.get(&#x27;ctx&#x27;), me.get(&#x27;args&#x27;));
+                    me._set(&#x27;started&#x27;, _true);
+                    me.get(&#x27;fn&#x27;).apply(me.get(&#x27;ctx&#x27;), me.get(_string_args));
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
+
             &#x2F;**
-             * Fired when the command function succeeds.
-             * @event success
-             * @fireonce
-             * @param value Optional return value from the command function.
-             * @protected
-             *&#x2F;
-            me.publish(&#x27;success&#x27;, {
+            * Fired when the command function succeeds.
+            * @event success
+            * @fireonce
+            * @param value Optional return value from the command function.
+            * @protected
+            *&#x2F;
+            me.publish(_string_success, {
                 defaultFn: function (eventFacade) {
                     var value = eventFacade.value;
-                    
+
                     me._set(&#x27;value&#x27;, value);
-                    
-                    me.fire(&#x27;complete&#x27;, {
-                        failed: false,
+
+                    me.fire(_string_complete, {
+                        failed: _false,
                         value: value
                     });
                 },
-                fireOnce: true
+                fireOnce: _true
             });
-            
-            me.get(&#x27;args&#x27;).unshift(_createCompleteFunction(me));
+
+            me.get(_string_args).unshift(_createCompleteFunction(me));
         },
         &#x2F;**
-         * Execute the command function.
-         * @method run
-         * @chainable
-         *&#x2F;
+        * Execute the command function.
+        * @method run
+        * @chainable
+        *&#x2F;
         run: function () {
-            this.fire(&#x27;start&#x27;);
+            this.fire(_string_start);
             return this;
         }
     }, {
         ATTRS: {
             &#x2F;**
-             * Array of arguments to be passed to the command function.
-             * A special callback function is automatically added as the first argument.
-             * @attribute args
-             * @default []
-             * @initonly
-             * @type Array
-             *&#x2F;
+            * Array of arguments to be passed to the command function.
+            * A special callback function is automatically added as the first
+            * argument.
+            * @attribute args
+            * @default []
+            * @initonly
+            * @type Array
+            *&#x2F;
             args: {
                 setter: function (args) {
                     if (!_isArray(args)) {
@@ -211,105 +219,107 @@
                             args
                         ];
                     }
-                    
+
                     return args;
                 },
                 value: [],
-                writeOnce: &#x27;initOnly&#x27;
+                writeOnce: _string_initOnly
             },
             &#x2F;**
-             * Boolean value indicating the completed status of the command.
-             * @attribute completed
-             * @default false
-             * @readonly
-             * @type Boolean
-             *&#x2F;
+            * Boolean value indicating the completed status of the command.
+            * @attribute completed
+            * @default false
+            * @readonly
+            * @type Boolean
+            *&#x2F;
             completed: {
-                readOnly: true,
-                value: false
+                readOnly: _true,
+                value: _false
             },
             &#x2F;**
-             * Execution context for the command function.
-             * @attribute ctx
-             * @initonly
-             *&#x2F;
+            * Execution context for the command function.
+            * @attribute ctx
+            * @initonly
+            *&#x2F;
             ctx: {
-                writeOnce: &#x27;initOnly&#x27;
+                value: null,
+                writeOnce: _string_initOnly
             },
             &#x2F;**
-             * Error value passed to the failure event.
-             * @attribute error
-             * @readonly
-             *&#x2F;
+            * Error value passed to the failure event.
+            * @attribute error
+            * @readonly
+            *&#x2F;
             error: {
-                readOnly: true
+                readOnly: _true,
+                value: null
             },
             &#x2F;**
-             * Boolean value indicating the failed status of the command.
-             * @attribute failed
-             * @default false
-             * @readonly
-             * @type Boolean
-             *&#x2F;
+            * Boolean value indicating the failed status of the command.
+            * @attribute failed
+            * @default false
+            * @readonly
+            * @type Boolean
+            *&#x2F;
             failed: {
-                readOnly: true,
-                value: false
+                readOnly: _true,
+                value: _false
             },
             &#x2F;**
-             * The command function to execute.  This function receives a special success callback function as
-             * the first parameter.  The success callback function has a method parameter called fail.  One of 
-             * these callback functions must be called in order to complete the command.
-             * @attribute fn
-             * @initonly
-             * @type Function
-             *&#x2F;
+            * The command function to execute.  This function receives a special
+            * success callback function as the first parameter.  The success
+            * callback function has a method parameter called fail.  One of
+            * these callback functions must be called in order to complete the
+            * command.
+            * @attribute fn
+            * @initonly
+            * @type Function
+            *&#x2F;
             fn: {
                 value: function (success) {
                     success();
                 },
-                writeOnce: &#x27;initOnly&#x27;
+                writeOnce: _string_initOnly
             },
             &#x2F;**
-             * Boolean value indicating the started status of the command.
-             * @attribute started
-             * @default false
-             * @readonly
-             * @type Boolean
-             *&#x2F;
+            * Boolean value indicating the started status of the command.
+            * @attribute started
+            * @default false
+            * @readonly
+            * @type Boolean
+            *&#x2F;
             started: {
-                readOnly: true,
-                value: false
+                readOnly: _true,
+                value: _false
             },
             &#x2F;**
-             * Value passed to the success event.
-             * @attribute value
-             * @readonly
-             *&#x2F;
+            * Value passed to the success event.
+            * @attribute value
+            * @readonly
+            *&#x2F;
             value: {
-                readOnly: true
+                readOnly: _true,
+                value: null
             }
-        },
-        NAME: &#x27;async-command&#x27;
+        }
     });
     
     _createCompleteFunction = function (asyncCommand) {
         var successFunction = function (value) {
-            asyncCommand.fire(&#x27;success&#x27;, {
+            asyncCommand.fire(_string_success, {
                 value: value
             });
         };
         
         successFunction.fail = function (error) {
-            asyncCommand.fire(&#x27;failure&#x27;, {
+            asyncCommand.fire(_string_failure, {
                 error: error
             });
         };
         
         return successFunction;
     };
-    
-    Y.AsyncCommand = _class;
-}(Y));
+}(Y, arguments[1]));
     </pre>
 </div>
 

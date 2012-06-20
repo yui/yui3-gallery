@@ -38,11 +38,11 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="..&#x2F;classes/Y.Async.html">Y.Async</a></li>
+                <li><a href="..&#x2F;classes/Async.html">Async</a></li>
             
-                <li><a href="..&#x2F;classes/Y.AsyncCommand.html">Y.AsyncCommand</a></li>
+                <li><a href="..&#x2F;classes/AsyncCommand.html">AsyncCommand</a></li>
             
-                <li><a href="..&#x2F;classes/Y.Plugin.AsyncProgress.html">Y.Plugin.AsyncProgress</a></li>
+                <li><a href="..&#x2F;classes/Plugin.AsyncProgress.html">Plugin.AsyncProgress</a></li>
             
             </ul>
 
@@ -90,218 +90,295 @@
 &#x2F;**
  * @module gallery-async
  *&#x2F;
-(function (Y) {
+(function (Y, moduleName) {
     &#x27;use strict&#x27;;
     
-    var _lang = Y.Lang,
+    var _string_complete = &#x27;complete&#x27;,
+        _string_initOnly = &#x27;initOnly&#x27;,
+        
         _run = {
             all: &#x27;_runAll&#x27;,
             queue: &#x27;_runQueue&#x27;
         },
-        _unnest = Y.Array.unnest,
+        
+        _Array = Y.Array,
+        _AsyncCommand = Y.AsyncCommand,
+        _Lang = Y.Lang,
         
         _createAndRun,
-        _isArray = _lang.isArray,
-        _isFunction = _lang.isFunction,
-        
-        _class;
+        _each = _Array.each,
+        _instanceOf = Y.instanceOf,
+        _isArray = _Lang.isArray,
+        _isFunction = _Lang.isFunction,
+        _isString = _Lang.isString,
+        _map = _Array.map,
+        _merge = Y.merge,
+        _unnest = _Array.unnest,
     
-    &#x2F;**
-     * Asynchronous command runner class.
-     * @class Async
-     * @extends Y.AsyncCommand
-     * @namespace Y
-     * @param {Object} config Configuration Object.
-     *&#x2F;
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.AsyncCommand, {
-        initializer: function () {
-            var me = this,
-                run = _run[me.get(&#x27;mode&#x27;)];
-            
-            if (run) {
-                me._set(&#x27;fn&#x27;, function (success) {
-                    me[run].call(me, success, me.get(&#x27;run&#x27;));
-                });
-            }
-            
-            _class.superclass.initializer.apply(this, arguments);
-        },
         &#x2F;**
-         * Command function for all mode.
-         * @method _runAll
-         * @param {Function} success
-         * @param {[AsyncCommand]} run
-         * @protected
-         *&#x2F;
-        _runAll: function (success, run) {
-            var commandCount = run.length,
-                completeCount = 0,
-                value = [];
+        * Asynchronous command runner class.
+        * @class Async
+        * @extends AsyncCommand
+        * @param {Object} config Configuration Object.
+        *&#x2F;
+        _class = Y.Base.create(moduleName, _AsyncCommand, [], {
+            initializer: function () {
+                var me = this,
+                    run = _run[me.get(&#x27;mode&#x27;)];
+                
+                if (run) {
+                    me._set(&#x27;fn&#x27;, function (success) {
+                        me[run].call(me, success, me.get(&#x27;run&#x27;));
+                    });
+                }
+            },
+            &#x2F;**
+            * Command function for all mode.
+            * @method _runAll
+            * @param {Function} success
+            * @param {[AsyncCommand]} run
+            * @protected
+            *&#x2F;
+            _runAll: function (success, run) {
+                var commandCount = run.length,
+                    completeCount = 0,
+                    value = [];
 
-            Y.each(run, function (asyncCommand, index) {
-                asyncCommand.run().after(&#x27;complete&#x27;, function (eventFacade) {
+                _each(run, function (asyncCommand, index) {
+                    asyncCommand.run().after(_string_complete, function (eventFacade) {
+                        if (eventFacade.failed) {
+                            success.fail(eventFacade.error);
+                            return;
+                        }
+
+                        completeCount += 1;
+                        value[index] = eventFacade.value;
+
+                        if (completeCount === commandCount) {
+                            success(value);
+                        }
+                    });
+                });
+
+                if (!commandCount) {
+                    success(value);
+                }
+            },
+            &#x2F;**
+            * Command function for queue mode.
+            * @method _runAll
+            * @param {Function} success
+            * @param {[AsyncCommand]} run
+            * @param {Number} index
+            * @param {Array} value
+            * @protected
+            *&#x2F;
+            _runQueue: function (success, run, index, value) {
+                index = index || 0;
+                value = value || [];
+
+                if (index &gt;= run.length) {
+                    success(value);
+                    return;
+                }
+
+                run[index].run().after(_string_complete, function (eventFacade) {
                     if (eventFacade.failed) {
                         success.fail(eventFacade.error);
                         return;
                     }
 
-                    completeCount += 1;
                     value[index] = eventFacade.value;
 
-                    if (completeCount === commandCount) {
-                        success(value);
-                    }
-                });
-            });
-
-            if (!commandCount) {
-                success(value);
+                    this._runQueue(success, run, index + 1, value);
+                }, this);
             }
-        },
-        &#x2F;**
-         * Command function for queue mode.
-         * @method _runAll
-         * @param {Function} success
-         * @param {[AsyncCommand]} run
-         * @param {Number} index
-         * @param {Array} value
-         * @protected
-         *&#x2F;
-        _runQueue: function (success, run, index, value) {
-            index = index || 0;
-            value = value || [];
-
-            if (index &gt;= run.length) {
-                success(value);
-                return;
-            }
-
-            run[index].run().after(&#x27;complete&#x27;, function (eventFacade) {
-                if (eventFacade.failed) {
-                    success.fail(eventFacade.error);
-                    return;
+        }, {
+            ATTRS: {
+                &#x2F;**
+                * The inherited args attribute is protected.
+                * @attribute args
+                * @default []
+                * @initonly
+                * @protected
+                * @type Array
+                *&#x2F;
+               &#x2F;**
+                * A config object passed to the AsyncCommand constructor when
+                * instantiating dynamically.
+                * @attribute config
+                * @default {}
+                * @initonly
+                * @type Object
+                *&#x2F;
+                config: {
+                    value: {},
+                    writeOnce: _string_initOnly
+                },
+                &#x2F;**
+                * The inherited ctx attribute is protected.
+                * @attribute ctx
+                * @initonly
+                * @protected
+                *&#x2F;
+                &#x2F;**
+                * The inherited fn attribute is protected.
+                * @attribute fn
+                * @initonly
+                * @protected
+                * @type Function
+                *&#x2F;
+                &#x2F;**
+                * Value indicating the run mode.  Possible modes are:
+                * &lt;dl&gt;
+                *     &lt;dt&gt;
+                *         all
+                *     &lt;&#x2F;dt&gt;
+                *     &lt;dd&gt;
+                *         This mode runs all commands.  The commands might be
+                *         completed out of order.  The run completes once all
+                *         commands have completed.  The run fails if any command
+                *         fails.
+                *     &lt;&#x2F;dd&gt;
+                *     &lt;dt&gt;
+                *         queue
+                *     &lt;&#x2F;dt&gt;
+                *     &lt;dd&gt;
+                *         This mode runs one command at a time.  It waits for
+                *         the first command to complete before moving on to the
+                *         next one.  The run completes when the last command has
+                *         completed.  The run fails if a command fails and the
+                *         remaining commands are not run.
+                *     &lt;&#x2F;dd&gt;
+                * &lt;&#x2F;dl&gt;
+                * @attribute mode
+                * @default &#x27;queue&#x27;
+                * @initonly
+                * @type String
+                *&#x2F;
+                mode: {
+                    value: &#x27;queue&#x27;,
+                    writeOnce: _string_initOnly
+                },
+                &#x2F;**
+                * An array of AsyncCommands to run.  Command functions,
+                * AsyncCommand config objects, and named command strings will
+                * get converted to instances of AsyncCommand.
+                * @attribute run
+                * @default []
+                * @initonly
+                * @type [AsyncCommand]
+                *&#x2F;
+                run: {
+                    setter: function (run) {
+                        var config = this.get(&#x27;config&#x27;);
+                        
+                        return _map(_isArray(run) ? run : [
+                            run
+                        ], function (item) {
+                            if (_instanceOf(item, _AsyncCommand)) {
+                                return item;
+                            }
+                            
+                            if (_isString(item)) {
+                                item = _class.commands[item] || {};
+                            }
+                            
+                            if (_isFunction(item)) {
+                                return new _AsyncCommand(_merge(config, {
+                                    fn: item
+                                }));
+                            }
+                            
+                            return new _AsyncCommand(_merge(config, item));
+                        });
+                    },
+                    value: [],
+                    writeOnce: _string_initOnly
                 }
-
-                value[index] = eventFacade.value;
-
-                this._runQueue(success, run, index + 1, value);
-            }, this);
-        }
-    }, {
-        ATTRS: {
-            &#x2F;**
-             * The inherited args attribute is protected.
-             * @attribute args
-             * @default []
-             * @initonly
-             * @protected
-             * @type Array
-             *&#x2F;
-            &#x2F;**
-             * The inherited ctx attribute is protected.
-             * @attribute ctx
-             * @initonly
-             * @protected
-             *&#x2F;
-            &#x2F;**
-             * The inherited fn attribute is protected.
-             * @attribute fn
-             * @initonly
-             * @protected
-             * @type Function
-             *&#x2F;
-            &#x2F;**
-             * Value indicating the run mode.  Possible modes are:
-             * &lt;dl&gt;
-             *     &lt;dt&gt;
-             *         all
-             *     &lt;&#x2F;dt&gt;
-             *     &lt;dd&gt;
-             *         This mode runs all commands.  The commands might be completed out of order.
-             *         The run completes once all commands have completed.  The run fails if any
-             *         command fails.
-             *     &lt;&#x2F;dd&gt;
-             *     &lt;dt&gt;
-             *         queue
-             *     &lt;&#x2F;dt&gt;
-             *     &lt;dd&gt;
-             *         This mode runs one command at a time.  It waits for the first command to complete
-             *         before moving on to the next one.  The run completes when the last command has completed.
-             *         The run fails if a command fails and the remaining commands are not run.
-             *     &lt;&#x2F;dd&gt;
-             * &lt;&#x2F;dl&gt;
-             * @attribute mode
-             * @default &#x27;queue&#x27;
-             * @initonly
-             * @type String
-             *&#x2F;
-            mode: {
-                value: &#x27;queue&#x27;,
-                writeOnce: &#x27;initOnly&#x27;
             },
             &#x2F;**
-             * An array of AsyncCommands to run.  Functions will get converted to instances of AsyncCommand.
-             * @attribute run
-             * @default []
-             * @initonly
-             * @type [AsyncCommand]
+             * This is a static object that stores named command definitions for
+             * repeat use.  This object&#x27;s keys are the names of commands.  The
+             * values can either command functions or AsyncCommand config
+             * objects.
+             * @property commands
+             * @static
+             * @type Object
              *&#x2F;
-            run: {
-                setter: function (run) {
-                    if (!_isArray(run)) {
-                        run = [
-                            run
-                        ];
-                    }
-                    
-                    Y.each(run, function (item, index, run) {
-                        if (_isFunction(item)) {
-                            run[index] = new Y.AsyncCommand({
-                                fn: item
-                            });
-                        }
-                    });
-                    
-                    return run;
-                },
-                value: [],
-                writeOnce: &#x27;initOnly&#x27;
+            commands: {},
+            &#x2F;**
+            * Creates and runs an instance of Async in &#x27;all&#x27; mode.  This method
+            * accepts an unlimited number of arguments.  Arguments can be
+            * command functions, AsyncCommand config objects, instances of
+            * AsyncCommand, instances of Async, or arrays containing any of the
+            * above.
+            * @method runAll
+            * @return {Async}
+            * @static
+            *&#x2F;
+            runAll: function () {
+                return _createAndRun({}, &#x27;all&#x27;, _unnest(arguments));
+            },
+            &#x2F;**
+            * Creates and runs an instance of Async in &#x27;all&#x27; mode.  This method
+            * accepts an unlimited number of arguments.  The first argument is a
+            * config object passed to the AsyncCommand constructor when
+            * instantiating dynamically.  The rest of the arguments can be
+            * command functions, AsyncCommand config objects, instances of
+            * AsyncCommand, instances of Async, or arrays containing any of the
+            * above.
+            * @method runAllWithConfig
+            * @return {Async}
+            * @static
+            *&#x2F;
+            runAllWithConfig: function () {
+                var args = _Array(arguments);
+                
+                return _createAndRun(args.shift(), &#x27;all&#x27;, _unnest(args));
+            },
+            &#x2F;**
+            * Creates and runs an instance of Async in &#x27;queue&#x27; mode.  This
+            * method accepts an unlimited number of parameters.  Parameters can
+            * be command functions, AsyncCommand config objects, instances of
+            * AsyncCommand, instances of Async, or arrays containing any of the
+            * above.
+            * @method runQueue
+            * @return {Async}
+            * @static
+            *&#x2F;
+            runQueue: function () {
+                return _createAndRun({}, &#x27;queue&#x27;, _unnest(arguments));
+            },
+            &#x2F;**
+            * Creates and runs an instance of Async in &#x27;queue&#x27; mode.  This
+            * method accepts an unlimited number of parameters.  The first
+            * argument is a config object passed to the AsyncCommand constructor
+            * when instantiating dynamically.  The rest of the arguments can
+            * be command functions, AsyncCommand config objects, instances of
+            * AsyncCommand, instances of Async, or arrays containing any of the
+            * above.
+            * @method runQueue
+            * @return {Async}
+            * @static
+            *&#x2F;
+            runQueueWithConfig: function () {
+                var args = _Array(arguments);
+                
+                return _createAndRun(args.shift(), &#x27;queue&#x27;, _unnest(args));
             }
-        },
-        NAME: &#x27;async&#x27;,
-        &#x2F;**
-         * Creates and runs an instance of Async in &#x27;all&#x27; mode.  This method accepts an unlimited number of parameters.
-         * Parameters can be command functions, instances of AsyncCommand, instances of Async, or arrays of any of the above.
-         * @method runAll
-         * @return {Async}
-         * @static
-         *&#x2F;
-        runAll: function () {
-            return _createAndRun(&#x27;all&#x27;, _unnest(arguments));
-        },
-        &#x2F;**
-         * Creates and runs an instance of Async in &#x27;queue&#x27; mode.  This method accepts an unlimited number of parameters.
-         * Parameters can be command functions, instances of AsyncCommand, instances of Async, or arrays of any of the above.
-         * @method runQueue
-         * @return {Async}
-         * @static
-         *&#x2F;
-        runQueue: function () {
-            return _createAndRun(&#x27;queue&#x27;, _unnest(arguments));
-        }
-    });
+        });
     
-    _createAndRun = function (mode, run) {
+    _createAndRun = function (config, mode, run) {
         return new _class({
+            config: config,
             mode: mode,
             run: run
         }).run();
     };
     
     Y.Async = _class;
-}(Y));
+}(Y, arguments[1]));
     </pre>
 </div>
 
