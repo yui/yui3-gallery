@@ -18,7 +18,8 @@
         _pow = Math.pow;
 
     /**
-     * AnyBaseConverter is an object that will convert numbers to and from a positional notation with a custom alphabet and base.
+     * AnyBaseConverter is an object that will convert numbers to and from a
+     * positional notation with a custom alphabet and base.
      * @class AnyBaseConverter
      * @extends Base
      * @param {Object} config Configuration Object.
@@ -101,10 +102,11 @@
     }, {
         ATTRS: {
             /**
-             * The string of characters to use as single-digit numbers. The length of this string determines
-             * the base of the result. Each character should be unique within the string or else it will be
-             * impossible to correctly convert a string back into a number. Currently, non-BMP characters are
-             * not supported.
+             * The string of characters to use as single-digit numbers. The
+             * length of this string determines the base of the result. Each
+             * character should be unique within the string or else it will be
+             * impossible to correctly convert a string back into a number.
+             * Currently, non-BMP characters are not supported.
              * @attribute alphabet
              * @default '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~'
              * @type String
@@ -135,7 +137,8 @@
                 value: null
             },
             /**
-             * A single character string to prepend to negative values. This character should not be in the alphabet.
+             * A single character string to prepend to negative values. This
+             * character should not be in the alphabet.
              * Currently, non-BMP characters are not supported.
              * @attribute minusSign
              * @default '-'
@@ -145,8 +148,9 @@
                 value: '-'
             },
             /**
-             * A single character string to insert between the integer and fractional parts of the number.
-             * This character should not be in the alphabet.  Currently, non-BMP characters are not supported.
+             * A single character string to insert between the integer and
+             * fractional parts of the number.  This character should not be in
+             * the alphabet.  Currently, non-BMP characters are not supported.
              * @attribute radixPoint
              * @default '.'
              * @type String
