@@ -1,0 +1,104 @@
+{
+    "project": {
+        "name": "YQL Execute",
+        "description": "This module Executes JavaScript remotely."
+    },
+    "files": {
+        "js/yql-execute.js": {
+            "name": "js/yql-execute.js",
+            "modules": {
+                "gallery-yql-execute.": 1
+            },
+            "classes": {},
+            "fors": {
+                "YQL": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-yql-execute.": {
+            "name": "gallery-yql-execute.",
+            "submodules": {},
+            "classes": {
+                "YQL": 1
+            },
+            "fors": {
+                "YQL": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/yql-execute.js",
+            "line": 1,
+            "description": "This module Executes JavaScript remotely."
+        }
+    },
+    "classes": {
+        "YQL": {
+            "name": "YQL",
+            "shortname": "YQL",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-yql-execute.",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/yql-execute.js",
+            "line": 9,
+            "description": "Execute JavaScript remotely.",
+            "itemtype": "method",
+            "name": "execute",
+            "params": [
+                {
+                    "name": "code",
+                    "description": "The code to execute",
+                    "type": "String"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "Passes through to YQL.",
+                    "type": "Fucntion"
+                },
+                {
+                    "name": "params",
+                    "description": "Passes through to YQL.",
+                    "type": "Object"
+                },
+                {
+                    "name": "opts",
+                    "description": "Passes through to YQL.",
+                    "type": "Object"
+                }
+            ],
+            "static": 1,
+            "class": "YQL",
+            "module": "gallery-yql-execute."
+        },
+        {
+            "file": "js/yql-execute.js",
+            "line": 23,
+            "description": "Helper function to get the deeply nested result.",
+            "itemtype": "method",
+            "name": "execute.getResult",
+            "params": [
+                {
+                    "name": "result",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "static": 1,
+            "class": "YQL",
+            "module": "gallery-yql-execute."
+        }
+    ]
+}
