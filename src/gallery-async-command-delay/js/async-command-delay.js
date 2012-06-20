@@ -1,45 +1,48 @@
 /**
  * @module gallery-async-command-delay
  */
-(function (Y) {
+(function (Y, moduleName) {
     'use strict';
     
-    var _delay = Y.delay,
-        _do = Y.Do,
-        _DoAlterReturn = _do.AlterReturn,
-        _DoPrevent = _do.Prevent,
+    var _string_delay = 'delay',
+        _string_delayed = 'delayed',
+        _string_run = 'run',
         
-        _class;
+        _Do = Y.Do,
+        _DoAlterReturn = _Do.AlterReturn,
+        _DoPrevent = _Do.Prevent,
+        _Plugin = Y.Plugin,
+        
+        _delay = Y.delay;
 
     /**
      * Asynchronous command delay plugin.
      * @class AsyncCommandDelay
-     * @extends Y.Plugin.Base
-     * @namespace Y.Plugin
+     * @extends Plugin.Base
+     * @namespace Plugin
      * @param {Object} config Configuration Object.
      */
-    _class = Y.extend(function (config) {
-        _class.superclass.constructor.call(this, config);
-    }, Y.Plugin.Base, {
+    _Plugin.AsyncCommandDelay = Y.Base.create(moduleName, _Plugin.Base, [], {
         initializer: function () {
             var me = this,
-                host = this.get('host'),
+            
+                host = me.get('host'),
                 run = host.run;
             
-            me.afterHostMethod('run', function () {
-                return new _DoAlterReturn('delayed', host);
+            me.afterHostMethod(_string_run, function () {
+                return new _DoAlterReturn(_string_delayed, host);
             });
             
-            me.beforeHostMethod('run', function () {
-                _delay(run, me.get('delay')).call(host);
-                return new _DoPrevent('delayed');
+            me.beforeHostMethod(_string_run, function () {
+                _delay(run, me.get(_string_delay)).call(host);
+                return new _DoPrevent(_string_delayed);
             });
         }
     }, {
         ATTRS: {
             /**
-             * Approximate delay in milliseconds to wait between the time run is called
-             * and when the command function is executed.
+             * Approximate delay in milliseconds to wait between the time run is
+             * called and when the command function is executed.
              * @attribute delay
              * @default 0
              * @initonly
@@ -50,9 +53,6 @@
                 writeOnce: 'initOnly'
             }
         },
-        NAME: 'async-command-delay',
-        NS: 'delay'
+        NS: _string_delay
     });
-
-    Y.Plugin.AsyncCommandDelay = _class;
-}(Y));
+}(Y, arguments[1]));
