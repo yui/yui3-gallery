@@ -829,9 +829,10 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @method _collapseItem
      * @protected
      * @param item {Y.AccordionItem} The item, which should be collapsed
+     * @param skipAnimation {Bool} (optional) Don't animate the initial collapse on add
      */
-    _collapseItem: function( item ){
-        this._processCollapsing( item, COLLAPSE_HEIGHT );
+    _collapseItem: function( item, skipAnimation ){
+        this._processCollapsing( item, COLLAPSE_HEIGHT, skipAnimation );
         this._setItemUI( item, false, false );
     },
 
@@ -1106,8 +1107,9 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      *
      * @method _processItems
      * @protected
+     * @param skipAnimation {Bool} (optional) Don't animate the initial collapse on add
      */
-    _processItems: function(){
+    _processItems: function(skipAnimation){
         var forCollapsing, forExpanding, itemCont, heightPerStretchItem,
             height, heightSettings, item;
 
@@ -1120,7 +1122,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
             if( forCollapsing.hasOwnProperty( item ) ){
                 itemCont = forCollapsing[ item ];
 
-                this._collapseItem( itemCont.item );
+                this._collapseItem( itemCont.item, skipAnimation );
             }
         }
 
@@ -1457,10 +1459,11 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
      * @method addItem
      * @param item {Y.AccordionItem} The item to be added in Accordion
      * @param parentItem {Y.AccordionItem} (optional) This item will be the parent of the item being added
+     * @param skipAnimation {Bool} (optional) Don't animate the initial collapse on add
      *
      * @return {Boolean} True in case of successfully added item, false otherwise
      */
-    addItem: function( item, parentItem ){
+    addItem: function( item, parentItem, skipAnimation ){
         var expanded, alwaysVisible, itemBody, itemBodyContent, itemIndex, items, contentBox,
             itemHandles, itemContentBox, res, children;
 
@@ -1535,7 +1538,7 @@ Y.Accordion = Y.Base.create( AccName, Y.Widget, [], {
             };
         }
 
-        this._processItems();
+        this._processItems(skipAnimation);
 
         if( this.get( "reorderItems" ) ){
             this._initItemDragDrop( item );
