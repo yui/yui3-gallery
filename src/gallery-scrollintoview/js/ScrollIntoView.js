@@ -51,9 +51,12 @@ Y.Node.prototype.scrollIntoView = function()
 		{
 			var hit_top = (ancestor.offsetParent === null);
 
-			var a = Y.one(ancestor);
-			if (ancestor.scrollWidth - a.horizMarginBorderPadding() > ancestor.clientWidth ||
-				ancestor.scrollHeight - a.vertMarginBorderPadding() > ancestor.clientHeight)
+			var a = Y.one(ancestor),
+				b = (Y.Node.getDOMNode(a) === Y.config.doc.body),
+				w = b ? Y.DOM.winWidth() : ancestor.clientWidth,
+				h = b ? Y.DOM.winHeight() : ancestor.clientHeight;
+			if (ancestor.scrollWidth - a.horizMarginBorderPadding() > w ||
+				ancestor.scrollHeight - a.vertMarginBorderPadding() > h)
 			{
 				break;
 			}
