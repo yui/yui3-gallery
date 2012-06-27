@@ -1,12 +1,10 @@
 /**
- *
  * Provides a secure, evented communication layer for cross-domain HTML5 web
  * applications.
  *
  * @module gallery-communication-layer
  * @requires json, node-base, event-custom-base
  */
-YUI.add('gallery-communication-layer', function (Y, NAME) {
 
     /**
      * @class CommunicationLayer
@@ -911,4 +909,3 @@ YUI.add('gallery-communication-layer', function (Y, NAME) {
 
     Y.CommunicationLayer = CommunicationLayer;
 
-}, '0.0.1', {requires: ['json', 'node-base', 'event-custom-base']});
