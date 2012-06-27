@@ -13,14 +13,14 @@ function FlickPanelPlugin(config) {
 FlickPanelPlugin.NAME = 'FlickPanelPlugin';
 FlickPanelPlugin.NS = 'FlickPanel';
 FlickPanelPlugin.PULL_TAB_MARKUP = '<div class="pullTab"><div class="gripper">Pull-tab</div></div>';
-FlickPanelPlugin.WINDOW_CHANGE_EVENT = (Y.config.win.hasOwnProperty('onorientationchange')) ? 'orientationchange' : 'resize';
+FlickPanelPlugin.WINDOW_CHANGE_EVENT = (Y.config.win.hasOwnProperty && Y.config.win.hasOwnProperty('onorientationchange')) ? 'orientationchange' : 'resize';
 FlickPanelPlugin.ATTRS = {
 };
 
 Y.extend(FlickPanelPlugin, Y.Plugin.Base, {
     initializer: function (config) {
         this.isOpen = false;
-        this.deviceSupportsTouch = (Y.config.win.hasOwnProperty('ontouchstart'));
+        this.deviceSupportsTouch = (Y.config.win.hasOwnProperty && Y.config.win.hasOwnProperty('ontouchstart'));
         // typically the body element
         this.root = config.root || this.get('host');
         this.animateMain = config.animateMain || false;
@@ -60,6 +60,7 @@ Y.extend(FlickPanelPlugin, Y.Plugin.Base, {
     },
 
     destructor: function () {
+        this.flickPanelNode.setStyle('position', '');
         this.pullTab.remove();
         this._closePanel();
         this.pullTab.detach();
@@ -68,7 +69,6 @@ Y.extend(FlickPanelPlugin, Y.Plugin.Base, {
         this.windowListener_2.detach();
         this.windowListener_3.detach();
         this.windowListener_4.detach();
-        this.flickPanelNode.style = '';
     },
 
     _windowChange: function () {
@@ -154,13 +154,14 @@ Y.extend(FlickPanelPlugin, Y.Plugin.Base, {
             this.mainNode.setStyle(transitionProperty, prefix + 'transform .25s ease-out');
         }
         if (this.animateMain) {
-            this.mainNode.setStyle(transformProperty, 'translate3d(' + xPos + 'px,0,0)');
+            this.mainNode.setStyle(transformProperty, 'translateX(' + xPos + 'px)');
         }
-        this.flickPanelNode.setStyle(transformProperty, 'translate3d(' + xPos + 'px,0,0)');
+        this.flickPanelNode.setStyle(transformProperty, 'translateX(' + xPos + 'px)');
     },
 
     _openPanel: function () {
-        this._slidePanels(parseInt(this.flickPanelNode.getComputedStyle('width'), 10), true);
+        var offsetWidth = this.flickPanelNode.get('offsetWidth');
+        this._slidePanels(parseInt(offsetWidth, 10), true);
         this.isOpen = true;
         Y.fire('flickpanel.open', {});
     },
