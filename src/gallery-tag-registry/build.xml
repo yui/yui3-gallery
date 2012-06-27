@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- YUI 3 Gallery Component Build File -->
 <project name="Tag Registry" default="local">
-    <description>Tag Registry Build File</description>
-    <property file="build.properties" />
-    <import file="${builddir}/3.x/bootstrap.xml" description="Default Build Properties and Targets" />
+    <description>Tag Registry - Build All Modules</description>
+
+    <macrodef name="build-tag-registry">
+        <attribute name="target"/>
+        <sequential>
+            <subant target="@{target}">
+                <fileset dir="." includes="build.*.xml"/>
+            </subant>
+        </sequential>
+    </macrodef>
+
+    <target name="local">
+        <build-tag-registry target="local"/>
+    </target>
+    <target name="deploy">
+        <build-tag-registry target="deploy"/>
+    </target>
+    <target name="all">
+        <build-tag-registry target="all"/>
+    </target>
+    <target name="clean">
+        <build-tag-registry target="clean"/>
+    </target>
 </project>

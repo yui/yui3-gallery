@@ -15,26 +15,23 @@
             }}}}}
         })
         </script>
-        <style type="text/css">
-        iframe {width: 500px; height: 300px; border: 0;}
-        </style>
     </head>
     <body>
-        <h1>YUI Tag</h1>
+        <h2>Template</h2>
+        <div id="raw"></div>
 
-        <iframe src="ybutton.html"></iframe>
+        <h2>Compiled</h2>
+        <div id="compiled"></div>
 
-        <iframe src="ydial.html"></iframe>
-
-        <iframe src="yautocomplete.html"></iframe>
-
-        <iframe src="ycalendar.html"></iframe>
-
-        <iframe src="yoverlay.html"></iframe>
-
-        <iframe src="ytemplate.html"></iframe>
+        <ytemplate><div>Hello, <span>{adjective}</span> world!</div></ytemplate>
 
         <script type="text/javascript">
+        Y.use('tag-ytemplate', function(Y) {
+            var tmpl = Y.one('ytemplate');
+
+            Y.one('#raw').setHTML(tmpl.tag.get('html'));
+            Y.one('#compiled').setHTML(tmpl.tag.compile({adjective: 'YUI Tag'}));
+        });
         </script>
     </body>
 </html>
