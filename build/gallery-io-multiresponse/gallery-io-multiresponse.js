@@ -351,10 +351,10 @@ Y.io = function(uri, c) {
         c.form.upload = true;
     }
 
-    orig_io.call(this, uri, c);
+    return orig_io.call(this, uri, c);
 };
 
 Y.mix(Y.io, orig_io);
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['io-upload-iframe'], optional:['json-stringify']});
+}, 'gallery-2012.06.27-20-10' ,{requires:['io-upload-iframe'], optional:['json-stringify']});

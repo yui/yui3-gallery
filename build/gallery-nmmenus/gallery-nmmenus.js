@@ -121,7 +121,10 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 				easing:'ease-out',
 				on : {
 					end:function() {
-						configObj.subMenu.setStyle('height', '0px');
+						configObj.subMenu.setStyles({
+							height:'0px',
+							display:'none'
+						});
 						configObj.topLi.removeClass('active');
 					}
 				}
@@ -250,4 +253,4 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 });
 
 
-}, 'gallery-2012.05.02-20-10' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
+}, 'gallery-2012.06.27-20-10' ,{requires:['base-build','widget','event-mouseenter','node','transition']});

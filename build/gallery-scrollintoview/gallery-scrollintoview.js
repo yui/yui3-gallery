@@ -53,9 +53,12 @@ Y.Node.prototype.scrollIntoView = function()
 		{
 			var hit_top = (ancestor.offsetParent === null);
 
-			var a = Y.one(ancestor);
-			if (ancestor.scrollWidth - a.horizMarginBorderPadding() > ancestor.clientWidth ||
-				ancestor.scrollHeight - a.vertMarginBorderPadding() > ancestor.clientHeight)
+			var a = Y.one(ancestor),
+				b = (Y.Node.getDOMNode(a) === Y.config.doc.body),
+				w = b ? Y.DOM.winWidth() : ancestor.clientWidth,
+				h = b ? Y.DOM.winHeight() : ancestor.clientHeight;
+			if (ancestor.scrollWidth - a.horizMarginBorderPadding() > w ||
+				ancestor.scrollHeight - a.vertMarginBorderPadding() > h)
 			{
 				break;
 			}
@@ -130,4 +133,4 @@ Y.Node.prototype.scrollIntoView = function()
 };
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-dimensions']});
+}, 'gallery-2012.06.27-20-10' ,{requires:['gallery-dimensions','dom-screen']});

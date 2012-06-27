@@ -98,7 +98,7 @@ Y.Node.prototype.getAncestorByClassName = function(
 		e = e.parentNode;
 		if (!e || !e.tagName)
 		{
-			return null;	// might be hidden, which is outside <fieldset>
+			return null;
 		}
 	}
 	return Y.one(e);
@@ -130,7 +130,7 @@ Y.Node.prototype.getAncestorByTagName = function(
 		e = e.parentNode;
 		if (!e || !e.tagName)
 		{
-			return null;	// might be hidden, which is outside <fieldset>
+			return null;
 		}
 	}
 	return Y.one(e);
@@ -258,10 +258,11 @@ Y.Node.prototype.getFirstElementByClassName = function(
 		{
 			for (var i=0; i<list1.length; i++)
 			{
-				var root = list1[i];
-				for (var j=0; j<root.children.length; j++)
+				var root     = list1[i],
+					children = root.children || root.childNodes;	// svg elements only have childNodes
+				for (var j=0; j<children.length; j++)
 				{
-					var e = root.children[j];
+					var e = children[j];
 					if (Y.DOM.hasClass(e, class_name))
 					{
 						return Y.one(e);
@@ -293,4 +294,4 @@ Y.Node.prototype.getFirstElementByClassName = function(
 };
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['node-base']});
+}, 'gallery-2012.06.27-20-10' ,{requires:['node-base']});

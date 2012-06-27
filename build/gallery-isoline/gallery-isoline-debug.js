@@ -86,7 +86,7 @@ YUI.add('gallery-isoline', function(Y) {
                     
                     dataCellValue = _parseInt(dataCellValue, 2);
                     
-                    if ((dataCellValue === 5 || dataCellValue === 10) && !data(x, y)) {
+                    if ((dataCellValue === 5 || dataCellValue === 10) && !dataFn(x, y)) {
                         dataCellValue *= 4;
                     }
                     
@@ -232,4 +232,4 @@ YUI.add('gallery-isoline', function(Y) {
 }(Y));
 
 
-}, 'gallery-2012.06.20-20-07' ,{requires:['graphics'], skinnable:false});
+}, 'gallery-2012.06.27-20-10' ,{requires:['graphics'], skinnable:false});
