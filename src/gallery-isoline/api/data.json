@@ -26,7 +26,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "js/isoline.js",
-            "line": 18
+            "line": 21
         }
     },
     "classes": {
@@ -41,7 +41,7 @@
             "module": "gallery-isoline",
             "namespace": "",
             "file": "js/isoline.js",
-            "line": 18,
+            "line": 21,
             "is_constructor": 1,
             "extends": "Shape",
             "params": [
@@ -56,7 +56,7 @@
     "classitems": [
         {
             "file": "js/isoline.js",
-            "line": 25,
+            "line": 28,
             "itemtype": "method",
             "name": "redraw",
             "chainable": 1,
@@ -65,7 +65,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 33,
+            "line": 36,
             "itemtype": "method",
             "name": "_draw",
             "access": "protected",
@@ -75,7 +75,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 141,
+            "line": 144,
             "itemtype": "attribute",
             "name": "dataCellHeight",
             "default": "1",
@@ -85,7 +85,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 149,
+            "line": 152,
             "description": "Setting dataCellSize will set dataCellHeight and dataCellWidth to\nthe same value.  It is just here as a convenience for setting a\nsquare cell size.",
             "itemtype": "attribute",
             "name": "dataCellSize",
@@ -95,7 +95,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 164,
+            "line": 167,
             "itemtype": "attribute",
             "name": "dataCellWidth",
             "default": "1",
@@ -105,7 +105,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 172,
+            "line": 175,
             "description": "This function defines a two-dimensional scalar field and the\nthreshold at which the isoline is drawn.  This function will be\npassed x and y as arguments.  This function should return either\ntrue or false.",
             "itemtype": "attribute",
             "name": "dataFn",
@@ -115,7 +115,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 185,
+            "line": 188,
             "description": "The maximum X value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
             "itemtype": "attribute",
             "name": "dataMaxX",
@@ -126,7 +126,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 195,
+            "line": 198,
             "description": "The maximum Y value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
             "itemtype": "attribute",
             "name": "dataMaxY",
@@ -137,7 +137,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 205,
+            "line": 208,
             "description": "The minimum X value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
             "itemtype": "attribute",
             "name": "dataMinX",
@@ -148,7 +148,7 @@
         },
         {
             "file": "js/isoline.js",
-            "line": 215,
+            "line": 218,
             "description": "The minimum Y value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
             "itemtype": "attribute",
             "name": "dataMinY",

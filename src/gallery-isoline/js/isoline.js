@@ -84,7 +84,7 @@
                     
                     dataCellValue = _parseInt(dataCellValue, 2);
                     
-                    if ((dataCellValue === 5 || dataCellValue === 10) && !data(x, y)) {
+                    if ((dataCellValue === 5 || dataCellValue === 10) && !dataFn(x, y)) {
                         dataCellValue *= 4;
                     }
                     
