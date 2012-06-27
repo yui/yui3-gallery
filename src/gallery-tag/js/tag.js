@@ -1,4 +1,27 @@
-var Tag = Y.namespace('Tag');
+var Tag = Y.namespace('Tag'),
+    tags = {};
+
+Tag.register = function(name, mixin) {
+    Tag.unregister(name);
+
+    tags[name] = {
+        mixin: mixin,
+        handle: Y.on('inserted', function(e) {
+            e.target.fire('tag:inserted');
+        }, name)
+    };
+};
+
+Tag.unregister = function(name) {
+    if (tags[name]) {
+        tags[name].handle.detach();
+        delete tags[name];
+    }
+};
+
+Tag.registered = function(name) {
+    return name ? name in tags : Object.keys(tags);
+};
 
 function TagPlugin(config) {
     TagPlugin.superclass.constructor.apply(this, arguments);
@@ -6,35 +29,44 @@ function TagPlugin(config) {
 
 TagPlugin.NAME = 'tagPlugin';
 TagPlugin.NS = 'tag';
-TagPlugin.ATTRS = {};
-
-TagPlugin._buildCfg = {
-    custom: {
-        NS: function(prop, receiver, supplier) {
-            receiver.NS = TagPlugin.NS;
+TagPlugin.ATTRS = {
+    name: {
+        valueFn: function() {
+            return (this.get('host').get('tagName') || '').toLowerCase();
         }
     }
 };
 
-Y.extend(TagPlugin, Y.Plugin.Base, {});
+// Fixes a bug in YUI (#2532464) and parses ints
+function camelize(attrs) {
+    var camelized = {};
 
-function listen(name, plugin) {
-    Y.on('inserted', function(e) {
-        e.target.plug(plugin);
-    }, name);
+    Y.each(attrs, function(value, key) {
+        var match = /^i:(-?[0-9]+)$/.exec(value);
+
+        if (match) {
+            value = parseInt(match[1], 10);
+        }
+
+        key = key.replace(/-([a-z])/g, function(s, l) {return l.toUpperCase();});
+        camelized[key] = value;
+    });
+
+    return camelized;
 }
 
-function register(name, plugin) {
-    if (plugin) {
-        listen(name, plugin);
-    } else { // Need to load plugin
-        Y.use('tag-' + name, function(Y) {
-            if (Y.namespace('Tag.Tags')[name]) {
-                listen(name, Y.namespace('Tag.Tags')[name]);
-            }
-        });
+Y.extend(TagPlugin, Y.Plugin.Base, {
+    initializer: function() {
+        var tag = tags[this.get('name')];
+        
+        if (!tag) {return;}
+
+        Y.mix(this, tag.mixin);
+
+        if (tag.mixin.created) {
+            tag.mixin.created.call(this, camelize(this.get('host').getData()));
+        }
     }
-}
+});
 
-Tag.register = register;
-Tag.Plugin = TagPlugin;
+Y.Node.plug(TagPlugin);
