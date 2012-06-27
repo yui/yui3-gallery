@@ -119,7 +119,10 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 				easing:'ease-out',
 				on : {
 					end:function() {
-						configObj.subMenu.setStyle('height', '0px');
+						configObj.subMenu.setStyles({
+							height:'0px',
+							display:'none'
+						});
 						configObj.topLi.removeClass('active');
 					}
 				}
