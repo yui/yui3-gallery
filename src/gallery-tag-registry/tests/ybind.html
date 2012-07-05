@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>YUI Tag</title>
+        <script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript">
+        var Y = YUI({
+            modules: {
+                'gallery-event-inserted': '../../../build/gallery-event-inserted/gallery-event-inserted.js',
+                'gallery-tag': '../../../build/gallery-tag/gallery-tag.js'
+            },
+            groups: {tag: {patterns: {'tag-': {configFn: function(cfg) {
+                cfg.path = '../../yui3-gallery/build/gallery-tag-registry/' + cfg.name + '.js'
+            }}}}}
+        })
+        </script>
+    </head>
+    <body>
+        <h2>Data Binding</h2>
+
+        <input id="name" type="text" placeholder="Enter your name" />
+        <p>Hello, <span ybind="#name" ybind:refkeyup></span>! Have a good day, <ybind data-ybind="#name" data-refkeyup></ybind>.</p>
+
+        <hr />
+
+        <input id="age" type="range" />
+        <p>Age: <span ybind="#age" ybind:refchange></span></p>
+
+        <hr />
+
+        <input id="age2" type="range" ybind="#age3" ybind:refchange />
+        <input id="age3" type="range" ybind="#age2" ybind:refchange />
+        <p id="test">Age: <span></span></p>
+
+        <hr />
+
+        <click-counter>
+            <p>Total clicks: <span ybind="click-counter" ybind:refcount-change></span></p>
+
+            <form ybind="click-counter" ybind:onsubmit="clicked">
+                <input type="submit" value="Click" />
+            </form>
+        </click-counter>
+
+        <script type="text/javascript">
+        Y.use('gallery-tag', 'tag-ybind', function(Y) {
+            Y.Tag.register('click-counter', {
+                created: function(config) {
+                    this.addAttr('count', {value: 0});
+                },
+
+                clicked: function(e) {
+                    e.preventDefault();
+                    this.set('count', this.get('count') + 1);
+                }
+            });
+        });
+        </script>
+    </body>
+</html>
