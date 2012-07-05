@@ -16,6 +16,8 @@ Y.extend(TextareaExpander, Y.Plugin.Base, {
 		txt.wrap('<div class="textarea-expander"></div>');
 		txt.ancestor().prepend("<pre><span></span><br/></pre>");
 		span = txt.ancestor().one('span');
+
+		txt.setStyle('height','100%');
 		
 		if(Y.UA.opera && Y.UA.os === 'macintosh'){
 			span.append('<br/>');

@@ -6,6 +6,7 @@
 #minheight textarea,#minheight pre,#minheight .textarea-expander{width:250px;}
 #minmaxheight textarea,#minmaxheight pre{min-height:25px;max-height:150px;}
 #minmaxheight textarea,#minmaxheight pre,#minmaxheight .textarea-expander{width:125px;}
+#fixedheight textarea{height:25px;}
 </style>
 <script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-debug.js"></script>
 <script type="text/javascript">
@@ -31,6 +32,7 @@
         Y.all("textarea").plug(Y.TextareaExpander);
     });
 </script>
+
 </head>
 <body>
 Max height
@@ -59,6 +61,13 @@ Min-height and Max-height
 
 Un-constrained
 <div id="unconstrained">
+    <form>
+        <textarea>Hello world</textarea>
+    </form>
+</div>
+
+Fixed height in stylesheet
+<div id="fixedheight">
     <form>
         <textarea>Hello world</textarea>
     </form>
