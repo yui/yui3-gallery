@@ -1,5 +1,3 @@
-{{toc}}
-
 <div class="intro">
 
 <p>
@@ -121,9 +119,9 @@ as a registration token during the handshake.
 Once the iframe is appended to the document, its CommunicationLayer
 kicks off the handshake sequence. This sequence allows both sides to
 record the source and origin of the other, which are then referenced
-every time an event is fired or an event listener is defined on the
-CommunicationLayer. This allows for the secure communication between
-the two application and addresses the main <a
+every time a CL message is dispatched or a CL message is received.
+This allows for the secure communication between the two application
+and addresses the main <a
 href="https://developer.mozilla.org/en/DOM/window.postMessage#Security_concerns">
 security concerns</a> regarding the `postMessage` API.
 </p>
@@ -206,7 +204,7 @@ proxy.once('init', initHandler);
 
 <p>
 Fire a CL event at the child along with optional event data. A callback
-can also be subscribed but will only execute if the child application
+can also be defined, but will only execute if the child application
 executes it.
 </p>
 
@@ -216,7 +214,9 @@ proxy.fire('init', {
 });
 ```
 <p>
-To prevent memory leaks, the callback expires after `callbackTimeout` milliseconds (default of 10,000).
+To prevent memory leaks, the callback expires after `callbackTimeout`
+milliseconds (default of 10,000). This is configurable in the
+constructor configuration.
 </p>
 
 <h4>ready (fn)</h4>
@@ -338,8 +338,24 @@ Y.CL.once({
 Y.CL.once(['refresh', 'close'], handler, this);
 ```
 
-<h4>fire</h4>
-<h4>ready</h4>
+<h4>fire (event, data, callback)</h4>
+
+<p>
+Fire a CL event at the parent along with optional event data. A
+callback can also be defined, but will only execute if the child
+application executes it.
+</p>
+
+```
+Y.CL.fire('init', {
+    foo: bar
+});
+```
+<p>
+To prevent memory leaks, the callback expires after `callbackTimeout`
+milliseconds (default of 10,000). This is configurable in the
+constructor configuration.
+</p>
 
 <h4>open (name, callback)</h4>
 
@@ -377,8 +393,8 @@ connection object has the following API:
 </dl>
 
 <p>
-The parent application can respond to requests coming over the connection via
-<code>proxy.on(..)</code>.
+The parent application can respond to requests coming over the
+connection via <code>proxy.on(..)</code>.
 </p>
 
 ```
@@ -400,10 +416,4 @@ buffered and flushed when the ready state is reached.
 
 <h2>Known Issues</h2>
 
-<ul>
-  <li>
-    <p>
-        Namespace collisions are possible between applications with the same origin.
-    </p>
-  </li>
-</ul>
+<p>None as of 2012-06-24</p>
