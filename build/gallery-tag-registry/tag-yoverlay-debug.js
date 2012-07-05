@@ -21,4 +21,4 @@ Y.Tag.register('yoverlay', {
 });
 
 
-}, 'gallery-2012.06.27-22-22' ,{requires:['gallery-tag', 'overlay']});
+}, 'gallery-2012.07.05-20-01' ,{requires:['gallery-tag', 'overlay']});

@@ -5,6 +5,9 @@ YUI.add('gallery-event-inserted', function(Y) {
  *
  * Uses efficient CSS3 Animation to fire insertion events otherwise falls back
  * to DOMNodeInserted.
+ *
+ * Based on technique described here:
+ * http://www.backalleycoder.com/2012/04/25/i-want-a-damnodeinserted/
  */
 var VENDOR = ['', 'WebKit', 'Moz', 'O', 'MS'].filter(function(prefix) {
         return Y.config.win[prefix + 'CSSKeyframesRule'];
@@ -14,7 +17,7 @@ var VENDOR = ['', 'WebKit', 'Moz', 'O', 'MS'].filter(function(prefix) {
 
 // CSS3 Animation Support
 Inserted = {
-    NAME: 'INSERTED', // Animation name
+    NAME: 'InsertedNode', // Animation name
     PREFIX: VENDOR ? '-' + VENDOR.toLowerCase() + '-' : VENDOR,
     ANIMATION_START_VENDORS: {
         WebKit: 'webkitAnimationStart',
@@ -41,7 +44,7 @@ Inserted = {
             rule = sub._extra + '{' + Inserted.PREFIX + 'animation-duration: 0.0001s; ' + Inserted.PREFIX + 'animation-name: ' + Inserted.NAME + ' !important;}';
 
         sub._handle = node[method](Inserted.ANIMATION_START, Y.bind(function(e) {
-            if (e._event.animationName === Inserted.NAME && e.target.get('tagName').toLowerCase() === sub._extra) {
+            if (e._event.animationName === Inserted.NAME) {
                 notifier.fire({target: e.target});
             }
         }, this), filter);
@@ -64,7 +67,7 @@ Inserted = {
 
 // DOMNodeInserted fallback
 DOMInserted = {
-    TAGS: {},
+    SELECTORS: {},
 
     _init: function() {
         Y.Node.DOM_EVENTS.DOMNodeInserted = 1;
@@ -75,17 +78,22 @@ DOMInserted = {
     },
 
     on: function(node, sub, notifier, filter) {
-        var method = filter ? 'delegate' : 'on';
+        var method = filter ? 'delegate' : 'on',
+            doc_node = (node.get('document') || node); // Y.all window bug
 
-        if (!DOMInserted.TAGS[sub._extra]) {
-            DOMInserted.TAGS[sub._extra] = true;
-            Y.all(sub._extra).each(function(item) {
-                notifier.fire({target: item});
-            });
+        // Initialize existing elements on page only once
+        if (!DOMInserted.SELECTORS[sub._extra]) {
+            DOMInserted.SELECTORS[sub._extra] = true;
+            setTimeout(function() {
+                doc_node.all(sub._extra).each(function(n) {
+                    notifier.fire({target: n});
+                });
+            }, 0);
         }
 
+        // Delegates don't seem to work for DOMNodeInserted :(
         sub._handle = node[method]('DOMNodeInserted', Y.bind(function(e) {
-            if (e.target.get('tagName').toLowerCase() === sub._extra) {
+            if (Y.Selector.test(e.target.getDOMNode(), sub._extra, doc_node.getDOMNode())) {
                 notifier.fire({target: e.target});
             }
         }, this), filter);
@@ -108,4 +116,4 @@ DOMInserted = {
 Y.Event.define('inserted', VENDOR ? Inserted : DOMInserted);
 
 
-}, 'gallery-2012.06.20-20-07' ,{requires:['event', 'node'], skinnable:false});
+}, 'gallery-2012.07.05-20-01' ,{requires:['event', 'node'], skinnable:false});
