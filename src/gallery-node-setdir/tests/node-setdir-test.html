@@ -1,0 +1,24 @@
+<html>
+<head>
+<title>Node SetDirection Test</title>
+</head>
+<body>
+<script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+<script src="gallery-node-setdir-min.js"></script>
+<script>
+YUI().use("gallery-node-setdir", "node-base", function(Y) {
+    var rtlButton = Y.Node.create("<button type='button'>Set to RTL</button>");
+    var ltrButton = Y.Node.create("<button type='button'>Set to LTR</button>");
+    var input = Y.Node.create("<div style='width: 20%; border: solid'>A > \u05D0</div>");
+    Y.one("body").append(rtlButton).append(ltrButton).append(input);
+    
+    rtlButton.on("click", function(){input.setDirection("rtl")});
+    ltrButton.on("click", function(){input.setDirection("ltr")});
+    
+    Y.on("directionChange", function(e){
+        alert("Direction changed to "+e.dir+".");
+    });
+});
+</script>
+</body>
+</html>

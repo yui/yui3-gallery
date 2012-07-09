@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>Slideshow Progressive Enhancement Test</title>
+		<script src="../../../../yui3/build/yui/yui.js"></script>
+		<script src="../../../build/gallery-slideshow/gallery-slideshow-debug.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../../build/gallery-slideshow/assets/gallery-slideshow-core.css"></link>
+		<style type="text/css">
+		</style>	
+	</head>
+	<body>
+		<div id="ss">
+			<div class='yui3-widget-header'>
+				Slideshow Progressive Enhancement Test
+			</div>
+			<ul class='yui3-widget-body' style='height: 87px; width: 87px;'>
+				<li>
+					<img src="3449422636_602e4a5520_t.jpg" />
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			YUI({filter: 'RAW'}).use('gallery-slideshow', 'anim', function(Y) {
+				var images =  
+					[/*
+						{
+							'src': "3449422636_602e4a5520_t.jpg",
+							'attribution': "flickrUser hannah_hill",
+							'license': "CC-BY"
+						},*/
+						{
+							'src': "1224766231_315b54b6d4_t.jpg",
+							'attribution': "flickrUser powi",
+							'license': "CC-BY"
+						},
+						{
+							'src': "2681765589_757a5da1a8_t.jpg",
+							'attribution': "flickrUser di_the_huntress",
+							'license': "CC-BY"
+						}
+					], anim = {from: { opacity: 1.0 }, to: {opacity: 0.0}, duration: 2};
+				var slideshow = new Y.SlideShow({ srcNode: '#ss', width: 200, animation: anim, delay: 4000});
+				slideshow.addImages(images);
+				slideshow.render();
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,139 @@
+{
+    "project": {
+        "name": "GoogleMapsFrame"
+    },
+    "files": {
+        "js/google-maps-frame.js": {
+            "name": "js/google-maps-frame.js",
+            "modules": {
+                "gallery-google-maps-frame": 1
+            },
+            "classes": {
+                "GoogleMapsFrame": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-google-maps-frame": {
+            "name": "gallery-google-maps-frame",
+            "submodules": {},
+            "classes": {
+                "GoogleMapsFrame": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/google-maps-frame.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "GoogleMapsFrame": {
+            "name": "GoogleMapsFrame",
+            "shortname": "GoogleMapsFrame",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-google-maps-frame",
+            "namespace": "",
+            "file": "js/google-maps-frame.js",
+            "line": 10,
+            "is_constructor": 1,
+            "extends": "Base",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 20,
+            "description": "Fired when Google Maps Loader fails.",
+            "itemtype": "event",
+            "name": "failure",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        },
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 26,
+            "description": "Fired when Google Maps Loader succeeds.",
+            "itemtype": "event",
+            "name": "load",
+            "fireonce": "",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        },
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 35,
+            "description": "Fired when Google Maps Loader times out.",
+            "itemtype": "event",
+            "name": "timeout",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        },
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 78,
+            "description": "A selector string or node object which will contain the iframe.",
+            "itemtype": "attribute",
+            "name": "container",
+            "initonly": "",
+            "type": "Node|String",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        },
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 88,
+            "description": "Reference to an empty div created inside the iframe. (This is not\nan instance of Node.)",
+            "itemtype": "attribute",
+            "name": "domNode",
+            "readonly": "",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        },
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 98,
+            "description": "The Y.Frame instance that created the iframe.",
+            "itemtype": "attribute",
+            "name": "frame",
+            "readonly": "",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        },
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 107,
+            "itemtype": "attribute",
+            "name": "loaded",
+            "default": "false",
+            "readonly": "",
+            "type": "Boolean",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        },
+        {
+            "file": "js/google-maps-frame.js",
+            "line": 117,
+            "description": "An optional parameters object passed to GoogleMapsLoader. (see\ngallery-google-maps-loader for information)",
+            "itemtype": "attribute",
+            "name": "parameters",
+            "initonly": "",
+            "type": "Object",
+            "class": "GoogleMapsFrame",
+            "module": "gallery-google-maps-frame"
+        }
+    ]
+}

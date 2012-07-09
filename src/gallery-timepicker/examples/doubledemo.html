@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>YUI 3 Timepicker</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.0.0/build/cssreset/reset-min.css&3.0.0/build/cssfonts/fonts-min.css">
+    <style type="text/css" media="screen">
+    
+        h1, h2, h3, h4 p{
+            margin: 0px 0 1em 0;  
+        }
+        h1{
+            font-size: 140%;
+            font-weight: bold;
+            color: #885;
+        }
+        
+        #main{
+            margin: 20px;
+        }
+        
+        #main .sec{
+            margin: 20px;
+        }
+
+        h2, h3, h4{
+            font-weight: bold;
+            color: #885;
+        }
+        
+        h2{
+            font-size: 120%;
+        }
+        
+        h3, h4{
+            font-size: 110%;
+        }
+        
+        h4{
+            font-style: italic;
+        }
+    </style>
+    
+    
+    <link rel="stylesheet" href="timepicker.css" type="text/css" charset="utf-8" />
+</head>
+<body>
+    <div id="main">
+        <div id="demo" class="sec">
+            
+        
+        <h2>Demo</h2>
+        <form action="demo.html" method="post">
+			<div class="sec">
+				
+
+            <p><label for="time">Time: </label><input type="text" name="time" value="2:45AM" id="time" class="time"></p>
+            <div class="foo">
+            </div>
+			</div>
+			
+			<div class="sec">
+			<p><label for="time">Time: </label><input type="text" name="time" value="2:45AM" id="time2" class="time"></p>
+            <div class="bar">
+            </div>
+			</div>
+            <p><input type="submit" value="Continue &rarr;" /></p>
+                        
+        </form>
+        </div>
+    </div>
+    
+</body>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.0.0/build/yui/yui-min.js">
+    
+</script><script type="text/javascript" src="gallery-timepicker-min.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+    YUI().use('gallery-timepicker', function(Y){
+	
+        
+        var picker = new Y.Saw.Timepicker({contentBox: 'div.foo', time:{hour:0, minute:0}, strings:{am:'AM', pm:'PM', seperator:':'}, delay:50});
+        
+        picker.set('time.ampm', picker.AM);
+        picker.render();
+        picker.hide();
+        picker.subscribe('timeset', function(e){
+
+            Y.get('#time').set('value',e.s24hour);
+        });
+        
+        picker.subscribe('cellclick', function(e){
+           this.hide(); 
+        },picker);
+
+
+		    var picker2 = new Y.Saw.Timepicker({contentBox: 'div.bar', time:{hour:0, minute:0}, strings:{am:'am', pm:'pm', seperator:'.'}, delay:10});
+
+	        picker2.set('time.ampm', picker.PM);
+	        picker2.render();
+	        picker2.hide();
+	        picker2.subscribe('timeset', function(e){
+	            Y.get('#time2').set('value',e.s12hour);
+	        });
+
+	        picker2.subscribe('cellclick', function(e){
+	           this.hide(); 
+	        },picker2);
+	    
+	
+		    function handleClick(e){
+	            var target =e.target;
+	            if(target.test('#time')){
+	                picker.toggle();
+	            }else if(target.test('#time2')){
+					picker2.toggle();
+				}
+	        }
+        Y.get('#main').on('click', handleClick);
+    });
+</script>
+</html>

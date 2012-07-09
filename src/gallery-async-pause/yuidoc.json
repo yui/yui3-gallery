@@ -1,0 +1,14 @@
+{
+    "name": "Async Pause Plugin",
+    "description": "Add pause/resume functionality to Async.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js",
+            "../gallery-async/js",
+            "../gallery-async-command/js"
+        ],
+        "outdir": "./api"
+    }
+}

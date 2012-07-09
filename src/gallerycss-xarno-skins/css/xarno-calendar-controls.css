@@ -1,0 +1,7 @@
+.yui3-xarno-calendar-controls { position: relative; text-align: center; background: #efefef; padding: 2px; margin-bottom: 2px; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px;}
+.yui3-xarno-calendar-controls .display { margin: 0 80px; line-height: 1.8em; }
+.yui3-xarno-calendar-controls .yui3-button { position: absolute; top: 3px; }
+.yui3-xarno-calendar-controls .prev-year  { left: 3px; }
+.yui3-xarno-calendar-controls .prev-month { left: 35px; }
+.yui3-xarno-calendar-controls .next-month { right: 35px; }
+.yui3-xarno-calendar-controls .next-year  { right: 3px; }

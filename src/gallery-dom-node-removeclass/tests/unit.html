@@ -1,0 +1,326 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd"> 
+<html>
+    <head>
+        <title>DOM and Node removeClass Tests</title>
+    </head>
+    <body class="yui3-skin-sam">
+        <h1>DOM and Node removeClass Tests</h1>
+        <div id="tests"></div>
+        <div id="console"></div>
+        <script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+        <script src="../../../build/gallery-dom-node-removeclass/gallery-dom-node-removeclass-debug.js"></script>
+        <script>
+            YUI({
+                useConsoleOutput: true,
+                logInclude: { TestRunner: true }
+            }).use('test', 'console', 'gallery-dom-node-removeclass', function (Y) {
+                // YUI Test
+                Y.namespace('Tests');
+
+                Y.Tests.DOMNodeRemoveClass = (function () {
+                    var Assert = Y.Assert,
+                        suite = new Y.Test.Suite('DOM and Node removeClass Tests'),
+                        YN = Y.Node,
+                        tests = Y.one('#tests'),
+                        
+                        // create and append single p node w/ class to test
+                        create = function (className) {
+                            var n = YN.create('<p class="' + className + '"></p>');
+
+                            tests.append(n);
+
+                            return n;
+                        };
+
+                    // Test Case DOM
+                    suite.add(new Y.Test.Case({
+                        name: 'DOM',
+
+                        // Tear down
+                        tearDown: function () {
+                            tests.setContent('');
+                        },
+
+                        // Tests
+                        'Remove class from empty class should return empty': function () {
+                            var node1 = create(''),
+                                node2 = create('');
+
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node1), 'foo');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node2), '');
+
+                            Assert.areEqual('', node1.get('className'));
+                            Assert.areEqual('', node2.get('className'));
+                        },
+
+                        'Remove class from single class should return empty': function () {
+                            var node = create('foo');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node), 'foo');
+
+                            Assert.areEqual('', node.get('className'));
+                        },
+
+                        'Remove class from multiple classes should remove it only': function () {
+                            var node = create('foo bar');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node), 'foo');
+
+                            Assert.areEqual('bar', node.get('className'));
+                        },
+
+                        'Remove inexistent class from single class should return single class': function () {
+                            var node = create('foo');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node), 'bar');
+
+                            Assert.areEqual('foo', node.get('className'));
+                        },
+
+                        'Remove inexistent class from multiple classes should return multiple classes': function () {
+                            var node = create('foo bar');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node), 'abc');
+
+                            Assert.areEqual('foo bar', node.get('className'));
+                        },
+
+                        'Remove undefined from multiple classes should return multiple classes': function () {
+                            var node = create('foo bar');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node), undefined);
+
+                            Assert.areEqual('foo bar', node.get('className'));
+                        },
+
+                        'Y.DOM.removeClass should return undefined (not chainable)': function () {
+                            var node = create('foo bar'),
+                                ret = Y.DOM.removeClass(Y.Node.getDOMNode(node), 'bar');
+
+                            Assert.areEqual('foo', node.get('className'));
+                            Assert.areEqual(undefined, ret);
+                        },
+
+                        'Remove multiple classes from multiple classes should remove all found only': function () {
+                            var node1 = create('foo bar baz moo abc'),
+                                node2 = create('foo bar baz moo abc'),
+                                node3 = create('foo bar baz moo abc'),
+                                node4 = create('foo bar baz moo abc');
+
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node1), 'foo baz');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node2), 'def bar');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node3), 'foo mmm abc');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node4), 'bar baz tar moo');
+
+                            Assert.areEqual('bar moo abc', node1.get('className'));
+                            Assert.areEqual('foo baz moo abc', node2.get('className'));
+                            Assert.areEqual('bar baz moo', node3.get('className'));
+                            Assert.areEqual('foo abc', node4.get('className'));
+                        },
+
+                        'Remove all multiple classes from multiple classes should return empty': function () {
+                            var node1 = create('foo bar baz moo abc'),
+                                node2 = create('foo bar baz moo abc'),
+                                node3 = create('foo bar baz moo abc'),
+                                node4 = create('foo bar baz moo abc');
+
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node1), 'foo bar baz moo abc');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node2), 'abc moo baz bar foo');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node3), 'mmm foo aaa bar rrr baz ccc moo eee abc lll');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node4), 'mmm abc aaa moo rrr baz ccc bar eee foo lll');
+
+                            Assert.areEqual('', node1.get('className'));
+                            Assert.areEqual('', node2.get('className'));
+                            Assert.areEqual('', node3.get('className'));
+                            Assert.areEqual('', node4.get('className'));
+                        },
+
+                        'Remove classes that are part of longer classes should only remove those classes not the longer ones': function () {
+                            var node1 = create('foo bar baz moo abc'),
+                                node2 = create('foo bar baz moo abc');
+
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node1), 'foobar bar bazzoo moo abcdef');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node2), 'foooo abc foo moo foobaz bar foofoo');
+
+                            Assert.areEqual('foo baz abc', node1.get('className'));
+                            Assert.areEqual('baz', node2.get('className'));
+                        },
+
+                        'Remove classes from spaced classes should remove all keeping final class neat': function () {
+                            var node1 = create('    foo bar    baz  moo  abc   '),
+                                node2 = create('    foo bar baz moo abc        '),
+                                node3 = create('foo\t\tbar\nbaz \tmoo  abc\t'),
+                                node4 = create('foo   bar    baz   moo     abc');
+
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node1), 'bar moo');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node2), 'baz foo abc');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node3), 'bar abc');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node4), 'abc foo');
+
+                            Assert.areEqual('foo baz abc', node1.get('className'));
+                            Assert.areEqual('bar moo', node2.get('className'));
+                            Assert.areEqual('foo baz moo', node3.get('className'));
+                            Assert.areEqual('bar baz moo', node4.get('className'));
+                        },
+
+                        'Remove multiple repeatead classes should remove them all': function () {
+                            var node1 = create('foo bar baz moo abc'),
+                                node2 = create('foo bar baz moo abc');
+
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node1), 'foo foo abc abc baz');
+                            Y.DOM.removeClass(Y.Node.getDOMNode(node2), 'abc bar abc bar moo');
+
+                            Assert.areEqual('bar moo', node1.get('className'));
+                            Assert.areEqual('foo baz', node2.get('className'));
+                        }
+
+                    }));
+
+                    // Test Case Node
+                    suite.add(new Y.Test.Case({
+                        name: 'Node',
+
+                        // Tear down
+                        tearDown: function () {
+                            tests.setContent('');
+                        },
+
+                        // Tests
+                        'Remove single and multiple classes should remove them': function () {
+                            var node1 = create('foo bar baz moo abc'),
+                                node2 = create('foo bar baz moo abc'),
+                                node3 = create(' foo bar\tbaz moo a'),
+                                node4 = create('foo bar baz moo abc'),
+                                node5 = create('foo bar baz moo abc');
+
+                            node1.removeClass('foo');
+                            node2.removeClass('baz');
+                            node3.removeClass('a');
+                            node4.removeClass('abc bar foo');
+                            node5.removeClass('mmm abc aaa baz bar foo rrr moo ccc moo eee foobar');
+
+                            Assert.areEqual('bar baz moo abc', node1.get('className'));
+                            Assert.areEqual('foo bar moo abc', node2.get('className'));
+                            Assert.areEqual('foo bar baz moo', node3.get('className'));
+                            Assert.areEqual('baz moo', node4.get('className'));
+                            Assert.areEqual('', node5.get('className'));
+                        },
+
+                        'Remove classes using chain should respect chain order': function () {
+                            var node1 = create('foo bar baz moo abc'),
+                                node2 = create('foo bar baz moo abc'),
+                                node3 = create('foo bar\t\t baz\nmoo abc'),
+                                node4 = create('foo bar baz moo abc'),
+                                node5 = create('foo bar baz moo abc');
+
+                            node1.removeClass('foo').removeClass('moo');
+                            node2.removeClass('moo baz').removeClass('bar');
+                            node3.removeClass('foobar moo baz').removeClass('bar').removeClass('none').removeClass('abc baz');
+                            node4.removeClass('foobar').removeClass('bar').removeClass('moo').removeClass('abc').removeClass('foo').removeClass('baz').removeClass('bazzoo');
+                            node5.removeClass('bar moo').removeClass('abc').removeClass('foo abc').removeClass('bazmoo baz');
+
+                            Assert.areEqual('bar baz abc', node1.get('className'));
+                            Assert.areEqual('foo abc', node2.get('className'));
+                            Assert.areEqual('foo', node3.get('className'));
+                            Assert.areEqual('', node4.get('className'));
+                            Assert.areEqual('', node5.get('className'));
+                        },
+
+                        'Remove and add multiple classes with chain should return last added not removed in order': function () {
+                            var node5 = create('foo bar baz moo abc');
+
+                            node5.removeClass('bar foo').removeClass('moo none abc').removeClass('abc').removeClass('baz foo').removeClass('baz').addClass('y').addClass('foo').addClass('foobar').removeClass('foo').addClass('ui');
+
+                            Assert.areEqual('y foobar ui', node5.get('className'));
+                        }
+                    }));
+
+                    // Test Case NodeList
+                    suite.add(new Y.Test.Case({
+                        name: 'NodeList',
+
+                        // Tear down
+                        tearDown: function () {
+                            tests.setContent('');
+                        },
+
+                        // Tests
+                        'Remove single class should remove only this class found for each node': function () {
+                            var node1 = create('foobar baz moo abc'),
+                                node2 = create('foo bar baz moo abc'),
+                                node3 = create(' foo bar\tbaz moo a'),
+                                node4 = create('foo bar baz mooabc'),
+                                node5 = create('  foo bar moo abc  '),
+                                node6 = create('baz'),
+                                node7 = create(''),
+                                nodes = tests.all('p');
+
+                            nodes.removeClass('baz');
+
+                            Assert.areEqual('foobar moo abc', node1.get('className'));
+                            Assert.areEqual('foo bar moo abc', node2.get('className'));
+                            Assert.areEqual('foo bar moo a', node3.get('className'));
+                            Assert.areEqual('foo bar mooabc', node4.get('className'));
+                            Assert.areEqual('foo bar moo abc', node5.get('className'));
+                            Assert.areEqual('', node6.get('className'));
+                            Assert.areEqual('', node7.get('className'));
+                        },
+
+                        'Remove multiple classes should remove only those found for each node': function () {
+                            var node1 = create('foobar baz moo abc'),
+                                node2 = create('foo bar baz moo abc'),
+                                node3 = create(' foo bar\tbaz moo a'),
+                                node4 = create('foo bar baz mooabc'),
+                                node5 = create('  foo bar moo abc  '),
+                                node6 = create('baz foo abc'),
+                                node7 = create(''),
+                                nodes = tests.all('p');
+
+                            nodes.removeClass('baz abc foo');
+
+                            Assert.areEqual('foobar moo', node1.get('className'));
+                            Assert.areEqual('bar moo', node2.get('className'));
+                            Assert.areEqual('bar moo a', node3.get('className'));
+                            Assert.areEqual('bar mooabc', node4.get('className'));
+                            Assert.areEqual('bar moo', node5.get('className'));
+                            Assert.areEqual('', node6.get('className'));
+                            Assert.areEqual('', node7.get('className'));
+                        },
+
+                        'Remove single and multiple classes with chain should remove only those found for each node': function () {
+                            var node1 = create('up foobar baz moo abc'),
+                                node2 = create('foo up bar baz up moo abc'),
+                                node3 = create(' foo bar\tbaz moo a'),
+                                node4 = create('foo bar baz mooabc'),
+                                node5 = create('  foo bar up moo abc  '),
+                                node6 = create('baz up'),
+                                node7 = create(''),
+                                nodes = tests.all('p');
+
+                            nodes.removeClass('baz abc').removeClass('moo test up').removeClass('none').addClass('yui').removeClass('a').removeClass('moo baz');
+
+                            Assert.areEqual('foobar yui', node1.get('className'));
+                            Assert.areEqual('foo bar yui', node2.get('className'));
+                            Assert.areEqual('foo bar yui', node3.get('className'));
+                            Assert.areEqual('foo bar mooabc yui', node4.get('className'));
+                            Assert.areEqual('foo bar yui', node5.get('className'));
+                            Assert.areEqual('yui', node6.get('className'));
+                            Assert.areEqual('yui', node7.get('className'));
+                        }
+                    }));
+
+                    return suite;
+                }());
+
+                // console
+                (new Y.Console({
+                    verbose: true,
+                    newestOnTop: false,
+                    height: '600px',
+                    width: '99%',
+                    style: 'block'
+                })).render('#console');
+
+                // add to the test runner and run
+                Y.Test.Runner.add(Y.Tests.DOMNodeRemoveClass);
+                Y.Test.Runner.run();
+            });
+        </script>
+    </body>
+</html>

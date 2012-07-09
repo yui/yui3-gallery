@@ -1,0 +1,12 @@
+{
+    "name": "Array Iterate",
+    "description": "Iterate through an array.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

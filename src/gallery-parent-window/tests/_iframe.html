@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+<title>iframe leveraging gallery-parent-window</title>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0/build/yui/yui-debug.js"></script>
+<script type="text/javascript" src="../../../build/gallery-parent-window/gallery-parent-window-debug.js"></script>
+<script type="text/javascript">
+YUI().use('gallery-parent-window', function (iY) {
+
+  iY.ParentWindow({
+    gallery: 'gallery-2010.08.18-17-12'
+  }).use ('yui2-tabview', 'gallery-dispatcher', 'node', 'event', function(pY) {
+    var d = pY.one ('#demo');
+    d.setContent('iframe injected content').addClass ('passed');
+    pY.Global.fire ('iframe-global-event');
+    pY.Global.on ('document-global-event', function() {
+      d.addClass ('document-global-event-captured-by-iframe');
+    });
+  })
+
+});
+</script>
+</head>
+<body><br></body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>YUI Tag</title>
+        <script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript">
+        var Y = YUI({
+            modules: {
+                'gallery-event-inserted': '../../../build/gallery-event-inserted/gallery-event-inserted.js',
+                'gallery-tag': '../../../build/gallery-tag/gallery-tag.js'
+            },
+            groups: {tag: {patterns: {'tag-': {configFn: function(cfg) {
+                cfg.path = '../../yui3-gallery/build/gallery-tag-registry/' + cfg.name + '.js'
+            }}}}}
+        })
+        </script>
+    </head>
+    <body>
+        <h2>Template</h2>
+        <div id="raw"></div>
+
+        <h2>Compiled</h2>
+        <div id="compiled"></div>
+
+        <ytemplate><div>Hello, <span>{adjective}</span> world!</div></ytemplate>
+
+        <script type="text/javascript">
+        Y.use('tag-ytemplate', function(Y) {
+            var tmpl = Y.one('ytemplate');
+
+            Y.one('#raw').setHTML(tmpl.tag.get('html'));
+            Y.one('#compiled').setHTML(tmpl.tag.compile({adjective: 'YUI Tag'}));
+        });
+        </script>
+    </body>
+</html>

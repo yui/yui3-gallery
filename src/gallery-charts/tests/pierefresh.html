@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+/*Supplemental: CSS for the YUI distribution*/
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+#mychart {
+    margin:10px 10px 10px 10px;
+    padding:10px 10px 10px 10px;
+    height:400px;
+    width:400px;
+    position:relative;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts.css">
+<!-- BEGIN EXAMPLE CODE -->	
+</head>		
+<body class="yui3-skin-sam">
+<button type="button" id="updatechart">Update Chart</button><br/>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.2/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-charts/gallery-charts-min.js"></script>
+<h3>Pie Chart Assembled with individual components</h3>
+<div id="mychart"></div>
+<script type="text/javascript">            
+    YUI().use('gallery-charts', function (Y) 
+    {
+        // Create data 
+        var dataProvider = [
+                {day:"Monday", taxes:2000}, 
+                {day:"Tuesday", taxes:50}, 
+                {day:"Wednesday", taxes:4000}, 
+                {day:"Thursday", taxes:200}, 
+                {day:"Friday", taxes:2000}
+        ];				
+
+        var dataProvider2 = [
+                {day:"Monday", taxes:200}, 
+                {day:"Tuesday", taxes:5000}, 
+                {day:"Wednesday", taxes:400}, 
+                {day:"Thursday", taxes:1200}, 
+                {day:"Friday", taxes:2000},
+                {day:"Saturday", taxes:1500},
+                {day:"Sunday", taxes:1800}
+        ];				
+        var pieGraph = new Y.Chart({
+                render:"#mychart", 
+                categoryKey:"day", 
+                seriesKeys:["taxes"], 
+                dataProvider:dataProvider, 
+                type:"pie", 
+                seriesCollection:[
+                    {
+                        categoryKey:"day",
+                        valueKey:"taxes",
+                        styles:{
+                            over: {
+                                fill:{
+                                    colors:[
+                                        "#93f"
+                                    ]
+                                },
+                                border: {
+                                    weight: 1,
+                                    color: "#000000"
+                                }
+                            }
+                        }
+                    }
+                ]
+            });
+            
+        function updateChart(e)
+        {
+            var dp = dataProvider;
+            if(pieGraph.get("dataProvider") === dataProvider)
+            {
+                dp = dataProvider2;
+            }
+            pieGraph.set("dataProvider", dp);
+        }
+        Y.on("click", updateChart, "#updatechart");
+   });
+</script>
+</body>
+</html>

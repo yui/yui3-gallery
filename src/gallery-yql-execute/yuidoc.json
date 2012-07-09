@@ -1,0 +1,12 @@
+{
+    "name": "YQL Execute",
+    "description": "This module Executes JavaScript remotely.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

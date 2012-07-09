@@ -1,0 +1,732 @@
+{
+    "project": {},
+    "files": {
+        "js/picklist.js": {
+            "name": "js/picklist.js",
+            "modules": {
+                "gallery-picklist": 1
+            },
+            "classes": {
+                "PickList": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-picklist": {
+            "name": "gallery-picklist",
+            "submodules": {},
+            "classes": {
+                "PickList": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/picklist.js",
+            "line": 1,
+            "description": "PickList Widget :\n  \nRequires:  3.5.0pr2 at least, \"event\", \"button\", \"cssbutton\""
+        }
+    },
+    "classes": {
+        "PickList": {
+            "name": "PickList",
+            "shortname": "PickList",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-picklist",
+            "namespace": "",
+            "file": "js/picklist.js",
+            "line": 11,
+            "extends": "Widget"
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/picklist.js",
+            "line": 23,
+            "description": "The Array to populate the SELECT / OPTIONS on the left-side, herein referred to\nas \"options\" in this widget.\n\nElements of this array aren't required to have members { text:'', value:''}, \nif the members are different they can be mapped to the expected settings using \nthe \"optionsMap\" attribute. \n\nIf the members of this array are non-object single-items, they are assumed to be \nthe \"text\" item, and the \"value\" will also be set to this item.",
+            "itemtype": "attribute",
+            "name": "options",
+            "type": "{Array}",
+            "default": "[]",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 44,
+            "description": "The Array to populate the SELECT / OPTIONS on the right-side, herein referred \nto as \"selected\" in this widget.  For example, if a FORM is opened with default \nmulti-selected items, they would be provided in this attribute as an array.\n\nElements of this array aren't required to have members { text:'', value:''}, \nif the members are different they can be mapped to the expected settings using \nthe \"optionsMap\" attribute. \n\nIf the members of this array are non-object single-items, they are assumed to be \nthe \"text\" item, and the \"value\" will also be set to this item.",
+            "itemtype": "attribute",
+            "name": "selected",
+            "type": "{Array}",
+            "default": "[]",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 66,
+            "description": "An object having members \"value, text, title\" that defines the mapping \nbetween the provided \"options\" array data and the expected parameters of \nthe JavaScript new Option('text', 'value').",
+            "itemtype": "attribute",
+            "name": "optionsMap",
+            "type": "{Object}",
+            "default": "{ value:'value', text:'text', title:'title' }",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 90,
+            "description": "Classname to be applied to the \"options\" <SELECT> element, usually used to \nspecify the \"width\" of the element.",
+            "itemtype": "attribute",
+            "name": "optClassName",
+            "type": "{String}",
+            "default": "''",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 104,
+            "description": "Classname to be applied to the \"selected\" <SELECT> element, usually used to \nspecify the \"width\" of the element.",
+            "itemtype": "attribute",
+            "name": "selClassName",
+            "type": "{String}",
+            "default": "''",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 118,
+            "description": "The DOM ID element of the \"template\" to be used for defining the OPTIONS, SELECTIONS, \nand the BUTTONS.\n \nExpected replacable placeholder tokens positioned within the \"template\" are identified as;\n\n\t{OPTIONS_CONTAINER}\t\t:  Left-hand side \"Options\" <select> placeholder\n\t{SELECTIONS_CONTAINER}\t:  Right-hand side \"Selected\" <select> placeholder\n\t{ACTION_ALL}\t\t\t:  Placeholder for the \"Add All\" button\n \t     \t{ACTION_ONE}\t\t\t:  Placeholder for the \"Add One\" button\n\t{ACTION_BACK}\t\t\t:  Placeholder for the \"Remove One\" button\n\t{ACTION_ALLBACK}\t\t:  Placeholder for the \"Remove All\" button",
+            "itemtype": "attribute",
+            "name": "template",
+            "type": "{String}",
+            "default": "''",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 141,
+            "description": "Attribute allows specifying the \"button\" type to be used during construction of the\nWidget template.  Currently supported are HTML <button>, a Y.Button object, a Y.Button \nCSSButton, and a simple HTML <a> link.\n\nRecognized settings are 'htmlbutton', 'ybutton', 'cssbutton', 'link'",
+            "itemtype": "attribute",
+            "name": "buttonType",
+            "type": "{String}",
+            "default": "'htmlbutton'",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 165,
+            "description": "The source \"ID\" of the container for this widget, REQUIRED.",
+            "itemtype": "attribute",
+            "name": "srcNode",
+            "type": "{String}",
+            "default": "null",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 178,
+            "description": "The number of options to display in the left and right side SELECT / OPTIONS control.",
+            "itemtype": "attribute",
+            "name": "selectSize",
+            "type": "{Int}",
+            "default": "10",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 191,
+            "description": "The default \"width\" style of the left and right side SELECT / OPTIONS control.",
+            "itemtype": "attribute",
+            "name": "selectSize",
+            "type": "{String}",
+            "default": "'9em'",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 204,
+            "description": "A flag setting for enabling \"stack\" mode of this widget.  In \"stack\" mode \nthe JS Options are moved from left-to-right individually, so that they can't \nbe re-used inadvertantly.  \n\nFor example, \"Add One\" from the left option MOVES the option to the right-side \n\"selections\".  If \"Remove One\" is chosen, the right-side selected item is returned\nto the bottom of the left-hand side options.  (Can't currently return it to the \nindex of where it came from ... see \"preserveOrder\").",
+            "itemtype": "attribute",
+            "name": "stackMode",
+            "type": "{Boolean}",
+            "default": "false",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 225,
+            "description": "NOT IMPLEMENTED AT THIS TIME\n\t  \t  \n\t     A flag setting for preserving the original order of the options, when add or \n\t     remove actions are taken.   With \"preserveOrder\" false, all items are added to the \n\t     bottom of the left / right side HTML SELECT / OPTIONS.  If set to TRUE, the \n\t     options are returned to proper order from the original \"options\" setting.\n\t     \n\t     This only has relevance when \"stackMode\" is TRUE.",
+            "itemtype": "attribute",
+            "name": "preserveOrder",
+            "type": "{Boolean}",
+            "default": "false",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 247,
+            "description": "The label to be used for the BUTTON face for \"Add All\" action.",
+            "itemtype": "attribute",
+            "name": "actionLabelAll",
+            "type": "{String}",
+            "default": "'Add All'",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 259,
+            "description": "The label to be used for the BUTTON face for \"Add One\" action.",
+            "itemtype": "attribute",
+            "name": "actionLabelOne",
+            "type": "{String}",
+            "default": "'Add'",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 271,
+            "description": "The label to be used for the BUTTON face for \"Remove\" action.",
+            "itemtype": "attribute",
+            "name": "actionLabelRmv",
+            "type": "{String}",
+            "default": "'Remove'",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 283,
+            "description": "The label to be used for the BUTTON face for \"Remove All\" action.",
+            "itemtype": "attribute",
+            "name": "actionLabelRmvAll",
+            "type": "{String}",
+            "default": "'Remove All'",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 303,
+            "description": "The default \"template\" to use for rendering of this widget.",
+            "itemtype": "property",
+            "name": "TMPL_control",
+            "type": "String",
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 313,
+            "description": "The template to use for constructing the HTML <SELECT> elements for left/right side",
+            "itemtype": "property",
+            "name": "TMPL_inputs",
+            "type": "String",
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 321,
+            "description": "The template to use for constructing the HTML <BUTTON> elements within \nthe widget (for buttonType='htmlbutton' or 'ybutton')",
+            "itemtype": "property",
+            "name": "TMPL_button",
+            "type": "String",
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 330,
+            "description": "The template to use for constructing the HTML <button> elements within \nthe widget (for buttonType='cssbutton')",
+            "itemtype": "property",
+            "name": "TMPL_cssbtn",
+            "type": "String",
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 339,
+            "description": "The template to use for constructing the HTML <A> elements within \nthe widget (for buttonType='link')",
+            "itemtype": "property",
+            "name": "TMPL_alink",
+            "type": "String",
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 349,
+            "itemtype": "property",
+            "name": "CLASS_ACTION",
+            "type": "Object",
+            "access": "private",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 356,
+            "description": "Holder for the Y.Node of the SELECT left-hand side \"available\" options.",
+            "itemtype": "property",
+            "name": "_optionNode",
+            "type": "Object",
+            "access": "private",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 364,
+            "description": "Holder for the Y.Node of the SELECT right-hand side \"selected\" or chosen options",
+            "itemtype": "property",
+            "name": "_selectNode",
+            "type": "Object",
+            "access": "private",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 372,
+            "description": "Holder for the \"action\" click event handlers",
+            "itemtype": "property",
+            "name": "_eventHandles",
+            "type": "Array",
+            "access": "private",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 380,
+            "description": "Holder for the Y.Button Widget instances (if \"buttonType\" === \"ybutton\" )",
+            "itemtype": "property",
+            "name": "_ybuttons",
+            "type": "Array",
+            "access": "private",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 387,
+            "description": "Holder for the original OPTIONS order, to be used with \"preserveOrder\"  (NOT IMPLEMENTED)",
+            "itemtype": "property",
+            "name": "_optOrder",
+            "type": "Array",
+            "access": "private",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 458,
+            "description": "Method that binds the button pushes to their handlers.  Keep a reference to the handler \nin this._eventHandles so we can detach them later.",
+            "itemtype": "method",
+            "name": "bindUI",
+            "access": "public",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 498,
+            "description": "Method to clear the left-hand side \"options\" SELECT OPTIONS completely.",
+            "itemtype": "method",
+            "name": "clearOptions",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "true"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 510,
+            "description": "Method to clear the right-hand side \"selections\" SELECT OPTIONS completely.",
+            "itemtype": "method",
+            "name": "clearSelections",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "true"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 521,
+            "description": "Returns the current items in the \"right side\" SELECT OPTIONS box.",
+            "itemtype": "method",
+            "name": "getSelections",
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "An array of options Objects, members are { value, text, title };",
+                "type": "Array"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 545,
+            "description": "Method to create the DOM elements for this Widget, including two HTML <SELECT> elements,\nand four BUTTONS to operate on the Widget.\n\nThe method uses the \"template\" attribute if set for positioning of the above UI elements,\nif none is provided a default template is used.",
+            "itemtype": "method",
+            "name": "_renderInput",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "true"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 646,
+            "description": "Method to load the left-hand side \"options\" HTML <SELECT> element with the \nuser-defined options array.",
+            "itemtype": "method",
+            "name": "_loadOptions",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "options.length",
+                "type": "Number"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 697,
+            "description": "Method to clear the right-hand side \"selections\" OPTIONS completely.",
+            "itemtype": "method",
+            "name": "_clearOptions",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "true"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 712,
+            "description": "Method to load the right-hand side \"selections\" HTML <SELECT> element with the \nuser-defined selections array.",
+            "itemtype": "method",
+            "name": "_loadSelections",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "selections.length",
+                "type": "Number"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 751,
+            "description": "Internal method to normalize the 'text', 'value', and 'title' data based upon the input \n\"optionsMap\" of the \"options\" attribute.  Returns an object that can be used directly by \nthe JS new Option( text, value ) command.",
+            "itemtype": "method",
+            "name": "_optStdFormat",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "An object that contains { value, text, title } for defining the JS Option",
+                "type": "Object"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 783,
+            "description": "Internal method intended to return the provided opt_node object back to the \"options\" \nSELECT OPTION in the original defined order. \nThis would only be used for \"stackMode\" and \"preserveOrder\" true.",
+            "itemtype": "method",
+            "name": "_returnOptionPerOrder",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": ""
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 808,
+            "description": "Creates a Y.Button object by using the input \"bnode\" as the srcNode of the Button.",
+            "itemtype": "method",
+            "name": "_createYButtonNode",
+            "params": [
+                {
+                    "name": "bnode,",
+                    "description": "The Node of the HTML <button> to use to create Y.Button",
+                    "type": "String || Node"
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "object",
+                "type": "Y.Button"
+            },
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 824,
+            "description": "Creates an HTML <button> object that can be used with the \"cssbutton\" module of 3.5.0.\nUses the internal \"TMPL_cssbtn\" property as a template for the HTML. \n\nThe cssButton design uses a <span> to specify the location of the IMG, on either the \nright or left side of the button contents (i.e. \"Click Me\").\n\nSo this method defines either lcontent or rcontent to specify which side of the \"content\" \nthe IMG is defined on.",
+            "itemtype": "method",
+            "name": "_createCssButton",
+            "params": [
+                {
+                    "name": "subname,",
+                    "description": "The sub-class name to be added to the button class",
+                    "type": "String"
+                },
+                {
+                    "name": "lcontent,",
+                    "description": "The sub-class name to add to the left-hand side IMG span class",
+                    "type": "String"
+                },
+                {
+                    "name": "rcontent,",
+                    "description": "The sub-class name to add to the right-hand side IMG span class",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "code for <button> element",
+                "type": "HTML"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 854,
+            "description": "Creates an HTML <button> object that will be inserted into the template.  The \"subname\" \nis a sub-class name to be appended to the <button> class to identify it.\nUses the internal \"TMPL_button\" property as a template for the HTML.",
+            "itemtype": "method",
+            "name": "_createHtmlButton",
+            "params": [
+                {
+                    "name": "subname,",
+                    "description": "The sub-class name to be appended to the \"class\" for this button",
+                    "type": "String"
+                },
+                {
+                    "name": "content,",
+                    "description": "The contents of the button face (i.e. \"Click Me\")",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "code for <button> element",
+                "type": "HTML"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 873,
+            "description": "Creates an HTML <a> link object that will be inserted into the template.  The \"subname\" \nis a sub-class name to be appended to the <a> class to identify it.  Uses the internal \n\"TMPL_alink\" property as a template for the HTML.",
+            "itemtype": "method",
+            "name": "_createALinkButton",
+            "params": [
+                {
+                    "name": "subname,",
+                    "description": "The sub-class name to be appended to the \"class\" for this item",
+                    "type": "String"
+                },
+                {
+                    "name": "content,",
+                    "description": "The contents of the <a> text node (i.e. \"Click Me\")",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "code for <button> element",
+                "type": "HTML"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 892,
+            "description": "Returns all of the HTML <select> OPTIONS, as an array of objects containing an index, optionObject \nformat.  This is really intended to return the right-hand side \"selections\" Options element, \nirregardless of whether an Option is \"selected\" / highlighted or not.",
+            "itemtype": "method",
+            "name": "_getSelectedOptions",
+            "params": [
+                {
+                    "name": "sel_node,",
+                    "description": "The SELECT object to get all options of (whether \"selected\" flag is set or not)",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "of Object containing the right-option elements as {index, optionObj} format",
+                "type": "Array"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 912,
+            "description": "Utility function to avoid duplicate adding an option to the right-hand side \"selections\" Options element. \nThis method checks if the \"opt_node\" already exists in the \"selections\" Options, if so it returns TRUE, \nif not it returns FALSE.",
+            "itemtype": "method",
+            "name": "_selOptionExists",
+            "params": [
+                {
+                    "name": "opt_node,",
+                    "description": "The Option node to check for existence.",
+                    "type": "Node"
+                }
+            ],
+            "return": {
+                "description": "true or false,  If the opt_node already exists in the Options array"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 938,
+            "description": "The \"Add All\" button click handler. \nAdds all of the \"Available\" options to the \"selected\" Options, checking to avoid duplicates.\nThis method checks if the Widget is a \"stack\", if so, it moves the Option from left to right.",
+            "itemtype": "method",
+            "name": "_onButtonAll",
+            "params": [
+                {
+                    "name": "e,",
+                    "description": "The button's Eventhandle from the button .on \"click\" event",
+                    "type": "EventHandle"
+                }
+            ],
+            "return": {
+                "description": "nothing"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 968,
+            "description": "The \"Add One\" button click handler. \nAdds the DOM selected option(s) from the \"Available\" options to the right-hand side HTML <select>, \nchecking to avoid duplicates. This method checks if the Widget is a \"stack\", if so, it moves the \nOption from left to right.",
+            "itemtype": "method",
+            "name": "_onButtonOne",
+            "params": [
+                {
+                    "name": "e,",
+                    "description": "The button's Eventhandle from the button .on \"click\" event",
+                    "type": "EventHandle"
+                }
+            ],
+            "return": {
+                "description": "nothing"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 1001,
+            "description": "The \"Remove One\" button click handler. \nRemoves the DOM selected option(s) from the \"Selections\" right-side options.  This method checks if the \nWidget is a \"stack\", if so, it moves the Option from right to left, otherwise it destroys it.",
+            "itemtype": "method",
+            "name": "_onButtonBack",
+            "params": [
+                {
+                    "name": "e,",
+                    "description": "The button's Eventhandle from the button .on \"click\" event",
+                    "type": "EventHandle"
+                }
+            ],
+            "return": {
+                "description": "nothing"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        },
+        {
+            "file": "js/picklist.js",
+            "line": 1031,
+            "description": "The \"Remove All\" button click handler. \nRemoves all of the option(s) from the \"Selections\" right-side options.  This method checks if the \nWidget is a \"stack\", if so, it moves the Option from right to left, otherwise it destroys it.",
+            "itemtype": "method",
+            "name": "_onButtonAllBack",
+            "params": [
+                {
+                    "name": "e,",
+                    "description": "The button's Eventhandle from the button .on \"click\" event",
+                    "type": "EventHandle"
+                }
+            ],
+            "return": {
+                "description": "nothing"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "PickList",
+            "module": "gallery-picklist"
+        }
+    ]
+}

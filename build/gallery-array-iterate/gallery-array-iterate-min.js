@@ -1,0 +1,1 @@
+YUI.add("gallery-array-iterate",function(a){(function(d){var c=d.Lang.isFunction,b=function(l,j,k,e,g){if(c(k)){return b(l,j<0?l.length-1:0,j,k,e);}var f=j,h=l.length;for(;f>=0&&f<h;f+=k){if(f in l&&e.call(g,l[f],f,l)){return true;}}return false;};d.Array.iterate=b;}(a));},"gallery-2012.06.20-20-07",{requires:["yui"],skinnable:false});

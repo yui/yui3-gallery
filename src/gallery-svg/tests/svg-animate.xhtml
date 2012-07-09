@@ -1,0 +1,595 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title></title>
+        <link rel="icon" href="../../res/2.0/images/favicon.svg" />
+    </head>
+    <script type="text/javascript" src="http://yui.yahooapis.com/combo?3.1.1/build/yui/yui-min.js"></script>
+    <script src="svg-animate.js" />
+
+    <style>
+        #shape-group {
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+
+        div {
+            margin-bottom: 20px;
+        }
+
+        body {
+            margin-left: auto;
+            margin-right: auto;
+            background: white;
+            border: 1px solid #e0e0e0;
+            width: 600px;
+            padding: 10px;
+            margin-top: 0;
+            box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+            -moz-box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+            -webkit-box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+            color: #505050;
+            font-family: 'Trebuchet MS';
+            font-size: 14px;
+        }
+
+        html {
+            background: #f0f0f0;
+        }
+
+        h1 {
+            color: #808080;
+        }
+
+        quote {
+            font-style: italic;
+            font-weight: bold;
+            color: #303030;
+        }
+
+        quote:before {
+            content: '"'
+        }
+
+        quote:after {
+            content: '"'
+        }
+
+        svg {
+            border: 1px solid #e0e0e0;
+            margin: 0px;
+            fill: #202020;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            box-shadow: inset 0px 0px 5px rgba(0,0,0,0.15);
+            -moz-box-shadow: inset 0px 0px 5px rgba(0,0,0,0.15);
+            -webkit-box-shadow: 0px 0px 5px rgba(0,0,0,0.15);
+        }
+
+        a, a > text {
+            color: #808080;
+            fill: #808080;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        a:hover, a > text:hover {
+            color: crimson;
+            fill: crimson;
+        }
+    </style>
+    <body>
+
+        <div id="transform-animations">
+            <h1>YUI SVG Animations Test Page</h1>
+
+            <p>This page tests animating the SVG attributes and properties with
+               the YUI SVG extensions created for the
+               <a href="http://svg-wow.org">SVG Wow!</a> web site.
+            </p>
+            <p>
+                There are some browser limitations. For example, WebKit browsers
+                (as of Safari 5.0 and Chrome 6.0) do not support animating
+                gradient stop colors or properties on &lt;use&gt; elements.
+            </p>
+
+            <ul>
+                <li><a href="#transform-animations-header">Transform Animations</a></li>
+                <li><a href="#shape-animations-header">Shape Animations</a></li>
+                <li><a href="#path-animations-header">Path Animations</a></li>
+                <li><a href="#filter-animations-header">Filter Animations</a></li>
+                <li><a href="#stroke-animations-header">Stroke Animations</a></li>
+                <li><a href="#time-offsets-header">Time Offsets</a></li>
+                <li><a href="#paint-animations">Paint Animations</a></li>
+            </ul>
+            <h2 id="transform-animations-header">Transform animations</h2>
+            <p>Click on shape labels to start animations</p>
+
+
+            <svg width="400" height="340"
+                 xmlns="http://www.w3.org/2000/svg"
+                 xmlns:xlink="http://www.w3.org/1999/xlink">
+
+                <defs>
+                    <g id="symbol">
+                        <g transform="translate(-20,-20)">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.214,21.563c-0.103,0.067-0.207,0.134-0.383,0.128
+		c0.079,0.474-0.208,1.314,0.255,1.405C8.789,23.103,8.438,21.797,8.214,21.563z M2.511,7.31c1.06,0.26,1.616,1.023,2.811,1.15
+		c0.509-0.09,1.242-0.626,1.66-0.383c0.453-0.526,0.495-1.464,1.15-1.789C7.756,5.706,7.586,5.062,8.003,4.5
+		C7.311,4.255,6.979,3.651,6.726,2.967C5.864,3.01,4.083,2.296,3.405,3.35C2.928,3.487,3.041,3.033,2.638,3.095
+		C2.996,3.89,2.81,4.962,2,5.266C2.546,5.874,2.768,6.303,2.511,7.31z M34.956,12.292c0.137-0.331,0.31-0.626,0.255-1.149
+		c-0.381,0.173-0.853,0.254-1.021,0.639C34.206,12.189,34.479,12.343,34.956,12.292z M29.591,12.164
+		c0.194-1.427-1.203-1.038-1.149,0C28.667,12.499,29.365,12.499,29.591,12.164z M36.233,22.914c0.608,0.343,1.471-0.022,1.532-0.639
+		C37.189,21.642,36.317,22.038,36.233,22.914z M36.105,31.324c0.192,0.317,0.438,0.584,0.894,0.639
+		C36.807,31.645,36.562,31.378,36.105,31.324z M10.431,10.248c-0.683-0.126-1.019-0.6-1.533-0.895
+		c0.064,0.665,1.022,0.582,1.149,1.405c0.068,0.437-0.428,0.66-0.511,1.149c-0.291,1.722,0.719,2.439,1.022,3.577
+		c0.854,0.012,1.937,0.633,2.555,1.278c1.413-0.912,3.256-1.271,3.321,0.766c0.014,0.415-0.186,1.5-0.383,1.916
+		c-0.143,0.302-1.015,0.854-0.256,1.405c0.054,0.436-0.382,0.383-0.511,0.638c-0.78-0.228-1.513-0.597-2.171-0.128
+		c-0.127,0.638,0.396,0.625,0.383,1.149c0.517,0.123,1.017,0.261,1.533,0.384c-0.079,0.426-0.375,0.436-0.127,0.894
+		c0.165,0.177,0.555,0.127,0.894,0.128c0.449,0.147,0.392,0.801,0.383,1.405c-0.139,0.286-0.627,0.225-0.766,0.511
+		c0.237,0.7,1.338,0.535,1.021,1.788c-0.284,0.1-0.342,0.425-0.766,0.384c0.356,1.049,1.672,1.138,2.299,1.916
+		c0.143,0.702-0.1,1.112,0.255,1.66c0.916-0.243,1.651,0.14,2.299,0.511c0.114,0.488-0.208,0.815,0,1.022
+		c0.571,0.061,0.491-0.531,1.021-0.511c0.468-0.085,0.49,0.276,0.895,0.255v1.149c0.685,0.174,0.396-0.626,0.767-0.766
+		c0.761-0.122,0.731,0.546,0.895,1.021c0.509,0.041,0.346-0.591,0.766-0.639c0.558-0.089,0.568,0.369,1.022,0.383
+		c0.471-0.125,0.456-0.734,1.149-0.639c0.587-0.033,0.646,0.461,1.021,0.639c0.418-0.541,1.538-0.708,1.916,0
+		c0.214-0.18-0.312-0.701-0.383-1.021c0.298-0.969,1.113-0.648,1.916-0.383c-0.381-1.55,0.808-1.551,1.66-1.533
+		c0.299-0.336-0.365-0.484-0.383-0.894c0.132-0.806,0.887-0.987,1.533-1.278c-0.033-0.392-0.277-0.574-0.384-0.894
+		c0.744-0.662,1.363-2.303,0.639-3.321c0.122-0.518,0.48-0.797,0.767-1.149c-0.624-0.483-1.035-1.179-1.533-1.788
+		c0.079-0.561,0.438-0.839,0.512-1.405c-0.164-0.178-0.604-0.078-0.767-0.256c-0.118-0.956,0.274-1.995-0.128-3.065
+		c-0.219-0.581-0.862-0.736-0.895-1.405c-0.032-0.686,0.685-1.94,1.405-2.044c-0.267-0.954-1.13,1.021-1.66,1.405
+		c-0.491-1.008-2.226-0.048-2.428-1.405c-1.848-0.582-4.438-0.596-6.387,0.511c-0.719-0.346-0.581-1.547-1.277-1.917
+		c0.085-0.681,0.889-0.645,1.022-1.277c-0.001-0.382-0.229-0.537-0.511-0.639c-0.919,0.061-0.872,1.087-1.533,1.405
+		c-0.747-0.062-1.057-0.562-1.405-1.022c-0.786,0.407-1.935,0.449-2.683,0.894c-0.397-0.029-0.215-0.636-0.255-1.022
+		c-1.309-0.217-1.409-1.446-1.66-2.427c-0.729-0.092-0.431,0.461-0.383,0.894c-0.744,0.211-0.864-0.129-1.405-0.383
+		C11.708,8.46,11.397,9.682,10.431,10.248z M16.051,15.357c0.028-0.099,0.107-0.148,0.255-0.127
+		c-0.095,1.219,1.565,1.308,1.277,2.299C16.939,17.009,16.005,16.148,16.051,15.357z M7.62,8.332
+		C7.423,8.579,8.17,8.968,8.386,9.226C8.584,8.979,7.836,8.59,7.62,8.332z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M27.357,37.716c0.359-0.599,0.019-1.471-0.596-1.551
+	C26.111,36.724,26.484,37.606,27.357,37.716z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M31.201,36.979c-0.01,0.371,0.053,0.728,0.407,1.02
+	C31.619,37.626,31.556,37.27,31.201,36.979z"/>
+                        </g>
+                    </g>
+                </defs>
+                <g transform="translate(50,-10)">
+                    <g transform="translate(0,60)">
+                        <use id="translate" xlink:href="#symbol" fill="crimson"/>
+                        <a><text x="30" y="0.2em" id="translate-target">translate</text></a>
+                    </g>
+
+                    <g transform="translate(0,120)">
+                        <use id="rotation" xlink:href="#symbol"/>
+                        <a><text x="30" y="0.2em" id="rotation-target">rotation</text></a>
+                    </g>
+
+                    <g transform="translate(0,180)">
+                        <use id="scale" xlink:href="#symbol" fill="crimson"/>
+                        <a><text x="30" y="0.2em" id="scale-target">scale</text></a>
+                    </g>
+
+                    <g transform="translate(0,240)">
+                        <use id="all" xlink:href="#symbol"/>
+                        <a><text x="30" y="0.2em" id="all-target">tx/ty/rotation/scale</text></a>
+                    </g>
+
+                    <g transform="translate(0,300)">
+                        <use id="custom" xlink:href="#symbol" fill="crimson"/>
+                        <a><text x="30" y="0.2em" id="custom-target">custom transform template</text></a>
+                    </g>
+                </g>
+            </svg>
+        </div>
+        <div id="shape-animations">
+            <h2 id="shape-animations-header">Shape animations</h2>
+            <p>
+                Click on shape labels to start their animations.
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 width="400px" height="400" >
+                <g transform="translate(50,-10)">
+                    <g transform="translate(0,60)">
+                        <rect id="rect-shape" x="-20" y="-20" width="40" height="40" rx="5" ry="5"/>
+                        <a><text x="40" y="0.2em" id="rect-shape-target">&lt;rect&gt; x / y / width / height</text></a>
+                    </g>
+
+                    <g transform="translate(0,120)">
+                        <circle id="circle-shape" fill="crimson" cx="0" cy="0" r="20"/>
+                        <a><text x="40" y="0.2em" id="circle-shape-target">&lt;circle&gt; cx / cy / r</text></a>
+                    </g>
+
+                    <g transform="translate(0,180)">
+                        <line id="line-shape" x1="-20" y1="-20" x2="20" y2="20"
+                              stroke="black" stroke-width="10"/>
+                        <a><text x="40" y="0.2em" id="line-shape-target">&lt;line&gt; x1 / x2 / y1 / y2</text></a>
+                    </g>
+
+                    <g transform="translate(0,240)">
+                        <ellipse id="ellipse-shape" fill="crimson" cx="0" cy="0" rx="20" ry="15" />
+                        <a><text x="40" y="0.2em" id="ellipse-shape-target">&lt;ellipse&gt; cx / cy / rx / ry</text></a>
+                    </g>
+
+                    <g transform="translate(0,300)">
+                        <text id="text-line" text-anchor="middle" x="0" y="0.3em"
+                              font-size="30">A</text>
+                        <a><text x="40" y="0.2em" id="text-line-target">&lt;text&gt; x / y</text></a>
+                    </g>
+
+                    <g transform="translate(0,360)">
+                        <text id="tspan-elt" text-anchor="middle" x="0" y="0.3em"
+                              font-size="30" fill="crimson">A<tspan id="b-span">B</tspan>C</text>
+                        <a><text x="40" y="0.2em" id="b-span-target">&lt;tspan&gt; dx / dy</text></a>
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <div id="path-animations">
+            <h2 id="path-animations-header">Path animations</h2>
+            <p>
+                Click on each path label to see it animate.
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 width="400" height="260" >
+
+                <text x="20" y="30" class="label">Different path commands</text>
+
+                <g transform="translate(40,70)">
+                    <g transform="translate(0,0)">
+                        <path id="M" d="M -20 -20 L 20 -20   20 20 Z"
+                              fill="silver" stroke="black" />
+                        <a><text x="30" y="0.2em" id="M-target">L</text></a>
+                    </g>
+
+                    <g transform="translate(100,0)">
+                        <path id="Q" d="M -20 -20 Q 20 -20  20 20 -20 20 -20 -20   Z"
+                              fill="silver" stroke="black" />
+                        <a><text x="30" y="0.2em" id="Q-target">Q</text></a>
+                    </g>
+
+                    <g transform="translate(200,0)">
+                        <path id="C" d="M -20 -20 C 20 -20  20 20 -20 20   Z"
+                              fill="silver" stroke="black" />
+                        <a><text x="30" y="0.2em" id="C-target">C</text></a>
+                    </g>
+
+                    <g transform="translate(280,0)">
+                        <path id="HV" d="M -20 -20 H 20 V 20 Z"
+                              fill="silver" stroke="black" />
+                        <a><text x="30" y="0.2em" id="HV-target">HV</text></a>
+                    </g>
+
+                    <g transform="translate(0,60)">
+                        <path id="T" d="M -20 -20 Q 20 -20 20 0 T 0 20 Z"
+                              fill="silver" stroke="black" />
+                        <a><text x="30" y="0.2em" id="T-target">T</text></a>
+                    </g>
+
+                    <g transform="translate(100,60)">
+                        <path id="S" d="M -20 -20 Q 20 -20 20 0 S 0 20 -20 0 Z"
+                              fill="silver" stroke="black" />
+                        <a><text x="30" y="0.2em" id="S-target">S</text></a>
+                    </g>
+
+                    <g transform="translate(200,60)">
+                        <path id="A" d="M -20 20 H 20 A 40 40 0 0 0 -20 -20 z"
+                              fill="silver" stroke="black" />
+                        <a><text x="30" y="0.2em" id="A-target">A</text></a>
+                    </g>
+                </g>
+                <g>
+                    <g transform="translate(20,180)">
+                        <path id="morph" fill="silver" transform="translate(0,20)" d="M37.468,1.093l0.381,0.908
+                              c-1.499,1.672-2.773,3.556-4.209,5.27
+                              c-1.713,2.045-3.608,4.352-5.229,6.451
+                              c-0.973,1.262-1.791,2.669-2.729,3.948
+                              c-0.654,0.896-1.208,1.89-1.843,2.794
+                              c-1.442,2.034-3.049,4.312-4.397,6.389
+                              c-1.529,2.354-3.23,4.505-4.638,6.911
+                              c-0.235,0.403-0.603,1.04-0.958,1.767
+                              c-0.744,1.513-1.881,2.653-3.074,3.123
+                              c-0.542,0.216-1.191,0.254-1.821,0.254
+                              c-0.861,0-1.645-0.199-2.201-0.453
+                              c-0.555-0.253-1.144-0.766-1.616-1.389
+                              c-0.389-0.538-0.708-1.285-1.044-2.152
+                              c-0.339-0.867-0.622-2.225-1.12-3.896
+                              c-0.03-0.1-0.059-0.23-0.097-0.382
+                              c-0.477-1.882-0.721-3.101-0.721-3.57
+                              c0-0.961,0.617-1.899,1.737-2.7
+                              c1.12-0.8,2.164-1.262,3.26-1.262
+                              c0.354,0,0.621,0.086,0.842,0.298
+                              c0.217,0.209,0.444,0.632,0.727,1.324
+                              c0.171,0.419,0.345,0.958,0.6,1.683
+                              c0.572,1.616,0.997,2.371,1.385,2.371
+                              c0.168,0,0.548-0.498,1.212-1.419
+                              c0.667-0.923,1.668-2.396,2.831-4.237
+                              c1.389-2.199,2.785-4.31,3.933-6.067
+                              c0.688-1.057,1.393-1.97,1.993-2.865
+                              c2.239-3.353,4.106-5.612,5.275-7.101
+                              c0.073-0.093,0.151-0.177,0.223-0.268
+                              c1.091-1.355,2.147-2.475,3.033-3.202
+                              c0.824-0.675,1.949-1.267,3.246-1.654
+                              C33.746,1.578,35.481,1.227,37.468,1.093z"/>
+                        <a><text x="0" y="0" id="morph-target">Morphing shapes</text></a>
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+        <div id="filter-animations">
+            <h2 id="filter-animations-header">Filter animations</h2>
+            <p>
+                Click on the 'Blur us!' label to start the animation.
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 width="400px" height="50" >
+                <defs>
+                    <filter id="blur-filter" x="-2" y="0" width="5" height="1" filterUnits="objectBoundingBox">
+                        <feGaussianBlur id="blur" stdDeviation="0.00000001 0.00000001" />
+                    </filter>
+
+                    <g id="star">
+
+                        <g>
+                            <radialGradient id="SVGID_1_" cx="23.2881" cy="30.8916" r="16.0106" gradientUnits="userSpaceOnUse">
+                                <stop  offset="0" style="stop-color:#FFF588"/>
+                                <stop  offset="0.3132" style="stop-color:#FFF350"/>
+                                <stop  offset="1" style="stop-color:#FAA919"/>
+                            </radialGradient>
+                            <polygon fill="url(#SVGID_1_)" points="20,31.299 8.931,37.119 11.045,24.792 2.089,16.063 14.465,14.264 20,3.05 25.535,14.264
+			37.91,16.063 28.955,24.792 31.069,37.119 		"/>
+                            <path fill="#D88119" d="M20,3.933l5.094,10.32l0.182,0.368l0.406,0.059l11.39,1.655l-8.242,8.034l-0.294,0.287l0.069,0.404
+			l1.946,11.344l-10.187-5.355L20,30.857l-0.364,0.191L9.449,36.404l1.946-11.344l0.07-0.404l-0.294-0.287l-8.242-8.034
+			l11.389-1.655l0.406-0.059l0.182-0.368L20,3.933 M20,2.167l-5.794,11.74L1.25,15.79l9.375,9.139L8.412,37.833L20,31.74
+			l11.588,6.093l-2.213-12.904l9.375-9.139l-12.955-1.883L20,2.167L20,2.167z"/>
+                        </g>
+                        <g>
+                            <linearGradient id="SVGID_2_" gradientUnits="userSpaceOnUse" x1="16" y1="0.2178" x2="23.5533" y2="31.6908">
+                                <stop  offset="0" style="stop-color:#FFFFFF"/>
+                                <stop  offset="1" style="stop-color:#FFFFFF;stop-opacity:0"/>
+                            </linearGradient>
+                            <path fill="url(#SVGID_2_)" d="M12.304,24.383l-0.139,0.812l-0.343,1.996c4.536-4.499,12.101-7.456,20.683-7.496l2.886-2.812
+			l-9.823-1.428l-0.812-0.119l-0.364-0.737l-4.393-8.899l-4.391,8.899l-0.363,0.737l-0.813,0.119l-9.823,1.428l7.109,6.928
+			L12.304,24.383z"/>
+                        </g>
+                    </g>
+                </defs>
+
+                <g id="blur-target" filter="url(#blur-filter)" transform="translate(0,5)">
+                    <a><text x="50" y="30" class="label" style="font-size:30px;font-weight:bold;cursor:pointer">Blur us!</text></a>
+                    <use xlink:href="#star" />
+                </g>
+            </svg>
+        </div>
+
+        <div id="stroke-animations">
+            <h2 id="stroke-animations-header">Stroke animations</h2>
+
+            <p>
+                Click on the stroke property labels to start the animations.
+            </p>
+            
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 width="400px" height="240"
+                 stroke-linejoin="round">
+
+                <defs>
+                    <radialGradient id="gold" cx="0.2" cy="0.2" r="0.7" gradientUnits="objectBoundingBox">
+                        <stop  offset="0" style="stop-color:#FFF588"/>
+                        <stop  offset="0.3132" style="stop-color:#FFF350"/>
+                        <stop  offset="1" style="stop-color:#FAA919"/>
+                    </radialGradient>
+                    <g id="speaker">
+                        <g>
+                            <path id="speaker-path" transform="translate(-20,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                        </g>
+                    </g>
+                </defs>
+                <g transform="translate(30,30)" id="stroke-opacity">
+                    <path fill="url(#gold)" stroke="orange" stroke-width="1" transform="translate(-20,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                    <!-- <use xlink:href="#speaker"
+                         fill="url(#gold)" stroke="orange" stroke-width="1" />-->
+                    <path fill="none" stroke="orange" stroke-width="1" transform="translate(30,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                     <!-- <use xlink:href="#speaker" x="50"
+                         fill="none" stroke="orange" stroke-width="1"/>-->
+                    <a><text x="80" y="0.2em" id="stroke-opacity-target">stroke-opacity</text></a>
+                </g>
+
+                <g transform="translate(30,90)" id="stroke" stroke="black">
+                    <path fill="white" transform="translate(-20,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                    <a><text x="30" y="0.2em" stroke="none" id="stroke-target">stroke</text></a>
+                </g>
+
+                <g transform="translate(30,150)" id="stroke-width" stroke-width="1">
+                    <path stroke="url(#gold)" transform="translate(-20,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                    <use xlink:href="#speaker" stroke="none" fill="white"/>
+                    <a><text x="30" y="0.2em" id="stroke-width-target">stroke-width</text></a>
+                </g>
+
+                <g transform="translate(30,210)" id="stroke-dashoffset" stroke-width="1"
+                   stroke-dasharray="90,90" stroke-dashoffset="90">
+                    <path stroke="#303030" fill="#f0f0f0" transform="translate(-20,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                    <a><text x="30" y="0.2em" id="stroke-dashoffset-target">stroke-dashoffset</text></a>
+                </g>
+            </svg>
+        </div>
+
+        <div id="time-offsets">
+            <h2 id="time-offsets-header">Time offsets</h2>
+            <p>
+                Click on first rectangle's label to see onBegin/onEnd handlers called
+                with no delay, 1s, 2s and 3s delays.
+                Click on the "begin" text to start animation on the second rectangle
+                or on the 'begin+1s" text to start it with a 1s delay. When the
+                animations are started, click on the 'end' text to end the animation
+                immediately or on 'end+1s' to end it after a 1s delay.
+            </p>
+            <p>
+                The dark gray rectangle's aninmation is synchronized with the
+                black rectangle's animation. The light gray rectangle's
+                animation is synchronized with the black rectangle's animation,
+                but with a 1s delay.
+            </p>
+            <p>
+                Click on any of the white dots to start a cascade of animations.
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 width="400px" height="180" >
+
+                <g transform="translate(30, 30)">
+                    <g transform="translate(0,0)">
+                        <rect id="onBegin-onEnd" x="-20" y="-20" width="40" height="40"
+                              fill="black" stroke="none" />
+                        <g transform="translate(0, -12)">
+                            <a><text x="30" y="3" id="onBegin-onEnd-target">onBegin-onEnd with/without offset</text></a>
+                            <text x="30" y="19" class="label">trace: <tspan id="onBegin-onEndTrace">--</tspan></text>
+                        </g>
+                    </g>
+
+                    <g transform="translate(0,60)">
+                        <rect id="beginOn-endOn" x="-20" y="-20" width="40" height="40"
+                              fill="black" stroke="none" />
+                        <g transform="translate(35, -15)">
+                            <rect id="beginOn-endOn-2" x="-5" y="-5" width="10" height="10"
+                                  fill="gray" stroke="black"/>
+                        </g>
+                        <g transform="translate(35, 0)">
+                            <rect id="beginOn-endOn-3" x="-5.5" y="-5.5" width="10" height="10"
+                                  fill="silver" stroke="black"/>
+                        </g>
+                        <g transform="translate(25, -12)">
+                            <text x="30" y="1" class="label">beginOn-endOn with/without offset</text>
+                            <text x="30" y="19" id="beginOn-endOn">
+                                <a id="beginOn">begin</a>|<a id="endOn">end</a>|<a id="beginOnOffset">begin+1s </a>|<a id="endOnOffset">end+1s</a>
+                            </text>
+
+                        </g>
+                    </g>
+
+                    <g transform="translate(0, 120) scale(2)" id="chained" stroke="#d0d0d0" stroke-width="0.25">
+                        <circle cx="0" r="5" fill="white" />
+                        <circle cx="15" r="5" fill="white" />
+                        <circle cx="30" r="5" fill="white" />
+                        <circle cx="45" r="5" fill="white" />
+                        <circle cx="60" r="5" fill="white" />
+                        <circle cx="75" r="5" fill="white" />
+                        <circle cx="90" r="5" fill="white" />
+                        <circle cx="105" r="5" fill="white" />
+                        <circle cx="120" r="5" fill="white" />
+                        <circle cx="135" r="5" fill="white" />
+                        <circle cx="150" r="5" fill="white" />
+                        <circle cx="165" r="5" fill="white" />
+                    </g>
+                </g>
+            </svg>
+        </div>
+
+
+        <div id="paint-animations">
+            <h2 id="paint-animations-header">Paint animations</h2>
+            <p>
+                Click on the labels to start the animations.
+            </p>
+            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                 xmlns:xlink="http://www.w3.org/1999/xlink"
+                 width="400px" height="210"
+                 stroke-linejoin="round">
+
+                <defs>
+                    <g id="callout">
+                        <g transform="scale(5) translate(-20,-20)">
+                            <g>
+                                <radialGradient id="calloutBg" cx="1" cy="1" r="1" gradientUnits="objectBoundingBox"><!-- cx="31.2471" cy="27.3496" r="23.5398" gradientUnits="userSpaceOnUse">-->
+                                    <stop  id="stop-offset" offset="0" style="stop-color:#FFFFFF"/>
+                                    <stop  id="stop-color" offset="1" stop-color="#B1BFC7"/>
+                                </radialGradient>
+                                <path fill="url(#calloutBg)" d="M25.399,27.56l-0.092,0.028c-1.696,0.517-3.482,0.778-5.307,0.778
+			c-8.36,0-15.162-5.535-15.162-12.338c0-6.803,6.801-12.337,15.162-12.337c8.359,0,15.161,5.535,15.161,12.337
+			c0,2.676-1.037,5.223-2.998,7.364l-0.14,0.153l2.896,6.815L25.399,27.56z"/>
+                                <g>
+                                    <path fill="#8C98A0" d="M20.001,4.013c8.182,0,14.838,5.39,14.838,12.015c0,2.594-1.007,5.065-2.912,7.146l-0.28,0.306
+				l0.162,0.382l2.548,5.997l-8.773-2.581l-0.185-0.055l-0.185,0.057c-1.666,0.507-3.42,0.764-5.213,0.764
+				c-8.182,0-14.839-5.39-14.839-12.015C5.162,9.403,11.819,4.013,20.001,4.013 M20.001,3.368c-8.552,0-15.484,5.669-15.484,12.66
+				c0,6.994,6.933,12.661,15.484,12.661c1.899,0,3.719-0.28,5.4-0.792l10.083,2.966l-3.082-7.253
+				c1.936-2.113,3.082-4.738,3.082-7.582C35.484,9.037,28.552,3.368,20.001,3.368L20.001,3.368z"/>
+                                </g>
+                            </g>
+                            <g>
+                                <linearGradient id="SVGID_32_" gradientUnits="userSpaceOnUse" x1="10.7256" y1="-1.1167" x2="24.0557" y2="23.5285">
+                                    <stop  id="stop-opacity" offset="0" style="stop-color:white" stop-opacity="1"/>
+                                    <stop  offset="1" style="stop-color:#FFFFFF" stop-opacity="0"/>
+                                </linearGradient>
+                                <path fill="url(#SVGID_32_)" d="M33.857,13.57c-1.406-5.092-7.083-8.913-13.856-8.913c-7.827,0-14.194,5.1-14.194,11.37
+			c0,3.727,2.25,7.042,5.719,9.117C12.929,19.042,22.206,14.217,33.857,13.57z"/>
+                            </g>
+                            <g>
+                                <linearGradient id="SVGID_4_" gradientUnits="userSpaceOnUse" x1="15.9355" y1="-0.5044" x2="20.2768" y2="20.7352">
+                                    <stop  offset="0" style="stop-color:white"/>
+                                    <stop  offset="1" style="stop-color:#FFFFFF" stop-opacity="0" />
+                                </linearGradient>
+                                <path fill="url(#SVGID_4_)" d="M7.098,17.319c0-6.271,6.367-11.37,14.194-11.37c4.108,0,7.812,1.406,10.406,3.647
+			c-2.562-2.98-6.849-4.939-11.697-4.939c-7.827,0-14.194,5.1-14.194,11.37c0,2.979,1.439,5.693,3.788,7.723
+			C8.021,21.92,7.098,19.705,7.098,17.319z"/>
+                            </g>
+                        </g>
+                    </g>
+                </defs>
+                <g transform="translate(30,30)">
+                    <g>
+                        <g id="fill-opacity">
+                            <path fill="url(#gold)" stroke="orange" stroke-width="1" transform="translate(10,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                            <path fill="black" stroke="none" stroke-width="1" transform="translate(60,-20)" d="M0,14.125 L0,25.906 L8.096,25.906 L18.194,33.795 L18.194,6.237 L8.097,14.125 z
+                                  M30.385,1.155l-2.374,3.737c4.321,1.861,7.597,8.032,7.597,15.124c0,7.031-3.22,13.157-7.486,15.074l2.323,3.755
+		C36.025,35.996,40,28.642,40,20.016C40,11.358,35.997,3.981,30.385,1.155z
+                                  M25.767,8.422l-2.323,3.657c1.914,1.708,3.212,4.657,3.212,7.936c0,3.184-1.221,6.058-3.045,7.786l2.292,3.702
+		c3.097-2.447,5.146-6.677,5.146-11.488C31.048,15.135,28.939,10.853,25.767,8.422z"/>
+                        </g>
+                        <a><text x="160" y="0.2em" id="fill-opacity-target">fill-opacity</text></a>
+                    </g>
+                </g>
+
+                <g transform="translate(30,90)">
+                    <use xlink:href="#callout" x="60" y="60"/>
+                    <g transform="translate(130,10)">
+                        <a><text x="30" y="0" stroke="none" id="stop-opacity-target">stop-opacity</text></a>
+                        <a><text x="30" y="16" id="stop-color-target">stop-color</text></a>
+                        <a><text x="30" y="32" id="stop-offset-target">gradient offset</text></a>
+                        <a><text x="30" y="48" id="calloutBg-target">gradient geometry</text></a>
+                    </g>
+                </g>
+            </svg>
+        </div>
+    </body>
+</html>

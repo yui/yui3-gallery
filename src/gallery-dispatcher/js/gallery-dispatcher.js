@@ -1,432 +1,536 @@
 /**
-* <p>The Dispatcher Node Plugin makes it easy to transform existing 
-* markup into an dispatcher element with expandable and collapsable elements, 
-* elements are  easy to customize, and only require a small set of dependencies.</p>
+* <p>The Dispatcher satisfies a very common need of developers using the 
+* YUI library: dynamic execution of HTML Fragments or remote content. Typical strategies to 
+* fulfill this need, like executing the innerHTML property or referencing remote 
+* scripts, are unreliable due to browser incompatibilities. The Dispatcher normalize 
+* this behavior across all a-grade browsers.
 * 
-* 
-* <p>To use the Dispatcher Node Plugin, simply pass a reference to the plugin to a 
-* Node instance's <code>plug</code> method.</p>
+* <p>To use the Dispatcher Module, simply create a new object based on Y.Dispatcher
+* and pass a reference to a node that should be handled.</p>
 * 
 * <p>
 * <code>
 * &#60;script type="text/javascript"&#62; <br>
 * <br>
-* 		//	Call the "use" method, passing in "node-dispatcher".  This will <br>
-* 		//	load the script and CSS for the Dispatcher Node Plugin and all of <br>
-* 		//	the required dependencies. <br>
+*       //  Call the "use" method, passing in "gallery-dispatcher".  This will <br>
+*       //  load the script for the Dispatcher Module and all of <br>
+*       //  the required dependencies. <br>
 * <br>
-* 		YUI().use("gallery-dispatcher", function(Y) { <br>
+*       YUI().use("gallery-dispatcher", function(Y) { <br>
 * <br>
-* 			//	Use the "contentready" event to initialize the dispatcher when <br>
-* 			//	the element that represente the dispatcher <br>
-* 			//	(&#60;div id="dispatcher-1"&#62;) is ready to be scripted. <br>
+*           (new Y.Dispatcher ({<br>
+*               node: '#demoajax',<br>
+*               content: 'Please wait... (Injecting fragment.html)'<br>
+*           })).set('uri', 'fragment.html');<br>
 * <br>
-* 			Y.on("contentready", function () { <br>
-* <br>
-* 				//	The scope of the callback will be a Node instance <br>
-* 				//	representing the dispatcher (&#60;div id="dispatcher-1"&#62;). <br>
-* 				//	Therefore, since "this" represents a Node instance, it <br>
-* 				//	is possible to just call "this.plug" passing in a <br>
-*				//	reference to the Dispatcher Node Plugin. <br>
-* <br>
-* 				this.plug(Y.Plugin.NodeDispatcher); <br>
-* <br>
-* 			}, "#dispatcher-1"); <br>
-* <br>		
-* 		}); <br>
-* <br>	
-* 	&#60;/script&#62; <br>
+* <br>      
+*   &#60;/script&#62; <br>
 * </code>
 * </p>
 *
-* <p>The Dispatcher Node Plugin has several configuration properties that can be 
-* set via an object literal that is passed as a second argument to a Node 
-* instance's <code>plug</code> method.
+* <p>The Dispatcher has several configuration properties that can be 
+* set via an object literal that is passed as a first argument during the
+* initialization, or using "set" method.
 * </p>
 *
-* <p>
-* <code>
-* &#60;script type="text/javascript"&#62; <br>
-* <br>
-* 		//	Call the "use" method, passing in "node-dispatcher".  This will <br>
-* 		//	load the script and CSS for the Dispatcher Node Plugin and all of <br>
-* 		//	the required dependencies. <br>
-* <br>
-* 		YUI().use("node-dispatcher", function(Y) { <br>
-* <br>
-* 			//	Use the "contentready" event to initialize the dispatcher when <br>
-* 			//	the element that represente the dispatcher <br>
-* 			//	(&#60;div id="dispatcher-1"&#62;) is ready to be scripted. <br>
-* <br>
-* 			Y.on("contentready", function () { <br>
-* <br>
-* 				//	The scope of the callback will be a Node instance <br>
-* 				//	representing the dispatcher (&#60;div id="dispatcher-1"&#62;). <br>
-* 				//	Therefore, since "this" represents a Node instance, it <br>
-* 				//	is possible to just call "this.plug" passing in a <br>
-*				//	reference to the Dispatcher Node Plugin. <br>
-* <br>
-* 				this.plug(Y.Plugin.NodeDispatcher, { anim: true, effect: Y.Easing.backIn });
-* <br><br>
-* 			}, "#dispatcher-1"); <br>
-* <br>		
-* 		}); <br>
-* <br>	
-* 	&#60;/script&#62; <br>
-* </code>
-* </p>
-* 
-* @module node-dispatcher
+* @module gallery-dispatcher
 */
 
+//  Util shortcuts
+var getClassName = Y.ClassNameManager.getClassName,
 
-//	Util shortcuts
+//  Frequently used strings
+DISPATCHER = "dispatcher",
+SC = "script",
+DISPATCHER_FETCH = 'fetch',
+DISPATCHER_PURGE = 'purge',
+DISPATCHER_BEFOREEXECUTE = 'beforeExecute',
+DISPATCHER_LOAD = 'load',
+DISPATCHER_READY = 'ready',
+DISPATCHER_ERROR = 'error',
 
-var UA = Y.UA,
-	getClassName = Y.ClassNameManager.getClassName,
+//  Attribute keys
+ATTR_URI = 'uri',
+ATTR_CONTENT = 'content',
+ATTR_AUTOPURGE = 'autopurge',
+ATTR_LOADING = 'loading',
+ATTR_NODE = 'node',
+ATTR_NORMALIZE = 'normalize',
 
-	//	Frequently used strings
-	DISPATCHER = "dispatcher",
-	PERIOD = ".",
-	DISPATCHER_START = 'start',
-    DISPATCHER_PURGE = 'purge',
-    DISPATCHER_CHANGE = 'change',
-    DISPATCHER_LOAD = 'load',
+// Regular Expressions
+reBODY = /<\s*body.*?>(.*?)<\/\s*?body[^>\w]*?>/i,
+reHEAD = /<\s*head.*?>(.*?)<\/\s*?head[^>\w]*?>/i,
+
+//  CSS class names
+CLASS_DISPATCHER_LOADING = getClassName(DISPATCHER, 'loading'),
+
+// shorthands
+L = Y.Lang,
+isBoolean = L.isBoolean,
+isString = L.isString;
+
+//  Utility functions
+function _parseContent(content, normalize) {
+    var fragment = Y.Node.create('<div></div>'),
+        head = fragment.cloneNode(),
+        o = {}, match = null, inject = '';
     
-	//	Attribute keys
-	ATTR_URI 		 = 'uri',
-	ATTR_CONTENT 	 = 'content',
-	
-	//	CSS class names
-	CLASS_DISPATCHER 			 = getClassName(DISPATCHER),
-	CLASS_DISPATCHER_LOADING 	 = getClassName(DISPATCHER, 'loading'),
-   	
-	//	CSS selectors
-	SELECTOR_DISPATCHER = PERIOD + CLASS_DISPATCHER,       
-	
-	// shorthands
-    L = Y.Lang,
-    isBoolean= L.isBoolean,
-    isString = L.isString,
-    isObject = L.isObject,	
+    // if normalize is set, let's parse the head
+    if (normalize && (match = reHEAD.exec(content))) {
+        Y.log('normalizing scripts, links and styles from the head tag', 'info', DISPATCHER);
+        fragment.setContent(match[1]).all(SC+',style,link').each(function(n) {
+            head.append(n);
+        });
+        inject = head.get('innerHTML');
+        Y.log('trying to inject this content: '+inject, 'info', DISPATCHER);
+    }
+
+    // if the content has a body tag, we should take the content of the body, if not, assume full content
+    // we should also include any injection from the head if exists
+    fragment.setContent(inject+((match=reBODY.exec(content))?match[1]:content));
     
-	/**
-	* The NodeDispatcher class is a plugin for a Node instance.  The class is used via  
-	* the <a href="Node.html#method_plug"><code>plug</code></a> method of Node and 
-	* should not be instantiated directly.
-	* @namespace plugin
-	* @class NodeDispatcher
-	*/
-	Dispatcher = function () {
-		Dispatcher.superclass.constructor.apply(this, arguments);
-	};
+    o.js = fragment.all(SC).each(function(n) {
+        n.get('parentNode').removeChild(n);
+    });
+    o.content = fragment.get('innerHTML');
 
-//	Utility functions
-
-function _parseContent ( content ) {
-	var fragment = Y.Node.create('<div></div>'),
-		o = {};
-	
-	fragment.setContent (content);
-	o.css = fragment.all('style, link[type=text/css]').each(function (n) {
-		fragment.removeChild (n);
-	});
-	o.js = fragment.all('script').each(function (n) {
-		fragment.removeChild (n);
-	});
-	o.content = fragment.get ('innerHTML');
-	return o;
+    return o;
 }
 
-// Dispatcher definition
+function _propagateIOEvent (ev, cfg, args) {
+    if (cfg && cfg.on && cfg.on[ev]) {
+        cfg.on[ev].apply(cfg.context || Y, args);
+    }
+}
 
-Y.mix(Dispatcher, {
+/**
+* The Dispatcher class represents an object that can manage Node Elements to
+* inject HTML content as the content of the Node..
+* @namespace Y
+* @class Dispatcher
+*/
+Y.Dispatcher = Y.Base.create(DISPATCHER, Y.Base, [], {
+
+    // Prototype Properties for Dispatcher
+
+    /** 
+    * @property _queue
+    * @description Execution queue.
+    * @default null
+    * @protected
+    * @type Object
+    */  
+    _queue: null,
+
+    /** 
+    * @property _io
+    * @description Connection Handler for AJAX requests.
+    * @default null
+    * @protected
+    * @type Object
+    */
+    _io: null,
+
+    initializer: function(config) {
+        var instance = this;
+        config = config || {};
+        Y.log('Initializer', 'info', DISPATCHER);
+        instance._queue = new Y.AsyncQueue();
+
+        instance.after(ATTR_CONTENT + "Change", function(e) {
+            instance._dispatch(e.newVal);
+        });
+
+        instance.after(ATTR_URI + "Change", function(e) {
+            instance._fetch(e.newVal);
+        });
+
+        // making the trick for content and uri in case the user want to set up thru config
+        if (config[ATTR_CONTENT]) {
+            instance._dispatch(instance.get(ATTR_CONTENT));
+        }
+        if (config[ATTR_URI]) {
+            instance._fetch(instance.get(ATTR_URI));
+        }
+
+    },
+
+    destructor: function() {
+        var instance = this;
+        instance.stop();
+        instance._queue = null;
+        instance._io = null;
+    },
+
+    //  Protected methods
 
     /**
-     * The identity of the component.
-     *
-     * @property Dispatcher.NAME
-     * @type String
-     * @static
+     * @method _executeScript
+     * @description Inject an inline script into the page as part of the dispatcher process. 
+     * @protected
+     * @param {string} text Script code that should be executed
+     * @param {Node} n A reference to the original SCRIPT tag Node, in case you want to get more specific attributes
      */
-    NAME : DISPATCHER,
+    _executeScript: function (text, jsNode) {
+        var doc = Y.config.doc,
+            d = ( jsNode ? jsNode.get('ownerDocument') : null ) || doc,
+            h = d.one('head') || d.get('documentElement'),
+            // creating a new script node to execute the inline javascrip code
+            newScript = Y.one(doc.createElement(SC));
 
-     *
-     * @property Dispatcher._hashtable
-     * @Type Array
-     * @static
+        Y.log('inline script tag: ' + text, 'info', DISPATCHER);
+        if (text) {
+            newScript._node.text = text;
+        }
+        h.appendChild(newScript);
+        // removing script nodes as part of the clean up process
+        newScript.remove();
+        if (jsNode) {
+            jsNode.remove();
+        }
+    },
+
+    /**
+     * @method _getScript
+     * @description Inject an external script into the page as part of the dispatcher process. Due
+     * the async nature of this routine, we need to run the queue after the execution.
+     * @protected
+     * @param {string} src URI of the script that need to be injected
+     * @param {Node} n A reference to the original SCRIPT tag Node, in case you want to get more specific attributes
      */
-    _hashtable : [],
+    _getScript: function (src, jsNode) {
+        var instance = this,
+            q = instance._queue;
+        Y.log('external script tag: ' + src, 'info', DISPATCHER);
+        Y.Get.script(src, {
+            autopurge: true, //removes the script node immediately after executing it
+            onFailure: function(o) {
+                Y.log('external script tag fails to load: ' + src, 'error', DISPATCHER);
+                // notifying that an error has occurred 
+                instance.fire(DISPATCHER_ERROR, o);
+            },
+            onEnd: function(o) {
+                // continuing the async execution
+                if (q) {
+                    q.run();
+                }
+            }
+        });
+    },
 
+    /**
+     * @method _setContent
+     * @description Set a new content into the dispatcher host node.
+     * @protected
+     * @param {string} content HTML code that will replace the current content
+     */    
+    _setContent: function (content) {
+        var n = this.get(ATTR_NODE);
+        Y.log('setting new content: ' + content, 'info', DISPATCHER);
+        n.setContent(content);
+    },
+
+    /**
+     * @method _purgeContent
+     * @description Purge all the child node in preparation for a new content to be injected.
+     * @protected
+     */    
+    _purgeContent: function() {
+        var n = this.get(ATTR_NODE);
+        Y.log('purging children collection', 'info', DISPATCHER);
+        n.get('children').each(function(c) {
+            c.purge(true);
+        });
+    },
+
+    /**
+     * @method _dispatch
+     * @description Dispatch a content into the code, parsing out the scripts, 
+     * injecting the code into the DOM, then executing the scripts.
+     * @protected
+     * @param {string} content html content that should be injected in the page
+     * @return null
+     */
+    _dispatch: function(content) {
+        var instance = this,
+            o = _parseContent(content, instance.get(ATTR_NORMALIZE)),
+            q = instance._queue,
+            n = instance.get(ATTR_NODE);
+
+        // stopping any previous process, just in case...
+        instance.stop();
+
+        if (!n) {
+            Y.log('Dispatcher requires a NODE to dispatch the content', 'error', DISPATCHER);
+            return;
+        }
+
+        Y.log('dispatching a new content', 'info', DISPATCHER);
+
+        // autopurging children collection
+        if (instance.get(ATTR_AUTOPURGE)) {
+            q.add({
+                fn: function() {
+                    instance._purgeContent();
+                    /**
+                     * Notification event right after purging all the event listeners associated to the 
+                     * Node that will be updated to avoid memory leaks. At this point, you can also destroy
+                     * any object associated to that content. Immidiately after this, the new content will be
+                     * injected. Use this event to clean up the mess before injecting new content.
+                     *
+                     * @event purge
+                     * @param n {Node} a reference to the Node that was updated.
+                     */
+                    instance.fire(DISPATCHER_PURGE, n);
+                }
+            });
+        }
+        // injecting new content
+        q.add({
+            fn: function() {
+                instance._setContent(o.content);
+                /**
+                 * Notification event right before starting the execution of the script tags associated
+                 * to the current content. At this point, the content (without script tags) was already
+                 * injected within the node, so, you can enhance that content right before process to the
+                 * execution process.
+                 *
+                 * @event beforeExecute
+                 * @param n {Node} a reference to the Node that was updated.
+                 */
+                instance.fire(DISPATCHER_BEFOREEXECUTE, n);
+            }
+        });
+        // executing JS blocks before the injection
+        o.js.each(function(jsNode) {
+            if (jsNode && jsNode.get('src')) {
+                q.add({
+                    fn: Y.bind(instance._getScript, instance, jsNode.get('src'), jsNode),
+                    autoContinue: false
+                });
+            } else {
+                q.add({
+                    fn: Y.bind(instance._executeScript, instance, jsNode._node.text, jsNode)
+                });
+            }
+        });
+        q.add({
+            fn: function() {
+                /**
+                 * Notification event when the new content gets injected and scripts loaded and executed
+                 * as well. This is the event that you should listen for to continue your programm after 
+                 * dispatcher finishes the whole process.
+                 *
+                 * @event ready
+                 */
+                 instance.fire(DISPATCHER_READY);
+            }
+        });
+        // executing the queue
+        instance._queue.run();
+    },
+    
+    /**
+    * @description Fetching a remote file using Y.io. The response will be dispatched thru _dispatch method...
+    * @method _fetch
+    * @protected
+    * @param {string} uri uri that should be loaded using Y.io
+    * @return object  Reference to the connection handler
+    */
+    
+    _fetch: function(uri) {
+        var instance = this,
+            defIOConfig = instance.get("ioConfig") || {}, 
+            cfg;
+        // stopping any previous process, just in case...
+        instance.stop();
+
+        if (!uri) {
+            return false;
+        }
+
+        Y.log('dispatching a new url ' + uri, 'info', DISPATCHER);
+
+        // minimal config + def attr ioConfig + arg cfg ; in that order or priority (single level merge)
+        cfg = Y.merge({
+            method: 'GET'
+        }, defIOConfig);
+            
+        cfg.on = {
+            start: function() {
+                instance._set(ATTR_LOADING, true);
+                Y.log('Start Loading', 'info', DISPATCHER);
+                _propagateIOEvent ('start', defIOConfig, arguments);
+            },
+            success: function(tid, o) {
+                Y.log('Success: ' + o.responseText, 'info', DISPATCHER);
+                instance.set(ATTR_CONTENT, o.responseText);
+                _propagateIOEvent ('success', defIOConfig, arguments);
+            },
+            failure: function(tid, o) {
+                Y.log('Failure: ' + uri, 'warn', DISPATCHER);
+                _propagateIOEvent ('failure', defIOConfig, arguments);
+                /**
+                 * Notification event when dispatcher fails to load the new url
+                 * using io, or fails to load an external script using Y.Get.script.
+                 * Use this event to fallback if an error occur.
+                 *
+                 * @event error
+                 * @param o {object} error object from IO or Get.
+                 */
+                instance.fire(DISPATCHER_ERROR, o);
+            },
+            end: function() {
+                instance._set(ATTR_LOADING, false);
+                Y.log('End Loading', 'info', DISPATCHER);
+                _propagateIOEvent ('end', defIOConfig, arguments);
+            }
+        };
+        cfg.context = instance;
+        return (instance._io = Y.io(uri, cfg));
+    },
+
+    //  Public methods
+    
+    /**
+     * @method stop
+     * @description Cancel the current loading and execution process immediately
+     * @public
+     * @return  {object} reference for chaining
+     */
+    stop: function() {
+        var instance = this;
+        instance._queue.stop();
+        if (instance._io) {
+            instance._io.abort();
+        }
+        return instance;
+    }
+
+}, {
+
+    // Static Properties for Dispatcher
+    
+    EVENT_PREFIX: DISPATCHER,
     /**
      * Static property used to define the default attribute configuration of
      * the component.
      *
-     * @property Dispatcher.ATTRS
+     * @property Y.Dispatcher.ATTRS
      * @Type Object
      * @static
      */
-    ATTRS : {
+    ATTRS: {
 
- 		/**
- 		* If dispatcher should purge the DOM elements before replacing the content
- 		* @attribute autopurge
- 		* @default true
- 		* @type boolean
- 		*/	
- 		autopurge: {
- 			value: true,
- 			validator : isBoolean
- 		},
- 		/**
- 		* URL that should be injected within the host
- 		* @attribute uri
- 		* @default null
- 		* @type string
- 		*/	
- 		uri: {
- 			value: null,
- 			setter : function (v) {
- 				Y.log ('dispatching a new url','info',DISPATCHER);
- 				this.stop ();
- 				this._io = this._fetch(v);
-				return v;
-			},
- 			validator : isString
- 		},
- 		/**
- 		* default content for the dynamic area
- 		* @attribute content
- 		* @default null
- 		* @type string
- 		*/	
- 		content: {
- 			value: '',
- 			setter : function (v) {
- 				Y.log ('dispatching a new content','info',DISPATCHER);
- 				this.stop();
- 				v = this._dispatch(v); // discarding the file name
-	            return v;
-			},
- 			validator : isString
- 		},
-	    /**
-		* Boolean indicating that a process is undergoing.
-		* 
-		* @attribute loading
-		* @default false
-		* @type {boolean}
-		*/
-		loading: {
-			value: false,
-			validator: isBoolean,
-			setter: function (v) {
-				Y.log ('setting status','info',DISPATCHER);
-				if (v) {
-					this._node.addClass (CLASS_DISPATCHER_LOADING);
-				} else {
-					this._node.removeClass (CLASS_DISPATCHER_LOADING);
-				}
-				return v;
-			} 
-		}
-     }
-});
-
-Y.extend(Dispatcher, Y.Base, {
-
-	//	Protected properties
-
-   /**
-    * ...
-    *
-    * @property _history
-    * @type Array
-    * @protected
-    */
-   _history : [],
-   _node: null,
-   _queue: null,
-   _io: null,
-
-	//	Public methods
-
-    initializer: function (config) {
-		Y.log ('Initializer','info',DISPATCHER);
-		this._queue = new Y.AsyncQueue ();
-		if (!isObject(config) || !config.node || !(this._node = Y.one(config.node))) {
-			Y.log ('Dispatcher requires a NODE to be instantiated','info',DISPATCHER);
-			// how can we stop the initialization?
-			return;
-		}
-
-		/**
-         * Signals the end of a thumb drag operation.  Payload includes
-         * the DD.Drag instance's drag:end event under key ddEvent.
+        /**
+        * YUI Node Object that represent a dynamic area in the page.  
+        * @attribute node
+        * @default null
+        * @type object
+        */
+        node: {
+            value: null,
+            setter: function(n) {
+                // stopping the current process if needed to define a new node
+                this.stop();
+                return Y.one(n);
+            }
+        },
+        /**
+        * If dispatcher should purge the DOM elements before replacing the content
+        * @attribute autopurge
+        * @default true
+        * @type boolean
+        */
+        autopurge: {
+            value: true,
+            validator: isBoolean
+        },
+        /**
+        * If dispatcher should analyze the content before injecting it. This will help 
+        * to support full html document injection, to collect scripts and styles from head if exists, etc.
+        * @attribute normalize
+        * @default false
+        * @type boolean
+        */
+        normalize: {
+            value: false,
+            validator: isBoolean
+        },
+        /**
+        * URL that should be injected within the host
+        * @attribute uri
+        * @default null
+        * @type string
+        */
+        uri: {
+            value: null,
+            validator: function(v) {
+                return (v && isString(v) && (v !== ''));
+            }
+        },
+        /**
+        * default content for the dynamic area
+        * @attribute content
+        * @default empty
+        * @type string
+        */
+        content: {
+            value: '',
+            validator: isString
+        },
+        /**
+        * Boolean indicating that a process is undergoing.
+        * 
+        * @attribute loading
+        * @default false
+        * @readonly
+        * @type {boolean}
+        */
+        loading: {
+            value: false,
+            validator: isBoolean,
+            readOnly: true,
+            setter: function(v) {
+                var instance = this;
+                Y.log('setting status to ' + v, 'info', DISPATCHER);
+                if (v) {
+                    /**
+                     * Notification event when dispatcher starts the loading process
+                     * using io. Equivalent to Y.on('io:start'). Right before this event, dispatcher 
+                     * adds the loading class from the node. This event will be triggered before the 
+                     * function defined under attribute "ioConfig.start". 
+                     *
+                     * @event fetch
+                     */
+                    instance.fire(DISPATCHER_FETCH);
+                    instance.get(ATTR_NODE).addClass(CLASS_DISPATCHER_LOADING);
+                } else {
+                    /**
+                     * Notification event when dispatcher finishes the loading process
+                     * using io. Equivalent to Y.on('io:end'). Right after this event, dispatcher 
+                     * removes the loading class from the node.This event will be triggered before the 
+                     * function defined under attribute "ioConfig.end".
+                     *
+                     * @event load
+                     */
+                    instance.fire(DISPATCHER_LOAD);
+                    instance.get(ATTR_NODE).removeClass(CLASS_DISPATCHER_LOADING);
+                }
+                return v;
+            }
+        },
+        /**
+         * Default IO Config object that will be used as base configuration for Y.io calls.
+         * http://developer.yahoo.com/yui/3/io/#configuration
          *
-         * @event slideEnd
-         * @param event {Event.Facade} An Event Facade object with the following attribute specific properties added:
-         *  <dl>
-         *      <dt>ddEvent</dt>
-         *          <dd><code>drag:end</code> event from the managed DD.Drag instance</dd>
-         *  </dl>
+         * @attribute ioConfig
+         * @type Object
+         * @default null
          */
-        this.publish(DISPATCHER_START);
-        this.publish(DISPATCHER_PURGE);
-        this.publish(DISPATCHER_CHANGE);
-        this.publish(DISPATCHER_LOAD);
-	},
-
-	destructor: function () {
-		this.stop();
-		this._node = null;
-		this._queue = null;
-		this._io = null;
-    },
-    stop: function () {
-    	this._queue.stop ();
-    	if (this._io) {
-    		this._io.abort();
-    	}
-    	return this;
-    },
-	/**
-	 * Dispatching the next node of the handle
-	 * @method dispatch
-	 * @return null
-	 */
-	_dispatch: function(content) {
-    	var o = _parseContent (content),
-    		q = this._queue,
-    		n = this._node;
-    	// injecting CSS blocks first
-    	o.css.each (function (cssNode) {
-    		if (cssNode && cssNode.get ('href')) {
-	    		q.add ({
-					fn: function () {
-	    				Y.log ('external link tag: '+cssNode.get ('href'),'info',DISPATCHER);
-	    				//q.next();
-	    				Y.Get.css(cssNode.get ('href'), { 
-	    					onFailure: function(o) {
-	    						Y.log ('external link tag fail to load: '+cssNode.get ('href'),'warn',DISPATCHER);
-							},
-							onEnd: function () {
-								q.run();
-							}
-						});
-					},
-					autoContinue: false
-	    		});  			
-    		} else {
-	    		q.add ({
-					fn: function () {
-		    			// inject css;
-		    			Y.log ('inline style tag: '+cssNode.get ('innerHTML'),'info',DISPATCHER);
-		    			var d = cssNode.get('ownerDocument'),
-							h = d.one('head') || d.get ('documentElement'),
-							newStyle = Y.Node.create('<style></style>');
-						h.replaceChild(cssNode, h.appendChild(newStyle));
-					}
-	    		});
-    		}
-    	});
-    	// autopurging children collection
-    	if (this.get ('autopurge')) {
-    		q.add ({
-    			fn: function () {
-    				Y.log ('purging children collection','info',DISPATCHER);
-	        		n.get ('children').each(function(c) {
-	        			c.purge (true);
-	        		});
-	        	}
-    		});
-		}
-    	// injecting new content
-    	q.add ({
-			fn: function () {
-				Y.log ('setting new content: '+o.content,'info',DISPATCHER);
-    			n.setContent (o.content);
-			}
-		});
-    	// executing JS blocks before the injection
-    	o.js.each (function (jsNode) {
-    		if (jsNode && jsNode.get ('src')) {
-	    		q.add ({
-					fn: function () {
-						Y.log ('external script tag: '+jsNode.get ('src'),'info',DISPATCHER);
-						//q.next();
-						Y.Get.script(jsNode.get ('src'), { 
-							onFailure: function(o) {
-	    						Y.log ('external script tag fail to load: '+jsNode.get ('src'),'error',DISPATCHER);
-							},
-							onEnd: function (o) {
-								o.purge(); //removes the script node immediately after executing it
-								q.run();
-							}
-						});
-					},
-					autoContinue: false
-	    		});  			
-    		} else {
-	    		q.add ({
-					fn: function () {
-		    			// inject js;
-						Y.log ('inline script tag: '+jsNode.get ('innerHTML'),'info',DISPATCHER);
-						var d = jsNode.get('ownerDocument'),
-							h = d.one('head') || d.get ('documentElement'),
-							newScript = Y.Node.create('<script></script>');
-						h.replaceChild(jsNode, h.appendChild(newScript));
-						if (jsNode._node.text) {
-					        newScript._node.text = jsNode._node.text;
-						}
-						jsNode.remove(); //removes the script node immediately after executing it
-					}
-	    		});    			
-    		}
-    	});
-    	// executing the queue
-    	this._queue.run();
-	},
-	/**
-	* * Fetching a remote file that will be processed thru this object...
-	* @param {object} uri       URI to be loaded using IO
-	* @return object  Reference to the connection handler
-	*/
-	_fetch: function ( uri, cfg ){
-		cfg = cfg || {
-			method: 'GET'
-		};
-		cfg.on = {
-			start: function () {
-		   		Y.log ('Start','info',DISPATCHER);
-	   		},
-			success: function (tid, o) {
-		   		Y.log ('Success: '+o.responseText,'info',DISPATCHER);
-		   		this.set(ATTR_CONTENT, o.responseText);
-	   		},
-	   		failure: function (tid, o) {
-	   			Y.log ('Failure','warn',DISPATCHER);
-		   	},
-			end: function () {
-		   		Y.log ('End','info',DISPATCHER);
-	   		}
-		};
-		cfg.context = this;
-		return Y.io(uri, cfg);
-	},
-
-	/**
-	 * Destroy Custom Event will be fired before remove the innerHTML in the displaying process
-	 * @method _destroy
-	 * @param {Object} el    	DOM Element reference
-	 * @param {Object} config    User configuration (useful for future implementations)
-	 * @return void
-	 */
-    _destroy: function ( node, callback ) {
-		// if the injected code tries to set up a destroyer method, this method should be 
-		// set in a FIFO, and if the area that contains the node will be destroyed, the 
-		// callback will be called.
-	}	
+         ioConfig: {
+            value: null
+         }
+    }
+    
 });
-
-Y.Dispatcher = Dispatcher;

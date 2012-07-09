@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/strict.dtd"
+    >
+<html lang="en">
+<head>
+    <title>Ratings Widget Tester</title>
+    <link rel="stylesheet" href="../../../build/gallery-ratings/assets/gallery-ratings.css" type="text/css" />
+</head>
+<body>
+  <div class="widget_demo">
+    Widget Basic:
+    <div class="default">default: <span id="myWidget_basic">2.5</span></div>
+    <div class="default-inline">default-inline: <span id="myWidget_inline">2.5</span></div>
+    <div class="small">small: <span id="myWidget_small">2.5</span></div>
+    <div class="small-inline">small-inline: <span id="myWidget_small_inline">2.5</span></div>
+    <div class="input-based">input based: <input type="text" id="ip_based" name="ip_based" value="3.5"></div>
+  </div>
+  
+  
+  <script type="text/javascript" src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
+  <script type="text/javascript">
+    YUI({
+        modules: {
+            'gallery-ratings': {
+                fullpath: '../../../build/gallery-ratings/gallery-ratings-min.js',
+                requires: ['base','widget']
+            }
+        },
+        filter: 'raw'
+      }).use('gallery-ratings', function(Y) {
+      var ratings = new Y.Ratings({ srcNode: "#myWidget_basic" });
+      var ratings2 = new Y.Ratings({ srcNode: "#myWidget_inline", inline: true });
+      var ratings3 = new Y.Ratings({ srcNode: "#myWidget_small", skin: "small", allowClearRating: true });
+      var ratings4 = new Y.Ratings({ srcNode: "#myWidget_small_inline", skin: "small", inline: true });
+      var ratings5 = new Y.Ratings({ srcNode: "#ip_based", inline: true, allowClearRating: false, titles: ["1 boot", "2 boots", "3 Feet", "Extra Good", "Great"], max: 15, allowClearRating: true});
+      
+      Y.on("ratings:ratingChange",function(e){
+        var id = e.target.get("contentBox").get("id");
+        Y.log(id+" New Value: "+e.newVal+" was: "+e.prevVal);
+      });
+    });
+  </script>
+</body>
+</html>

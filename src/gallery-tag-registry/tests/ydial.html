@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>YUI Tag</title>
+        <script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript">
+        var Y = YUI({
+            modules: {
+                'gallery-event-inserted': '../../../build/gallery-event-inserted/gallery-event-inserted.js',
+                'gallery-tag': '../../../build/gallery-tag/gallery-tag.js'
+            },
+            groups: {tag: {patterns: {'tag-': {configFn: function(cfg) {
+                cfg.path = '../../yui3-gallery/build/gallery-tag-registry/' + cfg.name + '.js'
+            }}}}}
+        })
+        </script>
+    </head>
+    <body>
+        <h2>Dial</h2>
+        <ydial data-min="-100" data-max="100" data-value="0"></ydial>
+
+        <script type="text/javascript">
+        Y.use('tag-ydial');
+        </script>
+    </body>
+</html>

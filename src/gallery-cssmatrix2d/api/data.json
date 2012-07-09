@@ -1,0 +1,350 @@
+{
+    "project": {
+        "name": "CSSMatrix2d"
+    },
+    "files": {
+        "js/cssmatrix2d.js": {
+            "name": "js/cssmatrix2d.js",
+            "modules": {
+                "gallery-cssmatrix2d": 1
+            },
+            "classes": {
+                "CSSMatrix2d": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-cssmatrix2d": {
+            "name": "gallery-cssmatrix2d",
+            "submodules": {},
+            "classes": {
+                "CSSMatrix2d": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/cssmatrix2d.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "CSSMatrix2d": {
+            "name": "CSSMatrix2d",
+            "shortname": "CSSMatrix2d",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-cssmatrix2d",
+            "namespace": "",
+            "file": "js/cssmatrix2d.js",
+            "line": 14,
+            "description": "This represents the matrix used by 2d CSS transforms.  It helps\nperform all of the necessary matrix calculations.  This is sort of an\nimplementation of the CSSMatrix object defined in this spec:\nhttp://www.w3.org/TR/css3-2d-transforms/#cssmatrix-interface\nThe matrix defined in the spec is a 3x2 matrix.  I'm not exactly an\nexpert at matrix math, but most of the operations required by the\nspec only work with square matrices.  The spec doesn't explain how a\n3x2 matrix is supposed to do these things.  In order to make the math\nwork correctly, this object internally treats it as the 4x4 matrix\ndefined in the 3d CSS transforms spec here:\nhttp://www.w3.org/TR/css3-3d-transforms/#cssmatrix-interface\nand it converts the 3x2 matrix into a 4x4 matrix by following the\nexamples provided in this spec:\nhttp://www.w3.org/TR/2012/WD-css3-transforms-20120403/\nOther implementations of these specs, like the WebKitCSSMatrix object\nand others that have copied it, attempt to combine both the 2d and 3d\nversions of CSSMatrix into the same object.  This implementation\nonly borrows ideas from the 3d version to make the math make sense,\nbut only the 2d functionality is implemented.  Since only the 6 2d\nmatrix items out of the total 16 3d matrix items are mutable, and the\nremaining 3d matrix items are known to be either 0 or 1, most of the\ncomplicated 4x4 matrix math is factored down and reduced, becoming\nmuch more efficient.",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 44,
+            "description": "The 1,1 position in the matrix.",
+            "itemtype": "property",
+            "name": "a",
+            "default": "1",
+            "type": "Number",
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 51,
+            "description": "The 2,1 position in the matrix.",
+            "itemtype": "property",
+            "name": "b",
+            "default": "0",
+            "type": "Number",
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 58,
+            "description": "The 1,2 position in the matrix.",
+            "itemtype": "property",
+            "name": "c",
+            "default": "0",
+            "type": "Number",
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 65,
+            "description": "The 2,2 position in the matrix.",
+            "itemtype": "property",
+            "name": "d",
+            "default": "1",
+            "type": "Number",
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 72,
+            "description": "The 1,4 position in the matrix.",
+            "itemtype": "property",
+            "name": "e",
+            "default": "0",
+            "type": "Number",
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 79,
+            "description": "The 2,4 position in the matrix.",
+            "itemtype": "property",
+            "name": "f",
+            "default": "0",
+            "type": "Number",
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 86,
+            "description": "Returns a new matrix, the inverse of this one.\nThis matrix is not modified.\nThis method will throw if the matrix can not be inverted.",
+            "itemtype": "method",
+            "name": "inverse",
+            "return": {
+                "description": "inverse",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 118,
+            "description": "Returns a new matrix, the product of this one multiplied by\nanother one.  Neither this matrix nor the other one is\nmodified.",
+            "itemtype": "method",
+            "name": "multiply",
+            "params": [
+                {
+                    "name": "other",
+                    "description": "",
+                    "type": "CSSMatrix2d"
+                }
+            ],
+            "return": {
+                "description": "product",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 149,
+            "description": "Returns a new matrix, rotated the given angle clockwise.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "rotate",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The angle specified in degrees.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "rotated",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 159,
+            "description": "Returns a new matrix, rotated the given angle clockwise.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "rotateRad",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The angle specified in radians.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "rotated",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 176,
+            "description": "Returns a new matrix, scaled horizontally and vertically.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "scale",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "The horizontal scale factor.",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "The vertical scale factor.  Optional.  If\nundefined, x will be used for both the horizontal and\nvertical scale factor.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "scaled.",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 194,
+            "description": "Sets the matrix based on a matrix string provided by the DOM.\nThe string is expected to be like 'matrix(a, b, c, d, e, f)'.\nThis format isn't specifically checked for, so other similar\nstrings might be accepted.  If 6 values can not be read from\nfrom the string, this method will do nothing.  Invalid values\ncould result in NaN being assigned to matrix items.",
+            "itemtype": "method",
+            "name": "setMatrixValue",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "matrixValue",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 223,
+            "description": "Returns a new matrix, skewed horizontally.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "skewX",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The horizontal skew angle specified in\ndegrees.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "skewed.",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 234,
+            "description": "Returns a new matrix, skewed horizontally.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "skewXRad",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The horizontal skew angle specified in radians.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "skewed.",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 248,
+            "description": "Returns a new matrix, skewed vertically.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "skewY",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The vertical skew angle specified in degrees.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "skewed.",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 258,
+            "description": "Returns a new matrix, skewed vertically.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "skewYRad",
+            "params": [
+                {
+                    "name": "angle",
+                    "description": "The vertical skew angle specified in radians.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "skewed.",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 272,
+            "description": "Returns a string 'matrix(a, b, c, d, e, f)' which can be used by the\nDOM for 2d CSS transforms.",
+            "itemtype": "method",
+            "name": "toString",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        },
+        {
+            "file": "js/cssmatrix2d.js",
+            "line": 283,
+            "description": "Returns a new matrix, translated horizontally and vertically.\nThis matrix is not modified.",
+            "itemtype": "method",
+            "name": "translate",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "The horizontal translation amount.",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "The vertical translation amount.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "translated.",
+                "type": "CSSMatrix2d"
+            },
+            "class": "CSSMatrix2d",
+            "module": "gallery-cssmatrix2d"
+        }
+    ]
+}

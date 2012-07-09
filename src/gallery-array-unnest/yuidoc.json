@@ -1,0 +1,12 @@
+{
+    "name": "Array Unnest",
+    "description": "Utility function that flattens nested arrays.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

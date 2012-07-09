@@ -1,0 +1,136 @@
+{
+    "project": {
+        "name": "GoogleMapsLoader"
+    },
+    "files": {
+        "js/google-maps-loader.js": {
+            "name": "js/google-maps-loader.js",
+            "modules": {
+                "gallery-google-maps-loader": 1
+            },
+            "classes": {
+                "GoogleMapsLoader": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-google-maps-loader": {
+            "name": "gallery-google-maps-loader",
+            "submodules": {},
+            "classes": {
+                "GoogleMapsLoader": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/google-maps-loader.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "GoogleMapsLoader": {
+            "name": "GoogleMapsLoader",
+            "shortname": "GoogleMapsLoader",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-google-maps-loader",
+            "namespace": "",
+            "file": "js/google-maps-loader.js",
+            "line": 11,
+            "is_constructor": 1,
+            "extends": "Base",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration object.",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/google-maps-loader.js",
+            "line": 21,
+            "description": "Fired when JSONP fails.",
+            "itemtype": "event",
+            "name": "failure",
+            "class": "GoogleMapsLoader",
+            "module": "gallery-google-maps-loader"
+        },
+        {
+            "file": "js/google-maps-loader.js",
+            "line": 27,
+            "description": "Fired when JSONP succeeds.",
+            "itemtype": "event",
+            "name": "success",
+            "fireonce": "",
+            "class": "GoogleMapsLoader",
+            "module": "gallery-google-maps-loader"
+        },
+        {
+            "file": "js/google-maps-loader.js",
+            "line": 36,
+            "description": "Fired when JSONP times out.",
+            "itemtype": "event",
+            "name": "timeout",
+            "class": "GoogleMapsLoader",
+            "module": "gallery-google-maps-loader"
+        },
+        {
+            "file": "js/google-maps-loader.js",
+            "line": 42,
+            "description": "Loads the Google Maps JavaScript API through JSONP.  Does nothing if\nthis object has already loaded it.",
+            "itemtype": "method",
+            "name": "load",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "parameters",
+                    "description": "An optional object with the following\noptional properties:\n<dl>\n    <dt>\n        language\n    </dt>\n    <dd>\n        The language code to override the browser's default language.\n    </dd>\n    <dt>\n        libraries\n    </dt>\n    <dd>\n        An array or comma separated string of library names.\n    </dd>\n    <dt>\n        region\n    </dt>\n    <dd>\n        A Unicode region subtag identifier to override the default\n        region.\n    </dd>\n    <dt>\n        sensor\n    </dt>\n    <dd>\n        Set this to a truthy value if your application determines the\n        user's location via a sensor.\n    </dd>\n    <dt>\n        source\n    </dt>\n    <dd>\n        Location of the Google Maps JavaScript API to override the attribute.\n    </dd>\n    <dt>\n        timeout\n    </dt>\n    <dd>\n        Timeout in milliseconds to override the attribute.\n    </dd>\n    <dt>\n        version\n    </dt>\n    <dd>\n        The version of the Google Maps JavaScript API to load.\n    </dd>\n</dl>",
+                    "type": "Object"
+                }
+            ],
+            "class": "GoogleMapsLoader",
+            "module": "gallery-google-maps-loader"
+        },
+        {
+            "file": "js/google-maps-loader.js",
+            "line": 155,
+            "itemtype": "attribute",
+            "name": "loaded",
+            "default": "false",
+            "readonly": "",
+            "type": "Boolean",
+            "class": "GoogleMapsLoader",
+            "module": "gallery-google-maps-loader"
+        },
+        {
+            "file": "js/google-maps-loader.js",
+            "line": 165,
+            "description": "The location of the Google Maps JavaScrpt API.",
+            "itemtype": "attribute",
+            "name": "source",
+            "default": "'http://maps.google.com/maps/api/js'",
+            "type": "String",
+            "class": "GoogleMapsLoader",
+            "module": "gallery-google-maps-loader"
+        },
+        {
+            "file": "js/google-maps-loader.js",
+            "line": 174,
+            "description": "The timeout in milliseconds used by JSONP.",
+            "itemtype": "attribute",
+            "name": "timeout",
+            "default": "30000",
+            "type": "Number",
+            "class": "GoogleMapsLoader",
+            "module": "gallery-google-maps-loader"
+        }
+    ]
+}

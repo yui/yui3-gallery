@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Full Screen</title>
+		<style>
+			body {
+				background: #F3F5FA;
+			}
+			
+			#container {
+				width: 600px;
+				padding: 30px;
+				background: #F8F8F8;
+				border: solid 1px #ccc;
+				color: #111;
+				margin: 20px auto;
+				border-radius: 3px;
+			}
+
+			#specialstuff {
+				background: #33e;
+				padding: 20px;
+				margin: 20px;
+				color: #fff;
+			}
+			
+			#specialstuff a {
+				color: #eee;
+			}
+
+			#fsstatus {
+				background: #e33;
+				color: #111;
+			}
+
+			#fsstatus.full-screen-supported {
+				background: #3e3;
+			}
+		</style>
+	</head>
+	<body class="yui-skin-sam">
+		<div id="container">
+			<h1>FullScreen API Testing</h1>
+
+			<div id="specialstuff">
+				<p>Inside here is special stuff which will go fullscreen</p>
+
+				<p>Status: <span id="fsstatus"></span></p>
+				<input type="button" value="Exit Fullscreen" id="fsexit" disabled="disabled"/>
+			</div>
+
+			<input type="button" value="Go Fullscreen" id="fsbutton" disabled="disabled"/>
+
+			<p>
+				Code and example based on <a href="http://johndyer.name/lab/fullscreenapi/">John Dyer&apos;s example</a>.
+			</p>
+		</div>
+		
+		
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.5.0/build/yui/yui-debug.js"></script>
+		<script type="text/javascript" src="../../../build/gallery-full-screen/gallery-full-screen-debug.js"></script>
+		<script type="text/javascript" src="../../../build/gallery-node-full-screen/gallery-node-full-screen-debug.js"></script>
+		<script>
+			YUI({
+			    filter: 'debug',
+			    combine: true,
+		        useConsole: true,
+		        logExclude: {Dom: true, Selector: true, Node: true, attribute: true, base: true, event: true, widget: true}
+			}).use('gallery-full-screen', 'gallery-node-full-screen', 'event-base', 'node-base', function(Y) {
+				'use strict';
+				
+				var status = Y.one('#fsstatus'),
+					button = Y.one('#fsbutton'),
+					exit = Y.one('#fsexit'),
+					node = Y.one('#specialstuff');
+				
+				if (!Y.FullScreen.isSupported()) {
+					status.set('text', 'SORRY: Your browser does not support FullScreen');
+					return;
+				}
+				
+				button.removeAttribute('disabled');
+				status.set('text', 'YES: Your browser supports FullScreen');
+				status.addClass('full-screen-supported');
+				
+				node.plug(Y.Plugin.NodeFullScreen);
+				
+				button.on('click', function(e) {
+					node.fullScreen.request();
+				});
+				
+				exit.on('click', function(e) {
+					Y.FullScreen.exit();
+				});
+				
+				Y.on('fullScreen:change', function(e) {
+					if (Y.FullScreen.isEnabled()) {
+						status.set('text', 'Whoa, you went fullscreen');
+						exit.removeAttribute('disabled');
+						button.setAttribute('disabled', 'disabled');
+					} else {
+						status.set('text', 'Back to normal');
+						exit.setAttribute('disabled', 'disabled');
+						button.removeAttribute('disabled');
+					}
+				});
+			});
+		</script>
+	</body>
+</html>

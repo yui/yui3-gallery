@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+	
+	<title>Lightbox Demo</title>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="content-language" content="en" />
+
+	<link rel="stylesheet" href="../../../build/gallery-lightbox/assets/skins/sam/gallery-lightbox.css" type="text/css" />
+
+	<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+	<script src="../../../build/gallery-lightbox/gallery-lightbox.js" type="text/javascript"></script>
+</head>
+
+<body>
+	
+<div id="content">
+
+	<a name="example"></a>	
+	<div class="section">
+
+
+	<h2>Example</h2>
+
+	<h3>Single Images</h3>
+	<div class="thumbnail">
+
+		<a href="http://www.huddletogether.com/projects/lightbox2/images/image-1.jpg" rel="lightbox"><img src="http://www.huddletogether.com/projects/lightbox2/images/thumb-1.jpg" width="100" height="40" alt="" /></a>
+	</div>
+	<div class="thumbnail">
+		<a href="http://www.huddletogether.com/projects/lightbox2/images/image-2.jpg" rel="lightbox" title="Optional caption."><img src="http://www.huddletogether.com/projects/lightbox2/images/thumb-2.jpg" width="100" height="40" alt="" /></a>
+	</div>
+
+	<h3 style="clear: both;">Image Set</h3>
+
+	<div class="thumbnail">
+
+		<a href="http://www.huddletogether.com/projects/lightbox2/images/image-3.jpg" rel="lightbox[plants]" title="Roll over and click right side of image to move forward."><img src="http://www.huddletogether.com/projects/lightbox2/images/thumb-3.jpg" width="100" height="40" alt="Plants: image 1 0f 4 thumb" /></a>
+	</div>
+	<div class="thumbnail">
+		<a href="http://www.huddletogether.com/projects/lightbox2/images/image-4.jpg" rel="lightbox[plants]" title="Alternately you can press the right arrow key." ><img src="http://www.huddletogether.com/projects/lightbox2/images/thumb-4.jpg" width="100" height="40" alt="Plants: image 2 0f 4 thumb" /></a>
+	</div>
+	<div class="thumbnail">
+		<a href="http://www.huddletogether.com/projects/lightbox2/images/image-5.jpg" rel="lightbox[plants]" title="The script preloads the next image in the set as you're viewing."><img src="http://www.huddletogether.com/projects/lightbox2/images/thumb-5.jpg" width="100" height="40" alt="Plants: image 3 0f 4 thumb" /></a>
+	</div>
+	<div class="thumbnail">
+
+		<a href="http://www.huddletogether.com/projects/lightbox2/images/image-6.jpg" rel="lightbox[plants]" title="Press Esc to close"><img src="http://www.huddletogether.com/projects/lightbox2/images/thumb-6.jpg" width="100" height="40" alt="Plants: image 4 0f 4 thumb" /></a>
+	</div>
+	
+</div><!-- end .section -->
+
+</div><!-- end #content -->
+
+<script type="text/javascript">
+	filter = true ? "" : "debug";
+	YUI({ filter: filter }).use("gallery-lightbox", function(Y) {
+	    Y.Lightbox.init();
+	});
+</script>
+
+</body>
+</html>

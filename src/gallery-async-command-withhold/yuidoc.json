@@ -1,0 +1,14 @@
+{
+    "name": "Async Command Withhold Plugin",
+    "description": "Delay updating the command's completed status for an amount of time after the command function completes.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js",
+            "../gallery-async/js",
+            "../gallery-async-command/js"
+        ],
+        "outdir": "./api"
+    }
+}

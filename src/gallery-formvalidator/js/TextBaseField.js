@@ -312,7 +312,13 @@
          * @param {HTMLElement} el DOM object to be insert beside the main input.
          */
         insertBeside:function(el) {
-            Y.DOM.insertAfter(el,this.get('inputDOM'));
+            if (Y.DOM.insertAfter) {
+                Y.DOM.insertAfter(el,this.get('inputDOM'));
+            }
+            else {
+                Y.DOM.addHTML(this.get('inputDOM'), el, 'after');
+            }
+            
         },
         /**
          * This will attach the keyup event to the input dom.

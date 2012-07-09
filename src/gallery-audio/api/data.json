@@ -1,0 +1,71 @@
+{
+    "project": {
+        "name": "Audio",
+        "description": "Utility to create an HTML 5 audio element."
+    },
+    "files": {
+        "js/audio.js": {
+            "name": "js/audio.js",
+            "modules": {
+                "gallery-audio": 1
+            },
+            "classes": {
+                "Audio": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-audio": {
+            "name": "gallery-audio",
+            "submodules": {},
+            "classes": {
+                "Audio": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/audio.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "Audio": {
+            "name": "Audio",
+            "shortname": "Audio",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-audio",
+            "namespace": "",
+            "file": "js/audio.js",
+            "line": 45,
+            "static": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/audio.js",
+            "line": 50,
+            "description": "This is a utility method to create an HTML 5 Audio element.  Each browser\nhas a different level of support for playing different audio formats.  If\nan audio file is hosted in multple formats, this will select the one most\nlikely to play in the current browser.  If the browser does not support\nany of the available audio formats, null is returned.",
+            "itemtype": "method",
+            "name": "create",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "The config object has the following optional\nproperties:\n<dl>\n    <dt>\n        autoplay\n    </dt>\n    <dd>\n        Boolean.  If the audio should begin playing immediately.\n    </dd>\n    <dt>\n        baseUrl\n    </dt>\n    <dd>\n        String.  URL of the audio file, minus the extension.  Works\n        together with the format property to pick the best audio file to\n        play.\n    </dd>\n    <dt>\n        controls\n    </dt>\n    <dd>\n        Boolean.  If the browser should render a user interface.  (The\n        audio node must be attached to the DOM for the controls to\n        appear)\n    </dd>\n    <dt>\n        format\n    </dt>\n    <dd>\n        Array or Object.  List of hosted formats.  Defaults to ['ogg',\n        'mp3', 'm4a', 'wav'].  The best supported format will be\n        determined and the file extension will be appended to baseUrl.\n        If all four formats are not being hosted, only list the formats\n        that are.  For example, ['mp3', 'ogg'] will not try to find an\n        m4a or wav file.  If the four formats aren't named the same, or\n        are hosted at different locations, or have unusual file\n        extensions, set the baseUrl property to any common URL fragment,\n        or leave the baseUrl property undefined if there isn't one.  Then\n        set the format property to an object which has the individual\n        formats as keys and a strings as values that will be appended to\n        the baseUrl.  For example, baseUrl could be set to\n        'http://domain.com/' and format could be set to\n        {m4a: 'music/file.m4a', mp3: 'mp3s/cool/file.mp4',\n        ogg: 'vorbis/file.ogg'}\n    </dd>\n    <dt>\n        loop\n    </dt>\n    <dd>\n        Boolean.  If the audio should loop forever.\n    </dd>\n    <dt>\n        preload\n    </dt>\n    <dd>\n        String.  This value should be either 'auto', 'metadata', or\n        'none'.  Defaults to 'auto'.\n</dl>",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Node"
+            },
+            "class": "Audio",
+            "module": "gallery-audio"
+        }
+    ]
+}

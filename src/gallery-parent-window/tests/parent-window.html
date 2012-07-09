@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+<head>
+<title>Parent Window Tests</title> 
+<script type="text/javascript" src="http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+    <h1>Parent Window Tests</h1>
+    <div id="demo">
+      <p>Placeholder for the tests</p>
+    </div>
+
+<script type="text/javascript">
+YUI({
+    useConsoleOutput: true,
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'substitute', function (Y) {
+
+  (new Y.Console({
+      verbose: true,
+      newestOnTop: false
+  })).render();
+
+  Y.namespace("Tests");
+
+  Y.Tests.ParentWindow = (function() {
+
+      var Assert = Y.Assert,
+          ObjectAssert = Y.ObjectAssert;
+
+      //-------------------------------------------------------------------------
+      // Base Test Suite
+      //-------------------------------------------------------------------------
+      var suite = new Y.Test.Suite("Parent Window Tests");
+
+      //-------------------------------------------------------------------------
+      // Test Case for encoding
+      //-------------------------------------------------------------------------
+      suite.add(new Y.Test.Case({
+
+          name: "Parent Window Tests",
+
+          //---------------------------------------------
+          // Setup and tear down
+          //---------------------------------------------
+          setUp: function() {
+              // global variable
+              iframeTemplate = '<iframe border="0" frameBorder="0" marginWidth="0" marginHeight="0" leftMargin="0" topMargin="0" allowTransparency="true" width="1px" height="1px"></iframe>';
+              iframeURL = './_iframe.html';
+              Y.one('#demo').set('innerHTML', 'Placeholder for the tests');
+          },
+
+          tearDown: function() {
+              Y.one('iframe').remove();
+              Y.one('#demo').removeClass('passed').removeClass('iframe-global-event-captured-by-document').removeClass('document-global-event-captured-by-iframe');
+          },
+
+          //---------------------------------------------------------------------
+          // Tests
+          //---------------------------------------------------------------------
+          testBasicIframe: function() {
+              Y.one('body').append(Y.Node.create(iframeTemplate).setStyle('visibility', 'hidden').set('src', iframeURL));
+              this.wait (function () {
+                Assert.isTrue(Y.one('#demo').hasClass('passed'), 'The iframe fails to access to the parent window dom structure.');
+              }, 2000);
+          },
+          
+          testCapturingGlobalEvent: function() {
+              var that = this;
+              Y.Global.on('iframe-global-event', function() {
+                  Y.one('#demo').addClass('iframe-global-event-captured-by-document');
+              });
+              Y.one('body').append(Y.Node.create(iframeTemplate).setStyle('visibility', 'hidden').set('src', iframeURL));
+              this.wait (function () {
+                Assert.isFalse(Y.one('#demo').hasClass('iframe-global-event-captured-by-document'), 'The iframe is polluting the parent window with broadcast messages.');
+              }, 200);
+          },
+          
+          testFiringGlobalEvent: function() {
+              var that = this;
+              Y.one('body').append(Y.Node.create(iframeTemplate).setStyle('visibility', 'hidden').set('src', iframeURL));
+              this.wait (function () {
+                Y.Global.fire('document-global-event');
+                Assert.isFalse(Y.one('#demo').hasClass('document-global-event-captured-by-iframe'), 'The iframe is being polluted by the parent window through broadcast messages.');
+              }, 200);
+          }
+
+      }));
+
+      //return it
+      return suite;
+
+  })();
+
+  //add to the testrunner and run
+  Y.Test.Runner.add(Y.Tests.ParentWindow);
+  Y.Test.Runner.run();
+  
+});
+</script>
+</body>
+</html>

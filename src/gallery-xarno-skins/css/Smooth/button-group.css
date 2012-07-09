@@ -1,0 +1,25 @@
+.yui3-skin-xarno-smooth .yui3-button-group .yui3-button {
+	border-radius:0;
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+	margin: 0;
+}
+
+.yui3-skin-xarno-smooth .yui3-button-group .yui3-button-group-label {
+	margin: 3px;
+}
+.yui3-skin-xarno-smooth .yui3-button-group-content {
+	margin: 3px;
+	display: inline-block;
+}
+.yui3-skin-xarno-smooth .yui3-button-group-content .yui3-button:first-child {
+    border-radius:3px 0 0 3px;
+    -moz-border-radius:3px 0 0 3px;
+    -webkit-border-radius:3px 0 0 3px;
+}
+
+.yui3-skin-xarno-smooth .yui3-button-group-content .yui3-button:last-child {
+    border-radius:0 3px 3px 0;
+    -moz-border-radius:0 3px 3px 0;
+    -webkit-border-radius:0 3px 3px 0;
+}

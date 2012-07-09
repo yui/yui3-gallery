@@ -1,0 +1,54 @@
+<html>
+<head>
+<script src="http://yui.yahooapis.com/3.6.0pr3/build/yui/yui-debug.js"></script>
+<script type="text/javascript">
+ 
+    YUI({
+        modules: {
+            'gallery-handlebars-loader': {
+                fullpath: 'build_tmp/gallery-handlebars-loader-debug.js',
+                requires: ['handlebars-base','handlebars-compiler','node-base']
+            }
+        },
+		filter:'debug'
+    }).use("node", 'gallery-handlebars-loader', function(Y) {
+        var handlebars = new Y.MSA.HandlebarsLoader(),
+		cfg = {
+			type : 'box',
+			url : 'http://assets.freelas.net/91/images/themes/frl/logoNLen.png'
+		};
+		var template = handlebars.template('some-photo-hbs');
+		Y.one('#photo').set('innerHTML',template(cfg));
+		
+		cfg = {
+			url : 'http://yuilibrary.com/img/yui-logo.png'
+		};
+		Y.one('#photo2').set('innerHTML',template(cfg));
+		
+		Y.one('#raw').set('innerText',handlebars.raw('some-photo-hbs'));
+		
+		handlebars.clear();
+		
+		handlebars.preCompile(['some-photo-hbs']);
+		
+		Y.one('#photo3').set('innerHTML',handlebars.template('some-photo-hbs')(cfg));
+    });
+</script>
+
+</head>
+<body>
+<script id="some-photo-hbs" type="text/x-handlebars-template">
+<div class="box {{type}}">
+	<span class="img">
+		<img src="{{url}}">
+	</span>
+</script>
+<div id="photo"></div>
+
+<div id="photo2"></div>
+
+<div id="photo3"></div>
+
+<div id="raw"></div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Button test</title>
+		<style>
+			.yui3-widget-loading {
+				display:none;
+			}
+		</style>
+		<script src="http://yui.yahooapis.com/3.4.1pr1/build/yui/yui-min.js"></script>
+	</head>
+	<body  class="yui3-skin-sam yui-skin-sam">
+		<p>Plain button, only label set: <span id="plain"></span></p>
+		<p>Button from existing markup: <button id="markup" >Click Here!</button></p>
+		<form method="get" action="#here"><input type="text" name="input" /><br/>
+		<input type="submit" id="submit" value="Submit"/><input type="reset" id="reset" value="Reset" />
+		<p>Toggle button, icon added: <span id="toggle"></span></p>
+		<p>Group of plain buttons with one separator: <span id="multiButton"></span></p>
+		<p>Group of toggle buttons, some with icons: <span id="multiToggle"></span></p>
+		<p>Group of toggle buttons, one should always remain selected: <span id="oneToggle"></span></p>
+		</form>
+
+		<script>
+			/*jslint browser: true, nomen: true, maxerr: 50, indent: 4, vars:true */
+			/*global YUI */
+			YUI({
+			/*
+				filter: 'debug',
+				combine: false,
+				debug: true,
+			*/
+				groups: {
+					sp: {
+						base: '../../../build/',
+						modules: {
+							"gallery-md-button": {
+								path: 'gallery-md-button/gallery-md-button.js',
+								requires: ['base-build','widget', 'gallery-makenode'],
+								skinnable: true
+							},
+							"gallery-md-button-group": {
+								path: 'gallery-md-button-group/gallery-md-button-group.js',
+								requires: ['base-build','widget', 'gallery-makenode', 'widget-parent','widget-child', 'gallery-md-button'],
+								skinnable: true
+							},
+							"gallery-makenode": {
+								path: 'gallery-makenode/gallery-makenode.js',
+								requires:['substitute','classnamemanager']
+							}
+						}
+					}
+				}
+			}).use('gallery-md-button', 'gallery-md-button-group', 'console', 'intl','collection', function (Y) {
+				'use strict';
+				
+				var PRESS = 'press',
+					INFO = 'info';
+					
+				new Y.Console().render();
+				
+				
+				var plain = (new Y.Button({label:'Ok'})).render('#plain'),
+					markup = (new Y.Button({srcNode:'#markup'})).render(),
+					submit = (new Y.Button({srcNode:'#submit'})).render(),
+					reset = (new Y.Button({srcNode:'#reset'})).render(),
+					toggle = (new Y.ButtonToggle({label:'B'})).render('#toggle'),
+					multiButton = (new Y.ButtonGroup({label:'Plain Buttons',children:[
+						{label:'A'},
+						new Y.ButtonSeparator(),
+						{label:'B'},
+						{label:'C'}
+					]})).render('#multiButton'),
+					multiToggle = (new Y.ButtonGroup({label:'Toggle Buttons',children:[
+						new Y.ButtonToggle({label:'A',icon:'arrow-sw'}),
+						new Y.ButtonToggle({label:'B'}),
+						new Y.ButtonToggle({label:'C',icon:'arrow-se', iconPosition:'right'})
+					]})).render('#multiToggle'),
+					oneToggle = (new Y.ButtonGroup({
+						label:'Toggle Buttons',
+						alwaysSelected:true,
+						children:[
+							new Y.ButtonToggle({label:'A'}),
+							new Y.ButtonToggle({label:'B'}),
+							new Y.ButtonToggle({label:'C'})
+						]
+					})).render('#oneToggle');
+					
+				toggle.set('icon','webcam');
+				plain.after(PRESS, function(ev) {
+					Y.log('Click: '+ ev.target.get('label'), INFO,'plain');
+				});
+				markup.after(PRESS, function(ev) {
+					Y.log('Click: '+ ev.target.get('label'), INFO,'markup');
+				});
+				submit.after(PRESS, function(ev) {
+					Y.log('Click: '+ ev.target.get('label'), INFO,'submit');
+				});
+				reset.after(PRESS, function(ev) {
+					Y.log('Click: '+ ev.target.get('label'), INFO,'reset');
+				});
+				toggle.after(PRESS, function(ev) {
+					Y.log('toggle selected: ' + this.get('selected') , INFO,'toggle');
+				});
+				multiButton.after(PRESS, function(ev) {
+					Y.log('multiButton pressed: ' + ev.pressed.get('label') , INFO,'multiButton');
+				});
+				multiToggle.after('selectionChange', function(ev) {
+					var sel = this.get('selection');
+					Y.log('multiToggle selected: ' + (sel?sel.get('label'):'none') , INFO,'multiToggle');
+				});
+				oneToggle.after('selectionChange', function(ev) {
+					var sel = this.get('selection');
+					Y.log('multiToggle selected: ' + (sel?sel.get('label'):'none') , INFO,'oneToggle');
+				});
+					
+			});
+		</script>
+	</body>
+</html>

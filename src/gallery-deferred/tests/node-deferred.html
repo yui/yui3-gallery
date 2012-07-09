@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Y.Node.Deferred plugin test</title>
+	<style>
+		.test {
+			width: 150px;
+			height: 150px;
+			background: #999;
+			position: absolute;
+			top: 30px;
+			left: 30px;
+			font-size: 40px;
+		}
+		.green {
+			background: green;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	<div class="test"></div>
+	<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
+	<script>
+		YUI({
+			filter: 'raw',
+			modules: {
+				'gallery-deferred': {
+					fullpath: '../build_tmp/gallery-deferred.js',
+					requires: ['event-custom']
+				}
+			}
+		}).use('node', 'node-load', 'transition', 'plugin', 'gallery-deferred', function (Y) {
+			
+			var node = Y.one('.test').plug(Y.Plugin.NodeDeferred);
+			
+			node.deferred.transition({ left: '300px' })
+						.transition({ top: '300px' })
+						.load('node-deferred-content.html')
+						.transition({ width: '420px', height: '420px', top: '30px' })
+						.addClass('green');
+			
+		});
+	</script>
+</body>
+</html>

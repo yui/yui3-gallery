@@ -1,0 +1,3155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>QrCode.GeneratorBase - QR Code Generator Base</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><img src="..&#x2F;assets/css/logo.png"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/QrCode.html">QrCode</a></li>
+            
+                <li><a href="..&#x2F;classes/QrCode.AlphanumericData.html">QrCode.AlphanumericData</a></li>
+            
+                <li><a href="..&#x2F;classes/QrCode.ByteData.html">QrCode.ByteData</a></li>
+            
+                <li><a href="..&#x2F;classes/QrCode.Data.html">QrCode.Data</a></li>
+            
+                <li><a href="..&#x2F;classes/QrCode.GeneratorBase.html">QrCode.GeneratorBase</a></li>
+            
+                <li><a href="..&#x2F;classes/QrCode.NumericData.html">QrCode.NumericData</a></li>
+            
+                <li><a href="..&#x2F;classes/QrCode.Ucs2Data.html">QrCode.Ucs2Data</a></li>
+            
+                <li><a href="..&#x2F;classes/QrCode.Utf8Data.html">QrCode.Utf8Data</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-qr-code-generator-base.html">gallery-qr-code-generator-base</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1>QrCode.GeneratorBase Class</h1>
+<div class="box meta">
+    
+
+    
+        <div class="extends">
+            Extends Base
+        </div>
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3044"><code>js&#x2F;qr-code-generator-base.js:3044</code></a>
+        </div>
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>This class provides utility methods for generating QR Codes.</p>
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_QrCode.GeneratorBase" class="method item">
+    <h3 class="name"><code>QrCode.GeneratorBase</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>config</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3044"><code>js&#x2F;qr-code-generator-base.js:3044</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">config</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Configuration object.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_applyMask">applyMask</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_drawAlignmentPattern">drawAlignmentPattern</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_drawFinderPattern">drawFinderPattern</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_drawFormatInformation">drawFormatInformation</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_drawQuietZone">drawQuietZone</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_drawTimingPattern">drawTimingPattern</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_drawVersionInformation">drawVersionInformation</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_evaluateMatrix">evaluateMatrix</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_evaluateMicroMatrix">evaluateMicroMatrix</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_formatBinaryString">formatBinaryString</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_generate">generate</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_generateDataMatrix">generateDataMatrix</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_generateErrorCorrectionBlock">generateErrorCorrectionBlock</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_generateMatrix">generateMatrix</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getAlignmentPatternCoordinates">getAlignmentPatternCoordinates</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getBinaryString">getBinaryString</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getSize">getSize</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+                <div class="index-section attrs">
+                    <h3>Attributes</h3>
+
+                    <ul class="index-list attrs">
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_data">data</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_errorCorrection">errorCorrection</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_mask">mask</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_version">version</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_applyMask" class="method item">
+    <h3 class="name"><code>applyMask</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>dataMatrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>maskFunction</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3053"><code>js&#x2F;qr-code-generator-base.js:3053</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Performs a mask operation that inverts some data bits.  QR Codes
+apply one of eight possible masks to the raw data matrix.
+Decoders benefit when a mask is used to reduce the occurence of
+ambiguous patterns within the data matrix.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to write the results to.
+Existing data will be overwritten.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">dataMatrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An array with the source data.
+Non-data elements should be undefined.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">maskFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A function that accepts x and y
+coordinates and returns true or false.  The x and y coordinates
+passed to the mask function do not account for the quiet zone
+region.  When the mask function returns true, the data at that
+position is inverted.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.
+(dataMatrix and matrix should be the same size.)</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the mask has been applied.  It is guaranteed to be called in
+a future turn of the event loop.  The modified matrix will be
+passed as the only argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_drawAlignmentPattern" class="method item">
+    <h3 class="name"><code>drawAlignmentPattern</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>centerX</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>centerY</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>overwrite</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3121"><code>js&#x2F;qr-code-generator-base.js:3121</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Alignment patterns are distinct patterns used to help decoders
+overcome distortion and perspective when viewing a QR Code.  They
+are made up of a 5x5 square of dark values surrounding a 3x3
+square of light values surrounding a single dark value.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to write to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">centerX</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The x coordinate of the center of the
+alignment pattern.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">centerY</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The y coordinate of the center of the
+alignment pattern.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">overwrite</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>When set to true, the alignment
+pattern will replace any existing data in the matrix at that
+location.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_drawFinderPattern" class="method item">
+    <h3 class="name"><code>drawFinderPattern</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>centerX</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>centerY</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>overwrite</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3160"><code>js&#x2F;qr-code-generator-base.js:3160</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Finder patterns are distinct patterns placed in three corners of
+a QR code.  Finder patterns help decoders determine position,
+scale, and orientation.  They are made up of a 9x9 square of
+light values surrounding a 7x7 square of dark values surrounding
+a 5x5 square of light values surrounding a 3x3 square filled with
+dark values.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to write to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">centerX</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The x coordinate of the center of the
+finder pattern.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">centerY</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The y coordinate of the center of the
+finder pattern.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">overwrite</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>When set to true, the finder pattern
+will replace any existing data in the matrix at that location.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_drawFormatInformation" class="method item">
+    <h3 class="name"><code>drawFormatInformation</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>binaryString</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>micro</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>overwrite</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3200"><code>js&#x2F;qr-code-generator-base.js:3200</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The error correction level and the id of the mask that has been
+applied to the data matrix are encoded together as a 5 bit value.
+This value gets 10 error correction bits appended to it, created
+by a (15, 5) BCH code.  The final 15 bit format information
+codeword has specific locations reserved for it within the
+matrix.  QR Codes contain the format information twice for
+additional redundancy.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to write to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">binaryString</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A string conatining 15 '1' or '0'
+characters.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">micro</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Set this to true for a Micro QR Code or
+false for a QR Code.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">overwrite</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>When set to true, the format
+information will replace any existing data in the matrix at that
+location.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_drawQuietZone" class="method item">
+    <h3 class="name"><code>drawQuietZone</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>overwrite</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3291"><code>js&#x2F;qr-code-generator-base.js:3291</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The quiet zone region is a padding of light values around the
+outside of a QR Code.  It helps separate the QR Code from other
+visual elements.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to write to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">overwrite</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>When set to true, the quiet zone
+region will replace any existing data in the matrix at that
+location.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_drawTimingPattern" class="method item">
+    <h3 class="name"><code>drawTimingPattern</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>coordinate</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>overwrite</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3341"><code>js&#x2F;qr-code-generator-base.js:3341</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The timing pattern is a row and column of alternating dark and
+light values.  The timing pattern allows decoders to determine
+the version of the QR Code as well as the pixel density and
+coordinate system.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to write to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">coordinate</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The row and column index to write to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">overwrite</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>When set to true, the timing patter
+will replace any existing data in the matrix at that location.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_drawVersionInformation" class="method item">
+    <h3 class="name"><code>drawVersionInformation</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>binaryString</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>overwrite</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3375"><code>js&#x2F;qr-code-generator-base.js:3375</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>QR Codes version 7 and higher contain the version number as a 6
+bit value.  This value gets 12 error correction bits appended to
+it, created by an (18, 6) Golay code.  The final 18 bit version
+information codeword has specific locations reserved for it
+within the matrix.  QR Codes contain the version information
+twice for additional redundancy.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to write to.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">binaryString</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A string conatining 18 '1' or '0'
+characters.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">overwrite</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>When set to true, the version
+information will replace any existing data in the matrix at that
+location.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_evaluateMatrix" class="method item">
+    <h3 class="name"><code>evaluateMatrix</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3429"><code>js&#x2F;qr-code-generator-base.js:3429</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Several potential matrices are generated during the masking
+process.  This method searches a matrix for negative features and
+generates a penalty score.  This score is used to determine which
+matrix to keep.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to examine.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the matrix has been evaluated.  It is guaranteed to be
+called in a future turn of the event loop.  The score will be
+passed as the only argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_evaluateMicroMatrix" class="method item">
+    <h3 class="name"><code>evaluateMicroMatrix</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3581"><code>js&#x2F;qr-code-generator-base.js:3581</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Several potential matrices are generated during the masking
+process.  This method searches for dark values along the non
+timing pattern edges.  Dark values along these edges make it
+easier for decoders to determine the difference between data and
+the quiet zone region.  The matrix is given a score used to
+determine which matrix to keep.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array to examine.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the matrix has been evaluated.  It is guaranteed to be
+called in a future turn of the event loop.  The score will be
+passed as the only argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_formatBinaryString" class="method item">
+    <h3 class="name"><code>formatBinaryString</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>binaryString</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3625"><code>js&#x2F;qr-code-generator-base.js:3625</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method formats the given data into the final binary string
+used to create a data matrix.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">binaryString</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A string of '1' and '0' characters.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the binary string has been formated.  It is guaranteed to be
+called in a future turn of the event loop.  If an error occurs,
+the error message will be passed as the first argument.  The
+formatted binary string is passed as the second argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_generate" class="method item">
+    <h3 class="name"><code>generate</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3820"><code>js&#x2F;qr-code-generator-base.js:3820</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Generate a QR Code matrix.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the matrix has been generated.  It is guaranteed to be
+called in a future turn of the event loop.  If an error occurs,
+the error message will be passed as the first argument.  The
+matrix is passed as the second argument.  The square root of the
+length of the matrix is passed as the third argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_generateDataMatrix" class="method item">
+    <h3 class="name"><code>generateDataMatrix</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>matrix</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>binaryString</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>coordinate</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>size</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3878"><code>js&#x2F;qr-code-generator-base.js:3878</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method creates a new matrix containing only raw data bits.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">matrix</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">[Boolean]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An array without any data bits defined.
+This matrix is only used to position data bits around other
+features that are already present.  This matrix is not modified.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">binaryString</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A string of '1' and '0' characters.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">coordinate</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The coordinate of the vertical timing
+pattern.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">size</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The square root of the length of matrix.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the dataMatrix has been generated.  It is guaranteed to be
+called in a future turn of the event loop.  The dataMatrix is
+passed as the only argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_generateErrorCorrectionBlock" class="method item">
+    <h3 class="name"><code>generateErrorCorrectionBlock</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>dataBlock</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>errorCorrectionBlockLength</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l3966"><code>js&#x2F;qr-code-generator-base.js:3966</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Generates a block of error correction codewords based on a block
+of data codewords.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">dataBlock</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">[String]</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Array of strings of '1' and '0'
+characters, 8 characters long each.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">errorCorrectionBlockLength</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The number of 8 bit
+codewords to generate in the error correction block.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the error correction block has been generated.  It is
+guaranteed to be called in a future turn of the event loop. The
+error correction block is passed as the only argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_generateMatrix" class="method item">
+    <h3 class="name"><code>generateMatrix</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>binaryString</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4046"><code>js&#x2F;qr-code-generator-base.js:4046</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Generates a matrix which represents the given data.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">binaryString</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>A string of '1' and '0' characters.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the matrix has been generated.  It is guaranteed to be
+called in a future turn of the event loop.  The matrix is passed
+as the first argument.  The square root of the length of the
+matrix is passed as the second argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getAlignmentPatternCoordinates" class="method item">
+    <h3 class="name"><code>getAlignmentPatternCoordinates</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>quietZoneSize</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">[x, y]</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4268"><code>js&#x2F;qr-code-generator-base.js:4268</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Each QR Code version has specific requirements for the position
+of alignment patterns.  This method returns the center position
+of each required alignment pattern.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">quietZoneSize</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The size of the quiet zone region.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">[x, y]</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getBinaryString" class="method item">
+    <h3 class="name"><code>getBinaryString</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>callbackFunction</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4302"><code>js&#x2F;qr-code-generator-base.js:4302</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Converts the value of the data attribute
+to a string of '1' and '0' characters.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">callbackFunction</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Function" class="crosslink external" target="_blank">Function</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This function will be called
+once the binary string has been created.  It is guaranteed to be
+called in a future turn of the event loop. The binary string is
+passed as the only argument.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getSize" class="method item">
+    <h3 class="name"><code>getSize</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4330"><code>js&#x2F;qr-code-generator-base.js:4330</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns the proper size of a matrix for this version.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_data" class="attr item">
+    <a name="config_data"></a> 
+    <h3 class="name"><code>data</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array" class="crosslink external" target="_blank">Array</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4346"><code>js&#x2F;qr-code-generator-base.js:4346</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Input data must be wrapped up in data objects.  A single data
+object or an array is acceptable.  Data objects are
+responsible for encoding raw values into one of the data
+encoding modes supported by QR codes.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> []</p>
+    
+
+    
+        <div class="emits box">
+            <h4>Fires event <code>dataChange</code></h4>
+
+            <p>
+            Fires when the value for the configuration attribute <code>data</code> is
+            changed. You can listen for the event using the <code>on</code> method if you
+            wish to be notified before the attribute's value has changed, or
+            using the <code>after</code> method if you wish to be notified after the
+            attribute's value has changed.
+            </p>
+
+            <div class="params">
+                <h4>Parameters:</h4>
+
+                <ul class="params-list">
+                    <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">EventFacade</span>
+
+                        <div class="param-description">
+                            An Event Facade object with the following
+                            attribute-specific properties added:
+                        </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                <code class="param-name">prevVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value of the attribute, prior to it being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">newVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value the attribute is to be set to.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">attrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">The name of the attribute being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">subAttrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">If setting a property within the attribute's value, the name of the sub-attribute property being set.</div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="attr_errorCorrection" class="attr item">
+    <a name="config_errorCorrection"></a> 
+    <h3 class="name"><code>errorCorrection</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4369"><code>js&#x2F;qr-code-generator-base.js:4369</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>QR Codes use error correction when encoding data.  Error
+correction allows a code to be successfully scanned even if
+part of the code is damaged, missing, or scanned incorrectly.
+There are four different error correction modes.
+Mode H can recover from 30% data loss.
+Mode L can recover from 7% data loss.
+Mode M can recover from 15% data loss.
+Mode Q can recover from 25% data loss.
+The more error correction added, the less data the QR Code
+can hold.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;M&#x27;,</p>
+    
+
+    
+        <div class="emits box">
+            <h4>Fires event <code>errorCorrectionChange</code></h4>
+
+            <p>
+            Fires when the value for the configuration attribute <code>errorCorrection</code> is
+            changed. You can listen for the event using the <code>on</code> method if you
+            wish to be notified before the attribute's value has changed, or
+            using the <code>after</code> method if you wish to be notified after the
+            attribute's value has changed.
+            </p>
+
+            <div class="params">
+                <h4>Parameters:</h4>
+
+                <ul class="params-list">
+                    <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">EventFacade</span>
+
+                        <div class="param-description">
+                            An Event Facade object with the following
+                            attribute-specific properties added:
+                        </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                <code class="param-name">prevVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value of the attribute, prior to it being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">newVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value the attribute is to be set to.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">attrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">The name of the attribute being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">subAttrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">If setting a property within the attribute's value, the name of the sub-attribute property being set.</div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="attr_mask" class="attr item">
+    <a name="config_mask"></a> 
+    <h3 class="name"><code>mask</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Number" class="crosslink external" target="_blank">Number</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4396"><code>js&#x2F;qr-code-generator-base.js:4396</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>QR Codes apply one of eight possible masks to the raw data
+matrix.  Decoders benefit when a mask is used to reduce the
+occurence of ambiguous patterns within the data matrix.  When
+this attribute is set to null, the data matrix will be have
+all 8 masks applied to it.  Each one will be evaluated and
+the one with the fewest ambiguous patterns will be used.
+When this attribute is set to a value from 0 to 7, only that
+specific mask will be applied and used.  This improves the
+performace of the encoding process by cutting out a complex
+step but manually selecting a mask is not recommended because
+it can negatively affect decoder performance and/or accuracy.
+Using different masks on the same data can result in QR Codes
+that appear very different, so some choose to select a mask
+for aesthetic reasons.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+        <div class="emits box">
+            <h4>Fires event <code>maskChange</code></h4>
+
+            <p>
+            Fires when the value for the configuration attribute <code>mask</code> is
+            changed. You can listen for the event using the <code>on</code> method if you
+            wish to be notified before the attribute's value has changed, or
+            using the <code>after</code> method if you wish to be notified after the
+            attribute's value has changed.
+            </p>
+
+            <div class="params">
+                <h4>Parameters:</h4>
+
+                <ul class="params-list">
+                    <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">EventFacade</span>
+
+                        <div class="param-description">
+                            An Event Facade object with the following
+                            attribute-specific properties added:
+                        </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                <code class="param-name">prevVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value of the attribute, prior to it being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">newVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value the attribute is to be set to.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">attrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">The name of the attribute being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">subAttrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">If setting a property within the attribute's value, the name of the sub-attribute property being set.</div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="attr_version" class="attr item">
+    <a name="config_version"></a> 
+    <h3 class="name"><code>version</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>Defined in
+            
+        
+        <a href="../files&#x2F;js_qr-code-generator-base.js.html#l4420"><code>js&#x2F;qr-code-generator-base.js:4420</code></a></p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>There are 40 different versions of QR Codes. A QR Code's
+version is just a confusing way to specify how big it is.  A
+version 1 QR Code is a 25x25 grid.  That size increases by 4
+up to the 181x181 grid of a version 40 QR code.  The larger
+the grid, the more data the QR Code can hold.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;1&#x27;</p>
+    
+
+    
+        <div class="emits box">
+            <h4>Fires event <code>versionChange</code></h4>
+
+            <p>
+            Fires when the value for the configuration attribute <code>version</code> is
+            changed. You can listen for the event using the <code>on</code> method if you
+            wish to be notified before the attribute's value has changed, or
+            using the <code>after</code> method if you wish to be notified after the
+            attribute's value has changed.
+            </p>
+
+            <div class="params">
+                <h4>Parameters:</h4>
+
+                <ul class="params-list">
+                    <li class="param">
+                        <code class="param-name">e</code>
+                        <span class="type">EventFacade</span>
+
+                        <div class="param-description">
+                            An Event Facade object with the following
+                            attribute-specific properties added:
+                        </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                <code class="param-name">prevVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value of the attribute, prior to it being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">newVal</code>
+                                <span class="type">Any</span>
+                                <div class="param-description">The value the attribute is to be set to.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">attrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">The name of the attribute being set.</div>
+                            </li>
+                            <li class="param">
+                                <code class="param-name">subAttrName</code>
+                                <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                                <div class="param-description">If setting a property within the attribute's value, the name of the sub-attribute property being set.</div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+    </div>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

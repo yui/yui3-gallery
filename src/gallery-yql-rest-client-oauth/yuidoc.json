@@ -1,0 +1,12 @@
+{
+    "name": "YQL REST Client OAuth",
+    "description": "This module is a REST client supporting OAuth signatures.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

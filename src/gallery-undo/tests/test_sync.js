@@ -4,7 +4,7 @@ YUI({
     debug: true,
     filter:"RAW"
 }).use('gallery-undo', 'test', 'console', function(Y) {
-    var that = this, testArray = [], console, synActions = 20;
+    var that = this, testArray = [], total = 0, console, synActions = 20;
 
     function TestUndoableAction( config ){
         TestUndoableAction.superclass.constructor.apply( this, arguments );
@@ -25,7 +25,80 @@ YUI({
     });
 
 
+    function UndoableActionMerge( config ){
+        UndoableActionMerge.superclass.constructor.apply( this, arguments );
+    }
+
+    Y.mix( UndoableActionMerge, {
+        ATTRS : {
+            number: {
+                value: 0,
+                validator: Y.Lang.isNumber
+            }
+        }
+    });
+
+    Y.extend( UndoableActionMerge, Y.UndoableAction, {
+        
+
+        undo : function(){
+            var number = this.get( "number" );
+            total -= number;
+        },
+
+        redo : function(){
+            var number = this.get( "number" );
+            total += number;
+        },
+
+        merge : function( newAction ){
+            var curNumber = this.get( "number" );
+            var newNumber = newAction.get( "number" );
+
+            this.set( "number", curNumber + newNumber );
+        }
+    });
+
+
     this.undoManager = new Y.UndoManager();
+
+    this.undoManager.on( "actionAdded", Y.bind( function(attrs){
+        var action = attrs.action;
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+    }, this) );
+
+    this.undoManager.on( "actionCanceled", Y.bind( function(attrs){
+        var action = attrs.action;
+        var index = attrs.index;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isNumber( index );
+    }, this) );
+
+    this.undoManager.on( "actionMerged", Y.bind( function(attrs){
+        var action = attrs.action;
+        var mergedAction = attrs.mergedAction;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isInstanceOf( Y.UndoableAction, mergedAction );
+    }, this) );
+
+    this.undoManager.on( "actionRedone", Y.bind( function(attrs){
+        var action = attrs.action;
+        var index = attrs.index;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isNumber( index );
+    }, this) );
+
+
+    this.undoManager.on( "actionUndone", Y.bind( function(attrs){
+        var action = attrs.action;
+        var index = attrs.index;
+
+        Y.Assert.isInstanceOf( Y.UndoableAction, action );
+        Y.Assert.isNumber( index );
+    }, this) );
 
     var testSynchronousActions = new Y.Test.Case({
         name: "Test synchronous action",
@@ -376,9 +449,35 @@ YUI({
         }
     });
 
+
+     var testMergeActions = new Y.Test.Case({
+        name: "Test merging action",
+
+        testMergeActions: function(){
+            var number1 = 2, number2 = 3;
+
+            var undoableAction = new UndoableActionMerge({
+              number: number1
+            });
+
+            undoableAction.redo();
+            that.undoManager.add( undoableAction );
+
+            undoableAction = new UndoableActionMerge({
+              number: number2
+            });
+
+            undoableAction.redo();
+            that.undoManager.add( undoableAction );
+
+            Y.Assert.areEqual( 5, total, "Total number must be " + (number1 + number2) );
+        }
+     });
+
     Y.Test.Runner.add(testSynchronousActions);
     Y.Test.Runner.add(testSynchronousActionsLimit);
     Y.Test.Runner.add(testPurgeActions);
+    Y.Test.Runner.add(testMergeActions);
 
     console = new Y.Console({
         verbose : false,

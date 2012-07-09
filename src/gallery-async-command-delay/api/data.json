@@ -1,0 +1,536 @@
+{
+    "project": {
+        "name": "Async Command Delay Plugin",
+        "description": "Delay the execution of the command function for an amount of time after execute is called."
+    },
+    "files": {
+        "js/async-command-delay.js": {
+            "name": "js/async-command-delay.js",
+            "modules": {
+                "gallery-async-command-delay": 1
+            },
+            "classes": {
+                "Plugin.AsyncCommandDelay": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Plugin": 1
+            }
+        },
+        "../gallery-async/js/async.js": {
+            "name": "../gallery-async/js/async.js",
+            "modules": {
+                "gallery-async": 1
+            },
+            "classes": {
+                "Async": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "../gallery-async-command/js/async-command.js": {
+            "name": "../gallery-async-command/js/async-command.js",
+            "modules": {
+                "gallery-async-command": 1
+            },
+            "classes": {
+                "AsyncCommand": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-async-command-delay": {
+            "name": "gallery-async-command-delay",
+            "submodules": {},
+            "classes": {
+                "Plugin.AsyncCommandDelay": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "Plugin": 1
+            },
+            "tag": "module",
+            "file": "js/async-command-delay.js",
+            "line": 1
+        },
+        "gallery-async": {
+            "name": "gallery-async",
+            "submodules": {},
+            "classes": {
+                "Async": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "../gallery-async/js/async.js",
+            "line": 1
+        },
+        "gallery-async-command": {
+            "name": "gallery-async-command",
+            "submodules": {},
+            "classes": {
+                "AsyncCommand": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 1
+        }
+    },
+    "classes": {
+        "Plugin.AsyncCommandDelay": {
+            "name": "Plugin.AsyncCommandDelay",
+            "shortname": "Plugin.AsyncCommandDelay",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-async-command-delay",
+            "namespace": "Plugin",
+            "file": "js/async-command-delay.js",
+            "line": 18,
+            "description": "Asynchronous command delay plugin.",
+            "extends": "Plugin.Base",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration Object.",
+                    "type": "Object"
+                }
+            ]
+        },
+        "Async": {
+            "name": "Async",
+            "shortname": "Async",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-async",
+            "namespace": "",
+            "file": "../gallery-async/js/async.js",
+            "line": 29,
+            "description": "Asynchronous command runner class.",
+            "extends": "AsyncCommand",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration Object.",
+                    "type": "Object"
+                }
+            ]
+        },
+        "AsyncCommand": {
+            "name": "AsyncCommand",
+            "shortname": "AsyncCommand",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-async-command",
+            "namespace": "",
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 21,
+            "description": "Asynchronous command class.",
+            "extends": "Base",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration Object.",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/async-command-delay.js",
+            "line": 43,
+            "description": "Approximate delay in milliseconds to wait between the time run is\ncalled and when the command function is executed.",
+            "itemtype": "attribute",
+            "name": "delay",
+            "default": "0",
+            "initonly": "",
+            "type": "Number",
+            "class": "Plugin.AsyncCommandDelay",
+            "module": "gallery-async-command-delay",
+            "namespace": "Plugin"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 46,
+            "description": "Command function for all mode.",
+            "itemtype": "method",
+            "name": "_runAll",
+            "params": [
+                {
+                    "name": "success",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "run",
+                    "description": "",
+                    "type": "[AsyncCommand]"
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 78,
+            "description": "Command function for queue mode.",
+            "itemtype": "method",
+            "name": "_runAll",
+            "params": [
+                {
+                    "name": "success",
+                    "description": "",
+                    "type": "Function"
+                },
+                {
+                    "name": "run",
+                    "description": "",
+                    "type": "[AsyncCommand]"
+                },
+                {
+                    "name": "index",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Array"
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 109,
+            "description": "The inherited args attribute is protected.",
+            "itemtype": "attribute",
+            "name": "args",
+            "default": "[]",
+            "initonly": "",
+            "access": "protected",
+            "tagname": "",
+            "type": "Array",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 117,
+            "description": "A config object passed to the AsyncCommand constructor when\ninstantiating dynamically.",
+            "itemtype": "attribute",
+            "name": "config",
+            "default": "{}",
+            "initonly": "",
+            "type": "Object",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 129,
+            "description": "The inherited ctx attribute is protected.",
+            "itemtype": "attribute",
+            "name": "ctx",
+            "initonly": "",
+            "access": "protected",
+            "tagname": "",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 135,
+            "description": "The inherited fn attribute is protected.",
+            "itemtype": "attribute",
+            "name": "fn",
+            "initonly": "",
+            "access": "protected",
+            "tagname": "",
+            "type": "Function",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 142,
+            "description": "Value indicating the run mode.  Possible modes are:\n<dl>\n    <dt>\n        all\n    </dt>\n    <dd>\n        This mode runs all commands.  The commands might be\n        completed out of order.  The run completes once all\n        commands have completed.  The run fails if any command\n        fails.\n    </dd>\n    <dt>\n        queue\n    </dt>\n    <dd>\n        This mode runs one command at a time.  It waits for\n        the first command to complete before moving on to the\n        next one.  The run completes when the last command has\n        completed.  The run fails if a command fails and the\n        remaining commands are not run.\n    </dd>\n</dl>",
+            "itemtype": "attribute",
+            "name": "mode",
+            "default": "'queue'",
+            "initonly": "",
+            "type": "String",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 174,
+            "description": "An array of AsyncCommands to run.  Command functions,\nAsyncCommand config objects, and named command strings will\nget converted to instances of AsyncCommand.",
+            "itemtype": "attribute",
+            "name": "run",
+            "default": "[]",
+            "initonly": "",
+            "type": "[AsyncCommand]",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 211,
+            "description": "This is a static object that stores named command definitions for\nrepeat use.  This object's keys are the names of commands.  The\nvalues can either command functions or AsyncCommand config\nobjects.",
+            "itemtype": "property",
+            "name": "commands",
+            "static": 1,
+            "type": "Object",
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 221,
+            "description": "Creates and runs an instance of Async in 'all' mode.  This method\naccepts an unlimited number of arguments.  Arguments can be\ncommand functions, AsyncCommand config objects, instances of\nAsyncCommand, instances of Async, or arrays containing any of the\nabove.",
+            "itemtype": "method",
+            "name": "runAll",
+            "return": {
+                "description": "",
+                "type": "Async"
+            },
+            "static": 1,
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 234,
+            "description": "Creates and runs an instance of Async in 'all' mode.  This method\naccepts an unlimited number of arguments.  The first argument is a\nconfig object passed to the AsyncCommand constructor when\ninstantiating dynamically.  The rest of the arguments can be\ncommand functions, AsyncCommand config objects, instances of\nAsyncCommand, instances of Async, or arrays containing any of the\nabove.",
+            "itemtype": "method",
+            "name": "runAllWithConfig",
+            "return": {
+                "description": "",
+                "type": "Async"
+            },
+            "static": 1,
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 251,
+            "description": "Creates and runs an instance of Async in 'queue' mode.  This\nmethod accepts an unlimited number of parameters.  Parameters can\nbe command functions, AsyncCommand config objects, instances of\nAsyncCommand, instances of Async, or arrays containing any of the\nabove.",
+            "itemtype": "method",
+            "name": "runQueue",
+            "return": {
+                "description": "",
+                "type": "Async"
+            },
+            "static": 1,
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async/js/async.js",
+            "line": 264,
+            "description": "Creates and runs an instance of Async in 'queue' mode.  This\nmethod accepts an unlimited number of parameters.  The first\nargument is a config object passed to the AsyncCommand constructor\nwhen instantiating dynamically.  The rest of the arguments can\nbe command functions, AsyncCommand config objects, instances of\nAsyncCommand, instances of Async, or arrays containing any of the\nabove.",
+            "itemtype": "method",
+            "name": "runQueue",
+            "return": {
+                "description": "",
+                "type": "Async"
+            },
+            "static": 1,
+            "class": "Async",
+            "module": "gallery-async"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 31,
+            "description": "Fired when the command function completes.",
+            "itemtype": "event",
+            "name": "complete",
+            "fireonce": "",
+            "params": [
+                {
+                    "name": "error",
+                    "description": "Optional error value."
+                },
+                {
+                    "name": "failed",
+                    "description": "Indicates the failed status of the\ncommand.",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "value",
+                    "description": "Optional return value from the command function."
+                }
+            ],
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 47,
+            "description": "Fired when the command function fails.",
+            "itemtype": "event",
+            "name": "failure",
+            "fireonce": "",
+            "params": [
+                {
+                    "name": "error",
+                    "description": "Optional error value."
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 69,
+            "description": "Fired when the command function starts.",
+            "itemtype": "event",
+            "name": "start",
+            "fireonce": "",
+            "access": "protected",
+            "tagname": "",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 83,
+            "description": "Fired when the command function succeeds.",
+            "itemtype": "event",
+            "name": "success",
+            "fireonce": "",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "Optional return value from the command function."
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 106,
+            "description": "Execute the command function.",
+            "itemtype": "method",
+            "name": "run",
+            "chainable": 1,
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 117,
+            "description": "Array of arguments to be passed to the command function.\nA special callback function is automatically added as the first\nargument.",
+            "itemtype": "attribute",
+            "name": "args",
+            "default": "[]",
+            "initonly": "",
+            "type": "Array",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 139,
+            "description": "Boolean value indicating the completed status of the command.",
+            "itemtype": "attribute",
+            "name": "completed",
+            "default": "false",
+            "readonly": "",
+            "type": "Boolean",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 150,
+            "description": "Execution context for the command function.",
+            "itemtype": "attribute",
+            "name": "ctx",
+            "initonly": "",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 159,
+            "description": "Error value passed to the failure event.",
+            "itemtype": "attribute",
+            "name": "error",
+            "readonly": "",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 168,
+            "description": "Boolean value indicating the failed status of the command.",
+            "itemtype": "attribute",
+            "name": "failed",
+            "default": "false",
+            "readonly": "",
+            "type": "Boolean",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 179,
+            "description": "The command function to execute.  This function receives a special\nsuccess callback function as the first parameter.  The success\ncallback function has a method parameter called fail.  One of\nthese callback functions must be called in order to complete the\ncommand.",
+            "itemtype": "attribute",
+            "name": "fn",
+            "initonly": "",
+            "type": "Function",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 195,
+            "description": "Boolean value indicating the started status of the command.",
+            "itemtype": "attribute",
+            "name": "started",
+            "default": "false",
+            "readonly": "",
+            "type": "Boolean",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        },
+        {
+            "file": "../gallery-async-command/js/async-command.js",
+            "line": 206,
+            "description": "Value passed to the success event.",
+            "itemtype": "attribute",
+            "name": "value",
+            "readonly": "",
+            "class": "AsyncCommand",
+            "module": "gallery-async-command"
+        }
+    ]
+}

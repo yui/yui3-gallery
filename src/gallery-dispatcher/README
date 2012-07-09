@@ -1,0 +1,32 @@
+Dispatcher
+    This tool is the implementation of Bubbling Library Dispatcher Plugin
+    for YUI 3. Dispatcher satisfies a very common use-case: 
+    As a developer, I want to execute scripts tags from an Ajax HTML response.
+    More info at http://yuilibrary.com/gallery/show/dispatcher
+
+HEAD
+    * Tested on YUI 3.3.0
+    * Fixing the inline script tag execution on FF4:
+      http://yuilibrary.com/forum/viewtopic.php?f=134&t=7529
+
+2011.03.02-20-58
+    * Internal refactor to provide access to some of the process during the 
+      dispatcher phase through protected methods: _executeScript, _getScript, 
+      _setContent, _purgeContent. More info about this here:
+      http://yuilibrary.com/forum/viewtopic.php?f=134&t=6968&p=21990#p21990
+    * Introducing a new event called "error" to provide feedback on failure within
+      the fetch process or the external script injection routine.
+    * Making dispatcher smaller (using "instance" instead of "this" for better compression)
+
+2010.09.15-18-40
+    * Tested on YUI 3.2.0
+    * Adding support for ioConfig attribute to control the io requests from 
+      within the dispatcher, just like yui3 core datasource module does it.
+
+2010.09.01-19-12
+    * Tested on YUI 3.1.1
+    * Bugfix to support html/head/body tags as part of the content
+
+2010.02.17-20
+    * Tested on YUI 3.0.0
+    * Initial release

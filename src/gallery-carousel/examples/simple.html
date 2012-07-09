@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd"> 
+<html>
+    <head>
+        <title>YUI Module</title>
+        <!-- Due to a bug the CSS has to be included manually -->
+        <link type="text/css" rel="stylesheet"
+              href="http://yui.yahooapis.com/gallery-2011.03.23-22-20/build/gallery-carousel/assets/skins/sam/gallery-carousel.css">
+        <style type="text/css">
+        .yui3-carousel-content li { width: 50px; }
+        </style>
+        <script type="text/javascript"
+                src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"
+                charset="utf-8">
+        </script>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="container" class="yui3-carousel-loading">
+            <ol>
+                <li>one</li>
+                <li>two</li>
+                <li>three</li>
+                <li>four</li>
+                <li>five</li>
+            </ol>
+        </div>
+    </body>
+    <script type="text/javascript">
+    YUI({
+        //Last Gallery Build of this module
+        gallery: 'gallery-2011.05.18-19-11'
+    }).use("gallery-carousel", "substitute", function (Y) {
+        Y.on("contentready", function () {
+            var carousel = new Y.Carousel({
+                boundingBox: "#container",
+                contentBox: "#container > ol"
+            });
+            carousel.render();
+        }, "#container");
+    });
+    </script>
+</html>

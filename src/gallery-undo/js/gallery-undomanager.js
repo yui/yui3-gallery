@@ -353,9 +353,14 @@
             if( !merged ){
                 this._undoIndex++;
                 this._limitActions();
-                this.fire( ACTIONADDED, newAction );
+                this.fire( ACTIONADDED, {
+                    action : newAction
+                });
             } else {
-                this.fire( ACTIONMERGED, curAction, newAction );
+                this.fire( ACTIONMERGED, {
+                    'action' : curAction,
+                    'mergedAction' : newAction
+                });
             }
             
             return true;
@@ -687,7 +692,9 @@
                 this._undoTo( newIndex );
             } else {
                 this._processing = false;
-                this.fire( UNDOFINISHED, action );
+                this.fire( UNDOFINISHED, {
+                    'action': action
+                });
             }
         },
 
@@ -714,7 +721,9 @@
                 this._redoTo( newIndex );
             } else {
                 this._processing = false;
-                this.fire( REDOFINISHED, action );
+                this.fire( REDOFINISHED, {
+                    'action': action
+                });
             }
         }
     });

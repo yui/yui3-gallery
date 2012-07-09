@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" > 
+
+<title>Pulldown Refresh</title>
+
+<style type="text/css">
+.body{
+    margin-top:-70px;
+}
+.title{
+    margin-bottom: 10px;
+    font-weight:bold;
+    font-size:20px;
+}
+#reloadheader {
+    font-family: 'Helvetica Neue';
+    font-size: 16px;
+    font-weight: bold;
+    height: 70px;
+    padding-top: 0;
+    background-color:transparent;
+    opacity: 0.4;
+    color:#000;
+}
+#content{
+height:100px;
+}
+#content p{
+ height:100px;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.1/build/cssreset/reset-min.css">
+<link rel="stylesheet" type="text/css" href="../../../build/gallery-pulldown-refresh/gallery-pulldown-refresh.css">
+<script type="text/javascript" src="http://yui.yahooapis.com/3.3.0pr3/build/yui/yui.js"></script>
+
+</head>
+
+<body class="yui3-skin-sam  yui-skin-sam body">
+<div id='reloadheader'>
+</div>
+<div id="content">
+<h1 class='title'>YUI3 Gallery Pulldown Refresh example: Constructing by providing markup</h1>
+<p>This example demonstrates the pull down to refresh action</p>
+</div>
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<script type="text/javascript">
+    YUI({ 
+        modules: {
+             "gallery-pulldown-refresh": {
+                fullpath : "../../../build/gallery-pulldown-refresh/gallery-pulldown-refresh.js",
+                requires : ["substitute", "widget", "widget-child", "widget-parent","node","io","scrollview","event","node-base", "node-event-delegate", "transition", "event-move"]
+            }
+        },
+        filter:"raw",
+        combine : false
+     }).use("gallery-pulldown-refresh", function (Y) {
+
+    Y.PullDownExample = {
+
+    init : function(){
+         var pulldownRefresh = new Y.PulldownRefresh({
+                                   contentBox:'#reloadheader',
+                                   optoutSelector:'#content'
+         });
+    
+         pulldownRefresh.render();
+         this.p = pulldownRefresh;
+         Y.subscribe("pulldown-refresh:refreshFeed", this.refreshFeed, this);
+    },
+
+    refreshFeed : function(){
+        Y.later('5000',this, function(){
+             Y.fire("pulldown-refresh:resetPulldown");
+        });
+ }
+};
+Y.PullDownExample.init();
+});
+    
+</script>
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<!--MyBlogLog instrumentation-->
+</body>
+</html>
+

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;audio.js - Audio</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><img src="..&#x2F;assets/css/logo.png"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Audio.html">Audio</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-audio.html">gallery-audio</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1 class="file-heading">File: js&#x2F;audio.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+ * @module gallery-audio
+ *&#x2F;
+(function (Y) {
+    &#x27;use strict&#x27;;
+
+    var _playable,
+    
+        _Lang = Y.Lang,
+    
+        _arraySome = Y.Array.some,
+        _createNode = Y.Node.create,
+        _isArray = _Lang.isArray,
+        _isObject = _Lang.isObject,
+        _objectSome = Y.Object.some;
+
+    (function (modernizr) {
+        var audioElement,
+            modernizrAudio = modernizr &amp;&amp; modernizr.audio;
+        
+        if (modernizrAudio) {
+            _playable = {
+                m4a: modernizrAudio.m4a,
+                mp3: modernizrAudio.mp3,
+                ogg: modernizrAudio.ogg,
+                wav: modernizrAudio.wav
+            };
+            return;
+        }
+
+        audioElement = Y.config.doc.createElement(&#x27;audio&#x27;);
+
+        if (!audioElement.canPlayType) {
+            return;
+        }
+        
+        _playable = {
+            m4a: audioElement.canPlayType(&#x27;audio&#x2F;x-m4a;&#x27;) || audioElement.canPlayType(&#x27;audio&#x2F;aac;&#x27;),
+            mp3: audioElement.canPlayType(&#x27;audio&#x2F;mpeg;&#x27;),
+            ogg: audioElement.canPlayType(&#x27;audio&#x2F;ogg; codecs=&quot;vorbis&quot;&#x27;),
+            wav: audioElement.canPlayType(&#x27;audio&#x2F;wav; codecs=&quot;1&quot;&#x27;)
+        };
+    }(Y.Modernizr || Y.config.win.Modernizr));
+
+    &#x2F;**
+     * @class Audio
+     * @static
+     *&#x2F;
+    
+    &#x2F;**
+     * This is a utility method to create an HTML 5 Audio element.  Each browser
+     * has a different level of support for playing different audio formats.  If
+     * an audio file is hosted in multple formats, this will select the one most
+     * likely to play in the current browser.  If the browser does not support
+     * any of the available audio formats, null is returned.
+     * @method create
+     * @param {Object} config The config object has the following optional
+     * properties:
+     * &lt;dl&gt;
+     *     &lt;dt&gt;
+     *         autoplay
+     *     &lt;&#x2F;dt&gt;
+     *     &lt;dd&gt;
+     *         Boolean.  If the audio should begin playing immediately.
+     *     &lt;&#x2F;dd&gt;
+     *     &lt;dt&gt;
+     *         baseUrl
+     *     &lt;&#x2F;dt&gt;
+     *     &lt;dd&gt;
+     *         String.  URL of the audio file, minus the extension.  Works
+     *         together with the format property to pick the best audio file to
+     *         play.
+     *     &lt;&#x2F;dd&gt;
+     *     &lt;dt&gt;
+     *         controls
+     *     &lt;&#x2F;dt&gt;
+     *     &lt;dd&gt;
+     *         Boolean.  If the browser should render a user interface.  (The
+     *         audio node must be attached to the DOM for the controls to
+     *         appear)
+     *     &lt;&#x2F;dd&gt;
+     *     &lt;dt&gt;
+     *         format
+     *     &lt;&#x2F;dt&gt;
+     *     &lt;dd&gt;
+     *         Array or Object.  List of hosted formats.  Defaults to [&#x27;ogg&#x27;,
+     *         &#x27;mp3&#x27;, &#x27;m4a&#x27;, &#x27;wav&#x27;].  The best supported format will be
+     *         determined and the file extension will be appended to baseUrl.
+     *         If all four formats are not being hosted, only list the formats
+     *         that are.  For example, [&#x27;mp3&#x27;, &#x27;ogg&#x27;] will not try to find an
+     *         m4a or wav file.  If the four formats aren&#x27;t named the same, or
+     *         are hosted at different locations, or have unusual file
+     *         extensions, set the baseUrl property to any common URL fragment,
+     *         or leave the baseUrl property undefined if there isn&#x27;t one.  Then
+     *         set the format property to an object which has the individual
+     *         formats as keys and a strings as values that will be appended to
+     *         the baseUrl.  For example, baseUrl could be set to
+     *         &#x27;http:&#x2F;&#x2F;domain.com&#x2F;&#x27; and format could be set to
+     *         {m4a: &#x27;music&#x2F;file.m4a&#x27;, mp3: &#x27;mp3s&#x2F;cool&#x2F;file.mp4&#x27;,
+     *         ogg: &#x27;vorbis&#x2F;file.ogg&#x27;}
+     *     &lt;&#x2F;dd&gt;
+     *     &lt;dt&gt;
+     *         loop
+     *     &lt;&#x2F;dt&gt;
+     *     &lt;dd&gt;
+     *         Boolean.  If the audio should loop forever.
+     *     &lt;&#x2F;dd&gt;
+     *     &lt;dt&gt;
+     *         preload
+     *     &lt;&#x2F;dt&gt;
+     *     &lt;dd&gt;
+     *         String.  This value should be either &#x27;auto&#x27;, &#x27;metadata&#x27;, or
+     *         &#x27;none&#x27;.  Defaults to &#x27;auto&#x27;.
+     * &lt;&#x2F;dl&gt;
+     * @return {Node}
+     *&#x2F;
+    Y.namespace(&#x27;Audio&#x27;).create = function (config) {
+        config = config || {};
+
+        var format,
+            formats = config.format || [
+                &#x27;ogg&#x27;,
+                &#x27;mp3&#x27;,
+                &#x27;m4a&#x27;,
+                &#x27;wav&#x27;
+            ],
+            playable,
+            source = config.baseUrl || &#x27;&#x27;,
+            
+            chooseFormat = function (testFormat) {
+                var playable = _playable[testFormat];
+                
+                if (!playable) {
+                    return;
+                }
+                
+                if (playable === &#x27;probably&#x27;) {
+                    format = testFormat;
+                    return true;
+                }
+                
+                if (!format) {
+                    format = testFormat;
+                }
+            };
+
+        if (_isArray(formats)) {
+            _arraySome(formats, chooseFormat);
+
+            if (format) {
+                source += &#x27;.&#x27; + format;
+            }
+        } else if (_isObject(formats)) {
+            _objectSome(formats, function (value, testFormat) {
+                return chooseFormat(testFormat);
+            });
+
+            if (format) {
+                source += formats[format];
+            }
+        }
+
+        return format &amp;&amp; _createNode(&#x27;&lt;audio &#x27; + (config.autoplay ? &#x27;autoplay=&quot;true&quot; &#x27; : &#x27;&#x27;) + (config.controls ? &#x27;controls=&quot;true&quot;&#x27; : &#x27;&#x27;) + (config.loop ? &#x27;loop=&quot;true&quot;&#x27; : &#x27;&#x27;) + &#x27; preload=&quot;&#x27; + (config.preload ? config.preload : &#x27;auto&#x27;) + &#x27;&quot; src=&quot;&#x27; + source + &#x27;&quot; &#x2F;&gt;&#x27;) || null;
+    };
+}(Y));
+    </pre>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

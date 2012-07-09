@@ -1,0 +1,77 @@
+{
+    "project": {
+        "name": "Gravatar Url",
+        "description": "This module provides a function for creating gravatar image urls."
+    },
+    "files": {
+        "js/gravatar-url.js": {
+            "name": "js/gravatar-url.js",
+            "modules": {
+                "gallery-gravatar-url": 1
+            },
+            "classes": {},
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-gravatar-url": {
+            "name": "gallery-gravatar-url",
+            "submodules": {},
+            "classes": {
+                "YUI": 1
+            },
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/gravatar-url.js",
+            "line": 1,
+            "description": "This module provides a function for creating gravatar image urls."
+        }
+    },
+    "classes": {
+        "YUI": {
+            "name": "YUI",
+            "shortname": "YUI",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-gravatar-url",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/gravatar-url.js",
+            "line": 12,
+            "description": "Create a gravatar image url.",
+            "itemtype": "method",
+            "name": "gravatarUrl",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "An object with the following optional properties:\n<dl>\n    <dt>\n        defaultImage\n    </dt>\n    <dd>\n        This could be a string url to an image to use when there is no\n        matching gravatar image or it could be one of the following\n        values: '404', 'mm', 'identicon', 'monsterid', 'wavatar', or\n        'retro'  Refer to gravatar's documentation:\n        http://en.gravatar.com/site/implement/images/\n    </dd>\n    <dt>\n        email\n    </dt>\n    <dd>\n        The user's e-mail address.\n    </dd>\n    <dt>\n        force\n    </dt>\n    <dd>\n        If this is a truthy value, it will force the default image to\n        load even if there is a matching gravatar image.\n    </dd>\n    <dt>\n        rating\n    </dt>\n    <dd>\n        The maximum image rating that is allowed to load.  It could be\n        one of the following values:  'g', 'pg', 'r', 'x'  Defaults to\n        'g'.  Refer to gravatar's documentation:\n        http://en.gravatar.com/site/implement/images/\n    </dd>\n    <dt>\n        secure\n    </dt>\n    <dd>\n        If this is a truthy value, the url will use the secure https\n        protocol.\n    </dd>\n    <dt>\n        size\n    </dt>\n    <dd>\n        An integer representing the height and width of the image in\n        pixels.  Values from 1 to 512 inclusive are supported.\n        Gravatar images are square.\n    </dd>\n</dl>",
+                    "type": "Object"
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": "This function receives the gravatar\nurl as its only parameter.",
+                    "type": "Function"
+                },
+                {
+                    "name": "contextObject",
+                    "description": "(optional) An object to provide as the\nexecution context for the callback function.",
+                    "type": "Object"
+                }
+            ],
+            "class": "YUI",
+            "module": "gallery-gravatar-url"
+        }
+    ]
+}

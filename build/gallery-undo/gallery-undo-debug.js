@@ -355,9 +355,14 @@ YUI.add('gallery-undo', function(Y) {
             if( !merged ){
                 this._undoIndex++;
                 this._limitActions();
-                this.fire( ACTIONADDED, newAction );
+                this.fire( ACTIONADDED, {
+                    action : newAction
+                });
             } else {
-                this.fire( ACTIONMERGED, curAction, newAction );
+                this.fire( ACTIONMERGED, {
+                    'action' : curAction,
+                    'mergedAction' : newAction
+                });
             }
             
             return true;
@@ -689,7 +694,9 @@ YUI.add('gallery-undo', function(Y) {
                 this._undoTo( newIndex );
             } else {
                 this._processing = false;
-                this.fire( UNDOFINISHED, action );
+                this.fire( UNDOFINISHED, {
+                    'action': action
+                });
             }
         },
 
@@ -716,7 +723,9 @@ YUI.add('gallery-undo', function(Y) {
                 this._redoTo( newIndex );
             } else {
                 this._processing = false;
-                this.fire( REDOFINISHED, action );
+                this.fire( REDOFINISHED, {
+                    'action': action
+                });
             }
         }
     });
@@ -956,4 +965,4 @@ Y.UndoableAction = UndoableAction;
 }());
 
 
-}, 'gallery-2009.12.15-22' ,{requires:['base','event']});
+}, 'gallery-2010.04.08-12-35' ,{requires:['base','event']});

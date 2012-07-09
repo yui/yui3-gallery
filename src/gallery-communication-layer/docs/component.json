@@ -1,0 +1,9 @@
+{
+    "name"        : "communication-layer",
+    "displayName" : "Communication Layer",
+    "description" : "Provides a secure, evented communication layer for cross-domain HTML5 web applications",
+    "author"      : "Eugene Kashida, Caridy Patiño",
+
+    "tags": ["postMessage", "cross-domain"],
+    "use" : ["json", "node-base", "event-custom-base"]
+}

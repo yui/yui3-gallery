@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<style>
+    /* Example styles */
+    #ac-text  {
+        width:150px;
+    }
+    div {
+        margin:0;padding:0;border:0;
+    }
+    
+    h1,h2 {
+        margin:2px 0;padding:0;
+    }
+    .container {
+        width:600px;
+    }
+    .button {
+        border:1px solid #C0C0C0;
+        background-color:#EFEFEF;
+        padding:5px;
+        width:200px;
+        height:200px;
+        z-index:10;
+    }
+    #log {
+        height:200px;
+        width:500px;
+        border:1px solid black;
+        background-color:#efefef;
+        overflow:scroll;
+        margin:5px;
+    }
+    #log div {
+        width:100%;
+    }
+    .control {
+        width:450px;
+        position:absolute;
+        top:160px;
+        left:350px;
+    }
+</style>
+</head>
+<body>
+    <div class='container'>
+        <h1 id='title'>Flash clipboard copy demo</h1>
+        <cite>This demo showcases the ability to create a YUI node and plugin the flash based
+        copy to clipboard functionality. The clipboard copy is implemented as a node plugin.
+        The clipboard support allows for attaching any event on the flash movie, so you can setup
+        the node to copy the string even on keydown or 'enter'. 'enter' is a custom event created inside
+        the falsh movie, so from JS you can setup to happen on 'enter'</cite>
+        <hr>
+        <div class='button b1'>To see a world in a grain of sand</div>
+        <div class='button b2'>Hold infinity in the palm of your hand</div>
+        <h2></h2>
+    </div>
+    <div class='control'>
+        <!-- input type='button' class='keyUp' node = 'b1' value='Node1 add Flash Enter event' />
+        <input type='button' class='remove-keyUp' node = 'b1' value='Node1 remove Flash Enter event' /-->
+        
+        <input type='button' class='mouseOver' node = 'b1' value='Node1 add Flash MouseOver' />
+        <input type='button' class='remove-mouseOver' node = 'b1' value='Node1 remove Flash MouseOver' />
+        <hr>
+        <input type='button' class='mouseOut' node = 'b2' value='Node2 add Flash MouseOut' />
+        <input type='button' class='remove-mouseOut' node = 'b2' value='Node2 remove Flash MouseOut' />
+        <hr>
+        <input type='text' id='copy-text' node='b1' />
+        <input type='button' class='set-text' node = 'b1' value='Node1 set text' />
+        <input type='button' class='set-text' node = 'b2' value='Node2 set text' />
+        
+        <div id="log"></div>
+        <input type='button' class='clear' value = 'Clear log' />
+    </div>
+    <script src="http://yui.yahooapis.com/3.3.0/build/yui/yui.js"></script>
+    <script src="../js/gallery-clipboard.js"></script>
+    
+    <script type='text/javascript'>
+    document.title = document.getElementById("title").innerHTML;
+    var MOVIE_PATH = '../assets/';
+    YUI().use('gallery-clipboard', function(Y) {
+        
+        var logit = function(str) {
+            var log = Y.one("#log"),
+                m   = Y.Node.create("<div>"+str+"</div>");
+            log.appendChild(m);
+            log.set("scrollTop", log.get("offsetHeight")+10)
+        };
+        
+        var node1 = Y.one(".b1"),
+            node2 = Y.one(".b2");
+        
+        /* Make sure that the flash interface callback is within a known global name space */
+        window.My = {
+            Global : {
+                foo : "bar"
+            }
+        };
+        Y.ClipBoard.setCallBackGlobal( "My.Global" );
+        
+        /* Set up Copy on Node 1 */
+        node1.plug(Y.ClipBoard, {
+            page : Y.one(".container"),
+            moviepath : MOVIE_PATH
+        }).on("clipboard:load", function(e){
+            logit("Flash Movie Loaded for :"+e.currentTarget.get("className"));
+            this.on("mouseover", function(ev) {
+                this.setAttribute("copy", this.get("innerHTML"));
+                logit("Press Enter to copy &quot;" + this.getAttribute("copy")+ "&quot;");
+            });
+            this.clipboard.setEvent("enter", function(ev) {
+                logit("Clipboard now contains - '"+ev.clipboard+"'");
+                this.clipboard.hide();
+            }, true);
+        });
+        Y.on("clipboard:error", function(e) {
+            logit("ERROR :"+e.error);
+        });
+        /* Set up Copy on Node 2 */
+        node2.plug(Y.ClipBoard, {
+            page : Y.one(".container"),
+            moviepath : MOVIE_PATH
+        }).on("clipboard:load", function(e){
+            logit("Flash Movie Loaded for :"+e.currentTarget.get("className"));
+            this.on("mouseover", function(ev) {
+                this.setAttribute("copy", this.get("innerHTML"));
+                logit("Click to copy &quot;" + this.getAttribute("copy")+"&quot;");
+            });
+            this.clipboard.setEvent("click", function(ev) {
+                this.clipboard.hide();
+                logit("Clipboard now contains - '"+ev.clipboard+"'");
+            }, true);
+        });
+        
+        /* Set up actions */
+        Y.all(".control input").on("click", function(e) {
+            var tr = e.target,nd,cl,event;
+            if(tr.get("type") === "button") {
+                nd = Y.one("."+tr.getAttribute("node"));
+                cl = tr.get("className");
+                if(cl === "set-text") {
+                    nd.set("innerHTML", Y.one("#copy-text").get("value"));
+                } else if(cl === "clear") {
+                    Y.one("#log").set("innerHTML", "");
+                } else if(cl.indexOf("-") < 0) {
+                    nd.clipboard.setEvent(cl, function(ev) {
+                        logit("Flash '"+ev.event+"' fired for node "+
+                              Y.one("#"+ev.transaction).get("className"));
+                    });
+                } else {
+                    /* Remove case */
+                    event = cl.substring(cl.indexOf("-")+1);
+                    nd.clipboard.removeEvent(event);
+                    logit("Flash '"+event+"' removed for "+nd.get("className"));
+                }
+                
+            }
+        });
+    });
+        
+    </script>
+</body>
+</html>

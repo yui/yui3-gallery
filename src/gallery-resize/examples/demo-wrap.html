@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> 
+<html> 
+<head> 
+<meta http-equiv="content-type" content="text/html; charset=utf-8"> 
+<title>Resize Node Plugin</title> 
+ 
+<style type="text/css"> 
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style> 
+
+
+
+
+
+<!-- 2.8 Skin CSS file -->
+<!--
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/assets/skins/sam/resize.css">
+-->
+<!-- Utility Dependencies -->
+<!--
+<script src="http://yui.yahooapis.com/2.8.0r4/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script src="http://yui.yahooapis.com/2.8.0r4/build/dragdrop/dragdrop-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.8.0r4/build/element/element-min.js"></script> 
+-->
+<!-- Optional Animation --> 
+<!--
+<script src="http://yui.yahooapis.com/2.8.0r4/build/animation/animation-min.js"></script> 
+-->
+<!-- Source file for the Resize Utility -->
+<!--
+<script src="http://yui.yahooapis.com/2.8.0r4/build/resize/resize-min.js"></script>
+-->
+
+
+
+<!-- 3.1.0pr1 --> 
+<link type="text/css" rel="stylesheet" href="file://C:\Documents and Settings\Matt_2\My Documents\Downloads\yui_3.1.0pr1\yui/build/cssfonts/fonts-min.css" /> 
+<script type="text/javascript" src="http://yui.yahooapis.com/3.1.0pr1/build/yui/yui-min.js"></script> 
+<script type="text/javascript" src="file://C:\Documents and Settings\Matt_2\My Documents\Downloads\yui_3.1.0pr1\yui\build\yui\yui-min.js"></script>
+
+<script type="text/javascript" src="../../../build/gallery-resize/plugin-resize.js"></script> 
+<link type="text/css" rel="stylesheet" href="../css/resize.css" /> 
+
+
+
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --> 
+ 
+<style> 
+    #demo , #demo28{
+        height: 100px;
+        width: 100px;
+        border: 1px solid black;
+        background-color: #8DD5E7;
+        position: absolute;
+        padding: 7px;
+        left: 100px;
+    }
+    #demo h2 {
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        font-size: 110%;
+        color: black;
+        font-weight: bold;
+        cursor: move;
+    }
+    #demo28{
+      left: 400px;
+      background-color: green;
+    } 
+    
+    code{
+     display: block;
+     white-space: pre;
+    }
+
+
+</style> 
+
+
+ 
+</head> 
+ 
+<body class=" yui-skin-sam"> 
+ 
+<h1>Resize Node Plugin - wrapping elements</h1> 
+ 
+<div class="exampleIntro"> 
+ <h2>Introduction</h2>
+	<p>Resize adds some handles inside the html element you are making resizeable.
+	Which is fine most of the time, unless the element doesn't allow child nodes:
+   images, textareas, inputs, iframes, and selects.
+   
+   In YUI2.x, these elements would be wrapped by a div, which would then hold 
+  the handles and the element itself.  All good.
+  </p>
+  <p>However, in writing the resize as a plugin for YUI3, this gives us a problem.
+  I started replicating the behaviour, becuase I wanted to honour the config
+  and use of 2.x.  But I realised this would be a bad thing.  The problem
+  is that the core resize behaviour then sits with the wrapper element, not
+  the element originally specified.  So if I have an image with id "myElement",
+   code like this:
+  <code>
+     var myNode = Y.get( '#myElement' );
+     
+     myNode.plug( Y.Plugin.Resize );
+  </code>
+  would end up a bit misleading: it says (to me) <em>Add some fancy resize behaviour
+  to the node with id "myElement".</em>  But what it does is different:
+  <em>Add some fancy resize behaviour to a magically newly created Node that 
+  wraps up your image with id "myElement".</em>
+  </p>
+  <p>
+  I didn't like the sound of that.  Particularly when you want to get your resize
+  later in the code:
+  <code>
+    myNode.resize.set("knobHandles", true);
+  </code>
+  Now in fact the resize would be attached to the parent of myNode, and myNode
+  would have had a reference to pass this kind of call up to the resize.  It
+  felt wrong.
+  </p>
+  <p>
+   So the moral of the story: there ain't no wrappin, baby.  You're just going
+   to have to do that yourself, either in the html or with js, and attach
+   the resize plugin to the wrapper.  The example below gives some details.
+  </p>
+	<p>
+   There is one advantage to this: you could wrap several elements with one 
+   resize plugin, and they'll all be resized proportionally to the wrapper.
+   Or put some text around the image and have it move with the image resize.
+  </p>		
+</div> 
+ 
+<div class="example">
+ <h2>Wrapping example</h2>
+ 
+ <div id="wrapper">
+   <img src="" />
+ </div>
+ <script type="text/javascript">
+   YUI( {base:"../../../../My Documents/Downloads/yui_3.1.0pr1/yui/build/"} ).use(  "*", function(Y) {
+   
+     // the wrappedEls config is a selector string for elements to resize when the 
+     // wrapper is resized.  It will only find children of the wrapper element.
+     
+     // hugWrappedEl makes the wrapper Node 'hug' the wrapped element.  It only
+     // works if there's one wrapped element.
+     
+     Y.get("#wrapper").plug( Y.Plugin.Resize , {wrappedEls: "img", hugWrappedEl: true });
+   
+   } );
+ </script>
+ 
+ 
+ <p>
+ So as a simple example, we'll wrap our image in a div in the html, and add the
+ resize to this wrapper:
+ <code>
+  &lt;div id="wrapper"&gt;
+     &lt;img src="" /&gt;
+  &lt/div&gt; 
+ </code>
+ Javascript:
+ <code>
+   YUI().use( "*" , function( Y ) {
+   
+     // the wrappedEls config is a selector string for elements to resize when the 
+     // wrapper is resized.  It will only find children of the wrapper element.
+     
+     // hugWrappedEl makes the wrapper Node 'hug' the wrapped element.  It only
+     // works if there's one wrapped element.
+     
+     Y.get("#wrapper").plug( Y.Plugin.Resize , {wrappedEls: "img", hugWrappedEl: true });
+   
+   
+   } );
+ </code>
+   
+ </p>
+ 
+ 
+</div>
+
+</body>
+</html> 

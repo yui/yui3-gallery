@@ -6,139 +6,162 @@
  * @description A form field which allows one or multiple values from a 
  * selection of choices
  */
-function ChoiceField() {
-    ChoiceField.superclass.constructor.apply(this,arguments);
-}
+Y.ChoiceField = Y.Base.create('choice-field', Y.FormField, [Y.WidgetParent, Y.WidgetChild], {
 
-Y.mix(ChoiceField, {
-    NAME : 'choice-field',
-    
-	ATTRS : { 
-        /** 
-         * @attribute choices
-         * @type Array
-         * @description The choices to render into this field
-         */
-        choices : { 
-            validator : function (val) {
-                return this._validateChoices(val);
-            }
-        },  
+    LABEL_TEMPLATE: '<span></span>',
+    SINGLE_CHOICE: Y.RadioField,
+    MULTI_CHOICE: Y.CheckboxField,
 
-        /** 
-         * @attribute multiple
-         * @type Boolean
-         * @default false
-         * @description Set to true to allow multiple values to be selected
-         */
-        multiple : { 
-            validator : Y.Lang.isBoolean,
-            value : false
-        }   
-    }  
-});
-
-Y.extend(ChoiceField, Y.FormField, {
     /**
      * @method _validateChoices
      * @protected
      * @param {Object} val
      * @description Validates the value passe to the choices attribute
      */
-    _validateChoices : function (val) {
+    _validateChoices: function(val) {
         if (!Y.Lang.isArray(val)) {
+            Y.log('Choice values must be in an array', 'warn');
             return false;
         }
-		
-		var valid = true;
 
-		Y.Array.each(val, function(c, i, a) {
-            if (!Y.Lang.isObject(c)) {
-                valid = false;
-				return;
-            }
-            if (!c.label ||
-                !Y.Lang.isString(c.label) ||
-                !c.value ||
-                !Y.Lang.isString(c.value)) {
-					valid = false;
-					return;
-            }
-        });
+        var i = 0,
+        len = val.length;
 
-        return valid;
+        for (; i < len; i++) {
+            if (!Y.Lang.isObject(val[i])) {
+                Y.log('Choice that is not an object cannot be used', 'warn');
+                delete val[i];
+                continue;
+            }
+            if (!val[i].label ||
+            (!Y.Lang.isString(val[i].label) && !Y.Lang.isNumber(val[i].value)) ||
+            !val[i].value ||
+            (!Y.Lang.isString(val[i].value) && !Y.Lang.isNumber(val[i].value))) {
+                Y.log('Choice without label and value cannot be used', 'warn');
+                delete val[i];
+                continue;
+            }
+        }
+
+        return true;
     },
 
-    _renderLabelNode : function () {
+    _renderFieldNode: function() {
         var contentBox = this.get('contentBox'),
-            titleNode = Y.Node.create('<span>' + this.get('label') + '</span>');
-        
-        contentBox.appendChild(titleNode);
-        
-        this._labelNode = titleNode;
-    },
-    
-    _renderFieldNode : function () {
-        var contentBox = this.get('contentBox'),
+            parent = contentBox.one("." + this.FIELD_CLASS),
             choices = this.get('choices'),
-            elLabel, elField;
-       
-		Y.Array.each(choices, function(c, i, a) {
-            elLabel = Y.Node.create(FormField.LABEL_TEMPLATE);
-            contentBox.appendChild(elLabel);
-            
-            elField = Y.Node.create(FormField.INPUT_TEMPLATE);
-            contentBox.appendChild(elField);
-        });
+            multiple = this.get('multi'),
+            fieldType = (multiple === true ? this.MULTI_CHOICE: this.SINGLE_CHOICE);
 
-		this._fieldNode = contentBox.all('input');
+        if (!parent) {
+            parent = contentBox;
+        }
+        Y.Array.each(choices,
+        function(c, i, a) {
+            var cfg = {
+                checked : c.checked,
+                value: c.value,
+                id: (this.get('id') + '_choice' + i),
+                name: this.get('name'),
+                label: c.label
+            },
+            field = new fieldType(cfg);
+
+            field.render(parent);
+        }, this);
+        this._fieldNode = parent.all('input');
     },
 
-	_syncFieldNode : function () {
-		var choices = this.get('choices'),
-			contentBox = this.get('contentBox'),
-			labels = contentBox.all('label'),
-			choiceType = (this.get('multiple') === true ? 'checkbox' : 'radio');
+    _syncFieldNode: function() {
+        var choices = this.get('value').split(',');
 
-		labels.each(function (node, index, list) {
-			node.setAttrs({
-				innerHTML : choices[index].label
-			});
-			node.setAttribute('for', (this.get('id') + '_choice' + index));
-		}, this);
+        if (choices && choices.length > 0) {
+            choices = Y.Array.map(choices, function(choice) {
+                return Y.Lang.trim(choice);
+            });
 
-		this._fieldNode.each(function (node, index, list) {
-			node.setAttrs({
-				value : choices[index].value,
-				id : (this.get('id') + '_choice' + index),
-				name : this.get('name'),
-				type : choiceType
-			});
+            this._fieldNode.each(function(node, index, list) {
+                var nodeValue = Y.Lang.trim(node.get('value'));
+                if (!!~Y.Array.indexOf(choices, nodeValue)) {
+                    node.set('checked', true);
+                } else {
+                    node.set('checked', false);
+                }
+            });
+        }
+    },
 
-			// Setting value above doesn't seem to work (bug?), this forces it
-			var domNode = Y.Node.getDOMNode(node);
-			domNode.value = choices[index].value;
-		}, this);
-	},
-            
-    clear : function () {
-        this._fieldNode.each(function (node, index, list) {
-            node.setAttribute('checked', false);
-        }, this);
-        
+    /**
+     * @method _afterChoicesChange
+     * @description When the available choices for the choice field change,
+     *     the old ones are removed and the new ones are rendered.
+     */
+    _afterChoicesChange: function(event) {
+        var contentBox = this.get("contentBox");
+        contentBox.all(".yui3-form-field").remove();
+        this._renderFieldNode();
+    },
+
+    clear: function() {
+        this._fieldNode.each(function(node, index, list) {
+            node.set('checked', false);
+        },
+        this);
+
         this.set('value', '');
     },
 
-	bindUI : function () {
-		this._fieldNode.on('change', Y.bind(function (e) {
-			this._fieldNode.each(function (node, index, list) {
-				if (node.get('checked') === true) {
-					this.set('value', node.get('value'));
-				}
-			}, this);
-		}, this));
-	}
+    bindUI: function() {
+        this._fieldNode.on('change', Y.bind(function(e) {
+            var value = '',
+                type = this.get('multi') ? 'checkbox' : 'radio';
 
+            this._fieldNode.each(function(node, index, list) {
+                if (node.get('type') == type && node.get('checked') === true) {
+                    if (value.length > 0) {
+                        value += ',';
+                    }
+                    value += node.get('value');
+                }
+            }, this);
+            this.set('value', value, {fromUI : true});
+        },
+        this));
+        this.after('choicesChange', this._afterChoicesChange);
+
+        this.after('valueChange', function (e) {
+            if (!e.fromUI) {
+                this._syncFieldNode();
+            }
+        });
+    }
+
+},
+{
+    ATTRS: {
+        /** 
+         * @attribute choices
+         * @type Array
+         * @description The choices to render into this field
+         */
+        choices: {
+            valueFn : function () {
+                return [];
+            },
+            validator: function(val) {
+                return this._validateChoices(val);
+            }
+        },
+
+        /** 
+         * @attribute multi
+         * @type Boolean
+         * @default false
+         * @description Set to true to allow multiple values to be selected
+         */
+        multi: {
+            validator: Y.Lang.isBoolean,
+            value: false
+        }
+    }
 });
-
-Y.ChoiceField = ChoiceField;

@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Spotlight - YUI Gallery Module Example</title>
+		<meta name="generator" content="TextMate http://macromates.com/">
+		<meta name="author" content="Santhosh Babu Nageshwar Rao"><!-- Date: 2011-02-15 -->
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/gallery-2011.05.04-20-03/build/gallery-carousel/assets/skins/sam/gallery-carousel.css">
+		<link rel="stylesheet" type="text/css" href="../../../build/gallery-spotlight/assets/gallery-spotlight.css">
+		<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-debug.js" type="text/javascript"></script>
+	</head>
+	<body class="yui3-skin-sam">
+		<h3>Spotlight - YUI Gallery Module Example</h3>
+		<div id="container"></div>
+		<!--div id="templates" style="display:none">
+			<div id="content-template">
+				<div><img xrc="{photo}" width="300px" heigh="450px"/></div>
+			</div>
+			<div id="li-template">
+				<li>
+					<div class="arrow">
+						<img xrc="{photo}" class="thumbnail" title="{title}" alt="{title}">
+						<p class="provider">{title}</p>
+					</div>
+				</li>
+			</div>
+		</div-->
+		<script type="text/javascript">
+		YUI({gallery: "gallery-2011.05.04-20-03",filter:"raw",debug:true}).use("node",function(Y){
+				Y.on("domready",function(){
+					Y.use("gallery-spotlight","gallery-lazyloadimages",function(Y){
+							var spotlight = new Y.Spotlight({
+									data : JSON_Data,
+									/*liTplId: "li-template",
+									contentTplId:"content-template",*/
+									containerId:"container",
+									height:180,
+									width:300
+							});
+							spotlight.process();
+					});
+				});
+			});
+		</script>
+		<script type="text/javascript" src="data.js"></script>
+		<script type="text/javascript" src="../../../build/gallery-spotlight/gallery-spotlight-debug.js"></script>
+	</body>
+</html>

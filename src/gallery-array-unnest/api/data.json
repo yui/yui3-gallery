@@ -1,0 +1,77 @@
+{
+    "project": {
+        "name": "Array Unnest",
+        "description": "Utility function that flattens nested arrays."
+    },
+    "files": {
+        "js/array-unnest.js": {
+            "name": "js/array-unnest.js",
+            "modules": {
+                "gallery-array-unnest": 1
+            },
+            "classes": {},
+            "fors": {
+                "Array": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-array-unnest": {
+            "name": "gallery-array-unnest",
+            "submodules": {},
+            "classes": {
+                "Array": 1
+            },
+            "fors": {
+                "Array": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/array-unnest.js",
+            "line": 1,
+            "description": "Utility function that flattens nested arrays."
+        }
+    },
+    "classes": {
+        "Array": {
+            "name": "Array",
+            "shortname": "Array",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-array-unnest",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/array-unnest.js",
+            "line": 8,
+            "description": "Utility function that flattens nested arrays.\nThe original array is not modified. The returned array items are a\nshallow copy of the original array items.",
+            "itemtype": "method",
+            "name": "unnest",
+            "params": [
+                {
+                    "name": "array",
+                    "description": "",
+                    "type": "Array"
+                },
+                {
+                    "name": "levels",
+                    "description": "Optional.  If defined, must be a non-negative\ninteger.  Defaults to 1.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "static": 1,
+            "class": "Array",
+            "module": "gallery-array-unnest"
+        }
+    ]
+}

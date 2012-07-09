@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>Spinner test</title>
+		<style>
+			.yui3-widget-loading {
+				display:none;
+			}
+		</style>
+		<script src="http://yui.yahooapis.com/3.4.1pr1/build/yui/yui-min.js"></script>
+	</head>
+	<body  class="yui3-skin-sam yui-skin-sam">
+		<p>Plain spinner, default values: <span id="plain"></span></p>
+		<p>Spinner from existing markup, wraps around: <input type="text" id="markup" value="20" /></p>
+		<p>Plain spinner, default values, tooltips translated: <span id="translated"></span></p>
+		<p>Multiple templates: <span id="multiple"></span></p>
+		<script>
+			YUI({
+				// filter: 'raw',
+				groups: {
+					sp: {
+						base: '../../../build/',
+						modules: {
+							'gallery-md-spinner': {
+								path: 'gallery-md-spinner/gallery-md-spinner.js',
+								requires:['base-build','event-key', 'widget', 'node-focusmanager', 'gallery-makenode'],
+								skinnable: true
+							},
+							'gallery-makenode': {
+								path: 'gallery-makenode/gallery-makenode.js',
+								requires:['substitute','classnamemanager']
+							}
+						}
+					}
+				}
+			}).use('gallery-md-spinner', 'console', 'intl','collection','gallery-makenode', function (Y) {
+				'use strict';
+				
+				var logTemplate = 'Change from {prevVal} to {newVal}',
+					VALUE_CHANGE = 'valueChange',
+					INFO = 'info';
+					
+				new Y.Console().render();
+				
+				Y.Intl.add('someLanguageModule','es_ES',{
+					input: "Presionar las flechas arriba/abajo para cambios menores, RePág/AvPág para cambios mayores.",
+					up: "Incrementar",
+					down: "Decrementar"
+				});
+				Y.Intl.setLang('someLanguageModule','es_ES');
+				
+				var plain = (new Y.Spinner()).render('#plain'),
+					markup = (new Y.Spinner({srcNode:'#markup', wraparound:true})).render(),
+					translated = (new Y.Spinner({strings: Y.Intl.get('someLanguageModule')})).render('#translated');
+					
+				plain.after(VALUE_CHANGE, function(ev) {
+					Y.log(Y.substitute(logTemplate,ev), INFO,'Plain');
+				});
+				markup.after(VALUE_CHANGE, function(ev) {
+					Y.log(Y.substitute(logTemplate,ev), INFO,'Markup');
+				});
+				markup.after('wrapped', function(ev) {
+					Y.log(Y.substitute(logTemplate,ev), 'wrapped','Markup');
+				});
+				translated.after(VALUE_CHANGE, function(ev) {
+					Y.log(Y.substitute(logTemplate,ev), INFO,'Translated');
+				});
+				
+				var MultipleTemplates = Y.Base.create(
+					'MultipleTemplates',
+					Y.Widget,
+					[Y.MakeNode, Y.ArrayList],
+					{
+						renderUI: function () {
+							var fieldset = this._makeNode();
+							this.each(function (item) {
+								fieldset.appendChild(this._makeNode(MultipleTemplates.RADIO_TEMPLATE, item));
+							}, this);
+							this.get('contentBox').append(fieldset);
+						},
+						_afterRadioClick: function (ev) {
+							this.fire('option',{option: ev.target, value:ev.target.get('value')});
+						}
+					},
+					{
+						_TEMPLATE: '<fieldset class="{c fieldset}"><legend>{s label}</legend></fieldset>',
+						RADIO_TEMPLATE: '<div><input class="{c radio}" type="radio" name="{@ name}" value="{value}" />{label}</div>',
+						_CLASS_NAMES:['fieldset','radio'],
+						_EVENTS: {
+							radio: 'click'
+						},
+						ATTRS: {
+							strings: {
+								value: {
+									label: 'Select one:'
+								}
+							},
+							name: {
+								value: ''
+							}
+									
+						}
+					}
+				);
+
+				var mt = new MultipleTemplates([
+					{label: 'one', value:1},
+					{label: 'two', value:2},
+					{label: 'three', value:3},
+					{label: 'four', value:4}
+				]);
+				mt.setAttrs({
+					strings: {
+						label:'Select option'
+					},
+					name: 'groupName'
+				});
+				mt.render('#multiple');
+				mt.on('option', function (ev) {
+					Y.log('Option pressed: ' + ev.value, INFO, 'Option');
+				});
+					
+			});
+		</script>
+	</body>
+</html>

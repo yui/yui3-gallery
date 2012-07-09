@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generic Animation Object</title>
+    <meta charset="utf-8">
+    
+    <link rel="stylesheet" href="http://yui.yahooapis.com/combo?2.8.1/build/reset-fonts/reset-fonts.css"> 
+    <style>
+        body { padding: 10px; }
+        
+        .ib { display:-moz-inline-stack; /*FF2*/ display:inline-block; /*Opera/FF3*/ _overflow: hidden;/*IE6*/ zoom: 1;/*IE*/ *display:inline;/*IE*/ }
+        .active { background: red; }
+        .hide { display: none; }
+        
+        h1 { font-size: 185%; font-weight: bold; }
+        
+        li { border: 1px solid black; width: 40px; height: 40px; margin-left: 2px; }
+        li:first-child { margin-left: 0; }
+    </style>
+</head>
+<body lang="en-US">
+
+    <h1><span>0</span> boxes active</h1>
+    <ul></ul>
+    
+    <p>
+        <button id="stop">Stop</button>
+    </p>
+    
+    <hr />
+    
+    <p id="start" class="hide">Started!</p>
+    <p id="complete" class="hide">Complete!</p>
+    <p id="stopped" class="hide">Stopped!</p>
+    <p id="end" class="hide">Ended!</p>
+
+    <script src="http://yui.yahooapis.com/combo?3.2.0/build/yui/yui.js"></script>
+    <script>
+        YUI({
+            modules : {
+                "gallery-generic-anim" : {
+                    fullpath : "../../build/gallery-generic-anim/gallery-generic-anim.js",
+                    requires : [ 'base']
+                }
+            }
+        }).use("node", "gallery-generic-anim", function(Y) {
+            Y.on("domready", function() {
+                var ul = Y.one("ul"),
+                    span = Y.one("span"),
+                    lis, i;
+                
+                ul.addClass("hide");
+                
+                for(i = 1; i <= 20; i++) {
+                	ul.append("<li class='ib'>" + i + "</li>");
+                }
+                
+                ul.removeClass("hide");
+                
+                lis = ul.all("li");
+                
+                Y.one("#stop").on("click", function(e) {
+                    e.preventDefault();
+                    
+                    if(anim) {
+                        anim.stop();
+                    }
+                });
+                
+                anim = new Y.GenericAnim({ steps : 20, duration : 4 });
+                
+                anim.on("start", function() {
+                    Y.one("#start").removeClass("hide");
+                });
+                
+                anim.on("step", function(step) {
+                    lis.item(step - 1).addClass("active");
+                    span.setContent(step);
+                });
+                
+                anim.on("complete", function() {
+                    Y.one("#complete").removeClass("hide");
+                });
+                
+                anim.on("stopped", function() {
+                    Y.one("#stopped").removeClass("hide");
+                });
+                
+                anim.on("end", function() {
+                    Y.one("#end").removeClass("hide");
+                });
+                
+                anim.run();
+                
+            });
+        });
+    </script>
+</body>
+</html>

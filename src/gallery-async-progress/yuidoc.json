@@ -1,0 +1,14 @@
+{
+    "name": "Async Progress Plugin",
+    "description": "Adds a progress event to Y.Async.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js",
+            "../gallery-async/js",
+            "../gallery-async-command/js"
+        ],
+        "outdir": "./api"
+    }
+}

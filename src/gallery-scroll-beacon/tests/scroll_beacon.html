@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,user-scalable=no">
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Test</title>
+        <!--for local dev without WIFI -->
+        <!-- <script type="text/javascript" src="http://localhost/3.3.0/build/yui/yui-min.js"></script> -->
+
+        <script type="text/javascript" src="http://yui.yahooapis.com/combo?3.3.0/build/yui/yui-min.js"></script>
+        <!-- <script type="text/javascript" src="../build_tmp/gallery-scroll-beacon-debug.js"></script> -->
+
+        <style type="text/css" media="screen">
+#demo{
+    width: 640px;
+    margin: 10px auto;
+}
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="demo">
+            <ol id="list">
+                <li>
+                The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community.
+                </li>
+                <li>
+                The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community.
+                </li>
+                <li>
+                The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community.
+                </li>
+                <li>
+                The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community.
+                </li>
+                <li>
+                The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community.
+                </li>
+                <li>
+                The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community.
+                </li>
+            </ol>
+        </div>
+        <div id="beacon">See me?</div>
+        <div id="console"></div>
+
+        <script type="text/javascript" charset="utf-8">
+YUI({
+    //filter: 'raw',
+    //combine: false,
+    gallery: 'gallery-2011.03.16-21-24',
+    scrollBeaconIntervay: 200
+}).use('gallery-scroll-beacon', 'node', function(Y) {
+    var list = Y.one('#list');
+
+    /*
+    var handle = Y.one('#beacon').on('beacon:reached', function(ev) {
+        Y.log('reached');
+
+        var html = "<li>The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community. </li>";
+
+        Y.log(ev.currentTarget);
+        Y.log(ev.target);
+        Y.log(ev.type);
+
+        list.appendChild(Y.Node.create( (new Array(10)).join(html) ));
+    });
+    */
+
+    var handle = Y.delegate('beacon:reached', function(ev) {
+        Y.log('reached');
+
+        var html = "<li>The most powerful earthquake to hit Japan in the last century has created a powerful tsunami and mass destruction. People are offering words of support and sympathy, sharing critical information about aid, and organizations are seeking support by setting up short codes for donations and reaching out to the global community. </li>";
+
+        list.appendChild(Y.Node.create( (new Array(10)).join(html) ));
+        Y.log(ev.currentTarget);
+        Y.log(ev.target);
+        Y.log(ev.type);
+    }, "body", "#beacon");
+
+});
+        </script>
+    </body>
+</html>

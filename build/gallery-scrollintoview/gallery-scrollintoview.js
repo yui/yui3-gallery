@@ -2,16 +2,25 @@ YUI.add('gallery-scrollintoview', function(Y) {
 
 "use strict";
 
-/**********************************************************************
+/**
+ * @module gallery-scrollintoview
+ */
+
+/**
  * <p>Only scrolls the browser if the object is not currently visible.</p>
  * 
  * <p>This requires that all scrollable elements have position:relative.
  * Otherwise, this algorithm will skip over them with unpredictable
  * results.</p>
  * 
- * @chainable
+ * @main gallery-scrollintoview
+ * @class Node~scrollIntoView
  */
 
+/**
+ * @method scrollIntoView
+ * @chainable
+ */
 Y.Node.prototype.scrollIntoView = function()
 {
 	var ancestor = Y.Node.getDOMNode(this.get('offsetParent'));
@@ -42,12 +51,14 @@ Y.Node.prototype.scrollIntoView = function()
 	{
 		while (1)
 		{
-			var tag     = ancestor.tagName.toLowerCase();
-			var hit_top = (tag == 'html' || tag == 'body');
+			var hit_top = (ancestor.offsetParent === null);
 
-			var a = Y.one(ancestor);
-			if (ancestor.scrollWidth - a.horizMarginBorderPadding() > ancestor.clientWidth ||
-				ancestor.scrollHeight - a.vertMarginBorderPadding() > ancestor.clientHeight)
+			var a = Y.one(ancestor),
+				b = (Y.Node.getDOMNode(a) === Y.config.doc.body),
+				w = b ? Y.DOM.winWidth() : ancestor.clientWidth,
+				h = b ? Y.DOM.winHeight() : ancestor.clientHeight;
+			if (ancestor.scrollWidth - a.horizMarginBorderPadding() > w ||
+				ancestor.scrollHeight - a.vertMarginBorderPadding() > h)
 			{
 				break;
 			}
@@ -60,8 +71,8 @@ Y.Node.prototype.scrollIntoView = function()
 			ancestor = ancestor.offsetParent || ancestor.parentNode;
 		}
 
-		var scrollX = (hit_top ? document.documentElement.scrollLeft || document.body.scrollLeft : ancestor.scrollLeft);
-		var scrollY = (hit_top ? document.documentElement.scrollTop || document.body.scrollTop : ancestor.scrollTop);
+		var scrollX = (hit_top ? Y.config.doc.documentElement.scrollLeft || Y.config.doc.body.scrollLeft : ancestor.scrollLeft);
+		var scrollY = (hit_top ? Y.config.doc.documentElement.scrollTop || Y.config.doc.body.scrollTop : ancestor.scrollTop);
 
 		var d =
 		{
@@ -72,23 +83,31 @@ Y.Node.prototype.scrollIntoView = function()
 		};
 
 		var dy = 0;
-		if (r.top < d.top)
+		if (a.getStyle('overflowY') == 'hidden')
+		{
+			// don't scroll
+		}
+		else if (r.top < d.top)
 		{
 			dy = r.top - d.top;
 		}
 		else if (r.bottom > d.bottom)
 		{
-			dy = r.bottom - d.bottom;
+			dy = Math.min(r.bottom - d.bottom, r.top - d.top);
 		}
 
 		var dx = 0;
-		if (r.left < d.left)
+		if (a.getStyle('overflowX') == 'hidden')
+		{
+			// don't scroll
+		}
+		else if (r.left < d.left)
 		{
 			dx = r.left - d.left;
 		}
 		else if (r.right > d.right)
 		{
-			dx = r.right - d.right;
+			dx = Math.min(r.right - d.right, r.left - d.left);
 		}
 
 		if (hit_top)
@@ -111,7 +130,7 @@ Y.Node.prototype.scrollIntoView = function()
 	}
 
 	return this;
-}
+};
 
 
-}, 'gallery-2010.01.13-20' ,{requires:['gallery-dimensions']});
+}, 'gallery-2012.06.27-20-10' ,{requires:['gallery-dimensions','dom-screen']});

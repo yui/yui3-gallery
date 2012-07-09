@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset=utf-8>
+    <title>Icello.Button demo</title>
+    <style type="text/css">
+        .yui3-widget-loading {display:none;}
+        
+        .form_body {background-color:#ffffff;border-left:1px solid #c0c0c0;border-right:1px solid #c0c0c0;border-top:1px solid #c0c0c0;width:800px;}
+        .form_body th {border-bottom:1px solid #c0c0c0;font-family:Tahoma;font-size:8pt;font-weight:bold;text-align:right;vertical-align:top;width:150px;}
+        .form_body td {background-color:#f1f1f1;border-bottom:1px solid #c0c0c0;vertical-align:top;}
+        .form_body td.formhelp {border-bottom:1px solid #c0c0c0;font-family:Tahoma;font-size:10px;font-weight:normal;vertical-align:top;width:25%;}
+        .form_container {background-color:#DAD8D8;border:1px solid #c0c0c0;padding:2px;width:800px;}
+        .grid_toolbar {background-color:#DADADA;  border-bottom:1px solid #DAD8D8;border-left:1px solid #c0c0c0;border-right:1px solid #c0c0c0;border-top:1px solid #c0c0c0;height:40px;width:100%;}
+        .grid_toolbar a {color:#000000;font-family:Tahoma;font-size:8pt;padding:3px;text-decoration:none;}
+        .grid_toolbar a:hover {background-color:#cccccc;color:#000000;font-family:Tahoma;font-size:8pt;padding:3px;text-decoration:none;}
+        .grid_toolbar li a {display:block;float:left;}
+        .grid_toolbar ul, .grid_toolbar ul li {float:left;list-style:none;margin:0;padding:0;padding-left:10px;padding-right:25px;}
+        
+        #allButtonsDsp span.yui3-grange-button-label {font-size:10px; margin-left:3px;}
+    </style>
+    
+    <script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<form>
+<div class="form_container" style="width:600px;">
+    <table cellpadding="0" cellspacing="0" style="width:600px;height:40px;">
+        <tbody>
+            <tr>
+                <td class="grid_toolbar">
+                    <ul>
+                        <li><button id="btnSearch" class="yui3-widget-loading" title="Search" data-icon="search">Search Website Here</button></li>
+                        <li><button id="btnSave" class="yui3-widget-loading" title="Save" disabled="disabled" data-icon="disk">Save Record</button></li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table border="0" class="form_body" cellpadding="8" cellspacing="0" style="width:600px;height:50px;">
+        <tbody>
+            <tr>
+                <th>Css Icons:</th>
+                <td><select id="ddlCssIcons" /></td>
+                <td class="formhelp">Choose a 'icon' property to see a button with the icon</td>
+            </tr>
+            
+        </tbody>
+    </table>
+</div>
+</form>
+
+
+<h2>Button with Icon</h2>
+<div id="buttonsBox">when nothing is chosen 'Save Record' button will be disabled
+</div>
+
+<hr />
+<h2>All Buttons</h2>
+<p>Click to toggle icon name</p>
+<div id="allButtonsDsp"></div>
+    
+    
+<script src="config.js"></script>
+<script src="demo.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+    "name": "Async Command Timeout Plugin",
+    "description": "Fail an Async Command if it doesn't succeed within an amount of time.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js",
+            "../gallery-async-command/js"
+        ],
+        "outdir": "./api"
+    }
+}

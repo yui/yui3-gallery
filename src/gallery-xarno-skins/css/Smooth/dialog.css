@@ -1,0 +1,56 @@
+.yui3-dialog {
+	border: 1px solid #555555;
+}
+
+.yui3-dialog-content {
+    -moz-box-shadow: 1px 3px 6px rgba(66, 66, 66, 0.2);
+    background: none repeat scroll 0 0 #EFEFEF;
+    border: 3px solid #3C84C6;
+    font-family: arial;
+}
+
+.yui3-dialog .yui3-widget-hd {
+    background-color: #3C84C6;
+    border-bottom: 1px solid #3473AC;
+    color: #FFFFFF;
+    font-size: 1.05em;
+    padding: 5px 50px 5px 12px;
+    position: relative;
+    text-shadow: 1px 1px 1px rgba(10, 10, 10, 0.5);
+    white-space: nowrap;
+	cursor: pointer;
+}
+.yui3-dialog .yui3-widget-hd .yui3-button {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+.yui3-dd-draggable .yui3-dialog-content .yui3-widget-hd {
+	cursor: move;
+}
+
+.yui3-dialog .yui3-widget-bd {
+    border-color: #555555;
+    border-style: solid;
+    border-width: 1px 1px 0;
+    padding: 15px 13px 10px;
+}
+.yui3-dialog-icon-alert .yui3-widget-bd {
+	padding-left: 60px;
+	background: url("img/caution.png") no-repeat scroll 14px 11px transparent;
+}
+.yui3-dialog-icon-confirm .yui3-widget-bd {
+	padding-left: 60px;
+	background: url("img/question.png") no-repeat scroll 14px 11px transparent;
+}
+.yui3-dialog-icon-prompt .yui3-widget-bd {
+	padding-left: 60px;
+	background: url("img/question.png") no-repeat scroll 14px 11px transparent;
+}
+.yui3-dialog .yui3-widget-ft {
+    border-color: #555555;
+    border-style: solid;
+    border-width: 0 1px 1px;
+    padding: 10px 20px;
+    text-align: center;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Shadow Anim plugin</title>
+    <meta charset="utf-8">
+    
+    <link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.2.0/build/cssreset/reset-min.css&3.2.0/build/cssfonts/fonts-min.css" />
+    <style>
+        body { background: #FFF; text-align: center; }
+        
+        h1 { font-size: 800%; margin: 100px; }
+    </style>
+</head>
+<body lang="en-US">
+    
+    <h1>Text-Shadow Animation</h1>
+    
+    <script type="text/javascript" src="http://yui.yahooapis.com/combo?3.2.0/build/yui/yui.js"></script>
+    <script>
+        var Y = YUI({
+            modules : {
+                "gallery-textshadow-anim" : {
+                    fullpath : "../../../build/gallery-textshadow-anim/gallery-textshadow-anim.js",
+                    requires : [ 'anim-base']
+                }
+            }
+        }).use("gallery-textshadow-anim", function(Y) {
+            new Y.Anim({
+                node : "h1",
+                to : { textShadow : "#F00 0 0 60px" },
+                from : { textShadow : "#F00 0 0 0" },
+                iterations: 'infinite',
+                direction: 'alternate'
+            }).run();
+        });
+    </script>
+</body>
+</html>

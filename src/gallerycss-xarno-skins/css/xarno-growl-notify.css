@@ -1,0 +1,46 @@
+.yui3-skin-xarno-growl .yui3-notify {
+	position:absolute;
+	right: 20px;
+	top: 20px;
+}
+.yui3-skin-xarno-growl .yui3-notify .yui3-notify-content li {
+	background-color: rgba(20,20,20,.8);
+	color: #efefef;
+	margin-bottom:20px;
+	padding: 15px 25px 15px 15px;
+	position:relative;
+	border: 2px solid rgba(255, 255, 255, .8);
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	box-shadow: 5px 5px 10px #888;
+	-moz-box-shadow: 5px 5px 10px #888;
+	-webkit-box-shadow: 5px 5px 10px #888;
+}
+
+.yui3-skin-xarno-growl .yui3-notify .yui3-notify-content .yui3-button {
+	position:absolute;
+	top: 2px;
+	right: 4px;
+	font-family:Arial, Helvetica;
+	font-size: 9px;
+	font-weight: bold;
+	padding: 3px;
+	cursor:pointer;
+	float:right;
+	width:20px;
+	height:20px;
+	line-height:10px;
+	text-align:center;
+  background: none;
+  border: none;
+  padding:0;
+}
+
+.yui3-skin-xarno-growl .yui3-notify .yui3-notify-content .yui3-notify-message-error {
+    border-color:rgba(230, 20, 20, .8);
+}
+.yui3-skin-xarno-growl .yui3-notify .yui3-notify-content .yui3-notify-message-alert {
+    border-color:rgba(230, 180, 20, .8);
+}
+

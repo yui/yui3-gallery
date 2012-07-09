@@ -1,0 +1,161 @@
+{
+    "project": {
+        "name": "Isoline"
+    },
+    "files": {
+        "js/isoline.js": {
+            "name": "js/isoline.js",
+            "modules": {
+                "gallery-isoline": 1
+            },
+            "classes": {
+                "Isoline": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-isoline": {
+            "name": "gallery-isoline",
+            "submodules": {},
+            "classes": {
+                "Isoline": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/isoline.js",
+            "line": 21
+        }
+    },
+    "classes": {
+        "Isoline": {
+            "name": "Isoline",
+            "shortname": "Isoline",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-isoline",
+            "namespace": "",
+            "file": "js/isoline.js",
+            "line": 21,
+            "is_constructor": 1,
+            "extends": "Shape",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "object",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/isoline.js",
+            "line": 28,
+            "itemtype": "method",
+            "name": "redraw",
+            "chainable": 1,
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 36,
+            "itemtype": "method",
+            "name": "_draw",
+            "access": "protected",
+            "tagname": "",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 144,
+            "itemtype": "attribute",
+            "name": "dataCellHeight",
+            "default": "1",
+            "type": "Number",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 152,
+            "description": "Setting dataCellSize will set dataCellHeight and dataCellWidth to\nthe same value.  It is just here as a convenience for setting a\nsquare cell size.",
+            "itemtype": "attribute",
+            "name": "dataCellSize",
+            "type": "Number",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 167,
+            "itemtype": "attribute",
+            "name": "dataCellWidth",
+            "default": "1",
+            "type": "Number",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 175,
+            "description": "This function defines a two-dimensional scalar field and the\nthreshold at which the isoline is drawn.  This function will be\npassed x and y as arguments.  This function should return either\ntrue or false.",
+            "itemtype": "attribute",
+            "name": "dataFn",
+            "type": "Function",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 188,
+            "description": "The maximum X value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
+            "itemtype": "attribute",
+            "name": "dataMaxX",
+            "default": "null",
+            "type": "Number",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 198,
+            "description": "The maximum Y value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
+            "itemtype": "attribute",
+            "name": "dataMaxY",
+            "default": "null",
+            "type": "Number",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 208,
+            "description": "The minimum X value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
+            "itemtype": "attribute",
+            "name": "dataMinX",
+            "default": "null",
+            "type": "Number",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        },
+        {
+            "file": "js/isoline.js",
+            "line": 218,
+            "description": "The minimum Y value to process.  If set to null, the data will be\nprocessed up the the edge of this shape.",
+            "itemtype": "attribute",
+            "name": "dataMinY",
+            "default": "null",
+            "type": "Number",
+            "class": "Isoline",
+            "module": "gallery-isoline"
+        }
+    ]
+}

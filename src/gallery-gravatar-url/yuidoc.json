@@ -1,0 +1,10 @@
+{
+    "name": "Gravatar Url",
+    "description": "This module provides a function for creating gravatar image urls.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [ "./js" ],
+        "outdir": "./api"
+    }
+}

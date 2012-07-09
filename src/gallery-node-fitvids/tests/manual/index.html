@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>YUI Plugin: gallery-node-fitvids </title>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0;">
+		<style>
+			body {
+				background-color: #4584BE;
+				color: #FFF;
+				font-family: sans-serif;
+			}
+			
+			header,
+			footer,
+			section {
+				padding-left: 10%;
+				padding-right: 10%;
+			}
+			
+			a {
+				color: #E6C92E;
+			}
+			
+			.hidden {
+				display: none;
+			}
+		</style>
+	</head>
+	<body class="yui-skin-sam">
+		<div class="container">
+			<h1>YUI FitVids</h1>
+			
+			<div class="bd">
+				<iframe src="http://player.vimeo.com/video/28523422?title=0&amp;byline=0&amp;portrait=0&amp;color=4584be" width="800/embed/?moog_width=800" height="450" frameborder="0"></iframe>
+				<div id="actions">
+					<a href="#" id="unplug" class="hidden">Unplug</a>
+					<a href="#" id="plug" class="hidden">Plug</a>
+				</div>
+			</div>
+	
+			<p class="ft">Based on <a href="https://github.com/davatron5000/FitVids.js">FitVids.js</a></p>
+		</div>
+		
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.4.1/build/yui/yui-debug.js"></script>
+		<script type="text/javascript" src="../../../../build/gallery-node-fitvids/gallery-node-fitvids-debug.js"></script>
+		<link type="text/css" rel="stylesheet" href="../../../../build/gallery-node-fitvids/assets/gallery-node-fitvids-core.css" />
+		<script type="text/javascript">
+			YUI({
+			    filter: 'debug',
+			    combine: true,
+		        useConsole: true,
+		        logExclude: {Dom: true, Selector: true, Node: true, attribute: true, base: true, event: true, widget: true}
+			}).use('gallery-node-fitvids', 'node-base', 'node-event-delegate', function(Y) {
+				'use strict';
+				
+				var container = Y.one('.container'),
+					plug = Y.one('#plug'),
+					unplug = Y.one('#unplug');
+				
+				plug.removeClass('hidden');
+				
+				Y.one('#actions').delegate('click', function(e) {
+					var action = e.target.get('id');
+					
+					e.preventDefault();
+					
+					container[action](Y.Plugin.NodeFitVids);
+					plug.toggleClass('hidden');
+					unplug.toggleClass('hidden');
+				}, 'a')
+			});
+		</script>
+	</body>
+</html>

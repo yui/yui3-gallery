@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>People Born in the 19th Century</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link href="http://yui.yahooapis.com/combo?2.8.1/build/reset-fonts-grids/reset-fonts-grids.css&2.8.1/build/base/base-min.css" type="text/css" rel="stylesheet">
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
+		<style>
+			#canvas {
+
+				width:800px;
+				height: 800px;
+			}
+		</style>
+    <body class="yui-skin-sam">
+		<button>normal</button><button type="toggle" disabled="disabled">disabled</button>
+		<div id="doc">
+			<h1>People Born in the 19th Century</h1>
+			<p>This is mostly to test an enormous quantity of data. See description below</p>
+			<div id="canvas"></div>
+			<p>This graph is build dynamically from data fetched from <a href="http://www.freebase.com">FreeBase</a>.  
+				To somehow limit the number of bars, I asked for people born in the XIX century.
+				This also provided me with people who most probably do have a date of death, so the bar has an end.
+				Anyway, the service returns only the first 100 entries by default so, in the end, the number of bars is no more than a hundred.
+				The people were put into categories based on the first profession listed, the colors for them assigned dynamically.
+			</p>
+			<p>The query can be seen in the <a target="freebase" href="http://www.freebase.com/queryeditor/?q=[{%22type%22%3A%22%2Fpeople%2Fperson%22%2C%22%2Fcommon%2Ftopic%2Farticle%22%3A{%22guid%22%3Anull%2C%22limit%22%3A1%2C%22optional%22%3Atrue}%2C%22%2Fcommon%2Ftopic%2Fimage%22%3A{%22guid%22%3Anull%2C%22limit%22%3A1%2C%22optional%22%3Atrue}%2C%22%2Fpeople%2Fdeceased_person%2Fdate_of_death%22%3Anull%2C%22%2Fpeople%2Fperson%2Fdate_of_birth%22%3Anull%2C%22name%22%3Anull%2C%22%2Fpeople%2Fperson%2Fdate_of_birth%3E%3D%22%3A%221800-01-01%22%2C%22%2Fpeople%2Fperson%2Fdate_of_birth%3C%22%3A%221900-01-01%22%2C%22%2Fpeople%2Fperson%2Fprofession%22%3A[{%22limit%22%3A1%2C%22name%22%3Anull}]}]">Query Editor</a>.</p>
+			<p>Zooming in towards the edges, where there are less bars to be shown, will display the bars without overlapping and then much taller.  
+				As more bars come into view, the bars will get shorter and start overlapping.  The cursor can be left to rest on a bar and its text and dates will be shown.</p>
+			<p>Both the images and descriptions are quite large so when an event bar does have either, the pop up will show up out of whack. 
+				They also take some time in loading so if you click on an event bar too soon, the pop-up will show empty.  
+				You can try again later.  Usually, the event bars close to the middle of the graph are the ones that load first, those at the top will take longer.</p>
+			<p>The bottom half of the graph is empty since all the events shown are range events, none is a point event (with only one date instead of a range)</p>
+			<p>This example does not use the released version of the Timeline component, as the <a href="index.php">other</a> example does, but a local copy.</p>
+		</div>
+
+http://api.freebase.com/api/trans/raw/guid/9202a8c04000641f80000000001956c9
+		<script>
+/*
+ * "http://www.freebase.com/queryeditor/?q=[{%22type%22%3A%22%2Fpeople%2Fperson%22%2C%22%2Fcommon%2Ftopic%2Farticle%22%3A{%22guid%22%3Anull%2C%22limit%22%3A1%2C%22optional%22%3Atrue}%2C%22%2Fcommon%2Ftopic%2Fimage%22%3A{%22id%22%3Anull%2C%22limit%22%3A1%2C%22optional%22%3Atrue}%2C%22%2Fpeople%2Fdeceased_person%2Fdate_of_death%22%3Anull%2C%22%2Fpeople%2Fperson%2Fdate_of_birth%22%3Anull%2C%22name%22%3Anull%2C%22%2Fpeople%2Fperson%2Fdate_of_birth%3E%3D%22%3A%221800-01-01%22%2C%22%2Fpeople%2Fperson%2Fdate_of_birth%3C%22%3A%221900-01-01%22}]"</div>
+			"http://www.freebase.com/api/service/mqlread?callback=qq&query={%20%22query%22%3A%20[{%20%22type%22%3A%20%22%2Fpeople%2Fperson%22%2C%20%22%2Fcommon%2Ftopic%2Farticle%22%3A%20{%20%22guid%22%3A%20null%2C%20%22limit%22%3A%201%2C%20%22optional%22%3A%20true%20}%2C%20%22%2Fcommon%2Ftopic%2Fimage%22%3A%20{%20%22id%22%3A%20null%2C%20%22limit%22%3A%201%2C%20%22optional%22%3A%20true%20}%2C%20%22%2Fpeople%2Fdeceased_person%2Fdate_of_death%22%3A%20null%2C%20%22%2Fpeople%2Fperson%2Fdate_of_birth%22%3A%20null%2C%20%22name%22%3A%20null%2C%20%22%2Fpeople%2Fperson%2Fdate_of_birth%3E%3D%22%3A%20%221800-01-01%22%2C%20%22%2Fpeople%2Fperson%2Fdate_of_birth%3C%22%3A%20%221900-01-01%22%20}]%20}"
+ */
+			YUI({
+				gallery:'gallery-2012.01.25-21-14',
+				groups: {
+					local: {
+						// base:'./',
+						base:'../../../build/',
+						modules: {
+							'gallery-timeline': {
+								path:'gallery-timeline/gallery-timeline.js',
+								requires:['node','io-base','base','event-mousewheel', 'event-gestures','classnamemanager','datatype','event-hover'],
+								skinnable:true,
+								lang:['es','en']
+							}
+						}
+					}
+				},
+				lang:'en'
+			}).use('gallery-timeline','jsonp', 'json', function (Y) {
+				"use strict";
+				
+				Y.jsonp('http://www.freebase.com/api/service/mqlread?callback={callback}&query=' + encodeURIComponent(Y.JSON.stringify(
+					{query:[{
+						"type": "/people/person",
+						"/common/topic/article": {
+							"guid":     null,
+							"limit":    1,
+							"optional": true
+						},
+						"/common/topic/image": {
+							"guid":     null,
+							"limit":    1,
+							"optional": true
+						},
+						"/people/deceased_person/date_of_death": null,
+						"/people/person/date_of_birth": null,
+						"name":  null,
+						"/people/person/date_of_birth>=": "1800-01-01",
+						"/people/person/date_of_birth<": "1900-01-01",
+						"/people/person/profession": [{limit:1,name:null}]
+					}]}
+				)), function (response) {
+					if (response.code === '/api/status/ok') {
+						var tl = new Y.Timeline({container:'#canvas'}),
+							minDate= Number.POSITIVE_INFINITY, maxDate = Number.NEGATIVE_INFINITY,
+							start, end, profession,cats = tl.get('categories'),color = 0,nCats = 0,
+							article, image,
+							parseDate = function (value) {
+								if (value) {
+									var date = value.split('-');
+									return new Date(date[0], date[1] -1 || 0 , date[2] || 1).getTime();
+								} else {
+									return null;
+								}
+							},
+							fetch = function (where, what, item) {
+								if (item && item.guid) {
+									where[what] = ' ';
+									Y.jsonp('http://api.freebase.com/api/trans/raw/guid/' + item.guid.substr(1) + '?callback={callback}', function (response) {
+										where[what] = response.result.body;
+									});
+								}
+								
+							};
+							
+						tl._events = [];
+						Y.each(response.result, function (inEvent, index) {
+							start = parseDate(inEvent['/people/person/date_of_birth']);
+							end = parseDate(inEvent['/people/deceased_person/date_of_death']);
+							minDate = Math.min(minDate, start);
+							maxDate = Math.max(maxDate, end);
+							profession = inEvent['/people/person/profession'];
+							if (profession) {
+								profession = profession[0].name;
+							}
+							if (!cats[profession]) {
+								cats[profession] = {};
+								nCats +=1; 
+							}
+							article = inEvent['/common/topic/article'];
+							image = inEvent['/common/topic/image'];
+							tl._events[index] = {
+								start: start,
+								end: end ,
+								text: inEvent.name,
+								category:profession,
+								descrGuid: article && article.guid,
+								iconGuid: image && image.guid
+							};
+						});
+						nCats = 720 / nCats;
+						Y.each(cats, function (item) {
+							item.color = 'hsl(' + (color % 360) + ',100%,' +(color >=360?30:70) + '%)';
+							item.fontColor = (color >= 360?'white':'black');
+							color += nCats;
+						});
+						var fetchDescr = function (ev) {
+							ev.halt();
+							var self = this,
+								event = ev.event,
+								done = 0,
+								fetch = function(where, what) {
+									Y.jsonp('http://api.freebase.com/api/trans/raw/guid/' + what.substr(1) + '?callback={callback}', function (response) {
+										event[where] = response.result.body;
+										fetchDescr.call(self,ev);
+									});
+									
+								};
+								
+							if (!event.icon && event.iconGuid) {
+								fetch('icon', event.iconGuid);
+							} else {
+								done +=1;
+							}
+							if (!event.description && event.descrGuid) {
+								fetch('description', event.descrGuid);
+							} else {
+								done +=1
+							}
+							if (done === 2) {
+								ev.callback.call(self,ev.bar, ev.event);
+							};
+						};
+						tl.on('showDescr', fetchDescr); 
+						tl.setAttrs({
+							start: new Date(1798,0,1).getTime(), // minDate,
+							end:new Date(1810,0,1).getTime(), // maxDate,
+							loaded:true
+						});
+					} else {
+						alert(response.code);
+					}
+								
+				});
+				
+			});
+		</script>
+	</body>
+</html>

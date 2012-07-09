@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="SlideShow" default="local">
+	<description>SlideShow - Build All Modules</description>
+
+	<target name="local">
+		<ant antfile="build.slideshow.xml" target="local" />
+		<ant antfile="build.slideshow-image-scaler.xml" target="local" />
+		<ant antfile="build.slideshow-image-padder.xml" target="local" />
+	</target>
+
+	<target name="deploy">
+		<ant antfile="build.slideshow.xml" target="deploy" />
+		<ant antfile="build.slideshow-image-scaler.xml" target="deploy" />
+		<ant antfile="build.slideshow-image-padder.xml" target="deploy" />
+	</target>
+
+	<target name="all">
+		<ant antfile="build.slideshow.xml" target="all" />
+		<ant antfile="build.slideshow-image-scaler.xml" target="all" />
+		<ant antfile="build.slideshow-image-padder.xml" target="all" />
+	</target>
+</project>

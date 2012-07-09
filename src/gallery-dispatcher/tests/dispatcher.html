@@ -1,0 +1,298 @@
+<!doctype html>
+<html>
+<head>
+<title>Dispatcher Tests</title>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.3.0/build/yui/yui-debug.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+    <h1>Dispatcher Tests</h1>
+    <div id="demo">
+      <p>Placeholder for dispatcher tests</p>
+    </div>
+
+<script type="text/javascript" src="../../../build/gallery-dispatcher/gallery-dispatcher-debug.js"></script>
+<script type="text/javascript">
+YUI({
+    filter: 'debug',
+    useConsoleOutput: true,
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'gallery-dispatcher', function (Y) {
+
+    (new Y.Console({
+        verbose: true,
+        newestOnTop: false,
+        height: '500px',
+        width: '99%',
+        style: 'block'
+    })).render();
+
+    Y.namespace("Tests");
+
+    Y.Tests.Dispatcher = (function() {
+
+        var Assert = Y.Assert,
+        ObjectAssert = Y.ObjectAssert;
+
+        //-------------------------------------------------------------------------
+        // Base Test Suite
+        //-------------------------------------------------------------------------
+        var suite = new Y.Test.Suite("Dispatcher Tests");
+
+        //-------------------------------------------------------------------------
+        // Test Case for encoding
+        //-------------------------------------------------------------------------
+        inlinecounter = 0;
+
+        suite.add(new Y.Test.Case({
+
+            name: "Dispatcher Inline Tests",
+
+            //---------------------------------------------
+            // Setup and tear down
+            //---------------------------------------------
+            setUp: function() {
+                // global variable
+                this.disp = new Y.Dispatcher({
+                    node: '#demo'
+                });
+                Y.one('#demo').set('innerHTML', 'placeholder');
+                Y.one('body').set('overflow', 'visible');
+            },
+
+            tearDown: function() {
+            },
+
+            //---------------------------------------------------------------------
+            // Tests
+            //---------------------------------------------------------------------
+            testBasicHtmlContent: function() {
+                var newcontent = "simple content",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        var result = Y.one('#demo').get('innerHTML');
+                        Assert.areEqual(newcontent, result, 'The new content was not properly injected.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            },
+
+            testInlineScript: function() {
+                var newcontent = "<p>simple content</p><script>window.flag = true;<\/script>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.isTrue(flag, 'The script was not executed.');
+                        var result = Y.one('#demo p').get('innerHTML');
+                        Assert.areEqual('simple content', result, 'The script tag was not removed from the original content');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            },
+
+            testInlineScriptGlobalVar: function() {
+                var newcontent = "<p>simple content</p><script>var data = 1;<\/script>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.areEqual(1, data, 'The script fails for a global variable called DATA.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            },
+
+            testInlineScriptAssumingGlobal: function() {
+                var newcontent = "<p>simple content</p><script>data = 2;<\/script>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.areEqual(2, data, 'The script fails while assuming a global variable called DATA.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            },
+
+            testInlineScriptCounter: function() {
+                var newcontent = "<p>simple content</p><script>inlinecounter++;<\/script>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.areEqual(1, inlinecounter, 'The script was executed more than one time.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            },
+
+            testInlineCSSOnHeader: function() {
+                var newcontent = "<html><head><style>body{overflow: hidden;}<\/style><\/head><body><p>simple content<\/p><\/body><\/html>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        var result = Y.one('body').getStyle('overflow');
+                        Assert.areEqual('hidden', result, 'The script was executed more than one time.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('normalize', true).set('content', newcontent);
+                instance.wait();
+            },
+
+            testInlineScriptOnHeader: function() {
+                var newcontent = "<html><head><script>data = 3;<\/script><\/head><body><p>simple content<\/p><\/body><\/html>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.areEqual(3, data, 'The script was executed more than one time.');
+                        var result = Y.one('#demo > p').get('innerHTML');
+                        Assert.areEqual('simple content', result, 'The html, body and head tags were not removed from the original content');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('normalize', true).set('content', newcontent);
+                instance.wait();
+            },
+
+            "test injecting empty content": function() {
+                var newcontent = "",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        var result = Y.one('#demo').get('innerHTML');
+                        Assert.areEqual('', result, 'Empty content is not being injected correctly.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp._dispatch(newcontent);
+                instance.wait();
+            },
+
+            "test injecting the same content twice": function() {
+                var newcontent = "same content twice",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        var result = Y.one('#demo').get('innerHTML');
+                        Assert.areEqual(newcontent, result, 'Injecting the same content twice should do the exact same.');
+                    });
+                });
+                // injecting the same content again manually
+                instance.disp._dispatch(newcontent);
+                instance.wait();
+            }
+
+        }));
+
+        counter = 0;
+
+        suite.add(new Y.Test.Case({
+
+            name: "Dispatcher External Tests",
+
+            //---------------------------------------------
+            // Setup and tear down
+            //---------------------------------------------
+            setUp: function() {
+                // global variable
+                this.disp = new Y.Dispatcher({
+                    node: '#demo'
+                });
+                Y.one('#demo').set('innerHTML', 'placeholder');
+            },
+
+            tearDown: function() {
+                },
+
+            //---------------------------------------------------------------------
+            // Tests
+            //---------------------------------------------------------------------
+            testExternalScript: function() {
+                var newcontent = "<p>simple content</p><script src='external.js'><\/script>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.isTrue(flag, 'The script was not executed.');
+                        var result = Y.one('#demo p').get('innerHTML');
+                        Assert.areEqual('simple content', result);
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            },
+
+            testExternalScriptCache: function() {
+                var newcontent = "<p>simple content</p><script src='external.js'><\/script>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.isTrue(flag, 'The script was not executed twice, dispatcher is caching it.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            },
+
+            testExternalScriptGlobalVar: function() {
+                var newcontent = "<p>simple content</p><script src='external.js'><\/script>",
+                    instance = this;
+                // dispatcher uses a queue, it will take a while to inject the content
+                instance.disp.on('ready', function() {
+                    instance.resume(function() {
+                        // resuming the test
+                        Assert.areEqual(3, data, 'The script fails for a global variable called DATA.');
+                    });
+                });
+                // using the dispatcher object to set a new content
+                instance.disp.set('content', newcontent);
+                instance.wait();
+            }
+
+        }));
+
+        //return it
+        return suite;
+
+    })();
+
+    //add to the testrunner and run
+    Y.Test.Runner.add(Y.Tests.Dispatcher);
+    Y.Test.Runner.run();
+
+});
+</script>
+</body>
+</html>

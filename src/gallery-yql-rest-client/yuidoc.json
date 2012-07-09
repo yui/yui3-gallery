@@ -1,0 +1,12 @@
+{
+    "name": "YQL REST Client",
+    "description": "This is a simple REST client supporting DELETE, GET, HEAD, POST, and PUT.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}

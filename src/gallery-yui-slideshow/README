@@ -1,0 +1,40 @@
+YUI Slideshow by Josh Lizarraga @ FreshCutSD.com
+
+Inspired by jQuery Cycle: http://malsup.com/jquery/cycle/
+
+
+Changelog:
+
+v2.1.0 - April 15, 2011
+
+* Added proper events, including "previous", "next", "pause", "play", "slide", "timeout", "hoverpause", and "hoverplay".
+* "interval" configuration attribute can now accept an array of timing settings (must have 1 element per slide).
+* "pages" configuration attribute now expects a selector string for the page elements or a NodeList.
+* When using pages, the active page will now receive the class "yui3-slideshow-active".
+* Added "visibility" definitions to default "before" and "after" settings.
+* Fixed a bug where mouseleave would *always* cause the slideshow to play when "pauseOnHover" was enabled.
+* Minor bug fixes and refactoring.
+
+v2.0.0 - March 30, 2011
+
+* Refactored module with better YUI3 conventions.
+* Module now extends the YUI3 Widget class.
+* Anim module replaced by Transitions module.
+* Added pagination support.
+* Added YUIDoc comments.
+* Added next(), pause(), play(), and previous() methods.
+* Added pauseOnChange and pauseOnHover options.
+
+v1.0.0 - March 19, 2010
+
+* Added lazy loading of content.
+* Added ability to pass a Node instance to constructor.
+* Minor bug fixes.
+
+v0.2.0
+
+* Rewritten as a YUI3 module.
+
+v0.1.0
+
+* YUI2 version.

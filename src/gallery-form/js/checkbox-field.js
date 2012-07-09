@@ -5,35 +5,43 @@
  * @constructor
  * @description A checkbox field node
  */
-function CheckboxField () {
-    CheckboxField.superclass.constructor.apply(this,arguments);
-}
 
-Y.mix(CheckboxField, {
-    NAME : 'checkbox-field'
+Y.CheckboxField = Y.Base.create('checkbox-field', Y.FormField, [Y.WidgetChild], {
+    _syncChecked : function () {
+        this._fieldNode.set('checked', this.get('checked'));
+    },
+
+    initializer : function () {
+        Y.CheckboxField.superclass.initializer.apply(this, arguments);
+    },
+
+    renderUI : function () {
+        this._renderFieldNode();
+        this._renderLabelNode();
+    },
+
+    syncUI : function () {
+        Y.CheckboxField.superclass.syncUI.apply(this, arguments);
+        this._syncChecked();
+    },
+
+    bindUI :function () {
+        Y.CheckboxField.superclass.bindUI.apply(this, arguments);
+        this.after('checkedChange', Y.bind(function(e) {
+            if (e.src != 'ui') {
+                this._fieldNode.set('checked', e.newVal);
+            }
+        }, this));
+
+        this._fieldNode.after('change', Y.bind(function (e) {
+            this.set('checked', e.currentTarget.get('checked'), {src : 'ui'});
+        }, this));
+    }
+}, {
+    ATTRS : {
+        'checked' : {
+            value : false,
+            validator : Y.Lang.isBoolean
+        }
+    }
 });
-
-Y.extend(CheckboxField, Y.FormField, {
-    _nodeType : 'checkbox',
-
-	_getValue : function (val, attrname) {
-		if (this._fieldNode.get('checked') === true) {
-			return val;
-		} else {
-			return '';
-		}
-	},
-
-	initializer : function () {
-		CheckboxField.superclass.initializer.apply(this, arguments);
-
-		this.modifyAttr('value', {
-			getter : function (val, attrName) {
-				return this._getValue(val, attrName);
-			},
-			writeOnce : true
-		});
-	}
-});
-
-Y.CheckboxField = CheckboxField;

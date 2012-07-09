@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Anim Class" default="local">
+    <description>Anim Class build file</description>
+    <property file="build.properties" />
+    <import file="${builddir}/3.x/bootstrap.xml" />
+</project>

@@ -12,6 +12,7 @@
     function _BaseInputField(){
         _BaseInputField.superclass.constructor.apply(this,arguments);
         this.publish(_BaseInputField.CE_ONCHANGE);
+        this.checkPrompt();
     }
     Y.augment(_BaseInputField, Y.EventTarget);
     _BaseInputField.staticVariables = {
@@ -208,6 +209,36 @@
          */
         optional:{
             value:false
+        },
+        /**
+         * This must provide a function and an html element.  A scope may be optionally provided. <br />
+         * &#123;fn: function(el, field) {}, scope: this, el: 'validation-prompt'&#124;
+         * @property validationPrompt
+         * @type HTMLElement
+         */
+        validationPrompt: {
+            value: null,
+            setter: function(val) {
+                if (!YL.isObject(val)) {
+                    return null;
+                }
+                else if (!val.el) {
+                    return null;
+                }
+                else if (!val.fn) {
+                    val.fn = function(el, field) {
+                        if (!field.isValid() && !field.isEmpty()) {
+                            el.style.display = '';
+                        }
+                        else {
+                            el.style.display = 'none';
+                        }
+                    }
+                }
+                val.el = _BaseInputField.staticFunctions.standardElSetter(val.el);
+                val.el.style.display = 'none'; // start off as hidden.
+                return val;
+            }
         }
     };
     _BaseInputField.NAME = 'BaseInputField';
@@ -310,7 +341,26 @@
          * that the input is valid or invalid.
          * @method checkIndicators
          */
-        checkIndicators:function(){},
+        checkIndicators: function () {},
+        /**
+         * This will ensure the validation prompt function gets called and the
+         * proper validation tip gets displayed.
+         * @method checkPrompt
+         */
+        checkPrompt: function () {
+            var prompt = this.get('validationPrompt'), scope, fn;
+            if (!prompt) {
+                return;
+            }
+            // if the input is not on, then hide the validation prompt
+            if (!this.inputIsOn()) {
+                prompt.el.style.display = 'none';
+                return;
+            }
+            scope = prompt.scope || {};
+            fn = prompt.fn || function() {};
+            fn.call(scope, prompt.el, this);
+        },
         /**
          * This will be overriden by subclasses, but this will hide the incorrect
          * indicator and show the correct indicator if there is one.  It will also
@@ -398,6 +448,7 @@
          * @method _evtOnChange
          */
         _evtOnChange:function(e){
+            this.checkPrompt();
             this.checkIndicators();
             this.fire(_BaseInputField.CE_ONCHANGE);
         },

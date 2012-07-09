@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>gallery-effects Tests</title>
+	<script src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+	
+	<script src="../../../build/gallery-effects/gallery-effects.js" type="text/javascript"></script>
+	
+	<script type="text/javascript">
+		Y = YUI({
+			filter: "raw",
+			combine: false
+		});
+	</script>
+	
+	<style type="text/css">
+		body {
+			margin:1em;
+		}
+		h2 {
+			clear:both;
+			margin:1em 0 0.5em;
+		}
+		.example {
+			position:relative;
+			padding:50px;
+			border:solid 2px #bbf;
+			background-color:#ddf;
+			margin-bottom:0.5em;
+		}
+		.box {
+			background-color:red;
+			width:100px;
+			height:100px;
+		}
+		
+		#scroll {
+			height:200px;
+			width:200px;
+			overflow:auto;
+		}
+		#scroll p {
+			width:300px;
+		}
+		#highlight {
+			background-color:white;
+			border:solid 1px #000;
+		}
+	</style>
+</head>
+
+<body class="yui-skin-sam">
+	
+	<h2>Y.Node.Opacity()</h2>
+	<div class="example">
+		<div class="box" id="opacity" style="opacity:0;"></div>
+	</div>
+	<div class="controls">
+		<button id="opacity_class">Class</button>
+		<button id="opacity_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.Move()</h2>
+	<div class="example">
+		<div class="box" id="move"></div>
+	</div>
+	<div class="controls">
+		<button id="move_class">Class</button>
+		<button id="move_method">Method</button>
+	</div>
+	
+	<h2>Y.Node.Scroll()</h2>
+	<div class="example">
+		<div class="box" id="scroll">
+			<p>This is the first line of text in this div.<br />This is the second line of text in this div.<br />
+			This is the third line of text in this div.<br />This is the fourth line of text in this div.<br />
+			This is the fifth line of text in this div.<br />This is the sixth line of text in this div.
+			This is the seventh line of text in this div.<br />This is the eighth line of text in this div.
+			This is the ninth line of text in this div.<br />This is the tenth line of text in this div.
+			This is the eleventh line of text in this div.<br />This is the twelvth line of text in this div.
+			This is the thirteenth line of text in this div.<br />This is the fourteenth line of text in this div.
+			This is the fifteenth line of text in this div.<br />This is the sixteenth line of text in this div.
+			This is the seventeenth line of text in this div.<br />This is the eighteenth line of text in this div.
+			This is the nineteenth line of text in this div.<br />This is the twenth line of text in this div.</p>
+		</div>
+	</div>
+	<div class="controls">
+		<button id="scroll_class">Class</button>
+		<button id="scroll_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.Morph()</h2>
+	<div class="example">
+		<div class="box" id="morph">Some text.</div>
+	</div>
+	<div class="controls">
+		<button id="morph_class">Class</button>
+		<button id="morph_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.Scale()</h2>
+	<div class="example">
+		<div class="box" id="scale" style="position:relative;">This is some text to see what happens.</div>
+	</div>
+	<div class="controls">
+		<button id="scale_class">Class</button>
+		<button id="scale_method">Method</button>
+	</div>
+	
+	<h2>Y.Node.highlight()</h2>
+	<div class="example">
+		<div class="box" id="highlight">This is some text to see what happens.</div>
+	</div>
+	<div class="controls">
+		<button id="highlight_class">Class</button>
+		<button id="highlight_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.puff()</h2>
+	<div class="example">
+		<div class="box" id="puff"></div>
+	</div>
+	<div class="controls">
+		<button id="puff_class">Class</button>
+		<button id="puff_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.appear()</h2>
+	<div class="example">
+		<div class="box" id="appear" style="display:none;"></div>
+	</div>
+	<div class="controls">
+		<button id="appear_class">Class</button>
+		<button id="appear_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.fade()</h2>
+	<div class="example">
+		<div class="box" id="fade"></div>
+	</div>
+	<div class="controls">
+		<button id="fade_class">Class</button>
+		<button id="fade_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.blindUp()</h2>
+	<div class="example">
+		<div class="box" id="blindUp"></div>
+	</div>
+	<div class="controls">
+		<button id="blindUp_class">Class</button>
+		<button id="blindUp_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.blindDown()</h2>
+	<div class="example">
+		<div class="box" id="blindDown" style="display:none;"></div>
+	</div>
+	<div class="controls">
+		<button id="blindDown_class">Class</button>
+		<button id="blindDown_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.switchOff()</h2>
+	<div class="example">
+		<div class="box" id="switchOff"></div>
+	</div>
+	<div class="controls">
+		<button id="switchOff_class">Class</button>
+		<button id="switchOff_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.dropOut()</h2>
+	<div class="example">
+		<div class="box" id="dropOut"></div>
+	</div>
+	<div class="controls">
+		<button id="dropOut_class">Class</button>
+		<button id="dropOut_method">Method</button>
+	</div>
+	
+	
+	<h2>Y.Node.squish()</h2>
+	<div class="example">
+		<div class="box" id="squish"></div>
+	</div>
+	<div class="controls">
+		<button id="squish_class">Class</button>
+		<button id="squish_method">Method</button>
+	</div>
+	
+	
+	<h2>Chaining (wait)</h2>
+	<div class="example">
+		<div class="box" id="chaining"></div>
+	</div>
+	<div class="controls">
+		<button id="chaining_ctrl">Go</button>
+	</div>
+	
+	
+	<h2>Chaining (no wait)</h2>
+	<div class="example">
+		<div class="box" id="chain2"></div>
+	</div>
+	<div class="controls">
+		<button id="chain2_ctrl">Go</button>
+	</div>
+	
+	
+	<script type="text/javascript">
+		Y.use("gallery-effects", function(Y) {
+			var cfg = {
+				opacity: { from: 0, to: 1 },
+				move: { x: 50, y: 20 },
+				scroll: { to: [100, 100] },
+				morph: { to: { backgroundColor: "blue", color: "white" } },
+				scale: { scaleTo: 250, scaleFromCenter: true },
+				highlight: { duration: 3 },
+				puff: {},
+				appear: {},
+				fade: {},
+				blindUp: {},
+				blindDown: {},
+				switchOff: {},
+				dropOut: {},
+				squish: {}
+			},
+			
+			bindEffect = function (effect, options) {
+				var capitalized = effect.charAt(0).toUpperCase() + effect.substring(1);
+					
+				Y.get("#" + effect + "_class").on("click", function () {
+					new Y.Effects[capitalized](Y.merge({ node: "#" + effect}, options));
+				});
+				
+				Y.get("#" + effect + "_method").on("click", function () {
+					Y.get("#" + effect)[effect](options);
+				});
+			};
+			
+			// Bind all the UI elements.
+			for (effect in cfg) {
+				bindEffect(effect, cfg[effect]);
+			}
+			
+			Y.get("#chaining_ctrl").on("click", function () {
+				Y.get("#chaining").blindUp().blindDown();
+			});
+			
+			Y.get("#chain2_ctrl").on("click", function () {
+				Y.get("#chain2").move({ x: 50, wait: false }).opacity({ from: 1.0, to: 0.5 });
+			});
+		});
+	</script>
+
+</body>
+</html>

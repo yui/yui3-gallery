@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Async Command Tests
+        </title>
+        <script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js">
+        </script>
+        <style type="text/css">
+            #console .yui3-console-entry {
+                padding: 2px;
+                margin: 0;
+                min-height: 0;
+            }
+
+            #console .yui3-console-entry-fail .yui3-console-entry-cat {
+                background-color: red;
+            }
+
+            #console .yui3-console-entry-pass .yui3-console-entry-cat {
+                background-color: green;
+            }
+
+            #console .yui3-console-entry-perf .yui3-console-entry-cat {
+                background-color: blue;
+            }
+
+            #console {
+                position: static;
+            }
+
+            html, body {
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="testbed" class="yui3-skin-foo">
+        </div>
+        <p>
+            <button id="runButton" type="button">
+                Run Tests
+            </button>
+        </p>
+        <script>
+            YUI({
+                useBrowserConsole:false,
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'min',
+                modules: {
+                    'gallery-async-command': {
+                        fullpath: '../../../build/gallery-async-command/gallery-async-command-min.js',
+                        requires: [
+                            'base'
+                        ]
+                    }
+                }
+            }).use('console', 'test', 'gallery-async-command', function (Y) {
+                'use strict';
+                
+                var assert = Y.Assert,
+                    assertAreSame = assert.areSame,
+                    assertIsFunction = assert.isFunction,
+                    assertIsUndefined = assert.isUndefined,
+                    AsyncCommand = Y.AsyncCommand,
+                    console,
+                    runButtonNode = Y.one('#runButton'),
+                    later = Y.later,
+                    test = Y.Test,
+                    testRunner = test.Runner,
+                    testSuite = new test.Suite('Async Command Tests');
+                    
+                if (!runButtonNode) {
+                    return;
+                }
+
+                testSuite.add(new test.Case({
+                    name: 'Async Command Tests',
+                    'test:01-correctArguments': function () {
+                        new AsyncCommand({
+                            args: [
+                                'a',
+                                'b',
+                                'c',
+                                'd',
+                                'e'
+                            ],
+                            fn: function (success, a, b, c, d, e, f) {
+                                assertIsFunction(success);
+                                assertIsFunction(success.fail);
+                                assertAreSame(a, 'a');
+                                assertAreSame(b, 'b');
+                                assertAreSame(c, 'c');
+                                assertAreSame(d, 'd');
+                                assertAreSame(e, 'e');
+                                assertIsUndefined(f);
+                                success();
+                            }
+                        }).run();
+                    },
+                    'test:02-correctContext': function () {
+                        new AsyncCommand({
+                            ctx: 'context',
+                            fn: function (success) {
+                                assertAreSame(this, 'context');
+                                success();
+                            }
+                        }).run();
+                    },
+                    'test:03-emptyCommandSynchronousSuccess': function () {
+                        new AsyncCommand().run().on('complete', function (eventFacade) {
+                            var target = eventFacade.target;
+                            
+                            assertIsUndefined(eventFacade.error);
+                            assertIsUndefined(target.get('error'));
+                            
+                            assertAreSame(eventFacade.failed, false);
+                            assertAreSame(target.get('failed'), false);
+                            
+                            assertIsUndefined(eventFacade.value);
+                            assertIsUndefined(target.get('value'));
+                        });
+                    },
+                    'test:04-syncronousFailure': function () {
+                        new AsyncCommand({
+                            fn: function (success) {
+                                success.fail();
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            var target = eventFacade.target;
+                            
+                            assertIsUndefined(eventFacade.error);
+                            assertIsUndefined(target.get('error'));
+                            
+                            assertAreSame(eventFacade.failed, true);
+                            assertAreSame(target.get('failed'), true);
+                            
+                            assertIsUndefined(eventFacade.value);
+                            assertIsUndefined(target.get('value'));
+                        });
+                    },
+                    'test:05-syncronousFailureWithError': function () {
+                        new AsyncCommand({
+                            fn: function (success) {
+                                success.fail('error message');
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            var target = eventFacade.target;
+                            
+                            assertAreSame(eventFacade.error, 'error message');
+                            assertAreSame(target.get('error'), 'error message');
+                            
+                            assertAreSame(eventFacade.failed, true);
+                            assertAreSame(target.get('failed'), true);
+                            
+                            assertIsUndefined(eventFacade.value);
+                            assertIsUndefined(target.get('value'));
+                        });
+                    },
+                    'test:06-syncronousSuccess': function () {
+                        new AsyncCommand({
+                            fn: function (success) {
+                                success();
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            var target = eventFacade.target;
+                            
+                            assertIsUndefined(eventFacade.error);
+                            assertIsUndefined(target.get('error'));
+                            
+                            assertAreSame(eventFacade.failed, false);
+                            assertAreSame(target.get('failed'), false);
+                            
+                            assertIsUndefined(eventFacade.value);
+                            assertIsUndefined(target.get('value'));
+                        });
+                    },
+                    'test:07-syncronousSuccessWithValue': function () {
+                        new AsyncCommand({
+                            fn: function (success) {
+                                success('success value');
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            var target = eventFacade.target;
+                            
+                            assertIsUndefined(eventFacade.error);
+                            assertIsUndefined(target.get('error'));
+                            
+                            assertAreSame(eventFacade.failed, false);
+                            assertAreSame(target.get('failed'), false);
+                            
+                            assertAreSame(eventFacade.value, 'success value');
+                            assertAreSame(target.get('value'), 'success value');
+                        });
+                    },
+                    'test:08-asyncronousFailure': function () {
+                        var me = this;
+                        
+                        new AsyncCommand({
+                            fn: function (success) {
+                                later(610, null, function () {
+                                    success.fail();
+                                });
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            me.resume(function () {
+                                var target = eventFacade.target;
+                            
+                                assertIsUndefined(eventFacade.error);
+                                assertIsUndefined(target.get('error'));
+
+                                assertAreSame(eventFacade.failed, true);
+                                assertAreSame(target.get('failed'), true);
+
+                                assertIsUndefined(eventFacade.value);
+                                assertIsUndefined(target.get('value'));
+                            });
+                        });
+                        
+                        me.wait(987);
+                    },
+                    'test:09-asyncronousFailureWithError': function () {
+                        var me = this;
+                        
+                        new AsyncCommand({
+                            fn: function (success) {
+                                later(610, null, function () {
+                                    success.fail('error message');
+                                });
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            me.resume(function () {
+                                var target = eventFacade.target;
+                            
+                                assertAreSame(eventFacade.error, 'error message');
+                                assertAreSame(target.get('error'), 'error message');
+
+                                assertAreSame(eventFacade.failed, true);
+                                assertAreSame(target.get('failed'), true);
+
+                                assertIsUndefined(eventFacade.value);
+                                assertIsUndefined(target.get('value'));
+                            });
+                        });
+                        
+                        me.wait(987);
+                    },
+                    'test:10-asyncronousSuccess': function () {
+                        var me = this;
+                        
+                        new AsyncCommand({
+                            fn: function (success) {
+                                later(610, null, function () {
+                                    success();
+                                });
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            me.resume(function () {
+                                var target = eventFacade.target;
+                            
+                                assertIsUndefined(eventFacade.error);
+                                assertIsUndefined(target.get('error'));
+
+                                assertAreSame(eventFacade.failed, false);
+                                assertAreSame(target.get('failed'), false);
+
+                                assertIsUndefined(eventFacade.value);
+                                assertIsUndefined(target.get('value'));
+                            });
+                        });
+                        
+                        me.wait(987);
+                    },
+                    'test:11-asyncronousSuccessWithValue': function () {
+                        var me = this;
+                        
+                        new AsyncCommand({
+                            fn: function (success) {
+                                later(610, null, function () {
+                                    success('success value');
+                                });
+                            }
+                        }).run().on('complete', function (eventFacade) {
+                            me.resume(function () {
+                                var target = eventFacade.target;
+                            
+                                assertIsUndefined(eventFacade.error);
+                                assertIsUndefined(target.get('error'));
+
+                                assertAreSame(eventFacade.failed, false);
+                                assertAreSame(target.get('failed'), false);
+
+                                assertAreSame(eventFacade.value, 'success value');
+                                assertAreSame(target.get('value'), 'success value');
+                            });
+                        });
+                        
+                        me.wait(987);
+                    }
+                }));
+
+                testRunner.setName('Async Command Tests');
+                testRunner.add(testSuite);
+                testRunner.enableLogging();
+
+                runButtonNode.on('click', function() {
+                    if (!console) {
+                        console = new Y.Console({
+                            entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">' +
+                                '<span class="{entry_cat_class}">' +
+                                    '{label}' +
+                                '</span>' +
+                                '<span class="{entry_content_class}">' +
+                                    '{message}' +
+                                '</span>' +
+                            '</pre>',
+                            height: '90%',
+                            id: 'console',
+                            newestOnTop: false,
+                            printTimeout: 0,
+                            verbose: false,
+                            width: '100%'
+                        }).render();
+                    }
+                    
+                    testRunner.run();
+                });
+            });
+        </script>
+    </body>
+</html>

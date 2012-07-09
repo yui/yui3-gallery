@@ -1,0 +1,77 @@
+<html>
+<head>
+<style>
+#maxheight textarea,#maxheight pre{max-height:150px;}
+#minheight textarea,#minheight pre{min-height:75px;}
+#minheight textarea,#minheight pre,#minheight .textarea-expander{width:250px;}
+#minmaxheight textarea,#minmaxheight pre{min-height:25px;max-height:150px;}
+#minmaxheight textarea,#minmaxheight pre,#minmaxheight .textarea-expander{width:125px;}
+#fixedheight textarea{height:25px;}
+</style>
+<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-debug.js"></script>
+<script type="text/javascript">
+ 
+    YUI({
+        modules: {
+			'gallery-textarea-expander-css':{
+				fullpath:'assets/skins/sam/gallery-textarea-expander-skin.css',
+				type: 'css'
+			},
+			'gallery-textarea-expander-core-css':{
+				fullpath:'assets/gallery-textarea-expander-core.css',
+				type: 'css'
+			},
+            'gallery-textarea-expander': {
+                fullpath: 'build_tmp/gallery-textarea-expander-debug.js',
+                requires: ['plugin','gallery-textarea-expander-css','gallery-textarea-expander-core-css'],
+				skinnable:['sam']
+            }
+        },
+		filter:'debug'
+    }).use("node", 'gallery-textarea-expander', function(Y) {
+        Y.all("textarea").plug(Y.TextareaExpander);
+    });
+</script>
+
+</head>
+<body>
+Max height
+<div id="maxheight">
+    <form>
+        <textarea>Hello world</textarea>
+    </form>
+</div>
+
+<br/>
+Min-height
+<div id="minheight">
+    <form>
+        <textarea>Hello world</textarea>
+    </form>
+</div>
+<br/>
+
+Min-height and Max-height
+<div id="minmaxheight">
+    <form>
+        <textarea>Hello world</textarea>
+    </form>
+</div>
+<br/>
+
+Un-constrained
+<div id="unconstrained">
+    <form>
+        <textarea>Hello world</textarea>
+    </form>
+</div>
+
+Fixed height in stylesheet
+<div id="fixedheight">
+    <form>
+        <textarea>Hello world</textarea>
+    </form>
+</div>
+
+</body>
+</html>

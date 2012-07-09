@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+<title>Parent Window Isolated Tests</title>
+</head>
+<body>
+
+    <h1>Parent Window Isolated Tests</h1>
+
+    <div id="demo">
+      <p>Placeholder for the tests</p>
+    </div>
+
+    <iframe border="1" frameBorder="1" marginWidth="0" marginHeight="0" leftMargin="0" topMargin="0" allowTransparency="true" width="1px" height="1px" style="visibility: hidden;" src="_iframe.html"></iframe>
+
+<script>
+alert ('Pollution: '+(window.Y?1:0));
+window.TestSwarm.submit ({
+	fail : (window.Y?1:0),
+	total : 1
+});
+</script>
+</body>
+</html>

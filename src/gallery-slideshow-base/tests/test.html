@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .slide { display: none;}
+        .slide.current { display: block; }
+        .inactive {color: #ccc; cursor: default;}
+        .current {font-weight: 700;}
+    </style>    
+</head>
+<body>
+<h2>Slideshow with images</h2>
+<div class="slideshow">
+    <img src="media/slide_1.jpg" class="slide current">
+    <img src="media/slide_2.jpg" class="slide">
+    <img src="media/slide_3.jpg" class="slide">
+    <img src="media/slide_4.jpg" class="slide">
+</div>    
+    
+<h2>Slideshow with images in a div with play and pause buttons (current slide not specified)</h2>
+<div class="slideshow">
+    <div class="slide"><img src="media/slide_1.jpg"></div>
+    <div class="slide"><img src="media/slide_2.jpg"></div>
+    <div class="slide"><img src="media/slide_3.jpg"></div>
+    <div class="slide"><img src="media/slide_4.jpg"></div>
+    <div><a href="" class="play">Play</a> &nbsp; <a href="" class="pause">Pause</a></div>
+</div>
+
+<h2>Slideshow individual slide links and next and prev (starting on the 3rd slide)</h2>
+<div class="slideshow">
+    <img src="media/slide_1.jpg" class="slide">
+    <img src="media/slide_2.jpg" class="slide">
+    <img src="media/slide_3.jpg" class="slide  current">
+    <img src="media/slide_4.jpg" class="slide">
+    <div>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        &nbsp; <a href="" class="next">next &gt;</a>  
+    </div>
+</div>  
+
+<div id="man_slideshow_events"  style="border: 1px solid #ccc; margin-left: 15px; float: right;">
+    <h2>Manual Slideshow Events</h2>
+</div>
+
+<h2>Manual Slideshow listening for events</h2>
+<div id="man_slideshow">
+    <img src="media/slide_1.jpg" class="slide current">
+    <img src="media/slide_2.jpg" class="slide">
+    <img src="media/slide_3.jpg" class="slide">
+    <img src="media/slide_4.jpg" class="slide">
+    <div>
+        <a href="" class="play">Play</a> &nbsp; <a href="" class="pause">Pause</a><br>
+        <a href="" class="previous">&lt; prev</a> &nbsp; 
+        <a href="" class="slideSelector">1</a>
+        <a href="" class="slideSelector">2</a>
+        <a href="" class="slideSelector">3</a>
+        <a href="" class="slideSelector">4</a>
+        &nbsp; <a href="" class="next">next &gt;</a>
+    </div>
+</div>  
+
+
+<hr>
+<p>Images courtesy of <a href="http://wildzoofari.com">Jim Knox's Wild Zoofari</a></p>
+
+<script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+<script type="text/javascript">
+    YUI({
+        modules: {
+            'gallery-slideshow-base': {
+                fullpath: '../build_tmp/gallery-slideshow-base-debug.js',
+                requires: ['node', 'event', 'widget']
+            }
+        }
+    }).use("gallery-slideshow-base", "log", "dump", function(Y) {
+        Y.Slideshow.auto();
+        
+        var append_node = Y.one('#man_slideshow_events'),
+            slideshow_events = [
+                'slideshow:slide-selected',
+                'slideshow:before-slide-displayed',
+                'slideshow:slide-displayed',
+                'slideshow:before-slide-hidden',
+                'slideshow:slide-hidden',
+                'slideshow:play-clicked',
+                'slideshow:pause-clicked'
+            ],
+            man_slideshow = new Y.Slideshow({
+                contentBox: '#man_slideshow',
+                pause_time: 3
+            });
+
+        man_slideshow.render();
+
+        for(var i=0, len=slideshow_events.length;i < len; i++) {
+            man_slideshow.on(slideshow_events[i], function(e) {
+                append_node.append(e.type +' -- slide number: ' + e.slide_number +'<br>');
+            });
+        }
+    });
+</script>
+</body>
+</html>

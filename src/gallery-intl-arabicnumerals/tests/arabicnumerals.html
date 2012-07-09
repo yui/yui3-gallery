@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Arabic Numerals Tests</title>
+	<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
+	<script src="../../../build/gallery-intl-arabicnumerals/gallery-intl-arabicnumerals.js"></script>
+</head>
+<body class="yui3-skin-sam">
+	<div id="c"></div>
+<script>
+
+YUI({
+    logInclude: { TestRunner: true }
+}).use('test', 'console', 'gallery-intl-arabicnumerals', function (Y) {
+	var testCase = new Y.Test.Case({
+		name: "Test Arabic Numerals",
+		
+		testParseIntNaN: function () {
+			Y.Assert.isNaN(Y.Intl.parseInt("AbDE",10), "Shouldn't Change the Normal Behavior (Strings result in a NaN)");
+		},
+		
+		testParseIntEuropean: function() {
+			Y.Assert.areSame(123,Y.Intl.parseInt("123",10), "Shouldn't Change the Normal Behavior (European are still numbers)");
+			Y.Assert.areSame(198536,Y.Intl.parseInt("198536",10), "Shouldn't Change the Normal Behavior (European are still numbers)");
+			Y.Assert.areSame(9876543210,Y.Intl.parseInt("9876543210",10), "Shouldn't Change the Normal Behavior (European are still numbers)");
+		},
+		
+		testParseIntArabic: function() {
+			Y.Assert.areSame(123,Y.Intl.parseInt("\u0661\u0662\u0663",10), "Arabic Numerals Are Parsed Correctly");
+			Y.Assert.areSame(1230987654,Y.Intl.parseInt("\u0661\u0662\u0663\u0660\u0669\u0668\u0667\u0666\u0665\u0664",10), "Arabic Numerals Are not Parsed Correctly");
+			
+		},
+		
+		testParseIntExtendedArabic: function() {
+			Y.Assert.areSame(123,Y.Intl.parseInt("\u06F1\u06F2\u06F3",10), "Extended Arabic Numerals Are not Parsed Correctly");
+			Y.Assert.areSame(1230987654,Y.Intl.parseInt("\u06F1\u06F2\u06F3\u06F0\u06F9\u06F8\u06F7\u06F6\u06F5\u06F4",10), "Arabic Numerals Are Parsed Correctly");
+		},
+		
+		testParseFloatNaN: function () {
+			Y.Assert.isNaN(Y.Intl.parseFloat("AbDE"));
+			Y.Assert.isNaN(Y.Intl.parseFloat("Ab.DE"));
+		},
+		
+		testParseFloatEuropean: function() {
+			Y.Assert.areSame(12.3,Y.Intl.parseFloat("12.3"));
+			Y.Assert.areSame(19.8536,Y.Intl.parseFloat("19.8536"));
+			Y.Assert.areSame(98765432.1,Y.Intl.parseFloat("98765432.10"));
+		},
+		
+		testParseFloatArabic: function() {
+			Y.Assert.areSame(1.23,Y.Intl.parseFloat("\u0661\u066B\u0662\u0663"));
+			Y.Assert.areSame(1.23,Y.Intl.parseFloat("\u0661.\u0662\u0663"));
+			Y.Assert.areSame(1230.987654,Y.Intl.parseFloat("\u0661\u0662\u0663\u0660\u066B\u0669\u0668\u0667\u0666\u0665\u0664"));
+			
+		},
+		
+		testParseFloatExtendedArabic: function() {
+			Y.Assert.areSame(1.23,Y.Intl.parseFloat("\u06F1.\u06F2\u06F3"), "Extended Arabic Numerals Are not Parsed Correctly");
+			Y.Assert.areSame(1.23,Y.Intl.parseFloat("\u06F1\u066B\u06F2\u06F3"), "Extended Arabic Numerals Are not Parsed Correctly");
+			Y.Assert.areSame(1230987.654,Y.Intl.parseFloat("\u06F1\u06F2\u06F3\u06F0\u06F9\u06F8\u06F7\u066B\u06F6\u06F5\u06F4"), "Arabic Numerals Are Parsed Correctly");
+		},
+		
+		testTextToArabicNumerals: function() {
+			Y.Assert.areEqual("These are Normal. Dots. www.yahoo٣.com", Y.Intl.textToArabicNumerals("These are Normal. Dots. www.yahoo3.com")); // Not a Float
+			Y.Assert.areEqual("You have ١٢ guys here", Y.Intl.textToArabicNumerals("You have 12 guys here"));
+			Y.Assert.areEqual("الأربعاء، ١٥ شباط ٢٠١٢ ٩:٣٨:٤٩ ص", Y.Intl.textToArabicNumerals("الأربعاء، 15 شباط 2012 9:38:49 ص"));
+			Y.Assert.areEqual("Pi is ٣٫١٤", Y.Intl.textToArabicNumerals("Pi is 3.14"));
+		},
+		
+		testTextToExtendedArabicNumerals: function() {
+			Y.Assert.areEqual("These are Normal. Dots. www.yahoo.com", Y.Intl.textToExtendedArabicNumerals("These are Normal. Dots. www.yahoo.com")); // Not a Float
+			Y.Assert.areEqual("You have \u06F1\u06F2 guys here", Y.Intl.textToExtendedArabicNumerals("You have 12 guys here"));
+			Y.Assert.areEqual("Pi is \u06F3٫\u06F1\u06F4", Y.Intl.textToExtendedArabicNumerals("Pi is 3.14"));
+		}
+	});
+	
+	var r = new Y.Console({
+        verbose : true,
+        //consoleLimit : 10,
+        newestOnTop : false
+    });
+	r.render('#c');
+	Y.Test.Runner.add(testCase);
+    Y.Test.Runner.run();
+});
+
+</script>
+</body>
+</html>

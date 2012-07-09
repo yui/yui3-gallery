@@ -1,27 +1,53 @@
 YUI.add('gallery-overlay-modal', function(Y) {
 
-	/**
-	 * Overlay Modal Plugin
-	 * 
-	 * Oddnut Software
-	 * Copyright (c) 2009 Eric Ferraiuolo - http://eric.ferraiuolo.name
-	 * YUI BSD License - http://developer.yahoo.com/yui/license.html
-	 */
-	
+/*!
+ * Overlay Modal Plugin
+ * 
+ * Oddnut Software
+ * Copyright (c) 2009-2010 Eric Ferraiuolo - http://eric.ferraiuolo.name
+ * YUI BSD License - http://developer.yahoo.com/yui/license.html
+ */
+ 
 	var OverlayModal,
 		OVERLAY_MODAL = 'overlayModal',
+		
+		HOST = 'host',
+		BOUNDING_BOX = 'boundingBox',
 		
 		OVERLAY = 'overlay',
 		MODAL = 'modal',
 		MASK = 'mask',
 		
-		HOST = 'host',
-		BOUNDING_BOX = 'boundingBox',
-		
-		CHANGE = 'Change',
-		
 		getCN = Y.ClassNameManager.getClassName,
-		isBoolean = Y.Lang.isBoolean;
+		
+		CLASSES = {
+			modal	: getCN(OVERLAY, MODAL),
+			mask	: getCN(OVERLAY, MASK)
+		},
+		
+		supportsPosFixed = (function(){
+			
+			/*! IS_POSITION_FIXED_SUPPORTED - Juriy Zaytsev (kangax) - http://yura.thinkweb2.com/cft/ */
+			
+			var isSupported = null,
+				el, root;
+			
+			if (document.createElement) {
+				el = document.createElement('div');
+				if (el && el.style) {
+					el.style.position = 'fixed';
+					el.style.top = '10px';
+					root = document.body;
+					if (root && root.appendChild && root.removeChild) {
+						root.appendChild(el);
+						isSupported = (el.offsetTop === 10);
+						root.removeChild(el);
+					}
+				}
+			}
+			
+			return isSupported;
+		}());
 		
 	// *** Constructor *** //
 	
@@ -38,21 +64,7 @@ YUI.add('gallery-overlay-modal', function(Y) {
 		
 		NS : MODAL,
 		
-		ATTRS : {
-			
-			mask : {
-				value : true,
-				validator : isBoolean
-			}
-			
-		},
-		
-		CLASSES : {
-			
-			modal : getCN(OVERLAY, MODAL),
-			mask : getCN(OVERLAY, MASK)
-			
-		}
+		CLASSES : CLASSES
 		
 	});
 	
@@ -63,11 +75,13 @@ YUI.add('gallery-overlay-modal', function(Y) {
 		// *** Instance Members *** //
 		
 		_maskNode : null,
-		_focusHandle : null,
+		_uiHandles : null,
 		
 		// *** Lifecycle Methods *** //
 		
 		initializer : function (config) {
+			
+			this._uiHandles = {};
 			
 			this.doAfter('renderUI', this.renderUI);
 			this.doAfter('bindUI', this.bindUI);
@@ -86,106 +100,111 @@ YUI.add('gallery-overlay-modal', function(Y) {
 				this._maskNode.remove(true);
 			}
 			
-			this._detachFocusHandle();
+			this._detachHandles();
 			
-			this.get(HOST).get(BOUNDING_BOX).removeClass(OverlayModal.CLASSES.modal);
+			this.get(HOST).get(BOUNDING_BOX).removeClass(CLASSES.modal);
 		},
 		
 		renderUI : function () {
 			
+			var host = this.get(HOST);
+			
 			this._maskNode = Y.Node.create('<div></div>');
-			this._maskNode.addClass(OverlayModal.CLASSES.mask);
+			this._maskNode.addClass(CLASSES.mask);
 			this._maskNode.setStyles({
-				position	: 'fixed',
+				position	: supportsPosFixed ? 'fixed' : 'absolute',
+				zIndex		: host.get('zIndex') || 0,
 				width		: '100%',
 				height		: '100%',
 				top			: '0',
 				left		: '0',
-				zIndex		: '-1'
+				display		: 'none'
 			});
 			
-			this.get(HOST).get(BOUNDING_BOX).addClass(OverlayModal.CLASSES.modal);
+			Y.one('body').insertBefore(this._maskNode, Y.one('body').get('firstChild'));
+			host.get(BOUNDING_BOX).addClass(CLASSES.modal);
 		},
 		
 		bindUI : function () {
 			
-			this.after(MASK+CHANGE, this._afterMaskChange);
-			
-			this.get(HOST).after('visibleChange', Y.bind(this._afterHostVisibleChange, this));
+			this.doAfter('visibleChange', this._afterHostVisibleChange);
 		},
 		
 		syncUI : function () {
 			
-			var host = this.get(HOST);
-			
-			this._uiSetMask(this.get(MASK));
-			
-			if (host.get('visible') === true) {
-				this._attachFocusHandle();
-				host.get(BOUNDING_BOX).focus();
-			} else {
-				this._detachFocusHandle();
-			}
+			this._uiSetHostVisible(this.get(HOST).get('visible'));
 		},
 		
 		// *** Public Methods *** //
 		
-		mask : function () {
-			
-			this.set(MASK, true);
-		},
-		
-		unmask : function () {
-			
-			this.set(MASK, false);
-		},
-		
 		// *** Private Methods *** //
 		
-		_uiSetMask : function (mask) {
+		_focus : function () {
 			
-			var hostBoundingBox = this.get(HOST).get(BOUNDING_BOX);
-			
-			if (mask) {
-				hostBoundingBox.append(this._maskNode);
-			} else if (this._maskNode.get('parentNode') === hostBoundingBox) {
-				this._maskNode.remove();
-			}
-		},
-		
-		_attachFocusHandle : function () {
-			
-			this._focusHandle = Y.one('document').on('focus', Y.bind(function(e){
-			
-				var hostBoundingBox = this.get(HOST).get(BOUNDING_BOX);
+			var host = this.get(HOST),
+				bb = host.get(BOUNDING_BOX),
+				oldTI = bb.get('tabIndex');
 				
-				if ( ! hostBoundingBox.contains(e.target)) {
-					hostBoundingBox.focus();
-				}
-			
-			}, this));
+			bb.set('tabIndex', 0);
+			host.focus();
+			bb.set('tabIndex', oldTI);
 		},
 		
-		_detachFocusHandle : function () {
+		_blur : function () {
 			
-			if (this._focusHandle) {
-				this._focusHandle.detach();
+			this.get(HOST).blur();
+		},
+		
+		_uiSetHostVisible : function (visible) {
+			
+			if (visible) {
+				this._attachHandles();
+				this._maskNode.setStyle('display', 'block');
+				this._focus();
+			} else {
+				this._detachHandles();
+				this._maskNode.setStyle('display', 'none');
+				this._blur();
 			}
 		},
 		
-		_afterMaskChange : function (e) {
+		_attachHandles : function () {
+		
+			var uiHandles = this._uiHandles;
 			
-			this._uiSetMask(e.newVal);
+			if ( ! uiHandles.focus) {
+				uiHandles.focus = Y.one(document).on('focus', Y.bind(function(e){
+					if ( ! this.get(HOST).get(BOUNDING_BOX).contains(e.target)) {
+						this._focus();
+					}
+				}, this));
+			}
+			
+			if ( ! uiHandles.click) {
+				var bb = this.get(HOST).get(BOUNDING_BOX);
+				uiHandles.click = this._maskNode.on('click', Y.bind(bb.scrollIntoView, bb, false));
+			}
+			
+			if ( ! supportsPosFixed && ! uiHandles.scroll) {
+				uiHandles.scroll = Y.one(window).on('scroll', Y.bind(function(e){
+					this._maskNode.setStyle('top', this._maskNode.get('docScrollY'));
+				}, this));
+			}
+		},
+		
+		_detachHandles : function () {
+			
+			var uiHandles = this._uiHandles;
+			
+			Y.Object.each(uiHandles, function(h, key){
+				h.detach();
+				delete uiHandles[key];
+			});
 		},
 		
 		_afterHostVisibleChange : function (e) {
 			
-			if (e.newVal === true) {
-				this._attachFocusHandle();
-				this.get(HOST).get(BOUNDING_BOX).focus();
-			} else {
-				this._detachFocusHandle();
-			}
+			this._uiSetHostVisible(e.newVal);
 		}
 		
 	});
@@ -193,4 +212,4 @@ YUI.add('gallery-overlay-modal', function(Y) {
 	Y.namespace('Plugin').OverlayModal = OverlayModal;
 
 
-}, 'gallery-2009.12.08-22' ,{requires:['overlay', 'plugin', 'event-focus']});
+}, 'gallery-2010.05.21-18-16' ,{requires:['overlay', 'plugin', 'event-focus']});

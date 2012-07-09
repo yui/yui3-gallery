@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<link type="text/css" rel="stylesheet"
+	href="http://yui.yahooapis.com/3.3.0/build/cssfonts/fonts-min.css" />
+<link type="text/css" rel="stylesheet"
+	href="/Users/prachiti/yui/yui3-gallery/build/gallery-simplenotifier/assets/simplenotifier.css" />
+
+<script type="text/javascript"
+	src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
+<script type="text/javascript"
+	src="/Users/prachiti/yui/yui3-gallery/build/gallery-simplenotifier/gallery-simplenotifier.js"></script>
+<style>
+#booga {
+	height: 200px;
+	line-height: 200px;
+	width: 450px;
+	border: 2px solid #000;
+	text-align: center;
+	margin-bottom: 10px;
+	border: solid;
+}
+
+</style>
+
+</head>
+<body>
+	<div id="booga" class=""></div>
+	<script>
+        YUI().use("gallery-simplenotifier", function(Y) {
+		  	var t = new Y.SimpleNotifier({timeout:12000, position:"bottom-left"});
+		  	t.set("message","message in here....");
+            t.render();
+        });
+        </script>
+</body>
+</html>

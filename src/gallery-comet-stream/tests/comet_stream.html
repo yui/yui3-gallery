@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width,user-scalable=no">
+
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Test</title>
+        <script type="text/javascript" src="http://yui.yahooapis.com/combo?3.3.0/build/yui/yui-min.js&3.3.0/build/loader/loader-min.js"></script>
+        <script type="text/javascript" src="gallery-comet-stream-debug.js"></script>
+        <style type="text/css" media="screen">
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <h2> 
+            Note: this page is supposed to take effects in PHP server.
+        </h2>
+        <div id="console"></div>
+
+        <script type="text/javascript" charset="utf-8">
+YUI({
+    //filter: 'raw',
+    //combine: false
+}).use('console', 'gallery-comet-stream', 'test', function(Y) {
+
+    var testSuite = new Y.Test.Suite("Comet Stream Tests");
+
+    var errorTestCases = new Y.Test.Case({
+        name: 'Error cases',
+
+        setUp: function() { },
+
+        tearDown: function(){
+            this.comet.close();
+            this.comet = null;
+        },
+
+        test_response_without_200_status_code_should_trigger_simple_on_event: function() {
+            var tc = this;
+            this.comet = new Y.CometStream({
+                url: '404.php',
+                connectTimeout: 1500
+            });
+
+            this.comet.on('fail', function(ev) {
+                tc.resume();
+            });
+
+            this.comet.start();
+
+            this.wait(5000);
+        },
+
+        test_response_without_200_status_code_should_cause_fail: function() {
+            var tc = this;
+            this.comet = new Y.CometStream({
+                url: '404.php',
+                connectTimeout: 1500,
+                on: {
+                    fail: function(ev) {
+                        tc.resume(function() {});
+                    }
+                }
+            });
+
+            this.comet.start();
+
+            this.wait(3000);
+        }
+
+    });
+
+    var invalidFormatTestCases = new Y.Test.Case({
+        name: 'pushed event cases',
+
+        setUp: function() { },
+
+        tearDown: function(){
+            this.comet.close();
+            this.comet = null;
+        },
+
+        test_response_with_invalid_format_should_cause_invalidFormat_event: function() {
+            if (Y.UA.ie) {
+                // only XHR streaming migh trigger invalidFormat
+                Y.Assert.isTrue(true, 'this test is skipped');
+                return;
+            }
+
+            var tc = this;
+            this.comet = new Y.CometStream({
+                url: 'resources/invalid_stream.php',
+                connectTimeout: 1500
+            });
+
+            this.comet.on("invalidFormat", function(e) {
+                tc.resume(function(){ });
+            });
+
+            this.comet.start();
+
+            this.wait(3000);
+        }
+    });
+
+    var pushedEventTestCases = new Y.Test.Case({
+        name: 'pushed event cases',
+
+        setUp: function() { },
+
+        tearDown: function(){
+            this.comet.close();
+            this.comet = null;
+        },
+
+        test_response_with_single_message_pushed_should_trigger_one_pushed_event: function() {
+            this.comet = new Y.CometStream({
+                url: 'resources/one_message.php',
+                connectTimeout: 1500
+            });
+
+            this.comet.on("pushed", Y.bind(function(e) {
+                var that = this;
+                this.resume(function(){
+                    Y.Assert.areEqual('Hello World', e.data);
+                });
+            }, this));
+
+            this.comet.start();
+
+            this.wait(5000);
+        },
+
+        test_response_with_three_message_should_trigger_pushed_event_three_times: function() {
+            this.comet = new Y.CometStream({
+                url: 'resources/three_message.php',
+                connectTimeout: 1500
+            });
+
+            var idx = 0;
+            this.comet.on("pushed", Y.bind(function(e) {
+                Y.log(e.data);
+                var that = this;
+                this.resume(function(){
+                    Y.Assert.areEqual(idx + ': Hello World', e.data);
+                    if (idx < 2) {
+                        that.wait(3000);
+                    }
+                });
+
+                ++idx;
+            }, this));
+
+            this.comet.start();
+
+            this.wait(5000);
+        }
+    });
+
+    var reconnectTestCases = new Y.Test.Case({
+        name: 'reconnect cases',
+
+        setUp: function() { },
+
+        tearDown: function(){
+            this.comet.close();
+            this.comet = null;
+        },
+
+        test_reconnect_event_triggered_when_stream_is_reset: function() {
+            this.comet = new Y.CometStream({
+                url: 'resources/three_message.php',
+                connectTimeout: 1500,
+                resetTimeout: 1000
+            });
+
+            this.comet.on("reconnect", Y.bind(function(e) {
+                this.resume(function(){
+                });
+            }, this));
+
+            this.comet.start();
+
+            this.wait(3000);
+        },
+
+        test_change_query_string_in_reconnect_event_handler: function() {
+            var  lastEventId,
+                 pushedEventIds = [],
+                 tc = this;
+                 streamUrl = 'resources/sequence_message.php';
+
+            this.comet = new Y.CometStream({
+                url: streamUrl,
+                resetTimeout: 1500
+            });
+
+            this.comet.on("pushed", function(ev) {
+                var n = new Number(ev.data);
+
+                lastEventId = n;
+                pushedEventIds.push(lastEventId);
+
+                if (lastEventId == 6) {
+                    tc.resume(function() {
+                        var expected = [1, 2, 3, 4, 5, 6];
+                        Y.Assert.areEqual(expected.length, pushedEventIds.length);
+                        for(var i=expected.length; i!=0; --i) {
+                            Y.Assert.areEqual(expected[i], pushedEventIds[i]);
+                        }
+                    });
+                }
+            });
+
+            this.comet.on("reconnect", function(ev) {
+                var newUrl = streamUrl + '?last_event_id=' + lastEventId;
+                this.set('url', newUrl);
+            });
+
+            this.comet.start();
+
+            this.wait(10000);
+        }
+    });
+
+    var report = new Y.Console({
+        verbose : true,
+        //consoleLimit : 10,
+        newestOnTop : false
+    });
+    report.render('#console');
+
+    testSuite.add(errorTestCases);
+    testSuite.add(pushedEventTestCases);
+    if (!Y.UA.ie) {
+        testSuite.add(invalidFormatTestCases);
+    }
+    testSuite.add(reconnectTestCases);
+
+    Y.Test.Runner.add(testSuite);
+    Y.Test.Runner.run();
+});
+        </script>
+    </body>
+</html>

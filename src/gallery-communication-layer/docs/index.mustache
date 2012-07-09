@@ -1,0 +1,419 @@
+<div class="intro">
+
+<p>
+The CommunicationLayer component provides an abstraction layer on top of
+HTML5's <a
+href="https://developer.mozilla.org/en/DOM/window.postMessage">`window.postMessage`</a>
+method to provide a secure, evented communication API for cross-domain web
+applications.
+</p>
+
+</div>
+
+<h2>Configuration</h2>
+
+<h3>bufferTimeout (optional)</h3>
+
+<p>
+Events fired at the parent may be buffered by the CommunicationLayer
+if the handshake has not yet completed. In order to prevent this buffer
+from causing a memory leak, these subscriptions are expired after a
+default of 10,000 milliseconds.
+
+You can change this timeout by passing in a new configuration value for
+`bufferTimeout` (in milliseconds).
+</p>
+
+```
+var CL = Y.CommunicationLayer({
+    bufferTimeout: 5000
+});
+```
+
+<h3>callbackTimeout (optional)</h3>
+
+<p>
+Callbacks can be defined per event when firing events into the
+CommunicationLayer. Since the execution of these callbacks relies on
+the action of the other application, in order to prevent a memory leak,
+these subscriptions are expired after a default of 10,000 milliseconds.
+
+You can change this timeout by passing in a new configuration value for
+`callbackTimeout` (in milliseconds).
+</p>
+
+```
+var CL = Y.CommunicationLayer({
+    callbackTimeout: 5000
+});
+```
+
+<h3>debug</h3>
+
+<p>
+If you need to simulate interaction between an application and its
+parent, you can enable debug mode.
+</p>
+
+```
+var CL = Y.CommunicationLayer({
+    debug: true
+});
+```
+<p>
+This allows interaction with the application through the global YUI object,
+even from the console.
+</p>
+
+```
+// Listens for the 'sd:suggest' event bubbling up from the appliation
+YUI.CL.on('sd:suggest', function () {
+    alert('"sd:suggest" has been fired by the app!');
+});
+
+// Simulates a 'query:change' event fired from the parent
+YUI.CL.fire('query:change', {
+    p: 'charlize'
+});
+```
+
+<h2>From the parent application's perspective</h2>
+
+<h3>Usage</h3>
+
+<p>
+The parent application must register a child application before any
+interaction can take place. Once the handshake between the two is
+complete, the parent is provided a proxy object as an argument to a
+registration callback. This proxy is the only way for the parent to
+communicate with the child.
+</p>
+
+```
+CL.register(iframe, function (proxy) {
+    proxy.on('navigate', navigateHandler);
+
+    Y.one('#button').on('click', function (e) {
+        proxy.fire('clicked', {
+            target: e.target
+        });
+    });
+});
+```
+
+<p>
+This registration process requires the following:
+</p>
+
+<ul>
+    <li>The iframe's `src` attribute is set</li>
+    <li>The iframe has not been appended to the document yet</li>
+</ul>
+
+<p>
+The iframe's `src` attribute is required to be set because it is used
+as a registration token during the handshake.
+</p>
+
+<p>
+Once the iframe is appended to the document, its CommunicationLayer
+kicks off the handshake sequence. This sequence allows both sides to
+record the source and origin of the other, which are then referenced
+every time a CL message is dispatched or a CL message is received.
+This allows for the secure communication between the two application
+and addresses the main <a
+href="https://developer.mozilla.org/en/DOM/window.postMessage#Security_concerns">
+security concerns</a> regarding the `postMessage` API.
+</p>
+
+<h3>Readiness</h3>
+
+<p>
+Although the execution of the registration callback signifies that the
+connection has been established, the child may require additional time
+to set up its application logic. To address this issue, the
+CommunicationLayer allows the parent to subscribe to the application
+ready state of the child, at which point it can start firing
+timing-sensitive events (usually related to the life cycle of the
+application).
+</p>
+
+```
+proxy.ready(function () {
+    proxy.fire('init', {
+        data: initData
+    });
+});
+```
+
+<p>
+It is the responsibility of the child to signal this application ready
+state.
+</p>
+
+<h3>Proxy Object API</h3>
+
+The proxy is passed as an argument to the registration handler and
+provides a secure way for the parent application to interact with
+the child application.
+
+<h4>iframe</h4>
+
+<p>
+A reference to the iframe node that this proxy is associated with.
+</p>
+
+```
+proxy.iframe
+```
+
+<h4>on (event, handler, [context], [arg*])</h4>
+
+<p>
+Subscribe an event handler to execute in response to a CL event fired by the child.
+</p>
+
+```
+proxy.on('refresh', refreshHandler);
+```
+
+<p>
+Group subscriptions are also supported.
+</p>
+
+```
+// Objects
+proxy.on({
+    refresh: refreshHandler,
+    close: Y.bind(closeHandler, this)
+});
+
+// Arrays
+proxy.on(['refresh', 'close'], handler, this);
+```
+
+<h4>once (event, handler, [context], [arg*])</h4>
+
+Subscribe an event handler to execute once in response to a CL event fired by the child
+
+```
+proxy.once('init', initHandler);
+```
+
+<h4>fire (event, data, callback)</h4>
+
+<p>
+Fire a CL event at the child along with optional event data. A callback
+can also be defined, but will only execute if the child application
+executes it.
+</p>
+
+```
+proxy.fire('init', {
+    foo: bar
+});
+```
+<p>
+To prevent memory leaks, the callback expires after `callbackTimeout`
+milliseconds (default of 10,000). This is configurable in the
+constructor configuration.
+</p>
+
+<h4>ready (fn)</h4>
+
+<p>
+Subscribe to the child application's ready state. The ready state is
+defined by the child application.
+</p>
+
+```
+proxy.ready(function () {
+    proxy.fire('init', {
+        data: initData
+    });
+});
+```
+
+<h4>open (name, callback)</h4>
+
+```
+var connection = proxy.open('encode', function (encoded) {
+    useEncodedAsset(encoded);
+
+    // The application should define when to close the connection
+    if (! encoded) {
+        connection.close();
+    }
+});
+connection.write(imageUri);
+connection.write(imageUri);
+```
+
+<p>
+A connection object is returned when a connection is successfully opened. The
+connection object has the following API:
+</p>
+
+<dl>
+    <dt><code>write</code></dt>
+    <dd>
+        Expects a single argument that can be of any type. This argument will
+        be available to the child under the <code>data</code> property of the
+        event object.
+    </dd>
+    <dt><code>close</code></dt>
+    <dd>
+        Closes the connection. Unlike callbacks to <code>fire</code>, callbacks
+        to connections do not automatically expire so they must be manually
+        closed.
+    </dd>
+</dl>
+
+<p>
+The child application can respond to connection requests sent through its
+parent's proxy object via <code>Y.CL.on</code>.
+</p>
+
+```
+Y.CL.on('encode', function (e) {
+    if (e.callback) {
+        e.callback(encodeAsset(e.data));
+    }
+});
+```
+
+<h2>From the child application's perspective</h2>
+
+<h3>CommunicationLayer API</h3>
+
+<h4>on</h4>
+
+<p>
+The child can subscribe to parent events in the following manner.
+</p>
+
+```
+Y.CL.on('refresh', refreshHandler);
+Y.CL.on('close', this.closeHandler, this);
+```
+
+<p>
+Group subscriptions are also supported.
+</p>
+
+```
+// Objects
+Y.CL.on({
+    refresh: refreshHandler,
+    close: Y.bind(closeHandler, this)
+});
+
+// Arrays
+Y.CL.on(['refresh', 'close'], handler, this);
+```
+
+<h4>once</h4>
+
+<p>
+The child can subscribe to parent events <em>just once</em> in the following manner.
+</p>
+
+```
+Y.CL.once('refresh', refreshHandler);
+Y.CL.once('close', this.closeHandler, this);
+```
+
+<p>
+Group subscriptions are also supported.
+</p>
+
+```
+// Objects
+Y.CL.once({
+    refresh: refreshHandler,
+    close: Y.bind(closeHandler, this)
+});
+
+// Arrays
+Y.CL.once(['refresh', 'close'], handler, this);
+```
+
+<h4>fire (event, data, callback)</h4>
+
+<p>
+Fire a CL event at the parent along with optional event data. A
+callback can also be defined, but will only execute if the child
+application executes it.
+</p>
+
+```
+Y.CL.fire('init', {
+    foo: bar
+});
+```
+<p>
+To prevent memory leaks, the callback expires after `callbackTimeout`
+milliseconds (default of 10,000). This is configurable in the
+constructor configuration.
+</p>
+
+<h4>open (name, callback)</h4>
+
+```
+var connection = Y.CL.open('encode', function (encoded) {
+    useEncodedAsset(encoded);
+
+    // The application should define when to close the connection
+    if (! encoded) {
+        connection.close();
+    }
+});
+connection.write(imageUri);
+connection.write(imageUri);
+```
+
+<p>
+A connection object is returned when a connection is successfully opened. The
+connection object has the following API:
+</p>
+
+<dl>
+    <dt><code>write</code></dt>
+    <dd>
+        Expects a single argument that can be of any type. This argument will
+        be available to the parent under the <code>data</code> property of the
+        event object.
+    </dd>
+    <dt><code>close</code></dt>
+    <dd>
+        Closes the connection. Unlike callbacks to <code>fire</code>, callbacks
+        to connections do not automatically expire so they must be manually
+        closed.
+    </dd>
+</dl>
+
+<p>
+The parent application can respond to requests coming over the
+connection via <code>proxy.on(..)</code>.
+</p>
+
+```
+proxy.on('encode', function (e) {
+    if (e.callback) {
+        e.callback(encodeAsset(e.data));
+    }
+});
+```
+
+<h3>Readiness</h3>
+
+<p>
+The child application can assume that the parent application is always
+ready. In the case where events are fired at the parent before it is
+ready (i.e., before the handshake has completed), these events are
+buffered and flushed when the ready state is reached.
+</p>
+
+<h2>Known Issues</h2>
+
+<p>None as of 2012-06-24</p>

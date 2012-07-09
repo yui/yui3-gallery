@@ -1,0 +1,183 @@
+{
+    "project": {
+        "name": "ZUI placeholder",
+        "description": "ZUI placeholder provides utilities to enable placeholder support for older browsers.",
+        "version": "0.0.1",
+        "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-placeholder"
+    },
+    "files": {
+        "js/zui-placeholder.js": {
+            "name": "js/zui-placeholder.js",
+            "modules": {
+                "gallery-zui-placeholder": 1
+            },
+            "classes": {
+                "Y.zui.placeholder": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-zui-placeholder": {
+            "name": "gallery-zui-placeholder",
+            "submodules": {},
+            "classes": {
+                "Y.zui.placeholder": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/zui-placeholder.js",
+            "line": 95,
+            "description": "The Placeholder module provides utilities to enable placeholder\nsupport for older browsers"
+        }
+    },
+    "classes": {
+        "Y.zui.placeholder": {
+            "name": "Y.zui.placeholder",
+            "shortname": "Y.zui.placeholder",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-zui-placeholder",
+            "namespace": "",
+            "file": "js/zui-placeholder.js",
+            "line": 95,
+            "description": "A static object to access zui placeholder properties and methods"
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/zui-placeholder.js",
+            "line": 100,
+            "description": "whether this browser supports placeholder natively",
+            "itemtype": "property",
+            "name": "isNative",
+            "static": 1,
+            "type": "bool",
+            "class": "Y.zui.placeholder",
+            "module": "gallery-zui-placeholder"
+        },
+        {
+            "file": "js/zui-placeholder.js",
+            "line": 108,
+            "description": "A string used to set attribute to indicate this node installed placeholder or not",
+            "itemtype": "property",
+            "name": "txtInstalled",
+            "static": 1,
+            "final": 1,
+            "type": "string",
+            "class": "Y.zui.placeholder",
+            "module": "gallery-zui-placeholder"
+        },
+        {
+            "file": "js/zui-placeholder.js",
+            "line": 118,
+            "description": "A string used to set classname when this input should show placeholder",
+            "itemtype": "property",
+            "name": "clsBlur",
+            "static": 1,
+            "final": 1,
+            "type": "string",
+            "class": "Y.zui.placeholder",
+            "module": "gallery-zui-placeholder"
+        },
+        {
+            "file": "js/zui-placeholder.js",
+            "line": 127,
+            "description": "use this method to install placeholder on nodes",
+            "itemtype": "method",
+            "name": "install",
+            "params": [
+                {
+                    "name": "elements",
+                    "description": "Optional. The elements to install placeholder support",
+                    "type": "NodeList || Node || HTMLElement || cssString"
+                }
+            ],
+            "return": {
+                "description": "An array contains [TotalElements, InstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find nodes",
+                "type": "Array"
+            },
+            "static": 1,
+            "class": "Y.zui.placeholder",
+            "module": "gallery-zui-placeholder"
+        },
+        {
+            "file": "js/zui-placeholder.js",
+            "line": 147,
+            "description": "use this method to uninstall placeholder on nodes",
+            "itemtype": "method",
+            "name": "uninstall",
+            "params": [
+                {
+                    "name": "elements",
+                    "description": "Optional. The elements to remove placeholder support",
+                    "type": "NodeList || Node || HTMLElement || cssString"
+                }
+            ],
+            "return": {
+                "description": "An array contains [TotalElements, UninstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find nodes",
+                "type": "Array"
+            },
+            "static": 1,
+            "class": "Y.zui.placeholder",
+            "module": "gallery-zui-placeholder"
+        },
+        {
+            "file": "js/zui-placeholder.js",
+            "line": 167,
+            "description": "use this method to install placeholder on node with event delegate",
+            "itemtype": "method",
+            "name": "installDelegate",
+            "params": [
+                {
+                    "name": "element",
+                    "description": "Optional. The parent element to install placeholder support",
+                    "type": "Node || HTMLElement || cssString"
+                },
+                {
+                    "name": "elements",
+                    "description": "Optional. The child elements to handle placeholder",
+                    "type": "NodeList || Node || HTMLElement || cssString"
+                }
+            ],
+            "return": {
+                "description": "An array contains [1, InstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find parent node. Return [-1, -1] when 'node-event-delegate' not loaded.",
+                "type": "Array"
+            },
+            "static": 1,
+            "class": "Y.zui.placeholder",
+            "module": "gallery-zui-placeholder"
+        },
+        {
+            "file": "js/zui-placeholder.js",
+            "line": 203,
+            "description": "use this method to uninstall placeholder on node with event delegate",
+            "itemtype": "method",
+            "name": "uninstallDelegate",
+            "params": [
+                {
+                    "name": "element",
+                    "description": "Optional. The parent element to uninstall placeholder support",
+                    "type": "Node || HTMLElement || cssString"
+                },
+                {
+                    "name": "elements",
+                    "description": "Optional. The child elements to unhandle placeholder",
+                    "type": "NodeList || Node || HTMLElement || cssString"
+                }
+            ],
+            "return": {
+                "description": "An array contains [1, UninstalledElements] when no native placeholder support. Return undefined when the browser suppports placeholder natively. Return [0, 0] when can not find parent node. Return [-1, -1] when 'node-event-delegate' not loaded.",
+                "type": "Array"
+            },
+            "static": 1,
+            "class": "Y.zui.placeholder",
+            "module": "gallery-zui-placeholder"
+        }
+    ]
+}

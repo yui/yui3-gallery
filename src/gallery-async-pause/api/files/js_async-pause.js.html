@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;async-pause.js - Async Pause Plugin</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><img src="..&#x2F;assets/css/logo.png"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Async.html">Async</a></li>
+            
+                <li><a href="..&#x2F;classes/AsyncCommand.html">AsyncCommand</a></li>
+            
+                <li><a href="..&#x2F;classes/Plugin.AsyncPause.html">Plugin.AsyncPause</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-async.html">gallery-async</a></li>
+            
+                <li><a href="..&#x2F;modules/gallery-async-command.html">gallery-async-command</a></li>
+            
+                <li><a href="..&#x2F;modules/gallery-async-pause.html">gallery-async-pause</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1 class="file-heading">File: js&#x2F;async-pause.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+ * @module gallery-async-pause
+ *&#x2F;
+(function (Y, moduleName) {
+    &#x27;use strict&#x27;;
+    
+    var _string__args = &#x27;_args&#x27;,
+        _string__resumed = &#x27;_resumed&#x27;,
+        _string_host = &#x27;host&#x27;,
+        _string_paused = &#x27;paused&#x27;,
+        
+        _false = false,
+        _true = true,
+        
+        _DoPrevent = Y.Do.Prevent,
+        _Plugin = Y.Plugin;
+
+    &#x2F;**
+     * Asynchronous command runner pause plugin.
+     * @class AsyncPause
+     * @extends Plugin.Base
+     * @namespace Plugin
+     * @param {Object} config Configuration Object.
+     *&#x2F;
+    _Plugin.AsyncPause = Y.Base.create(moduleName, _Plugin.Base, [], {
+        initializer: function () {
+            var me = this;
+                
+            if (me.get(_string_host).get(&#x27;mode&#x27;) === &#x27;queue&#x27;) {
+                me.beforeHostMethod(&#x27;_runQueue&#x27;, function () {
+                    if (me.get(_string_paused)) {
+                        me._set(_string__args, arguments);
+                        return new _DoPrevent(_string_paused);
+                    }
+
+                    return null;
+                });
+            }
+        },
+        &#x2F;**
+         * Pause the run.  Does not stop a command that is currently running,
+         * the run will pause before the next command runs.
+         * @method pause
+         * @chainable
+         *&#x2F;
+        pause: function () {
+            return this._set(_string_paused, _true);
+        },
+        &#x2F;**
+         * Resumes a paused run.  If a command is currently running, the paused
+         * state may not be updated immediately.  Resume does nothing if the run
+         * is not paused or not started yet or already complete.
+         * @method resume
+         * @chainable
+         *&#x2F;
+        resume: function () {
+            var argsChangeListener,
+                completeListener,
+                me = this,
+                
+                args = me.get(_string__args),
+                host = me.get(_string_host),
+                runQueue = host._runQueue,
+                
+                resume = function (args) {
+                    me._setAttrs({
+                        paused: _false,
+                        _args: null,
+                        _resumed: _false
+                    });
+                    runQueue.apply(host, args);
+                };
+            
+            if (!me.get(_string_paused) || me.get(_string__resumed)) {
+                return me;
+            }
+            
+            if (!host.get(&#x27;started&#x27;) || host.get(&#x27;completed&#x27;)) {
+                me._set(_string_paused, _false);
+                return me;
+            }
+
+            if (args) {
+                resume(args);
+                return me;
+            }
+            
+            me._set(_string__resumed, _true);
+            
+            argsChangeListener = me.once(&#x27;_argsChange&#x27;, function (eventFacade) {
+                completeListener.detach();
+                resume(eventFacade.newVal);
+            });
+            
+            completeListener = host.on(&#x27;complete&#x27;, function () {
+                argsChangeListener.detach();
+            });
+            
+            return me;
+        }
+    }, {
+        ATTRS: {
+            &#x2F;**
+             * Boolean value indicating the paused status of the run.
+             * @attribute paused
+             * @default false
+             * @readonly
+             * @type Boolean
+             *&#x2F;
+            paused: {
+                readonly: _true,
+                value: _false
+            },
+            &#x2F;**
+             * Paused _runQueue arguments.
+             * @attribute _args
+             * @protected
+             * @readonly
+             * @type Array
+             *&#x2F;
+            _args: {
+                readOnly: _true,
+                value: null
+            },
+            &#x2F;**
+             * Boolean value indicating the resumed status of the run.
+             * @attribute _resumed
+             * @protected
+             * @readonly
+             * @type Array
+             *&#x2F;
+            _resumed: {
+                readOnly: _true,
+                value: _false
+            }
+        },
+        NS: &#x27;pause&#x27;
+    });
+}(Y, arguments[1]));
+    </pre>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

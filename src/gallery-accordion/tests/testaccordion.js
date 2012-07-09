@@ -4,7 +4,19 @@ YUI({
     combine: false, 
     debug: true, 
     filter:"RAW"
-}).use("gallery-accordion", 'test', 'console', 'event-simulate', function(Y) {
+}).use("gallery-accordion", 'test', 'console', 'console-filters', 'dd-plugin', 'event-simulate', function(Y) {
+
+    var console = new Y.Console({
+        verbose : false,
+        printTimeout: 0,
+        newestOnTop : false,
+        entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
+                '<span class="{entry_cat_class}">{label}</span>'+
+                '<span class="{entry_content_class}">{message}</span>'+
+        '</pre>'
+    }).plug(Y.Plugin.ConsoleFilters)
+      .plug(Y.Plugin.Drag, { handles: ['.yui3-console-hd'] })
+      .render();
     
     var that = this;
 
@@ -14,10 +26,10 @@ YUI({
      */
     
     this.accordion1 = new Y.Accordion( {
-        boundingBox: "#bb1",
-        contentBox: "#acc1",
+        srcNode: "#acc1",
         useAnimation: true,
-        collapseOthersOnExpand: true
+        collapseOthersOnExpand: true,
+        itemChosen: ['click', 'mouseenter']
     });
 
 
@@ -28,7 +40,7 @@ YUI({
         var item, id;
         
         item = attrs.item;
-        id = item.get( "contentBox" ).get( "id" );
+        id = item.get( "id" );
 
         if( id === "item2" ){
             item.set( "label", "Label2" ); // there is no label in markup for this item, so we set it here
@@ -224,6 +236,21 @@ YUI({
             items = that.accordion1.get( "items" );
 
             Y.Assert.areSame( item3, items[ 0 ], "The items must be identical" );
+        },
+
+        testCancelRemoveItem: function(){
+            var items, item3;
+
+            that.accordion1.once("beforeItemRemove", function (e) {
+                e.halt();
+            });
+
+            item3 = that.accordion1.removeItem( 3 );
+
+            items = that.accordion1.get( "items" );
+
+            Y.Assert.areSame( 4, items.length, "There must be still 4 items" );
+            Y.Assert.areSame( null, item3, "The return value in case of canceled remove must be null" );
         }
     });
     
@@ -237,7 +264,7 @@ YUI({
             header = Y.Node.getDOMNode(item3.getStdModNode( Y.WidgetStdMod.HEADER ));
             
             Y.Event.simulate( header, "click" );
-            Y.Assert.areSame( true, item3.get( "expanded" ), "Item3 must be exapnded now" );
+            Y.Assert.areSame( true, item3.get( "expanded" ), "Item3 must be expanded now" );
         },
         
         testClickAlwaysVisible: function(){
@@ -250,10 +277,22 @@ YUI({
 
             Y.Event.simulate( iconAlwaysVisible, "click" );
             
-            Y.Assert.areSame( true, item2.get( "expanded" ), "Item3 must be exapnded now" );
+            Y.Assert.areSame( true, item2.get( "expanded" ), "Item3 must be expanded now" );
             Y.Assert.areSame( true, item2.get( "alwaysVisible" ), "Item3 must be always visible" );
 
             Y.Assert.areSame( false, item3.get( "expanded" ), "Item3 must be collapsed now" );
+        },
+
+        testMouseEnter: function(){
+            var item0, header;
+
+            item0 = that.accordion1.getItem( 0 );
+
+            header = Y.Node.getDOMNode(item0.getStdModNode( Y.WidgetStdMod.HEADER ));
+
+            Y.Event.simulate( header, "mouseover" );
+
+            Y.Assert.areSame( false, item0.get( "expanded" ), "Item0 must be collapsed now" );
         }
         
     });
@@ -291,7 +330,6 @@ YUI({
             newItem = new Y.AccordionItem( {
                 label: "Item, added from script",
                 expanded: true,
-                contentBox: "dynamicContentBox",
                 contentHeight: {
                     method: "fixed",
                     height: 30
@@ -391,20 +429,14 @@ YUI({
            }
     });
 
-    
-    //////////////////////////////////////////////////////////////////////////////////////
-    
-    var console = new Y.Console({
-        verbose : false,
-        printTimeout: 0,
-        newestOnTop : false,
-        entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
-                '<span class="{entry_cat_class}">{label}</span>'+
-                '<span class="{entry_content_class}">{message}</span>'+
-        '</pre>'
-    }).render();
 
-    
+    var testChangeContent = new Y.Test.Case({
+        testInnerHTMLChange: function(){
+            changeContentInnerHTML.call( that, Y, that.accordion1 );
+        }
+    });
+
+
     Y.Test.Runner.add(testBuildFromMarkup);
     Y.Test.Runner.add(testInsertRemoveItems);
     Y.Test.Runner.add(testUserInteractions);
@@ -413,11 +445,12 @@ YUI({
     Y.Test.Runner.add(testCollapse);
     Y.Test.Runner.add(testClosable);
     Y.Test.Runner.add(testLabelChange);
+    Y.Test.Runner.add(testChangeContent);
 
     Y.Test.Runner.on( 'complete', function( resCont ){
         var color;
         var results = resCont.results;
-        var res1 = Y.get( "#acc_result1" );
+        var res1 = Y.one( "#acc_result1" );
         res1.setContent(
             [ "Accordion1 - tests completed.<br>",
               "Passed:", results.passed,
@@ -454,8 +487,7 @@ YUI({
     var that = this;
 
     this.accordion2 = new Y.Accordion( {
-        boundingBox: "#bb2",
-        contentBox: "#acc2",
+        srcNode: "#acc2",
         useAnimation: false,
         reorderItems: true,
         collapseOthersOnExpand: false
@@ -530,24 +562,38 @@ YUI({
         }
     });
 
-    //////////////////////////////////////////////////////////////////////////////////////
+    var testChangeContent = new Y.Test.Case({
+        testInnerHTMLChange: function(){
+            changeContentInnerHTML.call( that, Y, that.accordion2 );
+        }
+    });
 
-    var console = new Y.Console({
-        verbose : false,
-        printTimeout: 0,
-        newestOnTop : false,
-        entryTemplate: '<pre class="{entry_class} {cat_class} {src_class}">'+
-                '<span class="{entry_cat_class}">{label}</span>'+
-                '<span class="{entry_content_class}">{message}</span>'+
-        '</pre>'
-    }).render();
 
+    var testStopEvents = new Y.Test.Case({
+        testPreventItemChosen: function(){
+            var item1, header;
+
+            item1 = that.accordion2.getItem( 0 );
+            header = Y.Node.getDOMNode(item1.getStdModNode( Y.WidgetStdMod.HEADER ));
+
+            that.accordion2.once('itemChosen', function(event){
+                event.preventDefault();
+            });
+
+            Y.Event.simulate( header, "click" );
+
+            Y.Assert.areSame( true, item1.get( "expanded" ), "Item3 must be expanded now" );
+        }
+    });
+    
     Y.Test.Runner.add(testDataAttr);
+    Y.Test.Runner.add(testChangeContent);
+    Y.Test.Runner.add(testStopEvents);
 
     Y.Test.Runner.on( 'complete', function( resCont ){
         var color;
         var results = resCont.results;
-        var res2 = Y.get( "#acc_result2" );
+        var res2 = Y.one( "#acc_result2" );
         res2.setContent(
             [ "Accordion2 - tests completed.<br>",
               "Passed:", results.passed,
@@ -572,5 +618,59 @@ YUI({
 
     this.accordion2.render();
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+function changeContentInnerHTML( Y, accordion ){
+    var newItem, handle, header, items, guid, cb;
+
+    items  = accordion.get( "items" );
+    Y.Array.each( items, function( item, index, items ){
+        if( item.get( "contentHeight" ).method === "stretch" && !item.get( "alwaysVisible" ) ){
+            item.set( "alwaysVisible", true );
+        }
+    }, this );
+
+    handle = accordion.after( "beforeItemExpand", Y.bind(function( attrs ){
+        var item = attrs.item;
+
+        if( item.get('contentBox').get('id') === guid && item.getStdModNode('body').get('children').size() === 0 ){
+            handle.detach();
+
+            item.set( "bodyContent", "<div>Loading, please wait...</div>" );
+
+            Y.later(2000, this, function(){
+                item.set( "bodyContent", [
+                    '<div id="my_first_div">',
+                        '<div id="my_second_div">Loading finished successfully!<br>The whole content of the item has been replaced.',
+                            '<div id="my_third_div"></div>',
+                        '</div>',
+                    '</div>'
+                ].join('') );
+
+                Y.later(1500, this, function(){
+                    var td = Y.one( "#my_third_div" );
+                    td.set( "innerHTML", "Only part of item's content has been changed<br> by using 'innerHTML' and the new resize() function." );
+                    item.resize();
+                });
+            });
+        }
+    }, this) );
+
+    newItem = new Y.AccordionItem({
+        label: "Change content via innerHTML"
+    });
+
+    accordion.addItem( newItem );
+
+    cb = newItem.get('contentBox');
+    guid = Y.guid();
+    cb.set('id', guid);
+
+    Y.later( 1000, this, function(){
+        header = Y.Node.getDOMNode(newItem.getStdModNode( Y.WidgetStdMod.HEADER ));
+        Y.Event.simulate( header, "click" );
+    } );
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////

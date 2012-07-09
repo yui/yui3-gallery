@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<style>
+/*Supplemental: CSS for the YUI distribution*/
+#custom-doc { width: 95%; min-width: 950px; }
+#pagetitle {background-image: url(../../assets/bg_hd.gif);}
+
+#mychart {
+    height:350px;
+    width:600px;
+    position:absolute;
+    top:180px;
+    left:100px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.1.2/build/cssfonts/fonts-min.css">
+<!-- BEGIN EXAMPLE CODE -->	
+</head>		
+<body class="yui3-skin-sam">
+<h3>Area Chart</h3>
+<div id="mychart"></div>
+<table>
+    <tr>
+        <td>width:</td>
+        <td>
+            <input type="text" id="widthfield"/><br/>
+        <td/>
+    </tr>
+    <tr>
+        <td>height:</td>
+        <td>
+            <input type="text" id="heightfield"/><br/>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <button type="button" id="loadchart">Load Chart</button><br/>
+        </td>
+        <td>
+            <button type="button" id="updateWidth">Update Dimensions</button>
+        </td>
+    </tr>
+</table>
+<div id="sliderparent" style="margin-left:100px"></div>
+<div id="leftsliderparent" style="position:absolute;top:180px;left:0px"></div>
+<script type="text/javascript" src="http://yui.yahooapis.com/3.2.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-charts/gallery-charts-min.js"></script>
+<script type="text/javascript">            
+    YUI().use('gallery-charts', 'slider', function (Y) 
+    {
+        var myDataValues = [ 
+            {category:"5/1/2010", values:2000, expenses:3700, revenue:2200}, 
+            {category:"5/2/2010", values:50, expenses:9100, revenue:100}, 
+            {category:"5/3/2010", values:400, expenses:1100, revenue:1500}, 
+            {category:"5/4/2010", expenses:1900, revenue:2800}, 
+            {category:"5/5/2010", values:5000, expenses:5000, revenue:2650}
+        ];
+        
+        var mychart;
+
+        var styleDef = {
+            graph: {
+                background:
+                {
+                    border:{
+                        color: "#ff0000",
+                        weight: 2
+                    },
+                    fill: {
+                        color: "#ddd"
+                    }
+                }
+            }
+        };
+        var gridStyles = {
+            line:{color:"#ff0000"}
+        };
+        Y.on("click", function(e) {
+            mychart = new Y.Chart({width:400, height: 350, dataProvider:myDataValues,
+            axes:{
+                valuestest:{
+                    keys: ["expenses", "revenue"],
+                    styles: {
+                        label:{
+                            rotation:-45,
+                            color:"#ff0000",
+                            fontSize:"95%"
+                        }
+                    },
+                    labelFormat: {
+                        prefix: "$",
+                        thousandSeparator: ",",
+                        decimalSeparator: ".",
+                        decimalPlaces: 2,
+                        suffix: " [US]"
+                    }
+                },
+                category:{
+                    styles: {
+                        label:{
+                            rotation:-45,
+                            color:"#ff0000",
+                            fontSize:"95%"
+                        }
+                    },
+                    labelFunction: function(txt)
+                    {
+                        return "Date: " + txt;
+                    }
+                }
+            },
+            seriesCollection:[
+                { 
+                    yKey:"values",
+                    styles:{
+                        marker:{
+                            fill:{
+                                color:"#ff8888"
+                            },
+                            border:{
+                                color:"#ff0000"
+                            },
+                            over:{
+                                fill:{
+                                    color:"#ffffff"
+                                },
+                                border:{
+                                    color:"#fe0000"
+                                },
+                                width: 12,
+                                height: 12
+                            }
+                        },
+                        line:{
+                            color:"#ff0000"
+                        }
+                    }
+                },
+                {
+                    yKey:"expenses",
+                    styles:{
+                        line:{
+                            color:"#999"
+                        },
+                        marker:
+                        {
+                            fill:{
+                                color:"#eee"
+                            },
+                            border:{
+                                color:"#999"
+                            }
+                        }
+                    },
+                    visible: false
+                } 
+            ], horizontalGridlines:{styles:gridStyles}, verticalGridlines: {styles:gridStyles}});
+            mychart.render("#mychart")
+            
+        }, "#loadchart");
+        Y.on("click", function(e) {
+            var w = document.getElementById("widthfield").value,
+                h = document.getElementById("heightfield").value;
+            mychart.set("width", w);
+            mychart.set("height", h);
+            slider.set("value", w);
+            vSlider.set("value", 450 - h);
+       }, "#updateWidth");
+
+       var slider = new Y.Slider({length:"850px",max:800,min:1,render:"#sliderparent",value:400});
+       slider.after("valueChange", function(e){
+            mychart.set("width", slider.get("value"));
+       });
+       var vSlider = new Y.Slider({length:"450px",min:450,axis:"y",max:1,render:"#leftsliderparent",value:100});
+       vSlider.after("valueChange", function(e){
+            mychart.set("height", (450 - vSlider.get("value")));
+       });
+    });
+</script>
+</body>
+</html>

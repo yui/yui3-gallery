@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>iButton test</title>
+		
+
+    </head>
+    <body class="yui3-skin-sam yui-skin-sam">
+
+		
+		<div id="test"></div>
+		<div id="test1"></div>
+		<p>Disabled: <input type="checkbox" id="dButton" /></p>
+		<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
+
+		<script>
+			YUI({
+				// debug:true,
+				// useBrowserConsole:true,
+				// filter: 'debug',
+				groups: {
+					sp: {
+						base: '../../../build/',
+						modules: {
+							'gallery-makenode': {
+								path: 'gallery-makenode/gallery-makenode-debug.js',
+								requires:['substitute','classnamemanager']
+							},
+							'gallery-md-ibutton': {
+								path: 'gallery-md-ibutton/gallery-md-ibutton-debug.js',
+								requires:['gallery-makenode', 'base-build','widget','anim'],
+								skinnable: true
+							}							
+						}
+					}
+				},
+				gallery: 'gallery-2011.10.06-19-55'
+			}).use(
+				'node','test', 'console','node-event-simulate', 
+				'gallery-md-ibutton',
+				function(Y) {
+					"use strict";
+
+					new Y.Console().render();
+					
+					
+					var iButton = new Y.IButton().render('#test');
+					var iButton1 = new Y.IButton({
+						labelOn:'a longer one',
+						labelOff: 'short'
+					}).render('#test1');
+					
+					var count = 0;
+					iButton.on('valueChange', function (ev) {
+						Y.log(ev.newVal,'info','iButton');
+						if (count++ > 5) {
+							this.set('labelOn', 'on on on on');
+							this.set('labelOff', 'off off off off');
+						}
+					});
+					iButton1.on('valueChange', function (ev) {
+						Y.log(ev.newVal,'info','iButton1');
+						if (count++ > 5) {
+							this.set('labelOn', 'on');
+							this.set('labelOff', 'off');
+						}
+					});
+					Y.one('#dButton').on('click', function (ev) {
+						var d = ev.target.get('checked');
+						iButton.set('disabled', d);
+						iButton1.set('disabled', d);
+					});
+				}
+			);
+
+		</script>
+        
+    </body>
+</html>

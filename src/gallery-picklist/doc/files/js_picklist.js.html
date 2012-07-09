@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;picklist.js</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.4.0&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.4.0&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            <h1><a href="..&#x2F;index.html"><img src="..&#x2F;assets/css/logo.png">undefined: js&#x2F;picklist.js</a></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: undefined</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/PickList.html">PickList</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-picklist.html">gallery-picklist</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main" class="content">
+                    <h1 class="file-heading">File: js&#x2F;picklist.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+ * PickList Widget :
+ *   
+ * Requires:  3.5.0pr2 at least, &quot;event&quot;, &quot;button&quot;, &quot;cssbutton&quot;
+ * 
+ * @module gallery-picklist 
+ **&#x2F;
+    var Lang 		= Y.Lang,
+        fnReplacer 	= Lang.sub;
+
+&#x2F;** 
+ * @class PickList
+ * @extends Widget
+ **&#x2F;
+     function PickList(config) {
+        PickList.superclass.constructor.apply(this, arguments);
+    }
+
+    PickList.NAME = &quot;picklist&quot;;
+
+    PickList.ATTRS = {
+
+	  	&#x2F;**
+	     The Array to populate the SELECT &#x2F; OPTIONS on the left-side, herein referred to
+	     as &quot;options&quot; in this widget.
+	     
+	     Elements of this array aren&#x27;t required to have members { text:&#x27;&#x27;, value:&#x27;&#x27;}, 
+	     if the members are different they can be mapped to the expected settings using 
+	     the &quot;optionsMap&quot; attribute. 
+	     
+	     If the members of this array are non-object single-items, they are assumed to be 
+	     the &quot;text&quot; item, and the &quot;value&quot; will also be set to this item.
+	     
+	     @attribute options
+	     @type {Array}
+	     @default []
+	     **&#x2F;
+		options : {
+        	value : 	[], 
+        	validator : Lang.isArray
+        },
+
+
+	  	&#x2F;**
+	     The Array to populate the SELECT &#x2F; OPTIONS on the right-side, herein referred 
+	     to as &quot;selected&quot; in this widget.  For example, if a FORM is opened with default 
+	     multi-selected items, they would be provided in this attribute as an array.
+	     
+	     Elements of this array aren&#x27;t required to have members { text:&#x27;&#x27;, value:&#x27;&#x27;}, 
+	     if the members are different they can be mapped to the expected settings using 
+	     the &quot;optionsMap&quot; attribute. 
+
+	     If the members of this array are non-object single-items, they are assumed to be 
+	     the &quot;text&quot; item, and the &quot;value&quot; will also be set to this item.
+	     
+	     @attribute selected
+	     @type {Array}
+	     @default []
+	     **&#x2F;
+        selections : {
+        	value : 	[],
+        	validator : Lang.isArray
+        },
+
+        
+	  	&#x2F;**
+	     An object having members &quot;value, text, title&quot; that defines the mapping 
+	     between the provided &quot;options&quot; array data and the expected parameters of 
+	     the JavaScript new Option(&#x27;text&#x27;, &#x27;value&#x27;).
+	      
+	     @attribute optionsMap
+	     @type {Object}
+	     @default { value:&#x27;value&#x27;, text:&#x27;text&#x27;, title:&#x27;title&#x27; }
+	     **&#x2F;
+        optionsMap : {
+        	value : 	{ value:&#x27;value&#x27;, text:&#x27;text&#x27;, title:&#x27;title&#x27; },
+        	writeOnce : true,
+        	validator:	function(o) {
+        					if ( !Lang.isObject(o) ) return false;
+        					if ( o.text &amp;&amp; !o.value ) 
+        						o.value = &#x27;value&#x27;;
+        					else if ( o.value &amp;&amp; !o.text )
+        						o.text = &#x27;text&#x27;;
+        					if ( !o.title ) o.title = &#x27;title&#x27;;
+        					return true; 
+        				}
+        },
+   		
+   		
+	  	&#x2F;**
+	     Classname to be applied to the &quot;options&quot; &lt;SELECT&gt; element, usually used to 
+	     specify the &quot;width&quot; of the element. 
+	      
+	     @attribute optClassName
+	     @type {String}
+	     @default &#x27;&#x27;
+	     **&#x2F;
+   		optClassName : {
+        	value : 	&#x27;&#x27;,
+        	validator : Lang.isString
+   		},
+
+
+	  	&#x2F;**
+	     Classname to be applied to the &quot;selected&quot; &lt;SELECT&gt; element, usually used to 
+	     specify the &quot;width&quot; of the element. 
+	      
+	     @attribute selClassName
+	     @type {String}
+	     @default &#x27;&#x27;
+	     **&#x2F;
+   		selClassName : {
+        	value : 	&#x27;&#x27;,
+        	validator : Lang.isString
+   		},
+        
+        
+	  	&#x2F;**
+	     The DOM ID element of the &quot;template&quot; to be used for defining the OPTIONS, SELECTIONS, 
+	     and the BUTTONS.
+	      
+	     Expected replacable placeholder tokens positioned within the &quot;template&quot; are identified as;
+	     
+	     	{OPTIONS_CONTAINER}		:  Left-hand side &quot;Options&quot; &lt;select&gt; placeholder
+	     	{SELECTIONS_CONTAINER}	:  Right-hand side &quot;Selected&quot; &lt;select&gt; placeholder
+	     	{ACTION_ALL}			:  Placeholder for the &quot;Add All&quot; button
+ 	     	{ACTION_ONE}			:  Placeholder for the &quot;Add One&quot; button
+	     	{ACTION_BACK}			:  Placeholder for the &quot;Remove One&quot; button
+	     	{ACTION_ALLBACK}		:  Placeholder for the &quot;Remove All&quot; button
+	       
+	     @attribute template
+	     @type {String}
+	     @default &#x27;&#x27;
+	     **&#x2F;
+        template : {
+        	value : 	&#x27;&#x27;,
+        	validator : Lang.isString
+        },
+        
+
+	  	&#x2F;**
+	     Attribute allows specifying the &quot;button&quot; type to be used during construction of the
+	     Widget template.  Currently supported are HTML &lt;button&gt;, a Y.Button object, a Y.Button 
+	     CSSButton, and a simple HTML &lt;a&gt; link.
+	     
+	     Recognized settings are &#x27;htmlbutton&#x27;, &#x27;ybutton&#x27;, &#x27;cssbutton&#x27;, &#x27;link&#x27;
+	      
+	     @attribute buttonType
+	     @type {String}
+	     @default &#x27;htmlbutton&#x27;
+	     **&#x2F;
+		buttonType : {
+			value : 	&#x27;htmlbutton&#x27;,		
+			writeOnce:	true,
+			validator : function(o) {
+							if ( Lang.isString(o) ) {
+								if ( o.search(&#x2F;htmlbutton|ybutton|cssbutton|link&#x2F;i) !== -1) 
+									return true;
+							}
+							return false;
+						}
+		},
+
+        
+	  	&#x2F;**
+	     The source &quot;ID&quot; of the container for this widget, REQUIRED. 
+	     @attribute srcNode
+	     @type {String}
+	     @default null
+	     **&#x2F;
+		srcNode : {
+			value : 	null,
+			validator : Lang.isString,
+			writeOnce:	true	
+		},
+
+		
+	  	&#x2F;**
+	     The number of options to display in the left and right side SELECT &#x2F; OPTIONS control.
+	      
+	     @attribute selectSize
+	     @type {Int}
+	     @default 10
+	     **&#x2F;
+        selectSize : {
+        	value : 	10,
+        	validator : Lang.isNumber
+        },
+
+
+	  	&#x2F;**
+	     The default &quot;width&quot; style of the left and right side SELECT &#x2F; OPTIONS control.
+	      
+	     @attribute selectSize
+	     @type {String}
+	     @default &#x27;9em&#x27;
+	     **&#x2F;
+        selectWidth : {
+        	value : 	&#x27;9em&#x27;,
+        	validator : Lang.isString
+        },
+
+
+	  	&#x2F;**
+	     A flag setting for enabling &quot;stack&quot; mode of this widget.  In &quot;stack&quot; mode 
+	     the JS Options are moved from left-to-right individually, so that they can&#x27;t 
+	     be re-used inadvertantly.  
+	     
+	     For example, &quot;Add One&quot; from the left option MOVES the option to the right-side 
+	     &quot;selections&quot;.  If &quot;Remove One&quot; is chosen, the right-side selected item is returned
+	     to the bottom of the left-hand side options.  (Can&#x27;t currently return it to the 
+	     index of where it came from ... see &quot;preserveOrder&quot;). 
+	      
+	     @attribute stackMode
+	     @type {Boolean}
+	     @default false
+	     **&#x2F;
+		stackMode : {
+			value : 	false,
+			writeOnce:	true,
+			validator : Lang.isBoolean
+		},
+
+
+	  	&#x2F;**   
+	  	  
+	  	 NOT IMPLEMENTED AT THIS TIME
+	  	  
+	     A flag setting for preserving the original order of the options, when add or 
+	     remove actions are taken.   With &quot;preserveOrder&quot; false, all items are added to the 
+	     bottom of the left &#x2F; right side HTML SELECT &#x2F; OPTIONS.  If set to TRUE, the 
+	     options are returned to proper order from the original &quot;options&quot; setting.
+	     
+	     This only has relevance when &quot;stackMode&quot; is TRUE.
+
+	     @attribute preserveOrder
+	     @type {Boolean}
+	     @default false
+	     **&#x2F;
+		preserveOrder : {
+			value : 	false,
+			writeOnce : true,
+			validator : Lang.isBoolean	
+		},
+	
+		
+	  	&#x2F;**
+	     The label to be used for the BUTTON face for &quot;Add All&quot; action. 
+	     @attribute actionLabelAll
+	     @type {String}
+	     @default &#x27;Add All&#x27;
+	     **&#x2F;
+		actionLabelAll : {
+        	value : 	&#x27;Add All&#x27;, 
+        	validator : Lang.isString
+		},
+
+
+	  	&#x2F;**
+	     The label to be used for the BUTTON face for &quot;Add One&quot; action. 
+	     @attribute actionLabelOne
+	     @type {String}
+	     @default &#x27;Add&#x27;
+	     **&#x2F;
+		actionLabelOne : {
+        	value : 	&#x27;Add&#x27;,
+        	validator : Lang.isString
+		},
+
+
+	  	&#x2F;**
+	     The label to be used for the BUTTON face for &quot;Remove&quot; action. 
+	     @attribute actionLabelRmv
+	     @type {String}
+	     @default &#x27;Remove&#x27;
+	     **&#x2F;
+		actionLabelRmv : {
+        	value : 	&#x27;Remove&#x27;,
+        	validator : Lang.isString
+		},
+
+
+	  	&#x2F;**
+	     The label to be used for the BUTTON face for &quot;Remove All&quot; action. 
+	     @attribute actionLabelRmvAll
+	     @type {String}
+	     @default &#x27;Remove All&#x27;
+	     **&#x2F;
+		actionLabelRmvAll : {
+        	value : 	&#x27;Remove All&#x27;,
+        	validator : Lang.isString
+		}
+		
+    };
+
+    PickList.INPUT_CLASS = Y.ClassNameManager.getClassName( PickList.NAME, &quot;value&quot;);
+
+
+    Y.extend( PickList, Y.Widget, {
+
+	&#x2F;*  Define some static properties  *&#x2F;
+	
+		&#x2F;**
+		 * The default &quot;template&quot; to use for rendering of this widget.
+		 * @property TMPL_control
+		 * @type String
+		 * @protected
+		 *&#x2F;
+		TMPL_control:   &#x27;&lt;table&gt;&lt;tr&gt;&lt;td valign=&quot;top&quot;&gt;Available:&lt;br&#x2F;&gt;{OPTIONS_CONTAINER}&lt;&#x2F;td&gt;&lt;td valign=&quot;middle&quot;&gt;&#x27;
+						+&#x27;{ACTION_ALL}&lt;br&#x2F;&gt;{ACTION_ONE}&lt;br&#x2F;&gt;{ACTION_BACK}&lt;br&#x2F;&gt;{ACTION_ALLBACK}&lt;&#x2F;td&gt;&lt;td valign=&quot;top&quot;&gt;&#x27;
+						+&#x27;Selected:&lt;br&#x2F;&gt;{SELECTIONS_CONTAINER}&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;table&gt;&#x27;,
+		
+		&#x2F;**
+		 * The template to use for constructing the HTML &lt;SELECT&gt; elements for left&#x2F;right side 
+		 * @property TMPL_inputs
+		 * @type String
+		 * @protected
+		 *&#x2F;
+		TMPL_inputs :	&#x27;&lt;select size=&quot;{size}&quot; class=&quot;{className}&quot; multiple=&quot;1&quot;&gt;&lt;&#x2F;select&gt;&#x27;,
+
+		&#x2F;**
+		 * The template to use for constructing the HTML &lt;BUTTON&gt; elements within 
+		 * the widget (for buttonType=&#x27;htmlbutton&#x27; or &#x27;ybutton&#x27;)
+		 * @property TMPL_button
+		 * @type String
+		 * @protected
+		 *&#x2F;
+		TMPL_button :	&#x27;&lt;button class=&quot;{className}&quot;&gt;{content}&lt;&#x2F;button&gt;&#x27;,
+
+		&#x2F;**
+		 * The template to use for constructing the HTML &lt;button&gt; elements within 
+		 * the widget (for buttonType=&#x27;cssbutton&#x27;) 
+		 * @property TMPL_cssbtn
+		 * @type String
+		 * @protected
+		 *&#x2F;
+        TMPL_cssbtn : 	&#x27;&lt;button class=&quot;yui3-button {className}&quot;&gt;{lcontent}&lt;span class=&quot;yui3-button-icon yui3-button-icon-{subName}&quot;&gt;&lt;&#x2F;span&gt;{rcontent}&lt;&#x2F;button&gt;&#x27;,
+
+		&#x2F;**
+		 * The template to use for constructing the HTML &lt;A&gt; elements within 
+		 * the widget (for buttonType=&#x27;link&#x27;) 
+		 * @property TMPL_alink
+		 * @type String
+		 * @protected
+		 *&#x2F;
+		TMPL_alink  :	&#x27;&lt;a class=&quot;{className}&quot; href=&quot;javascript:void(0);&quot;&gt;{content}&lt;&#x2F;a&gt;&#x27;,
+
+        
+		&#x2F;**
+		 * @property CLASS_ACTION
+		 * @type Object
+		 * @private
+		 *&#x2F;
+        CLASS_ACTION : 	&#x27;action&#x27;,
+		
+		&#x2F;**
+		 * Holder for the Y.Node of the SELECT left-hand side &quot;available&quot; options.
+		 * @property _optionNode
+		 * @type Object
+		 * @private
+		 *&#x2F;
+		_optionNode : null,		
+
+		&#x2F;**
+		 * Holder for the Y.Node of the SELECT right-hand side &quot;selected&quot; or chosen options
+		 * @property  _selectNode
+		 * @type Object
+		 * @private
+		 *&#x2F;
+		_selectNode : null,		
+		
+		&#x2F;**
+		 * Holder for the &quot;action&quot; click event handlers
+		 * @property _eventHandles
+		 * @type Array
+		 * @private
+		 *&#x2F;
+		_eventHandles : [],		
+
+		&#x2F;**
+		 * Holder for the Y.Button Widget instances (if &quot;buttonType&quot; === &quot;ybutton&quot; )
+		 * @property {Array} _ybuttons
+		 * @private
+		 *&#x2F;
+		_ybuttons : [],			
+		
+		&#x2F;**
+		 * Holder for the original OPTIONS order, to be used with &quot;preserveOrder&quot;  (NOT IMPLEMENTED)
+		 * @property {Array} _optOrder
+		 * @private
+		 *&#x2F;
+		_optOrder :[],
+		
+	
+	&#x2F;* ===================   Widget Public methods  =====================   *&#x2F;
+	
+		&#x2F;*
+		 * @method initializer
+		 * @param config {Object} Configuration object literal for the Accordion
+		 * @protected
+		 *&#x2F;
+        initializer: function( config ) {
+        	this._eventHandles = [];
+        	this._ybuttons = [];
+        	this._optionNode = null;
+        	this._selectNode = null;
+			return true;
+        },
+
+		&#x2F;*
+		 * @method destructor
+		 * @protected
+		 *&#x2F;
+        destructor : function() {
+		&#x2F;&#x2F;
+		&#x2F;&#x2F;  If Y.Buttons were created, destroy them 
+		&#x2F;&#x2F;
+       		Y.Array.each( this._ybuttons, function(item) {
+       			item.destroy();
+       		});
+		&#x2F;&#x2F;
+		&#x2F;&#x2F;  Clear out the button handlers
+		&#x2F;&#x2F;	       
+       		Y.Array.each( this._eventHandles, function(item) {
+       			item.detach();
+       		});
+       		
+       	&#x2F;&#x2F;
+       	&#x2F;&#x2F;  Clean-up and exit
+       	&#x2F;&#x2F;	
+       		this._optOrder.length = 0;
+       		this._optionNode.destroy();
+       		this._selectNode.destroy();
+       		
+       		return true;
+        },
+
+
+		&#x2F;*
+		 * @method renderUI
+		 * @public
+		 *&#x2F;
+        renderUI : function() {
+        
+        &#x2F;&#x2F; create the Select boxes and Buttons
+            this._renderInput();	
+		
+		&#x2F;&#x2F; load options, if defined.
+			if ( this.get(&#x27;options&#x27;) ) this._loadOptions();
+			
+		&#x2F;&#x2F; set focus to Left-hand side control 	
+           	this._optionNode.focus();
+            
+            this.fire( &#x27;render&#x27; );
+        },
+
+
+		&#x2F;**
+		 Method that binds the button pushes to their handlers.  Keep a reference to the handler 
+		 in this._eventHandles so we can detach them later.
+		 
+		 @method bindUI
+		 @public
+		 **&#x2F;
+        bindUI : function() {
+
+        	if ( this.get(&#x27;buttonType&#x27;) === &#x27;ybutton&#x27; ) {
+        		var ybtn = this._ybuttons;
+	        	if ( ybtn[0] ) this._eventHandles.push( ybtn[0].on(&quot;click&quot;, Y.bind( this._onButtonAll, this) )  );
+	        	if ( ybtn[1] ) this._eventHandles.push( ybtn[1].on(&quot;click&quot;, Y.bind( this._onButtonOne, this) )  );
+	        	if ( ybtn[2] ) this._eventHandles.push( ybtn[2].on(&quot;click&quot;, Y.bind( this._onButtonBack, this) )  );
+	        	if ( ybtn[3] ) this._eventHandles.push( ybtn[3].on(&quot;click&quot;, Y.bind( this._onButtonAllBack, this) )  );
+        		
+        	} else {
+	        	var cbox = this.get(&#x27;contentBox&#x27;),
+	        		btna = cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;all&#x27;)),
+	        		btno = cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;one&#x27;)),
+	        		btnb = cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;rmv&#x27;)),
+	        		btnab = cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;rmvall&#x27;));
+        		
+	        	if ( btna ) this._eventHandles.push( btna.on(&quot;click&quot;, Y.bind( this._onButtonAll, this) )  );
+	        	if ( btno ) this._eventHandles.push( btno.on(&quot;click&quot;, Y.bind( this._onButtonOne, this) )  );
+	        	if ( btnb ) this._eventHandles.push( btnb.on(&quot;click&quot;, Y.bind( this._onButtonBack, this) )  );
+	        	if ( btnab ) this._eventHandles.push( btnab.on(&quot;click&quot;, Y.bind( this._onButtonAllBack, this) )  );
+        		
+        	}
+        	
+        	this.after( &#x27;optionsChange&#x27;, Y.bind(this._loadOptions, this ) );
+        	this.after( &#x27;selectionsChange&#x27;, Y.bind(this._loadSelections, this ) );
+			
+			return true;        	
+        },
+
+        syncUI : function() {
+        },
+
+
+		&#x2F;**
+		 Method to clear the left-hand side &quot;options&quot; SELECT OPTIONS completely. 
+		 @method clearOptions
+		 @public 
+		 @return true
+		 **&#x2F;
+		clearOptions : function() {
+			this._optOrder.length = 0;
+			return this._clearOptions( this._optionNode );
+		},
+
+
+		&#x2F;**
+		 Method to clear the right-hand side &quot;selections&quot; SELECT OPTIONS completely. 
+		 @method clearSelections
+		 @public 
+		 @return true
+		 **&#x2F;
+		clearSelections : function() {
+			return this._clearOptions( this._selectNode );
+		},
+
+
+		&#x2F;**
+		 * Returns the current items in the &quot;right side&quot; SELECT OPTIONS box.
+		 * 
+		 * @method getSelections
+		 * @public
+		 * @return {Array} An array of options Objects, members are { value, text, title };
+		 *&#x2F;
+		getSelections : function() {
+			var snode = this._selectNode,
+				rtn   = [];
+			snode.get(&quot;options&quot;).each( function(item,index) {
+				rtn.push( { 
+					value:	item.get(&#x27;value&#x27;), 
+					text:	item.get(&#x27;text&#x27;), 
+					title:	item.get(&#x27;title&#x27;) 
+				}); 
+			});
+			return rtn;
+		},
+
+
+	&#x2F;* ===================   Widget Private methods  =====================   *&#x2F;
+
+
+        &#x2F;**
+		 Method to create the DOM elements for this Widget, including two HTML &lt;SELECT&gt; elements,
+		 and four BUTTONS to operate on the Widget.
+		 
+		 The method uses the &quot;template&quot; attribute if set for positioning of the above UI elements,
+		 if none is provided a default template is used.
+		 
+		 @method _renderInput
+		 @protected
+		 @return true
+         **&#x2F;
+		_renderInput : function() {
+            var cbox = this.get(&quot;contentBox&quot;),
+            	tmpl = ( this.get(&quot;template&quot;) ) ? Y.one( this.get(&quot;template&quot;) ).getContent() : null;
+
+			var widget_tmpl = tmpl || this.TMPL_control;	&#x2F;&#x2F; use default if none provided ...
+
+			cbox.addClass( this.getClassName() );
+			
+			var btna_html, btno_html, btnb_html, btnab_html, opt_html, sel_html;
+        &#x2F;&#x2F;
+        &#x2F;&#x2F;  Create the HTML SELECT boxes ...
+        &#x2F;&#x2F;    	
+        	opt_html = fnReplacer( this.TMPL_inputs, {
+        		size : this.get(&#x27;selectSize&#x27;),
+        		className : this.getClassName(&#x27;options&#x27;) + &#x27; &#x27; + this.get(&#x27;optClassName&#x27;)
+        	});
+
+        	sel_html = fnReplacer( this.TMPL_inputs, {
+        		size : this.get(&#x27;selectSize&#x27;),
+        		className : this.getClassName(&#x27;selected&#x27;) + &#x27; &#x27; + this.get(&#x27;selClassName&#x27;)
+        	});
+
+        &#x2F;&#x2F;
+        &#x2F;&#x2F;  Create the BUTTONS ...
+        &#x2F;&#x2F;    	
+    		if ( this.get(&#x27;buttonType&#x27;) === &#x27;htmlbutton&#x27; || this.get(&#x27;buttonType&#x27;) === &#x27;ybutton&#x27; ) {
+            	btna_html = this._createHtmlButton( &#x27;all&#x27;, &#x27;actionLabelAll&#x27; );
+            	btno_html = this._createHtmlButton( &#x27;one&#x27;, &#x27;actionLabelOne&#x27; );
+            	btnb_html = this._createHtmlButton( &#x27;rmv&#x27;, &#x27;actionLabelRmv&#x27; );
+            	btnab_html= this._createHtmlButton( &#x27;rmvall&#x27;, &#x27;actionLabelRmvAll&#x27; );
+    		}
+
+    		if ( this.get(&#x27;buttonType&#x27;) === &#x27;link&#x27; ) {
+            	btna_html = this._createALinkButton( &#x27;all&#x27;, &#x27;actionLabelAll&#x27; );
+            	btno_html = this._createALinkButton( &#x27;one&#x27;, &#x27;actionLabelOne&#x27; );
+            	btnb_html = this._createALinkButton( &#x27;rmv&#x27;, &#x27;actionLabelRmv&#x27; );
+            	btnab_html= this._createALinkButton( &#x27;rmvall&#x27;, &#x27;actionLabelRmvAll&#x27; );
+	   		}
+
+       		if ( this.get(&#x27;buttonType&#x27;) === &#x27;cssbutton&#x27; ) {
+    			btna_html = this._createCssButton( &#x27;all&#x27;, null, &#x27;actionLabelAll&#x27; );
+    			btno_html = this._createCssButton( &#x27;one&#x27;, null, &#x27;actionLabelOne&#x27; );
+    			btnb_html = this._createCssButton( &#x27;rmv&#x27;, null, &#x27;actionLabelRmv&#x27; );
+    			btnab_html = this._createCssButton( &#x27;rmvall&#x27;, null, &#x27;actionLabelRmvAll&#x27; );
+        	}
+
+        &#x2F;&#x2F;
+        &#x2F;&#x2F;  Populate the template
+        &#x2F;&#x2F;    	
+           	cbox.setContent( fnReplacer( widget_tmpl, {
+        		OPTIONS_CONTAINER : 	opt_html || &#x27;&#x27;,            		
+        		SELECTIONS_CONTAINER: 	sel_html || &#x27;&#x27;,
+        		ACTION_ALL : 			btna_html || &#x27;&#x27;,
+        		ACTION_ONE : 			btno_html || &#x27;&#x27;,
+        		ACTION_BACK : 			btnb_html || &#x27;&#x27;,
+        		ACTION_ALLBACK : 		btnab_html || &#x27;&#x27;            		
+        	}) );
+
+		&#x2F;&#x2F;
+		&#x2F;&#x2F;  Get references to the nodes of the widget after they were created
+		&#x2F;&#x2F;            	
+        	this._optionNode = cbox.one(&#x27;.&#x27;+this.getClassName(&#x27;options&#x27;));
+        	this._selectNode = cbox.one(&#x27;.&#x27;+this.getClassName(&#x27;selected&#x27;));
+        	
+        	if ( this._optionNode &amp;&amp; !this.get(&#x27;optClassName&#x27;) )
+        		this._optionNode.setStyle(&#x27;width&#x27;, this.get(&#x27;selectWidth&#x27;) );
+
+        	if ( this._selectNode &amp;&amp; !this.get(&#x27;selClassName&#x27;) )
+        		this._selectNode.setStyle(&#x27;width&#x27;, this.get(&#x27;selectWidth&#x27;) );
+        
+        	this._optionNode.getDOMNode().selectedIndex = -1;
+        	this._selectNode.getDOMNode().selectedIndex = -1;
+
+		
+		&#x2F;&#x2F; If Button widgets are reqd, go through and build them 
+		&#x2F;&#x2F;   now since the placeholders are in markup
+		
+    		if ( this.get(&#x27;buttonType&#x27;) === &#x27;ybutton&#x27; ) {
+    			
+            	this._ybuttons.push( this._createYButtonNode( cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;all&#x27;)) ) );
+            	this._ybuttons.push( this._createYButtonNode( cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;one&#x27;)) ) );
+            	this._ybuttons.push( this._createYButtonNode( cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;rmv&#x27;)) ) );
+            	this._ybuttons.push( this._createYButtonNode( cbox.one(&#x27;.&#x27;+this.getClassName( this.CLASS_ACTION,&#x27;rmvall&#x27;)) ) );
+        
+    		}
+        
+			return true;
+        },
+
+
+		&#x2F;**
+		 Method to load the left-hand side &quot;options&quot; HTML &lt;SELECT&gt; element with the 
+		 user-defined options array.
+		 
+		 @method _loadOptions
+		 @protected 
+		 @return {Number} options.length
+		 **&#x2F;
+		_loadOptions : function() {
+			var onode = this._optionNode,
+				onode_dom = onode.getDOMNode(),
+				opts  =  this.get(&#x27;options&#x27;) || [];
+		&#x2F;&#x2F;
+		&#x2F;&#x2F;  If already set, clear out the OPTIONS ...
+		&#x2F;&#x2F;			
+			if ( opts ) {
+				this.clearOptions();
+				this.clearSelections();
+			}
+			
+		&#x2F;&#x2F;
+		&#x2F;&#x2F;  Loop over each one, adding it to the optionsNode 
+		&#x2F;&#x2F;	
+			Y.Array.each( opts, function(item) {
+				var sopt = this._optStdFormat( item ),		&#x2F;&#x2F; returns &quot;sopt&quot; as standard {value, text, title} format							
+ 					new_opt = new Option( sopt.text, sopt.value, false, false );
+
+ 				if ( sopt.title ) new_opt.setAttribute(&#x27;title&#x27;, sopt.title );
+ 				
+ 				if (  Y.UA.ie &amp;&amp; Y.UA.ie&lt;9 ) {
+ 					onode_dom.options[onode_dom.options.length] = new_opt;
+ 				} else
+					onode.append( new_opt );
+				
+			&#x2F;&#x2F;
+			&#x2F;&#x2F;  If &quot;stack&quot; mode is set, then place the Option identifier in our sort array for later use.
+			&#x2F;&#x2F;	
+				if ( this.get(&quot;stackMode&quot;) &amp;&amp; this.get(&quot;preserveOrder&quot;) ) {
+					this._optOrder.push( sopt.value || sopt.text ); 	
+				}
+			}, this);
+			
+			this.fire(&#x27;load&#x27;,{
+				obj: this,
+				opts: opts
+			});
+			
+			return opts.length;
+		},
+
+
+		&#x2F;**
+		 Method to clear the right-hand side &quot;selections&quot; OPTIONS completely. 
+		 @method _clearOptions
+		 @protected
+		 @return true
+		 **&#x2F;
+		_clearOptions : function( ynode ) {
+			ynode = ynode || this._optionNode;
+			ynode.getDOMNode().options.length = 0;
+			&#x2F;&#x2F;ynode.set(&#x27;options&#x27;,null);
+			&#x2F;&#x2F;ynode.get(&#x27;options&#x27;).empty();
+			return true;
+		},
+
+
+		&#x2F;**
+		 Method to load the right-hand side &quot;selections&quot; HTML &lt;SELECT&gt; element with the 
+		 user-defined selections array.
+		 
+		 @method _loadSelections
+		 @protected 
+		 @return {Number} selections.length
+		 **&#x2F;
+		_loadSelections : function() {
+			var snode = this._selectNode,
+				snode_dom = snode.getDOMNode(),
+				sopts  =  this.get(&#x27;selections&#x27;) || [];
+		&#x2F;&#x2F;
+		&#x2F;&#x2F;  If already set, clear out the OPTIONS ...
+		&#x2F;&#x2F;			
+			if ( sopts ) {
+				this.clearSelections();
+			}
+			
+		&#x2F;&#x2F;
+		&#x2F;&#x2F;  Loop over each one, adding it to the optionsNode 
+		&#x2F;&#x2F;	
+			Y.Array.each( sopts, function(item) {
+				var sopt = this._optStdFormat( item ),		&#x2F;&#x2F; returns &quot;sopt&quot; as standard {value, text, title} format							
+ 					new_opt = new Option( sopt.text, sopt.value, false, false );
+
+ 				if ( sopt.title ) new_opt.setAttribute(&#x27;title&#x27;, sopt.title );
+
+ 				if (  Y.UA.ie &amp;&amp; Y.UA.ie&lt;9 ) {
+ 					snode_dom.options[snode_dom.options.length] = new_opt;
+ 				} else
+					snode.append( new_opt );
+
+			}, this);
+			
+			return sopts.length;
+		},
+
+
+		&#x2F;**
+		 Internal method to normalize the &#x27;text&#x27;, &#x27;value&#x27;, and &#x27;title&#x27; data based upon the input 
+		 &quot;optionsMap&quot; of the &quot;options&quot; attribute.  Returns an object that can be used directly by 
+		 the JS new Option( text, value ) command.
+		  
+		 @method _optStdFormat
+		 @protected
+		 @return {Object} An object that contains { value, text, title } for defining the JS Option
+		**&#x2F;
+		_optStdFormat : function( item ) {
+			var	omap    = this.get(&quot;optionsMap&quot;),
+				ovalue  = null,
+				otext   = null,
+				otitle  = null;
+	
+			if ( Lang.isObject(item) ) {
+				ovalue = item[ omap.value ] || null;
+				otext  = item[ omap.text ] || null;
+				otitle = item[ omap.title ] || null;
+				
+			} else {
+				ovalue = item;
+				otext  = item;
+			}
+
+		&#x2F;&#x2F; If the option &quot;value&quot; is not set, set it as the &quot;text&quot;				
+			ovalue = ovalue || otext;
+
+			return { value:ovalue, text:otext, title:otitle };			
+		},
+
+
+		&#x2F;**   METHOD IS INCOMPLETE !!!
+		 Internal method intended to return the provided opt_node object back to the &quot;options&quot; 
+		 SELECT OPTION in the original defined order. 
+		 This would only be used for &quot;stackMode&quot; and &quot;preserveOrder&quot; true. 
+		  
+		 @method _returnOptionPerOrder
+		 @protected
+		 @return 
+		**&#x2F;
+		_returnOptionPerOrder : function( opt_node ) {
+			var onode = this._optionNode,
+				snode = this._selectNode,
+				order = this.get(&quot;preserveOrder&quot;);
+			
+			var optValue = opt_node.get(&#x27;value&#x27;),
+				optText  = opt_node.get(&#x27;text&#x27;);
+			
+			var okey = optValue || optText || null;
+			if ( okey &amp;&amp; this.get(&quot;preserveOrder&quot;) &amp;&amp; this.get(&quot;stackMode&quot;) ) {
+				var oindex = this._optOrder.indexOf(opt_node);
+				&#x2F;&#x2F;onode.options.item(oindex).
+			}				
+		},
+
+
+        &#x2F;**
+		 Creates a Y.Button object by using the input &quot;bnode&quot; as the srcNode of the Button.
+		 @method _createYButtonNode
+		 @param {String || Node} bnode,  The Node of the HTML &lt;button&gt; to use to create Y.Button 
+		 @protected
+		 @return {Y.Button} object
+         **&#x2F;
+        _createYButtonNode : function( bnode ) {
+            var btn = new Y.Button({
+            	srcNode : bnode
+            });
+            
+            return btn;
+        },
+
+
+        &#x2F;**
+		 Creates an HTML &lt;button&gt; object that can be used with the &quot;cssbutton&quot; module of 3.5.0.
+		 Uses the internal &quot;TMPL_cssbtn&quot; property as a template for the HTML. 
+		 
+		 The cssButton design uses a &lt;span&gt; to specify the location of the IMG, on either the 
+		 right or left side of the button contents (i.e. &quot;Click Me&quot;).
+		 
+		 So this method defines either lcontent or rcontent to specify which side of the &quot;content&quot; 
+		 the IMG is defined on.
+		    
+		 @method _createCssButton
+		 @param {String} subname, The sub-class name to be added to the button class		 
+		 @param {String} lcontent, The sub-class name to add to the left-hand side IMG span class		 
+		 @param {String} rcontent, The sub-class name to add to the right-hand side IMG span class		 
+		 @return {HTML} code for &lt;button&gt; element
+		 @protected
+         **&#x2F;
+        _createCssButton : function( subname, lcontent, rcontent  ) {
+        	var left = ( lcontent ) ? this.get(lcontent) : &#x27;&#x27;;
+        	var right = ( rcontent ) ? this.get(rcontent) : &#x27;&#x27;;
+        	
+           	return fnReplacer( this.TMPL_cssbtn, {
+           		className : this.getClassName( this.CLASS_ACTION, subname ),
+           		subName : 	subname,
+           		lcontent : 	left || &#x27;&#x27;,
+           		rcontent : 	right || &#x27;&#x27;
+           	});
+        },
+
+
+        &#x2F;**
+		 Creates an HTML &lt;button&gt; object that will be inserted into the template.  The &quot;subname&quot; 
+		 is a sub-class name to be appended to the &lt;button&gt; class to identify it.
+		 Uses the internal &quot;TMPL_button&quot; property as a template for the HTML. 
+		 
+		 @method _createHtmlButton
+		 @param {String} subname,  The sub-class name to be appended to the &quot;class&quot; for this button 
+		 @param {String} content,  The contents of the button face (i.e. &quot;Click Me&quot;)
+		 @return {HTML} code for &lt;button&gt; element
+		 @protected
+         **&#x2F;
+        _createHtmlButton : function( subname, content ) {
+           	return fnReplacer( this.TMPL_button, {
+            		&#x27;content&#x27; : this.get(content),
+            		className : this.getClassName( this.CLASS_ACTION, subname ) + &#x27; &#x27; 
+            	});
+        },
+		
+
+        &#x2F;**
+		 Creates an HTML &lt;a&gt; link object that will be inserted into the template.  The &quot;subname&quot; 
+		 is a sub-class name to be appended to the &lt;a&gt; class to identify it.  Uses the internal 
+		 &quot;TMPL_alink&quot; property as a template for the HTML. 
+		 
+		 @method _createALinkButton
+		 @param {String} subname,  The sub-class name to be appended to the &quot;class&quot; for this item 
+		 @param {String} content,  The contents of the &lt;a&gt; text node (i.e. &quot;Click Me&quot;)
+		 @return {HTML} code for &lt;button&gt; element
+		 @protected
+         **&#x2F;
+        _createALinkButton : function( subname, content ) {
+           	return fnReplacer( this.TMPL_alink, {
+            		&#x27;content&#x27; : this.get(content),
+            		className : this.getClassName( this.CLASS_ACTION, subname ) + &#x27; &#x27; 
+            	});
+        },
+
+
+        &#x2F;**
+		 Returns all of the HTML &lt;select&gt; OPTIONS, as an array of objects containing an index, optionObject 
+		 format.  This is really intended to return the right-hand side &quot;selections&quot; Options element, 
+		 irregardless of whether an Option is &quot;selected&quot; &#x2F; highlighted or not.
+		 
+		 @method _getSelectedOptions
+		 @param {String} sel_node,  The SELECT object to get all options of (whether &quot;selected&quot; flag is set or not) 
+		 @return {Array} of Object containing the right-option elements as {index, optionObj} format
+		 @protected
+         **&#x2F;
+		_getSelectedOptions : function( sel_node ) {
+			var rtn = [];
+			sel_node.get(&#x27;options&#x27;).each( function( item,index){
+				if ( item.get(&#x27;selected&#x27;) === true ) 
+					rtn.push({ &#x27;index&#x27;:index, optionObj:item} ); 
+			});
+			return rtn;
+		},
+
+		
+        &#x2F;**
+		 Utility function to avoid duplicate adding an option to the right-hand side &quot;selections&quot; Options element. 
+		 This method checks if the &quot;opt_node&quot; already exists in the &quot;selections&quot; Options, if so it returns TRUE, 
+		 if not it returns FALSE.
+		 
+		 @method _selOptionExists
+		 @param {Node} opt_node,  The Option node to check for existence. 
+		 @return true or false,  If the opt_node already exists in the Options array
+		 @protected
+         **&#x2F;
+		_selOptionExists : function( opt_node ) {
+			var snode = this._selectNode,
+				oval  = opt_node.get(&#x27;value&#x27;),
+				rtn	  = false;
+			
+			snode.get(&#x27;options&#x27;).some(function(item) {
+				if ( item.get(&#x27;value&#x27;) === oval ) {
+					rtn = true;
+					return true;
+				}
+			},this);
+			
+			return rtn;
+		},
+
+
+        &#x2F;**
+		 The &quot;Add All&quot; button click handler. 
+		 Adds all of the &quot;Available&quot; options to the &quot;selected&quot; Options, checking to avoid duplicates.
+		 This method checks if the Widget is a &quot;stack&quot;, if so, it moves the Option from left to right.
+		 
+		 @method _onButtonAll
+		 @param {EventHandle} e,  The button&#x27;s Eventhandle from the button .on &quot;click&quot; event 
+		 @return nothing
+		 @protected
+         **&#x2F;
+		_onButtonAll : function(e) {
+			var onode = this._optionNode,
+				snode = this._selectNode,
+				onode_opts = onode.get(&#x27;options&#x27;);
+		
+			onode_opts.each( function(item) {
+				if ( this._selOptionExists(item) ) return;	&#x2F;&#x2F; if option exists in &quot;selected&quot;, bail
+				if ( this.get(&#x27;stackMode&#x27;) ) 
+					snode.append( item );
+				else 
+					snode.append( item.cloneNode(true) );
+			}, this);
+			
+			this.fire( &#x27;clickAll&#x27;, {
+				evt: 	e, 
+				opts: 	onode_opts
+			});
+		},
+
+
+        &#x2F;**
+		 The &quot;Add One&quot; button click handler. 
+		 Adds the DOM selected option(s) from the &quot;Available&quot; options to the right-hand side HTML &lt;select&gt;, 
+		 checking to avoid duplicates. This method checks if the Widget is a &quot;stack&quot;, if so, it moves the 
+		 Option from left to right.
+		 
+		 @method _onButtonOne
+		 @param {EventHandle} e,  The button&#x27;s Eventhandle from the button .on &quot;click&quot; event 
+		 @return nothing
+		 @protected
+         **&#x2F;
+		_onButtonOne : function(e) {
+			var onode = this._optionNode,
+				snode = this._selectNode;
+			
+			var osel = this._getSelectedOptions( onode );
+			Y.Array.each( osel, function(item) {
+				item.optionObj.set(&#x27;selected&#x27;, false);
+				if ( this._selOptionExists(item.optionObj) ) return;	&#x2F;&#x2F; if option exists in &quot;selected&quot;, bail
+
+				if ( this.get(&#x27;stackMode&#x27;) ) 
+					snode.append( item.optionObj );				
+				else
+					snode.append( item.optionObj.cloneNode(true) );
+			}, this);
+			
+			this.fire(&#x27;clickOne&#x27;, {
+				evt:	e,
+				opts:	osel				
+			});
+		},
+
+
+        &#x2F;**
+		 The &quot;Remove One&quot; button click handler. 
+		 Removes the DOM selected option(s) from the &quot;Selections&quot; right-side options.  This method checks if the 
+		 Widget is a &quot;stack&quot;, if so, it moves the Option from right to left, otherwise it destroys it.
+		 
+		 @method _onButtonBack
+		 @param {EventHandle} e,  The button&#x27;s Eventhandle from the button .on &quot;click&quot; event 
+		 @return nothing
+		 @protected
+         **&#x2F;
+		_onButtonBack : function(e) {
+			var onode = this._optionNode,
+				snode = this._selectNode;
+			
+			var ssel = this._getSelectedOptions( snode );
+			Y.Array.each( ssel, function(item) {
+				item.optionObj.set(&#x27;selected&#x27;, false);
+				if ( this.get(&#x27;stackMode&#x27;) ) 
+					onode.append( item.optionObj );				
+				else 
+					item.optionObj.remove();
+			}, this);
+			
+			this.fire(&#x27;clickRemove&#x27;, {
+				evt:	e,
+				opts:	ssel
+			});
+		},
+
+
+        &#x2F;**
+		 The &quot;Remove All&quot; button click handler. 
+		 Removes all of the option(s) from the &quot;Selections&quot; right-side options.  This method checks if the 
+		 Widget is a &quot;stack&quot;, if so, it moves the Option from right to left, otherwise it destroys it.
+
+		 @method _onButtonAllBack
+		 @param {EventHandle} e,  The button&#x27;s Eventhandle from the button .on &quot;click&quot; event 
+		 @return nothing
+		 @protected
+         **&#x2F;
+		_onButtonAllBack : function(e) {
+			var onode = this._optionNode,
+				snode = this._selectNode,
+				snode_opts = snode.get(&#x27;options&#x27;);
+		
+			snode_opts.each( function(item) {
+				if ( this.get(&#x27;stackMode&#x27;) ) 
+					onode.append( item );
+				else 
+					item.remove();
+			}, this);
+			
+			this.fire(&#x27;clickRemoveAll&#x27;,{
+				evt:	e,
+				opts:	snode_opts
+			});
+		}
+
+    });
+
+	Y.PickList = PickList;
+
+    </pre>
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<!--script src="..&#x2F;assets/js/tabs.js"></script-->
+<script src="..&#x2F;assets/../api.js"></script>
+
+
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

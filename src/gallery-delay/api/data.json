@@ -1,0 +1,76 @@
+{
+    "project": {
+        "name": "Delay",
+        "description": "Create a function that doesn't execute immediately when it is called."
+    },
+    "files": {
+        "js/delay.js": {
+            "name": "js/delay.js",
+            "modules": {
+                "gallery-delay": 1
+            },
+            "classes": {},
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-delay": {
+            "name": "gallery-delay",
+            "submodules": {},
+            "classes": {
+                "YUI": 1
+            },
+            "fors": {
+                "YUI": 1
+            },
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/delay.js",
+            "line": 1,
+            "description": "Create a function that doesn't execute immediately when it is called."
+        }
+    },
+    "classes": {
+        "YUI": {
+            "name": "YUI",
+            "shortname": "YUI",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-delay",
+            "namespace": ""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/delay.js",
+            "line": 14,
+            "description": "Pass in a callback function and the amount of time to delay.  Y.delay\nwill return a function that will wait an amount of time, then call your\ncallback function.  The arguments and execution context of this function\nwill be passed to the callback function.  This function returns an object\nwith a cancel method which will prevent the execution of the callback\nfunction once the delay timer has begun.  If the amount of time to delay\nis less than 0, the original callback function is returned.  If the\namount of time to delay is 0 and the gallery-soon module is available,\nthe delay will be as small as possible but your callback function will be\nguaranteed to be called in a future turn of the javascript event loop.",
+            "itemtype": "method",
+            "name": "delay",
+            "params": [
+                {
+                    "name": "callbackFunction",
+                    "description": "The function to delay.",
+                    "type": "Function"
+                },
+                {
+                    "name": "delayAmount",
+                    "description": "The approximate amount of time to delay in\nmilliseconds.",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "class": "YUI",
+            "module": "gallery-delay"
+        }
+    ]
+}
