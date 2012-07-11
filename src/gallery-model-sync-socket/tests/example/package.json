@@ -1,0 +1,20 @@
+{
+    "name"       : "yui-chat",
+    "description": "YUI Chat",
+    "version"    : "0.1.0",
+    "author"     : "Clarence Leung <cleung0@gmail.com> (http://github.com/clarle)",
+
+    "engines": {
+        "node": "0.6.x",
+        "npm" : "1.1.x"
+    },
+
+    "dependencies": {
+        "combohandler": "~0.1",
+        "connect"     : ">=1.8.0 <2.0.0",
+        "express"     : "3.0.0beta4",
+        "uglify-js"   : ">=1.2.0 <2.0.0",
+        "yui"         : "3.5.1",
+        "socket.io"   : "0.9.6"
+    }
+}

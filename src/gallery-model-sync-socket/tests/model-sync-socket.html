@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Model Sync Socket Test Page</title>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="log"></div>
+
+<script src="../../../../yui3/build/yui/yui.js"></script>
+<script>
+var Y = YUI({
+    allowRollup: false,
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'min',
+    modules: {
+        'gallery-model-sync-socket' : {
+            fullpath: '../../../build/gallery-model-sync-socket/gallery-model-sync-socket.js',
+            requires: ['io-base', 'json-stringify']
+        },
+
+        'model-sync-socket-test': {
+            fullpath: 'model-sync-socket-test.js',
+            requires: ['gallery-model-sync-socket', 'model', 'model-list', 'test']
+        }
+    },
+    useBrowserConsole: false
+}).use('model-sync-socket-test', 'test-console', function (Y) {
+    new Y.Test.Console().render('#log');
+    Y.Test.Runner.run();
+});
+</script>
+
+</body>
+</html>
