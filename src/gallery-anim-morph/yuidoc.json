@@ -1,0 +1,9 @@
+{
+    "description": "Perform an animating,  morphing between two nodes.",
+    "name": "Gallery Anim Morph",
+    "options": {
+        "outdir": "api"
+    },
+    "url": "",
+    "version": "0.1"
+}

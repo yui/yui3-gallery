@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Test gallery.morph</title>
+
+    <!-- YUI and test setup -->
+    <!--<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>-->
+    <script src="http://yuinightly.kludg.com/seed"></script>
+
+    <!-- The module under test -->
+    <script type="text/javascript" src="../js/gallery-anim-morph.js"></script>
+
+    <!-- The test suite -->
+    <script type="text/javascript" src="test_morph.js"></script>
+  </head>
+  <body class="yui3-skin-sam">
+  <div id="sample"></div>
+
+  <span id="suite">gallery.morph.tests</span>
+
+  <script type="text/javascript">
+      /**
+       * Here's how to declare the suite to run:
+       *
+       *   <span id="suite">gallery.something.test</span>
+       *
+       */
+      YUI().use("event", 'test-console', function(Y) {
+          Y.on("domready", function() {
+              var suite_node = Y.one("#suite");
+              if (Y.Lang.isValue(suite_node)) {
+                  var suite_name = suite_node.get("text");
+                  Y.use(suite_name, "test", function(y) {
+                      var module = y, parts = suite_name.split(".");
+                      while (parts.length > 0) { module = module[parts.shift()]; }
+                      var Runner = Y.Test.Runner;
+                      Runner.add(module.suite);
+
+                      var testsFinished = function(){
+                          var results = y.Test.Runner.getResults(y.Test.Format.JSON);
+                          // Publish the results in a new node.
+                          var result_node = Y.Node.create('<div />')
+                              .set('id', 'test_results')
+                              .set('text', results);
+                          Y.one('body').append(result_node);
+                          // Set the suite_node content to 'done'.
+                          suite_node.set('text', 'done');
+                      };
+                      Runner.subscribe(Runner.COMPLETE_EVENT, testsFinished);
+
+                      new Y.Test.Console({
+                          filters: {
+                              pass: true
+                          }
+                      }).render('#log');
+                      Runner.run();
+                 });
+              }
+          });
+      });
+  </script>
+  </body>
+</html>

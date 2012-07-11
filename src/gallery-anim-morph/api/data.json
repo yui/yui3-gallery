@@ -1,0 +1,135 @@
+{
+    "project": {
+        "description": "Perform an animating,  morphing between two nodes.",
+        "name": "Gallery Anim Morph",
+        "url": "",
+        "version": "0.1"
+    },
+    "files": {
+        "js/gallery-anim-morph.js": {
+            "name": "js/gallery-anim-morph.js",
+            "modules": {
+                "gallery.anim.morph": 1
+            },
+            "classes": {
+                "Morph": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery.anim.morph": {
+            "name": "gallery.anim.morph",
+            "submodules": {},
+            "classes": {
+                "Morph": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/gallery-anim-morph.js",
+            "line": 10,
+            "description": "Morph animation class to swap between two nodes."
+        }
+    },
+    "classes": {
+        "Morph": {
+            "name": "Morph",
+            "shortname": "Morph",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery.anim.morph",
+            "file": "js/gallery-anim-morph.js",
+            "line": 10,
+            "description": "Morph animation class to swap between two nodes.",
+            "extends": "Widget",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/gallery-anim-morph.js",
+            "line": 23,
+            "description": "Perform the animated version of the Morph.",
+            "itemtype": "method",
+            "name": "_perform_anim_morph",
+            "params": [
+                {
+                    "name": "ev",
+                    "description": "",
+                    "type": "Event"
+                },
+                {
+                    "name": "src",
+                    "description": "",
+                    "type": "Node"
+                },
+                {
+                    "name": "target",
+                    "description": "",
+                    "type": "Node"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Morph",
+            "module": "gallery.anim.morph"
+        },
+        {
+            "file": "js/gallery-anim-morph.js",
+            "line": 66,
+            "description": "Pass an optional animate boolean flag to skip animations. Useful\nfor initial states/testing.",
+            "itemtype": "method",
+            "name": "initializer",
+            "params": [
+                {
+                    "name": "cfg",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "class": "Morph",
+            "module": "gallery.anim.morph"
+        },
+        {
+            "file": "js/gallery-anim-morph.js",
+            "line": 82,
+            "description": "Perform the morph animation between the nodes.",
+            "itemtype": "method",
+            "name": "morph",
+            "params": [
+                {
+                    "name": "reverse",
+                    "description": "the animation back.",
+                    "type": "Bool"
+                }
+            ],
+            "class": "Morph",
+            "module": "gallery.anim.morph"
+        },
+        {
+            "file": "js/gallery-anim-morph.js",
+            "line": 113,
+            "description": "Reverse the animation effect.\n\nShortcut for morph(true)",
+            "itemtype": "method",
+            "name": "reverse",
+            "class": "Morph",
+            "module": "gallery.anim.morph"
+        },
+        {
+            "file": "js/gallery-anim-morph.js",
+            "line": 126,
+            "description": "The DOM node to be morphed from.",
+            "itemtype": "attribute",
+            "name": "targetNode",
+            "default": "null",
+            "type": "String|Node",
+            "class": "Morph",
+            "module": "gallery.anim.morph"
+        }
+    ]
+}
