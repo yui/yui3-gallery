@@ -1,0 +1,13 @@
+{
+    "name": "ZUI attribute",
+    "description": "ZUI attribute provides revert() , toggle() , set_again() methods for Attribute.",
+    "version": "0.0.1",
+    "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-attribute",
+    "options": {
+        "linkNatives": "true",        
+        "attributesEmit": "true",
+        "selleck": "true",
+        "paths": ["./js"],
+        "outdir": "./api"
+    }
+}

@@ -1,0 +1,127 @@
+{
+    "project": {
+        "name": "ZUI attribute",
+        "description": "ZUI attribute provides revert() , toggle() , set_again() methods for Attribute.",
+        "version": "0.0.1",
+        "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-attribute"
+    },
+    "files": {
+        "js/zui-attribute.js": {
+            "name": "js/zui-attribute.js",
+            "modules": {
+                "gallery-zui-attribute-core": 1
+            },
+            "classes": {
+                "ZAttribute": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-zui-attribute-core": {
+            "name": "gallery-zui-attribute-core",
+            "submodules": {},
+            "classes": {
+                "ZAttribute": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/zui-attribute.js",
+            "line": 8,
+            "description": "The Attribute module provides more methods for Attribute object\nsupport for older browsers"
+        }
+    },
+    "classes": {
+        "ZAttribute": {
+            "name": "ZAttribute",
+            "shortname": "ZAttribute",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-zui-attribute-core",
+            "namespace": "",
+            "file": "js/zui-attribute.js",
+            "line": 8,
+            "description": "A augmentable implementation for Attribute, providing extended\nmethods for Attribute management such as toggle() and set_again()"
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/zui-attribute.js",
+            "line": 17,
+            "description": "toggle the value of an attribute.",
+            "itemtype": "method",
+            "name": "toggle",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The name of the attribute.",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute-core"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 32,
+            "description": "set the value of an attribute to current value, to trigger setter function or valueChange event.",
+            "itemtype": "method",
+            "name": "set_again",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The name of the attribute.",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute-core"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 46,
+            "description": "set the value of an attribute, this wrapped function help to maintain a value change stack for revert().",
+            "itemtype": "method",
+            "name": "set",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The name of the attribute.",
+                    "type": "String"
+                },
+                {
+                    "name": "value",
+                    "description": "The value of the attribute.",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute-core"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 65,
+            "description": "revert the value of an attribute. If no older value, do nothing.",
+            "itemtype": "method",
+            "name": "revert",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The name of the attribute.",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute-core"
+        }
+    ]
+}

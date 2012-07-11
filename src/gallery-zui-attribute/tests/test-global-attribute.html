@@ -1,0 +1,38 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <title>Test ZUI Attribute</title>
+</head>
+<body>
+<script src="http://yui.yahooapis.com/3.5.1/build/yui/yui-min.js"></script>
+<script src="../../../build/gallery-zui-attribute/gallery-zui-attribute-debug.js"></script> 
+<script src="testlib.js"></script> 
+<script>
+YUI({combine: false}).use('test', 'attribute', 'gallery-zui-attribute', function (Y) {
+    Y.mix(Y.Attribute.prototype, Y.zui.Attribute.prototype, true);
+
+    Y.use('base', function (Y) {
+        var myClass = function () {
+                myClass.superclass.constructor.apply(this, arguments);
+            },
+            myInstance;
+
+        myClass.NAME = 'myClass';
+        myClass.ATTRS = {
+            attrA: {value: 0},
+            attrB: {value: 1},
+            attrC: {value: true},
+            attrD: {value: false},
+            attrE: {value: null},
+            attrF: {value: 'string'}
+        };
+
+        Y.extend(myClass, Y.Base);
+
+        myInstance = new myClass();
+
+        runTestLib(Y, myInstance, 'Test mix zui.Attribute.prototype on Y.Attribute.prototype');
+    });
+});
+</script>
+</body></html>
