@@ -1,0 +1,11 @@
+{
+    "name": "Conway's Game of Life Simulator",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}
