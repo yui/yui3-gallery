@@ -1,0 +1,739 @@
+{
+    "project": {
+        "name": "Weighted List"
+    },
+    "files": {
+        "js/weighted-list.js": {
+            "name": "js/weighted-list.js",
+            "modules": {
+                "gallery-weighted-list": 1
+            },
+            "classes": {
+                "WeightedList": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-weighted-list": {
+            "name": "gallery-weighted-list",
+            "submodules": {},
+            "classes": {
+                "WeightedList": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/weighted-list.js",
+            "line": 20
+        }
+    },
+    "classes": {
+        "WeightedList": {
+            "name": "WeightedList",
+            "shortname": "WeightedList",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-weighted-list",
+            "namespace": "",
+            "file": "js/weighted-list.js",
+            "line": 20,
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/weighted-list.js",
+            "line": 29,
+            "description": "Add a value to the weighted list.",
+            "itemtype": "method",
+            "name": "add",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "weight",
+                    "description": "Optional.  Defaults to 1.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The index of the item that was added.",
+                "type": "Number"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 55,
+            "description": "Dedupes a weighted list of string values, returning a new weighted\nlist that is guaranteed to contain only one copy of a given string\nvalue.  This method differs from the unique method in that it's\noptimized for use only with string values, whereas unique may be used\nwith other types (but is slower).  Using dedupe with non-string\nvalues may result in unexpected behavior.",
+            "itemtype": "method",
+            "name": "dedupe",
+            "params": [
+                {
+                    "name": "mode",
+                    "description": "Optional.  If the original weighted list contains\nduplicate values with different weights, the mode specifies how those\nweights get transferred to the new weighted list.  mode may be one of\nthe following values:\n<dl>\n    <dt>\n        'first'\n    </dt>\n    <dd>\n        Use the first weight that is found.  Ignore all others.\n    </dd>\n    <dt>\n        'sum'\n    </dt>\n    <dd>\n        Use the sum of all weights that are found.  This is the\n        default mode.\n    </dd>\n</dl>",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "WeightedList"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 112,
+            "description": "Executes the supplied function for each value in the weighted list.",
+            "itemtype": "method",
+            "name": "each",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 130,
+            "description": "Executes the supplied function for each value in the weighted list.\nIteration stops if the supplied function does not return a truthy\nvalue.",
+            "itemtype": "method",
+            "name": "every",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "true if every value in the weighted list returns\ntrue from the supplied function, false otherwise.",
+                "type": "Boolean"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 149,
+            "description": "Executes the supplied function for each value in the weighted list.\nReturns a new weighted list containing the values for which the\nsupplied function returned a truthy value.  The values in the new\nweighted list will retain the same weights they had in the original\nweighted list.",
+            "itemtype": "method",
+            "name": "filter",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "WeightedList"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 178,
+            "description": "Executes the supplied function for each value in the weighted list,\nsearching for the first value that matches the supplied function.",
+            "itemtype": "method",
+            "name": "find",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.  Iteration is stopped as soon as this function\nreturns true.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The found value is returned or null is returned if no value\nwas found.",
+                "type": "Any"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 206,
+            "description": "Iterates over a weighted list, returning a new weighted list with all\nthe values that match the supplied regular expression.  The values in\nthe new weighted list will retain the same weights they had in the\noriginal weighted list.",
+            "itemtype": "method",
+            "name": "grep",
+            "params": [
+                {
+                    "name": "pattern",
+                    "description": "Regular expression to test against each item.",
+                    "type": "RegExp"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "WeightedList"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 228,
+            "description": "Returns the index of the first value in the weighted list that is\nequal (using a strict equality check) to the specified value, or -1\nif the value isn't found.",
+            "itemtype": "method",
+            "name": "indexOf",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "from",
+                    "description": "Optional.  The index at which to begin the\nsearch.  Defaults to 0.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 263,
+            "description": "Executes a named method on each value in a weighted list of objects.\nValues in the weighted list that do not have a function by that name\nwill be skipped.",
+            "itemtype": "method",
+            "name": "invoke",
+            "params": [
+                {
+                    "name": "methodName",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "A new weighted list is returned containing the\nreturn values from each method.  The values in the new weighted list\nwill retain the same weights they had in the original weighted list.",
+                "type": "WeightedList"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 286,
+            "description": "Returns true if the weighted list is empty.",
+            "itemtype": "method",
+            "name": "isEmpty",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 294,
+            "description": "Gets an item by index from the weighted list if an index is supplied.\nIf an index is not supplied, an item is selected by weighted random\ndistribution.",
+            "itemtype": "method",
+            "name": "item",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "Optional.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The item is returned or null is returned if the\ngiven index does not exist.  A returned item will be an object with\nthe following properties:\n<dl>\n    <dt>\n        index\n    </dt>\n    <dd>\n        This item's index.\n    </dd>\n    <dt>\n        value\n    </dt>\n    <dd>\n        This item's value.\n    </dd>\n    <dt>\n        weight\n    </dt>\n    <dd>\n        This item's weight.\n    </dd>\n</dl>",
+                "type": "Object"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 336,
+            "description": "Default comparator for values stored in this weighted list.  Used by\nthe indexOf, lastIndexOf, and remove methods.",
+            "itemtype": "method",
+            "name": "itemsAreEqual",
+            "params": [
+                {
+                    "name": "a",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "b",
+                    "description": "",
+                    "type": "Any"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 347,
+            "description": "Returns the index of the last value in the weighted list that is\nequal (using a strict equality check) to the specified value, or -1\nif the value isn't found.",
+            "itemtype": "method",
+            "name": "lastIndexOf",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "from",
+                    "description": "Optional.  The index at which to begin the\nsearch.  Defaults to the last index in the weighted list.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 385,
+            "description": "Executes the supplied function for each value in the weighted list\nand returns a new weighted list containing all the values returned by\nthe supplied function.  The values in the new weighted list will\nretain the same weights they had in the original weighted list.",
+            "itemtype": "method",
+            "name": "map",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "WeightedList"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 410,
+            "description": "Partitions a weighted list into two new weighted lists, one with the\nvalues for which the supplied function returns true, and one with the\nvalues for which the function returns false.  The values in the new\nweighted lists will retain the same weights they had in the original\nweighted list.",
+            "itemtype": "method",
+            "name": "partition",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "An object with two properties: matches and rejects.\nEach is a weighted list containing the items that were selected or\nrejected by the test function.",
+                "type": "Object"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 443,
+            "description": "Executes the supplied function for each value in the weighted list,\n\"folding\" the weighted list into a single value.",
+            "itemtype": "method",
+            "name": "reduce",
+            "params": [
+                {
+                    "name": "initialValue",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value returned from the previous iteration or the initial value\nif this is the first iteration.  The second argument passed to this\nfunction will be the current value in the weighted list.  The third\nargument passed to this function will be the current value's index.\nThe fourth argument passed to this function will be the current\nvalue's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "Final result from iteratively applying the given function to\neach value in the weighted list.",
+                "type": "Any"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 465,
+            "description": "The inverse of the filter method.  Executes the supplied function for\neach value in the weighted list.  Returns a new weighted list\ncontaining the values for which the supplied function returned false.\nThe values in the new weighted list will retain the same weights they\nhad in the original weighted list.",
+            "itemtype": "method",
+            "name": "reject",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "WeightedList"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 494,
+            "description": "Removes the first or all occurrences of a value from the weighted\nlist.  This may cause remaining values to be reindexed.",
+            "itemtype": "method",
+            "name": "remove",
+            "params": [
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "all",
+                    "description": "Optional.  If true, removes all occurances.",
+                    "type": "Boolean",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The number of items that were removed.",
+                "type": "Number"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 527,
+            "description": "Removes a value from the weighted list by index.  This may cause\nremaining values to be reindexed.",
+            "itemtype": "method",
+            "name": "removeIndex",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "index",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 543,
+            "description": "Returns the number of values in the weighted list.",
+            "itemtype": "method",
+            "name": "size",
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 551,
+            "description": "Executes the supplied function for each value in the weighted list.\nReturning a truthy value from the function will stop the processing\nof remaining values.",
+            "itemtype": "method",
+            "name": "some",
+            "params": [
+                {
+                    "name": "fn",
+                    "description": "The function to execute for each value in the\nweighted list.  The first argument passed to this function will be\nthe value.  The second argument passed to this function will be the\nvalue's index.  The third argument passed to this function will be\nthe value's weight.",
+                    "type": "Function"
+                },
+                {
+                    "name": "context",
+                    "description": "Optional.  The context the function is called with.",
+                    "type": "Any",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "true if the function returns a truthy value on any\nof the values in the weighted list; false otherwise.",
+                "type": "Boolean"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 570,
+            "description": "Change the value and weight of a value that is already in the\nweighted list.",
+            "itemtype": "method",
+            "name": "update",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "index",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                },
+                {
+                    "name": "weight",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 596,
+            "description": "Change the value of a value that is already in the weighted list.",
+            "itemtype": "method",
+            "name": "updateValue",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "index",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "Any"
+                }
+            ],
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 606,
+            "description": "Change the weight of a value that is already in the weighted list.",
+            "itemtype": "method",
+            "name": "updateWeight",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "index",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "weight",
+                    "description": "",
+                    "type": "Number"
+                }
+            ],
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 616,
+            "description": "Returns a copy of the weighted list with duplicate value removed.",
+            "itemtype": "method",
+            "name": "unique",
+            "params": [
+                {
+                    "name": "mode",
+                    "description": "Optional.  If the original weighted list contains\nduplicate values with different weights, the mode specifies how those\nweights get transferred to the new weighted list.  mode may be one of\nthe following values:\n<dl>\n    <dt>\n        'first'\n    </dt>\n    <dd>\n        Use the first weight that is found.  Ignore all others.\n    </dd>\n    <dt>\n        'sum'\n    </dt>\n    <dd>\n        Use the sum of all weights that are found.  This is the\n        default mode.\n    </dd>\n</dl>",
+                    "type": "String",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "WeightedList"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 665,
+            "description": "Provides an array of values.",
+            "itemtype": "method",
+            "name": "toArray",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 675,
+            "description": "Provides an array of values for JSON.stringify.",
+            "itemtype": "method",
+            "name": "toJSON",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 683,
+            "itemtype": "method",
+            "name": "toString",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 690,
+            "description": "Gets a value by index from the weighted list if an index is supplied.\nIf an index is not supplied, a value is selected by weighted random\ndistribution.",
+            "itemtype": "method",
+            "name": "value",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "Optional.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The value is returned or null is returned if the given index\ndoes not exist.",
+                "type": "Any"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 707,
+            "description": "Gets a value's weight by index from the weighted list if an index is\nsupplied.  If an index is not supplied, a value is selected by\nweighted random distribution.",
+            "itemtype": "method",
+            "name": "weight",
+            "params": [
+                {
+                    "name": "index",
+                    "description": "Optional.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "The weight is returned or null is returned if the\ngiven index does not exist.",
+                "type": "Number"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 724,
+            "description": "Returns an index by weighted random distribution.",
+            "itemtype": "method",
+            "name": "_randomIndex",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "",
+                "type": "Number"
+            },
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        },
+        {
+            "file": "js/weighted-list.js",
+            "line": 781,
+            "description": "Updates chached data for achieving weighted random distribution.",
+            "itemtype": "method",
+            "name": "_update",
+            "chainable": 1,
+            "access": "protected",
+            "tagname": "",
+            "class": "WeightedList",
+            "module": "gallery-weighted-list"
+        }
+    ]
+}

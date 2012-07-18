@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;weighted-list.js - Weighted List</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title="Weighted List"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/WeightedList.html">WeightedList</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/gallery-weighted-list.html">gallery-weighted-list</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js&#x2F;weighted-list.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+ * @module gallery-weighted-list
+ *&#x2F;
+(function (Y) {
+    &#x27;use strict&#x27;;
+
+    var _Alea = Y.Alea,
+        _Array = Y.Array,
+        _Math = Math,
+
+        _each = _Array.each,
+        _floor = _Math.floor,
+        _isFunction = Y.Lang.isFunction,
+        _iterate = _Array.iterate,
+        _map = _Array.map,
+        _random = _Alea ? new _Alea().random : _Math.random,
+        _reduce = _Array.reduce,
+        _some = _Array.some,
+
+        &#x2F;**
+         * @class WeightedList
+         * @constructor
+         *&#x2F;
+        _class = function () {
+            this._array = [];
+        };
+
+    _class.prototype = {
+        &#x2F;**
+         * Add a value to the weighted list.
+         * @method add
+         * @param {Any} value
+         * @param {Number} [weight] Optional.  Defaults to 1.
+         * @return {Number} The index of the item that was added.
+         *&#x2F;
+        add: function (value, weight) {
+            var me = this,
+
+                array = me._array;
+
+            if (!weight &amp;&amp; weight !== 0) {
+                weight = 1;
+            }
+
+            array.push({
+                value: value,
+                weight: weight
+            });
+
+            delete me._sum;
+            delete me._totals;
+
+            return array.length - 1;
+        },
+        &#x2F;**
+         * Dedupes a weighted list of string values, returning a new weighted
+         * list that is guaranteed to contain only one copy of a given string
+         * value.  This method differs from the unique method in that it&#x27;s
+         * optimized for use only with string values, whereas unique may be used
+         * with other types (but is slower).  Using dedupe with non-string
+         * values may result in unexpected behavior.
+         * @method dedupe
+         * @param {String} [mode] Optional.  If the original weighted list contains
+         * duplicate values with different weights, the mode specifies how those
+         * weights get transferred to the new weighted list.  mode may be one of
+         * the following values:
+         * &lt;dl&gt;
+         *     &lt;dt&gt;
+         *         &#x27;first&#x27;
+         *     &lt;&#x2F;dt&gt;
+         *     &lt;dd&gt;
+         *         Use the first weight that is found.  Ignore all others.
+         *     &lt;&#x2F;dd&gt;
+         *     &lt;dt&gt;
+         *         &#x27;sum&#x27;
+         *     &lt;&#x2F;dt&gt;
+         *     &lt;dd&gt;
+         *         Use the sum of all weights that are found.  This is the
+         *         default mode.
+         *     &lt;&#x2F;dd&gt;
+         * &lt;&#x2F;dl&gt;
+         * @return {WeightedList}
+         *&#x2F;
+        dedupe: function (mode) {
+            var array = this._array,
+                i,
+                index,
+                item,
+                itemValue,
+                length = array.length,
+                object = {},
+                other = new _class();
+
+            if (!mode) {
+                mode = &#x27;sum&#x27;;
+            }
+
+            for (i = 0; i &lt; length; i += 1) {
+                item = array[i];
+                itemValue = item.value;
+
+                if (!object.hasOwnProperty(itemValue)) {
+                    object[itemValue] = other.add(itemValue, item.weight);
+                } else if (mode === &#x27;sum&#x27;) {
+                    index = object[itemValue];
+                    other.updateWeight(index, other.weight(index) + item.weight);
+                }
+            }
+
+            return other;
+        },
+        &#x2F;**
+         * Executes the supplied function for each value in the weighted list.
+         * @method each
+         * @chainable
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         *&#x2F;
+        each: function (fn, context) {
+            _each(this._array, function (item, index) {
+                fn.call(context, item.value, index, item.weight);
+            });
+
+            return this;
+        },
+        &#x2F;**
+         * Executes the supplied function for each value in the weighted list.
+         * Iteration stops if the supplied function does not return a truthy
+         * value.
+         * @method every
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {Boolean} true if every value in the weighted list returns
+         * true from the supplied function, false otherwise.
+         *&#x2F;
+        every: function (fn, context) {
+            return !_some(this._array, function (item, index) {
+                return !fn.call(context, item.value, index, item.weight);
+            });
+        },
+        &#x2F;**
+         * Executes the supplied function for each value in the weighted list.
+         * Returns a new weighted list containing the values for which the
+         * supplied function returned a truthy value.  The values in the new
+         * weighted list will retain the same weights they had in the original
+         * weighted list.
+         * @method filter
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {WeightedList}
+         *&#x2F;
+        filter: function (fn, context) {
+            var other = new _class();
+
+            _each(this._array, function (item, index) {
+                var itemValue = item.value,
+                    itemWeight = item.weight;
+
+                if (fn.call(context, itemValue, index, itemWeight)) {
+                    other.add(itemValue, itemWeight);
+                }
+            });
+
+            return other;
+        },
+        &#x2F;**
+         * Executes the supplied function for each value in the weighted list,
+         * searching for the first value that matches the supplied function.
+         * @method find
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.  Iteration is stopped as soon as this function
+         * returns true.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {Any} The found value is returned or null is returned if no value
+         * was found.
+         *&#x2F;
+        find: function (fn, context) {
+            var found = null;
+
+            _some(this._array, function (item, index) {
+                var itemValue = item.value;
+
+                if (fn.call(context, itemValue, index, item.weight)) {
+                    found = itemValue;
+                    return true;
+                }
+            });
+
+            return found;
+        },
+        &#x2F;**
+         * Iterates over a weighted list, returning a new weighted list with all
+         * the values that match the supplied regular expression.  The values in
+         * the new weighted list will retain the same weights they had in the
+         * original weighted list.
+         * @method grep
+         * @param {RegExp} pattern Regular expression to test against each item.
+         * @return {WeightedList}
+         *&#x2F;
+        grep: function (pattern) {
+            var other = new _class();
+
+            _each(this._array, function (item) {
+                var itemValue = item.value;
+
+                if (pattern.test(itemValue)) {
+                    other.add(itemValue, item.weight);
+                }
+            });
+
+            return other;
+        },
+        &#x2F;**
+         * Returns the index of the first value in the weighted list that is
+         * equal (using a strict equality check) to the specified value, or -1
+         * if the value isn&#x27;t found.
+         * @method indexOf
+         * @param {Any} value
+         * @param {Number} [from] Optional.  The index at which to begin the
+         * search.  Defaults to 0.
+         * @return {Number}
+         *&#x2F;
+        indexOf: function (value, from) {
+            var me = this,
+
+                array = me._array,
+                found = -1;
+
+            from = from || 0;
+
+            if (from &lt; 0) {
+                from += array.length;
+            }
+
+            _some(array, function (item, index) {
+                if (index &lt; from) {
+                    return false;
+                }
+
+                if (me.itemsAreEqual(item.value, value)) {
+                    found = index;
+                    return true;
+                }
+            });
+
+            return found;
+        },
+        &#x2F;**
+         * Executes a named method on each value in a weighted list of objects.
+         * Values in the weighted list that do not have a function by that name
+         * will be skipped.
+         * @method invoke
+         * @param {String} methodName
+         * @return {WeightedList} A new weighted list is returned containing the
+         * return values from each method.  The values in the new weighted list
+         * will retain the same weights they had in the original weighted list.
+         *&#x2F;
+        invoke: function (methodName) {
+            var args = _Array(arguments, 1, true),
+                other = new _class();
+
+            _each(this._array, function (item) {
+                var itemValue = item.value,
+                    method = itemValue &amp;&amp; itemValue[methodName];
+
+                other.add(_isFunction(method) ? method.apply(itemValue, args) : null, item.weight);
+            });
+
+            return other;
+        },
+        &#x2F;**
+         * Returns true if the weighted list is empty.
+         * @method isEmpty
+         * @return {Boolean}
+         *&#x2F;
+        isEmpty: function () {
+            return !this._array.length;
+        },
+        &#x2F;**
+         * Gets an item by index from the weighted list if an index is supplied.
+         * If an index is not supplied, an item is selected by weighted random
+         * distribution.
+         * @method item
+         * @param {Number} [index] Optional.
+         * @return {Object}  The item is returned or null is returned if the
+         * given index does not exist.  A returned item will be an object with
+         * the following properties:
+         * &lt;dl&gt;
+         *     &lt;dt&gt;
+         *         index
+         *     &lt;&#x2F;dt&gt;
+         *     &lt;dd&gt;
+         *         This item&#x27;s index.
+         *     &lt;&#x2F;dd&gt;
+         *     &lt;dt&gt;
+         *         value
+         *     &lt;&#x2F;dt&gt;
+         *     &lt;dd&gt;
+         *         This item&#x27;s value.
+         *     &lt;&#x2F;dd&gt;
+         *     &lt;dt&gt;
+         *         weight
+         *     &lt;&#x2F;dt&gt;
+         *     &lt;dd&gt;
+         *         This item&#x27;s weight.
+         *     &lt;&#x2F;dd&gt;
+         * &lt;&#x2F;dl&gt;
+         *&#x2F;
+        item: function (index) {
+            if (!index &amp;&amp; index !== 0) {
+                index = this._randomIndex();
+            }
+
+            var item = this._array[index];
+            return item ? {
+                index: index,
+                value: item.value,
+                weight: item.weight
+            } : null;
+        },
+        &#x2F;**
+         * Default comparator for values stored in this weighted list.  Used by
+         * the indexOf, lastIndexOf, and remove methods.
+         * @method itemsAreEqual
+         * @param {Any} a
+         * @param {Any} b
+         * @return {Boolean}
+         *&#x2F;
+        itemsAreEqual: function (a, b) {
+            return a === b;
+        },
+        &#x2F;**
+         * Returns the index of the last value in the weighted list that is
+         * equal (using a strict equality check) to the specified value, or -1
+         * if the value isn&#x27;t found.
+         * @method lastIndexOf
+         * @param {Any} value
+         * @param {Number} [from] Optional.  The index at which to begin the
+         * search.  Defaults to the last index in the weighted list.
+         * @return {Number}
+         *&#x2F;
+        lastIndexOf: function (value, from) {
+            var me = this,
+
+                array = me._array,
+                arrayLength = array.length,
+                found = -1;
+
+            if (!from &amp;&amp; from !== 0) {
+                from = arrayLength - 1;
+            }
+
+            if (from &lt; 0) {
+                from += array.length;
+            }
+
+            _iterate(array, -1, function (item, index) {
+                if (index &gt; from) {
+                    return false;
+                }
+
+                if (me.itemsAreEqual(item.value, value)) {
+                    found = index;
+                    return true;
+                }
+            });
+
+            return found;
+        },
+        &#x2F;**
+         * Executes the supplied function for each value in the weighted list
+         * and returns a new weighted list containing all the values returned by
+         * the supplied function.  The values in the new weighted list will
+         * retain the same weights they had in the original weighted list.
+         * @method map
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {WeightedList}
+         *&#x2F;
+        map: function (fn, context) {
+            var other = new _class();
+
+            _each(this._array, function (item, index) {
+                var itemWeight = item.weight;
+
+                other.add(fn.call(context, item.value, index, itemWeight), item.weight);
+            });
+
+            return other;
+        },
+        &#x2F;**
+         * Partitions a weighted list into two new weighted lists, one with the
+         * values for which the supplied function returns true, and one with the
+         * values for which the function returns false.  The values in the new
+         * weighted lists will retain the same weights they had in the original
+         * weighted list.
+         * @method partition
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {Object} An object with two properties: matches and rejects.
+         * Each is a weighted list containing the items that were selected or
+         * rejected by the test function.
+         *&#x2F;
+        partition: function (fn, context) {
+            var matches = new _class(),
+                rejects = new _class();
+
+            _each(this._array, function (item, index) {
+                var itemValue = item.value,
+                    itemWeight = item.weight;
+
+                (fn.call(context, itemValue, index, itemWeight) ? matches : rejects).add(itemValue, itemWeight);
+            });
+
+            return {
+                matches: matches,
+                rejects: rejects
+            };
+        },
+        &#x2F;**
+         * Executes the supplied function for each value in the weighted list,
+         * &quot;folding&quot; the weighted list into a single value.
+         * @method reduce
+         * @param {Any} initialValue
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value returned from the previous iteration or the initial value
+         * if this is the first iteration.  The second argument passed to this
+         * function will be the current value in the weighted list.  The third
+         * argument passed to this function will be the current value&#x27;s index.
+         * The fourth argument passed to this function will be the current
+         * value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {Any} Final result from iteratively applying the given function to
+         * each value in the weighted list.
+         *&#x2F;
+        reduce: function (initialValue, fn, context) {
+            return _reduce(this._array, initialValue, function (value, item, index) {
+                return fn.call(context, value, item.value, index, item.weight);
+            });
+        },
+        &#x2F;**
+         * The inverse of the filter method.  Executes the supplied function for
+         * each value in the weighted list.  Returns a new weighted list
+         * containing the values for which the supplied function returned false.
+         * The values in the new weighted list will retain the same weights they
+         * had in the original weighted list.
+         * @method reject
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {WeightedList}
+         *&#x2F;
+        reject: function (fn, context) {
+            var other = new _class();
+
+            _each(this._array, function (item, index) {
+                var itemValue = item.value,
+                    itemWeight = item.weight;
+
+                if (!fn.call(context, itemValue, index, itemWeight)) {
+                    other.add(itemValue, itemWeight);
+                }
+            });
+
+            return other;
+        },
+        &#x2F;**
+         * Removes the first or all occurrences of a value from the weighted
+         * list.  This may cause remaining values to be reindexed.
+         * @method remove
+         * @param {Any} value
+         * @param {Boolean} [all] Optional.  If true, removes all occurances.
+         * @return {Number} The number of items that were removed.
+         *&#x2F;
+        remove: function (value, all) {
+            var me = this,
+
+                array = me._array,
+                count = 0,
+                i = array.length - 1;
+
+            for (; i &gt;= 0; i -= 1) {
+                if (me.itemsAreEqual(value, me.value(i))) {
+                    array.splice(i, 1);
+                    count += 1;
+
+                    if (!all) {
+                        break;
+                    }
+                }
+            }
+
+            if (count) {
+                delete me._sum;
+                delete me._totals;
+            }
+
+            return count;
+        },
+        &#x2F;**
+         * Removes a value from the weighted list by index.  This may cause
+         * remaining values to be reindexed.
+         * @method removeIndex
+         * @chainable
+         * @param {Number} index
+         *&#x2F;
+        removeIndex: function (index) {
+            var me = this;
+
+            me._array.splice(index, 1);
+            delete me._sum;
+            delete me._totals;
+
+            return me;
+        },
+        &#x2F;**
+         * Returns the number of values in the weighted list.
+         * @method size
+         * @return {Number}
+         *&#x2F;
+        size: function () {
+            return this._array.length;
+        },
+        &#x2F;**
+         * Executes the supplied function for each value in the weighted list.
+         * Returning a truthy value from the function will stop the processing
+         * of remaining values.
+         * @method some
+         * @param {Function} fn The function to execute for each value in the
+         * weighted list.  The first argument passed to this function will be
+         * the value.  The second argument passed to this function will be the
+         * value&#x27;s index.  The third argument passed to this function will be
+         * the value&#x27;s weight.
+         * @param {Any} [context] Optional.  The context the function is called with.
+         * @return {Boolean} true if the function returns a truthy value on any
+         * of the values in the weighted list; false otherwise.
+         *&#x2F;
+        some: function (fn, context) {
+            return _some(this._array, function (item, index) {
+                return fn.call(context, item.value, index, item.weight);
+            });
+        },
+        &#x2F;**
+         * Change the value and weight of a value that is already in the
+         * weighted list.
+         * @method update
+         * @chainable
+         * @param {Number} index
+         * @param {Any} value
+         * @param {Number} weight
+         *&#x2F;
+        update: function (index, value, weight) {
+            var me = this;
+
+            if (!weight &amp;&amp; weight !== 0) {
+                weight = 1;
+            }
+
+            me._array[index] = {
+                value: value,
+                weight: weight
+            };
+
+            delete me._sum;
+            delete me._totals;
+
+            return me;
+        },
+        &#x2F;**
+         * Change the value of a value that is already in the weighted list.
+         * @method updateValue
+         * @chainable
+         * @param {Number} index
+         * @param {Any} value
+         *&#x2F;
+        updateValue: function (index, value) {
+            return this.update(index, value, this.weight(index));
+        },
+        &#x2F;**
+         * Change the weight of a value that is already in the weighted list.
+         * @method updateWeight
+         * @chainable
+         * @param {Number} index
+         * @param {Number} weight
+         *&#x2F;
+        updateWeight: function (index, weight) {
+            return this.update(index, this.value(index), weight);
+        },
+        &#x2F;**
+         * Returns a copy of the weighted list with duplicate value removed.
+         * @method unique
+         * @param {String} [mode] Optional.  If the original weighted list contains
+         * duplicate values with different weights, the mode specifies how those
+         * weights get transferred to the new weighted list.  mode may be one of
+         * the following values:
+         * &lt;dl&gt;
+         *     &lt;dt&gt;
+         *         &#x27;first&#x27;
+         *     &lt;&#x2F;dt&gt;
+         *     &lt;dd&gt;
+         *         Use the first weight that is found.  Ignore all others.
+         *     &lt;&#x2F;dd&gt;
+         *     &lt;dt&gt;
+         *         &#x27;sum&#x27;
+         *     &lt;&#x2F;dt&gt;
+         *     &lt;dd&gt;
+         *         Use the sum of all weights that are found.  This is the
+         *         default mode.
+         *     &lt;&#x2F;dd&gt;
+         * &lt;&#x2F;dl&gt;
+         * @return {WeightedList}
+         *&#x2F;
+        unique: function (mode) {
+            if (!mode) {
+                mode = &#x27;sum&#x27;;
+            }
+
+            var other = new _class();
+
+            _each(this._array, function (item) {
+                var itemValue = item.value;
+
+                if (!_some(other._array, function (otherItem, index) {
+                    if (otherItem.value === itemValue) {
+                        if (mode === &#x27;sum&#x27;) {
+                            other.updateWeight(index, otherItem.weight + item.weight);
+                        }
+
+                        return true;
+                    }
+                })) {
+                    other.add(itemValue, item.weight);
+                }
+            });
+
+            return other;
+        },
+        &#x2F;**
+         * Provides an array of values.
+         * @method toArray
+         * @return {Array}
+         *&#x2F;
+        toArray: function () {
+            return _map(this._array, function (item) {
+                return item.value;
+            });
+        },
+        &#x2F;**
+         * Provides an array of values for JSON.stringify.
+         * @method toJSON
+         * @return {Array}
+         *&#x2F;
+        toJSON: function () {
+            return this.toArray();
+        },
+        &#x2F;**
+         * @method toString
+         * @return {String}
+         *&#x2F;
+        toString: function () {
+            return this.toArray().toString();
+        },
+        &#x2F;**
+         * Gets a value by index from the weighted list if an index is supplied.
+         * If an index is not supplied, a value is selected by weighted random
+         * distribution.
+         * @method value
+         * @param {Number} [index] Optional.
+         * @return {Any} The value is returned or null is returned if the given index
+         * does not exist.
+         *&#x2F;
+        value: function (index) {
+            if (!index &amp;&amp; index !== 0) {
+                index = this._randomIndex();
+            }
+
+            var item = this._array[index];
+            return item ? item.value : null;
+        },
+        &#x2F;**
+         * Gets a value&#x27;s weight by index from the weighted list if an index is
+         * supplied.  If an index is not supplied, a value is selected by
+         * weighted random distribution.
+         * @method weight
+         * @param {Number} [index] Optional.
+         * @return {Number} The weight is returned or null is returned if the
+         * given index does not exist.
+         *&#x2F;
+        weight: function (index) {
+            if (!index &amp;&amp; index !== 0) {
+                index = this._randomIndex();
+            }
+
+            var item = this._array[index];
+            return item ? item.weight : null;
+        },
+        &#x2F;**
+         * Returns an index by weighted random distribution.
+         * @method _randomIndex
+         * @protected
+         * @return {Number}
+         *&#x2F;
+        _randomIndex: function () {
+            var maximumIndex,
+                me = this,
+                middleIndex,
+                minimumIndex = 0,
+                random,
+                sum = me._sum,
+                total,
+                totals = me._totals;
+
+            if (!sum || !totals) {
+                me._update();
+
+                sum = me._sum;
+                totals = me._totals;
+
+                if (!sum || !totals || !totals.length) {
+                    return null;
+                }
+            }
+
+            maximumIndex = totals.length - 1;
+            random = _random() * sum;
+
+            while (maximumIndex &gt;= minimumIndex) {
+                middleIndex = (maximumIndex + minimumIndex) &#x2F; 2;
+
+                if (middleIndex &lt; 0) {
+                    middleIndex = 0;
+                } else {
+                    middleIndex = _floor(middleIndex);
+                }
+
+                total = totals[middleIndex];
+
+                if (random === total) {
+                    middleIndex += 1;
+                    break;
+                } else if (random &lt; total) {
+                    if (middleIndex &amp;&amp; random &gt; totals[middleIndex - 1]) {
+                        break;
+                    }
+
+                    maximumIndex = middleIndex - 1;
+                } else if (random &gt; total) {
+                    minimumIndex = middleIndex + 1;
+                }
+            }
+
+            return middleIndex;
+        },
+        &#x2F;**
+         * Updates chached data for achieving weighted random distribution.
+         * @method _update
+         * @chainable
+         * @protected
+         *&#x2F;
+        _update: function () {
+            var me = this,
+                sum = 0,
+                totals = [];
+
+            _each(me._array, function (item) {
+                sum += item.weight;
+                totals.push(sum);
+            });
+
+            me._sum = sum;
+            me._totals = totals;
+
+            return me;
+        }
+    };
+
+    Y.WeightedList = _class;
+}(Y));
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
