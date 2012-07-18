@@ -131,4 +131,4 @@ Y.Event.define('selectionchange', {
 });
 
 
-}, 'gallery-2012.07.05-20-01' ,{requires:['event-move'], skinnable:false});
+}, 'gallery-2012.07.18-13-22' ,{requires:['event-move'], skinnable:false});

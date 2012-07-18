@@ -19,4 +19,4 @@ Y.Tag.register('ydial', {
 });
 
 
-}, 'gallery-2012.07.05-20-01' ,{requires:['gallery-tag', 'dial']});
+}, 'gallery-2012.07.18-13-22' ,{requires:['gallery-tag', 'dial']});
