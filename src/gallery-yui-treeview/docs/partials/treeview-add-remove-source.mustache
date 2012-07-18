@@ -1,0 +1,42 @@
+<style>
+.new { color: green; }
+</style>
+
+<div class="yui3-skin-sam yui3-cssreset">
+    <form>
+        <input id="label-text" type="text" value="New Leaf">
+        <button id="add">Add Leaf</button>
+        <button id="remove">Remove Leaf</button>
+    </form>
+    <div id="mytree"></div>
+</div>
+
+<script>
+YUI().use('treeview', 'escape', function (Y) {
+    var tree = new Y.TreeView({
+            label: "This my tree",
+            children: [
+               { label: "Leaf One" },
+               { label: "Leaf Two" }
+            ]
+        });
+    
+    tree.render("#mytree");
+    tree.expand();
+
+    // Add a new leaf, using the specified label value    
+    Y.one("#add").on("click", function (ev) {
+        var text = Y.one('#label-text').get('value');
+        tree.add({ label: '<span class="new">' + Y.Escape.html(text) + '</span>' });
+        ev.preventDefault();
+    });
+    
+    // Remove the first element of the tree if present
+    Y.one("#remove").on("click", function (ev) {
+        if (tree.item(0)) {
+            tree.item(0).remove();
+        }
+        ev.preventDefault();
+    });
+});
+</script>
