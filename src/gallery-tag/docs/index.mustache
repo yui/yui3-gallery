@@ -1,0 +1,120 @@
+<div class="intro">
+    <p>The Tag module provides a way to hook into Node creation and insertion. This allows you to build simple to use and powerful components that behave more like standard DOM nodes.</p>
+</div>
+
+{{>getting-started}}
+
+<h2>Using Tag</h2>
+
+<p>To hook into Node creation you must first specify what kind of node to hook into and what should be done on creation. You do that by registering a CSS selector and a mixin. If a node is found to match the selector, the mixin is applied and its `initializer` method is called.</p>
+
+
+
+When using Tag, every Node has a `tag` plugin. A CSS selector can be registered so that when any Node is found to match it has a mixin applied
+
+When a node is first created using Y.Node, the Tag plugin
+
+<p>CSS Selectors are used to attach additional functionality (mixins) to Nodes. Nodes will be matched whether they are present on page load or created dynamically.</p>
+
+<h4>Registering Tags</h4>
+
+```
+// Tag selector matches all copyright tags
+Y.Tag.register('copyright', {
+    created: function(config) {
+        this.addAttr('name', {value: config.name})
+        this.get('host').setHTML('Copyright &copy; ' + (new Date().getFullYear()) + ' ' + this.get('name'));
+    }
+});
+```
+
+<p>When registering a tag, `data-` attributes are passed in as config parameters. Dashes are used for camelization (i.e. `data-full-name` would be passed as `config.fullName`).</p>
+
+```
+<copyright data-name="Foo Inc."></copyright> <!-- Copyright © 2012 Foo Inc. -->
+```
+
+<p>Every Node has a `tag` plugin already created. The plugin is the receiver of a registered mixin.</p>
+
+```
+Y.one('copyright').tag.get('name'); // Foo Inc.
+```
+
+<h4>Registering Attributes</h4>
+
+<p>Registering attributes is a way to provide more graceful degredation to your elements. You could also register both an attribute and a tag to provide more flexible usage.</p>
+
+```
+// Attribute selector matches all highlight attributes
+Y.Tag.register('[highdpi]', {
+    created: function(config) {
+        if (Y.config.win.devicePixelRatio <= 1) {return;}
+
+        var host = config.get('host'),
+            src = host.get('src').replace(/(\.[a-zA-Z]+)$/, function(m) {return '@2x' + m;});
+
+        if (src) {
+            Y.io(src, {
+                method: 'HEAD',
+                onsuccess: function(e) {
+                    host.set('src', src);
+                }
+            });
+        }
+    }
+});
+
+Y.Tag.register('example, [example]', {});
+```
+
+<p>When registering an attribute, the attribute name becomes a namespace for config parameters.</p>
+
+```
+// Attribute selector matches all highlight attributes
+Y.Tag.register('[highlight]', {
+    created: function(config) {
+        var host = config.get('host'),
+            text = host.getHTML().replace(config.word, '<b>' + config.word + '</b>');
+
+        host.setHTML(text);
+    }
+});
+```
+
+```
+<!-- Bolds "elit" -->
+<p highlight highlight:word="elit">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p> 
+```
+
+<h3>Inserted Event</h3>
+
+<p>`tag:inserted`</p>
+
+<h2>How It Works</h2>
+
+<p>`gallery-event-inserted` provides the magic behind the `tag:inserted` event. It uses CSS3 Animation to create efficient inserted events. If CSS3 Animation is unsupported it falls back to using the slower DOMNodeInserted mutation event.</p>
+
+<h2>Registry</h2>
+
+<table class="yui-table">
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Module</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>`ybind`</td>
+        <td>Allows a node to respond to events.</td>
+        <td>tag-ybind</td>
+    </tr>
+</tbody>
+</table>
+
+<h2>About</h2>
+
+<p><a href="http://mozilla.github.com/x-tag/">X-Tag</a> was the initial inspiration, however the Tag module goes beyond the current implementation and allows you to register attributes in addition to tags.</p>
+
+<p>Compatibility: IE9+, FF5+, Chrome 4+, Safari/iOS 4+, Android 2.1+</p>

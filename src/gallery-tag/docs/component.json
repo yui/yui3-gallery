@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-tag",
+    "displayName": "Tag",
+    "description": "Provides a way to write 'smart' HTML tags backed by YUI modules.",
+    "author"     : "twobit",
+
+    "tags": ["gallery-tag"],
+    "use" : ["gallery-tag"],
+
+    "examples": []
+}

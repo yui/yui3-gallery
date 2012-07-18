@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>YUI Tag</title>
+        <script type="text/javascript" src="../../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript" src="../../../../build/gallery-event-inserted/gallery-event-inserted.js"></script>
+        <script type="text/javascript" src="../../../../build/gallery-tag/gallery-tag.js"></script>
+    </head>
+    <body>
+        <h1>YUI Tag</h1>
+
+        <h2>Test Tags</h2>
+        <ybutton data-label="TEST"></ybutton>
+        <ybutton data-label="DISABLE" data-disabled="false"></ybutton>
+
+        <script type="text/javascript">
+        YUI().use('gallery-tag', 'button', function(Y) {
+            Y.Tag.register('ybutton', {
+                created: function(config) {
+                    var node = this.get('host').appendChild('<button></button>');
+                    this._widget = new Y.Button(Y.merge(config, {srcNode: node}));
+                    this.onHostEvent('tag:inserted', function() {this._widget.render();}, this);
+                }
+            });
+        });
+        </script>
+    </body>
+</html>
