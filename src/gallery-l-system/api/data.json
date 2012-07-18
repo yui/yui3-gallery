@@ -1,0 +1,181 @@
+{
+    "project": {
+        "name": "L-System"
+    },
+    "files": {
+        "js/l-system.js": {
+            "name": "js/l-system.js",
+            "modules": {
+                "gallery-l-system": 1
+            },
+            "classes": {
+                "LSystem": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "gallery-l-system": {
+            "name": "gallery-l-system",
+            "submodules": {},
+            "classes": {
+                "LSystem": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/l-system.js",
+            "line": 26
+        }
+    },
+    "classes": {
+        "LSystem": {
+            "name": "LSystem",
+            "shortname": "LSystem",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-l-system",
+            "namespace": "",
+            "file": "js/l-system.js",
+            "line": 26,
+            "is_constructor": 1,
+            "extends": "Base",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration Object.",
+                    "type": "Object"
+                }
+            ]
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/l-system.js",
+            "line": 43,
+            "description": "Iterates the l-system's value.",
+            "itemtype": "method",
+            "name": "iterate",
+            "chainable": 1,
+            "params": [
+                {
+                    "name": "iterations",
+                    "description": "Optional.  The number of iterations to\nperform.  Defaults to 1.  The l-system can only iterate forward so\nnegative values aren't accepted.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ],
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        },
+        {
+            "file": "js/l-system.js",
+            "line": 75,
+            "description": "This method restarts the l-system and resets its value.",
+            "itemtype": "method",
+            "name": "restart",
+            "chainable": 1,
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        },
+        {
+            "file": "js/l-system.js",
+            "line": 91,
+            "itemtype": "method",
+            "name": "_resolveMatch",
+            "params": [
+                {
+                    "name": "ruleValue",
+                    "description": "",
+                    "type": "Array|Object|String|WeightedList"
+                },
+                {
+                    "name": "index",
+                    "description": "",
+                    "type": "Number"
+                },
+                {
+                    "name": "value",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "match",
+                    "description": "",
+                    "type": "String"
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "Returns null if the rule doesn't apply.",
+                "type": "String"
+            },
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        },
+        {
+            "file": "js/l-system.js",
+            "line": 206,
+            "description": "The axiom is the initial value of the l-system.  Note: If the\naxiom is changed after the l-system has been iterated, the\nl-system will be restarted.",
+            "itemtype": "attribute",
+            "name": "axiom",
+            "default": "''",
+            "type": "String",
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        },
+        {
+            "file": "js/l-system.js",
+            "line": 217,
+            "description": "The number of iterations the l-system has been set to.  This\nattribute is read only; use the iterate method to iterate the\nl-system.",
+            "itemtype": "attribute",
+            "name": "iterations",
+            "default": "0",
+            "readonly": "",
+            "type": "Number",
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        },
+        {
+            "file": "js/l-system.js",
+            "line": 230,
+            "description": "The regular expression that is used to help apply the rules\nduring iteration.",
+            "itemtype": "attribute",
+            "name": "pattern",
+            "access": "protected",
+            "tagname": "",
+            "readonly": "",
+            "type": "RegExp",
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        },
+        {
+            "file": "js/l-system.js",
+            "line": 242,
+            "description": "The l-system's rules.  Note: If the rules are changed after the\nl-system has been iterated, the l-system will be restarted.  If\nyou read this object and manipulate it directly, you must call\nthe restart method before iterating the l-system again otherwise\nit will yield unknown results.\n\nThe rules are key/value pairs.  The rules object's keys should be\nsingle characters.  In the simplest case, the rules object's\nvalues are strings.  For  example, with this rules object\n{a: 'abc'}, every time the character 'a' is found in the\nl-system's value, it will be replaced with the string 'abc'.\n\nThe rules object's values may also be objects for more control\nover when the rule is applied.  For example, with this rules\nobject {a: {prev: 'ccc', value: 'abc'}}, every time the character\n'a' is found in the l-system's value and the previous characters\nin the l-system's value are 'ccc', the 'a' will be replaced with\nthe string 'abc'.  In the simplest case, the value property is a\nstring but it may be any value that can be one of the rule\nobject's values.  Here is a list of the properties that affect\nwhen this rule is applied:\n<dl>\n    <dt>\n        first\n    </dt>\n    <dd>\n        If the first property is defined and is a truthy value,\n        the rule will only be applied if the matched character is\n        the first character in the l-system's value.  If the\n        first property is set to false, the rule will only be\n        applied if the matched character is not the first\n        character in the l-system's value.\n    </dd>\n    <dt>\n        last\n    </dt>\n    <dd>\n        If the last property is defined and is a truthy value,\n        the rule will only be applied if the matched character is\n        the last character in the l-system's value.  If the last\n        property is set to false, the rule will only be applied\n        if the matched character is not the last character in the\n        l-system's value.\n    </dd>\n    <dt>\n        next\n    </dt>\n    <dd>\n        If the next property is defined, it should be a string of\n        one or more characters.  The rule will only be applied if\n        the matched character is followed by this string of\n        characters exactly.\n\n        The next property may also be a weighted list of strings\n        of one or more characters.  In this case, the value will\n        be selected from the weighted list at random.\n    </dd>\n    <dt>\n        notNext\n    </dt>\n    <dd>\n        If the notNext property is defined, it should be a string\n        of one or more characters.  The rule will only be applied\n        if the matched character is not followed by this string\n        of characters exactly.\n\n        The notNext property may also be a weighted list of\n        strings of one or more characters.  In this case, the\n        value will be selected from the weighted list at random.\n    </dd>\n    <dt>\n        notPrev\n    </dt>\n    <dd>\n        If the notPrev property is defined, it should be a string\n        of one or more characters.  The rule will only be applied\n        if the matched character is not preceded by this string\n        of characters exactly.\n\n        The notPrev property may also be a weighted list of\n        strings of one or more characters.  In this case, the\n        value will be selected from the weighted list at random.\n    </dd>\n    <dt>\n        prev\n    </dt>\n    <dd>\n        If the prev property is defined, it should be a string of\n        one or more characters.  The rule will only be applied if\n        the matched character is preceded by this string of\n        characters exactly.\n\n        The prev property may also be a weighted list of strings\n        of one or more characters.  In this case, the value will\n        be selected from the weighted list at random.\n    </dd>\n</dl>\n\nFor even further control, the rules object's values may be\nobjects with a fn property.  The fn property should be a function\nthat accepts three arguments:\n<dl>\n    <dt>\n        match\n    </dt>\n    <dd>\n        String.  The single character that was matched.\n    </dd>\n    <dt>\n        index\n    </dt>\n    <dd>\n        Number.  The index of the matched character within the\n        l-system's value.\n    </dd>\n    <dt>\n        value\n    </dt>\n    <dd>\n        String.  The l-system's current value.\n    </dd>\n</dl>\nThe function should return a string or null.  The rule will only\nbe applied if the function does not return null.  The object may\nalso have a ctx property which will be used as the execution\ncontext for the function.\n\nMultiple rules may be given for a single character by providing\nan array as a rules object's value.  The array may contain any\nvalue that is acceptable as a rules object's value.  The array\nitems will be processed in order; the first rule that applies\nwill be used.  Because of this, the array items should usually be\none of the ojects described above.  The array may contain string\nitems, but since string rules are always applied, there should\nonly ever be one string item in the array and it should be the\nlast item in the array.\n\nA rules object's value may also be a weighted list of any of the\nother values described above.  In this case, the values will be\nselected from the weighted list at random.",
+            "itemtype": "attribute",
+            "name": "rules",
+            "default": "{}",
+            "type": "Object",
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        },
+        {
+            "file": "js/l-system.js",
+            "line": 390,
+            "description": "The current value of the l-system.",
+            "itemtype": "attribute",
+            "name": "value",
+            "default": "''",
+            "readonly": "",
+            "type": "String",
+            "class": "LSystem",
+            "module": "gallery-l-system"
+        }
+    ]
+}
