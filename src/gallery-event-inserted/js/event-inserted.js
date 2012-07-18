@@ -43,7 +43,7 @@ Inserted = {
 
         sub._handle = node[method](Inserted.ANIMATION_START, Y.bind(function(e) {
             if (e._event.animationName === Inserted.NAME) {
-                notifier.fire({target: e.target});
+                notifier.fire({target: e.target, selector: sub._extra});
             }
         }, this), filter);
 
@@ -92,7 +92,7 @@ DOMInserted = {
         // Delegates don't seem to work for DOMNodeInserted :(
         sub._handle = node[method]('DOMNodeInserted', Y.bind(function(e) {
             if (Y.Selector.test(e.target.getDOMNode(), sub._extra, doc_node.getDOMNode())) {
-                notifier.fire({target: e.target});
+                notifier.fire({target: e.target, selector: sub._extra});
             }
         }, this), filter);
     },
