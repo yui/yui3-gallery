@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>YUI Tag</title>
+        <script type="text/javascript" src="../../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript" src="../../../../build/gallery-event-inserted/gallery-event-inserted.js"></script>
+        <script type="text/javascript" src="../../../../build/gallery-tag/gallery-tag.js"></script>
+    </head>
+    <body>
+        <h2>Dial</h2>
+        <ydial data-min="-100" data-max="100" data-value="0"></ydial>
+
+        <script type="text/javascript">
+        YUI({
+            groups: {tag: {patterns: {'tag-': {configFn: function(cfg) {
+                cfg.path = '../../yui3-gallery/build/gallery-tag-registry/' + cfg.name + '.js'
+            }}}}}
+        }).use('tag-ydial');
+        </script>
+    </body>
+</html>

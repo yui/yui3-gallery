@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>YUI Tag</title>
+        <script type="text/javascript" src="../../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript" src="../../../../build/gallery-event-inserted/gallery-event-inserted.js"></script>
+        <script type="text/javascript" src="../../../../build/gallery-tag/gallery-tag.js"></script>
+    </head>
+    <body>
+        <h2>Button</h2>
+        <ybutton data-label="TEST BUTTON"></ybutton>
+        <ybutton data-label="SAMPLE BUTTON" data-disabled="true"></ybutton>
+
+        <script type="text/javascript">
+        YUI({
+            groups: {tag: {patterns: {'tag-': {configFn: function(cfg) {
+                cfg.path = '../../yui3-gallery/build/gallery-tag-registry/' + cfg.name + '.js'
+            }}}}}
+        }).use('tag-ybutton');
+        </script>
+    </body>
+</html>
