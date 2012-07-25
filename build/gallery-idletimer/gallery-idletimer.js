@@ -38,7 +38,7 @@ function handleUserEvent(event){
     if (enabled){
     
         if (/visibilitychange/.test(event.type)){
-            toggleIdleState(doc.hidden || doc.msHidden || doc.webkitHidden);
+            toggleIdleState(doc.hidden || doc.msHidden || doc.webkitHidden || doc.mozHidden);
         } else {
             //if it's idle, that means the user is no longer idle
             if (idle){
@@ -135,6 +135,7 @@ Y.IdleTimer = {
         //need to add the old-fashioned way
         doc.addEventListener("msvisibilitychange", handleUserEvent, false)
         doc.addEventListener("webkitvisibilitychange", handleUserEvent, false)
+        doc.addEventListener("mozvisibilitychange", handleUserEvent, false)
         
         //set a timeout to toggle state
         tId = setTimeout(toggleIdleState, timeout);
@@ -161,6 +162,7 @@ Y.IdleTimer = {
 
         doc.removeEventListener("msvisibilitychange", handleUserEvent, false)
         doc.removeEventListener("webkitvisibilitychange", handleUserEvent, false)
+        doc.removeEventListener("mozvisibilitychange", handleUserEvent, false)
       
     }
 
@@ -170,4 +172,4 @@ Y.IdleTimer = {
 Y.augment(Y.IdleTimer, Y.Event.Target);
 
 
-}, 'gallery-2011.08.03-21-18' ,{requires:['event','event-custom']});
+}, 'gallery-2012.07.25-21-36' ,{requires:['event','event-custom']});

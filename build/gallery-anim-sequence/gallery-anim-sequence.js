@@ -49,6 +49,54 @@ AnimSequence.ATTRS =
 	},
 
 	/**
+	 * The number of times the animation should run.  Can be "infinite"
+	 * 
+	 * @attribute iterations
+	 * @type {Number|String}
+	 * @default 1
+	 */
+	iterations:
+	{
+		value: 1,
+		validator: function(value)
+		{
+			return Y.Lang.isNumber(value) || value == 'infinite';
+		}
+	},
+
+	/**
+	 * The number of times the animation has run.  Resets to zero when
+	 * the animation finishes or is stopped.
+	 * 
+	 * @attribute iterationCount
+	 * @type {Number}
+	 * @readOnly
+	 */
+	iterationCount:
+	{
+		value:    0,
+		readOnly: true
+	},
+
+	/**
+	 * The behavior of the animation when "iterations" > 1:
+	 * If "normal", the animation will repeat in the same direction.
+	 * If "alternate", the animation will flip "reverse" at the end of the sequence.
+	 * 
+	 * @attribute direction
+	 * @type {String}
+	 * @default "normal"
+	 */
+	direction:
+	{
+		value: 'normal',
+		validator: function(value)
+		{
+			return value == 'normal' || value == 'alternate';
+		}
+	},
+
+	/**
 	 * Whether or not the animation is currently running.
 	 * 
 	 * @attribute running
@@ -113,8 +161,24 @@ function next()
 	if ((!reverse && this._index >= this._list.length) ||
 		( reverse && this._index < 0))
 	{
-		this._set('running', false);
-		this.fire('end');
+		var iter_max   = this.get('iterations'),
+			iter_count = this.get('iterationCount') + 1;
+		if (iter_max == 'infinite' || iter_count < iter_max)
+		{
+			if (this.get('direction') == 'alternate')
+			{
+				this.set('reverse', !reverse);
+			}
+
+			this._set('iterationCount', iter_count);
+			this._index = this.get('reverse') ? this._list.length-1 : 0;
+			next.call(this);
+		}
+		else
+		{
+			this._set('running', false);
+			this.fire('end');
+		}
 		return;
 	}
 
@@ -227,6 +291,7 @@ Y.extend(AnimSequence, Y.Base,
 		}
 		else
 		{
+			this._set('iterationCount', 0);
 			this._set('running', true);
 			this.fire('start');
 			this._index = this.get('reverse') ? this._list.length-1 : 0;
@@ -255,12 +320,14 @@ Y.extend(AnimSequence, Y.Base,
 			{
 				Y.each(item, function(a)
 				{
+					a.run();	// so items beyond the current item will finish
 					a.stop(finish);
 				},
 				this);
 			}
 			else if ((item instanceof Y.Anim) || (item instanceof Y.AnimSequence))
 			{
+				item.run();		// so items beyond the current item will finish
 				item.stop(finish);
 			}
 
@@ -382,4 +449,4 @@ Y.namespace('Plugin');
 Y.Plugin.NodeFXSequence = NodeFXSequence;
 
 
-}, 'gallery-2012.07.11-21-38' ,{requires:['anim-base','parallel','node-pluginhost']});
+}, 'gallery-2012.07.25-21-36' ,{requires:['anim-base','parallel','node-pluginhost']});

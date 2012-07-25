@@ -31,7 +31,7 @@ Tag.register = function(name, mixin) {
         registered[part] = {
             mixin: mixin,
             handle: Y.on('inserted', function(e) {
-                e.target.fire('tag:inserted');
+                e.target.fire('tag:inserted', e);
             }, part)
         };
     });
@@ -167,4 +167,4 @@ Y.extend(TagPlugin, Y.Plugin.Base, {
 Y.Node.plug(TagPlugin);
 
 
-}, 'gallery-2012.07.18-13-22' ,{requires:['node', 'base', 'plugin', 'gallery-event-inserted'], skinnable:false});
+}, 'gallery-2012.07.25-21-36' ,{requires:['node', 'base', 'plugin', 'gallery-event-inserted'], skinnable:false});
