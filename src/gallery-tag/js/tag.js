@@ -29,7 +29,7 @@ Tag.register = function(name, mixin) {
         registered[part] = {
             mixin: mixin,
             handle: Y.on('inserted', function(e) {
-                e.target.fire('tag:inserted');
+                e.target.fire('tag:inserted', e);
             }, part)
         };
     });
