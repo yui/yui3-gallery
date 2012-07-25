@@ -1,0 +1,504 @@
+{
+    "project": {},
+    "files": {
+        "js/timer.js": {
+            "name": "js/timer.js",
+            "modules": {
+                "timer": 1
+            },
+            "classes": {
+                "Y.Timer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "timer": {
+            "name": "timer",
+            "submodules": {},
+            "classes": {
+                "Y.Timer": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/timer.js",
+            "line": 8,
+            "description": "Losely modeled after AS3's Timer class. Provides a simple interface start,\n  pause, resume, and stop a defined timer set with a custom callback method.",
+            "author": "Anthony Pipkin",
+            "version": "1.1.0"
+        }
+    },
+    "classes": {
+        "Y.Timer": {
+            "name": "Y.Timer",
+            "shortname": "Y.Timer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "timer",
+            "namespace": "",
+            "file": "js/timer.js",
+            "line": 8,
+            "description": "Losely modeled after AS3's Timer class. Provides a simple interface start,\n  pause, resume, and stop a defined timer set with a custom callback method.",
+            "extends": "Y.Base"
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/timer.js",
+            "line": 29,
+            "itemtype": "event",
+            "name": "start",
+            "description": "The timer has started",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "An Event Facade object",
+                    "type": "Event.Facade"
+                }
+            ],
+            "type": "{Event.Custom}",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 36,
+            "itemtype": "event",
+            "name": "stop",
+            "description": "The timer has stopped",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "An Event Facade object",
+                    "type": "Event.Facade"
+                }
+            ],
+            "type": "{Event.Custom}",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 43,
+            "itemtype": "event",
+            "name": "pause",
+            "description": "The timer has paused",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "An Event Facade object",
+                    "type": "Event.Facade"
+                }
+            ],
+            "type": "{Event.Custom}",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 50,
+            "itemtype": "event",
+            "name": "resume",
+            "description": "The timer has resumed",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "An Event Facade object",
+                    "type": "Event.Facade"
+                }
+            ],
+            "type": "{Event.Custom}",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 57,
+            "description": "The timer has reached a reached zero",
+            "itemtype": "event",
+            "name": "timer",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "An Event Facade object",
+                    "type": "Event.Facade"
+                }
+            ],
+            "type": "{Event.Custom}",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 67,
+            "description": "Initializer lifecycle implementation for the Timer class.\nPublishes events and subscribes\nto update after the status is changed.",
+            "itemtype": "method",
+            "name": "initializer",
+            "access": "protected",
+            "tagname": "",
+            "params": [
+                {
+                    "name": "config",
+                    "description": "Configuration object literal for\n    the Timer",
+                    "type": "Object"
+                }
+            ],
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 86,
+            "description": "Interface method to start the Timer. Fires timer:start",
+            "itemtype": "method",
+            "name": "start",
+            "access": "public",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 102,
+            "description": "Interface method to stop the Timer. Fires timer:stop",
+            "itemtype": "method",
+            "name": "stop",
+            "access": "public",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 118,
+            "description": "Interface method to pause the Timer. Fires timer:pause",
+            "itemtype": "method",
+            "name": "pause",
+            "access": "public",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 134,
+            "description": "Interface method to resume the Timer. Fires timer:resume",
+            "itemtype": "method",
+            "name": "resume",
+            "access": "public",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 153,
+            "description": "Internal timer",
+            "itemtype": "property",
+            "name": "_timerObj",
+            "type": "Y.later",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 162,
+            "description": "Resume length",
+            "itemtype": "property",
+            "name": "_remainingLength",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 171,
+            "description": "Checks to see if a new Timer is to be created. If so, calls\n_timer() after a the schedule number of milliseconds. Sets\nTimer pointer to the new Timer id. Sets start to the current\ntimestamp.",
+            "itemtype": "method",
+            "name": "_makeTimer",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 202,
+            "description": "Resets the Timer.",
+            "itemtype": "method",
+            "name": "_destroyTimer",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 227,
+            "description": "Increments the step and either stops or starts a new Timer\ninterval. Fires the timer callback method.",
+            "itemtype": "method",
+            "name": "_timer",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 255,
+            "description": "Internal status change event callback. Allows status changes\nto fire start(), pause(), resume(), and stop() automatically.",
+            "itemtype": "method",
+            "name": "_statusChanged",
+            "protcted": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 276,
+            "description": "Default function for start event.",
+            "itemtype": "method",
+            "name": "_defStartFn",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 298,
+            "description": "Default function for stop event.",
+            "itemtype": "method",
+            "name": "_defStopFn",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 312,
+            "description": "Default function for pause event.",
+            "itemtype": "method",
+            "name": "_defPauseFn",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 324,
+            "description": "Default function for resume event. Starts timer with\nremaining time left after Timer was paused.",
+            "itemtype": "method",
+            "name": "_defResumeFn",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 337,
+            "description": "Abstracted the repeatCount validator into the prototype to\nencourage class extension.",
+            "itemtype": "method",
+            "name": "_repeatCountValidator",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.1.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 350,
+            "description": "Used to fire the internal callback",
+            "itemtype": "method",
+            "name": "_executeCallback",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.1.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 365,
+            "description": "Returns the time from `now` if the timer is running and returns remaining\n  time from `stop` if the timer has stopped.",
+            "itemtype": "method",
+            "name": "_remainingGetter",
+            "access": "protected",
+            "tagname": "",
+            "since": "1.2.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 388,
+            "description": "Static property used to define the default attribute\nconfiguration for the Timer.",
+            "itemtype": "property",
+            "name": "ATTRS",
+            "type": "Object",
+            "static": 1,
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 398,
+            "description": "The callback method that fires when the\ntimer interval is reached.",
+            "itemtype": "attribute",
+            "name": "callback",
+            "type": "function",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 411,
+            "description": "Time in milliseconds between intervals",
+            "itemtype": "attribute",
+            "name": "length",
+            "type": "Number",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 425,
+            "description": "Get remaining milliseconds",
+            "itemtype": "attribute",
+            "name": "remaining",
+            "type": "Number",
+            "since": "1.2.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 437,
+            "description": "Number of times the Timer should fire before it stops\n - 1.1.0 - added lazyAdd false to prevent starting from\n           overriding the validator",
+            "itemtype": "attribute",
+            "name": "repeatCount",
+            "type": "Number",
+            "since": "1.1.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 454,
+            "description": "Timestamp Timer was started",
+            "itemtype": "attribute",
+            "name": "start",
+            "type": "Boolean",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 465,
+            "description": "Time in ms to wait until starting after start() has been called",
+            "itemtype": "attribute",
+            "name": "startDelay",
+            "type": "Number",
+            "since": "1.1.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 475,
+            "description": "Timer status\n - 1.1.0 - Changed from state to status. state was left\n           from legacy code",
+            "itemtype": "attribute",
+            "name": "status",
+            "default": "STATUS_STOPPED",
+            "type": "String",
+            "since": "1.1.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 489,
+            "description": "Number of times the Timer has looped",
+            "itemtype": "attribute",
+            "name": "step",
+            "type": "Boolean",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 501,
+            "description": "Timestamp Timer was stoped or paused",
+            "itemtype": "attribute",
+            "name": "stop",
+            "type": "Boolean",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 512,
+            "description": "Timer id to used during stop()",
+            "itemtype": "attribute",
+            "name": "timer",
+            "type": "Number",
+            "since": "1.0.0",
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 524,
+            "description": "Static property provides public access to registered timer\nstatus strings",
+            "itemtype": "property",
+            "name": "Timer.STATUS",
+            "type": "Object",
+            "static": 1,
+            "class": "Y.Timer",
+            "module": "timer"
+        },
+        {
+            "file": "js/timer.js",
+            "line": 538,
+            "description": "Static property provides public access to registered timer\nevent strings",
+            "itemtype": "property",
+            "name": "Timer.EVENTS",
+            "type": "Object",
+            "static": 1,
+            "class": "Y.Timer",
+            "module": "timer"
+        }
+    ]
+}

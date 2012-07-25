@@ -1,0 +1,2515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Y.Timer</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.Timer.html">Y.Timer</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/timer.html">timer</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Y.Timer Class</h1>
+<div class="box meta">
+    
+
+    
+        <div class="extends">
+            Extends Y.Base
+        </div>
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;js_timer.js.html#l8"><code>js&#x2F;timer.js:8</code></a>
+        </div>
+    
+
+    
+        
+            Module: <a href="../modules/timer.html">timer</a>
+        
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>Losely modeled after AS3's Timer class. Provides a simple interface start,
+  pause, resume, and stop a defined timer set with a custom callback method.</p>
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
+        
+        
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods extends">
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__defPauseFn">_defPauseFn</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__defResumeFn">_defResumeFn</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__defStartFn">_defStartFn</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__defStopFn">_defStopFn</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__destroyTimer">_destroyTimer</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__executeCallback">_executeCallback</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__makeTimer">_makeTimer</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__remainingGetter">_remainingGetter</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__repeatCountValidator">_repeatCountValidator</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method__statusChanged">_statusChanged</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method__timer">_timer</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_initializer">initializer</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_pause">pause</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_resume">resume</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_start">start</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_stop">stop</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties extends">
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__remainingLength">_remainingLength</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__timerObj">_timerObj</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_ATTRS">ATTRS</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_Timer.EVENTS">Timer.EVENTS</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_Timer.STATUS">Timer.STATUS</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section attrs">
+                    <h3>Attributes</h3>
+
+                    <ul class="index-list attrs extends">
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_callback">callback</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_length">length</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_remaining">remaining</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_repeatCount">repeatCount</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_start">start</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_startDelay">startDelay</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_status">status</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_step">step</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_stop">stop</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_timer">timer</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events extends">
+                        
+                            <li class="index-item event">
+                                <a href="#event_pause">pause</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_resume">resume</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_start">start</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_stop">stop</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_timer">timer</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__defPauseFn" class="method item protected">
+    <h3 class="name"><code>_defPauseFn</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l312"><code>js&#x2F;timer.js:312</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Default function for pause event.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__defResumeFn" class="method item protected">
+    <h3 class="name"><code>_defResumeFn</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l324"><code>js&#x2F;timer.js:324</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Default function for resume event. Starts timer with
+remaining time left after Timer was paused.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__defStartFn" class="method item protected">
+    <h3 class="name"><code>_defStartFn</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l276"><code>js&#x2F;timer.js:276</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Default function for start event.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__defStopFn" class="method item protected">
+    <h3 class="name"><code>_defStopFn</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l298"><code>js&#x2F;timer.js:298</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Default function for stop event.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__destroyTimer" class="method item protected">
+    <h3 class="name"><code>_destroyTimer</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l202"><code>js&#x2F;timer.js:202</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Resets the Timer.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__executeCallback" class="method item protected">
+    <h3 class="name"><code>_executeCallback</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l350"><code>js&#x2F;timer.js:350</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.1.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Used to fire the internal callback</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__makeTimer" class="method item protected">
+    <h3 class="name"><code>_makeTimer</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l171"><code>js&#x2F;timer.js:171</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Checks to see if a new Timer is to be created. If so, calls
+_timer() after a the schedule number of milliseconds. Sets
+Timer pointer to the new Timer id. Sets start to the current
+timestamp.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__remainingGetter" class="method item protected">
+    <h3 class="name"><code>_remainingGetter</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l365"><code>js&#x2F;timer.js:365</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.2.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Returns the time from <code>now</code> if the timer is running and returns remaining
+  time from <code>stop</code> if the timer has stopped.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__repeatCountValidator" class="method item protected">
+    <h3 class="name"><code>_repeatCountValidator</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l337"><code>js&#x2F;timer.js:337</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.1.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Abstracted the repeatCount validator into the prototype to
+encourage class extension.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__statusChanged" class="method item">
+    <h3 class="name"><code>_statusChanged</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l255"><code>js&#x2F;timer.js:255</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Internal status change event callback. Allows status changes
+to fire start(), pause(), resume(), and stop() automatically.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__timer" class="method item protected">
+    <h3 class="name"><code>_timer</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l227"><code>js&#x2F;timer.js:227</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Increments the step and either stops or starts a new Timer
+interval. Fires the timer callback method.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initializer" class="method item protected">
+    <h3 class="name"><code>initializer</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>config</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l67"><code>js&#x2F;timer.js:67</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Initializer lifecycle implementation for the Timer class.
+Publishes events and subscribes
+to update after the status is changed.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">config</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Configuration object literal for
+    the Timer</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_pause" class="method item public">
+    <h3 class="name"><code>pause</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l118"><code>js&#x2F;timer.js:118</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Interface method to pause the Timer. Fires timer:pause</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_resume" class="method item public">
+    <h3 class="name"><code>resume</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l134"><code>js&#x2F;timer.js:134</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Interface method to resume the Timer. Fires timer:resume</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_start" class="method item public">
+    <h3 class="name"><code>start</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l86"><code>js&#x2F;timer.js:86</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Interface method to start the Timer. Fires timer:start</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_stop" class="method item public">
+    <h3 class="name"><code>stop</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l102"><code>js&#x2F;timer.js:102</code></a>
+        
+        </p>
+
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Interface method to stop the Timer. Fires timer:stop</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__remainingLength" class="property item protected">
+    <h3 class="name"><code>_remainingLength</code></h3>
+    <span class="type">Unknown</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l162"><code>js&#x2F;timer.js:162</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.2.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Resume length</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__timerObj" class="property item protected">
+    <h3 class="name"><code>_timerObj</code></h3>
+    <span class="type">Y.later</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l153"><code>js&#x2F;timer.js:153</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Internal timer</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_ATTRS" class="property item">
+    <h3 class="name"><code>ATTRS</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l388"><code>js&#x2F;timer.js:388</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Static property used to define the default attribute
+configuration for the Timer.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_Timer.EVENTS" class="property item">
+    <h3 class="name"><code>Timer.EVENTS</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l538"><code>js&#x2F;timer.js:538</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Static property provides public access to registered timer
+event strings</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_Timer.STATUS" class="property item">
+    <h3 class="name"><code>Timer.STATUS</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l524"><code>js&#x2F;timer.js:524</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Static property provides public access to registered timer
+status strings</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_callback" class="attr item">
+    <a name="config_callback"></a> 
+    <h3 class="name"><code>callback</code></h3>
+    <span class="type">Function</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l398"><code>js&#x2F;timer.js:398</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>The callback method that fires when the
+timer interval is reached.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_length" class="attr item">
+    <a name="config_length"></a> 
+    <h3 class="name"><code>length</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l411"><code>js&#x2F;timer.js:411</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Time in milliseconds between intervals</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_remaining" class="attr item">
+    <a name="config_remaining"></a> 
+    <h3 class="name"><code>remaining</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l425"><code>js&#x2F;timer.js:425</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.2.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Get remaining milliseconds</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_repeatCount" class="attr item">
+    <a name="config_repeatCount"></a> 
+    <h3 class="name"><code>repeatCount</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l437"><code>js&#x2F;timer.js:437</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.1.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Number of times the Timer should fire before it stops
+ - 1.1.0 - added lazyAdd false to prevent starting from
+           overriding the validator</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_start" class="attr item">
+    <a name="config_start"></a> 
+    <h3 class="name"><code>start</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l454"><code>js&#x2F;timer.js:454</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Timestamp Timer was started</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_startDelay" class="attr item">
+    <a name="config_startDelay"></a> 
+    <h3 class="name"><code>startDelay</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l465"><code>js&#x2F;timer.js:465</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.1.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Time in ms to wait until starting after start() has been called</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_status" class="attr item">
+    <a name="config_status"></a> 
+    <h3 class="name"><code>status</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l475"><code>js&#x2F;timer.js:475</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.1.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Timer status
+ - 1.1.0 - Changed from state to status. state was left
+           from legacy code</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> STATUS_STOPPED</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_step" class="attr item">
+    <a name="config_step"></a> 
+    <h3 class="name"><code>step</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l489"><code>js&#x2F;timer.js:489</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Number of times the Timer has looped</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_stop" class="attr item">
+    <a name="config_stop"></a> 
+    <h3 class="name"><code>stop</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l501"><code>js&#x2F;timer.js:501</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Timestamp Timer was stoped or paused</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_timer" class="attr item">
+    <a name="config_timer"></a> 
+    <h3 class="name"><code>timer</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l512"><code>js&#x2F;timer.js:512</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 1.0.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>Timer id to used during stop()</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                
+                    <div id="event_pause" class="events item">
+    <h3 class="name"><code>pause</code></h3>
+    <span class="type">Event.Custom</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l43"><code>js&#x2F;timer.js:43</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The timer has paused</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type">Event.Facade</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An Event Facade object</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_resume" class="events item">
+    <h3 class="name"><code>resume</code></h3>
+    <span class="type">Event.Custom</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l50"><code>js&#x2F;timer.js:50</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The timer has resumed</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type">Event.Facade</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An Event Facade object</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_start" class="events item">
+    <h3 class="name"><code>start</code></h3>
+    <span class="type">Event.Custom</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l29"><code>js&#x2F;timer.js:29</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The timer has started</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type">Event.Facade</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An Event Facade object</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_stop" class="events item">
+    <h3 class="name"><code>stop</code></h3>
+    <span class="type">Event.Custom</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l36"><code>js&#x2F;timer.js:36</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The timer has stopped</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type">Event.Facade</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An Event Facade object</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_timer" class="events item">
+    <h3 class="name"><code>timer</code></h3>
+    <span class="type">Event.Custom</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_timer.js.html#l57"><code>js&#x2F;timer.js:57</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The timer has reached a reached zero</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">event</code>
+                        <span class="type">Event.Facade</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>An Event Facade object</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+            </div>
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
