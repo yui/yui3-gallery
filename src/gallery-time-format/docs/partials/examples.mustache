@@ -1,0 +1,32 @@
+<h2>Examples</h2>
+
+<p>
+some code samples
+</p>
+
+```
+var DT = Y.DataType.Date,
+    from, to, format, delta;
+
+to = new Date('2012-04-04T12:00Z');
+from = to;
+
+// output: 2012-04-04
+DT.format(to);
+
+format = '%x';
+
+// output: 04/04/12
+DT.format(to, { format: format });
+
+to = new Date('2012-05-01T13:00Z'),
+from = to;
+delta = 3 * 60 * 60, // 3 hours in seconds
+
+// output: right now
+DT.format(to, { relativeDelta: delta, from: from });
+
+from = new Date('2012-05-01T14:00:10Z');
+// output: about an hour before
+DT.format(to, { relativeDelta: delta, from: from });
+```

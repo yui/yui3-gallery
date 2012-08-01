@@ -1,0 +1,7 @@
+{
+    "name"       : "gallery-time-format",
+    "displayName": "gallery-time-format",
+    "description": "Built on top of YUI datatype-date to display absolute / relative datetime",
+    "author"     : "Huge Huang <huge.huang@gmail.com>",
+    "use" : ["datatype-date", "gallery-torelativetime"]
+}

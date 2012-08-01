@@ -1,0 +1,60 @@
+<h2>options</h2>
+
+<p>format</p>
+```
+var DT = Y.DataType.Date;
+
+var to = new Date('2012-04-04T12:00Z'),
+    format;
+
+format = '%x';
+DT.format(to, { format: format });
+// output: 04/04/12
+
+format = '%Y-%m-%d %H%P';
+DT.format(to, { format: format });
+// output: 2012-04-04 05am
+```
+
+<p>relativeDelta</p>
+```
+var DT = Y.DataType.Date;
+
+var to = new Date('2012-05-01T13:00Z'),
+    delta = 3 * 60 * 60, // 3 hours in seconds
+    from;
+
+from = to;
+DT.format(to, { relativeDelta: delta, from: from });
+// output: right now
+
+from = new Date('2012-05-01T13:00:10Z');
+DT.format(to, { relativeDelta: delta, from: from });
+// output: less than a minute before
+
+from = new Date('2012-05-01T13:10Z');
+DT.format(to, { relativeDelta: delta, from: from });
+// output: 10 minutes before
+
+from = new Date('2012-05-01T14:00Z');
+DT.format(to, { relativeDelta: delta, from: from });
+// output: about an hour before
+
+from = new Date('2012-05-01T16:00Z');
+DT.format(to, { relativeDelta: delta, from: from });
+// output: about 3 hours before
+```
+
+<p>from</p>
+usually created for testing purpose
+
+```
+var DT = Y.DataType.Date;
+
+var to = new Date('2012-04-04T12:00Z'),
+    from;
+
+from = to;
+DT.format(to);
+// output: 2012-04-04
+```

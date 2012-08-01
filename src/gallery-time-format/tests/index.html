@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>YUI Time Format</title>
+        <script type="text/javascript" src="../../../../yui3/build/yui/yui.js"></script>
+        <script type="text/javascript">
+        var Y = YUI({
+            modules: {
+                'gallery-time-format': '../../../build/gallery-time-format/gallery-time-format.js'
+            }
+        })
+        </script>
+    </head>
+    <body>
+        <h1>YUI Time Format</h1>
+
+        <h2>Test Time Format</h2>
+
+        <script type="text/javascript">
+        Y.use('gallery-time-format', function (Y) {
+            var DT = Y.DataType.Date,
+                to = new Date('2012-05-01T13:00Z'),
+                delta = 3 * 60 * 60, // 3 hours in seconds
+                from,
+                output;
+
+            from = to;
+            output = DT.format(to, { relativeDelta: delta, from: from });
+            console.log('formatted time %s', output);
+
+            from = new Date('2012-05-01T13:00:10Z');
+            output = DT.format(to, { relativeDelta: delta, from: from });
+            console.log('formatted time %s', output);
+
+            from = new Date('2012-05-01T13:10Z');
+            output = DT.format(to, { relativeDelta: delta, from: from });
+            console.log('formatted time %s', output);
+
+            from = new Date('2012-05-01T14:00Z');
+            output = DT.format(to, { relativeDelta: delta, from: from });
+            console.log('formatted time %s', output);
+        });
+        </script>
+    </body>
+</html>
