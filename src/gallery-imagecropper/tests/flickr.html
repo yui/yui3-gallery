@@ -21,7 +21,7 @@
 		<div id="result"></div>
 		<p id="coords"></p>
 	</div>
-	<script src="http://yui.yahooapis.com/3.4.0/build/yui/yui.js"></script> 
+	<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script> 
 	<script> 
 YUI({
 	filter: 'raw',
@@ -31,7 +31,25 @@ YUI({
 			requires: ['widget','resize','gallery-event-arrow','dd-constrain']
 		}
 	}
-}).use('yql', 'gallery-imagecropper', function (Y) {
+}).use('gallery-imagecropper', function (Y) {
+	
+	var images = [{
+		src: 'http://farm8.staticflickr.com/7016/6748720265_e2f3e82fee.jpg',
+		width: 333,
+		height: 500
+	}, {
+		src: 'http://farm8.staticflickr.com/7026/6748694737_dc0e9cca3a.jpg',
+		width: 500,
+		height: 333
+	}, {
+		src: 'http://farm8.staticflickr.com/7150/6748698581_55aa86028f.jpg',
+		width: 500,
+		height: 333
+	}, {
+		src: 'http://farm8.staticflickr.com/7172/6748677447_a444f2cbce.jpg',
+		width: 335,
+		height: 500
+	}];
 	
 	Y.random = function (n) {
 		return Math.floor(Math.random() * n);
@@ -51,36 +69,36 @@ YUI({
 		});
 	});
 	
-	Y.YQL('select width,height,source from flickr.photos.sizes where photo_id in (select id from flickr.photos.interestingness limit 10) and label = "Medium"', function (response) {
+	var photo = images[Y.random(4)],
+		coordview = Y.one('#coords'),
+		result = Y.one('#result'),
 		
-		var photo = response.query.results.size[Y.random(10)],
-			coordview = Y.one('#coords'),
-			result = Y.one('#result'),
-			
-			imagecropper = new Y.ImageCropper(photo),
-			coords = imagecropper.getCropCoords();
-			
-		imagecropper.on('crop:crop', function (e) {
-			
-			coordview.setContent(e.left + 'x' + e.top + ' ' + e.width + 'x' + e.height);
-			
-			result.setBackgroundXY([-e.left, -e.top]).setStyles({
-				width: e.width,
-				height: e.height
-			});
-			
+		imagecropper = new Y.ImageCropper({
+			source: photo.src,
+			width: photo.width,
+			height: photo.height
+		}),
+		coords = imagecropper.getCropCoords();
+		
+	imagecropper.on('crop:crop', function (e) {
+		
+		coordview.setContent(e.left + 'x' + e.top + ' ' + e.width + 'x' + e.height);
+		
+		result.setBackgroundXY([-e.left, -e.top]).setStyles({
+			width: e.width,
+			height: e.height
 		});
-		
-		imagecropper.render('#imagecropper');
-		
-		result.setBackgroundXY([-coords.left, -coords.top]).setStyles({
-			backgroundImage: 'url(' + coords.image + ')',
-			width: coords.width,
-			height: coords.height
-		});
-		coordview.setContent(coords.left + 'x' + coords.top + ' ' + coords.width + 'x' + coords.height);
 		
 	});
+	
+	imagecropper.render('#imagecropper');
+	
+	result.setBackgroundXY([-coords.left, -coords.top]).setStyles({
+		backgroundImage: 'url(' + coords.image + ')',
+		width: coords.width,
+		height: coords.height
+	});
+	coordview.setContent(coords.left + 'x' + coords.top + ' ' + coords.width + 'x' + coords.height);
 	
 });
 	</script>
