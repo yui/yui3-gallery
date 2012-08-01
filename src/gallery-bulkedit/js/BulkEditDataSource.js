@@ -22,8 +22,8 @@
  * 
  * <p>The responseSchema passed to the YUI DataSource must include a
  * comparator for each field that should not be treated like a string.
- * This comparator can either be 'integer', 'decimal', or a function which
- * takes two arguments.</p>
+ * This comparator can either be 'string' (the default), 'integer',
+ * 'decimal', 'boolean', or a function which takes two arguments.</p>
  *
  * @class BulkEdit
  * @namespace DataSource
