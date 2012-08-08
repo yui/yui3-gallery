@@ -69,10 +69,19 @@ Y.QueryBuilder.Calendar.prototype = {
 		this._createDateRangeCalendar(var_config);
 
 		// Input box one for first calendar
+		var dt_value1 = value[1] || var_config.start_date; 
+		var dt_value2 = value[2] || var_config.end_date;  
+		if(value[2]){
+			visible = true;
+		}
+		else {
+			visible = op_list[0].multipleValue;
+		}
+
 		value_cell1 = this._createCellValue(query_index, var_config, op_list,
-				value, var_config.start_date, true, 0);
+				value, dt_value1, true, 0);
 		value_cell2 = this._createCellValue(query_index, var_config, op_list,
-				value, var_config.end_date, op_list[0].multipleValue, 1);
+				value, dt_value2, visible, 1);
 
 		var self = this;
 		this.op_menu.on('change', function() {
@@ -328,4 +337,4 @@ Y.QueryBuilder.Calendar.prototype = {
 Y.QueryBuilder.plugin_mapping.calendar = Y.QueryBuilder.Calendar;
 
 
-}, 'gallery-2012.05.23-19-56' ,{requires:['calendar','datatype-date','gallery-overlay-extras','gallery-querybuilder'], skinnable:true});
+}, 'gallery-2012.08.08-20-03' ,{requires:['calendar','datatype-date','gallery-overlay-extras','gallery-querybuilder'], skinnable:true});

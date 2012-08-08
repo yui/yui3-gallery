@@ -25,19 +25,19 @@ TapToTopPlugin.ATTRS = {
 Y.extend(TapToTopPlugin, Y.Plugin.Base, {
 
     initializer: function () {
-        this.host = this.get('host');
+        var host = this.get('host');
 
-        if (!this.host.one('#tapToTop')) {
-            this.host.append('<a id="tapToTop" href="#top" title="Top of page">Top of page<span class="circumflex"><span class="bar"></span><span class="bar"></span></span></a>');
+        if (!host.one('#tapToTop')) {
+            host.append('<a id="tapToTop" href="#top" title="Top of page">Top of page<span class="circumflex"><span class="bar"></span><span class="bar"></span></span></a>');
         }
 
-        this.btn = this.host.one('#tapToTop');
+        this.btn = host.one('#tapToTop');
 
         this.btnListener = this.btn.on('click', this._handleClick, this);
         this.windowListener = Y.on('scroll', this._handleWindowScroll, Y.config.win, this);
 
         this.scrollAnimation = new Y.Anim({
-            node: this.host,
+            node: Y.config.doc,
             easing: 'easeOut',
             to: {
                 scrollTop: 0
@@ -82,4 +82,4 @@ Y.TapToTopPlugin = TapToTopPlugin;
 
 
 
-}, 'gallery-2012.07.18-13-22' ,{skinnable:true, requires:['node','event','plugin','anim-base','anim-easing']});
+}, 'gallery-2012.08.08-20-03' ,{skinnable:true, requires:['node','event','plugin','anim-base','anim-easing']});

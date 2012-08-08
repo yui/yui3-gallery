@@ -201,7 +201,7 @@ var cell = table.getCell(e.taregt, [0, 1];</pre></code>
 */
 function getCell(seed, shift)
 {
-	var tbody = this.get('container'),
+	var tbody = this.tbodyNode,
 		row, cell;
 
 	if (seed && tbody)
@@ -285,22 +285,30 @@ found by the input, `null` is returned.
 */
 function getRow(id)
 {
-	var tbody = this.get('container') || null;
+	var tbody = this.tbodyNode,
+		row   = null;
 
-	if (id)
+	if (tbody)
 	{
-		id = this._idMap[id.get ? id.get('clientId') : id] || id;
+		if (id)
+		{
+			id = this._idMap[id.get ? id.get('clientId') : id] || id;
+		}
+
+		row = Y.one(Y.Lang.isNumber(id) ? this.getCell([id,0]).ancestor() : '#' + id);
 	}
 
-	return tbody &&
-		Y.one(Y.Lang.isNumber(id) ? this.getCell([id,0]).ancestor() : '#' + id);
+	return row;
 }
 
 function replaceGetters()
 {
-	var body = this.get('host').body;
-	if (body instanceof Y.DataTable.BodyView)
+	var view = this.get('host').view;
+	if (view instanceof Y.DataTable.TableView &&
+		view.body instanceof Y.DataTable.BodyView)
 	{
+		var body = view.body;
+
 		this.orig_getCell = body.getCell;
 		this.orig_getRow  = body.getRow;
 
@@ -311,15 +319,15 @@ function replaceGetters()
 
 function restoreGetters()
 {
-	var body = this.get('host').body;
-	if (this.orig_getCell)
+	var view = this.get('host').view;
+	if (view.body && this.orig_getCell)
 	{
-		body.getCell = this.orig_getCell;
+		view.body.getCell = this.orig_getCell;
 	}
 
-	if (this.orig_getRow)
+	if (view.body && this.orig_getRow)
 	{
-		body.getRow = this.orig_getRow;
+		view.body.getRow = this.orig_getRow;
 	}
 }
 
@@ -336,7 +344,7 @@ Y.extend(RowExpansion, Y.Plugin.Base,
 		analyzeColumns.call(this);
 		this.afterHostEvent('columnsChange', analyzeColumns);
 
-		this.afterHostEvent('renderTable', replaceGetters);
+		this.afterHostEvent('table:renderTable', replaceGetters);
 	},
 
 	destructor: function()
@@ -349,4 +357,4 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableRowExpansion = RowExpansion;
 
 
-}, 'gallery-2012.05.23-19-56' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations','gallery-math'], skinnable:true});
+}, 'gallery-2012.08.08-20-03' ,{requires:['datatable','plugin','gallery-funcprog','gallery-node-optimizations','gallery-math'], skinnable:true});
