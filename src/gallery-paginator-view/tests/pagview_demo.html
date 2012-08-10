@@ -1,0 +1,718 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 3.6 Paginator View Samples</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+	<link href="/syntax/styles/shCore.css" rel="stylesheet" type="text/css" />
+	<link href="/syntax/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+	<link href="/stylesheets/ba_example.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+
+        h4 {
+            color: #00008b;
+        }
+
+        #hvalue {
+            width: 18px;
+        }
+
+        ul {
+           /* margin-left: 10px;  */
+            padding-left:20px;
+        }
+
+        ul li {
+            padding-top: 0px;
+            padding-bottom:  30px;
+        }
+
+    /*   Basic Paginator  */
+
+        .pagBasic .yui3-pagview-link-page {
+            color:            #324759;
+            border:           1px solid #324759;
+            text-decoration:  none;
+            border-radius:    3px;
+        }
+
+        .pagBasic .yui3-pagview-link-page-active {
+            background-color: #495f73;
+            color:            #f0f0f0;
+        }
+
+        #pagBasicBCont input[type="text"] {
+            width: 40px;
+            text-align: center;
+            background-color: lightyellow;
+        }
+
+        #pagBasicCCont legend {
+            color: black;
+        }
+        #pagBasicCCont fieldset {
+            border:           2px solid #006400; /* #495f73; */
+            width:            380px;
+            padding:          13px 10px;
+            border-radius:      5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+        }
+
+        #pagBasicDCont .defImage {
+            width:          auto;
+            height:         12px;
+            border:         none;
+            margin-left:   4px;
+            vertical-align: middle;
+            cursor:         pointer;
+        }
+
+    /*   Paginator Bar CSS  */
+
+        .pagBar {
+            font-size:      12px;
+            padding:        4px 0;
+        }
+
+        .pagBar img.pgControls {
+            width:          auto;
+            height:         12px;
+            padding:        0 4px;
+            border:         none;
+            vertical-align: middle;
+            cursor:         pointer;
+        }
+
+        .pagBar img.yui3-pagview-disabled {
+            cursor:         default;
+        }
+
+        #pagBarACont {
+            padding:    3px 0 0 2px;
+            width:      400px;
+            height:     23px;
+        }
+
+        #pagBarACont a.yui3-pagview-link-page {
+            color:            black;
+            background-color: #f0f0f0;
+            border:           1px solid #d3d3d3;
+            text-decoration:  none;
+            padding:          4px;
+            margin:           0 10px 0 0;
+        }
+
+
+        #pagBarACont img .yui3-pagview-link-page .pgControls {
+            width:          auto;
+            background:     none;
+            height:         12px;
+            padding:        0 4px;
+            border:         none;
+            vertical-align: middle;
+            cursor:         pointer;
+        }
+
+        #pagBarBCont {
+            padding:    9px 5px 0 0;
+            width:      600px;
+            height:     23px;
+        }
+
+        #pagBarBCont a.yui3-pagview-link-page {
+            border:         1px solid #909090;
+            color:            #303030;
+        }
+
+        #pagBarBCont a.yui3-pagview-link-page-active {
+            background-color: #888;
+            color:            #fcfcfc;
+        }
+
+
+        #pagBarBCont img .yui3-pagview-link-page .pgControls {
+            width:          auto;
+            background:     none;
+            height:         12px;
+            padding:        0 4px;
+            border:         none;
+            vertical-align: middle;
+            cursor:         pointer;
+        }
+
+
+
+   /*  Buttons CSS          */
+
+       #pagBtnACont, #pagBtnBCont {
+            width:  inherit;
+            margin: 8px 0;
+        }
+
+        #pagBtnACont .yui3-button,
+        #pagBtnBCont .yui3-button {
+            font-size:  12px;
+            height:     26px;
+            width:      auto;
+            color:      black;
+            text-decoration: none;
+        }
+
+        #pagBtnCCont .yui3-pagview-link-page {
+            color:      #303030;
+            padding:    5px;
+        }
+
+        #pagBtnCCont .defImage {
+            width:          auto;
+            height:         10px;
+            border:         none;
+            margin-left:    4px;
+            vertical-align: middle;
+            cursor:         pointer;
+        }
+
+        #pagBtnGroupCont .yui3-button-selected {
+            background-color: #90EE90;
+        }
+
+        #radioContainer .yui3-button {
+            width: 35px;
+            color:  black;
+        }
+
+  /*  Uses GLYPHICONS 1.6 Free from http://dribbble.com/shots/509952-Glyphicons-1-6-update     */
+
+    </style>
+</head>
+
+<body class="yui3-skin-sam">
+
+	<h3>YUI 3.6+ DataTable - Paginator View Samples</h3>
+
+    <h4>Default:</h4>
+    <ul>
+        <li>Default A - bare-bones, no options;<br/><br/>
+            <div id="pagDefACont"></div>
+        </li>
+        <li>Default B - abbreviated Page list;<br/><br/>
+            <div id="pagDefBCont"></div>
+        </li>
+    </ul>
+
+
+    <h4>Basic:</h4>
+    <ul>
+        <li>
+            Basic A - CSS styles;<br/><br/>
+            <div id="pagBasicACont" class="pagBasic"></div>
+        </li>
+        <li>
+            Basic B - With abbreviated Page links;<br/><br/>
+            <div id="pagBasicBCont" class="pagBasic"></div>
+        </li>
+        <li>
+            Basic C - With abbreviated Page links;<br/><br/>
+            <div id="pagBasicCCont" class="pagBasic"></div>
+        </li>
+        <li>
+            Basic D - With abbreviated Page links / graphics;<br/><br/>
+            <div id="pagBasicDCont" class="pagBasic"></div>
+        </li>
+    </ul>
+
+    <script type="text/x-template" id="tmpl-basic-C">
+        <fieldset>
+            <legend> Active Page: </legend>
+            <!--  Define a Basic Paginator -->
+                <a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page">&lt;&lt;</a>
+                <a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page">&lt;</a>
+                {pageLinks}
+                <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">&gt;</a>
+                <a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">&gt;&gt;</a>
+                <span style="float:right;">{selectPage} <select class="yui3-pagview-select-page"></select> {totalItems} Records</span>
+        </fieldset>
+    </script>
+
+    <script type="text/x-template" id="tmpl-basic-D">
+        <a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page">
+           <img src="/yui/images/glyph/glyphicons_170_step_backward.png" class="defImage" data-pglink="first" title="First Page" border="0" />
+        </a>
+        <a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page">
+            <img src="/yui/images/glyph/glyphicons_173_backTES.png" class="defImage" data-pglink="prev" title="Prior Page" border="0" />
+        </a>
+        {pageLinks}
+        <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">
+           <img src="/yui/images/glyph/glyphicons_173_play.png" class="defImage" data-pglink="next" title="Next Page" border="0" />
+        </a>
+        <a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">
+           <img src="/yui/images/glyph/glyphicons_178_step_forward.png" class="defImage" data-pglink="last" title="Last Page" border="0" />
+        </a>
+    </script>
+
+
+    <h4>Paginator Bar:</h4>
+    <ul>
+        <li>Standard Bar A:<br/><br/>
+            <div id="pagBarACont" class="pagBar yui3-pagview-bar"></div>
+        </li>
+        <li>
+            Standard Bar B:<br/><br/>
+            <div id="pagBarBCont" class="pagBar yui3-pagview-bar"></div>
+        </li>
+    </ul>
+
+    <script type="text/x-template" id="tmpl-bar-A">
+        &nbsp;
+        <img src="/yui/images/glyph/glyphicons_170_step_backward.png" class="pgControls {pageLinkClass}" data-pglink="first" title="First Page" border="0" />
+        <img src="/yui/images/glyph/glyphicons_173_backTES.png" class="pgControls {pageLinkClass}" data-pglink="prev" title="Prior Page" border="0" />
+        {inputPage} of {totalPages}
+        <img src="/yui/images/glyph/glyphicons_173_play.png" class="pgControls {pageLinkClass}" data-pglink="next" title="Next Page" border="0" />
+        <img src="/yui/images/glyph/glyphicons_178_step_forward.png" class="pgControls {pageLinkClass}" data-pglink="last" title="Last Page" border="0" />
+        <span style="float:right;margin-right:20px;margin-top:2px;">Rows per Page: {selectRowsPerPage}</span>
+    </script>
+
+    <script type="text/x-template" id="tmpl-bar-B">
+        &nbsp;
+        <img src="/yui/images/glyph/glyphicons_170_step_backward.png" class="pgControls {pageLinkClass}" data-pglink="first" title="First Page" border="0" />
+        <img src="/yui/images/glyph/glyphicons_173_backTES.png" class="pgControls {pageLinkClass}" data-pglink="prev" title="Prior Page" border="0" />
+        {pageLinks}
+        <img src="/yui/images/glyph/glyphicons_173_play.png" class="pgControls {pageLinkClass}" data-pglink="next" title="Next Page" border="0" />
+        <img src="/yui/images/glyph/glyphicons_178_step_forward.png" class="pgControls {pageLinkClass}" data-pglink="last" title="Last Page" border="0" />
+        <span style="float:right;margin-right:20px;">Rows / Page: {selectRowsPerPage}
+<!--        <select class="yui3-pagview-select-rowsperpage">
+            <option>21</option>
+            <option>35</option>
+            <option>127</option>
+        </select>   -->
+        </span>
+    </script>
+
+
+    <h4>Buttons - using 'cssbutton' module:</h4>
+    <ul>
+        <li>Buttons A:<br/>
+            <div id="pagBtnACont"></div>
+        </li>
+        <li>Buttons B - with abbreviated list:<br/>
+            <div id="pagBtnBCont"></div>
+        </li>
+        <li>Buttons C:<br/><br/>
+            <div id="pagBtnCCont"></div>
+        </li>
+    </ul>
+
+
+    <h4>YUI Widget Implementations:</h4>
+    <ul>
+        <li>Slider Widget:<br/></br>
+            <div>
+                <span id="hslider" style="float:left;"></span>
+                <span  id="pagSliderCont" style="float:left;margin-left:20px;"></span>
+            </div>
+            <br/>
+        </li>
+        <li>ButtonsGroup Widget:  ... not fully functional<br/><br/>
+            <div id="pagBtnGroupCont"></div>
+        </li>
+    </ul>
+
+    <h4>HTML Controls:</h4>
+    Below are a few Paginator implementations using standard HTML controls.  They may not be fully-linked functional, but can be done.
+    <br/>(Why would you use them when you have all of the above beautiful buttons, etc.. ?)
+    <ul>
+        <li>Simple INPUT Box:<br/><br/>
+            <div id="pagInput">
+                Select a Page Number : <input type="text" class="yui3-pagview-input-page" value="{page}" />
+            </div>
+        </li>
+        <li>
+            Radio strip:<br/><br/>
+            <div id="pagRadio"></div>
+        </li>
+        <li>
+            SELECT combo-box:<br/><br/>
+            <div id="pagSelect"></div>
+        </li>
+    </ul>
+    <br/>
+    <br/>
+    <br/><br/>
+    <br/><br/>
+
+
+     <script type="text/x-template" id="tmpl-buttons">
+        <button data-pglink="first" class="yui3-button {pageLinkClass}" title="First Page">First</button>
+        <button data-pglink="prev" class="yui3-button {pageLinkClass}" title="Prior Page">Prev</button>
+        {pageLinks}
+        <button data-pglink="next" class="yui3-button {pageLinkClass}" title="Next Page">Next</button>
+        <button data-pglink="last" class="yui3-button {pageLinkClass}" title="Last Page">Last</button>
+    </script>
+
+
+     <script type="text/x-template" id="tmpl-buttons-inp">
+        <button data-pglink="first" class="yui3-button {pageLinkClass}" title="First Page">First</button>
+        <button data-pglink="prev" class="yui3-button {pageLinkClass}" title="Prior Page">Prev</button>
+         Page {inputPage} of {totalPages}
+        <button data-pglink="next" class="yui3-button {pageLinkClass}" title="Next Page">Next</button>
+        <button data-pglink="last" class="yui3-button {pageLinkClass}" title="Last Page">Last</button>
+    </script>
+
+     <script type="text/x-template" id="tmpl-buttons-C">
+        <button data-pglink="first" class="yui3-button {pageLinkClass}" title="First Page">
+            <img src="/yui/images/glyph/glyphicons_170_step_backward.png" class="defImage" data-pglink="first" title="First Page" border="0" /> &nbsp;
+        </button>
+        <button data-pglink="prev" class="yui3-button {pageLinkClass}" title="Prior Page">
+            <img src="/yui/images/glyph/glyphicons_173_backTES.png" class="defImage" data-pglink="prev" title="Prior Page" border="0" /> &nbsp;
+        </button>
+         Page {inputPage} of {totalPages}
+        <button data-pglink="next" class="yui3-button {pageLinkClass}" title="Next Page">
+            <img src="/yui/images/glyph/glyphicons_173_play.png" class="defImage" data-pglink="next" title="Next Page" border="0" />&nbsp;
+        </button>
+        <button data-pglink="last" class="yui3-button {pageLinkClass}" title="Last Page">
+            <img src="/yui/images/glyph/glyphicons_178_step_forward.png" class="defImage" data-pglink="last" title="Last Page" border="0" />&nbsp;
+        </button>
+    </script>
+
+
+	<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+
+<script type="text/javascript">
+YUI({
+    filter:'raw', combine:false,
+    modules:  {
+       'datatable-paginator': {
+           fullpath: "dt_paginator_class.js",
+           type:     'js',
+           requires: [ "datatable-base", "base-build", "event-custom" ]
+       },
+
+       'paginator-css' : {
+           fullpath: "paginator-view.css",
+           type:     "css"
+       },
+
+       'paginator-mv': {
+           fullpath: "paginator_mv.js",
+           type:     "js",
+           requires: [ "base-build", "model",  "view", 'substitute',  'paginator-css' ]
+       }
+    }
+}).use( 'cssfonts', 'cssbutton', 'paginator-mv', 'slider', 'button-group',
+        function(Y) {
+
+
+//---------------------------------------------------------------------------
+//  Default Views ...
+//---------------------------------------------------------------------------
+
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:  '#pagDefACont'
+    }).render();
+
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:      '#pagDefBCont',
+        maxPageLinks:   5
+    }).render();
+
+
+//---------------------------------------------------------------------------
+//  Basic Views ...
+//---------------------------------------------------------------------------
+
+    // Basic <A> tags ... CSS styling
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:      '#pagBasicACont',
+        circular:       true
+    }).render();
+
+    // Abbreviated <A> links, no FIRST/PREV/NEXT/LAST links shown
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagBasicBCont',
+        paginatorTemplate:  '{pageLinks} &nbsp; &nbsp; {inputRowsPerPage} (Currently {itemsPerPage} for {totalItems} Records)',
+        maxPageLinks:       5,
+        pageLinkFiller:     ' --- ',
+        alwaysShowFirst:    true,
+        alwaysShowLast:     true,
+        pageLinkTemplate:  '<a href="#" data-pglink="{page}" class="{pageLinkClass}"  title="Page {page}">{page}</a>'
+    }).render();
+
+
+    // A link list, wrapped in a FIELDSET ...
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagBasicCCont',
+        paginatorTemplate:  '#tmpl-basic-C',
+        maxPageLinks:       5,
+        pageLinkTemplate:  '<a href="#" data-pglink="{page}" class="{pageLinkClass}"  title="Rows {pageStartIndex} to {pageEndIndex}">{page}</a>'
+    }).render();
+
+
+    //
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagBasicDCont',
+        paginatorTemplate:  '#tmpl-basic-D',
+        maxPageLinks:       5,
+        pageLinkTemplate:  '<a href="#" data-pglink="{page}" class="{pageLinkClass}"  title="Page {page}">{pageStartIndex} to {pageEndIndex}</a>'
+    }).render();
+
+
+//---------------------------------------------------------------------------
+//  Paginator Bar Views ...
+//---------------------------------------------------------------------------
+
+    var pagBar = new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:            '#pagBarACont',
+        paginatorTemplate:  Y.one('#tmpl-bar-A').getHTML(),
+        pageOptions:        [ 10, 25, 50, 100, 'All' ]
+    }).render();
+
+    var pagBarA = new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:            '#pagBarBCont',
+        paginatorTemplate:  Y.one('#tmpl-bar-B').getHTML(),
+        maxPageLinks:       8,
+        pageLinkFiller:     '...',
+        linkListOffset:     1,
+        pageOptions:        [ 10, 25, 50, 100, 'All' ]
+    }).render();
+
+
+//---------------------------------------------------------------------------
+//  Button Views ...
+//---------------------------------------------------------------------------
+
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          Y.one('#pagBtnACont'),
+        paginatorTemplate:  Y.one('#tmpl-buttons').getHTML(),
+        pageLinkTemplate:  '<button data-pglink="{page}" class="yui3-button {pageLinkClass}" title="Page No. {page}">{page}</button>'
+    }).render();
+
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagBtnBCont',
+        paginatorTemplate:  '#tmpl-buttons',
+        maxPageLinks:   6,
+        pageLinkFiller: '...',
+        linkListOffset: 1,
+        pageLinkTemplate:  '<button data-pglink="{page}" class="yui3-button {pageLinkClass}" title="Page No. {page}">{page}</button>'
+    }).render();
+
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagBtnCCont',
+        paginatorTemplate:  Y.one('#tmpl-buttons-C').getHTML()
+    }).render();
+
+
+//---------------------------------------------------------------------------
+//   Widget - connected Views ...
+//---------------------------------------------------------------------------
+
+    var pagBtnGrp = new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagBtnGroupCont',
+        //linkHighLight:      false,
+        paginatorTemplate:  '<div id="radioContainer">{pageLinks}</div>',
+        pageLinkTemplate:   '<button type="{page}" data-pglink="{page}" class="radio {pageLinkClass}" title="Page No. {page}">{page}</button>'
+    });
+
+    var btnGroup;
+    pagBtnGrp.on('render',function(){
+        if ( !btnGroup ) {
+            btnGroup = new Y.ButtonGroup({
+                srcNode: '#radioContainer',
+                type: 'radio'
+            }).render();
+        }
+    });
+    pagBtnGrp.render();
+
+
+//
+//   Let's setup a Slider ... we'll need some extra listeners / logic to hook slider changes
+//     to the model.change
+//
+    var pagSlider = new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagSliderCont',
+        paginatorTemplate:  ' Page {inputPage} of {totalPages} .. {totalItems} Records'
+    });
+
+    var slider;
+
+    pagSlider.on('render',function(){
+        var pmodel = this.get('model'),
+            pview  = this;
+
+        // If Slider widget not instantiated, create it ...
+        if ( !slider ) {
+            slider = new Y.Slider({
+                width: '150px',
+                majorStep: 1,
+                minorStep: 1
+            }).render('#hslider');
+
+            // hook up slider's change event to the Paginator model ...
+            slider.after('valueChange',function(so){
+                if(so.newVal)
+                  this.set('page',so.newVal);
+            }, pmodel);
+        }
+
+        slider.setAttrs({
+            min: 1,
+            value: 1,
+            max: pagSlider.model.get('totalPages')
+        });
+
+    });
+
+    // Connect Model page change's to update the slider (... hopefully no race condition)
+    pagSlider.model.on('pageChange',function(e){
+         slider.set('value', e.newVal );
+    });
+
+    pagSlider.render();
+
+//	SyntaxHighlighter.highlight();
+
+
+//---------------------------------------------------------------------------
+//  HTML INPUT views .... require some extra work, but do-able
+//---------------------------------------------------------------------------
+
+    // The simple INPUT[text] box example ...
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:  '#pagInput'
+    }).render();
+
+
+    // A group of INPUT[radio] controls ....
+    var pagRad = new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:  '#pagRadio',
+        paginatorTemplate: '<form name="frmRadio">{pageLinks}</form>',
+        pageLinkTemplate:  '<input type="radio" name="pagradio[]" class="pagRadios" value="{page}" title="Page No. {page}" />',
+
+        // Since this is still a Y.View, we can use the "events" capability to
+        //  apply a listener on the container ...
+        events: {
+            '.pagRadios' : {
+                click : function(e){
+                    this.model.set('page', +e.target.get('value') );
+                }
+            }
+        }
+    }).render();
+
+    // Attempt to update radios on a Model page change ...
+    pagRad.model.on('pageChange',function(e){
+        var radchk = e.newVal,
+            radios = document.forms.frmRadio.elements;
+              //pagRad.get('container').all('form[name="frmRadio"].elements');
+        if ( radios && radios.length <= radchk )
+            radios[radchk-1].checked = true;
+            //radios.item(radchk-1).set('checked',true);
+/*            radios = pagRad.get('container').all('.pagRadios');
+        if ( radios && radios.size && radios.size() <= radchk )
+            radios.item(radchk-1).set('checked',true);  */
+    });
+
+
+    // A SELECT pull-down box implementation ... doesn't update on page changes, not interested in writing that !
+    var pagSelect = new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:          '#pagSelect',
+        paginatorTemplate:  '<select class="mySelect {selectPageClass}">{pageLinks}</select>',
+        pageLinkTemplate:   '<option data-pglink="{page}" value="{page}">Page {page} : Rows {pageStartIndex} - {pageEndIndex}</option>',
+        events: {
+            '.mySelect' : {
+                change : function(e){
+                    this.model.set('page', +e.target.get('value') );
+                }
+            }
+        }
+    }).render();
+
+
+});
+</script>
+
+
+</body>
+</html>
