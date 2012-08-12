@@ -1,13 +1,5 @@
 /**
- * @module paginator-view
- * @version 1.0.1
- * @author Todd Smith
- * @since 3.6.0
- */
-
-
-/**
- A Model infrastructure element to be used to track pagination state of a paged set of control elements.
+ A Model class extension to be used to track "pagination state" of a paged set of control elements.
  For example, can be used to track the pagination status of a DataTable where the user selects limited
  portions for display, against a larger data set.
 
@@ -16,7 +8,7 @@
      <br/>&nbsp;&nbsp;&nbsp;   `itemsPerPage` &nbsp;&nbsp; Which represents the "Count of items on each page" (See attribute [itemsPerPage](#attr_itemsPerPage) )
      <br/>&nbsp;&nbsp;&nbsp;   `page` &nbsp;&nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )
 
- Example;
+ <h4>Usage</h4>
 
         // setup a paginator model for 500 'foo' items, paged at 50 per page ...
         var pagModel = new Y.PaginatorModel({
@@ -28,7 +20,6 @@
         pagModel.set('page',3);
         pagModel.getAttrs(['lastPage','page','itemIndexStart','itemIndexEnd']);
         // returns ... { lastPage:1, page:3, itemIndexStart:100, itemIndexEnd:149 }
-
 
  @class Y.PaginatorModel
  @extends Y.Model
@@ -96,7 +87,7 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
      * If a page change is invalid (i.e. less than 1, non-numeric or greater than `totalPages` the change is prevented.
      *
      * @method _changePage
-     * @param {EventHandle} e
+     * @param {EventFacade} e
      * @return Nothing
      * @private
      */
@@ -159,6 +150,32 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
             iend = this.get('itemIndexStart') + this.get('itemsPerPage');
         return ( iend > ni ) ? ni : iend;
     }
+
+    /**
+     * Fires after the `page` attribute is changed
+     * @event pageChange
+     * @param {EventFacade} e
+     */
+    /**
+     * Fires after the `itemsPerPage` attribute is changed
+     * @event itemsPerPageChange
+     * @param {EventFacade} e
+     */
+    /**
+     * Fires after the `totalItems` attribute is changed
+     * @event totalItemsChange
+     * @param {EventFacade} e
+     */
+    /**
+     * Fires after the `totalPages` attribute is changed
+     * @event totalPagesChange
+     * @param {EventFacade} e
+     */
+    /**
+     * Fires after the `lastPage` attribute is changed
+     * @event lastPageChange
+     * @param {EventFacade} e
+     */
 
 },{
     ATTRS:{
@@ -269,10 +286,10 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
 
 
 /**
- A View infrastructure element to serve as a User Interface for the tracking of "pagination state" of
+ A View class extension to serve as a User Interface for the tracking of "pagination state" of
  a set of data.  This PaginatorView was specifically designed to work with PaginatorModel
  serving as the "model" (in MVC parlance), although would work with any user-supplied model under conditions
- that similar attributes and attribute changes are mapped.
+ where similar attributes and attribute changes are mapped.
 
  The PaginatorView was originally designed to function with DataTable (See Y.DataTable.Paginator) for managing the UI
  and page state of paginated tables, although it isn't necessarily limited to that application.  This View responds to
@@ -281,8 +298,7 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
  The PaginatorView utilizes an HTML template concept, where certain replaceable tokens uniquely related to this view,
  in addition to all of the model's attributes, can be defined for positioning within the Paginator container.
 
-
- Example;
+ <h4>Usage</h4>
 
         // Setup a paginator view based on a data model for 500 items, paged at 50 per page ...
         var pagView = new Y.PaginatorView(
@@ -293,6 +309,46 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
                 itemsPerPage:   50
             })
         }).render();
+
+ <h4>View 'container'</h4>
+ The [container](#attr_container) attribute is the only **REQUIRED** attribute for this View, primarily because we need to know *where* to
+ construct it positionally on the page.
+
+ This view has been designed such that the `container` setting can be either (a) an actual Y.Node instance OR
+ (b) a DOM css selector ID ... assumed if the container setting is a {String} with the first character is '#'.
+
+ <h4>Paginator HTML Template</h4>
+ The "HTML template" for this PaginatorView is the guts of displaying the user interface.  We refer to this as the "template" because it
+ typically contains standard HTML but also includes "replacement tokens" identified by ```{your token here}``` curly braces.
+
+ A definition of HTML Template for the paginator can be achieved through several methods;
+ <ul>
+    <li>Including the HTML template as content within the original `container` DOM element ... template retrived via .getHTML()</li>
+    <li>Setting the <a href="#attr_paginatorTemplate">paginatorTemplate</a> attribute to either the template 'string', or giving a SCRIPT template DOM[id] or Y.Node</li>
+    <li>Doing neither of the above ... where the default template is used (from <a href="#property_TMPL_PAGINATOR">TMPL_PAGINATOR</a> static property)</li>
+ </ul>
+ (Note: If for some reason it is desired to not have a "template" (because you are rendering one outside of this view), setting
+ ```paginatorTemplate:''``` will override the default.)
+
+ A noteworthy component of the "HTML template" includes the token **```{pageLinks}```**, which signifies where links generated by this
+ view for each page selector are to be placed.  In some instances (e.g. a Paginator Bar, with an INPUT[text] for page #) you may not
+ desire to have every link generated ... (think of a paginator with hundreds of pages, thus hundreds of links).
+
+ A sub-template is used to generate the "{pageLinks}" content, please see attribute [pageLinkTemplate](#attr_pageLinkTemplate) for
+ information.
+
+ For a listing of all recognized *"replaceable tokens"* that can be included in the template is shown on the [render](#method_render) method
+ API page.
+
+ <h4>Connecting to "other" UI Elements / Widgets</h4>
+ This View can be restricted to situations where the use desires to construct their own unique `pageLinkTemplate` and create their own
+ `events` attribute to set listeners.
+
+ For example, the PaginatorView's [render](#event_render) event can be listened for to ensure that the paginator has been initialized and setup.
+ Additionally the [pageChange](#event_pageChange) event (of the view) can be listened for to do any updating to user-specified page links and
+ or a supporting YUI Widget.
+
+ Please see the examples for a guide on how to achieve this.
 
 
  @class Y.PaginatorView
@@ -554,7 +610,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         this._subscr.push( pag_cont.delegate( 'change', this._selectChangeRowOptions, '.'+this._classInputRPP, this) );
 
         // after rendering and/or, resize if required ...
-        this._subscr.push( this.after(['render','pageChange'], this._resizePaginator) );
+        this._subscr.push( this.after(['render','pageChange'], this.resizePaginator) );
 
         return this;
     },
@@ -580,15 +636,44 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      for the paginator template and Y.Lang.sub for replacement of tokens and of Model attributes.
 
      NOTE: The render method is not called on every page "click", but is called if the Model changes
-     "totalItems" or "itemsPerPage".
+     `totalItems` or `itemsPerPage`.
 
-     This method fires the "render" event, for View listeners.
+     <h6>Recognized tokens:</h6>
+     Recognizeable tokens are supported, specifically as *placeholders* within the html template where generated content
+     can be inserted and ultimately rendered in the view container.
+
+     Tokens replaced within this method include all of the PaginatorModel attributes;
+
+        **{page}**, **{totalItems}**, **{itemsPerPage}**, **{lastPage}**, **{totalPages}**, **{itemIndexStart}**, **{itemIndexEnd}**
+
+     Additionally, specific tokens intended for view HTML construction and recognized by PaginatorView are;
+     <ul>
+        <li><b>{pageLinks}</b> : The placeholder within the html template where the View-generated page links will
+        <br/>be inserted via a loop over all pages (DEFAULT: see <a href="#property_TMPL_LINK">TMPL_LINK</a>)</li>
+        <li><b>{inputPage}</b> : An INPUT[type=text] box which the view listens for change events on (Default: see <a href="#property_TMPL_inputPage">TMPL_inputPage</a>)</li>
+        <li><b>{selectRowsPerPage}</b> : A SELECT type pulldown that will be populated with the <a href="#attr_pageOptions">pageOptions</a>
+     array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_selectRPP">TMPL_selectRPP</a>)</li>
+        <li><b>{inputRowsPerPage}</b> : An INPUT[type=text] box what will be listened to for changes to "Rows per Page" (Default: see <a href="#property_TMPL_inputRPP">TMPL_inputRPP</a>)</li>
+        <li><b>{selectPage}</b> (Not implemented at this time!)</li>
+        <li><b>{pageStartIndex}</b> : Represents the starting index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>
+        <li><b>{pageEndIndex}</b> : Represents the ending index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>
+     </ul>
+
+     And if that wasn't enough, the CSS class names supported by this view are also provided via tokens as;
+        **{pagClass}**, **{pageLinkClass}**, **{inputPageClass}**, **{selectRPPClass}**, **{selectPageClass}**, **{inputRPPClass}**
+
+
+     This method utilizes the Y.substitute tool (with recursion) for token replacement.
+
+     The `container` visibility is disabled during construction and insertion of DOM elements into the `container` node.
+
+     This method fires the `render` event, for View listeners.
 
      @method render
      @public
      @returns this
      **/
-   render: function() {
+    render: function() {
         var pag_cont = this.get('container'),
             model    = this.get('model'),
             nsize    = model.get('totalItems'),
@@ -664,7 +749,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
 
     /**
-     * Main handler that accomodates Page changes, updates visual cues for highlighting
+     * Main handler that accomodates Page changes and updates visual cues for highlighting
      *  the selected page link and the active Page selector link list.
      *
      * This method also fires the View's "pageChange" event.
@@ -673,7 +758,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      * the Model level (Model.set('page',...) and not using the _processPageChange method.
      *
      * @method _processPageChange
-     * @param cpage
+     * @param {Integer} cpage
      * @private
      */
     _processPageChange: function(cpage) {
@@ -683,7 +768,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             maxpls     = this.get('maxPageLinks'),
             pag_cont   = this.get('container'),
             linkOffset = this.get('linkListOffset'),
-            plNodes    = pag_cont.all('.'+ this._classLinkPageList);  //this._cssPageLinkItems) : null;
+            plNodes    = pag_cont.all('.'+ this._classLinkPageList);
 
         //
         //  Toggle highlighting of active page selector (if enabled)
@@ -841,7 +926,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      *  Listener set in _bindUI
      *
      * @method _modelPageChange
-     * @param {EventHandle} e
+     * @param {EventFacade} e
      * @private
      */
     _modelPageChange: function(e) {
@@ -856,7 +941,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      *  Listener set in _bindUI
      *
      * @method _modelStateChange
-     * @param {EventHandle} e
+     * @param {EventFacade} e
      * @private
      */
     _modelStateChange: function(e) {
@@ -937,7 +1022,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      * Listener set in _bindUI
      *
      * @method _inputChangePage
-     * @param {EventHandle} e
+     * @param {EventFacade} e
      * @private
      */
     _inputChangePage: function(e) {
@@ -962,7 +1047,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      *  Listener set in _bindUI
      *
      * @method _clickChangePage
-     * @param {EventHandle} e
+     * @param {EventFacade} e
      * @private
      */
     _clickChangePage: function(e) {
@@ -1005,7 +1090,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      * Listener set in _bindUI
      *
      * @method _selectChangeRowOptions
-     * @param {EventHandle} e
+     * @param {EventFacade} e
      * @private
      */
     _selectChangeRowOptions: function(e){
@@ -1026,10 +1111,10 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      *  Unfortunately, there isn't a distinct, definitive 'render' complete event due to
      *   DT's complex rendering, so I use a timer function to attempt a resize.
      *
-     * @method _resizePaginator
-     * @private
+     * @method resizePaginator
+     * @public
      */
-    _resizePaginator: function() {
+    resizePaginator: function() {
         if ( this.get('paginatorResize') !== true || !this.get('dt') )  return;
 
         //TODO:  this is a total HACK, should figure a better way than later ...
@@ -1053,6 +1138,23 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         this.fire('resize');
         return true;
     }
+
+    /**
+     * Fires after the Paginator is resized to match the DataTable size (requires attribute "paginatorResize:true")
+     * @event resize
+     */
+
+    /**
+     * Fires after the DataTable change is reflected AND the Paginator has been completely rendered.
+     * @event render
+     */
+
+    /**
+     * Fires after the _processPageChange method has updated the pagination state.
+     * @event pageChange
+     * @param {Object} state The PaginatorModel `getAttrs()` "state" after updating to the current page as an object.
+     * @since 3.5.0
+     */
 
 
 },{
@@ -1309,25 +1411,6 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         }
     }
 
-
-    /**
-     * Fires after the Paginator is resized to match the DataTable size (requires attribute "paginatorResize:true")
-     * @event resize
-     */
-
-    /**
-     * Fires after the DataTable change is reflected AND the Paginator has been completely rendered.
-     * @event render
-     */
-
-    /**
-     * Fires after the _processPageChange method has updated the pagination state.
-     * @event pageChange
-     * @param {Object} state The PaginatorModel `getAttrs()` "state" after updating to the current page as an object.
-     * @since 3.5.0
-     */
-
-
 });
 
-// requires:  "base-build", "model",  "view", 'substitute',  'paginator-css'
+
