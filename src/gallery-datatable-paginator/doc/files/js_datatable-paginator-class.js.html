@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;datatable-paginator-class.js</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.DataTable.Paginator.html">Y.DataTable.Paginator</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/datatable.html">datatable</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js&#x2F;datatable-paginator-class.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+  Defines a class extension to add capability to support a Paginator View-Model and allow
+   paging of actively displayed data within the DT instance.
+
+  Works with either client-side pagination (i.e. local data, usually in form of JS Array) or
+   in conjunction with remote server-side pagination, via either DataSource or ModelSync.REST.
+
+  Allows for dealing with sorted data, wherein the local data is sorted in place, and in the
+   case of remote data the &quot;sortBy&quot; attribute is passed to the remote server.
+  @example
+    var dtable = new Y.DataTable({
+        columns:    [ &#x27;firstName&#x27;,&#x27;lastName&#x27;,&#x27;state&#x27;,&#x27;age&#x27;, &#x27;grade&#x27; ],
+        data:       enrollment.records,
+        scrollable: &#x27;y&#x27;,
+        height:     &#x27;450px&#x27;,
+        paginator:  new PaginatorView({
+            model:  new PaginatorModel({itemsPerPage:50, page:1})
+        })
+
+    });
+
+  @module datatable
+  @class Y.DataTable.Paginator
+  @extensionfor DataTable
+  @extends Y.DataTable
+  @version 1.0.1
+  @since 3.6.0
+  @author Todd Smith
+
+ **&#x2F;
+function DtPaginator() {}
+
+
+DtPaginator.ATTRS = {
+
+    &#x2F;**
+     * Adds a paginator view (specifically, Y.PaginatorView) instance to the DataTable.
+     *
+     * @attribute paginator A Paginator-View instance to hook into this DataTable
+     * @type function Y.View
+     *&#x2F;
+    paginator:  {
+        value : null,
+        setter: &#x27;_setPaginator&#x27;
+    }
+}
+
+
+Y.mix( DtPaginator.prototype, {
+    &#x2F;**
+     * Holder for the &quot;original&quot; un-paged data that the DataTable was based upon.
+     *
+     * This property is stored as an Array, from the original &quot;data&quot; ModelList.
+     * For remote data, it is used as-is.
+     * For local data, is sliced as needed to re-set each data Page.
+     *
+     *  Populated in _bindPaginator
+     *  Utilized in processPageRequest
+     *
+     * @property _mlistArray
+     * @type Array
+     * @default null
+     * @static
+     * @since 3.6.0
+     * @private
+     * @example
+     *  this._mlistArray = data.slice(125,375);
+     *
+     *&#x2F;
+    _mlistArray: null,
+
+
+    &#x2F;**
+     * Placeholder for a text flag indicating the duck-typed source of data for this
+     *  DataTable,
+     *     this is set in _bindPaginator to either of &#x27;ds&#x27;, &#x27;mlist&#x27; or &#x27;local&#x27;
+     *
+     *  Populated in _bindPaginator
+     *  Utilized in processPageRequest
+     *
+     * @property _pagDataSrc
+     * @type String
+     * @default null
+     * @static
+     * @since 3.6.0
+     * @private
+     *&#x2F;
+    _pagDataSrc: null,
+
+
+&#x2F;*----------------------------------------------------------------------------------------------------------*&#x2F;
+&#x2F;*                  L I F E - C Y C L E    M E T H O D S                                                    *&#x2F;
+&#x2F;*----------------------------------------------------------------------------------------------------------*&#x2F;
+
+   &#x2F;**
+    * This initializer sets up the listeners related to the original DataTable instance and
+    *  also related to the underlying &quot;data&quot; attribute the DT is based upon.
+    *
+    * @method initializer
+    * @public
+    *&#x2F;
+    initializer: function(){
+       &#x2F;&#x2F;
+       &#x2F;&#x2F; Setup listeners on DT&#x27;s bindUI method and on &#x27;data&#x27; loads
+       &#x2F;&#x2F;
+        this._eventHandles.paginator = [];
+        this._eventHandles.paginator.push( Y.Do.after( this._bindPaginator, this, &#x27;_bindUI&#x27;, this) );
+        this._eventHandles.paginator.push( this.get(&#x27;data&#x27;).after([&quot;load&quot;,&quot;change&quot;,&quot;reset&quot;,&quot;add&quot;,&quot;remove&quot;], Y.bind(this._bindPaginator,this)) );
+
+       &#x2F;&#x2F; had to do this, specifically for DataSource ... (no better way?)
+       &#x2F;&#x2F;   since DataSource is a plugin, it may not be plugged when DT instantiates,
+       &#x2F;&#x2F;   so this captures the .set(&#x27;data&#x27;,...) event, and redirects to _bindPaginator
+        this._eventHandles.paginator.push( Y.Do.after( this._afterSetData, this, &#x27;_setData&#x27;, this) );
+
+       &#x2F;&#x2F; hacky .. but works
+        this._eventHandles.paginator.push( this.after( &#x27;renderView&#x27;, this._notifyRender) );
+
+    },
+
+    &#x2F;**
+     * Destructor to clean up listener event handlers and the internal storage buffer.
+     *
+     * @method destructor
+     * @public
+     *&#x2F;
+    destructor: function () {
+        Y.Array.each( this._eventHandles.paginator,function(item){
+            item.detach();
+        });
+        this._mlistArray = null;
+        this._subscr = null;
+    },
+
+
+&#x2F;*----------------------------------------------------------------------------------------------------------*&#x2F;
+&#x2F;*                  P U B L I C      M E T H O D S                                                          *&#x2F;
+&#x2F;*----------------------------------------------------------------------------------------------------------*&#x2F;
+
+    &#x2F;**
+     * Method to re-initialize the original data, mostly targeted at local data
+     *  when a new &#x27;data&#x27; is set, untested.
+     *
+     * @method dataReset
+     * @param data {Array|ModelList} Data to be reset to
+     * @public
+     * @returns nothing
+     *&#x2F;
+    dataReset: function(data){
+        if ( data instanceof Y.ModelList ) {
+            this._mlistArray = [];
+            data.each(function(model){
+                this._mlistArray.push( model.toJSON() );
+            },this);
+        } else if (Y.Lang.isArray(data) ) {
+            this._mlistArray = [];
+            this._mlistArray = data;
+        }
+    },
+
+    &#x2F;**
+     * Primary workhorse method that is fired when the Paginator &quot;page&quot; changes,
+     *   and returns a new subset of data for the DT
+     *   or sends a new request to a remote source to populate the DT
+     *
+     * @method processPageRequest
+     * @param page_no {Integer} Current page number to change to
+     * @param pag_state {Object} Pagination state object, includes {indexStart:, numRecs:, sortBy: }
+     * @public
+     * @returns nothing
+     *&#x2F;
+    processPageRequest: function(page_no, pag_state) {
+        var rdata = this._mlistArray,
+            pagv  = this.get(&#x27;paginator&#x27;),
+            pagm  = pagv.get(&#x27;model&#x27;),
+            rpp   = pagm.get(&#x27;itemsPerPage&#x27;);
+
+        var istart, iend, nitem;
+    &#x2F;&#x2F;
+    &#x2F;&#x2F;  Get paginator indices
+    &#x2F;&#x2F;
+        if ( pag_state ) {
+            istart = pag_state.itemIndexStart;
+            iend   = pag_state.itemIndexEnd;
+        } else {
+            &#x2F;&#x2F; usually here on first pass thru, when paginator initiates ...
+            istart = ( page_no - 1 ) * rpp;
+            iend = istart + rpp;
+            iend = ( iend &gt; rdata.length ) ? rdata.length : iend;
+            nitem = iend - istart + 1;
+        }
+
+    &#x2F;&#x2F;
+    &#x2F;&#x2F;  This is the main guts of retrieving the records,
+    &#x2F;&#x2F;    we already figured out if this was &#x27;local&#x27; or &#x27;server&#x27; based.
+    &#x2F;&#x2F;
+    &#x2F;&#x2F;   Now, process this page request thru either local data array slicing or
+    &#x2F;&#x2F;    simply firing off a remote server request ...
+    &#x2F;&#x2F;
+        switch(this._pagDataSrc) {
+
+            case &#x27;ds&#x27;:
+
+                var ds,qsTmpl,qs;
+
+                ds = this.datasource || this.datasourcepag;
+
+                qsTmpl  = ds.get(&#x27;queryStringTemplate&#x27;);
+                qs      = Y.Lang.sub( qsTmpl, {
+                            startIndex: istart,
+                            numRecs:    rpp,
+                            sortBy:     Y.JSON.stringify( this.get(&#x27;sortBy&#x27;) || {} ) || null
+                        });
+
+                ds.load({  request: qs });
+                break;
+
+            case &#x27;mlist&#x27;:
+            case &#x27;rest&#x27;:
+
+                this.get(&#x27;data&#x27;).load({
+                    startIndex: istart,
+                    numRecs:    rpp,
+                    sortBy:     Y.JSON.stringify( this.get(&#x27;sortBy&#x27;) || {} ) || null
+                });
+
+                break;
+
+            default:
+
+                var data_new = rdata.slice(istart,iend);
+                this.data.reset( data_new, {silent:true} );
+                this.syncUI();
+
+        }
+
+        this.fire(&#x27;pageupdate&#x27;,{ state:pag_state, view:pagv });
+    },
+
+
+&#x2F;*----------------------------------------------------------------------------------------------------------*&#x2F;
+&#x2F;*                  P R I V A T E    M E T H O D S                                                          *&#x2F;
+&#x2F;*----------------------------------------------------------------------------------------------------------*&#x2F;
+
+    &#x2F;**
+     *
+     * @method _notifyRender
+     * @private
+     *&#x2F;
+    _notifyRender: function() {
+        this.fire(&#x27;render&#x27;);
+    },
+
+    &#x2F;**
+     * @method _afterSetData
+     * @param e
+     * @private
+     *&#x2F;
+    _afterSetData:  function(e){
+        &#x2F;&#x2F;console.log(&#x27;aftersetdata ... data.size=&#x27; + this.data.size() );
+        if ( this.data.size &amp;&amp; this.data.size()&gt;0 )
+            this._bindPaginator();
+    },
+
+    &#x2F;**
+     * Listener hooked to the original DT&#x27;s &quot;syncUI&quot; event, only stores the ModelList for
+     *  the DT on the first pass through.
+     *
+     *  For server-generated data, this method determines the server type (DataSource or ModelSync.REST)
+     *   and sets the property flag _pagDataSrc to either &#x27;ds&#x27; or &#x27;mlist&#x27;
+     *
+     *
+     * @method _bindPaginator
+     * @since 3.6.0
+     * @private
+     * @returns true or false
+     *&#x2F;
+    _bindPaginator: function() {
+        &#x2F;&#x2F;
+        &#x2F;&#x2F; First time through, before DT ModelList has been read,
+        &#x2F;&#x2F;  store the &quot;base&quot; ModelList ....
+        &#x2F;&#x2F;
+        &#x2F;&#x2F; Otherwise ... just pass thru this
+        &#x2F;&#x2F;
+        if ( !this._mlistArray &amp;&amp; this.data &amp;&amp; this.data.size &amp;&amp; this.data.size()&gt;0 ) {
+
+            &#x2F;&#x2F; Store the &quot;base&quot; ModelList internally ...
+            this._mlistArray = [];
+            this.data.each(function(model){
+                this._mlistArray.push( model.toJSON() );
+            },this);
+
+            &#x2F;&#x2F;
+            &#x2F;&#x2F; If paginator is connected, push the total No. of Rows
+            &#x2F;&#x2F;   for the paginator, render it, and set a &quot;pageChange&quot; listener
+            &#x2F;&#x2F;
+            var pag     = this.paginator,
+                pgmodel = pag.get(&#x27;model&#x27;);
+
+            if ( pag &amp;&amp; pgmodel ) {
+
+                var totalRecs = null;
+
+                &#x2F;&#x2F; Duck checking for local &#x2F; array data ...
+                if ( this._mlistArray.length &gt; 0) {
+                    this._pagDataSrc = &#x27;array&#x27;;
+                    totalRecs = this._mlistArray.length;
+                }
+
+                &#x2F;&#x2F; Duck checking for ModelList &#x2F; REST ...
+                var mlTotalRecs = (this.data.getAttrs().totalRecs) ? this.data.get(&#x27;totalRecs&#x27;) : null;
+                if ( mlTotalRecs ) {
+                    this._pagDataSrc = &#x27;mlist&#x27;;
+                    totalRecs = mlTotalRecs;
+                }
+
+                &#x2F;&#x2F; check if DS ... if so, get the totalrecords from the DS
+                &#x2F;&#x2F;  ( datasourcepag was the NS for a testing plugin extension, leave it here for now ...)
+
+                if ( this.datasource || this.datasourcepag ) {
+                    var dsds;
+                    if ( this.datasource ) {
+                        dsds = this.datasource || null;
+                    } else {
+                        dsds = this.datasourcepag || null;
+                    }
+
+                    if ( dsds &amp;&amp; dsds.get(&#x27;state&#x27;) &amp;&amp; dsds.get(&#x27;state&#x27;) &amp;&amp; dsds.get(&#x27;state&#x27;).totalItems ) {
+                        this._pagDataSrc = &#x27;ds&#x27;;
+                        totalRecs = dsds.get(&#x27;state&#x27;).totalItems;
+                    }
+                }
+
+                if ( !totalRecs ) return false;
+
+            &#x2F;&#x2F;
+            &#x2F;&#x2F;  Setup the Paginator Model and View ...
+            &#x2F;&#x2F;
+                this.paginator = pag;
+
+                pgmodel.set(&#x27;totalItems&#x27;, totalRecs, {silent:true});
+                pag.set(&#x27;dt&#x27;,this);
+                pag.render();
+
+                pgmodel.set(&#x27;page&#x27;,0);
+                pag.on(&#x27;pageChange&#x27;,this._pageListener, this);
+                pgmodel.set(&#x27;page&#x27;,1);
+
+                this.processPageRequest(pgmodel.get(&#x27;page&#x27;));
+
+                this.fire(&#x27;paginatorSetup&#x27;, {model:pgmodel, view:pag} );
+            }
+        }
+    },
+
+    &#x2F;**
+     * Listener that fires when the Mode&#x27;s &#x27;pageChange&#x27; fires, this
+     *  extracts the current page from the state object and then
+     *  hooks up the processPageRequest method.
+     *
+     * @method _pageListener
+     * @param o
+     * @private
+     *&#x2F;
+    _pageListener: function(o){
+        if (o.state.page) {
+            this.processPageRequest(o.state.page, o.state);
+        }
+    },
+
+    &#x2F;**
+     * This is a setter for the &#x27;paginator&#x27; attribute,
+     *   might not be necessary ..
+     *
+     * @method _setPaginator
+     * @param val
+     * @return {*}
+     * @private
+     *&#x2F;
+    _setPaginator : function(val){
+        if ( !val ) return;
+        this.paginator = val;
+        return val;
+    }
+
+
+});
+
+Y.DataTable.Paginator = DtPaginator;
+Y.Base.mix(Y.DataTable, [Y.DataTable.Paginator]);
+
+&#x2F;&#x2F; requires: &quot;datatable-base&quot;, &quot;base-build&quot;, &quot;event-custom&quot;
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
