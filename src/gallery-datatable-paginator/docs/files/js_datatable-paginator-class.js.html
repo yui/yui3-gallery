@@ -122,7 +122,12 @@
  &#x60;data&#x60; property (i.e. the ModelList) contains an attribute &#x60;totalRecs&#x60; we expect that data will be retrieved via ModelSync.REST
  and set &#x60;_pagDataSrc:&#x27;mlist&#x27;&#x60;.
 
- &lt;h4&gt;Loading the &#x60;data&#x60; For a Page&lt;&#x2F;h4&gt;
+ For server-side pagination, an attribute [totalItemsResponse](#attr_totalItemsResponse) is used to identify the
+ property within the response that contains the total number of &quot;records&quot; (or items) at the remote data.  This setting is
+ required for server-side pagination, and is defaulted to &#x60;&#x60;&#x60;totalItems&#x60;&#x60;&#x60; to match the expected attribute at PaginatorModel.
+ &lt;br&#x2F;&gt;It is typically mapped in either a ModelSync.REST server &#x60;&#x60;&#x60;.parse&#x60;&#x60;&#x60; method or in a DataSource &#x60;&#x60;&#x60;after:response&#x60;&#x60;&#x60; method.
+
+ &lt;h4&gt;Loading the &quot;data&quot; For a Page&lt;&#x2F;h4&gt;
  Once the &quot;source of data&quot; is known, the method [processPageRequest](#method_processPageRequest) fires on a &#x60;pageChange&#x60;.
 
  For the case of &quot;local data&quot;, i.e. where &#x60;_pagDataSrc:&#x27;local&#x27;&#x60;, the existing buffer of data is sliced according to the pagination
@@ -132,8 +137,6 @@
  data, it simply inserts the full returned data into the DT.  So as a consequence, a pagination state change for remote data
  involves a simple request sent to the server source (either DataSource or ModelSync.REST) and the response results are
  loaded in the DT.
-
-
 
   @module datatable
   @class Y.DataTable.Paginator
@@ -159,8 +162,21 @@ DtPaginator.ATTRS = {
     paginator:  {
         value : null,
         setter: &#x27;_setPaginator&#x27;
+    },
+
+    &#x2F;**
+     * Property name of the &quot;total number of items&quot; returned in the server response object,
+     * required for server-side pagination.
+     *
+     * @attribute totalItemsResponse
+     * @type String
+     * @default &#x27;totalItems&#x27;
+     *&#x2F;
+    totalItemsResponse: {
+        value:      &#x27;totalItems&#x27;,
+        validator:  Y.Lang.isString
     }
-}
+};
 
 
 Y.mix( DtPaginator.prototype, {
@@ -230,7 +246,7 @@ Y.mix( DtPaginator.prototype, {
        &#x2F;&#x2F;
         this._eventHandles.paginator = [];
         this._eventHandles.paginator.push( Y.Do.after( this._bindPaginator, this, &#x27;_bindUI&#x27;, this) );
-        this._eventHandles.paginator.push( this.get(&#x27;data&#x27;).after([&quot;load&quot;,&quot;change&quot;,&quot;reset&quot;,&quot;add&quot;,&quot;remove&quot;], Y.bind(this._bindPaginator,this)) );
+        this._eventHandles.paginator.push( this.get(&#x27;data&#x27;).after([&quot;load&quot;,&quot;change&quot;,&quot;reset&quot;,&quot;add&quot;,&quot;remove&quot;], this._bindPaginator) );
 
        &#x2F;&#x2F;
        &#x2F;&#x2F; Had to do this, specifically for DataSource ... (no better way?)
@@ -242,7 +258,7 @@ Y.mix( DtPaginator.prototype, {
        &#x2F;&#x2F; Try to determine when DT is finished rendering records, this is hacky .. but seems to work
         this._eventHandles.paginator.push( this.after( &#x27;renderView&#x27;, this._notifyRender) );
 
-        return this
+        return this;
     },
 
     &#x2F;**
@@ -385,7 +401,7 @@ Y.mix( DtPaginator.prototype, {
      * @private
      * @returns true or false
      *&#x2F;
-    _bindPaginator: function() {
+      _bindPaginator: function() {
         &#x2F;&#x2F;
         &#x2F;&#x2F; First time through, before DT ModelList has been read,
         &#x2F;&#x2F;  store the &quot;base&quot; ModelList ....
@@ -418,7 +434,8 @@ Y.mix( DtPaginator.prototype, {
                 }
 
                 &#x2F;&#x2F; Duck checking for ModelList &#x2F; REST ...
-                var mlTotalRecs = (this.data.getAttrs().totalRecs) ? this.data.get(&#x27;totalRecs&#x27;) : null;
+                var attrTotalRecs = this.get(&#x27;totalItemsResponse&#x27;),
+                    mlTotalRecs = ( this.data.getAttrs()[attrTotalRecs] )  ? this.data.get(attrTotalRecs) : null;
                 if ( mlTotalRecs ) {
                     this._pagDataSrc = &#x27;mlist&#x27;;
                     totalRecs = mlTotalRecs;
@@ -435,9 +452,9 @@ Y.mix( DtPaginator.prototype, {
                         dsds = this.datasourcepag || null;
                     }
 
-                    if ( dsds &amp;&amp; dsds.get(&#x27;state&#x27;) &amp;&amp; dsds.get(&#x27;state&#x27;) &amp;&amp; dsds.get(&#x27;state&#x27;).totalItems ) {
+                    if ( dsds &amp;&amp; dsds.get(&#x27;state&#x27;) &amp;&amp; dsds.get(&#x27;state&#x27;) &amp;&amp; dsds.get(&#x27;state&#x27;)[attrTotalRecs] ) {
                         this._pagDataSrc = &#x27;ds&#x27;;
-                        totalRecs = dsds.get(&#x27;state&#x27;).totalItems;
+                        totalRecs = dsds.get(&#x27;state&#x27;)[attrTotalRecs];
                     }
                 }
 
@@ -543,8 +560,7 @@ Y.mix( DtPaginator.prototype, {
 Y.DataTable.Paginator = DtPaginator;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Paginator]);
 
-&#x2F;&#x2F; requires: &quot;datatable-base&quot;, &quot;base-build&quot;, &quot;event-custom&quot;
-
+&#x2F;&#x2F; requires: &quot;base-build&quot;, &quot;datatable-base&quot;,  &quot;event-custom&quot;
     </pre>
 </div>
 

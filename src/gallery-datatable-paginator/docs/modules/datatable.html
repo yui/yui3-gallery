@@ -138,7 +138,12 @@
  <code>data</code> property (i.e. the ModelList) contains an attribute <code>totalRecs</code> we expect that data will be retrieved via ModelSync.REST
  and set <code>_pagDataSrc:'mlist'</code>.</p>
 
-<p><h4>Loading the <code>data</code> For a Page</h4>
+<p>For server-side pagination, an attribute <a href="#attr_totalItemsResponse">totalItemsResponse</a> is used to identify the
+ property within the response that contains the total number of "records" (or items) at the remote data.  This setting is
+ required for server-side pagination, and is defaulted to <code>totalItems</code> to match the expected attribute at PaginatorModel.
+ <br/>It is typically mapped in either a ModelSync.REST server <code>.parse</code> method or in a DataSource <code>after:response</code> method.</p>
+
+<p><h4>Loading the "data" For a Page</h4>
  Once the "source of data" is known, the method <a href="#method_processPageRequest">processPageRequest</a> fires on a <code>pageChange</code>.</p>
 
 <p>For the case of "local data", i.e. where <code>_pagDataSrc:'local'</code>, the existing buffer of data is sliced according to the pagination
