@@ -4,9 +4,10 @@
  portions for display, against a larger data set.
 
  The primary tools for maintaining "page state" is through the following attributes;
-    <br/>&nbsp;&nbsp;&nbsp;    `totalItems` &nbsp;&nbsp;  Which represents the "Total count of items of interest" (See attribute [totalItems](#attr_totalItems) )
-     <br/>&nbsp;&nbsp;&nbsp;   `itemsPerPage` &nbsp;&nbsp; Which represents the "Count of items on each page" (See attribute [itemsPerPage](#attr_itemsPerPage) )
-     <br/>&nbsp;&nbsp;&nbsp;   `page` &nbsp;&nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )
+
+    * `totalItems` &nbsp;&nbsp;  Which represents the "Total count of items of interest" (See attribute [totalItems](#attr_totalItems) )
+    * `itemsPerPage` &nbsp;&nbsp; Which represents the "Count of items on each page" (See attribute [itemsPerPage](#attr_itemsPerPage) )
+    *  `page` &nbsp;&nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )
 
  <h4>Usage</h4>
 
@@ -340,11 +341,27 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
  For a listing of all recognized *"replaceable tokens"* that can be included in the template is shown on the [render](#method_render) method
  API page.
 
+ <h6>Data Attribute</h6>
+ A key takeaway for using this View is that page links (i.e. actionable selectable elements, such as A, BUTTON, DIV, etc...) for a specific
+ page use an HTML "data" attribute which defines the page associated with the link.
+
+ The data attribute used within the view is `data-pglink`, and can have a value setting of "first", "last", "prev", "next" or any
+ numeric page number.
+
+ For example, the following are all valid page link identifiers;
+
+        <a href="#" data-pglink="last" title="Last Page">Last</a>
+        <button data-pglink="6" class="myBtn">Page 6</button>
+        <select><option data-pglink="19" value="19">Page 19 : Rows 9501 - 10000</option></select>
+
+
  <h4>Connecting to "other" UI Elements / Widgets</h4>
  This View can be restricted to situations where the use desires to construct their own unique `pageLinkTemplate` and create their own
  `events` attribute to set listeners.
 
- For example, the PaginatorView's [render](#event_render) event can be listened for to ensure that the paginator has been initialized and setup.
+ For example, the PaginatorView's [render](#event_render) event can be listened for to ensure
+ that the paginator has been initialized and setup.
+
  Additionally the [pageChange](#event_pageChange) event (of the view) can be listened for to do any updating to user-specified page links and
  or a supporting YUI Widget.
 
@@ -1412,5 +1429,4 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
     }
 
 });
-
 

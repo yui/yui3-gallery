@@ -94,9 +94,10 @@
  portions for display, against a larger data set.
 
  The primary tools for maintaining &quot;page state&quot; is through the following attributes;
-    &lt;br&#x2F;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;    &#x60;totalItems&#x60; &amp;nbsp;&amp;nbsp;  Which represents the &quot;Total count of items of interest&quot; (See attribute [totalItems](#attr_totalItems) )
-     &lt;br&#x2F;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;   &#x60;itemsPerPage&#x60; &amp;nbsp;&amp;nbsp; Which represents the &quot;Count of items on each page&quot; (See attribute [itemsPerPage](#attr_itemsPerPage) )
-     &lt;br&#x2F;&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;   &#x60;page&#x60; &amp;nbsp;&amp;nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )
+
+    * &#x60;totalItems&#x60; &amp;nbsp;&amp;nbsp;  Which represents the &quot;Total count of items of interest&quot; (See attribute [totalItems](#attr_totalItems) )
+    * &#x60;itemsPerPage&#x60; &amp;nbsp;&amp;nbsp; Which represents the &quot;Count of items on each page&quot; (See attribute [itemsPerPage](#attr_itemsPerPage) )
+    *  &#x60;page&#x60; &amp;nbsp;&amp;nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )
 
  &lt;h4&gt;Usage&lt;&#x2F;h4&gt;
 
@@ -430,11 +431,27 @@ Y.PaginatorModel = Y.Base.create(&#x27;paginatorModel&#x27;, Y.Model,[],{
  For a listing of all recognized *&quot;replaceable tokens&quot;* that can be included in the template is shown on the [render](#method_render) method
  API page.
 
+ &lt;h6&gt;Data Attribute&lt;&#x2F;h6&gt;
+ A key takeaway for using this View is that page links (i.e. actionable selectable elements, such as A, BUTTON, DIV, etc...) for a specific
+ page use an HTML &quot;data&quot; attribute which defines the page associated with the link.
+
+ The data attribute used within the view is &#x60;data-pglink&#x60;, and can have a value setting of &quot;first&quot;, &quot;last&quot;, &quot;prev&quot;, &quot;next&quot; or any
+ numeric page number.
+
+ For example, the following are all valid page link identifiers;
+
+        &lt;a href=&quot;#&quot; data-pglink=&quot;last&quot; title=&quot;Last Page&quot;&gt;Last&lt;&#x2F;a&gt;
+        &lt;button data-pglink=&quot;6&quot; class=&quot;myBtn&quot;&gt;Page 6&lt;&#x2F;button&gt;
+        &lt;select&gt;&lt;option data-pglink=&quot;19&quot; value=&quot;19&quot;&gt;Page 19 : Rows 9501 - 10000&lt;&#x2F;option&gt;&lt;&#x2F;select&gt;
+
+
  &lt;h4&gt;Connecting to &quot;other&quot; UI Elements &#x2F; Widgets&lt;&#x2F;h4&gt;
  This View can be restricted to situations where the use desires to construct their own unique &#x60;pageLinkTemplate&#x60; and create their own
  &#x60;events&#x60; attribute to set listeners.
 
- For example, the PaginatorView&#x27;s [render](#event_render) event can be listened for to ensure that the paginator has been initialized and setup.
+ For example, the PaginatorView&#x27;s [render](#event_render) event can be listened for to ensure
+ that the paginator has been initialized and setup.
+
  Additionally the [pageChange](#event_pageChange) event (of the view) can be listened for to do any updating to user-specified page links and
  or a supporting YUI Widget.
 
@@ -1502,7 +1519,6 @@ Y.PaginatorView = Y.Base.create(&#x27;paginatorView&#x27;, Y.View, [], {
     }
 
 });
-
 
 
     </pre>

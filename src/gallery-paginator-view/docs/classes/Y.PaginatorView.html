@@ -96,7 +96,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l288"><code>js&#x2F;paginator-view.js:288</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l289"><code>js&#x2F;paginator-view.js:289</code></a>
         </div>
     
 
@@ -169,13 +169,30 @@ information.</p>
 <p>For a listing of all recognized <em>"replaceable tokens"</em> that can be included in the template is shown on the <a href="#method_render">render</a> method
 API page.</p>
 
+<h6>Data Attribute</h6>
+
+<p>A key takeaway for using this View is that page links (i.e. actionable selectable elements, such as A, BUTTON, DIV, etc...) for a specific
+page use an HTML "data" attribute which defines the page associated with the link.</p>
+
+<p>The data attribute used within the view is <code>data-pglink</code>, and can have a value setting of "first", "last", "prev", "next" or any
+numeric page number.</p>
+
+<p>For example, the following are all valid page link identifiers;</p>
+
+<pre class="code"><code class="prettyprint">   &lt;a href="#" data-pglink="last" title="Last Page"&gt;Last&lt;/a&gt;
+   &lt;button data-pglink="6" class="myBtn"&gt;Page 6&lt;/button&gt;
+   &lt;select&gt;&lt;option data-pglink="19" value="19"&gt;Page 19 : Rows 9501 - 10000&lt;/option&gt;&lt;/select&gt;
+</code></pre>
+
 <h4>Connecting to "other" UI Elements / Widgets</h4>
 
 <p>This View can be restricted to situations where the use desires to construct their own unique <code>pageLinkTemplate</code> and create their own
 <code>events</code> attribute to set listeners.</p>
 
-<p>For example, the PaginatorView's <a href="#event_render">render</a> event can be listened for to ensure that the paginator has been initialized and setup.
-Additionally the <a href="#event_pageChange">pageChange</a> event (of the view) can be listened for to do any updating to user-specified page links and
+<p>For example, the PaginatorView's <a href="#event_render">render</a> event can be listened for to ensure
+that the paginator has been initialized and setup.</p>
+
+<p>Additionally the <a href="#event_pageChange">pageChange</a> event (of the view) can be listened for to do any updating to user-specified page links and
 or a supporting YUI Widget.</p>
 
 <p>Please see the examples for a guide on how to achieve this.</p>
@@ -564,7 +581,7 @@ or a supporting YUI Widget.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l581"><code>js&#x2F;paginator-view.js:581</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l598"><code>js&#x2F;paginator-view.js:598</code></a>
         
         </p>
 
@@ -652,7 +669,7 @@ or a supporting YUI Widget.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l857"><code>js&#x2F;paginator-view.js:857</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l874"><code>js&#x2F;paginator-view.js:874</code></a>
         
         </p>
 
@@ -772,7 +789,7 @@ or a supporting YUI Widget.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1040"><code>js&#x2F;paginator-view.js:1040</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1057"><code>js&#x2F;paginator-view.js:1057</code></a>
         
         </p>
 
@@ -873,7 +890,7 @@ reviewed for its data-pglink="" setting, and processed from that.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l877"><code>js&#x2F;paginator-view.js:877</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l894"><code>js&#x2F;paginator-view.js:894</code></a>
         
         </p>
 
@@ -980,7 +997,7 @@ their data-pglink attribute setting.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1019"><code>js&#x2F;paginator-view.js:1019</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1036"><code>js&#x2F;paginator-view.js:1036</code></a>
         
         </p>
 
@@ -1071,7 +1088,7 @@ their data-pglink attribute setting.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l923"><code>js&#x2F;paginator-view.js:923</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l940"><code>js&#x2F;paginator-view.js:940</code></a>
         
         </p>
 
@@ -1162,7 +1179,7 @@ their data-pglink attribute setting.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l938"><code>js&#x2F;paginator-view.js:938</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l955"><code>js&#x2F;paginator-view.js:955</code></a>
         
         </p>
 
@@ -1257,7 +1274,7 @@ their data-pglink attribute setting.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l506"><code>js&#x2F;paginator-view.js:506</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l523"><code>js&#x2F;paginator-view.js:523</code></a>
         
         </p>
 
@@ -1357,7 +1374,7 @@ their data-pglink attribute setting.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l751"><code>js&#x2F;paginator-view.js:751</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l768"><code>js&#x2F;paginator-view.js:768</code></a>
         
         </p>
 
@@ -1452,7 +1469,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1087"><code>js&#x2F;paginator-view.js:1087</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1104"><code>js&#x2F;paginator-view.js:1104</code></a>
         
         </p>
 
@@ -1547,7 +1564,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l908"><code>js&#x2F;paginator-view.js:908</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l925"><code>js&#x2F;paginator-view.js:925</code></a>
         
         </p>
 
@@ -1642,7 +1659,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1125"><code>js&#x2F;paginator-view.js:1125</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1142"><code>js&#x2F;paginator-view.js:1142</code></a>
         
         </p>
 
@@ -1710,7 +1727,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1001"><code>js&#x2F;paginator-view.js:1001</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1018"><code>js&#x2F;paginator-view.js:1018</code></a>
         
         </p>
 
@@ -1766,7 +1783,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l953"><code>js&#x2F;paginator-view.js:953</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l970"><code>js&#x2F;paginator-view.js:970</code></a>
         
         </p>
 
@@ -1825,7 +1842,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l619"><code>js&#x2F;paginator-view.js:619</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l636"><code>js&#x2F;paginator-view.js:636</code></a>
         
         </p>
 
@@ -1886,7 +1903,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l524"><code>js&#x2F;paginator-view.js:524</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l541"><code>js&#x2F;paginator-view.js:541</code></a>
         
         </p>
 
@@ -1957,7 +1974,7 @@ the Model level (Model.set('page',...) and not using the _processPageChange meth
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l634"><code>js&#x2F;paginator-view.js:634</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l651"><code>js&#x2F;paginator-view.js:651</code></a>
         
         </p>
 
@@ -2060,7 +2077,7 @@ array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_s
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1107"><code>js&#x2F;paginator-view.js:1107</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1124"><code>js&#x2F;paginator-view.js:1124</code></a>
         
         </p>
 
@@ -2119,7 +2136,7 @@ array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_s
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l471"><code>js&#x2F;paginator-view.js:471</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l488"><code>js&#x2F;paginator-view.js:488</code></a>
         
         </p>
 
@@ -2166,7 +2183,7 @@ array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_s
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l495"><code>js&#x2F;paginator-view.js:495</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l512"><code>js&#x2F;paginator-view.js:512</code></a>
         
         </p>
 
@@ -2214,7 +2231,7 @@ array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_s
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1161"><code>js&#x2F;paginator-view.js:1161</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1178"><code>js&#x2F;paginator-view.js:1178</code></a>
         
         </p>
 
@@ -2260,7 +2277,7 @@ array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_s
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l459"><code>js&#x2F;paginator-view.js:459</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l476"><code>js&#x2F;paginator-view.js:476</code></a>
         
         </p>
 
@@ -2306,7 +2323,7 @@ array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_s
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l445"><code>js&#x2F;paginator-view.js:445</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l462"><code>js&#x2F;paginator-view.js:462</code></a>
         
         </p>
 
@@ -2356,7 +2373,7 @@ paginator template.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l432"><code>js&#x2F;paginator-view.js:432</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l449"><code>js&#x2F;paginator-view.js:449</code></a>
         
         </p>
 
@@ -2406,7 +2423,7 @@ token within the paginator template.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l388"><code>js&#x2F;paginator-view.js:388</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l405"><code>js&#x2F;paginator-view.js:405</code></a>
         
         </p>
 
@@ -2456,7 +2473,7 @@ at the location denoted <strong>{pageLinks}</strong> replacement token in the te
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l364"><code>js&#x2F;paginator-view.js:364</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l381"><code>js&#x2F;paginator-view.js:381</code></a>
         
         </p>
 
@@ -2512,7 +2529,7 @@ attribute is unused OR the container does not contain the HTML template.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l419"><code>js&#x2F;paginator-view.js:419</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l436"><code>js&#x2F;paginator-view.js:436</code></a>
         
         </p>
 
@@ -2562,7 +2579,7 @@ paginator template.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l406"><code>js&#x2F;paginator-view.js:406</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l423"><code>js&#x2F;paginator-view.js:423</code></a>
         
         </p>
 
@@ -2625,7 +2642,7 @@ within the paginator template.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1321"><code>js&#x2F;paginator-view.js:1321</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1338"><code>js&#x2F;paginator-view.js:1338</code></a>
         
         </p>
 
@@ -2684,7 +2701,7 @@ within the paginator template.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1341"><code>js&#x2F;paginator-view.js:1341</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1358"><code>js&#x2F;paginator-view.js:1358</code></a>
         
         </p>
 
@@ -2738,7 +2755,7 @@ within the paginator template.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1383"><code>js&#x2F;paginator-view.js:1383</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1400"><code>js&#x2F;paginator-view.js:1400</code></a>
         
         </p>
 
@@ -2793,7 +2810,7 @@ page selections.  (i.e. when on <em>last</em> page, a <em>next</em> click will r
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1190"><code>js&#x2F;paginator-view.js:1190</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1207"><code>js&#x2F;paginator-view.js:1207</code></a>
         
         </p>
 
@@ -2858,7 +2875,7 @@ a Y.Node instance or as a DOM "id" attribute (if prepended by "#").</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1397"><code>js&#x2F;paginator-view.js:1397</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1414"><code>js&#x2F;paginator-view.js:1414</code></a>
         
         </p>
 
@@ -2913,7 +2930,7 @@ by the user directly.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1291"><code>js&#x2F;paginator-view.js:1291</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1308"><code>js&#x2F;paginator-view.js:1308</code></a>
         
         </p>
 
@@ -2969,7 +2986,7 @@ an <em>abbreviated</em> page link list is desired.
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1274"><code>js&#x2F;paginator-view.js:1274</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1291"><code>js&#x2F;paginator-view.js:1291</code></a>
         
         </p>
 
@@ -3025,7 +3042,7 @@ that travel across the page!</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1170"><code>js&#x2F;paginator-view.js:1170</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1187"><code>js&#x2F;paginator-view.js:1187</code></a>
         
         </p>
 
@@ -3089,7 +3106,7 @@ that travel across the page!</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1308"><code>js&#x2F;paginator-view.js:1308</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1325"><code>js&#x2F;paginator-view.js:1325</code></a>
         
         </p>
 
@@ -3141,7 +3158,7 @@ that travel across the page!</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1246"><code>js&#x2F;paginator-view.js:1246</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1263"><code>js&#x2F;paginator-view.js:1263</code></a>
         
         </p>
 
@@ -3208,7 +3225,7 @@ with replacement tokens to create UI elements for each page link.  The template 
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1211"><code>js&#x2F;paginator-view.js:1211</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1228"><code>js&#x2F;paginator-view.js:1228</code></a>
         
         </p>
 
@@ -3260,7 +3277,7 @@ class selector "yui3-pagview-select-rowsperpage" ).</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1368"><code>js&#x2F;paginator-view.js:1368</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1385"><code>js&#x2F;paginator-view.js:1385</code></a>
         
         </p>
 
@@ -3314,7 +3331,7 @@ after rendering is complete.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1224"><code>js&#x2F;paginator-view.js:1224</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1241"><code>js&#x2F;paginator-view.js:1241</code></a>
         
         </p>
 
@@ -3380,7 +3397,7 @@ To disable creation of any template (in order to do your own replacements of the
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1356"><code>js&#x2F;paginator-view.js:1356</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1373"><code>js&#x2F;paginator-view.js:1373</code></a>
         
         </p>
 
@@ -3434,7 +3451,7 @@ To disable creation of any template (in order to do your own replacements of the
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1152"><code>js&#x2F;paginator-view.js:1152</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1169"><code>js&#x2F;paginator-view.js:1169</code></a>
         
         </p>
 
@@ -3502,7 +3519,7 @@ To disable creation of any template (in order to do your own replacements of the
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1147"><code>js&#x2F;paginator-view.js:1147</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1164"><code>js&#x2F;paginator-view.js:1164</code></a>
         
         </p>
 
@@ -3545,7 +3562,7 @@ To disable creation of any template (in order to do your own replacements of the
             
         
         
-        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1142"><code>js&#x2F;paginator-view.js:1142</code></a>
+        <a href="..&#x2F;files&#x2F;js_paginator-view.js.html#l1159"><code>js&#x2F;paginator-view.js:1159</code></a>
         
         </p>
 
