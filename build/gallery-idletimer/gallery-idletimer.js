@@ -133,9 +133,11 @@ Y.IdleTimer = {
         Y.on("keydown", handleUserEvent, doc);
 
         //need to add the old-fashioned way
-        doc.addEventListener("msvisibilitychange", handleUserEvent, false)
-        doc.addEventListener("webkitvisibilitychange", handleUserEvent, false)
-        doc.addEventListener("mozvisibilitychange", handleUserEvent, false)
+        if (doc.addEventListener) {
+            doc.addEventListener("msvisibilitychange", handleUserEvent, false);
+            doc.addEventListener("webkitvisibilitychange", handleUserEvent, false);
+            doc.addEventListener("mozvisibilitychange", handleUserEvent, false);
+        }
         
         //set a timeout to toggle state
         tId = setTimeout(toggleIdleState, timeout);
@@ -160,9 +162,11 @@ Y.IdleTimer = {
         Y.detach("mousemove", handleUserEvent, doc);
         Y.detach("keydown", handleUserEvent, doc);
 
-        doc.removeEventListener("msvisibilitychange", handleUserEvent, false)
-        doc.removeEventListener("webkitvisibilitychange", handleUserEvent, false)
-        doc.removeEventListener("mozvisibilitychange", handleUserEvent, false)
+        if (doc.removeEventListener) {
+            doc.removeEventListener("msvisibilitychange", handleUserEvent, false);
+            doc.removeEventListener("webkitvisibilitychange", handleUserEvent, false);
+            doc.removeEventListener("mozvisibilitychange", handleUserEvent, false);
+        }
       
     }
 
@@ -172,4 +176,4 @@ Y.IdleTimer = {
 Y.augment(Y.IdleTimer, Y.Event.Target);
 
 
-}, 'gallery-2012.07.25-21-36' ,{requires:['event','event-custom']});
+}, 'gallery-2012.08.15-20-00' ,{requires:['event','event-custom']});

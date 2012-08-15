@@ -2957,4 +2957,4 @@ Y.AccordionItem = Y.Base.create( AccItemName, Y.Widget, [Y.WidgetStdMod], {
 
 
 
-}, 'gallery-2011.03.23-22-20' ,{optional:['dd-constrain', 'dd-proxy', 'dd-drop'], requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse']});
+}, 'gallery-2012.08.15-20-00' ,{requires:['event', 'anim-easing', 'widget', 'widget-stdmod', 'json-parse'], skinnable:true, optional:['dd-constrain', 'dd-proxy', 'dd-drop']});
