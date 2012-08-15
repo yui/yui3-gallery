@@ -5,7 +5,7 @@
  */
 
 /**********************************************************************
- * <p>Adds filters to the logger.</p>
+ * <p>Appends filters to the log output.</p>
  * 
  * @main gallery-log-filter
  * @class LogFilter
