@@ -877,8 +877,8 @@ to override the parse() method to parse non-generic server responses.
 				
 			self._values = current._values;
 			self._loadedValues = current._loadedValues;
-			self.__setStateVal(IS_NEW, current.isNew);
-			self.__setStateVal(IS_MODIFIED, current.isModified);
+			self._setStateVal(IS_NEW, current.isNew);
+			self._setStateVal(IS_MODIFIED, current.isModified);
 			YArray.each(self._preserve, function (name) {
 				self[name] = current[name];
 			});
@@ -984,7 +984,7 @@ to override the parse() method to parse non-generic server responses.
 		 */
 		_batchLoad: function (ev) {
 			var self = this;
-			if (ev.src === 'load' && ev.Lang.isArray(ev.parsed)) {
+			if (ev.src === 'load' && Y.Lang.isArray(ev.parsed)) {
 				ev.halt();
 				YArray.each(ev.parsed, function (values) {
 					self.add(values);
