@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;dt_footerview.js</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.FooterView.html">Y.FooterView</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/FooterView.html">FooterView</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js&#x2F;dt_footerview.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+ &#x2F;**
+  FooterView is a YUI View class extension that provides a simple, one row summary row
+  to a Datatable. This view provides
+  for a summary row appended to the bottom of the DataTable TBODY, typically consisting
+  of **one** TH element (with a colspan) and several TD elements for each desired column
+  where a &quot;calculated field&quot; is desired.
+
+  View configuration provides for calculated fields based upon the all of the available
+  dataset fields within the DataTable&#x27;s &quot;ModelList&quot;.
+
+  The view works with either non-scrolling or scrolling DataTables, and allows for either a
+  &quot;fixed&quot; view, wherein the footer remains fixed at the bottom of the DataTable contentBox
+  while the table is scrolled.
+
+  #### Calculated Fields
+
+  The current implementation supports the following calculated fields, where they are
+  identified by their placeholder tag for replacement via Y.sub (case insensitive);
+
+  * &#x60;{sum}&#x60; Calculate the arithmetic sum of the specified column in dataset
+  * &#x60;{min}&#x60; Calculate the minimum value of the specified column in dataset
+  * &#x60;{max}&#x60; Calculate the maximum value of the specified column in dataset
+  * &#x60;{avg}&#x60; Calculate the arithmetic average of the of the specified column (synonyms &#x60;{mean}&#x60;, &#x60;{average}&#x60;)
+
+  Also, non-looping calcs are;
+
+  *  &#x60;{row_count}&#x60; Returns the number of rows in the dataset
+  *  &#x60;{col_count}&#x60; Returns the number of columns in the dataset (no visibility check)
+  *  &#x60;{date}&#x60; Returns the current date
+  *  &#x60;{time}&#x60; Returns the current time
+
+  #### Configuration
+
+  YUI 3.6.0 DataTable supports attributes including &#x60;footerView&#x60; and &#x60;footerConfig&#x60;.
+
+  This FooterView recognizes the following attributes, which must be configured via the
+  DataTable {configs} (see usage example below);
+
+  * [&#x60;fixed&#x60;](#attr_fixed) : Flag indicating if footer should be fixed or floating
+  * [&#x60;heading&#x60;](#attr_heading) : Object, defining the single TH as;
+     * [&#x60;colspan&#x60;](#attr_heading.colspan) : Number of columns to merge from left for the TH
+     * [&#x60;content&#x60;](#attr_heading.content) : A string indicating the content of the TH for the footer
+     * [&#x60;className&#x60;](#attr_heading.className) : Additional classname for TH
+  * [&#x60;columns&#x60;](#attr_columns) : Array of objects, one per desired TD column in footer as;
+     * [&#x60;key&#x60;](#attr_columns.key) : &#x60;key&#x60; name from the DataTable columns
+     * [&#x60;content&#x60;](#attr_columns.content) : String indicating the contents of this TD
+     * [&#x60;className&#x60;](#attr_columns.className) : Additional classname for TD
+     * [&#x60;formatter&#x60;](#attr_columns.formatter) : Formatter to apply to this column result
+  * [&#x60;dateFormat&#x60;](#attr_dateFormat) : Format string to use for any {date} fields
+  * [&#x60;timeFormat&#x60;](#attr_timeFormat) : Format string to use for any {time} fields
+
+  Additionally the user can provide a valid function as a column &#x60;content&#x60; to calculate a
+  custom entry for a column (see [&#x60;columns.content&#x60;](#attr_columns.content))
+
+  #### Usage
+
+      var dtable = new Y.DataTable({
+          columns:    [&#x27;EmpId&#x27;,&#x27;FirstName&#x27;,&#x27;LastName&#x27;,&#x27;NumClients&#x27;,&#x27;SalesTTM&#x27;],
+          data:       AccountMgr.Sales,
+          scrollable: &#x27;y&#x27;,
+          height:     &#x27;250px&#x27;,
+          width:      &#x27;400px&#x27;,
+
+          footerView:   Y.FooterView,
+          footerConfig: {
+              fixed:   true,
+              heading: {
+                  colspan:	3,
+                  content:	&quot;Sales Totals for {row_count} Account Mgrs : &amp;nbsp;&quot;,
+                  className:	&quot;align-right&quot;
+              },
+              columns: [
+                  { key:&#x27;NumClients&#x27;, content:&quot;{Avg} avg&quot;, className:&quot;clientAvg&quot; },
+                  { key:&#x27;SalesTTM&#x27;,   content:&quot;{sum}&quot;, className:&quot;salesTotal&quot;, formatter:fmtCurrency }
+              ]
+          }
+      });
+
+      dtable.render(&#x27;#salesDT&#x27;);
+
+
+  @module FooterView
+  @class Y.FooterView
+  @extends Y.View
+  @author Todd Smith
+  @version 1.1.0
+  @since 3.6.0
+  **&#x2F;
+ Y.FooterView = Y.Base.create( &#x27;tableFooter&#x27;, Y.View, [], {
+
+      &#x2F;**
+       Defines the default TD HTML template for a calculated field within the footer
+       @property TMPL_td
+       @type String
+       @default &#x27;&lt;td class=&quot;yui3-datatable-even {tdClass}&quot;&gt;{content}&lt;&#x2F;td&gt;&#x27;
+       @static
+       @since 3.6.0
+       @protected
+       **&#x2F;
+      TMPL_td: &#x27;&lt;td class=&quot;yui3-datatable-even {tdClass}&quot;&gt;{content}&lt;&#x2F;td&gt;&#x27;,
+
+      &#x2F;**
+       Defines the default TH HTML template for the header content within the footer
+       @property TMPL_th
+       @type String
+       @default &#x27;&lt;th colspan=&quot;{colspan}&quot; class=&quot;{thClass}&quot;&gt;{content}&lt;&#x2F;th&gt;&#x27;
+       @static
+       @since 3.6.0
+       @protected
+       **&#x2F;
+      TMPL_th: &#x27;&lt;th colspan=&quot;{colspan}&quot; class=&quot;{thClass}&quot;&gt;{content}&lt;&#x2F;th&gt;&#x27;,
+
+      &#x2F;**
+       Defines the default TR HTML template for the footer
+       @property TMPL_tr
+       @type String
+       @default &#x27;&lt;tr&gt;{th_content}{td_content}&lt;&#x2F;tr&gt;&#x27;
+       @static
+       @since 3.6.0
+       @protected
+       **&#x2F;
+      TMPL_tr:    &#x27;&lt;tr&gt;{th_content}{td_content}&lt;&#x2F;tr&gt;&#x27;,
+
+      &#x2F;**
+       Defines the default TFOOT HTML template for the footer
+       @property TMPL_tfoot
+       @type String
+       @default &#x27;&lt;tfoot class=&quot;{footClass}&quot;&gt;&lt;tr&gt;{th_content}{td_content}&lt;&#x2F;tr&gt;&lt;&#x2F;tfoot&gt;&#x27;
+       @static
+       @since 3.6.0
+       @protected
+       **&#x2F;
+      TMPL_tfoot: &#x27;&lt;tfoot class=&quot;{footClass}&quot;&gt;&lt;tr&gt;{th_content}{td_content}&lt;&#x2F;tr&gt;&lt;&#x2F;tfoot&gt;&#x27;,
+
+
+      &#x2F;**
+       Defines the default TABLE HTML template for the &quot;fixed&quot; footer type ... i.e. with scrolling
+       @property TMPL_table_fixed
+       @type String
+       @default &#x27;&lt;table cellspacing=&quot;0&quot; aria-hidden=&quot;true&quot; class=&quot;{className}&quot;&gt;&lt;&#x2F;table&gt;&#x27;
+       @static
+       @since 3.6.0
+       @protected
+       **&#x2F;
+      TMPL_table_fixed: &#x27;&lt;table cellspacing=&quot;0&quot; aria-hidden=&quot;true&quot; class=&quot;{className}&quot;&gt;&lt;&#x2F;table&gt;&#x27;,
+
+
+      dateFormat:  &#x27;%D&#x27;,
+      timeFormat:  &#x27;%T&#x27;,
+
+      &#x2F;&#x2F; replacer function
+      fnReplace  : Y.Lang.sub,
+
+      &#x2F;**
+       Storage array of objects, each object represents a rendered &quot;cell or column&quot; within the
+       footer view.  The first element is typically a TH element (with a colspan), and the
+       remaining elements are the TD&#x27;s for each requested footer field.
+
+       Created and populated by the render() method
+
+       @property node_cols
+       @type Array of Object hashes
+       @default null
+       @static
+       @since 3.6.0
+       @protected
+       **&#x2F;
+      node_cols : null,   &#x2F;&#x2F; array of col_key map (e.g. &#x27;_head&#x27;, null, &#x27;f_name&#x27; )
+
+      &#x2F;**
+       Placeholder for subscriber event handles, used to destroy cleanly
+       @property _subscr
+       @type {EventHandles} Array of eventhandles
+       @default null
+       @static
+       @since 3.6.0
+       @private
+       **&#x2F;
+      _subscr : null,
+
+      &#x2F;**
+       DataTable instance that utilizes this footerview, derived from initializer &quot;config.host&quot;
+       Used to reference changes to DT modellist, and to retrieve the underlying &quot;data&quot;
+
+       @property _dt
+       @type Y.DataTable
+       @default null
+       @static
+       @since 3.6.0
+       @private
+       **&#x2F;
+      _dt: null,
+
+      &#x2F;**
+       * Called when view is initialized.  Stores reference to calling DataTable and
+       *  creates listeners to link building or refreshing the footer back to the
+       *  parent DataTable.
+       *
+       * @method initializer
+       * @param {Object} config
+       * @protected
+       *&#x2F;
+      initializer: function(config) {
+          config || (config={});
+
+          &#x2F;&#x2F; Set a reference to the calling DataTable
+          this._dt = ( config.source ) ? config.source :  config.host;    &#x2F;&#x2F; reference to DT instance
+
+          &#x2F;&#x2F; Setup listeners ...
+          this._subscr = [];
+
+          &#x2F;&#x2F;  ... For scrollable with fixed footer, we have to build a new TABLE and append outside of scrolling ...
+          if ( config.footerConfig &amp;&amp; config.footerConfig.fixed &amp;&amp; this._dt.get(&#x27;scrollable&#x27;) ) {
+              this._subscr.push( Y.Do.after( this._buildFixedFooter, this._dt, &#x27;_syncScrollUI&#x27;, this._dt) );
+          }
+
+          &#x2F;&#x2F; Listen for changes on the DataTable &quot;data&quot; ...
+          this._subscr.push( this._dt.data.after([&#x27;*:change&#x27;,&#x27;*:add&#x27;,&#x27;*:create&#x27;, &#x27;*:remove&#x27;, &#x27;*:reset&#x27;], Y.bind(&#x27;refreshFooter&#x27;, this) ) );
+
+      },
+
+      &#x2F;**
+       * Default destructor method, cleans up the listeners that were created and
+       *  removes and&#x2F;or empties the created DOM elements for the footerView.
+       *
+       * @method destructor
+       * @protected
+       *&#x2F;
+      destructor: function () {
+          Y.Array.each(this._subscr,function(item){
+              item.detach();
+          });
+          this._dt._tfootNode.empty();
+          if ( this._dt._yScrollFooter ) this._dt._yScrollFooter.empty();
+      },
+
+
+      &#x2F;**
+       * Calls the helper function to construct and render the initial footer
+       * @method render
+       * @chainable
+       *&#x2F;
+      render: function() {
+          this.renderFooter();
+          return this;
+      },
+
+&#x2F;&#x2F; --------------------------------------------------------------------------------
+&#x2F;&#x2F;               Public Methods
+&#x2F;&#x2F; --------------------------------------------------------------------------------
+
+      &#x2F;**
+       * Creates the DOM elements and attaches them to the footerView container.
+       *  Reads the configuration parameters (i.e. from DataTable&#x27;s config as &quot;footerConfig&quot;)
+       *  and structures a single TR element, with a leading TH in first column, and the
+       *  requested TD elements following.
+       *
+       * @method renderFooter
+       * @public
+       * @chainable
+       *&#x2F;
+      renderFooter: function(){
+          var foot_cont = this.get(&#x27;container&#x27;),      &#x2F;&#x2F; reference to the TFOOT, created by DataTable
+              table_obj = this._dt,                   &#x2F;&#x2F; reference to the parent DataTable instance
+              columns   = table_obj.get(&#x27;columns&#x27;),   &#x2F;&#x2F; reference to the ModelList &#x2F; or DataTable.data
+              rs_data   = table_obj.get(&quot;data&quot;),      &#x2F;&#x2F; reference to the ModelList &#x2F; or DataTable.data
+              foot_cfg  = table_obj.get(&#x27;footerConfig&#x27;),    &#x2F;&#x2F; placeholder for the &#x27;footer&#x27; config
+              foot_cols = foot_cfg.columns,           &#x2F;&#x2F; placeholder for the &#x27;footer&#x27;.config.columns entry
+              tfoot_th  = &#x27;&#x27;,                         &#x2F;&#x2F; the string for the TH node
+              tfoot_td  = &#x27;&#x27;,                         &#x2F;&#x2F; the string for the TD node
+              cspan     = 1;                          &#x2F;&#x2F; colSpan entry for TH, default to 1
+
+          this.node_cols = [];
+
+          &#x2F;&#x2F;
+          &#x2F;&#x2F;  Initialize date and time formats
+          &#x2F;&#x2F;
+          this.dateFormat = ( foot_cfg &amp;&amp; foot_cfg.dateFormat ) ? foot_cfg.dateFormat
+              : ( table_obj.get(&#x27;dateFormat&#x27;) ) ? table_obj.get(&#x27;dateFormat&#x27;)
+              : this.dateFormat;
+
+          this.timeFormat = ( foot_cfg &amp;&amp; foot_cfg.timeFormat ) ? foot_cfg.timeFormat
+              : ( table_obj.get(&#x27;timeFormat&#x27;) ) ? table_obj.get(&#x27;timeFormat&#x27;)
+              : this.timeFormat;
+
+          &#x2F;&#x2F; define a default replacer object ...
+          var replacer_obj = {
+              ROW_COUNT : rs_data.size(),
+              COL_COUNT : columns.length,
+              DATE:       Y.DataType.Date.format( new Date(), { format: this.dateFormat }),
+              TIME:       Y.DataType.Date.format( new Date(), { format: this.timeFormat })
+          };
+          &#x2F;&#x2F; duplicate above, for lowercase
+          Y.Object.each(replacer_obj,function(val,key,obj){
+              obj[ key.toLowerCase() ] = val;
+          });
+          &#x2F;&#x2F;
+          &#x2F;&#x2F;  Process the TH part
+          &#x2F;&#x2F;
+          if ( foot_cfg.heading ) {
+              cspan = foot_cfg.heading.colspan || cspan;
+              tfoot_th = this.fnReplace( this.TMPL_th, {
+                  colspan: cspan,
+                  thClass: &#x27; &#x27; + (foot_cfg.heading.className || &#x27;&#x27;),
+                  content: this.fnReplace( foot_cfg.heading.content, replacer_obj )
+              });
+
+              var th_item = {
+                  index:		0,
+                  key:		0,
+                  td:			null,
+                  th:         foot_cfg.heading,
+                  className:	foot_cfg.className || &#x27;&#x27;,
+                  formatter:	&#x27;&#x27;,
+                  content:    null
+              };
+
+              &#x2F;&#x2F; save this for later ... used by refreshFooter
+              this.node_cols.push(th_item);
+          }
+
+          &#x2F;&#x2F;
+          &#x2F;&#x2F;  Make an array for the remainder TD&#x27;s in the Footer
+          &#x2F;&#x2F;
+          var num_tds = columns.length - cspan;
+          var td_html = [];	&#x2F;&#x2F; an array of objects to hold footer TD (non-TH!) data
+
+          for(var i=cspan; i&lt;columns.length; i++) {
+              var titem = columns[i];
+              td_html.push({
+                  index:		i,
+                  key:		titem.key,
+                  td:			null,
+                  th:         null,
+                  className:	titem.className || &#x27;&#x27;,
+                  formatter:	titem.formatter || &#x27;&#x27;,
+                  content:    null  &#x2F;&#x2F;titem.content || null
+              });
+          }
+
+          &#x2F;&#x2F;
+          &#x2F;&#x2F;  Augment the Footer TD&#x27;s, by inserting computed values from &#x27;footer&#x27; config
+          &#x2F;&#x2F;
+          &#x2F;&#x2F;   Note: Users may enter footer &#x27;columns&#x27; in non-ascending order, thus
+          &#x2F;&#x2F;         necessitating the search for column key ...
+          &#x2F;&#x2F;
+          Y.Array.each( foot_cols, function(fitem){
+              var imatch = -1;
+              Y.Array.some( td_html, function(item,index) {
+                  if ( item.key === fitem.key ) {
+                      imatch = index;
+                      return true;	&#x2F;&#x2F; true ends the loop ... so this is &#x27;find a first&#x27;
+                  }
+              });
+
+              if ( imatch !== -1) {
+                  &#x2F;&#x2F; go ahead and calculate the value for this cell, while we are building it ...
+                  td_html[imatch].td = this.formatFootCell( td_html[imatch], fitem );
+
+                  td_html[imatch].content = fitem.content || null;
+                  td_html[imatch].foot_cfg = fitem;
+              }
+
+          }, this);
+
+          &#x2F;&#x2F;
+          &#x2F;&#x2F;  and Build out the TD string ... looping over the non-TH columns
+          &#x2F;&#x2F;
+          Y.Array.each( td_html, function(item){
+              item.td = item.td || &#x27;&#x27;;	&#x2F;&#x2F; if nothing defined, fill with &#x27;&#x27;
+              item.content = item.content || null;
+
+              tfoot_td += this.fnReplace( this.TMPL_td, {
+                  tdClass: item.className || &#x27;&#x27;,
+                  content: item.td
+              });
+
+              this.node_cols.push( item );
+          }, this);
+
+          &#x2F;&#x2F;
+          &#x2F;&#x2F;  Now construct the TR and the outer TFOOT and add it
+          &#x2F;&#x2F;
+          var trClass = this._dt.getClassName(&#x27;footer&#x27;);
+          tr_tmpl = this.TMPL_tfoot;
+
+          var tr = this.fnReplace( tr_tmpl, {
+              footClass:  trClass,
+              th_content: tfoot_th,
+              td_content: tfoot_td
+          });
+
+          var foot_tr = foot_cont.append( Y.Node.create(tr) );
+
+          return this;
+
+      },
+
+
+      &#x2F;**
+       * Calculates a DataSet summary item defined in &#x27;calc&#x27; for the given colKey, by
+       *   looping through the current &quot;data&quot; (i.e. Recordset).
+       *
+       *   Currently, the &#x27;calc&#x27; is set to lowercase ...
+       *
+       * Example calc settings are as follows (for given &#x27;colKey&#x27;);
+       *
+       * {sum}		Calculate the arithmetic sum of dataset
+       * {min}		Calculate the minimum value within the dataset
+       * {max}		Calculate the maximum value within the dataset
+       * {avg}		Calculate the arithmetic average of the datset
+       *                (synonyms are {mean}, {average})
+       *
+       * Also, non-dataset iterating calcs are;
+       *  {row_count}	 Returns the number of rows in the dataset
+       *  {col_count}  Returns the number of columns in the dataset (no visibility check)
+       *  {date}		 Returns the current date (via dateFormat setting)
+       *  {time}		 Returns the current time (via timeFormat setting)
+       *
+       * If &#x27;calc&#x27; argument is a function(), then call it (in the &quot;this&quot; context of this
+       *  FooterView) with one argument, the DataTable.data property.
+       *
+       *  &#x2F;&#x2F; TODO:  Consider one call to this (with mult keys) for one loop thru only ...
+       *
+       * &#x2F;&#x2F; not a really possible use case, but ...
+       *   ? whatif user tries to enter calc=&#x27;this is a {sum} and {min} value&#x27; ??
+       *
+       * @method calcDatasetValue
+       * @param {String} colKey  The column key name to be calculated
+       * @param {String} calc    A recognizable calc setting from above
+       * @return {Number} the return value
+       * @public
+       *&#x2F;
+      calcDatasetValue: function(colKey, calc) {
+
+          var rs_data = this._dt.get(&quot;data&quot;),    &#x2F;&#x2F; this is a modelList currently
+              rcalc   = 0,
+              rmin    = Number.POSITIVE_INFINITY,
+              rmax    = Number.POSITIVE_INFINITY;
+
+          if ( Y.Lang.isString(calc) ) {
+              var lcalc = calc.toLowerCase(),
+                  avg   = lcalc.search(&#x2F;{average}|{avg}|{mean}&#x2F;i);  &#x2F;&#x2F; a flag for knowing if averaging is to be done
+
+              &#x2F;&#x2F;
+              &#x2F;&#x2F;  initial case, if non-summary item, just return it!
+              &#x2F;&#x2F;   Note: these probably shouldn&#x27;t be used in a TD column,
+              &#x2F;&#x2F;        but sometimes people may do this ...
+              &#x2F;&#x2F;
+              if ( lcalc.search(&#x2F;{row_count}&#x2F;) !== -1 ) 	return rs_data.size();
+              if ( lcalc.search(&#x2F;{col_count}&#x2F;) !== -1  ) 	return this._dt.get(&quot;columns&quot;).length;
+              if ( lcalc.search(&#x2F;{date}&#x2F;) !== -1  )		return Y.DataType.Date.format( new Date(), { format: this.dateFormat });
+              if ( lcalc.search(&#x2F;{time}&#x2F;) !== -1  )		return Y.DataType.Date.format( new Date(), { format: this.timeFormat });
+
+              &#x2F;&#x2F;
+              &#x2F;&#x2F;  If a min or max, set initial value to first
+              &#x2F;&#x2F;
+              if ( lcalc.search(&#x2F;{min}|{max}&#x2F;) !== -1 )
+                  rcalc = parseFloat(rs_data.item(0).get(colKey) );
+
+              &#x2F;&#x2F;
+              &#x2F;&#x2F;  March thru the dataset, operating on the &#x27;calc&#x27; item
+              &#x2F;&#x2F;
+              rs_data.each( function(item) {
+
+                  var rflt = parseFloat( item.get(colKey) );
+
+                  if ( lcalc.search(&#x2F;{sum}&#x2F;) !== -1 || avg !==-1 )
+                      rcalc += rflt;
+
+                  else if ( lcalc.search(&#x2F;{min}&#x2F;) !== -1 )
+                      rcalc = Math.min( rcalc, rflt );
+
+                  else if ( lcalc.search(&#x2F;{max}&#x2F;) !== -1 )
+                      rcalc = Math.max( rcalc, rflt );
+
+                  else
+                      rcalc = calc;
+              });
+
+              &#x2F;&#x2F;
+              &#x2F;&#x2F;  Post-process the data (mostly for averages) prior to returning
+              &#x2F;&#x2F;
+              if ( avg !== -1 )
+                  rcalc = ( !rs_data.isEmpty() ) ? ( parseFloat(rcalc)&#x2F;parseFloat(rs_data.size()) ) : 0;
+
+              return parseFloat(rcalc);   &#x2F;&#x2F; processed later in formatFootCell to proper output format
+
+          }
+
+          if ( Y.Lang.isNumber(calc) )
+              return calc;
+
+          if ( Y.Lang.isFunction(calc) ) {
+              var rtn = calc.call(this,rs_data);
+              return rtn;
+          }
+      },
+
+
+      &#x2F;**
+       * Calculates a DataSet summary item defined in &#x27;calc&#x27; for the given colKey, by
+       *
+       * @method formatFootCell
+       * @param {String} col  The column key name to be calculated
+       * @param {String} foot_col    A recognizable calc setting from above
+       * @return {Float} the return value
+       * @public
+       *&#x2F;
+      formatFootCell: function( col, foot_col ) {
+
+          if ( !foot_col.content ) return &#x27;&#x27;;
+
+          var rval = this.calcDatasetValue( foot_col.key, foot_col.content );	&#x2F;&#x2F; get the calculated item ...
+
+          &#x2F;&#x2F;
+          &#x2F;&#x2F; See if a custom formatter is defined ...
+          &#x2F;&#x2F;   first check the footer.column for a formatter,
+          &#x2F;&#x2F;   then use the column.formatter,
+          &#x2F;&#x2F;   or none
+          &#x2F;&#x2F; TODO: allow standard named formatters and&#x2F;or function names {String}
+          &#x2F;&#x2F;
+          var fmtr = ( foot_col.formatter &amp;&amp; Y.Lang.isFunction(foot_col.formatter) ) ? foot_col.formatter :
+              ( col.formatter &amp;&amp; Y.Lang.isFunction(col.formatter) ) ? col.formatter : null;
+
+          rval = ( fmtr ) ? fmtr.call( this, {value:rval, column:col} ) : rval;
+
+          if ( Y.Lang.isFunction(foot_col.content) ) {
+              return rval;
+          } else {
+              var ctag = foot_col.content.match(&#x2F;{.*}&#x2F;)[0] || null,
+                  srtn = foot_col.content;
+              if ( ctag &amp;&amp; Y.Lang.isString(ctag) )
+                  srtn = srtn.replace(ctag,rval);
+               return srtn;
+             &#x2F;&#x2F; return this.fnReplace( foot_col.content, repl_obj);
+          }
+      },
+
+      &#x2F;**
+       * Refreshes the summary items in the footer view and populates the footer
+       *  elements based on the current &quot;data&quot; contents.
+       *
+       * @method refreshFooter
+       * @return this
+       * @chainable
+       * @public
+       *&#x2F;
+      refreshFooter: function(){
+          var table_obj = this._dt,
+              foot_cont = table_obj._tfootNode, &#x2F;&#x2F; this.get(&#x27;container&#x27;).one(&#x27;tfoot&#x27;),
+              td_nodes  = foot_cont.all(&#x27;th,td&#x27;);
+
+          &#x2F;&#x2F;
+          &#x2F;&#x2F; Loop through each footer &quot;cell&quot; (i.e. either a TH or TD) and
+          Y.Array.each( this.node_cols, function(fitem,findex) {
+              var td_html;
+              if ( fitem.th ) {
+                  var replacer_obj = {
+                      ROW_COUNT : table_obj.data.size(),
+                      COL_COUNT : table_obj.get(&#x27;columns&#x27;).length,
+                      DATE:       Y.DataType.Date.format( new Date(), { format: this.get(&quot;dateFormat&quot;) }),
+                      TIME:       Y.DataType.Date.format( new Date(), { format: this.get(&quot;timeFormat&quot;) })
+                  };
+
+                  Y.Object.each(replacer_obj,function(val,key,obj){
+                      obj[ key.toLowerCase() ] = val;
+                  });
+
+                  td_html = this.fnReplace( fitem.th.content, replacer_obj );
+              }
+
+              if ( !fitem.th &amp;&amp; fitem.content ) {
+                  td_html = this.formatFootCell( fitem, fitem.foot_cfg);
+              }
+
+              if ( td_html ) td_nodes.item(findex).setHTML(td_html);
+
+          }, this);
+
+          return this;
+
+      },
+
+      &#x2F;**
+       * For scrollable tables only, adjusts the sizes of the TFOOT cells to match the widths
+       * of the THEAD cells.
+       *
+       * @method resizeFooter
+       * @return this
+       * @public
+       * @chainable
+       **&#x2F;
+      resizeFooter : function() {
+          var table_obj = this._dt,
+              thead = table_obj.get(&#x27;contentBox&#x27;).one(&#x27;.&#x27;+table_obj.getClassName(&#x27;scroll&#x27;,&#x27;columns&#x27;)),
+              tfootNode = this._dt._tfootNode,
+              tfoot_nodes = tfootNode.all(&#x27;th,td&#x27;);
+
+          if( table_obj._yScroll ) {
+
+              function _getNumericStyle(node,style){
+                  var style  = node.getComputedStyle(style),
+                      nstyle = (style) ? +(style.replace(&#x2F;px&#x2F;,&#x27;&#x27;)) : 0;
+                  return nstyle;
+              }
+
+              var thead_ths = thead.all(&#x27;th&#x27;);
+
+              Y.Array.each( this.node_cols, function(col,i) {
+                  var col_width = 0.,
+                      thead_th;
+                  if ( col.th ) {
+                      for(var j=0; j&lt;col.th.colspan; j++) {
+                          thead_th = thead_ths.item(col.index+j);
+                          col_width += _getNumericStyle(thead_th,&#x27;width&#x27;);
+                      }
+                      col_width += col.th.colspan-1;  &#x2F;&#x2F; subtract the 1px border between columns spanned
+                  } else {
+                      thead_th  = thead_ths.item(col.index);
+                      col_width = _getNumericStyle(thead_th,&#x27;width&#x27;)-20;  &#x2F;&#x2F; 20 is the padding
+                  }
+                  tfoot_nodes.item(i).setStyle(&#x27;width&#x27;,col_width+&#x27;px&#x27;);
+              });
+          }
+
+          return this;
+      },
+
+
+&#x2F;&#x2F; --------------------------------------------------------------------------------
+&#x2F;&#x2F;               Protected Methods
+&#x2F;&#x2F; --------------------------------------------------------------------------------
+
+      &#x2F;**
+       * Method that builds a separate TABLE &#x2F; TFOOT container outside of the Y-scrolling
+       *  container and places the view &quot;container&quot; within this.
+       *
+       * This is specifically required for a &quot;fixed&quot; footer ... i.e. with a scrolling DataTable,
+       * where the footer is expected to remain stationary as the records are scrolled through.
+       *
+       *  NOTE: A bug exists where the viewFooter container (TFOOT) is improperly placed within
+       *        the y-scroller container (http:&#x2F;&#x2F;yuilibrary.com&#x2F;projects&#x2F;yui3&#x2F;ticket&#x2F;2531723)
+       *        This function is a workaround for that.
+       * @method _buildFixedFooter
+       * @private
+       *&#x2F;
+      _buildFixedFooter : function() {
+          var fixedFooter   = this._yScrollFooter,    &#x2F;&#x2F; Node for footer containing TABLE element
+              tfoot         = this._tfootNode,
+              yScrollHeader = this._yScrollHeader,    &#x2F;&#x2F; header TABLE
+              yScroller     = this._yScrollContainer; &#x2F;&#x2F; Node for the DIV containing header TABLE, data TABLE and footer TABLE
+
+          if (!fixedFooter) {
+              var tmpl = &#x27;&lt;table cellspacing=&quot;0&quot; aria-hidden=&quot;true&quot; class=&quot;{className}&quot;&gt;&lt;&#x2F;table&gt;&#x27;;
+
+              &#x2F;&#x2F;
+              &#x2F;&#x2F; Create a new TABLE, to hold the TFOOT as a fixed element &quot;outside&quot; of yScroller
+              &#x2F;&#x2F;
+              fixedFooter =  Y.Node.create(
+                  Y.Lang.sub(this._Y_SCROLL_FOOTER_TEMPLATE || this.foot.TMPL_table_fixed  || tmpl, {
+                      className: this.getClassName(&#x27;footer&#x27;)
+                      &#x2F;&#x2F;    className: this.getClassName(&#x27;scroll&#x27;,&#x27;footer&#x27;)
+                  }));
+              this._yScrollFooter = fixedFooter;
+
+              yScroller.append(fixedFooter);
+
+              &#x2F;&#x2F;
+              &#x2F;&#x2F;  Move the already created TFOOT from the old incorrect location
+              &#x2F;&#x2F;   to within the new TABLE in &quot;fixedFooter&quot; location
+              &#x2F;&#x2F;
+              var tfootNode = this.get(&#x27;contentBox&#x27;).one(&#x27;table &gt; tfoot&#x27;);
+              this._tfootNode = tfootNode;
+              if ( tfootNode ) {
+                  this._yScrollFooter.append( tfootNode );
+                  this.foot.resizeFooter();
+              }
+          }
+
+      }
+
+  });
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>

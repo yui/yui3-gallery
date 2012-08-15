@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FooterView</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.FooterView.html">Y.FooterView</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/FooterView.html">FooterView</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>FooterView Module</h1>
+<div class="box clearfix meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l1"><code>js&#x2F;dt_footerview.js:1</code></a>
+        </div>
+    
+
+    
+        <p>Available since 3.6.0</p>
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>FooterView is a YUI View class extension that provides a simple, one row summary row
+to a Datatable. This view provides
+for a summary row appended to the bottom of the DataTable TBODY, typically consisting
+of <strong>one</strong> TH element (with a colspan) and several TD elements for each desired column
+where a "calculated field" is desired.</p>
+
+<p>View configuration provides for calculated fields based upon the all of the available
+dataset fields within the DataTable's "ModelList".</p>
+
+<p>The view works with either non-scrolling or scrolling DataTables, and allows for either a
+"fixed" view, wherein the footer remains fixed at the bottom of the DataTable contentBox
+while the table is scrolled.</p>
+
+<h4>Calculated Fields</h4>
+
+<p>The current implementation supports the following calculated fields, where they are
+identified by their placeholder tag for replacement via Y.sub (case insensitive);</p>
+
+<ul>
+<li><code>{sum}</code> Calculate the arithmetic sum of the specified column in dataset</li>
+<li><code>{min}</code> Calculate the minimum value of the specified column in dataset</li>
+<li><code>{max}</code> Calculate the maximum value of the specified column in dataset</li>
+<li><code>{avg}</code> Calculate the arithmetic average of the of the specified column (synonyms <code>{mean}</code>, <code>{average}</code>)</li>
+</ul>
+
+<p>Also, non-looping calcs are;</p>
+
+<ul>
+<li><code>{row_count}</code> Returns the number of rows in the dataset</li>
+<li><code>{col_count}</code> Returns the number of columns in the dataset (no visibility check)</li>
+<li><code>{date}</code> Returns the current date</li>
+<li><code>{time}</code> Returns the current time</li>
+</ul>
+
+<h4>Configuration</h4>
+
+<p>YUI 3.6.0 DataTable supports attributes including <code>footerView</code> and <code>footerConfig</code>.</p>
+
+<p>This FooterView recognizes the following attributes, which must be configured via the
+DataTable {configs} (see usage example below);</p>
+
+<ul>
+<li><a href="#attr_fixed"><code>fixed</code></a> : Flag indicating if footer should be fixed or floating</li>
+<li><a href="#attr_heading"><code>heading</code></a> : Object, defining the single TH as;
+<ul><li><a href="#attr_heading.colspan"><code>colspan</code></a> : Number of columns to merge from left for the TH</li>
+<li><a href="#attr_heading.content"><code>content</code></a> : A string indicating the content of the TH for the footer</li>
+<li><a href="#attr_heading.className"><code>className</code></a> : Additional classname for TH</li></ul></li>
+<li><a href="#attr_columns"><code>columns</code></a> : Array of objects, one per desired TD column in footer as;
+<ul><li><a href="#attr_columns.key"><code>key</code></a> : <code>key</code> name from the DataTable columns</li>
+<li><a href="#attr_columns.content"><code>content</code></a> : String indicating the contents of this TD</li>
+<li><a href="#attr_columns.className"><code>className</code></a> : Additional classname for TD</li>
+<li><a href="#attr_columns.formatter"><code>formatter</code></a> : Formatter to apply to this column result</li></ul></li>
+<li><a href="#attr_dateFormat"><code>dateFormat</code></a> : Format string to use for any {date} fields</li>
+<li><a href="#attr_timeFormat"><code>timeFormat</code></a> : Format string to use for any {time} fields</li>
+</ul>
+
+<p>Additionally the user can provide a valid function as a column <code>content</code> to calculate a
+custom entry for a column (see <a href="#attr_columns.content"><code>columns.content</code></a>)</p>
+
+<h4>Usage</h4>
+
+<pre class="code"><code class="prettyprint">var dtable = new Y.DataTable({
+    columns:    ['EmpId','FirstName','LastName','NumClients','SalesTTM'],
+    data:       AccountMgr.Sales,
+    scrollable: 'y',
+    height:     '250px',
+    width:      '400px',
+
+    footerView:   Y.FooterView,
+    footerConfig: {
+        fixed:   true,
+        heading: {
+            colspan:    3,
+            content:    "Sales Totals for {row_count} Account Mgrs : &amp;nbsp;",
+            className:    "align-right"
+        },
+        columns: [
+            { key:'NumClients', content:"{Avg} avg", className:"clientAvg" },
+            { key:'SalesTTM',   content:"{sum}", className:"salesTotal", formatter:fmtCurrency }
+        ]
+    }
+});
+
+dtable.render('#salesDT');
+</code></pre>
+</div>
+
+
+
+<div class="yui3-g">
+    <div class="yui3-u-1-2">
+        
+            <p>This module provides the following classes:</p>
+
+            <ul class="module-classes">
+            
+                <li class="module-class">
+                    <a href="..&#x2F;classes/Y.FooterView.html">
+                        Y.FooterView
+                    </a>
+                </li>
+            
+            </ul>
+        
+    </div>
+
+    <div class="yui3-u-1-2">
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
