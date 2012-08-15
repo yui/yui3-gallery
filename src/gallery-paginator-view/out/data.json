@@ -1,0 +1,511 @@
+{
+    "project": {},
+    "files": {
+        "js/paginator_mv.js": {
+            "name": "js/paginator_mv.js",
+            "modules": {
+                "paginator-model": 1,
+                "paginator-view": 1
+            },
+            "classes": {
+                "Y.PaginatorModel": 1,
+                "Y.PaginatorView": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "paginator-model": {
+            "name": "paginator-model",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/paginator_mv.js",
+            "line": 1,
+            "extends": "Y.Model",
+            "version": "1.0.1",
+            "since": "3.6.0",
+            "author": "Todd Smith *"
+        },
+        "paginator-view": {
+            "name": "paginator-view",
+            "submodules": {},
+            "classes": {
+                "Y.PaginatorModel": 1,
+                "Y.PaginatorView": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/paginator_mv.js",
+            "line": 183,
+            "description": "Uses a data attribute to track link / image / button / etc... actions ...\n   e.g. data-pglink=\"first | 7 | next\"",
+            "extends": "Y.View",
+            "version": "1.0.1",
+            "since": "3.6.0",
+            "author": "Todd Smith *"
+        }
+    },
+    "classes": {
+        "Y.PaginatorModel": {
+            "name": "Y.PaginatorModel",
+            "shortname": "Y.PaginatorModel",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "paginator-view",
+            "namespace": "",
+            "file": "js/paginator_mv.js",
+            "line": 1
+        },
+        "Y.PaginatorView": {
+            "name": "Y.PaginatorView",
+            "shortname": "Y.PaginatorView",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "paginator-view",
+            "namespace": "",
+            "file": "js/paginator_mv.js",
+            "line": 183,
+            "description": "Uses a data attribute to track link / image / button / etc... actions ...\n   e.g. data-pglink=\"first | 7 | next\""
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/paginator_mv.js",
+            "line": 12,
+            "itemtype": "property",
+            "name": "_npages  Placeholder for calculated # of pages required",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 18,
+            "itemtype": "property",
+            "name": "_subscr  Event subscribers created by this model",
+            "type": "Array",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 24,
+            "description": "Creates self-listeners to recalculate paginator settings on items / itemsPerPage\n changes.  Also sets listener to track 'lastPage' changes.",
+            "itemtype": "method",
+            "name": "initializer",
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 44,
+            "description": "Default destructor method, cleans up the listeners that were created.",
+            "itemtype": "method",
+            "name": "destructor",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 56,
+            "description": "Method responds to changes to \"page\", validates the change compared to the\n current paginator settings, and stores the prior page in \"lastPage\".",
+            "itemtype": "method",
+            "name": "_changePage",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 77,
+            "description": "Method to calculate the current paginator settings, specifically the\n number of pages required, including a modulus calc for extra records.",
+            "itemtype": "method",
+            "name": "_recalcPagnParams",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 100,
+            "description": "Getter for returning the start index for the current page",
+            "itemtype": "method",
+            "name": "_getItemIndexStart",
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 110,
+            "description": "Getter for returning the ending index for the current page",
+            "itemtype": "method",
+            "name": "_getItemIndexEnd",
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 125,
+            "itemtype": "attribute",
+            "name": "totalItems Total number of items used by this paginator-model",
+            "type": "{Integer}",
+            "default": "null",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 135,
+            "itemtype": "attribute",
+            "name": "itemsPerPage Number of items per page for this paginator",
+            "type": "{Integer}",
+            "default": "null",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 145,
+            "itemtype": "attribute",
+            "name": "page The current page selected for this paginator-model",
+            "type": "{Integer}",
+            "default": "1",
+            "class": "Y.PaginatorModel",
+            "module": "paginator-model"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 197,
+            "description": "Various \"templates\" for default rendering of this View.",
+            "itemtype": "property",
+            "name": "... (various)",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 219,
+            "description": "Placeholder property to store the initial container HTML for used later in the\n render method.  This property is populated by the View initializer.",
+            "itemtype": "property",
+            "name": "_pagHTML",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 228,
+            "description": "Class placeholders for UI elements",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 243,
+            "description": "Holder for Event subscribers created by this View, saved so they can be cleaned up later.",
+            "itemtype": "property",
+            "name": "_subscr",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 252,
+            "description": "Helper function, because I was too lazy to figure out how to get widget getClassName working",
+            "itemtype": "method",
+            "name": "_myClassName",
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 269,
+            "description": "Initializer setups up classes and the initial container and HTML templating for\n this View.",
+            "itemtype": "method",
+            "name": "initializer",
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 326,
+            "description": "Setup listeners on this View, specifically on all UI elements and\n \"most importantly\", listen to \"pageChange\" on the underlying Model.",
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 363,
+            "description": "Default destructor method, cleans up the listeners that were created and\n cleans up the view contents.",
+            "itemtype": "method",
+            "name": "destructor",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 377,
+            "description": "Render the current settings of the Paginator, using the supplied HTML content from the\n original \"srcNode\", using Y.Lang.sub for replacement of Model attributes.",
+            "itemtype": "method",
+            "name": "render",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 459,
+            "description": "Main handler that accomodates Page changes, updates visual cues for highlighting\n the selected page link and the active Page selector link list.\n\nThis method also fires the View's \"pageChange\" event.",
+            "itemtype": "method",
+            "name": "_processPageChange",
+            "params": [
+                {
+                    "name": "cpage",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 562,
+            "description": "Helper method to calculate offset either side of Selected Page link\n for abbreviated Page List.\n\n Called by _processPageChange",
+            "params": [
+                {
+                    "name": "cpage",
+                    "description": ""
+                },
+                {
+                    "name": "offset",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "as {left:Integer, right:Integer}",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 581,
+            "description": "Method that toggles the visibility of Page Link selector fields based upon\ntheir data-pglink attribute setting.\n\n Called by _processPageChange",
+            "itemtype": "method",
+            "name": "_disablePageSelector",
+            "params": [
+                {
+                    "name": "linkSel",
+                    "description": ""
+                },
+                {
+                    "name": "visible",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 619,
+            "description": "Handler responds to Model's \"pageChange\" event\n\n Listener set in _bindUI",
+            "itemtype": "method",
+            "name": "_modelPageChange",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 634,
+            "description": "Handler responds to Model's \"itemsPerPageChange\" event\n\n Listener set in _bindUI",
+            "itemtype": "method",
+            "name": "_modelStateChange",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 649,
+            "description": "Method fired after the Paginator View is rendered,\n  so that the SELECT[rowsPerPage] control can be updated\n\n Listener set in _bindUI",
+            "itemtype": "method",
+            "name": "_updateRPPSelect",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 709,
+            "description": "Handler responding to INPUT[text] box page change.\n\nListener set in _bindUI",
+            "itemtype": "method",
+            "name": "_inputChangePage",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 730,
+            "description": "Handler responding to a Page Selector \"click\" event.  The clicked Node is\nreviewed for its data-pglink=\"\" setting, and processed from that.\n\nChanged page is then sent back to the Model, which reprocesses the\n paginator settings (i.e. indices) and fires a pageChange event.\n\n Listener set in _bindUI",
+            "itemtype": "method",
+            "name": "_clickChangePage",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 777,
+            "description": "Handler that responds to SELECT changes for no. of rows per page\n\nListener set in _bindUI",
+            "itemtype": "method",
+            "name": "_selectChangeRowOptions",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 797,
+            "description": "Method to sync the container for the paginator View with the underlying DataTable\n 'table' element.\n\n Unfortunately, there isn't a distinct, definitive 'render' complete event due to\n  DT's complex rendering, so I use a timer function to attempt a resize.",
+            "itemtype": "method",
+            "name": "_resizePaginator",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 815,
+            "description": "Method to adjust the CSS width of the paginator container and set it to the\n width of the underlying DT.",
+            "itemtype": "method",
+            "name": "_syncPaginatorSize",
+            "return": {
+                "description": "Boolean if success"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        },
+        {
+            "file": "js/paginator_mv.js",
+            "line": 897,
+            "description": "a little wonky, may need to set DT 'width' attribute for this to work",
+            "itemtype": "attribute",
+            "name": "paginatorResize",
+            "type": "{Boolean}",
+            "default": "false",
+            "class": "Y.PaginatorView",
+            "module": "paginator-view"
+        }
+    ]
+}
