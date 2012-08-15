@@ -18,7 +18,7 @@ var Lang = Y.Lang,
 		cropMask: getClassName(IMAGE_CROPPER, MASK),
 		resizeKnob: getClassName(IMAGE_CROPPER, RESIZE, KNOB),
 		resizeMask: getClassName(IMAGE_CROPPER, RESIZE, MASK)
-	};
+	},
 
 /**
  * @constructor
@@ -37,7 +37,7 @@ var Lang = Y.Lang,
  * @protected
  * @static
  */
-Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
+ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 	
 	CONTENT_TEMPLATE: '<img/>',
 	
@@ -103,54 +103,16 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		this._syncResizeMask();
 	},
 	
-	_defCropMaskSetter: function (node) {
-		node = Y.one(node);
-		if (node) {
-			node.addClass(_classNames.cropMask);
-		}
-		return node;
-	},
-	
 	_defCropMaskValueFn: function () {
-		return Y.Node.create(Y.ImageCropper.CROP_MASK_TEMPLATE);
-	},
-	
-	_defResizeKnobSetter: function (node) {
-		node = Y.one(node);
-		if (node) {
-			node.addClass(_classNames.resizeKnob);
-		}
-		return node;
+		return Y.Node.create(ImageCropper.CROP_MASK_TEMPLATE);
 	},
 
 	_defResizeKnobValueFn: function () {
-		return Y.Node.create(Y.ImageCropper.RESIZE_KNOB_TEMPLATE);
-	},
-	
-	_defResizeMaskSetter: function (node) {
-		node = Y.one(node);
-		if (node) {
-			node.addClass(_classNames.resizeMask);
-		}
-		return node;
+		return Y.Node.create(ImageCropper.RESIZE_KNOB_TEMPLATE);
 	},
 
 	_defResizeMaskValueFn: function () {
-		return Y.Node.create(Y.ImageCropper.RESIZE_MASK_TEMPLATE);
-	},
-	
-	_defStatusGetter: function () {
-		var resizing = this._resize ? this._resize.get('resizing') : false,
-			drag = this._drag ? this._drag.get('dragging') : false;
-		return resizing || drag;
-	},
-	
-	_defInitHeightValidator: function (value) {
-		return isNumber(value) && value >= this.get('minHeight');
-	},
-	
-	_defInitWidthValidator: function (value) {
-		return isNumber(value) && value >= this.get('minWidth');
+		return Y.Node.create(ImageCropper.RESIZE_MASK_TEMPLATE);
 	},
 
 	_renderCropMask: function (boundingBox) {
@@ -310,7 +272,7 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 			* </dl>
 			* @type {CustomEvent}
 			*/
-			this.fire('crop:' + (eventType === ns ? 'crop' : eventType), o);
+			this.fire('crop:' + (eventType == ns ? 'crop' : eventType), o);
 			
 		}, this);
 	},
@@ -336,7 +298,7 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 			minWidth: this.get('minWidth'),
 			preserveRatio: this.get('preserveRatio')
 		});
-		YArray.each(Y.ImageCropper.RESIZE_EVENTS, Y.bind(this._icEventProxy, this, resize, 'resize'));
+		YArray.each(ImageCropper.RESIZE_EVENTS, Y.bind(this._icEventProxy, this, resize, 'resize'));
 	},
 	
 	_bindDrag: function (resizeKnob, contentBox) {
@@ -348,7 +310,7 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		drag.plug(Y.Plugin.DDConstrained, {
 			constrain2node: contentBox
 		});
-		YArray.each(Y.ImageCropper.DRAG_EVENTS, Y.bind(this._icEventProxy, this, drag, 'drag'));
+		YArray.each(ImageCropper.DRAG_EVENTS, Y.bind(this._icEventProxy, this, drag, 'drag'));
 	},
 	
 	initializer: function () {
@@ -361,7 +323,7 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		
 		this._icHandlers = [];
 		
-		YArray.each(Y.ImageCropper.RESIZE_ATTRS, function (attr) {
+		YArray.each(ImageCropper.RESIZE_ATTRS, function (attr) {
 			this.after(attr + 'Change', this._syncResizeAttr);
 		}, this);
 	},
@@ -435,7 +397,10 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 	 * @chainable
 	 */
 	reset: function () {
-		this.get('resizeKnob').setXY(this.get('initialXY')).setStyles({
+		var initialXY = this.get('initialXY');
+		this.get('resizeKnob').setStyles({
+			left: initialXY[0],
+			top: initialXY[1],
 			width: this.get('initWidth'),
 			height: this.get('initHeight')
 		});
@@ -558,7 +523,14 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		 * @type {Node}
 		 */
 		resizeMask: {
-			setter: '_defResizeMaskSetter',
+			setter: function (node) {
+				node = Y.one(node);
+				if (node) {
+					node.addClass(_classNames.resizeMask);
+				}
+				return node;
+			},
+
 			valueFn: '_defResizeMaskValueFn'
 		},
 		
@@ -569,7 +541,14 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		 * @type {Node}
 		 */
 		resizeKnob: {
-			setter: '_defResizeKnobSetter',
+			setter: function (node) {
+				node = Y.one(node);
+				if (node) {
+					node.addClass(_classNames.resizeKnob);
+				}
+				return node;
+			},
+
 			valueFn: '_defResizeKnobValueFn'
 		},
 		
@@ -580,7 +559,14 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		 * @type {Node}
 		 */
 		cropMask: {
-			setter: '_defCropMaskSetter',
+			setter: function (node) {
+				node = Y.one(node);
+				if (node) {
+					node.addClass(_classNames.cropMask);
+				}
+				return node;
+			},
+
 			valueFn: '_defCropMaskValueFn'
 		},
 		
@@ -640,7 +626,11 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		 */
 		status: {
 			readOnly: true,
-			getter: '_defStatusGetter'
+			getter: function () {
+				var resizing = this._resize ? this._resize.get('resizing') : false,
+					drag = this._drag ? this._drag.get('dragging') : false;
+				return resizing || drag;
+			}
 		},
 		
 		/**
@@ -687,7 +677,11 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		 */
 		initHeight: {
 			value: 0,
-			validator: '_defInitHeightValidator'
+			validator: isNumber,
+			setter: function (value) {
+				var minHeight = this.get('minHeight');
+				return value < minHeight ? minHeight : value;
+			}
 		},
 		
 		/**
@@ -698,9 +692,15 @@ Y.ImageCropper = Y.Base.create('imagecropper', Y.Widget, [], {
 		 */
 		initWidth: {
 			value: 0,
-			validator: '_defInitWidthValidator'
+			validator: isNumber,
+			setter: function (value) {
+				var minWidth = this.get('minWidth');
+				return value < minWidth ? minWidth : value;
+			}
 		}
 		
 	}
 	
 });
+
+Y.ImageCropper = ImageCropper;
