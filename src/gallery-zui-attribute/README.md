@@ -4,7 +4,7 @@ ZUI attribute
 Summary
 -------
 
-ZUI attribute provides revert() , toggle() , set_again() methods for Attribute.
+ZUI attribute provides revert() , toggle() , set_again(), sync(), unsync() methods for Attribute.
 
 Description
 -----------
@@ -16,6 +16,10 @@ This module provides 3 more methods for Attribute:
 *   toggle() : set attribute value to opposite boolean
 
 *   set_again() : set attribute value to current value, use this to trigger setter function or change event again.
+
+*   sync() : sync an attribute from other Object when the attribute value of other object changed, everytime.
+
+*   unsync() : remove the sync binding.
 
 Note
 ----
@@ -48,6 +52,17 @@ Code Sample
 
     // And you can revert the attribute
     myInstance.revert('testAttr');
+
+    // Sync an attribute from another object
+    // Everytime objterObject.get('testAttr') changed, set() the value to myInstance
+    myInstance.sync('testAttr', otherObject);
+
+    // Sync an attribute from another object, specify a different attribute name
+    // Everytime objterObject.get('Attr2') changed, set() the value to myInstance
+    myInstance.sync('testAttr', otherObject, 'Attr2');
+
+    // Stop to monitering the attribute change
+    myInstance.unsync('testAttr', otherObject);
 
 
     // Or, add ZUI attribute support to a class (before creating any instance) 

@@ -1,5 +1,15 @@
 var runTestLib = function (Y, O, N) {
-    var testSuite = new Y.Test.Suite('ZUI attribute');
+    var testSuite = new Y.Test.Suite('ZUI attribute'),
+        testObj = new Y.Base();
+
+    testObj.addAttrs({
+        attrA: {
+           value: 0
+        },
+        attrB: {
+           value: 3
+        }
+    });
 
     testSuite.add(new Y.Test.Case({
         name: N,
@@ -90,6 +100,28 @@ var runTestLib = function (Y, O, N) {
 
             Y.Assert.areSame(4, setRun);
             Y.Assert.areSame('same value', O.get('attrA'));
+        },
+
+        testSync: function () {
+            O.sync('attrA', testObj);
+            Y.Assert.areSame(0, O.get('attrA'));
+
+            testObj.set('attrA', 2);
+            Y.Assert.areSame(2, O.get('attrA'));
+
+            O.unsync('attrA', testObj);
+            testObj.set('attrA', 4);
+            Y.Assert.areSame(2, O.get('attrA'));
+
+            O.sync('attrA', testObj, 'attrB');
+            Y.Assert.areSame(3, O.get('attrA'));
+
+            testObj.set('attrB', 4);
+            Y.Assert.areSame(4, O.get('attrA'));
+
+            O.unsync('attrA', testObj, 'attrB');
+            testObj.set('attrA', 5);
+            Y.Assert.areSame(4, O.get('attrA'));
         }
     }));
 
