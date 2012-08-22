@@ -1434,4 +1434,4 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
 
 
-}, 'gallery-2012.08.15-20-00' ,{requires:['base-build','model','view','substitute'], skinnable:true});
+}, 'gallery-2012.08.22-20-00' ,{skinnable:true, requires:['base-build','model','view','substitute']});
