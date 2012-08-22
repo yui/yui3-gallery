@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Bootstrap Popover" default="local">
+    <description>Rich Popovers to add small overlays of content, similar to what you see on an iPad. Uses the Bootstrap styling and extends Y.Bootstrap.Tooltip</description>
+    <property file="build.properties" />
+    <import file="${builddir}/3.x/bootstrap.xml" />
+</project>
