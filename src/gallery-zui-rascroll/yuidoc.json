@@ -1,0 +1,13 @@
+{
+    "name": "ZUI RAScroll",
+    "description": "ZUI RAScroll is a scrollView plugin to handle Horizontal/Vertical scroll behaviors.",
+    "version": "0.0.1",
+    "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-rascroll",
+    "options": {
+        "linkNatives": "true",        
+        "attributesEmit": "true",
+        "selleck": "true",
+        "paths": ["./js"],
+        "outdir": "./api"
+    }
+}

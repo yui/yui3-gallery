@@ -1,0 +1,140 @@
+{
+    "project": {
+        "name": "ZUI RAScroll",
+        "description": "ZUI RAScroll is a scrollView plugin to handle Horizontal/Vertical scroll behaviors.",
+        "version": "0.0.1",
+        "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-rascroll"
+    },
+    "files": {
+        "js/zui-rascroll.js": {
+            "name": "js/zui-rascroll.js",
+            "modules": {
+                "gallery-zui-rascroll": 1
+            },
+            "classes": {
+                "zui.RAScrollPlugin": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "zui": 1
+            }
+        }
+    },
+    "modules": {
+        "gallery-zui-rascroll": {
+            "name": "gallery-zui-rascroll",
+            "submodules": {},
+            "classes": {
+                "zui.RAScrollPlugin": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "zui": 1
+            },
+            "tag": "module",
+            "file": "js/zui-rascroll.js",
+            "line": 9,
+            "description": "The RAScrollPlugin help to handle scrollView behaviors.\nWhen a Horizontal scrollView is placed inside a Vertical scrollView,\nuser can do only x or y direction slick."
+        }
+    },
+    "classes": {
+        "zui.RAScrollPlugin": {
+            "name": "zui.RAScrollPlugin",
+            "shortname": "zui.RAScrollPlugin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui",
+            "file": "js/zui-rascroll.js",
+            "line": 9,
+            "description": "RAScrollPlugin is a ScrollView plugin that adds right angle flick behaviors.",
+            "extends": "Plugin.Base",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/zui-rascroll.js",
+            "line": 24,
+            "description": "make the scrollView as horizontal or not.",
+            "itemtype": "attribute",
+            "name": "horizontal",
+            "default": "true",
+            "type": "Boolean",
+            "class": "zui.RAScrollPlugin",
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-rascroll.js",
+            "line": 41,
+            "description": "A boolean decides the right angle behavior should started when other scrollView is also dragged.",
+            "itemtype": "attribute",
+            "name": "cooperation",
+            "default": "false",
+            "type": "Boolean",
+            "class": "zui.RAScrollPlugin",
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-rascroll.js",
+            "line": 75,
+            "description": "internal gesturemovestart event handler",
+            "itemtype": "method",
+            "name": "handleGestureMoveStart",
+            "access": "protected",
+            "tagname": "",
+            "class": "zui.RAScrollPlugin",
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-rascroll.js",
+            "line": 85,
+            "description": "internal gesturemove event handler",
+            "itemtype": "method",
+            "name": "handleGestureMove",
+            "access": "protected",
+            "tagname": "",
+            "class": "zui.RAScrollPlugin",
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-rascroll.js",
+            "line": 108,
+            "description": "internal gesturemoveend event handler",
+            "itemtype": "method",
+            "name": "handleGestureMoveEnd",
+            "access": "protected",
+            "tagname": "",
+            "class": "zui.RAScrollPlugin",
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-rascroll.js",
+            "line": 126,
+            "description": "sync width or height for vertical scroll or horizontal scroll",
+            "itemtype": "method",
+            "name": "syncScroll",
+            "class": "zui.RAScrollPlugin",
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-rascroll.js",
+            "line": 139,
+            "description": "make the scrollView become vertical scrolling",
+            "itemtype": "method",
+            "name": "syncWidth",
+            "class": "zui.RAScrollPlugin",
+            "module": "gallery-zui-rascroll",
+            "namespace": "zui"
+        }
+    ]
+}
