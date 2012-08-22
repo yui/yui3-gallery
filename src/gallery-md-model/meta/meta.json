@@ -1,0 +1,6 @@
+{
+	"gallery-md-model": {
+		"requires":["base"],
+		"skinnable": false
+	}
+}

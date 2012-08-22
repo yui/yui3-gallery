@@ -34,7 +34,9 @@ to override the parse() method to parse non-generic server responses.
 		IS_MODIFIED = 'isModified',
 		IS_NEW = 'isNew',
 		DOT = '.',
-		CHANGE = 'Change';
+		CHANGE = 'Change',
+		ADD = 'add',
+		UNDO = 'undo';
 	
 
 	Y.GalleryModel = Y.Base.create(
@@ -125,7 +127,7 @@ to override the parse() method to parse non-generic server responses.
 			 * @chainable
 			 */
 			destroy: function (options, callback) {
-				if (typeof options === 'function') {
+				if (Lang.isFunction(options)) {
 					callback = options;
 					options = {};
 				} else if (!options) {
@@ -141,7 +143,9 @@ to override the parse() method to parse non-generic server responses.
 							Y.GalleryModel.superclass.destroy.call(self);
 						}
 
-						callback && callback.apply(null, arguments);
+						if (Lang.isFunction(callback)) {
+							callback.apply(null, arguments);
+						}
 					};
 
 				if (callback || options) {
@@ -252,7 +256,7 @@ to override the parse() method to parse non-generic server responses.
 			getPKValues: function () {
 				var pkValues = {},
 					self = this;
-				YArray.each(self.get('primaryKeys'), function (name) {
+				YArray.each(self._primaryKeys, function (name) {
 					pkValues[name] = self._values[name];
 				});
 				return pkValues;
@@ -285,14 +289,13 @@ to override the parse() method to parse non-generic server responses.
 					url = [];
 				if (name) {
 					return encodeURIComponent(Lang.isValue(value) ? String(value) : '');
-				} else {
-					YObject.each(value, function (value, name) {
-						if (Lang.isValue(value)) {
-							url.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
-						}
-					});
-					return url.join('&');
-				}
+				} 
+				YObject.each(value, function (value, name) {
+					if (Lang.isValue(value)) {
+						url.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
+					}
+				});
+				return url.join('&');
 			},
 
 			/**
@@ -319,7 +322,7 @@ to override the parse() method to parse non-generic server responses.
 				load operation will fire an error event with the src value "load".
 
 				@method load
-				@param options {Object} Options to be passed to sync().
+				@param [options] {Object} Options to be passed to sync().
 					Usually these will be or will include the keys used by the remote source 
 					to locate the data to be loaded.
 					They will be passed on unmodified to the sync method.
@@ -332,7 +335,7 @@ to override the parse() method to parse non-generic server responses.
 			load: function (options, callback) {
 				var self = this;
 
-				if (typeof options === 'function') {
+				if (Lang.isFunction(options)) {
 					callback = options;
 					options = {};
 				} else if (!options) {
@@ -357,7 +360,9 @@ to override the parse() method to parse non-generic server responses.
 						self.fire(EVT_LOADED, facade);
 					}
 
-					callback && callback.apply(null, arguments);
+					if (Lang.isFunction(callback)) {
+						callback.apply(null, arguments);
+					}
 				});
 
 				return self;
@@ -425,7 +430,7 @@ to override the parse() method to parse non-generic server responses.
 			save: function (options, callback) {
 				var self = this;
 
-				if (typeof options === 'function') {
+				if (Lang.isFunction(options)) {
 					callback = options;
 					options = {};
 				} else if (!options) {
@@ -434,7 +439,9 @@ to override the parse() method to parse non-generic server responses.
 
 				self._validate(self.getValues(), function (err) {
 					if (err) {
-						callback && callback.call(null, err);
+						if (Lang.isFunction(callback)) {
+							callback.call(null, err);
+						}
 						return;
 					}
 
@@ -461,7 +468,9 @@ to override the parse() method to parse non-generic server responses.
 							}
 						}
 
-						callback && callback.apply(null, arguments);
+						if (Lang.isFunction(callback)) {
+							callback.apply(null, arguments);
+						}
 					});
 				});
 
@@ -502,7 +511,7 @@ to override the parse() method to parse non-generic server responses.
 			**/
 			sync: function (action, options, callback) {
 
-				if (typeof callback === 'function') {
+				if (Lang.isFunction(callback)) {
 					callback();
 				}
 			},
@@ -547,7 +556,9 @@ to override the parse() method to parse non-generic server responses.
 				along to the resulting error event.
 			**/
 			validate: function (attrs, callback) {
-				callback && callback();
+				if (Lang.isFunction(callback))  {
+					callback();
+				}
 			},
 			/**
 				Calls the public, overridable validate() method and fires an error event
@@ -601,10 +612,8 @@ to override the parse() method to parse non-generic server responses.
 					var ret = {};
 					ret[name] = this._values[name] !== this._loadedValues[name];
 					return ret;
-				} else {
-					return value;
 				}
-
+				return value;
 			},
 			_isNewGetter: function (value, name) {
 				name = name.split(DOT);
@@ -613,9 +622,8 @@ to override the parse() method to parse non-generic server responses.
 					var ret = {};
 					ret[name] = !this._loadedValues.hasOwnProperty(name);
 					return ret;
-				} else {
-					return value;
 				}
+				return value;
 			},
 			_primaryKeysSetter: function (value) {
 				if (this._primaryKeys && this._primaryKeys.length) {
@@ -632,9 +640,8 @@ to override the parse() method to parse non-generic server responses.
 					var ret = {};
 					ret[name] = value.indexOf(name) !== -1;
 					return ret;
-				} else {
-					return (value || []).concat();  // makes sure to return a copy, not the original.
 				}
+				return (value || []).concat();  // makes sure to return a copy, not the original.
 			}
 		},
 		{
@@ -710,7 +717,9 @@ to override the parse() method to parse non-generic server responses.
 	Y.GalleryModelSimpleUndo.prototype = {
 		initializer: function () {
 			this._lastChange = {};
-			this._preserve = (this._preserve || []).concat('_lastChange');
+			if (this._addPreserve) {
+				this._addPreserve('_lastChange');
+			}
 			this.after(EVT_CHANGE, this._trackChange);
 			this.after([EVT_LOADED,EVT_SAVED,EVT_RESET], this._resetUndo);	
 		},
@@ -722,7 +731,7 @@ to override the parse() method to parse non-generic server responses.
 		 * @private
 		 */
 		_trackChange: function (ev) {
-			if (ev.name && ev.src !== 'undo') {
+			if (ev.name && ev.src !== UNDO) {
 				this._lastChange[ev.name] = ev.prevVal;
 			}
 		},
@@ -744,11 +753,11 @@ to override the parse() method to parse non-generic server responses.
 			var self = this;
 			if (name) {
 				if (self._lastChange[name] !== undefined) {		
-					self.setValue(name, self._lastChange[name], 'undo');
+					self.setValue(name, self._lastChange[name], UNDO);
 					delete self._lastChange[name];
 				}
 			} else {
-				self.setValues(this._lastChange, 'undo');
+				self.setValues(this._lastChange, UNDO);
 				self._lastChange = {};
 			}
 		}
@@ -766,7 +775,9 @@ to override the parse() method to parse non-generic server responses.
 	Y.GalleryModelChronologicalUndo.prototype = {
 		initializer: function () {
 			this._changes = [];
-			this._preserve = (this._preserve || []).concat('_changes');
+			if (this._addPreserve) {
+				this._addPreserve('_changes');
+			}
 			this.after(EVT_CHANGE, this._trackChange);
 			this.after([EVT_LOADED,EVT_SAVED,EVT_RESET], this._resetUndo);
 		},
@@ -778,7 +789,7 @@ to override the parse() method to parse non-generic server responses.
 		 * @private
 		 */
 		_trackChange: function (ev) {
-			if (ev.src !== 'undo') {
+			if (ev.src !== UNDO) {
 				this._changes.push(ev.details);
 			}
 		},
@@ -798,9 +809,9 @@ to override the parse() method to parse non-generic server responses.
 			var ev = this._changes.pop();
 			if (ev) {
 				if (ev.name) {
-					this.setValue(ev.name, ev.prevVal, 'undo');
+					this.setValue(ev.name, ev.prevVal, UNDO);
 				} else {
-					this.setValues(ev.prevVals, 'undo');
+					this.setValues(ev.prevVals, UNDO);
 				}
 			}
 			if (this._changes.length === 0) {
@@ -820,10 +831,18 @@ to override the parse() method to parse non-generic server responses.
 		MR = function () {};
 	
 	MR.prototype = {
+		/**
+		 * Added this property to have ModelSync.REST getURL() return the proper URL.
+		 * @property _isYUIModelList
+		 * @type Boolean
+		 * @value true
+		 * @private
+		 */
+		_isYUIModelList: true,
 		initializer: function () {
 			this._shelves = [];
 			this._currentIndex = 0;
-			this.on(EVT_LOADED, this._batchLoad);
+			this._addPreserve('_values','_loadedValues','_isNew','_isModified');
 		},
 		/**
 		 * Index of the shelf for the record being exposed.
@@ -851,12 +870,7 @@ to override the parse() method to parse non-generic server responses.
 				index = this._currentIndex;
 			}
 			var self = this,
-				current = {
-					_values: self._values,
-					_loadedValues: self._loadedValues,
-					isNew: self.get(IS_NEW),
-					isModified: self.get(IS_MODIFIED)
-				};
+				current = {};
 			YArray.each(self._preserve, function (name) {
 				current[name] = self[name];
 			});
@@ -871,19 +885,32 @@ to override the parse() method to parse non-generic server responses.
 		_fetch: function (index) {
 			if (index === undefined) {
 				index = this._currentIndex;
+			} else {
+				this._currentIndex = index;
 			}
 			var self = this,
 				current = self._shelves[index];
 				
-			self._values = current._values;
-			self._loadedValues = current._loadedValues;
-			self._setStateVal(IS_NEW, current.isNew);
-			self._setStateVal(IS_MODIFIED, current.isModified);
-			YArray.each(self._preserve, function (name) {
-				self[name] = current[name];
-			});
+			if (Lang.isUndefined(current)) {
+				this._initNew();
+			} else {
+				YArray.each(self._preserve, function (name) {
+					self[name] = current[name];
+				});
+			}
 			
 		},
+		/**
+		 * Adds the names of properties that are to be preserved in the shelf when moving,
+		 * and taken out of the shelf when fetching.
+		 * @method _addPreserve
+		 * @param {String} any number of names or array of names of properties to be preserved.
+		 * @protected
+		 */
+		_addPreserve: function () {
+			this._preserve = (this._preserve || []).concat(Array.prototype.slice.call(arguments));
+		},
+		
 		/**
 		 * Initializes an exposed record
 		 * @method _initNew
@@ -892,8 +919,8 @@ to override the parse() method to parse non-generic server responses.
 		_initNew: function () {
 			this._values = {};
 			this._loadedValues = {};
-			this._set(IS_NEW, true);
-			this._set(IS_MODIFIED, false);
+			this._isNew = true;
+			this._isModified = false;
 		},
 		/**
 		 * Adds a new record at the index position given or at the end.
@@ -906,55 +933,54 @@ to override the parse() method to parse non-generic server responses.
 			if (this.get(IS_MODIFIED) || !this.get(IS_NEW)) {
 				this._shelve();
 			}
-			if (arguments.length === 2) {
-				this._shelves.splice(index, 1);
-			} else {
-				index = this._shelves.length;
-			}
+			index = index || this._shelves.length;
+			this._shelves.splice(index, 0, {});
 			this._currentIndex = index;
 			this._initNew();
-			this.setValues(values, 'add');
+			this.setValues(values, ADD);
 		},
 		/**
 		 * Executes the given function for each record in the set.
 		 * Returning exactly false from the function spares shelving the record.
-		 * If function does not modify the record, returning false will improve performance.
+		 * If the callback function does not modify the record, 
+		 * returning false will improve performance.
 		 * @method each
 		 * @param fn {function} function to execute, it will be provided with:
 		 * @param fn.index {integer} index of the record exposed
 		 */
 		each: function(fn) {
-			var i, l, self = this;
-			this._shelve();
-			for (i = 0, l = this._shelves.length; i < l; i += 1) {
-				this._currentIndex = i;
-				this._fetch(i);
-				if (fn.call(self, i) !== false) {
-					this._shelve(i);
+			var self = this;
+			self._shelve();
+			YArray.each(self._shelves, function (shelf, index) {
+				self._currentIndex = index;
+				self._fetch(index);
+				if (fn.call(self, index) !== false) {
+					self._shelve(index);
 				}
-			}
+			});
 		},
 		/**
 		 * Executes the given function for each record in the set.
 		 * It is faster than using each and then checking for isModified
 		 * Returning exactly false from the function spares shelving the record.
-		 * If function does not modify the record, returning false will improve performance.
+		 * If the callback function does not modify the record, 
+		 * returning false will improve performance.
 		 * @method eachModified
 		 * @param fn {function} function to execute, it will be provided with:
 		 * @param fn.index {integer} index of the record exposed
 		 */
 		eachModified:function(fn) {
-			var i, l, self = this;
-			this._shelve();
-			for (i = 0, l = this._shelves.length; i < l; i += 1) {
-				if (this._shelves[i][IS_MODIFIED]) {
-					this._currentIndex = i;
-					this._fetch(i);
-					if (fn.call(self, i) !== false) {
-						this._shelve(i);
+			var self = this;
+			self._shelve();
+			YArray.each(self._shelves,  function (shelf, index) {
+				if (self._shelves[index][IS_MODIFIED]) {
+					self._currentIndex = index;
+					self._fetch(index);
+					if (fn.call(self, index) !== false) {
+						self._shelve(index);
 					}
 				}
-			}
+			});
 		},
 		/**
 		 * Calls _save_ on each record modified.
@@ -967,37 +993,54 @@ to override the parse() method to parse non-generic server responses.
 			this.eachModified(this.save);
 		},
 		/**
-		 * <em>This is a documentation entry only, this method does not define load.</em>
-		 *    
-		 * This extension captures the _loaded_ event so that if a load 
-		 * returns an array of records, they will be added to the shelves.
-		 * Existing records are kept, call _empty_ if they should be discarded.
+		 * This is a documentation entry only, this method does not define load. 
+		 * This extension redefines the default action for the loaded event so 
+		 * that if a load returns an array of records, they will be added to the shelves. 
+		 * Existing records are kept, call empty if they should be discarded. 
 		 * See method load of Y.GalleryModel for further info.
-		 * @method load
-		 */
+		 */ 
 		/**
-		 * Listener for the loaded event, checks if the parsed response is an array
-		 * and saves it into the shelves.
-		 * @method _batchLoad
+		 * Default action for the loaded event, checks if the parsed response is an array
+		 * and saves it into the shelves, otherwise t calls the default loader for single records.
+		 * @method _defDataLoaded
 		 * @param ev {EventFacade} facade produced by load.
 		 * @private
 		 */
-		_batchLoad: function (ev) {
-			var self = this;
-			if (ev.src === 'load' && Y.Lang.isArray(ev.parsed)) {
-				ev.halt();
+		_defDataLoaded: function (ev) {
+			var self = this,
+				shelves = self._shelves;
+			if (Lang.isArray(ev.parsed)) {
+				if (shelves.length && (self.get(IS_MODIFIED) || !self.get(IS_NEW))) {
+					self._shelve();
+				}
 				YArray.each(ev.parsed, function (values) {
-					self.add(values);
+					shelves.push({
+						_values: values,
+						_loadedValues: Y.clone(values),
+						isNew: false,
+						isModified:false
+					});
 				});
+				self._fetch();
+				if (self._sort) {
+					self._sort();
+				}
+			} else {
+				Y.GalleryModel.prototype._defDataLoaded.apply(self, arguments);
 			}
+			
 		},
 		/**
-		 * Returns the number of records stored
+		 * Returns the number of records stored, skipping over empty slots.
 		 * @method size
 		 * @return {Integer} number of records in the shelves
 		 */
 		size: function() {
-			return this._shelves.length;
+			var count = 0;
+			YArray.each(this._shelves, function () {
+				count +=1;
+			});
+			return count;
 		},
 		/**
 		 * Empties the shelves of any records as well as the exposed record
@@ -1022,9 +1065,8 @@ to override the parse() method to parse non-generic server responses.
 				this._currentIndex = value = parseInt(value,10);
 				this._fetch(value);
 				return value;
-			} else {
-				return Y.Attribute.INVALID_VALUE;
 			}
+			return Y.Attribute.INVALID_VALUE;
 		},
 		/**
 		 * Getter for the _index_ attribute
@@ -1033,9 +1075,70 @@ to override the parse() method to parse non-generic server responses.
 		 * @return {integer} value of the index
 		 * @private
 		 */
-		_indexGetter: function (value) {
+		_indexGetter: function () {
 			return this._currentIndex;
+		},
+		/**
+		 * Getter for the isNew attribute used only for GalleryModelMultiRecord
+		 * so that it is read from the shelf and not from the actual attribute, 
+		 * which is expensive to shelve
+		 * @method _isNewGetter
+		 * @param value {Boolean} value stored in the attribute, it is ignored.
+		 * @param name {String} name of the attribute.  
+		 *		If it contains a dot, the original getter is called.
+		 * @return {Boolean} state of the attribute
+		 * @private
+		 */
+		_isNewGetter: function (value, name) {
+			if (name.split(DOT).length > 1) {
+				return Y.GalleryModel.prototype._isNewGetter.apply(this, arguments);
+			}
+			return this._isNew;
+			
+		},
+		/**
+		 * Setter for the isNew attribute used only for GalleryModelMultiRecord
+		 * so that it is written into the shelf and not into the actual attribute, 
+		 * which is expensive to shelve
+		 * @method _isNewSetter
+		 * @param value {Boolean} value stored in the attribute.
+		 * @return {Boolean} the same value as received.
+		 * @private
+		 */
+		_isNewSetter: function (value) {
+			return (this._isNew = value);
+		},
+		/**
+		 * Getter for the isModified attribute used only for GalleryModelMultiRecord
+		 * so that it is read from the shelf and not from the actual attribute, 
+		 * which is expensive to shelve
+		 * @method _isModifiedGetter
+		 * @param value {Boolean} value stored in the attribute, it is ignored.
+		 * @param name {String} name of the attribute.  
+		 *		If it contains a dot, the original getter is called.
+		 * @return {Boolean} state of the attribute
+		 * @private
+		 */
+		_isModifiedGetter:  function (value, name) {
+			if (name.split(DOT).length > 1) {
+				return Y.GalleryModel.prototype._isModifiedGetter.apply(this, arguments);
+			}
+			return this._isModified;
+			
+		},
+		/**
+		 * Setter for the isModified attribute used only for GalleryModelMultiRecord
+		 * so that it is written into the shelf and not into the actual attribute, 
+		 * which is expensive to shelve
+		 * @method _isModifiedSetter
+		 * @param value {Boolean} value stored in the attribute.
+		 * @return {Boolean} the same value as received.
+		 * @private
+		 */
+		_isModifiedSetter:  function (value) {
+			return (this._isModified = value);
 		}
+			
 		
 	};
 	
@@ -1050,6 +1153,20 @@ to override the parse() method to parse non-generic server responses.
 			value: 0,
 			setter:'_indexSetter',
 			getter:'_indexGetter'
+		},
+		/**
+		 * Merges the new setter into the existing {{#crossLink "Y.GalleryModel/isNew"}}{{/crossLink}} attribute
+		 * @attribute isNew
+		 */
+		isNew: {
+			setter:'_isNewSetter'
+		},
+		/**
+		 * Merges the new setter into the existing {{#crossLink "Y.GalleryModel/isModified"}}{{/crossLink}} attribute.
+		 * @attribute isModified
+		 */
+		isModified: {
+			setter: '_isModifiedSetter'
 		}
 	};
 	
@@ -1057,6 +1174,7 @@ to override the parse() method to parse non-generic server responses.
 	
 	/**
 	 * Extension to sort records stored in GalleryModel, extended with GalleryModelMultiRecord
+	 * It is incompatible with Y.GalleryModelPrimaryKeyIndex
 	 * @class Y.GalleryModelSortedMultiRecord
 	 */
 	var SFIELD = 'sortField',
@@ -1121,7 +1239,8 @@ to override the parse() method to parse non-generic server responses.
 			this._setCompare();
 			this._shelve();
 			this._shelves.sort(this._compare);
-			this._fetch();
+			this._shelves.splice(this.size());
+			this._fetch(0);
 		},
 		/**
 		 * Listens to value changes and if the name of the field is that of the sortField
@@ -1138,7 +1257,7 @@ to override the parse() method to parse non-generic server responses.
 				shelves = this._shelves,
 				currentShelf;
 
-			if (fieldName && ev.src !== 'add' && (Lang.isFunction(sField) || fieldName === sField)) {
+			if (fieldName && ev.src !== ADD && (Lang.isFunction(sField) || fieldName === sField)) {
 				// The shelf has to be emptied otherwise _findIndex may match itself.
 				currentShelf = shelves.splice(currentIndex,1)[0];
 				index = this._findIndex(currentShelf._values);
@@ -1163,7 +1282,7 @@ to override the parse() method to parse non-generic server responses.
 				vals = {_values: values};
 				
 			while (low < high) {
-				index = (high + low) >> 1;
+				index = Math.floor((high + low) / 2);
 				switch(cmp(vals, shelves[index])) {
 					case 1:
 						low = index + 1;
@@ -1194,7 +1313,7 @@ to override the parse() method to parse non-generic server responses.
 			this._currentIndex = index;
 			shelves.splice(index, 0, {});
 			this._initNew();
-			this.setValues(values, 'add');
+			this.setValues(values, ADD);
 			this._shelve(index);
 		},
 		/**
@@ -1259,5 +1378,113 @@ to override the parse() method to parse non-generic server responses.
 		}
 	};
 	Y.GalleryModelSortedMultiRecord = SMR;
-
+	
+	/**
+	 * Extension to store the records in the GalleryModel using the field in the primaryKeys as its index.
+	 * The primary key must be a single unique integer field.
+	 * It should be used along Y.GalleryModelMultiRecord.
+	 * It is incompatible with Y.GalleryModelSortedMultiRecord.
+	 * @class Y.GalleryModelPrimaryKeyIndex
+	 */
+	var PKI = function () {};
+	PKI.prototype = {
+		/**
+		 * Adds a new record at the index position given by its primary key.
+		 * The new record becomes the current.
+		 * @method add
+		 * @param values {Object} set of values to set
+		 */
+		add: function(values) {
+			if (this.get(IS_MODIFIED) || !this.get(IS_NEW)) {
+				this._shelve();
+			}
+			this._currentIndex = values[this._primaryKeys[0]];
+			this._initNew();
+			this.setValues(values, ADD);
+		},
+		/**
+		 * Default action for the loaded event, checks if the parsed response is an array
+		 * and saves it into the shelves using the value of the primary key field for its index.
+		 * The model will be left positioned at the item with the lowest key value.
+		 * If the primary key field has not been declared, items will not be loaded.
+		 * If the primary key field is not unique, the duplicate will overwrite the previous.
+		 * @method _defDataLoaded
+		 * @param ev {EventFacade} facade produced by load.
+		 * @private
+		 */
+		_defDataLoaded: function (ev) {
+			var self = this,
+				shelves = self._shelves,
+				pk = self._primaryKeys[0];
+				
+			if (Lang.isUndefined(pk)) {
+				return;
+			}	
+			if (self.get(IS_MODIFIED) || !self.get(IS_NEW)) {
+				self._shelve();
+			}
+			YArray.each(new YArray(ev.parsed), function (values) {
+				shelves[values[pk]] = {
+					_values: values,
+					_loadedValues: Y.clone(values),
+					isNew: false,
+					isModified:false
+				};
+			});
+			YArray.some(shelves, function (shelf, index) {
+				self._fetch(index);
+				return true;
+			});
+			
+		},
+		/**
+		 * Sugar method added because items might not be contiguous so 
+		 * adding one to the index does not always get you to the next item.
+		 * If there is no next element, null will be returned and the
+		 * collection will still point to the last item.
+		 * @method next
+		 * @return {integer} index of the next item or null if none found
+		 */
+		next: function () {
+			if (this.get(IS_MODIFIED) || !this.get(IS_NEW)) {
+				this._shelve();
+			}
+			var shelves = this._shelves,
+				index = this._currentIndex + 1, 
+				l = shelves.length;
+			while (index < l && !shelves.hasOwnProperty(index)) {
+				index +=1;
+			}
+			if (index === l) {
+				return null;
+			}
+			this._fetch(index);
+			return index;
+		},
+		/**
+		 * Sugar method added because items might not be contiguous so 
+		 * subtracting one to the index does not always get you to the previous item.
+		 * If there is no next element, null will be returned and the
+		 * collection will still point to the first item.
+		 * @method next
+		 * @return {integer} index of the next item or null if none found
+		 */
+		previous: function () {
+			if (this.get(IS_MODIFIED) || !this.get(IS_NEW)) {
+				this._shelve();
+			}
+			var shelves = this._shelves,
+				index = this._currentIndex - 1;
+			while (index >= 0 && !shelves.hasOwnProperty(index)) {
+				index -=1;
+			}
+			if (index === -1) {
+				return null;
+			}
+			this._fetch(index);
+			return index;
+		}
+		
+	};
+	Y.GalleryModelPrimaryKeyIndex = PKI;
 
