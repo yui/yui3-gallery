@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Bootstrap Alert" default="local">
+    <description>Alerts that hide and fade away, all fancylike and using the Twitter Bootstrap style!</description>
+    <property file="build.properties" />
+    <import file="${builddir}/3.x/bootstrap.xml" />
+</project>
