@@ -50,7 +50,8 @@
   * [`timeFormat`](#attr_timeFormat) : Format string to use for any {time} fields
 
   Additionally the user can provide a valid function as a column `content` to calculate a
-  custom entry for a column (see [`columns.content`](#attr_columns.content))
+  custom entry for 
+  <br/>a column (see [`columns.content`](#attr_columns.content) or [`calcDatasetValue`](#method_calcDatasetValue))
 
   #### Usage
 
@@ -236,30 +237,17 @@
 
 
       /**
-       * Calls the helper function to construct and render the initial footer
-       * @method render
-       * @chainable
-       */
-      render: function() {
-          this.renderFooter();
-          return this;
-      },
-
-// --------------------------------------------------------------------------------
-//               Public Methods
-// --------------------------------------------------------------------------------
-
-      /**
        * Creates the DOM elements and attaches them to the footerView container.
        *  Reads the configuration parameters (i.e. from DataTable's config as "footerConfig")
        *  and structures a single TR element, with a leading TH in first column, and the
        *  requested TD elements following.
        *
-       * @method renderFooter
+       * @method render
        * @public
        * @chainable
+       * @return this
        */
-      renderFooter: function(){
+      render: function(){
           var foot_cont = this.get('container'),      // reference to the TFOOT, created by DataTable
               table_obj = this._dt,                   // reference to the parent DataTable instance
               columns   = table_obj.get('columns'),   // reference to the ModelList / or DataTable.data
@@ -294,6 +282,7 @@
           Y.Object.each(replacer_obj,function(val,key,obj){
               obj[ key.toLowerCase() ] = val;
           });
+
           //
           //  Process the TH part
           //
@@ -306,13 +295,13 @@
               });
 
               var th_item = {
-                  index:		0,
-                  key:		0,
-                  td:			null,
-                  th:         foot_cfg.heading,
-                  className:	foot_cfg.className || '',
-                  formatter:	'',
-                  content:    null
+                  index:	 0,
+                  key:		 0,
+                  td:		 null,
+                  th:        foot_cfg.heading,
+                  className: foot_cfg.heading.className || '',
+                  formatter: '',
+                  content:   null
               };
 
               // save this for later ... used by refreshFooter
@@ -328,13 +317,13 @@
           for(var i=cspan; i<columns.length; i++) {
               var titem = columns[i];
               td_html.push({
-                  index:		i,
-                  key:		titem.key,
-                  td:			null,
-                  th:         null,
-                  className:	titem.className || '',
-                  formatter:	titem.formatter || '',
-                  content:    null  //titem.content || null
+                  index:	 i,
+                  key:		 titem.key,
+                  td:		 null,
+                  th:        null,
+                  className: titem.className || '',   // copy over this DT's column class
+                  formatter: titem.formatter || '',   //                   and formatter
+                  content:   null
               });
           }
 
@@ -359,6 +348,12 @@
 
                   td_html[imatch].content = fitem.content || null;
                   td_html[imatch].foot_cfg = fitem;
+
+                  if ( fitem.formatter )
+                      td_html[imatch].formatter = fitem.formatter;
+
+                  if ( fitem.className )
+                      td_html[imatch].className = fitem.className;
               }
 
           }, this);
@@ -392,10 +387,21 @@
 
           var foot_tr = foot_cont.append( Y.Node.create(tr) );
 
+          this.fire('renderFooter');
+
           return this;
 
       },
 
+     /**
+      * Fires after the footer has been created and rendered.
+      * @event renderFooter
+      * @param none
+      */
+
+// --------------------------------------------------------------------------------
+//               Public Methods
+// --------------------------------------------------------------------------------
 
       /**
        * Calculates a DataSet summary item defined in 'calc' for the given colKey, by
@@ -420,10 +426,12 @@
        * If 'calc' argument is a function(), then call it (in the "this" context of this
        *  FooterView) with one argument, the DataTable.data property.
        *
-       *  // TODO:  Consider one call to this (with mult keys) for one loop thru only ...
+       * Doesn't handle non-numeric calculations (i.e. `Date` or `String`)
        *
-       * // not a really possible use case, but ...
-       *   ? whatif user tries to enter calc='this is a {sum} and {min} value' ??
+       * TODO:  Consider one call to this (with mult keys) for one loop thru only ...
+       *
+       *  not a really possible use case, but ...
+       *  whatif user tries to enter calc='this is a {sum} and {min} value' ??
        *
        * @method calcDatasetValue
        * @param {String} colKey  The column key name to be calculated
@@ -434,9 +442,9 @@
       calcDatasetValue: function(colKey, calc) {
 
           var rs_data = this._dt.get("data"),    // this is a modelList currently
-              rcalc   = 0,
-              rmin    = Number.POSITIVE_INFINITY,
-              rmax    = Number.POSITIVE_INFINITY;
+              rcalc   = 0;
+
+          // If a string, then process it ....
 
           if ( Y.Lang.isString(calc) ) {
               var lcalc = calc.toLowerCase(),
@@ -462,8 +470,15 @@
               //  March thru the dataset, operating on the 'calc' item
               //
               rs_data.each( function(item) {
+                  var colItem = item.get(colKey),
+                      rflt    = +colItem;
+           /*
+              TODO:  For handling date / string set calclations ...
 
-                  var rflt = parseFloat( item.get(colKey) );
+                    rflt    = (Y.Lang.isNumber(colItem) && colItem ) ? parseFloat(colItem) : null,
+                    rstr    = (Y.Lang.isString(colItem) && colItem ) ? colItem : null,
+                    rdate   = ( colItem.now ) ? rdate : null;
+            */
 
                   if ( lcalc.search(/{sum}/) !== -1 || avg !==-1 )
                       rcalc += rflt;
@@ -488,9 +503,11 @@
 
           }
 
+          // If numeric, just return it the data .. unformatted
           if ( Y.Lang.isNumber(calc) )
               return calc;
 
+          // If a function was entered, execute it in DataTable context, passing the "data" set as argument
           if ( Y.Lang.isFunction(calc) ) {
               var rtn = calc.call(this,rs_data);
               return rtn;
@@ -523,7 +540,7 @@
           var fmtr = ( foot_col.formatter && Y.Lang.isFunction(foot_col.formatter) ) ? foot_col.formatter :
               ( col.formatter && Y.Lang.isFunction(col.formatter) ) ? col.formatter : null;
 
-          rval = ( fmtr ) ? fmtr.call( this, {value:rval, column:col} ) : rval;
+          rval = ( fmtr && fmtr.call ) ? fmtr.call( this, {value:rval, column:col} ) : rval;
 
           if ( Y.Lang.isFunction(foot_col.content) ) {
               return rval;
@@ -548,11 +565,12 @@
        */
       refreshFooter: function(){
           var table_obj = this._dt,
-              foot_cont = table_obj._tfootNode, // this.get('container').one('tfoot'),
+              foot_cont = table_obj._tfootNode,
               td_nodes  = foot_cont.all('th,td');
 
           //
           // Loop through each footer "cell" (i.e. either a TH or TD) and
+          //
           Y.Array.each( this.node_cols, function(fitem,findex) {
               var td_html;
               if ( fitem.th ) {
@@ -570,6 +588,7 @@
                   td_html = this.fnReplace( fitem.th.content, replacer_obj );
               }
 
+              // call formatFootCell, which calculates the current cell content and formats it
               if ( !fitem.th && fitem.content ) {
                   td_html = this.formatFootCell( fitem, fitem.foot_cfg);
               }
@@ -578,9 +597,18 @@
 
           }, this);
 
+          this.fire('refreshFooter');
+
           return this;
 
       },
+
+     /**
+      * Fires after the footer has been recalculated and updated.
+      * @event refreshFooter
+      * @param none
+      */
+
 
       /**
        * For scrollable tables only, adjusts the sizes of the TFOOT cells to match the widths
@@ -624,9 +652,16 @@
               });
           }
 
+          this.fire('resizeFooter');
+
           return this;
       },
 
+     /**
+      * Fires after the footer has been resized to match the parent DataTable
+      * @event resizeFooter
+      * @param none
+      */
 
 // --------------------------------------------------------------------------------
 //               Protected Methods
@@ -679,5 +714,114 @@
           }
 
       }
+
+
+// --------------- PSEUDO-ATTRIBUTES ... i.e. attributes expected, but in DataTable's footerConfig ------------------
+
+    /**
+    Flag indicating if the footer is desired to be "fixed" (i.e. non-scrolling, true) or floating with Datatable scrolling (false)
+    @attribute fixed
+    @type boolean
+    @default false
+    **/
+
+    /**
+    Defines the TH properties for the footer row, the leftmost column (including optional colspan)
+    @attribute heading
+    @type Object
+    @default null
+    **/
+
+    /**
+    A string template defining the contents of the TH column.  May include any non-set related fields, including `{row_count}`, `{col_count}`, `{date}`,`{time}`
+
+    Example:
+
+        heading.content : 'Totals for {row_count} Orders as-of {date} :'
+
+    @attribute heading.content
+    @type String
+    @default null
+    **/
+
+    /**
+    The number of columns from the DataTable columns that should be spanned for the TH in the footer
+    @attribute heading.colspan
+    @type Integer
+    @default 1
+    **/
+
+    /**
+    A CSS class name to be added to the TH element of the footer
+    @attribute heading.className
+    @type String
+    @default null
+    **/
+
+    /**
+    An array of objects, one row per *desired* column of TD representing a summary from the dataset.
+
+    Only TD's with a row included in this array will be processed and rendered, otherwise any visible
+     columns from the DataTable, that are not within a TH colspan, will be created as empty.
+    @attribute columns
+    @type Array
+    @default null
+    **/
+
+    /**
+    The dataset "key" corresponding to the columns of the DataTable for this desired TD in the footer.
+    @attribute columns.key
+    @type String
+    @default null
+    **/
+
+    /**
+    A string template defining the contents of this TD column in the footer.  May include any set-based (i.e. `{sum}`,`{min}`,`{max}`,`{avg}`) or non-set related fields, including `{row_count}`, `{col_count}`, `{date}`,`{time}`.
+    <br/>The {average} and {mean} placeholders are equivalent to {avg} in this implementation.
+
+    Example:
+
+        columns[2].content : '{sum}'
+
+    @attribute columns.content
+    @type String
+    @default null
+    **/
+
+    /**
+    A CSS class name to be added to this TD element of the footer
+    @attribute columns.className
+    @type String
+    @default null
+    **/
+
+
+    /**
+    Specifies a formatter to apply to the numeric field denoted in this TD column.  A formatter from the original DataTable columns can be specified.
+
+    If this attribute is set to null (or missing), the formatter from the DataTable column associated with the "key" (if any), will be used.
+
+    If this attribute is set to '', no formatting will be applied.
+
+    @attribute columns.formatter
+    @type {String|Function}
+    @default null
+    **/
+
+    /**
+    Specifies a strftime format string to be applied for {date} entries, using Y.DataType.Date.format
+    @attribute dateFormat
+    @type String
+    @default "%D"
+    **/
+
+    /**
+    Specifies a strftime format string to be applied for {time} entries, using Y.DataType.Date.format
+    @attribute timeFormat
+    @type String
+    @default "%T"
+    **/
+
+
 
   });

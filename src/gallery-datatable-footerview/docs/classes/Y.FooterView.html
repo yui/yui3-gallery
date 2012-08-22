@@ -165,7 +165,8 @@ DataTable {configs} (see usage example below);</p>
 </ul>
 
 <p>Additionally the user can provide a valid function as a column <code>content</code> to calculate a
-custom entry for a column (see <a href="#attr_columns.content"><code>columns.content</code></a>)</p>
+custom entry for 
+<br/>a column (see <a href="#attr_columns.content"><code>columns.content</code></a> or <a href="#method_calcDatasetValue"><code>calcDatasetValue</code></a>)</p>
 
 <h4>Usage</h4>
 
@@ -208,6 +209,10 @@ dtable.render('#salesDT');
             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
+            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
+        
+        
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
         
     </ul>
 
@@ -263,15 +268,8 @@ dtable.render('#salesDT');
                                 
                             </li>
                         
-                            <li class="index-item method">
-                                <a href="#method_render">render</a>
-
-                                
-                                
-                            </li>
-                        
                             <li class="index-item method public">
-                                <a href="#method_renderFooter">renderFooter</a>
+                                <a href="#method_render">render</a>
 
                                 
                                 
@@ -371,7 +369,92 @@ dtable.render('#salesDT');
             
 
             
+                <div class="index-section attrs">
+                    <h3>Attributes</h3>
 
+                    <ul class="index-list attrs">
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_columns">columns</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_columns.className">columns.className</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_columns.content">columns.content</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_columns.formatter">columns.formatter</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_columns.key">columns.key</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_dateFormat">dateFormat</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_fixed">fixed</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_heading">heading</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_heading.className">heading.className</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_heading.colspan">heading.colspan</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_heading.content">heading.content</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_timeFormat">timeFormat</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events">
+                        
+                            <li class="index-item event">
+                                <a href="#event_refreshFooter">refreshFooter</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_renderFooter">renderFooter</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_resizeFooter">resizeFooter</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
             
         </div>
 
@@ -414,7 +497,7 @@ dtable.render('#salesDT');
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l635"><code>js&#x2F;dt_footerview.js:635</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l670"><code>js&#x2F;dt_footerview.js:670</code></a>
         
         </p>
 
@@ -498,7 +581,7 @@ where the footer is expected to remain stationary as the records are scrolled th
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l400"><code>js&#x2F;dt_footerview.js:400</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l406"><code>js&#x2F;dt_footerview.js:406</code></a>
         
         </p>
 
@@ -531,10 +614,12 @@ where the footer is expected to remain stationary as the records are scrolled th
 <p>If 'calc' argument is a function(), then call it (in the "this" context of this
  FooterView) with one argument, the DataTable.data property.</p>
 
-<p>// TODO:  Consider one call to this (with mult keys) for one loop thru only ...</p>
+<p>Doesn't handle non-numeric calculations (i.e. <code>Date</code> or <code>String</code>)</p>
 
-<p>// not a really possible use case, but ...
-  ? whatif user tries to enter calc='this is a {sum} and {min} value' ??</p>
+<p>TODO:  Consider one call to this (with mult keys) for one loop thru only ...</p>
+
+<p>not a really possible use case, but ...
+ whatif user tries to enter calc='this is a {sum} and {min} value' ??</p>
     </div>
 
     
@@ -630,7 +715,7 @@ where the footer is expected to remain stationary as the records are scrolled th
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l222"><code>js&#x2F;dt_footerview.js:222</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l223"><code>js&#x2F;dt_footerview.js:223</code></a>
         
         </p>
 
@@ -707,7 +792,7 @@ where the footer is expected to remain stationary as the records are scrolled th
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l501"><code>js&#x2F;dt_footerview.js:501</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l518"><code>js&#x2F;dt_footerview.js:518</code></a>
         
         </p>
 
@@ -824,7 +909,7 @@ where the footer is expected to remain stationary as the records are scrolled th
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l194"><code>js&#x2F;dt_footerview.js:194</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l195"><code>js&#x2F;dt_footerview.js:195</code></a>
         
         </p>
 
@@ -911,7 +996,7 @@ where the footer is expected to remain stationary as the records are scrolled th
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l540"><code>js&#x2F;dt_footerview.js:540</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l557"><code>js&#x2F;dt_footerview.js:557</code></a>
         
         </p>
 
@@ -945,7 +1030,7 @@ where the footer is expected to remain stationary as the records are scrolled th
 </div>
 
                 
-                    <div id="method_render" class="method item">
+                    <div id="method_render" class="method item public">
     <h3 class="name"><code>render</code></h3>
 
     
@@ -953,61 +1038,9 @@ where the footer is expected to remain stationary as the records are scrolled th
     
 
     
-
-    
-
-    
-
-    
-
-    
-
-    
-        <span class="flag chainable">chainable</span>
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l238"><code>js&#x2F;dt_footerview.js:238</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Calls the helper function to construct and render the initial footer</p>
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_renderFooter" class="method item public">
-    <h3 class="name"><code>renderFooter</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
     
 
     
@@ -1037,7 +1070,7 @@ where the footer is expected to remain stationary as the records are scrolled th
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l252"><code>js&#x2F;dt_footerview.js:252</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l239"><code>js&#x2F;dt_footerview.js:239</code></a>
         
         </p>
 
@@ -1056,6 +1089,17 @@ where the footer is expected to remain stationary as the records are scrolled th
 
     
 
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    this
+                
+            </div>
+        </div>
     
 
     
@@ -1102,7 +1146,7 @@ where the footer is expected to remain stationary as the records are scrolled th
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l585"><code>js&#x2F;dt_footerview.js:585</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l613"><code>js&#x2F;dt_footerview.js:613</code></a>
         
         </p>
 
@@ -1171,7 +1215,7 @@ of the THEAD cells.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l181"><code>js&#x2F;dt_footerview.js:181</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l182"><code>js&#x2F;dt_footerview.js:182</code></a>
         
         </p>
 
@@ -1224,7 +1268,7 @@ Used to reference changes to DT modellist, and to retrieve the underlying "data"
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l170"><code>js&#x2F;dt_footerview.js:170</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l171"><code>js&#x2F;dt_footerview.js:171</code></a>
         
         </p>
 
@@ -1276,7 +1320,7 @@ Used to reference changes to DT modellist, and to retrieve the underlying "data"
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l154"><code>js&#x2F;dt_footerview.js:154</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l155"><code>js&#x2F;dt_footerview.js:155</code></a>
         
         </p>
 
@@ -1332,7 +1376,7 @@ remaining elements are the TD's for each requested footer field.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l136"><code>js&#x2F;dt_footerview.js:136</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l137"><code>js&#x2F;dt_footerview.js:137</code></a>
         
         </p>
 
@@ -1384,7 +1428,7 @@ remaining elements are the TD's for each requested footer field.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l91"><code>js&#x2F;dt_footerview.js:91</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l92"><code>js&#x2F;dt_footerview.js:92</code></a>
         
         </p>
 
@@ -1436,7 +1480,7 @@ remaining elements are the TD's for each requested footer field.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l124"><code>js&#x2F;dt_footerview.js:124</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l125"><code>js&#x2F;dt_footerview.js:125</code></a>
         
         </p>
 
@@ -1488,7 +1532,7 @@ remaining elements are the TD's for each requested footer field.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l102"><code>js&#x2F;dt_footerview.js:102</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l103"><code>js&#x2F;dt_footerview.js:103</code></a>
         
         </p>
 
@@ -1540,7 +1584,7 @@ remaining elements are the TD's for each requested footer field.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l113"><code>js&#x2F;dt_footerview.js:113</code></a>
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l114"><code>js&#x2F;dt_footerview.js:114</code></a>
         
         </p>
 
@@ -1569,7 +1613,847 @@ remaining elements are the TD's for each requested footer field.</p>
         
 
         
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
 
+                
+                    <div id="attr_columns" class="attr item">
+    <a name="config_columns"></a> 
+    <h3 class="name"><code>columns</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l761"><code>js&#x2F;dt_footerview.js:761</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>An array of objects, one row per <em>desired</em> column of TD representing a summary from the dataset.</p>
+
+<p>Only TD's with a row included in this array will be processed and rendered, otherwise any visible
+ columns from the DataTable, that are not within a TH colspan, will be created as empty.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_columns.className" class="attr item">
+    <a name="config_columns.className"></a> 
+    <h3 class="name"><code>columns.className</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l791"><code>js&#x2F;dt_footerview.js:791</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A CSS class name to be added to this TD element of the footer</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_columns.content" class="attr item">
+    <a name="config_columns.content"></a> 
+    <h3 class="name"><code>columns.content</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l778"><code>js&#x2F;dt_footerview.js:778</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A string template defining the contents of this TD column in the footer.  May include any set-based (i.e. <code>{sum}</code>,<code>{min}</code>,<code>{max}</code>,<code>{avg}</code>) or non-set related fields, including <code>{row_count}</code>, <code>{col_count}</code>, <code>{date}</code>,<code>{time}</code>.
+<br/>The {average} and {mean} placeholders are equivalent to {avg} in this implementation.</p>
+
+<p>Example:</p>
+
+<pre class="code"><code class="prettyprint">columns[2].content : '{sum}'
+</code></pre>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_columns.formatter" class="attr item">
+    <a name="config_columns.formatter"></a> 
+    <h3 class="name"><code>columns.formatter</code></h3>
+    <span class="type">String | Function</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l799"><code>js&#x2F;dt_footerview.js:799</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Specifies a formatter to apply to the numeric field denoted in this TD column.  A formatter from the original DataTable columns can be specified.</p>
+
+<p>If this attribute is set to null (or missing), the formatter from the DataTable column associated with the "key" (if any), will be used.</p>
+
+<p>If this attribute is set to '', no formatting will be applied.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_columns.key" class="attr item">
+    <a name="config_columns.key"></a> 
+    <h3 class="name"><code>columns.key</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l771"><code>js&#x2F;dt_footerview.js:771</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The dataset "key" corresponding to the columns of the DataTable for this desired TD in the footer.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_dateFormat" class="attr item">
+    <a name="config_dateFormat"></a> 
+    <h3 class="name"><code>dateFormat</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l811"><code>js&#x2F;dt_footerview.js:811</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Specifies a strftime format string to be applied for {date} entries, using Y.DataType.Date.format</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &quot;%D&quot;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_fixed" class="attr item">
+    <a name="config_fixed"></a> 
+    <h3 class="name"><code>fixed</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l721"><code>js&#x2F;dt_footerview.js:721</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Flag indicating if the footer is desired to be "fixed" (i.e. non-scrolling, true) or floating with Datatable scrolling (false)</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> false</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_heading" class="attr item">
+    <a name="config_heading"></a> 
+    <h3 class="name"><code>heading</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l728"><code>js&#x2F;dt_footerview.js:728</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Defines the TH properties for the footer row, the leftmost column (including optional colspan)</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_heading.className" class="attr item">
+    <a name="config_heading.className"></a> 
+    <h3 class="name"><code>heading.className</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l754"><code>js&#x2F;dt_footerview.js:754</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A CSS class name to be added to the TH element of the footer</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_heading.colspan" class="attr item">
+    <a name="config_heading.colspan"></a> 
+    <h3 class="name"><code>heading.colspan</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l747"><code>js&#x2F;dt_footerview.js:747</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The number of columns from the DataTable columns that should be spanned for the TH in the footer</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 1</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_heading.content" class="attr item">
+    <a name="config_heading.content"></a> 
+    <h3 class="name"><code>heading.content</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l735"><code>js&#x2F;dt_footerview.js:735</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A string template defining the contents of the TH column.  May include any non-set related fields, including <code>{row_count}</code>, <code>{col_count}</code>, <code>{date}</code>,<code>{time}</code></p>
+
+<p>Example:</p>
+
+<pre class="code"><code class="prettyprint">heading.content : 'Totals for {row_count} Orders as-of {date} :'
+</code></pre>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_timeFormat" class="attr item">
+    <a name="config_timeFormat"></a> 
+    <h3 class="name"><code>timeFormat</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l818"><code>js&#x2F;dt_footerview.js:818</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Specifies a strftime format string to be applied for {time} entries, using Y.DataType.Date.format</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &quot;%T&quot;</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                
+                    <div id="event_refreshFooter" class="events item">
+    <h3 class="name"><code>refreshFooter</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l606"><code>js&#x2F;dt_footerview.js:606</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fires after the footer has been recalculated and updated.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">none</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_renderFooter" class="events item">
+    <h3 class="name"><code>renderFooter</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l396"><code>js&#x2F;dt_footerview.js:396</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fires after the footer has been created and rendered.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">none</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_resizeFooter" class="events item">
+    <h3 class="name"><code>resizeFooter</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_dt_footerview.js.html#l660"><code>js&#x2F;dt_footerview.js:660</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fires after the footer has been resized to match the parent DataTable</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">none</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+            </div>
         
     </div>
 </div>
