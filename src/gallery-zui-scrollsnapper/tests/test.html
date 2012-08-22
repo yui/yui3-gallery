@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>Test ZUI ScrollSnapper</title>
+</head>
+<style>
+li {width:200px;height:300px;border:2px solid #000;background#f00}
+</style>
+<body class="yui3-skin-sam">
+<ul>
+ <li>this is page 1</li>
+ <li>this is page 2</li>
+ <li>this is page 3</li>
+ <li>this is page 4</li>
+ <li>this is page 5</li>
+ <li>this is page 6</li>
+ <li>this is page 7</li>
+ <li>this is page 8</li>
+ <li>this is page 9</li>
+ <li>this is page 0</li>
+</ul>
+</body>
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="../../../build/gallery-zui-scrollsnapper/gallery-zui-scrollsnapper-debug.js"></script> 
+<script>
+YUI().use('gallery-zui-scrollsnapper', function (Y) {
+    var scroll1 = new Y.ScrollView({srcNode: 'ul', height: 400, width: 300, render: true});
+
+    scroll1.plug(Y.zui.ScrollSnapper);
+});
+</script>
+</html>

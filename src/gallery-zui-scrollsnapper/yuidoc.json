@@ -1,0 +1,13 @@
+{
+    "name": "ZUI ScrollSnapper",
+    "description": "ZUI ScrollSnapper is a scrollView plugin to replace YUI3 ScrollViewPaginator plugin.",
+    "version": "0.0.1",
+    "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-scrollsnapper",
+    "options": {
+        "linkNatives": "true",        
+        "attributesEmit": "true",
+        "selleck": "true",
+        "paths": ["./js"],
+        "outdir": "./api"
+    }
+}

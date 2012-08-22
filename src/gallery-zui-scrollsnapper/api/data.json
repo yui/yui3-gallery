@@ -1,0 +1,193 @@
+{
+    "project": {
+        "name": "ZUI ScrollSnapper",
+        "description": "ZUI ScrollSnapper is a scrollView plugin to replace YUI3 ScrollViewPaginator plugin.",
+        "version": "0.0.1",
+        "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-scrollsnapper"
+    },
+    "files": {
+        "js/zui-scrollsnapper.js": {
+            "name": "js/zui-scrollsnapper.js",
+            "modules": {
+                "gallery-zui-scrollsnapper": 1
+            },
+            "classes": {
+                "zui.ScrollSnapper": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "zui": 1
+            }
+        }
+    },
+    "modules": {
+        "gallery-zui-scrollsnapper": {
+            "name": "gallery-zui-scrollsnapper",
+            "submodules": {},
+            "classes": {
+                "zui.ScrollSnapper": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "zui": 1
+            },
+            "tag": "module",
+            "file": "js/zui-scrollsnapper.js",
+            "line": 8,
+            "description": "ZUI ScrollSnapper is a scrollView plugin to replace YUI3 ScrollViewPaginator plugin.\nIt provides same interface and namespace, and better user interaction."
+        }
+    },
+    "classes": {
+        "zui.ScrollSnapper": {
+            "name": "zui.ScrollSnapper",
+            "shortname": "zui.ScrollSnapper",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui",
+            "file": "js/zui-scrollsnapper.js",
+            "line": 8,
+            "description": "ScrollSnapper is a ScrollView plugin to replace YUI3 ScrollViewPaginator.",
+            "extends": "Plugin.Base",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 23,
+            "description": "CSS selector for a page inside the scrollview. The scrollview\nwill snap to the closest page.",
+            "itemtype": "attribute",
+            "name": "selector",
+            "type": "{String}",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 34,
+            "description": "The active page number for a paged scrollview",
+            "itemtype": "attribute",
+            "name": "index",
+            "type": "{Number}",
+            "default": "0",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 61,
+            "description": "The total number of pages",
+            "itemtype": "attribute",
+            "name": "total",
+            "type": "{Number}",
+            "default": "0",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 89,
+            "description": "Update page positions",
+            "itemtype": "method",
+            "name": "_updatePages",
+            "access": "protected",
+            "tagname": "",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 103,
+            "description": "internal scrollEnd event handler",
+            "itemtype": "method",
+            "name": "_scrollEnded",
+            "access": "protected",
+            "tagname": "",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 121,
+            "description": "Snap to a page, same as set('index', page)",
+            "itemtype": "method",
+            "name": "snapTo",
+            "params": [
+                {
+                    "name": "page",
+                    "description": "page index, start from 0",
+                    "type": "Number"
+                }
+            ],
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 131,
+            "description": "Scroll to a given page in the scrollview",
+            "itemtype": "method",
+            "name": "scrollTo",
+            "params": [
+                {
+                    "name": "page",
+                    "description": "page index, start from 0",
+                    "type": "Number"
+                },
+                {
+                    "name": "duration",
+                    "description": "The number of ms the animation should last",
+                    "type": "Number"
+                },
+                {
+                    "name": "easing",
+                    "description": "The timing function to use in the animation",
+                    "type": "String"
+                }
+            ],
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 155,
+            "description": "Scroll to the next page in the scrollview, with animation",
+            "itemtype": "method",
+            "name": "next",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 167,
+            "description": "Scroll to the previous page in the scrollview, with animation",
+            "itemtype": "method",
+            "name": "prev",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollsnapper.js",
+            "line": 179,
+            "description": "Get nearest page index",
+            "itemtype": "method",
+            "name": "snapIndex",
+            "class": "zui.ScrollSnapper",
+            "module": "gallery-zui-scrollsnapper",
+            "namespace": "zui"
+        }
+    ]
+}
