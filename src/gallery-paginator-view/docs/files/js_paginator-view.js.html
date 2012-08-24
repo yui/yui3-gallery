@@ -1117,7 +1117,7 @@ Y.PaginatorView = Y.Base.create(&#x27;paginatorView&#x27;, Y.View, [], {
             model     = this.get(&#x27;model&#x27;),
             selPage   = pag_cont.one(&#x27;.&#x27;+this._classSelectPage);
 
-        console.log(&#x27;updatePageSelect fired after render ...&#x27;);
+        Y.log(&#x27;updatePageSelect fired after render ...&#x27;);
 
         &#x2F;*  clearly, this method is incomplete .... *&#x2F;
     },
@@ -1209,50 +1209,11 @@ Y.PaginatorView = Y.Base.create(&#x27;paginatorView&#x27;, Y.View, [], {
         }
         this.get(&#x27;model&#x27;).set(&#x27;itemsPerPage&#x27;,val);
         this.render();
-    },
-
-    &#x2F;**
-     * Method to sync the container for the paginator View with the underlying DataTable
-     *  &#x27;table&#x27; element.
-     *
-     *  Unfortunately, there isn&#x27;t a distinct, definitive &#x27;render&#x27; complete event due to
-     *   DT&#x27;s complex rendering, so I use a timer function to attempt a resize.
-     *
-     * @method resizePaginator
-     * @public
-     *&#x2F;
-    resizePaginator: function() {
-        if ( this.get(&#x27;paginatorResize&#x27;) !== true || !this.get(&#x27;dt&#x27;) )  return;
-
-        &#x2F;&#x2F;TODO:  this is a total HACK, should figure a better way than later ...
-        if ( !this._syncPaginatorSize() )
-            Y.later(100,this,function(){ this._syncPaginatorSize(); } );
-    },
-
-    &#x2F;**
-     * Method to adjust the CSS width of the paginator container and set it to the
-     *  width of the underlying DT.
-     *
-     * @method _syncPaginatorSize
-     * @returns Boolean if success
-     * @private
-     *&#x2F;
-    _syncPaginatorSize: function() {
-        var tblCont = this.get(&#x27;dt&#x27;).get(&#x27;boundingBox&#x27;).one(&#x27;table&#x27;);
-        if ( !tblCont ) return false;
-
-        this.get(&#x27;container&#x27;).setStyle(&#x27;width&#x27;,tblCont.getComputedStyle(&#x27;width&#x27;));
-        this.fire(&#x27;resize&#x27;);
-        return true;
     }
 
-    &#x2F;**
-     * Fires after the Paginator is resized to match the DataTable size (requires attribute &quot;paginatorResize:true&quot;)
-     * @event resize
-     *&#x2F;
 
     &#x2F;**
-     * Fires after the DataTable change is reflected AND the Paginator has been completely rendered.
+     * Fires after the Paginator has been completely rendered.
      * @event render
      *&#x2F;
 
@@ -1461,7 +1422,7 @@ Y.PaginatorView = Y.Base.create(&#x27;paginatorView&#x27;, Y.View, [], {
         },
 
         &#x2F;**
-
+         Not implemented at this time.
          @attribute selectPageFormat
          @type String
          @default &#x27;Page {page}&#x27;
@@ -1470,21 +1431,6 @@ Y.PaginatorView = Y.Base.create(&#x27;paginatorView&#x27;, Y.View, [], {
         selectPageFormat: {
             value:      &#x27;Page {page}&#x27;,
             validator:  Y.Lang.isString
-        },
-
-        &#x2F;**
-         Flag to indicate if the Paginator container should be re-sized to the DataTable size
-         after rendering is complete.
-
-         This attribute works best with a &quot;bar&quot; type of Paginator that is intended to look integral with a DataTable.
-
-         @attribute paginatorResize
-         @type Boolean
-         @default false
-         **&#x2F;
-        paginatorResize: {
-            value:      false,
-            validator:  Y.Lang.isBoolean
         },
 
         &#x2F;**
@@ -1499,23 +1445,8 @@ Y.PaginatorView = Y.Base.create(&#x27;paginatorView&#x27;, Y.View, [], {
         circular : {
             value:      false,
             validator:  Y.Lang.isBoolean
-        },
-
-        &#x2F;**
-         A reference to the DataTable instance that may be using this paginator-view.  This is used primarily to handle
-         resizing the Paginator View after rendering&#x2F;updating.
-
-         NOTE:  This attribute is usually set by other methods (i.e. Y.DataTable.Paginator) and not required to be set
-         by the user directly.
-
-         @attribute dt
-         @type Y.DataTable
-         @default null
-         **&#x2F;
-        dt: {
-            value:      null,
-            validator:  function(v){ return v instanceof Y.DataTable }
         }
+
     }
 
 });

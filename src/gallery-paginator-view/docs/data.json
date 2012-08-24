@@ -651,46 +651,15 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1124,
-            "description": "Method to sync the container for the paginator View with the underlying DataTable\n 'table' element.\n\n Unfortunately, there isn't a distinct, definitive 'render' complete event due to\n  DT's complex rendering, so I use a timer function to attempt a resize.",
-            "itemtype": "method",
-            "name": "resizePaginator",
-            "access": "public",
-            "tagname": "",
-            "class": "Y.PaginatorView"
-        },
-        {
-            "file": "js/paginator-view.js",
-            "line": 1142,
-            "description": "Method to adjust the CSS width of the paginator container and set it to the\n width of the underlying DT.",
-            "itemtype": "method",
-            "name": "_syncPaginatorSize",
-            "return": {
-                "description": "Boolean if success"
-            },
-            "access": "private",
-            "tagname": "",
-            "class": "Y.PaginatorView"
-        },
-        {
-            "file": "js/paginator-view.js",
-            "line": 1159,
-            "description": "Fires after the Paginator is resized to match the DataTable size (requires attribute \"paginatorResize:true\")",
-            "itemtype": "event",
-            "name": "resize",
-            "class": "Y.PaginatorView"
-        },
-        {
-            "file": "js/paginator-view.js",
-            "line": 1164,
-            "description": "Fires after the DataTable change is reflected AND the Paginator has been completely rendered.",
+            "line": 1125,
+            "description": "Fires after the Paginator has been completely rendered.",
             "itemtype": "event",
             "name": "render",
             "class": "Y.PaginatorView"
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1169,
+            "line": 1130,
             "description": "Fires after the _processPageChange method has updated the pagination state.",
             "itemtype": "event",
             "name": "pageChange",
@@ -706,7 +675,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1178,
+            "line": 1139,
             "description": "The default set of attributes which will be available for instances of this class",
             "itemtype": "property",
             "name": "ATTRS",
@@ -716,7 +685,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1187,
+            "line": 1148,
             "description": "The base PaginatorModel that serves as data / change provider for this View.",
             "example": [
                 "\n     paginator:  new Y.PaginatorModel({\n         itemsPerPage:  250\n     }),\n     OR\n \tpaginator:  myPagModel // where myPagModel is an instance previously created ..."
@@ -729,7 +698,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1207,
+            "line": 1168,
             "description": "The container holder for the contents of this View.  Can be entered either as\na Y.Node instance or as a DOM \"id\" attribute (if prepended by \"#\").",
             "example": [
                 "\n      container: Y.one(\"#myDiv\"),\n      OR\n      container: \"#myDiv\"\n\nNOTE: If the container node contains HTML <b>it will be used as the paginatorTemplate</b>"
@@ -743,7 +712,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1228,
+            "line": 1189,
             "description": "An array that will be used to populate the rows per page SELECT box ( using string replacement \"{selectRowsPerPage}\" or\nclass selector \"yui3-pagview-select-rowsperpage\" ).",
             "itemtype": "attribute",
             "name": "pageOptions",
@@ -753,7 +722,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1241,
+            "line": 1202,
             "description": "A string that defines the Paginator HTML contents.  Can either be entered as a {String} including replacement parameters\nor as a {Node} instance whose contents will be read via .getHTML() or a DOM \"id\" element (indicated by '#' in first character)\n<br/><br/>\nTo disable creation of any template (in order to do your own replacements of the template), set this to ''.",
             "example": [
                 "\n      paginatorTemplate:  '<div data-pglink=\"first\">FIRST</div> {pageLinks} <div data-pglink=\"last\">LAST</div>',\n      paginatorTemplate:  Y.one('#script-id-tmpl'),\n      paginatorTemplate:  Y.one('#script-id-tmpl').getHTML(),\n      paginatorTemplate:  '#script-id-tmpl',   // where"
@@ -766,7 +735,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1263,
+            "line": 1224,
             "description": "Defines the HTML template to be used for each individual page within the Paginator.  This can be used along\nwith replacement tokens to create UI elements for each page link.  The template is used to construct the\n`{pageLinks}` replacement token with the paginator body.\n\nRecognized replacement tokens most appropriate to this attribute are `{page}`, `{pageStartIndex}` and\n`{pageEndIndex}`.\n\nA few examples of this template are listed below;",
             "example": [
                 "\n       pageLinkTemplate: '<a href=\"#\" data-pglink=\"{page}\" class=\"\" title=\"Page No. {page}\">{page}</a>'"
@@ -779,7 +748,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1291,
+            "line": 1252,
             "description": "Used to set the maximum number of page links that will be displayed for individual pages within `{pageLinks}`.\nThis is the primary attribute to use to setup **abbreviated page links**, to avoid a long line of page links\nthat travel across the page!\n\nSetting this to some number less than the total number of pages will begin abbreviating the links.\n<br/>(See also attributes [`linkListOffset`](#attr_linkListOffset) and [`pageLinkFiller`](#attr_pageLinkFiller), which work in conjunction with this attribute).",
             "itemtype": "attribute",
             "name": "maxPageLinks",
@@ -789,7 +758,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1308,
+            "line": 1269,
             "description": "Setting that represents the number of links adjacent to the current page that should be displayed for instances where\nan *abbreviated* page link list is desired.\n<br/>(See [maxPageLinks](#attr_maxPageLinks) and [pageLinkFiller](#attr_pageLinkFiller) attributes).\n\nFor example, a setting of this attribute to 1, will result in 3 page links (current page plus 1 each side),\n<br/>likewise a setting of 2, will results in 5 page links in the center of the paginator, etc.",
             "itemtype": "attribute",
             "name": "linkListOffset",
@@ -799,7 +768,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1325,
+            "line": 1286,
             "description": "Setting the the \".. more\" indicator to be used specifically for *abbreviated* page link lists.\n<br/>(See [maxPageLinks](#attr_maxPageLinks) and [linkListOffset](#attr_linkListOffset) attributes).",
             "itemtype": "attribute",
             "name": "pageLinkFiller",
@@ -809,7 +778,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1338,
+            "line": 1299,
             "description": "Flag to indicate whether the first page link **within the `{pageLinks}` template** is to be displayed or not.\n<br/>Specifically intended for *abbreviated* page link lists (See [maxPageLinks](#attr_maxPageLinks) attribute).\n\nFor Example;\n<br/>If our paginator state currently has 9 pages, and the current page is 5, if `alwaysShowLast:false` and `alwaysShowFirst:false`\n   the link list will resemble;<br/>First | Prev | ... 4 5 6 ... | Next | Last\n\n   Likewise, with `'alwaysShowLast:true` (and alwaysShowFirst:true) the link list will resemble;\n<br/>First | Prev | 1 ... 4 5 6 ... 9 | Next | Last",
             "itemtype": "attribute",
             "name": "alwaysShowFirst",
@@ -819,7 +788,7 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1358,
+            "line": 1319,
             "description": "Flag to indicate whether the last page link **within the `{pageLinks}` template** is to be displayed or not.\n<br/>Specifically intended for *abbreviated* page link lists (See [maxPageLinks](#attr_maxPageLinks) attribute).\n\nSee `alowsShowFirst` for an example.",
             "itemtype": "attribute",
             "name": "alwaysShowLast",
@@ -829,7 +798,8 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1373,
+            "line": 1334,
+            "description": "Not implemented at this time.",
             "itemtype": "attribute",
             "name": "selectPageFormat",
             "type": "String",
@@ -839,32 +809,12 @@
         },
         {
             "file": "js/paginator-view.js",
-            "line": 1385,
-            "description": "Flag to indicate if the Paginator container should be re-sized to the DataTable size\nafter rendering is complete.\n\nThis attribute works best with a \"bar\" type of Paginator that is intended to look integral with a DataTable.",
-            "itemtype": "attribute",
-            "name": "paginatorResize",
-            "type": "Boolean",
-            "default": "false",
-            "class": "Y.PaginatorView"
-        },
-        {
-            "file": "js/paginator-view.js",
-            "line": 1400,
+            "line": 1346,
             "description": "Flag indicating whether \"circular\" behavior of the Paginator View is desired.  If `true` the paginator\nwill stop \"disabling\" First|Previous or Next|Last toggling and will continue at either 1st page or last\npage selections.  (i.e. when on *last* page, a *next* click will return to page 1)",
             "itemtype": "attribute",
             "name": "circular",
             "type": "Boolean",
             "default": "false",
-            "class": "Y.PaginatorView"
-        },
-        {
-            "file": "js/paginator-view.js",
-            "line": 1414,
-            "description": "A reference to the DataTable instance that may be using this paginator-view.  This is used primarily to handle\nresizing the Paginator View after rendering/updating.\n\nNOTE:  This attribute is usually set by other methods (i.e. Y.DataTable.Paginator) and not required to be set\nby the user directly.",
-            "itemtype": "attribute",
-            "name": "dt",
-            "type": "Y.DataTable",
-            "default": "null",
             "class": "Y.PaginatorView"
         }
     ]
