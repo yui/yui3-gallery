@@ -159,6 +159,13 @@
                             </li>
                         
                             <li class="index-item method private">
+                                <a href="#method__getSelectedCells">_getSelectedCells</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method__getSelectedRecords">_getSelectedRecords</a>
 
                                 
@@ -194,6 +201,13 @@
                             </li>
                         
                             <li class="index-item method private">
+                                <a href="#method__setSelectedCells">_setSelectedCells</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method__setSelectedRecords">_setSelectedRecords</a>
 
                                 
@@ -209,6 +223,27 @@
                         
                             <li class="index-item method public">
                                 <a href="#method_destructor">destructor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_getColumnByTd">getColumnByTd</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_getColumnNameByTd">getColumnNameByTd</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_getSelectedTds">getSelectedTds</a>
 
                                 
                                 
@@ -380,7 +415,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l369"><code>js&#x2F;datatable-selection.js:369</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l497"><code>js&#x2F;datatable-selection.js:497</code></a>
         
         </p>
 
@@ -463,7 +498,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l277"><code>js&#x2F;datatable-selection.js:277</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l336"><code>js&#x2F;datatable-selection.js:336</code></a>
         
         </p>
 
@@ -489,6 +524,134 @@
                         <span class="type">Array</span>:
                     
                     selections Array of selected TR's and/or TD's
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__getSelectedCells" class="method item private">
+    <h3 class="name"><code>_getSelectedCells</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>cells.record</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>cells.column</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l353"><code>js&#x2F;datatable-selection.js:353</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Getter method that returns an Array of the selected cells in {record,column} coordinate format.
+If rows or TR elements were selected, it adds all of the row's child TD's.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">cells.record</code>
+                        <span class="type">Model</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Record for this cell as a Y.Model</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">cells.column</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Column for this cell defined in original "columns" DataTable attribute</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                    cells The selected cells in {record:, column:} format
                 
             </div>
         </div>
@@ -536,7 +699,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l312"><code>js&#x2F;datatable-selection.js:312</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l437"><code>js&#x2F;datatable-selection.js:437</code></a>
         
         </p>
 
@@ -547,8 +710,10 @@
     </div>
 
     <div class="description">
-        <p>Returns an array of DataTable records (Y.Model) based on the current "selected" items, either
-TR's or TD's.</p>
+        <p>A getter method for the <code>selectedRecords</code> attribute that returns an array of DataTable records (Y.Model)
+ based on the current "selected" items, either TR's or TD's.</p>
+
+<p>If TD's were selected it converts them to their base record.</p>
     </div>
 
     
@@ -616,7 +781,7 @@ TR's or TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l227"><code>js&#x2F;datatable-selection.js:227</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l286"><code>js&#x2F;datatable-selection.js:286</code></a>
         
         </p>
 
@@ -721,7 +886,7 @@ TR's or TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l328"><code>js&#x2F;datatable-selection.js:328</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l455"><code>js&#x2F;datatable-selection.js:455</code></a>
         
         </p>
 
@@ -856,7 +1021,7 @@ returns the current <code>selectionMode</code> or <code>highlightMode</code> Nod
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l237"><code>js&#x2F;datatable-selection.js:237</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l296"><code>js&#x2F;datatable-selection.js:296</code></a>
         
         </p>
 
@@ -951,7 +1116,7 @@ the current selection to the this._selections property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l381"><code>js&#x2F;datatable-selection.js:381</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l509"><code>js&#x2F;datatable-selection.js:509</code></a>
         
         </p>
 
@@ -1011,6 +1176,142 @@ a new delegated "mouseover" handler that updates the <code>highlighted</code> at
 </div>
 
                 
+                    <div id="method__setSelectedCells" class="method item private">
+    <h3 class="name"><code>_setSelectedCells</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>val</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l378"><code>js&#x2F;datatable-selection.js:378</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Setter method for attribute <code>selectedCells</code> that takes an array of cells as input and sets them
+as the current selected set with appropriate visual class.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">val</code>
+                        <span class="type">Array</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The desired cells to set as selected, in {record:,column:} format</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">record</code>
+                                    <span class="type">String | Number</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Record for this cell as either record index or record clientId</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">column</code>
+                                    <span class="type">String | Number</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Column for this cell as either the column index or "key" or "name"</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method__setSelectedRecords" class="method item private">
     <h3 class="name"><code>_setSelectedRecords</code></h3>
 
@@ -1059,7 +1360,7 @@ a new delegated "mouseover" handler that updates the <code>highlighted</code> at
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l287"><code>js&#x2F;datatable-selection.js:287</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l412"><code>js&#x2F;datatable-selection.js:412</code></a>
         
         </p>
 
@@ -1070,8 +1371,9 @@ a new delegated "mouseover" handler that updates the <code>highlighted</code> at
     </div>
 
     <div class="description">
-        <p>This method take as input an array of desired DataTable record indices to be changed to,
-clears existing selections, set the "selected" to the records and highlights the "selected" TR's</p>
+        <p>A setter method for attribute <code>selectedRecords</code> that takes as input an array of desired DataTable
+record indices to be "selected", clears existing selections and sets the "selected" records and
+highlights the TR's</p>
     </div>
 
     
@@ -1166,7 +1468,7 @@ clears existing selections, set the "selected" to the records and highlights the
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l403"><code>js&#x2F;datatable-selection.js:403</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l531"><code>js&#x2F;datatable-selection.js:531</code></a>
         
         </p>
 
@@ -1260,7 +1562,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l191"><code>js&#x2F;datatable-selection.js:191</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l192"><code>js&#x2F;datatable-selection.js:192</code></a>
         
         </p>
 
@@ -1276,6 +1578,292 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
 
     
 
+    
+
+    
+</div>
+
+                
+                    <div id="method_getColumnByTd" class="method item public">
+    <h3 class="name"><code>getColumnByTd</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>cell</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l210"><code>js&#x2F;datatable-selection.js:210</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns the Column object (from the original "columns") associated with the input TD Node.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">cell</code>
+                        <span class="type">Node</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Node of TD for which column object is desired</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    column The column object entry associated with the desired cell
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getColumnNameByTd" class="method item public">
+    <h3 class="name"><code>getColumnNameByTd</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>cell</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l223"><code>js&#x2F;datatable-selection.js:223</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns the column "key" or "name" string for the requested TD Node</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">cell</code>
+                        <span class="type">Node</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Node of TD for which column name is desired</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                    colName Column name or key name
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getSelectedTds" class="method item public">
+    <h3 class="name"><code>getSelectedTds</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l246"><code>js&#x2F;datatable-selection.js:246</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Utility method that will return all selected TD Nodes for the current "selected" set.
+If selections include a TR row, all child TD's from the row are included.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                    tds Array of selected TD's as Nodes
+                
+            </div>
+        </div>
     
 
     
@@ -1316,7 +1904,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l172"><code>js&#x2F;datatable-selection.js:172</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l173"><code>js&#x2F;datatable-selection.js:173</code></a>
         
         </p>
 
@@ -1373,7 +1961,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l132"><code>js&#x2F;datatable-selection.js:132</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l133"><code>js&#x2F;datatable-selection.js:133</code></a>
         
         </p>
 
@@ -1423,7 +2011,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l142"><code>js&#x2F;datatable-selection.js:142</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l143"><code>js&#x2F;datatable-selection.js:143</code></a>
         
         </p>
 
@@ -1473,7 +2061,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l152"><code>js&#x2F;datatable-selection.js:152</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l153"><code>js&#x2F;datatable-selection.js:153</code></a>
         
         </p>
 
@@ -1528,7 +2116,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l123"><code>js&#x2F;datatable-selection.js:123</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l124"><code>js&#x2F;datatable-selection.js:124</code></a>
         
         </p>
 
@@ -1793,7 +2381,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l91"><code>js&#x2F;datatable-selection.js:91</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l92"><code>js&#x2F;datatable-selection.js:92</code></a>
         
         </p>
 
@@ -1844,7 +2432,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l77"><code>js&#x2F;datatable-selection.js:77</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l78"><code>js&#x2F;datatable-selection.js:78</code></a>
         
         </p>
 
@@ -1947,7 +2535,7 @@ indices) or returns an array of "selected" records based on the recent selection
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l104"><code>js&#x2F;datatable-selection.js:104</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l105"><code>js&#x2F;datatable-selection.js:105</code></a>
         
         </p>
 
@@ -2003,7 +2591,7 @@ For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selec
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l270"><code>js&#x2F;datatable-selection.js:270</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l329"><code>js&#x2F;datatable-selection.js:329</code></a>
         
         </p>
 

@@ -1,4 +1,4 @@
-     /**
+    /**
      A class extension for DataTable that adds "highlight" and "select" actions via mouse selection.
 
      @module DataTable
@@ -71,7 +71,8 @@
             value:      [],
             readOnly:   true,
             validator:  Y.Lang.isArray,
-            getter:     '_getSelected'
+            getter:     '_getSelectedRows',
+            //setter:     '_setSelectedRows'
         },
 
         /**
@@ -180,8 +181,8 @@
             this._eventHandles.selector.push( this.on('highlightedChange',this._highlightChange) );
             this._eventHandles.selector.push( this.on('selectedChange',this._selectedChange) );
 
-            this._classHighlight = 'highlighted'; //this.getClassName('selection','highlighted');
-            this._classSelected  = 'selected'; //this.getClassName('selection','selected');
+            this._classHighlight = 'highlighted';   //this.getClassName('selection','highlighted');
+            this._classSelected  = 'selected';      //this.getClassName('selection','selected');
 
             this._clickModifiers = {
                 ctrlKey:null, altKey:null, metaKey:null, shiftKey:null, which:null, button:null
@@ -205,6 +206,64 @@
 //------------------------------------------------------------------------------------------------------
 //        P U B L I C     M E T H O D S
 //------------------------------------------------------------------------------------------------------
+
+        /**
+         * Returns the Column object (from the original "columns") associated with the input TD Node.
+         * @method getColumnByTd
+         * @param {Node} cell Node of TD for which column object is desired
+         * @return {Object} column The column object entry associated with the desired cell
+         * @public
+         */
+        getColumnByTd:  function(cell){
+            var colName = this.getColumnNameByTd(cell);
+            return (colName) ? this.getColumn(colName) : null;
+        },
+
+
+        /**
+         * Returns the column "key" or "name" string for the requested TD Node
+         * @method getColumnNameByTd
+         * @param {Node} cell Node of TD for which column name is desired
+         * @return {String} colName Column name or key name
+         * @public
+         */
+        getColumnNameByTd: function(cell){
+            var classes = cell.get('className').split(" "),
+                regCol  = new RegExp( this.getClassName('col') + '-(.*)');
+
+            var colName;
+            Y.Array.some(classes,function(item){
+                var colmatch =  item.match(regCol);
+                if ( colmatch && Y.Lang.isArray(colmatch) && colmatch[1] ) {
+                    colName = colmatch[1];
+                    return true;
+                }
+            });
+
+            return colName || null;
+        },
+
+        /**
+         * Utility method that will return all selected TD Nodes for the current "selected" set.
+         * If selections include a TR row, all child TD's from the row are included.
+         *
+         * @method getSelectedTds
+         * @return {Array} tds Array of selected TD's as Nodes
+         * @public
+         */
+        getSelectedTds: function(){
+            var tds = [];
+            Y.Array.each(this._selections,function(item){
+                if ( item.get('tagName').toLowerCase() === 'td' )
+                    tds.push( item );
+                else if ( item.get('tagName').toLowerCase() === 'tr' ) {
+                    var tdNodes = item.all("td");
+                    if ( tdNodes )
+                        tdNodes.each(function(item){ tds.push( item )});
+                }
+            });
+            return tds;
+        },
 
         clearSelections: function(){
             this._selections = [];
@@ -280,38 +339,106 @@
          * @return {Array} selections Array of selected TR's and/or TD's
          * @private
          */
-        _getSelected: function(){
-            return this._selections;
+        _getSelectedRows: function(){
+            var trs = [];
+            Y.Array.each(this._selections,function(item){
+                if ( item.get('tagName').toLowerCase() === 'tr' )
+                    trs.push( item );
+                else
+                    trs.push( item.ancestor('tr') );
+            });
+            return trs;
         },
 
         /**
-         * This method take as input an array of desired DataTable record indices to be changed to,
-         * clears existing selections, set the "selected" to the records and highlights the "selected" TR's
+         * Getter method that returns an Array of the selected cells in {record,column} coordinate format.
+         * If rows or TR elements were selected, it adds all of the row's child TD's.
+         *
+         * @method _getSelectedCells
+         * @return {Array} cells The selected cells in {record:, column:} format
+         * @param {Model} cells.record Record for this cell as a Y.Model
+         * @param {Object} cells.column Column for this cell defined in original "columns" DataTable attribute
+         * @private
+         */
+        _getSelectedCells: function(){
+            var cells = [], td;
+            Y.Array.each(this._selections,function(item){
+                if ( item.get('tagName').toLowerCase() === 'td' )
+                    cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } );
+                else if ( item.get('tagName').toLowerCase() === 'tr' ) {
+                    var tdNodes = item.all("td");
+                    if ( tdNodes )
+                        tdNodes.each(function(item){ cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } )});
+                }
+            },this);
+            return cells;
+        },
+
+
+        /**
+         * Setter method for attribute `selectedCells` that takes an array of cells as input and sets them
+         * as the current selected set with appropriate visual class.
+         *
+         * @method _setSelectedCells
+         * @param {Array} val The desired cells to set as selected, in {record:,column:} format
+         * @param {String|Number} val.record Record for this cell as either record index or record clientId
+         * @param {String|Number} val.column Column for this cell as either the column index or "key" or "name"
+         * @return {Array}
+         * @private
+         */
+        _setSelectedCells: function(val){
+            this._selections = [];
+            if ( Y.Lang.isArray(val) && this.data.size() > val.length ) {
+                Y.Array.each(val,function(item) {
+                    var row, col, td;
+                    if ( item.record ) row = this.getRow( item.record );
+                    if ( item.column ) col = this.getColumn(item.column);
+
+                    if ( row && col ) {
+                        var ckey = col.key || col.name;
+                        if ( ckey ) {
+                            td = row.one('.'+this.getClassName('col')+'-'+ckey);
+                            this._selections.push(td);
+                            td.addClass(this._classSelected);
+                        }
+                    }
+
+                },this);
+            }
+            return val;
+        },
+
+
+        /**
+         * A setter method for attribute `selectedRecords` that takes as input an array of desired DataTable
+         * record indices to be "selected", clears existing selections and sets the "selected" records and
+         * highlights the TR's
+         *
          * @method _setSelectedRecords
          * @param val {Array} recIndices Array of record indices desired to be set as selected.
          * @return {Array} records Array of DataTable records (Y.Model) for each selection chosen
          * @private
          */
         _setSelectedRecords: function(val){
-            var recs = [];
+            this._selections = [];
             if ( Y.Lang.isArray(val) && this.data.size() > val.length ) {
-                var trs = this.get('boundingBox').one("."+this.getClassName('data'));
-                if ( trs ) {
-                    this._selections = [];
-                    this._clearAll(this._classSelected);
-                    trs = trs.all('tr');
-                    Y.Array.each(val,function(item){
-                        this._selections.push( trs.item(item) );
-                        trs.item(item).addClass(this._classSelected);
-                    },this);
-                }
+                Y.Array.each(val,function(item){
+                    var tr = this.getRow(item);
+                    if ( tr ) {
+                        this._selections.push( tr );
+                        tr.addClass(this._classSelected);
+                    }
+                },this);
             }
-            return recs;
+            return val;
         },
 
+
         /**
-         * Returns an array of DataTable records (Y.Model) based on the current "selected" items, either
-         * TR's or TD's.
+         * A getter method for the `selectedRecords` attribute that returns an array of DataTable records (Y.Model)
+         *  based on the current "selected" items, either TR's or TD's.
+         *
+         *  If TD's were selected it converts them to their base record.
          *
          * @method _getSelectedRecords
          * @return {Array} records Array of records from the DataTable based on the selected items
@@ -365,6 +492,7 @@
 
             return tarNew;
         },
+
 
         /**
          * Method removes the specified `type` class from all nodes within the TBODY data node.

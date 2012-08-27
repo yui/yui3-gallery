@@ -128,7 +128,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 77,
+            "line": 78,
             "description": "Attribute that either sets the current \"selected\" records (by entering an array of DataTable record\nindices) or returns an array of \"selected\" records based on the recent selections.",
             "itemtype": "attribute",
             "name": "selectedRecords",
@@ -140,7 +140,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 91,
+            "line": 92,
             "description": "Attribute that sets the initially selected cells TD's or returns the currently selected TD's.",
             "itemtype": "attribute",
             "name": "selectedCells",
@@ -152,7 +152,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 104,
+            "line": 105,
             "description": "Flag to allow either single \"selections\" (false) or multiple selections (true).\nFor Macintosh OSX-type systems the modifier key \"Cmd\" is held for multiple selections,\n and for Windows or Linux type systems the modifier key is \"Ctrl\".",
             "itemtype": "attribute",
             "name": "selectionMulti",
@@ -164,7 +164,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 123,
+            "line": 124,
             "itemtype": "property",
             "name": "_selections",
             "type": "Array",
@@ -178,7 +178,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 132,
+            "line": 133,
             "description": "Holder for the classname for the \"highlight\" TR or TD",
             "itemtype": "property",
             "name": "_classHighlight",
@@ -193,7 +193,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 142,
+            "line": 143,
             "description": "Holder for the classname for the \"selected\" TR or TD",
             "itemtype": "property",
             "name": "_classSelected",
@@ -208,7 +208,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 152,
+            "line": 153,
             "description": "Holder for the most recent \"click\" event modifier keys from last click,\n used for assessing \"multi\" selections.\n\nContains properties;  altKey, ctrlKey, shiftKey, metaKey, button and which\n\nFilled initially by .initializer and on each Table \"click\".",
             "itemtype": "property",
             "name": "_clickModifiers",
@@ -223,7 +223,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 172,
+            "line": 173,
             "description": "Sets listeners and initial class names required for this \"datatable-selector\" module",
             "itemtype": "method",
             "name": "initializer",
@@ -235,7 +235,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 191,
+            "line": 192,
             "description": "Destructor to clean up listener event handlers and the internal storage buffer.",
             "itemtype": "method",
             "name": "destructor",
@@ -247,7 +247,69 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 227,
+            "line": 210,
+            "description": "Returns the Column object (from the original \"columns\") associated with the input TD Node.",
+            "itemtype": "method",
+            "name": "getColumnByTd",
+            "params": [
+                {
+                    "name": "cell",
+                    "description": "Node of TD for which column object is desired",
+                    "type": "Node"
+                }
+            ],
+            "return": {
+                "description": "column The column object entry associated with the desired cell",
+                "type": "Object"
+            },
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-selection.js",
+            "line": 223,
+            "description": "Returns the column \"key\" or \"name\" string for the requested TD Node",
+            "itemtype": "method",
+            "name": "getColumnNameByTd",
+            "params": [
+                {
+                    "name": "cell",
+                    "description": "Node of TD for which column name is desired",
+                    "type": "Node"
+                }
+            ],
+            "return": {
+                "description": "colName Column name or key name",
+                "type": "String"
+            },
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-selection.js",
+            "line": 246,
+            "description": "Utility method that will return all selected TD Nodes for the current \"selected\" set.\nIf selections include a TR row, all child TD's from the row are included.",
+            "itemtype": "method",
+            "name": "getSelectedTds",
+            "return": {
+                "description": "tds Array of selected TD's as Nodes",
+                "type": "Array"
+            },
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-selection.js",
+            "line": 286,
             "description": "Method that updates the \"highlighted\" classes for the selection and unhighlights the prevVal",
             "itemtype": "method",
             "name": "_highlightChange",
@@ -265,7 +327,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 237,
+            "line": 296,
             "description": "Method that updates the \"selected\" classes for the selection and un-selects the prevVal.\nThis method works with multiple selections (via ATTR `selectionMulti` true) by pushing\nthe current selection to the this._selections property.",
             "itemtype": "method",
             "name": "_selectedChange",
@@ -283,7 +345,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 270,
+            "line": 329,
             "itemtype": "event",
             "name": "selected",
             "params": [
@@ -311,7 +373,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 277,
+            "line": 336,
             "description": "Returns the current \"raw\" settings of selections (includes multiple selections)",
             "itemtype": "method",
             "name": "_getSelected",
@@ -327,8 +389,71 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 287,
-            "description": "This method take as input an array of desired DataTable record indices to be changed to,\nclears existing selections, set the \"selected\" to the records and highlights the \"selected\" TR's",
+            "line": 353,
+            "description": "Getter method that returns an Array of the selected cells in {record,column} coordinate format.\nIf rows or TR elements were selected, it adds all of the row's child TD's.",
+            "itemtype": "method",
+            "name": "_getSelectedCells",
+            "return": {
+                "description": "cells The selected cells in {record:, column:} format",
+                "type": "Array"
+            },
+            "params": [
+                {
+                    "name": "cells.record",
+                    "description": "Record for this cell as a Y.Model",
+                    "type": "Model"
+                },
+                {
+                    "name": "cells.column",
+                    "description": "Column for this cell defined in original \"columns\" DataTable attribute",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-selection.js",
+            "line": 378,
+            "description": "Setter method for attribute `selectedCells` that takes an array of cells as input and sets them\nas the current selected set with appropriate visual class.",
+            "itemtype": "method",
+            "name": "_setSelectedCells",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "The desired cells to set as selected, in {record:,column:} format",
+                    "type": "Array",
+                    "props": [
+                        {
+                            "name": "record",
+                            "description": "Record for this cell as either record index or record clientId",
+                            "type": "String|Number"
+                        },
+                        {
+                            "name": "column",
+                            "description": "Column for this cell as either the column index or \"key\" or \"name\"",
+                            "type": "String|Number"
+                        }
+                    ]
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-selection.js",
+            "line": 412,
+            "description": "A setter method for attribute `selectedRecords` that takes as input an array of desired DataTable\nrecord indices to be \"selected\", clears existing selections and sets the \"selected\" records and\nhighlights the TR's",
             "itemtype": "method",
             "name": "_setSelectedRecords",
             "params": [
@@ -350,8 +475,8 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 312,
-            "description": "Returns an array of DataTable records (Y.Model) based on the current \"selected\" items, either\nTR's or TD's.",
+            "line": 437,
+            "description": "A getter method for the `selectedRecords` attribute that returns an array of DataTable records (Y.Model)\n based on the current \"selected\" items, either TR's or TD's.\n\n If TD's were selected it converts them to their base record.",
             "itemtype": "method",
             "name": "_getSelectedRecords",
             "return": {
@@ -366,7 +491,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 328,
+            "line": 455,
             "description": "Method used to derive from the clicked selection, either the TR or TD of the selection, and\nreturns the current `selectionMode` or `highlightMode` Node (based on the setting of prefix).\n\nThis method adds the required class, and if erasePrev is true, removes the class from the prior setting.",
             "itemtype": "method",
             "name": "_processNodeAction",
@@ -399,7 +524,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 369,
+            "line": 497,
             "description": "Method removes the specified `type` class from all nodes within the TBODY data node.",
             "itemtype": "method",
             "name": "_clearAll",
@@ -418,7 +543,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 381,
+            "line": 509,
             "description": "Setter for `highlightMode` attribute, removes prior event handle (if exists) and defines\na new delegated \"mouseover\" handler that updates the `highlighted` attribute.\n\nA change to this setting clears all prior highlighting.",
             "itemtype": "method",
             "name": "_setHighlightMode",
@@ -440,7 +565,7 @@
         },
         {
             "file": "js/datatable-selection.js",
-            "line": 403,
+            "line": 531,
             "description": "Setter for `selectionMode` attribute, removes prior event handle (if exists) and defines\na new delegated \"click\" handler that updates the `selected` attribute.\n\nA change to this setting clears all prior selections.",
             "itemtype": "method",
             "name": "_setSelectionMode",
