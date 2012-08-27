@@ -1027,7 +1027,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             model     = this.get('model'),
             selPage   = pag_cont.one('.'+this._classSelectPage);
 
-        Y.log('updatePageSelect fired after render ...');
+        //Y.log('updatePageSelect fired after render ...');
 
         /*  clearly, this method is incomplete .... */
     },
