@@ -1027,7 +1027,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             model     = this.get('model'),
             selPage   = pag_cont.one('.'+this._classSelectPage);
 
-        console.log('updatePageSelect fired after render ...');
+        //Y.log('updatePageSelect fired after render ...');
 
         /*  clearly, this method is incomplete .... */
     },
@@ -1119,50 +1119,11 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         }
         this.get('model').set('itemsPerPage',val);
         this.render();
-    },
-
-    /**
-     * Method to sync the container for the paginator View with the underlying DataTable
-     *  'table' element.
-     *
-     *  Unfortunately, there isn't a distinct, definitive 'render' complete event due to
-     *   DT's complex rendering, so I use a timer function to attempt a resize.
-     *
-     * @method resizePaginator
-     * @public
-     */
-    resizePaginator: function() {
-        if ( this.get('paginatorResize') !== true || !this.get('dt') )  return;
-
-        //TODO:  this is a total HACK, should figure a better way than later ...
-        if ( !this._syncPaginatorSize() )
-            Y.later(100,this,function(){ this._syncPaginatorSize(); } );
-    },
-
-    /**
-     * Method to adjust the CSS width of the paginator container and set it to the
-     *  width of the underlying DT.
-     *
-     * @method _syncPaginatorSize
-     * @returns Boolean if success
-     * @private
-     */
-    _syncPaginatorSize: function() {
-        var tblCont = this.get('dt').get('boundingBox').one('table');
-        if ( !tblCont ) return false;
-
-        this.get('container').setStyle('width',tblCont.getComputedStyle('width'));
-        this.fire('resize');
-        return true;
     }
 
-    /**
-     * Fires after the Paginator is resized to match the DataTable size (requires attribute "paginatorResize:true")
-     * @event resize
-     */
 
     /**
-     * Fires after the DataTable change is reflected AND the Paginator has been completely rendered.
+     * Fires after the Paginator has been completely rendered.
      * @event render
      */
 
@@ -1371,7 +1332,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         },
 
         /**
-
+         Not implemented at this time.
          @attribute selectPageFormat
          @type String
          @default 'Page {page}'
@@ -1380,21 +1341,6 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         selectPageFormat: {
             value:      'Page {page}',
             validator:  Y.Lang.isString
-        },
-
-        /**
-         Flag to indicate if the Paginator container should be re-sized to the DataTable size
-         after rendering is complete.
-
-         This attribute works best with a "bar" type of Paginator that is intended to look integral with a DataTable.
-
-         @attribute paginatorResize
-         @type Boolean
-         @default false
-         **/
-        paginatorResize: {
-            value:      false,
-            validator:  Y.Lang.isBoolean
         },
 
         /**
@@ -1409,23 +1355,8 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         circular : {
             value:      false,
             validator:  Y.Lang.isBoolean
-        },
-
-        /**
-         A reference to the DataTable instance that may be using this paginator-view.  This is used primarily to handle
-         resizing the Paginator View after rendering/updating.
-
-         NOTE:  This attribute is usually set by other methods (i.e. Y.DataTable.Paginator) and not required to be set
-         by the user directly.
-
-         @attribute dt
-         @type Y.DataTable
-         @default null
-         **/
-        dt: {
-            value:      null,
-            validator:  function(v){ return v instanceof Y.DataTable }
         }
+
     }
 
 });
