@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.6.0/build/cssreset/cssreset-min.css">
+		<style type="text/css">
+			li {
+				margin-left: 15px;
+				list-style-type: circle;
+				margin-top: 5px;
+			}
+			h3 {
+				font-weight: bold;
+			}
+		</style>
+
+		<link rel="stylesheet" type="text/css" href="../../../build/gallery-yui3treeview-ng/assets/skins/sam/gallery-yui3treeview-ng.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../../build/gallery-yui3treeview-ng/assets/skins/sam/gallery-yui3treeview-ng-skin.css"></link>
+
+		<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.6.0/build/yui/yui-min.js"></script>
+		<script src="../../../build/gallery-yui3treeview-ng/gallery-yui3treeview-ng-debug.js"></script>
+	<head>
+
+	<body class="yui3-skin-sam" style="font-size:13px; font-family:arial">
+
+		<!-- Tree from config -->
+		<div style="margin: 20px; float: left; clear: both;">
+			<h3>Simple checkbox tree from config</h3>
+			<div id="cattree1" style="min-width:350px; min-height:200px; padding-right: 20px; padding-bottom: 20px; border: 1px solid gray;"></div>
+			<p id="clickme1" style="cursor:pointer; margin-bottom:10px;">Click me to add node</p>
+			<p id="unclickme1" style="display:none; cursor:pointer; margin-bottom:10px;">Click me to remove node</p>
+			<ul id="report1"></ul>
+			<ul id="report2"></ul>
+		</div>
+
+		<script>
+			YUI().use("gallery-yui3treeview-ng", function(Y) {
+				var treeview = new Y.CheckBoxTreeView({
+						startCollapsed: true,
+						toggleOnLabelClick: false,
+						children: [ {
+							label: "Root",
+							checked: "halfchecked",
+							children: [ 
+								{
+									label : "sub 1",
+									checked: "checked",
+									children : [
+										{ label: "sub 1-1"},
+										{ label: "sub 1-2"},
+									]
+								},
+								{
+									label : "sub 2",
+									children : [
+										{ label: "sub 2-1"},
+										{
+											label: "sub 2-2",
+											children: [
+												{ label: "sub 2-2-1" },
+												{ label: "sub 2-2-2" }
+											]
+										},
+									]
+								}
+							]
+						}]
+				});
+				treeview.render("#cattree1");
+				
+				var r1 = Y.one("#report1"),
+					r2 = Y.one("#report2");
+
+				treeview.on("nodeclick", function(e) {
+					var node = e.treenode;
+					r1.setContent("");
+					r1.appendChild("<li>You clicked " + (node.get("isLeaf") ? "leaf" : "node") + ": " + node.get("label"));
+					r1.appendChild("<li>Path to root is: " + node.path().join(" > "));
+					r1.appendChild("<li>State is: " + (node.get("collapsed") ? "collapsed" : "expanded") );
+				});
+
+				treeview.after("check", function(e) {
+					var node = e.treenode,
+						checked_roots = "",
+						checked_paths = "";
+
+					r2.setContent("");
+					r2.appendChild("<li>CheckBox State is: " + {10:"unchecked", 20:"halfchecked", 30:"checked"}[node.get("checked")]);
+
+					Y.Array.each(treeview.getChecked(), function (n) {
+						checked_roots += "<li> " + n.get("label");
+					});
+					r2.appendChild("<li>Checked subroots are: <ul>" + checked_roots + "</ul>")
+
+					Y.Array.each(treeview.getCheckedPaths(), function (n) {
+						checked_paths += "<li> " + n.join(" > ");
+					});
+					r2.appendChild("<li>Pathes to checked subroots are: <ul>" + checked_paths + "</ul>")
+				});
+
+				Y.one("#clickme1").once("click", function (e) {
+					treeview.add({
+						label: "foster-child"
+					})
+					e.target.remove(true);
+					Y.one("#unclickme1").setStyle("display", "block");
+				});
+				Y.one("#unclickme1").once("click", function (e) {
+					treeview.remove(1);
+					e.target.remove(true);
+				});
+			});
+		</script>
+
+	</body>
+</html>
