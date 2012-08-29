@@ -33,7 +33,7 @@
             },
             "tag": "module",
             "file": "js/zui-rascroll.js",
-            "line": 9,
+            "line": 11,
             "description": "The RAScrollPlugin help to handle scrollView behaviors.\nWhen a Horizontal scrollView is placed inside a Vertical scrollView,\nuser can do only x or y direction slick."
         }
     },
@@ -49,7 +49,7 @@
             "module": "gallery-zui-rascroll",
             "namespace": "zui",
             "file": "js/zui-rascroll.js",
-            "line": 9,
+            "line": 11,
             "description": "RAScrollPlugin is a ScrollView plugin that adds right angle flick behaviors.",
             "extends": "Plugin.Base",
             "is_constructor": 1
@@ -58,7 +58,7 @@
     "classitems": [
         {
             "file": "js/zui-rascroll.js",
-            "line": 24,
+            "line": 26,
             "description": "make the scrollView as horizontal or not.",
             "itemtype": "attribute",
             "name": "horizontal",
@@ -70,7 +70,7 @@
         },
         {
             "file": "js/zui-rascroll.js",
-            "line": 41,
+            "line": 43,
             "description": "A boolean decides the right angle behavior should started when other scrollView is also dragged.",
             "itemtype": "attribute",
             "name": "cooperation",
@@ -82,7 +82,7 @@
         },
         {
             "file": "js/zui-rascroll.js",
-            "line": 75,
+            "line": 77,
             "description": "internal gesturemovestart event handler",
             "itemtype": "method",
             "name": "handleGestureMoveStart",
@@ -94,7 +94,7 @@
         },
         {
             "file": "js/zui-rascroll.js",
-            "line": 85,
+            "line": 87,
             "description": "internal gesturemove event handler",
             "itemtype": "method",
             "name": "handleGestureMove",
@@ -106,7 +106,7 @@
         },
         {
             "file": "js/zui-rascroll.js",
-            "line": 108,
+            "line": 114,
             "description": "internal gesturemoveend event handler",
             "itemtype": "method",
             "name": "handleGestureMoveEnd",
@@ -118,7 +118,7 @@
         },
         {
             "file": "js/zui-rascroll.js",
-            "line": 126,
+            "line": 130,
             "description": "sync width or height for vertical scroll or horizontal scroll",
             "itemtype": "method",
             "name": "syncScroll",
@@ -128,7 +128,7 @@
         },
         {
             "file": "js/zui-rascroll.js",
-            "line": 139,
+            "line": 143,
             "description": "make the scrollView become vertical scrolling",
             "itemtype": "method",
             "name": "syncWidth",

@@ -90,6 +90,8 @@
  * @module gallery-zui-rascroll
  *&#x2F; 
 var dragging = 0,
+    dragStart = false,
+    onlyX = false,
 &#x2F;**
  * RAScrollPlugin is a ScrollView plugin that adds right angle flick behaviors.
  *
@@ -144,13 +146,13 @@ Y.namespace(&#x27;zui&#x27;).RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, 
     initializer: function () {
         this._host = this.get(&#x27;host&#x27;);
         this._node = this._host.get(&#x27;boundingBox&#x27;);
+        this._cnt = this._host.get(&#x27;contentBox&#x27;);
         this._start = false;
-        this._onlyX = false;
 
         this._handles.push(new Y.EventHandle([
-            this._node.on(&#x27;gesturemovestart&#x27;, Y.bind(this.handleGestureMoveStart, this)),
+            this._node.on(&#x27;gesturemovestart&#x27;, this.handleGestureMoveStart),
             this._node.on(&#x27;gesturemove&#x27;, Y.bind(this.handleGestureMove, this)),
-            this._host.get(&#x27;contentBox&#x27;).on(&#x27;gesturemoveend&#x27;, Y.bind(this.handleGestureMoveEnd, this), {standAlone: true})
+            this._cnt.on(&#x27;gesturemoveend&#x27;, Y.bind(this.handleGestureMoveEnd, this), {standAlone: true})
         ]));
 
         this.syncScroll();
@@ -178,13 +180,17 @@ Y.namespace(&#x27;zui&#x27;).RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, 
         }
 
         this._start = true;
-        this._onlyX = Math.abs(this._host._startClientX - E.clientX) &gt; Math.abs(this._host._startClientY - E.clientY);
+
+        if (!dragStart) {
+            onlyX = Math.abs(this._host._startClientX - E.clientX) &gt; Math.abs(this._host._startClientY - E.clientY);
+            dragStart = true;
+        }
 
         if (this._coop &amp;&amp; dragging &lt; 2) {
             return;
         }
 
-        if (this._hori ? !this._onlyX : this._onlyX) {
+        if (this._hori ? !onlyX : onlyX) {
             this._host.set(&#x27;disabled&#x27;, true);
         }
     },
@@ -197,12 +203,10 @@ Y.namespace(&#x27;zui&#x27;).RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, 
      *&#x2F;
     handleGestureMoveEnd: function (E) {
         this._start = false;
-        dragging--;
+        dragStart = false;
+        dragging = 0;
 
-        if (this._coop &amp;&amp; dragging === 0) {
-            return;
-        }
-        if (this._hori ? !this._onlyX : this._onlyX) {
+        if (this._hori ? !onlyX : onlyX) {
             this._host.set(&#x27;disabled&#x27;, false);
         }
     },
@@ -226,7 +230,7 @@ Y.namespace(&#x27;zui&#x27;).RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, 
      * @method syncWidth
      *&#x2F;
     syncWidth: function () {
-        var c = this._host.get(&#x27;contentBox&#x27;),
+        var c = this._cnt,
             sw = this._node.get(&#x27;scrollWidth&#x27;),
             pw = this._node.get(&#x27;offsetWidth&#x27;);
 

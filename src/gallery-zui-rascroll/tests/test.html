@@ -67,6 +67,29 @@
   test content with a b c d e f g h i j k l</br>
   test content with a b c d e f g h i j k l</br>
   test content with a b c d e f g h i j k l</br>
+  <div id="scroll3">
+   <div style="width:1000px">
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+    test content with a b c d e f g h i j k l m n o p q r s t u v w x y z
+   </div>
+  </div>
   test content with a b c d e f g h i j k l</br>
   test content with a b c d e f g h i j k l</br>
   test content with a b c d e f g h i j k l</br>
@@ -91,11 +114,13 @@
 <script type="text/javascript" src="../../../build/gallery-zui-rascroll/gallery-zui-rascroll-debug.js"></script> 
 <script>
 YUI().use('gallery-zui-rascroll', function (Y) {
-    var scroll2 = new Y.ScrollView({srcNode: '#scroll2', width:300, render: true}),
+    var scroll3 = new Y.ScrollView({srcNode: '#scroll3', width:300, render: true}),
+        scroll2 = new Y.ScrollView({srcNode: '#scroll2', width:300, render: true}),
         scroll1 = new Y.ScrollView({srcNode: '#scroll1', height: 400, width: 300, render: true});
 
     scroll1.plug(Y.zui.RAScroll, {horizontal: false, cooperation: true});
     scroll2.plug(Y.zui.RAScroll);
+    scroll3.plug(Y.zui.RAScroll);
 });
 </script>
 </html>
