@@ -23,6 +23,18 @@ ScrollSnapper.NAME = 'pluginScrollSnapper';
 ScrollSnapper.NS = 'pages';
 ScrollSnapper.ATTRS = {
     /**
+     * The active page number for a paged scrollview in micro seconds
+     *
+     * @attribute snapDuration
+     * @type {Number}
+     * @default 500
+     */
+    snapDuration: {
+        value: 500,
+        validator: Y.Lang.isNumber
+    },
+
+    /**
      * CSS selector for a page inside the scrollview. The scrollview
      * will snap to the closest page.
      *
@@ -45,7 +57,6 @@ ScrollSnapper.ATTRS = {
         lazyAdd: false,
         setter: function (val) {
             var T = this.get('total'),
-                I = this.get('index'),
                 V = Math.max(Math.floor(val), 0);
 
             if (T && (V >= T)) {
@@ -53,7 +64,7 @@ ScrollSnapper.ATTRS = {
             }
 
             if (this._pages) {
-                this.scrollTo(V, (I == V) ? -1 : 0);
+                this.scrollTo(V, this.get('snapDuration'), 'ease-out');
             }
 
             return V;
@@ -74,18 +85,25 @@ ScrollSnapper.ATTRS = {
 
 Y.namespace('zui').ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Base, {
     initializer: function () {
-        this._host = this.get('host').setAttrs({
-     //       deceleration: 0.6,
-     //       bounce: 0
-        });
+        this._host = this.get('host');
         this._vertical = this._host._scrollsVertical;
         this._snapAttr = this._vertical ? 'offsetTop' : 'offsetLeft';
         this._snapRange = this._vertical ? 'offsetHeight' : 'offsetWidth';
         this._snapSource = this._vertical ? 'scrollY' : 'scrollX';
-        this.afterHostMethod('_uiDimensionsChange', this._updatePages);
+        this.afterHostMethod('_uiDimensionsChange', this._updateSnap);
         this.afterHostEvent('render', this._updatePages);
         this.afterHostEvent('scrollEnd', this._scrollEnded);
         this._updatePages();
+    },
+
+    /**
+     * Update current page positions when scrollView width/height changed
+     *
+     * @method _updateSnap
+     * @protected
+     */
+    _updateSnap: function () {
+        this.scrollTo(this.get('index'));
     },
 
     /**
@@ -109,15 +127,17 @@ Y.namespace('zui').ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Base, {
      * @protected
      */
     _scrollEnded: function (E) {
-        if (this._host._flicking) {
-            this._snapping = false;
-            return;
-        }
-        if (!this._snapping) {
+        var fl = this._host._flicking;
+
+        Y.later(fl ? this.get('snapDuration') : 1, this, function () {
+            if (fl) {
+                this._host._currentVelocity = 0;
+            }
+            if (this._host.get(this._snapSource) == this._lastSnap) {
+                return;
+            }
             this.snapTo(this.snapIndex());
-        } else {
-            this._snapping = false;
-        }
+        });
     },
 
     /**
@@ -142,15 +162,19 @@ Y.namespace('zui').ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Base, {
         var V = Math.max(Math.floor(page), 0),
             T = Math.max(duration, 0),
             O = this._pages.item(V),
-            D = O ? O.get(this._snapAttr) : 0;
+            D = O ? O.get(this._snapAttr) : 0,
+            C = this._host.get(this._snapSource);
 
-        if (T > 0) {
-            this._snapping = true;
+        if (C === D) {
+            return;
         }
+
+        this._lastSnap = D;
+
         if (this._vertical) {
-            this._host.scrollTo(0, D, T, easing);
+            this._host.scrollTo(null, D, T, easing);
         } else {
-            this._host.scrollTo(D, 0, T, easing);
+            this._host.scrollTo(D, null, T, easing);
         }
     },
 
@@ -190,6 +214,7 @@ Y.namespace('zui').ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Base, {
             I, O,
             pages = this._pages,
             T = pages.size();
+
         for (I=0;I<T;I++) {
             O = pages.item(I);
             if (C < O.get(A) + O.get(R) / 2) {
@@ -201,4 +226,4 @@ Y.namespace('zui').ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Base, {
 });
 
 
-}, 'gallery-2012.08.22-20-00' ,{requires:['scrollview-base', 'plugin'], skinnable:false});
+}, 'gallery-2012.08.29-20-10' ,{requires:['scrollview-base', 'plugin'], skinnable:false});
