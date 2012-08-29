@@ -78,7 +78,10 @@ LocalSync.prototype = {
 
         config || (config = {});
 
-        ('root' in config) && (this.root = config.root || this.constructor.NAME);
+        if ('root' in config) {
+            this.root = config.root || '';
+        }
+
         try {
             this.storage = Y.config.win.localStorage;
             store = this.storage.getItem(this.root);
@@ -177,7 +180,7 @@ LocalSync.prototype = {
     @protected
     **/ 
     _show: function (options) {
-        return Y.JSON.parse(LocalSync._data[this.root][this.get('id')]);
+        return LocalSync._data[this.root][this.get('id')];
     },
     
     /**
