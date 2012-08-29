@@ -1,0 +1,588 @@
+{
+    "project": {},
+    "files": {
+        "js/datatable-paginator-class.js": {
+            "name": "js/datatable-paginator-class.js",
+            "modules": {
+                "datatable": 1
+            },
+            "classes": {
+                "Y.DataTable.Paginator": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "datatable": {
+            "name": "datatable",
+            "submodules": {},
+            "classes": {
+                "Y.DataTable.Paginator": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/datatable-paginator-class.js",
+            "line": 1,
+            "description": "Defines a Y.DataTable class extension to add capability to support a Paginator View-Model and allow\n paging of actively displayed data within the DT instance.\n\nWorks with either client-side pagination (i.e. local data, usually in form of JS Array) or\n in conjunction with remote server-side pagination, via either DataSource or ModelSync.REST.\n\nAllows for dealing with sorted data, wherein the local data is sorted in place, and in the case of remote data the \"sortBy\"\nattribute is passed to the remote server.\n\n <h4>Usage</h4>\n\n      var dtable = new Y.DataTable({\n          columns:    [ 'firstName','lastName','state','age', 'grade' ],\n          data:       enrollment.records,\n          scrollable: 'y',\n          height:     '450px',\n          sortBy:     [{lastName:'asc'}, {grade:-1}],\n          paginator:  new PaginatorView({\n\t\t\t\t\tmodel: \t\tnew PaginatorModel({itemsPerPage:50, page:3}),\n\t\t\t\t\tcontainer:\t'#pagContA'\n          }),\n          resizePaginator: true\n      });\n\n <h4>Client OR Server Pagination</h4>\n\n A determination of whether the source of `data` is either \"local\" data (i.e. a Javascript Array or Y.ModelList), or is\n provided from a server (either DataSource or ModelSync.REST) is made in the method [_dataChange](#method__dataChange).\n We use a \"duck-type\" evaluation, which may not be completely robust, but has worked so far in testing. The process used to\n evaluate the \"source\" of data can be reviewed in the _dataChange method.\n\n For server-side pagination, the OUTGOING request must include (as a minimum);  `page`, `totalItems` and `sortBy` querystring\n parameters.  Likewise, the INCOMING (returned response) must include as \"meta-data\" at least `totalItems`, plus any other\n PaginatorModel attributes.   The key item within the returned response is `totalItems'.\n\n We have provided an attribute [serverPaginationMap](#attr_serverPaginationMap) as an object hash to translate both outgoing\n querystring parameter names and incoming (response returned) parameter names in order to match what is expected by the\n PaginatorModel.  Please see this attribute or the examples for how to utilize this map for your use case.\n\n <h4>Loading the \"data\" For a Page</h4>\n Once the \"source of data\" is known, the method [processPageRequest](#method_processPageRequest) fires on a `pageChange`.\n\n For the case of \"local data\", i.e. where `_pagDataSrc:'local'`, the existing buffer of data is sliced according to the pagination\n state, and the data is loaded silently, and `this.syncUI()` is fired to refresh the DT.\n\n The case of \"remote data\" (from a server) is actually more straightforward.  For the case of ModelSync.REST remote data the\n current \"pagination state\" is processed through the [serverPaginationMap](#attr_serverPaginationMap) hash (to convert to\n queryString format) and the ModelList.load() method is called.  For the case of a DataSource, a similar approach is used where\n the [requestStringTemplate](#attr_requestStringTemplate) is read, processed through the serverPaginationMap hash and a\n datasource.load() request is fired.\n\n This extension DOES NOT \"cache\" pages for remote data, it simply inserts the full returned data into the DT.  So as a consequence,\n a pagination state change for remote data involves a simple request sent to the server source (either DataSource or ModelSync.REST)\n and the response results are loaded in the DT as in any other \"response\".",
+            "extends": "Y.DataTable",
+            "version": "1.0.1",
+            "since": "3.6.0",
+            "author": "Todd Smith"
+        }
+    },
+    "classes": {
+        "Y.DataTable.Paginator": {
+            "name": "Y.DataTable.Paginator",
+            "shortname": "Y.DataTable.Paginator",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [
+                "DataTable"
+            ],
+            "module": "datatable",
+            "namespace": "",
+            "file": "js/datatable-paginator-class.js",
+            "line": 1,
+            "description": "Defines a Y.DataTable class extension to add capability to support a Paginator View-Model and allow\n paging of actively displayed data within the DT instance.\n\nWorks with either client-side pagination (i.e. local data, usually in form of JS Array) or\n in conjunction with remote server-side pagination, via either DataSource or ModelSync.REST.\n\nAllows for dealing with sorted data, wherein the local data is sorted in place, and in the case of remote data the \"sortBy\"\nattribute is passed to the remote server.\n\n <h4>Usage</h4>\n\n      var dtable = new Y.DataTable({\n          columns:    [ 'firstName','lastName','state','age', 'grade' ],\n          data:       enrollment.records,\n          scrollable: 'y',\n          height:     '450px',\n          sortBy:     [{lastName:'asc'}, {grade:-1}],\n          paginator:  new PaginatorView({\n\t\t\t\t\tmodel: \t\tnew PaginatorModel({itemsPerPage:50, page:3}),\n\t\t\t\t\tcontainer:\t'#pagContA'\n          }),\n          resizePaginator: true\n      });\n\n <h4>Client OR Server Pagination</h4>\n\n A determination of whether the source of `data` is either \"local\" data (i.e. a Javascript Array or Y.ModelList), or is\n provided from a server (either DataSource or ModelSync.REST) is made in the method [_dataChange](#method__dataChange).\n We use a \"duck-type\" evaluation, which may not be completely robust, but has worked so far in testing. The process used to\n evaluate the \"source\" of data can be reviewed in the _dataChange method.\n\n For server-side pagination, the OUTGOING request must include (as a minimum);  `page`, `totalItems` and `sortBy` querystring\n parameters.  Likewise, the INCOMING (returned response) must include as \"meta-data\" at least `totalItems`, plus any other\n PaginatorModel attributes.   The key item within the returned response is `totalItems'.\n\n We have provided an attribute [serverPaginationMap](#attr_serverPaginationMap) as an object hash to translate both outgoing\n querystring parameter names and incoming (response returned) parameter names in order to match what is expected by the\n PaginatorModel.  Please see this attribute or the examples for how to utilize this map for your use case.\n\n <h4>Loading the \"data\" For a Page</h4>\n Once the \"source of data\" is known, the method [processPageRequest](#method_processPageRequest) fires on a `pageChange`.\n\n For the case of \"local data\", i.e. where `_pagDataSrc:'local'`, the existing buffer of data is sliced according to the pagination\n state, and the data is loaded silently, and `this.syncUI()` is fired to refresh the DT.\n\n The case of \"remote data\" (from a server) is actually more straightforward.  For the case of ModelSync.REST remote data the\n current \"pagination state\" is processed through the [serverPaginationMap](#attr_serverPaginationMap) hash (to convert to\n queryString format) and the ModelList.load() method is called.  For the case of a DataSource, a similar approach is used where\n the [requestStringTemplate](#attr_requestStringTemplate) is read, processed through the serverPaginationMap hash and a\n datasource.load() request is fired.\n\n This extension DOES NOT \"cache\" pages for remote data, it simply inserts the full returned data into the DT.  So as a consequence,\n a pagination state change for remote data involves a simple request sent to the server source (either DataSource or ModelSync.REST)\n and the response results are loaded in the DT as in any other \"response\"."
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 71,
+            "description": "Adds a paginator view (specifically Y.PaginatorView) instance to the DataTable.",
+            "itemtype": "attribute",
+            "name": "paginator",
+            "type": "Y.View",
+            "default": "null",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 83,
+            "description": "Defines a hash to convert expected PaginatorModel attributes to outgoing request queryString\nor returned (incoming response) meta data back to PaginatorModel attributes.",
+            "example": [
+                "\n         serverPaginationMap : {\n             totalItems :    'totalRows',\n             page :          {toServer:'requestedPage', fromServer:'returnedPageNo'},\n             itemIndexStart: 'startRecord',\n             itemsPerPage:   'numPageRows'\n         }\n\n         // would map to an outgoing request of (for url:/data/orders) ;\n         /data/orders/{cust_no}?requestedPage={requestedPage}&numPageRows={numPageRows}\n\n         // for a JSON response of ...\n         { \"reply\":\"ok\", \"totalRows\":478, \"returnedPageNo\":17, \"startRecord\":340, \"numPageRows\":20,\n           \"results\":[ {...} 20 total rows returned {...}] }\n\nFor default value, see [_defPagMap](#method__defPagMap)"
+            ],
+            "itemtype": "attribute",
+            "name": "serverPaginationMap",
+            "type": "{Object}",
+            "default": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 114,
+            "description": "Attribute to track the full pagination state (i.e. the PaginatorModel) attributes all in one object.\nAlso includes the `sortBy` property internally.",
+            "itemtype": "attribute",
+            "name": "paginationState",
+            "type": "Object",
+            "default": "unset",
+            "beta": 1,
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 129,
+            "description": "Includes the request queryString for a DataSource request (only!), which contains the pagination\nreplacement strings to be appended to the DataSource's \"source\" string.",
+            "example": [
+                "\n         requestStringTemplate:  \"?currentPage={page}&pageRows={itemsPerPage}&sorting={sortBy}\""
+            ],
+            "itemtype": "attribute",
+            "name": "requestStringTemplate",
+            "type": "String",
+            "default": "\"\"",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 145,
+            "description": "Flag to indicate if the Paginator container should be re-sized to the DataTable size\nafter rendering is complete.\n\nThis attribute works best with a \"bar\" type of Paginator that is intended to look integral with a DataTable.",
+            "itemtype": "attribute",
+            "name": "paginatorResize",
+            "type": "Boolean",
+            "default": "false",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 164,
+            "description": "Holder for the \"original\" un-paged data that the DataTable was based upon.\n\nThis property is stored as an Array, from the original \"data\" ModelList, only used\nfor case of \"local\" data, is sliced as needed to re-set each data Page.\n\nPopulated in method [_dataChange](#method__dataChange)",
+            "itemtype": "property",
+            "name": "_mlistArray",
+            "type": "Array",
+            "default": "null",
+            "static": 1,
+            "since": "3.6.0",
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 182,
+            "description": "Placeholder for a text flag indicating the source of \"data\" for this DataTable,\n this is set initially in method _dataChange.\n\nSet to either 'local', 'ds' or 'mlist' in method [_dataChange](#method__dataChange)\n\nPopulated in _dataChange.  Utilized in processPageRequest",
+            "itemtype": "property",
+            "name": "_pagDataSrc",
+            "type": "String",
+            "default": "null",
+            "static": 1,
+            "since": "3.6.0",
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 199,
+            "description": "A convenience property holder for the DataTable's \"paginator\" attribute.",
+            "itemtype": "property",
+            "name": "paginator",
+            "type": "{Y.PaginatorView|View}",
+            "default": "null",
+            "access": "public",
+            "tagname": "",
+            "since": "3.6.0",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 210,
+            "description": "A convenience property holder for the Paginator-View's Model attribute.",
+            "itemtype": "property",
+            "name": "pagModel",
+            "type": "{Y.PaginatorModel|Model}",
+            "default": "null",
+            "access": "public",
+            "tagname": "",
+            "since": "3.6.0",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 224,
+            "description": "This initializer sets up the listeners related to the original DataTable instance, to the\n PaginatorModel changes and related to the underlying \"data\" attribute the DT is based upon.",
+            "itemtype": "method",
+            "name": "initializer",
+            "access": "protected",
+            "tagname": "",
+            "return": {
+                "description": "this"
+            },
+            "chainable": 1,
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 265,
+            "description": "Destructor to clean up listener event handlers and the internal storage buffer.",
+            "itemtype": "method",
+            "name": "destructor",
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 284,
+            "description": "Primary workhorse method that is fired when the Paginator \"page\" changes,\n  and returns a new subset of data for the DT\n  or sends a new request to a remote source to populate the DT",
+            "itemtype": "method",
+            "name": "processPageRequest",
+            "params": [
+                {
+                    "name": "page_no",
+                    "description": "Current page number to change to",
+                    "type": "Integer"
+                },
+                {
+                    "name": "pag_state",
+                    "description": "Pagination state object (this is NOT populated in local .. non-server type pagination) including;",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "indexStart",
+                            "description": "Starting index returned from server response",
+                            "type": "Integer"
+                        },
+                        {
+                            "name": "numRecs",
+                            "description": "Count of records returned from the response",
+                            "type": "Integer"
+                        }
+                    ]
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "nothing"
+            },
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 385,
+            "description": "Method to sync the container for the paginator View with the underlying DataTable\n 'table' element.\n\n Unfortunately, there isn't a distinct, definitive 'render' complete event due to\n  DT's complex rendering, so I use a timer function to attempt a resize.",
+            "itemtype": "method",
+            "name": "resizePaginator",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 403,
+            "description": "Method to re-initialize the original data, mostly targeted at local data\n when a new 'data' is set, untested.",
+            "itemtype": "method",
+            "name": "dataReset",
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Data to be reset to ... either as a JS Array or a Y.ModelList",
+                    "type": "Array|ModelList"
+                }
+            ],
+            "access": "public",
+            "tagname": "",
+            "return": {
+                "description": "nothing"
+            },
+            "beta": 1,
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 430,
+            "description": "Helper method that searches the 'serverPaginationMap' ATTR and returns the requested\nproperty, including if it is nested as \"toServer\" or \"fromServer\" subattribute.\n( Used in processPageRequest )",
+            "example": [
+                "\n   _srvPagMapObj(\"itemsPerPage\")\n        { itemsPerPage : 'numPageRecords' }\n        { itemsPerPage : {toServer:'pageRows', fromServer:'pageRecordCount' }"
+            ],
+            "itemtype": "method",
+            "name": "_srvPagMapObj",
+            "params": [
+                {
+                    "name": "prop",
+                    "description": "Property name to search for (expected matches in PaginatorModel ATTRS)",
+                    "type": "String"
+                },
+                {
+                    "name": "dir",
+                    "description": "Directional (optional), either \"to\" (matches toServer) or \"from\" (matches fromServer)",
+                    "type": "String"
+                }
+            ],
+            "return": {
+                "description": "rprop Attribute name from RHS of map",
+                "type": "String"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 459,
+            "description": "Method called to ensure that the _dataChange method is called, specifically for the case\nwhere a DataSource is used (which is hard to track when it is plugged in ...)",
+            "itemtype": "method",
+            "name": "_afterSyncUI",
+            "params": [
+                {
+                    "name": "o",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 471,
+            "description": "Method fires after every variety of change event on the DT's \"data\" setting, which\nis used to sense the origin of where the \"data\" comes from, and sets the\nthis._pagDataSrc property to either \"ds\", \"mlist\" or \"local\".",
+            "itemtype": "method",
+            "name": "_dataChange",
+            "params": [
+                {
+                    "name": "o",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 515,
+            "description": "Method fires after DataTable/DataSource plugin fires it's \"response\" event, which includes\nthe response object, including {results:, meta:} properties.",
+            "itemtype": "method",
+            "name": "_afterDSResponse",
+            "params": [
+                {
+                    "name": "resp",
+                    "description": "Includes results and meta properties",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "results",
+                            "description": "Array of result Objects",
+                            "type": "Array"
+                        },
+                        {
+                            "name": "meta",
+                            "description": "Object including properties mapped to include pagination properties",
+                            "type": "Object"
+                        }
+                    ]
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 538,
+            "description": "Method fires after custom ModelSync.REST \"load\" action fires a user-defined \"response\" event.\nThis can be implemented by extending ModelSync.REST by adding .parse() method which fires\na custom \"response\" event including {results:, meta:} properties.\n\nUsage Note: The user is REQUIRED to provide a custom \"response\" event in the ModelList\n parse overridden function in order for this to work properly.",
+            "itemtype": "method",
+            "name": "_afterMLResponse",
+            "params": [
+                {
+                    "name": "resp",
+                    "description": "Includes results and meta properties",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "results",
+                            "description": "Array of result Objects",
+                            "type": "Array"
+                        },
+                        {
+                            "name": "meta",
+                            "description": "Object including properties mapped to include pagination properties",
+                            "type": "Object"
+                        }
+                    ]
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 563,
+            "description": "Listener that fires when the Model's 'pageChange' fires, this extracts the current page from the state object and then\n hooks up the processPageRequest method.",
+            "itemtype": "method",
+            "name": "_pageListener",
+            "params": [
+                {
+                    "name": "o",
+                    "description": "Change event facade for the PaginatorModel 'pageChange' event",
+                    "type": "Object"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 577,
+            "description": "Method to adjust the CSS width of the paginator container and set it to the\n width of the underlying DT.",
+            "itemtype": "method",
+            "name": "_syncPaginatorSize",
+            "return": {
+                "description": "Boolean if success"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 595,
+            "description": "Default 'valueFn' function setting for the ATTR `serverPaginationMap`, where\nthe defaults are simply the member names.",
+            "itemtype": "method",
+            "name": "_defPagMap",
+            "return": {
+                "description": "obj",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 611,
+            "description": "Setter method for the `serverPaginationMap` attribute, which can be used to\n merge the \"default\" object with the user-supplied object.",
+            "itemtype": "method",
+            "name": "_setPagMap",
+            "params": [
+                {
+                    "name": "val",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 625,
+            "description": "Sets default for the \"paginationState\" DataTable attribute complex object as an\nobject with all of PaginatorModel ATTRS and the `sortBy` setting.",
+            "itemtype": "method",
+            "name": "_defPagState",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 641,
+            "description": "Getter for the \"paginationState\" DataTable attribute complex object.",
+            "itemtype": "method",
+            "name": "_gefPagState",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 654,
+            "description": "Sets default for the \"paginationState\" DataTable attribute\n complex object.",
+            "itemtype": "method",
+            "name": "_sefPagState",
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 672,
+            "description": "This is a setter for the 'paginator' attribute, primarily to set the public property `paginator` to the\nattribute value.",
+            "itemtype": "method",
+            "name": "_setPaginator",
+            "params": [
+                {
+                    "name": "val",
+                    "description": "The PaginatorView instance to set",
+                    "type": "PaginatorView|View"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 690,
+            "description": "A method that fires after the DataTable `renderView` method completes, that is *approximately* when\nthe DataTable has finished rendering.",
+            "itemtype": "method",
+            "name": "_notifyRender",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 705,
+            "description": "Fires after the DataTable 'renderView' event fires",
+            "itemtype": "event",
+            "name": "render",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 710,
+            "description": "Fires after the DataTable-Paginator updates the page data and/or sends the remote request for more data",
+            "itemtype": "event",
+            "name": "pageUpdate",
+            "params": [
+                {
+                    "name": "pagStatus",
+                    "description": "containing following;",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "pag_state",
+                            "description": "Of Paginator Model `getAttrs()` as an Object",
+                            "type": "Object"
+                        },
+                        {
+                            "name": "view",
+                            "description": "Instance of the Paginator View",
+                            "type": "View"
+                        }
+                    ]
+                }
+            ],
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        },
+        {
+            "file": "js/datatable-paginator-class.js",
+            "line": 718,
+            "description": "Fires after the Paginator is resized to match the DataTable size (requires attribute \"paginatorResize:true\")",
+            "itemtype": "event",
+            "name": "resize",
+            "class": "Y.DataTable.Paginator",
+            "module": "datatable"
+        }
+    ]
+}
