@@ -23,7 +23,7 @@ Note
 ----
 
 *   The algorithm of 'snapTo' can be changed into 'Bipartite approximation' , for 
-    better performance. Current we just use linear search, when user scrollTo last
+    better performance. Now we just use linear search, when user scrollTo last
     items we run into worst case.
 
 Known Issue

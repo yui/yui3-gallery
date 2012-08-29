@@ -105,6 +105,18 @@ ScrollSnapper.NAME = &#x27;pluginScrollSnapper&#x27;;
 ScrollSnapper.NS = &#x27;pages&#x27;;
 ScrollSnapper.ATTRS = {
     &#x2F;**
+     * The active page number for a paged scrollview in micro seconds
+     *
+     * @attribute snapDuration
+     * @type {Number}
+     * @default 500
+     *&#x2F;
+    snapDuration: {
+        value: 500,
+        validator: Y.Lang.isNumber
+    },
+
+    &#x2F;**
      * CSS selector for a page inside the scrollview. The scrollview
      * will snap to the closest page.
      *
@@ -127,7 +139,6 @@ ScrollSnapper.ATTRS = {
         lazyAdd: false,
         setter: function (val) {
             var T = this.get(&#x27;total&#x27;),
-                I = this.get(&#x27;index&#x27;),
                 V = Math.max(Math.floor(val), 0);
 
             if (T &amp;&amp; (V &gt;= T)) {
@@ -135,7 +146,7 @@ ScrollSnapper.ATTRS = {
             }
 
             if (this._pages) {
-                this.scrollTo(V, (I == V) ? -1 : 0);
+                this.scrollTo(V, this.get(&#x27;snapDuration&#x27;), &#x27;ease-out&#x27;);
             }
 
             return V;
@@ -156,18 +167,25 @@ ScrollSnapper.ATTRS = {
 
 Y.namespace(&#x27;zui&#x27;).ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Base, {
     initializer: function () {
-        this._host = this.get(&#x27;host&#x27;).setAttrs({
-     &#x2F;&#x2F;       deceleration: 0.6,
-     &#x2F;&#x2F;       bounce: 0
-        });
+        this._host = this.get(&#x27;host&#x27;);
         this._vertical = this._host._scrollsVertical;
         this._snapAttr = this._vertical ? &#x27;offsetTop&#x27; : &#x27;offsetLeft&#x27;;
         this._snapRange = this._vertical ? &#x27;offsetHeight&#x27; : &#x27;offsetWidth&#x27;;
         this._snapSource = this._vertical ? &#x27;scrollY&#x27; : &#x27;scrollX&#x27;;
-        this.afterHostMethod(&#x27;_uiDimensionsChange&#x27;, this._updatePages);
+        this.afterHostMethod(&#x27;_uiDimensionsChange&#x27;, this._updateSnap);
         this.afterHostEvent(&#x27;render&#x27;, this._updatePages);
         this.afterHostEvent(&#x27;scrollEnd&#x27;, this._scrollEnded);
         this._updatePages();
+    },
+
+    &#x2F;**
+     * Update current page positions when scrollView width&#x2F;height changed
+     *
+     * @method _updateSnap
+     * @protected
+     *&#x2F;
+    _updateSnap: function () {
+        this.scrollTo(this.get(&#x27;index&#x27;));
     },
 
     &#x2F;**
@@ -191,15 +209,17 @@ Y.namespace(&#x27;zui&#x27;).ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Ba
      * @protected
      *&#x2F;
     _scrollEnded: function (E) {
-        if (this._host._flicking) {
-            this._snapping = false;
-            return;
-        }
-        if (!this._snapping) {
+        var fl = this._host._flicking;
+
+        Y.later(fl ? this.get(&#x27;snapDuration&#x27;) : 1, this, function () {
+            if (fl) {
+                this._host._currentVelocity = 0;
+            }
+            if (this._host.get(this._snapSource) == this._lastSnap) {
+                return;
+            }
             this.snapTo(this.snapIndex());
-        } else {
-            this._snapping = false;
-        }
+        });
     },
 
     &#x2F;**
@@ -224,15 +244,19 @@ Y.namespace(&#x27;zui&#x27;).ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Ba
         var V = Math.max(Math.floor(page), 0),
             T = Math.max(duration, 0),
             O = this._pages.item(V),
-            D = O ? O.get(this._snapAttr) : 0;
+            D = O ? O.get(this._snapAttr) : 0,
+            C = this._host.get(this._snapSource);
 
-        if (T &gt; 0) {
-            this._snapping = true;
+        if (C === D) {
+            return;
         }
+
+        this._lastSnap = D;
+
         if (this._vertical) {
-            this._host.scrollTo(0, D, T, easing);
+            this._host.scrollTo(null, D, T, easing);
         } else {
-            this._host.scrollTo(D, 0, T, easing);
+            this._host.scrollTo(D, null, T, easing);
         }
     },
 
@@ -272,6 +296,7 @@ Y.namespace(&#x27;zui&#x27;).ScrollSnapper = Y.extend(ScrollSnapper, Y.Plugin.Ba
             I, O,
             pages = this._pages,
             T = pages.size();
+
         for (I=0;I&lt;T;I++) {
             O = pages.item(I);
             if (C &lt; O.get(A) + O.get(R) &#x2F; 2) {
