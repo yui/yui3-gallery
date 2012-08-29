@@ -9,7 +9,7 @@ ZUI attribute provides revert() , toggle() , set_again(), sync(), unsync() metho
 Description
 -----------
 
-This module provides 3 more methods for Attribute:
+This module provides 5 more methods for Attribute:
 
 *   revert() : rollback attribute value to previous one
 
@@ -25,6 +25,8 @@ Note
 ----
 
 *   do not use toggle() on none boolean value. It works, but the result may changed in future version.
+
+*   Now revert() is disabled by default for performance. You can set _doRevert property to true to enable revert() for all properties, or set _revertList as {propertyName: true, ...} hash for specified properties.
 
 *   YUI Base object mixed Attribute when Y.use('base') , if you try to Y.mix(Y.AttributeCore.prototype, Y.zui.Attribute.prototype, true) , it seens not work. 2 ways to resolve this:
 
@@ -46,6 +48,12 @@ Code Sample
 
     // Add ZUI attribute support to one instance
     Y.mix(myInstance, Y.zui.Attribute.prototype);
+
+    // enable revert() on 'testAttr2'
+    myInstance._revertList = {testAttr2: true};
+
+    // Or, enable revert() on all attributes
+    myInstance._doRevert = true;
 
     // Now, set an attribute
     myInstance.set('testAttr', 3);

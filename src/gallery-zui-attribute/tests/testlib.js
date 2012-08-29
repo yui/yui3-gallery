@@ -11,6 +11,8 @@ var runTestLib = function (Y, O, N) {
         }
     });
 
+    O._revertList = {attrA: true, attrF: true};
+
     testSuite.add(new Y.Test.Case({
         name: N,
 
@@ -72,6 +74,25 @@ var runTestLib = function (Y, O, N) {
             O.revert('attrF');
             O.revert('attrF');
             Y.Assert.areSame('string', O.get('attrF'));
+        },
+
+        testNoRevert: function () {
+            O.set('attrB', 9);
+
+            O.revert('attrB');
+            Y.Assert.areSame(9, O.get('attrB'));
+        },
+
+        testRevertAll: function () {
+            O._doRevert = true;
+            O.set('attrB', 12);
+            Y.Assert.areSame(12, O.get('attrB'));
+
+            O.set('attrB', 15);
+            Y.Assert.areSame(15, O.get('attrB'));
+
+            O.revert('attrB');
+            Y.Assert.areSame(12, O.get('attrB'));
         },
 
         testSetAgain: function () {

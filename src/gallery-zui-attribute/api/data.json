@@ -9,7 +9,7 @@
         "js/zui-attribute.js": {
             "name": "js/zui-attribute.js",
             "modules": {
-                "gallery-zui-attribute-core": 1
+                "gallery-zui-attribute": 1
             },
             "classes": {
                 "ZAttribute": 1
@@ -19,8 +19,8 @@
         }
     },
     "modules": {
-        "gallery-zui-attribute-core": {
-            "name": "gallery-zui-attribute-core",
+        "gallery-zui-attribute": {
+            "name": "gallery-zui-attribute",
             "submodules": {},
             "classes": {
                 "ZAttribute": 1
@@ -42,7 +42,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "module": "gallery-zui-attribute-core",
+            "module": "gallery-zui-attribute",
             "namespace": "",
             "file": "js/zui-attribute.js",
             "line": 8,
@@ -65,7 +65,7 @@
             ],
             "chainable": 1,
             "class": "ZAttribute",
-            "module": "gallery-zui-attribute-core"
+            "module": "gallery-zui-attribute"
         },
         {
             "file": "js/zui-attribute.js",
@@ -82,7 +82,7 @@
             ],
             "chainable": 1,
             "class": "ZAttribute",
-            "module": "gallery-zui-attribute-core"
+            "module": "gallery-zui-attribute"
         },
         {
             "file": "js/zui-attribute.js",
@@ -100,15 +100,56 @@
                     "name": "value",
                     "description": "The value of the attribute.",
                     "type": "String"
+                },
+                {
+                    "name": "cfg",
+                    "description": "Optional event data to be mixed into the event facade passed to subscribers of the attribute's change event.",
+                    "type": "Object"
                 }
             ],
             "chainable": 1,
             "class": "ZAttribute",
-            "module": "gallery-zui-attribute-core"
+            "module": "gallery-zui-attribute"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 56,
+            "description": "When the obejct have _doRevert property , enable the revert() behavior on all properties",
+            "itemtype": "property",
+            "name": "_doRevert",
+            "type": "Boolean",
+            "access": "protected",
+            "tagname": "",
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute"
         },
         {
             "file": "js/zui-attribute.js",
             "line": 65,
+            "description": "When the obejct have _revertList property , enable the revert() behavior on listed properties",
+            "itemtype": "property",
+            "name": "_revertList",
+            "type": "Object",
+            "access": "protected",
+            "tagname": "",
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 77,
+            "description": "Used to keep data stack for revert()",
+            "itemtype": "property",
+            "name": "_revertStack",
+            "type": "Object",
+            "access": "protected",
+            "tagname": "",
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 96,
             "description": "revert the value of an attribute. If no older value, do nothing.",
             "itemtype": "method",
             "name": "revert",
@@ -121,7 +162,61 @@
             ],
             "chainable": 1,
             "class": "ZAttribute",
-            "module": "gallery-zui-attribute-core"
+            "module": "gallery-zui-attribute"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 113,
+            "description": "sync an attribute from other Object when the attribute value of other object changed, everytime.",
+            "itemtype": "method",
+            "name": "sync",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The name of the attribute.",
+                    "type": "String"
+                },
+                {
+                    "name": "source",
+                    "description": "The source Attribute owner Object you want to sync.",
+                    "type": "Attribute"
+                },
+                {
+                    "name": "sourceName",
+                    "description": "The source Attribute name. If the source attribute name is same with target, you can omit this parameter.",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute"
+        },
+        {
+            "file": "js/zui-attribute.js",
+            "line": 140,
+            "description": "Stop attribute syncing",
+            "itemtype": "method",
+            "name": "unsync",
+            "params": [
+                {
+                    "name": "name",
+                    "description": "The name of the attribute.",
+                    "type": "String"
+                },
+                {
+                    "name": "source",
+                    "description": "The source Attribute owner Object you want to sync.",
+                    "type": "Attribute"
+                },
+                {
+                    "name": "sourceName",
+                    "description": "The source Attribute name. If the source attribute name is same with target, you can o\nmit this parameter.",
+                    "type": "String"
+                }
+            ],
+            "chainable": 1,
+            "class": "ZAttribute",
+            "module": "gallery-zui-attribute"
         }
     ]
 }

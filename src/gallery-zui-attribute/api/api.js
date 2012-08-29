@@ -4,12 +4,12 @@ YUI.add("yuidoc-meta", function(Y) {
         "ZAttribute"
     ],
     "modules": [
-        "gallery-zui-attribute-core"
+        "gallery-zui-attribute"
     ],
     "allModules": [
         {
-            "displayName": "gallery-zui-attribute-core",
-            "name": "gallery-zui-attribute-core",
+            "displayName": "gallery-zui-attribute",
+            "name": "gallery-zui-attribute",
             "description": "The Attribute module provides more methods for Attribute object\nsupport for older browsers"
         }
     ]

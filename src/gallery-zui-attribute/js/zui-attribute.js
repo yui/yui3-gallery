@@ -49,17 +49,48 @@ ZAttribute.prototype = {
      * @method set
      * @param name {String} The name of the attribute.
      * @param value {String} The value of the attribute.
+     * @param cfg {Object} Optional event data to be mixed into the event facade passed to subscribers of the attribute's change event.
      * @chainable
      */
-    set: function (name, value) {
-        if (!this.revertStack) {
-            this.revertStack = {};
+    set: function (name, value, cfg) {
+       /**
+         * When the obejct have _doRevert property , enable the revert() behavior on all properties
+         *
+         * @property _doRevert
+         * @type Boolean
+         * @protected
+         */  
+        var doRevert = this._doRevert;
+
+       /**
+         * When the obejct have _revertList property , enable the revert() behavior on listed properties
+         *
+         * @property _revertList
+         * @type Object
+         * @protected
+         */
+        if (!doRevert && this._revertList) {
+            doRevert = this._revertList[name];
         }
-        if (!this.revertStack[name]) {
-            this.revertStack[name] = [];
+
+        if (doRevert) {
+           /**
+             * Used to keep data stack for revert()
+             *
+             * @property _revertStack
+             * @type Object
+             * @protected
+             */
+            if (!this._revertStack) {
+                this._revertStack = {};
+            }
+            if (!this._revertStack[name]) {
+                this._revertStack[name] = [];
+            }
+            this._revertStack[name].push(value);
         }
-        this.revertStack[name].push(value);
-        return this._setAttr(name, value);
+
+        return this._setAttr(name, value, cfg);
     },
 
     /**
@@ -70,13 +101,13 @@ ZAttribute.prototype = {
      * @chainable
      */
     revert: function (name, value) {
-        if (!this.revertStack[name] || (this.revertStack[name].length < 2)) {
+        if (!this._revertStack || !this._revertStack[name] || (this._revertStack[name].length < 2)) {
             return this;
         }
 
-        this.revertStack[name].pop();
+        this._revertStack[name].pop();
 
-        return this._setAttr(name, this.revertStack[name][this.revertStack[name].length - 1]);
+        return this._setAttr(name, this._revertStack[name][this._revertStack[name].length - 1]);
     },
 
     /**

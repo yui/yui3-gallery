@@ -46,7 +46,7 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="..&#x2F;modules/gallery-zui-attribute-core.html">gallery-zui-attribute-core</a></li>
+                <li><a href="..&#x2F;modules/gallery-zui-attribute.html">gallery-zui-attribute</a></li>
             
             </ul>
         </div>
@@ -92,7 +92,7 @@
 
     
         
-            Module: <a href="../modules/gallery-zui-attribute-core.html">gallery-zui-attribute-core</a>
+            Module: <a href="../modules/gallery-zui-attribute.html">gallery-zui-attribute</a>
         
     
 
@@ -115,6 +115,8 @@ methods for Attribute management such as toggle() and set_again()</p>
         
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
         
         
         
@@ -149,7 +151,19 @@ methods for Attribute management such as toggle() and set_again()</p>
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_sync">sync</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_toggle">toggle</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_unsync">unsync</a>
 
                                 
                             </li>
@@ -158,6 +172,32 @@ methods for Attribute management such as toggle() and set_again()</p>
                 </div>
             
 
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__doRevert">_doRevert</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__revertList">_revertList</a>
+
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__revertStack">_revertStack</a>
+
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
             
 
             
@@ -212,7 +252,7 @@ methods for Attribute management such as toggle() and set_again()</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_zui-attribute.js.html#l65"><code>js&#x2F;zui-attribute.js:65</code></a>
+        <a href="..&#x2F;files&#x2F;js_zui-attribute.js.html#l96"><code>js&#x2F;zui-attribute.js:96</code></a>
         
         </p>
 
@@ -273,6 +313,12 @@ methods for Attribute management such as toggle() and set_again()</p>
                 <li class="arg">
                     
                         <code>value</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>cfg</code>
                     
                 </li>
             
@@ -350,6 +396,21 @@ methods for Attribute management such as toggle() and set_again()</p>
 
                     <div class="param-description">
                         <p>The value of the attribute.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">cfg</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Optional event data to be mixed into the event facade passed to subscribers of the attribute's change event.</p>
                     </div>
 
                     
@@ -452,6 +513,135 @@ methods for Attribute management such as toggle() and set_again()</p>
 </div>
 
                 
+                    <div id="method_sync" class="method item">
+    <h3 class="name"><code>sync</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>source</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>sourceName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_zui-attribute.js.html#l113"><code>js&#x2F;zui-attribute.js:113</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>sync an attribute from other Object when the attribute value of other object changed, everytime.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The name of the attribute.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">source</code>
+                        <span class="type">Attribute</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The source Attribute owner Object you want to sync.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">sourceName</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The source Attribute name. If the source attribute name is same with target, you can omit this parameter.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_toggle" class="method item">
     <h3 class="name"><code>toggle</code></h3>
 
@@ -539,9 +729,283 @@ methods for Attribute management such as toggle() and set_again()</p>
 </div>
 
                 
+                    <div id="method_unsync" class="method item">
+    <h3 class="name"><code>unsync</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>source</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>sourceName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_zui-attribute.js.html#l140"><code>js&#x2F;zui-attribute.js:140</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stop attribute syncing</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The name of the attribute.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">source</code>
+                        <span class="type">Attribute</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The source Attribute owner Object you want to sync.</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">sourceName</code>
+                        <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/String" class="crosslink external" target="_blank">String</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The source Attribute name. If the source attribute name is same with target, you can o
+mit this parameter.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
             </div>
         
 
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__doRevert" class="property item protected">
+    <h3 class="name"><code>_doRevert</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Boolean" class="crosslink external" target="_blank">Boolean</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_zui-attribute.js.html#l56"><code>js&#x2F;zui-attribute.js:56</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>When the obejct have _doRevert property , enable the revert() behavior on all properties</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__revertList" class="property item protected">
+    <h3 class="name"><code>_revertList</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_zui-attribute.js.html#l65"><code>js&#x2F;zui-attribute.js:65</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>When the obejct have _revertList property , enable the revert() behavior on listed properties</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__revertStack" class="property item protected">
+    <h3 class="name"><code>_revertStack</code></h3>
+    <span class="type"><a href="https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object" class="crosslink external" target="_blank">Object</a></span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_zui-attribute.js.html#l77"><code>js&#x2F;zui-attribute.js:77</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Used to keep data stack for revert()</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
         
 
         

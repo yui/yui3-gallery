@@ -46,7 +46,7 @@
 
             <ul id="api-modules" class="apis modules">
             
-                <li><a href="..&#x2F;modules/gallery-zui-attribute-core.html">gallery-zui-attribute-core</a></li>
+                <li><a href="..&#x2F;modules/gallery-zui-attribute.html">gallery-zui-attribute</a></li>
             
             </ul>
         </div>
@@ -86,7 +86,7 @@
  * The Attribute module provides more methods for Attribute object
  * support for older browsers
  *
- * @module gallery-zui-attribute-core
+ * @module gallery-zui-attribute
  *&#x2F;
 
 &#x2F;**
@@ -94,7 +94,7 @@
  * methods for Attribute management such as toggle() and set_again()   
  *
  * @class ZAttribute
-*&#x2F; 
+*&#x2F;
 function ZAttribute() {}
 
 ZAttribute.prototype = {
@@ -102,10 +102,10 @@ ZAttribute.prototype = {
      * toggle the value of an attribute.
      *
      * @method toggle
-     * @param {String} name The name of the attribute.
+     * @param name {String} The name of the attribute.
      * @chainable
-     *&#x2F; 
-    toggle: function(name) {
+     *&#x2F;
+    toggle: function (name) {
         if (this.set &amp;&amp; this.get) {
             this.set(name, this.get(name) ? false : true);
         }
@@ -117,10 +117,10 @@ ZAttribute.prototype = {
      * set the value of an attribute to current value, to trigger setter function or valueChange event.
      *
      * @method set_again
-     * @param {String} name The name of the attribute.
+     * @param name {String} The name of the attribute.
      * @chainable
-     *&#x2F; 
-    set_again: function(name) {
+     *&#x2F;
+    set_again: function (name) {
         if (this.set &amp;&amp; this.get) {
             this.set(name, this.get(name));
         }
@@ -131,36 +131,122 @@ ZAttribute.prototype = {
      * set the value of an attribute, this wrapped function help to maintain a value change stack for revert().
      *
      * @method set
-     * @param {String} name The name of the attribute.
-     * @param {String} value The value of the attribute.
+     * @param name {String} The name of the attribute.
+     * @param value {String} The value of the attribute.
+     * @param cfg {Object} Optional event data to be mixed into the event facade passed to subscribers of the attribute&#x27;s change event.
      * @chainable
      *&#x2F;
-    set: function(name, value) {
-        if (!this.revertStack) {
-            this.revertStack = {};
+    set: function (name, value, cfg) {
+       &#x2F;**
+         * When the obejct have _doRevert property , enable the revert() behavior on all properties
+         *
+         * @property _doRevert
+         * @type Boolean
+         * @protected
+         *&#x2F;  
+        var doRevert = this._doRevert;
+
+       &#x2F;**
+         * When the obejct have _revertList property , enable the revert() behavior on listed properties
+         *
+         * @property _revertList
+         * @type Object
+         * @protected
+         *&#x2F;
+        if (!doRevert &amp;&amp; this._revertList) {
+            doRevert = this._revertList[name];
         }
-        if (!this.revertStack[name]) {
-            this.revertStack[name] = [];
+
+        if (doRevert) {
+           &#x2F;**
+             * Used to keep data stack for revert()
+             *
+             * @property _revertStack
+             * @type Object
+             * @protected
+             *&#x2F;
+            if (!this._revertStack) {
+                this._revertStack = {};
+            }
+            if (!this._revertStack[name]) {
+                this._revertStack[name] = [];
+            }
+            this._revertStack[name].push(value);
         }
-        this.revertStack[name].push(value);
-        return this._setAttr(name, value);
+
+        return this._setAttr(name, value, cfg);
     },
 
     &#x2F;**
      * revert the value of an attribute. If no older value, do nothing.
      *
      * @method revert
-     * @param {String} name The name of the attribute.
+     * @param name {String} The name of the attribute.
      * @chainable
      *&#x2F;
-    revert: function(name, value) {
-        if (!this.revertStack[name] || (this.revertStack[name].length &lt; 2)) {
+    revert: function (name, value) {
+        if (!this._revertStack || !this._revertStack[name] || (this._revertStack[name].length &lt; 2)) {
             return this;
         }
 
-        this.revertStack[name].pop();
+        this._revertStack[name].pop();
 
-        return this._setAttr(name, this.revertStack[name][this.revertStack[name].length - 1]);
+        return this._setAttr(name, this._revertStack[name][this._revertStack[name].length - 1]);
+    },
+
+    &#x2F;**
+     * sync an attribute from other Object when the attribute value of other object changed, everytime.
+     *
+     * @method sync
+     * @param name {String} The name of the attribute.
+     * @param source {Attribute} The source Attribute owner Object you want to sync.
+     * @param sourceName {String} The source Attribute name. If the source attribute name is same with target, you can omit this parameter.
+     * @chainable
+     *&#x2F;
+    sync: function (name, source, fname) {
+        var id = Y.stamp(this),
+            sid = Y.stamp(source),
+            from = fname || name;
+
+        if (!this.syncHandlers) {
+            this.syncHandlers = {};
+        }
+
+        this.syncHandlers[[name, id, sid, from].join(&#x27;_&#x27;)] = source.after(from + &#x27;Change&#x27;, function (E) {
+            this.set(name, E.newVal);
+        }, this);
+
+        this.set(name, source.get(from));
+
+        return this;
+    },
+
+    &#x2F;**
+     * Stop attribute syncing
+     *
+     * @method unsync
+     * @param name {String} The name of the attribute.
+     * @param source {Attribute} The source Attribute owner Object you want to sync.
+     * @param sourceName {String} The source Attribute name. If the source attribute name is same with target, you can o
+mit this parameter.
+     * @chainable
+     *&#x2F;
+    unsync: function (name, source, fname) {
+        var id = Y.stamp(this),
+            sid = Y.stamp(source),
+            from = fname || name,
+            hid = [name, id, sid, from].join(&#x27;_&#x27;);
+
+        if (!this.syncHandlers) {
+            this.syncHandlers = {};
+        }
+
+        if (this.syncHandlers[hid]) {
+            this.syncHandlers[hid].detach();
+            delete this.syncHandlers[hid];
+        }
+
+        return this;
     }
 };
 
