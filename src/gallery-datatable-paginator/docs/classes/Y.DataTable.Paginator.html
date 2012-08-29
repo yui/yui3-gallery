@@ -114,7 +114,8 @@
 <p>Works with either client-side pagination (i.e. local data, usually in form of JS Array) or
  in conjunction with remote server-side pagination, via either DataSource or ModelSync.REST.</p>
 
-<p>Allows for dealing with sorted data, wherein the local data is sorted in place, and in the case of remote data the "sortBy" attribute is passed to the remote server.</p>
+<p>Allows for dealing with sorted data, wherein the local data is sorted in place, and in the case of remote data the "sortBy"
+attribute is passed to the remote server.</p>
 
 <p><h4>Usage</h4></p>
 
@@ -123,29 +124,29 @@
       data:       enrollment.records,
       scrollable: 'y',
       height:     '450px',
+      sortBy:     [{lastName:'asc'}, {grade:-1}],
       paginator:  new PaginatorView({
-      model:  new PaginatorModel({itemsPerPage:50, page:1})
-      })
-
+                model:      new PaginatorModel({itemsPerPage:50, page:3}),
+                container:  '#pagContA'
+      }),
+      resizePaginator: true
   });
 </code></pre>
 
 <p><h4>Client OR Server Pagination</h4></p>
 
 <p>A determination of whether the source of <code>data</code> is either "local" data (i.e. a Javascript Array or Y.ModelList), or is
- provided from a server (either DataSource or ModelSync.REST) is made in the method <a href="#method__bindPaginator">_bindPaginator</a>.
- We use a "duck-type" evaluation, which may not be completely robust, but has worked so far in testing.</p>
+ provided from a server (either DataSource or ModelSync.REST) is made in the method <a href="#method__dataChange">_dataChange</a>.
+ We use a "duck-type" evaluation, which may not be completely robust, but has worked so far in testing. The process used to
+ evaluate the "source" of data can be reviewed in the _dataChange method.</p>
 
-<p>For remote data, the initial call to <code>.set('data',...)</code> and/or <code>data.load(...)</code> returns a null array, of zero length, while
- the request is being retrieved.  We use this fact to discern that it is not "local" data.  Then we evaluate whether the
- <code>datasource</code> plugin exists, and if so we assume the source is DataSource, and set <code>_pagDataSrc:'ds'</code>.  Otherwise, if the
- <code>data</code> property (i.e. the ModelList) contains an attribute <code>totalRecs</code> we expect that data will be retrieved via ModelSync.REST
- and set <code>_pagDataSrc:'mlist'</code>.</p>
+<p>For server-side pagination, the OUTGOING request must include (as a minimum);  <code>page</code>, <code>totalItems</code> and <code>sortBy</code> querystring
+ parameters.  Likewise, the INCOMING (returned response) must include as "meta-data" at least <code>totalItems</code>, plus any other
+ PaginatorModel attributes.   The key item within the returned response is `totalItems'.</p>
 
-<p>For server-side pagination, an attribute <a href="#attr_totalItemsResponse">totalItemsResponse</a> is used to identify the
- property within the response that contains the total number of "records" (or items) at the remote data.  This setting is
- required for server-side pagination, and is defaulted to <code>totalItems</code> to match the expected attribute at PaginatorModel.
- <br/>It is typically mapped in either a ModelSync.REST server <code>.parse</code> method or in a DataSource <code>after:response</code> method.</p>
+<p>We have provided an attribute <a href="#attr_serverPaginationMap">serverPaginationMap</a> as an object hash to translate both outgoing
+ querystring parameter names and incoming (response returned) parameter names in order to match what is expected by the
+ PaginatorModel.  Please see this attribute or the examples for how to utilize this map for your use case.</p>
 
 <p><h4>Loading the "data" For a Page</h4>
  Once the "source of data" is known, the method <a href="#method_processPageRequest">processPageRequest</a> fires on a <code>pageChange</code>.</p>
@@ -153,10 +154,15 @@
 <p>For the case of "local data", i.e. where <code>_pagDataSrc:'local'</code>, the existing buffer of data is sliced according to the pagination
  state, and the data is loaded silently, and <code>this.syncUI()</code> is fired to refresh the DT.</p>
 
-<p>The case of "remote data" (from a server) is actually more straightforward.  This extension DOES NOT "cache" pages for remote
- data, it simply inserts the full returned data into the DT.  So as a consequence, a pagination state change for remote data
- involves a simple request sent to the server source (either DataSource or ModelSync.REST) and the response results are
- loaded in the DT.</p>
+<p>The case of "remote data" (from a server) is actually more straightforward.  For the case of ModelSync.REST remote data the
+ current "pagination state" is processed through the <a href="#attr_serverPaginationMap">serverPaginationMap</a> hash (to convert to
+ queryString format) and the ModelList.load() method is called.  For the case of a DataSource, a similar approach is used where
+ the <a href="#attr_requestStringTemplate">requestStringTemplate</a> is read, processed through the serverPaginationMap hash and a
+ datasource.load() request is fired.</p>
+
+<p>This extension DOES NOT "cache" pages for remote data, it simply inserts the full returned data into the DT.  So as a consequence,
+ a pagination state change for remote data involves a simple request sent to the server source (either DataSource or ModelSync.REST)
+ and the response results are loaded in the DT as in any other "response".</p>
 </div>
 
 
@@ -190,14 +196,49 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
-                                <a href="#method__afterSetData">_afterSetData</a>
+                                <a href="#method__afterDSResponse">_afterDSResponse</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method__bindPaginator">_bindPaginator</a>
+                                <a href="#method__afterMLResponse">_afterMLResponse</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__afterSyncUI">_afterSyncUI</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__dataChange">_dataChange</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__defPagMap">_defPagMap</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__defPagState">_defPagState</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__gefPagState">_gefPagState</a>
 
                                 
                                 
@@ -218,7 +259,35 @@
                             </li>
                         
                             <li class="index-item method private">
+                                <a href="#method__sefPagState">_sefPagState</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method__setPaginator">_setPaginator</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__setPagMap">_setPagMap</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__srvPagMapObj">_srvPagMapObj</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__syncPaginatorSize">_syncPaginatorSize</a>
 
                                 
                                 
@@ -231,14 +300,14 @@
                                 
                             </li>
                         
-                            <li class="index-item method public">
+                            <li class="index-item method protected">
                                 <a href="#method_destructor">destructor</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method private">
+                            <li class="index-item method protected">
                                 <a href="#method_initializer">initializer</a>
 
                                 
@@ -247,6 +316,13 @@
                         
                             <li class="index-item method public">
                                 <a href="#method_processPageRequest">processPageRequest</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_resizePaginator">resizePaginator</a>
 
                                 
                                 
@@ -287,6 +363,13 @@
                                 
                             </li>
                         
+                            <li class="index-item property public">
+                                <a href="#property_pagModel">pagModel</a>
+
+                                
+                                
+                            </li>
+                        
                     </ul>
                 </div>
             
@@ -298,11 +381,23 @@
                     <ul class="index-list attrs">
                         
                             <li class="index-item attr">
+                                <a href="#attr_paginationState">paginationState</a>
+                            </li>
+                        
+                            <li class="index-item attr">
                                 <a href="#attr_paginator">paginator</a>
                             </li>
                         
                             <li class="index-item attr">
-                                <a href="#attr_totalItemsResponse">totalItemsResponse</a>
+                                <a href="#attr_paginatorResize">paginatorResize</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_requestStringTemplate">requestStringTemplate</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_serverPaginationMap">serverPaginationMap</a>
                             </li>
                         
                     </ul>
@@ -316,14 +411,7 @@
                     <ul class="index-list events">
                         
                             <li class="index-item event">
-                                <a href="#event_pageupdate">pageupdate</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item event">
-                                <a href="#event_paginatorSetup">paginatorSetup</a>
+                                <a href="#event_pageUpdate">pageUpdate</a>
 
                                 
                                 
@@ -331,6 +419,13 @@
                         
                             <li class="index-item event">
                                 <a href="#event_render">render</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_resize">resize</a>
 
                                 
                                 
@@ -346,8 +441,8 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__afterSetData" class="method item private">
-    <h3 class="name"><code>_afterSetData</code></h3>
+                    <div id="method__afterDSResponse" class="method item private">
+    <h3 class="name"><code>_afterDSResponse</code></h3>
 
     
         <div class="args">
@@ -355,7 +450,7 @@
             
                 <li class="arg">
                     
-                        <code>e</code>
+                        <code>resp</code>
                     
                 </li>
             
@@ -390,7 +485,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l433"><code>js&#x2F;datatable-paginator-class.js:433</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l515"><code>js&#x2F;datatable-paginator-class.js:515</code></a>
         
         </p>
 
@@ -401,8 +496,8 @@
     </div>
 
     <div class="description">
-        <p>A connector method that will re-bind the Paginator instance to this DataTable after an underlying
-change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</code>, <code>*:remove</code> events)</p>
+        <p>Method fires after DataTable/DataSource plugin fires it's "response" event, which includes
+the response object, including {results:, meta:} properties.</p>
     </div>
 
     
@@ -413,8 +508,252 @@ change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</
             
                 <li class="param">
                     
-                        <code class="param-name">e</code>
-                        <span class="type">EventFacade</span>
+                        <code class="param-name">resp</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Includes results and meta properties</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">results</code>
+                                    <span class="type">Array</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Array of result Objects</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">meta</code>
+                                    <span class="type">Object</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Object including properties mapped to include pagination properties</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__afterMLResponse" class="method item private">
+    <h3 class="name"><code>_afterMLResponse</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>resp</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l538"><code>js&#x2F;datatable-paginator-class.js:538</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method fires after custom ModelSync.REST "load" action fires a user-defined "response" event.
+This can be implemented by extending ModelSync.REST by adding .parse() method which fires
+a custom "response" event including {results:, meta:} properties.</p>
+
+<p>Usage Note: The user is REQUIRED to provide a custom "response" event in the ModelList
+ parse overridden function in order for this to work properly.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">resp</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Includes results and meta properties</p>
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">results</code>
+                                    <span class="type">Array</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Array of result Objects</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                
+                                    <code class="param-name">meta</code>
+                                    <span class="type">Object</span>
+                                
+
+                                <div class="param-description">
+                                    <p>Object including properties mapped to include pagination properties</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__afterSyncUI" class="method item private">
+    <h3 class="name"><code>_afterSyncUI</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>o</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l459"><code>js&#x2F;datatable-paginator-class.js:459</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method called to ensure that the _dataChange method is called, specifically for the case
+where a DataSource is used (which is hard to track when it is plugged in ...)</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">o</code>
+                        <span class="type">Object</span>
                     
 
                     
@@ -436,8 +775,99 @@ change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</
 </div>
 
                 
-                    <div id="method__bindPaginator" class="method item private">
-    <h3 class="name"><code>_bindPaginator</code></h3>
+                    <div id="method__dataChange" class="method item private">
+    <h3 class="name"><code>_dataChange</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>o</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l471"><code>js&#x2F;datatable-paginator-class.js:471</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method fires after every variety of change event on the DT's "data" setting, which
+is used to sense the origin of where the "data" comes from, and sets the
+this._pagDataSrc property to either "ds", "mlist" or "local".</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">o</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__defPagMap" class="method item private">
+    <h3 class="name"><code>_defPagMap</code></h3>
 
     
         <span class="paren">()</span>
@@ -445,7 +875,7 @@ change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</
 
     
         <span class="returns-inline">
-            <span class="type"></span>
+            <span class="type">Object</span>
         </span>
     
 
@@ -474,7 +904,7 @@ change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l301"><code>js&#x2F;datatable-paginator-class.js:301</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l595"><code>js&#x2F;datatable-paginator-class.js:595</code></a>
         
         </p>
 
@@ -482,16 +912,11 @@ change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</
         
 
         
-            <p>Available since 3.6.0</p>
-        
     </div>
 
     <div class="description">
-        <p>Listener hooked to the original DT's "syncUI" event, only stores the ModelList for
- the DT on the first pass through.</p>
-
-<p>For server-generated data, this method determines the server type (DataSource or ModelSync.REST)
-  and sets the property flag _pagDataSrc to either 'ds' or 'mlist'</p>
+        <p>Default 'valueFn' function setting for the ATTR <code>serverPaginationMap</code>, where
+the defaults are simply the member names.</p>
     </div>
 
     
@@ -503,7 +928,154 @@ change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</
             <div class="returns-description">
                 
                     
-                    true or false
+                        <span class="type">Object</span>:
+                    
+                    obj
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__defPagState" class="method item private">
+    <h3 class="name"><code>_defPagState</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l625"><code>js&#x2F;datatable-paginator-class.js:625</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets default for the "paginationState" DataTable attribute complex object as an
+object with all of PaginatorModel ATTRS and the <code>sortBy</code> setting.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__gefPagState" class="method item private">
+    <h3 class="name"><code>_gefPagState</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l641"><code>js&#x2F;datatable-paginator-class.js:641</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Getter for the "paginationState" DataTable attribute complex object.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
                 
             </div>
         </div>
@@ -547,7 +1119,7 @@ change to "data" (via <code>*:change</code>, <code>*:reset</code>, <code>*:add</
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l422"><code>js&#x2F;datatable-paginator-class.js:422</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l690"><code>js&#x2F;datatable-paginator-class.js:690</code></a>
         
         </p>
 
@@ -614,7 +1186,7 @@ the DataTable has finished rendering.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l393"><code>js&#x2F;datatable-paginator-class.js:393</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l563"><code>js&#x2F;datatable-paginator-class.js:563</code></a>
         
         </p>
 
@@ -644,7 +1216,7 @@ the DataTable has finished rendering.</p>
                     
 
                     <div class="param-description">
-                        <p>which contains a <code>state</code> object containing the <code>Model.getAttrs()</code> attributes</p>
+                        <p>Change event facade for the PaginatorModel 'pageChange' event</p>
                     </div>
 
                     
@@ -654,6 +1226,79 @@ the DataTable has finished rendering.</p>
         </div>
     
 
+    
+
+    
+</div>
+
+                
+                    <div id="method__sefPagState" class="method item private">
+    <h3 class="name"><code>_sefPagState</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l654"><code>js&#x2F;datatable-paginator-class.js:654</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets default for the "paginationState" DataTable attribute
+ complex object.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                
+            </div>
+        </div>
     
 
     
@@ -708,7 +1353,7 @@ the DataTable has finished rendering.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l407"><code>js&#x2F;datatable-paginator-class.js:407</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l672"><code>js&#x2F;datatable-paginator-class.js:672</code></a>
         
         </p>
 
@@ -766,6 +1411,323 @@ attribute value.</p>
 </div>
 
                 
+                    <div id="method__setPagMap" class="method item private">
+    <h3 class="name"><code>_setPagMap</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>val</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l611"><code>js&#x2F;datatable-paginator-class.js:611</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Setter method for the <code>serverPaginationMap</code> attribute, which can be used to
+ merge the "default" object with the user-supplied object.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">val</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__srvPagMapObj" class="method item private">
+    <h3 class="name"><code>_srvPagMapObj</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>prop</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>dir</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l430"><code>js&#x2F;datatable-paginator-class.js:430</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Helper method that searches the 'serverPaginationMap' ATTR and returns the requested
+property, including if it is nested as "toServer" or "fromServer" subattribute.
+( Used in processPageRequest )</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">prop</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Property name to search for (expected matches in PaginatorModel ATTRS)</p>
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">dir</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Directional (optional), either "to" (matches toServer) or "from" (matches fromServer)</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                    rprop Attribute name from RHS of map
+                
+            </div>
+        </div>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>_srvPagMapObj("itemsPerPage")
+        { itemsPerPage : 'numPageRecords' }
+        { itemsPerPage : {toServer:'pageRows', fromServer:'pageRecordCount' }</p>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method__syncPaginatorSize" class="method item private">
+    <h3 class="name"><code>_syncPaginatorSize</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l577"><code>js&#x2F;datatable-paginator-class.js:577</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method to adjust the CSS width of the paginator container and set it to the
+ width of the underlying DT.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    Boolean if success
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_dataReset" class="method item public">
     <h3 class="name"><code>dataReset</code></h3>
 
@@ -814,7 +1776,7 @@ attribute value.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l193"><code>js&#x2F;datatable-paginator-class.js:193</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l403"><code>js&#x2F;datatable-paginator-class.js:403</code></a>
         
         </p>
 
@@ -871,7 +1833,7 @@ attribute value.</p>
 </div>
 
                 
-                    <div id="method_destructor" class="method item public">
+                    <div id="method_destructor" class="method item protected">
     <h3 class="name"><code>destructor</code></h3>
 
     
@@ -883,7 +1845,7 @@ attribute value.</p>
     
 
     
-        <span class="flag public">public</span>
+        <span class="flag protected">protected</span>
     
 
     
@@ -905,7 +1867,7 @@ attribute value.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l174"><code>js&#x2F;datatable-paginator-class.js:174</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l265"><code>js&#x2F;datatable-paginator-class.js:265</code></a>
         
         </p>
 
@@ -927,7 +1889,7 @@ attribute value.</p>
 </div>
 
                 
-                    <div id="method_initializer" class="method item private">
+                    <div id="method_initializer" class="method item protected">
     <h3 class="name"><code>initializer</code></h3>
 
     
@@ -943,7 +1905,7 @@ attribute value.</p>
     
 
     
-        <span class="flag private">private</span>
+        <span class="flag protected">protected</span>
     
 
     
@@ -967,7 +1929,7 @@ attribute value.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l144"><code>js&#x2F;datatable-paginator-class.js:144</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l224"><code>js&#x2F;datatable-paginator-class.js:224</code></a>
         
         </p>
 
@@ -978,8 +1940,8 @@ attribute value.</p>
     </div>
 
     <div class="description">
-        <p>This initializer sets up the listeners related to the original DataTable instance and
- also related to the underlying "data" attribute the DT is based upon.</p>
+        <p>This initializer sets up the listeners related to the original DataTable instance, to the
+ PaginatorModel changes and related to the underlying "data" attribute the DT is based upon.</p>
     </div>
 
     
@@ -1055,7 +2017,7 @@ attribute value.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l215"><code>js&#x2F;datatable-paginator-class.js:215</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l284"><code>js&#x2F;datatable-paginator-class.js:284</code></a>
         
         </p>
 
@@ -1158,6 +2120,66 @@ attribute value.</p>
 </div>
 
                 
+                    <div id="method_resizePaginator" class="method item public">
+    <h3 class="name"><code>resizePaginator</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l385"><code>js&#x2F;datatable-paginator-class.js:385</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method to sync the container for the paginator View with the underlying DataTable
+ 'table' element.</p>
+
+<p>Unfortunately, there isn't a distinct, definitive 'render' complete event due to
+  DT's complex rendering, so I use a timer function to attempt a resize.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
             </div>
         
 
@@ -1193,7 +2215,7 @@ attribute value.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l93"><code>js&#x2F;datatable-paginator-class.js:93</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l164"><code>js&#x2F;datatable-paginator-class.js:164</code></a>
         
         </p>
 
@@ -1207,11 +2229,10 @@ attribute value.</p>
     <div class="description">
         <p>Holder for the "original" un-paged data that the DataTable was based upon.</p>
 
-<p>This property is stored as an Array, from the original "data" ModelList.
-For remote data, it is used as-is.
-For local data, is sliced as needed to re-set each data Page.</p>
+<p>This property is stored as an Array, from the original "data" ModelList, only used
+for case of "local" data, is sliced as needed to re-set each data Page.</p>
 
-<p>Populated in _bindPaginator and utilized in processPageRequest</p>
+<p>Populated in method <a href="#method__dataChange">_dataChange</a></p>
     </div>
 
     
@@ -1251,7 +2272,7 @@ For local data, is sliced as needed to re-set each data Page.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l112"><code>js&#x2F;datatable-paginator-class.js:112</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l182"><code>js&#x2F;datatable-paginator-class.js:182</code></a>
         
         </p>
 
@@ -1263,11 +2284,12 @@ For local data, is sliced as needed to re-set each data Page.</p>
     </div>
 
     <div class="description">
-        <p>Placeholder for a text flag indicating the duck-typed source of data for this
- DataTable, this is set in <code>_bindPaginator</code> to either of 'ds', 'mlist' or 'local'</p>
+        <p>Placeholder for a text flag indicating the source of "data" for this DataTable,
+ this is set initially in method _dataChange.</p>
 
-<p>Populated in _bindPaginator
- Utilized in processPageRequest</p>
+<p>Set to either 'local', 'ds' or 'mlist' in method <a href="#method__dataChange">_dataChange</a></p>
+
+<p>Populated in _dataChange.  Utilized in processPageRequest</p>
     </div>
 
     
@@ -1305,7 +2327,7 @@ For local data, is sliced as needed to re-set each data Page.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l129"><code>js&#x2F;datatable-paginator-class.js:129</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l199"><code>js&#x2F;datatable-paginator-class.js:199</code></a>
         
         </p>
 
@@ -1317,7 +2339,57 @@ For local data, is sliced as needed to re-set each data Page.</p>
     </div>
 
     <div class="description">
-        <p>A convenience property (which is identical to the attribute <code>paginator</code>) for use by the user.</p>
+        <p>A convenience property holder for the DataTable's "paginator" attribute.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_pagModel" class="property item public">
+    <h3 class="name"><code>pagModel</code></h3>
+    <span class="type">Y.PaginatorModel | Model</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l210"><code>js&#x2F;datatable-paginator-class.js:210</code></a>
+        
+        </p>
+
+        
+
+        
+            <p>Available since 3.6.0</p>
+        
+    </div>
+
+    <div class="description">
+        <p>A convenience property holder for the Paginator-View's Model attribute.</p>
     </div>
 
     
@@ -1336,6 +2408,58 @@ For local data, is sliced as needed to re-set each data Page.</p>
         
             <div id="attrs" class="api-class-tabpanel">
                 <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_paginationState" class="attr item">
+    <a name="config_paginationState"></a> 
+    <h3 class="name"><code>paginationState</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l114"><code>js&#x2F;datatable-paginator-class.js:114</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Attribute to track the full pagination state (i.e. the PaginatorModel) attributes all in one object.
+Also includes the <code>sortBy</code> property internally.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> unset</p>
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="attr_paginator" class="attr item">
@@ -1366,7 +2490,7 @@ For local data, is sliced as needed to re-set each data Page.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l65"><code>js&#x2F;datatable-paginator-class.js:65</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l71"><code>js&#x2F;datatable-paginator-class.js:71</code></a>
         
         </p>
 
@@ -1376,7 +2500,7 @@ For local data, is sliced as needed to re-set each data Page.</p>
     </div>
 
     <div class="description">
-        <p>Adds a paginator view (specifically, Y.PaginatorView) instance to the DataTable.</p>
+        <p>Adds a paginator view (specifically Y.PaginatorView) instance to the DataTable.</p>
     </div>
 
     
@@ -1389,9 +2513,63 @@ For local data, is sliced as needed to re-set each data Page.</p>
 </div>
 
                 
-                    <div id="attr_totalItemsResponse" class="attr item">
-    <a name="config_totalItemsResponse"></a> 
-    <h3 class="name"><code>totalItemsResponse</code></h3>
+                    <div id="attr_paginatorResize" class="attr item">
+    <a name="config_paginatorResize"></a> 
+    <h3 class="name"><code>paginatorResize</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l145"><code>js&#x2F;datatable-paginator-class.js:145</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Flag to indicate if the Paginator container should be re-sized to the DataTable size
+after rendering is complete.</p>
+
+<p>This attribute works best with a "bar" type of Paginator that is intended to look integral with a DataTable.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> false</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_requestStringTemplate" class="attr item">
+    <a name="config_requestStringTemplate"></a> 
+    <h3 class="name"><code>requestStringTemplate</code></h3>
     <span class="type">String</span>
 
     
@@ -1417,7 +2595,7 @@ For local data, is sliced as needed to re-set each data Page.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l77"><code>js&#x2F;datatable-paginator-class.js:77</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l129"><code>js&#x2F;datatable-paginator-class.js:129</code></a>
         
         </p>
 
@@ -1427,16 +2605,98 @@ For local data, is sliced as needed to re-set each data Page.</p>
     </div>
 
     <div class="description">
-        <p>Property name of the "total number of items" returned in the server response object,
-required for server-side pagination.</p>
+        <p>Includes the request queryString for a DataSource request (only!), which contains the pagination
+replacement strings to be appended to the DataSource's "source" string.</p>
     </div>
 
     
-        <p><strong>Default:</strong> &#x27;totalItems&#x27;</p>
+        <p><strong>Default:</strong> &quot;&quot;</p>
     
 
     
 
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">     requestStringTemplate:  "?currentPage={page}&amp;pageRows={itemsPerPage}&amp;sorting={sortBy}"
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="attr_serverPaginationMap" class="attr item">
+    <a name="config_serverPaginationMap"></a> 
+    <h3 class="name"><code>serverPaginationMap</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l83"><code>js&#x2F;datatable-paginator-class.js:83</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Defines a hash to convert expected PaginatorModel attributes to outgoing request queryString
+or returned (incoming response) meta data back to PaginatorModel attributes.</p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">     serverPaginationMap : {
+         totalItems :    'totalRows',
+         page :          {toServer:'requestedPage', fromServer:'returnedPageNo'},
+         itemIndexStart: 'startRecord',
+         itemsPerPage:   'numPageRows'
+     }
+
+     // would map to an outgoing request of (for url:/data/orders) ;
+     /data/orders/{cust_no}?requestedPage={requestedPage}&amp;numPageRows={numPageRows}
+
+     // for a JSON response of ...
+     { "reply":"ok", "totalRows":478, "returnedPageNo":17, "startRecord":340, "numPageRows":20,
+       "results":[ {...} 20 total rows returned {...}] }
+</code></pre>
+
+<p>For default value, see <a href="#method__defPagMap">_defPagMap</a></p>
+            </div>
+        </div>
     
 </div>
 
@@ -1449,8 +2709,8 @@ required for server-side pagination.</p>
                 <h2 class="off-left">Events</h2>
 
                 
-                    <div id="event_pageupdate" class="events item">
-    <h3 class="name"><code>pageupdate</code></h3>
+                    <div id="event_pageUpdate" class="events item">
+    <h3 class="name"><code>pageUpdate</code></h3>
     <span class="type"></span>
 
     
@@ -1472,7 +2732,7 @@ required for server-side pagination.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l452"><code>js&#x2F;datatable-paginator-class.js:452</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l710"><code>js&#x2F;datatable-paginator-class.js:710</code></a>
         
         </p>
 
@@ -1541,98 +2801,6 @@ required for server-side pagination.</p>
 </div>
 
                 
-                    <div id="event_paginatorSetup" class="events item">
-    <h3 class="name"><code>paginatorSetup</code></h3>
-    <span class="type"></span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l460"><code>js&#x2F;datatable-paginator-class.js:460</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Fires after the DataTable-Paginator has setup properly, rendered the View and is ready to accept page changes</p>
-    </div>
-
-    
-        <div class="params">
-            <h4>Event Payload:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">pagObj</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Containing following;</p>
-                    </div>
-
-                    
-                        <ul class="params-list">
-                            
-                            <li class="param">
-                                <code class="param-name">model</code>
-                                <span class="type">Model</span>
-
-                                <div class="param-description">
-                                    <p>Instance of Paginator Model</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                            <li class="param">
-                                <code class="param-name">view</code>
-                                <span class="type">View</span>
-
-                                <div class="param-description">
-                                    <p>Instance of the Paginator View</p>
-                                </div>
-
-                                
-                            </li>
-                            
-                        </ul>
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-
-    
-</div>
-
-                
                     <div id="event_render" class="events item">
     <h3 class="name"><code>render</code></h3>
     <span class="type"></span>
@@ -1656,7 +2824,7 @@ required for server-side pagination.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l447"><code>js&#x2F;datatable-paginator-class.js:447</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l705"><code>js&#x2F;datatable-paginator-class.js:705</code></a>
         
         </p>
 
@@ -1667,6 +2835,49 @@ required for server-side pagination.</p>
 
     <div class="description">
         <p>Fires after the DataTable 'renderView' event fires</p>
+    </div>
+
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_resize" class="events item">
+    <h3 class="name"><code>resize</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-paginator-class.js.html#l718"><code>js&#x2F;datatable-paginator-class.js:718</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fires after the Paginator is resized to match the DataTable size (requires attribute "paginatorResize:true")</p>
     </div>
 
     

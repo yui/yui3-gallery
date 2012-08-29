@@ -110,7 +110,8 @@
 <p>Works with either client-side pagination (i.e. local data, usually in form of JS Array) or
  in conjunction with remote server-side pagination, via either DataSource or ModelSync.REST.</p>
 
-<p>Allows for dealing with sorted data, wherein the local data is sorted in place, and in the case of remote data the "sortBy" attribute is passed to the remote server.</p>
+<p>Allows for dealing with sorted data, wherein the local data is sorted in place, and in the case of remote data the "sortBy"
+attribute is passed to the remote server.</p>
 
 <p><h4>Usage</h4></p>
 
@@ -119,29 +120,29 @@
       data:       enrollment.records,
       scrollable: 'y',
       height:     '450px',
+      sortBy:     [{lastName:'asc'}, {grade:-1}],
       paginator:  new PaginatorView({
-      model:  new PaginatorModel({itemsPerPage:50, page:1})
-      })
-
+                model:      new PaginatorModel({itemsPerPage:50, page:3}),
+                container:  '#pagContA'
+      }),
+      resizePaginator: true
   });
 </code></pre>
 
 <p><h4>Client OR Server Pagination</h4></p>
 
 <p>A determination of whether the source of <code>data</code> is either "local" data (i.e. a Javascript Array or Y.ModelList), or is
- provided from a server (either DataSource or ModelSync.REST) is made in the method <a href="#method__bindPaginator">_bindPaginator</a>.
- We use a "duck-type" evaluation, which may not be completely robust, but has worked so far in testing.</p>
+ provided from a server (either DataSource or ModelSync.REST) is made in the method <a href="#method__dataChange">_dataChange</a>.
+ We use a "duck-type" evaluation, which may not be completely robust, but has worked so far in testing. The process used to
+ evaluate the "source" of data can be reviewed in the _dataChange method.</p>
 
-<p>For remote data, the initial call to <code>.set('data',...)</code> and/or <code>data.load(...)</code> returns a null array, of zero length, while
- the request is being retrieved.  We use this fact to discern that it is not "local" data.  Then we evaluate whether the
- <code>datasource</code> plugin exists, and if so we assume the source is DataSource, and set <code>_pagDataSrc:'ds'</code>.  Otherwise, if the
- <code>data</code> property (i.e. the ModelList) contains an attribute <code>totalRecs</code> we expect that data will be retrieved via ModelSync.REST
- and set <code>_pagDataSrc:'mlist'</code>.</p>
+<p>For server-side pagination, the OUTGOING request must include (as a minimum);  <code>page</code>, <code>totalItems</code> and <code>sortBy</code> querystring
+ parameters.  Likewise, the INCOMING (returned response) must include as "meta-data" at least <code>totalItems</code>, plus any other
+ PaginatorModel attributes.   The key item within the returned response is `totalItems'.</p>
 
-<p>For server-side pagination, an attribute <a href="#attr_totalItemsResponse">totalItemsResponse</a> is used to identify the
- property within the response that contains the total number of "records" (or items) at the remote data.  This setting is
- required for server-side pagination, and is defaulted to <code>totalItems</code> to match the expected attribute at PaginatorModel.
- <br/>It is typically mapped in either a ModelSync.REST server <code>.parse</code> method or in a DataSource <code>after:response</code> method.</p>
+<p>We have provided an attribute <a href="#attr_serverPaginationMap">serverPaginationMap</a> as an object hash to translate both outgoing
+ querystring parameter names and incoming (response returned) parameter names in order to match what is expected by the
+ PaginatorModel.  Please see this attribute or the examples for how to utilize this map for your use case.</p>
 
 <p><h4>Loading the "data" For a Page</h4>
  Once the "source of data" is known, the method <a href="#method_processPageRequest">processPageRequest</a> fires on a <code>pageChange</code>.</p>
@@ -149,10 +150,15 @@
 <p>For the case of "local data", i.e. where <code>_pagDataSrc:'local'</code>, the existing buffer of data is sliced according to the pagination
  state, and the data is loaded silently, and <code>this.syncUI()</code> is fired to refresh the DT.</p>
 
-<p>The case of "remote data" (from a server) is actually more straightforward.  This extension DOES NOT "cache" pages for remote
- data, it simply inserts the full returned data into the DT.  So as a consequence, a pagination state change for remote data
- involves a simple request sent to the server source (either DataSource or ModelSync.REST) and the response results are
- loaded in the DT.</p>
+<p>The case of "remote data" (from a server) is actually more straightforward.  For the case of ModelSync.REST remote data the
+ current "pagination state" is processed through the <a href="#attr_serverPaginationMap">serverPaginationMap</a> hash (to convert to
+ queryString format) and the ModelList.load() method is called.  For the case of a DataSource, a similar approach is used where
+ the <a href="#attr_requestStringTemplate">requestStringTemplate</a> is read, processed through the serverPaginationMap hash and a
+ datasource.load() request is fired.</p>
+
+<p>This extension DOES NOT "cache" pages for remote data, it simply inserts the full returned data into the DT.  So as a consequence,
+ a pagination state change for remote data involves a simple request sent to the server source (either DataSource or ModelSync.REST)
+ and the response results are loaded in the DT as in any other "response".</p>
 </div>
 
 
