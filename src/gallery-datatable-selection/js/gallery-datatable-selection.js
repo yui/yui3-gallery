@@ -13,25 +13,25 @@ function DtSelection() {}
 
 DtSelection.ATTRS = {
     /**
-     * Attribute that is set to a Node for the most recent "highlighted" item, either TD or TR
+     * Node for the most recent "highlighted" item, either TD or TR
      * @attribute highlighted
      * @type {Node}
      * @default null
      */
     highlighted : {
-        value:      null,
-        validator:  function(v){ return v instanceof Y.Node; }
+        value:      null
+       // validator:  function(v){ return v instanceof Y.Node; }
     },
 
     /**
-     * Attribute that is set to a Node for the most recent "selected" item, either TD or TR
+     * Node for the most recent "selected" item, either TD or TR
      * @attribute selected
      * @type {Node}
      * @default null
      */
     selected:{
-        value:      null,
-        validator:  function(v){ return v instanceof Y.Node; }
+        value:      null
+        //validator:  function(v){ return v instanceof Y.Node; }
     },
 
     /**
@@ -71,13 +71,16 @@ DtSelection.ATTRS = {
         value:      [],
         readOnly:   true,
         validator:  Y.Lang.isArray,
-        getter:     '_getSelectedRows',
+        getter:     '_getSelectedRows'
         //setter:     '_setSelectedRows'
     },
 
     /**
      * Attribute that either sets the current "selected" records (by entering an array of DataTable record
-     * indices) or returns an array of "selected" records based on the recent selections.
+     *  indices) or returns an array of "selected" records based on the recent selections.
+     *
+     * Note, this attribute differs from `selectedRows` in that it operates on "records" and NOT TR's
+     *
      * @attribute selectedRecords
      * @type {Array}
      * @default []
@@ -90,7 +93,10 @@ DtSelection.ATTRS = {
     },
 
     /**
-     * Attribute that sets the initially selected cells TD's or returns the currently selected TD's.
+     * Attribute that sets the initially selected cells TD's or returns the currently selected TD's.  For
+     *  setting selected cells, the attribute is assumed to be an array of cell objects in {record,column}
+     *  format (See [_setSelectedCells](#method__setSelectedCells).
+     *
      * @attribute selectedCells
      * @type {Array}
      * @default []
@@ -198,12 +204,7 @@ Y.mix( DtSelection.prototype, {
         Y.Array.each( this._eventHandles.selector,function(item){
             item.detach();
         });
-        this._eventHandles.selectorSelect.detach();
-        this._eventHandles.selectorHighlight.detach();
-
         this._eventHandles.selector = null;
-        this._eventHandles.selectorSelect = null;
-        this._eventHandles.selectorHighlight = null;
     },
 
 
@@ -269,18 +270,35 @@ Y.mix( DtSelection.prototype, {
         return tds;
     },
 
+    /**
+     * Removes all "selected" classes from DataTable and resets internal selections counters and "selected" attribute.
+     * @method clearSelections
+     * @public
+     */
     clearSelections: function(){
         this._selections = [];
+        this.set('selected',null);
         this._clearAll(this._classSelected);
     },
 
+    /**
+     * Removes all "highlight" classes from DataTable and resets `highlighted` attribute.
+     * @method clearHighlighted
+     * @public
+     */
     clearHighlighted: function(){
+        this.set('selected',null);
         this._clearAll(this._classHighlight);
     },
 
+    /**
+     * Removes all highlighting and selections on the DataTable.
+     * @method clearAll
+     * @public
+     */
     clearAll: function(){
         this.clearSelections();
-        this._clearAll(this._classHighlight);
+        this.clearHighlighted();
     },
 
 //------------------------------------------------------------------------------------------------------
@@ -571,5 +589,4 @@ Y.mix( DtSelection.prototype, {
 
 Y.DataTable.Selection = DtSelection;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Selection]);
-
 

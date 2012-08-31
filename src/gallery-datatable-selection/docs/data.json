@@ -68,7 +68,7 @@
         {
             "file": "js/gallery-datatable-selection.js",
             "line": 15,
-            "description": "Attribute that is set to a Node for the most recent \"highlighted\" item, either TD or TR",
+            "description": "Node for the most recent \"highlighted\" item, either TD or TR",
             "itemtype": "attribute",
             "name": "highlighted",
             "type": "{Node}",
@@ -80,7 +80,7 @@
         {
             "file": "js/gallery-datatable-selection.js",
             "line": 26,
-            "description": "Attribute that is set to a Node for the most recent \"selected\" item, either TD or TR",
+            "description": "Node for the most recent \"selected\" item, either TD or TR",
             "itemtype": "attribute",
             "name": "selected",
             "type": "{Node}",
@@ -129,7 +129,7 @@
         {
             "file": "js/gallery-datatable-selection.js",
             "line": 78,
-            "description": "Attribute that either sets the current \"selected\" records (by entering an array of DataTable record\nindices) or returns an array of \"selected\" records based on the recent selections.",
+            "description": "Attribute that either sets the current \"selected\" records (by entering an array of DataTable record\n indices) or returns an array of \"selected\" records based on the recent selections.\n\nNote, this attribute differs from `selectedRows` in that it operates on \"records\" and NOT TR's",
             "itemtype": "attribute",
             "name": "selectedRecords",
             "type": "{Array}",
@@ -140,8 +140,8 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 92,
-            "description": "Attribute that sets the initially selected cells TD's or returns the currently selected TD's.",
+            "line": 95,
+            "description": "Attribute that sets the initially selected cells TD's or returns the currently selected TD's.  For\n setting selected cells, the attribute is assumed to be an array of cell objects in {record,column}\n format (See [_setSelectedCells](#method__setSelectedCells).",
             "itemtype": "attribute",
             "name": "selectedCells",
             "type": "{Array}",
@@ -152,7 +152,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 105,
+            "line": 111,
             "description": "Flag to allow either single \"selections\" (false) or multiple selections (true).\nFor Macintosh OSX-type systems the modifier key \"Cmd\" is held for multiple selections,\n and for Windows or Linux type systems the modifier key is \"Ctrl\".",
             "itemtype": "attribute",
             "name": "selectionMulti",
@@ -164,7 +164,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 124,
+            "line": 130,
             "itemtype": "property",
             "name": "_selections",
             "type": "Array",
@@ -178,7 +178,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 133,
+            "line": 139,
             "description": "Holder for the classname for the \"highlight\" TR or TD",
             "itemtype": "property",
             "name": "_classHighlight",
@@ -193,7 +193,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 143,
+            "line": 149,
             "description": "Holder for the classname for the \"selected\" TR or TD",
             "itemtype": "property",
             "name": "_classSelected",
@@ -208,7 +208,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 153,
+            "line": 159,
             "description": "Holder for the most recent \"click\" event modifier keys from last click,\n used for assessing \"multi\" selections.\n\nContains properties;  altKey, ctrlKey, shiftKey, metaKey, button and which\n\nFilled initially by .initializer and on each Table \"click\".",
             "itemtype": "property",
             "name": "_clickModifiers",
@@ -223,7 +223,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 173,
+            "line": 179,
             "description": "Sets listeners and initial class names required for this \"datatable-selector\" module",
             "itemtype": "method",
             "name": "initializer",
@@ -235,7 +235,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 192,
+            "line": 198,
             "description": "Destructor to clean up listener event handlers and the internal storage buffer.",
             "itemtype": "method",
             "name": "destructor",
@@ -247,7 +247,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 214,
+            "line": 215,
             "description": "Returns the Column object (from the original \"columns\") associated with the input TD Node.",
             "itemtype": "method",
             "name": "getColumnByTd",
@@ -270,7 +270,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 227,
+            "line": 228,
             "description": "Returns the column \"key\" or \"name\" string for the requested TD Node",
             "itemtype": "method",
             "name": "getColumnNameByTd",
@@ -293,7 +293,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 250,
+            "line": 251,
             "description": "Utility method that will return all selected TD Nodes for the current \"selected\" set.\nIf selections include a TR row, all child TD's from the row are included.",
             "itemtype": "method",
             "name": "getSelectedTds",
@@ -309,7 +309,43 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 290,
+            "line": 273,
+            "description": "Removes all \"selected\" classes from DataTable and resets internal selections counters and \"selected\" attribute.",
+            "itemtype": "method",
+            "name": "clearSelections",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/gallery-datatable-selection.js",
+            "line": 284,
+            "description": "Removes all \"highlight\" classes from DataTable and resets `highlighted` attribute.",
+            "itemtype": "method",
+            "name": "clearHighlighted",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/gallery-datatable-selection.js",
+            "line": 294,
+            "description": "Removes all highlighting and selections on the DataTable.",
+            "itemtype": "method",
+            "name": "clearAll",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Selection",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/gallery-datatable-selection.js",
+            "line": 308,
             "description": "Method that updates the \"highlighted\" classes for the selection and unhighlights the prevVal",
             "itemtype": "method",
             "name": "_highlightChange",
@@ -327,7 +363,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 300,
+            "line": 318,
             "description": "Method that updates the \"selected\" classes for the selection and un-selects the prevVal.\nThis method works with multiple selections (via ATTR `selectionMulti` true) by pushing\nthe current selection to the this._selections property.",
             "itemtype": "method",
             "name": "_selectedChange",
@@ -345,7 +381,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 333,
+            "line": 351,
             "itemtype": "event",
             "name": "selected",
             "params": [
@@ -373,7 +409,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 340,
+            "line": 358,
             "description": "Returns the current \"raw\" settings of selections (includes multiple selections)",
             "itemtype": "method",
             "name": "_getSelected",
@@ -389,7 +425,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 357,
+            "line": 375,
             "description": "Getter method that returns an Array of the selected cells in {record,column} coordinate format.\nIf rows or TR elements were selected, it adds all of the row's child TD's.",
             "itemtype": "method",
             "name": "_getSelectedCells",
@@ -417,7 +453,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 382,
+            "line": 400,
             "description": "Setter method for attribute `selectedCells` that takes an array of cells as input and sets them\nas the current selected set with appropriate visual class.",
             "itemtype": "method",
             "name": "_setSelectedCells",
@@ -452,7 +488,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 416,
+            "line": 434,
             "description": "A setter method for attribute `selectedRecords` that takes as input an array of desired DataTable\nrecord indices to be \"selected\", clears existing selections and sets the \"selected\" records and\nhighlights the TR's",
             "itemtype": "method",
             "name": "_setSelectedRecords",
@@ -475,7 +511,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 441,
+            "line": 459,
             "description": "A getter method for the `selectedRecords` attribute that returns an array of DataTable records (Y.Model)\n based on the current \"selected\" items, either TR's or TD's.\n\n If TD's were selected it converts them to their base record.",
             "itemtype": "method",
             "name": "_getSelectedRecords",
@@ -491,7 +527,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 459,
+            "line": 477,
             "description": "Method used to derive from the clicked selection, either the TR or TD of the selection, and\nreturns the current `selectionMode` or `highlightMode` Node (based on the setting of prefix).\n\nThis method adds the required class, and if erasePrev is true, removes the class from the prior setting.",
             "itemtype": "method",
             "name": "_processNodeAction",
@@ -524,7 +560,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 501,
+            "line": 519,
             "description": "Method removes the specified `type` class from all nodes within the TBODY data node.",
             "itemtype": "method",
             "name": "_clearAll",
@@ -543,7 +579,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 513,
+            "line": 531,
             "description": "Setter for `highlightMode` attribute, removes prior event handle (if exists) and defines\na new delegated \"mouseover\" handler that updates the `highlighted` attribute.\n\nA change to this setting clears all prior highlighting.",
             "itemtype": "method",
             "name": "_setHighlightMode",
@@ -565,7 +601,7 @@
         },
         {
             "file": "js/gallery-datatable-selection.js",
-            "line": 535,
+            "line": 553,
             "description": "Setter for `selectionMode` attribute, removes prior event handle (if exists) and defines\na new delegated \"click\" handler that updates the `selected` attribute.\n\nA change to this setting clears all prior selections.",
             "itemtype": "method",
             "name": "_setSelectionMode",

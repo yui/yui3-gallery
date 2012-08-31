@@ -105,25 +105,25 @@ function DtSelection() {}
 
 DtSelection.ATTRS = {
     &#x2F;**
-     * Attribute that is set to a Node for the most recent &quot;highlighted&quot; item, either TD or TR
+     * Node for the most recent &quot;highlighted&quot; item, either TD or TR
      * @attribute highlighted
      * @type {Node}
      * @default null
      *&#x2F;
     highlighted : {
-        value:      null,
-        validator:  function(v){ return v instanceof Y.Node; }
+        value:      null
+       &#x2F;&#x2F; validator:  function(v){ return v instanceof Y.Node; }
     },
 
     &#x2F;**
-     * Attribute that is set to a Node for the most recent &quot;selected&quot; item, either TD or TR
+     * Node for the most recent &quot;selected&quot; item, either TD or TR
      * @attribute selected
      * @type {Node}
      * @default null
      *&#x2F;
     selected:{
-        value:      null,
-        validator:  function(v){ return v instanceof Y.Node; }
+        value:      null
+        &#x2F;&#x2F;validator:  function(v){ return v instanceof Y.Node; }
     },
 
     &#x2F;**
@@ -163,13 +163,16 @@ DtSelection.ATTRS = {
         value:      [],
         readOnly:   true,
         validator:  Y.Lang.isArray,
-        getter:     &#x27;_getSelectedRows&#x27;,
+        getter:     &#x27;_getSelectedRows&#x27;
         &#x2F;&#x2F;setter:     &#x27;_setSelectedRows&#x27;
     },
 
     &#x2F;**
      * Attribute that either sets the current &quot;selected&quot; records (by entering an array of DataTable record
-     * indices) or returns an array of &quot;selected&quot; records based on the recent selections.
+     *  indices) or returns an array of &quot;selected&quot; records based on the recent selections.
+     *
+     * Note, this attribute differs from &#x60;selectedRows&#x60; in that it operates on &quot;records&quot; and NOT TR&#x27;s
+     *
      * @attribute selectedRecords
      * @type {Array}
      * @default []
@@ -182,7 +185,10 @@ DtSelection.ATTRS = {
     },
 
     &#x2F;**
-     * Attribute that sets the initially selected cells TD&#x27;s or returns the currently selected TD&#x27;s.
+     * Attribute that sets the initially selected cells TD&#x27;s or returns the currently selected TD&#x27;s.  For
+     *  setting selected cells, the attribute is assumed to be an array of cell objects in {record,column}
+     *  format (See [_setSelectedCells](#method__setSelectedCells).
+     *
      * @attribute selectedCells
      * @type {Array}
      * @default []
@@ -290,12 +296,7 @@ Y.mix( DtSelection.prototype, {
         Y.Array.each( this._eventHandles.selector,function(item){
             item.detach();
         });
-        this._eventHandles.selectorSelect.detach();
-        this._eventHandles.selectorHighlight.detach();
-
         this._eventHandles.selector = null;
-        this._eventHandles.selectorSelect = null;
-        this._eventHandles.selectorHighlight = null;
     },
 
 
@@ -361,18 +362,35 @@ Y.mix( DtSelection.prototype, {
         return tds;
     },
 
+    &#x2F;**
+     * Removes all &quot;selected&quot; classes from DataTable and resets internal selections counters and &quot;selected&quot; attribute.
+     * @method clearSelections
+     * @public
+     *&#x2F;
     clearSelections: function(){
         this._selections = [];
+        this.set(&#x27;selected&#x27;,null);
         this._clearAll(this._classSelected);
     },
 
+    &#x2F;**
+     * Removes all &quot;highlight&quot; classes from DataTable and resets &#x60;highlighted&#x60; attribute.
+     * @method clearHighlighted
+     * @public
+     *&#x2F;
     clearHighlighted: function(){
+        this.set(&#x27;selected&#x27;,null);
         this._clearAll(this._classHighlight);
     },
 
+    &#x2F;**
+     * Removes all highlighting and selections on the DataTable.
+     * @method clearAll
+     * @public
+     *&#x2F;
     clearAll: function(){
         this.clearSelections();
-        this._clearAll(this._classHighlight);
+        this.clearHighlighted();
     },
 
 &#x2F;&#x2F;------------------------------------------------------------------------------------------------------
@@ -663,7 +681,6 @@ Y.mix( DtSelection.prototype, {
 
 Y.DataTable.Selection = DtSelection;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Selection]);
-
 
 
     </pre>
