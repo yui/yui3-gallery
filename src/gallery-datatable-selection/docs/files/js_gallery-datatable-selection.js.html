@@ -92,6 +92,21 @@
     <pre class="code prettyprint linenums">
 &#x2F;**
  A class extension for DataTable that adds &quot;highlight&quot; and &quot;select&quot; actions via mouse selection.
+ The extension works in either &quot;cell&quot; mode or &quot;row&quot; mode (set via attribute [selectionMode](#attr_selectionMode)).
+
+ Highlighting is controlled by the [highlightMode](#attr_highlightMode) attribute (either &quot;cell&quot; or &quot;row&quot;).
+ (Highlighting provides a &quot;mouseover&quot; indication only).
+
+ Selection is provided bia &quot;click&quot; listeners.
+
+ This extension includes the ability to select &quot;multiple&quot; items, by setting the [selectionMulti](#attr_selectionMulti)
+ attribute (enabled using browser multi-select click modifier, i.e. &quot;Cmd&quot; key on Mac OSX or &quot;Ctrl&quot; key on Windows &#x2F; Linux).
+
+ Additionally, a &quot;range&quot; selection capability is provided by using the browser range selector click key modifier,
+ specifically the Shift key on most systems.
+
+ Specific attributes are provided that can be read for current selections, including the ATTRS [selectedRows](#attr_selectedRows),
+ [selectedRecords](#attr_selectedRecords) and [selectedCells](#attr_selectedCells).
 
  @module DataTable
  @submodule Selection
@@ -111,8 +126,8 @@ DtSelection.ATTRS = {
      * @default null
      *&#x2F;
     highlighted : {
-        value:      null
-       &#x2F;&#x2F; validator:  function(v){ return v instanceof Y.Node; }
+        value:      null,
+        validator:  function(v){ return (v instanceof Y.Node) || v === null; }
     },
 
     &#x2F;**
@@ -122,34 +137,40 @@ DtSelection.ATTRS = {
      * @default null
      *&#x2F;
     selected:{
-        value:      null
-        &#x2F;&#x2F;validator:  function(v){ return v instanceof Y.Node; }
+        value:      null,
+        validator:  function(v){ return (v instanceof Y.Node) || v === null; }
     },
 
     &#x2F;**
      * Set the current mode for highlighting, either for a single TD (as &quot;cell&quot;) or for a
-     * full TR (as &quot;row&quot;
+     * full TR (as &quot;row&quot;)
      * @attribute highlightMode
      * @type {String}
      * @default &#x27;cell&#x27;
      *&#x2F;
     highlightMode:{
-        value:      &#x27;cell&#x27;,
+        value:      null,
         setter:     &#x27;_setHighlightMode&#x27;,
-        validator:  Y.Lang.isString
+        validator:  function(v){
+            if (!Y.Lang.isString(v)) return false;
+            return (v === null || v === &#x27;cell&#x27; || v ===&#x27;row&#x27; ) ? true : false;
+        }
     },
 
     &#x2F;**
      * Set the current mode for indicating selections, either for a single TD (as &quot;cell&quot;) or for a
-     * full TR (as &quot;row&quot;
+     * full TR (as &quot;row&quot;)
      * @attribute highlightMode
      * @type {String}
      * @default &#x27;cell&#x27;
      *&#x2F;
     selectionMode:{
-        value:      &#x27;row&#x27;,
+        value:      null,
         setter:     &#x27;_setSelectionMode&#x27;,
-        validator:  Y.Lang.isString
+        validator:  function(v){
+            if (!Y.Lang.isString(v)) return false;
+            return (v === null || v === &#x27;cell&#x27; || v ===&#x27;row&#x27; ) ? true : false;
+        }
     },
 
     &#x2F;**
@@ -187,7 +208,7 @@ DtSelection.ATTRS = {
     &#x2F;**
      * Attribute that sets the initially selected cells TD&#x27;s or returns the currently selected TD&#x27;s.  For
      *  setting selected cells, the attribute is assumed to be an array of cell objects in {record,column}
-     *  format (See [_setSelectedCells](#method__setSelectedCells).
+     *  format (See [_setSelectedCells](#method__setSelectedCells) ).
      *
      * @attribute selectedCells
      * @type {Array}
@@ -269,40 +290,48 @@ Y.mix( DtSelection.prototype, {
 &#x2F;&#x2F;------------------------------------------------------------------------------------------------------
 
     &#x2F;**
-     * Sets listeners and initial class names required for this &quot;datatable-selector&quot; module
+     * Initializes and sets initial bindings for the datatable-selection module
      * @method initializer
-     * @public
+     * @protected
      *&#x2F;
     initializer: function(){
-        this._selections = [];
-        this._eventHandles.selector = [];
-        this._eventHandles.selector.push( this.on(&#x27;highlightedChange&#x27;,this._highlightChange) );
-        this._eventHandles.selector.push( this.on(&#x27;selectedChange&#x27;,this._selectedChange) );
-
-        this._classHighlight = &#x27;highlighted&#x27;;   &#x2F;&#x2F;this.getClassName(&#x27;selection&#x27;,&#x27;highlighted&#x27;);
-        this._classSelected  = &#x27;selected&#x27;;      &#x2F;&#x2F;this.getClassName(&#x27;selection&#x27;,&#x27;selected&#x27;);
-
-        this._clickModifiers = {
-            ctrlKey:null, altKey:null, metaKey:null, shiftKey:null, which:null, button:null
-        };
+        this._bindSelector();
     },
 
     &#x2F;**
-     * Destructor to clean up listener event handlers and the internal storage buffer.
+     * Destructor to clean up bindings.
      * @method destructor
-     * @public
+     * @protected
      *&#x2F;
     destructor: function () {
-        Y.Array.each( this._eventHandles.selector,function(item){
-            item.detach();
-        });
-        this._eventHandles.selector = null;
+        this._unbindSelector();
     },
+
 
 
 &#x2F;&#x2F;------------------------------------------------------------------------------------------------------
 &#x2F;&#x2F;        P U B L I C     M E T H O D S
 &#x2F;&#x2F;------------------------------------------------------------------------------------------------------
+
+    &#x2F;**
+     * Method to enable the datatable-selection module
+     * @method disableSelection
+     * @public
+     *&#x2F;
+    enableSelection: function(){
+        this.disableSelection();
+        this._bindSelector();
+    },
+
+    &#x2F;**
+     * Method to disable the datatable-selection module (cleans up listeners and user interface).
+     * @method disableSelection
+     * @public
+     *&#x2F;
+    disableSelection: function(){
+        this.clearAll();
+        this._unbindSelector();
+    },
 
     &#x2F;**
      * Returns the Column object (from the original &quot;columns&quot;) associated with the input TD Node.
@@ -379,7 +408,7 @@ Y.mix( DtSelection.prototype, {
      * @public
      *&#x2F;
     clearHighlighted: function(){
-        this.set(&#x27;selected&#x27;,null);
+        this.set(&#x27;highlighted&#x27;,null);
         this._clearAll(this._classHighlight);
     },
 
@@ -396,6 +425,51 @@ Y.mix( DtSelection.prototype, {
 &#x2F;&#x2F;------------------------------------------------------------------------------------------------------
 &#x2F;&#x2F;        P R I V A T E    M E T H O D S
 &#x2F;&#x2F;------------------------------------------------------------------------------------------------------
+
+    &#x2F;**
+     * Cleans up listener event handlers and static properties.
+     * @method _unbindSelector
+     * @private
+     *&#x2F;
+    _unbindSelector: function(){
+
+        Y.Array.each( this._eventHandles.selector,function(item){
+            item.detach();
+        });
+        this._eventHandles.selector = null;
+
+        if ( this._eventHandles.selectorSelect )
+            this._eventHandles.selectorSelect.detach();
+        this._eventHandles.selectorSelect = null;
+
+        this._clickModifiers = null;
+
+    },
+
+    &#x2F;**
+     * Sets listeners and initial class names required for this &quot;datatable-selector&quot; module
+     *
+     * Note:  Delegated &quot;click&quot; listeners are defined in _setSelectedMode and _setHightlightMode methods
+     *
+     * @method _bindSelector
+     * @private
+     *&#x2F;
+    _bindSelector: function(){
+        this._selections = [];
+        this._eventHandles.selector = [];
+        this._eventHandles.selector.push( this.on(&#x27;highlightedChange&#x27;,this._highlightChange) );
+        this._eventHandles.selector.push( this.on(&#x27;selectedChange&#x27;,this._selectedChange) );
+
+        &#x2F;&#x2F; set CSS classes for highlighting and selected,
+        &#x2F;&#x2F;    currently as  &quot;.yui3-datatable-sel-highlighted&quot; and &quot;.yui3-datatable-sel-selected&quot;
+        this._classHighlight = this.getClassName(&#x27;sel&#x27;,&#x27;highlighted&#x27;);
+        this._classSelected  = this.getClassName(&#x27;sel&#x27;,&#x27;selected&#x27;);
+
+        &#x2F;&#x2F; track click modifier keys from last click, this is the tempalte
+        this._clickModifiers = {
+            ctrlKey:null, altKey:null, metaKey:null, shiftKey:null, which:null, button:null
+        };
+    },
 
     &#x2F;**
      * Method that updates the &quot;highlighted&quot; classes for the selection and unhighlights the prevVal
@@ -418,26 +492,114 @@ Y.mix( DtSelection.prototype, {
      *&#x2F;
     _selectedChange: function(o){
         &#x2F;&#x2F; Evaluate a flag to determine whether previous selections should be cleared or &quot;kept&quot;
-        var keepPrev;
+        var keepPrev, keepRange;
         if ( Y.UA.os.search(&#x27;macintosh&#x27;) === 0 )
             keepPrev =  this.get(&#x27;selectionMulti&#x27;) === true &amp;&amp; this._clickModifiers.metaKey === true;
          else
             keepPrev =  this.get(&#x27;selectionMulti&#x27;) === true &amp;&amp; this._clickModifiers.ctrlKey === true;
 
+        keepRange = this.get(&#x27;selectionMulti&#x27;) === true &amp;&amp; this._clickModifiers.shiftKey === true;
+
+        &#x2F;&#x2F; clear any SHIFT selected text first ...
+        this._clearDOMSelection();
+
         &#x2F;&#x2F; if not-multi mode and more than one selection, clear them first ...
-        if ( !keepPrev &amp;&amp; this._selections.length&gt;1 ) this._clearAll(this._classSelected);
+        if ( !keepPrev &amp;&amp; !keepRange &amp;&amp; this._selections.length&gt;1 ) this.clearSelections();
 
-        &#x2F;&#x2F; Process the action ... updating &#x27;select&#x27; class
-        var tar = this._processNodeAction(o,&#x27;select&#x27;, !keepPrev );
+        if ( keepRange ) {
 
-        if ( !keepPrev ) this._selections = [];
-        this._selections.push(tar);
+            this._processRange(o);
+
+        }  else {
+
+            &#x2F;&#x2F; Process the action ... updating &#x27;select&#x27; class
+            var tar = this._processNodeAction(o,&#x27;select&#x27;, !keepPrev );
+
+            if ( !keepPrev ) this._selections = [];
+            this._selections.push(tar);
+
+        }
 
         this.fire(&#x27;selected&#x27;,{
             ochange: o,
             record: this.getRecord(o.newVal)
         });
 
+    },
+
+    &#x2F;**
+     * Called when a &quot;range&quot; selection is detected (i.e. SHIFT key held during click) that selects
+     * a range of TD&#x27;s or TR&#x27;s (depending on [selectionMode](#attr_selectionMode) setting.
+     *
+     * @method _processRange
+     * @param {Node} o Last clicked TD of range selection
+     * @private
+     *&#x2F;
+    _processRange: function(o) {
+        var tarNew  = o.newVal,
+            tarPrev = o.prevVal || null;
+
+        if ( tarNew &amp;&amp; tarPrev ) {
+            var newRec  = this.getRecord(tarNew),
+                newRecI = this.data.indexOf(newRec),
+                newCol  = this.getColumnNameByTd(tarNew),
+                newColI = this.get(&#x27;columns&#x27;).indexOf( this.getColumn(newCol)),
+                prevRec  = this.getRecord(tarPrev),
+                prevRecI = this.data.indexOf(prevRec),
+                prevCol  = this.getColumnNameByTd(tarPrev),
+                prevColI = this.get(&#x27;columns&#x27;).indexOf( this.getColumn(prevCol));
+
+            &#x2F;&#x2F; Calculate range offset ... delCol (horiz) and delRow (vertically)
+            var delCol = newColI - prevColI,
+                delRow = newRecI - prevRecI;
+
+            &#x2F;&#x2F; if we have valid deltas, update the range cells.
+            if ( delCol !== null &amp;&amp; delRow !== null) {
+
+                if (Y.Lang.isArray(this._selections) ) {
+                    this.clearSelections();
+                }
+
+                &#x2F;&#x2F; Select a range of CELLS (i.e. TD&#x27;s) ...
+                if ( this.get(&#x27;selectionMode&#x27;) === &#x27;cell&#x27; ) {
+                    var coldir = (delCol&lt;0) ? -1 : 1,
+                        rowdir = (delRow&lt;0) ? -1 : 1,
+                        cell = tarPrev;
+
+                    for(var j=0; j&lt;=Math.abs(delRow); j++)
+                        for(var i=0; i&lt;=Math.abs(delCol); i++) {
+                            cell = this.getCell(tarPrev,[rowdir*(j),coldir*(i)]);
+                            if (cell) {
+                                cell.addClass(this._classSelected);
+                                this._selections.push(cell);
+                            }
+                        }
+                &#x2F;&#x2F; Select a range of ROWS (i.e. TR&#x27;s)
+                } else if ( this.get(&#x27;selectionMode&#x27;) === &#x27;row&#x27; ) {
+
+                    var rowdir = (delRow&lt;0) ? -1 : 1,
+                        tr = this.getRow(prevRecI);
+
+                    for(var j=0; j&lt;=Math.abs(delRow); j++) {
+                        tr = this.getRow(prevRecI+rowdir*(j));
+                        if (tr) {
+                            tr.addClass(this._classSelected);
+                            this._selections.push(tr);
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+    },
+
+    _clearDOMSelection: function(){
+        var sel = (Y.config.win.getSelection) ? Y.config.win.getSelection() : (Y.config.doc.selection) ? Y.config.doc.selection : null;
+        if ( sel &amp;&amp; sel.empty ) sel.empty();    &#x2F;&#x2F; works on chrome
+        if ( sel &amp;&amp; sel.removeAllRanges ) sel.removeAllRanges();    &#x2F;&#x2F; works on FireFox
     },
 
     &#x2F;**
@@ -456,10 +618,10 @@ Y.mix( DtSelection.prototype, {
     _getSelectedRows: function(){
         var trs = [];
         Y.Array.each(this._selections,function(item){
-            if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; )
-                trs.push( item );
-            else
-                trs.push( item.ancestor(&#x27;tr&#x27;) );
+            var tr = ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; ) ? item : item.ancestor(&#x27;tr&#x27;);
+            &#x2F;&#x2F; if and only if, it&#x27;s a TR and not in &quot;trs&quot; array ... then add it
+            if ( tr.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; &amp;&amp; trs.indexOf(tr) === -1)
+                trs.push(tr);
         });
         return trs;
     },
@@ -477,12 +639,15 @@ Y.mix( DtSelection.prototype, {
     _getSelectedCells: function(){
         var cells = [], td;
         Y.Array.each(this._selections,function(item){
+            if (!item) return;
             if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;td&#x27; )
                 cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } );
             else if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; ) {
                 var tdNodes = item.all(&quot;td&quot;);
                 if ( tdNodes )
-                    tdNodes.each(function(item){ cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } )});
+                    tdNodes.each(function(item){
+                        cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } )
+                    },this);
             }
         },this);
         return cells;
@@ -559,9 +724,10 @@ Y.mix( DtSelection.prototype, {
      * @private
      *&#x2F;
     _getSelectedRecords: function(){
-        var recs = [];
-        Y.Array.each(this._selections,function(node){
-            recs.push(this.getRecord(node));
+        var rows = this._getSelectedRows() || [],
+            recs = [];
+        Y.Array.each(rows,function(tr){
+            if ( tr ) recs.push(this.getRecord(tr));
         },this);
         return recs;
     },
@@ -595,7 +761,9 @@ Y.mix( DtSelection.prototype, {
             tarNew  = tar || null;
             tarPrev = o.prevVal || null;
         } else if ( this.get(modeName) == &quot;row&quot; ) {
-            tarNew = (tar.get(&#x27;tagName&#x27;).search(&#x2F;td&#x2F;i) === 0 ) ? tar.ancestor(&#x27;tr&#x27;) : ( tar.get(&#x27;tagName&#x27;).search(&#x2F;tr&#x2F;i) === 0 ) ? tar : null ;
+            if ( tar ) {
+                tarNew = (tar.get(&#x27;tagName&#x27;).search(&#x2F;td&#x2F;i) === 0 ) ? tar.ancestor(&#x27;tr&#x27;) : ( tar.get(&#x27;tagName&#x27;).search(&#x2F;tr&#x2F;i) === 0 ) ? tar : null ;
+            }
             tarPrev = o.prevVal;
             if (tarPrev)
                 tarPrev = (tarPrev.get(&#x27;tagName&#x27;).search(&#x2F;td&#x2F;i) === 0 ) ? tarPrev.ancestor(&#x27;tr&#x27;) : ( tarPrev.get(&#x27;tagName&#x27;).search(&#x2F;tr&#x2F;i) === 0 ) ? tarPrev : null ;
@@ -635,7 +803,7 @@ Y.mix( DtSelection.prototype, {
         if ( this._eventHandles.selectorHighlight ) this._eventHandles.selectorHighlight.detach();
         this._eventHandles.selectorHighlight = this.delegate(&quot;mouseover&quot;,function(e){
                 var tar = e.currentTarget;
-                this.set(this._classHighlight,tar);
+                this.set(&#x27;highlighted&#x27;,tar);
             },&quot;tr td&quot;,this);
 
         this._clearAll(this._classHighlight);
@@ -670,7 +838,7 @@ Y.mix( DtSelection.prototype, {
                     button:   e.button
                 };
 
-                oSelf.set(oSelf._classSelected,tar);
+                oSelf.set(&#x27;selected&#x27;,tar);
 
             },&quot;tr td&quot;,oSelf);
         this._clearAll(this._classSelected);

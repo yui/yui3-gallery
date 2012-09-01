@@ -111,7 +111,22 @@
 
 
 <div class="box intro">
-    <p>A class extension for DataTable that adds "highlight" and "select" actions via mouse selection.</p>
+    <p>A class extension for DataTable that adds "highlight" and "select" actions via mouse selection.
+The extension works in either "cell" mode or "row" mode (set via attribute <a href="#attr_selectionMode">selectionMode</a>).</p>
+
+<p>Highlighting is controlled by the <a href="#attr_highlightMode">highlightMode</a> attribute (either "cell" or "row").
+(Highlighting provides a "mouseover" indication only).</p>
+
+<p>Selection is provided bia "click" listeners.</p>
+
+<p>This extension includes the ability to select "multiple" items, by setting the <a href="#attr_selectionMulti">selectionMulti</a>
+attribute (enabled using browser multi-select click modifier, i.e. "Cmd" key on Mac OSX or "Ctrl" key on Windows / Linux).</p>
+
+<p>Additionally, a "range" selection capability is provided by using the browser range selector click key modifier,
+specifically the Shift key on most systems.</p>
+
+<p>Specific attributes are provided that can be read for current selections, including the ATTRS <a href="#attr_selectedRows">selectedRows</a>,
+<a href="#attr_selectedRecords">selectedRecords</a> and <a href="#attr_selectedCells">selectedCells</a>.</p>
 </div>
 
 
@@ -143,6 +158,13 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods">
+                        
+                            <li class="index-item method private">
+                                <a href="#method__bindSelector">_bindSelector</a>
+
+                                
+                                
+                            </li>
                         
                             <li class="index-item method private">
                                 <a href="#method__clearAll">_clearAll</a>
@@ -187,6 +209,13 @@
                             </li>
                         
                             <li class="index-item method private">
+                                <a href="#method__processRange">_processRange</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method__selectedChange">_selectedChange</a>
 
                                 
@@ -221,6 +250,13 @@
                                 
                             </li>
                         
+                            <li class="index-item method private">
+                                <a href="#method__unbindSelector">_unbindSelector</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method public">
                                 <a href="#method_clearAll">clearAll</a>
 
@@ -242,8 +278,22 @@
                                 
                             </li>
                         
-                            <li class="index-item method public">
+                            <li class="index-item method protected">
                                 <a href="#method_destructor">destructor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_disableSelection">disableSelection</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_disableSelection">disableSelection</a>
 
                                 
                                 
@@ -270,7 +320,7 @@
                                 
                             </li>
                         
-                            <li class="index-item method public">
+                            <li class="index-item method protected">
                                 <a href="#method_initializer">initializer</a>
 
                                 
@@ -392,6 +442,64 @@
                 <h2 class="off-left">Methods</h2>
 
                 
+                    <div id="method__bindSelector" class="method item private">
+    <h3 class="name"><code>_bindSelector</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l357"><code>js&#x2F;gallery-datatable-selection.js:357</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets listeners and initial class names required for this "datatable-selector" module</p>
+
+<p>Note:  Delegated "click" listeners are defined in _setSelectedMode and _setHightlightMode methods</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method__clearAll" class="method item private">
     <h3 class="name"><code>_clearAll</code></h3>
 
@@ -436,7 +544,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l519"><code>js&#x2F;gallery-datatable-selection.js:519</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l687"><code>js&#x2F;gallery-datatable-selection.js:687</code></a>
         
         </p>
 
@@ -519,7 +627,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l358"><code>js&#x2F;gallery-datatable-selection.js:358</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l520"><code>js&#x2F;gallery-datatable-selection.js:520</code></a>
         
         </p>
 
@@ -608,7 +716,7 @@
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l375"><code>js&#x2F;gallery-datatable-selection.js:375</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l537"><code>js&#x2F;gallery-datatable-selection.js:537</code></a>
         
         </p>
 
@@ -720,7 +828,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l459"><code>js&#x2F;gallery-datatable-selection.js:459</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l624"><code>js&#x2F;gallery-datatable-selection.js:624</code></a>
         
         </p>
 
@@ -802,7 +910,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l308"><code>js&#x2F;gallery-datatable-selection.js:308</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l382"><code>js&#x2F;gallery-datatable-selection.js:382</code></a>
         
         </p>
 
@@ -907,7 +1015,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l477"><code>js&#x2F;gallery-datatable-selection.js:477</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l643"><code>js&#x2F;gallery-datatable-selection.js:643</code></a>
         
         </p>
 
@@ -998,6 +1106,96 @@ returns the current <code>selectionMode</code> or <code>highlightMode</code> Nod
 </div>
 
                 
+                    <div id="method__processRange" class="method item private">
+    <h3 class="name"><code>_processRange</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>o</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l438"><code>js&#x2F;gallery-datatable-selection.js:438</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Called when a "range" selection is detected (i.e. SHIFT key held during click) that selects
+a range of TD's or TR's (depending on <a href="#attr_selectionMode">selectionMode</a> setting.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">o</code>
+                        <span class="type">Node</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Last clicked TD of range selection</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method__selectedChange" class="method item private">
     <h3 class="name"><code>_selectedChange</code></h3>
 
@@ -1042,7 +1240,7 @@ returns the current <code>selectionMode</code> or <code>highlightMode</code> Nod
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l318"><code>js&#x2F;gallery-datatable-selection.js:318</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l392"><code>js&#x2F;gallery-datatable-selection.js:392</code></a>
         
         </p>
 
@@ -1137,7 +1335,7 @@ the current selection to the this._selections property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l531"><code>js&#x2F;gallery-datatable-selection.js:531</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l699"><code>js&#x2F;gallery-datatable-selection.js:699</code></a>
         
         </p>
 
@@ -1245,7 +1443,7 @@ a new delegated "mouseover" handler that updates the <code>highlighted</code> at
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l400"><code>js&#x2F;gallery-datatable-selection.js:400</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l565"><code>js&#x2F;gallery-datatable-selection.js:565</code></a>
         
         </p>
 
@@ -1381,7 +1579,7 @@ as the current selected set with appropriate visual class.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l434"><code>js&#x2F;gallery-datatable-selection.js:434</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l599"><code>js&#x2F;gallery-datatable-selection.js:599</code></a>
         
         </p>
 
@@ -1489,7 +1687,7 @@ highlights the TR's</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l553"><code>js&#x2F;gallery-datatable-selection.js:553</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l721"><code>js&#x2F;gallery-datatable-selection.js:721</code></a>
         
         </p>
 
@@ -1549,6 +1747,62 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
 </div>
 
                 
+                    <div id="method__unbindSelector" class="method item private">
+    <h3 class="name"><code>_unbindSelector</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l337"><code>js&#x2F;gallery-datatable-selection.js:337</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Cleans up listener event handlers and static properties.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_clearAll" class="method item public">
     <h3 class="name"><code>clearAll</code></h3>
 
@@ -1583,7 +1837,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l294"><code>js&#x2F;gallery-datatable-selection.js:294</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l323"><code>js&#x2F;gallery-datatable-selection.js:323</code></a>
         
         </p>
 
@@ -1639,7 +1893,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l284"><code>js&#x2F;gallery-datatable-selection.js:284</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l313"><code>js&#x2F;gallery-datatable-selection.js:313</code></a>
         
         </p>
 
@@ -1695,7 +1949,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l273"><code>js&#x2F;gallery-datatable-selection.js:273</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l302"><code>js&#x2F;gallery-datatable-selection.js:302</code></a>
         
         </p>
 
@@ -1717,8 +1971,64 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
 </div>
 
                 
-                    <div id="method_destructor" class="method item public">
+                    <div id="method_destructor" class="method item protected">
     <h3 class="name"><code>destructor</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l209"><code>js&#x2F;gallery-datatable-selection.js:209</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Destructor to clean up bindings.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_disableSelection" class="method item public">
+    <h3 class="name"><code>disableSelection</code></h3>
 
     
         <span class="paren">()</span>
@@ -1751,7 +2061,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l198"><code>js&#x2F;gallery-datatable-selection.js:198</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l234"><code>js&#x2F;gallery-datatable-selection.js:234</code></a>
         
         </p>
 
@@ -1762,7 +2072,63 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
     </div>
 
     <div class="description">
-        <p>Destructor to clean up listener event handlers and the internal storage buffer.</p>
+        <p>Method to disable the datatable-selection module (cleans up listeners and user interface).</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_disableSelection" class="method item public">
+    <h3 class="name"><code>disableSelection</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l224"><code>js&#x2F;gallery-datatable-selection.js:224</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method to enable the datatable-selection module</p>
     </div>
 
     
@@ -1821,7 +2187,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l215"><code>js&#x2F;gallery-datatable-selection.js:215</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l244"><code>js&#x2F;gallery-datatable-selection.js:244</code></a>
         
         </p>
 
@@ -1927,7 +2293,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l228"><code>js&#x2F;gallery-datatable-selection.js:228</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l257"><code>js&#x2F;gallery-datatable-selection.js:257</code></a>
         
         </p>
 
@@ -2023,7 +2389,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l251"><code>js&#x2F;gallery-datatable-selection.js:251</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l280"><code>js&#x2F;gallery-datatable-selection.js:280</code></a>
         
         </p>
 
@@ -2059,7 +2425,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
 </div>
 
                 
-                    <div id="method_initializer" class="method item public">
+                    <div id="method_initializer" class="method item protected">
     <h3 class="name"><code>initializer</code></h3>
 
     
@@ -2071,7 +2437,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
     
 
     
-        <span class="flag public">public</span>
+        <span class="flag protected">protected</span>
     
 
     
@@ -2093,7 +2459,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l179"><code>js&#x2F;gallery-datatable-selection.js:179</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l200"><code>js&#x2F;gallery-datatable-selection.js:200</code></a>
         
         </p>
 
@@ -2104,7 +2470,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
     </div>
 
     <div class="description">
-        <p>Sets listeners and initial class names required for this "datatable-selector" module</p>
+        <p>Initializes and sets initial bindings for the datatable-selection module</p>
     </div>
 
     
@@ -2150,7 +2516,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l139"><code>js&#x2F;gallery-datatable-selection.js:139</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l160"><code>js&#x2F;gallery-datatable-selection.js:160</code></a>
         
         </p>
 
@@ -2200,7 +2566,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l149"><code>js&#x2F;gallery-datatable-selection.js:149</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l170"><code>js&#x2F;gallery-datatable-selection.js:170</code></a>
         
         </p>
 
@@ -2250,7 +2616,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l159"><code>js&#x2F;gallery-datatable-selection.js:159</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l180"><code>js&#x2F;gallery-datatable-selection.js:180</code></a>
         
         </p>
 
@@ -2305,7 +2671,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l130"><code>js&#x2F;gallery-datatable-selection.js:130</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l151"><code>js&#x2F;gallery-datatable-selection.js:151</code></a>
         
         </p>
 
@@ -2364,7 +2730,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l15"><code>js&#x2F;gallery-datatable-selection.js:15</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l30"><code>js&#x2F;gallery-datatable-selection.js:30</code></a>
         
         </p>
 
@@ -2415,7 +2781,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l37"><code>js&#x2F;gallery-datatable-selection.js:37</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l52"><code>js&#x2F;gallery-datatable-selection.js:52</code></a>
         
         </p>
 
@@ -2426,7 +2792,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
 
     <div class="description">
         <p>Set the current mode for highlighting, either for a single TD (as "cell") or for a
-full TR (as "row"</p>
+full TR (as "row")</p>
     </div>
 
     
@@ -2467,7 +2833,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l50"><code>js&#x2F;gallery-datatable-selection.js:50</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l68"><code>js&#x2F;gallery-datatable-selection.js:68</code></a>
         
         </p>
 
@@ -2478,7 +2844,7 @@ full TR (as "row"</p>
 
     <div class="description">
         <p>Set the current mode for indicating selections, either for a single TD (as "cell") or for a
-full TR (as "row"</p>
+full TR (as "row")</p>
     </div>
 
     
@@ -2519,7 +2885,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l26"><code>js&#x2F;gallery-datatable-selection.js:26</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l41"><code>js&#x2F;gallery-datatable-selection.js:41</code></a>
         
         </p>
 
@@ -2570,7 +2936,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l95"><code>js&#x2F;gallery-datatable-selection.js:95</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l116"><code>js&#x2F;gallery-datatable-selection.js:116</code></a>
         
         </p>
 
@@ -2582,7 +2948,7 @@ full TR (as "row"</p>
     <div class="description">
         <p>Attribute that sets the initially selected cells TD's or returns the currently selected TD's.  For
  setting selected cells, the attribute is assumed to be an array of cell objects in {record,column}
- format (See <a href="#method__setSelectedCells">_setSelectedCells</a>.</p>
+ format (See <a href="#method__setSelectedCells">_setSelectedCells</a> ).</p>
     </div>
 
     
@@ -2623,7 +2989,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l78"><code>js&#x2F;gallery-datatable-selection.js:78</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l99"><code>js&#x2F;gallery-datatable-selection.js:99</code></a>
         
         </p>
 
@@ -2677,7 +3043,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l63"><code>js&#x2F;gallery-datatable-selection.js:63</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l84"><code>js&#x2F;gallery-datatable-selection.js:84</code></a>
         
         </p>
 
@@ -2728,7 +3094,7 @@ full TR (as "row"</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l111"><code>js&#x2F;gallery-datatable-selection.js:111</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l132"><code>js&#x2F;gallery-datatable-selection.js:132</code></a>
         
         </p>
 
@@ -2784,7 +3150,7 @@ For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selec
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l351"><code>js&#x2F;gallery-datatable-selection.js:351</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l513"><code>js&#x2F;gallery-datatable-selection.js:513</code></a>
         
         </p>
 
