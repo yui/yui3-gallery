@@ -117,7 +117,7 @@ The extension works in either "cell" mode or "row" mode (set via attribute <a hr
 <p>Highlighting is controlled by the <a href="#attr_highlightMode">highlightMode</a> attribute (either "cell" or "row").
 (Highlighting provides a "mouseover" indication only).</p>
 
-<p>Selection is provided bia "click" listeners.</p>
+<p>Selection is provided via "click" listeners.</p>
 
 <p>This extension includes the ability to select "multiple" items, by setting the <a href="#attr_selectionMulti">selectionMulti</a>
 attribute (enabled using browser multi-select click modifier, i.e. "Cmd" key on Mac OSX or "Ctrl" key on Windows / Linux).</p>
@@ -125,8 +125,10 @@ attribute (enabled using browser multi-select click modifier, i.e. "Cmd" key on 
 <p>Additionally, a "range" selection capability is provided by using the browser range selector click key modifier,
 specifically the Shift key on most systems.</p>
 
+<p>The extension has been written to allow preserving the "selected" rows or cells during "sort" operations.</p>
+
 <p>Specific attributes are provided that can be read for current selections, including the ATTRS <a href="#attr_selectedRows">selectedRows</a>,
-<a href="#attr_selectedRecords">selectedRecords</a> and <a href="#attr_selectedCells">selectedCells</a>.</p>
+and <a href="#attr_selectedCells">selectedCells</a>.</p>
 </div>
 
 
@@ -160,6 +162,20 @@ specifically the Shift key on most systems.</p>
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
+                                <a href="#method__afterResetDataSelect">_afterResetDataSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__beforeResetDataSelect">_beforeResetDataSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method__bindSelector">_bindSelector</a>
 
                                 
@@ -174,7 +190,7 @@ specifically the Shift key on most systems.</p>
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method__getSelected">_getSelected</a>
+                                <a href="#method__clearDOMSelection">_clearDOMSelection</a>
 
                                 
                                 
@@ -188,7 +204,7 @@ specifically the Shift key on most systems.</p>
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method__getSelectedRecords">_getSelectedRecords</a>
+                                <a href="#method__getSelectedRows">_getSelectedRows</a>
 
                                 
                                 
@@ -237,7 +253,7 @@ specifically the Shift key on most systems.</p>
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method__setSelectedRecords">_setSelectedRecords</a>
+                                <a href="#method__setSelectedRows">_setSelectedRows</a>
 
                                 
                                 
@@ -404,10 +420,6 @@ specifically the Shift key on most systems.</p>
                             </li>
                         
                             <li class="index-item attr">
-                                <a href="#attr_selectedRecords">selectedRecords</a>
-                            </li>
-                        
-                            <li class="index-item attr">
                                 <a href="#attr_selectedRows">selectedRows</a>
                             </li>
                         
@@ -440,6 +452,125 @@ specifically the Shift key on most systems.</p>
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__afterResetDataSelect" class="method item private">
+    <h3 class="name"><code>_afterResetDataSelect</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l727"><code>js&#x2F;gallery-datatable-selection.js:727</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method is fired AFTER a "reset" action takes place on the "data", usually related to a column sort.
+This function reads the pre-sorted selections that were stored by  <a href="#method__beforeResetDataSelect"><em>beforeResetDataSelect</a>
+temporarily in this.</em>selections.</p>
+
+<p>Depending upon the current "selectionMode", either post-sorted TBODY selections are re-applied, by determining either
+the TR's (from the Model data) or the TD's (from the Model and Column Index data).</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__beforeResetDataSelect" class="method item private">
+    <h3 class="name"><code>_beforeResetDataSelect</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l682"><code>js&#x2F;gallery-datatable-selection.js:682</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method is fired BEFORE a "reset" action takes place on the "data", usually related to a column sort.
+This is used to preserve the pre-sorted data (temporarily in <em>selections) prior to sorting so that
+we can reapply the "selections" after the sort is completed (see <a href="#method__afterResetDataSelect"></em>afterResetDataSelect</a>)</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="method__bindSelector" class="method item private">
@@ -476,7 +607,7 @@ specifically the Shift key on most systems.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l357"><code>js&#x2F;gallery-datatable-selection.js:357</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l364"><code>js&#x2F;gallery-datatable-selection.js:364</code></a>
         
         </p>
 
@@ -544,7 +675,7 @@ specifically the Shift key on most systems.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l687"><code>js&#x2F;gallery-datatable-selection.js:687</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l811"><code>js&#x2F;gallery-datatable-selection.js:811</code></a>
         
         </p>
 
@@ -555,7 +686,7 @@ specifically the Shift key on most systems.</p>
     </div>
 
     <div class="description">
-        <p>Method removes the specified <code>type</code> class from all nodes within the TBODY data node.</p>
+        <p>Method removes the specified <code>type</code> CSS class from all nodes within the TBODY data node.</p>
     </div>
 
     
@@ -589,17 +720,13 @@ specifically the Shift key on most systems.</p>
 </div>
 
                 
-                    <div id="method__getSelected" class="method item private">
-    <h3 class="name"><code>_getSelected</code></h3>
+                    <div id="method__clearDOMSelection" class="method item private">
+    <h3 class="name"><code>_clearDOMSelection</code></h3>
 
     
         <span class="paren">()</span>
     
 
-    
-        <span class="returns-inline">
-            <span class="type">Array</span>
-        </span>
     
 
     
@@ -627,7 +754,7 @@ specifically the Shift key on most systems.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l520"><code>js&#x2F;gallery-datatable-selection.js:520</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l880"><code>js&#x2F;gallery-datatable-selection.js:880</code></a>
         
         </p>
 
@@ -638,24 +765,11 @@ specifically the Shift key on most systems.</p>
     </div>
 
     <div class="description">
-        <p>Returns the current "raw" settings of selections (includes multiple selections)</p>
+        <p>Helper method to clear DOM "selected" text or ranges</p>
     </div>
 
     
 
-    
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                
-                    
-                        <span class="type">Array</span>:
-                    
-                    selections Array of selected TR's and/or TD's
-                
-            </div>
-        </div>
     
 
     
@@ -666,23 +780,7 @@ specifically the Shift key on most systems.</p>
     <h3 class="name"><code>_getSelectedCells</code></h3>
 
     
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>cells.record</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>cells.column</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
     
 
     
@@ -716,7 +814,7 @@ specifically the Shift key on most systems.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l537"><code>js&#x2F;gallery-datatable-selection.js:537</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l567"><code>js&#x2F;gallery-datatable-selection.js:567</code></a>
         
         </p>
 
@@ -727,48 +825,20 @@ specifically the Shift key on most systems.</p>
     </div>
 
     <div class="description">
-        <p>Getter method that returns an Array of the selected cells in {record,column} coordinate format.
+        <p>Getter method that returns an Array of the selected cells in record/column coordinate format.
 If rows or TR elements were selected, it adds all of the row's child TD's.</p>
+
+<p><strong>Returned</strong> <code>cells</code> {Array} of objects in format;</p>
+
+<ul>
+  <li><code>cells.record</code> {Model} Record for this cell as a Y.Model</li>
+  <li><code>cells.recordIndex</code> {Integer} Record index for this cell in the current "data" set</li>
+  <li><code>cells.column</code> {Object} Column for this cell defined in original "columns" DataTable attribute</li>
+  <li><code>cells.columnName</code> {String} Column name or key associated with this cell</li>
+  <li><code>cells.columnIndex</code> {Integer} Column index of the column, within the "columns" data</li>
+</ul>
     </div>
 
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">cells.record</code>
-                        <span class="type">Model</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Record for this cell as a Y.Model</p>
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">cells.column</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Column for this cell defined in original "columns" DataTable attribute</p>
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -780,7 +850,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
                     
                         <span class="type">Array</span>:
                     
-                    cells The selected cells in {record:, column:} format
+                    cells The selected cells in {record,recordIndex,column,columnName,columnIndex} format
                 
             </div>
         </div>
@@ -790,8 +860,8 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
 </div>
 
                 
-                    <div id="method__getSelectedRecords" class="method item private">
-    <h3 class="name"><code>_getSelectedRecords</code></h3>
+                    <div id="method__getSelectedRows" class="method item private">
+    <h3 class="name"><code>_getSelectedRows</code></h3>
 
     
         <span class="paren">()</span>
@@ -828,7 +898,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l624"><code>js&#x2F;gallery-datatable-selection.js:624</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l529"><code>js&#x2F;gallery-datatable-selection.js:529</code></a>
         
         </p>
 
@@ -839,10 +909,17 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
     </div>
 
     <div class="description">
-        <p>A getter method for the <code>selectedRecords</code> attribute that returns an array of DataTable records (Y.Model)
- based on the current "selected" items, either TR's or TD's.</p>
+        <p>Returns the current settings of row selections, includes multiple selections.  If the
+current <code>selectionMode</code> is "cell" mode, this function returns the unique "records" associated with
+the selected cells.</p>
 
-<p>If TD's were selected it converts them to their base record.</p>
+<p><strong>Returned</strong> <code>rows</code> {Array} of objects in format;</p>
+
+<ul>
+  <li><code>rows.tr</code> {Node} Node instance of the TR that was selected</li>
+  <li><code>rows.record</code> {Model} The Model associated with the data record for the selected TR</li>
+  <li><code>rows.recordIndex</code> {Integer} The record index of the selected TR within the current "data" set</li>
+</ul>
     </div>
 
     
@@ -856,7 +933,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
                     
                         <span class="type">Array</span>:
                     
-                    records Array of records from the DataTable based on the selected items
+                    rows Array of selected "rows" as objects in {tr,record,recordIndex} format
                 
             </div>
         </div>
@@ -910,7 +987,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l382"><code>js&#x2F;gallery-datatable-selection.js:382</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l397"><code>js&#x2F;gallery-datatable-selection.js:397</code></a>
         
         </p>
 
@@ -1015,7 +1092,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l643"><code>js&#x2F;gallery-datatable-selection.js:643</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l767"><code>js&#x2F;gallery-datatable-selection.js:767</code></a>
         
         </p>
 
@@ -1150,7 +1227,7 @@ returns the current <code>selectionMode</code> or <code>highlightMode</code> Nod
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l438"><code>js&#x2F;gallery-datatable-selection.js:438</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l453"><code>js&#x2F;gallery-datatable-selection.js:453</code></a>
         
         </p>
 
@@ -1240,7 +1317,7 @@ a range of TD's or TR's (depending on <a href="#attr_selectionMode">selectionMod
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l392"><code>js&#x2F;gallery-datatable-selection.js:392</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l407"><code>js&#x2F;gallery-datatable-selection.js:407</code></a>
         
         </p>
 
@@ -1335,7 +1412,7 @@ the current selection to the this._selections property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l699"><code>js&#x2F;gallery-datatable-selection.js:699</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l823"><code>js&#x2F;gallery-datatable-selection.js:823</code></a>
         
         </p>
 
@@ -1443,7 +1520,7 @@ a new delegated "mouseover" handler that updates the <code>highlighted</code> at
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l565"><code>js&#x2F;gallery-datatable-selection.js:565</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l625"><code>js&#x2F;gallery-datatable-selection.js:625</code></a>
         
         </p>
 
@@ -1531,8 +1608,8 @@ as the current selected set with appropriate visual class.</p>
 </div>
 
                 
-                    <div id="method__setSelectedRecords" class="method item private">
-    <h3 class="name"><code>_setSelectedRecords</code></h3>
+                    <div id="method__setSelectedRows" class="method item private">
+    <h3 class="name"><code>_setSelectedRows</code></h3>
 
     
         <div class="args">
@@ -1579,7 +1656,7 @@ as the current selected set with appropriate visual class.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l599"><code>js&#x2F;gallery-datatable-selection.js:599</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l658"><code>js&#x2F;gallery-datatable-selection.js:658</code></a>
         
         </p>
 
@@ -1590,7 +1667,7 @@ as the current selected set with appropriate visual class.</p>
     </div>
 
     <div class="description">
-        <p>A setter method for attribute <code>selectedRecords</code> that takes as input an array of desired DataTable
+        <p>A setter method for attribute <code>selectedRows</code> that takes as input an array of desired DataTable
 record indices to be "selected", clears existing selections and sets the "selected" records and
 highlights the TR's</p>
     </div>
@@ -1687,7 +1764,7 @@ highlights the TR's</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l721"><code>js&#x2F;gallery-datatable-selection.js:721</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l845"><code>js&#x2F;gallery-datatable-selection.js:845</code></a>
         
         </p>
 
@@ -1781,7 +1858,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l337"><code>js&#x2F;gallery-datatable-selection.js:337</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l344"><code>js&#x2F;gallery-datatable-selection.js:344</code></a>
         
         </p>
 
@@ -1837,7 +1914,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l323"><code>js&#x2F;gallery-datatable-selection.js:323</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l330"><code>js&#x2F;gallery-datatable-selection.js:330</code></a>
         
         </p>
 
@@ -1893,7 +1970,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l313"><code>js&#x2F;gallery-datatable-selection.js:313</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l320"><code>js&#x2F;gallery-datatable-selection.js:320</code></a>
         
         </p>
 
@@ -1949,7 +2026,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l302"><code>js&#x2F;gallery-datatable-selection.js:302</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l309"><code>js&#x2F;gallery-datatable-selection.js:309</code></a>
         
         </p>
 
@@ -2005,7 +2082,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l209"><code>js&#x2F;gallery-datatable-selection.js:209</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l216"><code>js&#x2F;gallery-datatable-selection.js:216</code></a>
         
         </p>
 
@@ -2061,7 +2138,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l234"><code>js&#x2F;gallery-datatable-selection.js:234</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l241"><code>js&#x2F;gallery-datatable-selection.js:241</code></a>
         
         </p>
 
@@ -2117,7 +2194,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l224"><code>js&#x2F;gallery-datatable-selection.js:224</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l231"><code>js&#x2F;gallery-datatable-selection.js:231</code></a>
         
         </p>
 
@@ -2187,7 +2264,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l244"><code>js&#x2F;gallery-datatable-selection.js:244</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l251"><code>js&#x2F;gallery-datatable-selection.js:251</code></a>
         
         </p>
 
@@ -2293,7 +2370,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l257"><code>js&#x2F;gallery-datatable-selection.js:257</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l264"><code>js&#x2F;gallery-datatable-selection.js:264</code></a>
         
         </p>
 
@@ -2389,7 +2466,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l280"><code>js&#x2F;gallery-datatable-selection.js:280</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l287"><code>js&#x2F;gallery-datatable-selection.js:287</code></a>
         
         </p>
 
@@ -2459,7 +2536,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l200"><code>js&#x2F;gallery-datatable-selection.js:200</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l207"><code>js&#x2F;gallery-datatable-selection.js:207</code></a>
         
         </p>
 
@@ -2516,7 +2593,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l160"><code>js&#x2F;gallery-datatable-selection.js:160</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l167"><code>js&#x2F;gallery-datatable-selection.js:167</code></a>
         
         </p>
 
@@ -2566,7 +2643,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l170"><code>js&#x2F;gallery-datatable-selection.js:170</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l177"><code>js&#x2F;gallery-datatable-selection.js:177</code></a>
         
         </p>
 
@@ -2616,7 +2693,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l180"><code>js&#x2F;gallery-datatable-selection.js:180</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l187"><code>js&#x2F;gallery-datatable-selection.js:187</code></a>
         
         </p>
 
@@ -2671,7 +2748,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l151"><code>js&#x2F;gallery-datatable-selection.js:151</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l158"><code>js&#x2F;gallery-datatable-selection.js:158</code></a>
         
         </p>
 
@@ -2730,7 +2807,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l30"><code>js&#x2F;gallery-datatable-selection.js:30</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l32"><code>js&#x2F;gallery-datatable-selection.js:32</code></a>
         
         </p>
 
@@ -2781,7 +2858,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l52"><code>js&#x2F;gallery-datatable-selection.js:52</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l54"><code>js&#x2F;gallery-datatable-selection.js:54</code></a>
         
         </p>
 
@@ -2833,7 +2910,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l68"><code>js&#x2F;gallery-datatable-selection.js:68</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l70"><code>js&#x2F;gallery-datatable-selection.js:70</code></a>
         
         </p>
 
@@ -2885,7 +2962,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l41"><code>js&#x2F;gallery-datatable-selection.js:41</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l43"><code>js&#x2F;gallery-datatable-selection.js:43</code></a>
         
         </p>
 
@@ -2936,7 +3013,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l116"><code>js&#x2F;gallery-datatable-selection.js:116</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l113"><code>js&#x2F;gallery-datatable-selection.js:113</code></a>
         
         </p>
 
@@ -2946,63 +3023,20 @@ full TR (as "row")</p>
     </div>
 
     <div class="description">
-        <p>Attribute that sets the initially selected cells TD's or returns the currently selected TD's.  For
- setting selected cells, the attribute is assumed to be an array of cell objects in {record,column}
- format (See <a href="#method__setSelectedCells">_setSelectedCells</a> ).</p>
-    </div>
+        <p>Attribute that holds the selected TD's associated with the selected "cells", or related to the
+ selected "rows" if that is the <code>selectionMode</code>.</p>
 
-    
-        <p><strong>Default:</strong> []</p>
-    
+<p>On input, an Array can be provided to pre-set as "selected" cells, defined as each element being
+ in {record,column} format; where "record" is the record index (or clientId) and "column" is either
+ the column index or the key/name for the column.
+ (Please see method <a href="#method__setSelectedCells">_setSelectedCells</a> for reference).</p>
 
-    
+<pre class="code"><code class="prettyprint">     dt.set('selectedCells',[{record:0,column:'fname'}, {record:187,column:7} ]);
+</code></pre>
 
-    
-</div>
-
-                
-                    <div id="attr_selectedRecords" class="attr item">
-    <a name="config_selectedRecords"></a> 
-    <h3 class="name"><code>selectedRecords</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l99"><code>js&#x2F;gallery-datatable-selection.js:99</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Attribute that either sets the current "selected" records (by entering an array of DataTable record
- indices) or returns an array of "selected" records based on the recent selections.</p>
-
-<p>Note, this attribute differs from <code>selectedRows</code> in that it operates on "records" and NOT TR's</p>
+<p>For reading the selected cells (via "get"), an array is returned with contains {Object} elements
+ that describe the row / column combinations of each currently selected cell.
+ (Please see method <a href="#method__getSelectedCells">_getSelectedCells</a> for full information on the returned objects).</p>
     </div>
 
     
@@ -3043,7 +3077,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l84"><code>js&#x2F;gallery-datatable-selection.js:84</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l87"><code>js&#x2F;gallery-datatable-selection.js:87</code></a>
         
         </p>
 
@@ -3053,7 +3087,20 @@ full TR (as "row")</p>
     </div>
 
     <div class="description">
-        <p>Readonly attribute which returns the currently selected TR's</p>
+        <p>Attribute that holds the selected TR's associated with either the selected "rows" or the
+ TR's that are related to the selected "cells", duplicates are excluded.</p>
+
+<p>On input, accepts an Array of record indices for rows that should be set as "selected".
+(Please refer to method <a href="#method__setSelectedRows">_setSelectedRows</a>)</p>
+
+<pre class="code"><code class="prettyprint">     dt.set('selectedRows',[ 1, 5, 9, 11]);
+     // selects the 2nd, 6th, 10th and 12th records
+</code></pre>
+
+<p>For reading this setting, it returns an Array of objects containing {tr,record,recordIndex} for each
+ selected "row"; where "tr" is a Y.Node instance and "record" is the Model for the TR and "recordIndex" is the
+ record index within the current dataset.
+(Please refer to method <a href="#method__getSelectedRows">_getSelectedRows</a>)</p>
     </div>
 
     
@@ -3094,7 +3141,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l132"><code>js&#x2F;gallery-datatable-selection.js:132</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l139"><code>js&#x2F;gallery-datatable-selection.js:139</code></a>
         
         </p>
 
@@ -3150,7 +3197,7 @@ For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selec
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l513"><code>js&#x2F;gallery-datatable-selection.js:513</code></a>
+        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l522"><code>js&#x2F;gallery-datatable-selection.js:522</code></a>
         
         </p>
 

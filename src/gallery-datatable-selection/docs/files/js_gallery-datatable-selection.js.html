@@ -97,7 +97,7 @@
  Highlighting is controlled by the [highlightMode](#attr_highlightMode) attribute (either &quot;cell&quot; or &quot;row&quot;).
  (Highlighting provides a &quot;mouseover&quot; indication only).
 
- Selection is provided bia &quot;click&quot; listeners.
+ Selection is provided via &quot;click&quot; listeners.
 
  This extension includes the ability to select &quot;multiple&quot; items, by setting the [selectionMulti](#attr_selectionMulti)
  attribute (enabled using browser multi-select click modifier, i.e. &quot;Cmd&quot; key on Mac OSX or &quot;Ctrl&quot; key on Windows &#x2F; Linux).
@@ -105,8 +105,10 @@
  Additionally, a &quot;range&quot; selection capability is provided by using the browser range selector click key modifier,
  specifically the Shift key on most systems.
 
+ The extension has been written to allow preserving the &quot;selected&quot; rows or cells during &quot;sort&quot; operations.
+
  Specific attributes are provided that can be read for current selections, including the ATTRS [selectedRows](#attr_selectedRows),
- [selectedRecords](#attr_selectedRecords) and [selectedCells](#attr_selectedCells).
+ and [selectedCells](#attr_selectedCells).
 
  @module DataTable
  @submodule Selection
@@ -160,6 +162,7 @@ DtSelection.ATTRS = {
     &#x2F;**
      * Set the current mode for indicating selections, either for a single TD (as &quot;cell&quot;) or for a
      * full TR (as &quot;row&quot;)
+     *
      * @attribute highlightMode
      * @type {String}
      * @default &#x27;cell&#x27;
@@ -174,41 +177,45 @@ DtSelection.ATTRS = {
     },
 
     &#x2F;**
-     * Readonly attribute which returns the currently selected TR&#x27;s
+     * Attribute that holds the selected TR&#x27;s associated with either the selected &quot;rows&quot; or the
+     *  TR&#x27;s that are related to the selected &quot;cells&quot;, duplicates are excluded.
+     *
+     * On input, accepts an Array of record indices for rows that should be set as &quot;selected&quot;.
+     * (Please refer to method [_setSelectedRows](#method__setSelectedRows))
+     *
+     *          dt.set(&#x27;selectedRows&#x27;,[ 1, 5, 9, 11]);
+     *          &#x2F;&#x2F; selects the 2nd, 6th, 10th and 12th records
+     *
+     * For reading this setting, it returns an Array of objects containing {tr,record,recordIndex} for each
+     *  selected &quot;row&quot;; where &quot;tr&quot; is a Y.Node instance and &quot;record&quot; is the Model for the TR and &quot;recordIndex&quot; is the
+     *  record index within the current dataset.
+     * (Please refer to method [_getSelectedRows](#method__getSelectedRows))
+     *
      * @attribute selectedRows
      * @type {Array}
-     * @readonly
      * @default []
      *&#x2F;
     selectedRows: {
         value:      [],
-        readOnly:   true,
         validator:  Y.Lang.isArray,
-        getter:     &#x27;_getSelectedRows&#x27;
-        &#x2F;&#x2F;setter:     &#x27;_setSelectedRows&#x27;
+        getter:     &#x27;_getSelectedRows&#x27;,
+        setter:     &#x27;_setSelectedRows&#x27;
     },
 
     &#x2F;**
-     * Attribute that either sets the current &quot;selected&quot; records (by entering an array of DataTable record
-     *  indices) or returns an array of &quot;selected&quot; records based on the recent selections.
+     * Attribute that holds the selected TD&#x27;s associated with the selected &quot;cells&quot;, or related to the
+     *  selected &quot;rows&quot; if that is the &#x60;selectionMode&#x60;.
      *
-     * Note, this attribute differs from &#x60;selectedRows&#x60; in that it operates on &quot;records&quot; and NOT TR&#x27;s
+     *  On input, an Array can be provided to pre-set as &quot;selected&quot; cells, defined as each element being
+     *  in {record,column} format; where &quot;record&quot; is the record index (or clientId) and &quot;column&quot; is either
+     *  the column index or the key&#x2F;name for the column.
+     *  (Please see method [_setSelectedCells](#method__setSelectedCells) for reference).
      *
-     * @attribute selectedRecords
-     * @type {Array}
-     * @default []
-     *&#x2F;
-    selectedRecords: {
-        value:      [],
-        validator:  Y.Lang.isArray,
-        setter:     &#x27;_setSelectedRecords&#x27;,
-        getter:     &#x27;_getSelectedRecords&#x27;
-    },
-
-    &#x2F;**
-     * Attribute that sets the initially selected cells TD&#x27;s or returns the currently selected TD&#x27;s.  For
-     *  setting selected cells, the attribute is assumed to be an array of cell objects in {record,column}
-     *  format (See [_setSelectedCells](#method__setSelectedCells) ).
+     *          dt.set(&#x27;selectedCells&#x27;,[{record:0,column:&#x27;fname&#x27;}, {record:187,column:7} ]);
+     *
+     *  For reading the selected cells (via &quot;get&quot;), an array is returned with contains {Object} elements
+     *  that describe the row &#x2F; column combinations of each currently selected cell.
+     *  (Please see method [_getSelectedCells](#method__getSelectedCells) for full information on the returned objects).
      *
      * @attribute selectedCells
      * @type {Array}
@@ -457,6 +464,7 @@ Y.mix( DtSelection.prototype, {
     _bindSelector: function(){
         this._selections = [];
         this._eventHandles.selector = [];
+
         this._eventHandles.selector.push( this.on(&#x27;highlightedChange&#x27;,this._highlightChange) );
         this._eventHandles.selector.push( this.on(&#x27;selectedChange&#x27;,this._selectedChange) );
 
@@ -464,6 +472,13 @@ Y.mix( DtSelection.prototype, {
         &#x2F;&#x2F;    currently as  &quot;.yui3-datatable-sel-highlighted&quot; and &quot;.yui3-datatable-sel-selected&quot;
         this._classHighlight = this.getClassName(&#x27;sel&#x27;,&#x27;highlighted&#x27;);
         this._classSelected  = this.getClassName(&#x27;sel&#x27;,&#x27;selected&#x27;);
+
+        &#x2F;&#x2F;
+        &#x2F;&#x2F;  These listeners are here solely for &quot;sort&quot; actions, to allow preserving the &quot;selections&quot;
+        &#x2F;&#x2F;   pre-sort and re-applying them after the TBODY has been sorted and displayed
+        &#x2F;&#x2F;
+        this._eventHandles.selector.push( this.data.before(&#x27;*:reset&#x27;, Y.bind(&#x27;_beforeResetDataSelect&#x27;, this) ) );
+        this._eventHandles.selector.push( this.data.after(&#x27;*:reset&#x27;, Y.bind(&#x27;_afterResetDataSelect&#x27;, this) ) );
 
         &#x2F;&#x2F; track click modifier keys from last click, this is the tempalte
         this._clickModifiers = {
@@ -596,12 +611,6 @@ Y.mix( DtSelection.prototype, {
 
     },
 
-    _clearDOMSelection: function(){
-        var sel = (Y.config.win.getSelection) ? Y.config.win.getSelection() : (Y.config.doc.selection) ? Y.config.doc.selection : null;
-        if ( sel &amp;&amp; sel.empty ) sel.empty();    &#x2F;&#x2F; works on chrome
-        if ( sel &amp;&amp; sel.removeAllRanges ) sel.removeAllRanges();    &#x2F;&#x2F; works on FireFox
-    },
-
     &#x2F;**
      * @event selected
      * @param {Object} obj Return object
@@ -610,49 +619,100 @@ Y.mix( DtSelection.prototype, {
      *&#x2F;
 
     &#x2F;**
-     * Returns the current &quot;raw&quot; settings of selections (includes multiple selections)
-     * @method _getSelected
-     * @return {Array} selections Array of selected TR&#x27;s and&#x2F;or TD&#x27;s
+     * Returns the current settings of row selections, includes multiple selections.  If the
+     * current &#x60;selectionMode&#x60; is &quot;cell&quot; mode, this function returns the unique &quot;records&quot; associated with
+     * the selected cells.
+     *
+     * **Returned** &#x60;rows&#x60; {Array} of objects in format;
+     * &lt;ul&gt;
+     *   &lt;li&gt;&#x60;rows.tr&#x60; {Node} Node instance of the TR that was selected&lt;&#x2F;li&gt;
+     *   &lt;li&gt;&#x60;rows.record&#x60; {Model} The Model associated with the data record for the selected TR&lt;&#x2F;li&gt;
+     *   &lt;li&gt;&#x60;rows.recordIndex&#x60; {Integer} The record index of the selected TR within the current &quot;data&quot; set&lt;&#x2F;li&gt;
+     * &lt;&#x2F;ul&gt;
+
+     * @method _getSelectedRows
+     * @return {Array} rows Array of selected &quot;rows&quot; as objects in {tr,record,recordIndex} format
      * @private
      *&#x2F;
     _getSelectedRows: function(){
-        var trs = [];
+        var trs  = [],
+            rows = [],
+            tr, rec;
         Y.Array.each(this._selections,function(item){
-            var tr = ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; ) ? item : item.ancestor(&#x27;tr&#x27;);
+            tr = ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; ) ? item : item.ancestor(&#x27;tr&#x27;);
             &#x2F;&#x2F; if and only if, it&#x27;s a TR and not in &quot;trs&quot; array ... then add it
-            if ( tr.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; &amp;&amp; trs.indexOf(tr) === -1)
+            if ( tr.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; &amp;&amp; trs.indexOf(tr) === -1) {
+                rec = this.data.getByClientId(tr.getData(&#x27;yui3-record&#x27;));
                 trs.push(tr);
-        });
-        return trs;
+                rows.push({
+                    tr:     tr,   &#x2F;&#x2F; this is an OLD, stale TR from pre-sort
+                    record: rec,
+                    recordIndex: this.data.indexOf(rec)
+                });
+            }
+        },this);
+        return rows;
     },
 
+
+
     &#x2F;**
-     * Getter method that returns an Array of the selected cells in {record,column} coordinate format.
+     * Getter method that returns an Array of the selected cells in record&#x2F;column coordinate format.
      * If rows or TR elements were selected, it adds all of the row&#x27;s child TD&#x27;s.
      *
+     * **Returned** &#x60;cells&#x60; {Array} of objects in format;
+     * &lt;ul&gt;
+     *   &lt;li&gt;&#x60;cells.record&#x60; {Model} Record for this cell as a Y.Model&lt;&#x2F;li&gt;
+     *   &lt;li&gt;&#x60;cells.recordIndex&#x60; {Integer} Record index for this cell in the current &quot;data&quot; set&lt;&#x2F;li&gt;
+     *   &lt;li&gt;&#x60;cells.column&#x60; {Object} Column for this cell defined in original &quot;columns&quot; DataTable attribute&lt;&#x2F;li&gt;
+     *   &lt;li&gt;&#x60;cells.columnName&#x60; {String} Column name or key associated with this cell&lt;&#x2F;li&gt;
+     *   &lt;li&gt;&#x60;cells.columnIndex&#x60; {Integer} Column index of the column, within the &quot;columns&quot; data&lt;&#x2F;li&gt;
+     * &lt;&#x2F;ul&gt;
+     *
      * @method _getSelectedCells
-     * @return {Array} cells The selected cells in {record:, column:} format
-     * @param {Model} cells.record Record for this cell as a Y.Model
-     * @param {Object} cells.column Column for this cell defined in original &quot;columns&quot; DataTable attribute
+     * @return {Array} cells The selected cells in {record,recordIndex,column,columnName,columnIndex} format
      * @private
      *&#x2F;
     _getSelectedCells: function(){
-        var cells = [], td;
+        var cells = [],
+            cols  = this.get(&#x27;columns&#x27;),
+            col, tr, rec;
+
         Y.Array.each(this._selections,function(item){
             if (!item) return;
-            if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;td&#x27; )
-                cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } );
-            else if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; ) {
-                var tdNodes = item.all(&quot;td&quot;);
-                if ( tdNodes )
-                    tdNodes.each(function(item){
-                        cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } )
+            if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;td&#x27; ) {
+                col = this.getColumnByTd(item);
+                tr  = item.ancestor(&quot;tr&quot;);
+                rec = this.data.getByClientId(tr.getData(&#x27;yui3-record&#x27;));
+
+                cells.push({
+                    record:     rec,
+                    recordIndex: this.data.indexOf(rec),
+                    column:     col,
+                    columnName: col.key || col.name,
+                    columnIndex: cols.indexOf(col)
+                });
+            } else if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; ) {
+                tr = item;
+                rec = this.data.getByClientId(tr.getData(&#x27;yui3-record&#x27;));
+                var tdNodes = tr.all(&quot;td&quot;);
+                if ( tdNodes ) {
+                    tdNodes.each(function(td){
+                        &#x2F;&#x2F;cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } )
+                        col = this.getColumnByTd(td);
+                        cells.push({
+                            record:     rec,
+                            recordIndex: this.data.indexOf(rec),
+                            column:     col,
+                            columnName: col.key || col.name,
+                            columnIndex: cols.indexOf(col)
+                        });
                     },this);
+                }
             }
         },this);
         return cells;
     },
-
 
     &#x2F;**
      * Setter method for attribute &#x60;selectedCells&#x60; that takes an array of cells as input and sets them
@@ -687,18 +747,17 @@ Y.mix( DtSelection.prototype, {
         return val;
     },
 
-
     &#x2F;**
-     * A setter method for attribute &#x60;selectedRecords&#x60; that takes as input an array of desired DataTable
+     * A setter method for attribute &#x60;selectedRows&#x60; that takes as input an array of desired DataTable
      * record indices to be &quot;selected&quot;, clears existing selections and sets the &quot;selected&quot; records and
      * highlights the TR&#x27;s
      *
-     * @method _setSelectedRecords
+     * @method _setSelectedRows
      * @param val {Array} recIndices Array of record indices desired to be set as selected.
      * @return {Array} records Array of DataTable records (Y.Model) for each selection chosen
      * @private
      *&#x2F;
-    _setSelectedRecords: function(val){
+    _setSelectedRows: function(val){
         this._selections = [];
         if ( Y.Lang.isArray(val) &amp;&amp; this.data.size() &gt; val.length ) {
             Y.Array.each(val,function(item){
@@ -712,24 +771,89 @@ Y.mix( DtSelection.prototype, {
         return val;
     },
 
-
     &#x2F;**
-     * A getter method for the &#x60;selectedRecords&#x60; attribute that returns an array of DataTable records (Y.Model)
-     *  based on the current &quot;selected&quot; items, either TR&#x27;s or TD&#x27;s.
+     * Method is fired BEFORE a &quot;reset&quot; action takes place on the &quot;data&quot;, usually related to a column sort.
+     * This is used to preserve the pre-sorted data (temporarily in _selections) prior to sorting so that
+     * we can reapply the &quot;selections&quot; after the sort is completed (see [_afterResetDataSelect](#method__afterResetDataSelect))
      *
-     *  If TD&#x27;s were selected it converts them to their base record.
-     *
-     * @method _getSelectedRecords
-     * @return {Array} records Array of records from the DataTable based on the selected items
+     * @method _beforeResetDataSelect
      * @private
      *&#x2F;
-    _getSelectedRecords: function(){
-        var rows = this._getSelectedRows() || [],
-            recs = [];
-        Y.Array.each(rows,function(tr){
-            if ( tr ) recs.push(this.getRecord(tr));
+    _beforeResetDataSelect: function() {
+        if( !this._selections || this._selections.length === 0 ) return;
+
+        &#x2F;&#x2F; Save a copy of the current pre-sort rows and&#x2F;or cells ...
+        var rows  = this.get(&#x27;selectedRows&#x27;),   &#x2F;&#x2F; array as {record,tr}
+            cells = this.get(&#x27;selectedCells&#x27;),  &#x2F;&#x2F; array as {record,td,column,columnIndex,columnName}
+            tr, td;
+
+        &#x2F;&#x2F; Clear out the selections, reset selected and remove &quot;selected&quot; CSS on table
+        this._selections = [];
+        this.set(&#x27;selected&#x27;,null);
+        this._clearAll(this._classSelected);
+
+        &#x2F;&#x2F;
+        &#x2F;&#x2F;  Loop over all of the rows or cells (depending on mode),
+        &#x2F;&#x2F;    and push a temporary record to the _selections array,
+        &#x2F;&#x2F;    to be used in _afterResetDataSelect to reconstruct selections
+        &#x2F;&#x2F;
+        if( this.get(&#x27;selectionMode&#x27;) === &#x27;row&#x27; &amp;&amp; rows &amp;&amp; rows.length &gt; 0 ) {
+
+            &#x2F;&#x2F; Push the Model data only to the _selections array ...
+            Y.Array.each(rows,function(r){
+                if ( r &amp;&amp; r.record )
+                    this._selections.push( r.record );
+            },this);
+
+        } else if ( this.get(&#x27;selectionMode&#x27;) === &#x27;cell&#x27; &amp;&amp; cells &amp;&amp; cells.length &gt; 0 ) {
+
+            &#x2F;&#x2F; Push the Model data and column index only to the _selections array
+            Y.Array.each(cells,function(r){
+                if(r &amp;&amp; r.record &amp;&amp; r.columnIndex)
+                    this._selections.push({record:r.record, colIndex:r.columnIndex});
+            },this);
+        }
+
+    },
+
+    &#x2F;**
+     * Method is fired AFTER a &quot;reset&quot; action takes place on the &quot;data&quot;, usually related to a column sort.
+     * This function reads the pre-sorted selections that were stored by  [_beforeResetDataSelect](#method__beforeResetDataSelect)
+     * temporarily in this._selections.
+     *
+     * Depending upon the current &quot;selectionMode&quot;, either post-sorted TBODY selections are re-applied, by determining either
+     * the TR&#x27;s (from the Model data) or the TD&#x27;s (from the Model and Column Index data).
+     *
+     * @method _afterResetDataSelect
+     * @private
+     *&#x2F;
+    _afterResetDataSelect: function() {
+        if( !this._selections || this._selections.length === 0 ) return;
+        var tr, td;
+        var buffer = [];
+
+        Y.Array.each(this._selections,function(item){
+            if( this.get(&#x27;selectionMode&#x27;) === &#x27;row&#x27; &amp;&amp; item ) {
+                &#x2F;&#x2F; the &quot;item&quot; is a Model pushed prior to the &quot;sort&quot; action ...
+                tr = this.getRow(item);
+                if( tr ){
+                    buffer.push(tr);
+                    tr.addClass(this._classSelected);
+                }
+            } else if (this.get(&#x27;selectionMode&#x27;) === &#x27;cell&#x27; &amp;&amp; item ) {
+                &#x2F;&#x2F; the item is an object as {record,colIndex} pushed prior to &quot;sort&quot; action ...
+                tr = this.getRow(item.record),
+                td = (tr) ? tr.all(&quot;td&quot;).item(item.colIndex) : null;
+                if(tr &amp;&amp; td) {
+                    buffer.push(td);
+                    td.addClass(this._classSelected);
+                }
+            }
         },this);
-        return recs;
+
+        &#x2F;&#x2F; swap out the temporary buffer, for the current selections ...
+        this._selections = buffer;
+
     },
 
     &#x2F;**
@@ -777,7 +901,7 @@ Y.mix( DtSelection.prototype, {
 
 
     &#x2F;**
-     * Method removes the specified &#x60;type&#x60; class from all nodes within the TBODY data node.
+     * Method removes the specified &#x60;type&#x60; CSS class from all nodes within the TBODY data node.
      * @method _clearAll
      * @param {String} type Class name to remove from all nodes attached to TBODY DATA
      * @private
@@ -843,13 +967,23 @@ Y.mix( DtSelection.prototype, {
             },&quot;tr td&quot;,oSelf);
         this._clearAll(this._classSelected);
         return val;
+    },
+
+    &#x2F;**
+     * Helper method to clear DOM &quot;selected&quot; text or ranges
+     * @method _clearDOMSelection
+     * @private
+     *&#x2F;
+    _clearDOMSelection: function(){
+        var sel = (Y.config.win.getSelection) ? Y.config.win.getSelection() : (Y.config.doc.selection) ? Y.config.doc.selection : null;
+        if ( sel &amp;&amp; sel.empty ) sel.empty();    &#x2F;&#x2F; works on chrome
+        if ( sel &amp;&amp; sel.removeAllRanges ) sel.removeAllRanges();    &#x2F;&#x2F; works on FireFox
     }
 
 });
 
 Y.DataTable.Selection = DtSelection;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Selection]);
-
 
     </pre>
 </div>

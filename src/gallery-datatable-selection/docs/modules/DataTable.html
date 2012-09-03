@@ -144,7 +144,7 @@ The extension works in either "cell" mode or "row" mode (set via attribute [sele
 Highlighting is controlled by the [highlightMode](#attr_highlightMode) attribute (either "cell" or "row").
 (Highlighting provides a "mouseover" indication only).
 
-Selection is provided bia "click" listeners.
+Selection is provided via "click" listeners.
 
 This extension includes the ability to select "multiple" items, by setting the [selectionMulti](#attr_selectionMulti)
 attribute (enabled using browser multi-select click modifier, i.e. "Cmd" key on Mac OSX or "Ctrl" key on Windows / Linux).
@@ -152,8 +152,10 @@ attribute (enabled using browser multi-select click modifier, i.e. "Cmd" key on 
 Additionally, a "range" selection capability is provided by using the browser range selector click key modifier,
 specifically the Shift key on most systems.
 
+The extension has been written to allow preserving the "selected" rows or cells during "sort" operations.
+
 Specific attributes are provided that can be read for current selections, including the ATTRS [selectedRows](#attr_selectedRows),
-[selectedRecords](#attr_selectedRecords) and [selectedCells](#attr_selectedCells).
+and [selectedCells](#attr_selectedCells).
                     </div>
                 </li>
             
