@@ -1,0 +1,14 @@
+<div class="intro component">
+    <p>HTML forms are complex beasts, requiring insertion of default values when the form is first displayed, possible auto-saving of unvalidated input to protect against connection loss, client-side pre-validation of user input, synchronous/asynchronous submission of user input to the server, and processing and display of the results returned by the server (success or errors). When combined with Y.IO, FormMgr supports all of this.</p>
+
+    <p>This module is lightweight because it does not instantiate a separate JavaScript object for each form element. Instead, basic pre-validation configuration is stored in each element's class. Custom pre-validations can be added either by registering a regular expression and/or function for a particular element or by overriding postValidateForm().</p>
+
+    <p>This approach is ideal when implementing progressive enhancement: the form is defined via markup, and FormManager is then used to add functionality when JavaScript is enabled. Even then error message containers are in the markup, and this allows the server to populate them for non-JavaScript clients.</p>
+
+    <p>We refer to client-side checks as "pre-validation" because JavaScript is relatively easy to subvert -- or it might be turned off completely by the user. Only the server can truly validate that the data is acceptable.</p>
+
+    <p>More information is provided in <a href="http://www.yuiblog.com/blog/2010/03/23/gallery-form-manager/">this YUI Blog post</a></p>
+    </p>
+</div>
+
+{{>getting-started}}

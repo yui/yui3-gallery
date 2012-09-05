@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="assets/gallery-formmgr-tests.js"></script>
+<script type="text/javascript" src="../../../../build/gallery-formmgr/gallery-formmgr.js"></script>
+</head>
+
+<body class="yui3-skin-sam">
+
+<form name="test_form">
+	<fieldset>
+		<div class="formmgr-row">
+			<label for="s1">String</label>
+			<p class="formmgr-message-text"></p>
+			<input type="text" id="s1" name="s1" class="formmgr-field yiv-required">
+		</div>
+		<div class="formmgr-row">
+			<label for="s2">String (not required, 6-10 characters)</label>
+			<p class="formmgr-message-text"></p>
+			<input type="text" id="s2" name="s2" class="formmgr-field yiv-length:[6,10]">
+		</div>
+	</fieldset>
+</form>
+
+<div id="log"></div>
+
+<script type="text/javascript">
+YUI({
+	filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use("test-console", "gallery-formmgr-tests", function(Y) {
+
+	(new Y.Test.Console()).render('#log');
+
+	Y.Test.Runner.setName('gallery-formmgr');
+	Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

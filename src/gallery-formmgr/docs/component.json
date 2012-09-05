@@ -1,0 +1,9 @@
+{
+	"name": "gallery-formmgr",
+	"displayName": "Form Manager",
+	"description": "Form Manager provides all the functionality required to manage an HTML form.",
+	"author": "jafl",
+
+	"use": ["gallery-formmgr"],
+	"tags": ["jafl","form","validation"]
+}
