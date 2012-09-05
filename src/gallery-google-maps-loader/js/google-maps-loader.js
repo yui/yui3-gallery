@@ -5,8 +5,9 @@
     'use strict';
 
     var _Base = Y.Base,
-    
-        _isArray = Y.Lang.isArray;
+
+        _isArray = Y.Lang.isArray,
+        _stringify = Y.QueryString.stringify;
 
     /**
      * @class GoogleMapsLoader
@@ -17,13 +18,13 @@
     Y.GoogleMapsLoader = _Base.create(moduleName, _Base, [], {
         initializer: function () {
             var me = this;
-            
+
             /**
              * Fired when JSONP fails.
              * @event failure
              */
             me.publish('failure');
-            
+
             /**
              * Fired when JSONP succeeds.
              * @event success
@@ -32,7 +33,7 @@
             me.publish('success', {
                 fireOnce: true
             });
-            
+
             /**
              * Fired when JSONP times out.
              * @event timeout
@@ -48,6 +49,13 @@
          * optional properties:
          * <dl>
          *     <dt>
+         *         client
+         *     </dt>
+         *     <dd>
+         *         This is your client id when using Google Maps API for
+         *         Business.
+         *     </dd>
+         *     <dt>
          *         language
          *     </dt>
          *     <dd>
@@ -58,6 +66,12 @@
          *     </dt>
          *     <dd>
          *         An array or comma separated string of library names.
+         *     </dd>
+         *     <dt>
+         *         key
+         *     </dt>
+         *     <dd>
+         *         This is your Google Maps v3 API key.
          *     </dd>
          *     <dt>
          *         region
@@ -77,7 +91,8 @@
          *         source
          *     </dt>
          *     <dd>
-         *         Location of the Google Maps JavaScript API to override the attribute.
+         *         Location of the Google Maps JavaScript API to override the
+         *         attribute.
          *     </dd>
          *     <dt>
          *         timeout
@@ -92,47 +107,39 @@
          *         The version of the Google Maps JavaScript API to load.
          *     </dd>
          * </dl>
+         * If other properties not listed here are included in the parameters
+         * object, they will also be included the the Google Maps API request.
          */
         load: function (parameters) {
-            var me = this;
-            
+            parameters = parameters || {};
+
+            var me = this,
+
+                libraries = parameters.libraries,
+                timeout = parameters.timeout || me.get('timeout'),
+                url = parameters.source || me.get('source');
+
             if (me.get('loaded')) {
                 return me;
             }
 
-            parameters = parameters || {};
-
-            var language = parameters.language,
-                libraries = parameters.libraries,
-                region = parameters.region,
-                sensor = parameters.sensor,
-                timeout = parameters.timeout || me.get('timeout'),
-                url = (parameters.source || me.get('source')) + '?callback={callback}',
-                version = parameters.version;
-
-            if (language) {
-                url += '&language=' + language;
+            if (_isArray(libraries)) {
+                parameters.libraries = libraries.join(',');
             }
 
-            if (libraries) {
-                if (_isArray(libraries)) {
-                    libraries = libraries.join(',');
-                }
+            parameters.sensor = parameters.sensor ? 'true' : 'false';
+            parameters.v = parameters.v || parameters.version;
 
-                url += '&libraries=' + libraries;
+            delete parameters.callback;
+            delete parameters.source;
+            delete parameters.timeout;
+            delete parameters.version;
+
+            if (url.indexOf('?') === -1) {
+                url += '?';
             }
 
-            if (region) {
-                url += '&region=' + region;
-            }
-
-            url += '&sensor=' + (sensor ? 'true' : 'false');
-
-            if (version) {
-                url += '&v=' + version;
-            }
-
-            Y.jsonp(url, {
+            Y.jsonp(url + _stringify(parameters) + '&callback={callback}', {
                 on: {
                     failure: function () {
                         me.fire('failure');
@@ -147,7 +154,7 @@
                 },
                 timeout: timeout
             });
-            
+
             return me;
         }
     }, {
