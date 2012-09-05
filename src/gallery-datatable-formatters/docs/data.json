@@ -1,0 +1,134 @@
+{
+    "project": {},
+    "files": {
+        "js/datatable-formatters.js": {
+            "name": "js/datatable-formatters.js",
+            "modules": {
+                "formatters": 1
+            },
+            "classes": {
+                "Y.DataTable.Formatters": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "datatable": {
+            "name": "datatable",
+            "submodules": {
+                "formatters": 1
+            },
+            "classes": {
+                "Y.DataTable.Formatters": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "file": "js/datatable-formatters.js",
+            "line": 1
+        },
+        "formatters": {
+            "name": "formatters",
+            "submodules": {},
+            "classes": {
+                "Y.DataTable.Formatters": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "datatable",
+            "namespace": "",
+            "file": "js/datatable-formatters.js",
+            "line": 1,
+            "description": "Define a \"named\" Column Formatters object and attach it to the Y.DataTable namespace.\nThe named formatters are defined as a series of format strings that are typically used by the\ndata formatting function Y.DataType.Number.format and Y.DataType.Date.format.\n\nThe function [`namedFormatter`](#method_namedFormatter) is defined that can be used to call as a column formatter which\nformats the column cell using the [`formatStrings`](#property_formatStrings) object.\n\nThis module includes an override of the [Y.DataTable.BodyView._createRowHTML](#method_Y.DataTable.BodyView._createRowHTML) method.  Therefore implementers shouldn't call the `namedFormatter` method directly because the overridden method handles the call if the entered formatter string name is recognized.\n \n###Usage\nThe format string names can be used in a column configuration object as follows;\n\n\t\tvar dt1 = new Y.DataTable({\n\t        data: some_data,\n   \t    columns: [\n       \t    { key:\"start_date\", label:\"Start\", formatter:\"fullDate\" },\n           \t{ key:\"end_date\", label:\"End\", formatter:\"default\",\n\t                 formatOptions:{ type:'date', formatConfig:{ format:'%F' } }    },\n   \t        { key:\"qty\", label:\"Inventory Qty\", formatter:\"comma\" },\n       \t    { key:\"cost\", label:\"Carried Cost\", formatter:\"currency\",\n\t                 formatConfig:{ prefix:'£', thousandsSeparator:\",\"} }\n   \t    ]\n\t\t}).render();\n\n####Pre-Defined `formatStrings` settings; (specifically, Y.DataTable.Formatters.formatStrings)\nFor \"number\" formatting, using [Y.DataType.Number](http://yuilibrary.com/yui/docs/api/classes/DataType.Number.html#method_format).\n\n<table><tr><th>string</th><th>Formatter Object</th><th>Formatted Example</th></tr>\n<tr><td>`general`</td><td>{ decimalPlaces:0 }</td><td>123457</td></tr>\n<tr><td>`general2`</td><td>{ decimalPlaces:2 }</td><td>123456.79</td></tr>\n<tr><td>`currency`</td><td>{ prefix:'$', decimalPlaces:0, thousandsSeparator:',' }</td><td>$ 123,457</td></tr>\n<tr><td>`currency2`</td><td>{ prefix:'$', decimalPlaces:2, thousandsSeparator:',' }</td><td>$ 123,456.78</td></tr>\n<tr><td>`currency3`</td><td>{ prefix:'$', decimalPlaces:3, thousandsSeparator:',' }</td><td>$ 123,457.789</td></tr>\n<tr><td>`comma`</td><td>{ decimalPlaces:0, thousandsSeparator:','}</td><td>123,457</td></tr>\n<tr><td>`comma2`</td><td>{ decimalPlaces:2, thousandsSeparator:','}</td><td>123,456.78</td></tr>\n<tr><td>`comma3`</td><td>{ decimalPlaces:3, thousandsSeparator:','}</td><td>123,457.789</td></tr>\n</table>\n\nFor \"date\" formatting, using [Y.DataType.Date](http://yuilibrary.com/yui/docs/api/classes/DataType.Date.html#method_format).\n<br/>(Please refer to the Date.format method above for the proper use of \"strftime\" format strings)\n<table><tr><th>string</th><th>Formatter Object</th><th>Formatted Example</th></tr>\n<tr><td>`shortDate`</td><td>{ format:'%D' }</td><td>03/12/92</td></tr>\n<tr><td>`longDate`</td><td>{ format:'%m/%d/%Y' }</td><td>03/12/1992</td></tr>\n<tr><td>`fullDate`</td><td>{ format:'%B %e, %Y' }</td><td>March 12, 1992</td></tr>\n<tr><td>`isoDate`</td><td>{ format:'%F'}</td><td>1992-03-12</td></tr>\n<tr><td>`isoDateTime`</td><td>{ format:'%FT%T'}</td><td>1992-03-12T22:11:07</td></tr>\n</table>\n\n####Replaceable Hash\nThis utility can also replace the cell value with values from a data hash (i.e. JS simple object, consisting of key:value pairs).\nAccess to this capability is by providing a `formatter` as any string not-recognizable in the `formatStrings` object\n**AND** by providing a `formatConfig` object (equal to the hash) in the column definition.\n\n####User-Defined `formatStrings`\nImplementers may add their \"named\" own formatting strings for their own use-cases simply by adding more named formatters to the `formatStrings` object as;\n\n\tY.DataTable.Formatters.formatStrings['myNumberFmtr'] = {\n\t\ttype:'number', \n\t\tformatConfig:{ thousandsSeparator:'x', decimalPlaces:11 } \n\t};\n\tY.DataTable.Formatters.formatStrings['myDateFmtr'] = {\n\t\ttype:'date', \n\t\tformatConfig:{ format:{ \"At the tone the TIME will be %T\" } \n\t};",
+            "type": "{Object}"
+        }
+    },
+    "classes": {
+        "Y.DataTable.Formatters": {
+            "name": "Y.DataTable.Formatters",
+            "shortname": "Y.DataTable.Formatters",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "datatable",
+            "submodule": "formatters",
+            "namespace": "",
+            "file": "js/datatable-formatters.js",
+            "line": 1,
+            "description": "Define a \"named\" Column Formatters object and attach it to the Y.DataTable namespace.\nThe named formatters are defined as a series of format strings that are typically used by the\ndata formatting function Y.DataType.Number.format and Y.DataType.Date.format.\n\nThe function [`namedFormatter`](#method_namedFormatter) is defined that can be used to call as a column formatter which\nformats the column cell using the [`formatStrings`](#property_formatStrings) object.\n\nThis module includes an override of the [Y.DataTable.BodyView._createRowHTML](#method_Y.DataTable.BodyView._createRowHTML) method.  Therefore implementers shouldn't call the `namedFormatter` method directly because the overridden method handles the call if the entered formatter string name is recognized.\n \n###Usage\nThe format string names can be used in a column configuration object as follows;\n\n\t\tvar dt1 = new Y.DataTable({\n\t        data: some_data,\n   \t    columns: [\n       \t    { key:\"start_date\", label:\"Start\", formatter:\"fullDate\" },\n           \t{ key:\"end_date\", label:\"End\", formatter:\"default\",\n\t                 formatOptions:{ type:'date', formatConfig:{ format:'%F' } }    },\n   \t        { key:\"qty\", label:\"Inventory Qty\", formatter:\"comma\" },\n       \t    { key:\"cost\", label:\"Carried Cost\", formatter:\"currency\",\n\t                 formatConfig:{ prefix:'£', thousandsSeparator:\",\"} }\n   \t    ]\n\t\t}).render();\n\n####Pre-Defined `formatStrings` settings; (specifically, Y.DataTable.Formatters.formatStrings)\nFor \"number\" formatting, using [Y.DataType.Number](http://yuilibrary.com/yui/docs/api/classes/DataType.Number.html#method_format).\n\n<table><tr><th>string</th><th>Formatter Object</th><th>Formatted Example</th></tr>\n<tr><td>`general`</td><td>{ decimalPlaces:0 }</td><td>123457</td></tr>\n<tr><td>`general2`</td><td>{ decimalPlaces:2 }</td><td>123456.79</td></tr>\n<tr><td>`currency`</td><td>{ prefix:'$', decimalPlaces:0, thousandsSeparator:',' }</td><td>$ 123,457</td></tr>\n<tr><td>`currency2`</td><td>{ prefix:'$', decimalPlaces:2, thousandsSeparator:',' }</td><td>$ 123,456.78</td></tr>\n<tr><td>`currency3`</td><td>{ prefix:'$', decimalPlaces:3, thousandsSeparator:',' }</td><td>$ 123,457.789</td></tr>\n<tr><td>`comma`</td><td>{ decimalPlaces:0, thousandsSeparator:','}</td><td>123,457</td></tr>\n<tr><td>`comma2`</td><td>{ decimalPlaces:2, thousandsSeparator:','}</td><td>123,456.78</td></tr>\n<tr><td>`comma3`</td><td>{ decimalPlaces:3, thousandsSeparator:','}</td><td>123,457.789</td></tr>\n</table>\n\nFor \"date\" formatting, using [Y.DataType.Date](http://yuilibrary.com/yui/docs/api/classes/DataType.Date.html#method_format).\n<br/>(Please refer to the Date.format method above for the proper use of \"strftime\" format strings)\n<table><tr><th>string</th><th>Formatter Object</th><th>Formatted Example</th></tr>\n<tr><td>`shortDate`</td><td>{ format:'%D' }</td><td>03/12/92</td></tr>\n<tr><td>`longDate`</td><td>{ format:'%m/%d/%Y' }</td><td>03/12/1992</td></tr>\n<tr><td>`fullDate`</td><td>{ format:'%B %e, %Y' }</td><td>March 12, 1992</td></tr>\n<tr><td>`isoDate`</td><td>{ format:'%F'}</td><td>1992-03-12</td></tr>\n<tr><td>`isoDateTime`</td><td>{ format:'%FT%T'}</td><td>1992-03-12T22:11:07</td></tr>\n</table>\n\n####Replaceable Hash\nThis utility can also replace the cell value with values from a data hash (i.e. JS simple object, consisting of key:value pairs).\nAccess to this capability is by providing a `formatter` as any string not-recognizable in the `formatStrings` object\n**AND** by providing a `formatConfig` object (equal to the hash) in the column definition.\n\n####User-Defined `formatStrings`\nImplementers may add their \"named\" own formatting strings for their own use-cases simply by adding more named formatters to the `formatStrings` object as;\n\n\tY.DataTable.Formatters.formatStrings['myNumberFmtr'] = {\n\t\ttype:'number', \n\t\tformatConfig:{ thousandsSeparator:'x', decimalPlaces:11 } \n\t};\n\tY.DataTable.Formatters.formatStrings['myDateFmtr'] = {\n\t\ttype:'date', \n\t\tformatConfig:{ format:{ \"At the tone the TIME will be %T\" } \n\t};"
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/datatable-formatters.js",
+            "line": 75,
+            "description": "Object containing referenceable format strings",
+            "itemtype": "property",
+            "name": "formatStrings",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.Formatters",
+            "module": "datatable",
+            "submodule": "formatters"
+        },
+        {
+            "file": "js/datatable-formatters.js",
+            "line": 103,
+            "description": "Formatter function called that executes a standard \"named\" formatter defined by `fmtrName`.\nThe parameter `fmtrName` maps to a member of the \"formatStrings\" object, that includes a type\ndeclaration and a formatConfig string to be substituted in the DataType.Number.format or Date.format\nfunction.",
+            "itemtype": "method",
+            "name": "namedFormatter",
+            "params": [
+                {
+                    "name": "fmtrName",
+                    "description": "Name of formatter object from \"formatStrings\", i.e. \"currency2\", \"fullDate\"",
+                    "type": "String"
+                },
+                {
+                    "name": "o",
+                    "description": "The passed-in column formatter object",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "value",
+                "type": "Mixed"
+            },
+            "class": "Y.DataTable.Formatters",
+            "module": "datatable",
+            "submodule": "formatters"
+        },
+        {
+            "file": "js/datatable-formatters.js",
+            "line": 131,
+            "description": "Override of method _createRowHTML from DataTable.BodyView extended to permit use of named\nformatter functions from Y.DataTable.Formatters.\n\nAdditional functionality was added to facilitate using a template approach for {o.value} within\nthe column, by using Y.Lang.sub (as fromTemplate) with the replacement object hash provided\nas column configuration \"formatConfig\" (o.column.formatConfig).",
+            "itemtype": "method",
+            "name": "Y.DataTable.BodyView._createRowHTML",
+            "params": [
+                {
+                    "name": "model",
+                    "description": ""
+                },
+                {
+                    "name": "index",
+                    "description": ""
+                },
+                {
+                    "name": "columns",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.Formatters",
+            "module": "datatable",
+            "submodule": "formatters"
+        }
+    ]
+}
