@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Bottle UI Lib" default="local">
+    <description>Tag Registry - Build All Modules</description>
+
+    <macrodef name="build-bottle">
+        <attribute name="target"/>
+        <sequential>
+            <subant target="@{target}">
+                <fileset dir="." includes="build.*.xml"/>
+            </subant>
+        </sequential>
+    </macrodef>
+
+    <target name="local">
+        <build-bottle target="local"/>
+    </target>
+    <target name="deploy">
+        <build-bottle target="deploy"/>
+    </target>
+    <target name="all">
+        <build-bottle target="all"/>
+    </target>
+    <target name="clean">
+        <build-bottle target="clean"/>
+    </target>
+</project>

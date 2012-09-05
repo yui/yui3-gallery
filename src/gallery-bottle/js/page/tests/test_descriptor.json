@@ -1,0 +1,19 @@
+[
+    {
+        "settings" : [ "master" ],
+
+        "name" : "page",
+
+        "commonlib" : "../../testlib.js,testlib.js",
+
+        "dataprovider" : {
+            "Functional" : {
+                "params" : {
+                    "test" : "functional.js",
+                    "page" : "$$config.baseUrl$$/container/test-default.html"
+                },
+                "group" : "unit"
+            }
+        }
+    }
+]

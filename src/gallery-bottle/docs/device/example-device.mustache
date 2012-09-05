@@ -1,0 +1,46 @@
+<style>
+#content div{margin:10px;}
+#demo {min-height:300px;overflow-y:scroll;border:1px solid black;}
+#content input{width:150px;}
+</style>
+<div id="bottle">
+    <div data-role="page" id="page">
+        <div id="content" data-role="body">
+            <div id="demo"></div>
+            <div><input type="text" id="DeviceWidth" /> <input type="button" id="getDeviceWidth" value="getDeviceWidth()" /></div>
+            <div><input type="text" id="DeviceHeight" /> <input type="button" id="getDeviceHeight" value="getDeviceHeight()" /></div>
+            <div><input type="text" id="BrowserWidth" /> <input type="button" id="getBrowserWidth" value="getBrowserWidth()" /></div>
+            <div><input type="text" id="BrowserHeight" /> <input type="button" id="getBrowserHeight" value="getBrowserHeight()" /></div>
+        </div>
+    </div>
+</div>
+<script>
+YUI().use({{{useParams}}}, function(Y){
+    var sb = "";
+    sb += '<div>';
+    sb +=  'Y.Bottle.Device.Name : ' + Y.Bottle.Device.Name + '<br />';
+    sb +=  'Y.Bottle.Device.OS : ' + Y.Bottle.Device.OS + '<br />';
+    sb +=  'Y.Bottle.Device.OS_Version : ' + Y.Bottle.Device.OS_Version + '<br />';
+    sb +=  'Y.Bottle.Device.Browser : ' + Y.Bottle.Device.Browser + '<br />';
+    sb +=  'Y.Bottle.Device.B_Version : ' + Y.Bottle.Device.B_Version + '<br />';
+    sb += '</div>';
+    Y.one('#demo').append(sb);
+   
+    Y.one('#getDeviceWidth').on('click', function(e){
+        Y.one('#DeviceWidth').set('value', Y.Bottle.Device.getDeviceWidth());
+    })
+    
+    Y.one('#getDeviceHeight').on('click', function(e){
+        Y.one('#DeviceHeight').set('value', Y.Bottle.Device.getDeviceHeight());
+    })
+    
+    Y.one('#getBrowserWidth').on('click', function(e){
+        Y.one('#BrowserWidth').set('value', Y.Bottle.Device.getBrowserWidth());
+    })
+    
+    Y.one('#getBrowserHeight').on('click', function(e){
+        Y.one('#BrowserHeight').set('value', Y.Bottle.Device.getBrowserHeight());
+    });
+});
+</script>
+</html>

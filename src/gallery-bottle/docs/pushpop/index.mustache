@@ -1,0 +1,13 @@
+{{>component-desc}}
+
+<p>
+ `{{displayName}}` is a WidgetParent, and default WidgetChild of `{{displayName}}` is <a href="../container/">Container</a>. When a `{{displayName}}` instance created, all child nodes with `data-role="container"` will be added automatically. Bellow is an sample <a href="../page">Page</a> HTML structure with two child `Container`, which is ready to do `pop()` once.
+</p>
+```
+<div data-role="page">
+{{>basehtml-container}}{{>basehtml-container}}</div>
+```
+
+<p>
+ `{{displayName}}` provides two transition methods: <a href="{{apiDocUrl}}classes/{{className}}.html#method_push">push()</a> and <a href="{{apiDocUrl}}classes/{{className}}.html#method_pop">pop()</a>. You can pop the top child `Container` from a `{{displayName}}`, or push a `Container` into `{{displayName}}.
+</p> 

@@ -1,0 +1,102 @@
+{
+    "name"       : "container",
+    "displayName": "Container Widget",
+    "className": "Container",
+    "description": "extends from widget, which provides a scrollable block for all supported mobile device.",
+    "dataRole": "container",
+
+    "showContainer": true,
+
+    "data-attrs": [
+        {
+            "name": "cfg-scroll",
+            "description": "Specify configuration for internal scrollView in JSON format.",
+            "referAttr": "cfgScroll",
+            "referY3Guide": "scrollview",
+            "json": true,
+            "default": "<pre>{\n \"flick\": {\n  \"minDistance\": 10,\n  \"minVelocity\": 0.3\n }\n}</pre>"
+        },
+        {
+            "name": "translate3d",
+            "description": "Boolean indicating if hardware acceleration in scrollview animation is enabled.",
+            "referAttr": "translate3D",
+            "default": "true"
+        }
+    ],
+
+    "data-roles": [
+        {
+            "name": "header",
+            "description": "a header node in <code>Container</code>, which can be set to fixed or unfixed.",
+            "default": "null",
+            "data-attrs": [
+                {
+                    "name": "position",
+                    "description": "when set to 'fixed', the header node will be fixed on top of scrollview.",
+                    "TODO: referAttr": "headerFixed",
+                    "default": "-"
+                }
+            ]
+        },
+        {
+            "name": "body",
+            "description": "a body node in <code>Container</code>, which will be placed in scrollView.",
+            "default": "null"
+        },
+        {
+            "name": "footer",
+            "description": "a footer node in <code>Container</code>, which can be set to fixed or unfixed.",
+            "default": "null",
+            "data-attrs": [
+                {
+                    "name": "position",
+                    "description": "when set to 'fixed', the footer node will be fixed on bottom of scrollview.",
+                    "TODO: referAttr": "footerFixed",
+                    "default": "-"
+                }
+            ]
+        }
+    ],
+
+    "examples": [
+        {
+            "name"       : "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name"       : "test-data-attr",
+            "layout": "example",
+            "forTest": true,
+            "containerAttrs": " data-cfg-scroll='{\"deceleration\":0.5}' data-translate3d=\"false\"",
+            "headerAttrs": " data-position=\"fixed\"",
+            "footerAttrs": " data-position=\"fixed\""
+        },
+        {
+            "name"       : "example-basic",
+            "displayName": "Basic Container",
+            "description": "Demonstrates basic usage of the Container Widget.",
+            "onlyInit": true,
+            "modules": ["page"],
+            "layout": "example"
+        },
+        {
+            "name"       : "example-translate3d",
+            "displayName": "Container without translate3d support",
+            "description": "Disable translate3d",
+            "onlyInit": true,
+            "layout": "example",
+            "containerAttrs": " data-translate3d=\"false\""
+        },
+        {
+            "name"       : "example-fixed",
+            "displayName": "Container with fixed header/footer",
+            "description": "Use data-position=\"fixed\" on header and footer to make their position fixed.",
+            "onlyInit": true,
+            "layout": "example",
+            "modules": ["page"],
+            "headerAttrs": " data-position=\"fixed\"",
+            "footerAttrs": " data-position=\"fixed\""
+        }
+    ]
+} 

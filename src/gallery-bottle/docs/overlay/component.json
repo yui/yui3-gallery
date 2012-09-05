@@ -1,0 +1,152 @@
+{
+    "name"       : "overlay",
+    "displayName": "Overlay Widget",
+    "description": "is extended from Widget and PushPop, and it hide in someplace in normal status. When user needed it, it can appear in viewport with different direction or style. And, `Bottle` will make sure only one overlay widget displayed in the same time.",
+    "className": "Overlay",
+    "parents": ["pushpop"],
+    "dataRole": "overlay",
+
+    "hidePage": true,
+    "hideShortcut": true,
+
+    "data-attrs": [
+        {
+            "name": "show-from",
+            "description": "Determine the overlay show direction.",
+            "referAttr": "showFrom",
+            "default": "left"
+        },
+        {
+            "name": "mask",
+            "description": "Boolean indicating Overlay requires mask when show.",
+            "referAttr": "mask",
+            "default": "true"
+        },
+        {
+            "name": "cfg-ol-trans",
+            "description": "Specify show/hide transition configuration in JSON format.",
+            "referAttr": "olTrans",
+            "referY3Guide": "transition",
+            "json": true,
+            "default": "<pre>{\n \"duration\": 0.5\n}</pre>"
+        },
+        {
+            "name": "full-page",
+            "description": "Boolean indicating Overlay requires adjusting width/height to match viewport.",
+            "referAttr": "fullPage",
+            "default": "true"
+        }
+    ],
+
+    "examples": [
+        {
+            "name": "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name": "test-data-attr",
+            "layout": "example",
+            "overlayAttrs": " data-mask='false' data-full-page=\"false\" data-show-from='right' data-cfg-ol-trans='{\"duration\":2,\"easing\":\"ease-in-out\"}'",
+            "forTest": true
+        },
+        {
+            "name": "example-overlay-left",
+            "displayName": "Show overlay from left",
+            "description": "Demonstrates showing a overlay Widget with from  left.",
+            "layout": "example",
+            "fullPage": true,
+            "overlayAttrs": " data-show-from='left'"
+        },
+        {
+            "name": "example-overlay-right",
+            "displayName": "Show overlay from right",
+            "description": "Demonstrates showing a overlay Widget with from  right.",
+            "layout": "example",
+            "fullPage": true,
+            "overlayAttrs": " data-show-from='right'"
+        },
+        {
+            "name": "example-overlay-top",
+            "displayName": "Show overlay from top",
+            "description": "Demonstrates showing a overlay Widget with from  top.",
+            "layout": "example",
+            "fullPage": true,
+            "overlayAttrs": " data-show-from='top'"
+        },
+        {
+            "name": "example-overlay-bottom",
+            "displayName": "Show overlay from bottom",
+            "description": "Demonstrates showing a overlay Widget with from  bottom.",
+            "layout": "example",
+            "fullPage": true,
+            "overlayAttrs": " data-show-from='bottom'"
+        },
+        {
+            "name": "example-overlay-left-non-fullpage",
+            "displayName": "Show overlay from left and not fullPage",
+            "description": "Demonstrates showing a overlay Widget with from left.",
+            "layout": "example",
+            "fullPage": false,
+            "overlayAttrs": " data-show-from='left' data-full-page=\"false\""
+        },
+        {
+            "name": "example-overlay-right-non-fullpage",
+            "displayName": "Show overlay from right and not fullPage",
+            "description": "Demonstrates showing a overlay Widget with from right.",
+            "layout": "example",
+            "fullPage": false,
+            "overlayAttrs": " data-show-from='right' data-full-page=\"false\""
+        },
+        {
+            "name": "example-overlay-top-non-fullpage",
+            "displayName": "Show overlay from top and not fullPage",
+            "description": "Demonstrates showing a overlay Widget with from top.",
+            "layout": "example",
+            "fullPage": false,
+            "overlayAttrs": " data-show-from='top' data-full-page=\"false\""
+        },
+        {
+            "name": "example-overlay-bottom-non-fullpage",
+            "displayName": "Show overlay from bottom and not fullPage",
+            "description": "Demonstrates showing a overlay Widget with from bottom.",
+            "layout": "example",
+            "fullPage": false,
+            "overlayAttrs": " data-show-from='bottom' data-full-page=\"false\""
+        },
+        {
+            "name": "example-overlay-cfg-non-fullpage",
+            "displayName": "Show overlay from cfg and not fullPage",
+            "description": "Demonstrates showing a overlay Widget with cfg.",
+            "layout": "example",
+            "fullPage": false,
+            "overlayAttrs": " data-cfg-ol-trans='{\"duration\":0}' data-full-page=\"false\""
+        },
+        {
+            "name": "example-overlay-no-mask-non-fullpage",
+            "displayName": "Show overlay without mask and fullpage",
+            "description": "Demonstrates showing a overlay Widget without mask and fullpage",
+            "layout": "example",
+            "fullPage": false,
+            "overlayAttrs": " data-mask=\"false\" data-full-page=\"false\""
+        },
+        {
+            "name": "example-push-in-overlay",
+            "displayName": "Show push in overlay",
+            "description": "Demonstrates showing push action in a overlay Widget.",
+            "layout": "example",
+            "doPushPop": 1000,
+            "fullPage": false,
+            "overlayAttrs": " data-show-from='bottom' data-full-page=\"false\""
+        },
+        {
+            "name": "example-pop-in-overlay",
+            "displayName": "Show pop in overlay",
+            "description": "Demonstrates showing pop action in a overlay Widget.",
+            "layout": "example",
+            "doPushPop": -1000,
+            "fullPage": false,
+            "overlayAttrs": " data-show-from='bottom' data-full-page=\"false\""
+        }
+    ]
+}

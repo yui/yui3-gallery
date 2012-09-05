@@ -1,0 +1,56 @@
+<h2>Welcome to {{projectName}} {{projectVersion}}</h2>
+<p>The `{{projectName}}` is a mobile HTML5 framework javascript library, provides a lot of Mobile UI components</p>
+
+{{>getting-started}}
+
+<h2>Mobile Metas</h2>
+
+<p>You should add these meta inside head tags, to make sure mobile device render the page in correct zoom scale, and support iphone web application.</p>
+
+```
+{{>device-metas}}
+```
+<h2>Skins</h2>
+<p>You should pick one skin for UI components, and add proper class names in `body` tag:
+
+```
+<body class="yui3-skin-sam btHideAll">
+```
+
+`yui3-skin-sam` is required by YUI. `btHideAll` is a skin to hide everything and displayed a loading icon before `{{projectName}}` initialized.
+`{{projectName}}` provides more <a href="pe.html">skins for progressive enhancement</a>, please read the document for more detail.
+
+<h2>Sample HTML Structure</h2>
+<p>Here is a basic HTML structure with one page, one shortcut and one overlay.</p>
+```
+{{>basehtml-bottle}}
+```
+
+<h2>Component User Guides</h2>
+<ul>
+{{#components}}
+ {{#meta}}
+ <li><a href="{{name}}/"><b>{{displayName}}</b> - {{description}}</a></li>
+ {{/meta}}
+{{/components}}
+</ul>
+
+<h2>Live Examples</h2>
+{{#components}}
+ {{#meta}}
+{{#unless noExamples}}
+<h3><a href="{{name}}/">{{displayName}}</a></h3>
+<ul>
+  {{#examples}}
+   {{^forTest}}
+    {{#unless inherited}}
+ <li data-description="{{description}}">
+  <a href="{{../../../name}}/{{name}}.html"><b>{{displayName}}</b> - {{description}}</a>
+ </li>
+    {{/unless}}
+   {{/forTest}}
+  {{/examples}}
+</ul>
+{{/unless}}
+ {{/meta}}
+{{/components}}

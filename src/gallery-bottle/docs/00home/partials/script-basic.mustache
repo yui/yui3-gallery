@@ -1,0 +1,10 @@
+<script>
+YUI().use({{{useParams}}}, function (Y) {
+    {{#unless onlyInit}}var srcNode, {{name}}Widget;
+    {{/unless}}
+    Y.Bottle.init();
+    {{#unless onlyInit}}
+    srcNode = Y.one('[data-role={{name}}]');  //{{name}} srcNode
+    {{name}}Widget = Y.Widget.getByNode(srcNode); //{{name}} widget{{/unless}}
+});
+</script>

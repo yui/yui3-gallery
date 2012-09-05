@@ -1,0 +1,80 @@
+{
+    "name"       : "photogrid",
+    "displayName": "PhotoGrid Widget",
+    "description": "is a Widget which can help you to render a lot of photo in different patterns.",
+    "className": "PhotoGrid",
+    "dataRole": "photogrid",
+    "parents": ["syncscroll"],
+
+    "hidePage": true,
+    "hideShortcut": true,
+    "showPhotoGrid": true,
+    "hideOverlay": true,
+
+    "data-attrs": [
+        {
+            "name": "column-width",
+            "description": "Default column width. Column number will be decided by <code>Math.round(parentWidth / columnWidth)</code>, and then all these columns will be fitted equally.",
+            "referAttr": "columnWidth",
+            "default": "200"
+        },
+        {
+            "name": "grid-type",
+            "description": "Photo rendering direction.",
+            "referAttr": "gridType",
+            "default": "vertical"
+        },
+        {
+            "name": "module-node",
+            "description": "Default module child nodes css selector.",
+            "referAttr": "moduleNode",
+            "default": "> div"
+        },
+        {
+            "name": "photo-node",
+            "description": "Default image child node css selector. If can not find the Node, a new image node will be inserted under the module node.",
+            "referAttr": "photoNode",
+            "default": "> div"
+        }
+    ],
+
+    "examples": [
+        {
+            "name": "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name": "test-data-attr",
+            "layout": "example",
+            "photoGridAttr": " data-grid-type=\"horizontal\" data-column-width=\"300\" data-auto-width=\"true\" data-module-node=\"div\" data-photo-node=\"h1\"",
+            "forTest": true
+        },
+        {
+            "name": "example-vertical",
+            "displayName": "Vertical PhotoGrid",
+            "description": "Demonstrates a vertical PhotoGrid with 200 pixel column width.",
+            "onlyInit": true,
+            "layout": "example"
+        },
+        {
+            "name": "example-vertical-text",
+            "displayName": "Vertical PhotoGrid with text",
+            "description": "Demonstrates a vertical PhotoGrid with 200 pixel column width, and modules contain texts.",
+            "moduleHTML": "<h1>Sample Title</h2><p>sample description texts and sample sample sample ...</p>",
+            "modules": ["syncscroll"],
+            "onlyInit": true,
+            "layout": "example"
+        },
+        {
+            "name": "example-vertical-text-nopage",
+            "displayName": "Vertical PhotoGrid with text, do not use Page",
+            "description": "Demonstrates a vertical PhotoGrid with 200 pixel column width, and modules contain texts. This example do not use Page Widget to handle screen size and scroll.",
+            "moduleHTML": "<h1>Sample Title here</h2><p>sample description texts and sample sample sample ...</p>",
+            "photoGridAttr": " data-column-width=\"300\" data-auto-width=\"true\" data-module-node=\"div\" data-photo-node=\"h1\"",
+            "noPage": true,
+            "onlyInit": true,
+            "layout": "example"
+        }
+    ]
+}

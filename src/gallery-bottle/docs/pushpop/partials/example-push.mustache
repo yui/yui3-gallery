@@ -1,0 +1,18 @@
+{{>bottle-page}}
+<script>
+YUI().use({{{useParams}}}, function (Y) {
+{{>example-clone}}
+
+    Y.Bottle.init();
+
+    Y.Bottle.Page.getCurrent().get('contentBox').one('.subheader').set('innerHTML', '2 seconds later something will be pushed');
+    container2.get('contentBox').one('.subheader').set('innerHTML', 'I am pushed');
+
+    Y.later(2000, null, function () {
+        Y.Bottle.Page.getCurrent().push(container2);
+    });
+
+});
+
+</script>
+

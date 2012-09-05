@@ -1,0 +1,27 @@
+<h2>Progressive Enhancement</h2>
+<p>`{{projectName}}` provides some predefined style to handle progress enhancement. The typical life cycle of a html page is:</p>
+
+<dl>
+ <dt>None JavaScript</dt><dd>User disable the JavaScript, or JavaScript is enabled but not started.</dd>
+ <dt>YUI started</dt><dd>YUI script already processed, and `yui3-js-enabled` class name is added into html tag.</dd>
+ <dt>Bottle started</dt><dd>Bottle.init() started, and <b>`btInit`</b> cass name is added into body tag.</dd>
+ <dt>Bottle initialized</dt><dd>Bottle.init() done, and <b>`btReady`</b> class name is added into body tag.</dd>
+</dl>
+
+<h2>Preinitialize Skins</h2>
+<p>When user loading a page , all required YUI and `{{projectName}}` javascript files will be loaded. In the first time, these scripts takes some time to load, and user will see strange html elements on the page before `{{projectName}}` start to work. To improve user experence, we can choose a preinitialize skin as progressive enhancement:</p>
+
+<dl>
+ <dt>Keep Everything</dt><dd>By default, if you do not add any skin class name into body tag, `{{projectName}} will not touch any thing before init().</dd>
+ <dt>Hide All before init() done</dt><dd>Add the <b>`btHideAll`</b> class name into body tag. You will see a loading icon in the center of the page before `{{projectName}}` finish the init() task, and everything in the body will be hide.</dd>
+ <dt>Hide ShortCut and Overlay before init() done</dt><dd>Add the <b>`btHideSCO`</b> class name into body tag. Only ShortCut and Overlay will be hidden until the init() done.</dd>
+ <dt>Inplace init</dt><dd>Add the <b>`btInPlace`</b> class name into body tag. All widgets will be displayed as loading icon before the init() done</dd>
+</dl>
+
+<h2>Customized Preinitialize Skins</h2>
+<p>You can create styles for preinitialized skin. For example, if you want to customize carousel widgets, use these css selectors:</p>
+<dl>
+ <dt>html:not(.yui3-js-enabled) [data-role=carousel]</dt><dd>This css selector defines the default style of the carousel widget. If user disabled javascript, this style will be used.</dd>
+ <dt>body:not(.btReady) [data-role=carousel]</dt><dd>Use this css selector to define the style for the 'Now initializing' status. Before Y.Bottle.init() finished, this style will be used.</dd>
+</dl>
+<p>These css selectors will not work on IE 6/7/8, but works on almost all smartphones.</p>

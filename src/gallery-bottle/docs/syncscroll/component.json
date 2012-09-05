@@ -1,0 +1,21 @@
+{
+    "name"       : "syncscroll",
+    "displayName": "SyncScroll Widget",
+    "description": "is a Widget extension provides methods and behaviors to sync with parent scrollView.",
+    "className": "SyncScroll",
+
+    "hidePage": true,
+    "hideShortcut": true,
+    "showSlideTab": true,
+
+    "data-attrs": [
+        {
+            "name": "auto-width",
+            "description": "Auto adjust column width when viewport size changed.",
+            "referAttr": "autoWidth",
+            "default": "false"
+        }
+    ],
+
+    "noExamples": true
+} 

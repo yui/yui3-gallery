@@ -1,0 +1,20 @@
+<a name="data-attrs"></a>
+<h2>Attributes for {{displayName}}{{#if dataRole}} (data-role="{{dataRole}}"){{/if}}</h2>
+<p>
+{{#if projectName}}`{{displayName}}`{{else}}<a href="{{name}}/">{{displayName}}</a>{{/if}}
+{{#if dataRole}}
+ created by a HTML tag with `data-role="{{dataRole}}"` HTML attribute.
+{{else}}
+ is a Widget extension and can not be created with `data-role` attribute directly, but it provides attribute support for child classes.
+{{/if}}
+To refine{{#unless dataRole}} child classes of{{/unless}} `{{displayName}}` behaviors, you can add more HTML attributes in it. All supported attributes are prefixed with `data-`, and specified default value will be used when omitted.{{#if data-attrs}} Here is a full attribute list:
+</p>
+{{>data-attributes-table}}
+{{/if}}
+{{#if parents}}
+<p>`{{../displayName}}`{{#if data-attrs}} also{{/if}} supports attributes which provided by parent classes. You may refer to these documents:<ul>
+{{#parents}}
+ <li><a href="{{#if ../templateName}}..{{else}}.{{/if}}/{{.}}/#data-attrs">{{.}} attributes</a>
+{{/parents}}
+</ul>
+{{/if}}

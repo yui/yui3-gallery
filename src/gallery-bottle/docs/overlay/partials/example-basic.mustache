@@ -1,0 +1,40 @@
+{{>bottle-page}}
+    <div id="overlayMenu" data-role="overlay"{{{overlayAttrs}}}>
+        <div data-role="container">
+        {{#if fullPage}}
+        {{>example-overlay-innertext}}
+        {{else}}
+        {{>example-overlay-innertext-non-fullpage}}
+        {{/if}}
+        </div>
+    </div>
+
+<script>
+YUI().use({{{useParams}}}, function (Y) {
+    var overlayNode = Y.one('#overlayMenu'),
+        overlay;
+{{#if doPushPop}}
+    var container2 = new Y.Bottle.Container({
+        srcNode: overlayNode.one('[data-role=container]').cloneNode(true)
+    });
+{{/if}}
+    Y.Bottle.init();
+    overlay = Y.Widget.getByNode(Y.one('#overlayMenu'));
+    overlay.show();
+    setTimeout(function() {
+        overlay.hide();
+    }, 2000);
+{{#if doPushPop}}
+    if ({{doPushPop}} > 0) {
+        Y.later({{doPushPop}}, null, function () {
+            overlay.push(container2);
+        });
+    } else {
+        overlay.add(container2);
+        Y.later(-1 * {{doPushPop}}, null, function () {
+            overlay.pop();
+        });
+    }
+{{/if}}
+});
+</script>

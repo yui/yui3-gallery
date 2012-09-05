@@ -1,0 +1,38 @@
+<div class="intro">
+    <p>The `{{displayName}}` {{description}}</p>
+</div>
+{{#if dataRole}}
+{{>getting-started}}
+{{/if}}
+<h2>API Document</h2>
+
+<p>You can see API document here: <a href="{{#if relUrl}}..{{/if}}{{apiDocUrl}}classes/{{className}}.html">{{#if relUrl}}..{{/if}}{{apiDocUrl}}classes/{{className}}.html</a></p>
+
+{{>data-attributes}}
+{{>data-roles}}
+
+<h2>Using {{displayName}}</h2>
+{{#if dataRole}}
+<h3>Basic HTML structure</h3>
+<p>
+Basic HTML structure to create `{{displayName}}` is:
+</p>
+```
+{{>basehtml-bottle}}
+```
+<h3>Create Instance</h3>
+<p>
+You can create `{{projectName}}` widgets in these ways:
+<ol>
+ <li>use one line of javascript `Y.Bottle.init();` to create all widgets.</li>
+ <li>Handle widget yourself, create widgets one by one.</li>
+</ol>
+</p>
+
+<p>
+Here is a javascript example code to create/get `{{displayName}}`:
+</p>
+```
+{{>script-basic}}
+```
+{{/if}}

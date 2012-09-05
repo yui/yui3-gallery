@@ -1,0 +1,160 @@
+{
+    "name"       : "shortcut",
+    "displayName": "ShortCut Widget",
+    "description": "is extended from Widget and PushPop, and it hide in someplace in normal status. When user needed it, it can slide into viewport with different direction or style. And, `Bottle` will make sure only one shortcut widget displayed in the same time.",
+    "className": "ShortCut",
+    "parents": ["pushpop"],
+    "dataRole": "shortcut",
+
+    "hidePage": true,
+    "hideOverlay": true,
+
+    "data-attrs": [
+        {
+            "name": "action",
+            "description": "Determine the shortcut type.",
+            "referAttr": "action",
+            "default": "overlay"
+        },
+        {
+            "name": "show-from",
+            "description": "Determine the shortcut show direction.",
+            "referAttr": "showFrom",
+            "default": "left"
+        },
+        {
+            "name": "mask",
+            "description": "Boolean indicating ShortCut requires mask when show.",
+            "referAttr": "mask",
+            "default": "true"
+        },
+        {
+            "name": "cfg-sc-trans",
+            "description": "Specify show/hide transition configuration in JSON format.",
+            "referAttr": "scTrans",
+            "referY3Guide": "transition",
+            "json": true,
+            "default": "<pre>{\n \"duration\": 0.5\n}</pre>"
+        },
+        {
+            "name": "full-height",
+            "description": "Boolean indicating ShortCut requires adjusting height to match viewport.",
+            "referAttr": "fullHeight",
+            "default": "<b>true</b> when data-show-from is left or right, <b>false</b> when data-show-from is top or bottom"
+        },
+        {
+            "name": "full-width",
+            "description": "Boolean indicating ShortCut requires adjusting width to match viewport.",
+            "referAttr": "fullWidth",
+            "default": "<b>false</b> when data-show-from is left or right, <b>true</b> when data-show-from is top or bottom"
+        }
+    ],
+
+    "examples": [
+        {
+            "name": "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name": "test-data-attr",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push' data-mask='false' data-full-height=\"false\" data-show-from='right' data-cfg-sc-trans='{\"duration\":2,\"easing\":\"ease-in-out\"}'",
+            "forTest": true
+        },
+        {
+            "name": "example-push-left",
+            "displayName": "Push ShortCut at left",
+            "description": "Demonstrates showing a ShortCut Widget with push transition at left.",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push'"
+        },
+        {
+            "name": "example-push-right",
+            "displayName": "Push ShortCut at right",
+            "description": "Demonstrates showing a ShortCut Widget with push transition at right.",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push' data-show-from='right'"
+        },
+        {
+            "name": "example-push-top",
+            "displayName": "Push ShortCut at top",
+            "description": "Demonstrates showing a ShortCut Widget with push transition at top.",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push' data-show-from='top'"
+        },
+        {
+            "name": "example-push-bottom",
+            "displayName": "Push ShortCut at bottom",
+            "description": "Demonstrates showing a ShortCut Widget with push transition at bottom.",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push' data-show-from='bottom'"
+        },
+        {
+            "name": "example-unveil-left",
+            "displayName": "Unveil ShortCut at left",
+            "description": "Demonstrates an unveil ShortCut Widget at left.",
+            "layout": "example"
+        },
+        {
+            "name": "example-unveil-right",
+            "displayName": "Unveil ShortCut at right",
+            "description": "Demonstrates an unveil ShortCut Widget at right.",
+            "layout": "example",
+            "shortcutAttrs": " data-show-from='right' "
+        },
+        {
+            "name": "example-unveil-top",
+            "displayName": "Unveil ShortCut at top",
+            "description": "Demonstrates an unveil ShortCut Widget at top.",
+            "layout": "example",
+            "shortcutAttrs": " data-show-from='top' "
+        },
+        {
+            "name": "example-unveil-bottom",
+            "displayName": "Unveil ShortCut at bottom",
+            "description": "Demonstrates an unveil ShortCut Widget at bottom.",
+            "layout": "example",
+            "shortcutAttrs": " data-show-from='bottom' "
+        },
+        {
+            "name": "example-unveil-left-push",
+            "displayName": "Unveil ShortCut at left with push",
+            "description": "Demonstrates an unveil ShortCut Widget at left, push another Container in ShortCut after 2 seconds.",
+            "layout": "example",
+            "doPushPop": 2000,
+            "modules": ["pushpop"],
+            "shortcutAttrs": " data-show-from='left' "
+        },
+        {
+            "name": "example-unveil-left-pop",
+            "displayName": "Unveil ShortCut at left with pop",
+            "description": "Demonstrates an unveil ShortCut Widget at left, pop a Container in ShortCut after 2 seconds.",
+            "layout": "example",
+            "doPushPop": -2000,
+            "modules": ["pushpop"],
+            "shortcutAttrs": " data-show-from='left' "
+        },
+        {
+            "name": "example-push-left-cfg",
+            "displayName": "Push ShortCut at left with cfg setting",
+            "description": "Demonstrates showing a ShortCut Widget with push transition at left with 2 seconds duration and ease-in-out transition.",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push' data-cfg-sc-trans='{\"duration\":2,\"easing\":\"ease-in-out\"}'"
+        },
+        {
+            "name": "example-push-left-no_full_height",
+            "displayName": "Push ShortCut at left without full height",
+            "description": "Demonstrates showing a none full height ShortCut Widget with push transition at left.",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push' data-full-height=\"false\""
+        },
+        {
+            "name": "example-push-top-no_full_width",
+            "displayName": "Push ShortCut at top without full width",
+            "description": "Demonstrates showing a none full width ShortCut Widget with push transition at top.",
+            "layout": "example",
+            "shortcutAttrs": " data-action='push' data-show-from='top' data-full-width=\"false\""
+        }
+    ]
+}

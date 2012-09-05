@@ -1,0 +1,41 @@
+[
+    {
+        "settings" : [ "master" ],
+
+        "name" : "container",
+
+        "commonlib" : "../../testlib.js,testlib.js",
+
+        "dataprovider" : {
+            "Default Values" : {
+                "params" : {
+                    "test" : "default.js",
+                    "page" : "$$config.baseUrl$$/container/test-default.html"
+                },
+                "group" : "unit"
+            },
+            "Data Attributes" : {
+                "params" : {
+                    "test" : "data-attr.js",
+                    "page" : "$$config.baseUrl$$/container/test-data-attr.html"
+                },
+                "group" : "unit"
+            },
+            "Attributes" : {
+                "params" : {
+                    "test" : "attribute.js",
+                    "page" : "$$config.baseUrl$$/container/test-default.html"
+                },
+                "group" : "unit"
+            },
+            "Functional" : {
+                "params" : {
+                    "test" : "functional.js",
+                    "page" : "$$config.baseUrl$$/container/test-default.html"
+                },
+                "group" : "unit"
+            }
+        }
+
+    }
+]

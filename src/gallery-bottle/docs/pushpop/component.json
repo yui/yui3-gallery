@@ -1,0 +1,131 @@
+{
+    "name"       : "pushpop",
+    "displayName": "PushPop Widget",
+    "description": "helps Page Widget and ShortCut Widget to do push/pop animations.",
+    "className"  : "WidgetPushPop",
+
+    "data-attrs": [
+        {
+            "name": "push-from",
+            "description": "Specify the direction of push animation should start from which direction.",
+            "referAttr": "pushFrom",
+            "default": "right"
+        },
+        {
+            "name": "cfg-pp-trans",
+            "description": "Specify push/pop transition configuration in JSON format.",
+            "referAttr": "ppTrans",
+            "referY3Guide": "transition",
+            "json": true,
+            "default": "<pre>{\n \"duration\": 0.5\n}</pre>"
+        },
+        {
+            "name": "underlay",
+            "description": "Specify underlay transition execution stage.",
+            "referAttr": "underlay",
+            "default": "none"
+        }
+    ],
+
+    "examples": [
+        {
+            "name"       : "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name"       : "test-data-attr",
+            "layout": "example",
+            "majorAttrs": " data-push-from=\"br\" data-cfg-pp-trans='{\"duration\":1,\"easing\":\"ease-in-out\"}' data-underlay=\"after\"",
+            "forTest": true
+        },
+        {
+            "name"       : "example-push-right",
+            "displayName": "Basic push from right",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do push from right after 2 seconds.",
+            "modules": ["page"],
+            "layout": "example"
+        },
+        {
+            "name"       : "example-pop-right",
+            "displayName": "Basic pop to right",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do pop to right after 2 seconds.",
+            "modules": ["page"],
+            "layout": "example"
+        },
+        {
+            "name"       : "example-push-br",
+            "displayName": "Basic push from bottom right",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do push from right bottom after 2 seconds.",
+            "modules": ["page"],
+            "majorAttrs": " data-push-from=\"br\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-push-left",
+            "displayName": "Basic push from left",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do push from left after 2 seconds.",
+            "majorAttrs": " data-push-from=\"left\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-pop-left",
+            "displayName": "Basic pop to left",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do pop to left after 2 seconds.",
+            "majorAttrs": " data-push-from=\"left\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-push-bottom",
+            "displayName": "Basic push from bottom",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do push from left after 2 seconds.",
+            "majorAttrs": " data-push-from=\"bottom\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-pop-bottom",
+            "displayName": "Basic pop to bottom",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do pop to left after 2 seconds.",
+            "majorAttrs": " data-push-from=\"bottom\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-push-br-slow",
+            "displayName": "Push from bottom right in slow motion",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do push from right bottom after 2 seconds with long transition duration.",
+            "modules": ["page"],
+            "majorAttrs": " data-push-from=\"br\" data-cfg-pp-trans='{\"duration\":2,\"easing\":\"ease-in-out\"}'",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-push-right-with",
+            "displayName": "Push from right with underlay animation",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do push from right after 2 seconds.",
+            "modules": ["page"],
+            "majorAttrs": " data-underlay=\"with\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-pop-right-with",
+            "displayName": "Pop to right with underlay animation",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do pop to right after 2 seconds.",
+            "majorAttrs": " data-underlay=\"with\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-push-right-after",
+            "displayName": "Push from right after underlay animation",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do push from right after 2 seconds.",
+            "majorAttrs": " data-underlay=\"after\"",
+            "layout": "example"
+        },
+        {
+            "name"       : "example-pop-right-after",
+            "displayName": "Pop to right after underlay animation",
+            "description": "Demonstrates basic usage of the Plugin.PushPop, do pop to right after 2 seconds.",
+            "modules": ["page"],
+            "majorAttrs": " data-underlay=\"after\"",
+            "layout": "example"
+        }
+    ]
+} 

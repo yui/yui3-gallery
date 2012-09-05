@@ -1,0 +1,18 @@
+<table>
+ <tr>
+  <th>Attribute Name</th>
+  <th>Description</th>
+  <th>Default Value</th>
+ </tr>
+{{#data-attrs}}
+ <tr>
+  <td>data-{{name}}</td>
+  <td>{{{description}}}
+{{#if referAttr}} This data attribute connects to the <a href="{{#if ../../relUrl}}{{#if ../../../templateName}}..{{else}}.{{/if}}{{/if}}{{../../apiDocUrl}}classes/{{../../className}}.html#attr_{{referAttr}}">{{referAttr}} attribute</a> of `{{../../displayName}}`, you can read document for more detail.{{/if}}
+{{#if referY3Guide}} To know more about how to use {{referY3Guide}}, please read <a href="{{../../y3GuideUrl}}{{referY3Guide}}/">YUI 3 {{referY4Guide}} user guide</a>.{{/if}}
+{{#if json}} To set valid JSON into this attribute, you may need to use single quote, for example: `data-{{name}}='{"key": "value"}'` .{{/if}}
+</td>
+  <td>{{{default}}}</td>
+ </tr>
+{{/data-attrs}}
+</table>

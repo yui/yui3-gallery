@@ -1,0 +1,33 @@
+{{>bottle-page}}
+    <div id="shortcutMenu" data-role="shortcut"{{{shortcutAttrs}}}>
+        <div data-role="container">
+        {{>example-shortcut-innertext}}
+        </div>
+    </div>
+
+<script>
+YUI().use({{{useParams}}}, function (Y) {
+    var shortCutNode = Y.one('#shortcutMenu'),
+        shortCut;
+{{#if doPushPop}}
+    var container2 = new Y.Bottle.Container({
+        srcNode: shortCutNode.one('[data-role=container]').cloneNode(true)
+    });
+{{/if}}
+    Y.Bottle.init();
+    shortCut = Y.Widget.getByNode(Y.one('#shortcutMenu'));
+    shortCut.show();
+{{#if doPushPop}}
+    if ({{doPushPop}} > 0) {
+        Y.later({{doPushPop}}, null, function () {
+            shortCut.push(container2);
+        });
+    } else {
+        shortCut.add(container2);
+        Y.later(-1 * {{doPushPop}}, null, function () {
+            shortCut.pop();
+        });
+    }
+{{/if}}
+});
+</script>

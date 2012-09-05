@@ -1,0 +1,5 @@
+{{#if showContainer}}
+{{>basehtml-container}}
+{{else}}
+{{#unless hidePage}}{{>basehtml-page}}{{/unless}}{{#unless hideShortcut}}{{>basehtml-shortcut}}{{/unless}}{{#unless hideOverlay}}{{>basehtml-overlay}}{{/unless}}{{#if showPhotoGrid}}{{>basehtml-photogrid}}{{/if}}{{#if showSlideTab}}{{>basehtml-slidetab}}{{/if}}{{#if showCarousel}}{{>basehtml-carousel}}{{/if}}
+{{/if}}

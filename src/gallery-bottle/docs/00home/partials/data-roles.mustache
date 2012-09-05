@@ -1,0 +1,16 @@
+{{#if data-roles}}
+<h3>Child Data Roles</h3>
+<p>
+`{{displayName}}` supports these child data roles:
+</p>
+{{#data-roles}}
+<dl>
+ <dt>{{name}}</dt><dd><p>You can add data-role="{{name}}" in your HTML tag to specify a role to a tag. It is {{{description}}}</p>
+ {{#if data-attrs}}
+ <p>You may use these data attributes to setting {{name}}:</p>
+ {{>data-attributes-table}}
+ {{/if}}
+ </dd>
+</dl>
+{{/data-roles}}
+{{/if}}

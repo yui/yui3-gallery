@@ -1,0 +1,76 @@
+{
+    "name"       : "slidetab",
+    "displayName": "SlideTab Widget",
+    "description": "is a Widget provides a slide selector which can help you to pick a tab to view.",
+    "className": "SlideTab",
+    "dataRole": "slidetab",
+    "parents": ["syncscroll"],
+
+    "hidePage": true,
+    "hideShortcut": true,
+    "showSlideTab": true,
+    "hideOverlay": true,
+
+    "data-attrs": [
+        {
+            "name": "selected-index",
+            "description": "Indicate index number of selected tab.",
+            "referAttr": "selectedIndex",
+            "default": "0"
+        },
+        {
+            "name": "slide-node",
+            "description": "Default slider node css selector.",
+            "referAttr": "slideNode",
+            "default": "> ul"
+        },
+        {
+            "name": "label-node",
+            "description": "Default slider label nodes css selector.",
+            "referAttr": "labelNode",
+            "default": "> li"
+        },
+        {
+            "name": "label-width",
+            "description": "Slider label width by percentage of Widget.",
+            "referAttr": "labelWidth",
+            "default": "30"
+        },
+        {
+            "name": "tab-node",
+            "description": "Default tab container selector, all tabs should be children of this node.",
+            "referAttr": "tabNode",
+            "default": "> div"
+        }
+    ],
+
+    "examples": [
+        {
+            "name": "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name": "test-data-attr",
+            "layout": "example",
+            "slidetabAttrs": " data-selected-index=\"1\" data-slide-node=\"h2\" data-label-node=\"img\" data-label-width=\"60\" data-tab-node=\"ul\" data-show-neighbors=\"false\"",
+            "forTest": true
+        },
+        {
+            "name"       : "example-basic",
+            "displayName": "Basic SlideTab",
+            "description": "Demonstrates basic usage of the SlideTab Widget.",
+            "onlyInit": true,
+            "modules": ["syncscroll"],
+            "layout": "example"
+        },
+        {
+            "name"       : "example-no-page",
+            "displayName": "Basic SlideTab, do not use Page",
+            "description": "Demonstrates basic usage of the SlideTab Widget. This example do not use Page Widget to handle screen size and scroll.",
+            "onlyInit": true,
+            "noPage": true,
+            "layout": "example"
+        }
+    ]
+}

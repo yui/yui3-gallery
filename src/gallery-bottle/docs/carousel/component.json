@@ -1,0 +1,93 @@
+{
+    "name"       : "carousel",
+    "displayName": "Carousel Widget",
+    "description": "is a Widget provides a Carousel interface.",
+    "className": "Carousel",
+    "dataRole": "carousel",
+
+    "hidePage": true,
+    "hideShortcut": true,
+    "showCarousel": true,
+    "hideOverlay": true,
+
+    "data-attrs": [
+        {
+            "name": "selected-index",
+            "description": "Indicate index number of selected page.",
+            "referAttr": "selectedIndex",
+            "default": "0"
+        },
+        {
+            "name": "page-node",
+            "description": "Default pages node css selector.",
+            "referAttr": "pageNode",
+            "default": "> li"
+        },
+        {
+            "name": "cfg-scroll",
+            "description": "Specify configuration for internal scrollView in JSON format.",
+            "referY3Guide": "scrollview",
+            "json": true,
+            "default": "<pre>{\n \"flick\": {\n  \"minDistance\": 10,\n  \"minVelocity\": 0.3\n }\n}</pre>"
+        },
+        {
+            "name": "index-node",
+            "description": "Default page indicator parent. If the Node can not be found, the indicator will be appended into the boundingBox.",
+            "referAttr": "indexNode",
+            "default": "undefined"
+        },
+        {
+            "name": "page-items",
+            "description": "Specify how many items in a page.",
+            "referAttr": "pageItems",
+            "default": "1"
+        },
+        {
+            "name": "show-buttons",
+            "description": "Show left and right buttons.",
+            "referAttr": "showButtons",
+            "default": "true"
+        },
+        {
+            "name": "text-right",
+            "description": "Wording for right button.",
+            "referAttr": "textRight",
+            "default": "\"\" (empty string)"
+        },
+        {
+            "name": "text-left",
+            "description": "Wording for left button.",
+            "referAttr": "textLeft",
+            "default": "\"\" (empty string)"
+        }
+    ],
+
+    "examples": [
+        {
+            "name": "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name": "test-data-attr",
+            "layout": "example",
+            "carouselAttrs": " data-selected-index=\"1\" data-page-node=\"> div\" data-index-node=\"body\" data-show-buttons=\"false\" data-cfg-scroll='{bounce:0, deceleration: 0.5}' data-page-items=\"2\" data-text-left=\"left\" data-text-right=\"right\"",
+            "forTest": true
+        },
+        {
+            "name"       : "example-basic",
+            "displayName": "Basic Carousel",
+            "description": "Demonstrates basic usage of the Carousel Widget.",
+            "onlyInit": true,
+            "layout": "example"
+        },
+        {
+            "name"       : "example-no-page",
+            "displayName": "Basic Carousel, do not use Page",
+            "description": "Demonstrates basic usage of the Carousel Widget. This example do not use Page Widget to handle screen size and scroll.",
+            "onlyInit": true,
+            "noPage": true,
+            "layout": "example"
+        }
+    ]
+}

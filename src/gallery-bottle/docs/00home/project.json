@@ -1,0 +1,11 @@
+{
+    "projectName": "Mobile UI Library - Bottle",
+    "projectVersion": "0.0.2",
+    "yuiVersion": "3.6.0",
+    "useParams": "'gallery-bottle', 'gallery-bt-css'",
+    "apiDocUrl": "http://devel-stage.corp.yahoo.com/aff/bottle/api/",
+    "y3GuideUrl": "http://yuilibrary.com/yui/docs/",
+    "sourceUrl": "http://svn.corp.yahoo.com/view/yahoo/asia/mobile/trunk/web/bottle/",
+    "twikiUrl": "http://twiki.corp.yahoo.com/view/AsiaEng/MobileUILibrary",
+    "dummyUrl": "http://placehold.it/"
+}

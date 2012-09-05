@@ -1,0 +1,39 @@
+/* Skin */
+/* TODO: later this will be moved into a css module: bottle-skin-black */
+[data-role="overlay"] .yui3-btcontainer, [data-role="shortcut"] .yui3-btcontainer{background:url(bd_bg.png) repeat 0 0;color:#fff;font-weight:bold;}
+[data-role="overlay"] ul li, [data-role="shortcut"] ul li{padding:7px 0;border-bottom:1px solid #404040;color:#aeadad;font-weight:bold;}
+[data-role="overlay"] ul li h2, [data-role="shortcut"] ul li h2{padding-left:8px;font-weight:bold;}
+[data-role="overlay"] ul li.divider, [data-role="shortcut"] ul li.divider{padding:3px 0;color:#C9BEAA;font-weight:bold;font-size:11px;background:none;background-color:#333;}
+[data-role="overlay"] .bt-header, [data-role="shortcut"] .bt-header{background:url(shortcut_hd.png) repeat-x 0 0 #010101;padding-bottom:1px;border-top:1px solid #333;}
+[data-role="overlay"] .bt-footer, [data-role="shortcut"] .bt-footer{background:url(shortcut_ft.png) repeat-x 0 0;height:25px;line-height:1.8;padding-left:5px;}
+.bpg_module {border:2px solid #888;margin:5px}
+.bpg_module img {display:block;width:100%;position:relative;z-index:-1}
+.bpg_module h1 {font-weight:900;margin:3px}
+.bpg_module p {font-style:italic;margin:3px}
+
+/*User Defined*/
+.bd{color:#333;font-weight:bold;}
+.bd li{padding:15px 0;border-bottom:1px solid #B9E0EF;background:url(blue_bg.png) repeat-x 0 0;color:#111;}
+.bd li h2{font-weight:bold;}
+.subheader{color:#fff;}
+li h2{padding:0 0 0 15px;margin:0;}
+li img{vertical-align:middle;padding-right:10px;}
+.left, .center, .right{display:inline-block;width:12%}
+.center{width:75%;text-align:center}
+.right{text-align:right}
+[data-role="header"]{padding:5px 15px;white-space:nowrap;background:url(hd_bg.png) repeat-x scroll 0 0 #3a3a3a}
+[data-role="header"] .center{color:#fff;font-weight:bold;font-size:108%}
+.subheader{height:38px;background-color:#262626;border-bottom:1px solid #646464;padding-left:15px;line-height:2.8;}
+.bt-footer{height:45px;background-color:#242424;border-top:1px solid #646464;padding-left:15px;line-height:3.3;color:#fff;font-weight:bold;}
+#leftmenu, #shortcutMenu, #rightmenu{width:210px;height:300px}
+.yui3-btshortcut .bt-header {padding:0}
+[data-role="photogrid"] > div {display:none}
+[data-role="photogrid"] > div.bpg_column {display:inline-block}
+.bst_slidebox {margin:0 auto}
+
+[data-role="slidetab"] {background:#ffd}
+[data-role="carousel"] {background:#ffd}
+[data-role="carousel"] > li {height:300px;background:#ffc;}
+.yui3-btslidetab .bst_slidebox {border-bottom:2px solid #888;padding:4px}
+.yui3-btslidetab .bst_tab {padding:4px}
+.yui3-btslidetab .bst_slide li {padding:5px;overflow:hidden;text-align:center}

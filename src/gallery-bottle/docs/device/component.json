@@ -1,0 +1,17 @@
+{
+    "name"       : "device",
+    "displayName": "Device Utility",
+    "description": "provides information about browser and device by Y.UA.",
+    "className": "Device",
+
+    "noAttrs"     : true,
+
+    "examples": [
+        {
+            "name"       : "example-device",
+            "displayName": "Device",
+            "description": "Demonstrates basic usage of the Device Utiltiy.",
+            "layout": "example"
+        }
+    ]
+} 

@@ -1,0 +1,36 @@
+<script>
+YUI().use({{{useParams}}}, function (Y) {
+    var enableBottle = function () {
+        Y.Bottle.init();
+
+        Y.one('.btn.menu').on('click', function (E) {
+            Y.Bottle.ShortCut.getInstances()[0].show();
+        });
+
+        Y.one('#toc .toc').delegate('click', function (E) {
+            var O = E.currentTarget,
+                H = O.get('href'),
+                M = H.match(/(#.+)/),
+                L = M ? Y.one(M[1]) : null;
+
+            if (L) {
+                Y.Bottle.ShortCut.getInstances()[0].hide();
+                Y.Bottle.Page.getCurrent().item(0).get('scrollView').scrollTo(0, L.getY(), 1000);
+            }
+
+            if (M) {
+                E.preventDefault();
+            }
+        }, 'li a');
+    };
+
+    if (Y.Bottle.Device.getBrowserWidth() <= 800) {
+        enableBottle();
+    } else {
+        Y.one('#hd ul').appendChild('<button>Enable Bottle</botton>').once('click', function (E) {
+            E.target.remove().purge();
+            enableBottle();
+        });
+    }
+});
+</script>

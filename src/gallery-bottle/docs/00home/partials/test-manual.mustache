@@ -1,0 +1,12 @@
+<script>
+var hash = location.href.match(/#(.+)/),
+    args = hash ? hash[1].split(/:/) : [],
+    basedir = '../../assets/test/';
+
+if (args.length > 1) {
+    document.write('<script src="' + basedir + 'testlib.js"><\/script>');
+    document.write('<script src="' + basedir + args[0] + '/tests/testlib.js"><\/script>');
+    document.write('<script src="' + basedir + args[0] + '/tests/' + args[1] + '.js"><\/script>');
+    document.title += '(TEST ' + args[0] + ':' + args[1] + ')';
+}
+</script>

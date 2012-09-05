@@ -1,0 +1,11 @@
+<h2>Data Roles and Data Attributes</h2>
+<p>
+ `{{projectName}}` creates JavaScript objects when defined data roles exist in HTML. For example, a `DIV` tag with `data-role="container"` means to create a <a href="container/">Container</a> instance. With proper data-roles and data-attributes, you can create great mobile application by `{{projectName}}` without touching any JavaScript. Below are all supported data attributes.
+</p>
+{{#components}}
+ {{#meta}}
+  {{#unless noAttrs}}
+  {{>data-attributes}}
+  {{/unless}}
+ {{/meta}}
+{{/components}}
