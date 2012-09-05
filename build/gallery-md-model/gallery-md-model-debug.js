@@ -21,6 +21,9 @@ to override the parse() method to parse non-generic server responses.
 @param [cfg] {Object} Initial configuration attribute plus:
 @param [cfg.values] {Object}  Sets initial values for the model.  
 	Model will be marked as new and not modified (as if just loaded).
+	If GalleryModel is extended with any of the multi-record extensions,
+	this will not work until <a href="http://yuilibrary.com/projects/yui3/ticket/2529898">this bug</a> is fixed:
+	Use `new Y.GalleryModel().add(values)` instead.
 @extends Base
 **/
 	"use strict";
@@ -43,7 +46,7 @@ to override the parse() method to parse non-generic server responses.
 	
 
 	Y.GalleryModel = Y.Base.create(
-		'gallery-md-model',
+		NAME,
 		Y.Base, 
 		[],
 		{
@@ -121,7 +124,7 @@ to override the parse() method to parse non-generic server responses.
 				 * The developer has full control of what is
 				 * about to be saved and when it is saved so it would be pointless
 				 * to try to prevent it at this stage.  This is in contrast to
-				 * the {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event where the developer has no control of what might
+				 * the {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event where the developer has no control of what might
 				 * come from the server and might wish to do something about it.
 				 * If in reply to the save operation the server replies with data, 
 				 * the __response__ and __parsed__ properties will be filled.
@@ -138,11 +141,23 @@ to override the parse() method to parse non-generic server responses.
 				});
 				cfg = cfg || {};
 				if (Lang.isObject(cfg.values)) {
-					this.setValues(cfg.values, 'init');
-					this._set(IS_MODIFIED, false);
-					this._set(IS_NEW, true);
-					this._loadedValues = Y.clone(this._values);
+					this.after('init',this._setInitialValues);
 				}
+			},
+			/**
+			 * Sets the initial values if any were provided to the constructor.
+			 * It is only ever called after the initialization of this class and all its extensions
+			 * and only if the arguments to the constructor had a `values` attribute
+			 * @method _setInitialValues
+			 * @param ev {EventFacade} in particular:
+			 * @param ev.cfg.values {Object} values to be set
+			 * @private
+			 */
+			_setInitialValues: function (ev) {
+				this.setValues(ev.cfg.values, 'init');
+				this._set(IS_MODIFIED, false);
+				this._set(IS_NEW, true);
+				this._loadedValues = Y.clone(this._values);
 			},
 			/**
 			 * Destroys this model instance and removes it from its containing lists, if
@@ -207,7 +222,7 @@ to override the parse() method to parse non-generic server responses.
 			},
 			/**
 			 * Sets the value of the named field. 
-			 * Fires the {{#crossLink "Y.GalleryModel/change"}}{{/crossLink}} event if the new value is different from the current one.
+			 * Fires the {{#crossLink "Y.GalleryModel/change:event"}}{{/crossLink}} event if the new value is different from the current one.
 			 * Primary key fields cannot be changed unless still `undefined`.
 			 * @method setValue
 			 * @param name {string} Name of the field to be set
@@ -230,7 +245,7 @@ to override the parse() method to parse non-generic server responses.
 			/**
 			 * Default function for the change event, sets the value and marks the model as modified.
 			 * @method _defSetValue
-			 * @param ev {EventFacade} (see {{#crossLink "Y.GalleryModel/change"}}{{/crossLink}} event)
+			 * @param ev {EventFacade} (see {{#crossLink "Y.GalleryModel/change:event"}}{{/crossLink}} event)
 			 * @private
 			 */
 			_defSetValue: function (ev) {
@@ -247,7 +262,7 @@ to override the parse() method to parse non-generic server responses.
 			/**
 			 * Sets a series of values.   
 			 * It simply loops over the hash of values provided calling {{#crossLink "Y.GalleryModel/setValue"}}{{/crossLink}} on each.
-			 * Fires the {{#crossLink "Y.GalleryModel/change"}}{{/crossLink}} event.
+			 * Fires the {{#crossLink "Y.GalleryModel/change:event"}}{{/crossLink}} event.
 			 * @method setValues
 			 * @param values {Object} hash of values to change
 			 * @param [src] {Any} Source of the changes
@@ -338,7 +353,7 @@ to override the parse() method to parse non-generic server responses.
 			},
 
 			/**
-			 * Default function for the {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event. 
+			 * Default function for the {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event. 
 			 * Does the actual setting of the values just loaded and calls the callback function.
 			 * @method _defDataLoaded
 			 * @param ev {EventFacade} see loaded event
@@ -353,14 +368,13 @@ to override the parse() method to parse non-generic server responses.
 				ev.callback.call(self,null, ev.response);
 			},
 			/**
-			 * Function called when the {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event is prevented, stopped or halted
+			 * Function called when the {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event is prevented, stopped or halted
 			 * so that the callback is called with a suitable error
 			 * @method _stoppedDataLoaded
 			 * @param ev {EventFacade}
 			 * @private
 			 */
 			_stoppedDataLoaded: function (ev) {
-				console.log('stopped', ev);
 				ev.details[0].callback.call(this, 'Load event halted');
 			},
 			/**
@@ -370,8 +384,8 @@ to override the parse() method to parse non-generic server responses.
 				operation, which is an asynchronous action. Specify a __callback__ function to
 				be notified of success or failure.
 
-				A successful load operation will fire a {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event, while an unsuccessful
-				load operation will fire an {{#crossLink "Y.GalleryModel/error"}}{{/crossLink}} event with the `src` set to `"load"`.
+				A successful load operation will fire a {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event, while an unsuccessful
+				load operation will fire an {{#crossLink "Y.GalleryModel/error:event"}}{{/crossLink}} event with the `src` set to `"load"`.
 
 				@method load
 				@param [options] {Object} Options to be passed to {{#crossLink "Y.GalleryModel/sync"}}{{/crossLink}}.
@@ -466,11 +480,11 @@ to override the parse() method to parse non-generic server responses.
 				operation, which is an asynchronous action. Specify a __callback__ function to
 				be notified of success or failure.
 
-				A successful save operation will fire a {{#crossLink "Y.GalleryModel/saved"}}{{/crossLink}} event, while an unsuccessful
-				load operation will fire an {{#crossLink "Y.GalleryModel/error"}}{{/crossLink}} event with the 'src' property set to `"save"`.
+				A successful save operation will fire a {{#crossLink "Y.GalleryModel/saved:event"}}{{/crossLink}} event, while an unsuccessful
+				load operation will fire an {{#crossLink "Y.GalleryModel/error:event"}}{{/crossLink}} event with the 'src' property set to `"save"`.
 
 				If the save operation succeeds and the {{#crossLink "Y.GalleryModel/parse"}}{{/crossLink}} method returns non-empty values
-				from the response received from the server a {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event will also be fired to read those values.
+				from the response received from the server a {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event will also be fired to read those values.
 
 				@method save
 				@param {Object} [options] Options to be passed to {{#crossLink "Y.GalleryModel/sync"}}{{/crossLink}}. 
@@ -656,7 +670,7 @@ to override the parse() method to parse non-generic server responses.
 				return this.getValues();
 			},
 			/**
-			 * Getter for the {{#crossLink "Y.GalleryModel/isModified"}}{{/crossLink}} attribute.
+			 * Getter for the {{#crossLink "Y.GalleryModel/isModified:attribute"}}{{/crossLink}} attribute.
 			 * If the value contains a dot (`'.'`) the modified state of the field named as a sub-attribute will be returned.
 			 * Otherwise, the modified status of the whole record will be returned.
 			 * @method _isModifiedGetter
@@ -676,7 +690,7 @@ to override the parse() method to parse non-generic server responses.
 				return value;
 			},
 			/**
-			 * Getter for the {{#crossLink "Y.GalleryModel/isNew"}}{{/crossLink}} attribute.
+			 * Getter for the {{#crossLink "Y.GalleryModel/isNew:attribute"}}{{/crossLink}} attribute.
 			 * If the value contains a dot (`'.'`) the 'new' state of the field named as a sub-attribute will be returned.
 			 * Otherwise, the 'new' status of the whole record will be returned.
 			 * @method _isNewGetter
@@ -696,7 +710,7 @@ to override the parse() method to parse non-generic server responses.
 				return value;
 			},
 			/**
-			 * Setter for the {{#crossLink "Y.GalleryModel/primaryKeys"}}{{/crossLink}} attribute.
+			 * Setter for the {{#crossLink "Y.GalleryModel/primaryKeys:attribute"}}{{/crossLink}} attribute.
 			 * If the value is already set, no further changes will be allowed.
 			 * If the value is not an array, it will be converted to one.
 			 * @method _primaryKeysSetter
@@ -713,7 +727,7 @@ to override the parse() method to parse non-generic server responses.
 				return value;
 			},
 			/**
-			 * Getter for the {{#crossLink "Y.GalleryModel/primaryKeys"}}{{/crossLink}} attribute.
+			 * Getter for the {{#crossLink "Y.GalleryModel/primaryKeys:attribute"}}{{/crossLink}} attribute.
 			 * If the name contains a dot (`'.'`) it will return a boolean indicating 
 			 * whether the field named as a sub-attribute is part of the primary key.
 			 * Otherwise, it returns the array of primary key fields.
@@ -818,7 +832,7 @@ to override the parse() method to parse non-generic server responses.
 		 * Event listener for the after value change event, it tracks changes for each field.  
 		 * It retains only the last change for each field.
 		 * @method _trackChange
-		 * @param ev {EventFacade} As provided by the {{#crossLink "Y.GalleryModel/change"}}{{/crossLink}} event
+		 * @param ev {EventFacade} As provided by the {{#crossLink "Y.GalleryModel/change:event"}}{{/crossLink}} event
 		 * @private
 		 */
 		_trackChange: function (ev) {
@@ -882,7 +896,7 @@ to override the parse() method to parse non-generic server responses.
 		 * Event listener for the after value change event, it tracks changes for each field.  
 		 * It keeps a stack of each change.  
 		 * @method _trackChange
-		 * @param ev {EventFacade} As provided by the {{#crossLink "Y.GalleryModel/change"}}{{/crossLink}} event
+		 * @param ev {EventFacade} As provided by the {{#crossLink "Y.GalleryModel/change:event"}}{{/crossLink}} event
 		 * @private
 		 */
 		_trackChange: function (ev) {
@@ -922,7 +936,7 @@ to override the parse() method to parse non-generic server responses.
 	/**
 	 * Allows GalleryModel to handle a set of records using the Flyweight pattern.
 	 * It exposes one record at a time from a shelf of records.
-	 * Exposed records can be selected by setting the {{#crossLink "Y.GalleryModel/index"}}{{/crossLink}} attribute.
+	 * Exposed records can be selected by setting the {{#crossLink "Y.GalleryModel/index:attribute"}}{{/crossLink}} attribute.
 	 * @class Y.GalleryModelMultiRecord
 	 */
 	
@@ -944,8 +958,23 @@ to override the parse() method to parse non-generic server responses.
 			this._addPreserve('_values','_loadedValues','_isNew','_isModified');
 		},
 		/**
+		 * Sets the initial values if any were provided to the constructor.
+		 * It is only ever called after the initialization of this class and all its extensions
+		 * and only if the arguments to the constructor had a `values` attribute.
+		 * It overrides the {{#crossLink "Y.GalleryModel/_setInitialValues"}}{{/crossLink}} 
+		 * so as to handle arrays.
+		 * @method _setInitialValues
+		 * @param ev {EventFacade} in particular:
+		 * @param ev.cfg.values {Object} values to be set
+		 * @private
+		 */
+		_setInitialValues: function (ev) {
+			this.add(ev.cfg.values);
+		},
+
+		/**
 		 * Index of the shelf for the record being exposed.
-		 * Use {{#crossLink "Y.GalleryModel/index"}}{{/crossLink}} attribute to check/set the index value.
+		 * Use {{#crossLink "Y.GalleryModel/index:attribute"}}{{/crossLink}} attribute to check/set the index value.
 		 * @property _currentIndex
 		 * @type integer
 		 * @default 0
@@ -1027,20 +1056,30 @@ to override the parse() method to parse non-generic server responses.
 		 * Adds a new record at the index position given or at the end.
 		 * The new record becomes the current.
 		 * @method add
-		 * @param values {Object} set of values to set
+		 * @param values {Object|Array} set of values to set. 
+		 * If it is an array, it will call itself for each of the items in it.
 		 * @param [index] {Integer} position to add the values at or at the end if not provided.  
 		 * @chainable
 		 */
 		add: function(values, index) {
-			if (this.get(IS_MODIFIED) || !this.get(IS_NEW)) {
-				this._shelve();
+			var self = this;
+			if (Lang.isArray(values)) {
+				YArray.each(values, function (value, i) {
+					self.add(value, (index?index + i:undefined));
+				});
+				return self;
 			}
-			index = index || this._shelves.length;
-			this._shelves.splice(index, 0, {});
-			this._currentIndex = index;
-			this._initNew();
-			this.setValues(values, ADD);
-			return this;
+			if (self.get(IS_MODIFIED) || !self.get(IS_NEW)) {
+				self._shelve();
+			}
+			if (index === undefined) {
+				index = self._shelves.length;
+			}
+			self._shelves.splice(index, 0, {});
+			self._currentIndex = index;
+			self._initNew();
+			self.setValues(values, ADD);
+			return self;
 		},
 		/**
 		 * Executes the given function for each record in the set.
@@ -1073,7 +1112,7 @@ to override the parse() method to parse non-generic server responses.
 		 * `this.{{#crossLink "Y.GalleryModel/getValue"}}{{/crossLink}}`
 		 * or any such method to access the values of the current record.
 		 * It is faster than using {{#crossLink "Y.GalleryModelMultiRecord/each"}}{{/crossLink}} 
-		 * and then checking the {{#crossLink "Y.GalleryModel/isModified"}}{{/crossLink}} attribute
+		 * and then checking the {{#crossLink "Y.GalleryModel/isModified:attribute"}}{{/crossLink}} attribute
 		 * Returning exactly `false` from the function spares shelving the record.
 		 * If the callback function does not modify the record, 
 		 * returning `false` will improve performance.
@@ -1110,7 +1149,7 @@ to override the parse() method to parse non-generic server responses.
 		},
 		/**
 		 * This is a documentation entry only, this method does not define `load`. 
-		 * This extension redefines the default action for the {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event so 
+		 * This extension redefines the default action for the {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event so 
 		 * that if a load returns an array of records, they will be added to the shelves. 
 		 * Existing records are kept, call {{#crossLink "Y.GalleryModelMultiRecord/empty"}}{{/crossLink}} if they should be discarded. 
 		 * See method {{#crossLink "Y.GalleryModel/load"}}{{/crossLink}} of {{#crossLink "Y.GalleryModel"}}{{/crossLink}} for further info.
@@ -1172,7 +1211,7 @@ to override the parse() method to parse non-generic server responses.
 			return this;
 		},
 		/**
-		 * Setter for the {{#crossLink "Y.GalleryModelMultiRecord/index"}}{{/crossLink}} attribute.
+		 * Setter for the {{#crossLink "Y.GalleryModelMultiRecord/index:attribute"}}{{/crossLink}} attribute.
 		 * Validates and copies the current index value into {{#crossLink "Y.GalleryModel/_currentIndex"}}{{/crossLink}}.
 		 * It shelves the current record and fetches the requested one. 
 		 * @method _indexSetter
@@ -1190,7 +1229,7 @@ to override the parse() method to parse non-generic server responses.
 			return Y.Attribute.INVALID_VALUE;
 		},
 		/**
-		 * Getter for the {{#crossLink "Y.GalleryModelMultiRecord/index"}}{{/crossLink}} attribute
+		 * Getter for the {{#crossLink "Y.GalleryModelMultiRecord/index:attribute"}}{{/crossLink}} attribute
 		 * Returns the value from {{#crossLink "Y.GalleryModelMultiRecord/_currentIndex"}}{{/crossLink}}
 		 * @method _indexGetter
 		 * @return {integer} value of the index
@@ -1200,7 +1239,7 @@ to override the parse() method to parse non-generic server responses.
 			return this._currentIndex;
 		},
 		/**
-		 * Getter for the {{#crossLink "Y.GalleryModel/isNew"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
+		 * Getter for the {{#crossLink "Y.GalleryModel/isNew:attribute"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
 		 * so that it is read from the shelf and not from the actual attribute, 
 		 * which is expensive to shelve
 		 * @method _isNewGetter
@@ -1218,7 +1257,7 @@ to override the parse() method to parse non-generic server responses.
 			
 		},
 		/**
-		 * Setter for the {{#crossLink "Y.GalleryModel/isNew"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
+		 * Setter for the {{#crossLink "Y.GalleryModel/isNew:attribute"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
 		 * so that it is written into the shelf and not into the actual attribute, 
 		 * which is expensive to shelve
 		 * @method _isNewSetter
@@ -1230,7 +1269,7 @@ to override the parse() method to parse non-generic server responses.
 			return (this._isNew = value);
 		},
 		/**
-		 * Getter for the {{#crossLink "Y.GalleryModel/isModified"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
+		 * Getter for the {{#crossLink "Y.GalleryModel/isModified:attribute"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
 		 * so that it is read from the shelf and not from the actual attribute, 
 		 * which is expensive to shelve
 		 * @method _isModifiedGetter
@@ -1248,7 +1287,7 @@ to override the parse() method to parse non-generic server responses.
 			
 		},
 		/**
-		 * Setter for the {{#crossLink "Y.GalleryModel/isModified"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
+		 * Setter for the {{#crossLink "Y.GalleryModel/isModified:attribute"}}{{/crossLink}} attribute used only for GalleryModelMultiRecord
 		 * so that it is written into the shelf and not into the actual attribute, 
 		 * which is expensive to shelve
 		 * @method _isModifiedSetter
@@ -1276,14 +1315,14 @@ to override the parse() method to parse non-generic server responses.
 			getter:'_indexGetter'
 		},
 		/**
-		 * Merges the new setter into the existing {{#crossLink "Y.GalleryModel/isNew"}}{{/crossLink}} attribute
+		 * Merges the new setter into the existing {{#crossLink "Y.GalleryModel/isNew:attribute"}}{{/crossLink}} attribute
 		 * @attribute isNew
 		 */
 		isNew: {
 			setter:'_isNewSetter'
 		},
 		/**
-		 * Merges the new setter into the existing {{#crossLink "Y.GalleryModel/isModified"}}{{/crossLink}} attribute.
+		 * Merges the new setter into the existing {{#crossLink "Y.GalleryModel/isModified:attribute"}}{{/crossLink}} attribute.
 		 * @attribute isModified
 		 */
 		isModified: {
@@ -1331,8 +1370,8 @@ to override the parse() method to parse non-generic server responses.
 		},
 		/**
 		 * Sets the compare function to be used in sorting the records
-		 * based on the {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField"}}{{/crossLink}} 
-		 * and {{#crossLink "Y.GalleryModelSortedMultiRecord/sortDir"}}{{/crossLink}} 
+		 * based on the {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField:attribute"}}{{/crossLink}} 
+		 * and {{#crossLink "Y.GalleryModelSortedMultiRecord/sortDir:attribute"}}{{/crossLink}} 
 		 * attributes and stores it into this._compare
 		 * @method _setCompare
 		 * @private
@@ -1355,8 +1394,8 @@ to override the parse() method to parse non-generic server responses.
 		},
 		/**
 		 * Sorts the shelves whenever the 
-		 * {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField"}}{{/crossLink}} 
-		 * or {{#crossLink "Y.GalleryModelSortedMultiRecord/sortDir"}}{{/crossLink}} 
+		 * {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField:attribute"}}{{/crossLink}} 
+		 * or {{#crossLink "Y.GalleryModelSortedMultiRecord/sortDir:attribute"}}{{/crossLink}} 
 		 * attributes change.
 		 * @method _sort
 		 * @private
@@ -1370,11 +1409,11 @@ to override the parse() method to parse non-generic server responses.
 		},
 		/**
 		 * Listens to value changes and if the name of the field is that of the 
-		 * {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField"}}{{/crossLink}} attribute 
-		 * or if {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField"}}{{/crossLink}} 
+		 * {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField:attribute"}}{{/crossLink}} attribute 
+		 * or if {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField:attribute"}}{{/crossLink}} 
 		 * is a function, it will relocate the record to its proper sort order
 		 * @method _afterChange
-		 * @param ev {EventFacade} Event façade as produced by the {{#crossLink "Y.GalleryModel/change"}}{{/crossLink}}  event
+		 * @param ev {EventFacade} Event façade as produced by the {{#crossLink "Y.GalleryModel/change:event"}}{{/crossLink}}  event
 		 * @private
 		 */
 		_afterChange: function (ev) {
@@ -1396,8 +1435,8 @@ to override the parse() method to parse non-generic server responses.
 		/**
 		 * Finds the correct index position of a record within the shelves
 		 * according to the current 
-		 * {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField"}}{{/crossLink}} 
-		 * or {{#crossLink "Y.GalleryModelSortedMultiRecord/sortDir"}}{{/crossLink}} 
+		 * {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField:attribute"}}{{/crossLink}} 
+		 * or {{#crossLink "Y.GalleryModelSortedMultiRecord/sortDir:attribute"}}{{/crossLink}} 
 		 * attributes
 		 * @method _findIndex
 		 * @param values {Object} values of the record to be located
@@ -1437,10 +1476,15 @@ to override the parse() method to parse non-generic server responses.
 		 * method, ignoring the index position requested, if any.
 		 * The new record becomes the current.
 		 * @method add
-		 * @param values {Object} set of values to set
+		 * @param values {Object|Array} set of values to set. 
+		 * If it is an array, it will call itself for each of the items in it.
 		 * @chainable
 		 */
 		add: function(values) {
+			if (Lang.isArray(values)) {
+				YArray.each(values, this.add, this);
+				return this;
+			}
 			var shelves = this._shelves,
 				index = 0;
 				
@@ -1454,11 +1498,11 @@ to override the parse() method to parse non-generic server responses.
 		},
 		/**
 		 * Locates a record by value.  The record will be located by the field
-		 * given in the {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField"}}{{/crossLink}}
+		 * given in the {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField:attribute"}}{{/crossLink}}
 		 *  attribute.   It will return the index of the
 		 * record in the shelves or `null` if not found.
 		 * By default it will expose that record.
-		 * If {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField"}}{{/crossLink}} 
+		 * If {{#crossLink "Y.GalleryModelSortedMultiRecord/sortField:attribute"}}{{/crossLink}} 
 		 * contains a function, it will return `null` and do nothing.
 		 * Since sort fields need not be unique, find may return any of the records
 		 * with the same value for that field.
@@ -1519,7 +1563,7 @@ to override the parse() method to parse non-generic server responses.
 	
 	/**
 	 * Extension to store the records in the GalleryModel using the field in the 
-	 * {{#crossLink "Y.GalleryModel/primaryKeys"}}{{/crossLink}} attribute as its index.
+	 * {{#crossLink "Y.GalleryModel/primaryKeys:attribute"}}{{/crossLink}} attribute as its index.
 	 * The primary key __must__ be a __single__ __unique__ __integer__ field.
 	 * It should be used along {{#crossLink "Y.GalleryModelMultiRecord"}}{{/crossLink}}.
 	 * It is incompatible with {{#crossLink "Y.GalleryModelSortedMultiRecord"}}{{/crossLink}}.
@@ -1531,10 +1575,15 @@ to override the parse() method to parse non-generic server responses.
 		 * Adds a new record at the index position given by its primary key.
 		 * The new record becomes the current.
 		 * @method add
-		 * @param values {Object} set of values to set
+		 * @param values {Object|Array} set of values to set. 
+		 * If it is an array, it will call itself for each of the items in it.
 		 * @chainable
 		 */
 		add: function(values) {
+			if (Lang.isArray(values)) {
+				YArray.each(values, this.add, this);
+				return this;
+			}
 			if (this.get(IS_MODIFIED) || !this.get(IS_NEW)) {
 				this._shelve();
 			}
@@ -1544,14 +1593,14 @@ to override the parse() method to parse non-generic server responses.
 			return this;
 		},
 		/**
-		 * Default action for the {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event, 
+		 * Default action for the {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event, 
 		 * checks if the parsed response is an array
 		 * and saves it into the shelves using the value of the primary key field for its index.
 		 * The model will be left positioned at the item with the lowest key value.
 		 * If the primary key field has not been declared, items will not be loaded.
 		 * If the primary key field is not unique, the duplicate will overwrite the previous.
 		 * @method _defDataLoaded
-		 * @param ev {EventFacade} facade produced by the {{#crossLink "Y.GalleryModel/loaded"}}{{/crossLink}} event, 
+		 * @param ev {EventFacade} facade produced by the {{#crossLink "Y.GalleryModel/loaded:event"}}{{/crossLink}} event, 
 		 * @private
 		 */
 		_defDataLoaded: function (ev) {
@@ -1632,4 +1681,5 @@ to override the parse() method to parse non-generic server responses.
 	Y.GalleryModelPrimaryKeyIndex = PKI;
 
 
-}, 'gallery-2012.08.29-20-10' ,{requires:['base'], skinnable:false});
+
+}, 'gallery-2012.09.05-20-01' ,{requires:['base'], skinnable:false});

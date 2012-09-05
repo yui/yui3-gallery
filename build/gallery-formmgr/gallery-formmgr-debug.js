@@ -533,12 +533,17 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 * Set the default values for all form elements.
 	 * 
 	 * @method setDefaultValues
-	 * @param default_value_map {Object} Mapping of form element names to values.
+	 * @param default_value_map {Object|Model} Mapping of form element names to values.
 	 */
 	setDefaultValues: function(
-		/* object */	default_value_map)
+		/* object */	map)
 	{
-		this.default_value_map = default_value_map;
+		if (Y.Model && (map instanceof Y.Model))
+		{
+			map = map.getAttrs();
+		}
+
+		this.default_value_map = map;
 	},
 
 	/**
@@ -1186,4 +1191,4 @@ Y.aggregate(FormManager, Y.FormManager);
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2012.05.23-19-56' ,{requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation'], optional:['gallery-scrollintoview']});
+}, 'gallery-2012.09.05-20-01' ,{optional:['gallery-scrollintoview'], requires:['pluginhost-base','gallery-node-optimizations','gallery-formmgr-css-validation']});
