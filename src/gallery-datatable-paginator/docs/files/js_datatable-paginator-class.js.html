@@ -193,7 +193,7 @@ DtPaginator.ATTRS = {
      *
      * @attribute serverPaginationMap
      * @type {Object}
-     * @default 
+     * @default
      *&#x2F;
     serverPaginationMap:{
         valueFn:    &#x27;_defPagMap&#x27;,
@@ -217,11 +217,17 @@ DtPaginator.ATTRS = {
     },
 
     &#x2F;**
+     * (SERVER DataSource only!)
      * Includes the request queryString for a DataSource request (only!), which contains the pagination
      * replacement strings to be appended to the DataSource&#x27;s &quot;source&quot; string.
      *
      * @example
      *          requestStringTemplate:  &quot;?currentPage={page}&amp;pageRows={itemsPerPage}&amp;sorting={sortBy}&quot;
+     *
+     * Note, the replacement parameters within this template should match the settings from the PaginatorModel
+     * attributes.
+     *
+     * In cases where your server expects differing query parameters, you can utilize ATTR [serverPaginationMap](#attr_serverPaginationMap).
      *
      * @attribute requestStringTemplate
      * @type String
@@ -340,14 +346,22 @@ Y.mix( DtPaginator.prototype, {
             }
 
             &#x2F;&#x2F; General listener for changes to underlying modellist ...
+            &#x2F;&#x2F;this.set(&#x27;data&#x27;,[]);
+            if ( this.get(&#x27;data&#x27;) &amp;&amp; this.get(&#x27;data&#x27;).size()&gt;0  )
+                this._setLocalData();
             this._eventHandles.paginator.push( this.data.after([&quot;load&quot;,&quot;change&quot;,&quot;add&quot;,&quot;remove&quot;,&quot;reset&quot;], Y.bind(this._dataChange,this)) );
+
+            &#x2F;&#x2F; TODO: Need to come up with a way to listen to &quot;sort&quot; on &quot;local&quot; data ...
+            &#x2F;&#x2F; this._eventHandles.paginator.push( this.data.on(&quot;sort&quot;, Y.bind(this._onSortData,this)) );
 
             &#x2F;&#x2F; Added listener to sniff for DataSource existence, for its binding
             this._eventHandles.paginator.push( Y.Do.after( this._afterSyncUI, this, &#x27;_syncUI&#x27;, this) );
+
+           &#x2F;&#x2F; Try to determine when DT is finished rendering records, this is hacky .. but seems to work
+            this._eventHandles.paginator.push( this.after( &#x27;renderView&#x27;, this._notifyRender) );
+
         }
 
-       &#x2F;&#x2F; Try to determine when DT is finished rendering records, this is hacky .. but seems to work
-        this._eventHandles.paginator.push( this.after( &#x27;renderView&#x27;, this._notifyRender) );
 
         return this;
     },
@@ -497,7 +511,8 @@ Y.mix( DtPaginator.prototype, {
      * @method dataReset
      * @param {Array|ModelList} data Data to be reset to ... either as a JS Array or a Y.ModelList
      * @public
-     * @returns nothing
+     * @returns this
+     * @chainable
      * @beta
      *&#x2F;
     dataReset: function(data){
@@ -510,6 +525,8 @@ Y.mix( DtPaginator.prototype, {
             this._mlistArray = [];
             this._mlistArray = data;
         }
+        this.processPageRequest(this.pagModel.get(&#x27;page&#x27;));
+        return this;
     },
 
 
@@ -581,11 +598,10 @@ Y.mix( DtPaginator.prototype, {
         }
 
         &#x2F;&#x2F; For neither ModelList or DS source .... but &quot;data&quot; supplied === Local data
-        if ( !this._pagDataSrc &amp;&amp; Y.Lang.isArray(o.models) &amp;&amp; o.models.length&gt;0 ) {
-
+        if ( !this._pagDataSrc &amp;&amp; o.models &amp;&amp; Y.Lang.isArray(o.models) &amp;&amp; o.models.length&gt;0 ) {
             o.preventDefault();
-
-            this._pagDataSrc = &#x27;local&#x27;;
+            this._setLocalData(o);
+&#x2F;*            this._pagDataSrc = &#x27;local&#x27;;
 
             &#x2F;&#x2F;
             &#x2F;&#x2F;   Store the full local data in property _mlistArray (as an array)
@@ -598,9 +614,27 @@ Y.mix( DtPaginator.prototype, {
             &#x2F;&#x2F; Set the PaginatorModel totalItems count and process the page change.
             this.pagModel.set(&#x27;totalItems&#x27;, o.models.length );
             this.processPageRequest(this.pagModel.get(&#x27;page&#x27;));
-        }
+*&#x2F;        }
     },
 
+
+    _setLocalData: function(){
+        var mdata = this.get(&#x27;data&#x27;);
+
+        this._pagDataSrc = &#x27;local&#x27;;
+
+        &#x2F;&#x2F;
+        &#x2F;&#x2F;   Store the full local data in property _mlistArray (as an array)
+        &#x2F;&#x2F;
+        this._mlistArray = [];
+        mdata.each(function(model){
+            this._mlistArray.push( model.toJSON() );
+        },this);
+
+        &#x2F;&#x2F; Set the PaginatorModel totalItems count and process the page change.
+        this.pagModel.set(&#x27;totalItems&#x27;, mdata.size() );
+        this.processPageRequest(this.pagModel.get(&#x27;page&#x27;));
+    },
 
     &#x2F;**
      * Method fires after DataTable&#x2F;DataSource plugin fires it&#x27;s &quot;response&quot; event, which includes
@@ -721,7 +755,7 @@ Y.mix( DtPaginator.prototype, {
      *&#x2F;
     _defPagState: function(){
         var rtn = {};
-        if ( this.get(&#x27;paginator&#x27;).model ) {
+        if ( this.get(&#x27;paginator&#x27;) &amp;&amp; this.get(&#x27;paginator&#x27;).model ) {
             rtn = this.get(&#x27;paginator&#x27;).model.getAttrs();
             rtn.sortBy = this.get(&#x27;sortBy&#x27;);
         }
@@ -735,7 +769,7 @@ Y.mix( DtPaginator.prototype, {
      * @private
      *&#x2F;
     _getPagState: function(){
-        var rtn = this.pagModel.getAttrs(true);
+        var rtn = (this.pagModel) ? this.pagModel.getAttrs(true) : {};
         delete rtn.initialized;
         rtn.sortBy = this.get(&#x27;sortBy&#x27;);
         return rtn;
@@ -754,7 +788,7 @@ Y.mix( DtPaginator.prototype, {
         if ( val.sortBy !== undefined )
             this.set(&#x27;sortBy&#x27;,val.sortBy);
 
-        this.pagModel.setAttrs(val);
+        if ( this.pagModel ) this.pagModel.setAttrs(val);
         return val;
     },
 
@@ -814,8 +848,6 @@ Y.mix( DtPaginator.prototype, {
 
 Y.DataTable.Paginator = DtPaginator;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Paginator]);
-
-&#x2F;&#x2F; requires: &quot;base-build&quot;, &quot;datatable-base&quot;,  &quot;event-custom&quot;, &quot;json&quot;
 
     </pre>
 </div>

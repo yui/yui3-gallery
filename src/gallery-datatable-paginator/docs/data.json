@@ -91,9 +91,9 @@
         {
             "file": "js/datatable-paginator-class.js",
             "line": 129,
-            "description": "Includes the request queryString for a DataSource request (only!), which contains the pagination\nreplacement strings to be appended to the DataSource's \"source\" string.",
+            "description": "(SERVER DataSource only!)\nIncludes the request queryString for a DataSource request (only!), which contains the pagination\nreplacement strings to be appended to the DataSource's \"source\" string.",
             "example": [
-                "\n         requestStringTemplate:  \"?currentPage={page}&pageRows={itemsPerPage}&sorting={sortBy}\""
+                "\n         requestStringTemplate:  \"?currentPage={page}&pageRows={itemsPerPage}&sorting={sortBy}\"\n\nNote, the replacement parameters within this template should match the settings from the PaginatorModel\nattributes.\n\nIn cases where your server expects differing query parameters, you can utilize ATTR [serverPaginationMap](#attr_serverPaginationMap)."
             ],
             "itemtype": "attribute",
             "name": "requestStringTemplate",
@@ -104,7 +104,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 145,
+            "line": 151,
             "description": "Flag to indicate if the Paginator container should be re-sized to the DataTable size\nafter rendering is complete.\n\nThis attribute works best with a \"bar\" type of Paginator that is intended to look integral with a DataTable.",
             "itemtype": "attribute",
             "name": "paginatorResize",
@@ -115,7 +115,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 164,
+            "line": 170,
             "description": "Holder for the \"original\" un-paged data that the DataTable was based upon.\n\nThis property is stored as an Array, from the original \"data\" ModelList, only used\nfor case of \"local\" data, is sliced as needed to re-set each data Page.\n\nPopulated in method [_dataChange](#method__dataChange)",
             "itemtype": "property",
             "name": "_mlistArray",
@@ -130,7 +130,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 182,
+            "line": 188,
             "description": "Placeholder for a text flag indicating the source of \"data\" for this DataTable,\n this is set initially in method _dataChange.\n\nSet to either 'local', 'ds' or 'mlist' in method [_dataChange](#method__dataChange)\n\nPopulated in _dataChange.  Utilized in processPageRequest",
             "itemtype": "property",
             "name": "_pagDataSrc",
@@ -145,7 +145,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 199,
+            "line": 205,
             "description": "A convenience property holder for the DataTable's \"paginator\" attribute.",
             "itemtype": "property",
             "name": "paginator",
@@ -159,7 +159,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 210,
+            "line": 216,
             "description": "A convenience property holder for the Paginator-View's Model attribute.",
             "itemtype": "property",
             "name": "pagModel",
@@ -173,7 +173,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 224,
+            "line": 230,
             "description": "This initializer sets up the listeners related to the original DataTable instance, to the\n PaginatorModel changes and related to the underlying \"data\" attribute the DT is based upon.",
             "itemtype": "method",
             "name": "initializer",
@@ -188,7 +188,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 265,
+            "line": 279,
             "description": "Destructor to clean up listener event handlers and the internal storage buffer.",
             "itemtype": "method",
             "name": "destructor",
@@ -199,7 +199,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 284,
+            "line": 298,
             "description": "Primary workhorse method that is fired when the Paginator \"page\" changes,\n  and returns a new subset of data for the DT\n  or sends a new request to a remote source to populate the DT",
             "itemtype": "method",
             "name": "processPageRequest",
@@ -237,7 +237,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 385,
+            "line": 399,
             "description": "Method to sync the container for the paginator View with the underlying DataTable\n 'table' element.\n\n Unfortunately, there isn't a distinct, definitive 'render' complete event due to\n  DT's complex rendering, so I use a timer function to attempt a resize.",
             "itemtype": "method",
             "name": "resizePaginator",
@@ -248,7 +248,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 403,
+            "line": 417,
             "description": "Method to re-initialize the original data, mostly targeted at local data\n when a new 'data' is set, untested.",
             "itemtype": "method",
             "name": "dataReset",
@@ -262,15 +262,16 @@
             "access": "public",
             "tagname": "",
             "return": {
-                "description": "nothing"
+                "description": "this"
             },
+            "chainable": 1,
             "beta": 1,
             "class": "Y.DataTable.Paginator",
             "module": "datatable"
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 430,
+            "line": 447,
             "description": "Helper method that searches the 'serverPaginationMap' ATTR and returns the requested\nproperty, including if it is nested as \"toServer\" or \"fromServer\" subattribute.\n( Used in processPageRequest )",
             "example": [
                 "\n   _srvPagMapObj(\"itemsPerPage\")\n        { itemsPerPage : 'numPageRecords' }\n        { itemsPerPage : {toServer:'pageRows', fromServer:'pageRecordCount' }"
@@ -300,7 +301,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 459,
+            "line": 476,
             "description": "Method called to ensure that the _dataChange method is called, specifically for the case\nwhere a DataSource is used (which is hard to track when it is plugged in ...)",
             "itemtype": "method",
             "name": "_afterSyncUI",
@@ -317,7 +318,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 471,
+            "line": 488,
             "description": "Method fires after every variety of change event on the DT's \"data\" setting, which\nis used to sense the origin of where the \"data\" comes from, and sets the\nthis._pagDataSrc property to either \"ds\", \"mlist\" or \"local\".",
             "itemtype": "method",
             "name": "_dataChange",
@@ -334,7 +335,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 515,
+            "line": 549,
             "description": "Method fires after DataTable/DataSource plugin fires it's \"response\" event, which includes\nthe response object, including {results:, meta:} properties.",
             "itemtype": "method",
             "name": "_afterDSResponse",
@@ -364,7 +365,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 538,
+            "line": 572,
             "description": "Method fires after custom ModelSync.REST \"load\" action fires a user-defined \"response\" event.\nThis can be implemented by extending ModelSync.REST by adding .parse() method which fires\na custom \"response\" event including {results:, meta:} properties.\n\nUsage Note: The user is REQUIRED to provide a custom \"response\" event in the ModelList\n parse overridden function in order for this to work properly.",
             "itemtype": "method",
             "name": "_afterMLResponse",
@@ -394,7 +395,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 563,
+            "line": 597,
             "description": "Listener that fires when the Model's 'pageChange' fires, this extracts the current page from the state object and then\n hooks up the processPageRequest method.",
             "itemtype": "method",
             "name": "_pageListener",
@@ -412,7 +413,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 577,
+            "line": 611,
             "description": "Method to adjust the CSS width of the paginator container and set it to the\n width of the underlying DT.",
             "itemtype": "method",
             "name": "_syncPaginatorSize",
@@ -426,7 +427,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 595,
+            "line": 629,
             "description": "Default 'valueFn' function setting for the ATTR `serverPaginationMap`, where\nthe defaults are simply the member names.",
             "itemtype": "method",
             "name": "_defPagMap",
@@ -441,7 +442,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 611,
+            "line": 645,
             "description": "Setter method for the `serverPaginationMap` attribute, which can be used to\n merge the \"default\" object with the user-supplied object.",
             "itemtype": "method",
             "name": "_setPagMap",
@@ -462,7 +463,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 625,
+            "line": 659,
             "description": "Sets default for the \"paginationState\" DataTable attribute complex object as an\nobject with all of PaginatorModel ATTRS and the `sortBy` setting.",
             "itemtype": "method",
             "name": "_defPagState",
@@ -477,7 +478,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 641,
+            "line": 675,
             "description": "Getter for the \"paginationState\" DataTable attribute complex object.",
             "itemtype": "method",
             "name": "_gefPagState",
@@ -492,7 +493,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 654,
+            "line": 688,
             "description": "Sets default for the \"paginationState\" DataTable attribute\n complex object.",
             "itemtype": "method",
             "name": "_sefPagState",
@@ -507,7 +508,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 672,
+            "line": 706,
             "description": "This is a setter for the 'paginator' attribute, primarily to set the public property `paginator` to the\nattribute value.",
             "itemtype": "method",
             "name": "_setPaginator",
@@ -529,7 +530,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 690,
+            "line": 724,
             "description": "A method that fires after the DataTable `renderView` method completes, that is *approximately* when\nthe DataTable has finished rendering.",
             "itemtype": "method",
             "name": "_notifyRender",
@@ -540,7 +541,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 705,
+            "line": 739,
             "description": "Fires after the DataTable 'renderView' event fires",
             "itemtype": "event",
             "name": "render",
@@ -549,7 +550,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 710,
+            "line": 744,
             "description": "Fires after the DataTable-Paginator updates the page data and/or sends the remote request for more data",
             "itemtype": "event",
             "name": "pageUpdate",
@@ -577,7 +578,7 @@
         },
         {
             "file": "js/datatable-paginator-class.js",
-            "line": 718,
+            "line": 752,
             "description": "Fires after the Paginator is resized to match the DataTable size (requires attribute \"paginatorResize:true\")",
             "itemtype": "event",
             "name": "resize",

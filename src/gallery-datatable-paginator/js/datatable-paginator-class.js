@@ -103,7 +103,7 @@ DtPaginator.ATTRS = {
      *
      * @attribute serverPaginationMap
      * @type {Object}
-     * @default 
+     * @default
      */
     serverPaginationMap:{
         valueFn:    '_defPagMap',
@@ -127,11 +127,17 @@ DtPaginator.ATTRS = {
     },
 
     /**
+     * (SERVER DataSource only!)
      * Includes the request queryString for a DataSource request (only!), which contains the pagination
      * replacement strings to be appended to the DataSource's "source" string.
      *
      * @example
      *          requestStringTemplate:  "?currentPage={page}&pageRows={itemsPerPage}&sorting={sortBy}"
+     *
+     * Note, the replacement parameters within this template should match the settings from the PaginatorModel
+     * attributes.
+     *
+     * In cases where your server expects differing query parameters, you can utilize ATTR [serverPaginationMap](#attr_serverPaginationMap).
      *
      * @attribute requestStringTemplate
      * @type String
@@ -250,14 +256,22 @@ Y.mix( DtPaginator.prototype, {
             }
 
             // General listener for changes to underlying modellist ...
+            //this.set('data',[]);
+            if ( this.get('data') && this.get('data').size()>0  )
+                this._setLocalData();
             this._eventHandles.paginator.push( this.data.after(["load","change","add","remove","reset"], Y.bind(this._dataChange,this)) );
+
+            // TODO: Need to come up with a way to listen to "sort" on "local" data ...
+            // this._eventHandles.paginator.push( this.data.on("sort", Y.bind(this._onSortData,this)) );
 
             // Added listener to sniff for DataSource existence, for its binding
             this._eventHandles.paginator.push( Y.Do.after( this._afterSyncUI, this, '_syncUI', this) );
+
+           // Try to determine when DT is finished rendering records, this is hacky .. but seems to work
+            this._eventHandles.paginator.push( this.after( 'renderView', this._notifyRender) );
+
         }
 
-       // Try to determine when DT is finished rendering records, this is hacky .. but seems to work
-        this._eventHandles.paginator.push( this.after( 'renderView', this._notifyRender) );
 
         return this;
     },
@@ -407,7 +421,8 @@ Y.mix( DtPaginator.prototype, {
      * @method dataReset
      * @param {Array|ModelList} data Data to be reset to ... either as a JS Array or a Y.ModelList
      * @public
-     * @returns nothing
+     * @returns this
+     * @chainable
      * @beta
      */
     dataReset: function(data){
@@ -420,6 +435,8 @@ Y.mix( DtPaginator.prototype, {
             this._mlistArray = [];
             this._mlistArray = data;
         }
+        this.processPageRequest(this.pagModel.get('page'));
+        return this;
     },
 
 
@@ -491,11 +508,10 @@ Y.mix( DtPaginator.prototype, {
         }
 
         // For neither ModelList or DS source .... but "data" supplied === Local data
-        if ( !this._pagDataSrc && Y.Lang.isArray(o.models) && o.models.length>0 ) {
-
+        if ( !this._pagDataSrc && o.models && Y.Lang.isArray(o.models) && o.models.length>0 ) {
             o.preventDefault();
-
-            this._pagDataSrc = 'local';
+            this._setLocalData(o);
+/*            this._pagDataSrc = 'local';
 
             //
             //   Store the full local data in property _mlistArray (as an array)
@@ -508,9 +524,27 @@ Y.mix( DtPaginator.prototype, {
             // Set the PaginatorModel totalItems count and process the page change.
             this.pagModel.set('totalItems', o.models.length );
             this.processPageRequest(this.pagModel.get('page'));
-        }
+*/        }
     },
 
+
+    _setLocalData: function(){
+        var mdata = this.get('data');
+
+        this._pagDataSrc = 'local';
+
+        //
+        //   Store the full local data in property _mlistArray (as an array)
+        //
+        this._mlistArray = [];
+        mdata.each(function(model){
+            this._mlistArray.push( model.toJSON() );
+        },this);
+
+        // Set the PaginatorModel totalItems count and process the page change.
+        this.pagModel.set('totalItems', mdata.size() );
+        this.processPageRequest(this.pagModel.get('page'));
+    },
 
     /**
      * Method fires after DataTable/DataSource plugin fires it's "response" event, which includes
@@ -631,7 +665,7 @@ Y.mix( DtPaginator.prototype, {
      */
     _defPagState: function(){
         var rtn = {};
-        if ( this.get('paginator').model ) {
+        if ( this.get('paginator') && this.get('paginator').model ) {
             rtn = this.get('paginator').model.getAttrs();
             rtn.sortBy = this.get('sortBy');
         }
@@ -645,7 +679,7 @@ Y.mix( DtPaginator.prototype, {
      * @private
      */
     _getPagState: function(){
-        var rtn = this.pagModel.getAttrs(true);
+        var rtn = (this.pagModel) ? this.pagModel.getAttrs(true) : {};
         delete rtn.initialized;
         rtn.sortBy = this.get('sortBy');
         return rtn;
@@ -664,7 +698,7 @@ Y.mix( DtPaginator.prototype, {
         if ( val.sortBy !== undefined )
             this.set('sortBy',val.sortBy);
 
-        this.pagModel.setAttrs(val);
+        if ( this.pagModel ) this.pagModel.setAttrs(val);
         return val;
     },
 
@@ -724,5 +758,3 @@ Y.mix( DtPaginator.prototype, {
 
 Y.DataTable.Paginator = DtPaginator;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Paginator]);
-
-// requires: "base-build", "datatable-base",  "event-custom", "json"
