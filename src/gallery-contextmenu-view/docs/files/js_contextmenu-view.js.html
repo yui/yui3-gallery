@@ -41,9 +41,13 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
+                <li><a href="..&#x2F;classes/Y.ContextMenuView.html">Y.ContextMenuView</a></li>
+            
             </ul>
 
             <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/contextmenu.html">contextmenu</a></li>
             
             </ul>
         </div>
@@ -84,6 +88,42 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
+&#x2F;**
+ This module includes a Y.View class extension that attaches to an existing &quot;trigger&quot; Node and uses event delegation to listen
+ for &quot;contextmenu&quot; requests (i.e. right-click). When the context menu is invoked, a Y.Overlay object is rendered and displayed
+ that includes user-defined menu items that are related to the context where the menu was invoked.
+
+ This view utilizes several attributes and fires several events that users can listen to in order to take specific actions based
+ on the &quot;trigger target&quot; node.
+ 
+ Please refer to the [trigger](#attr_trigger) ATTRIBUTE for more description of the target.node and target.trigger.
+
+ #####Usage
+ To configure a bare-bones basic contextmenu, you need to provide the &#x60;trigger&#x60; and &#x60;menuItems&#x60; attributes as;
+
+     var cmenu = new Y.ContextMenuView({
+        trigger: {
+            node:   Y.one(&quot;.myExistingContainer&quot;),
+            target:  &#x27;li&#x27;
+        },
+        menuItems: [ &quot;Add&quot;, &quot;Edit&quot;, &quot;Delete&quot; ]
+    });
+
+ The &#x60;menuItems&#x60; can be simple entries or Objects, if they are Objects the &quot;label&quot; property will be used to fill the visible Menu (See [menuItems](#attr_menuItems)).
+ 
+ #####Attributes &#x2F; Events
+ An implementer is typically interested in listening to the following ATTRIBUTE &quot;change&quot; events;
+ &lt;ul&gt;
+   &lt;li&gt;&#x60;selectedMenuChange&#x60; : which fires when a contextmenu choice is clicked (see [selectedMenu](#attr_selectedMenu))&lt;&#x2F;li&gt;
+   &lt;li&gt;&#x60;contextTargetChange&#x60;: which fires when the user &quot;right-clicks&quot; on the target.node (see [contextTarget](#attr_contextTarget))&lt;&#x2F;li&gt;
+ &lt;&#x2F;ul&gt;
+
+ Additionally, see the [Events](#events) section for more information on available events.
+
+ @module contextmenu
+ @class Y.ContextMenuView
+ @constructor
+ **&#x2F;
 Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
 
     &#x2F;**
@@ -242,6 +282,7 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
     },
 
     &#x2F;**
+     * Handler for right-click event (actually &quot;contextmenu&quot; event) on &#x60;trigger.node&#x60;.
      * @method _onContextMenu
      * @param {EventTarget} e Y.Event target object created when &quot;context&quot; menu fires
      * @private
@@ -254,7 +295,7 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
         &#x2F;&#x2F; Store the context &quot;trigger&quot; selection, who invoked the contextMenu
         &#x2F;&#x2F;
         var contextTar = e.currentTarget;
-        this.set(&#x27;contextTarget&#x27;, contextTar );
+        this._set(&#x27;contextTarget&#x27;, contextTar );
 
         &#x2F;&#x2F;
         &#x2F;&#x2F; Position and display the Overlay for the menu
@@ -269,7 +310,16 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
     },
 
     &#x2F;**
+     * Fired after the &quot;contextmenu&quot; event is initiated and the Menu has been positioned and displayed
+     * @event contextMenuShow
+     * @param {EventTarget} e
+     *&#x2F;
+
+
+    &#x2F;**
      * Process a &quot;click&quot; event on the Content Menu&#x27;s Overlay menuItems
+     *
+     * @method _selectMenuItem
      * @param {EventTarget} e
      * @private
      *&#x2F;
@@ -279,7 +329,7 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
             menuItems = this.get(&#x27;menuItems&#x27;);
 
         if ( menuItems &amp;&amp;  menuItems.length&gt;0 )
-            this.set(&#x27;selectedMenu&#x27;, {
+            this._set(&#x27;selectedMenu&#x27;, {
                 evt:e,
                 menuItem:menuItems[menuData],
                 menuIndex:menuData
@@ -287,7 +337,22 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
 
         this.hideOverlay();
         this.fire(&quot;contextMenuHide&quot;,e);
+        this.fire(&quot;select&quot;,e);
     },
+
+	&#x2F;**
+	 * Fires when a selection is &quot;clicked&quot; from within the pop-up menu 
+	 * (a better approach is to listen on attribute [selectedMenu](#attr_selectedMenu) for &quot;change&quot;)
+	 * 
+	 * @event select
+	 * @param {EventTarget} e
+	 **&#x2F;
+
+    &#x2F;**
+     * Fired after a Menu choice has been selected from the ContexMenu and the menu has been hidden
+     * @event contextMenuHide
+     * @param {EventTarget} e
+     *&#x2F;
 
     &#x2F;**
      * Helper method to clear DOM &quot;selected&quot; text or ranges
@@ -300,26 +365,19 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
         if ( sel &amp;&amp; sel.removeAllRanges ) sel.removeAllRanges();    &#x2F;&#x2F; works on FireFox
     }
 
-
-    &#x2F;**
-     * Fired after the &quot;contextmenu&quot; event is initiated and the Menu has been positioned and displayed
-     * @event contextMenuShow
-     * @param {EventTarget} e
-     *&#x2F;
-
-    &#x2F;**
-     * Fired after a Menu choice has been selected from the ContexMenu and the menu has been hidden
-     * @event contextMenuHide
-     * @param {EventTarget} e
-     *&#x2F;
-
 },{
    ATTRS:{
 
        &#x2F;**
-        * Container Node where the menu&#x27;s Overlay will be rendered into
+        * Container Node where the menu&#x27;s Overlay will be rendered into.  If not provided, the
+        * default will create a container from the [template](#property_template) setting.
+        *
+        * This is usually only set when the user has a specific Overlay container design they
+        * wish to utilize.
+        *
         * @attribute container
         * @type {Node}
+        * @default Y.Node.create(this.template)
         *&#x2F;
        container:{
            valueFn:   function(){return Y.Node.create(this.template);}
@@ -327,28 +385,46 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
 
        &#x2F;**
         * Defines the container element for the &quot;contextmenu&quot; event listener to attach this menu to.
+        * &lt;br&#x2F;&gt;&lt;br&#x2F;&gt;This {Object} must contain the following;&lt;br&#x2F;&gt;
+        * &lt;ul&gt;
+        *   &lt;li&gt;&#x60;node&#x60; {Node} the Node instance that will have a delegated &quot;contextmenu&quot; listener 
+        attached to it&lt;&#x2F;li&gt;
+            &lt;li&gt;&#x60;target&#x60; {String} A CSS selector for the &quot;target&quot; sub-element (child of trigger.node) that will be used for the delegation and will be returned from attribute &quot;contextTarget&quot;&lt;&#x2F;li&gt;
+        * &lt;&#x2F;ul&gt;
+        *
+		*
+        * @example
+        *       &#x2F;&#x2F; This will define the trigger node (to accept right-clicks) as a DataTable&#x27;s THEAD
+        *       &#x2F;&#x2F;  element and the target as the TH nodes.
+        *       trigger : {
+        *           node:   myDataTable.get(&#x27;srcNode&#x27;).one(&#x27;thead .yui3-datatable-columns&#x27;),
+        *           target: &quot;th&quot;
+        *       }
+        *
+        *
         * @attribute trigger
         * @type {Object} trigger Container object to listen for &quot;contextmenu&quot; event on
         * @type {Node} trigger.node Container node to listen on (i.e. delegation container) for &quot;contextmenu&quot;
         * @type {String} trigger.target Container filter selector to assign target from container event
-        * @default null
+        * @default {node:null, target:&#x27;&#x27;}
         *&#x2F;
        trigger: {
-           value:  {node:null, target:&#x27;&#x27;}
+           value:  {node:null, target:&#x27;&#x27;},
+           writeOnce: true
        },
 
        &#x2F;**
         * Set to the returned target within the &#x60;trigger.node&#x60; container that the &quot;contextmenu&quot; event was initiated on
         * (e.g. for a DataTable this may be a specific TR row within the table body).
         *
-        * This is not intended to be .set by the user, but is meant to be read by users.
-        *
         * @attribute contextTarget
         * @type {Node}
         * @default null
+        * @readonly
         *&#x2F;
        contextTarget:{
-           value:   null
+           value:   null,
+           readOnly: true
        },
 
        &#x2F;**
@@ -364,8 +440,13 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
        },
 
        &#x2F;**
-        * Array of &quot;menu&quot; item {Objects} to add to the Menu.  Each item is an object, including the following;
-        *   content, dataValue
+        * Array of &quot;menu&quot; items as either {Strings} or {Objects} to add to the Menu.  
+        * 
+        * When {Objects} are included, as a minimum they must include a &#x60;label&#x60; property that contains the text to display in the menu.
+        * @example
+        *	menuItems: [ &quot;one&quot;, &quot;two&quot;, &quot;three&quot;, &quot;four&quot; ]
+        *	menuItems: [ &quot;Insert&quot;, &quot;Update&quot;, {label:&quot;Delete&quot;, confirm:true}, &quot;... More&quot; ]
+        *	menuItems: [ {label:&quot;Foo&quot;, value:100}, {label:&quot;Bar&quot;, value:105}, {label:&quot;Baz&quot;, value:200} ]
         *
         * @attribute menuItems
         * @type {Array}
@@ -378,10 +459,10 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
 
        &#x2F;**
         * Y.Overlay instance used to render the pop-up context menu within
-        *
+        * 
+        * **Default:** See [_valOverlay](#method__valOverlay) 
         * @attribute overlay
-        * @type Y.Overlay
-        * @default &#x27;_valOverlay&#x27;
+        * @type Y.Overlay 
         *&#x2F;
        overlay: {
            valueFn:     &#x27;_valOverlay&#x27;,
@@ -392,17 +473,32 @@ Y.ContextMenuView = Y.Base.create(&#x27;contextmenu&#x27;, Y.View, [],{
        &#x2F;**
         * Set to the &quot;selected&quot; item from the pop-up Overlay menu when clicked by user, where this
         * attribute is set to an object containing the EventTarget of the selection and the resulting
-        * menuitem that that corresponds to.
+        * menuitem and menuindex that corresponds to the selection.
         *
-        * This is not intended to be .set by the user, but is meant to be read by users.
+        * This is set by the method [_selectMenuItem](#method__selectMenuItem).
+        *
+        * Set to an {Object} with the following properties;
+        *   &lt;ul&gt;
+        *   &lt;li&gt;&#x60;evt&#x60; Event target from &quot;click&quot; selection within displayed Overlay&lt;&#x2F;li&gt;
+        *   &lt;li&gt;&#x60;menuItem&#x60; Menuitem object entry selected from &#x60;menuItems&#x60; array&lt;&#x2F;li&gt;
+        *   &lt;li&gt;&#x60;menuIndex&#x60; Index of current Menuitem object within the [menuItems](#attr_menuItems) attribute array&lt;&#x2F;li&gt;
+        *   &lt;&#x2F;ul&gt;
+	    *
+	    * @example
+	    *	&#x2F;&#x2F; If the &#x27;selectedMenu&#x27; was set to the 2nd item from the following menuItems setting ...
+	    *	myCmenu.set(&#x27;menuItems&#x27;,[ {label:&quot;Foo&quot;, value:100}, {label:&quot;Bar&quot;, value:105}, {label:&quot;Baz&quot;, value:200} ]);
+	    *	
+	    *	&#x2F;&#x2F; ... user clicks 2nd item,
+	    *	myCmenu.get(&#x27;selectedMenu&#x27;) 
+	    *	&#x2F;&#x2F; returns {evt:&#x27;event stuff object&#x27;, menuItem:{label:&quot;Bar&quot;, value:105}, menuIndex:1 }   
         *
         * @attribute selectedMenu
         * @type {Object} obj
-        * @param {EventTarget} obj.evt Event target from &quot;click&quot; selection within displayed Overlay
-        * @param {Object} obj.menuItem Menuitem object entry selected from &#x60;menuItems&#x60; array
+        * @readonly
         *&#x2F;
        selectedMenu: {
-           value: null
+           value: null,
+           readOnly: true
        }
    }
 });

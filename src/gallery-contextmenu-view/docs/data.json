@@ -3,29 +3,64 @@
     "files": {
         "js/contextmenu-view.js": {
             "name": "js/contextmenu-view.js",
-            "modules": {},
-            "classes": {},
+            "modules": {
+                "contextmenu": 1
+            },
+            "classes": {
+                "Y.ContextMenuView": 1
+            },
             "fors": {},
             "namespaces": {}
         }
     },
-    "modules": {},
-    "classes": {},
+    "modules": {
+        "contextmenu": {
+            "name": "contextmenu",
+            "submodules": {},
+            "classes": {
+                "Y.ContextMenuView": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "js/contextmenu-view.js",
+            "line": 1,
+            "description": "This module includes a Y.View class extension that attaches to an existing \"trigger\" Node and uses event delegation to listen\nfor \"contextmenu\" requests (i.e. right-click). When the context menu is invoked, a Y.Overlay object is rendered and displayed\nthat includes user-defined menu items that are related to the context where the menu was invoked.\n\nThis view utilizes several attributes and fires several events that users can listen to in order to take specific actions based\non the \"trigger target\" node.\n\nPlease refer to the [trigger](#attr_trigger) ATTRIBUTE for more description of the target.node and target.trigger.\n\n#####Usage\nTo configure a bare-bones basic contextmenu, you need to provide the `trigger` and `menuItems` attributes as;\n\n    var cmenu = new Y.ContextMenuView({\n       trigger: {\n           node:   Y.one(\".myExistingContainer\"),\n           target:  'li'\n       },\n       menuItems: [ \"Add\", \"Edit\", \"Delete\" ]\n   });\n\nThe `menuItems` can be simple entries or Objects, if they are Objects the \"label\" property will be used to fill the visible Menu (See [menuItems](#attr_menuItems)).\n\n#####Attributes / Events\nAn implementer is typically interested in listening to the following ATTRIBUTE \"change\" events;\n<ul>\n  <li>`selectedMenuChange` : which fires when a contextmenu choice is clicked (see [selectedMenu](#attr_selectedMenu))</li>\n  <li>`contextTargetChange`: which fires when the user \"right-clicks\" on the target.node (see [contextTarget](#attr_contextTarget))</li>\n</ul>\n\nAdditionally, see the [Events](#events) section for more information on available events.",
+            "is_constructor": 1
+        }
+    },
+    "classes": {
+        "Y.ContextMenuView": {
+            "name": "Y.ContextMenuView",
+            "shortname": "Y.ContextMenuView",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "contextmenu",
+            "namespace": "",
+            "file": "js/contextmenu-view.js",
+            "line": 1,
+            "description": "This module includes a Y.View class extension that attaches to an existing \"trigger\" Node and uses event delegation to listen\nfor \"contextmenu\" requests (i.e. right-click). When the context menu is invoked, a Y.Overlay object is rendered and displayed\nthat includes user-defined menu items that are related to the context where the menu was invoked.\n\nThis view utilizes several attributes and fires several events that users can listen to in order to take specific actions based\non the \"trigger target\" node.\n\nPlease refer to the [trigger](#attr_trigger) ATTRIBUTE for more description of the target.node and target.trigger.\n\n#####Usage\nTo configure a bare-bones basic contextmenu, you need to provide the `trigger` and `menuItems` attributes as;\n\n    var cmenu = new Y.ContextMenuView({\n       trigger: {\n           node:   Y.one(\".myExistingContainer\"),\n           target:  'li'\n       },\n       menuItems: [ \"Add\", \"Edit\", \"Delete\" ]\n   });\n\nThe `menuItems` can be simple entries or Objects, if they are Objects the \"label\" property will be used to fill the visible Menu (See [menuItems](#attr_menuItems)).\n\n#####Attributes / Events\nAn implementer is typically interested in listening to the following ATTRIBUTE \"change\" events;\n<ul>\n  <li>`selectedMenuChange` : which fires when a contextmenu choice is clicked (see [selectedMenu](#attr_selectedMenu))</li>\n  <li>`contextTargetChange`: which fires when the user \"right-clicks\" on the target.node (see [contextTarget](#attr_contextTarget))</li>\n</ul>\n\nAdditionally, see the [Events](#events) section for more information on available events."
+        }
+    },
     "classitems": [
         {
             "file": "js/contextmenu-view.js",
-            "line": 3,
+            "line": 39,
             "description": "Y.View's events static property, where we define a \"click\" listener on Nodes in the\ncontainer that are the MenuItem nodes.                    *",
             "itemtype": "property",
             "name": "events",
             "type": "{Object}",
             "access": "public",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 16,
+            "line": 52,
             "description": "Default HTML template for the container's content         *",
             "itemtype": "property",
             "name": "template",
@@ -33,11 +68,12 @@
             "default": "'<div class=\"yui3-contextmenu-overlay\"></div>'",
             "access": "public",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 25,
+            "line": 61,
             "description": "A placeholder to hold subscriber EventHandles so they can be destroyed properly",
             "itemtype": "property",
             "name": "_subscr",
@@ -45,11 +81,12 @@
             "default": "null",
             "access": "protected",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 36,
+            "line": 72,
             "description": "Sets an increment that the Overlay box will be positioned relative to the e.target \"x-coordinate\"",
             "itemtype": "property",
             "name": "_overlayDX",
@@ -57,11 +94,12 @@
             "default": "5",
             "access": "protected",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 45,
+            "line": 81,
             "description": "Sets an increment that the Overlay box will be positioned relative to the e.target \"y-coordinate\"",
             "itemtype": "property",
             "name": "_overlayDY",
@@ -69,31 +107,34 @@
             "default": "11",
             "access": "protected",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 54,
+            "line": 90,
             "description": "Initializer where we define initial handlers to invoke this view and to hide the Overlay",
             "itemtype": "method",
             "name": "initializer",
             "access": "protected",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 74,
+            "line": 110,
             "description": "Clean up listeners and destroys the Overlay",
             "itemtype": "method",
             "name": "destructor",
             "access": "protected",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 94,
+            "line": 130,
             "itemtype": "method",
             "name": "render",
             "access": "protected",
@@ -102,21 +143,23 @@
                 "description": "this"
             },
             "chainable": 1,
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 106,
+            "line": 142,
             "description": "Method that hides the Overlay for this contextmenu and fires the `contextMenuHide` event",
             "itemtype": "method",
             "name": "hideOverlay",
             "access": "public",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 118,
+            "line": 154,
             "description": "Default value setter for attribute `overlay`, creates a Y.Overlay widget to display the menu within",
             "itemtype": "method",
             "name": "_valOverlay",
@@ -126,11 +169,13 @@
             },
             "access": "private",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 158,
+            "line": 194,
+            "description": "Handler for right-click event (actually \"contextmenu\" event) on `trigger.node`.",
             "itemtype": "method",
             "name": "_onContextMenu",
             "params": [
@@ -142,36 +187,12 @@
             ],
             "access": "private",
             "tagname": "",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 185,
-            "description": "Process a \"click\" event on the Content Menu's Overlay menuItems",
-            "params": [
-                {
-                    "name": "e",
-                    "description": "",
-                    "type": "EventTarget"
-                }
-            ],
-            "access": "private",
-            "tagname": "",
-            "class": ""
-        },
-        {
-            "file": "js/contextmenu-view.js",
-            "line": 206,
-            "description": "Helper method to clear DOM \"selected\" text or ranges",
-            "itemtype": "method",
-            "name": "_clearDOMSelection",
-            "access": "private",
-            "tagname": "",
-            "class": ""
-        },
-        {
-            "file": "js/contextmenu-view.js",
-            "line": 218,
+            "line": 222,
             "description": "Fired after the \"contextmenu\" event is initiated and the Menu has been positioned and displayed",
             "itemtype": "event",
             "name": "contextMenuShow",
@@ -182,11 +203,46 @@
                     "type": "EventTarget"
                 }
             ],
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 224,
+            "line": 229,
+            "description": "Process a \"click\" event on the Content Menu's Overlay menuItems",
+            "itemtype": "method",
+            "name": "_selectMenuItem",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "EventTarget"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
+        },
+        {
+            "file": "js/contextmenu-view.js",
+            "line": 253,
+            "description": "Fires when a selection is \"clicked\" from within the pop-up menu \n(a better approach is to listen on attribute [selectedMenu](#attr_selectedMenu) for \"change\")",
+            "itemtype": "event",
+            "name": "select",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "EventTarget"
+                }
+            ],
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
+        },
+        {
+            "file": "js/contextmenu-view.js",
+            "line": 261,
             "description": "Fired after a Menu choice has been selected from the ContexMenu and the menu has been hidden",
             "itemtype": "event",
             "name": "contextMenuHide",
@@ -197,87 +253,105 @@
                     "type": "EventTarget"
                 }
             ],
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 233,
-            "description": "Container Node where the menu's Overlay will be rendered into",
+            "line": 267,
+            "description": "Helper method to clear DOM \"selected\" text or ranges",
+            "itemtype": "method",
+            "name": "_clearDOMSelection",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
+        },
+        {
+            "file": "js/contextmenu-view.js",
+            "line": 281,
+            "description": "Container Node where the menu's Overlay will be rendered into.  If not provided, the\ndefault will create a container from the [template](#property_template) setting.\n\nThis is usually only set when the user has a specific Overlay container design they\nwish to utilize.",
             "itemtype": "attribute",
             "name": "container",
             "type": "{Node}",
-            "class": ""
+            "default": "Y.Node.create(this.template)",
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 242,
-            "description": "Defines the container element for the \"contextmenu\" event listener to attach this menu to.",
+            "line": 296,
+            "description": "Defines the container element for the \"contextmenu\" event listener to attach this menu to.\n<br/><br/>This {Object} must contain the following;<br/>\n<ul>\n  <li>`node` {Node} the Node instance that will have a delegated \"contextmenu\" listener \n       attached to it</li>\n           <li>`target` {String} A CSS selector for the \"target\" sub-element (child of trigger.node) that will be used for the delegation and will be returned from attribute \"contextTarget\"</li>\n</ul>",
+            "example": [
+                "\n      // This will define the trigger node (to accept right-clicks) as a DataTable's THEAD\n      //  element and the target as the TH nodes.\n      trigger : {\n          node:   myDataTable.get('srcNode').one('thead .yui3-datatable-columns'),\n          target: \"th\"\n      }"
+            ],
             "itemtype": "attribute",
             "name": "trigger",
             "type": "{String} trigger.target Container filter selector to assign target from container event",
-            "default": "null",
-            "class": ""
+            "default": "{node:null, target:''}",
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 254,
-            "description": "Set to the returned target within the `trigger.node` container that the \"contextmenu\" event was initiated on\n(e.g. for a DataTable this may be a specific TR row within the table body).\n\nThis is not intended to be .set by the user, but is meant to be read by users.",
+            "line": 326,
+            "description": "Set to the returned target within the `trigger.node` container that the \"contextmenu\" event was initiated on\n(e.g. for a DataTable this may be a specific TR row within the table body).",
             "itemtype": "attribute",
             "name": "contextTarget",
             "type": "{Node}",
             "default": "null",
-            "class": ""
+            "readonly": "",
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 268,
+            "line": 340,
             "description": "Overrideable HTML template to use for creating each `menuItem` entry in Overlay.\nMust include \"data-cmenu\"",
             "itemtype": "attribute",
             "name": "menuItemTemplate",
             "type": "{String}",
             "default": "'<div class=\"{menuClass}\" data-cmenu=\"{menuIndex}\">{menuContent}</div>'",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 280,
-            "description": "Array of \"menu\" item {Objects} to add to the Menu.  Each item is an object, including the following;\n  content, dataValue",
+            "line": 352,
+            "description": "Array of \"menu\" items as either {Strings} or {Objects} to add to the Menu.  \n\nWhen {Objects} are included, as a minimum they must include a `label` property that contains the text to display in the menu.",
+            "example": [
+                "\n\tmenuItems: [ \"one\", \"two\", \"three\", \"four\" ]\n\tmenuItems: [ \"Insert\", \"Update\", {label:\"Delete\", confirm:true}, \"... More\" ]\n\tmenuItems: [ {label:\"Foo\", value:100}, {label:\"Bar\", value:105}, {label:\"Baz\", value:200} ]"
+            ],
             "itemtype": "attribute",
             "name": "menuItems",
             "type": "{Array}",
             "default": "[]",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 293,
-            "description": "Y.Overlay instance used to render the pop-up context menu within",
+            "line": 370,
+            "description": "Y.Overlay instance used to render the pop-up context menu within\n\n**Default:** See [_valOverlay](#method__valOverlay)",
             "itemtype": "attribute",
             "name": "overlay",
             "type": "Y.Overlay",
-            "default": "'_valOverlay'",
-            "class": ""
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         },
         {
             "file": "js/contextmenu-view.js",
-            "line": 306,
-            "description": "Set to the \"selected\" item from the pop-up Overlay menu when clicked by user, where this\nattribute is set to an object containing the EventTarget of the selection and the resulting\nmenuitem that that corresponds to.\n\nThis is not intended to be .set by the user, but is meant to be read by users.",
+            "line": 383,
+            "description": "Set to the \"selected\" item from the pop-up Overlay menu when clicked by user, where this\nattribute is set to an object containing the EventTarget of the selection and the resulting\nmenuitem and menuindex that corresponds to the selection.\n\nThis is set by the method [_selectMenuItem](#method__selectMenuItem).\n\nSet to an {Object} with the following properties;\n  <ul>\n  <li>`evt` Event target from \"click\" selection within displayed Overlay</li>\n  <li>`menuItem` Menuitem object entry selected from `menuItems` array</li>\n  <li>`menuIndex` Index of current Menuitem object within the [menuItems](#attr_menuItems) attribute array</li>\n  </ul>",
+            "example": [
+                "\n\t// If the 'selectedMenu' was set to the 2nd item from the following menuItems setting ...\n\tmyCmenu.set('menuItems',[ {label:\"Foo\", value:100}, {label:\"Bar\", value:105}, {label:\"Baz\", value:200} ]);\n\t\n\t// ... user clicks 2nd item,\n\tmyCmenu.get('selectedMenu') \n\t// returns {evt:'event stuff object', menuItem:{label:\"Bar\", value:105}, menuIndex:1 }   "
+            ],
             "itemtype": "attribute",
             "name": "selectedMenu",
             "type": "{Object} obj",
-            "params": [
-                {
-                    "name": "obj.evt",
-                    "description": "Event target from \"click\" selection within displayed Overlay",
-                    "type": "EventTarget"
-                },
-                {
-                    "name": "obj.menuItem",
-                    "description": "Menuitem object entry selected from `menuItems` array",
-                    "type": "Object"
-                }
-            ],
-            "class": ""
+            "readonly": "",
+            "class": "Y.ContextMenuView",
+            "module": "contextmenu"
         }
     ]
 }

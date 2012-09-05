@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Y.ContextMenuView</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.ContextMenuView.html">Y.ContextMenuView</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/contextmenu.html">contextmenu</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Y.ContextMenuView Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l1"><code>js&#x2F;contextmenu-view.js:1</code></a>
+        </div>
+    
+
+    
+        
+            Module: <a href="../modules/contextmenu.html">contextmenu</a>
+        
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>This module includes a Y.View class extension that attaches to an existing "trigger" Node and uses event delegation to listen
+for "contextmenu" requests (i.e. right-click). When the context menu is invoked, a Y.Overlay object is rendered and displayed
+that includes user-defined menu items that are related to the context where the menu was invoked.</p>
+
+<p>This view utilizes several attributes and fires several events that users can listen to in order to take specific actions based
+on the "trigger target" node.</p>
+
+<p>Please refer to the <a href="#attr_trigger">trigger</a> ATTRIBUTE for more description of the target.node and target.trigger.</p>
+
+<h5>Usage</h5>
+
+<p>To configure a bare-bones basic contextmenu, you need to provide the <code>trigger</code> and <code>menuItems</code> attributes as;</p>
+
+<pre class="code"><code class="prettyprint">var cmenu = new Y.ContextMenuView({
+   trigger: {
+       node:   Y.one(".myExistingContainer"),
+       target:  'li'
+   },
+   menuItems: [ "Add", "Edit", "Delete" ]
+</code></pre>
+
+<p>});</p>
+
+<p>The <code>menuItems</code> can be simple entries or Objects, if they are Objects the "label" property will be used to fill the visible Menu (See <a href="#attr_menuItems">menuItems</a>).</p>
+
+<h5>Attributes / Events</h5>
+
+<p>An implementer is typically interested in listening to the following ATTRIBUTE "change" events;</p>
+
+<ul>
+  <li><code>selectedMenuChange</code> : which fires when a contextmenu choice is clicked (see [selectedMenu](#attr_selectedMenu))</li>
+  <li><code>contextTargetChange</code>: which fires when the user "right-clicks" on the target.node (see [contextTarget](#attr_contextTarget))</li>
+</ul>
+
+<p>Additionally, see the <a href="#events">Events</a> section for more information on available events.</p>
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
+        
+        
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method private">
+                                <a href="#method__clearDOMSelection">_clearDOMSelection</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__onContextMenu">_onContextMenu</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__selectMenuItem">_selectMenuItem</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__valOverlay">_valOverlay</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_destructor">destructor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_hideOverlay">hideOverlay</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_initializer">initializer</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_render">render</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__overlayDX">_overlayDX</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__overlayDY">_overlayDY</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property protected">
+                                <a href="#property__subscr">_subscr</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property public">
+                                <a href="#property_events">events</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property public">
+                                <a href="#property_template">template</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section attrs">
+                    <h3>Attributes</h3>
+
+                    <ul class="index-list attrs">
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_container">container</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_contextTarget">contextTarget</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_menuItems">menuItems</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_menuItemTemplate">menuItemTemplate</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_overlay">overlay</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_selectedMenu">selectedMenu</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_trigger">trigger</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events">
+                        
+                            <li class="index-item event">
+                                <a href="#event_contextMenuHide">contextMenuHide</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_contextMenuShow">contextMenuShow</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_select">select</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__clearDOMSelection" class="method item private">
+    <h3 class="name"><code>_clearDOMSelection</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l267"><code>js&#x2F;contextmenu-view.js:267</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Helper method to clear DOM "selected" text or ranges</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__onContextMenu" class="method item private">
+    <h3 class="name"><code>_onContextMenu</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>e</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l194"><code>js&#x2F;contextmenu-view.js:194</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Handler for right-click event (actually "contextmenu" event) on <code>trigger.node</code>.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Y.Event target object created when "context" menu fires</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__selectMenuItem" class="method item private">
+    <h3 class="name"><code>_selectMenuItem</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>e</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l229"><code>js&#x2F;contextmenu-view.js:229</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Process a "click" event on the Content Menu's Overlay menuItems</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__valOverlay" class="method item private">
+    <h3 class="name"><code>_valOverlay</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Y.Overlay</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l154"><code>js&#x2F;contextmenu-view.js:154</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Default value setter for attribute <code>overlay</code>, creates a Y.Overlay widget to display the menu within</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Y.Overlay</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_destructor" class="method item protected">
+    <h3 class="name"><code>destructor</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l110"><code>js&#x2F;contextmenu-view.js:110</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Clean up listeners and destroys the Overlay</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_hideOverlay" class="method item public">
+    <h3 class="name"><code>hideOverlay</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l142"><code>js&#x2F;contextmenu-view.js:142</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that hides the Overlay for this contextmenu and fires the <code>contextMenuHide</code> event</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initializer" class="method item protected">
+    <h3 class="name"><code>initializer</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l90"><code>js&#x2F;contextmenu-view.js:90</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initializer where we define initial handlers to invoke this view and to hide the Overlay</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_render" class="method item protected">
+    <h3 class="name"><code>render</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l130"><code>js&#x2F;contextmenu-view.js:130</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    this
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__overlayDX" class="property item protected">
+    <h3 class="name"><code>_overlayDX</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l72"><code>js&#x2F;contextmenu-view.js:72</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets an increment that the Overlay box will be positioned relative to the e.target "x-coordinate"</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 5</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__overlayDY" class="property item protected">
+    <h3 class="name"><code>_overlayDY</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l81"><code>js&#x2F;contextmenu-view.js:81</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets an increment that the Overlay box will be positioned relative to the e.target "y-coordinate"</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 11</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__subscr" class="property item protected">
+    <h3 class="name"><code>_subscr</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l61"><code>js&#x2F;contextmenu-view.js:61</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A placeholder to hold subscriber EventHandles so they can be destroyed properly</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_events" class="property item public">
+    <h3 class="name"><code>events</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l39"><code>js&#x2F;contextmenu-view.js:39</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Y.View's events static property, where we define a "click" listener on Nodes in the
+container that are the MenuItem nodes.                    *</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_template" class="property item public">
+    <h3 class="name"><code>template</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l52"><code>js&#x2F;contextmenu-view.js:52</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Default HTML template for the container's content         *</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;&lt;div class=&quot;yui3-contextmenu-overlay&quot;&gt;&lt;&#x2F;div&gt;&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_container" class="attr item">
+    <a name="config_container"></a> 
+    <h3 class="name"><code>container</code></h3>
+    <span class="type">Node</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l281"><code>js&#x2F;contextmenu-view.js:281</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Container Node where the menu's Overlay will be rendered into.  If not provided, the
+default will create a container from the <a href="#property_template">template</a> setting.</p>
+
+<p>This is usually only set when the user has a specific Overlay container design they
+wish to utilize.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> Y.Node.create(this.template)</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_contextTarget" class="attr item">
+    <a name="config_contextTarget"></a> 
+    <h3 class="name"><code>contextTarget</code></h3>
+    <span class="type">Node</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l326"><code>js&#x2F;contextmenu-view.js:326</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set to the returned target within the <code>trigger.node</code> container that the "contextmenu" event was initiated on
+(e.g. for a DataTable this may be a specific TR row within the table body).</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_menuItems" class="attr item">
+    <a name="config_menuItems"></a> 
+    <h3 class="name"><code>menuItems</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l352"><code>js&#x2F;contextmenu-view.js:352</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Array of "menu" items as either {Strings} or {Objects} to add to the Menu.  </p>
+
+<p>When {Objects} are included, as a minimum they must include a <code>label</code> property that contains the text to display in the menu.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> []</p>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">menuItems: [ "one", "two", "three", "four" ]
+menuItems: [ "Insert", "Update", {label:"Delete", confirm:true}, "... More" ]
+menuItems: [ {label:"Foo", value:100}, {label:"Bar", value:105}, {label:"Baz", value:200} ]
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="attr_menuItemTemplate" class="attr item">
+    <a name="config_menuItemTemplate"></a> 
+    <h3 class="name"><code>menuItemTemplate</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l340"><code>js&#x2F;contextmenu-view.js:340</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Overrideable HTML template to use for creating each <code>menuItem</code> entry in Overlay.
+Must include "data-cmenu"</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;&lt;div class=&quot;{menuClass}&quot; data-cmenu=&quot;{menuIndex}&quot;&gt;{menuContent}&lt;&#x2F;div&gt;&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_overlay" class="attr item">
+    <a name="config_overlay"></a> 
+    <h3 class="name"><code>overlay</code></h3>
+    <span class="type">Y.Overlay</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l370"><code>js&#x2F;contextmenu-view.js:370</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Y.Overlay instance used to render the pop-up context menu within</p>
+
+<p><strong>Default:</strong> See <a href="#method__valOverlay">_valOverlay</a></p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_selectedMenu" class="attr item">
+    <a name="config_selectedMenu"></a> 
+    <h3 class="name"><code>selectedMenu</code></h3>
+    <span class="type">Object obj</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l383"><code>js&#x2F;contextmenu-view.js:383</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Set to the "selected" item from the pop-up Overlay menu when clicked by user, where this
+attribute is set to an object containing the EventTarget of the selection and the resulting
+menuitem and menuindex that corresponds to the selection.</p>
+
+<p>This is set by the method <a href="#method__selectMenuItem">_selectMenuItem</a>.</p>
+
+<p>Set to an {Object} with the following properties;
+  <ul>
+  <li><code>evt</code> Event target from "click" selection within displayed Overlay</li>
+  <li><code>menuItem</code> Menuitem object entry selected from <code>menuItems</code> array</li>
+  <li><code>menuIndex</code> Index of current Menuitem object within the <a href="#attr_menuItems">menuItems</a> attribute array</li>
+  </ul></p>
+    </div>
+
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">// If the 'selectedMenu' was set to the 2nd item from the following menuItems setting ...
+myCmenu.set('menuItems',[ {label:"Foo", value:100}, {label:"Bar", value:105}, {label:"Baz", value:200} ]);
+
+// ... user clicks 2nd item,
+myCmenu.get('selectedMenu') 
+// returns {evt:'event stuff object', menuItem:{label:"Bar", value:105}, menuIndex:1 }   
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="attr_trigger" class="attr item">
+    <a name="config_trigger"></a> 
+    <h3 class="name"><code>trigger</code></h3>
+    <span class="type">String trigger.target Container filter selector to assign target from container event</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l296"><code>js&#x2F;contextmenu-view.js:296</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Defines the container element for the "contextmenu" event listener to attach this menu to.
+<br/><br/>This {Object} must contain the following;<br/></p>
+
+<ul>
+  <li><code>node</code> {Node} the Node instance that will have a delegated "contextmenu" listener 
+       attached to it</li>
+           <li><code>target</code> {String} A CSS selector for the "target" sub-element (child of trigger.node) that will be used for the delegation and will be returned from attribute "contextTarget"</li>
+</ul>
+    </div>
+
+    
+        <p><strong>Default:</strong> {node:null, target:&#x27;&#x27;}</p>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">  // This will define the trigger node (to accept right-clicks) as a DataTable's THEAD
+  //  element and the target as the TH nodes.
+  trigger : {
+      node:   myDataTable.get('srcNode').one('thead .yui3-datatable-columns'),
+      target: "th"
+  }
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                
+                    <div id="event_contextMenuHide" class="events item">
+    <h3 class="name"><code>contextMenuHide</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l261"><code>js&#x2F;contextmenu-view.js:261</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fired after a Menu choice has been selected from the ContexMenu and the menu has been hidden</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_contextMenuShow" class="events item">
+    <h3 class="name"><code>contextMenuShow</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l222"><code>js&#x2F;contextmenu-view.js:222</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fired after the "contextmenu" event is initiated and the Menu has been positioned and displayed</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_select" class="events item">
+    <h3 class="name"><code>select</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_contextmenu-view.js.html#l253"><code>js&#x2F;contextmenu-view.js:253</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fires when a selection is "clicked" from within the pop-up menu 
+(a better approach is to listen on attribute <a href="#attr_selectedMenu">selectedMenu</a> for "change")</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+            </div>
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
