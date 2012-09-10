@@ -96,7 +96,7 @@
             "itemtype": "attribute",
             "name": "highlightMode",
             "type": "{String}",
-            "default": "'cell'",
+            "default": "null",
             "class": "Y.DataTable.Selection",
             "module": "DataTable",
             "submodule": "Selection"
@@ -106,9 +106,9 @@
             "line": 70,
             "description": "Set the current mode for indicating selections, either for a single TD (as \"cell\") or for a\nfull TR (as \"row\")",
             "itemtype": "attribute",
-            "name": "highlightMode",
+            "name": "selectionMode",
             "type": "{String}",
-            "default": "'cell'",
+            "default": "null",
             "class": "Y.DataTable.Selection",
             "module": "DataTable",
             "submodule": "Selection"

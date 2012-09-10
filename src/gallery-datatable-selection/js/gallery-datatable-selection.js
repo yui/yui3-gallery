@@ -56,7 +56,7 @@ DtSelection.ATTRS = {
      * full TR (as "row")
      * @attribute highlightMode
      * @type {String}
-     * @default 'cell'
+     * @default null
      */
     highlightMode:{
         value:      null,
@@ -71,9 +71,9 @@ DtSelection.ATTRS = {
      * Set the current mode for indicating selections, either for a single TD (as "cell") or for a
      * full TR (as "row")
      *
-     * @attribute highlightMode
+     * @attribute selectionMode
      * @type {String}
-     * @default 'cell'
+     * @default null
      */
     selectionMode:{
         value:      null,
