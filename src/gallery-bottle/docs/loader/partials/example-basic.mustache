@@ -1,0 +1,9 @@
+{{#unless noPage}}<div data-role="page">
+    <div data-role="container">
+     <div data-role="body">{{/unless}}
+{{>bottle-loader}}
+{{#unless noPage}}
+     </div>
+    </div>
+</div>
+{{/unless}}{{#if forTest}}{{>test-manual}}{{else}}{{>script-basic}}{{/if}}

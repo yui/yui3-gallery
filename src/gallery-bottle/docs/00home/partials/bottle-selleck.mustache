@@ -1,7 +1,7 @@
 <script>
-YUI().use({{{useParams}}}, function (Y) {
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     var enableBottle = function () {
-        Y.Bottle.init();
+        Y.Bottle.init(true);
 
         Y.one('.btn.menu').on('click', function (E) {
             Y.Bottle.ShortCut.getInstances()[0].show();

@@ -1,6 +1,6 @@
 var debug = location.href.match(/(#|:)debug/),
     YUI_config = {
-        gallery: 'gallery-2012.08.29-20-10',
+        gallery: 'gallery-2012.09.05-20-01',
         debug: debug,
         combine: debug ? false : true,
         filter: debug ? 'debug' : 'min',
@@ -10,6 +10,9 @@ var debug = location.href.match(/(#|:)debug/),
                 modules: {
                     'gallery-bt-device': {
                         path: 'gallery-bt-device/gallery-bt-device.js'
+                    },
+                    'gallery-bt-loader': {
+                        path: 'gallery-bt-loader/gallery-bt-loader.js'
                     },
                     'gallery-bt-container': {
                         path: 'gallery-bt-container/gallery-bt-container.js'

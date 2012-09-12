@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{yuiGridsUrl}}">
     <link rel="stylesheet" href="{{projectAssets}}/css/main.css">
     <link rel="stylesheet" href="{{projectAssets}}/css/bottle_doc.css">
+    <link rel="stylesheet" href="{{projectAssets}}/js/gallery-bottle/assets/skins/sam/gallery-bottle.css">
     <link rel="stylesheet" href="{{projectAssets}}/vendor/prettify/prettify-min.css">
 {{>device-metas}}
 </head>
@@ -25,6 +26,11 @@ if (location.href.match(/yahoo\.com/)) {
 </script>
       <li><a href="{{#if relUrl}}{{#if displayName}}..{{else}}.{{/if}}{{/if}}{{apiDocUrl}}" target="_blank">Api Documents</a></li>
       <li><a href="{{sourceUrl}}" target="_blank">Source</a></li>
+<script>
+if (location.href.match(/yahoo\.com/)) {
+    document.write('<li><a href="{{bugUrl}}" target="_blank">Report Bug</a></li>');
+}
+</script>
      </ul>
     </div>
     <h1>{{title}}</h1>
@@ -66,7 +72,7 @@ if (location.href.match(/yahoo\.com/)) {
                                 {{#components}}
                                   {{#meta}}
                                         <li data-description="{{description}}">
-                                            <a href="{{name}}/">{{displayName}}</a>
+                                            <a href="{{name}}/">{{displayName}}{{#unless galleryTag}} (testing){{/unless}}</a>
                                         </li>
                                   {{/meta}}
                                 {{/components}}
@@ -121,6 +127,9 @@ if (location.href.match(/yahoo\.com/)) {
              </div>
             </div>
         </div>
+    </div>
+    <div id="ft">
+{{projectName}} is Created by Brian Huang, Eric Chuang, John Wu, Montie Tsai and Zordius Chen, please visit <a href="contributers.html">this page</a> to know where to contact us.
     </div>
   </div>
  </div>

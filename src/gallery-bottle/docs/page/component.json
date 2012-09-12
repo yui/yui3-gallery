@@ -5,6 +5,7 @@
     "className": "Page",
     "parents": ["pushpop"],
     "dataRole": "page",
+    "galleryTag": "gallery-2012.09.05-20-01",
 
     "hideShortcut": true,
     "hideOverlay": true,

@@ -1,0 +1,67 @@
+{
+    "name"       : "loader",
+    "displayName": "Loader Widget",
+    "description": "is a Widget to help dynamic content loading process.",
+    "className": "Loader",
+    "parents": ["syncscroll"],
+    "dataRole": "loader",
+
+    "hidePage": true,
+    "hideShortcut": true,
+    "hideOverlay": true,
+    "showLoader": true,
+
+    "data-attrs": [
+        {
+            "name": "action-node",
+            "description": "Defines which nodes will be monitered. When these node be clicked, do loading task.",
+            "referAttr": "actionNode",
+            "default": "'a'"
+        },
+        {
+            "name": "action-attr",
+            "description": "Defines which attribute will be used to load new data when the node is clicked.",
+            "referAttr": "actionAttr",
+            "default": "'href'"
+        },
+        {
+            "name": "action",
+            "description": "Default action when data loaded, should be one of 'append', 'insert', 'refresh', 'replace'.",
+            "referAttr": "action",
+            "default": "'append'"
+        },
+        {
+            "name": "parser",
+            "description": "Default parser for ajax data, should be one of 'json', 'none', or a Function. If data can not be parsed, the ajax will be a 'failed' case.",
+            "referAttr": "parser",
+            "default": "'none'"
+        },
+        {
+            "name": "selector",
+            "description": "Default selector string for responsed data. For HTML data, this value should be css selector; For json data, this value should be something like data.hash.value (will return JSONData.data.hash.value). When set to '*', all ajax response will be selected. If can not select anything, the ajax will be a 'failed' case.",
+            "referAttr": "selector",
+            "default": "'*'"
+        }
+    ],
+
+    "examples": [
+        {
+            "name": "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name": "test-data-attr",
+            "layout": "example",
+            "loaderAttrs": " data-action-node=\"img\" data-action-attr=\"alt\" data-action=\"insert\" data-parser=\"json\" data-selector=\"data.msg\"",
+            "forTest": true
+        },
+        {
+            "name"       : "example-basic",
+            "displayName": "Basic Loader",
+            "description": "Demonstrates basic usage of the Loader Widget.",
+            "onlyInit": true,
+            "layout": "example"
+        }
+    ]
+}

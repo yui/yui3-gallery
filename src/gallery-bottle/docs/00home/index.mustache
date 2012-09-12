@@ -3,6 +3,9 @@
 
 {{>getting-started}}
 
+<h2>Auto Hide</h2>
+<p>If you like to hide browser url bar, you may use `Y.Bottle.init(true);` to initialize. This can help you to gain more client size.</p>
+
 <h2>Mobile Metas</h2>
 
 <p>You should add these meta inside head tags, to make sure mobile device render the page in correct zoom scale, and support iphone web application.</p>
@@ -36,10 +39,12 @@
 </ul>
 
 <h2>Live Examples</h2>
+<dl>
 {{#components}}
  {{#meta}}
 {{#unless noExamples}}
-<h3><a href="{{name}}/">{{displayName}}</a></h3>
+<dt><a href="{{name}}/">{{displayName}}</a></dt>
+<dd>
 <ul>
   {{#examples}}
    {{^forTest}}
@@ -51,6 +56,7 @@
    {{/forTest}}
   {{/examples}}
 </ul>
+</dd>
 {{/unless}}
  {{/meta}}
 {{/components}}

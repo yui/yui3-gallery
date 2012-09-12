@@ -28,6 +28,10 @@
     border-left:1px solid #ccc;
 }
 
+#ft {
+    border-top:3px double #ccc;
+}
+
 h3 {
     color:#c84;
 }
@@ -73,8 +77,21 @@ body.btInit {
     word-break:break-all;
 }
 
+.btInit [data-role=shortcut] {
+    position:absolute;
+}
+
 .btInit .sidebox {
     margin:5px 5px 0;
+}
+
+.btInit a {
+    display:inline-block;
+    font-size:20px;
+    padding:10px;
+    margin:2px;
+    background:#ffd;
+    border-radius:10px;
 }
 
 .btInit .btn.menu {

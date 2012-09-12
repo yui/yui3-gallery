@@ -45,7 +45,7 @@ var Mask = Y.one('.bt-shortcut-mask') || Y.one('body').appendChild(Y.Node.create
      * @uses WidgetPosition
      * @uses WidgetStack
      * @uses WidgetPositionAlign
-     * @uses PushPop
+     * @uses Bottle.PushPop
      * @constructor
      */
     ShortCut = Y.Base.create('btshortcut', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.WidgetPositionAlign, Y.Bottle.PushPop], {
@@ -87,8 +87,9 @@ var Mask = Y.one('.bt-shortcut-mask') || Y.one('body').appendChild(Y.Node.create
 
         renderUI: function () {
             var O = this.get('boundingBox'),
-                W = O.get('offsetWidth'),
-                H = O.get('offsetHeight');
+                P = this.get('contentBox'),
+                W = O.get('offsetWidth') || P.get('offsetWidth'),
+                H = O.get('offsetHeight') || P.get('offsetHeight');
 
             if (!this.get('height') && H) {
                 this.set('height', H);

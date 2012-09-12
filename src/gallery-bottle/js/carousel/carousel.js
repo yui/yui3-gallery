@@ -33,7 +33,7 @@ var WIDTH_CHANGE = 'widthChange',
  * @constructor
  * @namespace Bottle
  * @extends ScrollView
- * @uses Y.Bottle.SyncScroll
+ * @uses Bottle.SyncScroll
  * @uses Y.zui.Attribute
  * @param [config] {Object} Object literal with initial attribute values
  */

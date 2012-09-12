@@ -9,7 +9,7 @@
   {{>example-shortcut-innertext}}
  </div>
 <script>
-YUI().use({{{useParams}}}, function (Y) {
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     var overlaymenu, pushmenu, unveilmenu;
 
     Y.Bottle.init();

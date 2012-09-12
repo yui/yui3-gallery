@@ -64,6 +64,7 @@ var BOTTLE_INIT = 'btInit',
         initWidgets('[data-role=photogrid]', Y.Bottle.PhotoGrid);
         initWidgets('[data-role=carousel]', Y.Bottle.Carousel);
         initWidgets('[data-role=slidetab]', Y.Bottle.SlideTab);
+        initWidgets('[data-role=loader]', Y.Bottle.Loader);
 
         if (pageNode) {
             resetBodySize();
@@ -103,7 +104,7 @@ var BOTTLE_INIT = 'btInit',
             }
 
             if (overlayCurrent) {
-                overlayCurrent.scResize();
+                overlayCurrent.olResize();
             }
         }, false);
 

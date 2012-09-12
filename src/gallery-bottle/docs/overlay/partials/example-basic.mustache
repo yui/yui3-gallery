@@ -10,7 +10,7 @@
     </div>
 
 <script>
-YUI().use({{{useParams}}}, function (Y) {
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     var overlayNode = Y.one('#overlayMenu'),
         overlay;
 {{#if doPushPop}}

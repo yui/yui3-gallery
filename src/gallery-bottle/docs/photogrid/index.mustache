@@ -1,1 +1,11 @@
 {{>component-desc}}
+<h3>Rendering Process</h3>
+<p>When `Y.Bottle.init()` , `{{projectName}}` will create `{{displayName}}` then render it. In the mean time, the default Widget `render` event will be fired. But the rendering process of `{{displayName}}` still not finished. `{{displayName}}` will get required images and their metadata sequentially, decides best position of new grids. After all grids are rendered, `{{displayName}}` will fire `renderFinished` event.
+
+<p>Here is an example code to show rendered number of grids:</p>
+
+```
+photogridWidget.on('renderFinished', function (E) {
+    alert('Rendered grids:' + photogridWidget.get('contentBox').all('.bpg_module').size());
+});
+```

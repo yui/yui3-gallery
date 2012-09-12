@@ -4,6 +4,7 @@
     "className": "Container",
     "description": "extends from widget, which provides a scrollable block for all supported mobile device.",
     "dataRole": "container",
+    "galleryTag": "gallery-2012.09.05-20-01",
 
     "showContainer": true,
 

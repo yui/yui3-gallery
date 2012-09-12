@@ -21,7 +21,7 @@ var current,
  * @uses WidgetParent
  * @uses WidgetPosition
  * @uses WidgetStack
- * @uses PushPop
+ * @uses Bottle.PushPop
  * @param [config] {Object} Object literal with initial attribute values
  */
 Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.Bottle.PushPop], {

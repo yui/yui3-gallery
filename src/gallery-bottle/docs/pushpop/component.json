@@ -2,7 +2,8 @@
     "name"       : "pushpop",
     "displayName": "PushPop Widget",
     "description": "helps Page Widget and ShortCut Widget to do push/pop animations.",
-    "className"  : "WidgetPushPop",
+    "className"  : "PushPop",
+    "galleryTag": "gallery-2012.09.05-20-01",
 
     "data-attrs": [
         {

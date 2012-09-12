@@ -6,7 +6,7 @@
     </div>
 
 <script>
-YUI().use({{{useParams}}}, function (Y) {
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     var shortCutNode = Y.one('#shortcutMenu'),
         shortCut;
 {{#if doPushPop}}

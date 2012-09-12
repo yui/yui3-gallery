@@ -5,6 +5,7 @@
     "className": "ShortCut",
     "parents": ["pushpop"],
     "dataRole": "shortcut",
+    "galleryTag": "gallery-2012.09.05-20-01",
 
     "hidePage": true,
     "hideOverlay": true,

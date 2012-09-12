@@ -7,12 +7,9 @@ To include the source files for `{{projectName}}` and its dependencies, first lo
 ```
 {{>bottle-scripts}}
 ```
-
-<p>You may use nighty version, too. The nighty version is hosted on dropbox, which is most updated. But, sometimes buggy. </p>
-
-```
-{{>bottle-scripts-db}}
-```
+{{#unless examples}}
+<p>The YUI gallery CDN version of `{{projectName}}` is stable. If you want to try new features, you may need to use nighty versions, check <a href="versions.html">versions document</a>.
+</p>{{/unless}}
 
 <p>
 Next, create a new YUI instance for your application and populate it with the modules you need by specifying them as arguments to the `YUI().use()` method. YUI will automatically load any dependencies required by the modules you specify.
@@ -21,7 +18,7 @@ Next, create a new YUI instance for your application and populate it with the mo
 ```
 <script>
 // Create a new YUI instance and populate it with the required modules.
-YUI().use({{{useParams}}}, function (Y) {
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     Y.Bottle.init();{{#if displayName}}
     // {{displayName}} is available and ready for use. 
     // Add implementation code here.{{else}}
@@ -35,3 +32,8 @@ YUI().use({{{useParams}}}, function (Y) {
 Then, use correct <a href="{{#if displayName}}..{{else}}.{{/if}}/data-attribute.html">Data Roles and Data Attributes</a> in your HTML to enable `{{projectName}}`.
 </p>
 {{/unless}}
+
+<p>You also need to add default css inside head tags:</p>
+```
+{{>yui-css}}
+```

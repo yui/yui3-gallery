@@ -1,5 +1,5 @@
 <script>
-YUI().use({{{useParams}}}, function (Y) {
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     {{#unless onlyInit}}var srcNode, {{name}}Widget;
     {{/unless}}
     Y.Bottle.init();

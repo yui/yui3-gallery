@@ -1,6 +1,6 @@
 {{>bottle-page}}
 <script>
-YUI().use({{{useParams}}}, function (Y) {
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
 {{>example-clone}}
 
     Y.Bottle.init();
