@@ -1,0 +1,587 @@
+{
+    "project": {},
+    "files": {
+        "js/datatable-checkbox-select.js": {
+            "name": "js/datatable-checkbox-select.js",
+            "modules": {
+                "Selection": 1
+            },
+            "classes": {
+                "Y.DataTable.CheckboxSelect": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "DataTable": {
+            "name": "DataTable",
+            "submodules": {
+                "Selection": 1
+            },
+            "classes": {
+                "Y.DataTable.CheckboxSelect": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "file": "js/datatable-checkbox-select.js",
+            "line": 1
+        },
+        "Selection": {
+            "name": "Selection",
+            "submodules": {},
+            "classes": {
+                "Y.DataTable.CheckboxSelect": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "DataTable",
+            "namespace": "",
+            "file": "js/datatable-checkbox-select.js",
+            "line": 1,
+            "description": "A DataTable class extension that adds capability to provide a \"checkbox\" (INPUT[type=checkbox]) selection\ncapability via a new column, which includes \"select all\" checkbox in the TH.  The class uses only a few\ndefined attributes to add the capability.\n\nThis extension works with sorted data and with paginated DataTable (via Y.DataTable.Paginator), by retaining\na set of \"primary keys\" for the selected records.\n\nUsers define the \"primary keys\" by either setting a property flag of \"primaryKey:true\" in the DataTable\ncolumn configuration OR by setting the [primaryKeys](#attr_primaryKeys) attribute.\n\nTo enable the \"checkbox\" selection, set the attribute [checkboxSelectMode](#attr_checkboxSelectMode) to true,\nwhich will add a new column as the first column and sets listeners for checkbox selections.\n\nTo retrieve the \"checkbox\" selected records, the attribute [checkboxSelected](#attr_checkboxSelected) can be\nqueried to return an array of objects of selected records (See method [_getCheckboxSelected](#method__getCheckboxSelected))\nfor details.\n\n####Usage\n\t\tvar dtable = new Y.DataTable({\n\t\t    columns: \t['port','pname', 'ptitle'],\n\t\t    data: \t\tports,\n\t\t    scrollable: 'y',\n\t\t    height: \t'250px',\n\t\t\n\t\t// define two primary keys and enable checkbox selection mode ...\n\t\t    primaryKeys:\t\t[ 'port', 'pname' ],\n\t\t    checkboxSelectMode:\ttrue\n\t\t\n\t\t}).render(\"#dtable\");",
+            "extends": "Y.DataTable",
+            "author": "Todd Smith",
+            "version": "1.0.0",
+            "since": "3.6.0"
+        }
+    },
+    "classes": {
+        "Y.DataTable.CheckboxSelect": {
+            "name": "Y.DataTable.CheckboxSelect",
+            "shortname": "Y.DataTable.CheckboxSelect",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "DataTable",
+            "submodule": "Selection",
+            "namespace": "",
+            "file": "js/datatable-checkbox-select.js",
+            "line": 1,
+            "description": "A DataTable class extension that adds capability to provide a \"checkbox\" (INPUT[type=checkbox]) selection\ncapability via a new column, which includes \"select all\" checkbox in the TH.  The class uses only a few\ndefined attributes to add the capability.\n\nThis extension works with sorted data and with paginated DataTable (via Y.DataTable.Paginator), by retaining\na set of \"primary keys\" for the selected records.\n\nUsers define the \"primary keys\" by either setting a property flag of \"primaryKey:true\" in the DataTable\ncolumn configuration OR by setting the [primaryKeys](#attr_primaryKeys) attribute.\n\nTo enable the \"checkbox\" selection, set the attribute [checkboxSelectMode](#attr_checkboxSelectMode) to true,\nwhich will add a new column as the first column and sets listeners for checkbox selections.\n\nTo retrieve the \"checkbox\" selected records, the attribute [checkboxSelected](#attr_checkboxSelected) can be\nqueried to return an array of objects of selected records (See method [_getCheckboxSelected](#method__getCheckboxSelected))\nfor details.\n\n####Usage\n\t\tvar dtable = new Y.DataTable({\n\t\t    columns: \t['port','pname', 'ptitle'],\n\t\t    data: \t\tports,\n\t\t    scrollable: 'y',\n\t\t    height: \t'250px',\n\t\t\n\t\t// define two primary keys and enable checkbox selection mode ...\n\t\t    primaryKeys:\t\t[ 'port', 'pname' ],\n\t\t    checkboxSelectMode:\ttrue\n\t\t\n\t\t}).render(\"#dtable\");"
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 44,
+            "description": "Holder for the EventHandle for the \"select all\" INPUT[checkbox] click handler in the TH\n(set via delegate in _bindCheckboxSelect)",
+            "itemtype": "property",
+            "name": "_subscrChkAll",
+            "type": "Array",
+            "default": "null",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 55,
+            "description": "Holder for the EventHandle for the individual INPUT[checkbox]'s click handler within each TR\n(set via delegate in _bindCheckboxSelect)",
+            "itemtype": "property",
+            "name": "_subscrChk",
+            "type": "Array",
+            "default": "null",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 66,
+            "description": "Placeholder for the \"checkbox\" currently selected records, stored in 'primary key value' format.",
+            "itemtype": "property",
+            "name": "_chkRecords",
+            "type": "Array",
+            "default": "[]",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 76,
+            "description": "HTML template for creation of the TH column of the \"checkbox\" select column.",
+            "itemtype": "property",
+            "name": "tmplTH",
+            "type": "String",
+            "default": "'<input type=\"checkbox\" class=\"{className}\" title=\"{columnTitleTH}\"/>'",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 86,
+            "description": "Key name of the \"checkbox\" select column that is added to DataTable's column configurations",
+            "itemtype": "property",
+            "name": "colSelect",
+            "type": "String",
+            "default": "'chkSelect'",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 97,
+            "description": "Initializer, doesn't really do anything at this point ...",
+            "itemtype": "method",
+            "name": "initializer",
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 112,
+            "description": "Unbinds the checkbox listeners and detaches any others created",
+            "itemtype": "method",
+            "name": "destructor",
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 125,
+            "description": "Method that selects all \"checkboxes\" to checked, adds all records to the selected records and\nchecks the \"Select All\" checkbox.",
+            "itemtype": "method",
+            "name": "checkboxSelectAll",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 149,
+            "description": "Fires after the \"select all\" checkbox is clicked and all records are selected",
+            "itemtype": "event",
+            "name": "checkboxSetAll",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 154,
+            "description": "Method that resets all \"checkboxes\" to unchecked, zeros the selected records and\nunchecks the \"Select All\" checkbox.",
+            "itemtype": "method",
+            "name": "checkboxClearAll",
+            "access": "public",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 172,
+            "description": "Fires after the \"select all\" checkbox is clicked and all records are cleared",
+            "itemtype": "event",
+            "name": "checkboxclearAll",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 179,
+            "description": "Method that sets \"click\" events (via DataTable .delegate) on the INPUT[checkbox]'s for each \nrow TR and for the \"select all\" checkbox.",
+            "itemtype": "method",
+            "name": "_bindCheckboxSelect",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 190,
+            "description": "Method to detach all of the listeners created by this class",
+            "itemtype": "method",
+            "name": "_unbindCheckboxSelect",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 202,
+            "description": "Enables this class, by clearing the selected records, creating the UI elements and adding checkbox listeners.",
+            "itemtype": "method",
+            "name": "_enableCheckboxSelect",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 213,
+            "description": "Disables this class, by clearing all selectors and remove the UI element and detaching listeners",
+            "itemtype": "method",
+            "name": "_enableCheckboxSelect",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 224,
+            "description": "Setter method for attribute (checkboxSelectMode)[#attr_checkboxSelectMode] that toggles this extension on/off",
+            "itemtype": "method",
+            "name": "_setCheckboxSelectMode",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 238,
+            "description": "Getter method for [checkboxSelected](#attr_checkboxSelected) attribute, that returns the currently \"checkbox\" selected\nrows, returned as an array of {Object}s containing members {tr,record,pkvalues}.\n\t <br/><br/><b>Returns:</b> {Array} of {Objects} selected for each row as;\n\t <ul>\n\t <li>`selected.tr` : TR Node for the checkbox selected row</li>\n\t <li>`selected.record` : Model instance for the selected data record</li>\n\t <li>`selected.pkvalues` Primary key value settings for the selected record (single value or {Object} if more than one primary key is set)</li>\n\t </ul>",
+            "itemtype": "method",
+            "name": "_getCheckboxSelected",
+            "return": {
+                "description": "See above"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 266,
+            "description": "Setter method for [checkboxSelected](#attr_checkboxSelected) attribute, currently only supports on input an\nArray of record indices that should be initially \"checkbox\" selected.\n\nTODO:  Need to add initial selections as \"primary key\" values",
+            "itemtype": "method",
+            "name": "_setCheckboxSelected",
+            "params": [
+                {
+                    "name": "rows",
+                    "description": "Array of row indices to initially set as \"checked\"",
+                    "type": "Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 300,
+            "description": "Method that returns a boolean flag indicating whether the entered record represents\na record that is currently selected (i.e. in this._chkRecords).\n\nThis is principally used by the formatter function for the checkbox column.",
+            "itemtype": "method",
+            "name": "_getCheckboxSelectedFlag",
+            "params": [
+                {
+                    "name": "rec",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "selected Either \"true\" or \"false\" depending on whether the entered row is currently \"checked\"",
+                "type": "Boolean"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 324,
+            "description": "Click handler for the added in the checkbox select INPUT[checkbox]",
+            "itemtype": "method",
+            "name": "_onCheckboxSelect",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "EventTarget"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 351,
+            "description": "Click handler for the TH \"check ALL\" INPUT[checkbox]",
+            "itemtype": "method",
+            "name": "_onCheckboxSelectAll",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "EventTarget"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 368,
+            "description": "Adds a new Column with the TH element",
+            "itemtype": "method",
+            "name": "_uiAddCheckboxTH",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 403,
+            "description": "Removes the \"checkbox\" select column from the DataTable columns attribute",
+            "itemtype": "method",
+            "name": "_uiRemoveCheckboxTH",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 413,
+            "description": "Method that updates the UI on each record's INPUT[checkbox] and sets them to the entered setting (true,false).",
+            "itemtype": "method",
+            "name": "_uiCheckboxSetEach",
+            "params": [
+                {
+                    "name": "bool",
+                    "description": "Flag indicating whether checks should be set or not",
+                    "type": "Boolean"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 427,
+            "description": "Method that updates the UI on the \"select all\" INPUT[checkbox] and sets it to the entered setting (true,false).",
+            "itemtype": "method",
+            "name": "_uiCheckboxSetEach",
+            "params": [
+                {
+                    "name": "bool",
+                    "description": "Flag indicating whether the check should be set or not",
+                    "type": "Boolean"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 441,
+            "description": "Default value method for the (primaryKeys)[#attr_primaryKeys] attribute.  This method will search\nthe defined DataTable \"columns\" attribute array and loop over each column, if a column has a\nproperty \"primaryKey\" that column will be added as a primary key.",
+            "example": [
+                "\n       var cols = [ {key:'cust_id', label:'Cust ID', primaryKey:true},\n               {key:'ord_date', label:'Order Date'},\n               {key:'ord_id', label:'Order ID', primaryKey:true}\n               ....\n           ];\n       // will result in ATTR \"primaryKeys\" as [ 'cust_id', 'ord_id' ]"
+            ],
+            "itemtype": "method",
+            "name": "_valPrimaryKeys",
+            "return": {
+                "description": "",
+                "type": "Array"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 472,
+            "description": "Setter method for the the (primaryKeys)[#attr_primaryKeys] attribute, where the input values can be\neither (a) a single {String} column key name or (b) an {Array} of column key names in {String} format.\n\nNOTE: If this attribute is set, it will over-ride any \"primaryKey\" entries from the \"columns\".",
+            "itemtype": "method",
+            "name": "_setPrimaryKeys",
+            "params": [
+                {
+                    "name": "pkn",
+                    "description": "Column key (or column name) entries, either a single {String} name or an array of {Strings}",
+                    "type": "String|Array"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "*"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 494,
+            "description": "Returns the corresponding record (Model) for the entered primary key setting (pkv),\nwhere pkv can be either a single value or an object (for multiple primary keys).",
+            "itemtype": "method",
+            "name": "_getRecordforPKvalue",
+            "params": [
+                {
+                    "name": "pkv",
+                    "description": "Primary key setting to search ModelList for",
+                    "type": "Number|String|Date|Object"
+                }
+            ],
+            "return": {
+                "description": "record Returns the record (Model) that corresponds to the key setting in pkv",
+                "type": "Model"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 521,
+            "description": "Method that returns the primary key values for the provided record \"rec\", either as an\nindividual value (for a single primary key) or as an {Object} in key:value pairs where the\nkey is the primary key name and the value is the value from this record.",
+            "example": [
+                "\n       // For a record with rec = {cust_id:157, cust_name:'foo', odate:'9/12/2009', ord_no:987}\n       this._getPKValues(rec);  // for one primary key \"cust_id\"  RETURNS 157\n       this._getPKValues(rec);  // for primary keys \"cust_id\", \"ord_no\"  RETURNS {cust_id:157,ord_no:987}"
+            ],
+            "itemtype": "method",
+            "name": "_getPKValues",
+            "params": [
+                {
+                    "name": "rec",
+                    "description": "The record Model that the primary key values are requested for",
+                    "type": "Model"
+                }
+            ],
+            "return": {
+                "description": "pkv Returns the primary key values as a single value or an object key:value hash",
+                "type": "Mixed|Object"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 553,
+            "description": "Function that searches an Array of Objects, looking for a matching partial object as defined by key_vals {Object},\nand returning the index of the first match.",
+            "itemtype": "method",
+            "name": "_indexOfObjMatch",
+            "params": [
+                {
+                    "name": "arr",
+                    "description": ""
+                },
+                {
+                    "name": "key_vals",
+                    "description": ""
+                }
+            ],
+            "return": {
+                "description": "imatch Returned index number of first match, or -1 if none found",
+                "type": "Integer"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 583,
+            "description": "Attribute that is used to trigger \"checkbox\" selection mode, and inserting of a checkbox select\ncolumn to the current DataTable.",
+            "itemtype": "attribute",
+            "name": "checkboxSelectMode",
+            "type": "{Boolean}",
+            "default": "false",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 598,
+            "description": "Attribute that is used to retrieve the \"checkbox\" selected records from the DataTable at any time. \n\nAlso can be used to set initially \"checked\" records by entering an {Array} of record indices. (See method [_setCheckboxSelected](#method__setCheckboxSelected)).\n\n\nWhen a `get('checkboxSelected')` is requested, an {Array} of {Objects} containing members as \n{tr,record,pkvalues} is returned for each checked row. (See method [_getCheckboxSelected](#method__getCheckboxSelected)).",
+            "itemtype": "attribute",
+            "name": "checkboxSelected",
+            "type": "{Array}",
+            "default": "[]",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        },
+        {
+            "file": "js/datatable-checkbox-select.js",
+            "line": 618,
+            "description": "Attribute to set the \"primary keys\" for the DataTable that uniquely define the record (Model) attributes \nto use to search for specific records.  \n\nPrimary keys can be defined either with this attribute `primaryKeys` OR by placing an extra object property\nin the DataTable column configuration as \"primaryKey:true\".\n\nThis attribute is more useful in use cases where the primary key is not displayed in a column.",
+            "example": [
+                "\n\t // sets a single primary key to data field with key:'emp_id'\n\t myDT.set('primaryKeys','emp_id');       \t\t\n\t\t\n\t // sets dual primary keys to two data fields with key:'inventory_id' and key:'lot_id'\n\t myDT.set('primaryKeys',['inventory_id','lot_id']);  \n\t // OR\n\t var myDT = new Y.DataTable({\n\t \tcolumns: [ \n\t \t\t{key:'inventory_id', label:'Inventory Code', primaryKey:true},\n\t \t\t{key:'item_code', label:'Sales Item'},\n\t \t\t{key:'lot_id', label:'Lot Code', primaryKey:true},\n\t \t\t...\n\t });"
+            ],
+            "itemtype": "attribute",
+            "name": "primaryKeys",
+            "type": "{String|Array}",
+            "default": "See above",
+            "class": "Y.DataTable.CheckboxSelect",
+            "module": "DataTable",
+            "submodule": "Selection"
+        }
+    ]
+}

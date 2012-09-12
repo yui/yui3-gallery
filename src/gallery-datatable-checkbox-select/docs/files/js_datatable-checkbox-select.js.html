@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js&#x2F;datatable-checkbox-select.js</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.DataTable.CheckboxSelect.html">Y.DataTable.CheckboxSelect</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/DataTable.html">DataTable</a></li>
+            
+                <li><a href="..&#x2F;modules/Selection.html">Selection</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js&#x2F;datatable-checkbox-select.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+&#x2F;**
+A DataTable class extension that adds capability to provide a &quot;checkbox&quot; (INPUT[type=checkbox]) selection
+capability via a new column, which includes &quot;select all&quot; checkbox in the TH.  The class uses only a few
+defined attributes to add the capability.
+
+This extension works with sorted data and with paginated DataTable (via Y.DataTable.Paginator), by retaining
+a set of &quot;primary keys&quot; for the selected records.
+
+Users define the &quot;primary keys&quot; by either setting a property flag of &quot;primaryKey:true&quot; in the DataTable
+column configuration OR by setting the [primaryKeys](#attr_primaryKeys) attribute.
+
+To enable the &quot;checkbox&quot; selection, set the attribute [checkboxSelectMode](#attr_checkboxSelectMode) to true,
+which will add a new column as the first column and sets listeners for checkbox selections.
+
+To retrieve the &quot;checkbox&quot; selected records, the attribute [checkboxSelected](#attr_checkboxSelected) can be
+queried to return an array of objects of selected records (See method [_getCheckboxSelected](#method__getCheckboxSelected))
+for details.
+
+####Usage
+		var dtable = new Y.DataTable({
+		    columns: 	[&#x27;port&#x27;,&#x27;pname&#x27;, &#x27;ptitle&#x27;],
+		    data: 		ports,
+		    scrollable: &#x27;y&#x27;,
+		    height: 	&#x27;250px&#x27;,
+		
+		&#x2F;&#x2F; define two primary keys and enable checkbox selection mode ...
+		    primaryKeys:		[ &#x27;port&#x27;, &#x27;pname&#x27; ],
+		    checkboxSelectMode:	true
+		
+		}).render(&quot;#dtable&quot;);
+		
+ @module DataTable
+ @submodule Selection	
+ @class Y.DataTable.CheckboxSelect
+ @extends Y.DataTable
+ @author Todd Smith
+ @version 1.0.0
+ @since 3.6.0
+ **&#x2F;
+DtCheckboxSelect = function(){};
+
+Y.mix( DtCheckboxSelect.prototype, {
+
+    &#x2F;**
+     * Holder for the EventHandle for the &quot;select all&quot; INPUT[checkbox] click handler in the TH
+     * (set via delegate in _bindCheckboxSelect)
+     * @property _subscrChkAll
+     * @type Array
+     * @default null
+     * @private
+     *&#x2F;
+    _subscrChkAll: null,
+
+
+    &#x2F;**
+     * Holder for the EventHandle for the individual INPUT[checkbox]&#x27;s click handler within each TR
+     * (set via delegate in _bindCheckboxSelect)
+     * @property _subscrChk
+     * @type Array
+     * @default null
+     * @private
+     *&#x2F;
+    _subscrChk: null,
+
+
+    &#x2F;**
+     * Placeholder for the &quot;checkbox&quot; currently selected records, stored in &#x27;primary key value&#x27; format.
+     * @property _chkRecords
+     * @type Array
+     * @default []
+     * @private
+     *&#x2F;
+    _chkRecords: [],
+
+
+    &#x2F;**
+     * HTML template for creation of the TH column of the &quot;checkbox&quot; select column.
+     * @property tmplTH
+     * @type String
+     * @default &#x27;&lt;input type=&quot;checkbox&quot; class=&quot;{className}&quot; title=&quot;{columnTitleTH}&quot;&#x2F;&gt;&#x27;
+     * @public
+     *&#x2F;
+    tmplTH:     &#x27;&lt;input type=&quot;checkbox&quot; class=&quot;{className}&quot; title=&quot;{columnTitleTH}&quot;&#x2F;&gt;&#x27;,
+
+
+    &#x2F;**
+     * Key name of the &quot;checkbox&quot; select column that is added to DataTable&#x27;s column configurations
+     * @property colSelect
+     * @type String
+     * @default &#x27;chkSelect&#x27;
+     * @public
+     *&#x2F;
+    colSelect:  &#x27;chkSelect&#x27;,
+
+&#x2F;&#x2F;====================   LIFECYCLE METHODS   ============================
+
+    &#x2F;**
+     * Initializer, doesn&#x27;t really do anything at this point ...
+     * @method initializer
+     * @return {*}
+     * @protected
+     *&#x2F;
+    initializer: function(){
+
+        &#x2F;&#x2F; Currently, this doesn&#x27;t do much ... see _bindCheckboxSelect
+
+&#x2F;&#x2F;        if(this.get(&#x27;checkboxSelect&#x27;))
+&#x2F;&#x2F;        this._subscr.push( this.on(&#x27;sort&#x27;,this._afterSortEventChk) );
+        return this;
+    },
+
+    &#x2F;**
+     * Unbinds the checkbox listeners and detaches any others created
+     * @method destructor
+     * @protected
+     *&#x2F;
+    destructor:function(){
+        this._unbindCheckboxSelect();
+        this._chkRecords = null;
+    },
+
+
+&#x2F;&#x2F;====================   PUBLIC METHODS   ============================
+
+    &#x2F;**
+     Method that selects all &quot;checkboxes&quot; to checked, adds all records to the selected records and
+     checks the &quot;Select All&quot; checkbox.
+     @method checkboxSelectAll
+     @public
+     **&#x2F;
+    checkboxSelectAll: function(){
+
+        &#x2F;&#x2F; Reset and push all pk vals as selected
+        this._chkRecords = [];
+        this.data.each(function(r){
+            var pks = this._getPKValues(r);
+            if(pks) this._chkRecords.push(pks);
+        },this);
+
+        &#x2F;&#x2F; Update all of the the INPUTs
+        this._uiCheckboxSetEach(true);
+
+        &#x2F;&#x2F; Set the &quot;select all&quot; checkbox to checked ...
+        this._uiAllChecksSet(true);
+
+        this.fire(&#x27;checkboxSetAll&#x27;);
+    },
+
+    &#x2F;**
+     * Fires after the &quot;select all&quot; checkbox is clicked and all records are selected
+     * @event checkboxSetAll
+     *&#x2F;
+
+    &#x2F;**
+     Method that resets all &quot;checkboxes&quot; to unchecked, zeros the selected records and
+     unchecks the &quot;Select All&quot; checkbox.
+     @method checkboxClearAll
+     @public
+     **&#x2F;
+    checkboxClearAll: function() {
+        this._chkRecords = [];
+
+        &#x2F;&#x2F; turn off all individual checkboxes ...
+        this._uiCheckboxSetEach(false);
+
+        &#x2F;&#x2F; Set the &quot;select all&quot; checkbox to unchecked ...
+        this._uiAllChecksSet(false);
+
+        this.fire(&#x27;checkboxClearAll&#x27;);
+    },
+
+    &#x2F;**
+     * Fires after the &quot;select all&quot; checkbox is clicked and all records are cleared
+     * @event checkboxclearAll
+     *&#x2F;
+
+&#x2F;&#x2F;====================   PRIVATE METHODS   ============================
+
+	&#x2F;**
+	 Method that sets &quot;click&quot; events (via DataTable .delegate) on the INPUT[checkbox]&#x27;s for each 
+	 row TR and for the &quot;select all&quot; checkbox.
+	 @method _bindCheckboxSelect
+	 @private
+	 **&#x2F;
+    _bindCheckboxSelect: function(){
+        this._subscrChk = this.delegate(&quot;click&quot;,this._onCheckboxSelect,&quot;tr .&quot;+this.getClassName(&quot;checkbox&quot;,&quot;select&quot;),this);
+        this._subscrChkAll = this.delegate(&quot;click&quot;,this._onCheckboxSelectAll,&quot;.&quot;+this.getClassName(&quot;checkbox&quot;,&quot;select&quot;,&quot;all&quot;),this);
+    },
+
+	&#x2F;**
+	 Method to detach all of the listeners created by this class
+	 @method _unbindCheckboxSelect
+	 @private
+	 **&#x2F;
+    _unbindCheckboxSelect: function(){
+        if(this._subscrChk) this._subscrChk.detach();
+        this._subscrChk = null;
+        if(this._subscrChkAll) this._subscrChkAll.detach();
+        this._subscrChkAll = null;
+    },
+
+	&#x2F;**
+	 Enables this class, by clearing the selected records, creating the UI elements and adding checkbox listeners.
+	 @method _enableCheckboxSelect
+	 @private
+	 **&#x2F;
+    _enableCheckboxSelect: function(){
+        this._chkRecords = [];
+        this._uiAddCheckboxTH();
+        this._bindCheckboxSelect();
+    },
+
+	&#x2F;**
+	 Disables this class, by clearing all selectors and remove the UI element and detaching listeners
+	 @method _enableCheckboxSelect
+	 @private
+	 **&#x2F;
+    _disableCheckboxSelect: function(){
+        this.checkboxClearAll();
+        this._uiRemoveCheckboxTH();
+        this._unbindCheckboxSelect();
+    },
+
+	&#x2F;**
+	 Setter method for attribute (checkboxSelectMode)[#attr_checkboxSelectMode] that toggles this extension on&#x2F;off
+	 @method _setCheckboxSelectMode
+	 @private
+	 **&#x2F;
+    _setCheckboxSelectMode: function(val){
+        if(val) {
+            this._enableCheckboxSelect();
+        } else {
+            this._disableCheckboxSelect();
+        }
+    },
+
+
+    &#x2F;**
+     Getter method for [checkboxSelected](#attr_checkboxSelected) attribute, that returns the currently &quot;checkbox&quot; selected
+     rows, returned as an array of {Object}s containing members {tr,record,pkvalues}.
+	 &lt;br&#x2F;&gt;&lt;br&#x2F;&gt;&lt;b&gt;Returns:&lt;&#x2F;b&gt; {Array} of {Objects} selected for each row as;
+	 &lt;ul&gt;
+	 &lt;li&gt;&#x60;selected.tr&#x60; : TR Node for the checkbox selected row&lt;&#x2F;li&gt;
+	 &lt;li&gt;&#x60;selected.record&#x60; : Model instance for the selected data record&lt;&#x2F;li&gt;
+	 &lt;li&gt;&#x60;selected.pkvalues&#x60; Primary key value settings for the selected record (single value or {Object} if more than one primary key is set)&lt;&#x2F;li&gt;
+	 &lt;&#x2F;ul&gt;
+	 
+     @method _getCheckboxSelected
+     @return See above
+     @private
+     **&#x2F;
+    _getCheckboxSelected: function(){
+        var recs = [];
+        Y.Array.each( this._chkRecords, function(pk){
+            var rec = this._getRecordforPKvalue(pk);
+            recs.push({
+                tr:     this.getRow(rec),
+                record: rec,
+                pkvalues: pk
+            });
+        },this);
+
+        return recs;
+    },
+
+    &#x2F;**
+     Setter method for [checkboxSelected](#attr_checkboxSelected) attribute, currently only supports on input an
+     Array of record indices that should be initially &quot;checkbox&quot; selected.
+
+     TODO:  Need to add initial selections as &quot;primary key&quot; values
+
+     @method _setCheckboxSelected
+     @param {Array} rows Array of row indices to initially set as &quot;checked&quot;
+     @return {*}
+     @private
+     **&#x2F;
+    _setCheckboxSelected: function(rows){
+        if(!Y.Lang.isArray(rows)) return false;
+
+        this.checkboxClearAll();
+
+        var recs = [], tr, rec, pkv, inp;
+
+        Y.Array.each( rows, function(ri) {
+
+            rec = this.data.item(ri);
+            pkv = this._getPKValues(rec);
+            tr  = this.getRow(rec);
+
+            if(rec &amp;&amp; pkv) {
+                this._chkRecords.push( pkv );
+                inp = tr.one(&#x27;.&#x27;+this.getClassName(&quot;checkbox&quot;,&quot;select&quot;));
+                if (inp) inp.set(&#x27;checked&#x27;,true);
+            }
+        },this);
+
+        return rows;
+    },
+
+    &#x2F;**
+     Method that returns a boolean flag indicating whether the entered record represents
+     a record that is currently selected (i.e. in this._chkRecords).
+
+     This is principally used by the formatter function for the checkbox column.
+
+     @method _getCheckboxSelectedFlag
+     @param rec
+     @return {Boolean} selected Either &quot;true&quot; or &quot;false&quot; depending on whether the entered row is currently &quot;checked&quot;
+     @private
+     **&#x2F;
+    _getCheckboxSelectedFlag: function(rec) {
+        var pks = this._getPKValues(rec),
+            rtn = false;
+
+        if(Y.Lang.isObject(pks) )
+            rtn = this._indexOfObjMatch(this._chkRecords,pks);
+        else
+            rtn = Y.Array.indexOf(this._chkRecords,pks);
+
+        return (rtn !== -1) ? true : false;
+    },
+
+
+    &#x2F;**
+     Click handler for the added in the checkbox select INPUT[checkbox]
+     @method _onCheckboxSelect
+     @param {EventTarget} e
+     @private
+     **&#x2F;
+    _onCheckboxSelect: function(e){
+        var chkTar = e.target,                  &#x2F;&#x2F; the INPUT[checkbox] that triggered this
+            tr     = chkTar.ancestor(&#x27;tr&#x27;),     &#x2F;&#x2F; the clicked TR
+            rec    = this.getRecord(tr),        &#x2F;&#x2F; the Model corresponding to the clicked TR
+            pkv    = this._getPKValues(rec);    &#x2F;&#x2F; primary key value object, either an individual value or an object value
+
+        &#x2F;&#x2F; If this change makes it &quot;checked&quot;, then add the &quot;pkv&quot; to the _chkRecords array
+        if(e.target.get(&#x27;checked&#x27;)) {
+            this._chkRecords.push(pkv);
+        } else {
+        &#x2F;&#x2F; The user &quot;un-checked&quot; this record, remove it from _chkRecords ...
+
+            &#x2F;&#x2F; The wonky but works amazingly well method to remove one element!
+            var vals = [];
+            Y.Array.each(this._chkRecords,function(s){
+                if( s !== pkv ) vals.push(s);
+            });
+            this._chkRecords = vals;
+        }
+    },
+
+    &#x2F;**
+     Click handler for the TH &quot;check ALL&quot; INPUT[checkbox]
+     @method _onCheckboxSelectAll
+     @param {EventTarget} e
+     @private
+     **&#x2F;
+    _onCheckboxSelectAll: function(e){
+        var chkTar = e.target,
+            tr     = chkTar.ancestor(&#x27;tr&#x27;),
+            rec    = this.getRecord(tr);
+
+        if(e.target.get(&#x27;checked&#x27;))
+            this.checkboxSelectAll();
+        else
+            this.checkboxClearAll();
+    },
+
+    &#x2F;**
+     Adds a new Column with the TH element
+     @method _uiAddCheckboxTH
+     @private
+     **&#x2F;
+    _uiAddCheckboxTH: function(){
+
+        &#x2F;&#x2F; Define a new &quot;select&quot; column ....
+        var colSel = {
+            key:        this.colSelect,
+
+            allowHTML:  true,
+            label:      Y.Lang.sub( this.tmplTH,{
+                className:      this.getClassName(&quot;checkbox&quot;,&quot;select&quot;,&quot;all&quot;),
+                columnTitleTH:  &quot;Select ALL records&quot;
+            }),
+
+            formatter:  function(o) {
+                var chkd = ( this._getCheckboxSelectedFlag(o.record) ) ? &quot;checked&quot; : &quot;&quot;;
+                o.value = &#x27;&lt;input type=&quot;checkbox&quot; class=&quot;&#x27; + this.getClassName(&quot;checkbox&quot;,&quot;select&quot;) + &#x27;&quot; &#x27; + chkd + &#x27;&#x2F;&gt;&#x27;;
+                o.className += &#x27; center&#x27;;
+             }
+        };
+
+        &#x2F;&#x2F; Retrieve the columns, and add the new column at the first index location ...
+        var cols = this.get(&#x27;columns&#x27;);
+
+        &#x2F;&#x2F; only add this column if it is nonexistent in the column already ...
+        if(!this.getColumn(this.colSelect) ) {
+            this.addColumn(colSel,0);
+            this.syncUI();
+        }
+
+    },
+
+    &#x2F;**
+     Removes the &quot;checkbox&quot; select column from the DataTable columns attribute
+     @method _uiRemoveCheckboxTH
+     @private
+     **&#x2F;
+    _uiRemoveCheckboxTH: function(){
+        this.removeColumn(this.colSelect);
+        this.syncUI();
+    },
+
+    &#x2F;**
+     Method that updates the UI on each record&#x27;s INPUT[checkbox] and sets them to the entered setting (true,false).
+     @method _uiCheckboxSetEach
+     @param {Boolean} bool Flag indicating whether checks should be set or not
+     @private
+     **&#x2F;
+    _uiCheckboxSetEach: function(bool){
+        var inps = this.get(&#x27;srcNode&#x27;).all(&quot;.&quot;+this.getClassName(&quot;data&quot;) + &quot; .&quot;+this.getClassName(&quot;checkbox&quot;,&quot;select&quot;));
+        inps.each(function(n){
+            n.set(&#x27;checked&#x27;,bool);
+        });
+
+    },
+
+    &#x2F;**
+     Method that updates the UI on the &quot;select all&quot; INPUT[checkbox] and sets it to the entered setting (true,false).
+     @method _uiCheckboxSetEach
+     @param {Boolean} bool Flag indicating whether the check should be set or not
+     @private
+     **&#x2F;
+    _uiAllChecksSet: function(bool){
+        var sa = this.get(&#x27;srcNode&#x27;).one(&quot;.&quot;+this.getClassName(&quot;checkbox&quot;,&quot;select&quot;,&quot;all&quot;));
+        if (sa) sa.set(&#x27;checked&#x27;,bool);
+    },
+
+
+&#x2F;&#x2F;------------   Primary Key functions  --------------
+
+    &#x2F;**
+     Default value method for the (primaryKeys)[#attr_primaryKeys] attribute.  This method will search
+     the defined DataTable &quot;columns&quot; attribute array and loop over each column, if a column has a
+     property &quot;primaryKey&quot; that column will be added as a primary key.
+     @example
+            var cols = [ {key:&#x27;cust_id&#x27;, label:&#x27;Cust ID&#x27;, primaryKey:true},
+                    {key:&#x27;ord_date&#x27;, label:&#x27;Order Date&#x27;},
+                    {key:&#x27;ord_id&#x27;, label:&#x27;Order ID&#x27;, primaryKey:true}
+                    ....
+                ];
+            &#x2F;&#x2F; will result in ATTR &quot;primaryKeys&quot; as [ &#x27;cust_id&#x27;, &#x27;ord_id&#x27; ]
+
+     @method _valPrimaryKeys
+     @return {Array}
+     @private
+     **&#x2F;
+    _valPrimaryKeys: function(){
+        var cols = this.get(&#x27;columns&#x27;),
+            pks = [];
+
+        Y.Array.each(cols,function(c){
+            if( c &amp;&amp; c.primaryKey &amp;&amp; c.primaryKey === true) {
+                var ckey = c.key || c.name || null;
+                if(ckey) {
+                    pks.push(ckey);
+                }
+            }
+        });
+        return pks;
+    },
+
+    &#x2F;**
+     Setter method for the the (primaryKeys)[#attr_primaryKeys] attribute, where the input values can be
+     either (a) a single {String} column key name or (b) an {Array} of column key names in {String} format.
+
+     NOTE: If this attribute is set, it will over-ride any &quot;primaryKey&quot; entries from the &quot;columns&quot;.
+
+     @method _setPrimaryKeys
+     @param {String|Array} pkn Column key (or column name) entries, either a single {String} name or an array of {Strings}
+     @return {*}
+     @private
+     **&#x2F;
+    _setPrimaryKeys: function(pkn){
+
+        if (Y.Lang.isArray(pkn))
+            pks = pkn;
+        else if (Y.Lang.isString(pkn))
+            pks = [ pkn ];
+
+        return pks;
+    },
+
+
+    &#x2F;**
+     Returns the corresponding record (Model) for the entered primary key setting (pkv),
+     where pkv can be either a single value or an object (for multiple primary keys).
+
+     @method _getRecordforPKvalue
+     @param {Number|String|Date|Object} pkv Primary key setting to search ModelList for
+     @return {Model} record Returns the record (Model) that corresponds to the key setting in pkv
+     @private
+     **&#x2F;
+    _getRecordforPKvalue: function(pkv){
+        var pkeys = this.get(&#x27;primaryKeys&#x27;);
+        var recs = this.data.filter(function(r){
+            if(Y.Lang.isObject(pkv)) {
+                var flag = true;
+                Y.Object.each(pkv,function(v,k){
+                    if(r.get(k)!== v) flag = false;
+                });
+                if(flag)
+                    return true;
+            } else {
+                if(r.get(pkeys[0]) === pkv )
+                    return true;
+            }
+        });
+        return (recs &amp;&amp; recs.length===1)  ? recs[0] : recs;
+    },
+
+    &#x2F;**
+     Method that returns the primary key values for the provided record &quot;rec&quot;, either as an
+     individual value (for a single primary key) or as an {Object} in key:value pairs where the
+     key is the primary key name and the value is the value from this record.
+
+     @example
+            &#x2F;&#x2F; For a record with rec = {cust_id:157, cust_name:&#x27;foo&#x27;, odate:&#x27;9&#x2F;12&#x2F;2009&#x27;, ord_no:987}
+            this._getPKValues(rec);  &#x2F;&#x2F; for one primary key &quot;cust_id&quot;  RETURNS 157
+            this._getPKValues(rec);  &#x2F;&#x2F; for primary keys &quot;cust_id&quot;, &quot;ord_no&quot;  RETURNS {cust_id:157,ord_no:987}
+
+     @method _getPKValues
+     @param {Model} rec The record Model that the primary key values are requested for
+     @return {Mixed|Object} pkv Returns the primary key values as a single value or an object key:value hash
+     @private
+     **&#x2F;
+    _getPKValues: function(rec){
+        var pkeys = this.get(&#x27;primaryKeys&#x27;);
+        if(!pkeys || !Y.Lang.isArray(pkeys) || !rec) return false;
+
+        var rtn;
+        if( pkeys.length === 1)
+            rtn = rec.get(pkeys[0]);
+        else {
+            rtn = {};
+            Y.Array.each(pkeys,function(pk){
+                if( pk ) rtn[pk] = rec.get(pk);
+            });
+        }
+        return rtn;
+    },
+
+
+    &#x2F;**
+     Function that searches an Array of Objects, looking for a matching partial object as defined by key_vals {Object},
+     and returning the index of the first match.
+     @method _indexOfObjMatch
+     @param arr
+     @param key_vals
+     @return {Integer} imatch Returned index number of first match, or -1 if none found
+     @private
+     **&#x2F;
+    _indexOfObjMatch: function(arr,key_vals) {
+        if(!Y.Lang.isObject(key_vals) || !Y.Lang.isArray(arr) ) return -1;
+        var imatch = -1;
+        Y.Array.some(arr,function(item,index){
+            var bool = true;
+            Y.Object.each(key_vals,function(v,k){
+                if(item[k] !== v) bool = false;
+            });
+            if (bool) {
+                imatch = index;
+                return true;
+            }
+        });
+
+        return imatch;
+    }
+
+});
+
+DtCheckboxSelect.ATTRS = {
+
+    &#x2F;**
+     Attribute that is used to trigger &quot;checkbox&quot; selection mode, and inserting of a checkbox select
+     column to the current DataTable.
+
+     @attribute checkboxSelectMode
+     @type {Boolean}
+     @default false
+     **&#x2F;
+    checkboxSelectMode: {
+        value:      false,
+        validator:  Y.Lang.isBoolean,
+        setter:     &#x27;_setCheckboxSelectMode&#x27;
+    },
+
+
+    &#x2F;**
+     Attribute that is used to retrieve the &quot;checkbox&quot; selected records from the DataTable at any time. 
+     
+     Also can be used to set initially &quot;checked&quot; records by entering an {Array} of record indices. (See method [_setCheckboxSelected](#method__setCheckboxSelected)).
+
+     
+     When a &#x60;get(&#x27;checkboxSelected&#x27;)&#x60; is requested, an {Array} of {Objects} containing members as 
+     {tr,record,pkvalues} is returned for each checked row. (See method [_getCheckboxSelected](#method__getCheckboxSelected)).
+
+     @attribute checkboxSelected
+     @type {Array}
+     @default []
+     **&#x2F;
+    checkboxSelected: {
+        value:      [],
+        validator:  Y.Lang.isArray,
+        setter:     &#x27;_setCheckboxSelected&#x27;,
+        getter:     &#x27;_getCheckboxSelected&#x27;
+    },
+
+    &#x2F;**
+     Attribute to set the &quot;primary keys&quot; for the DataTable that uniquely define the record (Model) attributes 
+     to use to search for specific records.  
+     
+     Primary keys can be defined either with this attribute &#x60;primaryKeys&#x60; OR by placing an extra object property
+     in the DataTable column configuration as &quot;primaryKey:true&quot;.
+     
+     This attribute is more useful in use cases where the primary key is not displayed in a column.
+     
+     @example
+	 &#x2F;&#x2F; sets a single primary key to data field with key:&#x27;emp_id&#x27;
+	 myDT.set(&#x27;primaryKeys&#x27;,&#x27;emp_id&#x27;);       		
+		
+	 &#x2F;&#x2F; sets dual primary keys to two data fields with key:&#x27;inventory_id&#x27; and key:&#x27;lot_id&#x27;
+	 myDT.set(&#x27;primaryKeys&#x27;,[&#x27;inventory_id&#x27;,&#x27;lot_id&#x27;]);  
+	 &#x2F;&#x2F; OR
+	 var myDT = new Y.DataTable({
+	 	columns: [ 
+	 		{key:&#x27;inventory_id&#x27;, label:&#x27;Inventory Code&#x27;, primaryKey:true},
+	 		{key:&#x27;item_code&#x27;, label:&#x27;Sales Item&#x27;},
+	 		{key:&#x27;lot_id&#x27;, label:&#x27;Lot Code&#x27;, primaryKey:true},
+	 		...
+	 });
+     		
+     @attribute primaryKeys
+     @type {String|Array}
+     @default See above
+     **&#x2F;
+    primaryKeys: {
+        valueFn:    &#x27;_valPrimaryKeys&#x27;,
+        setter:     &#x27;_setPrimaryKeys&#x27;
+    }
+
+};
+
+Y.DataTable.CheckboxSelect = DtCheckboxSelect;
+Y.Base.mix(Y.DataTable, [Y.DataTable.CheckboxSelect]);
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
