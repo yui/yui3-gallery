@@ -1,0 +1,2833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Y.DataTable.CheckboxSelect</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.DataTable.CheckboxSelect.html">Y.DataTable.CheckboxSelect</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="..&#x2F;modules/DataTable.html">DataTable</a></li>
+            
+                <li><a href="..&#x2F;modules/Selection.html">Selection</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Y.DataTable.CheckboxSelect Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l1"><code>js&#x2F;datatable-checkbox-select.js:1</code></a>
+        </div>
+    
+
+    
+        
+            Module: <a href="../modules/Selection.html">Selection</a><br>
+            Parent Module: <a href="../modules/DataTable.html">DataTable</a>
+        
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>A DataTable class extension that adds capability to provide a "checkbox" (INPUT[type=checkbox]) selection
+capability via a new column, which includes "select all" checkbox in the TH.  The class uses only a few
+defined attributes to add the capability.</p>
+
+<p>This extension works with sorted data and with paginated DataTable (via Y.DataTable.Paginator), by retaining
+a set of "primary keys" for the selected records.</p>
+
+<p>Users define the "primary keys" by either setting a property flag of "primaryKey:true" in the DataTable
+column configuration OR by setting the <a href="#attr_primaryKeys">primaryKeys</a> attribute.</p>
+
+<p>To enable the "checkbox" selection, set the attribute <a href="#attr_checkboxSelectMode">checkboxSelectMode</a> to true,
+which will add a new column as the first column and sets listeners for checkbox selections.</p>
+
+<p>To retrieve the "checkbox" selected records, the attribute <a href="#attr_checkboxSelected">checkboxSelected</a> can be
+queried to return an array of objects of selected records (See method <a href="#method__getCheckboxSelected">_getCheckboxSelected</a>)
+for details.</p>
+
+<h4>Usage</h4>
+
+<pre class="code"><code class="prettyprint">    var dtable = new Y.DataTable({
+        columns:    ['port','pname', 'ptitle'],
+        data:       ports,
+        scrollable: 'y',
+        height:     '250px',
+
+    // define two primary keys and enable checkbox selection mode ...
+        primaryKeys:        [ 'port', 'pname' ],
+        checkboxSelectMode: true
+
+    }).render("#dtable");
+</code></pre>
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
+        
+        
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method private">
+                                <a href="#method__bindCheckboxSelect">_bindCheckboxSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__enableCheckboxSelect">_enableCheckboxSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__enableCheckboxSelect">_enableCheckboxSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__getCheckboxSelected">_getCheckboxSelected</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__getCheckboxSelectedFlag">_getCheckboxSelectedFlag</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__getPKValues">_getPKValues</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__getRecordforPKvalue">_getRecordforPKvalue</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__indexOfObjMatch">_indexOfObjMatch</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__onCheckboxSelect">_onCheckboxSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__onCheckboxSelectAll">_onCheckboxSelectAll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__setCheckboxSelected">_setCheckboxSelected</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__setCheckboxSelectMode">_setCheckboxSelectMode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__setPrimaryKeys">_setPrimaryKeys</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__uiAddCheckboxTH">_uiAddCheckboxTH</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__uiCheckboxSetEach">_uiCheckboxSetEach</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__uiCheckboxSetEach">_uiCheckboxSetEach</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__uiRemoveCheckboxTH">_uiRemoveCheckboxTH</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__unbindCheckboxSelect">_unbindCheckboxSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__valPrimaryKeys">_valPrimaryKeys</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_checkboxClearAll">checkboxClearAll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method public">
+                                <a href="#method_checkboxSelectAll">checkboxSelectAll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_destructor">destructor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_initializer">initializer</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property private">
+                                <a href="#property__chkRecords">_chkRecords</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__subscrChk">_subscrChk</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__subscrChkAll">_subscrChkAll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property public">
+                                <a href="#property_colSelect">colSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property public">
+                                <a href="#property_tmplTH">tmplTH</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section attrs">
+                    <h3>Attributes</h3>
+
+                    <ul class="index-list attrs">
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_checkboxSelected">checkboxSelected</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_checkboxSelectMode">checkboxSelectMode</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_primaryKeys">primaryKeys</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events">
+                        
+                            <li class="index-item event">
+                                <a href="#event_checkboxclearAll">checkboxclearAll</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_checkboxSetAll">checkboxSetAll</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__bindCheckboxSelect" class="method item private">
+    <h3 class="name"><code>_bindCheckboxSelect</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l179"><code>js&#x2F;datatable-checkbox-select.js:179</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that sets "click" events (via DataTable .delegate) on the INPUT[checkbox]'s for each 
+row TR and for the "select all" checkbox.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__enableCheckboxSelect" class="method item private">
+    <h3 class="name"><code>_enableCheckboxSelect</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l202"><code>js&#x2F;datatable-checkbox-select.js:202</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Enables this class, by clearing the selected records, creating the UI elements and adding checkbox listeners.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__enableCheckboxSelect" class="method item private">
+    <h3 class="name"><code>_enableCheckboxSelect</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l213"><code>js&#x2F;datatable-checkbox-select.js:213</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Disables this class, by clearing all selectors and remove the UI element and detaching listeners</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__getCheckboxSelected" class="method item private">
+    <h3 class="name"><code>_getCheckboxSelected</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l238"><code>js&#x2F;datatable-checkbox-select.js:238</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Getter method for <a href="#attr_checkboxSelected">checkboxSelected</a> attribute, that returns the currently "checkbox" selected
+rows, returned as an array of {Object}s containing members {tr,record,pkvalues}.
+     <br/><br/><b>Returns:</b> {Array} of {Objects} selected for each row as;
+     <ul>
+     <li><code>selected.tr</code> : TR Node for the checkbox selected row</li>
+     <li><code>selected.record</code> : Model instance for the selected data record</li>
+     <li><code>selected.pkvalues</code> Primary key value settings for the selected record (single value or {Object} if more than one primary key is set)</li>
+     </ul></p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    See above
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__getCheckboxSelectedFlag" class="method item private">
+    <h3 class="name"><code>_getCheckboxSelectedFlag</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>rec</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l300"><code>js&#x2F;datatable-checkbox-select.js:300</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that returns a boolean flag indicating whether the entered record represents
+a record that is currently selected (i.e. in this._chkRecords).</p>
+
+<p>This is principally used by the formatter function for the checkbox column.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">rec</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    selected Either "true" or "false" depending on whether the entered row is currently "checked"
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__getPKValues" class="method item private">
+    <h3 class="name"><code>_getPKValues</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>rec</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Mixed | Object</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l521"><code>js&#x2F;datatable-checkbox-select.js:521</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that returns the primary key values for the provided record "rec", either as an
+individual value (for a single primary key) or as an {Object} in key:value pairs where the
+key is the primary key name and the value is the value from this record.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">rec</code>
+                        <span class="type">Model</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The record Model that the primary key values are requested for</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Mixed | Object</span>:
+                    
+                    pkv Returns the primary key values as a single value or an object key:value hash
+                
+            </div>
+        </div>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">   // For a record with rec = {cust_id:157, cust_name:'foo', odate:'9/12/2009', ord_no:987}
+   this._getPKValues(rec);  // for one primary key "cust_id"  RETURNS 157
+   this._getPKValues(rec);  // for primary keys "cust_id", "ord_no"  RETURNS {cust_id:157,ord_no:987}
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method__getRecordforPKvalue" class="method item private">
+    <h3 class="name"><code>_getRecordforPKvalue</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>pkv</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Model</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l494"><code>js&#x2F;datatable-checkbox-select.js:494</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Returns the corresponding record (Model) for the entered primary key setting (pkv),
+where pkv can be either a single value or an object (for multiple primary keys).</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">pkv</code>
+                        <span class="type">Number | String | Date | Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Primary key setting to search ModelList for</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Model</span>:
+                    
+                    record Returns the record (Model) that corresponds to the key setting in pkv
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__indexOfObjMatch" class="method item private">
+    <h3 class="name"><code>_indexOfObjMatch</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>arr</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>key_vals</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Integer</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l553"><code>js&#x2F;datatable-checkbox-select.js:553</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Function that searches an Array of Objects, looking for a matching partial object as defined by key_vals {Object},
+and returning the index of the first match.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">arr</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">key_vals</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Integer</span>:
+                    
+                    imatch Returned index number of first match, or -1 if none found
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__onCheckboxSelect" class="method item private">
+    <h3 class="name"><code>_onCheckboxSelect</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>e</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l324"><code>js&#x2F;datatable-checkbox-select.js:324</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Click handler for the added in the checkbox select INPUT[checkbox]</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__onCheckboxSelectAll" class="method item private">
+    <h3 class="name"><code>_onCheckboxSelectAll</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>e</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l351"><code>js&#x2F;datatable-checkbox-select.js:351</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Click handler for the TH "check ALL" INPUT[checkbox]</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__setCheckboxSelected" class="method item private">
+    <h3 class="name"><code>_setCheckboxSelected</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>rows</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l266"><code>js&#x2F;datatable-checkbox-select.js:266</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Setter method for <a href="#attr_checkboxSelected">checkboxSelected</a> attribute, currently only supports on input an
+Array of record indices that should be initially "checkbox" selected.</p>
+
+<p>TODO:  Need to add initial selections as "primary key" values</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">rows</code>
+                        <span class="type">Array</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Array of row indices to initially set as "checked"</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__setCheckboxSelectMode" class="method item private">
+    <h3 class="name"><code>_setCheckboxSelectMode</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l224"><code>js&#x2F;datatable-checkbox-select.js:224</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Setter method for attribute (checkboxSelectMode)[#attr_checkboxSelectMode] that toggles this extension on/off</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__setPrimaryKeys" class="method item private">
+    <h3 class="name"><code>_setPrimaryKeys</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>pkn</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l472"><code>js&#x2F;datatable-checkbox-select.js:472</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Setter method for the the (primaryKeys)[#attr_primaryKeys] attribute, where the input values can be
+either (a) a single {String} column key name or (b) an {Array} of column key names in {String} format.</p>
+
+<p>NOTE: If this attribute is set, it will over-ride any "primaryKey" entries from the "columns".</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">pkn</code>
+                        <span class="type">String | Array</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Column key (or column name) entries, either a single {String} name or an array of {Strings}</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method__uiAddCheckboxTH" class="method item private">
+    <h3 class="name"><code>_uiAddCheckboxTH</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l368"><code>js&#x2F;datatable-checkbox-select.js:368</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Adds a new Column with the TH element</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__uiCheckboxSetEach" class="method item private">
+    <h3 class="name"><code>_uiCheckboxSetEach</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>bool</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l427"><code>js&#x2F;datatable-checkbox-select.js:427</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that updates the UI on the "select all" INPUT[checkbox] and sets it to the entered setting (true,false).</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">bool</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Flag indicating whether the check should be set or not</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__uiCheckboxSetEach" class="method item private">
+    <h3 class="name"><code>_uiCheckboxSetEach</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>bool</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l413"><code>js&#x2F;datatable-checkbox-select.js:413</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that updates the UI on each record's INPUT[checkbox] and sets them to the entered setting (true,false).</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">bool</code>
+                        <span class="type">Boolean</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Flag indicating whether checks should be set or not</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__uiRemoveCheckboxTH" class="method item private">
+    <h3 class="name"><code>_uiRemoveCheckboxTH</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l403"><code>js&#x2F;datatable-checkbox-select.js:403</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Removes the "checkbox" select column from the DataTable columns attribute</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__unbindCheckboxSelect" class="method item private">
+    <h3 class="name"><code>_unbindCheckboxSelect</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l190"><code>js&#x2F;datatable-checkbox-select.js:190</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method to detach all of the listeners created by this class</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__valPrimaryKeys" class="method item private">
+    <h3 class="name"><code>_valPrimaryKeys</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l441"><code>js&#x2F;datatable-checkbox-select.js:441</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Default value method for the (primaryKeys)[#attr_primaryKeys] attribute.  This method will search
+the defined DataTable "columns" attribute array and loop over each column, if a column has a
+property "primaryKey" that column will be added as a primary key.</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">   var cols = [ {key:'cust_id', label:'Cust ID', primaryKey:true},
+           {key:'ord_date', label:'Order Date'},
+           {key:'ord_id', label:'Order ID', primaryKey:true}
+           ....
+       ];
+   // will result in ATTR "primaryKeys" as [ 'cust_id', 'ord_id' ]
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+                    <div id="method_checkboxClearAll" class="method item public">
+    <h3 class="name"><code>checkboxClearAll</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l154"><code>js&#x2F;datatable-checkbox-select.js:154</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that resets all "checkboxes" to unchecked, zeros the selected records and
+unchecks the "Select All" checkbox.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_checkboxSelectAll" class="method item public">
+    <h3 class="name"><code>checkboxSelectAll</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l125"><code>js&#x2F;datatable-checkbox-select.js:125</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that selects all "checkboxes" to checked, adds all records to the selected records and
+checks the "Select All" checkbox.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_destructor" class="method item protected">
+    <h3 class="name"><code>destructor</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l112"><code>js&#x2F;datatable-checkbox-select.js:112</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Unbinds the checkbox listeners and detaches any others created</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initializer" class="method item protected">
+    <h3 class="name"><code>initializer</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l97"><code>js&#x2F;datatable-checkbox-select.js:97</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initializer, doesn't really do anything at this point ...</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__chkRecords" class="property item private">
+    <h3 class="name"><code>_chkRecords</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l66"><code>js&#x2F;datatable-checkbox-select.js:66</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Placeholder for the "checkbox" currently selected records, stored in 'primary key value' format.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> []</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__subscrChk" class="property item private">
+    <h3 class="name"><code>_subscrChk</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l55"><code>js&#x2F;datatable-checkbox-select.js:55</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Holder for the EventHandle for the individual INPUT[checkbox]'s click handler within each TR
+(set via delegate in _bindCheckboxSelect)</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__subscrChkAll" class="property item private">
+    <h3 class="name"><code>_subscrChkAll</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l44"><code>js&#x2F;datatable-checkbox-select.js:44</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Holder for the EventHandle for the "select all" INPUT[checkbox] click handler in the TH
+(set via delegate in _bindCheckboxSelect)</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_colSelect" class="property item public">
+    <h3 class="name"><code>colSelect</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l86"><code>js&#x2F;datatable-checkbox-select.js:86</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Key name of the "checkbox" select column that is added to DataTable's column configurations</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;chkSelect&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_tmplTH" class="property item public">
+    <h3 class="name"><code>tmplTH</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag public">public</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l76"><code>js&#x2F;datatable-checkbox-select.js:76</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>HTML template for creation of the TH column of the "checkbox" select column.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;&lt;input type=&quot;checkbox&quot; class=&quot;{className}&quot; title=&quot;{columnTitleTH}&quot;&#x2F;&gt;&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_checkboxSelected" class="attr item">
+    <a name="config_checkboxSelected"></a> 
+    <h3 class="name"><code>checkboxSelected</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l598"><code>js&#x2F;datatable-checkbox-select.js:598</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Attribute that is used to retrieve the "checkbox" selected records from the DataTable at any time. </p>
+
+<p>Also can be used to set initially "checked" records by entering an {Array} of record indices. (See method <a href="#method__setCheckboxSelected">_setCheckboxSelected</a>).</p>
+
+<p>When a <code>get('checkboxSelected')</code> is requested, an {Array} of {Objects} containing members as 
+{tr,record,pkvalues} is returned for each checked row. (See method <a href="#method__getCheckboxSelected">_getCheckboxSelected</a>).</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> []</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_checkboxSelectMode" class="attr item">
+    <a name="config_checkboxSelectMode"></a> 
+    <h3 class="name"><code>checkboxSelectMode</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l583"><code>js&#x2F;datatable-checkbox-select.js:583</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Attribute that is used to trigger "checkbox" selection mode, and inserting of a checkbox select
+column to the current DataTable.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> false</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_primaryKeys" class="attr item">
+    <a name="config_primaryKeys"></a> 
+    <h3 class="name"><code>primaryKeys</code></h3>
+    <span class="type">String | Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l618"><code>js&#x2F;datatable-checkbox-select.js:618</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Attribute to set the "primary keys" for the DataTable that uniquely define the record (Model) attributes 
+to use to search for specific records.  </p>
+
+<p>Primary keys can be defined either with this attribute <code>primaryKeys</code> OR by placing an extra object property
+in the DataTable column configuration as "primaryKey:true".</p>
+
+<p>This attribute is more useful in use cases where the primary key is not displayed in a column.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> See above</p>
+    
+
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint"> // sets a single primary key to data field with key:'emp_id'
+ myDT.set('primaryKeys','emp_id');              
+
+ // sets dual primary keys to two data fields with key:'inventory_id' and key:'lot_id'
+ myDT.set('primaryKeys',['inventory_id','lot_id']);  
+ // OR
+ var myDT = new Y.DataTable({
+    columns: [ 
+        {key:'inventory_id', label:'Inventory Code', primaryKey:true},
+        {key:'item_code', label:'Sales Item'},
+        {key:'lot_id', label:'Lot Code', primaryKey:true},
+        ...
+ });
+</code></pre>
+            </div>
+        </div>
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                
+                    <div id="event_checkboxclearAll" class="events item">
+    <h3 class="name"><code>checkboxclearAll</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l172"><code>js&#x2F;datatable-checkbox-select.js:172</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fires after the "select all" checkbox is clicked and all records are cleared</p>
+    </div>
+
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_checkboxSetAll" class="events item">
+    <h3 class="name"><code>checkboxSetAll</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_datatable-checkbox-select.js.html#l149"><code>js&#x2F;datatable-checkbox-select.js:149</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fires after the "select all" checkbox is clicked and all records are selected</p>
+    </div>
+
+    
+
+
+    
+</div>
+
+                
+            </div>
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
