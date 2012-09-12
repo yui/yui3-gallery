@@ -128,6 +128,7 @@ Y.IdleTimer = {
         
         //assign appropriate event handlers
         Y.on("mousemove", handleUserEvent, doc);
+        Y.on("mousedown", handleUserEvent, doc);
         Y.on("keydown", handleUserEvent, doc);
 
         //need to add the old-fashioned way
@@ -158,6 +159,7 @@ Y.IdleTimer = {
         
         //detach the event handlers
         Y.detach("mousemove", handleUserEvent, doc);
+        Y.detach("mousedown", handleUserEvent, doc);
         Y.detach("keydown", handleUserEvent, doc);
 
         if (doc.removeEventListener) {
