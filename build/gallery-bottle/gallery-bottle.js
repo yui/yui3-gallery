@@ -66,6 +66,7 @@ var BOTTLE_INIT = 'btInit',
         initWidgets('[data-role=photogrid]', Y.Bottle.PhotoGrid);
         initWidgets('[data-role=carousel]', Y.Bottle.Carousel);
         initWidgets('[data-role=slidetab]', Y.Bottle.SlideTab);
+        initWidgets('[data-role=loader]', Y.Bottle.Loader);
 
         if (pageNode) {
             resetBodySize();
@@ -105,7 +106,7 @@ var BOTTLE_INIT = 'btInit',
             }
 
             if (overlayCurrent) {
-                overlayCurrent.scResize();
+                overlayCurrent.olResize();
             }
         }, false);
 
@@ -117,4 +118,4 @@ var BOTTLE_INIT = 'btInit',
 Y.namespace('Bottle').init = init;
 
 
-}, 'gallery-2012.09.05-20-01' ,{requires:['gallery-bt-device', 'gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel'], optional:['gallery-bt-css']});
+}, 'gallery-2012.09.12-20-02' ,{skinnable:true, requires:['gallery-bt-device', 'gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel', 'gallery-bt-loader']});

@@ -37,7 +37,7 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
      * @uses WidgetPosition
      * @uses WidgetStack
      * @uses WidgetPositionAlign
-     * @uses PushPop
+     * @uses Bottle.PushPop
      * @constructor
      * @namespace Bottle
      */

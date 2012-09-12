@@ -9,6 +9,7 @@ YUI.add('gallery-bt-photogrid', function(Y) {
 
 var WIDTH_CHANGE = 'widthChange',
     COLUMN_CHANGE = 'columnWidthChange',
+    RENDER_FINISHED = 'renderFinished',
 
     RENDER_INTERVAL = 100,
 
@@ -35,7 +36,7 @@ var WIDTH_CHANGE = 'widthChange',
  * @constructor
  * @namespace Bottle
  * @extends Widget
- * @uses SyncScroll
+ * @uses Bottle.SyncScroll
  * @param [config] {Object} Object literal with initial attribute values
 
  */
@@ -44,6 +45,13 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
         this.parseImageData();
 
         this.set('syncScrollMethod', this._updateColumns);
+
+        /**
+         * Fired when all grid rendered
+         *
+         * @event renderFinished
+         */
+        this.publish(RENDER_FINISHED);
 
         /**
          * internal eventhandlers, keep for destructor
@@ -171,6 +179,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 
         if (this._bpgImages.length <= this._bpgRendered) {
             this.syncScroll();
+            this.fire(RENDER_FINISHED);
             return;
         }
 

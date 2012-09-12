@@ -130,6 +130,7 @@ Y.IdleTimer = {
         
         //assign appropriate event handlers
         Y.on("mousemove", handleUserEvent, doc);
+        Y.on("mousedown", handleUserEvent, doc);
         Y.on("keydown", handleUserEvent, doc);
 
         //need to add the old-fashioned way
@@ -160,6 +161,7 @@ Y.IdleTimer = {
         
         //detach the event handlers
         Y.detach("mousemove", handleUserEvent, doc);
+        Y.detach("mousedown", handleUserEvent, doc);
         Y.detach("keydown", handleUserEvent, doc);
 
         if (doc.removeEventListener) {
@@ -176,4 +178,4 @@ Y.IdleTimer = {
 Y.augment(Y.IdleTimer, Y.Event.Target);
 
 
-}, 'gallery-2012.08.15-20-00' ,{requires:['event','event-custom']});
+}, 'gallery-2012.09.12-20-02' ,{requires:['event','event-custom']});

@@ -14,14 +14,17 @@ Y.Nmresizer = Y.Base.create('nmresizer', Y.Widget, [], {
 			return;
 		}
 			
+		// make sure provided CSS IDs include leading pound sign
 		if (!config.olddiv.match(/^(#|\.)/)) {
-			// CSS class or ID not specified, default to ID
 			config.olddiv = '#' + config.olddiv;
 		}
 		if (!config.newdiv.match(/^(#|\.)/)) {
-			// CSS class or ID not specified, default to ID
 			config.newdiv = '#' + config.newdiv;
 		}
+		if (!config.resizediv.match(/^(#|\.)/)) {
+			config.resizediv = '#' + config.resizediv;
+		}
+		
 		if (typeof config.animDuration !== "undefined") {
 			// use provided animDuration, overriding default
 			this.set('animDuration', config.animDuration);
@@ -206,4 +209,4 @@ Y.Nmresizer = Y.Base.create('nmresizer', Y.Widget, [], {
 });
 
 
-}, 'gallery-2012.08.08-20-03' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
+}, 'gallery-2012.09.12-20-02' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
