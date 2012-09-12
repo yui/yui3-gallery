@@ -14,14 +14,17 @@ Y.Nmresizer = Y.Base.create('nmresizer', Y.Widget, [], {
 			return;
 		}
 			
+		// make sure provided CSS IDs include leading pound sign
 		if (!config.olddiv.match(/^(#|\.)/)) {
-			// CSS class or ID not specified, default to ID
 			config.olddiv = '#' + config.olddiv;
 		}
 		if (!config.newdiv.match(/^(#|\.)/)) {
-			// CSS class or ID not specified, default to ID
 			config.newdiv = '#' + config.newdiv;
 		}
+		if (!config.resizediv.match(/^(#|\.)/)) {
+			config.resizediv = '#' + config.resizediv;
+		}
+		
 		if (typeof config.animDuration !== "undefined") {
 			// use provided animDuration, overriding default
 			this.set('animDuration', config.animDuration);
