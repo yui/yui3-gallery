@@ -1,15 +1,48 @@
 /**
- *
- * @class Y.Plugin.Calendar.JumpNav
- * @param config
- * @constructor
- */
+ A Plugin for Y.Calendar that sets up Calendar to work with Y.Calendar.JumpNavView, which 
+ is a View class extension to setup a "click" listener on Calendar's "Month Year" header label 
+ that opens a popup Panel to provide a quick method to jump to a month / year.
+ 
+ Please see the Calendar.JumpNavView documentation for full details.
+ 
+ @example
+ 	var myCal = new Y.Calendar({
+		contentBox: "#mycal",
+		width: '200px',
+		showPrevMonth: true,
+		showNextMonth: true
+	}); 		
+	
+	// Plugin the View to this Calendar ... available years are 1988 to 2021
+	cal.plug( Y.Plugin.Calendar.JumpNav, {
+		yearStart: 1988,
+		yearEnd:   2021
+	});
+	
+	cal.render();
+ 	
+ @class Y.Plugin.Calendar.JumpNav
+ @param config
+ @constructor
+ **/
 function CalJumpNav(config) {
    CalJumpNav.superclass.constructor.apply(this, arguments);
 }
 
+/**
+ * The namespace property of this plugin that this can be accessed from via a Calendar instance.
+ * @property NS
+ * @description This plugin can be accessed from a Calendar instance as "Calendar.jumpnav"
+ * @type {String}
+ */
 CalJumpNav.NS = "jumpnav";
 
+/**
+ * The name property of this plugin
+ * @property NAME
+ * @description name for this plugin
+ * @type {String}
+ */
 CalJumpNav.NAME = "calendarJumpnavPlugin";
 
 CalJumpNav.ATTRS = {
@@ -35,6 +68,8 @@ CalJumpNav.ATTRS = {
     },
 
     /**
+     * The x,y offset (horiz, vert) that should be used to offset the popup Panel from the original Calendar "header label" 
+     *  that was clicked.
      * @attribute offsetXY
      * @type Array
      * @default [ 30, 10 ]
@@ -44,6 +79,12 @@ CalJumpNav.ATTRS = {
         validator:  Y.Lang.isArray
     },
 
+	/**
+	 This flag sets whether the Panel instance should be hidden after the "Go" button is pressed
+	 @attribute closeAfterGo
+	 @type Boolean
+	 @default true
+	 **/
     closeAfterGo:{
         value:      true,
         validator:  Y.Lang.isBoolean
@@ -94,10 +135,38 @@ Y.extend(CalJumpNav, Y.Plugin.Base, {
 });
 
 /**
- *
- * @class Y.Calendar.JumpNavView
- * @type {*}
- */
+ This class defines a View class extension for Calendar that configures to load on a "click" on the Calendar's "Month Year"  
+ header label to display a popup panel that allows for selecting the month / year without requiring to page thru by month.
+ The view creates a Panel instance from a standard template (see the property [template](#property_template) for the default) 
+ and handles populating the SELECT dropdown controls for "month" and "year".  
+ 
+ Attributes are provided that include [yearStart](#attr_yearStart) and [yearEnd](#attr_yearEnd) for defining the range to 
+ be used for the "year" dropdown elements, for example.
+ 
+ #####Usage
+ The simplest application includes creating a Calendar instance and then creating the View and attaching the calendar to 
+ the view with the [calendar](#attr_calendar) attribute.
+ 
+	var cal = new Y.Calendar({
+		contentBox: "#mycal",
+		width:'240px',
+		showPrevMonth: true,
+		showNextMonth: true
+	}).render();
+	
+	// This creates a View instance and connects it to the "cal" Calendar instance.
+	var calJNav = new Y.Calendar.JumpNavView({
+		calendar:  cal,
+		yearStart: 1988,
+		yearEnd:   2021
+	});
+
+ An additional module is provided, the Y.Plugin.Calendar.JumpNav plugin that attaches the Calendar to the view via a plugin method.
+ 
+ @class Y.Calendar.JumpNavView
+ @extends Y.View
+ @version 3.5.0
+ **/
 Y.Calendar.JumpNavView = Y.Base.create('caljumpnav', Y.View,[],{
 
     /**
@@ -113,18 +182,34 @@ Y.Calendar.JumpNavView = Y.Base.create('caljumpnav', Y.View,[],{
     },
 
     /**
-     * Default setting for the `template` attribute that defines the Panel HTML contents, including
-     * the SELECT options for month and year
-     * @property template
-     * @type String HTML Setting for Panel's contents
-     * @static
-     */
+     Default setting for the `template` attribute that defines the Panel HTML contents, including
+     the SELECT options for month and year.
+     
+     @example
+	// Where classPanel is replaced by 'yui3-calendar-jumpnav-panel', 
+	// and classMonth by 'yui3-calendar-jumpnav-month' 
+	// and classYear by 'yui3-calendar-jumpnav-year' 
+	<div class="{classPanel}">
+		<div class="yui3-widget-bd">
+		<table>
+			<tr><td align="right">Jump to Month:</td><td><select class="{classMonth}"></select></td></tr>
+			<tr><td align="right">and Year:</td><td><select class="{classYear}"></select></td></tr>
+		</table>
+		</div>
+	</div>
+     
+     
+     @property template
+     @type String HTML Setting for Panel's contents
+     @default See example below
+     @static
+     **/
     template:   '<div class="{classPanel}"><div class="yui3-widget-bd">'+
                 '<table><tr><td align="right">Jump to Month:</td>' +
                 '<td><select class="{classMonth}"></select></td></tr>' +
                 '<tr><td align="right">and Year:</td>' +
                 '<td><select class="{classYear}"></select></td></tr>'+
-                '</table></div></div',
+                '</table></div></div>',
 
     /**
      * Placeholder for the Y.Panel instance used in this view
@@ -278,10 +363,34 @@ Y.Calendar.JumpNavView = Y.Base.create('caljumpnav', Y.View,[],{
         return this;
 
     },
+    
+    /**
+     * Clears up the created listeners and destroys the Panel
+     * @method destructor
+     * @protected
+     */
+    destructor: function(){
+		Y.Array.each( this._subscr, function(item){
+            item.detach();
+        });
+        this._subscr = null;   		
+        
+        if(this._panel) {
+   			this._panel.destroy();
+   			this._panel = null;
+   		}
+   		
+   		this._viewNode = null;
+   	},
 
 
 //===========================   PRIVATE  METHODS   ====================================
 
+	/**
+	 * @method _createPanelView
+	 * @param {Node} vnode The Node that was created from `template` that will be used as the container for the Y.Panel creation.
+	 * @private
+	 */
     _createPanelView: function(vnode){
         var oSelf = this;
 
@@ -517,6 +626,9 @@ Y.Calendar.JumpNavView = Y.Base.create('caljumpnav', Y.View,[],{
     ATTRS:{
 
         /**
+         * Specifies the Calendar instance that this view will be attached to for header label clicks and 
+         * for updates to the `date` attribute.
+         
          * @attribute calendar
          * @type Y.Calendar
          * @default null
@@ -527,45 +639,60 @@ Y.Calendar.JumpNavView = Y.Base.create('caljumpnav', Y.View,[],{
         },
 
         /**
-         * @attribute template
-         * @type String
-         * @default (See Code)
-         */
+         Defines the HTML content that is used to setup the Y.Panel instance that is created by this View.
+         See the property [template](#property_template) for the default setting.
+         
+         @attribute template
+         @type String
+         @default this.template
+         **/
         template:{
             valueFn:    function(){ return this.template; },
             validator:  Y.Lang.isString
         },
 
         /**
-         * @attribute yearStart
-         * @type Number
-         * @default 1985
-         */
+         Sets the beginning year that will be used to setup the "year" SELECT dropdown control, defaults to  
+         a favorite year of the author's.
+         @attribute yearStart
+         @type Number
+         @default 1985
+         **/
         yearStart:{
-            value:      1985,
+            value:      1992,
             validator:  Y.Lang.isNumber
         },
 
         /**
-         * @attribute yearEnd
-         * @type Number
-         * @default Current year
-         */
+         Sets the last year that should be setup within the "year" SELECT dropdown control, defaults the 
+         the current year.
+         @attribute yearEnd
+         @type Number
+         @default Current year
+         **/
         yearEnd:{
             value:      new Date().getFullYear(),
             validator:  Y.Lang.isNumber
         },
 
-        /**
-         * @attribute offsetXY
-         * @type Array
-         * @default [ 30, 10 ]
-         */
+	    /**
+	     The x,y offset (horiz, vert) that should be used to offset the popup Panel from the original Calendar "header label" 
+	      that was clicked.
+	     @attribute offsetXY
+	     @type Array
+	     @default [ 30, 10 ]
+	     **/
         offsetXY:{
             value:      [ 30, 10 ],
             validator:  Y.Lang.isArray
         },
 
+		/**
+		 This flag sets whether the Panel instance should be hidden after the "Go" button is pressed
+		 @attribute closeAfterGo
+		 @type Boolean
+		 @default true
+		 **/
         closeAfterGo:{
             value:      true,
             validator:  Y.Lang.isBoolean
