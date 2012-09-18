@@ -104,8 +104,8 @@
 
 
 <div class="box intro">
-    <p>A Plugin for Y.Calendar that sets up Calendar to work with Y.Calendar.JumpNavView, which 
-is a View class extension to setup a "click" listener on Calendar's "Month Year" header label 
+    <p>A Plugin for Y.Calendar that sets up Calendar to work with Y.Calendar.JumpNavView, which
+is a View class extension to setup a "click" listener on Calendar's "Month Year" header label
 that opens a popup Panel to provide a quick method to jump to a month / year.</p>
 
 <p>Please see the Calendar.JumpNavView documentation for full details.</p>
@@ -207,7 +207,7 @@ that opens a popup Panel to provide a quick method to jump to a month / year.</p
     width: '200px',
     showPrevMonth: true,
     showNextMonth: true
-});         
+});
 
 // Plugin the View to this Calendar ... available years are 1988 to 2021
 cal.plug( Y.Plugin.Calendar.JumpNav, {
@@ -315,6 +315,10 @@ cal.render();
                             </li>
                         
                             <li class="index-item attr">
+                                <a href="#attr_openEventType">openEventType</a>
+                            </li>
+                        
+                            <li class="index-item attr">
                                 <a href="#attr_yearEnd">yearEnd</a>
                             </li>
                         
@@ -368,7 +372,7 @@ cal.render();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l122"><code>js&#x2F;calendar-jumpnav.js:122</code></a>
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l135"><code>js&#x2F;calendar-jumpnav.js:135</code></a>
         
         </p>
 
@@ -424,7 +428,7 @@ cal.render();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l110"><code>js&#x2F;calendar-jumpnav.js:110</code></a>
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l123"><code>js&#x2F;calendar-jumpnav.js:123</code></a>
         
         </p>
 
@@ -488,7 +492,7 @@ cal.render();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l100"><code>js&#x2F;calendar-jumpnav.js:100</code></a>
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l113"><code>js&#x2F;calendar-jumpnav.js:113</code></a>
         
         </p>
 
@@ -665,7 +669,7 @@ cal.render();
             
         
         
-        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l82"><code>js&#x2F;calendar-jumpnav.js:82</code></a>
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l95"><code>js&#x2F;calendar-jumpnav.js:95</code></a>
         
         </p>
 
@@ -726,12 +730,64 @@ cal.render();
     </div>
 
     <div class="description">
-        <p>The x,y offset (horiz, vert) that should be used to offset the popup Panel from the original Calendar "header label" 
+        <p>The x,y offset (horiz, vert) that should be used to offset the popup Panel from the original Calendar "header label"
  that was clicked.</p>
     </div>
 
     
         <p><strong>Default:</strong> [ 30, 10 ]</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_openEventType" class="attr item">
+    <a name="config_openEventType"></a> 
+    <h3 class="name"><code>openEventType</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l82"><code>js&#x2F;calendar-jumpnav.js:82</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets the Event "type" that is used in the Calendar "header label" listener to open the popup Panel.
+Sensible values are "click" or "dblclick".</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;click&#x27;</p>
     
 
     
