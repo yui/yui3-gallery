@@ -118,4 +118,4 @@ var BOTTLE_INIT = 'btInit',
 Y.namespace('Bottle').init = init;
 
 
-}, 'gallery-2012.09.12-20-02' ,{skinnable:true, requires:['gallery-bt-device', 'gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel', 'gallery-bt-loader']});
+}, 'gallery-2012.09.19-20-07' ,{skinnable:true, requires:['gallery-bt-device', 'gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel', 'gallery-bt-loader']});

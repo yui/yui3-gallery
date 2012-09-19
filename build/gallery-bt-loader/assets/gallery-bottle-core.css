@@ -1,4 +1,5 @@
 html{height:100%}
+body{position:relative}
 body.btInit{-webkit-text-size-adjust:100%}
 
 .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)}
@@ -8,18 +9,15 @@ body.btInit{-webkit-text-size-adjust:100%}
 
 .yui3-widget-pushpop{overflow:hidden}
 
-.yui3-btshortcut{position:absolute}
-.yui3-btshortcut-hidden{top:-9999px;left:-9999px}
-.yui3-btshortcut-disabled{display:none}
-
-.yui3-btoverlay{position:absolute;z-index:9999}
-.yui3-btoverlay-hidden{top:-9999px;left:-9999px}
-.yui3-btoverlay-disabled{display:none}
+.yui3-btshortcut, .yui3-btoverlay {position:absolute}
+.yui3-btshortcut-hidden, .yui3-btoverlay-hidden{top:-9999px;left:-9999px}
+.yui3-btshortcut-disabled, .yui3-btoverlay-disabled{display:none}
 
 .yui3-btphotogrid .bpg_column{display:inline-block;overflow:hidden;vertical-align:top}
 
 .yui3-btslidetab .bst_slide {white-space:nowrap}
 .bst_slidebox {overflow:hidden}
+.bst_slide {position:relative}
 .bst_slide li {display:inline-block}
 .bst_tab {position:relative}
 .bst_tab > * {position:absolute!important;left:-10000px;width:100%}
