@@ -1,0 +1,597 @@
+{
+    "project": {},
+    "files": {
+        "js/calendar-jumpnav.js": {
+            "name": "js/calendar-jumpnav.js",
+            "modules": {},
+            "classes": {
+                "Y.Plugin.Calendar.JumpNav": 1,
+                "Y.Calendar.JumpNavView": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Y.Plugin.Calendar.JumpNav": {
+            "name": "Y.Plugin.Calendar.JumpNav",
+            "shortname": "Y.Plugin.Calendar.JumpNav",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js/calendar-jumpnav.js",
+            "line": 1,
+            "description": "A Plugin for Y.Calendar that sets up Calendar to work with Y.Calendar.JumpNavView, which\nis a View class extension to setup a \"click\" listener on Calendar's \"Month Year\" header label\nthat opens a popup Panel to provide a quick method to jump to a month / year.\n\nPlease see the Calendar.JumpNavView documentation for full details.",
+            "example": [
+                "\n\tvar myCal = new Y.Calendar({\n\t\tcontentBox: \"#mycal\",\n\t\twidth: '200px',\n\t\tshowPrevMonth: true,\n\t\tshowNextMonth: true\n\t});\n\n\t// Plugin the View to this Calendar ... available years are 1988 to 2021\n\tcal.plug( Y.Plugin.Calendar.JumpNav, {\n\t\tyearStart: 1988,\n\t\tyearEnd:   2021\n\t});\n\n\tcal.render();"
+            ],
+            "params": [
+                {
+                    "name": "config",
+                    "description": ""
+                }
+            ],
+            "is_constructor": 1
+        },
+        "Y.Calendar.JumpNavView": {
+            "name": "Y.Calendar.JumpNavView",
+            "shortname": "Y.Calendar.JumpNavView",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "js/calendar-jumpnav.js",
+            "line": 150,
+            "description": "This class defines a View class extension for Calendar that configures to load on a \"click\" on the Calendar's \"Month Year\"\nheader label to display a popup panel that allows for selecting the month / year without requiring to page thru by month.\nThe view creates a Panel instance from a standard template (see the property [template](#property_template) for the default)\nand handles populating the SELECT dropdown controls for \"month\" and \"year\".\n\nAttributes are provided that include [yearStart](#attr_yearStart) and [yearEnd](#attr_yearEnd) for defining the range to\nbe used for the \"year\" dropdown elements, for example.\n\n#####Usage\nThe simplest application includes creating a Calendar instance and then creating the View and attaching the calendar to\nthe view with the [calendar](#attr_calendar) attribute.\n\n\tvar cal = new Y.Calendar({\n\t\tcontentBox: \"#mycal\",\n\t\twidth:'240px',\n\t\tshowPrevMonth: true,\n\t\tshowNextMonth: true\n\t}).render();\n\n\t// This creates a View instance and connects it to the \"cal\" Calendar instance.\n\tvar calJNav = new Y.Calendar.JumpNavView({\n\t\tcalendar:  cal,\n\t\tyearStart: 1988,\n\t\tyearEnd:   2021\n\t});\n\nAn additional module is provided, the Y.Plugin.Calendar.JumpNav plugin that attaches the Calendar to the view via a plugin method.",
+            "extends": "Y.View",
+            "version": "3.5.0"
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 32,
+            "description": "This plugin can be accessed from a Calendar instance as \"Calendar.jumpnav\"",
+            "itemtype": "property",
+            "name": "NS",
+            "type": "{String}",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 40,
+            "description": "name for this plugin",
+            "itemtype": "property",
+            "name": "NAME",
+            "type": "{String}",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 50,
+            "itemtype": "attribute",
+            "name": "yearStart",
+            "type": "Number",
+            "default": "1985",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 60,
+            "itemtype": "attribute",
+            "name": "yearEnd",
+            "type": "Number",
+            "default": "Current year",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 70,
+            "description": "The x,y offset (horiz, vert) that should be used to offset the popup Panel from the original Calendar \"header label\"\n that was clicked.",
+            "itemtype": "attribute",
+            "name": "offsetXY",
+            "type": "Array",
+            "default": "[ 30, 10 ]",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 82,
+            "description": "Sets the Event \"type\" that is used in the Calendar \"header label\" listener to open the popup Panel.\nSensible values are \"click\" or \"dblclick\".",
+            "itemtype": "attribute",
+            "name": "openEventType",
+            "type": "String",
+            "default": "'click'",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 95,
+            "description": "This flag sets whether the Panel instance should be hidden after the \"Go\" button is pressed",
+            "itemtype": "attribute",
+            "name": "closeAfterGo",
+            "type": "Boolean",
+            "default": "true",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 113,
+            "itemtype": "method",
+            "name": "initializer",
+            "params": [
+                {
+                    "name": "config",
+                    "description": ""
+                }
+            ],
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 123,
+            "description": "Destroys the View that was created and detaches its event listeners",
+            "itemtype": "method",
+            "name": "destructor",
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 135,
+            "description": "Connector method that initializes the View and connects it to the Calendar instance",
+            "itemtype": "method",
+            "name": "_afterHostRenderEvent",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Plugin.Calendar.JumpNav"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 185,
+            "description": "Defines event objects as part of View's event handling, specifically defines actions to\nbe taken on \"change\" events of the month and year SELECT controls.",
+            "itemtype": "property",
+            "name": "events",
+            "type": "Object",
+            "static": 1,
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 197,
+            "description": "Default setting for the `template` attribute that defines the Panel HTML contents, including\nthe SELECT options for month and year.",
+            "example": [
+                "\n\t// Where classPanel is replaced by 'yui3-calendar-jumpnav-panel',\n\t// and classMonth by 'yui3-calendar-jumpnav-month'\n\t// and classYear by 'yui3-calendar-jumpnav-year'\n\t<div class=\"{classPanel}\">\n\t\t<div class=\"yui3-widget-bd\">\n\t\t<table>\n\t\t\t<tr><td align=\"right\">Jump to Month:</td><td><select class=\"{classMonth}\"></select></td></tr>\n\t\t\t<tr><td align=\"right\">and Year:</td><td><select class=\"{classYear}\"></select></td></tr>\n\t\t</table>\n\t\t</div>\n\t</div>"
+            ],
+            "itemtype": "property",
+            "name": "template",
+            "type": "String HTML Setting for Panel's contents",
+            "default": "See example below",
+            "static": 1,
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 227,
+            "description": "Placeholder for the Y.Panel instance used in this view",
+            "itemtype": "property",
+            "name": "_panel",
+            "type": "Y.Panel",
+            "default": "null",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 236,
+            "description": "Holder for an array of the Listeners created by this view so we can detach them when finished",
+            "itemtype": "property",
+            "name": "_subscr",
+            "type": "Array",
+            "default": "[]",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 245,
+            "description": "Stores the classname to search the Calendar instance for to hook onto the \"header-label\" element",
+            "itemtype": "property",
+            "name": "_classCalHead",
+            "type": "String",
+            "default": "'yui3-calendar-header-label'",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 254,
+            "description": "Stores the classname used internally for the Panel srcNode used in this view",
+            "itemtype": "property",
+            "name": "_classPanel",
+            "type": "String",
+            "default": "'yui3-calendar-jumpnav-panel'",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 264,
+            "description": "Placeholder for the Node instance for this view, set to Panel contentBox",
+            "itemtype": "property",
+            "name": "_viewNode",
+            "type": "Node",
+            "default": "null",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 273,
+            "description": "Stores the classname used internally for the Panel's \"month\" SELECT control",
+            "itemtype": "property",
+            "name": "_classMonth",
+            "type": "String",
+            "default": "'yui3-calendar-jumpnav-month'",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 282,
+            "description": "Stores the classname used internally for the Panel's \"month\" SELECT control",
+            "itemtype": "property",
+            "name": "_classYear",
+            "type": "String",
+            "default": "'yui3-calendar-jumpnav-year'",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 294,
+            "description": "Initializer that creates the `container`, the Panel instance and listeners for this view",
+            "itemtype": "method",
+            "name": "initializer",
+            "return": {
+                "description": "this"
+            },
+            "chainable": 1,
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 338,
+            "description": "Renders the Panel and resets the SELECT controls \"selected\" default to the current Calendar data setting",
+            "itemtype": "method",
+            "name": "render",
+            "chainable": 1,
+            "return": {
+                "description": "this"
+            },
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 379,
+            "description": "Clears up the created listeners and destroys the Panel",
+            "itemtype": "method",
+            "name": "destructor",
+            "access": "protected",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 401,
+            "itemtype": "method",
+            "name": "_createPanelView",
+            "params": [
+                {
+                    "name": "vnode",
+                    "description": "The Node that was created from `template` that will be used as the container for the Y.Panel creation.",
+                    "type": "Node"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 446,
+            "description": "Sets the currently \"selected\" OPTION for the month control to the current month",
+            "itemtype": "method",
+            "name": "_setSelectedMonth",
+            "params": [
+                {
+                    "name": "curDate",
+                    "description": "",
+                    "type": "Date"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 457,
+            "description": "Sets the currently \"selected\" OPTION for the year control to the current year.\n<br/>This method searches the OPTION nodes for \"value\" set to the year, to get around\nCSS selector issues in some browers.",
+            "itemtype": "method",
+            "name": "_setSelectedYear",
+            "params": [
+                {
+                    "name": "curDate",
+                    "description": "",
+                    "type": "Date"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 475,
+            "description": "Method that regenerates the \"month\" SELECT control, adding the months and defining the \"selected\" as the curDate parameter",
+            "itemtype": "method",
+            "name": "_regenMonths",
+            "params": [
+                {
+                    "name": "curDate",
+                    "description": "Current date to set as \"selected\"",
+                    "type": "Date"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 502,
+            "description": "Method that regenerates the \"year\" SELECT control, adding the months defined by attributes `yearStart` to `yearEnd`\nand defining the \"selected\" as the curDate parameter",
+            "itemtype": "method",
+            "name": "_regenYears",
+            "params": [
+                {
+                    "name": "curDate",
+                    "description": "Current date to set as \"selected\"",
+                    "type": "Date"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 530,
+            "description": "Helper method to check if the specified year is an option in the current SELECT control OPTIONS.",
+            "itemtype": "method",
+            "name": "_yearInSelect",
+            "params": [
+                {
+                    "name": "year",
+                    "description": "Year to be checked if it is in the current SELECT control",
+                    "type": "Number"
+                }
+            ],
+            "return": {
+                "description": "true if year is in SELECt, false if not",
+                "type": "Boolean"
+            },
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 553,
+            "description": "Listener on the Calendar's \"dateChange\" event to update the JumpNavigator if it's visible",
+            "itemtype": "method",
+            "name": "_onCalendarDateChange",
+            "params": [
+                {
+                    "name": "e",
+                    "description": "",
+                    "type": "EventTarget"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 569,
+            "description": "Listener on the Panel's \"Go\" button, resets the Calendar to the Month/Year and first day,\nand optionally closes the Panel if `closeAfterGo` is true.",
+            "itemtype": "method",
+            "name": "_onGoButton",
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 587,
+            "description": "\"change\" Listener on the SELECT control for the JumpNavigator's month control",
+            "itemtype": "method",
+            "name": "_selectMonth",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 604,
+            "itemtype": "event",
+            "name": "monthSelected",
+            "params": [
+                {
+                    "name": "return",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "evt",
+                            "description": "Eventtarget for the SELECT \"change\" event",
+                            "type": "EventTarget"
+                        },
+                        {
+                            "name": "value",
+                            "description": "Value part of the selected OPTION, which is the selected month",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "text",
+                            "description": "Text from selected OPTION, which is the month name",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 612,
+            "description": "\"change\" Listener on the SELECT control for the JumpNavigator's year control",
+            "itemtype": "method",
+            "name": "_selectYear",
+            "params": [
+                {
+                    "name": "e",
+                    "description": ""
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 629,
+            "itemtype": "event",
+            "name": "yearSelected",
+            "params": [
+                {
+                    "name": "return",
+                    "description": "",
+                    "type": "Object",
+                    "props": [
+                        {
+                            "name": "evt",
+                            "description": "Eventtarget for the SELECT \"change\" event",
+                            "type": "EventTarget"
+                        },
+                        {
+                            "name": "value",
+                            "description": "Value part of the selected OPTION, which is the Selected year",
+                            "type": "Number"
+                        },
+                        {
+                            "name": "text",
+                            "description": "Text from selected OPTION, which is the selected year",
+                            "type": "String"
+                        }
+                    ]
+                }
+            ],
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 640,
+            "description": "Specifies the Calendar instance that this view will be attached to for header label clicks and\nfor updates to the `date` attribute.",
+            "itemtype": "attribute",
+            "name": "calendar",
+            "type": "Y.Calendar",
+            "default": "null",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 653,
+            "description": "Defines the HTML content that is used to setup the Y.Panel instance that is created by this View.\nSee the property [template](#property_template) for the default setting.",
+            "itemtype": "attribute",
+            "name": "template",
+            "type": "String",
+            "default": "this.template",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 666,
+            "description": "Sets the beginning year that will be used to setup the \"year\" SELECT dropdown control, defaults to\na favorite year of the author's.",
+            "itemtype": "attribute",
+            "name": "yearStart",
+            "type": "Number",
+            "default": "1985",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 678,
+            "description": "Sets the last year that should be setup within the \"year\" SELECT dropdown control, defaults the\nthe current year.",
+            "itemtype": "attribute",
+            "name": "yearEnd",
+            "type": "Number",
+            "default": "Current year",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 690,
+            "description": "The x,y offset (horiz, vert) that should be used to offset the popup Panel from the original Calendar \"header label\"\n that was clicked.",
+            "itemtype": "attribute",
+            "name": "offsetXY",
+            "type": "Array",
+            "default": "[ 30, 10 ]",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 703,
+            "description": "Sets the Event \"type\" that is used in the Calendar \"header label\" listener to open the popup Panel.\n         Sensible values are \"click\" or \"dblclick\".",
+            "itemtype": "attribute",
+            "name": "openEventType",
+            "type": "String",
+            "default": "'click'",
+            "class": "Y.Calendar.JumpNavView"
+        },
+        {
+            "file": "js/calendar-jumpnav.js",
+            "line": 715,
+            "description": "This flag sets whether the Panel instance should be hidden after the \"Go\" button is pressed",
+            "itemtype": "attribute",
+            "name": "closeAfterGo",
+            "type": "Boolean",
+            "default": "true",
+            "class": "Y.Calendar.JumpNavView"
+        }
+    ]
+}

@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Y.Calendar.JumpNavView</title>
+    <link rel="stylesheet" href="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;3.5.1&#x2F;build&#x2F;cssgrids&#x2F;cssgrids-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="..&#x2F;assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="..&#x2F;assets/favicon.png">
+    <script src="http:&#x2F;&#x2F;yui.yahooapis.com&#x2F;combo?3.5.1&#x2F;build&#x2F;yui&#x2F;yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="..&#x2F;assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="..&#x2F;classes/Y.Calendar.JumpNavView.html">Y.Calendar.JumpNavView</a></li>
+            
+                <li><a href="..&#x2F;classes/Y.Plugin.Calendar.JumpNav.html">Y.Plugin.Calendar.JumpNav</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Y.Calendar.JumpNavView Class</h1>
+<div class="box meta">
+    
+
+    
+        <div class="extends">
+            Extends Y.View
+        </div>
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l150"><code>js&#x2F;calendar-jumpnav.js:150</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>This class defines a View class extension for Calendar that configures to load on a "click" on the Calendar's "Month Year"
+header label to display a popup panel that allows for selecting the month / year without requiring to page thru by month.
+The view creates a Panel instance from a standard template (see the property <a href="#property_template">template</a> for the default)
+and handles populating the SELECT dropdown controls for "month" and "year".</p>
+
+<p>Attributes are provided that include <a href="#attr_yearStart">yearStart</a> and <a href="#attr_yearEnd">yearEnd</a> for defining the range to
+be used for the "year" dropdown elements, for example.</p>
+
+<h5>Usage</h5>
+
+<p>The simplest application includes creating a Calendar instance and then creating the View and attaching the calendar to
+the view with the <a href="#attr_calendar">calendar</a> attribute.</p>
+
+<pre class="code"><code class="prettyprint">var cal = new Y.Calendar({
+    contentBox: "#mycal",
+    width:'240px',
+    showPrevMonth: true,
+    showNextMonth: true
+}).render();
+
+// This creates a View instance and connects it to the "cal" Calendar instance.
+var calJNav = new Y.Calendar.JumpNavView({
+    calendar:  cal,
+    yearStart: 1988,
+    yearEnd:   2021
+});
+</code></pre>
+
+<p>An additional module is provided, the Y.Plugin.Calendar.JumpNav plugin that attaches the Calendar to the view via a plugin method.</p>
+</div>
+
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
+        
+            <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
+        
+        
+            <li class="api-class-tab events"><a href="#events">Events</a></li>
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods extends">
+                        
+                            <li class="index-item method private">
+                                <a href="#method__createPanelView">_createPanelView</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__onCalendarDateChange">_onCalendarDateChange</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__onGoButton">_onGoButton</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__regenMonths">_regenMonths</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__regenYears">_regenYears</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__selectMonth">_selectMonth</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__selectYear">_selectYear</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__setSelectedMonth">_setSelectedMonth</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__setSelectedYear">_setSelectedYear</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
+                                <a href="#method__yearInSelect">_yearInSelect</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_destructor">destructor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_initializer">initializer</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method protected">
+                                <a href="#method_render">render</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties extends">
+                        
+                            <li class="index-item property private">
+                                <a href="#property__classCalHead">_classCalHead</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__classMonth">_classMonth</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__classPanel">_classPanel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__classYear">_classYear</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__panel">_panel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__subscr">_subscr</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property private">
+                                <a href="#property__viewNode">_viewNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_events">events</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_template">template</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section attrs">
+                    <h3>Attributes</h3>
+
+                    <ul class="index-list attrs extends">
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_calendar">calendar</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_closeAfterGo">closeAfterGo</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_offsetXY">offsetXY</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_openEventType">openEventType</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_template">template</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_yearEnd">yearEnd</a>
+                            </li>
+                        
+                            <li class="index-item attr">
+                                <a href="#attr_yearStart">yearStart</a>
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+                <div class="index-section events">
+                    <h3>Events</h3>
+
+                    <ul class="index-list events extends">
+                        
+                            <li class="index-item event">
+                                <a href="#event_monthSelected">monthSelected</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item event">
+                                <a href="#event_yearSelected">yearSelected</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__createPanelView" class="method item private">
+    <h3 class="name"><code>_createPanelView</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>vnode</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l401"><code>js&#x2F;calendar-jumpnav.js:401</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">vnode</code>
+                        <span class="type">Node</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The Node that was created from <code>template</code> that will be used as the container for the Y.Panel creation.</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__onCalendarDateChange" class="method item private">
+    <h3 class="name"><code>_onCalendarDateChange</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>e</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l553"><code>js&#x2F;calendar-jumpnav.js:553</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Listener on the Calendar's "dateChange" event to update the JumpNavigator if it's visible</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">EventTarget</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__onGoButton" class="method item private">
+    <h3 class="name"><code>_onGoButton</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l569"><code>js&#x2F;calendar-jumpnav.js:569</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Listener on the Panel's "Go" button, resets the Calendar to the Month/Year and first day,
+and optionally closes the Panel if <code>closeAfterGo</code> is true.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__regenMonths" class="method item private">
+    <h3 class="name"><code>_regenMonths</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>curDate</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l475"><code>js&#x2F;calendar-jumpnav.js:475</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that regenerates the "month" SELECT control, adding the months and defining the "selected" as the curDate parameter</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">curDate</code>
+                        <span class="type">Date</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Current date to set as "selected"</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__regenYears" class="method item private">
+    <h3 class="name"><code>_regenYears</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>curDate</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l502"><code>js&#x2F;calendar-jumpnav.js:502</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method that regenerates the "year" SELECT control, adding the months defined by attributes <code>yearStart</code> to <code>yearEnd</code>
+and defining the "selected" as the curDate parameter</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">curDate</code>
+                        <span class="type">Date</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Current date to set as "selected"</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__selectMonth" class="method item private">
+    <h3 class="name"><code>_selectMonth</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>e</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l587"><code>js&#x2F;calendar-jumpnav.js:587</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>"change" Listener on the SELECT control for the JumpNavigator's month control</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__selectYear" class="method item private">
+    <h3 class="name"><code>_selectYear</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>e</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l612"><code>js&#x2F;calendar-jumpnav.js:612</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>"change" Listener on the SELECT control for the JumpNavigator's year control</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">e</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__setSelectedMonth" class="method item private">
+    <h3 class="name"><code>_setSelectedMonth</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>curDate</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l446"><code>js&#x2F;calendar-jumpnav.js:446</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets the currently "selected" OPTION for the month control to the current month</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">curDate</code>
+                        <span class="type">Date</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__setSelectedYear" class="method item private">
+    <h3 class="name"><code>_setSelectedYear</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>curDate</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l457"><code>js&#x2F;calendar-jumpnav.js:457</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets the currently "selected" OPTION for the year control to the current year.
+<br/>This method searches the OPTION nodes for "value" set to the year, to get around
+CSS selector issues in some browers.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">curDate</code>
+                        <span class="type">Date</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__yearInSelect" class="method item private">
+    <h3 class="name"><code>_yearInSelect</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>year</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l530"><code>js&#x2F;calendar-jumpnav.js:530</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Helper method to check if the specified year is an option in the current SELECT control OPTIONS.</p>
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">year</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Year to be checked if it is in the current SELECT control</p>
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    true if year is in SELECt, false if not
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_destructor" class="method item protected">
+    <h3 class="name"><code>destructor</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l379"><code>js&#x2F;calendar-jumpnav.js:379</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Clears up the created listeners and destroys the Panel</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_initializer" class="method item protected">
+    <h3 class="name"><code>initializer</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l294"><code>js&#x2F;calendar-jumpnav.js:294</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initializer that creates the <code>container</code>, the Panel instance and listeners for this view</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    this
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_render" class="method item protected">
+    <h3 class="name"><code>render</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+        <span class="flag protected">protected</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l338"><code>js&#x2F;calendar-jumpnav.js:338</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Renders the Panel and resets the SELECT controls "selected" default to the current Calendar data setting</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                    this
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property__classCalHead" class="property item private">
+    <h3 class="name"><code>_classCalHead</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l245"><code>js&#x2F;calendar-jumpnav.js:245</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stores the classname to search the Calendar instance for to hook onto the "header-label" element</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;yui3-calendar-header-label&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__classMonth" class="property item private">
+    <h3 class="name"><code>_classMonth</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l273"><code>js&#x2F;calendar-jumpnav.js:273</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stores the classname used internally for the Panel's "month" SELECT control</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;yui3-calendar-jumpnav-month&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__classPanel" class="property item private">
+    <h3 class="name"><code>_classPanel</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l254"><code>js&#x2F;calendar-jumpnav.js:254</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stores the classname used internally for the Panel srcNode used in this view</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;yui3-calendar-jumpnav-panel&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__classYear" class="property item private">
+    <h3 class="name"><code>_classYear</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l282"><code>js&#x2F;calendar-jumpnav.js:282</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stores the classname used internally for the Panel's "month" SELECT control</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;yui3-calendar-jumpnav-year&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__panel" class="property item private">
+    <h3 class="name"><code>_panel</code></h3>
+    <span class="type">Y.Panel</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l227"><code>js&#x2F;calendar-jumpnav.js:227</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Placeholder for the Y.Panel instance used in this view</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__subscr" class="property item private">
+    <h3 class="name"><code>_subscr</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l236"><code>js&#x2F;calendar-jumpnav.js:236</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Holder for an array of the Listeners created by this view so we can detach them when finished</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> []</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property__viewNode" class="property item private">
+    <h3 class="name"><code>_viewNode</code></h3>
+    <span class="type">Node</span>
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l264"><code>js&#x2F;calendar-jumpnav.js:264</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Placeholder for the Node instance for this view, set to Panel contentBox</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_events" class="property item">
+    <h3 class="name"><code>events</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l185"><code>js&#x2F;calendar-jumpnav.js:185</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Defines event objects as part of View's event handling, specifically defines actions to
+be taken on "change" events of the month and year SELECT controls.</p>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_template" class="property item">
+    <h3 class="name"><code>template</code></h3>
+    <span class="type">String HTML Setting for Panel's contents</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l197"><code>js&#x2F;calendar-jumpnav.js:197</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Default setting for the <code>template</code> attribute that defines the Panel HTML contents, including
+the SELECT options for month and year.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> See example below</p>
+    
+
+    
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code"><code class="prettyprint">// Where classPanel is replaced by 'yui3-calendar-jumpnav-panel',
+// and classMonth by 'yui3-calendar-jumpnav-month'
+// and classYear by 'yui3-calendar-jumpnav-year'
+&lt;div class="{classPanel}"&gt;
+    &lt;div class="yui3-widget-bd"&gt;
+    &lt;table&gt;
+        &lt;tr&gt;&lt;td align="right"&gt;Jump to Month:&lt;/td&gt;&lt;td&gt;&lt;select class="{classMonth}"&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;
+        &lt;tr&gt;&lt;td align="right"&gt;and Year:&lt;/td&gt;&lt;td&gt;&lt;select class="{classYear}"&gt;&lt;/select&gt;&lt;/td&gt;&lt;/tr&gt;
+    &lt;/table&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="attrs" class="api-class-tabpanel">
+                <h2 class="off-left">Attributes</h2>
+
+                
+                    <div id="attr_calendar" class="attr item">
+    <a name="config_calendar"></a> 
+    <h3 class="name"><code>calendar</code></h3>
+    <span class="type">Y.Calendar</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l640"><code>js&#x2F;calendar-jumpnav.js:640</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Specifies the Calendar instance that this view will be attached to for header label clicks and
+for updates to the <code>date</code> attribute.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> null</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_closeAfterGo" class="attr item">
+    <a name="config_closeAfterGo"></a> 
+    <h3 class="name"><code>closeAfterGo</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l715"><code>js&#x2F;calendar-jumpnav.js:715</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This flag sets whether the Panel instance should be hidden after the "Go" button is pressed</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> true</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_offsetXY" class="attr item">
+    <a name="config_offsetXY"></a> 
+    <h3 class="name"><code>offsetXY</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l690"><code>js&#x2F;calendar-jumpnav.js:690</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>The x,y offset (horiz, vert) that should be used to offset the popup Panel from the original Calendar "header label"
+ that was clicked.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> [ 30, 10 ]</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_openEventType" class="attr item">
+    <a name="config_openEventType"></a> 
+    <h3 class="name"><code>openEventType</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l703"><code>js&#x2F;calendar-jumpnav.js:703</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets the Event "type" that is used in the Calendar "header label" listener to open the popup Panel.
+         Sensible values are "click" or "dblclick".</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> &#x27;click&#x27;</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_template" class="attr item">
+    <a name="config_template"></a> 
+    <h3 class="name"><code>template</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l653"><code>js&#x2F;calendar-jumpnav.js:653</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Defines the HTML content that is used to setup the Y.Panel instance that is created by this View.
+See the property <a href="#property_template">template</a> for the default setting.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> this.template</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_yearEnd" class="attr item">
+    <a name="config_yearEnd"></a> 
+    <h3 class="name"><code>yearEnd</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l678"><code>js&#x2F;calendar-jumpnav.js:678</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets the last year that should be setup within the "year" SELECT dropdown control, defaults the
+the current year.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> Current year</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="attr_yearStart" class="attr item">
+    <a name="config_yearStart"></a> 
+    <h3 class="name"><code>yearStart</code></h3>
+    <span class="type">Number</span>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l666"><code>js&#x2F;calendar-jumpnav.js:666</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets the beginning year that will be used to setup the "year" SELECT dropdown control, defaults to
+a favorite year of the author's.</p>
+    </div>
+
+    
+        <p><strong>Default:</strong> 1985</p>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+            <div id="events" class="api-class-tabpanel">
+                <h2 class="off-left">Events</h2>
+
+                
+                    <div id="event_monthSelected" class="events item">
+    <h3 class="name"><code>monthSelected</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l604"><code>js&#x2F;calendar-jumpnav.js:604</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">return</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                <code class="param-name">evt</code>
+                                <span class="type">EventTarget</span>
+
+                                <div class="param-description">
+                                    <p>Eventtarget for the SELECT "change" event</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">value</code>
+                                <span class="type">Number</span>
+
+                                <div class="param-description">
+                                    <p>Value part of the selected OPTION, which is the selected month</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">text</code>
+                                <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>Text from selected OPTION, which is the month name</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+                    <div id="event_yearSelected" class="events item">
+    <h3 class="name"><code>yearSelected</code></h3>
+    <span class="type"></span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="..&#x2F;files&#x2F;js_calendar-jumpnav.js.html#l629"><code>js&#x2F;calendar-jumpnav.js:629</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Event Payload:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">return</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                        <ul class="params-list">
+                            
+                            <li class="param">
+                                <code class="param-name">evt</code>
+                                <span class="type">EventTarget</span>
+
+                                <div class="param-description">
+                                    <p>Eventtarget for the SELECT "change" event</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">value</code>
+                                <span class="type">Number</span>
+
+                                <div class="param-description">
+                                    <p>Value part of the selected OPTION, which is the Selected year</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                            <li class="param">
+                                <code class="param-name">text</code>
+                                <span class="type">String</span>
+
+                                <div class="param-description">
+                                    <p>Text from selected OPTION, which is the selected year</p>
+                                </div>
+
+                                
+                            </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+
+    
+</div>
+
+                
+            </div>
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="..&#x2F;assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="..&#x2F;assets/js/yui-prettify.js"></script>
+<script src="..&#x2F;assets/../api.js"></script>
+<script src="..&#x2F;assets/js/api-filter.js"></script>
+<script src="..&#x2F;assets/js/api-list.js"></script>
+<script src="..&#x2F;assets/js/api-search.js"></script>
+<script src="..&#x2F;assets/js/apidocs.js"></script>
+</body>
+</html>
