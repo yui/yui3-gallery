@@ -30,6 +30,13 @@ var RENDERUI = 'renderUI',
         bl: [-1, 1]
     },
 
+    moveWidget = function (W, T) {
+        W.get('boundingBox').setStyles({
+            left: T.left,
+            top: T.top
+        });
+    },
+
 /**
  * PushPop extension that adds push, pop unshift animation and methods to Widget Parent
  *
@@ -338,16 +345,20 @@ PushPop.prototype = {
             that = this;
 
         if (done === true) {
-            W.get('boundingBox').setStyles({
-                left: transition.left,
-                top: transition.top
-            });
+            moveWidget(W, transition);
         } else {
-            W.get('boundingBox').transition(transition, function () {
+            if (this.get('visible')) {
+                W.get('boundingBox').transition(transition, function () {
+                    if (done) {
+                        done.apply(that);
+                    }
+                });
+            } else {
+                moveWidget(W, transition);
                 if (done) {
                     done.apply(that);
                 }
-            });
+            }
         }
         return this;
     },

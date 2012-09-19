@@ -3,7 +3,7 @@
 YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
 {{>example-clone}}
 
-    Y.Bottle.init();
+    Y.Bottle.init(true);
 
     Y.Bottle.Page.getCurrent().get('contentBox').one('.subheader').set('innerHTML', 'top widget was pushed');
     container2.get('contentBox').one('.subheader').set('innerHTML', 'I will be poped after 2 seconds');

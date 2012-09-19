@@ -19,7 +19,7 @@ Next, create a new YUI instance for your application and populate it with the mo
 <script>
 // Create a new YUI instance and populate it with the required modules.
 YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
-    Y.Bottle.init();{{#if displayName}}
+    Y.Bottle.init(true); // true means hide browser url bar{{#if displayName}}
     // {{displayName}} is available and ready for use. 
     // Add implementation code here.{{else}}
     // Bottle framework is initialized, enjoy it! Or, add more codes.{{/if}}
@@ -33,7 +33,7 @@ Then, use correct <a href="{{#if displayName}}..{{else}}.{{/if}}/data-attribute.
 </p>
 {{/unless}}
 
-<p>You also need to add default css inside head tags:</p>
+<p>You may add default css inside head tags, this can help performance. If you don't, `{{projectName}}` still works well.</p>
 ```
 {{>yui-css}}
 ```

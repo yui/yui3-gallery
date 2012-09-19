@@ -2,7 +2,7 @@
 YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     {{#unless onlyInit}}var srcNode, {{name}}Widget;
     {{/unless}}
-    Y.Bottle.init();
+    Y.Bottle.init(true);
     {{#unless onlyInit}}
     srcNode = Y.one('[data-role={{name}}]');  //{{name}} srcNode
     {{name}}Widget = Y.Widget.getByNode(srcNode); //{{name}} widget{{/unless}}

@@ -5,7 +5,7 @@
     "className": "SlideTab",
     "dataRole": "slidetab",
     "parents": ["syncscroll"],
-    "galleryTag": "gallery-2012.09.05-20-01",
+    "galleryTag": "gallery-2012.09.12-20-02",
 
     "hidePage": true,
     "hideShortcut": true,

@@ -83,6 +83,11 @@ body.btInit {
 
 .btInit .sidebox {
     margin:5px 5px 0;
+    width:240px;
+}
+
+.btInit .sidebox li {
+    word-break:break-all;
 }
 
 .btInit a {

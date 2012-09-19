@@ -3,7 +3,8 @@
  *
  * @module gallery-bt-shortcut
  */
-var Mask = Y.one('.bt-shortcut-mask') || Y.one('body').appendChild(Y.Node.create('<div class="bt-shortcut-mask"></div>')),
+var body = Y.one('body'),
+    Mask = Y.one('.bt-shortcut-mask') || body.appendChild(Y.Node.create('<div class="bt-shortcut-mask"></div>')),
     WIDTH_CHANGE = 'widthChange',
     HEIGHT_CHANGE = 'heightChange',
     VISIBLE_CHANGE = 'visibleChange',
@@ -180,7 +181,7 @@ var Mask = Y.one('.bt-shortcut-mask') || Y.one('body').appendChild(Y.Node.create
                 posData = POSITIONS[this.get('showFrom')];
 
             if (!vis) {
-                this.align(null, [isUnveil ? posData[0] : posData[3], posData[0]]);
+                this.align(body, [isUnveil ? posData[0] : posData[3], posData[0]]);
             }
         },
 

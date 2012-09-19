@@ -9,11 +9,9 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
     HEIGHT_CHANGE = 'heightChange',
     VISIBLE_CHANGE = 'visibleChange',
 
-    pageWidget,
-    pageNode,
-
     instances = [],
     current,
+    body = Y.one('body'),
     next,
 
     POSITIONS = {
@@ -40,16 +38,12 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
      * @namespace Bottle
      */
     Overlay = Y.Base.create('btoverlay', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.WidgetPositionAlign, Y.Bottle.PushPop], {
-        initializer: function () {
-            if (!pageWidget) {
-                pageWidget = Y.Bottle.Page.getCurrent();
-                if (pageWidget) {
-                    pageNode = pageWidget.get('boundingBox');
-                    pageWidget.set('zIndex', Overlay.ZINDEX_PAGE);
-                }
-            }
-
+        initializer: function (cfg) {
             instances.push(this);
+
+            if (!cfg.zIndex) {
+                this.set('zIndex', 200);
+            }
 
             /**
              * internal eventhandlers, keep for destructor
@@ -144,9 +138,9 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
                 return;
             }
             if (this.get('fullPage')) {
-                this.align(pageNode, [posData[3], posData[3]]);
+                this.align(body, [posData[3], posData[3]]);
             } else {
-                this.centered(pageNode);
+                this.centered(body);
             }
         },
 
@@ -216,7 +210,6 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
             }
 
             this.set('disabled', show ? false : true);
-            this.set('zIndex', show ? Overlay.ZINDEX_SHOW : Overlay.ZINDEX_HIDE);
 
             if (next) {
                 next.show();
@@ -253,12 +246,10 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
                 current = undefined;
             }
 
-            this.set('zIndex', Overlay.ZINDEX_SHOW);
-
             if (this.get('fullPage')) {
-                this._doTransition(node, posData[4] * pageNode.get('offsetWidth') + (selfDir * posData[1] - posData[4]) * this.get('width'), posData[5] * pageNode.get('offsetHeight') + (selfDir * posData[2] - posData[5]) * this.get('height'), this._doneShowHide);
+                this._doTransition(node, posData[4] * body.get('offsetWidth') + (selfDir * posData[1] - posData[4]) * this.get('width'), posData[5] * body.get('offsetHeight') + (selfDir * posData[2] - posData[5]) * this.get('height'), this._doneShowHide);
             } else {
-                pageRegion = pageNode.get('region');
+                pageRegion = body.get('region');
                 if (show) {
                     nodeX = pageRegion.left + Math.floor(pageRegion.width / 2) - (this.get('width') / 2);
                     nodeY = pageRegion.top + Math.floor(pageRegion.height / 2) - (this.get('height') / 2);
@@ -351,7 +342,7 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
             /**
              * Default transition setting for Overlay
              *
-             * @attribute transition
+             * @attribute olTrans
              * @type Object
              * @default {dutation: 0.5}
              */
@@ -415,36 +406,6 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
                 return true;
             }
         },
-
-        /**
-         * Default zindex for Page
-         *
-         * @property ZINDEX_PAGE
-         * @static
-         * @type Number
-         * @default 100
-         */
-        ZINDEX_PAGE: 100,
-
-        /**
-         * Default zindex for visible Overlay
-         *
-         * @property ZINDEX_SHOW
-         * @static
-         * @type Number
-         * @default 300
-         */
-        ZINDEX_SHOW: 300,
-
-        /**
-         * Default zindex for hidden Overlay
-         *
-         * @property ZINDEX_HIDE
-         * @static
-         * @type Number
-         * @default 10
-         */
-        ZINDEX_HIDE: 10,
 
         /**
          * Get all instances of Overlay

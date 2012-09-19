@@ -18,7 +18,7 @@ YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
         srcNode: overlayNode.one('[data-role=container]').cloneNode(true)
     });
 {{/if}}
-    Y.Bottle.init();
+    Y.Bottle.init(true);
     overlay = Y.Widget.getByNode(Y.one('#overlayMenu'));
     overlay.show();
     setTimeout(function() {

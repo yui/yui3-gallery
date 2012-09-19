@@ -3,7 +3,7 @@
     "displayName": "SyncScroll Widget",
     "description": "is a Widget extension provides methods and behaviors to sync with parent scrollView.",
     "className": "SyncScroll",
-    "galleryTag": "gallery-2012.09.05-20-01",
+    "galleryTag": "gallery-2012.09.12-20-02",
 
     "hidePage": true,
     "hideShortcut": true,
