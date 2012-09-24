@@ -1,0 +1,380 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<title>DT Selection Tests</title>
+</head>
+<body lang="en" class="yui3-skin-sam">
+
+<script src="http://yui.yahooapis.com/3.7.1/build/yui/yui-min.js"></script>
+
+<h3>DT Selection Testing</h3>
+
+<div id="console_div"></div>
+<br/><br/>
+
+<div id="tableDiv" style="visibility: hidden;"></div>
+​
+<script>
+YUI({
+/*    modules:{
+        "module-datatable-selection" :{
+            fullpath:"../module-gallery-datatable-selection.js",
+            type:"js",
+            requires:[ "datatable-base", "event-custom" ]
+        }
+    }  */
+}).use('test-console', 'test', 'datatable', "cssfonts",
+        //"module-datatable-selection",
+        "gallery-datatable-selection",
+        'node-event-simulate',
+        function (Y) {
+
+    Y.one("body").addClass("yui3-skin-sam");
+
+
+    function DtSelectionTable(){
+
+        var cols = [ 'tid','title','tname', {key:'tdate', label:'A Date'}, 'tint', 'tflt'  ];
+
+        var mydata = [
+            {tid:100, title:'title A', tname:'Name A', tdate:new Date(2012,7,21), tint: 12, tflt:9876.54321 },
+            {tid:200, title:'title B', tname:'Name B', tdate:new Date(2012,7,25), tint: 34, tflt:9876.54321 },
+            {tid:300, title:'title C', tname:'Name C', tdate:new Date(2012,7,16), tint: 56, tflt:9876.54321 },
+            {tid:400, title:'title D', tname:'Name D', tdate:new Date(2012,7,1), tint: 78, tflt:9876.54321 }
+        ]
+
+        var dt = new Y.DataTable({
+            columns: cols,
+            data:    mydata
+        }).render('#tableDiv');
+
+        return {dtable:dt, data:mydata};
+
+    }
+
+
+//=================  Setup TEST cases  =======================
+
+    (new Y.Test.Console({
+       newestOnTop : false,
+       filters:{ pass: true, status:true, info:false }
+    })).render('#console_div');
+
+    var Assert = Y.Assert;
+
+    var suite = new Y.Test.Suite("gallery-datatable-selection");
+
+    suite.add(
+        new Y.Test.Case({
+            name : "DataTable selection module tests",
+
+            setUp : function () {
+                var dt = DtSelectionTable();
+                this.dt = dt.dtable;
+                this.data = dt.data;
+            },
+
+            tearDown : function () {
+                if( this.dt ) this.dt.destroy();
+                delete this.dt;
+            },
+
+            //---------------------------------------------------------------------
+            // Test methods - names must begin with "test"
+            //---------------------------------------------------------------------
+
+            'Test module existence ' : function () {
+                Y.Assert.isNotUndefined(Y.DataTable.Selection);
+            },
+
+            'Check attribute existence and defaults' : function () {
+
+                Y.Assert.isNull(this.dt.get('highlighted'),"Default should be null");
+                Y.Assert.isNull(this.dt.get('selected'),"Default should be null");
+                Y.Assert.isNull(this.dt.get('highlightMode'),"Default should be null");
+                Y.Assert.isNull(this.dt.get('selectionMode'),"Default should be null");
+                Y.ArrayAssert.isEmpty(this.dt.get('selectedRows'),"Default should be empty Array");
+            },
+
+            'Setting selectionMulti' : function () {
+
+                Y.Assert.isFalse( this.dt.get('selectionMulti'), "Initially selectionMulti should be false." );
+                this.dt.set('selectionMulti',true);
+                Y.Assert.isTrue( this.dt.get('selectionMulti'), "Cannot set selectionMulti to true." );
+
+            },
+
+            'Setting selectionMode' : function () {
+
+                Y.Assert.isNull( this.dt.get('selectionMode'), "Initially selectionMode should be null."  );
+                this.dt.set('selectionMode','row');
+                Y.Assert.areSame( "row", this.dt.get('selectionMode'), "Cannot set selectionMode to row correctly." );
+
+                this.dt.set('selectionMode','cell');
+                Y.Assert.areSame( "cell", this.dt.get('selectionMode'),"Cannot set selectionMode to cell correctly." );
+
+                this.dt.set('selectionMode','foo');
+                Y.Assert.areSame( "cell", this.dt.get('selectionMode'), "Should remain at last setting, 'cell'" );
+
+                this.dt.set('selectionMode','cELL');
+                Y.Assert.areSame( "cell", this.dt.get('selectionMode'), "Cannot set selectionMode to cell mixed-case correctly." );
+
+            },
+
+            'Setting highlightMode' : function () {
+
+                Y.Assert.isNull( this.dt.get('highlightMode'), "Attr highlightMode should initially be null." );
+                this.dt.set('highlightMode','row');
+                Y.Assert.areSame( "row", this.dt.get('highlightMode'), "Cannot set highlightMode to row correctly." );
+
+                this.dt.set('highlightMode','cell');
+                Y.Assert.areSame( "cell", this.dt.get('highlightMode'), "Cannot set highlightMode to cell correctly." );
+
+                this.dt.set('highlightMode','foo');
+                Y.Assert.areSame( "cell", this.dt.get('highlightMode'), "Should remain at last setting, 'cell'" );
+
+            }
+
+        })
+    );
+
+
+    suite.add( new Y.Test.Case({
+            name : "DataTable Selection - testing 'select' actions in CELL mode",
+
+            setUp : function () {
+                var dt = DtSelectionTable();
+                this.dt = dt.dtable;
+                this.data = dt.data;
+            },
+
+            tearDown : function () {
+                if( this.dt ) this.dt.destroy();
+                delete this.dt;
+            },
+
+
+            'Enable selectionMode cell and select one cell.' : function(){
+                this.dt.set('selectionMode','cell');
+                Y.Assert.areSame( "cell", this.dt.get('selectionMode'),"Cannot set selectionMode to cell correctly." );
+
+
+                var tds_row1 = this.dt.get('contentBox').one('.yui3-datatable-data tr').all('td');
+                tds_row1.item(1).simulate('click');
+
+                var sel_cells = this.dt.get('selectedCells');
+                Assert.areEqual(1,sel_cells.length,"Selected cells should be 1.");
+            },
+
+            'Inspect single selected cell return contents.' : function(){
+                this.dt.set('selectionMode','cell');
+                var tds_row1 = this.dt.get('contentBox').one('.yui3-datatable-data tr').all('td');
+                var td2 = tds_row1.item(1);
+                tds_row1.item(1).simulate('click');
+
+                var sel_cells = this.dt.get('selectedCells');
+
+                var sel_cell = sel_cells[0];  // td, record, recordIndex, column, columnIndex, columnName
+                Assert.areEqual(td2,sel_cell.td,"Selected cell TD's don't match.");
+                Assert.areEqual('title A',sel_cell.td.getHTML(),"Selected cell content doesn't match.");
+                Assert.areEqual(this.dt.getRecord(0),sel_cell.record,"Selected cell records don't match.");
+                Assert.areEqual(0,sel_cell.recordIndex,"Selected cell recordIndex should be 0.");
+                Assert.areEqual(1,sel_cell.columnIndex,"Selected cell recordIndex should be 0.");
+                Assert.areEqual('title',sel_cell.columnName,"Selected cell columnName should be 'title'.");
+
+            },
+
+            'Enable selectionMode cell / selectionMulti and select 3 cells.' : function(){
+                this.dt.set('selectionMode','cell');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+                var td12 = trs.item(0).all("td").item(1);   // title A
+                var td31 = trs.item(2).all("td").item(0);   // 300
+                var td45 = trs.item(3).all("td").item(4);   // 78
+
+                td12.simulate('click');
+                var keyMulti = (Y.UA.os.search('macintosh') === 0) ? {metaKey:true}: {ctrlKey:true};
+                td31.simulate('click',keyMulti);
+                td45.simulate('click',keyMulti);
+
+
+                var sel_cells = this.dt.get('selectedCells');
+                Assert.areEqual(3,sel_cells.length,"Selected cells should be 3.");
+            },
+
+            'Inspect selectionMode cell / selectionMulti and 3 cell contents.' : function(){
+                this.dt.set('selectionMode','cell');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+                var td12 = trs.item(0).all("td").item(1);   // title A
+                var td31 = trs.item(2).all("td").item(0);   // 300
+                var td45 = trs.item(3).all("td").item(4);   // 78
+
+                td12.simulate('click');
+                var keyMulti = (Y.UA.os.search('macintosh') === 0) ? {metaKey:true}: {ctrlKey:true};
+                td31.simulate('click',keyMulti);
+                td45.simulate('click',keyMulti);
+
+                var sel_cells = this.dt.get('selectedCells');
+                Assert.areEqual(3,sel_cells.length,"Selected cells should be 3.");
+                Assert.areEqual('title A',sel_cells[0].td.getHTML(),"Selected cell 1 content should be 'title A'.");
+                Assert.areEqual(300,sel_cells[1].td.getHTML(),"Selected cell 2 content should be 300.");
+                Assert.areEqual(78,sel_cells[2].td.getHTML(),"Selected cell 3 content should be 78.");
+
+            },
+
+            'Enable selectionMode cell / selectionMulti and select range of 12 cells.' : function(){
+                this.dt.set('selectionMode','cell');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+                var td_1 = trs.item(0).all("td").item(2);   // Name A
+                var td_2 = trs.item(3).all("td").item(4);   // 78
+
+                td_1.simulate('click');
+                //var keyMulti = (Y.UA.os.search('macintosh') === 0) ? {metaKey:true}: {ctrlKey:true};
+                td_2.simulate('click',{shiftKey:true});
+
+                var sel_cells = this.dt.get('selectedCells');
+                Assert.areEqual(12,sel_cells.length,"Selected cells count should be 3.");
+            },
+
+            'Inspect selectionMode cell / selectionMulti and select range of 12 cells.' : function(){
+                this.dt.set('selectionMode','cell');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+                var td_1 = trs.item(0).all("td").item(2);   // Name A
+                var td_2 = trs.item(3).all("td").item(4);   // 78
+
+                td_1.simulate('click');
+                td_2.simulate('click',{shiftKey:true});
+
+                var sel_cells = this.dt.get('selectedCells');
+                Assert.areEqual('Name A',sel_cells[0].td.getHTML(),"First selected cell should be 'Name A'.");
+                Assert.areEqual(78,sel_cells[11].td.getHTML(),"Last selected cell should be 78.");
+
+            }
+
+        })
+    );
+
+    suite.add( new Y.Test.Case({
+            name : "DataTable Selection - testing 'select' actions in ROW mode",
+
+            setUp : function () {
+                var dt = DtSelectionTable();
+                this.dt = dt.dtable;
+                this.data = dt.data;
+            },
+
+            tearDown : function () {
+                if( this.dt ) this.dt.destroy();
+                delete this.dt;
+            },
+
+
+            'Enable selectionMode row and select one row.' : function(){
+                this.dt.set('selectionMode','row');
+                Y.Assert.areSame( "row", this.dt.get('selectionMode'),"Cannot set selectionMode to row correctly." );
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+                trs.item(1).one("td").simulate('click');
+
+                var sel_rows = this.dt.get('selectedRows');
+                Assert.areEqual(1,sel_rows.length,"Selected rows should be 1.");
+            },
+
+            'Inspect single selected row return contents.' : function(){
+                this.dt.set('selectionMode','row');
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+
+                // listener is set on TD click, not TR click ...
+                trs.item(1).one("td").simulate('click');
+
+                var sel_rows = this.dt.get('selectedRows');  // tr, record, recordIndex
+
+                Assert.areEqual(trs.item(1),sel_rows[0].tr,"Selected row TR's don't match.");
+                Assert.areEqual(1, sel_rows[0].recordIndex,"Selected row record indexes don't match.");
+                Assert.areEqual(this.dt.data.item(1),sel_rows[0].record,"Selected row records don't match.");
+                Assert.areEqual(6,this.dt.get('selectedCells').length,"Selected cells should be 6.");
+            },
+
+            'Enable selectionMode row / selectionMulti and select 2 rows.' : function(){
+                this.dt.set('selectionMode','row');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+
+                var keyMulti = (Y.UA.os.search('macintosh') === 0) ? {metaKey:true}: {ctrlKey:true};
+                trs.item(0).all("td").item(1).simulate('click');
+                trs.item(3).all("td").item(4).simulate('click',keyMulti);
+
+                var sel_rows = this.dt.get('selectedRows');
+                Assert.areEqual(2,sel_rows.length,"Selected rows count should be 2.");
+            },
+
+            'Inspect selectionMode row / selectionMulti and select 2 rows.' : function(){
+                this.dt.set('selectionMode','row');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+
+                var keyMulti = (Y.UA.os.search('macintosh') === 0) ? {metaKey:true}: {ctrlKey:true};
+                trs.item(0).all("td").item(1).simulate('click');
+                trs.item(3).all("td").item(4).simulate('click',keyMulti);
+
+                var sel_rows = this.dt.get('selectedRows');
+
+                Assert.areEqual(100,sel_rows[0].record.get('tid'),"Selected row 1 content 'tid' should be 200.");
+                Assert.areEqual(78,sel_rows[1].record.get('tint'),"Selected row 2 content 'tint' should be 78.");
+                Assert.areEqual(12,this.dt.get('selectedCells').length,"Selected cells count should be 12.");
+
+            },
+
+            'Enable selectionMode row / selectionMulti and select range of 3 rows.' : function(){
+                this.dt.set('selectionMode','row');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+                trs.item(1).all("td").item(1).simulate('click');
+                trs.item(3).all("td").item(4).simulate('click',{shiftKey:true});
+
+                var sel_rows = this.dt.get('selectedRows');
+                Assert.areEqual(3,sel_rows.length,"Selected rows count should be 3.");
+
+                var sel_cells = this.dt.get('selectedCells');
+                Assert.areEqual(18,sel_cells.length,"Selected cells count should be 18.");
+            },
+
+            'Inspect selectionMode row / selectionMulti and select range of 3 rows.' : function(){
+                this.dt.set('selectionMode','row');
+                this.dt.set('selectionMulti',true);
+
+                var trs = this.dt.get('contentBox').one('.yui3-datatable-data').all('tr');
+                trs.item(1).all("td").item(1).simulate('click');
+                trs.item(3).all("td").item(4).simulate('click',{shiftKey:true});
+
+                var sel_rows = this.dt.get('selectedRows');
+                var sel_cells = this.dt.get('selectedCells');
+                Assert.areEqual(this.dt.data.item(3),sel_rows[2].record,"Last record should match data.");
+
+                Assert.areEqual(1,sel_cells[5].recordIndex,"5th cell should be in first record.");
+
+            }
+
+        })
+    );
+
+
+    Y.Test.Runner.add(suite);
+
+    Y.Test.Runner.run();
+
+});
+</script>
+</body>
+</html>
