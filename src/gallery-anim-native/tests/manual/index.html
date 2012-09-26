@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />        
+        <title>Anim Native</title>
+        <script type="text/javascript" src="../../../../../yui3/build/yui/yui.js"></script>
+        <style type="text/css">
+        #test1 {
+            width: 200px;
+            height: 200px;
+            background: black;
+            border: 5px solid #000;
+        }
+        </style>
+    </head>
+    <body>
+        <div id="test1"></div>
+        <button id="start" type="button">Start</button>
+        <button id="pause" type="button">Pause</button>
+        <button id="resume" type="button">Resume</button>
+        <button id="stop" type="button">Stop</button>
+
+        <script type="text/javascript">
+        YUI({
+            filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+            modules: {
+                'gallery-anim-native': '../../../../build/gallery-anim-native/gallery-anim-native-debug.js'
+            }
+        }).use('gallery-anim-native', function(Y) {
+            var anim = new Y.Anim({
+                node: '#test1',
+                duration: 4,
+                iterations: 1,//'infinite',
+                reverse: true,
+                direction: 'alternate',
+                from: {
+                    width: 250,
+                    height: '250',
+                    background: 'red'
+                },
+                to: {
+                    width: function(node) {
+                        return 300;
+                    },
+                    height: '20em',
+                    background: 'blue'
+                }
+            });
+
+            anim.set('frames', {'50%': {
+                background: function(node) {
+                    return 'green';
+                },
+                borderColor: 'red'
+            }});
+
+            anim.on('start', function(e) {
+                console.log('start');
+            });
+
+            anim.on('end', function(e) {
+                console.log('end');
+            });
+
+            anim.on('pause', function(e) {
+                console.log('pause');
+            });
+
+            anim.on('resume', function(e) {
+                console.log('resume');
+            });
+
+            Y.one('#start').on('click', function() {
+                anim.run();
+            });
+
+            Y.one('#pause').on('click', function() {
+                anim.pause();
+            });
+
+            Y.one('#resume').on('click', function() {
+                anim.run();
+            });
+
+            Y.one('#stop').on('click', function() {
+                anim.stop();
+            });
+        });
+        </script>
+    </body>
+</html>

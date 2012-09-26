@@ -1,0 +1,16 @@
+{
+    "name": "gallery-anim-native",
+    "builds": {
+        "gallery-anim-native": {
+            "jsfiles": [
+                "anim-native.js"
+            ],
+            "config": {
+                "use": [
+                    "node",
+                    "base"
+                ]
+            }
+        }
+    }
+}
