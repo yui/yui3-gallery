@@ -1,0 +1,118 @@
+{
+    "project": {
+        "name": "ZUI ScrollHelper",
+        "description": "ZUI ScrollHelper help you to handle desktop img/a dragging problem in scrollView.",
+        "version": "0.0.1",
+        "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-scrollhelper"
+    },
+    "files": {
+        "js/zui-scrollhelper.js": {
+            "name": "js/zui-scrollhelper.js",
+            "modules": {
+                "gallery-zui-scrollhelper": 1
+            },
+            "classes": {
+                "zui.ScrollHelperPlugin": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "zui": 1
+            }
+        }
+    },
+    "modules": {
+        "gallery-zui-scrollhelper": {
+            "name": "gallery-zui-scrollhelper",
+            "submodules": {},
+            "classes": {
+                "zui.ScrollHelperPlugin": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "zui": 1
+            },
+            "tag": "module",
+            "file": "js/zui-scrollhelper.js",
+            "line": 12,
+            "description": "ZUI ScrollHelper help you to handle desktop img/a dragging problem in scrollView.\nJust plug Y.zui.ScrollHelper into a scrollView. If user dragging with Desktop\nbrowsers, the scrollView still work well even when user start dragging on an A\n( or IMG."
+        }
+    },
+    "classes": {
+        "zui.ScrollHelperPlugin": {
+            "name": "zui.ScrollHelperPlugin",
+            "shortname": "zui.ScrollHelperPlugin",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-zui-scrollhelper",
+            "namespace": "zui",
+            "file": "js/zui-scrollhelper.js",
+            "line": 12,
+            "description": "ScrollHelperPlugin is a ScrollView plugin that help to handle A/IMG dragging bug.",
+            "extends": "Plugin.Base",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/zui-scrollhelper.js",
+            "line": 27,
+            "description": "Default css selector to help disable browser native dragging",
+            "itemtype": "attribute",
+            "name": "noDragSelector",
+            "default": "'a, img'",
+            "type": "String",
+            "class": "zui.ScrollHelperPlugin",
+            "module": "gallery-zui-scrollhelper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollhelper.js",
+            "line": 40,
+            "description": "Default css selector to help disable click when scrollView was scrolled",
+            "itemtype": "attribute",
+            "name": "noClickSelector",
+            "default": "'a'",
+            "type": "Boolean",
+            "class": "zui.ScrollHelperPlugin",
+            "module": "gallery-zui-scrollhelper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollhelper.js",
+            "line": 65,
+            "description": "internal click event handler",
+            "itemtype": "method",
+            "name": "handleClick",
+            "access": "protected",
+            "tagname": "",
+            "class": "zui.ScrollHelperPlugin",
+            "module": "gallery-zui-scrollhelper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollhelper.js",
+            "line": 78,
+            "description": "internal mousedown event handler",
+            "itemtype": "method",
+            "name": "handleMouseDown",
+            "access": "protected",
+            "tagname": "",
+            "class": "zui.ScrollHelperPlugin",
+            "module": "gallery-zui-scrollhelper",
+            "namespace": "zui"
+        },
+        {
+            "file": "js/zui-scrollhelper.js",
+            "line": 89,
+            "description": "sync scrollView scroll position and height",
+            "itemtype": "method",
+            "name": "syncScroll",
+            "class": "zui.ScrollHelperPlugin",
+            "module": "gallery-zui-scrollhelper",
+            "namespace": "zui"
+        }
+    ]
+}

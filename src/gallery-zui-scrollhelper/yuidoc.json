@@ -1,0 +1,13 @@
+{
+    "name": "ZUI ScrollHelper",
+    "description": "ZUI ScrollHelper help you to handle desktop img/a dragging problem in scrollView.",
+    "version": "0.0.1",
+    "url": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-zui-scrollhelper",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "selleck": "true",
+        "paths": ["./js"],
+        "outdir": "./api"
+    }
+}
