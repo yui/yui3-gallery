@@ -5,10 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Insert title here</title>
         <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.5.1/build/cssreset/cssreset-min.css"></link>
-        <link rel="stylesheet" href="./simple-accordion.css" type="text/css" charset="utf-8"></link>
-        
-        <script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script> 
-        <script src="./simple-accordion.js"></script>
+        <script src="http://yui.yahooapis.com/3.4.0/build/yui/yui-min.js"></script>
         <style>
 
             
@@ -53,7 +50,10 @@
 		  </li>
 		</ul>
 		<script type="text/javascript" charset="utf-8">
-			YUI().use('simple-accordion', 'node', function(Y) {
+			YUI({
+    //Last Gallery Build of this module
+    gallery: 'gallery-2012.09.19-20-07'
+}).use('gallery-simple-accordion', 'node', function(Y) {
 				Y.on('domready', function() {
 				    var simpleAccordion = new Y.SimpleAccordion({
 				        mainNode: Y.one('.one-accordion')
