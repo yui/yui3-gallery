@@ -112,6 +112,8 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
 
         if (this._hori ? !onlyX : onlyX) {
             this._host.set('disabled', true);
+        } else {
+            E.preventDefault();
         }
     },
 

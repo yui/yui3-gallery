@@ -7,6 +7,9 @@ Summary
 ZUI RAScroll is a scrollView plugin to handle Horizontal scroll behaviors when 
 a scrollView (horizontal) is be placed in another scrollView (vertical) .
 
+Now ZUI RAScroll also support browser native scroll, that means: If the horizontal
+scrollView is scrolling, the vertical page scroll will be disabled, too.
+
 Description
 -----------
 
@@ -18,14 +21,16 @@ Note
 ----
 
 *   When Y.zui.RAScroll be plugged as horizontal mode, it will try to adjust 
-    host height to ensure the scrollView is horizontal. If the contents in 
-    the scrollView changed, you may need to execute scrollview.hs.syncHeight()
-    to adjust the height again.
+    host height to ensure the scrollView is horizontal. Or, if Y.zui.RAScroll 
+    be plugged as vertical mode, it will try to ensure the native browser 
+    scroll will not happen by adjust the contentBox height. If the contents in 
+    the scrollView changed, you may need to execute scrollview.hs.syncScroll()
+    to do the adjustment again.
 
 Known Issue
 -----------
 
-*   None
+*   Can not cowork with YUI 3.7.0+
 
 Code Sample
 -----------
