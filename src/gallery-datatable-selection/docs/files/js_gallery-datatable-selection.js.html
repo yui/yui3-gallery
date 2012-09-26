@@ -110,6 +110,9 @@
  Specific attributes are provided that can be read for current selections, including the ATTRS [selectedRows](#attr_selectedRows),
  and [selectedCells](#attr_selectedCells).
 
+ Typical usage would be to set the &quot;selectionMode&quot; attribute (and selectionMulti if desired), and then to listen to for the
+ [selection](#event_selection) event to respond to each &quot;click&quot; selection.
+
  @module DataTable
  @submodule Selection
  @class Y.DataTable.Selection
@@ -148,7 +151,7 @@ DtSelection.ATTRS = {
      * full TR (as &quot;row&quot;)
      * @attribute highlightMode
      * @type {String}
-     * @default &#x27;cell&#x27;
+     * @default null
      *&#x2F;
     highlightMode:{
         value:      null,
@@ -163,9 +166,9 @@ DtSelection.ATTRS = {
      * Set the current mode for indicating selections, either for a single TD (as &quot;cell&quot;) or for a
      * full TR (as &quot;row&quot;)
      *
-     * @attribute highlightMode
+     * @attribute selectionMode
      * @type {String}
-     * @default &#x27;cell&#x27;
+     * @default null
      *&#x2F;
     selectionMode:{
         value:      null,
@@ -540,7 +543,37 @@ Y.mix( DtSelection.prototype, {
             record: this.getRecord(o.newVal)
         });
 
+        &#x2F;&#x2F;
+        &#x2F;&#x2F;  Fire a generic &quot;selection&quot; event that returns selected data according to the current &quot;selectionMode&quot; setting
+        &#x2F;&#x2F;
+        var sobj = { selectionMode : this.get(&#x27;selectionMode&#x27;)  };
+
+        if(this.get(&#x27;selectionMode&#x27;).toLowerCase()===&#x27;cell&#x27;)
+            sobj[&#x27;cells&#x27;] = this.get(&#x27;selectedCells&#x27;);
+        else if (this.get(&#x27;selectionMode&#x27;).toLowerCase()===&#x27;row&#x27;)
+            sobj[&#x27;rows&#x27;] = this.get(&#x27;selectedRows&#x27;);
+
+        this.fire(&#x27;selection&#x27;,sobj);
     },
+
+    &#x2F;**
+     * @event selected
+     * @deprecated
+     * @param {Object} obj Return object
+     * @param {Object} obj.ochange Change event object passed from attribute &#x27;selected&#x27;
+     * @param {Object} obj.record DataTable record (Y.Model) instance for the selection
+     *&#x2F;
+
+    &#x2F;**
+     * Event that fires on every DataTable &quot;select&quot; event, returns current selections, either cells or rows depending
+     * on the current &quot;selectionMode&quot;.
+     * @event selection
+     * @param {Object} obj Return object
+     * @param {Object} obj.selectionMode Current setting of attribute [selectionMode](#attr_selectionMode)
+     * @param {Object} obj.cells Returns the current setting of the attribute [selectedCells](#attr_selectedCells)
+     * @param {Object} obj.rows Returns the current setting of the attribute [selectedRows](#attr_selectedRows)
+     *&#x2F;
+
 
     &#x2F;**
      * Called when a &quot;range&quot; selection is detected (i.e. SHIFT key held during click) that selects
@@ -558,11 +591,11 @@ Y.mix( DtSelection.prototype, {
             var newRec  = this.getRecord(tarNew),
                 newRecI = this.data.indexOf(newRec),
                 newCol  = this.getColumnNameByTd(tarNew),
-                newColI = this.get(&#x27;columns&#x27;).indexOf( this.getColumn(newCol)),
+                newColI = Y.Array.indexOf(this.get(&#x27;columns&#x27;),this.getColumn(newCol)),
                 prevRec  = this.getRecord(tarPrev),
                 prevRecI = this.data.indexOf(prevRec),
                 prevCol  = this.getColumnNameByTd(tarPrev),
-                prevColI = this.get(&#x27;columns&#x27;).indexOf( this.getColumn(prevCol));
+                prevColI = Y.Array.indexOf(this.get(&#x27;columns&#x27;),this.getColumn(prevCol));
 
             &#x2F;&#x2F; Calculate range offset ... delCol (horiz) and delRow (vertically)
             var delCol = newColI - prevColI,
@@ -611,12 +644,6 @@ Y.mix( DtSelection.prototype, {
 
     },
 
-    &#x2F;**
-     * @event selected
-     * @param {Object} obj Return object
-     * @param {Object} obj.ochange Change event object passed from attribute &#x27;selected&#x27;
-     * @param {Object} obj.record DataTable record (Y.Model) instance for the selection
-     *&#x2F;
 
     &#x2F;**
      * Returns the current settings of row selections, includes multiple selections.  If the
@@ -662,6 +689,7 @@ Y.mix( DtSelection.prototype, {
      *
      * **Returned** &#x60;cells&#x60; {Array} of objects in format;
      * &lt;ul&gt;
+     *   &lt;li&gt;&#x60;cells.td&#x60; {Node} TD Node for this cell.&lt;&#x2F;li&gt;
      *   &lt;li&gt;&#x60;cells.record&#x60; {Model} Record for this cell as a Y.Model&lt;&#x2F;li&gt;
      *   &lt;li&gt;&#x60;cells.recordIndex&#x60; {Integer} Record index for this cell in the current &quot;data&quot; set&lt;&#x2F;li&gt;
      *   &lt;li&gt;&#x60;cells.column&#x60; {Object} Column for this cell defined in original &quot;columns&quot; DataTable attribute&lt;&#x2F;li&gt;
@@ -686,11 +714,12 @@ Y.mix( DtSelection.prototype, {
                 rec = this.data.getByClientId(tr.getData(&#x27;yui3-record&#x27;));
 
                 cells.push({
-                    record:     rec,
+                    td:          item,
+                    record:      rec,
                     recordIndex: this.data.indexOf(rec),
-                    column:     col,
-                    columnName: col.key || col.name,
-                    columnIndex: cols.indexOf(col)
+                    column:      col,
+                    columnName:  col.key || col.name,
+                    columnIndex: Y.Array.indexOf(cols,col)
                 });
             } else if ( item.get(&#x27;tagName&#x27;).toLowerCase() === &#x27;tr&#x27; ) {
                 tr = item;
@@ -698,14 +727,14 @@ Y.mix( DtSelection.prototype, {
                 var tdNodes = tr.all(&quot;td&quot;);
                 if ( tdNodes ) {
                     tdNodes.each(function(td){
-                        &#x2F;&#x2F;cells.push( {record:this.getRecord(item), column:this.getColumnByTd(item) } )
                         col = this.getColumnByTd(td);
                         cells.push({
-                            record:     rec,
+                            td:          td,
+                            record:      rec,
                             recordIndex: this.data.indexOf(rec),
-                            column:     col,
-                            columnName: col.key || col.name,
-                            columnIndex: cols.indexOf(col)
+                            column:      col,
+                            columnName:  col.key || col.name,
+                            columnIndex: Y.Array.indexOf(cols,col)
                         });
                     },this);
                 }
@@ -984,6 +1013,7 @@ Y.mix( DtSelection.prototype, {
 
 Y.DataTable.Selection = DtSelection;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Selection]);
+
 
     </pre>
 </div>
