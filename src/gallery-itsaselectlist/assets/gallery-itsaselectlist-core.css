@@ -84,6 +84,7 @@
 
 .itsa-selectlist-basediv {
     position: absolute;
+    z-index: 1001;
     cursor:pointer;
     overflow: hidden;
     margin-left: 3px;
