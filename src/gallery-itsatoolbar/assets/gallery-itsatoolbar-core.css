@@ -1,6 +1,12 @@
 #itsatoolbar-ref {
     display: none;
 }
+#itsatoolbar-tmpref {
+    display: none;
+}
+#itsatoolbar-tmpempty {
+    display: none;
+}
 .yui3-button.itsa-button-active {
     background-color: #AAA;
 }
@@ -48,6 +54,12 @@
 .itsatoolbar .yui3-button {
     float: left;
     position: static;
+    margin:0px;
+    height:32px;
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:3px;
+    padding-bottom:4px;
 }
 .itsatoolbar.itsa-buttonsize-small .yui3-button {
     padding: 3px;
@@ -94,15 +106,6 @@
 .itsatoolbar .yui3-widget-loading {
     visibility:hidden;
     display:block;
-}
-
-.itsatoolbar .yui3-button {
-    margin:0px;
-    height:32px;
-    padding-left:10px;
-    padding-right:10px;
-    padding-top:3px;
-    padding-bottom:4px;
 }
 
 .itsa-buttonsize-small .itsa-button-icon {
