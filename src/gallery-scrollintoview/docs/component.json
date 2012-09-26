@@ -1,0 +1,9 @@
+{
+	"name": "gallery-scrollintoview",
+	"displayName": "Node ScrollIntoView",
+	"description": "Overrides scrollIntoView() with a smarter algorithm.",
+	"author": "jafl",
+
+	"use": ["gallery-scrollintoview"],
+	"tags": ["jafl","plugin","node","scroll"]
+}
