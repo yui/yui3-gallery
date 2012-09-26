@@ -731,4 +731,4 @@ Y.Calendar.JumpNavView = Y.Base.create('caljumpnav', Y.View,[],{
 Y.namespace("Plugin.Calendar").JumpNav = CalJumpNav;
 
 
-}, 'gallery-2012.09.19-20-07' ,{requires:['plugin', 'base-build', 'view'], skinnable:false});
+}, 'gallery-2012.09.26-20-36' ,{requires:['plugin', 'base-build', 'view', 'panel', 'calendar'], skinnable:false});

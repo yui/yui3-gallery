@@ -77,9 +77,9 @@ Y.Node.prototype.scrollIntoView = function()
 		var d =
 		{
 			top:    scrollY,
-			bottom: scrollY + ancestor.clientHeight,
+			bottom: scrollY + (hit_top ? Y.DOM.winHeight() : ancestor.clientHeight),
 			left:   scrollX,
-			right:  scrollX + ancestor.clientWidth
+			right:  scrollX + (hit_top ? Y.DOM.winWidth() : ancestor.clientWidth)
 		};
 
 		var dy = 0;
@@ -133,4 +133,4 @@ Y.Node.prototype.scrollIntoView = function()
 };
 
 
-}, 'gallery-2012.06.27-20-10' ,{requires:['gallery-dimensions','dom-screen']});
+}, 'gallery-2012.09.26-20-36' ,{requires:['gallery-dimensions','dom-screen']});

@@ -176,7 +176,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     if (item.returnValue) {newNode.setData('returnValue', item.returnValue);}
                     ullist.append(newNode);
                 }
-                instance._selectedMainItemNode.setHTML(defaultItemFound ? defaultItem : instance.get('defaultButtonText'));
+                instance._selectedMainItemNode.setHTML((instance.get('selectionOnButton') && defaultItemFound) ? defaultItem : instance.get('defaultButtonText'));
             }
             instance._syncWithinSetterItems = true;
         },
@@ -221,7 +221,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     // no hit: return to default without selection in case of softMatch
                     if (softMatch) {
                         nodelist.removeClass(instance._selectedItemClass);
-                        instance._selectedMainItemNode.setHTML(softButtonText ? softButtonText : instance.get('defaultButtonText'));
+                        if (instance.get('selectionOnButton')) {instance._selectedMainItemNode.setHTML(softButtonText ? softButtonText : instance.get('defaultButtonText'));}
                     }
                 }
             }
@@ -273,7 +273,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 if (previousNode) {previousNode.removeClass(instance._selectedItemClass);}
                 node.addClass(instance._selectedItemClass);
                 nodeHTML = node.getHTML();
-                instance._selectedMainItemNode.setHTML(nodeHTML);
+                if (instance.get('selectionOnButton')) {instance._selectedMainItemNode.setHTML(nodeHTML);}
                 /**
                  * In case of a valuechange, valueChange will be fired. 
                  * No matter whether the change is done by userinteraction, or by a functioncall like selectItem()
@@ -283,7 +283,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                  * <i>- e.value: returnvalue of the selected item<br>
                  * <i>- e.index: index of the selected item</i>
                 */                
-                instance.fire('valueChange', {currentTarget: instance, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});
+                instance.fire('valueChange', {currentTarget: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});
                 /**
                  * In case of a valuechange <u>triggered by userinteraction</u>, selectChange will be fired. 
                  * This way you can use functioncalls like selectItem() and prevent double programmaction (which might occur when you listen to the valueChange event)
@@ -293,28 +293,46 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                  * <i>- e.value: returnvalue of the selected item<br>
                  * <i>- e.index: index of the selected item</i>
                 */                
-                if (userInteraction) {instance.fire('selectChange', {currentTarget: instance, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
+                if (userInteraction) {instance.fire('selectChange', {currentTarget: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
             }
         },
 
         /**
          * Will hide the listitems.
+         * Will also fire a <b>hide event</b>.<br>
          * @method hideListbox
          *
         */
         hideListbox : function() {
             var instance = this;
-            if (!instance.get('disabled')) {instance._itemsContainerNode.toggleClass(ITSA_CLASSHIDDEN, true);}
+            if (!instance.get('disabled')) {
+                /**
+                 * In case the listbox is opened, hide-event will be fired. 
+                 * @event shide
+                 * @param {EventFacade} e Event object<br>
+                */                
+                instance.fire('hide');
+                instance._itemsContainerNode.toggleClass(ITSA_CLASSHIDDEN, true);
+            }
         },
 
         /**
          * Will show the listitems.
+         * Will also fire a <b>show event</b>.<br>
          * @method showListbox
          *
         */
         showListbox : function() {
             var instance = this;
-            if (!instance.get('disabled')) {instance._itemsContainerNode.toggleClass(ITSA_CLASSHIDDEN, false);}
+            if (!instance.get('disabled')) {
+                /**
+                 * In case the listbox is opened, show-event will be fired. 
+                 * @event show
+                 * @param {EventFacade} e Event object<br>
+                */                
+                instance.fire('show');
+                instance._itemsContainerNode.toggleClass(ITSA_CLASSHIDDEN, false);
+            }
         },
 
         /**
@@ -326,7 +344,8 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         */
         _toggleListbox : function() {
             var instance = this;
-            if (!instance.get('disabled')) {instance._itemsContainerNode.toggleClass(ITSA_CLASSHIDDEN);}
+            if (instance._itemsContainerNode.hasClass(ITSA_CLASSHIDDEN)) {instance.showListbox();}
+            else {instance.hideListbox();}
         },
 
         /**
@@ -523,6 +542,21 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             },
 
             /**
+             * @description Whether the selection should be displayed on the button.<br>
+             * This is normal behaviour. Although in some cases you might not want this. For example when simulating a menubutton with static text and a dropdown with subbuttons<br>
+             * Default = true<br>
+             * When set to false, the buttontext will always remains the Attribute: <b>defaultButtonText</b>
+             * @attribute selectionOnButton
+             * @type Boolean
+            */
+            selectionOnButton : {
+                value: true,
+                validator: function(val) {
+                    return Y.Lang.isBoolean(val);
+                }
+            },
+
+            /**
              * @description Determines whether to show the selected item in the selectlist, or if it should disappear from the selectlist when selected.<br>
              * Default = false.
              * @attribute hideSelected
@@ -544,4 +578,4 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
 );
 
 
-}, 'gallery-2012.09.19-20-07' ,{requires:['widget-base', 'node-base', 'event-base', 'event-delegate', 'event-outside', 'event-custom'], skinnable:true});
+}, 'gallery-2012.09.26-20-36' ,{requires:['base-build', 'widget-base', 'node-base', 'cssbutton', 'event-base', 'node-event-delegate', 'event-outside'], skinnable:true});

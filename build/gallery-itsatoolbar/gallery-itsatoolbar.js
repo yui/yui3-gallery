@@ -39,9 +39,14 @@ var Lang = Y.Lang,
     ITSA_TOOLBAR_MEDIUM = 'itsa-buttonsize-medium',
     ITSA_CLASSEDITORPART = 'itsatoolbar-editorpart',
     ITSA_SELECTCONTNODE = '<div></div>',
+    ITSA_TMPREFNODE = "<img id='itsatoolbar-tmpref' />",
+    ITSA_REFEMPTYCONTENT = "<img class='itsatoolbar-tmpempty' src='itsa-buttonicons-2012-08-15.png' width=0 height=0>",
     ITSA_REFNODE = "<span id='itsatoolbar-ref'></span>",
     ITSA_REFSELECTION = 'itsa-selection-tmp',
-    ITSA_FONTSIZENODE = 'itsa-fontsize';
+    ITSA_FONTSIZENODE = 'itsa-fontsize',
+    ITSA_FONTFAMILYNODE = 'itsa-fontfamily',
+    ITSA_FONTCOLORNODE = 'itsa-fontcolor',
+    ITSA_MARKCOLORNODE = 'itsa-markcolor';
 
 // -- Public Static Properties -------------------------------------------------
 
@@ -80,7 +85,24 @@ var Lang = Y.Lang,
  * Used internally to check if the toolbar should still be rendered after the editor is rendered<br>
  * To prevent rendering while it is already unplugged
  * @property _destroyed
+ * @private
  * @type Boolean
+ */
+
+/**
+ * Timer: used internally to clean up empty fontsize-markings<br>
+ * @property _timerClearEmptyFontRef
+ * @private
+ * @type Object
+ */
+
+/**
+ * Reference to a backup cursorposition<br>
+ * Is needed for ItsaSelectlist instances, because IE will loose focus when an item is selected.
+ * Reference is made on a show-event of the selectlist.
+ * @property _backupCursorRef
+ * @private
+ * @type Y.Node
  */
 
 /**
@@ -245,6 +267,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         containerNode : null,
         toolbarNode : null,
         _destroyed : false,
+        _timerClearEmptyFontRef : null,
+        _backupCursorRef : null,
 
         ICON_BOLD : 'itsa-icon-bold',
         ICON_ITALIC : 'itsa-icon-italic',
@@ -281,14 +305,17 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             // need to make sure we can use execCommand, so do not render before the frame exists.
             if (instance.editor.frame && instance.editor.frame.get('node')) {instance._render();}
             else {
-                if (Y.UA.ie>0) {
+                var delayIE = false;
+                if (delayIE && (Y.UA.ie>0)) {
                     // didn't find out yet: IE stops creating the editorinstance when pluggedin too soon!
                     // GOTTA check out
                     // at the time being: delaying
                     Y.later(250, instance, instance._render);
                 }
                 else {
-                    instance.editor.on('frame:ready', instance._render, instance);
+                    // do not subscribe to the frame:ready, but to the ready-event
+                    // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
+                    instance.editor.on('ready', instance._render, instance);
                 }
             }
         },
@@ -323,21 +350,34 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * In case of selection, there will always be made a tmp-node as placeholder. But in that case, the tmp-node will be just before the returned node.
          * @method _getCursorRef
          * @private
+         * @param {Boolean} [selectionIfAvailable] do return the selectionnode if a selection is made. If set to false, then always just the cursornode will be returned. 
+         * Which means -in case of selection- that the cursornode exists as a last child of the selection. Default = false.
          * @returns {Y.Node} created empty referencenode
         */
-        _getCursorRef : function() {
+        _getCursorRef : function(selectionIfAvailable) {
             var instance = this,
-                node;
+                node,
+                tmpnode,
+                sel,
+                out;
             // insert cursor and use that node as the selected node
             // first remove previous
             instance._removeCursorRef();
-            node = instance._getSelectedNode();
+            sel = new instance.editorY.EditorSelection();
+            out = sel.getSelected();
+            if (!sel.isCollapsed && out.size()) {
+                // We have a selection
+                node = out.item(0);
+            }
+            // node only exist when selection is available
             if (node) {
                 node.addClass(ITSA_REFSELECTION);
-                instance.editorY.one('body').insertBefore(ITSA_REFNODE, node);
+                node.insert(ITSA_REFNODE, 'after');
+                if (!(Lang.isBoolean(selectionIfAvailable) && selectionIfAvailable)) {node = instance.editorY.one('#itsatoolbar-ref');}
             }
             else {
-                instance.editor.exec.command('inserthtml', ITSA_REFNODE);
+                instance.editor.focus();
+                instance.execCommand('inserthtml', ITSA_REFNODE);
                 node = instance.editorY.one('#itsatoolbar-ref');
             }
             return node;
@@ -357,11 +397,54 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             // first cleanup single referencenode
             node = useY.all('#itsatoolbar-ref');
             if (node) {node.remove();}
-            // next clean up aal selections, by replacing the nodes with its html-content. Thus elimination the <span> definitions
-            node = useY.all('.' + ITSA_REFSELECTION)
+            node = useY.all('#itsatoolbar-tmpempty');
+            if (node) {node.remove();}
+            // next clean up all selections, by replacing the nodes with its html-content. Thus elimination the <span> definitions
+            node = useY.all('.' + ITSA_REFSELECTION);
             if (node.size()>0) {
                 node.each(function(node){
                     node.replace(node.getHTML());
+                });
+            }
+        },
+
+        /**
+         * Removes temporary created font-size-ref-Node that might have been created by inserting fontsizes
+         * @method _clearEmptyFontRef
+         * @private
+        */
+        _clearEmptyFontRef : function() {
+            var instance = this,
+                node,
+                useY;
+            // because it can be called when editorY is already destroyed, you need to take Y-instance instead of editorY in those cases
+            useY = instance.editorY ? instance.editorY : Y;
+            // first cleanup single referencenode
+            node = useY.all('.itsatoolbar-tmpempty');
+            if (node) {node.remove();}
+            // next clean up all references that are empty
+            node = useY.all('.itsa-fontsize');
+            if (node.size()>0) {
+                node.each(function(node){
+                    if (node.getHTML()==='') {node.remove();}
+                });
+            }
+            node = useY.all('.itsa-fontfamily');
+            if (node.size()>0) {
+                node.each(function(node){
+                    if (node.getHTML()==='') {node.remove();}
+                });
+            }
+            node = useY.all('.itsa-fontcolor');
+            if (node.size()>0) {
+                node.each(function(node){
+                    if (node.getHTML()==='') {node.remove();}
+                });
+            }
+            node = useY.all('.itsa-markcolor');
+            if (node.size()>0) {
+                node.each(function(node){
+                    if (node.getHTML()==='') {node.remove();}
                 });
             }
         },
@@ -379,27 +462,32 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             if (node) {
                 sel = new instance.editorY.EditorSelection();
                 sel.selectNode(node);
-                instance._removeCursorRef();
+                // DO NOT call _removeCursorref straight away --> it will make Opera crash
+                Y.later(100, instance, instance._removeCursorRef);
             }
         },
 
         /**
-         * Gets the selection<br>
-         * returns null when no selection is made.
-         * @method _getSelectedNode
+         * Creates a reference at cursorposition for backupusage<br>
+         * Is needed for ItsaSelectlist instances, because IE will loose focus when an item is selected.
+         * @method _createBackupCursorRef
          * @private
-         * @returns {Y.Node} selection-node
         */
-        _getSelectedNode : function() {
-            var instance = this,
-                node = null,
-                sel = new instance.editorY.EditorSelection(),
-                out = sel.getSelected();
-            if (!sel.isCollapsed && out.size()) {
-                // We have a selection
-                node = out.item(0);
-            }
-            return node;
+        _createBackupCursorRef : function() {
+            var instance = this;
+            instance._backupCursorRef = instance._getCursorRef(true);
+        },
+
+        /**
+         * Returns backupnode at cursorposition that is created by _createBackupCursorRef()<br>
+         * Is needed for ItsaSelectlist instances, because IE will loose focus when an item is selected.
+         * So descendenst of ItsaSelectlist should refer to this cursorref.
+         * @method _getBackupCursorRef
+         * @private
+         * @returns {Y.Node} created empty referencenode
+        */
+        _getBackupCursorRef : function() {
+            return this._backupCursorRef;
         },
 
         /**
@@ -409,10 +497,13 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         */
         sync : function(e) {
             // syncUI will sync the toolbarstatus with the editors cursorposition
-            var instance = this;
-            if (!e || !e.changedNode) {
-                e = {changedNode: instance._getCursorRef()};
-                Y.later(500, instance, instance._removeCursorRef);
+            var instance = this,
+                cursorRef;
+            if (!(e && e.changedNode)) {
+                cursorRef = instance._getCursorRef(false);
+                if (!e) {e = {changedNode: cursorRef};}
+                else {e.changedNode = cursorRef;}
+                Y.later(250, instance, instance._removeCursorRef);
             }
             instance.toolbarNode.fire('itsatoolbar:statusChange', e);
         },
@@ -420,7 +511,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         /**
          * Creates a new Button on the Toolbar. By default at the end of the toolbar.
          * @method addButton
-         * @param {String} iconClass Defines the icon's look. Refer to the general moduledescription for a list with available classes.
+         * @param {String} iconClass Defines the icon's look. Refer to the static Properties for some predefined classes like ICON_BOLD.
          * @param {String | Object} execCommand ExecCommand that will be executed on buttonclick.<br>
          * when execCommand consists of a command and a value, or you want a custom Function to be executed, you must supply an object:<br>
          * <i>- [command]</i> (String): the execcommand<br>
@@ -459,7 +550,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * A syncButton is just like a normal toolbarButton, with the exception that the editor can sync it's status, which cannot be done with a normal button. 
          * Typically used in situations like a hyperlinkbutton: it never stays pressed, but when the cursos is on a hyperlink, he buttons look will change.
          * @method addSyncButton
-         * @param {String} iconClass Defines the icon's look. Refer static Properties for some predefined classes like ICON_BOLD.
+         * @param {String} iconClass Defines the icon's look. Refer to the static Properties for some predefined classes like ICON_BOLD.
          * @param {String | Object} execCommand ExecCommand that will be executed on buttonclick.<br>
          * when execCommand consists of a command and a value, you must supply an object with two fields:<br>
          * <i>- command</i> (String): the execcommand<br>
@@ -484,7 +575,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         /**
          * Creates a new toggleButton on the Toolbar. By default at the end of the toolbar.
          * @method addToggleButton
-         * @param {String} iconClass Defines the icon's look. Refer static Properties for some predefined classes like ICON_BOLD.
+         * @param {String} iconClass Defines the icon's look. Refer to the static Properties for some predefined classes like ICON_BOLD.
          * @param {String | Object} execCommand ExecCommand that will be executed on buttonclick.<br>
          * when execCommand consists of a command and a value, you must supply an object with two fields:<br>
          * <i>- command</i> (String): the execcommand<br>
@@ -509,7 +600,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * Position is by default at the end of the toolbar.<br>
          * @method addButtongroup
          * @param {Array} buttons Should consist of objects with two fields:<br>
-         * <i>- iconClass</i> (String): defines the icon's look. Refer static Properties for some predefined classes like ICON_BOLD.
+         * <i>- iconClass</i> (String): defines the icon's look. Refer to the static Properties for some predefined classes like ICON_BOLD.
          * <i>- command</i> (String): the execcommand that will be executed on buttonclick
          * <i>- [value]</i> (String) optional: additional value for the execcommand
          * <i>- syncFunc</i> (Function): callback-function that will be called after a statusChange, when the users manupilates the text, or the cursor is moved (for more info on the sync-function, see addToggleButton)
@@ -547,7 +638,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * Creates a selectList on the Toolbar. By default at the end of the toolbar.
          * When fired, the event-object returnes with 2 fields:<br>
          * <i>- e.value</i>: value of selected item<br>
-         * <i>- e.index</i>: indexnr of the selected item
+         * <i>- e.index</i>: indexnr of the selected item<br>.
+         * CAUTION: when using a selectlist, you <u>cannot</u? use standard execCommands. That will not work in most browsers, because the focus will be lost. <br>
+         * Instead, create your customexecCommand and use cursorrefference <i>_getBackupCursorRef()</i>: see example <i>_defineExecCommandFontFamily()</i>
          * @method addSelectList
          * @param {Array} items contains all the items. Should be either a list of (String), or a list of (Objects). In case of an Object-list, the objects should contain two fields:<br>
          * <i>- text</i> (String): the text shown in the selectlist<br>
@@ -587,6 +680,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 }
                 if (indent) {selectlist.get('boundingBox').addClass('itsa-button-indent');}
                 instance.toolbarNode.addTarget(buttonNode);
+                selectlist.on('show', instance._createBackupCursorRef, instance);
                 selectlist.on('selectChange', instance._handleSelectChange, instance);
                 if (Lang.isFunction(syncFunc)) {buttonNode.on('itsatoolbar:statusChange', Y.rbind(syncFunc, context || instance));}
                 instance.editor.on('nodeChange', selectlist.hideListbox, selectlist);
@@ -607,6 +701,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
              // first, set _notDestroyed to false --> this will prevent rendering if editor.frame:ready fires after toolbars destruction
             instance._destroyed = true;
             instance._removeCursorRef();
+            if (instance._timerClearEmptyFontRef) {instance._timerClearEmptyFontRef.cancel();}
+            instance._clearEmptyFontRef();
             if (instance.toolbarNode) {instance.toolbarNode.remove(true);}
         },
 
@@ -674,7 +770,10 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         _defineCustomExecCommands : function() {
             var instance = this;
             instance._defineExecCommandHeader();
+            instance._defineExecCommandFontFamily();
             instance._defineExecCommandFontSize();
+            instance._defineExecCommandFontColor();
+            instance._defineExecCommandMarkColor();
             instance._defineExecCommandHyperlink();
             instance._defineExecCommandMaillink();
             instance._defineExecCommandImage();
@@ -742,16 +841,27 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
 
         /**
          * Performs a execCommand that will take into account the editors cursorposition<br>
-         * This means that when no selection is made, the operation still works: you can preset an command this way.
+         * This means that when no selection is made, the operation still works: you can preset an command this way.<br>
+         * It also makes 'inserthtml' work with all browsers.
          *
          * @method execCommand
          * @param {String} command The execCommand
          * @param {String} [value] additional commandvalue
         */
         execCommand: function(command, value) {
-            var instance = this;
+            var instance = this,
+                tmpnode;
             instance.editor.focus();
-            instance.editor.exec.command(command, value);
+            if (command==='inserthtml') {
+                // we need a tmp-ref which is an img-element instead of a span-element --> inserthtml of span does not work in chrome and safari
+                // but inserting img does, which can replaced afterwards
+                // first a command that I don't understand: but we need this, because otherwise some browsers will replace <br> by <p> elements
+                instance.editor._execCommand('createlink', '&nbsp;');
+                instance.editor.exec.command('inserthtml', ITSA_TMPREFNODE);
+                tmpnode = instance.editorY.one('#itsatoolbar-tmpref');
+                tmpnode.replace(value);
+            }
+            else {instance.editor.exec.command(command, value);}
         },
 
         /**
@@ -783,11 +893,12 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 fragment,
                 inbetween = false,
                 refContent = instance.editorY.one('body').getHTML(),
-                nodewrap,
+                cursorid,
                 cursorindex;
-            nodewrap = Node.create('<div></div>');
-            nodewrap.append(cursornode.cloneNode(true));
-            cursorindex = refContent.indexOf(nodewrap.getHTML());
+            cursorid = cursornode.get('id');
+            cursorindex = refContent.indexOf(' id="' + cursorid + '"');
+            if (cursorindex===-1) {cursorindex = refContent.indexOf(" id='" + cursorid + "'");}
+            if (cursorindex===-1) {cursorindex = refContent.indexOf(" id=" + cursorid);}
             fragment = searchHeaderPattern.exec(refContent);
             while ((fragment !== null) && !inbetween) {
                 inbetween = ((cursorindex>=fragment.index) && (cursorindex<(fragment.index+fragment[0].length)));
@@ -810,7 +921,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 searchHeaderPattern,
                 fragment,
                 nodeFound,
-                nodewrap,
+                cursorid,
                 nodetag,
                 headingNumber = 0,
                 returnNode = null,
@@ -825,19 +936,19 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     returnNode = cursornode;
                 }
                 else {
-                    nodewrap = Node.create('<div></div>');
-                    nodewrap.append(cursornode.cloneNode(true));
+                    cursorid = cursornode.get('id');
                     // first look for endtag, to determine which headerlevel to search for
-//                    pattern = '<\\s*h\\d[^>]*>(.*?)' + nodewrap.getHTML() + '(.*?)<\\s*/\\s*h\\d>';
-                    pattern = nodewrap.getHTML() + '(.*?)<\\s*/\\s*h\\d>';
+                    pattern = ' id=("|\')?' + cursorid + '("|\')?(.*?)<\\s*/\\s*h\\d>';
                     searchHeaderPattern = new RegExp(pattern, 'gi');
                     refContent = instance.editorY.one('body').getHTML();
                     fragment = searchHeaderPattern.exec(refContent);
+
+
                     if (fragment !== null) {
                         // search again, looking for the right headernumber
                         endpos = fragment.index+fragment[0].length-1;
                         headingNumber = refContent.substring(endpos-1, endpos);
-                        pattern = '<\\s*h' + headingNumber + '[^>]*>(.*?)' + nodewrap.getHTML() + '(.*?)<\\s*/\\s*h' + headingNumber + '>';
+                        pattern = '<\\s*h' + headingNumber + '[^>]*>(.*?)id=("|\')?' + cursorid + '("|\')?(.*?)<\\s*/\\s*h' + headingNumber + '>';
                         searchHeaderPattern = new RegExp(pattern, 'gi');
                         fragment = searchHeaderPattern.exec(refContent); // next search
                         if (fragment !== null) {
@@ -876,13 +987,13 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     item = items[i];
                     items[i] = {text: "<span style='font-family:"+item+"'>"+item+"</span>", returnValue: item};
                 }
-                instance.fontSelectlist = instance.addSelectlist(items, 'fontname2', function(e) {
+                instance.fontSelectlist = instance.addSelectlist(items, 'itsafontfamily', function(e) {
                     var familyList = e.changedNode.getStyle('fontFamily'),
                         familyListArray = familyList.split(','),
                         activeFamily = familyListArray[0];
                     // some browsers place '' surround the string, when it should contain whitespaces.
                     // first remove them
-                    if (activeFamily.substring(0,1)==="'") {activeFamily = activeFamily.substring(1, activeFamily.length-1);}
+                    if ((activeFamily.substring(0,1)==="'") || (activeFamily.substring(0,1)==='"')) {activeFamily = activeFamily.substring(1, activeFamily.length-1);}
                     this.fontSelectlist.selectItemByValue(activeFamily, true, true);
                 }, null, true, {buttonWidth: 145});
             }
@@ -892,11 +1003,11 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 items = [];
                 for (i=6; i<=32; i++) {items.push({text: i.toString(), returnValue: i+'px'});}
                 instance.sizeSelectlist = instance.addSelectlist(items, 'itsafontsize', function(e) {
-                    var fontSize = e.changedNode.getStyle('fontSize'),
+                    var fontSize = e.changedNode.getComputedStyle('fontSize'),
                         fontSizeNumber = parseFloat(fontSize),
                         fontsizeExt = fontSize.substring(fontSizeNumber.toString().length);
                     // make sure not to display partial numbers    
-                    this.sizeSelectlist.selectItemByValue(Math.round(fontSizeNumber)+fontsizeExt, true);
+                    this.sizeSelectlist.selectItemByValue(Lang.isNumber(fontSizeNumber) ? Math.round(fontSizeNumber)+fontsizeExt : '', true);
                 }, null, true, {buttonWidth: 42, className: 'itsatoolbar-fontsize', listAlignLeft: false});
             }
 
@@ -922,7 +1033,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             // create bold button
             if (instance.get('btnBold')) {
                 instance.addToggleButton(instance.ICON_BOLD, 'bold', function(e) {
-                    e.currentTarget.toggleClass(ITSA_BTNPRESSED, (e.changedNode.getStyle('fontWeight')==='bold'));
+                    var fontWeight = e.changedNode.getStyle('fontWeight');
+                    e.currentTarget.toggleClass(ITSA_BTNPRESSED, (Lang.isNumber(parseInt(fontWeight, 10)) ? (fontWeight>=600) : ((fontWeight==='bold') || (fontWeight==='bolder'))));
                 }, null, true);
             }
 
@@ -1000,7 +1112,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     bgcolor = bgcolors[i];
                     items.push({text: "<div style='background-color:"+bgcolor+";'></div>", returnValue: bgcolor});
                 }
-                instance.colorSelectlist = instance.addSelectlist(items, 'forecolor', function(e) {
+                instance.colorSelectlist = instance.addSelectlist(items, 'itsafontcolor', function(e) {
                     var instance = this,
                         styleColor = e.changedNode.getStyle('color'),
                         hexColor = instance._filter_rgb(styleColor);
@@ -1016,7 +1128,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     bgcolor = bgcolors[i];
                     items.push({text: "<div style='background-color:"+bgcolor+";'></div>", returnValue: bgcolor});
                 }
-                instance.markcolorSelectlist = instance.addSelectlist(items, 'hilitecolor', function(e) {
+                instance.markcolorSelectlist = instance.addSelectlist(items, 'itsamarkcolor', function(e) {
                     var instance = this,
                         styleColor = e.changedNode.getStyle('backgroundColor'),
                         hexColor = instance._filter_rgb(styleColor);
@@ -1192,15 +1304,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             return css;
         },
 
-        /**********************************************************************************************************************
-        ***********************************************************************************************************************
-
-        FUNCTIONS BELOW REALLY NEED TO BE REDISGNED
-        THEY DO NOT WORK WELL
-
-        ***********************************************************************************************************************
-        ***********************************************************************************************************************/
-
         /**
         * Defines the execCommand itsaheading
         * @method _defineExecCommandHeader
@@ -1213,7 +1316,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                         var editor = this.get('host'),
                             editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
-                            noderef = itsatoolbar._getCursorRef(),
+                            noderef = itsatoolbar._getBackupCursorRef(),
                             activeHeader = itsatoolbar._getActiveHeader(noderef),
                             headingNumber = 0,
                             disableSelectbutton = false,
@@ -1221,7 +1324,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                         if (val==='none') {
                             // want to clear heading
                             if (activeHeader) {
-                                activeHeader.replace("<span class='" + ITSA_REFSELECTION + "'>"+activeHeader.getHTML()+"</span>");
+                                activeHeader.replace("<p>"+activeHeader.getHTML()+"</p>");
                                 // need to disable the selectbutton right away, because there will be no syncing on the headerselectbox
                                 itsatoolbar.headerSelectlist.set('disabled', true);
                             }
@@ -1234,11 +1337,55 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                                 node.replace("<"+val+" id='" + editorY.guid() + "'>"+node.getHTML()+"</"+val+">");
                             }
                         }
-                        itsatoolbar._setCursorAtRef();
                         // do a toolbarsync, because styles will change.
                         // but do not refresh the heading-selectlist! Therefore e.sender is defined
-                        itsatoolbar.sync({sender: 'itsaheading'});
+                        itsatoolbar.sync({sender: 'itsaheading', changedNode: editorY.one('#itsatoolbar-ref')});
+                        // take some time to let the sync do its work before set and remove cursor
+                        Y.later(250, itsatoolbar, itsatoolbar._setCursorAtRef);
                    }
+                });
+            }
+        },
+
+        /**
+        * Defines the execCommand itsafontfamily
+        * @method _defineExecCommandFontFamily
+        * @private
+        */
+        _defineExecCommandFontFamily : function() {
+            // This function seriously needs redesigned.
+            // it does work, but as you can see in the comment, there are some flaws
+            if (!Y.Plugin.ExecCommand.COMMANDS.itsafontfamily) {
+                Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
+                    itsafontfamily: function(cmd, val) {
+                        var editor = this.get('host'),
+                            editorY = editor.getInstance(),
+                            itsatoolbar = editor.itsatoolbar,
+                            noderef,
+                            browserNeedsContent,
+                            selection;
+                        if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
+                        itsatoolbar._clearEmptyFontRef();
+                        noderef = itsatoolbar._getBackupCursorRef();
+                        selection = noderef.hasClass(ITSA_REFSELECTION);
+                        if (selection) {
+                            // first cleaning up old fontsize
+                            noderef.all('span').setStyle('fontFamily', '');
+                            // now previous created span-tags will be marked as temp-selection --> this way the can be removed (retaining innerhtml)
+                            noderef.all('.'+ITSA_FONTFAMILYNODE).replaceClass(ITSA_FONTFAMILYNODE, ITSA_REFSELECTION);
+                            noderef.setStyle('fontFamily', val);
+                            // now, mark this node, so we know it is made by itsafontsize. This way, we can cleanup when fontsize is generated multiple times (prevent creating span within span)
+                            noderef.addClass(ITSA_FONTFAMILYNODE);
+                            // remove the selection-mark before removing tmp-node placeholder: we need to keep the node
+                            noderef.removeClass(ITSA_REFSELECTION);
+                            itsatoolbar._setCursorAtRef();
+                        }
+                        else {
+                            itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_FONTFAMILYNODE + "' style='font-family:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
+                            itsatoolbar._setCursorAtRef();
+                            Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
+                        }
+                    }
                 });
             }
         },
@@ -1253,14 +1400,19 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             // it does work, but as you can see in the comment, there are some flaws
             if (!Y.Plugin.ExecCommand.COMMANDS.itsafontsize) {
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
-                   itsafontsize: function(cmd, val) {
+                    itsafontsize: function(cmd, val) {
                         var editor = this.get('host'),
                             editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
-                            noderef = itsatoolbar._getCursorRef(),
+                            noderef,
                             parentnode,
-                            selection = noderef.hasClass(ITSA_REFSELECTION);
-                       if (selection) {
+                            browserNeedsContent,
+                            selection;
+                        if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
+                        itsatoolbar._clearEmptyFontRef();
+                        noderef = itsatoolbar._getBackupCursorRef();
+                        selection = noderef.hasClass(ITSA_REFSELECTION);
+                        if (selection) {
                             //We have a selection
                             parentnode = noderef.get('parentNode');
                             if (Y.UA.webkit) {
@@ -1275,15 +1427,105 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                             noderef.addClass(ITSA_FONTSIZENODE);
                             // remove the selection-mark before removing tmp-node placeholder: we need to keep the node
                             noderef.removeClass(ITSA_REFSELECTION);
+                            itsatoolbar._setCursorAtRef();
+                        }
+                        else {
+                            itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_FONTSIZENODE + "' style='font-size:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
+                            itsatoolbar._setCursorAtRef();
+                            Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
+                        }
+                    }
+                });
+            }
+        },
+
+        /**
+        * Defines the execCommand itsafontcolor<br>
+        * We need to overrule the standard color execCommand, because in IE the ItsaSelectlist will loose focus on the selection
+        * @method _defineExecCommandFontColor
+        * @private
+        */
+        _defineExecCommandFontColor : function() {
+            // This function seriously needs redesigned.
+            // it does work, but as you can see in the comment, there are some flaws
+            if (!Y.Plugin.ExecCommand.COMMANDS.itsafontcolor) {
+                Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
+                    itsafontcolor: function(cmd, val) {
+                        var editor = this.get('host'),
+                            editorY = editor.getInstance(),
+                            itsatoolbar = editor.itsatoolbar,
+                            noderef,
+                            browserNeedsContent,
+                            selection;
+                        if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
+                        itsatoolbar._clearEmptyFontRef();
+                        noderef = itsatoolbar._getBackupCursorRef();
+                        selection = noderef.hasClass(ITSA_REFSELECTION);
+                        if (selection) {
+                            //We have a selection
+                            // first cleaning up old fontcolors
+                            noderef.all('span').setStyle('color', '');
+                            // now previous created span-tags will be marked as temp-selection --> this way the can be removed (retaining innerhtml)
+                            noderef.all('.'+ITSA_FONTCOLORNODE).replaceClass(ITSA_FONTCOLORNODE, ITSA_REFSELECTION);
+                            noderef.setStyle('color', val);
+                            // now, mark this node, so we know it is made by itsafontsize. This way, we can cleanup when fontsize is generated multiple times (prevent creating span within span)
+                            noderef.addClass(ITSA_FONTCOLORNODE);
+                            // remove the selection-mark before removing tmp-node placeholder: we need to keep the node
+                            noderef.removeClass(ITSA_REFSELECTION);
+                            itsatoolbar._setCursorAtRef();
+                        }
+                        else {
+                            itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_FONTCOLORNODE + "' style='color:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
+                            itsatoolbar._setCursorAtRef();
+                            Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
+                        }
+                    }
+                });
+            }
+        },
+
+        /**
+        * Defines the execCommand itsamarkcolor<br>
+        * We need to overrule the standard hilitecolor execCommand, because in IE the ItsaSelectlist will loose focus on the selection
+        * @method _defineExecCommandMarkColor
+        * @private
+        */
+        _defineExecCommandMarkColor : function() {
+            // This function seriously needs redesigned.
+            // it does work, but as you can see in the comment, there are some flaws
+            if (!Y.Plugin.ExecCommand.COMMANDS.itsamarkcolor) {
+                Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
+                    itsamarkcolor: function(cmd, val) {
+                        var editor = this.get('host'),
+                            editorY = editor.getInstance(),
+                            itsatoolbar = editor.itsatoolbar,
+                            noderef,
+                            browserNeedsContent,
+                            selection;
+                        if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
+                        itsatoolbar._clearEmptyFontRef();
+                        noderef = itsatoolbar._getBackupCursorRef();
+                        selection = noderef.hasClass(ITSA_REFSELECTION);
+                        if (selection) {
+                            //We have a selection
+                            // first cleaning up old fontbgcolors
+                            noderef.all('span').setStyle('backgroundColor', '');
+                            // now previous created span-tags will be marked as temp-selection --> this way the can be removed (retaining innerhtml)
+                            noderef.all('.'+ITSA_MARKCOLORNODE).replaceClass(ITSA_MARKCOLORNODE, ITSA_REFSELECTION);
+                            noderef.setStyle('backgroundColor', val);
+                            // now, mark this node, so we know it is made by itsafontsize. This way, we can cleanup when fontsize is generated multiple times (prevent creating span within span)
+                            noderef.addClass(ITSA_MARKCOLORNODE);
+                            // remove the selection-mark before removing tmp-node placeholder: we need to keep the node
+                            noderef.removeClass(ITSA_REFSELECTION);
                             // remove the tmp-node placeholder
-                            itsatoolbar._removeCursorRef();
-                       }
-                       else {
-//                           itsatoolbar._setCursorAtRef();
-                           itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_FONTSIZENODE + "' style='font-size:" + val + "'>" + ITSA_REFNODE + "</span>");
-                           itsatoolbar._setCursorAtRef();
-                       }
-                   }
+                            itsatoolbar._setCursorAtRef();
+                        }
+                        else {
+                            itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_MARKCOLORNODE + "' style='backgroundColor:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
+                            itsatoolbar._setCursorAtRef();
+                            Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
+                        }
+                    }
                 });
             }
         },
@@ -1568,8 +1810,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             },
 
             /**
-             * @description The fontfamilies that can be selected<br>
-             * Should be a value from 1-9<br>
+             * @description The fontfamilies that can be selected.<br>
+             * Be aware to supply fontFamilies that are supported by the browser.<br>
+             * Typically usage is the standard families extended by some custom fonts.<br>
              * @attribute fontFamilies
              * @type Array [String]
             */
@@ -2007,4 +2250,4 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
 );
 
 
-}, 'gallery-2012.09.12-20-02' ,{requires:['plugin', 'base-build', 'node-base', 'editor', 'event-delegate', 'event-custom', 'cssbutton', 'gallery-itsaselectlist'], skinnable:true});
+}, 'gallery-2012.09.26-20-36' ,{requires:['plugin', 'base-build', 'node-base', 'editor', 'event-delegate', 'event-custom', 'cssbutton', 'gallery-itsaselectlist'], skinnable:true});

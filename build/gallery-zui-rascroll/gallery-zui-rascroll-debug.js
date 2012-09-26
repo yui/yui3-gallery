@@ -114,6 +114,8 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
 
         if (this._hori ? !onlyX : onlyX) {
             this._host.set('disabled', true);
+        } else {
+            E.preventDefault();
         }
     },
 
@@ -163,4 +165,4 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
 });
 
 
-}, 'gallery-2012.08.29-20-10' ,{requires:['scrollview'], skinnable:false});
+}, 'gallery-2012.09.26-20-36' ,{requires:['scrollview'], skinnable:false});

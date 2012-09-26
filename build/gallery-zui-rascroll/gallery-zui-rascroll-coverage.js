@@ -26,10 +26,10 @@ _yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"] = {
     path: "/build/gallery-zui-rascroll/gallery-zui-rascroll.js",
     code: []
 };
-_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].code=["YUI.add('gallery-zui-rascroll', function(Y) {","","/**"," * The RAScrollPlugin help to handle scrollView behaviors."," * When a Horizontal scrollView is placed inside a Vertical scrollView,"," * user can do only x or y direction slick."," *"," * @module gallery-zui-rascroll"," */ ","var dragging = 0,","    dragStart = false,","    onlyX = false,","/**"," * RAScrollPlugin is a ScrollView plugin that adds right angle flick behaviors."," *"," * @class RAScrollPlugin"," * @namespace zui "," * @extends Plugin.Base"," * @constructor"," */","    RAScrollPlugin = function () {","        RAScrollPlugin.superclass.constructor.apply(this, arguments);","    };","","RAScrollPlugin.NAME = 'pluginRAScroll';","RAScrollPlugin.NS = 'zras';","RAScrollPlugin.ATTRS = {","    /**","     * make the scrollView as horizontal or not.","     *","     * @attribute horizontal","     * @default true","     * @type Boolean","     */","    horizontal: {","        value: true,","        lazyAdd: false,","        validator: Y.Lang.isBoolean,","        setter: function (V) {","            this._hori = V;","            return V;","        }","    },","","    /**","     * A boolean decides the right angle behavior should started when other scrollView is also dragged.","     *","     * @attribute cooperation","     * @default false","     * @type Boolean","     */","    cooperation: {","        value: false,","        lazyAdd: false,","        validator: Y.Lang.isBoolean,","        setter: function (V) {","            this._coop = V;","            return V;","        }","    }","};","","Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {","    initializer: function () {","        this._host = this.get('host');","        this._node = this._host.get('boundingBox');","        this._cnt = this._host.get('contentBox');","        this._start = false;","","        if (!this._hori) {","            this._cnt.setStyle('overflowX', 'hidden');","        }","","        this._handles.push(new Y.EventHandle([","            this._node.on('gesturemovestart', this.handleGestureMoveStart),","            this._node.on('gesturemove', Y.bind(this.handleGestureMove, this)),","            this._cnt.on('gesturemoveend', Y.bind(this.handleGestureMoveEnd, this), {standAlone: true})","        ]));","","        this.syncScroll();","    },","","    /**","     * internal gesturemovestart event handler","     *","     * @method handleGestureMoveStart","     * @protected","     */","    handleGestureMoveStart: function (E) {","        dragging++;","    },","","    /**","     * internal gesturemove event handler","     *","     * @method handleGestureMove","     * @protected","     */","    handleGestureMove: function (E) {","        if (this._start) {","            return;","        }","","        this._start = true;","","        if (!dragStart) {","            onlyX = Math.abs(this._host._startClientX - E.clientX) > Math.abs(this._host._startClientY - E.clientY);","            dragStart = true;","        }","","        if (this._coop && dragging < 2) {","            return;","        }","","        if (this._hori ? !onlyX : onlyX) {","            this._host.set('disabled', true);","        }","    },","","    /**","     * internal gesturemoveend event handler","     *","     * @method handleGestureMoveEnd","     * @protected","     */","    handleGestureMoveEnd: function (E) {","        this._start = false;","        dragStart = false;","        dragging = 0;","","        if (this._hori ? !onlyX : onlyX) {","            Y.later(1, this._host, this._host.set, ['disabled', false]);","        }","    },","","    /**","     * sync width or height for vertical scroll or horizontal scroll","     *","     * @method syncScroll","     */","    syncScroll: function () {","        if (this._hori) {","            this._node.set('offsetHeight', this._node.get('scrollHeight'));","        } else {","            this.syncWidth();","        }","    },","","    /**","     * make the scrollView become vertical scrolling","     *","     * @method syncWidth","     */","    syncWidth: function () {","        var c = this._cnt,","            sw = this._node.get('scrollWidth'),","            pw = this._node.get('offsetWidth');","","        if (sw > pw) {","            c.set('offsetWidth', c.get('offsetWidth') + pw - sw);","        }","    }","});","","","}, 'gallery-2012.08.29-20-10' ,{requires:['scrollview'], skinnable:false});"];
-_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].lines = {"1":0,"10":0,"22":0,"25":0,"26":0,"27":0,"40":0,"41":0,"57":0,"58":0,"63":0,"65":0,"66":0,"67":0,"68":0,"70":0,"71":0,"74":0,"80":0,"90":0,"100":0,"101":0,"104":0,"106":0,"107":0,"108":0,"111":0,"112":0,"115":0,"116":0,"127":0,"128":0,"129":0,"131":0,"132":0,"142":0,"143":0,"145":0,"155":0,"159":0,"160":0};
-_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].functions = {"RAScrollPlugin:21":0,"setter:39":0,"setter:56":0,"initializer:64":0,"handleGestureMoveStart:89":0,"handleGestureMove:99":0,"handleGestureMoveEnd:126":0,"syncScroll:141":0,"syncWidth:154":0,"(anonymous 1):1":0};
-_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].coveredLines = 41;
+_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].code=["YUI.add('gallery-zui-rascroll', function(Y) {","","/**"," * The RAScrollPlugin help to handle scrollView behaviors."," * When a Horizontal scrollView is placed inside a Vertical scrollView,"," * user can do only x or y direction slick."," *"," * @module gallery-zui-rascroll"," */ ","var dragging = 0,","    dragStart = false,","    onlyX = false,","/**"," * RAScrollPlugin is a ScrollView plugin that adds right angle flick behaviors."," *"," * @class RAScrollPlugin"," * @namespace zui "," * @extends Plugin.Base"," * @constructor"," */","    RAScrollPlugin = function () {","        RAScrollPlugin.superclass.constructor.apply(this, arguments);","    };","","RAScrollPlugin.NAME = 'pluginRAScroll';","RAScrollPlugin.NS = 'zras';","RAScrollPlugin.ATTRS = {","    /**","     * make the scrollView as horizontal or not.","     *","     * @attribute horizontal","     * @default true","     * @type Boolean","     */","    horizontal: {","        value: true,","        lazyAdd: false,","        validator: Y.Lang.isBoolean,","        setter: function (V) {","            this._hori = V;","            return V;","        }","    },","","    /**","     * A boolean decides the right angle behavior should started when other scrollView is also dragged.","     *","     * @attribute cooperation","     * @default false","     * @type Boolean","     */","    cooperation: {","        value: false,","        lazyAdd: false,","        validator: Y.Lang.isBoolean,","        setter: function (V) {","            this._coop = V;","            return V;","        }","    }","};","","Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {","    initializer: function () {","        this._host = this.get('host');","        this._node = this._host.get('boundingBox');","        this._cnt = this._host.get('contentBox');","        this._start = false;","","        if (!this._hori) {","            this._cnt.setStyle('overflowX', 'hidden');","        }","","        this._handles.push(new Y.EventHandle([","            this._node.on('gesturemovestart', this.handleGestureMoveStart),","            this._node.on('gesturemove', Y.bind(this.handleGestureMove, this)),","            this._cnt.on('gesturemoveend', Y.bind(this.handleGestureMoveEnd, this), {standAlone: true})","        ]));","","        this.syncScroll();","    },","","    /**","     * internal gesturemovestart event handler","     *","     * @method handleGestureMoveStart","     * @protected","     */","    handleGestureMoveStart: function (E) {","        dragging++;","    },","","    /**","     * internal gesturemove event handler","     *","     * @method handleGestureMove","     * @protected","     */","    handleGestureMove: function (E) {","        if (this._start) {","            return;","        }","","        this._start = true;","","        if (!dragStart) {","            onlyX = Math.abs(this._host._startClientX - E.clientX) > Math.abs(this._host._startClientY - E.clientY);","            dragStart = true;","        }","","        if (this._coop && dragging < 2) {","            return;","        }","","        if (this._hori ? !onlyX : onlyX) {","            this._host.set('disabled', true);","        } else {","            E.preventDefault();","        }","    },","","    /**","     * internal gesturemoveend event handler","     *","     * @method handleGestureMoveEnd","     * @protected","     */","    handleGestureMoveEnd: function (E) {","        this._start = false;","        dragStart = false;","        dragging = 0;","","        if (this._hori ? !onlyX : onlyX) {","            Y.later(1, this._host, this._host.set, ['disabled', false]);","        }","    },","","    /**","     * sync width or height for vertical scroll or horizontal scroll","     *","     * @method syncScroll","     */","    syncScroll: function () {","        if (this._hori) {","            this._node.set('offsetHeight', this._node.get('scrollHeight'));","        } else {","            this.syncWidth();","        }","    },","","    /**","     * make the scrollView become vertical scrolling","     *","     * @method syncWidth","     */","    syncWidth: function () {","        var c = this._cnt,","            sw = this._node.get('scrollWidth'),","            pw = this._node.get('offsetWidth');","","        if (sw > pw) {","            c.set('offsetWidth', c.get('offsetWidth') + pw - sw);","        }","    }","});","","","}, 'gallery-2012.09.26-20-36' ,{requires:['scrollview'], skinnable:false});"];
+_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].lines = {"1":0,"10":0,"22":0,"25":0,"26":0,"27":0,"40":0,"41":0,"57":0,"58":0,"63":0,"65":0,"66":0,"67":0,"68":0,"70":0,"71":0,"74":0,"80":0,"90":0,"100":0,"101":0,"104":0,"106":0,"107":0,"108":0,"111":0,"112":0,"115":0,"116":0,"118":0,"129":0,"130":0,"131":0,"133":0,"134":0,"144":0,"145":0,"147":0,"157":0,"161":0,"162":0};
+_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].functions = {"RAScrollPlugin:21":0,"setter:39":0,"setter:56":0,"initializer:64":0,"handleGestureMoveStart:89":0,"handleGestureMove:99":0,"handleGestureMoveEnd:128":0,"syncScroll:143":0,"syncWidth:156":0,"(anonymous 1):1":0};
+_yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].coveredLines = 42;
 _yuitest_coverage["/build/gallery-zui-rascroll/gallery-zui-rascroll.js"].coveredFunctions = 10;
 _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 1);
 YUI.add('gallery-zui-rascroll', function(Y) {
@@ -184,6 +184,9 @@ return;
 if (this._hori ? !onlyX : onlyX) {
             _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 116);
 this._host.set('disabled', true);
+        } else {
+            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 118);
+E.preventDefault();
         }
     },
 
@@ -194,17 +197,17 @@ this._host.set('disabled', true);
      * @protected
      */
     handleGestureMoveEnd: function (E) {
-        _yuitest_coverfunc("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", "handleGestureMoveEnd", 126);
-_yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 127);
+        _yuitest_coverfunc("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", "handleGestureMoveEnd", 128);
+_yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 129);
 this._start = false;
-        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 128);
+        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 130);
 dragStart = false;
-        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 129);
+        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 131);
 dragging = 0;
 
-        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 131);
+        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 133);
 if (this._hori ? !onlyX : onlyX) {
-            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 132);
+            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 134);
 Y.later(1, this._host, this._host.set, ['disabled', false]);
         }
     },
@@ -215,13 +218,13 @@ Y.later(1, this._host, this._host.set, ['disabled', false]);
      * @method syncScroll
      */
     syncScroll: function () {
-        _yuitest_coverfunc("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", "syncScroll", 141);
-_yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 142);
+        _yuitest_coverfunc("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", "syncScroll", 143);
+_yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 144);
 if (this._hori) {
-            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 143);
+            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 145);
 this._node.set('offsetHeight', this._node.get('scrollHeight'));
         } else {
-            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 145);
+            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 147);
 this.syncWidth();
         }
     },
@@ -232,19 +235,19 @@ this.syncWidth();
      * @method syncWidth
      */
     syncWidth: function () {
-        _yuitest_coverfunc("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", "syncWidth", 154);
-_yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 155);
+        _yuitest_coverfunc("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", "syncWidth", 156);
+_yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 157);
 var c = this._cnt,
             sw = this._node.get('scrollWidth'),
             pw = this._node.get('offsetWidth');
 
-        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 159);
+        _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 161);
 if (sw > pw) {
-            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 160);
+            _yuitest_coverline("/build/gallery-zui-rascroll/gallery-zui-rascroll.js", 162);
 c.set('offsetWidth', c.get('offsetWidth') + pw - sw);
         }
     }
 });
 
 
-}, 'gallery-2012.08.29-20-10' ,{requires:['scrollview'], skinnable:false});
+}, 'gallery-2012.09.26-20-36' ,{requires:['scrollview'], skinnable:false});

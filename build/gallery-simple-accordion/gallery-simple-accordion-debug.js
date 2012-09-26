@@ -95,4 +95,4 @@ YUI.add('gallery-simple-accordion', function (Y) {
 });
 
 
-}, 'gallery-2012.09.19-20-07' ,{requires:['base','node','node-event-delegate'], skinnable:true});
+}, 'gallery-2012.09.26-20-36' ,{requires:['base','node','node-event-delegate'], skinnable:true});
