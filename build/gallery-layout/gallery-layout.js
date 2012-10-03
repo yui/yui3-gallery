@@ -156,6 +156,25 @@ PageLayout.ATTRS =
 	{
 		value:     true,
 		validator: Y.Lang.isBoolean
+	},
+
+	/**
+	 * Selector identifying the element which contains layout-(hd|bd|ft).
+	 * This cannot be used to attach PageLayout to only part of the page.
+	 * It should only be used when the page content is unavoidably embedded
+	 * inside an element which fills the page.
+	 * 
+	 * @attribute body
+	 * @type {String|Node}
+	 * @default "body"
+	 */
+	body:
+	{
+		value:     'body',
+		validator: function(value)
+		{
+			return (Y.Lang.isString(value) || value._node);
+		}
 	}
 };
 
@@ -429,7 +448,7 @@ function init()
 
 	// find header, body, footer
 
-	var page_blocks = Y.one('body').get('children');
+	var page_blocks = Y.one(this.get('body')).get('children');
 
 	var list = page_blocks.filter('.'+PageLayout.page_header_class);
 	if (list.size() > 1)
@@ -601,8 +620,8 @@ function resize()
 
 	var viewport =
 	{
-		w: this.body_container.get('winWidth'),
-		h: this.body_container.get('winHeight')
+		w: Y.DOM.winWidth(),
+		h: Y.DOM.winHeight()
 	};
 
 	var resize_event = arguments[0] && arguments[0].type == 'resize';	// IE7 generates no-op's
@@ -689,8 +708,8 @@ function resize()
  */
 function checkViewportSize()
 {
-	if (this.body_container.get('winWidth')    != this.viewport.w ||
-		this.body_container.get('winHeight')   != this.viewport.h ||
+	if (Y.DOM.winWidth()                       != this.viewport.w ||
+		Y.DOM.winHeight()                      != this.viewport.h ||
 		this.body_container.get('clientWidth') != this.viewport.bcw)
 	{
 		resize.call(this);
@@ -1194,4 +1213,4 @@ Y.extend(PageLayout, Y.Base,
 Y.PageLayout = PageLayout;
 
 
-}, 'gallery-2012.05.16-20-37' ,{skinnable:true, optional:['gallery-layout-rows','gallery-layout-cols'], requires:['base','gallery-funcprog','gallery-node-optimizations','gallery-dimensions','gallery-nodelist-extras2']});
+}, 'gallery-2012.10.03-20-02' ,{optional:['gallery-layout-rows','gallery-layout-cols'], requires:['base','gallery-funcprog','gallery-node-optimizations','gallery-dimensions','gallery-nodelist-extras2'], skinnable:true});

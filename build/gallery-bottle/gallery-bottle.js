@@ -15,13 +15,29 @@ YUI.add('gallery-bottle', function(Y) {
 //handle body width and height
 var BOTTLE_INIT = 'btInit',
     BOTTLE_READY = 'btReady',
+    BOTTLE_NATIVE = 'btNative',
+    SYNC_SCREEN = 'btSyncScreen',
+    htmlbody = Y.all('html, body'),
     body = Y.one('body'),
+    btRoot = Y.one('.btRoot') || body.appendChild(Y.Node.create('<div class="btRoot"></div>')),
     inited = body.hasClass(BOTTLE_INIT),
     hideURL = false,
+    nativeScroll = true,
+    styles = {
+        hidden: {overflow: 'hidden'},
+        scroll: {
+            overflow: 'auto',
+            overflowX: 'hidden'
+        }
+    },
 
-    resetBodySize = function () {
-        if (hideURL) {
-            window.scrollTo(0, 0);
+    resetBodySize = function (resize) {
+        if (hideURL && !resize) {
+            window.scrollTo(0, 1);
+        }
+
+        if (nativeScroll) {
+            return;
         }
 
         body.setStyles({
@@ -47,7 +63,7 @@ var BOTTLE_INIT = 'btInit',
      */
     init = function (hide) {
         var pageNode = Y.one('[data-role=page]'),
-            unused;
+            pageWidget;
 
         hideURL = hide;
 
@@ -56,12 +72,12 @@ var BOTTLE_INIT = 'btInit',
         }
 
         if (pageNode) {
-            Y.one('html').setStyle('overflow', 'hidden');
-            body.setStyle('overflow', 'hidden');
+            htmlbody.setStyles(styles.hidden);
         }
 
         body.addClass(BOTTLE_INIT);
         inited = true;
+
 
         initWidgets('[data-role=photogrid]', Y.Bottle.PhotoGrid);
         initWidgets('[data-role=carousel]', Y.Bottle.Carousel);
@@ -70,24 +86,43 @@ var BOTTLE_INIT = 'btInit',
 
         if (pageNode) {
             resetBodySize();
-            unused = (new Y.Bottle.Page({srcNode: pageNode, render: true})).resize();
+
+            pageWidget = new Y.Bottle.Page({srcNode: pageNode, render: true});
+            pageWidget.resize();
+
+            if (pageWidget.get('nativeScroll')) {
+                htmlbody.setStyles(styles.scroll);
+                body.addClass(BOTTLE_NATIVE);
+                pageWidget.item(0).get('scrollView').disable();
+                Y.publish(BOTTLE_NATIVE, {fireOnce: true});
+                Y.fire(BOTTLE_NATIVE);
+                Y.publish(SYNC_SCREEN);
+
+                // disable scroll on shortcut and overlay
+                btRoot.on('gesturemove', function (E) {
+                    E.preventDefault();
+                }, {standAlone:true, root: btRoot});
+            } else {
+                nativeScroll = false;
+                resetBodySize();
+            }
         }
 
         Y.all('[data-role=shortcut]').each(function (shortcutNode) {
-            unused = new Y.Bottle.ShortCut({
+            var unused = new Y.Bottle.ShortCut({
                 srcNode: shortcutNode,
                 visible: false,
                 disabled: true,
-                render: body
+                render: btRoot
             });
         });
 
         Y.all('[data-role=overlay]').each(function (overlayNode) {
-            unused = new Y.Bottle.Overlay({
+            var unused = new Y.Bottle.Overlay({
                 srcNode: overlayNode,
                 visible: false,
                 disabled: true,
-                render: body
+                render: btRoot
             });
         });
 
@@ -97,8 +132,10 @@ var BOTTLE_INIT = 'btInit',
                 page = Y.Bottle.Page.getCurrent();
 
             if (page) {
-                resetBodySize();
+                resetBodySize(true);
                 page.resize();
+            } else {
+                Y.fire(SYNC_SCREEN);
             }
 
             if (scCurrent) {
@@ -118,4 +155,4 @@ var BOTTLE_INIT = 'btInit',
 Y.namespace('Bottle').init = init;
 
 
-}, 'gallery-2012.09.19-20-07' ,{skinnable:true, requires:['gallery-bt-device', 'gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel', 'gallery-bt-loader']});
+}, 'gallery-2012.10.03-20-02' ,{skinnable:true, requires:['gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel', 'gallery-bt-loader']});

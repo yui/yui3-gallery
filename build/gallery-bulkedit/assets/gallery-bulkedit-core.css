@@ -11,3 +11,10 @@
 	display: table-row;
 	*display: block;
 }
+
+.yui3-htmltablebulkedit .checkbox-multiselect-checkbox
+{
+	margin: 0;
+	border: 0;
+	padding: 0;
+}

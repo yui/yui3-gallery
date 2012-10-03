@@ -305,18 +305,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             // need to make sure we can use execCommand, so do not render before the frame exists.
             if (instance.editor.frame && instance.editor.frame.get('node')) {instance._render();}
             else {
-                var delayIE = false;
-                if (delayIE && (Y.UA.ie>0)) {
-                    // didn't find out yet: IE stops creating the editorinstance when pluggedin too soon!
-                    // GOTTA check out
-                    // at the time being: delaying
-                    Y.later(250, instance, instance._render);
-                }
-                else {
-                    // do not subscribe to the frame:ready, but to the ready-event
-                    // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
-                    instance.editor.on('ready', instance._render, instance);
-                }
+                // do not subscribe to the frame:ready, but to the ready-event
+                // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
+                instance.editor.on('ready', instance._render, instance);
             }
         },
 
@@ -352,7 +343,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * @private
          * @param {Boolean} [selectionIfAvailable] do return the selectionnode if a selection is made. If set to false, then always just the cursornode will be returned. 
          * Which means -in case of selection- that the cursornode exists as a last child of the selection. Default = false.
-         * @returns {Y.Node} created empty referencenode
+         * @return {Y.Node} created empty referencenode
         */
         _getCursorRef : function(selectionIfAvailable) {
             var instance = this,
@@ -484,7 +475,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * So descendenst of ItsaSelectlist should refer to this cursorref.
          * @method _getBackupCursorRef
          * @private
-         * @returns {Y.Node} created empty referencenode
+         * @return {Y.Node} created empty referencenode
         */
         _getBackupCursorRef : function() {
             return this._backupCursorRef;
@@ -505,7 +496,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 else {e.changedNode = cursorRef;}
                 Y.later(250, instance, instance._removeCursorRef);
             }
-            instance.toolbarNode.fire('itsatoolbar:statusChange', e);
+            if (instance.toolbarNode) {instance.toolbarNode.fire('itsatoolbar:statusChange', e);}
         },
 
         /**
@@ -541,7 +532,13 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             buttonInnerNode = Node.create(ITSA_BTNINNERNODE);
             buttonInnerNode.addClass(iconClass);
             buttonNode.append(buttonInnerNode);
-            instance.toolbarNode.append(buttonNode);
+            // be aware of that addButton might get called when the editor isn't rendered yet. In that case instance.toolbarNode does not exist 
+            if (instance.toolbarNode) {instance.toolbarNode.append(buttonNode);}
+            else {
+                // do not subscribe to the frame:ready, but to the ready-event
+                // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
+                instance.editor.on('ready', function(e, buttonNode){instance.toolbarNode.append(buttonNode);}, instance, buttonNode);
+            }
             return buttonNode;
         },
 
@@ -567,7 +564,13 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             var instance = this,
                 buttonNode = instance.addButton(iconClass, execCommand, indent, position);
             if (!isToggleButton) {buttonNode.addClass(ITSA_BTNSYNC);}
-            instance.toolbarNode.addTarget(buttonNode);
+            // be aware of that addButton might get called when the editor isn't rendered yet. In that case instance.toolbarNode does not exist 
+            if (instance.toolbarNode) {instance.toolbarNode.addTarget(buttonNode);}
+            else {
+                // do not subscribe to the frame:ready, but to the ready-event
+                // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
+                instance.editor.on('ready', function(e, buttonNode){instance.toolbarNode.addTarget(buttonNode);}, instance, buttonNode);
+            }
             if (Lang.isFunction(syncFunc)) {buttonNode.on('itsatoolbar:statusChange', Y.bind(syncFunc, context || instance));}
             return buttonNode;
         },
@@ -607,9 +610,32 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * <i>- [context]</i> (instance): context for the syncFunction. Default is Toolbar's instance
          * @param {Boolean} [indent] To indent the button thus creating a whitespace between the previous button. Default=false.
          * @param {Number} [position] Index where to insert the button. Default=null, which means added as the last button.
-         * @return {Y.Node} reference to the first buttonnode of the created buttongroup
         */
         addButtongroup : function(buttons, indent, position) {
+            var instance = this;
+            if (instance.toolbarNode) {instance._addButtongroup(buttons, indent, position);}
+            else {
+                // do not subscribe to the frame:ready, but to the ready-event
+                // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
+                instance.editor.on('ready', function(e, buttons, indent, position){instance._addButtongroup(buttons, indent, position);}, instance, buttons, indent, position);
+            }
+        },
+
+        /**
+         * Does the real action of addButtongroup, but assumes that the editor is rendered.<br>
+         * therefore not to be called mannually, only by addButtongroup()
+         * @method _addButtongroup
+         * @private
+         * @param {Array} buttons Should consist of objects with at least two fields:<br>
+         * <i>- iconClass</i> (String): defines the icon's look. Refer to the static Properties for some predefined classes like ICON_BOLD.<br>
+         * <i>- command</i> (String): the execcommand that will be executed on buttonclick.<br>
+         * <i>- [value]</i> (String) optional: additional value for the execcommand.<br>
+         * <i>- syncFunc</i> (Function): callback-function that will be called after a statusChange, when the users manupilates the text, or the cursor is moved (for more info on the sync-function, see addToggleButton).<br>
+         * <i>- [context]</i> (instance): context for the syncFunction. Default is Toolbar's instance.
+         * @param {Boolean} [indent] To indent the button thus creating a whitespace between the previous button. Default=false.
+         * @param {Number} [position] Index where to insert the button. Default=null, which means added as the last button.
+        */
+        _addButtongroup : function(buttons, indent, position) {
             var instance = this,
                 buttonGroup = Y.guid(),
                 button,
@@ -633,13 +659,12 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             }
             return returnNode;
         },
-
         /**
          * Creates a selectList on the Toolbar. By default at the end of the toolbar.
          * When fired, the event-object returnes with 2 fields:<br>
          * <i>- e.value</i>: value of selected item<br>
          * <i>- e.index</i>: indexnr of the selected item<br>.
-         * CAUTION: when using a selectlist, you <u>cannot</u? use standard execCommands. That will not work in most browsers, because the focus will be lost. <br>
+         * CAUTION: when using a selectlist, you <u>cannot</u> use standard execCommands. That will not work in most browsers, because the focus will be lost. <br>
          * Instead, create your customexecCommand and use cursorrefference <i>_getBackupCursorRef()</i>: see example <i>_defineExecCommandFontFamily()</i>
          * @method addSelectList
          * @param {Array} items contains all the items. Should be either a list of (String), or a list of (Objects). In case of an Object-list, the objects should contain two fields:<br>
@@ -679,13 +704,20 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     if (Lang.isString(execCommand.restoreValue)) {buttonNode.setData('restoreValue', execCommand.restoreValue);}                    
                 }
                 if (indent) {selectlist.get('boundingBox').addClass('itsa-button-indent');}
+                // instance.toolbarNode should always exist here
                 instance.toolbarNode.addTarget(buttonNode);
                 selectlist.on('show', instance._createBackupCursorRef, instance);
                 selectlist.on('selectChange', instance._handleSelectChange, instance);
                 if (Lang.isFunction(syncFunc)) {buttonNode.on('itsatoolbar:statusChange', Y.rbind(syncFunc, context || instance));}
                 instance.editor.on('nodeChange', selectlist.hideListbox, selectlist);
             }, instance, execCommand, syncFunc, context, indent);
-            selectlist.render(instance.toolbarNode);
+            // be aware of that addButton might get called when the editor isn't rendered yet. In that case instance.toolbarNode does not exist 
+            if (instance.toolbarNode) {selectlist.render(instance.toolbarNode);}
+            else {
+                // do not subscribe to the frame:ready, but to the ready-event
+                // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
+                instance.editor.on('ready', function(){selectlist.render(instance.toolbarNode);}, instance);
+            }
             return selectlist;
         },
 
@@ -869,7 +901,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          *
          * @method _hasSelection
          * @private
-         * @returns {Boolean} whether there is a selection
+         * @return {Boolean} whether there is a selection
         */
         _hasSelection : function() {
             var instance = this,
@@ -884,7 +916,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * @private
          * @param {String} selector The selector to check for
          * @param {Y.Node} cursornode Active node where the cursor resides, or the selection
-         * @returns {Boolean} whether node resides inbetween selector
+         * @return {Boolean} whether node resides inbetween selector
         */
         _checkInbetweenSelector : function(selector, cursornode) {
             var instance = this,
@@ -913,7 +945,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * @method _getActiveHeader
          * @private
          * @param {Y.Node} cursornode Active node where the cursor resides, or the selection. Can be supplied by e.changedNode, or left empty to make this function determine itself.
-         * @returns {Y.Node|null} the headernode where the cursor remains. Returns null if outside any header.
+         * @return {Y.Node|null} the headernode where the cursor remains. Returns null if outside any header.
         */
      _getActiveHeader : function(cursornode) {
             var instance = this,
@@ -1225,6 +1257,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
 // just for temporary local use ITS Asbreuk
 // should NOT be part of the gallery
             if (false) {
+                instance.addButton(instance.ICON_EURO, {command: 'inserthtml', value: '&#8364;'}, true);
                 instance.addSyncButton(
                     instance.ICON_FILE,
                     {   customFunc: function(e) {
@@ -1381,6 +1414,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                             itsatoolbar._setCursorAtRef();
                         }
                         else {
+                            // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element
                             itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_FONTFAMILYNODE + "' style='font-family:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
                             itsatoolbar._setCursorAtRef();
                             Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
@@ -1430,6 +1464,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                             itsatoolbar._setCursorAtRef();
                         }
                         else {
+                            // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element
                             itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_FONTSIZENODE + "' style='font-size:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
                             itsatoolbar._setCursorAtRef();
                             Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
@@ -1475,6 +1510,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                             itsatoolbar._setCursorAtRef();
                         }
                         else {
+                            // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element
                             itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_FONTCOLORNODE + "' style='color:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
                             itsatoolbar._setCursorAtRef();
                             Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
@@ -1521,7 +1557,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                             itsatoolbar._setCursorAtRef();
                         }
                         else {
-                            itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_MARKCOLORNODE + "' style='backgroundColor:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
+                            // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element
+                            itsatoolbar.execCommand("inserthtml", "<span class='" + ITSA_MARKCOLORNODE + "' style='background-color:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>");
                             itsatoolbar._setCursorAtRef();
                             Y.later(30000, itsatoolbar, itsatoolbar._clearEmptyFontRef);
                         }
@@ -2250,4 +2287,4 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
 );
 
 
-}, 'gallery-2012.09.26-20-36' ,{requires:['plugin', 'base-build', 'node-base', 'editor', 'event-delegate', 'event-custom', 'cssbutton', 'gallery-itsaselectlist'], skinnable:true});
+}, 'gallery-2012.10.03-20-02' ,{requires:['plugin', 'base-build', 'node-base', 'editor', 'event-delegate', 'event-custom', 'cssbutton', 'gallery-itsaselectlist'], skinnable:true});

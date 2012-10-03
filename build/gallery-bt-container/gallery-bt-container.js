@@ -7,10 +7,31 @@ YUI.add('gallery-bt-container', function(Y) {
  */
 var HEIGHT_CHANGE = 'heightChange',
     WIDTH_CHANGE = 'widthChange',
+    fixedPos = Y.Bottle.Device.getPositionFixedSupport(),
 
-    handleFixPos = function (header, fixed) {
+    handleFixPos = function (header, fixed, nativeScroll) {
+        var node,
+            pfix = fixed && fixedPos,
+            ns = (nativeScroll !== undefined) ? nativeScroll : this.get('nativeScroll');
+
         if (this.get('scrollView')) {
-            this.get(fixed ? 'srcNode' : 'scrollNode').insert(this.get(header ? 'headerNode' : 'footerNode'), header ? 0 : undefined);
+            node = this.get(header ? 'headerNode' : 'footerNode');
+
+            if (node) {
+                node.setStyles({
+                    position: (ns && pfix) ? 'fixed' : '',
+                    top: (header && ns && pfix) ? 0 : '',
+                    bottom: (!header && ns && pfix) ? 0 : '',
+                    zIndex: (ns && pfix) ? 50 : ''
+                });
+
+                if (fixedPos) {
+                    this.get('scrollView').get('boundingBox').setStyle(header ? 'marginTop' : 'marginBottom', (fixed && ns) ? (node.get('offsetHeight') + 'px') : 0);
+                }
+            }
+
+            this.get(fixed ? 'srcNode' : 'scrollNode').insert(node, header ? 0 : undefined);
+
             this._syncScrollHeight();
         }
     };
@@ -59,7 +80,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
             footerNode = this.get('footerNode'),
             scrollView = new Y.ScrollView(Y.merge(this.get('cfgScroll'), {
                 srcNode: scrollNode
-            })).plug(Y.zui.RAScroll, {horizontal: false, cooperation: true});
+            }));
 
         this.set('scrollNode', scrollNode);
         this.set('scrollView', scrollView);
@@ -75,6 +96,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
         this.set_again('headerFixed');
         this.set_again('footerFixed');
         this.set_again('translate3D');
+        this.set_again('nativeScroll');
     },
 
     /**
@@ -105,13 +127,14 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
             return;
         }
 
-        height -= scroll.get('boundingBox').get('offsetTop');
+        Y.later(1, this, function () {
+            height -= scroll.get('boundingBox').get('offsetTop');
 
-        if (this.get('footerFixed')) {
-            height -= this.get('footerNode').get('clientHeight');
-        }
-
-        scroll.set('height', height);
+            if (this.get('footerFixed')) {
+                height -= this.get('footerNode').get('clientHeight');
+            }
+            scroll.set('height', height);
+        });
     }
 }, {
     /**
@@ -123,6 +146,37 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
      * @type Object
      */
     ATTRS: {
+        /**
+         * use browser native scroll and css3 position fixed
+         *
+         * @attribute nativeScroll
+         * @type Boolean
+         * @default false
+         */
+        nativeScroll: {
+            value: false,
+            validator: Y.Lang.isBoolean,
+            setter: function (V) {
+                var sv = this.get('scrollView');
+
+                if (sv) {
+                    sv.set('disabled', V);
+                    if (V) {
+                        sv.unplug(Y.zui.RAScroll);
+                    } else {
+                        sv.plug(Y.zui.RAScroll, {horizontal: false, cooperation: true});
+                        if (!Y.Bottle.Device.getTouchSupport()) {
+                            sv.plug(Y.zui.ScrollHelper);
+                        }
+                    }
+                }
+
+                handleFixPos.apply(this, [true, this.get('headerFixed'), V]);
+                handleFixPos.apply(this, [false, this.get('footerFixed'), V]);
+                return V;
+            }
+        },
+
         /**
          * header node of the container
          * 
@@ -300,4 +354,4 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
 });
 
 
-}, '@VERSION@' ,{requires:['scrollview', 'widget-child', 'json-parse', 'gallery-zui-attribute', 'gallery-zui-rascroll']});
+}, '@VERSION@' ,{requires:['scrollview', 'widget-child', 'json-parse', 'gallery-zui-attribute', 'gallery-zui-rascroll', 'gallery-zui-scrollhelper', 'gallery-bt-device']});

@@ -66,7 +66,7 @@ Y.PjaxPlus = Y.Base.create('pjaxplus', Y.Widget, [], {
 				clickedLink = e.originEvent.target.get('href');
 				var html5support = this.get('html5support');			
 					
-				if (this.get('startCallbackFunc') && !this.ppCache.retrieve(clickedLink)) {		
+				if (this.get('startCallbackFunc')) {		
 					this.get('startCallbackFunc').call(null, {
 						clickTarget:e.originEvent.target,
 						path:e.originEvent.target.get('pathname'),
@@ -183,7 +183,7 @@ Y.PjaxPlus = Y.Base.create('pjaxplus', Y.Widget, [], {
 	},
 		
 	startAjaxLoad : function(configObj) {
-		if (this.get('startCallbackFunc') && !this.ppCache.retrieve(configObj.url)) {
+		if (this.get('startCallbackFunc')) {
 			this.get('startCallbackFunc').call(null, configObj, this);
 		}
 		if (!configObj.path.match(/^\//)) {
@@ -284,4 +284,4 @@ Y.PjaxPlus = Y.Base.create('pjaxplus', Y.Widget, [], {
 });
 
 
-}, 'gallery-2012.08.22-20-00' ,{requires:['base-build', 'widget', 'node', 'io', 'history', 'pjax', 'event-delegate', 'cache-base', 'selector-css3'], skinnable:false});
+}, 'gallery-2012.10.03-20-02' ,{requires:['base-build', 'widget', 'node', 'io', 'history', 'pjax', 'event-delegate', 'cache-base', 'selector-css3'], skinnable:false});

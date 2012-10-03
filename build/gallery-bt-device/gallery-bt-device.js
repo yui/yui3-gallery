@@ -14,7 +14,9 @@ YUI.add('gallery-bt-device', function(Y) {
  * @class Device
  * @namespace Bottle
  */
-var Device = {
+var positionFixedSupport = null,
+
+    Device = {
 
     /**
      * The name of current device, should be: iphone , ipad, ipod, android, null
@@ -47,6 +49,34 @@ var Device = {
      * @property Browser
      */
     Borwser: null,
+
+    /**
+     * get current Device touch support status
+     * @static
+     * @method getTouchSupport
+     * @return {Boolean}
+     */
+    getTouchSupport: function () { return ((Y.config.win && ('ontouchstart' in Y.config.win)) && !(Y.UA.chrome && Y.UA.chrome < 6))},
+
+    /**
+     * get current Device touch support status
+     * @static
+     * @method getTouchSupport
+     * @return {Boolean}
+     */
+    getPositionFixedSupport: function () {
+        var positionFixedParent,
+            py;
+        if (positionFixedSupport !== null) {
+            return positionFixedSupport;
+        }
+        
+        positionFixedParent = Y.one('.bt_posfixed') || Y.one('body').appendChild('<div class="bt_posfixed"><div><span></span></div></div>');
+        py = positionFixedParent.one('div').set('scrollTop', '30px').one('span').getY();
+        positionFixedParent.remove();
+
+        return positionFixedSupport = (py === 1);
+    },
 
     /**
      * get current Device Width in pixel
@@ -126,4 +156,4 @@ if (Y.UA.iphone) {
 Y.namespace('Bottle').Device = Device;
 
 
-}, '@VERSION@' ,{requires:['node-base']});
+}, '@VERSION@' ,{requires:['node-screen']});

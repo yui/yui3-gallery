@@ -58,6 +58,7 @@ PushPop = function (config) {
         Y.after(this._renderUIPushPop, this, RENDERUI),
 
         this.before(ADDCHILD, this._beforePPAddChild),
+        this.after(ADDCHILD, this._afterPPAddChild),
         this.after(WIDTH_CHANGE, this._afterPPWidthChange),
         this.after(HEIGHT_CHANGE, this._afterPPHeightChange),
         this.on('destroy', this._destroyPushPop)
@@ -73,8 +74,40 @@ PushPop = function (config) {
  * @static
  */
 PushPop.ATTRS = {
+    /**
+     * Default child class
+     *
+     * @attribute defaultChildType
+     * @type Object
+     * @default Y.Bottle.Container
+     */
     defaultChildType: {
         value: Y.Bottle.Container
+    },
+
+    /**
+     * Default css3 selector to add children when rendering
+     *
+     * @property childQuery
+     * @type String
+     * @default '> [data-role=container]'
+     */
+    childQuery: {
+        value: '> [data-role=container]',
+        writeOnce: true
+    },
+
+    /**
+     * Default initial attributes for all children when rendering
+     *
+     * @property cfgChild
+     * @type Object
+     * @default {}
+     */
+    cfgChild: {
+        value: {},
+        validator: Y.Lang.isObject,
+        writeOnce: true
     },
 
     /**
@@ -148,6 +181,15 @@ PushPop.ATTRS = {
  * @type Object
  */
 PushPop.HTML_PARSER = {
+    childQuery: function (srcNode) {
+        return srcNode.getData('child-query');
+    },
+    cfgChild: function (srcNode) {
+        try {
+            return Y.JSON.parse(srcNode.getData('cfg-child'));
+        } catch (e) {
+        }
+    },
     ppTrans: function (srcNode) {
         try {
             return Y.JSON.parse(srcNode.getData('cfg-pp-trans'));
@@ -164,23 +206,17 @@ PushPop.HTML_PARSER = {
 
 PushPop.prototype = {
     initializer: function () {
-        var widget = this,
-            srcNode = this.get('srcNode'),
-            w = srcNode.get('offsetWidth'),
-            h = srcNode.get('offsetHeight');
+        var srcNode = this.get('srcNode'),
+            query = this.get('childQuery'),
+            cfg = this.get('cfgChild');
 
-        if (!w) {
-            this.set('width', w);
-        }
-        if (!h) {
-            this.set('height', h);
+        if (!query) {
+            return;
         }
 
-        this.get('contentBox').all('> [data-role=container]').each(function (O) {
-            widget.add({
-                srcNode: O
-            });
-        });
+        this.get('contentBox').all(query).each(function (O) {
+            this.add(Y.merge(cfg, {srcNode: O}));
+        }, this);
     },
 
     /**
@@ -259,17 +295,25 @@ PushPop.prototype = {
     },
 
     /**
-     * handle child Widget
+     * handle add child Widget, if not defaultChildType, cancel add
      *
-     * @method _beforeAddChild
+     * @method _beforePPAddChild
      * @protected
      */    
     _beforePPAddChild: function (E) {
-        if (Y.instanceOf(E.child, this.get('defaultChildType'))) {
-            this.sync(E.child);
-        } else {
+        if (!Y.instanceOf(E.child, this.get('defaultChildType'))) {
             E.halt();
         }
+    },
+
+    /**
+     * handle child Widget, sync size after add
+     *
+     * @method _afterPPAddChild
+     * @protected
+     */
+    _afterPPAddChild: function (E) {
+        this.sync(E.child);
     },
 
     /**

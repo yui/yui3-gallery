@@ -25,12 +25,12 @@ YUI.add('gallery-anim-native', function(Y) {
     "use strict";
     /*global Y:true */
     /*jslint regexp: true*/
-    var VENDOR = ['', 'webkit', 'Moz', 'O', 'ms'].filter(function (prefix) {
+    var VENDOR = ['', 'Webkit', 'Moz', 'O', 'ms'].filter(function (prefix) {
             return Y.config.doc.body.style.hasOwnProperty(prefix + 'Animation');
         })[0],
         PREFIX = VENDOR ? '-' + VENDOR.toLowerCase() + '-' : VENDOR,
         ANIMATION_END_VENDORS = {
-            webkit: 'webkitAnimationEnd',
+            Webkit: 'webkitAnimationEnd',
             O: 'oAnimationEnd'
         },
         ANIMATION_END_EVENT = 'animationend',
@@ -62,6 +62,7 @@ YUI.add('gallery-anim-native', function(Y) {
         easeInStrong: {p1: 0.895, p2: 0.030, p3: 0.685, p4: 0.220},
         easeOutStrong: {p1: 0.165, p2: 0.840, p3: 0.440, p4: 1.000},
         easeBothStrong: {p1: 0.770, p2: 0.000, p3: 0.175, p4: 1.000},
+        backIn: {p1: 0.600, p2: -0.280, p3: 0.735, p4: 0.045},
         backOut: {p1: 0.175, p2: 0.885, p3: 0.320, p4: 1.275},
         backBoth: {p1: 0.680, p2: -0.550, p3: 0.265, p4: 1.550},
 
@@ -69,7 +70,6 @@ YUI.add('gallery-anim-native', function(Y) {
         elasticIn: {p1: 0.250, p2: 0.250, p3: 0.750, p4: 0.750},
         elasticOut: {p1: 0.250, p2: 0.250, p3: 0.750, p4: 0.750},
         elasticBoth: {p1: 0.250, p2: 0.250, p3: 0.750, p4: 0.750},
-        backIn: {p1: 0.250, p2: 0.250, p3: 0.750, p4: 0.750},
         bounceIn: {p1: 0.250, p2: 0.250, p3: 0.750, p4: 0.750},
         bounceOut: {p1: 0.250, p2: 0.250, p3: 0.750, p4: 0.750},
         bounceBoth: {p1: 0.250, p2: 0.250, p3: 0.750, p4: 0.750}
@@ -129,7 +129,7 @@ YUI.add('gallery-anim-native', function(Y) {
                 Y.log(e.message + rule, 'warn');
             }
         } else {
-            style = doc.createElement("style");
+            style = doc.createElement('style');
             style.innerHTML = rule;
             doc.head.appendChild(style);
         }
@@ -137,7 +137,7 @@ YUI.add('gallery-anim-native', function(Y) {
 
     Anim._delete = function (ruleName) {
         var doc = Y.config.doc,
-            cssrules = doc.all ? "rules" : "cssRules",
+            cssrules = doc.all ? 'rules' : 'cssRules',
             i;
 
         for (i = 0; i < doc.styleSheets[0][cssrules].length; i += 1) {
@@ -277,7 +277,7 @@ YUI.add('gallery-anim-native', function(Y) {
          */
         running: {
             getter: function () {
-                return this.get('node').getStyle(VENDOR + "AnimationName") !== 'none';
+                return this.get('node').getStyle(VENDOR + 'AnimationName') !== 'none';
             },
             value: false,
             readOnly: true
@@ -341,7 +341,7 @@ YUI.add('gallery-anim-native', function(Y) {
          */
         paused: {
             getter: function () {
-                return this.get('node').getStyle(VENDOR + "AnimationPlayState") === 'paused';
+                return this.get('node').getStyle(VENDOR + 'AnimationPlayState') === 'paused';
             },
             readOnly: true,
             value: false
@@ -390,7 +390,9 @@ YUI.add('gallery-anim-native', function(Y) {
     };
 
     Y.extend(Anim, Y.Base, {
-        initializer: function (config) {},
+        initializer: function (config) {
+            this._sub = null;
+        },
 
         /**
          * Starts or resumes an animation.
@@ -415,7 +417,7 @@ YUI.add('gallery-anim-native', function(Y) {
          */
         pause: function () {
             if (this.get('running')) {
-                this.get('node').setStyle(VENDOR + "AnimationPlayState", 'paused');
+                this.get('node').setStyle(VENDOR + 'AnimationPlayState', 'paused');
                 this.fire('pause');
             }
             return this;
@@ -433,7 +435,7 @@ YUI.add('gallery-anim-native', function(Y) {
         },
 
         _resume: function () {
-            this.get('node').setStyle(VENDOR + "AnimationPlayState", 'running');
+            this.get('node').setStyle(VENDOR + 'AnimationPlayState', 'running');
             this.fire('resume');
         },
 
@@ -450,7 +452,12 @@ YUI.add('gallery-anim-native', function(Y) {
                 frames = this.get('frames'),
                 keyframes = {},
                 res,
-                frame;
+                frame,
+                styles = {},
+                parentStyles = {};
+
+            node.removeAttribute('style');
+            node.setAttribute('style', '');
 
             keyframes['0%'] = from;
             keyframes = Y.merge(keyframes, frames);
@@ -458,45 +465,56 @@ YUI.add('gallery-anim-native', function(Y) {
 
             res = this._render(node, name, keyframes);
 
+            Anim._insert(res.css);
+
             // Apply last animation frame styles
             if (this.get('iterations') !== 'infinite') {
                 frame = this.get('iterations') % (2 - this.get('reverse')) * 100;
-                node.setStyles(res.styles[frame + '%']);
+                Y.Object.each(res.styles[frame + '%'], function (value, prop) {
+                    styles[prop] = value;
+                });
             }
-
-            Anim._insert(res.css);
 
             this.set('iterationCount', 0);
 
-            parent.setStyle(VENDOR + "Perspective", this.get('perspective') + "px");
-            parent.setStyle(VENDOR + "PerspectiveOrigin", this.get('perspectiveOrigin'));
-            node.setStyle(VENDOR + "AnimationDuration", this.get('duration') + 's');
-            node.setStyle(VENDOR + "AnimationTimingFunction", this.get('easing'));
-            node.setStyle(VENDOR + "AnimationDelay", this.get('delay') + 's');
-            node.setStyle(VENDOR + "AnimationIterationCount", this.get('iterations'));
-            node.setStyle(VENDOR + "AnimationDirection", direction);
-            node.setStyle(VENDOR + "AnimationPlayState", 'running');
-            node.setStyle(VENDOR + "BackfaceVisibility", this.get('backfaceVisibility'));
-            node.setStyle(VENDOR + "AnimationName", name);
+            parentStyles[VENDOR + 'Perspective'] = this.get('perspective') + 'px';
+            parentStyles[VENDOR + 'PerspectiveOrigin'] = this.get('perspectiveOrigin');
+            parent.setStyles(parentStyles);
+
+            styles[VENDOR + 'AnimationName'] = name;
+            styles[VENDOR + 'AnimationDuration'] = this.get('duration') + 's';
+            styles[VENDOR + 'AnimationTimingFunction'] = this.get('easing');
+            styles[VENDOR + 'AnimationDelay'] = this.get('delay') + 's';
+            styles[VENDOR + 'AnimationIterationCount'] = this.get('iterations');
+            styles[VENDOR + 'AnimationDirection'] = direction;
+            styles[VENDOR + 'AnimationPlayState'] = 'running';
+            styles[VENDOR + 'BackfaceVisibility'] = this.get('backfaceVisibility');
+
+            node.setStyles(styles);
 
             this.fire('start');
-            this._sub = node.on(ANIMATION_END, this._end, this);
+            this._sub = node.on(ANIMATION_END, Y.bind(this._end, this));
         },
 
         _end: function () {
             var node = this.get('node'),
-                name = node.getStyle(VENDOR + "AnimationName");
+                name = node.getStyle(VENDOR + 'AnimationName'),
+                styles = {};
 
-            node.detach(ANIMATION_END, this._end);
+            if (this._sub) {
+                this._sub.detach();
+                this._sub = null;
+            }
 
-            node.setStyle(VENDOR + "AnimationName", "none");
-            node.setStyle(VENDOR + "AnimationDuration", "0s");
-            node.setStyle(VENDOR + "AnimationTimingFunction", "ease");
-            node.setStyle(VENDOR + "AnimationDelay", "0s");
-            node.setStyle(VENDOR + "AnimationIterationCount", "1");
-            node.setStyle(VENDOR + "AnimationDirection", "normal");
-            node.setStyle(VENDOR + "AnimationPlayState", "running");
-            node.setStyle(VENDOR + "BackfaceVisibility", 'visible');
+            styles[VENDOR + 'AnimationName'] = '';
+            styles[VENDOR + 'AnimationDuration'] = '';
+            styles[VENDOR + 'AnimationTimingFunction'] = '';
+            styles[VENDOR + 'AnimationDelay'] = '';
+            styles[VENDOR + 'AnimationIterationCount'] = '';
+            styles[VENDOR + 'AnimationDirection'] = '';
+            styles[VENDOR + 'AnimationPlayState'] = '';
+            styles[VENDOR + 'BackfaceVisibility'] = '';
+            node.setStyles(styles);
 
             // TODO: Restore parent node perspective?
 
@@ -532,6 +550,10 @@ YUI.add('gallery-anim-native', function(Y) {
                         }
                     }
 
+                    if (prop === 'transform') {
+                        prop = VENDOR + 'Transform';
+                    }
+
                     styles[key][prop] = value;
                     css.push('\t\t' + Anim._toHyphen(prop) + ': ' + value + ';');
                 }, this);
@@ -544,7 +566,10 @@ YUI.add('gallery-anim-native', function(Y) {
         },
 
         destructor: function () {
-            this.get('node').detach(ANIMATION_END, this._end);
+            if (this._sub) {
+                this._sub.detach();
+                this._sub = null;
+            }
         }
     });
 
@@ -552,4 +577,4 @@ YUI.add('gallery-anim-native', function(Y) {
     Y.AnimNative = Anim;
 
 
-}, 'gallery-2012.09.26-20-36' ,{skinnable:false});
+}, 'gallery-2012.10.03-20-02' ,{skinnable:false});
