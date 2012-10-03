@@ -1,0 +1,9 @@
+{
+	"name": "gallery-layout",
+	"displayName": "Page Layout",
+	"description": "Provides fluid-width/height layout for modules, sandwiched between (optional) page header and footer.",
+	"author": "jafl",
+
+	"use": ["gallery-layout"],
+	"tags": ["jafl","layout","page","fluid","liquid"]
+}
