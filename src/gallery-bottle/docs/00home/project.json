@@ -1,6 +1,6 @@
 {
     "projectName": "Mobile UI Library - Bottle",
-    "projectVersion": "0.1.0",
+    "projectVersion": "0.1.1",
     "yuiVersion": "3.6.0",
     "useParams": "'gallery-bottle'",
     "apiDocUrl": "http://devel-stage.corp.yahoo.com/aff/bottle/api/",

@@ -6,10 +6,8 @@ YUI().use('overlay-testlib', function (Y) {
         B = Y.bottleTest,
         page = Y.Bottle.Page.getCurrent(),
         basicMenu = Y.Widget.getByNode(Y.one('#overlayMenu')),
-        overlayMenu2 = Y.Widget.getByNode(Y.one('#overlayMenu2')),
         waitTime = 1000,
-        zIndexShow = 300,
-        zIndexHide = 10,
+        zIndexShow = '200',
         mask = 'mask',
         fullPage = 'fullPage',
         resetWH = function () {
@@ -30,6 +28,7 @@ YUI().use('overlay-testlib', function (Y) {
         },
 
         "test basic show" : function () {
+            basicMenu.set(mask, true);
             basicMenu.show();
             this.wait(function () {
                 Y.overlayTest.isShow();
@@ -44,7 +43,7 @@ YUI().use('overlay-testlib', function (Y) {
             basicMenu.hide();
             this.wait(function () {
                 Y.overlayTest.isHide();
-                Y.overlayTest.areZIndex(zIndexHide, basicMenu);
+                Y.overlayTest.areZIndex(zIndexShow, basicMenu);
                 Y.overlayTest.withoutMask();
                 Y.overlayTest.isPageStay();
             }, waitTime);
@@ -66,7 +65,7 @@ YUI().use('overlay-testlib', function (Y) {
             basicMenu.hide();
             this.wait(function () {
                 Y.overlayTest.isHide();
-                Y.overlayTest.areZIndex(zIndexHide, basicMenu);
+                Y.overlayTest.areZIndex(zIndexShow, basicMenu);
                 Y.overlayTest.withoutMask();
                 Y.overlayTest.isPageStay();
                 basicMenu.set(mask, true);
@@ -90,25 +89,11 @@ YUI().use('overlay-testlib', function (Y) {
             basicMenu.hide();
             this.wait(function () {
                 Y.overlayTest.isHide();
-                Y.overlayTest.areZIndex(zIndexHide, basicMenu);
+                Y.overlayTest.areZIndex(zIndexShow, basicMenu);
                 Y.overlayTest.withoutMask();
                 Y.overlayTest.isPageStay();
                 basicMenu.set(fullPage, true);
             }, waitTime);
-        },
-
-        "test hide after show another overlay" : function () {
-            basicMenu.show();
-
-            Y.later(waitTime, this, function () {
-                overlayMenu2.show();
-            });
-            this.wait(function () {
-                Y.overlayTest.isShow();
-                Y.overlayTest.withMask();
-                Y.overlayTest.areZIndex(zIndexShow, overlayMenu2);
-                Y.overlayTest.areZIndex(zIndexHide, basicMenu);
-            }, waitTime * 3);
         }
     }));
 

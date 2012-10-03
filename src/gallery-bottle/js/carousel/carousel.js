@@ -46,8 +46,8 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
     destructor: function () {
         this.unsync('selectedIndex', this.pages, 'index');
         this.unplug(Y.zui.RAScroll);
-        this._bpgEventHandlers.detach();
-        delete this._bpgEventHandlers;
+        this._bcrEventHandlers.detach();
+        delete this._bcrEventHandlers;
     },
 
     renderUI: function () {
@@ -63,6 +63,11 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
         }
 
         this.unplug(Y.Plugin.ScrollViewScrollbars);
+
+        if (!Y.Bottle.Device.getTouchSupport()) {
+            this.plug(Y.zui.ScrollHelper);
+        }
+
         this._updatePages();
         this.sync('selectedIndex', this.pages, 'index');
 
@@ -85,18 +90,29 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
         /**
          * internal eventhandlers, keep for destructor
          *
-         * @property _bpgEventHandlers
+         * @property _bcrEventHandlers
          * @type EventHandle
          * @private
          */
-        this._bpgEventHandlers = new Y.EventHandle([
-            this.after(WIDTH_CHANGE, this._updatePages),
+        this._bcrEventHandlers = new Y.EventHandle([
             this.leftButton.on('click', this.pages.prev, this.pages),
             this.rightButton.on('click', this.pages.next, this.pages)
         ]);
 
+        Y.once('btNative', this._nativeScroll, this);
+
         this.set('selectedIndex', index);
         this._updateButtons(index);
+    },
+
+    /**
+     * toggle internal scrollview to support nativeScroll mode
+     *
+     * @method _nativeScroll
+     * @protected
+     */
+    _nativeScroll: function () {
+        this._prevent = {move: false, start: false, end: false};
     },
 
     /**

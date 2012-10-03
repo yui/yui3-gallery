@@ -4,21 +4,23 @@
  *
  * @module gallery-bt-overlay
  */
-var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create('<div class="bt-overlay-mask"></div>')),
+var body = Y.one('body'),
+    Mask = Y.one('.bt-overlay-mask') || body.appendChild(Y.Node.create('<div class="bt-overlay-mask"></div>')),
     WIDTH_CHANGE = 'widthChange',
     HEIGHT_CHANGE = 'heightChange',
     VISIBLE_CHANGE = 'visibleChange',
 
+    hasTouch = Y.Bottle.Device.getTouchSupport(),
+    scrollBase = hasTouch ? body : Y.one('html'),
+
     instances = [],
     current,
-    body = Y.one('body'),
-    next,
 
     POSITIONS = {
-        top: ['tc', 0, -1, 'bc', 0.5, 0],
-        bottom: ['bc', 0, 1, 'tc', 0.5, 1],
-        left: ['lc', -1, 0, 'rc', 0, 0.5],
-        right: ['rc', 1, 0, 'lc', 1, 0.5]
+        top: [0, -1],
+        bottom: [0, 1],
+        left: [-1, 0],
+        right: [1, 0]
     },
 
     /**
@@ -37,13 +39,17 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
      * @constructor
      * @namespace Bottle
      */
-    Overlay = Y.Base.create('btoverlay', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.WidgetPositionAlign, Y.Bottle.PushPop], {
+    Overlay = Y.Base.create('btoverlay', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.Bottle.PushPop], {
         initializer: function (cfg) {
+            var msk = this.get('contentBox').getData('mask');
+
             instances.push(this);
 
             if (!cfg.zIndex) {
                 this.set('zIndex', 200);
             }
+
+            this.set('mask', (msk ? (msk === 'false') : this.get('fullPage')) ? false : true);
 
             /**
              * internal eventhandlers, keep for destructor
@@ -57,9 +63,6 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
                 this.after(HEIGHT_CHANGE, this._updatePositionShow),
                 this.after(VISIBLE_CHANGE, this._doShowHide)
             ]);
-
-            //this._updatePositionHide();
-            //this._updatePositionShow();
         },
 
         destructor: function () {
@@ -79,6 +82,9 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
             if (!this.get('width') && W) {
                 this.set('width', W);
             }
+
+            this._updatePositionHide();
+            this._updatePositionShow();
         },
 
         /**
@@ -88,16 +94,12 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
          * @param [force=false] {Boolean} <b>true</b> to forece resize even when Overlay is not visibile.
          */
         olResize: function (force) {
-            //reduce syncUI times
-            if (!force && (this.get('width') === Y.Bottle.Device.getBrowserWidth())) {
-                return;
-            }
-
-            if (!force && (this.get('height') === Y.Bottle.Device.getBrowserHeight())) {
-                return;
-            }
-
             if (!this.get('visible') && !force) {
+                return;
+            }
+
+            //reduce syncUI times
+            if (!force && (this.get('width') === Y.Bottle.Device.getBrowserWidth()) && (this.get('height') === Y.Bottle.Device.getBrowserHeight())) {
                 return;
             }
 
@@ -125,22 +127,13 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
          * @protected
          */
         _updatePositionShow: function (E) {
-            var pos = (E && E.showFrom) ? E.showFrom : this.get('showFrom'),
-                vis = (E && (E.visible !== undefined)) ? E.visible : this.get('visible'),
+            var vis = (E && (E.visible !== undefined)) ? E.visible : this.get('visible'),
                 noAlign = (E && E.noAlign) ? true : false,
-                posData = POSITIONS[pos];
+                move = (vis && !noAlign),
+                pos = move ? this.getShowHideXY(true) : 0;
 
-            if (!vis) {
-                return;
-            }
-
-            if (noAlign) {
-                return;
-            }
-            if (this.get('fullPage')) {
-                this.align(body, [posData[3], posData[3]]);
-            } else {
-                this.centered(body);
+            if (move) {
+                this.move(pos[0], pos[1]);
             }
         },
 
@@ -152,10 +145,10 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
          */
         _updatePositionHide: function (E) {
             var vis = (E && (E.visible !== undefined)) ? E.visible : this.get('visible'),
-                posData = POSITIONS[this.get('showFrom')];
+                pos = vis ? 0 : this.getShowHideXY(false);
 
             if (!vis) {
-                this.align(null, [posData[3], posData[0]]);
+                this.move(pos[0], pos[1]);
             }
         },
 
@@ -209,12 +202,27 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
                 this._displayMask(show);
             }
 
-            this.set('disabled', show ? false : true);
-
-            if (next) {
-                next.show();
-                next = undefined;
+            if (!show) {
+                this.disable();
             }
+        },
+
+        /**
+         * get show position or hide position
+         *
+         * @method getShowHideXY
+         * @return {Array} array of position: [x, y]
+         */
+        getShowHideXY: function (show) {
+            var selfDir = show ? 0 : 1,
+                posData = POSITIONS[this.get('showFrom')],
+                W = Y.Bottle.Device.getBrowserWidth(),
+                H = Y.Bottle.Device.getBrowserHeight();
+
+            return [
+                selfDir * W * posData[0] + Math.floor((W - this.get('width')) / 2),
+                selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + scrollBase.get('scrollTop')
+            ]; 
         },
 
         /**
@@ -224,58 +232,20 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
          * @protected
          */
         _doShowHide: function (E) {
-            var show = E.newVal,
-                selfDir = show ? 0 : 1,
-                pageDir = show ? -1 : 0,
-                posData = POSITIONS[this.get('showFrom')],
-                node = this.get('boundingBox'),
-                pageRegion,
-                nodeX,
-                nodeY;
+            var show = E.newVal;
+                runthese = show && this.enable() && this._updateFullSize(),
+                finalPos = this.getShowHideXY(show),
+                node = this.get('boundingBox');
 
             if (show) {
-                this.enable();
-                this._updateFullSize();
                 this._updatePositionHide({visible: false});
                 current = this;
             } else {
                 this._updatePositionShow({visible: true});
-                if (this.get('mask')) {
-                    this._displayMask(false);
-                }
                 current = undefined;
             }
 
-            if (this.get('fullPage')) {
-                this._doTransition(node, posData[4] * body.get('offsetWidth') + (selfDir * posData[1] - posData[4]) * this.get('width'), posData[5] * body.get('offsetHeight') + (selfDir * posData[2] - posData[5]) * this.get('height'), this._doneShowHide);
-            } else {
-                pageRegion = body.get('region');
-                if (show) {
-                    nodeX = pageRegion.left + Math.floor(pageRegion.width / 2) - (this.get('width') / 2);
-                    nodeY = pageRegion.top + Math.floor(pageRegion.height / 2) - (this.get('height') / 2);
-                } else {
-                    switch (this.get('showFrom')) {
-                    case 'top':
-                        nodeX = pageRegion.left + Math.floor(pageRegion.width / 2) - (this.get('width') / 2);
-                        nodeY = - this.get('height');
-                        break;
-                    case 'bottom':
-                        nodeX = pageRegion.left + Math.floor(pageRegion.width / 2) - (this.get('width') / 2);
-                        nodeY = pageRegion.bottom;
-                        break;
-                    case 'right':
-                        nodeX = pageRegion.right;
-                        nodeY = pageRegion.top + Math.floor(pageRegion.height / 2) - (this.get('height') / 2);
-                        break;
-                    case 'left':
-                    default:
-                        nodeX = - this.get('width');
-                        nodeY = pageRegion.top + Math.floor(pageRegion.height / 2) - (this.get('height') / 2);
-                        break;
-                    }
-                }
-                this._doTransition(node, nodeX, nodeY, this._doneShowHide);
-            }
+            this._doTransition(node, finalPos[0], finalPos[1], this._doneShowHide);
         }
     }, {
         /**
@@ -307,10 +277,6 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
                     return POSITIONS[V] ? true : false;
                 },
                 setter: function (V) {
-                    var F,
-                        B = this.get('contentBox'),
-                        fwh = POSITIONS[V][1];
-
                     if (V === this.get('showFrom')) {
                         return V;
                     }
@@ -381,13 +347,6 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
          * @type Object
          */
         HTML_PARSER: {
-            mask: function (srcNode) {
-                if (srcNode.getData('mask') === 'false') {
-                    return false;
-                }
-                return true;
-            },
-
             showFrom: function (srcNode) {
                 return srcNode.getData('show-from');
             },
@@ -400,10 +359,7 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
             },
 
             fullPage: function (srcNode) {
-                if (srcNode.getData('full-page') === 'false') {
-                    return false;
-                }
-                return true;
+                return (srcNode.getData('full-page') === 'false') ? false : true;
             }
         },
 
@@ -432,7 +388,12 @@ var Mask = Y.one('.bt-overlay-mask') || Y.one('body').appendChild(Y.Node.create(
 
 Y.Bottle.Overlay = Overlay;
 
-//create Overlay mask
-Mask.on('click', function () {
+// hide shortcut when click mask
+Mask.on(hasTouch ? 'gesturemoveend' : 'click', function () {
     current.hide();
+});
+
+// disable scroll on mask
+Mask.on('gesturemovestart', function (E) {
+    E.preventDefault();
 });

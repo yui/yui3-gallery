@@ -19,7 +19,7 @@
         },
         {
             "name": "mask",
-            "description": "Boolean indicating Overlay requires mask when show.",
+            "description": "Boolean indicating Overlay requires mask when showing. If omitted, the default value will be decided by fullPage. When fullPage is false, the default mask will be true.",
             "referAttr": "mask",
             "default": "true"
         },

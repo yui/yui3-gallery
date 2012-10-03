@@ -16,11 +16,11 @@ YUI().use('overlay-testlib', function (Y) {
             A.isFalse(basicMenu.get('mask'));
         },
 
-        'test cfgScTrans: from HTML': function () {
+        'test olTrans: from HTML': function () {
             B.areSame({
                 duration: 2,
                 easing: "ease-in-out"
-            }, basicMenu.get('scTrans'));
+            }, basicMenu.get('olTrans'));
         },
 
         'test fullPage: false': function () {

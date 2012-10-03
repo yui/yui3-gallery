@@ -68,28 +68,36 @@
             "displayName": "Push ShortCut at left",
             "description": "Demonstrates showing a ShortCut Widget with push transition at left.",
             "layout": "example",
-            "shortcutAttrs": " data-action='push'"
+            "shortcutAttrs": " data-action='push'",
+            "headerAttrs": " data-position=\"fixed\"",
+            "footerAttrs": " data-position=\"fixed\""
         },
         {
             "name": "example-push-right",
             "displayName": "Push ShortCut at right",
             "description": "Demonstrates showing a ShortCut Widget with push transition at right.",
             "layout": "example",
-            "shortcutAttrs": " data-action='push' data-show-from='right'"
+            "shortcutAttrs": " data-action='push' data-show-from='right'",
+            "headerAttrs": " data-position=\"fixed\"",
+            "footerAttrs": " data-position=\"fixed\""
         },
         {
             "name": "example-push-top",
             "displayName": "Push ShortCut at top",
             "description": "Demonstrates showing a ShortCut Widget with push transition at top.",
             "layout": "example",
-            "shortcutAttrs": " data-action='push' data-show-from='top'"
+            "shortcutAttrs": " data-action='push' data-show-from='top'",
+            "headerAttrs": " data-position=\"fixed\"",
+            "footerAttrs": " data-position=\"fixed\""
         },
         {
             "name": "example-push-bottom",
             "displayName": "Push ShortCut at bottom",
             "description": "Demonstrates showing a ShortCut Widget with push transition at bottom.",
             "layout": "example",
-            "shortcutAttrs": " data-action='push' data-show-from='bottom'"
+            "shortcutAttrs": " data-action='push' data-show-from='bottom'",
+            "headerAttrs": " data-position=\"fixed\"",
+            "footerAttrs": " data-position=\"fixed\""
         },
         {
             "name": "example-unveil-left",

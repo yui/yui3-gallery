@@ -23,6 +23,7 @@ YUI({{{yuiParams}}}).use({{{useParams}}}, function(Y){
     sb +=  'Y.Bottle.Device.OS_Version : ' + Y.Bottle.Device.OS_Version + '<br />';
     sb +=  'Y.Bottle.Device.Browser : ' + Y.Bottle.Device.Browser + '<br />';
     sb +=  'Y.Bottle.Device.B_Version : ' + Y.Bottle.Device.B_Version + '<br />';
+    sb +=  'Y.Bottle.Device.getTouchSupport : ' + Y.Bottle.Device.getTouchSupport() + '<br />';
     sb += '</div>';
     Y.one('#demo').append(sb);
    

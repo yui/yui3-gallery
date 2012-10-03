@@ -10,6 +10,15 @@
     "hideShortcut": true,
     "hideOverlay": true,
 
+    "data-attrs": [
+        {
+            "name": "native-scroll",
+            "description": "Use native browser page scroll. ",
+            "referAttr": "nativeScroll",
+            "default": "true (on touch devices)"
+        }
+    ],
+
     "examples": [
         {
             "name"       : "example-basic-page",

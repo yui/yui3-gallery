@@ -5,7 +5,8 @@
  * @module gallery-bt-page
  */
 
-var current,
+var ADDCHILD = 'addChild',
+    current,
     instances = [];
 
 /**
@@ -27,28 +28,99 @@ var current,
 Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.Bottle.PushPop], {
     initializer: function () {
         instances.push(current = this);
+
+        if (this.get('nativeScroll')) {
+            this.get('boundingBox').addClass('btp-native');
+        }
+
+        this._bpgEventHandlers = new Y.EventHandle([
+            this.after(ADDCHILD, this._afterPGAddChild)
+        ]);
+    },
+
+    destructor: function () {
+        this._bpgEventHandlers.detach();
+        delete this._bpgEventHandlers;
     },
 
     /**
-     * Resize the page to adapt the browser width and height.
+     * handle nativeScroll attribute when children added
+     *
+     * @method _afterPGAddChild
+     * @protected
+     */
+    _afterPGAddChild: function (E) {
+        E.child.set('nativeScroll', this.get('nativeScroll'));
+    },
+
+    /**
+     * Resize the page to adapt the browser width and height. If the page enable the nativeScroll configuration, the widget height will not be touched
      *
      * @method resize
      */
     resize: function () {
-        var b_width = Y.Bottle.Device.getBrowserWidth(),
-            b_height = Y.Bottle.Device.getBrowserHeight();
+        var W = Y.Bottle.Device.getBrowserWidth(),
+            H = Y.Bottle.Device.getBrowserHeight();
 
         //reduce syncUI times
-        if ((this.get('width') === b_width) && (this.get('height') === b_height)) {
+        if ((this.get('width') === W) && (this.get('height') === H)) {
             return;
         }
 
-        this.setAttrs({
-            'width': b_width,
-            'height': b_height
-        });
+        if (this.get('nativeScroll')) {
+            Y.fire('btSyncScreen');
+            return;
+        }
+        
+        this.setAttrs({width: W, height: H});
     }
 }, {
+    /**
+     * Static property used to define the default attribute configuration.
+     *
+     * @property ATTRS
+     * @protected
+     * @type Object
+     * @static
+     */
+    ATTRS: {
+        /**
+         * Use native browser scroll
+         *
+         * @attribute action
+         * @type String
+         * @default unveil
+         */
+        nativeScroll: {
+            value: true,
+            validator: Y.Lang.isBool,
+            writeOnce: 'initOnly'
+        }
+    },
+
+    /**
+     * Static property used to define the default HTML parsing rules
+     *
+     * @property HTML_PARSER
+     * @protected
+     * @static
+     * @type Object
+     */
+    HTML_PARSER: {
+        nativeScroll: function (srcNode) {
+            var D = srcNode.getData('native-scroll');
+
+            if (D === 'false') {
+                return false;
+            }
+
+            if (D === 'true') {
+                return true;
+            }
+            return Y.Bottle.Device.getTouchSupport();
+        }
+    },
+
     /**
      * Get all instances of Page
      *

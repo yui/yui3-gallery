@@ -5,7 +5,7 @@
 [data-role="overlay"] ul li h2, [data-role="shortcut"] ul li h2{padding-left:8px;font-weight:bold;}
 [data-role="overlay"] ul li.divider, [data-role="shortcut"] ul li.divider{padding:3px 0;color:#C9BEAA;font-weight:bold;font-size:11px;background:none;background-color:#333;}
 [data-role="overlay"] .bt-header, [data-role="shortcut"] .bt-header{background:url(shortcut_hd.png) repeat-x 0 0 #010101;padding-bottom:1px;border-top:1px solid #333;}
-[data-role="overlay"] .bt-footer, [data-role="shortcut"] .bt-footer{background:url(shortcut_ft.png) repeat-x 0 0;height:25px;line-height:1.8;padding-left:5px;}
+[data-role="overlay"] .bt-footer, [data-role="shortcut"] .bt-footer{background:url(shortcut_ft.png) repeat-x 0 0}
 .bpg_module {border:2px solid #888;margin:5px}
 .bpg_module img {display:block;width:100%;position:relative;z-index:-1}
 .bpg_module h1 {font-weight:900;margin:3px}
@@ -23,8 +23,8 @@ li img{vertical-align:middle;padding-right:10px;}
 .right{text-align:right}
 [data-role="header"]{padding:5px 15px;white-space:nowrap;background:url(hd_bg.png) repeat-x scroll 0 0 #3a3a3a}
 [data-role="header"] .center{color:#fff;font-weight:bold;font-size:108%}
-.subheader{height:38px;background-color:#262626;border-bottom:1px solid #646464;padding-left:15px;line-height:2.8;}
-.bt-footer{height:45px;background-color:#242424;border-top:1px solid #646464;padding-left:15px;line-height:3.3;color:#fff;font-weight:bold;}
+.subheader{background-color:#262626;border-bottom:1px solid #646464;padding-left:15px;line-height:2.8;}
+.bt-footer{background-color:#242424;border-top:1px solid #646464;color:#fff;font-weight:bold;padding:5px}
 #leftmenu, #shortcutMenu, #rightmenu{width:210px;height:300px}
 .yui3-btshortcut .bt-header {padding:0}
 [data-role="photogrid"] > div {display:none}

@@ -1,6 +1,6 @@
 var debug = location.href.match(/(#|:)debug/),
     YUI_config = {
-        gallery: 'gallery-2012.09.05-20-01',
+        gallery: 'gallery-2012.09.26-20-36',
         debug: debug,
         combine: debug ? false : true,
         filter: debug ? 'debug' : 'min',
@@ -8,6 +8,9 @@ var debug = location.href.match(/(#|:)debug/),
             'bottle-modules': {
                 base: jsURL,
                 modules: {
+                    'gallery-zui-rascroll': {
+                        path: 'gallery-zui-rascroll.js'
+                    },
                     'gallery-bt-device': {
                         path: 'gallery-bt-device/gallery-bt-device.js'
                     },

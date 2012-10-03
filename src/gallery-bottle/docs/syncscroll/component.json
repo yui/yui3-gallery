@@ -9,14 +9,5 @@
     "hideShortcut": true,
     "showSlideTab": true,
 
-    "data-attrs": [
-        {
-            "name": "auto-width",
-            "description": "Auto adjust column width when viewport size changed.",
-            "referAttr": "autoWidth",
-            "default": "false"
-        }
-    ],
-
     "noExamples": true
 } 

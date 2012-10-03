@@ -10,14 +10,14 @@ YUI().use('overlay-testlib', function (Y) {
             A.areEqual('left', basicMenu.get('showFrom'));
         },
 
-        'test mask: true': function () {
-            A.isTrue(basicMenu.get('mask'));
+        'test mask: false': function () {
+            A.isFalse(basicMenu.get('mask'));
         },
 
-        'test scTrans: { duration: 0.5 }': function () {
+        'test olTrans: { duration: 0.5 }': function () {
             B.areSame({
                 duration: 0.5
-            }, basicMenu.get('scTrans'));
+            }, basicMenu.get('olTrans'));
         },
 
         'test fullPage: true': function () {

@@ -37,33 +37,6 @@ SyncScroll.ATTRS = {
     syncScrollMethod: {
         writeOnce: true,
         validator: Y.Lang.isFunction
-    },
-
-    /**
-     * Auto set width when screen size changed
-     *
-     * @attribute autoWidth
-     * @writeOnce
-     * @type Boolean
-     */
-    autoWidth: {
-        validator: Y.Lang.isBoolean,
-        lazyAdd: false,
-        writeOnce: true
-    }
-};
-
-/**
- * Static property used to define the default HTML parsing rules
- *
- * @property HTML_PARSER
- * @static
- * @protected
- * @type Object
- */
-SyncScroll.HTML_PARSER = {
-    autoWidth: function (srcNode) {
-        return (srcNode.getData('auto-width') === 'true');
     }
 };
 
@@ -88,21 +61,23 @@ SyncScroll.prototype = {
      */
     _bssInitParentScroll: function () {
         var V = this.get('syncScrollMethod'),
-            that = this;
+            pg = Y.Bottle.Page.getCurrent(),
+            hs = [this.after(WIDTH_CHANGE, V, this)];
+
         this._bssParentScroll = Y.Widget.getByNode(this.get('boundingBox').ancestor('.yui3-scrollview'));
 
         if (V) {
             // sync width with parent scrollView
             if (this._bssParentScroll) {
-                this._bssHandle = this._bssParentScroll.after(WIDTH_CHANGE, V, this);
+                hs.push(this._bssParentScroll.after(WIDTH_CHANGE, V, this));
             }
 
-            // sync width with window
-            if (this.get('autoWidth')) {
-                window.addEventListener((Y.UA.mobile == 'Apple') ? 'orientationchange' : 'resize', function () {
-                    V.apply(that);
-                }, false);
+            // sync width with screen width
+            if (!pg || pg.get('nativeScroll')) {
+                hs.push(Y.on('btSyncScreen', Y.bind(V, this)));
             }
+
+            this._bssHandle = new Y.EventHandle(hs);
         }
         this.syncScroll();
     },

@@ -100,13 +100,7 @@ body.btInit {
 }
 
 .btInit .btn.menu {
-    z-index:10;
-    position:absolute;
-    right:0;
     cursor:pointer;
-    width:40px;
-    height:40px;
-    background:url(shortcut.png) no-repeat;
-    background-size:cover;
-    opacity:0.5;
+    height:48px;
+    background:#fdf url(shortcut.png) no-repeat 100% 0;
 }

@@ -1,10 +1,10 @@
 {
     "projectName": "Mobile UI Library - Bottle",
-    "projectVersion": "0.1.0",
+    "projectVersion": "0.1.2",
     "yuiVersion": "3.6.0",
     "useParams": "'gallery-bottle'",
     "apiDocUrl": "/api/",
-    "yuiParams": "{gallery: 'gallery-2012.09.12-20-02'}",
+    "yuiParams": "{gallery: 'gallery-2012.09.26-20-36'}",
     "relUrl": true,
     "y3GuideUrl": "http://yuilibrary.com/yui/docs/",
     "sourceUrl": "https://github.com/zordius/yui3-gallery/tree/master/src/gallery-bottle",

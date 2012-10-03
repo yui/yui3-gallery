@@ -40,8 +40,8 @@ SlideTab = Y.Base.create('btslidetab', Y.Widget, [Y.WidgetStdMod, Y.Bottle.SyncS
          * @private
          */
         this._bstEventHandlers = new Y.EventHandle([
-            this.after(WIDTH_CHANGE, this._updateSlide),
-            this.after(LABELWIDTH_CHANGE, this._updateSlide)
+            this.after(LABELWIDTH_CHANGE, this._updateSlide),
+            Y.once('btNative', this._nativeScroll, this)
         ]);
     },
 
@@ -71,6 +71,16 @@ SlideTab = Y.Base.create('btslidetab', Y.Widget, [Y.WidgetStdMod, Y.Bottle.SyncS
         }, this);
         this.set('scrollView', scrollView);
         this._updateSlide();
+    },
+
+    /**
+     * toggle internal scrollview to support nativeScroll mode
+     *
+     * @method _nativeScroll
+     * @protected
+     */
+    _nativeScroll: function () {
+        this.get('scrollView')._prevent = {move: false, start: false, end: false};
     },
 
     /**

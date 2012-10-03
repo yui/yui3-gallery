@@ -25,6 +25,19 @@
             "description": "Specify underlay transition execution stage.",
             "referAttr": "underlay",
             "default": "none"
+        },
+        {
+            "name": "child-query",
+            "description": "Default css3 selector to add children when rendering.",
+            "referAttr": "childQuery",
+            "default": "> [data-role=container]"
+        },
+        {
+            "name": "cfg-child",
+            "description": "Specify underlay transition execution stage.",
+            "referAttr": "cfgChild",
+            "json": true,
+            "default": "{} (empty hash)"
         }
     ],
 
