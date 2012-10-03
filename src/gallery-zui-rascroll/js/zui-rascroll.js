@@ -154,10 +154,11 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
     syncWidth: function () {
         var c = this._cnt,
             sw = this._node.get('scrollWidth'),
-            pw = this._node.get('offsetWidth');
+            pw = this._node.get('offsetWidth'),
+            cw = c.get('offsetWidth');
 
-        if (sw > pw) {
-            c.set('offsetWidth', c.get('offsetWidth') + pw - sw);
+        if (cw && (sw > pw)) {
+            c.set('offsetWidth', cw + pw - sw);
         }
     }
 });
