@@ -64,7 +64,7 @@ Y.PjaxPlus = Y.Base.create('pjaxplus', Y.Widget, [], {
 				clickedLink = e.originEvent.target.get('href');
 				var html5support = this.get('html5support');			
 					
-				if (this.get('startCallbackFunc') && !this.ppCache.retrieve(clickedLink)) {		
+				if (this.get('startCallbackFunc')) {		
 					//Y.log('trigger start callback');
 					this.get('startCallbackFunc').call(null, {
 						clickTarget:e.originEvent.target,
@@ -185,7 +185,7 @@ Y.PjaxPlus = Y.Base.create('pjaxplus', Y.Widget, [], {
 	},
 		
 	startAjaxLoad : function(configObj) {
-		if (this.get('startCallbackFunc') && !this.ppCache.retrieve(configObj.url)) {
+		if (this.get('startCallbackFunc')) {
 			//Y.log('trigger start callback - AJAX');
 			this.get('startCallbackFunc').call(null, configObj, this);
 		}
