@@ -13,7 +13,7 @@
 
 .itsa-button-icon {
     display: inline-block;
-    height: 20px;
+    height: 21px;
     vertical-align: middle;
     width: 20px;
     background-repeat: no-repeat;
@@ -33,21 +33,21 @@
     width:15px;
     height:15px;
 }
-.itsatoolbar-colors .itsa-selectlist-ullist li {
+.yui3-itsaselectlist.itsa-leftalign.itsatoolbar-colors li {
     display: inline-block;
     padding: 2px;
     border: solid 1px #FFF;
 }
-.itsatoolbar-colors .itsa-selectlist-ullist li.itsa-selectlist-selected {
+.yui3-itsaselectlist.itsa-leftalign.itsatoolbar-colors li.itsa-selectlist-selected {
     background-image: none;
     border-color: #000;
 }
-.itsatoolbar-fontsize .itsa-selectlist-ullist li {
+.yui3-itsaselectlist.itsa-rightalign.itsatoolbar-fontsize li {
     padding: 1px 3px 2px;
     margin: 0px 2px;
     border: solid 1px #FFF;
 }
-.itsatoolbar-fontsize .itsa-selectlist-ullist li.itsa-selectlist-selected {
+.yui3-itsaselectlist.itsa-rightalign.itsatoolbar-fontsize li.itsa-selectlist-selected {
     background-image: none;
     border-color: #000;
 }
@@ -114,6 +114,13 @@
 
 .itsatoolbar.itsa-buttonsize-small {
     padding: 4px 0px 0px;
+}
+
+.itsatoolbar.itsa-buttonsize-small .yui3-itsaselectlist.itsa-leftalign .itsa-selectlist-basediv {
+    margin-top: -3px;
+}
+.itsatoolbar.itsa-buttonsize-small .yui3-itsaselectlist.itsa-rightalign .itsa-selectlist-basediv {
+    margin-top: -3px;
 }
 
 .itsatoolbar {
