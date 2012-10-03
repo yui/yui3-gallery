@@ -1,0 +1,17 @@
+{
+    "name": "gallery-datatable-col-resize",
+    "builds": {
+        "gallery-datatable-col-resize": {
+            "jsfiles": [
+                "gallery-datatable-col-resize.js"
+            ],
+            "config": {
+            	"skinnable":true,
+                "requires": [
+                    "plugin", "datatable", "node", "dd-plugin"
+                ]
+            },
+            "meta": {}
+        }
+    }
+}
