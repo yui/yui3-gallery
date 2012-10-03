@@ -1,0 +1,9 @@
+{
+	"name": "gallery-bulkedit",
+	"displayName": "Bulk Editor",
+	"description": "Allows editing an arbitrary amount of data as an atomic operation (from the server's perspective).",
+	"author": "jafl",
+
+	"use": ["gallery-bulkedit"],
+	"tags": ["jafl","data","table","edit","bulk","form","upload"]
+}

@@ -1,0 +1,33 @@
+<div class="intro component">
+    <p>
+        Bulk Editor allows editing an arbitrary amount of data as an atomic operation (from the server's perspective).
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2 id="using">Using the Bulk Editor module</h2>
+
+<h3 id="modules">Bulk Editor module overview</h3>
+
+<p>
+Bulk Editor allows editing an arbitrary amount of data as an atomic operation (from the server's perspective).
+</p>
+<p>
+This is different from YUI DataTable Quick Edit, because Quick Edit only allows editing a single page of records and Quick Edit is restricted by what YUI DataTable can display: one table row per record, where each cell contains a single value.
+</p>
+<p>
+Bulk Editor allows any kind of presentation of the form fields, and supports pagination without having to save to the server. The default implementation uses an HTML table.
+</p>
+<p>
+Bulk Editor allows creating records, removing records, and modifying records, so it is useful both for creating new records and editing existing records. Bulk Editor also supports both client-side and server-side pagination.
+</p>
+<p>
+Client-side pagination is the fastest and provides the most flexibility, because it allows best-effort saving: acceptable values can be saved, acceptable insertions and removals can be processed, and then validation errors can be displayed for invalid values.
+</p>
+<p>
+Server-side pagination must be used when it is not feasible to transfer all the data to the client. In this case, you can only save all-or-nothing because the data returned by the server must be immutable during the edit process.
+</p>
+<p>
+One example of server-side pagination is bulk upload of data. The file is uploaded to the server, parsed (accepting any errors), and stored in a scratch space. Then Bulk Editor is invoked to allow the user to verify the data and fix the errors.
+</p>
