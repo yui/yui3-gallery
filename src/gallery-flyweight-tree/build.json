@@ -1,0 +1,13 @@
+{
+    "name": "gallery-flyweight-tree",
+    "builds": {
+        "gallery-flyweight-tree": {
+            "jsfiles": [
+                "flyweight-tree-constants.js",
+                "flyweight-tree-manager.js",
+                "flyweight-tree-node.js"
+            ],
+            "meta": {}
+        }
+    }
+}

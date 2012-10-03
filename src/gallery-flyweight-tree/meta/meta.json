@@ -1,0 +1,6 @@
+{
+	"gallery-flyweight-tree": {
+		"requires":["base-base","base-build","classnamemanager"],
+		"skinnable": false
+	}
+}
