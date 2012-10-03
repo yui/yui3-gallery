@@ -22,108 +22,112 @@
  *  - Can't listen to multiple gesturemove events on the same node.
  *  - gesturemoveend doesn't fire without gesturemovestart.
  */
-var DELAY = Y.UA.ios ? 400 : 0,
-    POLL = 300;
+    "use strict";
+    /*global Y:true */
+    /*jslint regexp: true*/
+    var DELAY = Y.UA.ios ? 400 : 0,
+        POLL = 300;
 
-function getSelection() {
-    if (Y.config.win.getSelection) {
-        return Y.config.win.getSelection().toString();
-    } else if (Y.config.doc.selection) {
-        return Y.config.doc.selection.createRange().text;
-    }
-    return '';
-}
-
-Y.Event.define('selection', {
-    on: function(node, sub, notifier, filter) {
-        var method = filter ? 'delegate' : 'on';
-        sub._notifier = notifier;
-        sub._handle = new Y.EventHandle([
-            node[method]('gesturemovestart', function(e) {}, filter), // event-gesture bug
-            // Checking asynchronously since previously selected text can be reported as selected.
-            node[method]('gesturemoveend', Y.bind(function(e) {
-                sub._x = e.pageX;
-                sub._y = e.pageY;
-                Y.later(DELAY, this, this._checkSelection, sub);
-            }, this), filter)
-        ]);
-    },
-
-    delegate: function() {
-        this.on.apply(this, arguments);
-    },
-
-    detach: function(node, sub, notifier) {
-        sub._handle.detach();
-    },
-
-    detachDelegate: function() {
-        this.detach.apply(this, arguments);
-    },
-
-    _checkSelection: function(sub) {
-        var selection = getSelection();
-        if (selection !== '') {
-            sub._notifier.fire({selection: selection, pageX: sub._x, pageY: sub._y});
+    function getSelection() {
+        var s = '';
+        if (Y.config.win.getSelection) {
+            s = Y.config.win.getSelection().toString();
+        } else if (Y.config.doc.selection) {
+            s = Y.config.doc.selection.createRange().text;
         }
+        return s;
     }
-});
 
-Y.Event.define('selectionchange', {
-    _poll: null, // Keep one poll since there can only ever be one text selection.
+    Y.Event.define('selection', {
+        on: function (node, sub, notifier, filter) {
+            var method = filter ? 'delegate' : 'on';
+            sub._notifier = notifier;
+            sub._handle = new Y.EventHandle([
+                node[method]('gesturemovestart', function (e) {}, filter), // event-gesture bug
+                // Checking asynchronously since previously selected text can be reported as selected.
+                node[method]('gesturemoveend', Y.bind(function (e) {
+                    sub._x = e.pageX;
+                    sub._y = e.pageY;
+                    Y.later(DELAY, this, this._checkSelection, sub);
+                }, this), filter)
+            ]);
+        },
 
-    on: function(node, sub, notifier, filter) {
-        var method = filter ? 'delegate' : 'on';
-        sub._selection = ''; // Save last selection
-        sub._notifier = notifier;
-        sub._handle = new Y.EventHandle([
-            Y.on('gesturemovestart', Y.bind(function(e) {
-                this._unpoll();
-                if (sub._selection) {
-                    Y.later(0, this, this._checkSelectionChange, sub);
-                }
-            }, this)),
-            node[method]('gesturemovestart', function(e) {}, filter), // event-gesture bug
-            // Checking asynchronously since previously selected text can be reported as selected.
-            node[method]('gesturemoveend', Y.bind(function(e) {
-                sub._x = e.pageX;
-                sub._y = e.pageY;
-                Y.later(DELAY, this, this._checkSelection, sub);
-            }, this), filter)
-        ]);
-    },
+        delegate: function () {
+            this.on.apply(this, arguments);
+        },
 
-    delegate: function() {
-        this.on.apply(this, arguments);
-    },
+        detach: function (node, sub, notifier) {
+            sub._handle.detach();
+        },
 
-    detach: function(node, sub, notifier) {
-        this._unpoll();
-        sub._handle.detach();
-    },
+        detachDelegate: function () {
+            this.detach.apply(this, arguments);
+        },
 
-    detachDelegate: function() {
-        this.detach.apply(this, arguments);
-    },
-
-    _checkSelection: function(sub) {
-        this._unpoll();
-        this._checkSelectionChange(sub);
-        this._poll = Y.later(POLL, this, this._checkSelectionChange, sub, true);
-    },
-
-    _checkSelectionChange: function(sub) {
-        var selection = getSelection();
-        if (selection !== sub._selection) {
-            sub._selection = selection;
-            sub._notifier.fire({selection: sub._selection, pageX: sub._x, pageY: sub._y});
+        _checkSelection: function (sub) {
+            var selection = getSelection();
+            if (selection !== '') {
+                sub._notifier.fire({selection: selection, pageX: sub._x, pageY: sub._y});
+            }
         }
-    },
+    });
 
-    _unpoll: function() {
-        if (this._poll) {
-            this._poll.cancel();
-            this._poll = null;
+    Y.Event.define('selectionchange', {
+        _poll: null, // Keep one poll since there can only ever be one text selection.
+
+        on: function (node, sub, notifier, filter) {
+            var method = filter ? 'delegate' : 'on';
+            sub._selection = ''; // Save last selection
+            sub._notifier = notifier;
+            sub._handle = new Y.EventHandle([
+                Y.on('gesturemovestart', Y.bind(function (e) {
+                    this._unpoll();
+                    if (sub._selection) {
+                        Y.later(0, this, this._checkSelectionChange, sub);
+                    }
+                }, this)),
+                node[method]('gesturemovestart', function (e) {}, filter), // event-gesture bug
+                // Checking asynchronously since previously selected text can be reported as selected.
+                node[method]('gesturemoveend', Y.bind(function (e) {
+                    sub._x = e.pageX;
+                    sub._y = e.pageY;
+                    Y.later(DELAY, this, this._checkSelection, sub);
+                }, this), filter)
+            ]);
+        },
+
+        delegate: function () {
+            this.on.apply(this, arguments);
+        },
+
+        detach: function (node, sub, notifier) {
+            this._unpoll();
+            sub._handle.detach();
+        },
+
+        detachDelegate: function () {
+            this.detach.apply(this, arguments);
+        },
+
+        _checkSelection: function (sub) {
+            this._unpoll();
+            this._checkSelectionChange(sub);
+            this._poll = Y.later(POLL, this, this._checkSelectionChange, sub, true);
+        },
+
+        _checkSelectionChange: function (sub) {
+            var selection = getSelection();
+            if (selection !== sub._selection) {
+                sub._selection = selection;
+                sub._notifier.fire({selection: sub._selection, pageX: sub._x, pageY: sub._y});
+            }
+        },
+
+        _unpoll: function () {
+            if (this._poll) {
+                this._poll.cancel();
+                this._poll = null;
+            }
         }
-    }
-});
+    });

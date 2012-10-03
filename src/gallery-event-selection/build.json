@@ -1,0 +1,15 @@
+{
+    "name": "gallery-event-selection",
+    "builds": {
+        "gallery-event-selection": {
+            "jsfiles": [
+                "event-selection.js"
+            ],
+            "config": {
+                "use": [
+                    "event-move"
+                ]
+            }
+        }
+    }
+}
