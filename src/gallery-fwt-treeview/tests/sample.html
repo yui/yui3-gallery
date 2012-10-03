@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.7.1/build/yui/yui-min.js"></script>
+	</head>
+	<body class="yui3-skin-sam">
+		<a href="out/index.html">API docs</a>
+		<h1>A Tree:</h1>
+		<div id="container"></div>
+		<h1>A dynamic tree with multiple node types:</h1>
+		<p>The nodes of this tree are read from YQL, any replies rely on that service.
+		The long connecting lines might look funny sometimes because they are borrowed from YUI2 TreeView and
+		they assumed limits on the height of a line so for lengthy lines, the sprite overflows into the next element.  
+		With a proper sprite, this would not happen.</p>
+		<div id="dynTree"></div>
+		<!-- h1>A form:</h1>
+		<div id="form"></div -->
+		<script>
+			YUI({
+				groups: {
+					gallery: {
+//						base:'../../../build/',
+						base:'http://satyam.github.com/yui3-gallery/build/',
+						modules: {
+							'gallery-flyweight-tree': {
+								path:'gallery-flyweight-tree/gallery-flyweight-tree.js',
+								requires:["base-base","base-build","classnamemanager"]
+							},
+							'gallery-fwt-treeview': {
+								path: 'gallery-fwt-treeview/gallery-fwt-treeview.js',
+								requires: ["gallery-flyweight-tree","widget","base-build"],
+								skinnable: true
+							}
+						}
+					}
+				},
+				lang:'es'
+			}).use('gallery-fwt-treeview','yql', function (Y) {
+				'use strict';
+				/*jslint white:true*/
+				var Lang = Y.Lang,
+					tv = new Y.FWTreeView({tree: [
+					{
+						label:'label 0',
+						children: [
+							{
+								label: 'label 0-0',
+								expanded: false,
+								children: [
+									{
+										label: 'label 0-0-0'
+									},
+									{
+										label: 'label 0-0-1',
+										children: [
+											{label: 'label 0-0-1'}
+										]
+									}
+								]
+							},
+							{
+								label: 'label 0-1'
+							}
+						]
+					},
+					{
+						label: 'label 1'
+					}
+					
+				]});
+				tv.render('#container');
+				var ArtistNode = Y.Base.create(
+					'artist-node',
+					Y.FWTreeNode,
+					[],
+					{
+						
+					},{
+						TEMPLATE: '<li id="{id}" class="artistnode {cname_node}"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-content"><a href="{url}">{label}<\/a><\/div><ul class="{cname_children}">{children}<\/ul><\/li>',
+						ATTRS: {
+							url: {},
+							artistId: {}
+						}
+						
+					}
+				);
+				var AlbumNode = Y.Base.create(
+					'album-node',
+					Y.FWTreeNode,
+					[],
+					{
+						
+					},{
+						TEMPLATE: '<li id="{id}" class="albumnode {cname_node}"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-content"><a href="{url}">{label}<\/a> ({publisher})<\/div><ul class="{cname_children}">{children}<\/ul><\/li>',
+						ATTRS: {
+							url: {},
+							albumId: {},
+							publisher: {}
+						}
+						
+					}
+				);
+				var TrackNode = Y.Base.create(
+					'track-node',
+					Y.FWTreeNode,
+					[],
+					{
+						
+					},{
+						// {"Track":{"discNumber":"1","duration":"0","popularity":"3","title":"Karaoke: Crazy For You","trackNumber":"1"}}
+ 						TEMPLATE: '<li id="{id}" class="tracknode {cname_node}"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-content">[disc:{discNumber} - track:{trackNumber} - duration: {duration}]: {label}<\/div><ul class="{cname_children}">{children}<\/ul><\/li>',
+						ATTRS: {
+							discNumber: {},
+							trackNumber: {},
+							duration: {}
+						}
+						
+					}
+				);
+				
+				Y.YQL('select id, name, url from music.artist.search where keyword="Madonna" | sort(field="trackCount", descending="true")', function(response) {
+					if (!response.query.count) {
+						Y.one('#dynTree').setContent('YQL query for Madonna returned no records or failed');
+						return;
+					}
+					var cfg = [],
+						results = response.query.results.Artist || [];
+						
+					if (!Lang.isArray(results)) {
+						results = [results];
+					}
+					Y.Array.each(results, function (entry) {
+						cfg.push( {
+							label: entry.name,
+							artistId: entry.id,
+							url: entry.url,
+							type:ArtistNode
+							
+						});
+					});
+					(new Y.FWTreeView({
+						dynamicLoader: function (node, callback) {
+							if (node instanceof ArtistNode) {
+								Y.YQL(Lang.sub('select id, title, releaseYear, label, url from music.release.artist where id="{artistId}"   | sort(field="releaseYear", descending="true")', node.getAttrs()), function (response) {
+									if (!response.query.count) {
+										alert(Lang.sub('YQL query for albums by {label} failed or returned no results', node.getAttrs()));
+										callback();
+										return;
+									}
+									var cfg = [],
+										results = response.query.results.Release || [];
+
+									if (!Lang.isArray(results)) {
+										results = [results];
+									};
+									Y.Array.each(results, function (entry) {
+										cfg.push( {
+											label: entry.title || ' ',
+											publisher: entry.label || 'unknown publisher',
+											albumId: entry.id,
+											url: entry.url || '#',
+											type:AlbumNode
+
+										});
+									});
+									callback(cfg);
+									return;
+								});
+								
+							}
+							if (node instanceof AlbumNode)  {
+								Y.YQL(Lang.sub('select Track.discNumber, Track.trackNumber, Track.duration, Track.title, Track.popularity from music.release.id where ids="{albumId}" and response="tracks"', node.getAttrs()), function (response) {
+
+									if (!response.query.count) {
+										alert(Lang.sub('YQL query for album "{label}" failed or returned no results', node.getAttrs()));
+										callback();
+										return;
+									}
+									var cfg = [],
+										results = response.query.results.Release || [];
+
+									if (!Lang.isArray(results)) {
+										results = [results];
+									};
+									Y.Array.each(results, function (entry) {
+										entry = entry.Track;
+									// {"Track":{"discNumber":"1","duration":"0","popularity":"3","title":"Karaoke: Crazy For You","trackNumber":"1"}}
+										cfg.push( {
+											label: entry.title || '- no title -',
+											discNumber: entry.discNumber || 1,
+											trackNumber: entry.trackNumber || '-',
+											duration: entry.duration || '--:--',
+											type:TrackNode,
+											isLeaf:true
+
+										});
+									});
+									callback(cfg);
+									return;
+								});
+								
+							}
+						},
+						tree: cfg
+					})).render('#dynTree');
+			    });				
+
+//				var f = new Y.Form({fields: [
+//					{
+//						label: 'First Field',
+//						name: 'firstField',
+//						value: 1
+//					},
+//					{
+//						label: 'Second Field',
+//						name: 'secondField',
+//						value: 2
+//						
+//					},
+//					{
+//						type:'FieldSet',
+//						label:'Set of Fields',
+//						children: [
+//							{
+//								label: 'First Child Field'
+//							},
+//							{
+//								label: 'Second Child field'
+//							}
+//						]
+//					}
+//				]});
+//				f.render('#form');
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+{
+    "name": "gallery-fwt-treeview",
+    "builds": {
+        "gallery-fwt-treeview": {
+            "jsfiles": [
+                "fwtv-constants.js",
+                "fw-treeview.js",
+                "fw-treenode.js"
+            ],
+            "meta": {}
+        }
+    }
+}
