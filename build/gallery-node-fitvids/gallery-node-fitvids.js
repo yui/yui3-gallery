@@ -161,4 +161,4 @@ YUI.add('gallery-node-fitvids', function(Y) {
 	});
 
 
-}, 'gallery-2012.10.03-20-02' ,{skinnable:true, requires:['plugin', 'base-build', 'node-base', 'node-style', 'node-pluginhost', 'classnamemanager']});
+}, 'gallery-2012.10.10-19-59' ,{skinnable:true, requires:['plugin', 'base-build', 'node-base', 'node-style', 'node-pluginhost', 'classnamemanager']});

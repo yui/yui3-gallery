@@ -673,7 +673,7 @@ Y.extend(BulkEditDataSource, Y.DataSource.Local,
 		record_id = record_id.toString();
 
 		var record = this._recordMap[ record_id ];
-		if (record && this._getComparator(key)(record[key] || '', value || ''))
+		if (record && this._getComparator(key)(Y.Lang.isValue(record[key]) ? record[key] : '', Y.Lang.isValue(value) ? value : ''))
 		{
 			if (this._diff[ record_id ])
 			{
@@ -1284,7 +1284,7 @@ Y.extend(BulkEditor, Y.Widget,
 		var ds      = this.get('ds');
 		var records = ds.getCurrentRecords();
 		var id_key  = ds.get('uniqueIdKey');
-		Y.Object.each(this.get('fields'), function(value, key)
+		Y.Object.each(this.get('fields'), function(field, key)
 		{
 			Y.Array.each(records, function(r)
 			{
@@ -1293,7 +1293,7 @@ Y.extend(BulkEditor, Y.Widget,
 					value;
 				if (tag == 'input' && node.get('type').toLowerCase() == 'checkbox')
 				{
-					value = node.get('checked');
+					value = node.get('checked') ? field.values.on : field.values.off;
 				}
 				else if (tag == 'select' && node.get('multiple'))
 				{
@@ -2409,7 +2409,7 @@ BulkEditor.markup =
 			key:   o.key,
 			id:    this.getFieldId(o.record, o.key),
 			label: label,
-			value: o.value ? 'checked="checked"' : '',
+			value: o.value == o.field.values.on ? 'checked="checked"' : '',
 			msg:   BulkEditor.error_msg_markup
 		});
 	},
@@ -2589,12 +2589,18 @@ HTMLTableBulkEditor.ATTRS =
 	}
 };
 
-var cell_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'cell'),
+var cell_class        = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'cell'),
 	cell_class_prefix = cell_class + '-',
-	odd_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'odd'),
-	even_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'even'),
-	msg_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'record-message'),
-	liner_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'liner');
+	odd_class         = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'odd'),
+	even_class        = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'even'),
+	msg_class         = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'record-message'),
+	liner_class       = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'liner'),
+
+	input_class          = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'input'),
+	textarea_class       = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'textarea'),
+	select_class         = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'select'),
+	checkbox_class       = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'checkbox'),
+	cb_multiselect_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'checkbox-multiselect');
 
 /**
  * Renders an input element in the cell.
@@ -2606,6 +2612,7 @@ var cell_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'cell
 HTMLTableBulkEditor.inputFormatter = function(o)
 {
 	o.cell.set('innerHTML', BulkEditor.markup.input.call(this, o));
+	o.cell.addClass(input_class);
 };
 
 /**
@@ -2618,6 +2625,7 @@ HTMLTableBulkEditor.inputFormatter = function(o)
 HTMLTableBulkEditor.textareaFormatter = function(o)
 {
 	o.cell.set('innerHTML', BulkEditor.markup.textarea.call(this, o));
+	o.cell.addClass(textarea_class);
 };
 
 /**
@@ -2630,6 +2638,7 @@ HTMLTableBulkEditor.textareaFormatter = function(o)
 HTMLTableBulkEditor.selectFormatter = function(o)
 {
 	o.cell.set('innerHTML', BulkEditor.markup.select.call(this, o));
+	o.cell.addClass(select_class);
 };
 
 /**
@@ -2642,6 +2651,7 @@ HTMLTableBulkEditor.selectFormatter = function(o)
 HTMLTableBulkEditor.checkboxFormatter = function(o)
 {
 	o.cell.set('innerHTML', BulkEditor.markup.checkbox.call(this, o));
+	o.cell.addClass(checkbox_class);
 };
 
 /**
@@ -2654,6 +2664,7 @@ HTMLTableBulkEditor.checkboxFormatter = function(o)
 HTMLTableBulkEditor.checkboxMultiselectFormatter = function(o)
 {
 	o.cell.set('innerHTML', BulkEditor.markup.checkboxMultiselect.call(this, o));
+	o.cell.addClass(cb_multiselect_class);
 };
 
 /**
@@ -2881,4 +2892,4 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 Y.HTMLTableBulkEditor = HTMLTableBulkEditor;
 
 
-}, 'gallery-2012.10.03-20-02' ,{optional:['datasource','dataschema','gallery-paginator'], requires:['widget','datasource-local','gallery-busyoverlay','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-scrollintoview','array-extras','gallery-funcprog','escape','event-key','gallery-nodelist-extras2'], skinnable:true});
+}, 'gallery-2012.10.10-19-59' ,{optional:['datasource','dataschema','gallery-paginator'], requires:['widget','datasource-local','gallery-busyoverlay','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-scrollintoview','array-extras','gallery-funcprog','escape','event-key','gallery-nodelist-extras2'], skinnable:true});
