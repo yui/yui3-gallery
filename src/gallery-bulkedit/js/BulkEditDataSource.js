@@ -671,7 +671,7 @@ Y.extend(BulkEditDataSource, Y.DataSource.Local,
 		record_id = record_id.toString();
 
 		var record = this._recordMap[ record_id ];
-		if (record && this._getComparator(key)(record[key] || '', value || ''))
+		if (record && this._getComparator(key)(Y.Lang.isValue(record[key]) ? record[key] : '', Y.Lang.isValue(value) ? value : ''))
 		{
 			if (this._diff[ record_id ])
 			{
