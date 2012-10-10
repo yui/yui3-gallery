@@ -1,0 +1,83 @@
+{
+    "project": {
+        "name": "Multiple Model Sync",
+        "description": "Allows multiple model sync implementations to be used by a single model."
+    },
+    "files": {
+        "js/model-sync-multi.js": {
+            "name": "js/model-sync-multi.js",
+            "modules": {
+                "gallery-model-sync-multi": 1
+            },
+            "classes": {
+                "ModelSync.Multi": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "ModelSync": 1
+            }
+        }
+    },
+    "modules": {
+        "gallery-model-sync-multi": {
+            "name": "gallery-model-sync-multi",
+            "submodules": {},
+            "classes": {
+                "ModelSync.Multi": 1
+            },
+            "fors": {},
+            "namespaces": {
+                "ModelSync": 1
+            },
+            "tag": "module",
+            "file": "js/model-sync-multi.js",
+            "line": 8,
+            "description": "Allows multiple model sync implementations to be used by a single model."
+        }
+    },
+    "classes": {
+        "ModelSync.Multi": {
+            "name": "ModelSync.Multi",
+            "shortname": "ModelSync.Multi",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "gallery-model-sync-multi",
+            "namespace": "ModelSync",
+            "file": "js/model-sync-multi.js",
+            "line": 8,
+            "description": "This is a class extension for Y.Module allowing multiple model sync\nimplementations to be used by a single model.  When a class is created\nextending Y.Model, this class extension must come after all other class\nextensions which implement sync.  Model classes using this extension\nshould have a static SYNCS property.  The SYNCS property will be an\nobject of key/value pairs.  There should be a value for each other sync\nimplementation extension.  The keys can be any name you want to give that\nimplementation.  When calling the sync methods such as load or save, the\noptions argument object should be given a sync property which matches the\nname of one of the SYNCS to use.",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "js/model-sync-multi.js",
+            "line": 26,
+            "description": "This sync method passes to one of the other sync methods based on the\nvalue of options.sync.  If there is no matching sync method, this\ndoes nothing.",
+            "itemtype": "method",
+            "name": "sync",
+            "params": [
+                {
+                    "name": "action",
+                    "description": ""
+                },
+                {
+                    "name": "options",
+                    "description": ""
+                },
+                {
+                    "name": "callbackFunction",
+                    "description": ""
+                }
+            ],
+            "access": "protected",
+            "tagname": "",
+            "class": "ModelSync.Multi",
+            "module": "gallery-model-sync-multi",
+            "namespace": "ModelSync"
+        }
+    ]
+}

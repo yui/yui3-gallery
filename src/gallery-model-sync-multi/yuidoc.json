@@ -1,0 +1,12 @@
+{
+    "name": "Multiple Model Sync",
+    "description": "Allows multiple model sync implementations to be used by a single model.",
+    "options": {
+        "linkNatives": "true",
+        "attributesEmit": "true",
+        "paths": [
+            "./js"
+        ],
+        "outdir": "./api"
+    }
+}
