@@ -1,7 +1,7 @@
 .yui3-fluid-width-video-wrapper {
-	width: 100%; 
-	position: relative; 
+	position: relative;
 	padding: 0; 
+	width: 100%; 
 }
 
 .yui3-fluid-width-video-wrapper iframe,
@@ -10,6 +10,6 @@
 	position: absolute; 
 	top: 0; 
 	left: 0; 
-	width: 100%; 
+	width: 100%;
 	height: 100%;
 }
