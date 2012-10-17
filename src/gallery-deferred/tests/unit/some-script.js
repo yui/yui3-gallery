@@ -1,0 +1,1 @@
+window.Y_GET_LOADED_SCRIPT = true;
