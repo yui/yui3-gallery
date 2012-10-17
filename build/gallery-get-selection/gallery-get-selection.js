@@ -7,7 +7,7 @@ YUI.add('gallery-get-selection', function(Y) {
  */
 
 /**
- * Return a DOM Fragment with the dom structure selected by the user to 
+ * Return a DOM Fragment with the dom structure selected by the user to
  * facilitate the analysis of that fragment.
  * E.g., Y.getSelection().all('p').size() will give you the number of paragraphs
  * selected by the user.
@@ -16,22 +16,26 @@ YUI.add('gallery-get-selection', function(Y) {
  */
 
 /*
- * All the credit for Dav Glass (@davglass), since he has provided the whole chunk of code, 
- * I just did the monkey work.
+ * All the credit for Dav Glass (@davglass), since he has provided
+ * the whole chunk of code, I just did the monkey work.
  */
-Y.getSelection = function() {
+Y.getSelection = function () {
     var sel,
+        winsel,
         frag;
 
     if (Y.config.win.getSelection) {
-        sel = Y.config.win.getSelection().getRangeAt(0);
+        winsel = Y.config.win.getSelection();
+        if (winsel.rangeCount > 0) {
+            sel = winsel.getRangeAt(0);
+        }
     } else if (Y.config.doc.selection) {
         sel = Y.config.doc.selection.createRange();
     }
 
-    if (sel.cloneContents) {
+    if (sel && sel.cloneContents) {
         frag = sel.cloneContents();
-    } else if (sel.htmlText) {
+    } else if (sel && sel.htmlText) {
         frag = Y.Node.create(sel.htmlText);
     }
 
@@ -39,4 +43,4 @@ Y.getSelection = function() {
 };
 
 
-}, 'gallery-2011.05.04-20-03' ,{requires:['node']});
+}, 'gallery-2012.10.17-20-00' ,{requires:['node']});
