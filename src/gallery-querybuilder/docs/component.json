@@ -1,0 +1,9 @@
+{
+	"name": "gallery-querybuilder",
+	"displayName": "Query Builder",
+	"description": "Provides a way for users to construct a set of filter conditions.",
+	"author": "jafl",
+
+	"use": ["gallery-querybuilder"],
+	"tags": ["jafl","filter","query","expression","sql"]
+}
