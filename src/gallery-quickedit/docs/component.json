@@ -1,0 +1,9 @@
+{
+	"name": "gallery-quickedit",
+	"displayName": "QuickEdit for DataTable",
+	"description": "Provides a way to edit all the values in a table simultaneously.",
+	"author": "jafl",
+
+	"use": ["gallery-quickedit"],
+	"tags": ["jafl","table","datatable","edit","quickedit","plugin"]
+}
