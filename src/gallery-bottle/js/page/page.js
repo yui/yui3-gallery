@@ -133,6 +133,30 @@ Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosit
     },
 
     /**
+     * Scroll the page to a position or a Node, works in scrollView mode and native scroll mode.
+     *
+     * @method scrollTo
+     * @param position {Number|Node} the Y position or the Node to scroll into viewport.
+     * @param [duration] {Number} ms of the scroll animation.
+     * @static
+     */
+    scrollTo: function (position, duration) {
+        var S = current ? current.topScroll() : null,
+            Y;
+        if (current) {
+            if (position.getY) {
+                Y = S.get('scrollY');
+                S.scrollTo(0, 0, 0);
+                position = position.getY() - S.get('boundingBox').getY();
+                S.scrollTo(0, Y, 0);
+            }
+            S.scrollTo(0, position, duration);
+        } else {
+            window.scrollTo(0, position.getY ? position.getY() : position);
+        }
+    },
+
+    /**
      * Get current visible Page
      *
      * @method getCurrent

@@ -119,6 +119,9 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
      */
     _syncScrollHeight: function () {
         var height = this.get('height'),
+            footer,
+            H,
+            P,
             scroll = this.get('scrollView');
 
         if (!scroll || !height) {
@@ -127,9 +130,18 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
 
         Y.later(1, this, function () {
             height -= scroll.get('boundingBox').get('offsetTop');
+            footer = this.get('footerNode');
 
             if (this.get('footerFixed')) {
-                height -= this.get('footerNode').get('clientHeight');
+                height -= footer.get('clientHeight');
+            } else {
+                if (this.get('fullHeight')) {
+                    P = footer.previous();
+                    H = height - P.getY() - footer.get('clientHeight');
+                    if (H > P.get('offsetHeight')) {
+                        P.set('offsetHeight', H);
+                    }
+                }
             }
             scroll.set('height', height);
         });
@@ -273,6 +285,18 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
         },
 
         /**
+         * Boolean indicating if the content size will scale to make the footer can fit to Container buttom.
+         *
+         * @attribute fullHeight
+         * @type Boolean
+         * @default true
+         */
+        fullHeight: {
+            value: true,
+            validator: Y.Lang.isBoolean
+        },
+           
+        /**
          * Boolean indicating if hardware acceleration in scrollview
          * animation is disabled.
          *
@@ -340,6 +364,13 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
                 return Y.JSON.parse(srcNode.getData('cfg-scroll'));
             } catch (e) {
             }
+        },
+
+        fullHeight: function (srcNode) {
+            if (srcNode.getData('full-height') === 'false') {
+                return false;
+            }
+            return true;
         },
 
         translate3D: function (srcNode) {

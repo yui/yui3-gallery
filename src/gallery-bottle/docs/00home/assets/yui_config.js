@@ -1,6 +1,6 @@
 var debug = location.href.match(/(#|:)debug/),
     YUI_config = {
-        gallery: 'gallery-2012.09.26-20-36',
+        gallery: 'gallery-2012.10.03-20-02',
         debug: debug,
         combine: debug ? false : true,
         filter: debug ? 'debug' : 'min',
@@ -8,14 +8,14 @@ var debug = location.href.match(/(#|:)debug/),
             'bottle-modules': {
                 base: jsURL,
                 modules: {
-                    'gallery-zui-rascroll': {
-                        path: 'gallery-zui-rascroll.js'
-                    },
-                    'gallery-bt-device': {
-                        path: 'gallery-bt-device/gallery-bt-device.js'
+                    'gallery-bt-viewer': {
+                        path: 'gallery-bt-viewer/gallery-bt-viewer.js'
                     },
                     'gallery-bt-loader': {
                         path: 'gallery-bt-loader/gallery-bt-loader.js'
+                    },
+                    'gallery-bt-device': {
+                        path: 'gallery-bt-device/gallery-bt-device.js'
                     },
                     'gallery-bt-container': {
                         path: 'gallery-bt-container/gallery-bt-container.js'
@@ -43,10 +43,6 @@ var debug = location.href.match(/(#|:)debug/),
                     },
                     'gallery-bt-carousel': {
                         path: 'gallery-bt-carousel/gallery-bt-carousel.js'
-                    },
-                    'gallery-bt-css': {
-                        path: 'gallery-bt-css/gallery-bt-css.css',
-                        type: 'css'
                     },
                     'gallery-bottle': {
                         path: 'gallery-bottle/gallery-bottle.js'

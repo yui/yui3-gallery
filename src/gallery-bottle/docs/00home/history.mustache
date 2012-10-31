@@ -2,6 +2,20 @@
 <h3>nighty</h3>
 <h4>for test, only on github, not on cdn</h4>
 <ul>
+ <li>page: now nativeScroll mode the fixed header/footer style missing in Android devices bug fixed.</li>
+ <li>overlay: now the bug of overlay size when using btHideSCO skin is fixed.</li>
+ <li>device: fix getBrowserWidth and getBrowserHeight for IE</li>
+ <li>core: IE7+ support, fix javascript error when init()</li>
+ <li>skin: fix shortcut/overlay mask opacity for IE7-</li>
+ <li>core: auto hide header/footer when input focused (position:fixed work around)</li>
+ <li>core: auto adjust overlay/shortcut size when input blur</li>
+ <li>page: add scrollTo() support</li>
+ <li>container: add fullHeight support, default is false</li>
+</ul>
+
+<h3>0.1.2</h3>
+<h4>2012-10-04</h4>
+<ul>
  <li>overlay: core show()/hide() rewrite, prevent floating number position and transition bugs</li>
  <li>container: delay 1ms to sync scrollView height when setting container height to prevent css related bug</li>
  <li>container: now use Y.zui.ScrollHelper on none touch device browsers to resolve 'dragging on image' bug</li>

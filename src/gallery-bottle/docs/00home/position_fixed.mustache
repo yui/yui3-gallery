@@ -1,0 +1,20 @@
+<h2>Position fixed issues</h2>
+<p>`{{projectName}}` provides some work arounds to handle position:fixed issues for mobile browsers. Here you can know how `{{projectName}}` handle them, and how to enable/disable these hacks.</p>
+
+<h3>Soft Keyboard</h3>
+<p>When user touch on an input or a textarea, the build-in software keyboard will be pushed in, and the touched node will be centered in the rest viewport. In the mean time, other position fixed element may run into wrong position. Here are sample screen shots:</p>
+
+<dl class="illustration">
+ <dt><img src="{{projectAssets}}/img/issue_input_covered_position_fixed1.png" /></dt><dd>before input focused</dd>
+ <dt><img src="{{projectAssets}}/img/issue_input_covered_position_fixed2.png" /></dt><dd>input focused</dd>
+</dl>
+
+<p>`{{projectName}}` will try to hide header and footer elements when any `INPUT`, `SELECT` or `TEXTAREA` are focused, this can prevent position fixed nodes be placed on focused input.
+<dl class="illustration">
+ <dt><img src="{{projectAssets}}/img/issue_input_covered_position_fixed3.png" /></dt><dd>hide header when input focused</dd>
+</dl>
+<p>When any input is focused, `{{projectName}}` added 'btFocus' class name on `BODY` element. If you want to disbale 'hide header/footer when input focused' behavior, you can overwrite these css rules:</p>
+<ul>
+ <li>.btFocus .bt-header {...}</li>
+ <li>.btFocus .bt-footer {...}</li>
+</ul>

@@ -2,7 +2,7 @@
     {
         "settings" : [ "master" ],
 
-        "name" : "carousel",
+        "name" : "viewer",
 
         "commonlib" : "../../testlib.js,testlib.js",
 
@@ -10,28 +10,28 @@
             "Default Values" : {
                 "params" : {
                     "test" : "default.js",
-                    "page" : "$$config.baseUrl$$/carousel/test-default.html"
+                    "page" : "$$config.baseUrl$$/viewer/test-default.html"
                 },
                 "group" : "unit"
             },
             "Data Attributes" : {
                 "params" : {
                     "test" : "data-attr.js",
-                    "page" : "$$config.baseUrl$$/carousel/test-data-attr.html"
+                    "page" : "$$config.baseUrl$$/viewer/test-data-attr.html"
                 },
                 "group" : "unit"
             },
             "Attributes" : {
                 "params" : {
                     "test" : "attribute.js",
-                    "page" : "$$config.baseUrl$$/carousel/test-default.html"
+                    "page" : "$$config.baseUrl$$/viewer/test-default.html"
                 },
                 "group" : "unit"
             },
             "Functional" : {
                 "params" : {
                     "test" : "functional.js",
-                    "page" : "$$config.baseUrl$$/carousel/test-default.html"
+                    "page" : "$$config.baseUrl$$/viewer/test-default.html"
                 },
                 "group" : "unit"
             }

@@ -20,6 +20,12 @@
             "default": "200"
         },
         {
+            "name": "error-image",
+            "description": "Default error Image.",
+            "referAttr": "errorImage",
+            "default": "http://l.yimg.com/f/i/tw/map/i/cpx.gif"
+        },
+        {
             "name": "grid-type",
             "description": "Photo rendering direction.",
             "referAttr": "gridType",
@@ -55,7 +61,14 @@
             "name": "example-vertical",
             "displayName": "Vertical PhotoGrid",
             "description": "Demonstrates a vertical PhotoGrid with 200 pixel column width.",
-            "onlyInit": true,
+            "layout": "example"
+        },
+        {
+            "name": "example-vertical-append",
+            "displayName": "Vertical PhotoGrid Append Data",
+            "photoGridAttr": " data-error-image=\"http://icons.iconarchive.com/icons/kyo-tux/phuzion/256/Sign-Error-icon.png\"",
+            "description": "Demonstrates a vertical PhotoGrid with 200 pixel column width, then append new data after 8 seconds.",
+            "appendData": true,
             "layout": "example"
         },
         {
@@ -64,7 +77,6 @@
             "description": "Demonstrates a vertical PhotoGrid with 200 pixel column width, and modules contain texts.",
             "moduleHTML": "<h1>Sample Title</h2><p>sample description texts and sample sample sample ...</p>",
             "modules": ["syncscroll"],
-            "onlyInit": true,
             "layout": "example"
         },
         {
@@ -74,7 +86,6 @@
             "moduleHTML": "<h1>Sample Title here</h2><p>sample description texts and sample sample sample ...</p>",
             "photoGridAttr": " data-column-width=\"300\" data-auto-width=\"true\" data-module-node=\"div\" data-photo-node=\"h1\"",
             "noPage": true,
-            "onlyInit": true,
             "layout": "example"
         }
     ]

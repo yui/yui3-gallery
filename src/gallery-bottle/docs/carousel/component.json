@@ -72,7 +72,7 @@
         {
             "name": "test-data-attr",
             "layout": "example",
-            "carouselAttrs": " data-selected-index=\"1\" data-page-node=\"> div\" data-index-node=\"body\" data-show-buttons=\"false\" data-cfg-scroll='{bounce:0, deceleration: 0.5}' data-page-items=\"2\" data-text-left=\"left\" data-text-right=\"right\"",
+            "carouselAttrs": " data-selected-index=\"1\" data-page-node=\"> div\" data-index-node=\"body\" data-show-buttons=\"false\" data-cfg-scroll='{\"bounce\": 0.7, \"deceleration\": 0.6}' data-page-items=\"2\" data-text-left=\"left\" data-text-right=\"right\"",
             "forTest": true
         },
         {

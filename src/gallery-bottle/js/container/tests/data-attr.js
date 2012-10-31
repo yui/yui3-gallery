@@ -13,6 +13,10 @@ YUI().use('container-testlib', function (Y) {
             A.isTrue(container.get('headerFixed'));
         },
 
+        'test fullHeight: false': function () {
+            A.isFalse(container.get('fullHeight'));
+        },
+
         'test cfgScroll: from HTML': function () {
             B.areSame({
                 deceleration: 0.5

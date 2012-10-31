@@ -13,6 +13,10 @@ YUI().use('container-testlib', function (Y) {
             Y.containerTest.cfgScrollIsDefault();
         },
 
+        'test fullHeight: false': function () {
+            A.isTrue(container.get('fullHeight'));
+        },
+
         'test footerFixed: false': function () {
             A.isFalse(container.get('footerFixed'));
         },

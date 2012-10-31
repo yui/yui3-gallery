@@ -7,11 +7,13 @@
    </div>
    <div class="bd" data-role="body">
     <div class="subheader">Subheader goes here...</div>
+    <form><input type="text"><select><option>TEXT</option><option>IMAGE</option><input type="submit" value="SEARCH"></form>
     <ul id="list_content">
      <li><h2><img src="../assets/img/tmp1.png"/>Item1</h2></li>
      <li><h2><img src="../assets/img/tmp2.png"/>Item2</h2></li>
      <li><h2><img src="../assets/img/tmp3.png"/>Item3</h2></li>
      <li><h2><img src="../assets/img/tmp4.png"/>Item4</h2></li>
+{{#unless lessContent}}
      <li><h2><img src="../assets/img/tmp5.png"/>Item5</h2></li>
      <li><h2><img src="../assets/img/tmp6.png"/>Item6</h2></li>
      <li><h2><img src="../assets/img/tmp7.png"/>Item7</h2></li>
@@ -23,6 +25,7 @@
      <li><h2><img src="../assets/img/tmp6.png"/>Item13</h2></li>
      <li><h2><img src="../assets/img/tmp7.png"/>Item14</h2></li>
      <li><h2><img src="../assets/img/tmp8.png"/>Item15</h2></li>
+{{/unless}}
     </ul>
    </div>
    <div data-role="footer"{{{footerAttrs}}}>

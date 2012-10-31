@@ -71,18 +71,7 @@ var body = Y.one('body'),
         },
 
         renderUI: function () {
-            var O = this.get('boundingBox'),
-                W = O.get('offsetWidth'),
-                H = O.get('offsetHeight');
-
-            if (!this.get('height') && H) {
-                this.set('height', H);
-            }
-
-            if (!this.get('width') && W) {
-                this.set('width', W);
-            }
-
+            this.syncWH();
             this._updatePositionHide();
             this._updatePositionShow();
         },

@@ -1,12 +1,10 @@
 YUI().use('carousel-testlib', function (Y) {
     var suite = new Y.Test.Suite('Carousel test suite: Functional'),
         carousel = Y.carouselTest.Instance,
-        WAIT_RENDERING = 8000,
         A = Y.Assert,
         B = Y.bottleTest,
         bounding = Y.one('.yui3-btcarousel'),
         items = carousel.get('pageNode');
-
 
     suite.add(new Y.Test.Case({
         'test rendering': function () {

@@ -18,6 +18,12 @@
             "default": "<pre>{\n \"flick\": {\n  \"minDistance\": 10,\n  \"minVelocity\": 0.3\n }\n}</pre>"
         },
         {
+            "name": "full-height",
+            "description": "Boolean indicating if the content size will scale to make the footer can fit to Container buttom.",
+            "referAttr": "fullHeight",
+            "default": "true"
+        },
+        {
             "name": "translate3d",
             "description": "Boolean indicating if hardware acceleration in scrollview animation is enabled.",
             "referAttr": "translate3D",
@@ -63,13 +69,14 @@
         {
             "name"       : "test-default",
             "layout": "example",
+            "lessContent": true,
             "forTest": true
         },
         {
             "name"       : "test-data-attr",
             "layout": "example",
             "forTest": true,
-            "containerAttrs": " data-cfg-scroll='{\"deceleration\":0.5}' data-translate3d=\"false\"",
+            "containerAttrs": " data-cfg-scroll='{\"deceleration\":0.5}' data-translate3d=\"false\" data-full-height=\"false\"",
             "headerAttrs": " data-position=\"fixed\"",
             "footerAttrs": " data-position=\"fixed\""
         },

@@ -21,9 +21,6 @@ YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
     Y.Bottle.init(true);
     overlay = Y.Widget.getByNode(Y.one('#overlayMenu'));
     overlay.show();
-    setTimeout(function() {
-        overlay.hide();
-    }, 2000);
 {{#if doPushPop}}
     if ({{doPushPop}} > 0) {
         Y.later({{doPushPop}}, null, function () {

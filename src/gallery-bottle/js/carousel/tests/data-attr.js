@@ -26,8 +26,8 @@ YUI().use('carousel-testlib', function (Y) {
         },
 
         'test cfgScroll: ': function () {
-            B.areSame(0, carousel.get('bounce'));
-            B.areSame(0.5, carousel.get('deceleration'));
+            B.areSame(0.7, carousel.get('bounce'));
+            B.areSame(0.6, carousel.get('deceleration'));
         },
 
         'test indexNode: BODY': function () {

@@ -1,0 +1,13 @@
+<script>
+YUI().use('gallery-bottle', function (Y) {
+    var srcNode = Y.one('[data-role=photogrid]'),
+        html = srcNode.getHTML();
+
+    Y.Bottle.init(true);
+{{#if appendData}}
+    Y.later(8000, null, function () {
+        Y.Widget.getByNode(srcNode).append(html.replace(/400x400/g, '99x99'));
+    });
+{{/if}}
+});
+</script>

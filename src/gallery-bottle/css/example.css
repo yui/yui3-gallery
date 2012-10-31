@@ -7,7 +7,7 @@
 [data-role="overlay"] .bt-header, [data-role="shortcut"] .bt-header{background:url(shortcut_hd.png) repeat-x 0 0 #010101;padding-bottom:1px;border-top:1px solid #333;}
 [data-role="overlay"] .bt-footer, [data-role="shortcut"] .bt-footer{background:url(shortcut_ft.png) repeat-x 0 0}
 .bpg_module {border:2px solid #888;margin:5px}
-.bpg_module img {display:block;width:100%;position:relative;z-index:-1}
+.bpg_module img {display:block;width:100%;position:relative;z-index:-1;background:#a44}
 .bpg_module h1 {font-weight:900;margin:3px}
 .bpg_module p {font-style:italic;margin:3px}
 
@@ -37,3 +37,5 @@ li img{vertical-align:middle;padding-right:10px;}
 .yui3-btslidetab .bst_slidebox {border-bottom:2px solid #888;padding:4px}
 .yui3-btslidetab .bst_tab {padding:4px}
 .yui3-btslidetab .bst_slide li {padding:5px;overflow:hidden;text-align:center}
+input{padding:5px;margin:4px}
+#shortcutMenu input {width:93px;margin:2px}

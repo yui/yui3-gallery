@@ -14,8 +14,8 @@ YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
                 L = M ? Y.one(M[1]) : null;
 
             if (L) {
-                Y.Bottle.ShortCut.getInstances()[0].hide();
-                Y.Bottle.Page.getCurrent().item(0).get('scrollView').scrollTo(0, L.getY(), 1000);
+                Y.Bottle.ShortCut.getCurrent().hide();
+                Y.Bottle.Page.scrollTo(L, 1000);
             }
 
             if (M) {

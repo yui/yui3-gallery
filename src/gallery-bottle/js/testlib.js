@@ -58,4 +58,4 @@ YUI.add('bottle-testlib', function (Y) {
 
     Y.bottleTest = bottleTest;
 
-}, '0.0.1', {requires:['test', 'gallery-bottle', 'gallery-bt-css']});
+}, '0.0.1', {requires:['test', 'gallery-bottle']});

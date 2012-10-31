@@ -1,5 +1,5 @@
 .bt-shortcut-mask,
-.bt-overlay-mask{opacity:0.5;background-color:#000}
+.bt-overlay-mask{opacity:0.5;filter:alpha(opacity='50',style=0);background-color:#000}
 
 .yui3-btslidetab .bst_index {border:2px solid #444;background:#eee}
 
@@ -7,7 +7,11 @@
 .bcr_indexitem.bcr_on {background-color:#afc}
 .bcr_btnl, .bcr_btnr {width:60px;height:30px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 10px -545px}
 .bcr_btnr {background-position:10px -595px}
-.bcr_off {opacity:0.5}
+.bcr_off {opacity:0.5;filter:alpha(opacity='50',style=0)}
+
+.yui3-btviewer .bvi_botton {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer}
+.yui3-btviewer .bvi_botton.bvi_expand {background-position:5px -395px}
+.yui3-btviewer .bvi_image.bvi_expand {max-width:none}
 
 .yui3-btloader-content .blo_loading{background:#fff url(http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif) no-repeat 50% 50%;min-height:40px}
 .yui3-btloader-content .blo_loaded{background:#ccc}
@@ -16,6 +20,7 @@
 /* Skins for init / progress enhancement */
 .btHideAll:not(.btReady),
 .btInPlace:not(.btReady) [data-role=carousel],
+.btInPlace:not(.btReady) [data-role=viewer],
 .btInPlace:not(.btReady) [data-role=shortcut],
 .btInPlace:not(.btReady) [data-role=overlay],
 .btInPlace:not(.btReady) [data-role=photogrid],
@@ -25,6 +30,7 @@
 
 .btHideAll:not(.btReady) > *,
 .btInPlace:not(.btReady) [data-role=carousel] > *,
+.btInPlace:not(.btReady) [data-role=viewer] > *,
 .btInPlace:not(.btReady) [data-role=shortcut] > *,
 .btInPlace:not(.btReady) [data-role=overlay] > *,
 .btInPlace:not(.btReady) [data-role=photogrid] > *,

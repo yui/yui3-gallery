@@ -1,0 +1,57 @@
+{
+    "name"       : "viewer",
+    "displayName": "Viewer Widget",
+    "description": "is a Widget provides a HTML Viewer interface. When contents or images are wider then device, Viewer can be scroll horizontally. And, from beginning, all images in Viewer are scaled down to fit the device width, and a 'expand' button will be provided for each scaled images.",
+    "className": "Viewer",
+    "dataRole": "viewer",
+
+    "hidePage": true,
+    "hideShortcut": true,
+    "showViewer": true,
+    "hideOverlay": true,
+
+    "data-attrs": [
+        {
+            "name": "cfg-scroll",
+            "description": "Specify configuration for internal scrollView in JSON format.",
+            "referY3Guide": "scrollview",
+            "json": true,
+            "default": "<pre>{\n \"flick\": false,\n \"bounce\": 0\n}</pre>"
+        },
+        {
+            "name": "image-node",
+            "description": "Default image node css selector. After the Widget initialized, the attribute will become the NodeList object.",
+            "referAttr": "imageNode",
+            "default": "img"
+        }
+    ],
+
+    "examples": [
+        {
+            "name": "test-default",
+            "layout": "example",
+            "forTest": true
+        },
+        {
+            "name": "test-data-attr",
+            "layout": "example",
+            "viewerAttrs": " data-image-node=\".img\" data-cfg-scroll='{\"deceleration\": 0.6, \"bounce\": 0.7}'",
+            "forTest": true
+        },
+        {
+            "name"       : "example-basic",
+            "displayName": "Basic Viewer",
+            "description": "Demonstrates basic usage of the Viewer Widget.",
+            "onlyInit": true,
+            "layout": "example"
+        },
+        {
+            "name"       : "example-no-page",
+            "displayName": "Basic Viewer, do not use Page",
+            "description": "Demonstrates basic usage of the Viewer Widget. This example do not use Page Widget to handle screen size and scroll.",
+            "onlyInit": true,
+            "noPage": true,
+            "layout": "example"
+        }
+    ]
+}

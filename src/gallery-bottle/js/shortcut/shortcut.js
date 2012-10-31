@@ -91,18 +91,7 @@ var body = Y.one('body'),
         },
 
         renderUI: function () {
-            var O = this.get('boundingBox'),
-                P = this.get('contentBox'),
-                W = O.get('offsetWidth') || P.get('offsetWidth'),
-                H = O.get('offsetHeight') || P.get('offsetHeight');
-
-            if (!this.get('height') && H) {
-                this.set('height', H);
-            }
-
-            if (!this.get('width') && W) {
-                this.set('width', W);
-            }
+            this.syncWH();
         },
 
         /**
