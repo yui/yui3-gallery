@@ -191,6 +191,7 @@ function insertRow(
 	/* event */		e,
 	/* element */	query_row)
 {
+	e.halt();
 	this.appendNew();
 }
 
@@ -198,6 +199,8 @@ function removeRow(
 	/* event */		e,
 	/* element */	query_row)
 {
+	e.halt();
+
 	var i = findRow(this.row_list, query_row);
 	if (i >= 0)
 	{
@@ -775,8 +778,8 @@ Y.extend(QueryBuilder, Y.Widget,
 	_rowControls: function()
 	{
 		var markup =
-			'<a href="#" class="{ci}"></a>' +
-			'<a href="#" class="{cr}"></a>';
+			'<button class="{cr}">&ndash;</button>' +
+			'<button class="{ci}">+</button>';
 
 		if (!this._controls_markup)
 		{
@@ -1165,4 +1168,4 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2012.05.23-19-56' ,{skinnable:true, optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr']});
+}, 'gallery-2012.10.31-20-00' ,{optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr'], skinnable:true});

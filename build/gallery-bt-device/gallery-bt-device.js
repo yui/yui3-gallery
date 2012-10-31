@@ -103,7 +103,7 @@ var positionFixedSupport = null,
      * @return {Number} an integer
      */
     getBrowserWidth: function () {
-        return window.innerWidth;
+        return window.innerWidth || document.documentElement.clientWidth;
     },
 
     /**
@@ -113,7 +113,7 @@ var positionFixedSupport = null,
      * @return {Number} an integer
      */
     getBrowserHeight: function () {
-        return window.innerHeight;
+        return window.innerHeight || document.documentElement.clientHeight;
     }
 };
 

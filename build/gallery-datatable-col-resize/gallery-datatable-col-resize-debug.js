@@ -91,4 +91,4 @@ YUI.add('gallery-datatable-col-resize', function(Y) {
     Y.DatatableColResizePlugin = DatatableColResizePlugin;
 
 
-}, 'gallery-2012.10.17-20-00' ,{requires:['plugin', 'datatable', 'node', 'dd-plugin'], skinnable:true});
+}, 'gallery-2012.10.31-20-00' ,{requires:['plugin', 'datatable', 'node', 'dd-plugin'], skinnable:true});

@@ -16,6 +16,7 @@ YUI.add('gallery-bottle', function(Y) {
 var BOTTLE_INIT = 'btInit',
     BOTTLE_READY = 'btReady',
     BOTTLE_NATIVE = 'btNative',
+    BOTTLE_FOCUS = 'btFocus',
     SYNC_SCREEN = 'btSyncScreen',
     htmlbody = Y.all('html, body'),
     body = Y.one('body'),
@@ -44,6 +45,27 @@ var BOTTLE_INIT = 'btInit',
             width: Y.Bottle.Device.getBrowserWidth(),
             height: Y.Bottle.Device.getBrowserHeight()
         });
+    },
+
+    handleResize = function (force) {
+        var scCurrent = Y.Bottle.ShortCut.getCurrent(),
+            overlayCurrent = Y.Bottle.Overlay.getCurrent(),
+            page = Y.Bottle.Page.getCurrent();
+
+        if (page) {
+            resetBodySize(true);
+            page.resize();
+        } else {
+            Y.fire(SYNC_SCREEN);
+        }
+
+        if (scCurrent) {
+            scCurrent.scResize(force === true);
+        }
+
+        if (overlayCurrent) {
+            overlayCurrent.olResize(force === true);
+        }
     },
 
     initWidgets = function(css, cls) {
@@ -78,7 +100,7 @@ var BOTTLE_INIT = 'btInit',
         body.addClass(BOTTLE_INIT);
         inited = true;
 
-
+        initWidgets('[data-role=viewer]', Y.Bottle.Viewer);
         initWidgets('[data-role=photogrid]', Y.Bottle.PhotoGrid);
         initWidgets('[data-role=carousel]', Y.Bottle.Carousel);
         initWidgets('[data-role=slidetab]', Y.Bottle.SlideTab);
@@ -126,28 +148,19 @@ var BOTTLE_INIT = 'btInit',
             });
         });
 
-        window.addEventListener((Y.UA.mobile == 'Apple') ? 'orientationchange' : 'resize', function () {
-            var scCurrent = Y.Bottle.ShortCut.getCurrent(),
-                overlayCurrent = Y.Bottle.Overlay.getCurrent(),
-                page = Y.Bottle.Page.getCurrent();
+        Y.on((Y.UA.mobile == 'Apple') ? 'orientationchange' : 'resize', handleResize, window);
 
-            if (page) {
-                resetBodySize(true);
-                page.resize();
-            } else {
-                Y.fire(SYNC_SCREEN);
-            }
+        body.delegate('focus', function (E) {
+            body.addClass(BOTTLE_FOCUS);
+        }, 'input, select, textarea');
 
-            if (scCurrent) {
-                scCurrent.scResize();
-            }
 
-            if (overlayCurrent) {
-                overlayCurrent.olResize();
-            }
-        }, false);
+        body.delegate('blur', function (E) {
+            body.removeClass(BOTTLE_FOCUS);
+            handleResize(true);
+        }, 'input, select, textarea');
 
-        body.addClass(BOTTLE_READY);
+        body.addClass(BOTTLE_READY).removeClass('btHideSCO').removeClass('btInPlace').removeClass('btHideAll');
         Y.publish(BOTTLE_READY, {fireOnce: true});
         Y.fire(BOTTLE_READY);
     };
@@ -155,4 +168,4 @@ var BOTTLE_INIT = 'btInit',
 Y.namespace('Bottle').init = init;
 
 
-}, 'gallery-2012.10.03-20-02' ,{skinnable:true, requires:['gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel', 'gallery-bt-loader']});
+}, 'gallery-2012.10.31-20-00' ,{skinnable:true, requires:['gallery-bt-shortcut', 'gallery-bt-overlay', 'gallery-bt-photogrid', 'gallery-bt-slidetab', 'gallery-bt-carousel', 'gallery-bt-loader', 'gallery-bt-viewer']});

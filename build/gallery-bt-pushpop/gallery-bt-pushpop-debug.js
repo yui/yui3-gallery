@@ -158,7 +158,7 @@ PushPop.ATTRS = {
      * @attribute pushFrom
      * @type String
      * @default 'right'
-     */ 
+     */
     pushFrom: {
         value: 'right',
         lazyAdd: false,
@@ -224,7 +224,7 @@ PushPop.prototype = {
      *
      * @method _destroyPushPop
      * @private
-     */    
+     */
     _destroyPushPop: function () {
         this._bppEventHandlers.detach();
         delete this._bppEventHandlers;
@@ -237,7 +237,7 @@ PushPop.prototype = {
      * @param [direction] {String} should be one of 'right', 'left', 'top', 'bottom', 'tr', 'br', 'tl', 'bl'. If omitted, current 'pushFrom' attribute will be used
      * @param [transition] {Object} transition config. If omitted, current 'ppTrans' attribute will be used
      * @protected
-     */    
+     */
     _updateTransitions: function (direction, transition) {
         var D = direction || this.get('pushFrom'),
             trans = transition || this.get('ppTrans'),
@@ -265,7 +265,7 @@ PushPop.prototype = {
      * @method _syncOneSize
      * @param sideName {String} should be 'width' or 'height'
      * @protected
-     */    
+     */
     _syncOneSide: function (HW) {
         var hw = this.get(HW);
         this.each(function (O) {
@@ -279,7 +279,7 @@ PushPop.prototype = {
      *
      * @method _afterPPHeightChange
      * @protected
-     */    
+     */
     _afterPPHeightChange: function () {
         this._syncOneSide('height');
     },
@@ -289,7 +289,7 @@ PushPop.prototype = {
      *
      * @method _afterPPWidthChange
      * @protected
-     */    
+     */
     _afterPPWidthChange: function () {
         this._syncOneSide('width');
     },
@@ -299,7 +299,7 @@ PushPop.prototype = {
      *
      * @method _beforePPAddChild
      * @protected
-     */    
+     */
     _beforePPAddChild: function (E) {
         if (!Y.instanceOf(E.child, this.get('defaultChildType'))) {
             E.halt();
@@ -321,9 +321,29 @@ PushPop.prototype = {
      *
      * @method _renderUIPushPop
      * @protected
-     */    
+     */
     _renderUIPushPop: function () {
         this.get('boundingBox').addClass(Y.Widget.getClassName(PUSHPOP));
+    },
+
+    /**
+     * sync width and height from DOM to widget object
+     *
+     * @method syncWH
+     */
+    syncWH: function () {
+        var O = this.get('boundingBox'),
+            P = this.get('contentBox'),
+            W = O.get('offsetWidth') || P.get('offsetWidth'),
+            H = O.get('offsetHeight') || P.get('offsetHeight');
+
+        if (!this.get('height') && H) {
+            this.set('height', H);
+        }
+
+        if (!this.get('width') && W) {
+            this.set('width', W);
+        }
     },
 
     /**
