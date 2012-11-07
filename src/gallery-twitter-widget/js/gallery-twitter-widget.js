@@ -10,7 +10,7 @@ var RE_USERNAME = /@(\w+)/g,
 
 Twitter = Y.Base.create("Twitter", Y.Widget, [], {
 	
-	PHOTO_TEMPLATE: '<div class="twitter-photo"><a href="{url}"><img src="{photo}"></a></div>',
+	PHOTO_TEMPLATE: '<div class="twitter-photo"><a href="{url}"><img src="{profile_image_url}"></a></div>',
 	
 	ENTRY_TEMPLATE:
 	'<div class="twitter-update">{img}'+
@@ -26,12 +26,12 @@ Twitter = Y.Base.create("Twitter", Y.Widget, [], {
 	
 	interval: null,
 
-	initializer: function () {
+	initializer: function (config) {
 		this.publish({
 			data:  { defaultFn: this._defDataFn },
 			error: { defaultFn: this._defErrorFn }
 		});
-
+		
 		this._initJSONPRequest();
 
 		this.after( {
@@ -42,8 +42,13 @@ Twitter = Y.Base.create("Twitter", Y.Widget, [], {
 
 	_initJSONPRequest: function () {
 		var un = this.get('key'),
-		obj = {count: this.get('count'),d:(new Date()).getTime(), key:un},
-		url = Y.Lang.sub(this.get('isQuery')? Twitter.TREND_API_URI : Twitter.FEED_URI,obj).replace('#','%23');
+		obj = {
+			count: this.get('count'),
+			d:(new Date()).getTime(), 
+			key:this.get('isQuery')? un : "from:" + un
+		},
+
+		url = Y.Lang.sub(Twitter.SEARCH_API_URI,obj).replace('#','%23');
 		
 		this._jsonpHandle = new Y.JSONPRequest(url, {
 			on: {
@@ -93,9 +98,9 @@ Twitter = Y.Base.create("Twitter", Y.Widget, [], {
 			content = Y.Lang.sub(this.TITLE_TEMPLATE, {
 				title   : this.get('strings.title'),
 				user	: Y.Lang.sub(this.USER_TEMPLATE, {
-				username: qry? un : '@' + un,
-				url     : qry? Twitter.TREND_URL + un.replace('#','%23') : Twitter.PROFILE_URL + un
-					})
+					username: qry? un : '@' + un,
+					url     : qry? Twitter.TREND_URL + un.replace('#','%23') : Twitter.PROFILE_URL + un
+				})
 			});
 
 
@@ -146,7 +151,7 @@ Twitter = Y.Base.create("Twitter", Y.Widget, [], {
 				new Date(Date.parse(data[i].created_at.replace(/\+\d+/,''))));
 			
 				var screenName = resp.results? data[i].from_user : data[i].user.screen_name;
-				data[i].photo = Twitter.API_URI + screenName;
+				//data[i].photo = Twitter.API_URI + screenName;
 				data[i].url = Twitter.PROFILE_URL + screenName;
 				data[i].username = screenName;
 
@@ -181,7 +186,7 @@ Twitter = Y.Base.create("Twitter", Y.Widget, [], {
 	_defErrorFn: function () {
 		this.get('contentBox').one('ul.twitter-updates').
 			addClass('twitter-error').
-			setContent('<li><em>'+this.get('strings.error')+'</em></li>');
+			setContent('<li><em>' + this.get('strings.error') +'</em></li>');
 	},
 
 	_updateInterval: function () {
@@ -199,12 +204,8 @@ Twitter = Y.Base.create("Twitter", Y.Widget, [], {
 	
 	TREND_URL : 'https://twitter.com/#!/search/',
 
-	FEED_URI: 'https://twitter.com/statuses/user_timeline/{key}.json?count={count}&d={d}&callback={callback}',
+	SEARCH_API_URI: 'http://search.twitter.com/search.json?q={key}&count={count}&d={d}&callback={callback}',
 	
-	API_URI: 'https://api.twitter.com/1/users/profile_image?size=normal&screen_name=',
-	
-	TREND_API_URI: 'https://search.twitter.com/search.json?page=1&rpp={count}&q={key}&d={d}&callback={callback}',
-
 	ATTRS: {
 		/*
 		 * Use the key to determin what you are searching for. This can be a twitter username, e.g. freelas_net or a query, e.g. #yui
