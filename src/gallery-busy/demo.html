@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<style>
+
+</style>
+<script src="http://yui.yahooapis.com/3.7.3/build/yui/yui-debug.js"></script>
+<script>
+YUI.GlobalConfig = {
+    debug: true,
+    combine: true
+};
+YUI({
+	base: './',
+	filter:'debug',
+	modules:{
+			'gallery-busy-css':{
+				fullpath:'assets/skins/sam/gallery-busy-skin.css',
+				type: 'css'
+			},
+			'gallery-busy-core-css':{
+				fullpath:'assets/gallery-busy-core.css',
+				type: 'css'
+			},
+			'gallery-busy':{
+				fullpath:'build_tmp/gallery-busy-debug.js',
+				requires:['base-core','node-base','node-style','event-tap','event-delegate','node-screen','gallery-busy-core-css','gallery-busy-css']
+			}
+		},
+		gallery:'gallery-2012.08.22-20-00'
+	}
+).use('node-base','gallery-busy',function(Y){
+
+	new Y.MSA.Busy({
+		container:'body',
+		selector:'.show',
+		globalNode: '#global'
+	});
+	
+	Y.one('#hide').on('click',function(){
+		Y.Global.fire('msa-busy:hide');
+	});
+	
+	Y.one('#fire').on('click',function(){
+		Y.Global.fire('msa-busy:show');
+	});
+
+	
+});
+</script>
+</head>
+<body style="background-color:#F5F5F5;" class="green" style="font-size:0.75em;">
+<div id="global">
+	<div class="busyTop" style="border:1px solid silver;">
+	text <br/>
+	more text<br/>
+	</div>
+
+	<a href="javascript:void(0);" class="show" data-busy="div.busyTop">Show busy top container</a><br/><br/>
+
+	<div class="busyBottom" style="border:1px solid silver;">
+	text <br/>
+	more text<br/>
+	</div>
+
+	<a href="javascript:void(0);" class="show" data-busy="div.busyBottom">Show busy bottom container</a><br/><br/>
+</div>
+<a href="javascript:void(0);" id="fire">Fire show event</a><br/>
+<a href="javascript:void(0);" class="show">Show default container</a> | <a href="javascript:void(0);" id="hide">Hide busy</a> 
+</body>
+</html>
