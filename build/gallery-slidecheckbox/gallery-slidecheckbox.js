@@ -52,7 +52,7 @@ YUI.add('gallery-slidecheckbox', function(Y) {
 				this._wrapperNode.setStyle('width',wrapperWidth);
 			},
 			bindUI : function(){
-				this.disabled = this.src.get('disabled');
+				this.disabled = this.src.get('disabled') || this.src.get('readonly');
 				
 				var dd = new Y.DD.Drag({
 					node: this._sliderwrapNode,
@@ -99,7 +99,7 @@ YUI.add('gallery-slidecheckbox', function(Y) {
 					this.src.get('checked')?  0 : this.left
 				);
 			},destructor : function(){
-				this.anim.stop().destroy();
+				this.anim && this.anim.stop().destroy();
 				this.src=null;
 			},
 			goLeft : function(){
@@ -203,4 +203,4 @@ YUI.add('gallery-slidecheckbox', function(Y) {
 	);
 
 
-}, 'gallery-2012.05.09-20-27' ,{skinnable:true, requires:['node-base', 'anim-base', 'anim-easing', 'base-build', 'event-key', 'event-move', 'widget', 'node-style', 'gallery-makenode', 'dd-drag', 'dd-constrain']});
+}, 'gallery-2012.11.07-21-32' ,{skinnable:true, requires:['node-base', 'anim-base', 'anim-easing', 'base-build', 'event-key', 'event-move', 'widget', 'node-style', 'gallery-makenode', 'dd-drag', 'dd-constrain']});

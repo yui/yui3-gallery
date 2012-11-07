@@ -131,7 +131,15 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
         dragging = 0;
 
         if (this._hori ? !onlyX : onlyX) {
-            Y.later(1, this._host, this._host.set, ['disabled', false]);
+            // IOS6 setTimeout bug fix
+            if (Y.UA.ipad + Y.UA.iphone + Y.UA.ipod >= 6) {
+                this._host.set('disabled', false);
+            } else {
+                // Use later to make multi scrollview more stable when
+                // user finger off
+                Y.later(1, this._host, this._host.set, ['disabled', false]);
+            }
+
         }
     },
 
@@ -166,4 +174,4 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
 });
 
 
-}, 'gallery-2012.10.03-20-02' ,{requires:['scrollview'], skinnable:false});
+}, 'gallery-2012.11.07-21-32' ,{requires:['scrollview'], skinnable:false});

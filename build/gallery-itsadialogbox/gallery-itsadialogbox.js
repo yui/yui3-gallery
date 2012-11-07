@@ -2,6 +2,10 @@ YUI.add('gallery-itsadialogbox', function(Y) {
 
 'use strict';
 
+// TO DO:
+// wait for show until the widget is rendered
+// When form is disabled, the cancelbutton doesn only close when pressed twice
+
 /**
  * The Itsa Dialogbox module.
  *
@@ -116,18 +120,21 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
  * Internal reference to the active panelOptions (which is active after showPanel() is called
  * @property _activePanelOption
  * @type Object
+ * @private
  */
 
 /**
  * Nodelist that contains all current (from _activePanelOption) buttons that have button.validated set to true.
  * @property _validationButtons
  * @type Y.NodeList
+ * @private
  */
 
 /**
  * Internal count that keeps track of how many times a descendentChange has been taken place by the focusManager
  * @property _descendantChange
  * @type Int
+ * @private
  */
 
         /**
@@ -147,15 +154,15 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         /**
          * Defines a new Panel and stores it to the panelOptions-Array. Returns an panelId that can be used sot show the Panel later on using showPanel(panelId).<br>
          * PanelOptions is an object that can have the following fields:<br>
-           <ul><li>iconClass (String) className for the icon, for example Y.Global.ItsaDialog.ICON_QUESTION</li>
+           <ul><li>iconClass (String) className for the icon, for example Y.Global.ItsaDialog.ICON\_QUESTION</li>
                <li>form (Array) Array with objects that will be transformed to Y.FORMELEMENT objects (not currently available)</li>
                <li>buttons (Object) Which buttons to use. For example:
                <br>&nbsp;&nbsp;{
                     <br>&nbsp;&nbsp;&nbsp;&nbsp;footer: [
-                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'cancel', label:'Cancel', action: Y.Global.ItsaDialog.ACTION_HIDE},
-                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'ok', label:'Ok', action: Y.Global.ItsaDialog.ACTION_HIDE, validation: true, isDefault: true}    
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'cancel', label:'Cancel', action: Y.Global.ItsaDialog.ACTION\_HIDE},
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'ok', label:'Ok', action: Y.Global.ItsaDialog.ACTION\_HIDE, validation: true, isDefault: true}    
                     <br>&nbsp;&nbsp;&nbsp;&nbsp;]
-               &nbsp;&nbsp;}
+               <br>&nbsp;&nbsp;}
                </li>    
             </ul>    
             <br><br>
@@ -402,8 +409,11 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     if ((cursor===1) && (previousStringValue==='0') && (Y.Array.indexOf(digits, keycode) !== -1)) {
                         node.set('value', '');
                     }
-                    if (reactivation && e.hideValidation) {e.hideValidation();}
-                    if (reactivation && e.activatePanel) {e.activatePanel();}
+                    // only reactivate when the key is not a key that leaves the element
+                    if ((keycode!==9) && (keycode!==13)) {
+                        if (reactivation && e.hideValidation) {e.hideValidation();}
+                        if (reactivation && e.activatePanel) {e.activatePanel();}
+                    }
                     return true;
                 },
                 autoCorrection: function(e) {
@@ -415,6 +425,10 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                         newValue = parseInt(value, 10);
                     formelement.set('value', newValue.toString());
                     if ((Lang.isNumber(minvalue) && (newValue<minvalue)) || (Lang.isNumber(maxvalue) && (newValue>maxvalue))) {
+                        if (newValue<minvalue) {
+                        }
+                        if (newValue>maxvalue) {
+                        }
                         if (e.showValidation) {e.showValidation();}
                         if (e.activatePanel) {e.activatePanel();}
                         return false;
@@ -602,10 +616,12 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                         nextDescendant = e.newVal,
                         defaultButton,
                         isButton,
-                        allDescendants = contentBox.focusManager.get('descendants');
+                        allDescendants = contentBox.focusManager.get('descendants'),
+                        sameDescendant;
                     instance._descendantChange++;
                     if (Lang.isNumber(previousDescendant) && (previousDescendant>=0)) {previousDescendant = allDescendants.item(e.prevVal);}
                     if (Lang.isNumber(nextDescendant)) {nextDescendant = allDescendants.item(e.newVal);}
+                    sameDescendant = nextDescendant.compareTo(previousDescendant);
                     defaultButton = contentBox.one('.yui3-button-primary');
                     isButton = (nextDescendant.get('tagName')==='BUTTON');
                     if (defaultButton) {
@@ -618,8 +634,11 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     }
                     // now: by first time showing the Panel, the focusManager activeDescendent will be called three times, before steady state in case of an element that gets focused.
                     // To make the content be selected again (if requested) look at the value of instance._descendant
-                    if ((!nextDescendant.compareTo(previousDescendant) || (instance._descendantChange<4)) && nextDescendant.hasClass('itsa-formelement-selectall')) {
+                    if ((!sameDescendant || (instance._descendantChange<4)) && nextDescendant.hasClass('itsa-formelement-selectall')) {
                         nextDescendant.select();
+                    }
+                    if (!sameDescendant) {
+                        instance._validate(isButton, nextDescendant);
                     }
                 },
                 instance,
@@ -640,13 +659,6 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             instance._inputListener = contentBox.delegate(
                 'keydown',
                 instance._checkInput,
-                'input',
-                instance
-            );
-            // reset posible validationmessages
-            instance._blurInputListener = contentBox.delegate(
-                'blur',
-                instance._checkInputBlur,
                 'input',
                 instance
             );
@@ -744,7 +756,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     autoCorrection = instance.inputElement && instance.inputElement.get('autoCorrection');
                     autoCorrectResult = true;
                     if (autoCorrection) {
-                        autoCorrectResult = Y.bind(autoCorrection, instance.inputElement, eventArgs.minValue, eventArgs.maxValue)();
+                        autoCorrectResult = Y.bind(autoCorrection, instance.inputElement, eventArgs)();
                         if (!autoCorrectResult) {
                             eventArgs.showValidation();
                             instance.deactivatePanel();
@@ -767,24 +779,24 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * Internal function that is called when an input-elements gets blurred.<br>
+         * Internal function that is called when an descendant changes. To validate inputelements (if present)<br>
          * If the element has autocorrection, autocorrect-function is called.<br>If this returns false, then all buttons with button.validation=true get disabled, if returns true, all these buttons get enabled.
-         * @method _checkInputBlur
+         * @method _validate
          * @private
         */
-        _checkInputBlur: function() {
+        _validate: function(isButton, node) {
             var instance = this,
                 eventArgs = instance._activePanelOption.eventArgs,
+                buttonValidation = isButton && node.hasClass('itsadialogbox-button-validated'),
                 autoCorrection = instance.inputElement && instance.inputElement.get('autoCorrection'),
                 autoCorrectResult = true;
-            if (autoCorrection) {
+            if (autoCorrection && buttonValidation) {
                 autoCorrectResult = Y.bind(autoCorrection, instance.inputElement, eventArgs)();
                 if (!autoCorrectResult) {
                     if (eventArgs && eventArgs.showValidation) {
                         eventArgs.showValidation();
                     }
                     instance.deactivatePanel();
-                    instance.get('contentBox').focusManager.focus(instance._getFirstFocusNode());
                 }
             }
             if (autoCorrectResult) {
@@ -796,7 +808,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * Enables all buttons with button.validation=true
+         * Enables the Panel in such a way that Buttons with validation are functional
          * @method activatePanel
         */
         activatePanel: function() {
@@ -804,7 +816,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * Disnables all buttons with button.validation=true
+         * Deactivates the Panel in such a way that it only responses to Buttons with no validation
          * @method deactivatePanel
         */
         deactivatePanel: function() {
@@ -824,7 +836,6 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             if (instance._headerMousedownListener) {instance._headerMousedownListener.detach();}
             if (instance._headerMouseupListener) {instance._headerMouseupListener.detach();}
             if (instance._inputListener) {instance._inputListener.detach();}
-            if (instance._blurInputListener) {instance._blurInputListener.detach();}
             if (instance._checkBoxListener) {instance._checkBoxListener.detach();}
             if (instance._buttonsListener) {instance._buttonsListener.detach();}
         },
@@ -1012,10 +1023,15 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             // at later stage, handle this by Y.ITSAFORM with a true serialize function
             var instance = this,
                 formelements = masterNode.all('.itsa-formelement'),
+                value,
+                intValue,
                 serialdata = {};
             formelements.each(
                 function(formelementNode, index, nodeList) {
-                    serialdata[formelementNode.get('name')] = formelementNode.get('value');
+                    value = formelementNode.get('value');
+                    intValue = parseInt(value, 10);
+                    // now check with DOUBLE == (not threedouble) to see if value == intValue --> in that case we have an integer
+                    serialdata[formelementNode.get('name')] = (value==intValue) ? intValue : value;
                 }
             );
             return serialdata;
@@ -1366,4 +1382,4 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
 );
 
 
-}, 'gallery-2012.10.31-20-00' ,{requires:['base-build', 'widget-base', 'node-base', 'cssbutton', 'event-base', 'node-event-delegate', 'event-outside'], skinnable:true});
+}, 'gallery-2012.11.07-21-32' ,{requires:['base-build', 'panel', 'node-base', 'dd-plugin', 'node-focusmanager', 'event-valuechange'], skinnable:true});
