@@ -23,7 +23,7 @@ Y.extend(TextareaExpander, Y.Plugin.Base, {
 			span.append('<br/>');
 		}
 		
-		txt.on(['keyup','scroll'],function(e){
+		this.handle = txt.on(['keyup','scroll'],function(e){
 			//We need to prevent the situation that a max-height is set and text starts overflowing.
 			//If maxHeight is set, it will be a number
 			if(!isNaN(maxHeight)){
@@ -48,7 +48,9 @@ Y.extend(TextareaExpander, Y.Plugin.Base, {
 		span.set('text',txt.get('value'));
 		
 		txt.ancestor().addClass('active');
-		txt.focus();
-    }
+    },
+	destructor:function(){
+		this.handle.detach();
+	}
 });
 Y.TextareaExpander = TextareaExpander;
