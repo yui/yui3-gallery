@@ -4,11 +4,13 @@
 <style>
 .yui3-slidecheckbox-wrapper > .edge{background-color:#F5F5F5 !important;}
 </style>
-<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-debug.js"></script>
+<script src="http://yui.yahooapis.com/3.6.0pr2/build/yui/yui-debug.js"></script>
 <script>
 YUI({
 	base: './',
+	gallery:'gallery-2012.06.20-20-07',
 	modules:{
+	/*
 			'gallery-slidecheckbox-css':{
 				fullpath:'assets/skins/sam/gallery-slidecheckbox-skin.css',
 				type: 'css'
@@ -19,13 +21,21 @@ YUI({
 			},
 			'gallery-slidecheckbox':{
 				fullpath:'build_tmp/gallery-slidecheckbox-debug.js',
-				requires:['node-base','anim-base','anim-easing','base-build','event-key', 'node-style', 'gallery-makenode','dd-drag','dd-constrain','gallery-slidecheckbox-core-css','gallery-slidecheckbox-css','widget-position'],
+				requires:['node-base','anim-base','anim-easing','base-build','event-key', 'node-style', 'gallery-makenode','dd-drag','dd-constrain','widget-position'
+				,'gallery-slidecheckbox-core-css','gallery-slidecheckbox-css'
+				],
 				skinnable:['sam','green','ios5','ios5-green']
 			}
+	*/
 		},
+	skin:{
+		overrides:{
+			//'gallery-slidecheckbox':['ios5-green']
+		}
+	},
 	filter:'debug'
-	}
-).use('gallery-slidecheckbox',function(Y){
+	
+}).use('gallery-slidecheckbox',function(Y){
 	var slide = new Y.SlideCheckbox({srcNode:'#c1'}),
 	slide2 = new Y.SlideCheckbox({srcNode:'#c2',strings:{labelOn: 'Pipo De Long',labelOff:'Clown text'}}),
 	slide3 = new Y.SlideCheckbox({srcNode:'#c3',strings:{labelOn: 'Yes',labelOff:'No'}}),

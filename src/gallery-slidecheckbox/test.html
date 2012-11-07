@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<style>
+.yui3-slidecheckbox-wrapper > .edge{background-color:#F5F5F5 !important;}
+</style>
+<script src="http://yui.yahooapis.com/3.5.0/build/yui/yui-debug.js"></script>
+<script>
+YUI({
+	base: './',
+	gallery:'gallery-2012.04.10-14-57',
+	skin:{
+		overrides:{
+			'gallery-slidecheckbox':['ios5']
+		}
+	},
+	filter:'debug'
+	}
+).use('gallery-slidecheckbox',function(Y){
+	var slide = new Y.SlideCheckbox({srcNode:'#c1'}),
+	slide2 = new Y.SlideCheckbox({srcNode:'#c2',strings:{labelOn: 'Pipo De Long',labelOff:'Clown text'}}),
+	slide3 = new Y.SlideCheckbox({srcNode:'#c3',strings:{labelOn: 'Yes',labelOff:'No'}});
+	
+	Y.all('.slidecheck1').each(function(node){
+		new Y.SlideCheckbox({srcNode:node,strings:{labelOn: 'Long text',labelOff:'Very long text'}}).render();
+	});
+	
+	slide.render();
+	slide2.render();
+	slide3.render();
+
+});
+function reset(){
+	var src = document.getElementById('c4');
+	src.checked = !src.checked;
+}
+</script>
+</head>
+<body style="background-color:#F5F5F5;">
+<form>
+<div class="yui3-skin-ios5">
+<input type="checkbox" name="myCheck1" class="yesno" id="c1" class="slidecheck"><br/>
+<input type="checkbox" name="myCheck2" class="yesno" checked="CHECKED" id="c2" class="slidecheck"><br/>
+<input type="checkbox" name="myCheck3" class="yesno slidecheck1" CHECKED id="c5"><br/>
+<input type="checkbox" name="myCheck4" class="yesno slidecheck1" CHECKED id="c6"><br/>
+
+Disabled:<br/>
+<input type="checkbox" name="myCheck5" class="yesno" DISABLED id="c3" class="slidecheck"><br/>
+</div>
+</form>
+
+</body>
+</html>

@@ -50,7 +50,7 @@
 				this._wrapperNode.setStyle('width',wrapperWidth);
 			},
 			bindUI : function(){
-				this.disabled = this.src.get('disabled');
+				this.disabled = this.src.get('disabled') || this.src.get('readonly');
 				
 				var dd = new Y.DD.Drag({
 					node: this._sliderwrapNode,
@@ -97,7 +97,7 @@
 					this.src.get('checked')?  0 : this.left
 				);
 			},destructor : function(){
-				this.anim.stop().destroy();
+				this.anim && this.anim.stop().destroy();
 				this.src=null;
 			},
 			goLeft : function(){
