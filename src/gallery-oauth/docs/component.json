@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-oauth",
+    "displayName": "Gallery: oauth",
+    "description": "Simple oAuth Module",
+    "author"     : [ "davglass" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

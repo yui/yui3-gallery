@@ -1,0 +1,15 @@
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.35 on node@0.8.14
+[35myogi[39m [37m[37m[[39m[33mwarn[39m[37m][39m[39m  THIS IS EXPERIMENTAL, USE AT YOUR OWN RISK!!
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-oauth
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5000
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-oauth]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /ssd/home/yui/src/gallery-build/cdn_gallery-2012.11.09-01-41/src/gallery-oauth/logs/tests.json
+[35myogi[39m [37m[37m[[39m[31mbail[39m[37m][39m[39m grover returned a failure

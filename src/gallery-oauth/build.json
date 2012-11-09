@@ -1,0 +1,11 @@
+{
+    "name": "gallery-oauth",
+    "builds": {
+        "gallery-oauth": {
+            "jsfiles": [
+                "oauth.js"
+            ],
+            "meta": {}
+        }
+    }
+}

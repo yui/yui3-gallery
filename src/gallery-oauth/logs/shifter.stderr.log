@@ -1,0 +1,15 @@
+[35mshifter[0m [31m[err][0m /ssd/home/yui/src/gallery-build/cdn_gallery-2012.11.09-01-41/src/gallery-oauth/js/oauth.js contains 7 lint errors
+   #1: [33mTrailing whitespace.[0m
+       baseStr = OAuth.decodeForm(OAuth.SignatureMethod.getBaseString(message));[37m // line 66, pos 86[0m
+   #2: [33mExpected '===' and instead saw '=='.[0m
+       if (subitem == "oauth_signature") {[37m // line 71, pos 37[0m
+   #3: [33mTrailing whitespace.[0m
+       theSig = item[1];[37m // line 72, pos 46[0m
+   #4: [33mTrailing whitespace.[0m
+       locString += paramList[k] + '&';[37m // line 89, pos 49[0m
+   #5: [33m'url' is already defined.[0m
+       var url = Y.oAuth.signURL(this._opts.key, this._opts.secret, (url + '&callback=' + proxy));[37m // line 122, pos 29[0m
+   #6: [33m'item' is defined but never used.[0m
+       item, subitem, paramList,[37m // line 52, pos 17[0m
+   #7: [33m'subitem' is defined but never used.[0m
+       item, subitem, paramList,[37m // line 52, pos 26[0m

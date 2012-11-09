@@ -1,0 +1,47 @@
+<div class="intro">
+    <p>
+    Simple oAuth Module
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>This simple oAuth module will allow you to create a signed url to use with a 2-Legged oAuth web service.<br>
+<br>
+It also modifies YQL, if it's on the page, and adds in support for key and secret config options.<br>
+</p>
+
+```
+YUI().use('gallery-oauth', function(Y) {
+    
+    //Make sure the oAuth libs are available on the page
+    Y.oAuth.ready(function() {
+
+        //Using with YQL
+         Y.YQL('select title,abstract from search.news where query="election"', function() {
+              console.log('success: ', arguments);
+         }, {
+              key: 'dj0yJmk9Q9WVdrOVJGSlJRelpHTlRJbWNHbzlNelF6TlRjMk9EWXkmcz1jb25zdW1lcnNlY3JldCZ4PWMw',
+              secret: 'f6cbasdfsadfas68d25da294a584b541ff29da599a3f53db76',
+              base: '://query.yahooapis.com/v1/yql?'
+         });
+
+         //Using with JSONP
+        Y.jsonp('mywebservice.com/?', {
+            on: {
+                success: function() {
+                    console.log('success: ', arguments);
+                }
+            },
+            format: function(url, proxy) {
+                var finalURL = url + 'callback=' + proxy;
+                return Y.oAuth.signURL("dj0yJmk9SXNaaTF2JGSlJRelpHTlRJbWNHbzlNelF6TlRjMk9EWXkmcz1jb25zdW1lcnNlY3JldCZ4PWMw", "5da294a584b5asdfasd41ff29da599a3f53db76", finalURL);
+            }
+        });
+
+    });
+
+
+});
+```
+

@@ -1,0 +1,12 @@
+{
+    "gallery-oauth": {
+        "requires": [
+            "jsonp"
+        ],
+        "supersedes": [],
+        "optional": [
+            "yql"
+        ],
+        "skinnable": false
+    }
+}
