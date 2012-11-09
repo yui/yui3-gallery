@@ -1,0 +1,19 @@
+[35mshifter[0m [37m[info][0m revving up
+[35mshifter[0m [37m[info][0m looking for build.json file
+[35mshifter[0m [37m[info][0m found build.json file, shifting
+[35mshifter[0m [37m[info][0m putting the hammer down, let's build this thing!
+[35mshifter[0m [37m[info][0m munging in loader meta data into build.json
+[35mshifter[0m [37m[info][0m putting the hammer down
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bitly
+[35mshifter[0m [37m[info][0m deleting build dir: /ssd/home/yui/src/gallery-build/cdn_gallery-2012.11.09-01-41/build/gallery-bitly
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m compressing gallery-bitly/gallery-bitly.js with UglifyJS
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting assets for gallery-bitly
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bitly/gallery-bitly.js
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bitly/gallery-bitly-coverage.js
+[35mshifter[0m [37m[info][0m done racing, the gears are toast
+[35mshifter[0m [37m[info][0m finished in 0.102 seconds, pretty fast huh?

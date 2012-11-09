@@ -1,0 +1,47 @@
+<div class="intro">
+    <p>
+    Module deals with the bit.ly api for shortening or expanding URL's.
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>Module deals with the bit.ly api for shortening or expanding URL's.<br>
+<br>
+To use the bit.ly module, you must have a bit.ly username and apiKey. If you do not have an apiKey, sign up for a <a href="http://bit.ly" style="background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeF59z4EJADEIQ1F36k7u5E7ZKXeUQPACJ3wK7UNokVxVk9kHnQH7bY9hbDyDhNXgjpRLqFlo4M2GgfyJHhjq8V4agfrgPQX3JtJQGbofmCHgA/nAKks+JAjFAAAAAElFTkSuQmCC") no-repeat scroll right center transparent;padding-right: 13px;">bitly account</a> and go to your <a href="http://bit.ly/account" style="background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeF59z4EJADEIQ1F36k7u5E7ZKXeUQPACJ3wK7UNokVxVk9kHnQH7bY9hbDyDhNXgjpRLqFlo4M2GgfyJHhjq8V4agfrgPQX3JtJQGbofmCHgA/nAKks+JAjFAAAAAElFTkSuQmCC") no-repeat scroll right center transparent;padding-right: 13px;">Account</a> page to get your apiKey.<br>
+<br>
+This module supports the following bit.ly API's at version 2.0.1<br>
+<br>
+<ul>
+<li>shorten</li>
+<li>expand</li>
+<li>info</li>
+<li>stats</li>
+</ul>
+<br>
+<br>
+More information on the bit.ly API can be found <a href="http://code.google.com/p/bitly-api/wiki/ApiDocumentation" style="background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAFZJREFUeF59z4EJADEIQ1F36k7u5E7ZKXeUQPACJ3wK7UNokVxVk9kHnQH7bY9hbDyDhNXgjpRLqFlo4M2GgfyJHhjq8V4agfrgPQX3JtJQGbofmCHgA/nAKks+JAjFAAAAAElFTkSuQmCC") no-repeat scroll right center transparent;padding-right: 13px;">here</a><br>
+</p>
+
+```
+YUI().use('gallery-bitly', function(Y) {
+
+    var b = new Y.bitly({
+        //You must get your own to use this. See module description
+        username: 'bitlyapidemo',
+        key: 'R_0da49e0a9118ff35f52f629d2d71bf07'
+    });
+    //Event based
+    b.on('shorten', console.log);
+    b.on('expand', console.log);
+    b.shorten('http://blog.davglass.com/');
+
+    //Callback based
+    b.shorten('http://blog.davglass.com/', function(e) {
+        b.expandByURL(e.shortUrl, console.log);
+        b.infoByHash(e.hash, console.info);
+        b.statsByHash(e.hash, console.log);
+    });
+});
+```
+

@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-bitly",
+    "displayName": "Gallery: bitly",
+    "description": "Module deals with the bit.ly api for shortening or expanding URL's.",
+    "author"     : [ "davglass" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

@@ -1,0 +1,11 @@
+{
+    "gallery-bitly": {
+        "requires": [
+            "base",
+            "get"
+        ],
+        "supersedes": [],
+        "optional": [],
+        "skinnable": false
+    }
+}

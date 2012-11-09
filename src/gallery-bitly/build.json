@@ -1,0 +1,11 @@
+{
+    "name": "gallery-bitly",
+    "builds": {
+        "gallery-bitly": {
+            "jsfiles": [
+                "bitly.js"
+            ],
+            "meta": {}
+        }
+    }
+}
