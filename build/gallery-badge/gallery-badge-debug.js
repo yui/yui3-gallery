@@ -1,4 +1,4 @@
-YUI.add('gallery-badge', function(Y) {
+YUI.add('gallery-badge', function (Y, NAME) {
 
 
         var B = function(config) {
@@ -142,4 +142,4 @@ YUI.add('gallery-badge', function(Y) {
 
 
 
-}, 'gallery-2009.11.09-19' ,{requires:['node','event','gallery-yql','stylesheet']});
+}, '@VERSION@', {"requires": ["node", "event", "gallery-yql", "base"], "supersedes": [], "optional": [], "skinnable": false});

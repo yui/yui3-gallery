@@ -1,9 +1,21 @@
-YUI.add('gallery-bitly', function(Y) {
+YUI.add('gallery-bitly', function (Y, NAME) {
+
+/*jshint maxlen: 200 */
 
 
+/**
+Bitly API Access
+@module gallery-bitly
+*/
 
+/**
+Bitly API Access
+@class bitly
+@constructor
+@param {Object} config Config object
+*/
     var B = function(config) {
-        B.superclass.constructor.call(this, config);        
+        B.superclass.constructor.call(this, config);
     };
 
     B.NAME = 'bitly';
@@ -35,7 +47,7 @@ YUI.add('gallery-bitly', function(Y) {
 
             YUI[stamp] = Y.bind(function(e) {
                 if (e.results) {
-                    if (name == 'stats') {
+                    if (name === 'stats') {
                         this.fire(name, e.results);
                         if (cb) {
                             cb = Y.bind(cb, this);
@@ -53,7 +65,7 @@ YUI.add('gallery-bitly', function(Y) {
                 }
                 delete YUI[stamp];
             }, this);
-            
+
             Y.Get.script(url + '&callback=YUI.' + stamp);
         },
         shorten: function(url, cb) {
@@ -65,7 +77,7 @@ YUI.add('gallery-bitly', function(Y) {
                 api = this._buildURL('expand', path);
 
             this._handleAPI('expand', api, cb);
-            
+
         },
         expandByURL: function(v, cb) {
             return this.expand({ url: v }, cb);
@@ -78,7 +90,7 @@ YUI.add('gallery-bitly', function(Y) {
                 api = this._buildURL('info', path);
 
             this._handleAPI('info', api, cb);
-            
+
         },
         infoByURL: function(v, cb) {
             return this.info({ url: v }, cb);
@@ -91,7 +103,7 @@ YUI.add('gallery-bitly', function(Y) {
                 api = this._buildURL('stats', path);
 
             this._handleAPI('stats', api, cb);
-            
+
         },
         statsByURL: function(v, cb) {
             return this.stats({ url: v }, cb);
@@ -104,4 +116,4 @@ YUI.add('gallery-bitly', function(Y) {
     Y.bitly = B;
 
 
-}, 'gallery-2009.11.09-19' ,{requires:['base','get']});
+}, '@VERSION@', {"requires": ["base", "get"], "supersedes": [], "optional": [], "skinnable": false});

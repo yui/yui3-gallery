@@ -1,4 +1,4 @@
-YUI.add('gallery-oauth', function(Y) {
+YUI.add('gallery-oauth', function (Y, NAME) {
 
     /**
     * This module pulls in the oAuth code from googlecode and adds a couple of helper methods
@@ -128,4 +128,4 @@ YUI.add('gallery-oauth', function(Y) {
     }
 
 
-}, 'gallery-2011.04.27-17-14' ,{optional:['yql'], requires:['jsonp']});
+}, '@VERSION@', {"requires": ["jsonp"], "supersedes": [], "optional": ["yql"], "skinnable": false});
