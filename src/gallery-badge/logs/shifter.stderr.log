@@ -1,0 +1,11 @@
+[35mshifter[0m [31m[err][0m /ssd/home/yui/src/gallery-build/cdn_gallery-2012.11.09-01-41/src/gallery-badge/js/badge.js contains 5 lint errors
+   #1: [33mExpected '!==' and instead saw '!='.[0m
+       if (type != 'random') {[37m // line 80, pos 26[0m
+   #2: [33mExpected '===' and instead saw '=='.[0m
+       if (type == 'user') {[37m // line 81, pos 30[0m
+   #3: [33mLine too long.[0m
+       header = Y.Node.create('<h2><a href="http:/'+'/yuilibrary.com/gallery/user/' + data.userinfo.username + '">' + data.userinfo.fullname + '\'s Gallery Items</a></h2>');[37m // line 82, pos 190[0m
+   #4: [33mExpected '===' and instead saw '=='.[0m
+       if (type == 'user') {[37m // line 97, pos 26[0m
+   #5: [33m'e' is defined but never used.[0m
+       updateUI: function(e) {[37m // line 109, pos 33[0m

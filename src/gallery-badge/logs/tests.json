@@ -1,0 +1,28 @@
+{
+    "name": "gallery-badge",
+    "passed": 0,
+    "failed": 1,
+    "errors": 0,
+    "ignored": 0,
+    "total": 1,
+    "duration": 6,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 3,
+        "type": "testcase",
+        "test is empty": {
+            "result": "fail",
+            "message": "No Tests Provided For This Module",
+            "type": "test",
+            "name": "test is empty",
+            "duration": 1
+        }
+    },
+    "timestamp": "Thu 08 Nov 2012 07:41:57 PM CST"
+}

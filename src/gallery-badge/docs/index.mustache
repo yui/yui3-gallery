@@ -1,0 +1,41 @@
+<div class="intro">
+    <p>
+    A simple YUI 3 Gallery badge using the YQL Gallery Module.
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>A simple YUI 3 Gallery badge using the YQL Gallery Module.<br>
+<br>
+<b>Note: this badge is not skinned. It will simply produce an unordered list of modules</b><br>
+</p>
+
+```
+YUI().use('gallery-badge', function(Y) {
+
+    //Simple Use Case
+    var node = Y.one('div.badge');
+    node.plug(Y.Plugin.Badge, {
+        type: 'oncdn' //popular, new, all, featured
+    });
+
+    node.set('username', 'davglass');
+    //or
+    node.set('type', 'popular');
+
+    //Event Driven, with No Layout
+    node = Y.one('div.badge');
+    node.plug(Y.Plugin.Badge, {
+        username: 'davglass',
+        render: false
+    });
+    node.badge.on('dataReturned', function(e) {
+        e.preventDefault();
+        console.log(e);
+    });
+    node.badge.render();
+
+});
+```
+

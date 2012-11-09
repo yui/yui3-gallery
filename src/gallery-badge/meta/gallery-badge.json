@@ -1,0 +1,13 @@
+{
+    "gallery-badge": {
+        "requires": [
+            "node",
+            "event",
+            "gallery-yql",
+            "base"
+        ],
+        "supersedes": [],
+        "optional": [],
+        "skinnable": false
+    }
+}

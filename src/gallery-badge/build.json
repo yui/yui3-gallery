@@ -1,0 +1,11 @@
+{
+    "name": "gallery-badge",
+    "builds": {
+        "gallery-badge": {
+            "jsfiles": [
+                "badge.js"
+            ],
+            "meta": {}
+        }
+    }
+}

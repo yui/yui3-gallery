@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-badge",
+    "displayName": "Gallery: badge",
+    "description": "A simple YUI 3 Gallery badge using the YQL Gallery Module.",
+    "author"     : [ "davtest" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
