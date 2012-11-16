@@ -94,7 +94,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l1"><code>js&#x2F;gallery-datatable-selection.js:1</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l1"><code>js&#x2F;datatable-selection.js:1</code></a>
         </div>
     
 
@@ -130,8 +130,9 @@ specifically the Shift key on most systems.</p>
 <p>Specific attributes are provided that can be read for current selections, including the ATTRS <a href="#attr_selectedRows">selectedRows</a>,
 and <a href="#attr_selectedCells">selectedCells</a>.</p>
 
-<p>Typical usage would be to set the "selectionMode" attribute (and selectionMulti if desired), and then to listen to for the
-<a href="#event_selection">selection</a> event to respond to each "click" selection.</p>
+<p>Typical usage would be to set the "selectionMode" and "highlightMode" attributes (and selectionMulti if desired) and then
+to provide a positive control (like a BUTTON or A link) to process the selections.  Two events are provided,  <a href="#event_selection">selection</a>
+and <a href="#event_selected">selected</a> but these fire for every "click" action, which may not be ideal -- especially for multi selections.</p>
 </div>
 
 
@@ -440,12 +441,10 @@ and <a href="#attr_selectedCells">selectedCells</a>.</p>
 
                     <ul class="index-list events">
                         
-                            <li class="index-item event deprecated">
+                            <li class="index-item event">
                                 <a href="#event_selected">selected</a>
 
                                 
-                                
-                                    <span class="flag deprecated">deprecated</span>
                                 
                             </li>
                         
@@ -500,7 +499,7 @@ and <a href="#attr_selectedCells">selectedCells</a>.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l756"><code>js&#x2F;gallery-datatable-selection.js:756</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l761"><code>js&#x2F;datatable-selection.js:761</code></a>
         
         </p>
 
@@ -561,7 +560,7 @@ the TR's (from the Model data) or the TD's (from the Model and Column Index data
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l711"><code>js&#x2F;gallery-datatable-selection.js:711</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l716"><code>js&#x2F;datatable-selection.js:716</code></a>
         
         </p>
 
@@ -619,7 +618,7 @@ we can reapply the "selections" after the sort is completed (see <a href="#metho
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l367"><code>js&#x2F;gallery-datatable-selection.js:367</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l369"><code>js&#x2F;datatable-selection.js:369</code></a>
         
         </p>
 
@@ -687,7 +686,7 @@ we can reapply the "selections" after the sort is completed (see <a href="#metho
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l840"><code>js&#x2F;gallery-datatable-selection.js:840</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l845"><code>js&#x2F;datatable-selection.js:845</code></a>
         
         </p>
 
@@ -766,7 +765,7 @@ we can reapply the "selections" after the sort is completed (see <a href="#metho
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l909"><code>js&#x2F;gallery-datatable-selection.js:909</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l917"><code>js&#x2F;datatable-selection.js:917</code></a>
         
         </p>
 
@@ -826,7 +825,7 @@ we can reapply the "selections" after the sort is completed (see <a href="#metho
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l594"><code>js&#x2F;gallery-datatable-selection.js:594</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l599"><code>js&#x2F;datatable-selection.js:599</code></a>
         
         </p>
 
@@ -911,7 +910,7 @@ If rows or TR elements were selected, it adds all of the row's child TD's.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l556"><code>js&#x2F;gallery-datatable-selection.js:556</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l561"><code>js&#x2F;datatable-selection.js:561</code></a>
         
         </p>
 
@@ -1000,7 +999,7 @@ the selected cells.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l400"><code>js&#x2F;gallery-datatable-selection.js:400</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l402"><code>js&#x2F;datatable-selection.js:402</code></a>
         
         </p>
 
@@ -1105,7 +1104,7 @@ the selected cells.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l796"><code>js&#x2F;gallery-datatable-selection.js:796</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l801"><code>js&#x2F;datatable-selection.js:801</code></a>
         
         </p>
 
@@ -1240,7 +1239,7 @@ returns the current <code>selectionMode</code> or <code>highlightMode</code> Nod
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l486"><code>js&#x2F;gallery-datatable-selection.js:486</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l491"><code>js&#x2F;datatable-selection.js:491</code></a>
         
         </p>
 
@@ -1330,7 +1329,7 @@ a range of TD's or TR's (depending on <a href="#attr_selectionMode">selectionMod
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l410"><code>js&#x2F;gallery-datatable-selection.js:410</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l412"><code>js&#x2F;datatable-selection.js:412</code></a>
         
         </p>
 
@@ -1425,7 +1424,7 @@ the current selection to the this._selections property.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l852"><code>js&#x2F;gallery-datatable-selection.js:852</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l857"><code>js&#x2F;datatable-selection.js:857</code></a>
         
         </p>
 
@@ -1533,7 +1532,7 @@ a new delegated "mouseover" handler that updates the <code>highlighted</code> at
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l654"><code>js&#x2F;gallery-datatable-selection.js:654</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l659"><code>js&#x2F;datatable-selection.js:659</code></a>
         
         </p>
 
@@ -1669,7 +1668,7 @@ as the current selected set with appropriate visual class.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l687"><code>js&#x2F;gallery-datatable-selection.js:687</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l692"><code>js&#x2F;datatable-selection.js:692</code></a>
         
         </p>
 
@@ -1777,7 +1776,7 @@ highlights the TR's</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l874"><code>js&#x2F;gallery-datatable-selection.js:874</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l880"><code>js&#x2F;datatable-selection.js:880</code></a>
         
         </p>
 
@@ -1871,7 +1870,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l347"><code>js&#x2F;gallery-datatable-selection.js:347</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l349"><code>js&#x2F;datatable-selection.js:349</code></a>
         
         </p>
 
@@ -1927,7 +1926,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l333"><code>js&#x2F;gallery-datatable-selection.js:333</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l335"><code>js&#x2F;datatable-selection.js:335</code></a>
         
         </p>
 
@@ -1983,7 +1982,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l323"><code>js&#x2F;gallery-datatable-selection.js:323</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l325"><code>js&#x2F;datatable-selection.js:325</code></a>
         
         </p>
 
@@ -2039,7 +2038,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l312"><code>js&#x2F;gallery-datatable-selection.js:312</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l314"><code>js&#x2F;datatable-selection.js:314</code></a>
         
         </p>
 
@@ -2095,7 +2094,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l219"><code>js&#x2F;gallery-datatable-selection.js:219</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l221"><code>js&#x2F;datatable-selection.js:221</code></a>
         
         </p>
 
@@ -2151,7 +2150,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l244"><code>js&#x2F;gallery-datatable-selection.js:244</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l246"><code>js&#x2F;datatable-selection.js:246</code></a>
         
         </p>
 
@@ -2207,7 +2206,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l234"><code>js&#x2F;gallery-datatable-selection.js:234</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l236"><code>js&#x2F;datatable-selection.js:236</code></a>
         
         </p>
 
@@ -2277,7 +2276,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l254"><code>js&#x2F;gallery-datatable-selection.js:254</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l256"><code>js&#x2F;datatable-selection.js:256</code></a>
         
         </p>
 
@@ -2383,7 +2382,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l267"><code>js&#x2F;gallery-datatable-selection.js:267</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l269"><code>js&#x2F;datatable-selection.js:269</code></a>
         
         </p>
 
@@ -2479,7 +2478,7 @@ a new delegated "click" handler that updates the <code>selected</code> attribute
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l290"><code>js&#x2F;gallery-datatable-selection.js:290</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l292"><code>js&#x2F;datatable-selection.js:292</code></a>
         
         </p>
 
@@ -2549,7 +2548,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l210"><code>js&#x2F;gallery-datatable-selection.js:210</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l212"><code>js&#x2F;datatable-selection.js:212</code></a>
         
         </p>
 
@@ -2606,7 +2605,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l170"><code>js&#x2F;gallery-datatable-selection.js:170</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l172"><code>js&#x2F;datatable-selection.js:172</code></a>
         
         </p>
 
@@ -2656,7 +2655,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l180"><code>js&#x2F;gallery-datatable-selection.js:180</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l182"><code>js&#x2F;datatable-selection.js:182</code></a>
         
         </p>
 
@@ -2706,7 +2705,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l190"><code>js&#x2F;gallery-datatable-selection.js:190</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l192"><code>js&#x2F;datatable-selection.js:192</code></a>
         
         </p>
 
@@ -2761,7 +2760,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l161"><code>js&#x2F;gallery-datatable-selection.js:161</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l163"><code>js&#x2F;datatable-selection.js:163</code></a>
         
         </p>
 
@@ -2820,7 +2819,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l35"><code>js&#x2F;gallery-datatable-selection.js:35</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l36"><code>js&#x2F;datatable-selection.js:36</code></a>
         
         </p>
 
@@ -2871,7 +2870,7 @@ If selections include a TR row, all child TD's from the row are included.</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l57"><code>js&#x2F;gallery-datatable-selection.js:57</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l58"><code>js&#x2F;datatable-selection.js:58</code></a>
         
         </p>
 
@@ -2882,11 +2881,11 @@ If selections include a TR row, all child TD's from the row are included.</p>
 
     <div class="description">
         <p>Set the current mode for highlighting, either for a single TD (as "cell") or for a
-full TR (as "row")</p>
+full TR (as "row") or "none" for no highlighting</p>
     </div>
 
     
-        <p><strong>Default:</strong> null</p>
+        <p><strong>Default:</strong> &#x27;none&#x27;</p>
     
 
     
@@ -2923,7 +2922,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l46"><code>js&#x2F;gallery-datatable-selection.js:46</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l47"><code>js&#x2F;datatable-selection.js:47</code></a>
         
         </p>
 
@@ -2974,7 +2973,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l116"><code>js&#x2F;gallery-datatable-selection.js:116</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l117"><code>js&#x2F;datatable-selection.js:117</code></a>
         
         </p>
 
@@ -3038,7 +3037,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l90"><code>js&#x2F;gallery-datatable-selection.js:90</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l91"><code>js&#x2F;datatable-selection.js:91</code></a>
         
         </p>
 
@@ -3102,7 +3101,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l73"><code>js&#x2F;gallery-datatable-selection.js:73</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l74"><code>js&#x2F;datatable-selection.js:74</code></a>
         
         </p>
 
@@ -3113,11 +3112,11 @@ full TR (as "row")</p>
 
     <div class="description">
         <p>Set the current mode for indicating selections, either for a single TD (as "cell") or for a
-full TR (as "row")</p>
+full TR (as "row") or 'none' for no selection</p>
     </div>
 
     
-        <p><strong>Default:</strong> null</p>
+        <p><strong>Default:</strong> &#x27;none&#x27;</p>
     
 
     
@@ -3154,7 +3153,7 @@ full TR (as "row")</p>
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l142"><code>js&#x2F;gallery-datatable-selection.js:142</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l143"><code>js&#x2F;datatable-selection.js:143</code></a>
         
         </p>
 
@@ -3187,12 +3186,10 @@ For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selec
                 <h2 class="off-left">Events</h2>
 
                 
-                    <div id="event_selected" class="events item deprecated">
+                    <div id="event_selected" class="events item">
     <h3 class="name"><code>selected</code></h3>
     <span class="type"></span>
 
-    
-        <span class="flag deprecated">deprecated</span>
     
 
     
@@ -3212,7 +3209,7 @@ For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selec
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l467"><code>js&#x2F;gallery-datatable-selection.js:467</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l469"><code>js&#x2F;datatable-selection.js:469</code></a>
         
         </p>
 
@@ -3222,7 +3219,9 @@ For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selec
     </div>
 
     <div class="description">
-        
+        <p>Event that fires on every "select" action and returns the LAST SELECTED item, either a cell or a row.
+Please see the event "selection" which provides a cumulative total of all selected items as opposed to
+just the last item.</p>
     </div>
 
     
@@ -3304,7 +3303,7 @@ For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selec
             
         
         
-        <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l475"><code>js&#x2F;gallery-datatable-selection.js:475</code></a>
+        <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l480"><code>js&#x2F;datatable-selection.js:480</code></a>
         
         </p>
 
