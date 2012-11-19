@@ -581,7 +581,7 @@ Y.mix( DtSelection.prototype, {
         Y.Array.each(this._selections,function(item){
             tr = ( item.get('tagName').toLowerCase() === 'tr' ) ? item : item.ancestor('tr');
             // if and only if, it's a TR and not in "trs" array ... then add it
-            if ( tr.get('tagName').toLowerCase() === 'tr' && trs.indexOf(tr) === -1) {
+	    if ( tr.get('tagName').toLowerCase() === 'tr' && Y.Array.indexOf(trs,tr) === -1) {
                 rec = this.data.getByClientId(tr.getData('yui3-record'));
                 trs.push(tr);
                 rows.push({
