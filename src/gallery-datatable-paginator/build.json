@@ -1,0 +1,10 @@
+{
+    "name": "gallery-datatable-paginator",
+    "builds": {
+        "gallery-datatable-paginator": {
+            "jsfiles": [
+                "datatable-paginator.js"
+            ]
+        }
+    }
+}
