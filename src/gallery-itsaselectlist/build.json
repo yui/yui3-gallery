@@ -1,0 +1,30 @@
+{
+    "name": "gallery-itsaselectlist",
+    "builds": {
+        "gallery-itsaselectlist": {
+            "config": {
+                "supersedes": [
+                    ""
+                ],
+                "skinnable": "true",
+                "requires": [
+                    "base-build",
+                    "widget",
+                    "node-base",
+                    "cssbutton",
+                    "event-base",
+                    "node-event-delegate",
+                    "event-outside"
+                ],
+                "optional": [
+                    ""
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "itsaselectlist.js"
+            ],
+            "meta": {}
+        }
+    }
+}

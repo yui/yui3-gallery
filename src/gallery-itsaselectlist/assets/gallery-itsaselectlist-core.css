@@ -1,3 +1,11 @@
+.yui3-js-enabled .yui3-itsaselectlist-loading {
+    display: none;
+}
+
+.yui3-itsaselectlist-content {
+    display: none;
+}
+
 .yui3-itsaselectlist-disabled .itsa-selectlist-basediv {
     display: none;
 }
@@ -55,7 +63,7 @@
 
 .yui3-itsaselectlist {
     display: inline;
-    position: static;
+    position: relative;
     float:left;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -63,10 +71,6 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.yui3-itsaselectlist-content {
-    position: relative;
     font-size: 13px;
     font-family: verdana;
     vertical-align: middle;
@@ -109,6 +113,7 @@
 
 .itsa-selectlist-basediv li {
     white-space:nowrap;
+    list-style: none;
 }
 
 .yui3-itsaselectlist.itsa-rightalign li {

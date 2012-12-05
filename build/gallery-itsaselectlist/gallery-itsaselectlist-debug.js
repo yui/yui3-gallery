@@ -1,4 +1,4 @@
-YUI.add('gallery-itsaselectlist', function(Y) {
+YUI.add('gallery-itsaselectlist', function (Y, NAME) {
 
 'use strict';
 
@@ -12,6 +12,7 @@ YUI.add('gallery-itsaselectlist', function(Y) {
 /**
  *
  * @class ITSASelectlist
+ * @extends Widget
  * @constructor
  *
  * <i>Copyright (c) 2012 Marco Asbreuk - http://theinternetwizard.net</i>
@@ -78,12 +79,20 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
  * @type Y.Node
  */
 
+/**
+ * arraylist of all created eventhandlers within bindUI(). Is used to cleanup during destruction.
+ * @private
+ * @property _eventhandlers
+ * @type Array
+ */
+
         buttonNode : null,
         _selectedMainItemNode : null,
         _selectedItemClass : null,
         _itemsContainerNode : null,
         _itemValues : null, // for internal use: listitems, transformed to String, so we can use selectItemByValue
         _syncWithinSetterItems : false, // no items.setter.syncUI during initializing
+        _eventhandlers : [],
 
 
         /**
@@ -97,6 +106,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             Y.log('initializer ', 'cmas', 'ITSASelectList');
             var instance = this;
             instance._selectedItemClass = instance.get('hideSelected') ? ITSA_CLASSHIDDEN : 'itsa-selectlist-selected';
+
         },
 
         /**
@@ -107,7 +117,6 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         renderUI : function() {
             Y.log('renderUI ', 'cmas', 'ITSASelectList');
             var instance = this,
-                contentBox = instance.get('contentBox'), 
                 boundingBox = instance.get('boundingBox'),
                 className = instance.get('className'),
                 iconClassName = instance.get('iconClassName'),
@@ -117,7 +126,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 items;
             if ((IE>0) && (IE<7)) {boundingBox.append(instance.SHIM_TEMPLATE);}
             instance.buttonNode = Y.Node.create(ITSA_BUTTON_TEMPLATE);
-            contentBox.append(instance.buttonNode);
+            boundingBox.append(instance.buttonNode);
             instance.buttonNode.setHTML(ITSA_DOWNBUTTON_TEMPLATE);
             instance._selectedMainItemNode = Y.Node.create(ITSA_SELECTEDMAIN_TEMPLATE);
             instance.buttonNode.append(instance._selectedMainItemNode);
@@ -133,7 +142,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             if (listWidth) {instance._itemsContainerNode.setStyle('width', listWidth+'px');}
             if (btnSize===1) {boundingBox.addClass('itsa-buttonsize-small');}
             else {if (btnSize===2) {boundingBox.addClass('itsa-buttonsize-medium');}}
-            contentBox.append(instance._itemsContainerNode);
+            boundingBox.append(instance._itemsContainerNode);
         },
 
         /**
@@ -145,10 +154,18 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             Y.log('bindUI ', 'cmas', 'ITSASelectList');
             var instance = this,
                 boundingBox = instance.get('boundingBox');
-            boundingBox.on('click', instance._toggleListbox, instance);
-            boundingBox.on('clickoutside', instance.hideListbox, instance);
-            instance._itemsContainerNode.delegate('click', instance._itemClick, 'li', instance);
-            instance.on('disabledChange', instance._disabledChange, instance);
+            instance._eventhandlers.push(
+               boundingBox.on('click', instance._toggleListbox, instance)
+            );
+            instance._eventhandlers.push(
+               boundingBox.on('clickoutside', instance.hideListbox, instance)
+            );
+            instance._eventhandlers.push(
+               instance._itemsContainerNode.delegate('click', instance._itemClick, 'li', instance)
+            );
+            instance._eventhandlers.push(
+               instance.on('disabledChange', instance._disabledChange, instance)
+            );
         },
 
         /**
@@ -159,7 +176,6 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         syncUI : function() {
             Y.log('syncUI ', 'cmas', 'ITSASelectList');
             var instance = this,
-                contentBox = instance.get('contentBox'),
                 items = instance.get('items'),
                 defaultItem = instance.get('defaultItem'),
                 ullist = instance._itemsContainerNode.one('.itsa-selectlist-ullist'),
@@ -173,7 +189,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             if (items.length>0) {
                 for (i=0; i<items.length; i++) {
                     item = items[i];
-                    itemText = Lang.isString(item) ? itemText = item : itemText = item.text;
+                    itemText = Lang.isString(item) ? item : (item.text || '');
                     isDefaultItem = (itemText===defaultItem);
                     if (isDefaultItem) {defaultItemFound = true;}
                     newNode = Y.Node.create('<li' + ((isDefaultItem) ? ' class="' + instance._selectedItemClass + '"' : '') + '>' + itemText +'</li>');
@@ -227,7 +243,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     // no hit: return to default without selection in case of softMatch
                     if (softMatch) {
                         nodelist.removeClass(instance._selectedItemClass);
-                        if (instance.get('selectionOnButton')) {instance._selectedMainItemNode.setHTML(softButtonText ? softButtonText : instance.get('defaultButtonText'));}
+                        if (instance.get('selectionOnButton')) {instance._selectedMainItemNode.setHTML(softButtonText || instance.get('defaultButtonText'));}
                     }
                 }
             }
@@ -287,21 +303,21 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                  * No matter whether the change is done by userinteraction, or by a functioncall like selectItem()
                  * @event valueChange
                  * @param {EventFacade} e Event object<br>
-                 * <i>- e.currentTarget: the selected li-Node<br>
+                 * <i>- e.element: the selected li-Node<br>
                  * <i>- e.value: returnvalue of the selected item<br>
                  * <i>- e.index: index of the selected item</i>
                 */                
-                instance.fire('valueChange', {currentTarget: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});
+                instance.fire('valueChange', {element: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});
                 /**
                  * In case of a valuechange <u>triggered by userinteraction</u>, selectChange will be fired. 
                  * This way you can use functioncalls like selectItem() and prevent double programmaction (which might occur when you listen to the valueChange event)
                  * @event selectChange
                  * @param {EventFacade} e Event object<br>
-                 * <i>- e.currentTarget: the selected li-Node<br>
+                 * <i>- e.element: the selected li-Node<br>
                  * <i>- e.value: returnvalue of the selected item<br>
                  * <i>- e.index: index of the selected item</i>
                 */                
-                if (userInteraction) {instance.fire('selectChange', {currentTarget: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
+                if (userInteraction) {instance.fire('selectChange', {element: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
             }
         },
 
@@ -317,7 +333,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             if (!instance.get('disabled')) {
                 /**
                  * In case the listbox is opened, hide-event will be fired. 
-                 * @event shide
+                 * @event hide
                  * @param {EventFacade} e Event object<br>
                 */                
                 instance.fire('hide');
@@ -406,9 +422,28 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          *
         */
         _disabledChange : function(e) {
+            Y.log('_disabledChange set to '+e.newVal, 'cmas', 'ITSASelectList');
             var instance = this;
             instance.buttonNode.toggleClass('yui3-button-disabled', e.newVal);
             instance.hideListbox();
+        },
+
+        /**
+         * Cleaning up all eventhandlers created by bindUI(). Is called by the destructor.<br>
+         *
+         * @method _clearMemory
+         * @private
+         *
+        */
+        _clearMemory : function() {
+            Y.log('_clearMemory ', 'cmas', 'ITSASelectList');
+            var instance = this;
+            Y.Array.each(
+                instance._eventhandlers,
+                function(item, index, array){
+                    item.detach();
+                }    
+            );
         },
 
         /**
@@ -420,7 +455,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         */
         destructor : function() {
             Y.log('destructor ', 'cmas', 'ITSASelectList');
-            this.get('contentBox').empty();
+            this._clearMemory();
         }
 
     }, {
@@ -520,7 +555,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             /**
              * @description Listitems in the selectbox
              * @attribute items
-             * @type Array of (String or Int)
+             * @type Array (String | Int | Object)  in case of Object, the object should have the fields: <i>o.text</i> and <i>o.returnValue</i>
             */
             items : {
                 value: [],
@@ -588,9 +623,58 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     return val;
                 }
             }
+        },
+
+        HTML_PARSER: {
+
+            defaultItem: function (srcNode) {
+                var options = srcNode.all('option'),
+                    selected = null;
+                options.each(
+                    function(node, index, nodelist) {
+                        if (!selected && (node.getAttribute('selected')==='selected')) {
+                            selected = node.getHTML();
+                        }
+                    }
+                );
+                return selected; 
+            },
+
+            items: function(srcNode) {
+                var options = srcNode.all('option'),
+                    allItems = [];
+                options.each(
+                    function(node, index, nodelist) {
+                        allItems.push(
+                            {
+                                text: node.getHTML(),
+                                returnValue: node.getAttribute('value') || node.getHTML()
+                            }
+                        );
+                    }
+                );
+                return allItems;
+            }
         }
+
     }
 );
 
-
-}, 'gallery-2012.09.26-20-36' ,{requires:['base-build', 'widget-base', 'node-base', 'cssbutton', 'event-base', 'node-event-delegate', 'event-outside'], skinnable:true});
+}, 'gallery-2012.12.05-21-01', {
+    "supersedes": [
+        ""
+    ],
+    "skinnable": "true",
+    "requires": [
+        "base-build",
+        "widget",
+        "node-base",
+        "cssbutton",
+        "event-base",
+        "node-event-delegate",
+        "event-outside"
+    ],
+    "optional": [
+        ""
+    ]
+});
