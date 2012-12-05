@@ -1,0 +1,16 @@
+[35mshifter[0m [33m[warn][0m no build.json file, downshifting to convert ant files
+[35mshifter[0m [37m[info][0m revving up
+[35mshifter[0m [37m[info][0m looking for build.json file
+[35mshifter[0m [37m[info][0m found build.json file, shifting
+[35mshifter[0m [37m[info][0m putting the hammer down, let's build this thing!
+[35mshifter[0m [33m[warn][0m down shifting, can't find a meta directory
+[35mshifter[0m [37m[info][0m putting the hammer down
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-more-loader
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-more-loader
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m compressing gallery-more-loader/gallery-more-loader.js with UglifyJS
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-more-loader/gallery-more-loader.js
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul

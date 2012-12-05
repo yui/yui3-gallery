@@ -1,0 +1,47 @@
+[35mshifter[0m [31m[err][0m /src/gallery-more-loader/js/gallery-more-loader.js contains 23 lint errors
+   #1: [33mLine too long.[0m
+       * {start} and {max} are automatically replaced by the appropriate values. {dte} is replaced by the current time in milliseconds at the time of the load[37m // line 6, pos 151[0m
+   #2: [33mTrailing whitespace.[0m
+       * The server content can be returned as HTML. In that case, supply a container attribute to append/prepend to,[37m // line 9, pos 111[0m
+   #3: [33mExpected '{' and instead saw 'this'.[0m
+       this.fire(EVT_MAX);[37m // line 74, pos 17[0m
+   #4: [33mExpected '{' and instead saw 'this'.[0m
+       this.startTimer();[37m // line 77, pos 17[0m
+   #5: [33mExpected '{' and instead saw 'clearInterval'.[0m
+       clearInterval(this.timer);[37m // line 93, pos 17[0m
+   #6: [33mExpected '{' and instead saw 'return'.[0m
+       return;[37m // line 98, pos 17[0m
+   #7: [33mMixed spaces and tabs.[0m
+       newContent 	= content = res.responseText,[37m // line 116, pos 15[0m
+   #8: [33mVariable content was not declared correctly.[0m
+       newContent 	= content = res.responseText,[37m // line 116, pos 34[0m
+   #9: [33mMixed spaces and tabs.[0m
+       selector 	= this.get('contentSelector'),[37m // line 117, pos 13[0m
+   #10: [33mTrailing whitespace.[0m
+       }[37m // line 133, pos 18[0m
+   #11: [33mToo many var statements.[0m
+       var anim = e.content.one('> div') && this.get('anim'),[37m // line 153, pos 21[0m
+   #12: [33mToo many var statements.[0m
+       var script = Y.Node.create(e.original).all('script').get('innerHTML').join("");[37m // line 170, pos 25[0m
+   #13: [33meval is evil.[0m
+       eval(script);[37m // line 172, pos 21[0m
+   #14: [33mExpected '{' and instead saw 'this'.[0m
+       this.fire(EVT_MAX);[37m // line 188, pos 17[0m
+   #15: [33mTrailing whitespace.[0m
+       * Parameters that are supported are[37m // line 192, pos 44[0m
+   #16: [33mExpected an assignment or function call and instead saw an expression.[0m
+       this.get('moreBtn') && this.get('moreBtn').destroy();[37m // line 215, pos 64[0m
+   #17: [33mTrailing whitespace.[0m
+       * The url supplied to the loader[37m // line 222, pos 45[0m
+   #18: [33mTrailing whitespace.[0m
+       * url format options:[37m // line 223, pos 34[0m
+   #19: [33mTrailing whitespace.[0m
+       * The total number of results. If 0, it is assumed that loading is "endless"[37m // line 244, pos 89[0m
+   #20: [33mTrailing whitespace.[0m
+       */[37m // line 272, pos 15[0m
+   #21: [33m'config' is defined but never used.[0m
+       function MoreLoader(config) {[37m // line 39, pos 27[0m
+   #22: [33m'src' is defined but never used.[0m
+       var src = this.get(SRC),[37m // line 50, pos 20[0m
+   #23: [33m'e' is defined but never used.[0m
+       moreBtn.on('click',function(e){[37m // line 65, pos 46[0m

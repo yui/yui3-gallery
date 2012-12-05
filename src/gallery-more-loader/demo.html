@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<style>
+
+</style>
+<script src="http://yui.yahooapis.com/3.7.3/build/yui/yui-debug.js"></script>
+<script>
+YUI.GlobalConfig = {
+    debug: true,
+    combine: true
+};
+YUI({
+	base: './',
+	modules:{
+			'gallery-more-loader':{
+				fullpath:'build_tmp/gallery-more-loader-debug.js',
+				requires:['node-base','pjax']
+			}
+		},
+	gallery:'gallery-2012.08.22-20-00',
+	filter:'debug'
+	}
+).use('node-base','gallery-more-loader',function(Y){
+	var c = Y.one('#container1'),
+	m1 = new Y.MoreLoader({
+		container:c,
+		url: c.getData('url'),
+		start: parseInt(c.getData('start'),10),
+		max: parseInt(c.getData('max'),10),
+		count: parseInt(c.getData('count'),10),
+		moreBtn: '#moreBtn',
+		contentSelector:'#contain-me'
+	});
+
+	c = Y.one('#container2');
+	var m2 = new Y.MoreLoader({
+		container:c,
+		url: c.getData('url'),
+		append:false,
+		autoRepeat:3,
+		contentSelector:'#contain-me'
+	});
+
+	c = Y.one('#container3');
+	var m3 = new Y.MoreLoader({
+		container:c,
+		url: c.getData('url'),
+		autoRepeat:5,
+		contentSelector:'#contain-me'
+	});
+
+	m1.on('max', function(){
+		alert('max reached');
+	});
+	
+	var m4 = new Y.MoreLoader({
+		url: 'test.json',
+		autoRepeat:10
+	});
+
+	m4.on('load',function(e){
+		alert('loaded json' + e.responseText);
+	});
+	//load and add items 0,24
+	//more.load(0,24);
+
+
+});
+</script>
+</head>
+<body style="font-size:11pt;font-family:Arial;">
+<p>
+Loading page fragments is a great way to offer a smooth user experience and to optomize performance. You can either load an entire page and use a contentSelector to select the appropriate node to insert, or you can load a smaller page fragment. You can also work with json and create the HTML fragments yourself.
+</p>
+<p>
+Below you will find various test setups for working with retrieving page fragments.<br/>
+<!--A word of caution: not all browsers cache query paramenters, so if you are using the same url to retrieve <b>both a full page and a page fragment</b> (that is stripped of most page elements for optimized performance), the user could end up caching the page fragment as the "full page". The strategy to deal with this requires some clever use of the webserver as follows:<br/>
+Let's say that you can deliver a normal page at <br/>
+<b>http://yousite/results/?start=x&max=y</b><br/>
+and an optimized page fragment at <br/>
+<b>http://yousite/results/?start=x&max=y&fragment=true</b>
+<p>
+What you need to do is set the MoreLoader up to retrieve something like http://yousite/results/<b>fragment/</b>?start=x&max=y&fragment=true<br/>
+Then set up your webserver to remove <b>fragment/</b> from any url it encounters before sending the request off to the application server.<br/>
+This way you don't run the risk of accidently caching and serving up the wrong page.
+</p>-->
+<p>
+If you are replacing a traditional pagination widget with this approach you might want to consider keeping the pagination in place but hidden for SEO purposes.
+</p>
+
+<div class="content" style="float:left;margin-right:5px;">
+	<div id="container1" data-url="test" data-start=0 data-max=25 data-count=100 style="border:1px solid silver;width:350px;">
+		SOME EXISTING CONTENT - Button load, Append content, Max content 100, steps of 25
+	</div>
+	<a id="moreBtn" href="javascript:void(0);" style="margin-top:5px;padding:3px;text-align:center;display:block;border:1px solid silver;background-color:whitesmoke;">MORE</a>
+</div>
+
+<div class="content" style="float:left;margin-right:5px;">
+	<div id="container2" data-url="test" style="border:1px solid silver;width:350px;">
+		SOME EXISTING CONTENT - AutoLoader no limit, Prepend content
+	</div>
+</div>
+
+<div class="content" style="float:left;margin-right:5px;">
+	<div id="container3" data-url="test" style="border:1px solid silver;width:350px;">
+		SOME EXISTING CONTENT - AutoLoader no limit, Append content
+	</div>
+</div>
+
+</form>
+
+</body>
+</html>

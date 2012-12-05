@@ -1,0 +1,52 @@
+<html>
+<body>
+<div id="contain-me">
+	<div class="vendorinfo small brdr lt">
+		<div class="bdy">
+			<div class="txt">
+				<div><a href="/nederland/NL_en/!/marcplaats/" class="name">Marc</a></div>
+				<div class="title" title="Experienced software developer, consultant and entrepeneur">Experienced software developer, consultant and entrepeneur</div>
+				<div class="city"></div>
+			</div>
+		</div>
+		<div class="ft">
+			<div class="ratingdiv readonly" style="min-height:15px;"><div class="rating-el" title="rating:5.0;count:2"></div></div>
+			<div class="tiny" style="max-width:90px;overflow:hidden;">
+
+			</div>
+		</div>
+	</div>
+	<div class="vendorinfo small brdr">
+		<div class="bdy">
+			<div class="txt">
+				<div><a href="/nederland/NL_en/!/bas_avis/" class="name">Bas</a></div>
+				<div class="title" title="Freelance project manager en ondernemer">Freelance project manager en ondernemer</div>
+				<div class="city"></div>
+			</div>
+		</div>
+		<div class="ft">
+			<div class="ratingdiv readonly" style="min-height:15px;"><div class="rating-el" title="rating:5.0;count:3"></div></div>
+			<div class="tiny" style="max-width:90px;overflow:hidden;">
+
+			</div>
+		</div>
+	</div>
+	<div class="vendorinfo small brdr">
+		<div class="bdy">
+			<div class="txt">
+				<div><a href="/nederland/NL_en/!/ximonn/" class="name">Simon</a></div>
+				<div class="title" title="Project Manager, Creative designer">Project Manager, Creative designer</div>
+				<div class="city"></div>
+			</div>
+		</div>
+		<div class="ft">
+			<div class="ratingdiv readonly" style="min-height:15px;"><div class="rating-el" title="rating:0.0;count:0"></div></div>
+			<div class="tiny" style="max-width:90px;overflow:hidden;">
+
+			</div>
+		</div>
+	</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+	[
+		{"user":'Marc',"role":'admin'},
+		{"user":'Bas',"role":'editor'},
+		{"user":'Simon',"role":'project manager'}
+	]
+}

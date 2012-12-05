@@ -1,0 +1,17 @@
+{
+    "name": "gallery-more-loader",
+    "builds": {
+        "gallery-more-loader": {
+            "config": {
+                "requires": [
+                    "node-base",
+                    "io-base",
+                    "transition"
+                ]
+            },
+            "jsfiles": [
+                "gallery-more-loader.js"
+            ]
+        }
+    }
+}
