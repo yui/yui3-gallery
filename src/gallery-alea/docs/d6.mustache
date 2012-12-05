@@ -1,0 +1,70 @@
+<link href="{{componentAssets}}/alea.css" rel="stylesheet" type="text/css">
+<div class="intro">
+    <p>
+        This demonstrates how to use Y.Alea to simulate rolling 6-sided dice.
+    </p>
+</div>
+
+<div class="example">
+    {{>d6-source}}
+</div>
+
+<h2>
+    Setting up the HTML
+</h2>
+<p>
+    First we add the HTML form.
+</p>
+
+```
+{{>d6-source-html}}
+```
+
+<h2>
+    Creating the Die Roller
+</h2>
+<p>
+    Now we create an instance of <code>Y.Alea</code>, and write some functions to generate die rolls.
+</p>
+
+```
+var alea = new Y.Alea(),
+    randomBoundInteger = function (max, min) {
+        return Math.floor(min + alea.random() * (max - min + 1));
+    },
+    rollD6 = function (count) {
+        var sum = 0;
+
+        while (count > 0) {
+            count -= 1;
+            sum += randomBoundInteger(6, 1);
+        }
+
+        return sum;
+    };
+```
+
+<h2>
+    Handling the Click Event
+</h2>
+<p>
+    Clicking the button should roll the dice, so we'll need to handle that click.
+</p>
+
+```
+Y.one('#rollDice').on('click', function () {
+    var numberOfDice = +numberOfDiceInputNode.get('value');
+
+    if (numberOfDice > 0) {
+        resultsNode.append('<span> ' + rollD6(numberOfDice) + ' </span>');
+    }
+});
+```
+
+<h2>
+    Complete Example Source
+</h2>
+
+```
+{{>d6-source}}
+```

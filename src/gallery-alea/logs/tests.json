@@ -1,0 +1,1040 @@
+{
+    "name": "gallery-alea",
+    "passed": 7,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 7,
+    "duration": 83,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 7,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 7,
+        "duration": 81,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:001-apiExists",
+            "duration": 1
+        },
+        "test:002-random": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:002-random",
+            "duration": 1
+        },
+        "test:003-fract53": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:003-fract53",
+            "duration": 0
+        },
+        "test:004-uint32": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:004-uint32",
+            "duration": 1
+        },
+        "test:005-seedValues": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:005-seedValues",
+            "duration": 1
+        },
+        "test:006-backwardsCompatibility": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:006-backwardsCompatibility",
+            "duration": 1
+        },
+        "test:007-probability": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:007-probability",
+            "duration": 14
+        }
+    },
+    "timestamp": "Wed 05 Dec 2012 03:02:53 PM CST",
+    "coverage": {
+        "build/cdn_gallery-2012.12.05-21-01/": {
+            "path": "build/cdn_gallery-2012.12.05-21-01/",
+            "s": {
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 9,
+                "6": 9,
+                "7": 5,
+                "8": 9,
+                "9": 21,
+                "10": 21,
+                "11": 8,
+                "12": 21,
+                "13": 21,
+                "14": 14,
+                "15": 21,
+                "16": 21,
+                "17": 9,
+                "18": 9,
+                "19": 14343,
+                "20": 14343,
+                "21": 14343,
+                "22": 14343,
+                "23": 14343,
+                "24": 14343,
+                "25": 1,
+                "26": 1,
+                "27": 1,
+                "28": 1,
+                "29": 1,
+                "30": 9,
+                "31": 9,
+                "32": 90,
+                "33": 90,
+                "34": 90,
+                "35": 729,
+                "36": 729,
+                "37": 729,
+                "38": 729,
+                "39": 729,
+                "40": 729,
+                "41": 729,
+                "42": 729,
+                "43": 90,
+                "44": 1
+            },
+            "b": {
+                "1": [
+                    5,
+                    4
+                ],
+                "2": [
+                    8,
+                    13
+                ],
+                "3": [
+                    14,
+                    7
+                ],
+                "4": [
+                    9,
+                    12
+                ]
+            },
+            "f": {
+                "1": 1,
+                "2": 1,
+                "3": 9,
+                "4": 21,
+                "5": 14343,
+                "6": 1,
+                "7": 1,
+                "8": 9,
+                "9": 90
+            },
+            "fnMap": {
+                "1": {
+                    "name": "(anonymous_1)",
+                    "line": 1,
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 24
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 43
+                        }
+                    }
+                },
+                "2": {
+                    "name": "(anonymous_2)",
+                    "line": 36,
+                    "loc": {
+                        "start": {
+                            "line": 36,
+                            "column": 1
+                        },
+                        "end": {
+                            "line": 36,
+                            "column": 14
+                        }
+                    }
+                },
+                "3": {
+                    "name": "(anonymous_3)",
+                    "line": 55,
+                    "loc": {
+                        "start": {
+                            "line": 55,
+                            "column": 17
+                        },
+                        "end": {
+                            "line": 55,
+                            "column": 29
+                        }
+                    }
+                },
+                "4": {
+                    "name": "(anonymous_4)",
+                    "line": 67,
+                    "loc": {
+                        "start": {
+                            "line": 67,
+                            "column": 24
+                        },
+                        "end": {
+                            "line": 67,
+                            "column": 39
+                        }
+                    }
+                },
+                "5": {
+                    "name": "(anonymous_5)",
+                    "line": 93,
+                    "loc": {
+                        "start": {
+                            "line": 93,
+                            "column": 26
+                        },
+                        "end": {
+                            "line": 93,
+                            "column": 38
+                        }
+                    }
+                },
+                "6": {
+                    "name": "(anonymous_6)",
+                    "line": 112,
+                    "loc": {
+                        "start": {
+                            "line": 112,
+                            "column": 17
+                        },
+                        "end": {
+                            "line": 112,
+                            "column": 29
+                        }
+                    }
+                },
+                "7": {
+                    "name": "(anonymous_7)",
+                    "line": 121,
+                    "loc": {
+                        "start": {
+                            "line": 121,
+                            "column": 16
+                        },
+                        "end": {
+                            "line": 121,
+                            "column": 28
+                        }
+                    }
+                },
+                "8": {
+                    "name": "(anonymous_8)",
+                    "line": 135,
+                    "loc": {
+                        "start": {
+                            "line": 135,
+                            "column": 19
+                        },
+                        "end": {
+                            "line": 135,
+                            "column": 31
+                        }
+                    }
+                },
+                "9": {
+                    "name": "(anonymous_9)",
+                    "line": 138,
+                    "loc": {
+                        "start": {
+                            "line": 138,
+                            "column": 15
+                        },
+                        "end": {
+                            "line": 138,
+                            "column": 31
+                        }
+                    }
+                }
+            },
+            "statementMap": {
+                "1": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 163,
+                        "column": 16
+                    }
+                },
+                "2": {
+                    "start": {
+                        "line": 36,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 161,
+                        "column": 6
+                    }
+                },
+                "3": {
+                    "start": {
+                        "line": 37,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 37,
+                        "column": 17
+                    }
+                },
+                "4": {
+                    "start": {
+                        "line": 40,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 103,
+                        "column": 10
+                    }
+                },
+                "5": {
+                    "start": {
+                        "line": 56,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 61,
+                        "column": 42
+                    }
+                },
+                "6": {
+                    "start": {
+                        "line": 63,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 65,
+                        "column": 13
+                    }
+                },
+                "7": {
+                    "start": {
+                        "line": 64,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 64,
+                        "column": 34
+                    }
+                },
+                "8": {
+                    "start": {
+                        "line": 67,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 85,
+                        "column": 15
+                    }
+                },
+                "9": {
+                    "start": {
+                        "line": 68,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 68,
+                        "column": 32
+                    }
+                },
+                "10": {
+                    "start": {
+                        "line": 70,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 72,
+                        "column": 17
+                    }
+                },
+                "11": {
+                    "start": {
+                        "line": 71,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 71,
+                        "column": 28
+                    }
+                },
+                "12": {
+                    "start": {
+                        "line": 74,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 74,
+                        "column": 32
+                    }
+                },
+                "13": {
+                    "start": {
+                        "line": 76,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 78,
+                        "column": 17
+                    }
+                },
+                "14": {
+                    "start": {
+                        "line": 77,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 77,
+                        "column": 28
+                    }
+                },
+                "15": {
+                    "start": {
+                        "line": 80,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 80,
+                        "column": 32
+                    }
+                },
+                "16": {
+                    "start": {
+                        "line": 82,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 84,
+                        "column": 17
+                    }
+                },
+                "17": {
+                    "start": {
+                        "line": 83,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 83,
+                        "column": 28
+                    }
+                },
+                "18": {
+                    "start": {
+                        "line": 93,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 102,
+                        "column": 14
+                    }
+                },
+                "19": {
+                    "start": {
+                        "line": 94,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 94,
+                        "column": 69
+                    }
+                },
+                "20": {
+                    "start": {
+                        "line": 96,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 96,
+                        "column": 26
+                    }
+                },
+                "21": {
+                    "start": {
+                        "line": 97,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 97,
+                        "column": 24
+                    }
+                },
+                "22": {
+                    "start": {
+                        "line": 98,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 98,
+                        "column": 24
+                    }
+                },
+                "23": {
+                    "start": {
+                        "line": 99,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 99,
+                        "column": 27
+                    }
+                },
+                "24": {
+                    "start": {
+                        "line": 101,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 101,
+                        "column": 26
+                    }
+                },
+                "25": {
+                    "start": {
+                        "line": 105,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 124,
+                        "column": 6
+                    }
+                },
+                "26": {
+                    "start": {
+                        "line": 113,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 113,
+                        "column": 37
+                    }
+                },
+                "27": {
+                    "start": {
+                        "line": 114,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 114,
+                        "column": 80
+                    }
+                },
+                "28": {
+                    "start": {
+                        "line": 122,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 122,
+                        "column": 52
+                    }
+                },
+                "29": {
+                    "start": {
+                        "line": 135,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 158,
+                        "column": 6
+                    }
+                },
+                "30": {
+                    "start": {
+                        "line": 136,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 136,
+                        "column": 27
+                    }
+                },
+                "31": {
+                    "start": {
+                        "line": 138,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 157,
+                        "column": 10
+                    }
+                },
+                "32": {
+                    "start": {
+                        "line": 139,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 139,
+                        "column": 35
+                    }
+                },
+                "33": {
+                    "start": {
+                        "line": 141,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 143,
+                        "column": 37
+                    }
+                },
+                "34": {
+                    "start": {
+                        "line": 145,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 154,
+                        "column": 13
+                    }
+                },
+                "35": {
+                    "start": {
+                        "line": 146,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 146,
+                        "column": 40
+                    }
+                },
+                "36": {
+                    "start": {
+                        "line": 147,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 147,
+                        "column": 44
+                    }
+                },
+                "37": {
+                    "start": {
+                        "line": 148,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 148,
+                        "column": 28
+                    }
+                },
+                "38": {
+                    "start": {
+                        "line": 149,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 149,
+                        "column": 23
+                    }
+                },
+                "39": {
+                    "start": {
+                        "line": 150,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 150,
+                        "column": 23
+                    }
+                },
+                "40": {
+                    "start": {
+                        "line": 151,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 151,
+                        "column": 28
+                    }
+                },
+                "41": {
+                    "start": {
+                        "line": 152,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 152,
+                        "column": 23
+                    }
+                },
+                "42": {
+                    "start": {
+                        "line": 153,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 153,
+                        "column": 42
+                    }
+                },
+                "43": {
+                    "start": {
+                        "line": 156,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 156,
+                        "column": 57
+                    }
+                },
+                "44": {
+                    "start": {
+                        "line": 160,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 160,
+                        "column": 20
+                    }
+                }
+            },
+            "branchMap": {
+                "1": {
+                    "line": 63,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 63,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 63,
+                                "column": 12
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 63,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 63,
+                                "column": 12
+                            }
+                        }
+                    ]
+                },
+                "2": {
+                    "line": 70,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 70,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 70,
+                                "column": 16
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 70,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 70,
+                                "column": 16
+                            }
+                        }
+                    ]
+                },
+                "3": {
+                    "line": 76,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 76,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 76,
+                                "column": 16
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 76,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 76,
+                                "column": 16
+                            }
+                        }
+                    ]
+                },
+                "4": {
+                    "line": 82,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 82,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 82,
+                                "column": 16
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 82,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 82,
+                                "column": 16
+                            }
+                        }
+                    ]
+                }
+            },
+            "code": [
+                "(function () { YUI.add('gallery-alea', function (Y, NAME) {",
+                "",
+                "/*!",
+                " * based on Alea.js and Mash.js.",
+                " * Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>",
+                " *",
+                " * Permission is hereby granted, free of charge, to any person obtaining a copy",
+                " * of this software and associated documentation files (the \"Software\"), to deal",
+                " * in the Software without restriction, including without limitation the rights",
+                " * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell",
+                " * copies of the Software, and to permit persons to whom the Software is",
+                " * furnished to do so, subject to the following conditions:",
+                " *",
+                " * The above copyright notice and this permission notice shall be included in",
+                " * all copies or substantial portions of the Software.",
+                " *",
+                " * THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR",
+                " * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,",
+                " * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE",
+                " * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER",
+                " * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,",
+                " * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN",
+                " * THE SOFTWARE.",
+                " */",
+                "",
+                "/**",
+                " * Y.Alea is a better pseudorandom number generator than Math.random.",
+                " *",
+                " * based on Alea.js and Mash.js.",
+                " * Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>",
+                " *",
+                " * <http://baagoe.org/en/w/index.php/Better_random_numbers_for_javascript>",
+                " *",
+                " * @module gallery-alea",
+                " */",
+                "(function (Y) {",
+                "    'use strict';",
+                "    /*jshint bitwise:false*/",
+                "",
+                "    var _number_2_pow_32 = 4294967296, // 2^32",
+                "        _number_2_pow_negative_32 = 2.3283064365386963e-10, // 2^-32",
+                "        _string__space = ' ',",
+                "",
+                "        _Array = Y.Array,",
+                "",
+                "        _each = _Array.each,",
+                "        _now = Y.Lang.now,",
+                "",
+                "        /**",
+                "         * @class Alea",
+                "         * @constructor",
+                "         * @param [seedValues=Y.Lang.now()]* Any number of seed values.  If left",
+                "         * undefined, Y.Lang.now() is used.",
+                "         */",
+                "        _class = function () {",
+                "            var args = _Array(arguments),",
+                "                c = 1,",
+                "                mash = _class._mash(),",
+                "                s0 = mash(_string__space),",
+                "                s1 = mash(_string__space),",
+                "                s2 = mash(_string__space);",
+                "",
+                "            if (!args.length) {",
+                "                args.push(_now());",
+                "            }",
+                "",
+                "            _each(args, function (arg) {",
+                "                s0 -= mash(arg);",
+                "",
+                "                if (s0 < 0) {",
+                "                    s0 += 1;",
+                "                }",
+                "",
+                "                s1 -= mash(arg);",
+                "",
+                "                if (s1 < 0) {",
+                "                    s1 += 1;",
+                "                }",
+                "",
+                "                s2 -= mash(arg);",
+                "",
+                "                if (s2 < 0) {",
+                "                    s2 += 1;",
+                "                }",
+                "            });",
+                "",
+                "            /**",
+                "             * Generates a random number that is greater than or equal to zero",
+                "             * and less than one.  The number will be a 32-bit fraction.",
+                "             * @method random",
+                "             * @return {Number}",
+                "             */",
+                "            this.random = function () {",
+                "                var t = 2091639 * s0 + c * _number_2_pow_negative_32;",
+                "",
+                "                c = t | 0;",
+                "                s0 = s1;",
+                "                s1 = s2;",
+                "                s2 = t - c;",
+                "",
+                "                return s2;",
+                "            };",
+                "        };",
+                "",
+                "    _class.prototype = {",
+                "        /**",
+                "        * Generates a random number that is greater than or equal to zero",
+                "        * and less than one.  The number will be a 53-bit fraction.",
+                "        * @method fract53",
+                "        * @return {Number}",
+                "        */",
+                "        fract53: function () {",
+                "            var random = this.random;",
+                "            return random() + (random() * 2097152 | 0) * 1.1102230246251565e-16; // 2^-53",
+                "        },",
+                "        /**",
+                "        * Generates a random 32-bit unsigned integer.",
+                "        * @method uint32",
+                "        * @return {Number}",
+                "        */",
+                "        uint32: function () {",
+                "            return this.random() * _number_2_pow_32;",
+                "        }",
+                "    };",
+                "",
+                "    /**",
+                "     * This method returns a string hashing function which is initialized with",
+                "     * an internal state.",
+                "     * @method _mash",
+                "     * @protected",
+                "     * @return {Function} A string hashing function which accepts a single",
+                "     * argument and returns a number.",
+                "     * @static",
+                "     */",
+                "    _class._mash = function () {",
+                "        var n = 4022871197;",
+                "",
+                "        return function (data) {",
+                "            data = data.toString();",
+                "",
+                "            var h,",
+                "                i = 0,",
+                "                length = data.length;",
+                "",
+                "            for (; i < length; i += 1) {",
+                "                n += data.charCodeAt(i);",
+                "                h = 0.02519603282416938 * n;",
+                "                n = h >>> 0;",
+                "                h -= n;",
+                "                h *= n;",
+                "                n = h >>> 0;",
+                "                h -= n;",
+                "                n += h * _number_2_pow_32;",
+                "            }",
+                "",
+                "            return (n >>> 0) * _number_2_pow_negative_32;",
+                "        };",
+                "    };",
+                "",
+                "    Y.Alea = _class;",
+                "}(Y));",
+                "",
+                "}, '@VERSION@');",
+                "",
+                "}());"
+            ],
+            "l": {
+                "1": 1,
+                "36": 1,
+                "37": 1,
+                "40": 1,
+                "56": 9,
+                "63": 9,
+                "64": 5,
+                "67": 9,
+                "68": 21,
+                "70": 21,
+                "71": 8,
+                "74": 21,
+                "76": 21,
+                "77": 14,
+                "80": 21,
+                "82": 21,
+                "83": 9,
+                "93": 9,
+                "94": 14343,
+                "96": 14343,
+                "97": 14343,
+                "98": 14343,
+                "99": 14343,
+                "101": 14343,
+                "105": 1,
+                "113": 1,
+                "114": 1,
+                "122": 1,
+                "135": 1,
+                "136": 9,
+                "138": 9,
+                "139": 90,
+                "141": 90,
+                "145": 90,
+                "146": 729,
+                "147": 729,
+                "148": 729,
+                "149": 729,
+                "150": 729,
+                "151": 729,
+                "152": 729,
+                "153": 729,
+                "156": 90,
+                "160": 1
+            }
+        }
+    },
+    "coverageType": "istanbul"
+}

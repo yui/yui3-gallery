@@ -1,6 +1,6 @@
-YUI.add("gallery-alea",function(a){
+YUI.add("gallery-alea",function(e,t){
 /*!
- * based on Alea.js and Mash.js. http://baagoe.com/en/RandomMusings/javascript/
+ * based on Alea.js and Mash.js.
  * Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,4 +21,4 @@ YUI.add("gallery-alea",function(a){
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-(function(g){var b=g.Array,f=b.each,d=function(){var h=4022871197;return function(m){m=m.toString();var k,j=0,l=m.length;for(;j<l;j+=1){h+=m.charCodeAt(j);k=0.02519603282416938*h;h=k>>>0;k-=h;k*=h;h=k>>>0;k-=h;h+=k*4294967296;}return(h>>>0)*2.3283064365386963e-10;};},e=g.Lang.now,c=function(){var i=b(arguments),m=1,k=d(),l=k(" "),j=k(" "),h=k(" ");if(!i.length){i.push(e());}f(i,function(n){l-=k(n);if(l<0){l+=1;}j-=k(n);if(j<0){j+=1;}h-=k(n);if(h<0){h+=1;}});this.random=function(){var n=2091639*l+m*2.3283064365386963e-10;m=n|0;l=j;j=h;h=n-m;return h;};};c.prototype={fract53:function(){var h=this.random;return h()+(h()*2097152|0)*1.1102230246251565e-16;},uint32:function(){return this.random()*4294967296;}};g.Alea=c;}(a));},"gallery-2012.07.18-13-22",{requires:["yui-base"],skinnable:false});
+;(function(e){"use strict";var t=4294967296,n=2.3283064365386963e-10,r=" ",i=e.Array,s=i.each,o=e.Lang.now,u=function(){var e=i(arguments),t=1,a=u._mash(),f=a(r),l=a(r),c=a(r);e.length||e.push(o()),s(e,function(e){f-=a(e),f<0&&(f+=1),l-=a(e),l<0&&(l+=1),c-=a(e),c<0&&(c+=1)}),this.random=function(){var e=2091639*f+t*n;return t=e|0,f=l,l=c,c=e-t,c}};u.prototype={fract53:function(){var e=this.random;return e()+(e()*2097152|0)*1.1102230246251565e-16},uint32:function(){return this.random()*t}},u._mash=function(){var e=4022871197;return function(r){r=r.toString();var i,s=0,o=r.length;for(;s<o;s+=1)e+=r.charCodeAt(s),i=.02519603282416938*e,e=i>>>0,i-=e,i*=e,e=i>>>0,i-=e,e+=i*t;return(e>>>0)*n}},e.Alea=u})(e)},"gallery-2012.12.05-21-01");

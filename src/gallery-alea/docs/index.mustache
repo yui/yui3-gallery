@@ -1,0 +1,70 @@
+<div class="intro">
+    <p>
+        Y.Alea is a better pseudorandom number generator than Math.random.
+    </p>
+    <p>
+        based on Alea.js and Mash.js.
+        <br />
+        Copyright (C) 2010 by Johannes Baagøe &lt;baagoe@baagoe.org&gt;
+    <p>
+    </p>
+        <a href="http://baagoe.org/en/w/index.php/Better_random_numbers_for_javascript">
+            http://baagoe.org/en/w/index.php/Better_random_numbers_for_javascript
+        </a>
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Better Than Math.random!
+</h2>
+
+<p>
+    To summarize
+    <a href="http://baagoe.org/en/w/index.php/Better_random_numbers_for_javascript#Why_Math.random_should_not_be_used_for_serious_programming">
+        Johannes Baagøe's arguments
+    </a>
+    <ul>
+        <li>
+            Math.random may be implemented differently in different environments.  This makes it impossible to control the quality of the pseudorandom numbers in your application.
+        </li>
+        <li>
+            Math.random does not allow custom seed values.  Random sequences can not be easily repeated for testing or other purposes.
+        </li>
+        <li>
+            Math.random is not cryptographically secure.
+        </li>
+    </ul>
+    Y.Alea is based on the Alea pseudorandom number generator which aims to solve these problems.
+</p>
+
+<h2>
+    Using Y.Alea
+</h2>
+
+<p>
+    Y.Alea is a constructor that will accept any number of arguments.  Together, these arguments form the seed value.  If no arguments are given, the current time will be used as the seed value.
+    Instances of Y.Alea have three methods for generating random numbers:
+    <dl>
+        <dt>
+            random
+        </dt>
+        <dd>
+            The random method is intended to be used in place of Math.random.  It will return a number that is greater than or equal to 0 and less than 1.
+            The random method is also the core implementation of Alea; the other methods derive from it.
+        </dd>
+        <dt>
+            fract53
+        </dt>
+        <dd>
+            The fract53 method works just like the random method except it will return floating point values of greater precision.  The extra precision comes with a small performance cost.
+        </dd>
+        <dt>
+            uint32
+        </dt>
+        <dd>
+            The uint32 method returns integers instead of floating point values.  It will return a number greater than or equal to 0 and less than 4294967296.
+        </dd>
+    </dl>
+</p>

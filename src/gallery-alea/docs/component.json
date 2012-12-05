@@ -1,0 +1,33 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Y.Alea is a better pseudorandom number generator than Math.random.",
+    "displayName": "Gallery: Alea Pseudorandom Number Generator",
+    "examples": [{
+        "description": "Rolling 6-sided dice.",
+        "displayName": "Rolling 6-sided dice.",
+        "hideTableOfContents": true,
+        "name": "d6",
+        "modules": [
+            "gallery-alea"
+        ]
+    }],
+    "name": "gallery-alea",
+    "tags": [
+        "alea",
+        "gallery",
+        "generator",
+        "math",
+        "number",
+        "prng",
+        "pseudorandom",
+        "rand",
+        "random",
+        "rng",
+        "solmsted"
+    ],
+    "use": [
+        "gallery-alea"
+    ]
+}

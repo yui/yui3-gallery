@@ -1,0 +1,29 @@
+{{>d6-source-html}}
+<script type="text/javascript">
+    YUI().use('cssbase', 'cssbutton', 'cssfonts', 'cssreset', 'gallery-alea', 'node', function (Y) {
+        var alea = new Y.Alea(),
+            numberOfDiceInputNode = Y.one('#numberOfDice'),
+            randomBoundInteger = function (max, min) {
+                return Math.floor(min + alea.random() * (max - min + 1));
+            },
+            resultsNode = Y.one('#results'),
+            rollD6 = function (count) {
+                var sum = 0;
+
+                while (count > 0) {
+                    count -= 1;
+                    sum += randomBoundInteger(6, 1);
+                }
+
+                return sum;
+            };
+
+        Y.one('#rollDice').on('click', function () {
+            var numberOfDice = +numberOfDiceInputNode.get('value');
+            
+            if (numberOfDice > 0) {
+                resultsNode.append('<span> ' + rollD6(numberOfDice) + ' </span>');
+            }
+        });
+    });
+</script>

@@ -1,5 +1,5 @@
 /*!
- * based on Alea.js and Mash.js. http://baagoe.com/en/RandomMusings/javascript/
+ * based on Alea.js and Mash.js.
  * Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,56 +23,40 @@
 
 /**
  * Y.Alea is a better pseudorandom number generator than Math.random.
- * 
- * based on Alea.js and Mash.js. http://baagoe.com/en/RandomMusings/javascript/
+ *
+ * based on Alea.js and Mash.js.
  * Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
+ *
+ * <http://baagoe.org/en/w/index.php/Better_random_numbers_for_javascript>
+ *
  * @module gallery-alea
  */
 (function (Y) {
     'use strict';
+    /*jshint bitwise:false*/
 
-    var _Array = Y.Array,
+    var _number_2_pow_32 = 4294967296, // 2^32
+        _number_2_pow_negative_32 = 2.3283064365386963e-10, // 2^-32
+        _string__space = ' ',
+
+        _Array = Y.Array,
 
         _each = _Array.each,
-        _mash = function () {
-            var n = 0xefc8249d;
-
-            return function (data) {
-                data = data.toString();
-
-                var h,
-                    i = 0,
-                    length = data.length;
-
-                for (; i < length; i += 1) {
-                    n += data.charCodeAt(i);
-                    h = 0.02519603282416938 * n;
-                    n = h >>> 0;
-                    h -= n;
-                    h *= n;
-                    n = h >>> 0;
-                    h -= n;
-                    n += h * 0x100000000; // 2^32
-                }
-
-                return (n >>> 0) * 2.3283064365386963e-10; // 2^-32
-            };
-        },
         _now = Y.Lang.now,
 
         /**
          * @class Alea
          * @constructor
-         * @param [seedValues*] Optional.  Any number of seed values.  If left
+         * @param [seedValues=Y.Lang.now()]* Any number of seed values.  If left
          * undefined, Y.Lang.now() is used.
          */
         _class = function () {
             var args = _Array(arguments),
                 c = 1,
-                mash = _mash(),
-                s0 = mash(' '),
-                s1 = mash(' '),
-                s2 = mash(' ');
+                mash = _class._mash(),
+                s0 = mash(_string__space),
+                s1 = mash(_string__space),
+                s2 = mash(_string__space);
 
             if (!args.length) {
                 args.push(_now());
@@ -102,10 +86,10 @@
              * Generates a random number that is greater than or equal to zero
              * and less than one.  The number will be a 32-bit fraction.
              * @method random
-             * @return Number
+             * @return {Number}
              */
             this.random = function () {
-                var t = 2091639 * s0 + c * 2.3283064365386963e-10; // 2^-32
+                var t = 2091639 * s0 + c * _number_2_pow_negative_32;
 
                 c = t | 0;
                 s0 = s1;
@@ -121,20 +105,54 @@
         * Generates a random number that is greater than or equal to zero
         * and less than one.  The number will be a 53-bit fraction.
         * @method fract53
-        * @return Number
+        * @return {Number}
         */
         fract53: function () {
             var random = this.random;
-            return random() + (random() * 0x200000 | 0) * 1.1102230246251565e-16; // 2^-53
+            return random() + (random() * 2097152 | 0) * 1.1102230246251565e-16; // 2^-53
         },
         /**
         * Generates a random 32-bit unsigned integer.
         * @method uint32
-        * @return Number
+        * @return {Number}
         */
         uint32: function () {
-            return this.random() * 0x100000000; // 2^32
+            return this.random() * _number_2_pow_32;
         }
+    };
+
+    /**
+     * This method returns a string hashing function which is initialized with
+     * an internal state.
+     * @method _mash
+     * @protected
+     * @return {Function} A string hashing function which accepts a single
+     * argument and returns a number.
+     * @static
+     */
+    _class._mash = function () {
+        var n = 4022871197;
+
+        return function (data) {
+            data = data.toString();
+
+            var h,
+                i = 0,
+                length = data.length;
+
+            for (; i < length; i += 1) {
+                n += data.charCodeAt(i);
+                h = 0.02519603282416938 * n;
+                n = h >>> 0;
+                h -= n;
+                h *= n;
+                n = h >>> 0;
+                h -= n;
+                n += h * _number_2_pow_32;
+            }
+
+            return (n >>> 0) * _number_2_pow_negative_32;
+        };
     };
 
     Y.Alea = _class;
