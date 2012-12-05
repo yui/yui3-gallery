@@ -1,0 +1,75 @@
+<div class="intro">
+    <p>
+    A class extension to allow display of data in DataTable via the PaginatorView paginator.
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>This component is a Y.DataTable class extension that provides the capability to link the displayed `data` within a DataTable to a Paginator View class.   This extension was specifically designed to work with  <a href="http://yuilibrary.com/gallery/show/paginator-view|Gallery-Paginator-View">http://yuilibrary.com/gallery/show/paginator-view|Gallery-Paginator-View</a> but could be configured to work with a user's own custom paginator View class.<br>
+<br>
+https://dl.dropbox.com/u/14338200/dt_pag_sample.png<br>
+<br>
+The extension defines one new DataTable attribute <b>paginator</b>, which represents the only UI element (wherein this extension has no UI).  It also defines listeners on the model for the view that updates the DT when `pageChange` events are fired.<br>
+<br>
+<h2>Features</h2><br>
+This extension provides the following features / capabilities;<br>
+<ul>
+<li>Works with <a href="http://yuilibrary.com/gallery/show/paginator-view|Gallery-Paginator-View">http://yuilibrary.com/gallery/show/paginator-view|Gallery-Paginator-View</a> or with any user created Model-View implementation.</li>
+<li>Standard or Scrolling datatable</li>
+<li>Sorting</li>
+<li>Data provided either locally (client-side) or remotely (server-side)      </li>
+</ul>
+<br>
+<h2>=Client-Side=</h2><br>
+Pagination of local data supplied to the DataTable is accomplished by initially storing the supplied &quot;data&quot; into an internal buffer.   On a page change request, the internal buffer is Array-sliced to retrieve the portion of the data.  <br>
+<br>
+A limited sorting capability for local data is provided (at present it only sorts contents on the currently displayed page, not ALL data within the buffer...)  <br>
+<h2>=Server-Side (remote data)=</h2><br>
+Server-side pagination provides support for either DataSource-based remote data (via the DataSource plugins) or for ModelSync.REST syncing infrastructure (<i>preferred</i>).   The remote pagination works very well with sorting, but require your server to accept the &quot;sortBy&quot; attribute as input. <br>
+<br>
+The linked Example demonstrates pagination for &quot;local&quot;, &quot;datasource&quot; and &quot;RESTful&quot; servers.<br>
+<br>
+An additional example for DataSource only is at : <a href="http://blunderalong.com/yui/dti/paginator/dt_paginator_DS.html">dt_paginator_DS.html</a>.<br>
+<br>
+and one for ModelSync.REST pagination is  : <a href="http://blunderalong.com/yui/dti/paginator/dt_paginator_REST.html">dt_paginator_REST.html</a><br>
+<br>
+Remote pagination is the <b>BEST</b> application of this component and is the typical use-case, i.e. where it is desired to efficiently look for small segments of data (pages) from a much larger dataset (server data).<br>
+<br>
+To implement server-side pagination the server querystring / url has replaceable parameters (replaced via Y.Lang.sub) that are sent to the server and expected meta data must be returned back in the response (i.e. the number of items in total dataset being critical). <br>
+<br>
+This DT-Paginator also allows for custom querystring (outgoing server request) and response (incoming data returned) mapping to user specified &quot;meta&quot; data that differs from the default PaginatorModel (Please see the Docs and Examples, specifically attribute <b>serverPaginationMap</b>)   <br>
+<br>
+<b>Troubleshooting Remote Pagination</b><br>
+NOTE:  It is <b>ESSENTIAL</b> that your response includes meta data for <b>totalItems</b>, otherwise the paginator won't render.<br>
+<br>
+If your paged data is available (i.e. in a debugger Net tab) but the paginator doesn't render, this is usually due to the the &quot;totalItems&quot; property in the response not being defined, or often not returned as an integer.  Please confirm your server returns this item AND that it is an integer and not a string value.<br>
+</p>
+
+```
+YUI().use('gallery-datatable-paginator','gallery-paginator-view', function(Y) {
+
+//
+// Basic Paginator Example
+//
+    var dtableB = new Y.DataTable({
+        columns:    cols,
+        data:       jsRandom500,
+        scrollable: 'y',
+        height:     '200px',
+
+        paginator: new Y.PaginatorView({
+            model:              new Y.PaginatorModel({ page:3, itemsPerPage:50 }),
+            container:         '#pagContainerBar',
+            paginatorTemplate:  Y.one('#tmpl-bar').getHTML(),
+            pageOptions:        [ 10, 25, 50, 100, 'All' ]
+        }),
+           
+       paginatorResize:    true
+
+    });
+
+
+});
+```
+

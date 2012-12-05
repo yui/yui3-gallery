@@ -1,0 +1,95 @@
+[35mshifter[0m [31m[err][0m /src/gallery-datatable-paginator/js/datatable-paginator.js contains 47 lint errors
+   #1: [33mMixed spaces and tabs.[0m
+       model: 		new PaginatorModel({itemsPerPage:50, page:3}),[37m // line 22, pos 19[0m
+   #2: [33mExpected '{' and instead saw 'return'.[0m
+       if (!item) return;[37m // line 345, pos 24[0m
+   #3: [33mExpected '{' and instead saw 'Y'.[0m
+       Y.Array.each(item,function(si){[37m // line 347, pos 17[0m
+   #4: [33mExpected '{' and instead saw 'item'.[0m
+       item.detach();[37m // line 351, pos 17[0m
+   #5: [33mToo many var statements.[0m
+       var istart, iend, nitem;[37m // line 383, pos 13[0m
+   #6: [33mToo many var statements.[0m
+       var url_obj     = {},[37m // line 405, pos 17[0m
+   #7: [33m['sortBy'] is better written in dot notation.[0m
+       url_obj['sortBy']    = Y.JSON.stringify( this.get('sortBy') || {} ) || null;[37m // line 412, pos 20[0m
+   #8: [33m['page'] is better written in dot notation.[0m
+       url_obj['page']  = this.pagModel.get('page');[37m // line 418, pos 20[0m
+   #9: [33mToo many var statements.[0m
+       var rqst_str = this.get('requestStringTemplate') || '';[37m // line 436, pos 21[0m
+   #10: [33m'url_obj' used out of scope.[0m
+       this.paginatorDSRequest( Y.Lang.sub(rqst_str,url_obj) );[37m // line 438, pos 62[0m
+   #11: [33m'url_obj' used out of scope.[0m
+       this.paginatorMLRequest(url_obj);[37m // line 447, pos 41[0m
+   #12: [33mToo many var statements.[0m
+       var data_new = rdata.slice(istart,iend);[37m // line 520, pos 13[0m
+   #13: [33mExpected '{' and instead saw 'return'.[0m
+       if ( this.get('paginatorResize') !== true )  return;[37m // line 537, pos 54[0m
+   #14: [33mToo many var statements.[0m
+       var sortObj = sortBy[0],[37m // line 583, pos 17[0m
+   #15: [33mExpected '{' and instead saw 'delete'.[0m
+       if(data.id) delete data.id;[37m // line 649, pos 25[0m
+   #16: [33mExpected '{' and instead saw 'newData'.[0m
+       newData = newData.concat(data,mdata);[37m // line 655, pos 17[0m
+   #17: [33mToo many var statements.[0m
+       var first = mdata.slice(0,pgIndex);[37m // line 657, pos 21[0m
+   #18: [33mToo many var statements.[0m
+       var second = mdata.slice(pgIndex)[37m // line 658, pos 21[0m
+   #19: [33mMissing semicolon.[0m
+       var second = mdata.slice(pgIndex)[37m // line 658, pos 50[0m
+   #20: [33mToo many var statements.[0m
+       var mdata = this._mlistArray;[37m // line 684, pos 17[0m
+   #21: [33mExpected '{' and instead saw 'this'.[0m
+       if ( !this._pagDataSrc) this._afterDataReset({});[37m // line 740, pos 33[0m
+   #22: [33mExpected '{' and instead saw 'return'.[0m
+       if(this._pagDataSrc !== null) return;[37m // line 762, pos 39[0m
+   #23: [33mExpected '{' and instead saw 'localPagDataSrc'.[0m
+       localPagDataSrc = 'mlist';[37m // line 773, pos 13[0m
+   #24: [33mExpected '{' and instead saw 'localPagDataSrc'.[0m
+       localPagDataSrc = 'ds';[37m // line 777, pos 13[0m
+   #25: [33mExpected '{' and instead saw 'localPagDataSrc'.[0m
+       localPagDataSrc = 'local';[37m // line 781, pos 13[0m
+   #26: [33mExpected '{' and instead saw 'this'.[0m
+       this._pagDataSrc = 'local';[37m // line 799, pos 21[0m
+   #27: [33mExpected '{' and instead saw 'this'.[0m
+       this._pagDataSrc = 'mlist';[37m // line 801, pos 21[0m
+   #28: [33mExpected '{' and instead saw 'this'.[0m
+       this._pagDataSrc = 'local';[37m // line 810, pos 21[0m
+   #29: [33mExpected '{' and instead saw 'this'.[0m
+       this._pagDataSrc = 'ds';[37m // line 812, pos 21[0m
+   #30: [33mExpected '{' and instead saw 'mdata'.[0m
+       mdata = o;[37m // line 845, pos 13[0m
+   #31: [33mExpected '{' and instead saw 'this'.[0m
+       this.addLocalData(o,pgIndex);[37m // line 867, pos 13[0m
+   #32: [33mExpected '{' and instead saw 'this'.[0m
+       this.addRemoteData(o,pgIndex);[37m // line 869, pos 13[0m
+   #33: [33mExpected '{' and instead saw 'this'.[0m
+       this.removeLocalData(o,pgIndex);[37m // line 902, pos 13[0m
+   #34: [33mExpected '{' and instead saw 'this'.[0m
+       this.removeRemoteData(o,pgIndex);[37m // line 904, pos 13[0m
+   #35: [33mExpected '{' and instead saw 'return'.[0m
+       if(!this._pagDataSrc) return;[37m // line 938, pos 31[0m
+   #36: [33m['totalItems'] is better written in dot notation.[0m
+       totalItemProp = this.get('serverPaginationMap')['totalItems'] || null,[37m // line 971, pos 60[0m
+   #37: [33mExpected '{' and instead saw 'return'.[0m
+       if ( !tblCont ) return false;[37m // line 1079, pos 25[0m
+   #38: [33mExpected '===' and instead saw '=='.[0m
+       if ( rprop && dir == 'to' && rprop.toServer )   rprop = rprop.toServer;[37m // line 1115, pos 27[0m
+   #39: [33mExpected '{' and instead saw 'rprop'.[0m
+       if ( rprop && dir == 'to' && rprop.toServer )   rprop = rprop.toServer;[37m // line 1115, pos 57[0m
+   #40: [33mExpected '!==' and instead saw '!='.[0m
+       if ( rprop && dir != 'to' && rprop.fromServer ) rprop = rprop.fromServer;[37m // line 1116, pos 27[0m
+   #41: [33mExpected '{' and instead saw 'rprop'.[0m
+       if ( rprop && dir != 'to' && rprop.fromServer ) rprop = rprop.fromServer;[37m // line 1116, pos 57[0m
+   #42: [33mExpected '{' and instead saw 'delete'.[0m
+       delete val.initialized;[37m // line 1189, pos 13[0m
+   #43: [33mExpected '{' and instead saw 'this'.[0m
+       this.set('sortBy',val.sortBy);[37m // line 1191, pos 13[0m
+   #44: [33mExpected '{' and instead saw 'this'.[0m
+       if ( this.pagModel ) this.pagModel.setAttrs(val);[37m // line 1193, pos 30[0m
+   #45: [33mExpected '{' and instead saw 'return'.[0m
+       if ( !val ) return;[37m // line 1208, pos 21[0m
+   #46: [33mExpected '{' and instead saw 'this'.[0m
+       this.resizePaginator();[37m // line 1225, pos 13[0m
+   #47: [33m'prop_nitems' is defined but never used.[0m
+       prop_nitems = this._srvPagMapObj('totalItems'),[37m // line 407, pos 28[0m

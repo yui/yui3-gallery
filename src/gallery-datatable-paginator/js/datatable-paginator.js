@@ -1,5 +1,3 @@
-YUI.add('gallery-datatable-paginator', function (Y, NAME) {
-
 /**
  Defines a Y.DataTable class extension to add capability to support a Paginator View-Model and allow
  paging of actively displayed data within the DT instance.
@@ -1008,6 +1006,7 @@ Y.mix( DtPaginator.prototype, {
      * @private
      */
     _afterDSResponse: function(e) {
+        //Y.log('afterDSResponse ...');
         this._afterRemoteResponse(e,'ds');
     },
 
@@ -1028,6 +1027,7 @@ Y.mix( DtPaginator.prototype, {
      * @private
      */
     _afterMLResponse: function(resp){
+        //Y.log('afterMLResponse ...');
         this._afterRemoteResponse(resp,'mlist');
     },
 
@@ -1233,6 +1233,3 @@ Y.mix( DtPaginator.prototype, {
 
 Y.DataTable.Paginator = DtPaginator;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Paginator]);
-
-
-}, 'gallery-2012.12.05-21-01');

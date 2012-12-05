@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-datatable-paginator",
+    "displayName": "Gallery: datatable-paginator",
+    "description": "A class extension to allow display of data in DataTable via the PaginatorView paginator.",
+    "author"     : [ "stlsmiths" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
