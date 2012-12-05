@@ -1,0 +1,81 @@
+<div class="intro">
+    <p>This example shows how to use other styling libraries.</p>
+</div>
+<style>
+    @font-face {
+      font-family: "FontAwesome";
+      src: url('{{componentAssets}}/fontawesome-webfont.eot');
+      src: url('{{componentAssets}}/fontawesome-webfont.eot?#iefix') format('eot'), url('{{componentAssets}}/fontawesome-webfont.woff') format('woff'), url('{{componentAssets}}/fontawesome-webfont.ttf') format('truetype'), url('{{componentAssets}}/fontawesome-webfont.svg#FontAwesome') format('svg');
+      font-weight: normal;
+      font-style: normal;
+    }
+</style>
+
+<link rel="stylesheet" type="text/css" href="{{componentAssets}}/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="{{componentAssets}}/font-awesome.css">
+<div class="example yui3-skin-sam">
+    {{>awesome-markup}}
+    <script>
+        YUI().use('gallery-button-plugin','node','event', function (Y) {
+            {{>awesome-code}}
+        });
+    </script>
+</div>
+<p>This plugin is not limited to YUI's `cssbutton`  styling library.
+In this example, we use <a href="http://twitter.github.com/bootstrap">Bootstrap</a>
+and <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>.
+Incidentally, it is also affecting this document itself since there is no
+way to limit its usage to a particular area of the page, thus `code` and <a href="#">links</a>
+don't follow the pattern of the rest of the documentation and the headings
+at the top of the page look squeezed.</p>
+
+<p>While YUI uses CSS classNames with the prefix `yui3-` for most of its classes,
+other libraries don't hold to any particular convention and sometimes even
+redefine whole HTML tags.  `gallery-button-plugin` comes preset for using the
+`cssbutton` sub-module, part of the YUI Button module.  For other libraries,
+it can be customized.</p>
+```
+{{>awesome-markup}}
+```
+<p>The HTML above combines CSS classNames starting with `yui3-` for functionality
+not related to styling with other used by the alternate styling library such as
+ `btn`, `btn-group`, `disabled`, `btn-danger` or `btn-success`.
+See the <a href="http://fortawesome.github.com/Font-Awesome/#examples">examples</a>
+and also <a href="http://twitter.github.com/bootstrap/base-css.html#buttons">this</a>.</p>
+
+<p>One obvious difference is that some of the buttons are not actually `<button>` tags
+but anchor `<a>` elements.  The plugin doesn't mind what the actual DOM elements
+are since all it does is manipulate CSS classNames and ARIA status.</p>
+
+```
+{{>awesome-code}}
+```
+<p>There are two ways to manipulate styling.  One is to override the defaults
+by setting the CSS classNames directly in the `Y.ButtonToggle` object,
+as shown in the first two lines above.  Those CSS classNames will be used for
+all toggles unless stated otherwise.</p>
+
+<p>The other alternative is to set them for a specific set of buttons, as shown
+in the last few lines. Both arguments to `addToggles` are optional.  The first
+is where to look for the toggles or groups and it defaults to the whole document.
+The second can be an object with alternate values for the CSS classNames used by the
+plugin.  They are:</p>
+<dl>
+    <dt>C_TOGGLE</dt>
+        <dd>CSS className used to identify toggle buttons.
+        Buttons not marked with this className are ignored by the plugin and operate as regular ones.
+         Defaults to `yui3-button-toggle`</dd>
+    <dt>C_SELECTED</dt>
+        <dd>CSS className used to identify selected toggle buttons, and to assign to them when selected. Defaults to `yui3-button-selected`</dd>
+    <dt>C_NOT_SELECTED</dt>
+        <dd>CSS className used to identify toggle buttons not selected or to assign it to them.
+        Mostly used for styling purposes when the inactive state also needs a CSS className assigned.
+        Defaults to none</dd>
+    <dt>C_EXCLUSIVE</dt>
+        <dd>CSS className used to identify groups of mutually exclusive toggle buttons, defaults to `yui3-button-group-exclusive`</dd>
+</dl>
+<hr/>
+<p><a href="http://twitter.github.com/bootstrap">Bootstrap</a> is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>,
+documentation under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.<br/>
+The <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a> webfont and CSS files are licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.
+</p>

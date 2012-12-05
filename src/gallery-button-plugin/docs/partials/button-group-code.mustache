@@ -1,0 +1,35 @@
+// Plug in all suitable buttons in the toolbar
+Y.ButtonPlugin.addToggles('#toolbar');
+
+// After two seconds, select the button 2 on the first group
+window.setTimeout(function() {
+    Y.one('#group').set('selected','#toggle02');
+},2000);
+
+// Listen to clicks on the first group and log selected one
+Y.delegate('click', function(ev) {
+    var selected = ev.container.get('selected');
+    Y.log('Clicked: ' + ev.currentTarget.getHTML() + ', selected: ' + (selected?selected.getContent():'none'));
+},'#group', 'button.yui3-button-toggle');
+
+// Listen to clicks on the second group and log selected one
+Y.delegate('click', function(ev) {
+    var selected = ev.container.get('selected');
+    Y.log('Clicked: ' + ev.currentTarget.getHTML() + ', selected: ' + (selected?selected.getContent():'none'));
+},'#preselectedgroup', 'button.yui3-button-toggle');
+
+// Listen to clicks on the third and log all selected
+Y.delegate('click', function(ev) {
+    var sel = [];
+    ev.container.all('button').each(function(button) {
+        if (button.get('selected')) {
+            sel.push(button.getHTML());
+        }
+    });
+    Y.log('Clicked: ' + ev.currentTarget.getHTML() + ',  selected: ' + sel.join(','));
+},'#nonexclusive', 'button.yui3-button-toggle');
+
+//No toggling here, simply log clicks.
+Y.delegate('click', function(ev) {
+    Y.log('Clicked: ' + ev.currentTarget.getHTML());
+},'#regularbuttons', 'button.yui3-button');

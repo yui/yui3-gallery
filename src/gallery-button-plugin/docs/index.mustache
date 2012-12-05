@@ -1,0 +1,112 @@
+<div class="intro">
+    <p>
+    {{displayName}} is a plugin for Y.Node that converts regular buttons marked with a given className into toggle buttons.
+It will also make groups of toggle buttons within a container mutually exclusive of one another.
+    </p>
+</div>
+{{>getting-started}}
+<h2>Description</h2>
+
+<p>All browsers handle regular buttons in the proper way.
+Styling components abound, such as YUI's own CSS Button, now part of the Button module.
+The only thing browsers don't do well is toggle buttons and groups of
+toggle buttons. This adds the toggling behavior to buttons properly marked
+without any undue costs in terms of code size.</p>
+
+<h2>Usage</h2>
+
+<p>The `Y.ButtonPlugin` class has a single static public method `addToggles`,
+which will search within the given container (or the document body if none given)
+for buttons marked with the `yui3-button-toggle` className
+and make them behave as toggle buttons.</p>
+
+<p>To do that it will add itself as a plugin to the `Node` instances wrapping the buttons.
+The plugged-in buttons will have a `selected` attribute
+which will return the pressed state of the button.</p>
+
+<p>The `addToggles` method will also search for any container marked with the
+`yui3-button-group-exclusive` className and make sure that only one toggle button
+within it is pressed at any time.
+It also adds a `selected` attribute to such container which points to the selected button.
+Buttons within the group have to be marked
+as toggles by giving them the `yui3-button-toggle` className,
+just as with any other toggle buttons.</p>
+
+<p>Toggle buttons marked with the `yui3-button-selected` className will be shown depressed.</p>
+
+<p>The plugin adds the `aria-pressed` attribute to active toggle buttons.</p>
+
+<p>The plugin defaults to using the `cssbutton` module for styling, however, they are not included
+and other styling libraries can be used instead. For the rest of this guide, the CSS Button is assumed.
+Thus, buttons also have to be marked with the `yui3-button` className to have the proper styling.</p>
+
+<p>Regular buttons or groups of otherwise unrelated buttons,
+be them toggles or not, need no special handling so this plugin ignores them.
+The plugin doesn't interfere with other elements that do have a `selected` attribute,
+such as dropdown boxes, nor does it add such attribute to any other element but those explicitly marked
+via the classNames mentioned above.</p>
+
+<p>The plugin fits well with any template engine as such engine would be used
+initially to create the markup, either in the client or the server,
+and then the plugin would run and activate the toggling on the marked elements.</p>
+
+<h2>Example</h2>
+
+<p>Assuming the following markup:</p>
+```
+<div id="toolbar">
+    <!-- Single toggle button -->
+    <button id="toggle0" class="yui3-button yui3-button-toggle">toggle</button>
+
+    <!-- Set of mutually exclusive toggle buttons, the third is pre-selected -->
+    <span id="group" class="yui3-button-group-exclusive">
+           <button id="toggle11" class="yui3-button yui3-button-toggle">A</button>
+           <button id="toggle12" class="yui3-button yui3-button-toggle">B</button>
+           <button id="toggle13" class="yui3-button yui3-button-toggle yui3-button-selected">C</button>
+    </span>
+</div>
+```
+<p>This code will turn the above markup into a toggle button and a group of
+mutually exclusive toggle buttons:</p>
+```
+YUI().use('gallery-button-plugin', function(Y) {
+
+    // Adds the toggling behavior to any properly marked button in the given element.
+    Y.ButtonPlugin.addToggles('#toolbar');
+
+    // Reports the pressed state of the toggle whenever it is clicked
+     Y.one('#toggle0').on('click', function (){
+         Y.log('click on toggle, selected: '  + this.get('selected'));
+     });
+
+    // Makes sure it starts unselected
+    Y.one('#toggle0').set('selected', false);
+
+    // selects the B button, overriding the one pre-selected in the markup
+    Y.one('#group').set('selected','#toggle12');
+
+    // Uses event delegation to detect the toggling of the buttons in the group
+    Y.delegate('click', function(ev) {
+
+          // The selected attribute of the container points to the toggle button currently selected
+          // it may return null if no button is pressed.
+          var selected = ev.container.get('selected');
+
+          // Shows the label of the button selected or none
+          Y.log('group click, selected: ' + (selected?selected.getContent():'none'));
+     },'#group', 'button');
+
+});
+```
+<p>Note that in the code above, the `selected` attribute of the toggle buttons is handled via the
+standard `set` and `get` methods of `Y.Node` as if the elements affected
+have always had that attribute.  In the case of groups, there is the
+`selected` attribute of the group element, which points to the pressed
+toggle, and the individual `selected` attribute in each of the buttons.
+The first returns a Node reference, the second, a boolean.</p>
+
+<p>There is no event added to the Nodes.  Changes in the selected status are
+likely to come from clicking on the buttons and thus, this is the method to listen to.</p>
+
+
+

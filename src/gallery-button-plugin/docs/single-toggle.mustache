@@ -1,0 +1,48 @@
+<div class="intro">
+<p>This example shows a simple toggle button.</p>
+</div>
+<div class="example yui3-skin-sam">
+{{>single-toggle-markup}}
+<div id="console" style="display: inline-block; margin-left: 5em;"></div>
+<script>
+YUI().use('gallery-button-plugin','node','event','console','cssbutton', function (Y) {
+    new Y.Console({style:'inline'}).render('#console');
+{{>single-toggle-code}}
+});
+</script>
+
+</div>
+<h3>Creating a simple toggle button</h3>
+
+<p>Two buttons were created on this page with the following markup:</p>
+```
+{{>single-toggle-markup}}
+```
+<p>The one on the left is a toggle button, the one on the right a normal one.
+The toggle button has the `yui3-button-toggle` that allows the plugin to recognize it
+as such.
+Both have the `yui3-button` for styling purposes.</p>
+
+<p>You should be able to click on both buttons and see their status reflected on the
+console panel. The same effect can be obtained by pressing the space bar or the enter
+key when the button has the focus, but that is the normal behavior in all browsers.</p>
+
+```
+{{>single-toggle-code}}
+```
+<p>The code for this page calls the static `Y.ButtonPlugin.addToggles` method
+to attach the plugin to any button marked with the `yui3-button-toggle` className.
+Since no CSS selector was passed to `addToggles`, it will scan the whole document
+looking for such buttons.</p>
+
+<p>It then gets a node reference to the toggle button. It sets a listener for the
+`click` event on it.  When a click event happens, it logs the `selected` attribute
+of the button, which should change on each click.</p>
+
+<p>The `selected` attribute is not just for reading.  When setting it, the button
+changes to the pressed state and the `selected` attribute reflect the change.
+The same effect might have been obtained by adding the `yui3-button-selected`
+CSS className to the button.</p>
+
+<p>For the sake of comparison, a regular button was also provided which,
+as the log shows, it has no `selected` attribute and shows as `undefined`.</p>

@@ -1,0 +1,20 @@
+// Add the plugin to all suitable buttons
+Y.ButtonPlugin.addToggles();
+
+// locate the button
+var toggleButton = Y.one('#toggle');
+
+// listen to clicks and log its state
+toggleButton.on('click', function (){
+    Y.log('click on toggle, selected: '  + this.get('selected'));
+});
+
+// Switch the state, loging the before and after state
+Y.log('before toggle, selected: ' + toggleButton.get('selected'));
+toggleButton.set('selected',true);
+Y.log('after toggle, selected: ' + toggleButton.get('selected'));
+
+// You listen to regular buttons just the same way, but they don't have a selected attribute.
+Y.on('click', function() {
+    Y.log('click on regular, selected ' + this.get('selected'));
+},'#regular');

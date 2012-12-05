@@ -1,0 +1,36 @@
+{
+    "name"       : "gallery-button-plugin",
+    "displayName": "Gallery: gallery-button-plugin",
+    "description": "A plugin for Y.Node that converts regular buttons marked with a given className into toggle buttons.It will also make groups of toggle buttons within a container mutually exclusive of one another.",
+    "author"     : [ "Daniel Barreiro (a.k.a.: satyam)" ],
+    "use"        : ["gallery-button-plugin","cssbutton /*optional*/"],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name" : "single-toggle",
+            "displayName" : "Single toggle button",
+            "description" : "Shows how to create and handle a single toggle button.",
+            "modules" : ["gallery-button-plugin"],
+            "tags" : ["button", "toggle"],
+            "hideTableOfContents": true
+        },
+        {
+            "name" : "button-group",
+            "displayName" : "Groups of toggle buttons",
+            "description" : "Shows how to create and handle multiple mutually exclusive toggle buttons.",
+            "modules" : ["gallery-button-plugin"],
+            "tags" : ["button", "toggle", "groups"],
+            "hideTableOfContents": true
+        },
+        {
+            "name" : "awesome",
+            "displayName" : "Using Bootstrap and Font Awesome",
+            "description" : "Shows usage of alternate styling libraries.",
+            "modules" : ["gallery-button-plugin"],
+            "tags" : ["button", "toggle", "groups","bootstrap", "twitter", "awesome"],
+            "hideTableOfContents": true
+        }
+    ]
+}

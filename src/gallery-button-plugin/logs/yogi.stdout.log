@@ -1,0 +1,32 @@
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-button-plugin
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5000
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [FWTreeView Test Suite]: Passed: 4 Failed: 0 Total: 4 (ignored 0) (0.062 seconds) 93%
+Writing files in JSON format to: /src/gallery-button-plugin/logs/tests.json
+
+----------------+-----------+-----------+-----------+-----------+
+File            |   % Stmts |% Branches |   % Funcs |   % Lines |
+----------------+-----------+-----------+-----------+-----------+
+   build/       |      93.1 |     84.21 |       100 |      93.1 |
+      All files |      93.1 |     84.21 |       100 |      93.1 |
+----------------+-----------+-----------+-----------+-----------+
+All files       |      93.1 |     84.21 |       100 |      93.1 |
+----------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 93.1% ( 54/58 )
+Branches     : 84.21% ( 32/38 )
+Functions    : 100% ( 9/9 )
+Lines        : 93.1% ( 54/58 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 4 Failed: 0 Total: 4 (ignored 0) (0.062 seconds)
+  [Grover Execution Timer] 1.237 seconds
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  [32mgrover tests complete[39m

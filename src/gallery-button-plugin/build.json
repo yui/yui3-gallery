@@ -1,0 +1,11 @@
+{
+    "name": "gallery-button-plugin",
+    "builds": {
+        "gallery-button-plugin": {
+            "jsfiles": [
+                "button-plugin.js"
+            ],
+            "meta": {}
+        }
+    }
+}

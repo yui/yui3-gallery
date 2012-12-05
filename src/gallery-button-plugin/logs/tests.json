@@ -1,0 +1,1667 @@
+{
+    "name": "FWTreeView Test Suite",
+    "passed": 4,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 4,
+    "duration": 62,
+    "type": "report",
+    "FWTreeView": {
+        "name": "FWTreeView",
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 4,
+        "duration": 61,
+        "type": "testcase",
+        "Test basic toggling": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test basic toggling",
+            "duration": 17
+        },
+        "test group": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test group",
+            "duration": 5
+        },
+        "alternative classnames": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "alternative classnames",
+            "duration": 2
+        },
+        "more alternative classnames": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "more alternative classnames",
+            "duration": 2
+        }
+    },
+    "timestamp": "Wed 05 Dec 2012 03:02:48 PM CST",
+    "coverage": {
+        "build/cdn_gallery-2012.12.05-21-01/": {
+            "path": "build/cdn_gallery-2012.12.05-21-01/",
+            "s": {
+                "1": 1,
+                "2": 1,
+                "3": 41,
+                "4": 41,
+                "5": 30,
+                "6": 6,
+                "7": 5,
+                "8": 31,
+                "9": 31,
+                "10": 31,
+                "11": 25,
+                "12": 18,
+                "13": 25,
+                "14": 7,
+                "15": 25,
+                "16": 25,
+                "17": 25,
+                "18": 6,
+                "19": 6,
+                "20": 6,
+                "21": 6,
+                "22": 0,
+                "23": 6,
+                "24": 12,
+                "25": 6,
+                "26": 6,
+                "27": 0,
+                "28": 0,
+                "29": 31,
+                "30": 8,
+                "31": 8,
+                "32": 8,
+                "33": 8,
+                "34": 6,
+                "35": 2,
+                "36": 2,
+                "37": 8,
+                "38": 5,
+                "39": 3,
+                "40": 3,
+                "41": 3,
+                "42": 3,
+                "43": 3,
+                "44": 2,
+                "45": 1,
+                "46": 3,
+                "47": 3,
+                "48": 5,
+                "49": 5,
+                "50": 5,
+                "51": 5,
+                "52": 1,
+                "53": 4,
+                "54": 5,
+                "55": 0,
+                "56": 5,
+                "57": 1,
+                "58": 1
+            },
+            "b": {
+                "1": [
+                    30,
+                    6,
+                    5
+                ],
+                "2": [
+                    25,
+                    6,
+                    0
+                ],
+                "3": [
+                    18,
+                    7
+                ],
+                "4": [
+                    10,
+                    8
+                ],
+                "5": [
+                    7,
+                    18
+                ],
+                "6": [
+                    3,
+                    4
+                ],
+                "7": [
+                    14,
+                    11
+                ],
+                "8": [
+                    6,
+                    0
+                ],
+                "9": [
+                    6,
+                    0
+                ],
+                "10": [
+                    6,
+                    6
+                ],
+                "11": [
+                    6,
+                    2
+                ],
+                "12": [
+                    2,
+                    0
+                ],
+                "13": [
+                    2,
+                    1
+                ],
+                "14": [
+                    3,
+                    0
+                ],
+                "15": [
+                    5,
+                    4
+                ],
+                "16": [
+                    5,
+                    3
+                ],
+                "17": [
+                    1,
+                    4
+                ],
+                "18": [
+                    0,
+                    5
+                ]
+            },
+            "f": {
+                "1": 1,
+                "2": 41,
+                "3": 31,
+                "4": 12,
+                "5": 8,
+                "6": 5,
+                "7": 3,
+                "8": 3,
+                "9": 5
+            },
+            "fnMap": {
+                "1": {
+                    "name": "(anonymous_1)",
+                    "line": 1,
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 33
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 52
+                        }
+                    }
+                },
+                "2": {
+                    "name": "(anonymous_2)",
+                    "line": 73,
+                    "loc": {
+                        "start": {
+                            "line": 73,
+                            "column": 25
+                        },
+                        "end": {
+                            "line": 73,
+                            "column": 37
+                        }
+                    }
+                },
+                "3": {
+                    "name": "(anonymous_3)",
+                    "line": 93,
+                    "loc": {
+                        "start": {
+                            "line": 93,
+                            "column": 25
+                        },
+                        "end": {
+                            "line": 93,
+                            "column": 41
+                        }
+                    }
+                },
+                "4": {
+                    "name": "(anonymous_4)",
+                    "line": 118,
+                    "loc": {
+                        "start": {
+                            "line": 118,
+                            "column": 58
+                        },
+                        "end": {
+                            "line": 118,
+                            "column": 74
+                        }
+                    }
+                },
+                "5": {
+                    "name": "(anonymous_5)",
+                    "line": 138,
+                    "loc": {
+                        "start": {
+                            "line": 138,
+                            "column": 26
+                        },
+                        "end": {
+                            "line": 138,
+                            "column": 42
+                        }
+                    }
+                },
+                "6": {
+                    "name": "(anonymous_6)",
+                    "line": 148,
+                    "loc": {
+                        "start": {
+                            "line": 148,
+                            "column": 27
+                        },
+                        "end": {
+                            "line": 148,
+                            "column": 39
+                        }
+                    }
+                },
+                "7": {
+                    "name": "(anonymous_7)",
+                    "line": 161,
+                    "loc": {
+                        "start": {
+                            "line": 161,
+                            "column": 25
+                        },
+                        "end": {
+                            "line": 161,
+                            "column": 41
+                        }
+                    }
+                },
+                "8": {
+                    "name": "(anonymous_8)",
+                    "line": 175,
+                    "loc": {
+                        "start": {
+                            "line": 175,
+                            "column": 33
+                        },
+                        "end": {
+                            "line": 175,
+                            "column": 46
+                        }
+                    }
+                },
+                "9": {
+                    "name": "(anonymous_9)",
+                    "line": 193,
+                    "loc": {
+                        "start": {
+                            "line": 193,
+                            "column": 20
+                        },
+                        "end": {
+                            "line": 193,
+                            "column": 53
+                        }
+                    }
+                }
+            },
+            "statementMap": {
+                "1": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 261,
+                        "column": 67
+                    }
+                },
+                "2": {
+                    "start": {
+                        "line": 18,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 213,
+                        "column": 2
+                    }
+                },
+                "3": {
+                    "start": {
+                        "line": 74,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 74,
+                        "column": 59
+                    }
+                },
+                "4": {
+                    "start": {
+                        "line": 75,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 82,
+                        "column": 13
+                    }
+                },
+                "5": {
+                    "start": {
+                        "line": 77,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 77,
+                        "column": 48
+                    }
+                },
+                "6": {
+                    "start": {
+                        "line": 79,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 79,
+                        "column": 48
+                    }
+                },
+                "7": {
+                    "start": {
+                        "line": 81,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 81,
+                        "column": 70
+                    }
+                },
+                "8": {
+                    "start": {
+                        "line": 94,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 94,
+                        "column": 66
+                    }
+                },
+                "9": {
+                    "start": {
+                        "line": 95,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 96,
+                        "column": 43
+                    }
+                },
+                "10": {
+                    "start": {
+                        "line": 97,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 127,
+                        "column": 13
+                    }
+                },
+                "11": {
+                    "start": {
+                        "line": 100,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 102,
+                        "column": 21
+                    }
+                },
+                "12": {
+                    "start": {
+                        "line": 101,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 101,
+                        "column": 81
+                    }
+                },
+                "13": {
+                    "start": {
+                        "line": 103,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 105,
+                        "column": 21
+                    }
+                },
+                "14": {
+                    "start": {
+                        "line": 104,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 104,
+                        "column": 86
+                    }
+                },
+                "15": {
+                    "start": {
+                        "line": 106,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 106,
+                        "column": 85
+                    }
+                },
+                "16": {
+                    "start": {
+                        "line": 107,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 107,
+                        "column": 51
+                    }
+                },
+                "17": {
+                    "start": {
+                        "line": 108,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 108,
+                        "column": 26
+                    }
+                },
+                "18": {
+                    "start": {
+                        "line": 111,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 117,
+                        "column": 21
+                    }
+                },
+                "19": {
+                    "start": {
+                        "line": 112,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 112,
+                        "column": 46
+                    }
+                },
+                "20": {
+                    "start": {
+                        "line": 113,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 113,
+                        "column": 51
+                    }
+                },
+                "21": {
+                    "start": {
+                        "line": 114,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 114,
+                        "column": 82
+                    }
+                },
+                "22": {
+                    "start": {
+                        "line": 116,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 116,
+                        "column": 52
+                    }
+                },
+                "23": {
+                    "start": {
+                        "line": 118,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 122,
+                        "column": 23
+                    }
+                },
+                "24": {
+                    "start": {
+                        "line": 119,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 121,
+                        "column": 25
+                    }
+                },
+                "25": {
+                    "start": {
+                        "line": 120,
+                        "column": 28
+                    },
+                    "end": {
+                        "line": 120,
+                        "column": 54
+                    }
+                },
+                "26": {
+                    "start": {
+                        "line": 123,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 123,
+                        "column": 26
+                    }
+                },
+                "27": {
+                    "start": {
+                        "line": 125,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 125,
+                        "column": 69
+                    }
+                },
+                "28": {
+                    "start": {
+                        "line": 126,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 126,
+                        "column": 26
+                    }
+                },
+                "29": {
+                    "start": {
+                        "line": 128,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 128,
+                        "column": 25
+                    }
+                },
+                "30": {
+                    "start": {
+                        "line": 139,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 139,
+                        "column": 65
+                    }
+                },
+                "31": {
+                    "start": {
+                        "line": 140,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 140,
+                        "column": 45
+                    }
+                },
+                "32": {
+                    "start": {
+                        "line": 141,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 141,
+                        "column": 36
+                    }
+                },
+                "33": {
+                    "start": {
+                        "line": 143,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 147,
+                        "column": 13
+                    }
+                },
+                "34": {
+                    "start": {
+                        "line": 144,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 144,
+                        "column": 67
+                    }
+                },
+                "35": {
+                    "start": {
+                        "line": 145,
+                        "column": 19
+                    },
+                    "end": {
+                        "line": 147,
+                        "column": 13
+                    }
+                },
+                "36": {
+                    "start": {
+                        "line": 146,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 146,
+                        "column": 72
+                    }
+                },
+                "37": {
+                    "start": {
+                        "line": 148,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 150,
+                        "column": 15
+                    }
+                },
+                "38": {
+                    "start": {
+                        "line": 149,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 149,
+                        "column": 56
+                    }
+                },
+                "39": {
+                    "start": {
+                        "line": 162,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 162,
+                        "column": 65
+                    }
+                },
+                "40": {
+                    "start": {
+                        "line": 163,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 163,
+                        "column": 44
+                    }
+                },
+                "41": {
+                    "start": {
+                        "line": 164,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 164,
+                        "column": 36
+                    }
+                },
+                "42": {
+                    "start": {
+                        "line": 166,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 167,
+                        "column": 51
+                    }
+                },
+                "43": {
+                    "start": {
+                        "line": 169,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 173,
+                        "column": 13
+                    }
+                },
+                "44": {
+                    "start": {
+                        "line": 170,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 170,
+                        "column": 64
+                    }
+                },
+                "45": {
+                    "start": {
+                        "line": 172,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 172,
+                        "column": 104
+                    }
+                },
+                "46": {
+                    "start": {
+                        "line": 175,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 177,
+                        "column": 29
+                    }
+                },
+                "47": {
+                    "start": {
+                        "line": 176,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 176,
+                        "column": 73
+                    }
+                },
+                "48": {
+                    "start": {
+                        "line": 194,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 194,
+                        "column": 61
+                    }
+                },
+                "49": {
+                    "start": {
+                        "line": 195,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 200,
+                        "column": 33
+                    }
+                },
+                "50": {
+                    "start": {
+                        "line": 201,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 201,
+                        "column": 51
+                    }
+                },
+                "51": {
+                    "start": {
+                        "line": 202,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 206,
+                        "column": 13
+                    }
+                },
+                "52": {
+                    "start": {
+                        "line": 203,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 203,
+                        "column": 64
+                    }
+                },
+                "53": {
+                    "start": {
+                        "line": 205,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 205,
+                        "column": 96
+                    }
+                },
+                "54": {
+                    "start": {
+                        "line": 207,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 211,
+                        "column": 13
+                    }
+                },
+                "55": {
+                    "start": {
+                        "line": 208,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 208,
+                        "column": 63
+                    }
+                },
+                "56": {
+                    "start": {
+                        "line": 210,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 210,
+                        "column": 98
+                    }
+                },
+                "57": {
+                    "start": {
+                        "line": 228,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 231,
+                        "column": 2
+                    }
+                },
+                "58": {
+                    "start": {
+                        "line": 257,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 257,
+                        "column": 21
+                    }
+                }
+            },
+            "branchMap": {
+                "1": {
+                    "line": 75,
+                    "type": "switch",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 77,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 77,
+                                "column": 48
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 79,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 79,
+                                "column": 48
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 81,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 81,
+                                "column": 70
+                            }
+                        }
+                    ]
+                },
+                "2": {
+                    "line": 97,
+                    "type": "switch",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 100,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 108,
+                                "column": 26
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 111,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 123,
+                                "column": 26
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 125,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 126,
+                                "column": 26
+                            }
+                        }
+                    ]
+                },
+                "3": {
+                    "line": 100,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 100,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 100,
+                                "column": 20
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 100,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 100,
+                                "column": 20
+                            }
+                        }
+                    ]
+                },
+                "4": {
+                    "line": 101,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 101,
+                                "column": 35
+                            },
+                            "end": {
+                                "line": 101,
+                                "column": 45
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 101,
+                                "column": 46
+                            },
+                            "end": {
+                                "line": 101,
+                                "column": 59
+                            }
+                        }
+                    ]
+                },
+                "5": {
+                    "line": 103,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 103,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 103,
+                                "column": 20
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 103,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 103,
+                                "column": 20
+                            }
+                        }
+                    ]
+                },
+                "6": {
+                    "line": 104,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 104,
+                                "column": 36
+                            },
+                            "end": {
+                                "line": 104,
+                                "column": 46
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 104,
+                                "column": 47
+                            },
+                            "end": {
+                                "line": 104,
+                                "column": 60
+                            }
+                        }
+                    ]
+                },
+                "7": {
+                    "line": 106,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 106,
+                                "column": 31
+                            },
+                            "end": {
+                                "line": 106,
+                                "column": 45
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 106,
+                                "column": 46
+                            },
+                            "end": {
+                                "line": 106,
+                                "column": 63
+                            }
+                        }
+                    ]
+                },
+                "8": {
+                    "line": 111,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 111,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 111,
+                                "column": 20
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 111,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 111,
+                                "column": 20
+                            }
+                        }
+                    ]
+                },
+                "9": {
+                    "line": 114,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 114,
+                                "column": 69
+                            },
+                            "end": {
+                                "line": 114,
+                                "column": 75
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 114,
+                                "column": 76
+                            },
+                            "end": {
+                                "line": 114,
+                                "column": 80
+                            }
+                        }
+                    ]
+                },
+                "10": {
+                    "line": 119,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 119,
+                                "column": 24
+                            },
+                            "end": {
+                                "line": 119,
+                                "column": 24
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 119,
+                                "column": 24
+                            },
+                            "end": {
+                                "line": 119,
+                                "column": 24
+                            }
+                        }
+                    ]
+                },
+                "11": {
+                    "line": 143,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 143,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 143,
+                                "column": 12
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 143,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 143,
+                                "column": 12
+                            }
+                        }
+                    ]
+                },
+                "12": {
+                    "line": 145,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 145,
+                                "column": 19
+                            },
+                            "end": {
+                                "line": 145,
+                                "column": 19
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 145,
+                                "column": 19
+                            },
+                            "end": {
+                                "line": 145,
+                                "column": 19
+                            }
+                        }
+                    ]
+                },
+                "13": {
+                    "line": 169,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 169,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 169,
+                                "column": 12
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 169,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 169,
+                                "column": 12
+                            }
+                        }
+                    ]
+                },
+                "14": {
+                    "line": 176,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 176,
+                                "column": 62
+                            },
+                            "end": {
+                                "line": 176,
+                                "column": 66
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 176,
+                                "column": 67
+                            },
+                            "end": {
+                                "line": 176,
+                                "column": 71
+                            }
+                        }
+                    ]
+                },
+                "15": {
+                    "line": 200,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 200,
+                                "column": 15
+                            },
+                            "end": {
+                                "line": 200,
+                                "column": 25
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 200,
+                                "column": 29
+                            },
+                            "end": {
+                                "line": 200,
+                                "column": 31
+                            }
+                        }
+                    ]
+                },
+                "16": {
+                    "line": 201,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 201,
+                                "column": 30
+                            },
+                            "end": {
+                                "line": 201,
+                                "column": 39
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 201,
+                                "column": 43
+                            },
+                            "end": {
+                                "line": 201,
+                                "column": 49
+                            }
+                        }
+                    ]
+                },
+                "17": {
+                    "line": 202,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 202,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 202,
+                                "column": 12
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 202,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 202,
+                                "column": 12
+                            }
+                        }
+                    ]
+                },
+                "18": {
+                    "line": 207,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 207,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 207,
+                                "column": 12
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 207,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 207,
+                                "column": 12
+                            }
+                        }
+                    ]
+                }
+            },
+            "code": [
+                "(function () { YUI.add('gallery-button-plugin', function (Y, NAME) {",
+                "",
+                "/**",
+                "\tNode plugin to handle toggle buttons and groups of mutually exclusive toggle buttons.",
+                "\tSearches a given container for buttons marked with the `yui3-button-toggle` className",
+                "\tand turns them into toggle buttons and also any HTML element with the `yui3-button-group-exclusive`",
+                "\tclassName and makes the toggle buttons within it mutually exclussive.",
+                "\tAdds the `selected` attribute, for toggle buttons it tells whether the button is in the pressed state,",
+                "\tfor groups of toggles points to the button currently presssed.",
+                "\tRelies on the cssbutton module for styling.",
+                "\t@module gallery-button-plugin",
+                "*/",
+                "/**",
+                "\t@class ButtonPlugin",
+                "\t@static",
+                "*/",
+                "",
+                "var C_BUTTON = 'yui3-button',",
+                "    SELECTED = 'selected',",
+                "    CLICK = 'click',",
+                "    DOT = '.',",
+                "    ARIA_PRESSED = 'aria-pressed',",
+                "    BUTTON_TOGGLE = 1,",
+                "    GROUP_TOGGLE = 2,",
+                "",
+                "    btn = {",
+                "        /**",
+                "            CSS className for selected buttons",
+                "            @property C_SELECTED",
+                "            @type String",
+                "            @default \"yui3-button-selected\"",
+                "            @static",
+                "         */",
+                "        C_SELECTED: C_BUTTON + '-selected',",
+                "",
+                "        /**",
+                "            CSS className for non-selected buttons",
+                "            @property C_NOT_SELECTED",
+                "            @type String",
+                "            @default \"\"",
+                "            @static",
+                "         */",
+                "        C_NOT_SELECTED: '',",
+                "",
+                "",
+                "        /**",
+                "            CSS className to identify toggle buttons",
+                "            @property C_TOGGLE",
+                "            @type String",
+                "            @default \"yui3-button-toggle\"",
+                "            @static",
+                "         */",
+                "        C_TOGGLE: C_BUTTON + '-toggle',",
+                "",
+                "        /**",
+                "            CSS className to identify elements containing mutually exclusive toggle buttons",
+                "            @property C_EXCLUSIVE",
+                "            @type String",
+                "            @default \"yui3-button-group-exclusive\"",
+                "            @static",
+                "         */",
+                "        C_EXCLUSIVE: C_BUTTON + '-group-exclusive',",
+                "",
+                "        /**",
+                "            Getter for the augmented `selected` Node attribute",
+                "            Returns the state of the toggle button or",
+                "            a Node reference to the toggle button selected within group.",
+                "            @method _selectedGetter",
+                "            @return Boolean for toggle buttons, Node reference for groups.",
+                "            @static",
+                "            @private",
+                "        */",
+                "        _selectedGetter: function () {",
+                "            console.log('_selectedSetter', this.get('id'));",
+                "            switch (this._toggleType) {",
+                "                case BUTTON_TOGGLE:",
+                "                    return this._toggleSelected;",
+                "                case GROUP_TOGGLE:",
+                "                    return this._selectedToggle;",
+                "                default:",
+                "                    return Y.Node.DEFAULT_GETTER.call(this, SELECTED);",
+                "            }",
+                "        },",
+                "",
+                "        /**",
+                "            Setter for the augmented `selected` Node attribute",
+                "            @method _selectedSetter",
+                "            @param value {Boolean|Node|String}  For toggle buttons: pressed state,",
+                "                   for groups of toggles, reference or css-selector of pressed button",
+                "            @static",
+                "            @private",
+                "        */",
+                "        _selectedSetter: function(value) {",
+                "            console.log('_selectedSetter', this.get('id'), value);",
+                "            var target = null,",
+                "                classes = this._cssClasses;",
+                "            switch (this._toggleType) {",
+                "",
+                "                case BUTTON_TOGGLE:",
+                "                    if (classes.C_SELECTED) {",
+                "                        this[value?'addClass':'removeClass'](classes.C_SELECTED);",
+                "                    }",
+                "                    if (classes.C_NOT_SELECTED) {",
+                "                        this[!value?'addClass':'removeClass'](classes.C_NOT_SELECTED);",
+                "                    }",
+                "                    this[value?'setAttribute':'removeAttribute'](ARIA_PRESSED, true);",
+                "                    this._toggleSelected = !!value;",
+                "                    break;",
+                "",
+                "                case GROUP_TOGGLE:",
+                "                    if (value) {",
+                "                        target = Y.one(value);",
+                "                        target.set(SELECTED, true);",
+                "                        this._selectedToggle = (target.get(SELECTED)?target:null);",
+                "                    } else {",
+                "                        this._selectedToggle = null;",
+                "                    }",
+                "                    this.all(DOT + classes.C_TOGGLE).each(function (node) {",
+                "                        if (node !== target) {",
+                "                            node.set(SELECTED, false);",
+                "                        }",
+                "                    });",
+                "                    break;",
+                "                default:",
+                "                    Y.Node.DEFAULT_SETTER.call(this,SELECTED, value);",
+                "                    break;",
+                "            }",
+                "            return value;",
+                "        },",
+                "",
+                "        /**",
+                "            Plugs into a toggle button.",
+                "            @method _addToggleButton",
+                "            @param node {Node} Reference to the Node to be plugged into.",
+                "            @private",
+                "            @static",
+                "        */",
+                "        _addToggleButton: function (node) {",
+                "            console.log('_addToggleButton', node.get('id'),this);",
+                "            node._toggleType = BUTTON_TOGGLE;",
+                "            node._cssClasses = this;",
+                "",
+                "            if (this.C_SELECTED) {",
+                "                node.set(SELECTED, node.hasClass(this.C_SELECTED));",
+                "            } else if (this.C_NOT_SELECTED) {",
+                "                node.set(SELECTED, !node.hasClass(this.C_NOT_SELECTED));",
+                "            }",
+                "            node.on(CLICK, function () {",
+                "                this.set(SELECTED, !this.get(SELECTED));",
+                "            });",
+                "",
+                "        },",
+                "",
+                "        /**",
+                "            Plugs into a container of mutually exclusive toggle buttons.",
+                "            @method _addButtonGroup",
+                "            @param node {Node} Reference to the container of the buttons.",
+                "            @private",
+                "            @static",
+                "        */",
+                "        _addButtonGroup: function (node) {",
+                "            console.log('_addButtonGroup', node.get('id'), this);",
+                "            node._toggleType = GROUP_TOGGLE;",
+                "            node._cssClasses = this;",
+                "",
+                "            var cssSelected = this.C_SELECTED,",
+                "                cssSelToggle = DOT + this.C_TOGGLE;",
+                "",
+                "            if (cssSelected) {",
+                "                node.set(SELECTED, node.one(DOT + cssSelected));",
+                "            } else {",
+                "                node.set(SELECTED,  node.one(cssSelToggle + ':not(' + DOT + this.C_NOT_SELECTED + ')'));",
+                "            }",
+                "",
+                "            node.delegate(CLICK, function(ev) {",
+                "                ev.container.set(SELECTED, this.get(SELECTED)?this:null);",
+                "            }, cssSelToggle);",
+                "        },",
+                "        /**",
+                "            Searches within the given container or the body of the document for",
+                "            buttons marked with the className `yui3-button-toggle`",
+                "            and elements with the className `yui3-button-group-exclusive` and",
+                "            plugs them with this module",
+                "            @method addToggles",
+                "            @param [container] {Node|string} Node instance or css selector of the",
+                "                button or button groups to be plugged into,",
+                "                or a container holding the buttons and groups.",
+                "                Assumes the document body if missing.",
+                "            @param [cssClasses] {Object} CSS classes to override",
+                "            @static",
+                "        */",
+                "",
+                "        addToggles: function (container, cssClasses) {",
+                "            console.log('addToggles', container, cssClasses);",
+                "            cssClasses = Y.merge({",
+                "                C_TOGGLE: btn.C_TOGGLE,",
+                "                C_SELECTED: btn.C_SELECTED,",
+                "                C_NOT_SELECTED: btn.C_NOT_SELECTED,",
+                "                C_EXCLUSIVE: btn.C_EXCLUSIVE",
+                "            }, cssClasses || {});",
+                "            container = Y.one(container || 'body');",
+                "            if (container.hasClass(cssClasses.C_TOGGLE)) {",
+                "                btn._addToggleButton.call(cssClasses,container);",
+                "            } else {",
+                "                container.all(DOT + cssClasses.C_TOGGLE).each(btn._addToggleButton, cssClasses);",
+                "            }",
+                "            if (container.hasClass(cssClasses.C_EXCLUSIVE)) {",
+                "                btn._addButtonGroup.call(cssClasses,container);",
+                "            } else {",
+                "                container.all(DOT + cssClasses.C_EXCLUSIVE).each(btn._addButtonGroup, cssClasses);",
+                "            }",
+                "        }",
+                "};",
+                "",
+                "",
+                "/**",
+                "    Augmented `selected` attribute.",
+                "",
+                "    - For toggle buttons a Boolean that indicates whether the button is pressed.",
+                "    - For groups of toggle buttons it can be:",
+                "",
+                "        * Node reference to the selected button (get or set).",
+                "        * null when none is selected or to deselect all (get or set).",
+                "        * A string representing a CSS selector (only on set).",
+                "    @for Node",
+                "    @attribute selected",
+                "*/",
+                "Y.Node.ATTRS[SELECTED] = {",
+                "    getter: btn._selectedGetter,",
+                "    setter: btn._selectedSetter",
+                "};",
+                "",
+                "/**",
+                "    Signals if it is a toggle button or a group of toggle buttons.",
+                "    1 for toggle buttons, 2 for groups of toggle buttons",
+                "    @property _toggleType",
+                "    @for Node",
+                "    @type integer",
+                "    @private",
+                " */",
+                " /**",
+                "    Holds a reference to the only pressed toggle button within a group",
+                "    @property _selectedToggle",
+                "    @for Node",
+                "    @type Y.Node",
+                "    @private",
+                " */",
+                " /**",
+                "    Hash with the CSS classNames to use/apply to this Node",
+                "    @property _cssClasses",
+                "    @for Node",
+                "    @type Object",
+                "    @private",
+                "  */",
+                "",
+                "",
+                "Y.ButtonPlugin = btn;",
+                "",
+                "",
+                "",
+                "}, '@VERSION@', {\"requires\": [\"node\"], \"optional\": [\"cssbutton\"]});",
+                "",
+                "}());"
+            ]
+        }
+    },
+    "coverageType": "istanbul"
+}

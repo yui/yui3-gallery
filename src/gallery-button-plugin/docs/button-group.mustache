@@ -1,0 +1,68 @@
+<div class="intro">
+    <p>This example shows samples of groups of buttons.</p>
+</div>
+<style>
+    fieldset {
+        border: thin solid silver;
+        display: inline;
+        padding: 3px;
+    }
+    legend {
+        font-size: x-small;
+    }
+</style>
+<div class="example yui3-skin-sam">
+{{>button-group-markup}}
+<div id="console" style="display: inline-block;"></div>
+<script>
+YUI().use('gallery-button-plugin','node','event','console','cssbutton', function (Y) {
+    new Y.Console({style:'inline'}).render('#console');
+    {{>button-group-code}}
+});
+</script>
+
+</div>
+<h3>Creating groups of buttons</h3>
+
+<p>An assortment of buttons were created via the following markup:</p>
+```
+{{>button-group-markup}}
+```
+<p>All the buttons have the `yui3-button` CSS className.
+The first three sets are toggle buttons and are marked as such by the `yui3-button-toggle`
+CSS className.</p>
+
+<p>Each set of three buttons is enclosed in a `<fieldset>` tag with a suitable legend.
+The first two such groups are mutually exclusive sets, as signaled by the `yui3-button-group-exclusive`
+CSS className. The third group, though it contains toggle buttons, does not force them to be exclusive
+of one another.</p>
+
+<p>A couple of buttons are marked with the `yui3-button-selected` CSS className and show
+in their pressed state.</p>
+
+<p>The first group will get a button selected after a couple of seconds of loading.
+This was done via code, not markup, as shown below.</p>
+
+
+```
+{{>button-group-code}}
+```
+<p>The code for this page calls the static `Y.ButtonPlugin.addToggles` method
+to attach the plugin to any suitable marked element within the element
+passed to it..</p>
+
+<p>To show how to select a button within a group via code, after a delay of two seconds
+using the `window.setTimeout` function, the second button on the first set was selected
+by giving the CSS selector for it.</p>
+
+<p>Listeners for all buttons are set via delegation.  In the first two cases,
+the button clicked and the resulting selected button (it can be none) is shown
+in the log console. You might either loop through all buttons to find which one
+has the `selected` attribute set or simply ask the group container for a reference
+to the selected element, as done in this example.</p>
+
+<p>For the third group, since they are not mutually exclusive, all the buttons
+with the `selected` attribute set are listed.  </p>
+
+<p>For the final group, there is no selection at all since they are regular buttons,
+the click is simply reported</p>
