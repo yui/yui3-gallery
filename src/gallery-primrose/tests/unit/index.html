@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <title>gallery-primrose</title>
+    <script src="/build/yui/yui.js"></script>
+    <script src="js/suite_test.js"></script>
+    <script src="js/spec_test.js"></script>
+    <script src="js/expectation_test.js"></script>
+  </head>
+  <body class="yui3-skin-sam">
+    <div id="logger"></div>
+
+    <script>
+      YUI({
+        modules: {
+          'gallery-primrose': {
+            fullpath: '../../../../../build/gallery-primrose/gallery-primrose.js'
+          }
+        },
+        coverage: ['gallery-primrose'],
+        filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+      }).use('test-console', 'test', 'primrose-suite-test', 'primrose-spec-test', 'primrose-expectation-test', function(Y) {
+
+        var suite = new Y.Test.Suite({
+          name: 'Primrose Test Suite'
+        });
+
+        suite.add(Y.Primrose.SuiteTest);
+        suite.add(Y.Primrose.SpecTest);
+        suite.add(Y.Primrose.ExpectationTest);
+
+        Y.Test.TestRunner.add(suite);
+
+        (new Y.Test.Console()).render('#logger');
+
+        Y.Test.Runner.setName('gallery-primrose');
+        Y.Test.Runner.run();
+      });
+    </script>
+  </body>
+</html>

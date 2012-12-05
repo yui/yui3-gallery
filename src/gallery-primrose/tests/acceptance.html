@@ -1,0 +1,104 @@
+<!doctype html>
+
+<html lang='en'>
+
+  <head>
+    <title>Primrose acceptance</title>
+  </head>
+
+  <body>
+    <script src="http://yui.yahooapis.com/3.7.3/build/yui/yui-min.js"></script>
+    <script>
+      YUI({
+        modules: {
+          'gallery-primrose': {
+            fullpath: '../../../build/gallery-primrose/gallery-primrose.js'
+          }
+        }
+      }).use('gallery-primrose', 'node', function (Y) {
+
+        var P = Y.Primrose, 
+            describe = P.describe, 
+            beforeEach = P.beforeEach,
+            it = P.it;
+
+        describe('Matchers', function () {
+          describe('toBe', function () {
+            it('asserts simple matches', function (expect) {
+              expect( 1 ).toBe( 1 );
+              expect( 1 ).not().toBe( 2 );
+            });
+          });
+          /*
+
+          describe('toBeTypeof', function () {
+            it('assets the type', function (expect) {
+              expect( "mystr" ).toBeTypeof( "string" );
+            });
+          });
+
+          describe('toMatch', function () {
+            it('matches a regex', function (expect) {
+              expect( 'foo' ).toMatch( /foo/ );
+              expect( 'bar' ).not().toMatch( /foo/ );
+            });
+          });
+
+          describe('toBeDefined', function () {
+            it('checks if defined', function (expect) {
+              var foo = 1;
+
+              expect( foo ).toBeDefined();
+              expect( undefined ).not().toBeDefined();
+            });
+          });
+          */
+
+          describe('toBeUndefined', function () {
+            it('checks if undefined', function (expect) {
+              var bar = 1;
+
+              expect( undefined ).toBeUndefined();
+              expect( bar ).not().toBeUndefined();
+            });
+          });
+
+          describe('toBeNaN', function () {
+            it('checks if NaN', function (expect) {
+              expect( 'str' ).toBeNaN();
+              expect( 1 ).not().toBeNaN();
+            });
+          });
+          
+          describe('toContain', function () {
+            describe('with an array', function () {
+              it('checks if it contains the element', function (expect) {
+                expect( ['foo', 'bar'] ).toInclude('bar');
+                expect( ['foo', 'bar'] ).not().toInclude('baz');
+              });
+            });
+
+            describe('with a string', function () {
+              it('checks if it contains the substring', function (expect) {
+                expect( 'foobar' ).toInclude('bar');
+                expect( 'foobar' ).not().toInclude('baz');
+              });
+            });
+          });
+        });
+
+        describe('word', function () {
+          describe('fucking rad', function () {
+            it('is something', function (expect) {
+              expect( 1 ).toBe( 1 );
+            });
+          });
+        });
+
+        Y.Primrose.addReporter(new Y.Primrose.LogReporter());
+
+        Y.Primrose.run();
+      });
+    </script>
+  </body>
+</html>

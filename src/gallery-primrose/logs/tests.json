@@ -1,0 +1,118 @@
+{
+    "name": "Primrose Test Suite",
+    "passed": 11,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 11,
+    "duration": 160,
+    "type": "report",
+    "Suite": {
+        "name": "Suite",
+        "passed": 2,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 2,
+        "duration": 32,
+        "type": "testcase",
+        "add: it should add children": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "add: it should add children",
+            "duration": 9
+        },
+        "run: it should run all children": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "run: it should run all children",
+            "duration": 9
+        }
+    },
+    "Spec": {
+        "name": "Spec",
+        "passed": 5,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 5,
+        "duration": 67,
+        "type": "testcase",
+        "add: it add an expectation": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "add: it add an expectation",
+            "duration": 2
+        },
+        "expect: it created an expectation for add": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "expect: it created an expectation for add",
+            "duration": 1
+        },
+        "run: it runs beforeList": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "run: it runs beforeList",
+            "duration": 2
+        },
+        "run: it should run the block": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "run: it should run the block",
+            "duration": 1
+        },
+        "run: it runs expectations": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "run: it runs expectations",
+            "duration": 1
+        }
+    },
+    "Expectation": {
+        "name": "Expectation",
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 4,
+        "duration": 54,
+        "type": "testcase",
+        "run: it runs validate": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "run: it runs validate",
+            "duration": 2
+        },
+        "not: it negates the expectation": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "not: it negates the expectation",
+            "duration": 0
+        },
+        "validate:it calls the validator": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "validate:it calls the validator",
+            "duration": 1
+        },
+        "validate: it sets the result": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "validate: it sets the result",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 05 Dec 2012 03:02:52 PM CST"
+}

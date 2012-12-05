@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-primrose",
+    "displayName": "Gallery: Primrose",
+    "description": "BDD testing library",
+    "author"     : [ "hojberg" ],
+
+    "tags": [ "gallery", "bdd", "test" ],
+
+    "examples": []
+}
