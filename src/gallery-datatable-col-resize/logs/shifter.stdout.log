@@ -1,0 +1,19 @@
+[35mshifter[0m [37m[info][0m revving up
+[35mshifter[0m [37m[info][0m looking for build.json file
+[35mshifter[0m [37m[info][0m found build.json file, shifting
+[35mshifter[0m [37m[info][0m putting the hammer down, let's build this thing!
+[35mshifter[0m [33m[warn][0m down shifting, can't find a meta directory
+[35mshifter[0m [37m[info][0m putting the hammer down
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-datatable-col-resize
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-datatable-col-resize
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m compressing gallery-datatable-col-resize/gallery-datatable-col-resize.js with UglifyJS
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting assets for gallery-datatable-col-resize
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-datatable-col-resize/gallery-datatable-col-resize.js
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-datatable-col-resize/gallery-datatable-col-resize-coverage.js
+[35mshifter[0m [37m[info][0m done racing, the gears are toast
+[35mshifter[0m [37m[info][0m finished in 0.066 seconds, pretty fast huh?

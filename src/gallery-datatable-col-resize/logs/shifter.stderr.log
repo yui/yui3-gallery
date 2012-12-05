@@ -1,0 +1,17 @@
+[35mshifter[0m [31m[err][0m /src/gallery-datatable-col-resize/js/gallery-datatable-col-resize.js contains 8 lint errors
+   #1: [33mMixed spaces and tabs.[0m
+       gripClass:{value: 'grip'},[37m // line 13, pos 4[0m
+   #2: [33mMixed spaces and tabs.[0m
+       var thead = this._host.get('boundingBox').one("thead");[37m // line 31, pos 6[0m
+   #3: [33mMixed spaces and tabs.[0m
+       var cells = thead.all("th");[37m // line 32, pos 6[0m
+   #4: [33mToo many var statements.[0m
+       var cells = thead.all("th");[37m // line 32, pos 15[0m
+   #5: [33mMixed spaces and tabs.[0m
+       this._afterHostSetHeaders(cells);[37m // line 33, pos 6[0m
+   #6: [33mMissing semicolon.[0m
+       }, this)[37m // line 34, pos 15[0m
+   #7: [33m'config' is defined but never used.[0m
+       function DatatableColResizePlugin(config) {[37m // line 3, pos 45[0m
+   #8: [33m'e' is defined but never used.[0m
+       this.afterHostEvent('render', function(e){[37m // line 30, pos 47[0m

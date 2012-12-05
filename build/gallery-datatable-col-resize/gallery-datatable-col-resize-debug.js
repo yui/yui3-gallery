@@ -1,4 +1,4 @@
-YUI.add('gallery-datatable-col-resize', function(Y) {
+YUI.add('gallery-datatable-col-resize', function (Y, NAME) {
 
     function DatatableColResizePlugin(config) {
         DatatableColResizePlugin.superclass.constructor.apply(this, arguments);
@@ -90,5 +90,4 @@ YUI.add('gallery-datatable-col-resize', function(Y) {
 
     Y.DatatableColResizePlugin = DatatableColResizePlugin;
 
-
-}, 'gallery-2012.10.31-20-00' ,{requires:['plugin', 'datatable', 'node', 'dd-plugin'], skinnable:true});
+}, 'gallery-2012.12.05-21-01', {"skinnable": false, "requires": ["plugin", "datatable", "node", "dd-plugin"]});

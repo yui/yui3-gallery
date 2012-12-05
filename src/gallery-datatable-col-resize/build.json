@@ -6,7 +6,7 @@
                 "gallery-datatable-col-resize.js"
             ],
             "config": {
-            	"skinnable":true,
+            	"skinnable":false,
                 "requires": [
                     "plugin", "datatable", "node", "dd-plugin"
                 ]
