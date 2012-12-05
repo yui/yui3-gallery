@@ -1,0 +1,21 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Iterate through an array.",
+    "displayName": "Gallery: Array Iterate",
+    "name": "gallery-array-iterate",
+    "tags": [
+        "array",
+        "each",
+        "for",
+        "gallery",
+        "iterate",
+        "loop",
+        "some",
+        "solmsted"
+    ],
+    "use": [
+        "gallery-array-iterate"
+    ]
+}

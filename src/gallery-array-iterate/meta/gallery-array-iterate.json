@@ -1,0 +1,5 @@
+{
+    "gallery-array-iterate": {
+        "requires": "yui-base"
+    }
+}

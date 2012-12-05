@@ -1,0 +1,98 @@
+<div class="intro">
+    <p>
+        Iterate through an array.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    Y.Array.each and Y.Array.some are useful iteration methods with a convenient API.  It is very common to need to iterate the items of an array starting with the first item moving forward one-by-one.
+    Occasionally, it is necessary to begin iterating part way through the array, or to iterate backwards, or to skip items in the array at regular intervals.  To accomplish this it was necessary to fall
+    back to using for loops, forsaking the convenient API provided by these methods.
+</p>
+<p>
+    Y.Array.iterate aims to provide a similar convenient API to replace any standard iteration for loop.  It works similarly to Y.Array.some except the start index and increment values can be specified.
+</p>
+<p>
+    This is a potential solution to Ticket #2531344: http://yuilibrary.com/projects/yui3/ticket/2531344
+</p>
+
+<h2>
+    Examples
+</h2>
+
+<h3>
+    Example: Iterate every Nth item
+</h3>
+
+```
+YUI().use('gallery-array-iterate', function(Y) {
+    var array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+        values = [];
+    
+    Y.Array.iterate(array, 3, function (value) {
+        values.push(value);
+    });
+
+    // values === [0, 3, 6, 9, 12, 15, 18, 21];
+});
+```
+
+<h3>
+    Example: Iterate backwards
+</h3>
+
+```
+YUI().use('gallery-array-iterate', function(Y) {
+    var array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+        values = [];
+    
+    Y.Array.iterate(array, -1, function (value) {
+        values.push(value);
+    });
+
+    // values === [21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+});
+```
+
+<h3>
+    Example: Specific start index
+</h3>
+
+```
+YUI().use('gallery-array-iterate', function(Y) {
+    var array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+        values = [];
+    
+    Y.Array.iterate(array, 15, -3, function (value) {
+        values.push(value);
+    });
+
+    // values === [15, 12, 9, 6, 3, 0];
+});
+```
+
+<h3>
+    Example: Early termination
+</h3>
+
+```
+YUI().use('gallery-array-iterate', function(Y) {
+    var array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21],
+        values = [];
+    
+    Y.Array.iterate(array, 4, 3, function (value, index) {
+        values.push(value);
+        if (index >= 13) {
+            return true;
+        }
+    });
+
+    // values === [4, 7, 10, 13];
+});
+```

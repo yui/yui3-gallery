@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-array-iterate": {
+            "jsfiles": [
+                "array-iterate.js"
+            ]
+        }
+    },
+    "name": "gallery-array-iterate"
+}
