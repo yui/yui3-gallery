@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src="http://yui.yahooapis.com/3.7.1/build/yui/yui-min.js"></script>
+	</head>
+	<body class="yui3-skin-sam">
+		<a href="out/index.html">API docs</a>
+		<h1>A Tree:</h1>
+		<div id="container"></div>
+        <button id="go">Go</button>
+		<script>
+			YUI({
+//                filter:'raw',
+//                combine:false,
+				groups: {
+					gallery: {
+						base:'../../../build/',
+//						base:'http://satyam.github.com/yui3-gallery/build/',
+						modules: {
+							'gallery-flyweight-tree': {
+								path:'gallery-flyweight-tree/gallery-flyweight-tree.js',
+								requires:["base-base","base-build","classnamemanager"]
+							},
+							'gallery-fwt-treeview': {
+								path: 'gallery-fwt-treeview/gallery-fwt-treeview.js',
+								requires: ["gallery-flyweight-tree","widget","base-build"],
+								skinnable: true
+							}
+						}
+					}
+				},
+				lang:'es'
+			}).use('gallery-fwt-treeview', function (Y) {
+				'use strict';
+				/*jslint white:true*/
+                var tv = null,
+                    build = function() {
+//                    if (tv) {
+//                        tv.destroy();
+//                    }
+                    Y.one('#container').setHTML('');
+					tv = new Y.FWTreeView({tree: [
+                        {
+                            label:'label 0',
+                            children: [
+                                {
+                                    label: 'label 0-0',
+                                    expanded: false,
+                                    children: [
+                                        {
+                                            label: 'label 0-0-0'
+                                        },
+                                        {
+                                            label: 'label 0-0-1',
+                                            children: [
+                                                {label: 'label 0-0-1'}
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    label: 'label 0-1'
+                                }
+                            ]
+                        },
+                        {
+                            label: 'label 1'
+                        }
+
+                    ]});
+                    tv.render('#container');
+//                    tv.after('mouseover', function (ev) {
+//                        console.log('mousing over', ev);
+//                    });
+
+				};
+                Y.one('#go').on('click', build);
+                build();
+
+			});
+		</script>
+	</body>
+</html>

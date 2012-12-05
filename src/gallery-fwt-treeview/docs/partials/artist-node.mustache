@@ -1,0 +1,15 @@
+        var ArtistNode = Y.Base.create(
+            'artist-node',
+            Y.FWTreeNode,
+            [ ],
+            { },
+            {
+                INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+                                '<div class="{CNAME_LABEL} role="link">{label}</div> <div class="www-go"></div></div>',
+
+                ATTRS: {
+                    url: { },
+                    artistId: { }
+                }
+            }
+        );

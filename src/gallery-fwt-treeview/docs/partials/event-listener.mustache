@@ -1,0 +1,9 @@
+        artistTree.after(['click', 'enterkey'], function (ev) {
+            if (ev.type.split(':')[1] === 'enterkey' || ev.domEvent.target.hasClass('www-go')) {
+
+                var url = ev.node.get('url');
+                if (url) {
+                    window.location = url;
+                }
+            }
+        });

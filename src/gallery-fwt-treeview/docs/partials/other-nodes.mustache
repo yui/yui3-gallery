@@ -1,0 +1,33 @@
+        var AlbumNode = Y.Base.create(
+            'album-node',
+            Y.FWTreeNode,
+            [ ],
+            { },
+            {
+                INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+                                '<div class="{CNAME_LABEL}" role="link">{label} ({publisher})</div><div class="www-go"></div></div>',
+
+                ATTRS: {
+                    url: {},
+                    albumId: {},
+                    publisher: {}
+                }
+            }
+        ),
+        TrackNode = Y.Base.create(
+            'track-node',
+            Y.FWTreeNode,
+            [ ],
+            { },
+            {
+                INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+                                '<div class="{CNAME_LABEL}" role="link">[disc:{discNumber} - track:{trackNumber} - duration: {duration}]: {label}</div></div>',
+
+                ATTRS: {
+                    discNumber: {},
+                    trackNumber: {},
+                    duration: {}
+                }
+
+            }
+        );

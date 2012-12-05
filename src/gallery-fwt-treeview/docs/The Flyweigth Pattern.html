@@ -1,0 +1,229 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <title>The Flyweigth Pattern</title>
+  </head>
+  <body>
+    <h1>The Flyweight Pattern</h1>
+    <p>Some objects manage large number of items. If those items are
+      complex objects themselves, such as subclasses of <code>Base</code>,
+      the memory consumed by such a collection can take your application
+      down. However, with a large number of items, you are rarely going
+      to actually deal with all of those items at once, you don't need
+      the to be active all the time. This is when the Flyweight pattern
+      comes handy. The name doesn't mean much to me, I prefer to think
+      of it as a Sliding Window kind of thing, where you slide a small
+      window cut in a piece of paper over the data so that you actually
+      see a little bit of it at a time. </p>
+    <p> For several years now, YUI 3 has been lacking a TreeView which
+      was one of the very earliest widgets in YUI 2 and the reason is
+      simple, the formal way to construct such a widget would be to use
+      <code> Widget</code> for the root augmented by <code>WidgetParent</code>
+      and a <code>Widget</code> for each node in the tree, each
+      augmented by <code>WidgetChild</code> and, if they have children,
+      <code>WidgetParent</code>. This is a terribly costly way of doing
+      it, the browser soon starts running out of memory, becomes
+      sluggish and eventually freezes with trees far short of big. </p>
+    <p> The Flyweight pattern gives us an alternative. Each node is
+      actually composed of the state and the behavior. The state is made
+      of things like the label it shows, whether it is expanded or
+      collapsed, selected or not and which nodes are its children. The
+      behavior is what to do when things change. In OOP we learn that
+      objects are made of those two aspects put together. As it turns
+      out, this is terribly expensive. What we do instead is to have the
+      state in a plain object, without methods, attributes or events,
+      simple property:value sets, and put all the behavior, that is
+      methods and events, in a separate object. This object provides us
+      the window which allows us to look at the state of any node at any
+      time. </p>
+    <p>If we were to have one object handling the behavior for each item
+      in the collection we would be just as bad as having a <code>Widget</code>
+      instance per node. Going back to our paper cutout, it would be as
+      having the paper weakened with too many wholes. What we do instead
+      is try to have a few behavior objects as we can possibly can.</p>
+    <p> I had already explored this in my own <a
+        href="http://yuilibrary.com/gallery/show/md-model">Gallery Model</a>
+      module, where the base Model could be augmented by the
+      MultiRecordModel extension which allowed the same Model to handle
+      any number of records that slid under the single Model instance.
+      This allowed the same Model to handle one or multiple records. The
+      Model provided the window into the data and the <code>MultiRecordModel</code>
+      extension managed the sliding of the data under it. </p>
+    <h2>The Flyweight Tree Manager and the Flyweight TreeView </h2>
+    <p>For a TreeView, I needed to add a second dimension since, unlike
+      a list which is uni-dimensional, a tree has depth. However, a
+      TreeView is not the only widget that relies on tree-structured
+      data, a Menu also does and so can a form, made of several nested
+      groupings of fields, field-sets, groups of radio buttons and other
+      arbitrary groupings. So, the <code>Widget</code> is split into
+      two parts, the <a
+        href="http://yuilibrary.com/gallery/show/flyweight-tree">FlyweightTreeManager,
+
+
+
+
+
+      </a>which handles the tree-like structure, and the actual <a
+        href="http://yuilibrary.com/gallery/show/fwt-treeview">FWTreeView</a>
+      widget, which shows the tree data as a TreeView. Though originally
+      I made the <code>FlyweightTreeManager</code> as an extension to
+      avoid limiting to a <code>Widget</code>, I found that the
+      generalization had a cost in code size and the abstraction made
+      little sense. Thus, <code>FlyweightTreeManager</code> is a
+      subclass of <code>Widget</code>. </p>
+    <p>The <code>FlyweightTreeManager</code> is not the window, the
+      paper cutout showing the data through, but it manages the windows
+      over the plain data underneath. The sliding windows are instances
+      of <code>FlyweightTreeNode</code>, a subclass of <code>Base</code>.
+      The manager deals with moving these windows around the data. The
+      manager is also a factory of node instances, they should not be
+      created independently. This allows the manager to limit the number
+      of instances created at any time to the minimum. </p>
+    <p>The manager has a pool of node instances and it borrows them from
+      the pool when needed, and refills the pool when empty. The pool
+      can be quite small. The number of items in the pool hardly ever
+      exceeds the depth of the tree. A fully collapsed tree will require
+      just two instances for rendering, one for the root and one for
+      each node in turn (the manager gets an instance for the root and
+      then the enumerating method uses a single instance for each node
+      being drawn). If the tree is expanded one node at a time, the same
+      two nodes will be used over and over, one for the node being
+      expanded and the other to render each child. Rendering a fully
+      expanded tree would require a node instance per level. </p>
+    <p>Since the information at each level might be different, nodes can
+      be of different types. The manager recognizes the <code>type</code>
+      attribute and keeps separate pools for each kind of node. Thus,
+      the pool is a hash indexed by node type, with each entry an array
+      of pooled nodes. </p>
+    <p>To create the tree, the constructor receives an array of plain
+      objects defining the first level of nodes, containing properties
+      such as <code>label</code>, <code>expanded</code>, <code>type</code>
+      or <code>children</code>, the later being an array of further
+      objects defining the next level of nodes. </p>
+    <h2>Moving about</h2>
+    <p>To traverse the tree, the manager provides the <code>forSomeNodes</code>
+      method, which loops through all of the nodes in the tree, depth
+      first, passing each node to the callback in turn. The method
+      assumes the node instance will not be used beyond the lifespan of
+      the callback and returns the node to pool at every step. If there
+      are different node types, it will provide a suitable instance for
+      each node. As its name suggest ('some' instead of 'each') the
+      traversal can be cancelled at any time. A full traversal will
+      require a number of nodes equal to the depth of the tree, assuming
+      all the nodes of the same type. For finer control over the
+      traversal <code>FlyweightTreeNode</code> also provides a <code>forSomeChildren</code>
+      method that lets you go one level at a time. For example, the <code>render</code>
+      method does not use <code>forSomeNodes</code> since it doesn't
+      bother to render the whole tree, just the expanded branches. Thus,
+      it uses <code>forSomeChildren</code> one level at a time, when
+      needed. </p>
+    <p>What happens when you want to keep a reference to a node? Each
+      node has a <code>hold</code> method which keeps the node away
+      from the pool. The developer should use <code>hold</code>
+      sparingly as this increases memory. When done with the node,
+      calling <code>release</code> will return it to the pool. Several
+      <code>get<i>Xxxx</i></code> methods (<code>getParent</code>, <code>getNextSibling</code>,
+      <code>getNodeBy</code>) return node references. Unlike the
+      traversal methods (<code>forSomeNodes</code>, <code>forSomeChildren</code>),
+      the manager cannot predict when you are done with the requested
+      node, thus, those nodes are automatically placed on hold for you.
+    </p>
+    <h2>Events</h2>
+    <p>Event listeners are also provided with node instances. You can
+      listen to any DOM events by delegation at the root. The manager
+      will supplement the event facade for such events with an extra <code>node</code>
+      property containing a reference to the node that received the
+      event (in fact, the node that would have received the event had it
+      been there, but the manager makes it all look like it has always
+      been there). The node instances provided to the event facade are
+      returned to the pool when the event has run its course. Once
+      again, the developer can call <code>hold</code> to keep that
+      reference and call <code>release</code> when it is no longer
+      needed. </p>
+    <p>What happens with events at the node level? DOM events can be
+      listened to by delegation at the root. You can listen to them at
+      the node level but that would require you to place the node
+      instance on hold. If a node needs to respond itself to a DOM
+      event, all it needs to do is add the type of event to a list kept
+      by the manager so that when the event fires, the manager will take
+      an instance from the pool and relay it the event as if it had
+      always been there. <code>FWTreeNode</code> does this with the <code>"click"</code>
+      event so that it can respond to clicks by toggling expansion or
+      selection. For internal node events, such as attribute change
+      events, since the attribute must be changed from within the
+      instance itself (by using the <code>set</code> method), any such
+      events will fire while the instance is already active. </p>
+    <p>The manager also handles dynamic loading, a feature much
+      appreciated in YUI2 TreeView. If a function is set on the <code>dynamicLoader</code>
+      attribute, the first time a collapsed node is expanded, the
+      dynamic loader will be called. The loader will get a reference to
+      the node being expanded and a callback function. Whenever it
+      manages to get the new nodes, it must call the callback function
+      passing the array of new nodes to add to the tree. Along the
+      examples of <a
+        href="http://yuilibrary.com/gallery/show/fwt-treeview">gallery-fwt-treeview</a>
+      there is one showing this feature, extracting information from YQL
+      every time a node is expanded. All the example uses just four
+      nodes, no matter how many nodes are shown and each is of a
+      different type (one default type for the root, which is invisible
+      and one of a different type for each level). </p>
+    <p>There is another throughback to YUI 2 TreeView. All rendering is
+      done via templates. A big string containing the markup is build
+      for the expanded sections of the tree and then inserted into the <code>innerHTML</code>
+      of the overall container for the tree in a single action. TreeView
+      was the only widget in the YUI 2 family that did it this way, most
+      of them use <code>YAHOO.util.Element</code> and do quite a lot of
+      DOM manipulation. TreeView simply concatenated lots of tiny bits
+      and pieces of strings, without any templates, just one bit a time.
+      Once it was expected that DOM manipulation would eventually see
+      great performance improvements and doing DOM manipulation seemed
+      better than concatenating strings, however, the opposite turned
+      out to be true. Thus, an old part of an old widget turned out to
+      be better than later improvements. </p>
+    <h2>Performance</h2>
+    <p>Now, as for memory consumption, drawing a tree using a <code>Widget</code>
+      per node, each augmented with <code>WidgetChild</code> an <code>WidgetParent</code>,
+      takes 8 times the memory than using the <code>FWTreeView</code>
+      when drawing a tree with about 150 nodes. The pure <code>Widget</code>
+      solution grows in proportion to the depth times the width of the
+      tree (this is not strictly true since the tree is not a square, in
+      fact it grows with exponentialy with the depth of the tree, the
+      exponent being the number of children per node). <code>FWTreeView</code>
+      grows linearly with the depth. Thus, with more nodes, the
+      difference grows even sharper. Adding just one more level of nodes
+      to the tree made the browser crash with the <code>Widget</code>
+      based solution while <code>FWTreeView</code> kept working fine. </p>
+    <p>All this savings would be expected to come at a cost, after all,
+      managing the pool and sliding those cutout windows around should
+      take time. As a matter of fact, the cost of managing the nodes is
+      barely noticeable for very small trees. For larger trees, the cost
+      to the browser of managing the huge amounts of memory required by
+      the Widget-based solution completely overwhelms the browser. For
+      the same 150 nodes, the performance of <code>FWTreeView</code>
+      was 12 times faster. I was unable to measure it for a tree one
+      level deeper because Firefox froze and Chrome crashed with the
+      Widget-based tree while it kept working with <code>FWTreeView</code>.
+      (I wasn't adding one node at a time but one full level at a time
+      so after the 156 nodes it went to 781 nodes, growing exponentially
+      with each level). </p>
+    <h2>Conclusion</h2>
+    <p>The flyweight pattern allows managing large number of nodes with
+      ease, minimizing memory consumption and, indirectly, improving
+      performance by taking less resources from the browser. It can be
+      argued (and has been argued) that <code>Base</code> and <code>Widget</code>
+      are too heavy, and there is some truth to it. One solution is to
+      avoid using them. Another is to use them wisely, which is the
+      option shown here.</p>
+    <p> This article has described mostly the <code>FlyweightTreeManager</code>
+      object though developers are more likely to use <code>FWTreeView</code>,
+      which inherits from it. <code>FlyweightTreeManager</code> can be
+      instantiated and rendered, but it has no CSS styles and the
+      templates are very basic so the resulting HTML is boring, it
+      should be considered an abstract class. <code>FWTreeView</code>
+      ads several features such as node selection and keyboard
+      navigation. These are not provided by the base abstract classes
+      because each widget (treeview, menu, form) handles them
+      differently. WAI-ARIA support is built-in. </p>
+  </body>
+</html>

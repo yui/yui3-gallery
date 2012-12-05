@@ -1,0 +1,63 @@
+var dynLoader = function (node, callback) {
+
+    if (node instanceof ArtistNode) {
+        Y.YQL(Lang.sub('select id, title, releaseYear, label, url from music.release.artist where id="{artistId}"   | sort(field="releaseYear", descending="true")', node.getAttrs()), function (response) {
+            if (!response.query.count) {
+                alert(Lang.sub('YQL query for albums by {label} failed or returned no results', node.getAttrs()));
+                callback();
+                return;
+            }
+            var treeDef = [],
+                results = response.query.results.Release || [];
+
+            if (!Lang.isArray(results)) {
+                results = [results];
+            };
+            Y.Array.each(results, function (entry) {
+                treeDef.push( {
+                    label: entry.title || ' ',
+                    publisher: entry.label || 'unknown publisher',
+                    albumId: entry.id,
+                    url: entry.url || '#',
+                    type:AlbumNode
+
+                });
+            });
+            callback(treeDef);
+            return;
+        });
+
+    }
+
+    if (node instanceof AlbumNode)  {
+        Y.YQL(Lang.sub('select Track.discNumber, Track.trackNumber, Track.duration, Track.title, Track.popularity from music.release.id where ids="{albumId}" and response="tracks"', node.getAttrs()), function (response) {
+
+            if (!response.query.count) {
+                alert(Lang.sub('YQL query for album "{label}" failed or returned no results', node.getAttrs()));
+                callback();
+                return;
+            }
+            var treeDef = [],
+                results = response.query.results.Release || [];
+
+            if (!Lang.isArray(results)) {
+                results = [results];
+            };
+            Y.Array.each(results, function (entry) {
+                entry = entry.Track;
+
+                treeDef.push( {
+                    label: entry.title || '- no title -',
+                    discNumber: entry.discNumber || 1,
+                    trackNumber: entry.trackNumber || '-',
+                    duration: entry.duration || '--:--',
+                    type:TrackNode,
+                    isLeaf:true
+
+                });
+            });
+            callback(treeDef);
+            return;
+        });
+    }
+};

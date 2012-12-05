@@ -1,0 +1,43 @@
+<div class="intro">
+<p>This example shows how to dynamically populate a tree.</p>
+</div>
+<div class="example yui3-skin-sam">
+<div id="container"></div>
+<script>
+{{>dynamic-loading-code}}
+</script>
+
+</div>
+<h3>Creating a simple `FWTreeView` instance</h3>
+
+
+<p>The FWTreeView module lets you load nodes on the fly, you just need to provide a function
+that will be called whenever a node is expanded the first time.</p>
+
+<p>In the example below, we create a simple, shallow tree with three initial nodes,
+using the `tree` property in the configuration object.  In that same object
+we set the dynamic loader.</p>
+
+<p>The dynamic loader function receives two arguments, the node being expanded
+and a callback.  The dynamic loader uses the information of the node to fetch its children,
+usually some value that can be used in a remote request to a server.
+In this case, we simply use the label of the node being expanded to produce
+the labels of the child nodes by appending an index to each label.</p>
+
+<p>For most nodes, a simple string is all that is needed to define a node.
+That string is used as the label for each node.  To set other options, an object
+must be provided.  For each set of nodes added to each branch, a last, childless
+node is added.  To signal that the node have no children, the `isLeaf` property must be set,
+otherwise, FWTreeView  assumes all nodes can be expanded. Note the lack of a toggle icon on the
+last node of each new branch.</p>
+
+<p>Once the array of new nodes has been obtained, the callback must be called with the array
+as its single argument.</p>
+
+<p>The dynamic loader has a one second delay to simulate the delay that might
+occur when requesting data from a remote source.</p>
+
+
+```
+{{>dynamic-loading-code}}
+```

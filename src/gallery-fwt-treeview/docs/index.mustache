@@ -1,0 +1,388 @@
+<div class="intro">
+    <p>
+    {{displayName}} is a TreeView widget using the Flyweight pattern for its nodes so as to save memory and improve performance.
+    It extends the classes in the gallery-flyweight-tree module.
+    </p>
+</div>
+{{>getting-started}}
+<h2>Description</h2>
+
+<p>The FWTreeView uses the Flyweight Pattern to reduce memory consumption.
+YUI has not have a TreeView in all these years because the standard solution, to have
+a subclass of Widget augmented with Widget-Parent and Widget-Child for each node
+in the tree, is terribly expensive.  FWTreeView solves this by having a single subclass of Widget which is the FWTreeView class itself
+that represents the overall container for the tree.
+The node information is stored internally in a plain passive object, without methods, attributes or events, which takes really little memory.
+To have active nodes, FWTreeView uses a small pool of FWTreeNode instances which it places on top of the internal node status information.
+This is handled transparently via the `gallery-flyweight-tree` module.
+For further information see the Performance Data section on the `gallery-flyweight-tree` users guide.</p>
+
+
+<p>A tree can be created by simply providing a `tree` configuration attribute to the constructor, describing the tree.</p>
+
+```
+YUI().use('gallery-fwt-treeview', function(Y) {
+    var tv = new Y.FWTreeView({
+        tree: [
+            {
+                label:'label 0',
+                children: [
+                    {
+                        label: 'label 0-0',
+                        expanded: false,
+                        children: [
+                            'label 0-0-0',
+                            {
+                                label: 'label 0-0-1',
+                                children: [
+                                    'label 0-0-1-0'
+                                ]
+                            }
+                        ]
+                    },
+                    'label 0-1'
+                ]
+            },
+            {label: 'label 1'}
+        ]
+    });
+    tv.render('#container');
+});
+```
+
+<p>Each node description may contain either a string for the label of the node or an object with the following properties:</p>
+
+<ul>
+    <li>`label`: text or HTML markup to be shown in the tree node.</li>
+    <li>`expanded`: Signals the children of this node should be visible (true by default).</li>
+    <li>`children`: an array containing further node descriptors.</li>
+    <li>`id`: id to assign to the outer DOM element for this node.</li>
+    <li>`type`: a reference to a subclass of Y.FWTreeNode or a string with the name of such a class, used to display this node.</li>
+    <li>`isLeaf`: when dynamic loading is enabled, every childless node is a candidate for expansion and it shows a suitable toggle icon.
+        When this attribute is set, it means TreeView will show no such toggle icon and will avoid asking for children.</li>
+    <li>`selected`: Indicates whether a node is selected. Nodes can be partially selected so this variable may contain 3 different values.
+        See the API docs for more info.</li>
+</ul>
+
+<p>`label` is the only required property.  FWTreeView can also accept other configuration attributes:</p>
+
+<ul>
+    <li>`defaultType`: Either an object reference or a string that can be resolved to an object reference doing `Y[defaultType]`.
+        This attribute is usually `FWTreeNode` but you can create a subclass of it and set this configuration attribute
+        to point to that one so the TreeView will use it for its nodes</li>
+    <li>`toggleOnLabelClick`: Some people want to toggle node expansion by clicking only on the toggle icon, others want
+        to make toggling the default action for clicks anywhere, even in the label.
+        It is false by default (only the toggle icon will toggle expansion) leaving the label for other actions.</li>
+    <li>`dynamicLoader`: A function can be provided that will allow to load child nodes dynamically.</li>
+    <li>`focusedNode`: contains a reference to the node that has or would have the focus when the widget has the focus.
+        It does not force the focus on this widget, it simply says which node will get the focus when the user tabs
+        through the page and the node that will respond to pressing the `Enter` key.</li>
+</ul>
+
+<p>Both the `tree` FWTreeView configuration attribute as well as the `type` attribute of each node are only valid at instantiation.</p>
+
+<h2>Features</h2>
+<ul>
+<li>Keyboard navigation.</li>
+<li>WAI-ARIA roles and states.</li>
+<li>Node selection / highlighting</li>
+<li>Dynamic loading.</li>
+<li>Nodes might be of various types</li>
+<li>Low memory consumption and fast execution.</li>
+<li>Lazy rendering: nodes are rendered when their parent is expanded.</li>
+</ul>
+
+<h2>Node selection</h2>
+
+<p>Node selection is enabled by default in FWTreeView.
+Usually, it is not visible since the way to show it to the user might be different according to taste.
+The CSS StyleSheet provided uses checkboxes to show the selection state.
+To use it the container of the tree view must have the CSS className `yui3-fw-treeview-checkbox`:</p>
+```
+<div id="tree-with-selection" class="yui3-fw-treeview-checkbox"></div>
+```
+<p>Nodes have the `selectionEnabled` configuration attribute
+set by default so they will all respond to node selection.
+The selected state of a node can be read or set via the `selected` attribute.</p>
+
+<p>Nodes can be fully, partially or not selected.
+These are represented by the values of the static constants provided (see API docs).
+A partially selected node is one where some of its children are selected but not all.
+The developer cannot set a node to partially selected, this state can only result
+from the state of the child nodes.</p>
+
+<p>Since the partially selected state can not be forced on a node but is the result
+of the state of its children, three states can be read from the `selected` attribute
+while only two can be set.  Thus, for setting, any truish or falsy value will work
+while when reading, a more precise 0, 1 or 2 will be returned.</p>
+
+<p> FWTreeNodes have two attributes `propagateUp` and `propagateDown` both initially set to true.
+When `propagateUp` is true, any change in the selected state of a node will propagate
+to the ones above so that if all the children of the parent are selected, the parent
+itself will be selected, if all the children are not selected, the parent will not
+be selected.  If the children have a mix of selected, not selected or partially
+selected, the parent will be partially selected.
+When `propagateDown` is true, any changes in a node will propagate to its children,
+even those not yet loaded.</p>
+
+<p>Values for the `selected` attribute set at instantiation will not trigger
+propagation, they will be accepted as they come.  Nodes loaded dynamically
+will have their `selected` attribute set as their parent because it behaves as though
+the nodes had always been there and, as such, they would have inherited the
+selected state from their parent.</p>
+
+<h2>Traversing the tree</h2>
+
+<p>To reach all nodes in the tree, FWTreeView provides the `forSomeNodes` method
+which takes a function as its first argument.  This function will be called
+for each and every loaded node in the tree. It will do a depth-first traversal.
+It will receive a reference to each node visited,
+the depth this node is at and the index of this node amongst its siblings.
+If this callback returns true, no further nodes will be visited.</p>
+
+<p>If the developer needs more control over the search, all nodes provide
+a `forSomeChildren` method so, starting at any point, the developer can
+have a better control of the traversal.</p>
+
+<p>These methods as well as `getNextSibling` and `getPreviousSibling` methods
+should be used with some caution as explained [[#pooled-nodes|later]].
+
+<h2>Dynamic Loading</h2>
+
+<p>For large trees it might be unwise to load all the data at once.
+Some trees have loops so it would never finish rendering them.
+For those, dynamic loading is useful/vital.</p>
+
+<p>To enable dynamic loading a function has to be set in the `dynamicLoader` attribute.
+It can either be set at instantiation or later on.  Setting `dynamicLoader` to null
+disables dynamic loading.</p>
+
+<p>The loader function will receive a reference to the node being expanded and a callback function.
+It should use the information of the node received to fetch its children, either locally
+or remotely through some communication mechanism.  When it has fetched the child nodes,
+it should call the callback function with a tree definition for the children,
+using the same format as for the initial tree.
+If callback is called with any <i>falsy</i> value (which includes an empty array),
+FWTreeView will set the `isLeaf` attribute of the node to `true` signaling there are no children.<p>
+
+<p>The tree definition loaded may contain a branch of any depth, it is not limited to a single level of child nodes.
+If there is an error when loading, the callback should also be called with a <i>falsy</i> argument,
+which includes no argument at all.
+FWTreeView does not discriminate between a successful load of no children and an error.
+When there is an error, the developer might alert the user by whatever means might apply but for the purpose
+of FWTreeView, the expanded node has no children.</p>
+
+```
+(new Y.FWTreeView({
+    tree: [
+        'label 0',
+        'label 1',
+        'label 2'
+    ],
+    dynamicLoader: function (node, callback) {
+
+        var i,
+            label = node.get('label'),
+            branch = [];
+        for (i = 0; i < 3; i += 1) {
+            branch[i] = label + '-' + i;
+        }
+        callback(branch);
+    }
+})).render('#treeContainer');
+```
+
+<p>The example above shows a shallow initial tree with a dynamic loader that produces new nodes with made-up labels.
+When a new branch is requested, it uses the label read from the node being expanded and appends an extra dash and a digit.
+The array of objects with the new node definitions is passed to the callback.
+This tree will expand forever adding ever more and more dashes and digits to the labels.
+This is the reason why the `expandAll` method or the numeric keypad `*` key
+will only expand existing nodes, it will not trigger any dynamic loading.
+
+<h2>Multiple node types</h2>
+
+<p>FWTreeView can handle nodes of various types in the same tree.
+All nodes must be FWTreeNode or a subclass derived from it.
+Each node may have a `type` attribute.  If none is given, FWTreeView
+will use the type of node set in the `defaultType` attribute.
+Both properties may contain a reference to the class or a string
+with the name of the class under `Y` so that `"MyNodeType"` will make FWTreeView
+try to create an instance of `Y.MyNodeType`.</p>
+
+<p>A developer might wish to create a custom node type to have extra information
+on a node, to change the look or change the defaults. For example, lets assume a developer needs
+to show artist information from Yahoo Music site via YQL.
+
+```
+var ArtistNode = Y.Base.create(
+    'artist-node',
+    Y.FWTreeNode,
+    [ ],
+    { },
+    {
+        INNER_TEMPLATE:
+            '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+            '<div class="{CNAME_LABEL}"><a href="{url}">{label}</a></div></div>'
+        ),
+        ATTRS: {
+            url: {},
+            artistId: {}
+        }
+    }
+);
+```
+
+<p>In the example above, a new `ArtistNode` is created based on `Y.FWTreeNode`.
+The `INNER_TEMPLATE` has been changed.  FWTreeView uses two templates, one for the outer
+envelope of the node, called `OUTER_TEMPLATE` and one for the visible part of the node,
+excluding the children.  It is the `INNER_TEMPLATE` that most developers are
+likely to ever change and that is why they were defined separate.</p>
+<p>Based on the original taken from the source
+for FWTreeNode, it has been simplified by dropping markup related to WAI-ARIA
+and node selection, which will not be used.  Instead, the second line has a change.
+The placeholder for the `label` attribute
+has been enclosed in an anchor tag using the value of the `url` attribute,
+defined later.</p>
+
+<p>The attributes `url` and `artistId` have been added for this type of node.
+The first one is used in the template and will be seen by the user, the second
+is not shown but it is used internally by the node.  The example this fragment
+was taken from uses dynamic loading and the `artistId` value is used to
+load child nodes related to this artist.</p>
+
+<p>Actually, the example above is not a good solution because the anchor element
+can get the focus, and that competes with FWTreeView's own focusing mechanism.
+A better solution is to use events, as shown [[#events|below]].</p>
+
+
+<p>Selection and propagation of selection state are enabled by default in all nodes.
+It is easy to create a node type that does not have propagation enabled
+and then use that as the default node type:</p>
+```
+var ArtistNode = Y.Base.create(
+    'artist-node',
+    Y.FWTreeNode,
+    [ ],
+    { },
+    {
+        ATTRS: {
+            propagateUp: false,
+            propagateDown: false
+        }
+    }
+);
+
+// Later on:
+var tv = new Y.FWTreeView({
+    tree: treeDef,
+    defaultType: ArtistNode
+});
+```
+<p>The same could have been accomplished without defining a new node type
+after the creation of the tree by doing:</p>
+```
+tv.forSomeNodes(function (node) {
+    node.setAttr({propagateUp:false, propagateDown: false});
+});
+```
+<p>But, if you have a mixture of nodes with and without propagation (or any other
+particular node setting) defining different types might be easier.</p>
+
+<p>To help in styling, nodes may have a CSS className identifying
+the node type.  For nodes other than the default type, a className will be formed
+using the `yui3-flyweight-tree-node-type-` prefix with the value of the `type`
+configuration attribute if it is a string, or the `NAME` property if `type`
+was an object reference.</p>
+
+<h2>Pooled nodes</h2>
+
+<p>FWTreeView does not actually create a FWTreeNode instance per tree node,
+instead, it uses a pool of reusable instances.  To avoid memory losses the
+developer must help a little bit.</p>
+
+<p>When FWTreeView fires an event, if it involves a tree node, it will add a reference
+to the node involved to the event facade as property `node`. This node reference
+will be returned to the pool once the last event listener has returned.
+The developer must not keep a reference to such nodes, as they will be reused
+and moved around.</p>
+
+<p>Likewise, method `forSomeNodes` lets the developer act on all or some nodes
+in the tree.  The callback function passed to `forSomeNodes` will receive a
+node instance.  This node instance will return to the pool when the callback returns.</p>
+
+<p>If the developer wants to hold on to a reference of a node, that copy must be placed
+on hold by calling the `hold` method.  This will prevent the copy from being
+returned to the pool and later reused.  Keeping references on hold increases
+memory consumption so such references must be returned to the pool ASAP.
+To do that, the method `release` must be called when they are no longer needed.
+Once a reference is released, it should not be used since it might have been
+repositioned.</p>
+
+<p>Some methods return node references: `getRoot`, `getParent`, `getNextSibling`,
+`getPreviousSibling`, `getNodeBy`.  The nodes returned by any of these functions
+are placed on hold.  FWTreeView cannot know when the reference is no longer needed
+so it is the responsibility of the developer to release those references when no longer needed.</p>
+
+<h2>Events</h2>
+
+<p>Since all DOM events eventually bubble up to the outermost container,
+it is best to subscribe to events on the FWTreeView instance than on individual nodes.
+For that purpose, all such events get an extra `node` property on the event facade.</p>
+
+<p>A better solution for the example [[#multiple-node-types|above]] is to add a small <i>navigate</i> icon
+to the template, either an `<img>` tag or a `<div>` with a className
+to set a suitable background image.  The changed line from the template above might be:</p>
+```
+<div class="{CNAME_LABEL}" role="link">{label} <div class="navigate"></div></div>' +
+```
+<p>Note that instead of an actual anchor element, the whole label is given the role of `link`
+so the user listening to a screen reader will know that pressing `enter` will navigate
+to whatever it is the label describes.</p>
+
+<p>After the tree is created, a listener can be set for both the `click` and the `enterkey`
+event.  The events `enterkey` and `spacebar` are generated by FWTreeView by filtering out
+these two keys from the `keydown` event.  The WAI-ARIA standard singles those
+two for a default (unspecified) action and node selection respectively,
+thus it made sense to provide them.</p>
+```
+musicTreeView.after(['click', 'enterkey'], function (ev) {
+    if (ev.type.split(':')[1] === 'enterkey' || ev.domEvent.target.hasClass('navigate')) {
+        var url = ev.node.get('url');
+        if (url) {
+            window.location = url;
+        }
+    }
+});
+```
+<p>A single listener is set for both events.  The listener checks whether the type of the event
+received is `'enterkey'` by reading the part after the colon `':'` character of the
+type property of the event facade, or whether the actual target clicked has the className
+assigned to the small icon in the template above.  There is no need to check whether the
+event was a click since at that point it could not be anything else.   If any of those
+is true, it reads the `url` attribute from the `node` property in the event facade
+and if there is one, it navigates to it.</p>
+
+<p>When creating different node types, that is, subclasses of FWTreeNode, the developer
+might want to listen to DOM events that occur to that node.
+Since the node instances are not active most of the time, they cannot be listening
+to DOM events.
+However, the outermost container, that is, the content box of the FWTreeView widget
+can listen to them.  To tell FWTreeView to listen
+to an event on behalf of a node, the event name must be added to an array held in the
+`_domEvents` property of FWTreeView.  FWTreeView will listen to those events and,
+in response to them, it will locate the node where it would have happened, fetch
+a node instance from the pool, position it over the node and relay the event to it.
+These are <i>after</i> events so the node cannot halt their processing.</p>
+
+<p>For events generated by the node instance itself, such as attribute value change events,
+there is nothing special to do since, to fire such an event, the node instance must be
+already positioned and active.</p>
+
+<p>FWTreeNode itself listens to the `click` event, which it uses to toggle expansion
+and selection so the `_domEvents` array already contains  the string `click`.
+Care must be taken not to blindly push other event names into this array as
+duplicate names will result in multiple firings of the same event.
+The `_domEvents` array is marked as 'protected'  because it is mostly meant for
+developers creating their own node types.  Developers using FWTreeView are expected
+to use the events that bubble up to the tree container, as described at the
+start of this section. </p>

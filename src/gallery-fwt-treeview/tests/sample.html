@@ -9,24 +9,33 @@
 		<a href="out/index.html">API docs</a>
 		<h1>A Tree:</h1>
 		<div id="container"></div>
+        <div id="plainDynLoader"></div>
 		<h1>A dynamic tree with multiple node types:</h1>
 		<p>The nodes of this tree are read from YQL, any replies rely on that service.
-		The long connecting lines might look funny sometimes because they are borrowed from YUI2 TreeView and
-		they assumed limits on the height of a line so for lengthy lines, the sprite overflows into the next element.  
-		With a proper sprite, this would not happen.</p>
+            The nodes have references to albums and artists so that by clicking on them
+            or pressing enter while they have the focus, it will navigate away.</p>
 		<div id="dynTree"></div>
-		<!-- h1>A form:</h1>
-		<div id="form"></div -->
+        <h1>A tree with checkboxes for selection</h1>
+        <p>This tree is built dynamically with randomized labels just to show selection, supposedly of files/folders.
+         The Save button will list in the container below the JSON for those files/folders marked as selected.</p>
+        <p>The container for this tree has <code>class="yui3-fw-treeview-checkbox"</code> set because node
+        selection is always active in TreeView, it just needs to be made visible through CSS styles, which
+        the default stylesheet contains and this className activates.</p>
+        <div id="selContainer" class="yui3-fw-treeview-checkbox"></div>
+		<button id="save">Save</button>
+		<div id="output"></div>
 		<script>
 			YUI({
+//                filter:'raw',
+//                combine:false,
 				groups: {
 					gallery: {
-//						base:'../../../build/',
-						base:'http://satyam.github.com/yui3-gallery/build/',
+						base:'../../../build/',
+//						base:'http://satyam.github.com/yui3-gallery/build/',
 						modules: {
 							'gallery-flyweight-tree': {
 								path:'gallery-flyweight-tree/gallery-flyweight-tree.js',
-								requires:["base-base","base-build","classnamemanager"]
+								requires:["widget","base-build"]
 							},
 							'gallery-fwt-treeview': {
 								path: 'gallery-fwt-treeview/gallery-fwt-treeview.js',
@@ -37,7 +46,7 @@
 					}
 				},
 				lang:'es'
-			}).use('gallery-fwt-treeview','yql', function (Y) {
+			}).use('gallery-fwt-treeview','yql', 'json', function (Y) {
 				'use strict';
 				/*jslint white:true*/
 				var Lang = Y.Lang,
@@ -68,22 +77,42 @@
 					{
 						label: 'label 1'
 					}
-					
+
 				]});
 				tv.render('#container');
-				var ArtistNode = Y.Base.create(
+
+				(new Y.FWTreeView({
+                    tree: [
+                        'label 0',
+                        'label 1',
+                        'label 2'
+                    ],
+                    dynamicLoader: function (node, callback) {
+
+                        var i,
+                            label = node.get('label'),
+                            branch = [];
+                        for (i = 0; i < 3; i+=1) {
+                            branch[i] = label + '-' + i;
+                        }
+                        callback(branch);
+                    }
+                })).render('#plainDynLoader');
+
+//
+                var ArtistNode = Y.Base.create(
 					'artist-node',
 					Y.FWTreeNode,
 					[],
 					{
-						
+
 					},{
-						TEMPLATE: '<li id="{id}" class="artistnode {cname_node}"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-content"><a href="{url}">{label}<\/a><\/div><ul class="{cname_children}">{children}<\/ul><\/li>',
+						TEMPLATE: Y.Lang.sub('<li id="{id}" class="artistnode {cname_node}"><div tabIndex="{tabIndex}" class="{cname_content}"><div class="{cname_toggle}"><\/div><div class="{cname_label}">{label} <div class="artistNavigate"></div><\/div></div><ul class="{cname_children}">{children}<\/ul><\/li>',Y.FWTreeNode.CNAMES),
 						ATTRS: {
 							url: {},
 							artistId: {}
 						}
-						
+
 					}
 				);
 				var AlbumNode = Y.Base.create(
@@ -91,15 +120,15 @@
 					Y.FWTreeNode,
 					[],
 					{
-						
+
 					},{
-						TEMPLATE: '<li id="{id}" class="albumnode {cname_node}"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-content"><a href="{url}">{label}<\/a> ({publisher})<\/div><ul class="{cname_children}">{children}<\/ul><\/li>',
+						TEMPLATE: '<li id="{id}" class="albumnode {cname_node}"><div tabIndex="{tabIndex}" class="yui3-flyweight-tree-node-content"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-label">{label} ({publisher})<\/div></div><ul class="{cname_children}">{children}<\/ul><\/li>',
 						ATTRS: {
 							url: {},
 							albumId: {},
 							publisher: {}
 						}
-						
+
 					}
 				);
 				var TrackNode = Y.Base.create(
@@ -107,19 +136,19 @@
 					Y.FWTreeNode,
 					[],
 					{
-						
+
 					},{
 						// {"Track":{"discNumber":"1","duration":"0","popularity":"3","title":"Karaoke: Crazy For You","trackNumber":"1"}}
- 						TEMPLATE: '<li id="{id}" class="tracknode {cname_node}"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-content">[disc:{discNumber} - track:{trackNumber} - duration: {duration}]: {label}<\/div><ul class="{cname_children}">{children}<\/ul><\/li>',
+ 						TEMPLATE: '<li id="{id}" class="tracknode {cname_node}"><div tabIndex="{tabIndex}" class="yui3-flyweight-tree-node-content"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-label">[disc:{discNumber} - track:{trackNumber} - duration: {duration}]: {label}<\/div></div><ul class="{cname_children}">{children}<\/ul><\/li>',
 						ATTRS: {
 							discNumber: {},
 							trackNumber: {},
 							duration: {}
 						}
-						
+
 					}
 				);
-				
+
 				Y.YQL('select id, name, url from music.artist.search where keyword="Madonna" | sort(field="trackCount", descending="true")', function(response) {
 					if (!response.query.count) {
 						Y.one('#dynTree').setContent('YQL query for Madonna returned no records or failed');
@@ -127,7 +156,7 @@
 					}
 					var cfg = [],
 						results = response.query.results.Artist || [];
-						
+
 					if (!Lang.isArray(results)) {
 						results = [results];
 					}
@@ -137,10 +166,10 @@
 							artistId: entry.id,
 							url: entry.url,
 							type:ArtistNode
-							
+
 						});
 					});
-					(new Y.FWTreeView({
+					var artistTree = new Y.FWTreeView({
 						dynamicLoader: function (node, callback) {
 							if (node instanceof ArtistNode) {
 								Y.YQL(Lang.sub('select id, title, releaseYear, label, url from music.release.artist where id="{artistId}"   | sort(field="releaseYear", descending="true")', node.getAttrs()), function (response) {
@@ -168,7 +197,7 @@
 									callback(cfg);
 									return;
 								});
-								
+
 							}
 							if (node instanceof AlbumNode)  {
 								Y.YQL(Lang.sub('select Track.discNumber, Track.trackNumber, Track.duration, Track.title, Track.popularity from music.release.id where ids="{albumId}" and response="tracks"', node.getAttrs()), function (response) {
@@ -200,39 +229,113 @@
 									callback(cfg);
 									return;
 								});
-								
+
 							}
 						},
 						tree: cfg
-					})).render('#dynTree');
-			    });				
+					});
+                    artistTree.render('#dynTree');
+                    artistTree.after(['click', 'enterkey'], function (ev) {
+                        if (ev.type.split(':')[1] == 'enterkey' || ev.domEvent.target.hasClass('artistNavigate')) {
 
-//				var f = new Y.Form({fields: [
-//					{
-//						label: 'First Field',
-//						name: 'firstField',
-//						value: 1
-//					},
-//					{
-//						label: 'Second Field',
-//						name: 'secondField',
-//						value: 2
-//						
-//					},
-//					{
-//						type:'FieldSet',
-//						label:'Set of Fields',
-//						children: [
-//							{
-//								label: 'First Child Field'
-//							},
-//							{
-//								label: 'Second Child field'
-//							}
-//						]
-//					}
-//				]});
-//				f.render('#form');
+                        }
+                        var url = ev.node.get('url');
+                        console.log('url', url);
+                        if (url) {
+                            window.location = url;
+                        }
+                    });
+			    });
+				var sampleString = ("In computer programming, flyweight is a software design pattern. " +
+					"A flyweight is an object that minimizes memory use by sharing as much data as possible with other similar objects; " +
+					"it is a way to use objects in large numbers when a simple repeated representation would use an unacceptable amount of memory." +
+					" Often some parts of the object state can be shared, and it is common practice to hold them in external data structures and pass " +
+					"them to the flyweight objects temporarily when they are used." +
+					"A classic example usage of the flyweight pattern is the data structures for graphical representation of characters in a word processor. " +
+					"It might be desirable to have, for each character in a document, a glyph object containing its font outline, font metrics, " +
+					"and other formatting data, but this would amount to hundreds or thousands of bytes for each character. " +
+					"Instead, for every character there might be a reference to a flyweight glyph object shared by " +
+					"every instance of the same character in the document; only the position of each character " +
+					"(in the document and/or the page) would need to be stored internally.Another example is string interning." +
+					"In other contexts the idea of sharing identical data structures is called hash consing.").replace(/\W/g,'');
+
+
+				var FileNode = Y.Base.create(
+					'file-node',
+					Y.FWTreeNode,
+					[],
+					{
+					},
+					{
+						ATTRS: {
+							path: {}
+						}
+
+					}
+				);
+
+
+				var tv = new Y.FWTreeView({
+					tree: [
+						{
+							label:'nice files',
+                            path: 'niceFiles',
+							children: [
+								{
+									label: 'really nice',
+									path:'reallyNiceFiles'
+								},
+								{
+									label: 'so-so files',
+									path:'mediocreFiles'
+								}
+							]
+						},
+						{
+							label: 'ugly files',
+							path: 'nastyFiles'
+						}
+
+					],
+					dynamicLoader: function (node, callback) {
+						var returnFakeJSON = function(path) {
+							var i, l, f, reply = [];
+							for (i = 0,l = Math.random() * 5; i < l; i+=1) {
+								f = sampleString.substr(Math.random() * sampleString.length, Math.ceil(Math.random() * 10));
+								reply.push({
+									label:f,
+									path:path + '/' + f,
+									isLeaf:Math.random() > .3,
+                                    selectionEnabled: Math.random() > .3
+								})
+							}
+							return reply;
+						}
+
+						var reply = returnFakeJSON(node.get('path'));
+
+						callback(reply);
+						return;
+					},
+					defaultType: FileNode,
+					toggleOnLabelClick:true
+                });
+				tv.render('#selContainer');
+				Y.one('#save').on('click', function() {
+					var output = [];
+					tv.forSomeNodes(function (node) {
+						if (node.get('selected')=== Y.FWTreeNode.FULLY_SELECTED) {
+							output.push({
+								path:node.get('path'),
+								isFolder: !node.get('isLeaf')
+							});
+						}
+					});
+
+					Y.one('#output').setContent(Y.JSON.stringify(output));
+
+				});
+
 			});
 		</script>
 	</body>

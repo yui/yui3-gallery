@@ -1,0 +1,38 @@
+
+    // the code to read and show the results of selected nodes.
+    Y.one('#show').on('click', function () {
+
+        var output = ['<tr><th>Label</th><th>Selected</th></tr>'];
+
+        tv.forSomeNodes(function (node) {
+            if (node.get('selected')) {
+                output.push(Y.Lang.sub(
+                    '<tr><td>{label}</td><td>{selected}</td>',
+                    node.getAttrs(['label','selected'])
+                ));
+            }
+        });
+
+        Y.one('#log').setHTML('<table>' + output.join('\n') + '</table>');
+    });
+
+    // Sets the propagateUp attribute on all nodes
+    Y.one('#up').on('click', function (ev) {
+
+        var value = ev.target.get('checked');
+
+        tv.forSomeNodes(function(node) {
+            node.set('propagateUp', value);
+        });
+    });
+
+    // Sets the propagateDown attribute on all nodes
+    Y.one('#down').on('click', function (ev) {
+
+        var value = ev.target.get('checked');
+
+        tv.forSomeNodes(function(node) {
+            node.set('propagateDown', value);
+        });
+    });
+

@@ -1,0 +1,44 @@
+{
+    "name"       : "gallery-fwt-treeview",
+    "displayName": "Gallery: gallery-fwt-treeview",
+    "description": "A TreeView widget using the Flyweight pattern for its nodes so as to save memory.  It uses the classes in the gallery-flyweight-tree module.",
+    "author"     : [ "Daniel Barreiro (a.k.a.: satyam)" ],
+    "use"        : ["gallery-fwt-treeview"],
+
+    "tags": [ "gallery" ,"treeview", "flyweight pattern"],
+
+    "examples": [
+        {
+            "name" : "tree-simple",
+            "displayName" : "Basic TreeView Implementation",
+            "description" : "Shows how to create a simple TreeView.",
+            "modules" : ["gallery-fwt-treeview"],
+            "tags" : ["TreeView"],
+            "hideTableOfContents": true
+        },
+        {
+            "name" : "dynamic-loading",
+            "displayName" : "Dynamic Loading",
+            "description" : "Shows how to load nodes dynamically.",
+            "modules" : ["gallery-fwt-treeview"],
+            "tags" : ["TreeView", "dynamic","loading"],
+            "hideTableOfContents": true
+        },
+        {
+            "name" : "selection",
+            "displayName" : "Node selection",
+            "description" : "Shows how to select nodes and read them.",
+            "modules" : ["gallery-fwt-treeview"],
+            "tags" : ["TreeView", "selection"],
+            "hideTableOfContents": true
+        },
+        {
+            "name" : "complex",
+            "displayName" : "Complex example",
+            "description" : "Example using different node types, dynamic loading and events.",
+            "modules" : ["gallery-fwt-treeview"],
+            "tags" : ["TreeView", "events", "node types", "dynamic loading"],
+            "hideTableOfContents": true
+        }
+    ]
+}

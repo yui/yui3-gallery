@@ -1,0 +1,41 @@
+
+
+    // The tree definition (it might have arrived as JSON)
+    var treeDefinition =  [
+        {
+            label: 'label 0',
+            children: [
+                {
+                    label: 'label 0-0',
+                    expanded: false,
+                    children: [
+                        {
+                            label: 'label 0-0-0'
+                        },
+                        {
+                            label: 'label 0-0-1',
+                            children: [
+                                {label: 'label 0-0-1'}
+                            ]
+                        }
+                    ]
+                },
+                {
+                    label: 'label 0-1'
+                }
+            ]
+        },
+        {
+            label: 'label 1'
+        }
+    ];
+
+    // Creating the tree
+    var tv = new Y.FWTreeView({
+        tree: treeDefinition
+    });
+
+    // rendering it into a container
+    tv.render('#container');
+
+

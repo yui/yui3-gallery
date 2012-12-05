@@ -1,0 +1,171 @@
+<div class="intro">
+<p>Building a tree dynamically, from YQL queries, using various templates and responding to events.</p>
+</div>
+<style>
+    .www-go {
+        width: 16px;
+        height: 16px;
+        background-image: url({{componentAssets}}/www_go.png);
+        float: left;
+    }
+</style>
+<div class="example yui3-skin-sam">
+<div id="container"></div>
+<script>
+{{>complex-code}}
+</script>
+
+</div>
+<p>The tree above was created from a query to several YQL tables looking for artists containing the string `Madonna`.
+Sometimes YQL does not respond or returns no records.  If so it will show an error message.  Try again a little later.</p>
+
+<p>The first level of the tree shows the artists containing that string, the second, when expanded, show the albums registered
+for that artist and the third the tracks of each albums.  Each branch is different from the previous and they are loaded on demand.</p>
+
+<h3>Creating the nodes</h3>
+
+<p>Each level of the tree contains different information that needs to be shown in a different way.
+Thus, for each node, there is a different type of node, such as the `ArtistNode` below:</p>
+
+```
+{{>artist-node}}
+```
+<p>We create nodes by inheriting from `Y.FWTreeNode`.
+We just need to give it a value for the `NAME` property (here `artist-node`)
+a new `INNER_TEMPLATE` and a couple of extra attributes to hold additional information.</p>
+
+<p>Tree nodes have two templates, the outer and the inner one.
+The outer one rarely needs to be changed, it is usually the inner one that changes from one
+type of node to the other.  Earlier prototypes of FWTreeNode had a single `TEMPLATE` which
+proved to be cumbersome as a lot of it had to be copied, unchanged, from one node type
+to the next.  Thus, we currently have two templates, the `INNER_TEMPLATE` being the one
+modified most often.</p>
+
+<p>Here, we took the original `INNER_TEMPLATE` from FWTreeNode and changed a few things.
+Since we are not going to use node selection, we dropped that.  We added an extra
+`<div class="www-go"></div>` to hold an icon indicating that the node can be navigated.
+The following CSS declaration adds the icon:</p>
+```
+.www-go {
+    width: 16px;
+    height: 16px;
+    background-image: url(assets/www_go.png);
+    float: left;
+}
+```
+<p>We also added the `role="link"` attribute to tell screen readers that the label acts
+as a link, even if not enclosed in anchor tags.</p>
+
+<p>Finally, we added two attributes to those standard in FWTreeNode, `artistId` and `url`.
+We might have chosen to add the value of any of these attributes to the template.
+It is handy to do so when debugging, to make them visible.  The name of the attribute
+enclosed in between curly braces is enough, just as the `{label}` is shown as part of the template.
+We could have built an anchor tag using the `url`, but this really messes up the style
+by showing all the names as links, and also the keyboard navigation as both the node
+and the anchor within it are targets for focus so there are two stops per node
+(and not in a predictable order, but that's another story).</p>
+
+<p>Other node types can be defined in a similar manner, with different templates
+and attributes. In both of them, some of the extra values stored in the new
+attributes do get used in the templates:</p>
+```
+{{>other-nodes}}
+```
+<h3>Tree creation</h3>
+
+<p>We can't draw the tree until we have some data so, instead of starting with the tree,
+we start with the first query.  The string for the query can be test by using the YQL console.
+The YQL module adds some options to the query so that it returns JSON which the YQL module
+decodes and passes to the callback function as its argument. We check the number of records
+in the response and if there is none, we show an error message.</p>
+
+<p>YQL has the unfortunate peculiarity of producing different responses for
+different number of records.  Instead of always providing an array with 0, 1 or
+more objects in it, it will return null, an object or an array of objects.
+When we extract the `results` from the `response`, we already default to an empty array
+if it came as null (this should never happen since we have already checked that the
+count is greater than zero). Still, if there is only
+one record, we need to turn it into an array, which we do in the next lines.</p>
+
+<p>We then loop through those records, pushing into the `treeDef` array the values
+of the properties we are interested in, giving them suitable names for our purposes.
+We also add a `type: ArtistNode` property to each node so that we used the
+subclass of FWTreeNode we defined before so FWTreeView uses that instead of the default node type.</p>
+
+<p>Finally, we create the tree, using that tree definition and assigning it a
+dynamic loader, and render it into a container.  We then set a listener to a couple
+of events, which we will discuss later.</p>
+
+```
+{{>complex-init}}
+```
+<h3>Dynamic Loader</h3>
+
+<p>The dynamic loader looks big but it is actually made up of two almost identical parts
+both of which are very similar to what we have already seen.</p>
+
+<p>The dynamic loader is called whenever a node which is not marked as a terminal
+node (`isLeaf: true`) gets expanded the first time
+(if the node is collapsed and expanded again, it won't be refreshed).
+The loader will receive a reference to the node being expanded and a reference to
+a function it must call back when done.</p>
+
+<p>Since the first two levels of the tree can be loaded dynamically we first
+need to find out which kind of node is being expanded, if it is an `ArtistNode`
+or an `AlbumNode`, both of which we defined earlier.</p>
+
+<p>From then on, the code in each of the halves is very similar to what we saw
+for the first level of the tree, we start a YQL query, check the number of items
+in the reply and push the results into a `treeDef` array.  For each level,
+we add a suitable node `type` to be used for each.  For the last level
+we add a further property `isLeaf: false` so that FWTreeView knows it should
+not draw toggle icons on those, since there is nothing else there.</p>
+
+<p>When we have the tree definition for each level, we call the callback function
+with the array containing the children of the node received as an argument.
+The callback is also called when no records are received, in that case with no arguments.
+FWTreeView will mark the parent node as terminal (`isLeaf: true`) and the
+node will not expand any longer.  Since the empty response might or might not be an error,
+it is up to the developer to provide any additional indication to the user, in this case
+an `alert` box is shown.</p>
+```
+{{>dynamic-loader}}
+```
+
+<h3>Listening to events</h3>
+
+<p>We avoided providing an actual anchor element to link to each artist and album
+page at Yahoo!'s music site, to make the tree look better and improve navigation.
+Instead, we listen to the `click` and the `enterkey` events.  </p>
+
+<p>The `click` event is the regular DOM event which bubbles up to the contentBox
+of the FWTreeView widget.  FWTreeView picks that event (and any other DOM event
+you might want to listen to) and adds a `node` property to the event facade.</p>
+
+<p>The `enterkey` is generated by FWTreeView in response to a `keydown` event
+with the key code for the enter key.  A similar event, `spacebar` is also available.
+This events are singled out by the WAI-ARIA usability guidelines, the first
+for an application-defined use, the second for toggling selection, thus, it
+made sense to add these extra two events.  Since FWTreeView already listens
+to the `keydown` event to provide navigation within the widget, these two events
+added nearly no size to the code. All the regular key events
+are still available for other keys.</p>
+
+<p>So, in the event listener, we check if the event was an `enterkey` or
+otherwise, if it was a `click` (and after the first condition, there is nothing else
+it can be), whether it happened over the icon for navigation.  If so, we read
+the `url` from the `node` received as part of the event facade and, if there is one
+we navigate to it. In this way, we respond both to a click on the icon and to
+the expected keyboard behavior on an element marked with `role="link"`. </p>
+
+<p>It is a good practice to check whether the target of the `click` event was
+the added icon.  FWTreeView already listens to the `click` event both for
+toggling the expansion of nodes and to select nodes, when enabled.
+However, it does not prevent further propagation of the event in those cases,
+as the developer might want to do something else after the toggling.  So,
+don't assume that the `click` event, if it reaches you, it has been
+filtered out, check the target.</p>
+
+```
+{{>event-listener}}
+```

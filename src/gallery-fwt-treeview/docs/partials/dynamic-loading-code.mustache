@@ -1,0 +1,39 @@
+YUI().use('gallery-fwt-treeview', function (Y) {
+
+    (new Y.FWTreeView({
+        // The initial tree nodes:
+        tree: [
+            'label 0',
+            'label 1',
+            'label 2'
+        ],
+
+        // The dynamic loader:
+        dynamicLoader: function (node, callback) {
+
+            // a little delay is faked to simulate a remote response
+            window.setTimeout(function () {
+
+                var i, branch = [],
+
+                    // The label (or any other suitable info) is fetched from the node being expanded
+                    label = node.get('label');
+
+                // Three new simple nodes are piled into the response
+                // These just need a string for the label
+                for (i = 0; i < 3; i += 1) {
+                    branch[i] = label + '-' + i;
+                }
+                // A further childless node is added, which requires an object to set the options.
+                branch.push({
+                    label: 'no children',
+                    isLeaf: true
+                });
+
+                // The new nodes are sent to the TreeView to display
+                callback(branch);
+
+            },1000);
+        }
+    })).render('#container');
+});

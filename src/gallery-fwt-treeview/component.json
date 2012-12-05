@@ -1,0 +1,10 @@
+{
+    "name"       : "FWTreeview",
+    "displayName": "Satyam's TreeView",
+    "description": "Provides automatic input completion or suggestions for text input fields and textareas.",
+    "author"     : "Satyam (Daniel Barreiro)",
+
+    "yuiSeedUrl" : "http://yui.yahooapis.com/3.7.3/build/yui/yui-min.js",
+    "tags": ["widget", "treeview"],
+    "use" : ["autocomplete"]
+}

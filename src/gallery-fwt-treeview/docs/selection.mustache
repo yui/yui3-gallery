@@ -1,0 +1,62 @@
+<div class="intro">
+<p>Node Selection.</p>
+</div>
+<div class="example yui3-skin-sam">
+    <div id="container"  class="yui3-fw-treeview-checkbox"></div>
+    <hr/>
+    <div>
+        <input id="up" type="checkbox" checked> propagateUp &nbsp; &nbsp;
+        <input id="down" type="checkbox" checked> propagateDown &nbsp; &nbsp;
+        <button id="show">Show Selected</button>
+    </div>
+    <div id="log"></div>
+
+    <script>
+YUI().use('gallery-fwt-treeview', function (Y) {
+    {{>tree-simple-code}}
+    {{>selection-code}}
+});
+    </script>
+
+</div>
+<h3>Node selection</h3>
+<p>Node selection is always enabled in FWTreeView but it is not always shown.
+The CSS that comes with FWTreeView provides for checkboxes to show selection.
+The developer may choose to show them in a different manner.
+To make them visible, the container should have the CSS class name `yui3-fw-treeview-checkbox`,
+like:</p>
+```
+<div id="container" class="yui3-fw-treeview-checkbox"></div>
+```
+<p>The example above uses the same code as the <a href="tree-simple.html">basic example</a>
+to show the tree but the class name on the container makes the selection checkboxes visible.</p>
+<p>Clicking on the checkboxes or pressing the space bar when the a node has the focus
+changes the selected state of the node.</p>
+
+<p>FWTreeView optionally supports propagation of selection.
+Selecting a node may select all its descendants while, at the same time,
+it may affect its ancestors.  This is controlled by the `propagateUp` and `propagateDown`
+attributes and to see it at work, the example has two checkboxes below the tree
+to change the state of these two attributes.</p>
+<p>When `propagateUp` is enabled, changing the selected state of a node will
+make the parent recalculate its selected state. If all its children are selected,
+it will become selected.  If none of its children is selected, it will not
+be selected.  If there is a mix of selected and unselected nodes, it will
+become partially selected.</p>
+<p>The `Show Selected` button shows the labels of the nodes that are fully or
+partially selected with the value of the `selected` attribute.  It will be 1
+for those partially selected and 2 for fully selected.  The `selected` attribute
+can return three values, 0, 1 or 2 while when setting however, the developer cannot
+force a node to have a 1 state, it can only be the result of propagation.
+On setting the `selected` attribute, any falsy value will make it 0, any thruthy
+value will make it 2.</p>
+
+<p>See the <a href="tree-simple.html">basic example</a> for the code to draw the tree.
+This extra code has been added to respond to the changes in setting propagation
+and showing the data from the tree:</p>
+
+
+
+```
+{{>selection-code}}
+```

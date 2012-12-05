@@ -1,25 +1,7 @@
-YUI.add('gallery-fwt-treeview', function(Y) {
+YUI.add('gallery-fwt-treeview', function (Y, NAME) {
 
-'use strict';
-/*jslint white: true */
-var Lang = Y.Lang,
-	// DOT = '.',
-	getCName = Y.ClassNameManager.getClassName,
-	cName = function (name) {
-		return getCName('fw-treeview', name);
-	},
-	CNAMES = {
-		toggle: cName('toggle'),
-		icon: cName('icon'),
-		selection: cName('selection'),
-		content: cName('content'),
-		sel_prefix: cName('selected-state')
-	},
-	CBX = 'contentBox',
-	NOT_SELECTED = 0,
-	PARTIALLY_SELECTED = 1,
-	FULLY_SELECTED = 2;
-/** Creates a Treeview using the FlyweightTreeManager extension to handle its nodes.
+/**
+ * Creates a Treeview using the FlyweightTreeManager Widget to handle its nodes.
  * It creates the tree based on an object passed as the `tree` attribute in the constructor.
  * @example
  *
@@ -44,48 +26,271 @@ var Lang = Y.Lang,
 
  * @module gallery-fwt-treeview
  */
+'use strict';
+/*jslint white: true */
+var Lang = Y.Lang,
+	YArray = Y.Array,
+    FWTV,
+    FWTN,
+	getCName = Y.ClassNameManager.getClassName,
+	cName = function (name) {
+		return getCName('fw-treeview', name);
+	},
+	CBX = 'contentBox',
+    EXPANDED = 'expanded',
+    SEL_ENABLED = 'selectionEnabled',
+    SELECTED = 'selected',
+    CHANGE = 'Change',
+	NOT_SELECTED = 0,
+	PARTIALLY_SELECTED = 1,
+	FULLY_SELECTED = 2;
 /**
+ * TreeView widget.
+ * It creates the tree based on an object passed as the `tree` attribute in the constructor.
+ * @example
+ *
+	var tv = new Y.FWTreeView({tree: [
+		{
+			label:'label 0',
+			children: [
+				{
+					label: 'label 0-0',
+					children: [
+						{label: 'label 0-0-0'},
+						{label: 'label 0-0-1'}
+					]
+				},
+				{label: 'label 0-1'}
+			]
+		},
+		{label: 'label 1'}
+
+	]});
+	tv.render('#container');
+
+ *
  * @class FWTreeView
- * @extends Widget
- * @uses FlyweightTreeManager
- */
-/**
+ * @extends FlyweightTreeManager
  * @constructor
  * @param config {Object} Configuration attributes, amongst them:
- * @param config.tree {Array} Array of objects defining the first level of nodes.
+ * @param config.tree {Array} Array of strings or objects defining the first level of nodes.
+ * If a string, it will be used as the label, if an object, it may contain:
  * @param config.tree.label {String} Text of HTML markup to be shown in the node
  * @param [config.tree.expanded=true] {Boolean} Whether the children of this node should be visible.
  * @param [config.tree.children] {Array} Further definitions for the children of this node
  * @param [config.tree.type=FWTreeNode] {FWTreeNode | String} Class used to create instances for this node.
  * It can be a reference to an object or a name that can be resolved as `Y[name]`.
  * @param [config.tree.id=Y.guid()] {String} Identifier to assign to the DOM element containing this node.
- * @param [config.tree.template] {String} Template for this particular node. 
+ * @param [config.tree.template] {String} Template for this particular node.
  */
-Y.FWTreeView = Y.Base.create(
-	'fw-treeview',
-	Y.Widget,
-	[Y.FlyweightTreeManager],
+FWTV = Y.Base.create(
+	NAME,
+	Y.FlyweightTreeManager,
+	[],
 	{
+        /**
+         * Array of iNodes containing a flat list of all nodes visible regardless
+         * of their depth in the tree.
+         * Used to handle keyboard navigation.
+         * @property _visibleSequence
+         * @type Array or null
+         * @default null
+         * @private
+         */
+        _visibleSequence: null,
+        /**
+         * Index, within {{#crossLink "_visibleSequence"}}{{/crossLink}}, of the iNode having the focus.
+         * Used for keyboard navigation.
+         * @property _visibleIndex
+         * @type Integer
+         * @default null
+         * @private
+         */
+        _visibleIndex: null,
 		/**
 		 * Widget lifecycle method
 		 * @method initializer
-		 * @param config {object} configuration object of which 
+		 * @param config {object} configuration object of which
 		 * `tree` contains the tree configuration.
 		 */
 		initializer: function (config) {
 			this._domEvents = ['click'];
 			this._loadConfig(config.tree);
 		},
+        /**
+         * Overrides the same function to process the selected attribute
+         * @method _initNodes
+         * @param parentINode {Object} Parent of the iNodes to be set
+         * @protected
+         */
+        _initNodes: function (parentINode) {
+            FWTV.superclass._initNodes.call(this, parentINode);
+            parentINode.selected = parentINode.selected?FULLY_SELECTED:NOT_SELECTED;
+        },
 		/**
-		 * Widget lifecyle method
-		 * I opted for not including this method in FlyweightTreeManager so that
-		 * it can be used to extend Base, not just Widget
+		 * Widget lifecyle method.
+         * Adds the `tree` role to the content box.
 		 * @method renderUI
 		 * @protected
 		 */
 		renderUI: function () {
-			this.get(CBX).setContent(this._getHTML());
+            FWTV.superclass.renderUI.apply(this, arguments);
+            this.get(CBX).set('role','tree');
 		},
+		/**
+		 * Widget lifecyle method.
+         * Sets the keydown listener to handle keyboard navigation.
+		 * @method bindUI
+		 * @protected
+		 */
+        bindUI: function () {
+            FWTV.superclass.bindUI.apply(this, arguments);
+            this._eventHandles.push(this.get(CBX).on('keydown', this._onKeyDown, this));
+        },
+        /**
+         * Listener for keyboard events to handle keyboard navigation
+         * @method _onKeyDown
+         * @param ev {EventFacade} Standard YUI key facade
+         * @private
+         */
+        _onKeyDown: function (ev) {
+            var self = this,
+                key = ev.keyCode,
+                iNode = this._focusedINode,
+                seq = this._visibleSequence,
+                index = this._visibleIndex,
+                fwNode,
+                fireKey = function (which) {
+                    fwNode = self._poolFetch(iNode);
+                    ev.container = ev.target;
+                    ev.target = Y.one('#' + iNode.id);
+                    var newEv = {
+                        domEvent:ev,
+                        node: fwNode
+                    };
+                    self.fire(which, newEv);
+                    fwNode.fire(which);
+                    self._poolReturn(fwNode);
+                };
+
+            switch (key) {
+                case 38: // up
+                    if (!seq) {
+                        seq = this._rebuildSequence();
+                        index = seq.indexOf(iNode);
+                    }
+                    index -=1;
+                    if (index >= 0) {
+                        iNode = seq[index];
+                        self._visibleIndex = index;
+                    } else {
+                        iNode = null;
+                    }
+                    break;
+                case 39: // right
+                    if (iNode.expanded) {
+                        if (iNode.children && iNode.children.length) {
+                            iNode = iNode.children[0];
+                        } else {
+                            iNode = null;
+                        }
+                    } else {
+                        self._poolReturn(self._poolFetch(iNode).set(EXPANDED, true));
+                        iNode = null;
+                    }
+
+                    break;
+                case 40: // down
+                    if (!seq) {
+                        seq = self._rebuildSequence();
+                        index = seq.indexOf(iNode);
+                    }
+                    index +=1;
+                    if (index < seq.length) {
+                        iNode = seq[index];
+                        self._visibleIndex = index;
+                    } else {
+                        iNode = null;
+                    }
+                    break;
+                case 37: // left
+                    if (iNode.expanded && iNode.children) {
+                        self._poolReturn(self._poolFetch(iNode).set(EXPANDED, false));
+                        iNode = null;
+                    } else {
+                        iNode = iNode._parent;
+                        if (iNode === self._tree) {
+                            iNode = null;
+                        }
+                    }
+
+                    break;
+                case 36: // home
+                    iNode = self._tree.children && self._tree.children[0];
+                    break;
+                case 35: // end
+                    index = self._tree.children && self._tree.children.length;
+                    if (index) {
+                        iNode = self._tree.children[index -1];
+                    } else {
+                        iNode = null;
+                    }
+                    break;
+                case 13: // enter
+                    fireKey('enterkey');
+                    iNode = null;
+                    break;
+                case 32: // spacebar
+                    fireKey('spacebar');
+                    iNode = null;
+                    break;
+                case 106: // asterisk on the numeric keypad
+                    self.expandAll();
+                    break;
+                default: // initial
+                    iNode = null;
+                    break;
+            }
+            if (iNode) {
+                self._focusOnINode(iNode);
+                ev.halt();
+                return false;
+            }
+            return true;
+        },
+        /**
+         * Listener for the focus event.
+         * Updates the node receiving the focus when the widget gets the focus.
+         * @method _aferFocus
+         * @param ev {EventFacade} Standard event facade
+         * @private
+         */
+        _afterFocus: function (ev) {
+            var iNode = this._findINodeByElement(ev.domEvent.target);
+            this._focusOnINode(iNode);
+            if (this._visibleSequence) {
+                this._visibleIndex = this._visibleSequence.indexOf(iNode);
+            }
+        },
+        /**
+         * Rebuilds the array of {{#crossLink "_visibleSequence"}}{{/crossLink}} that can be traversed with the up/down arrow keys
+         * @method _rebuildSequence
+         * @private
+         */
+        _rebuildSequence: function () {
+            var seq = [],
+                loop = function(iNode) {
+                    YArray.each(iNode.children || [], function(childINode) {
+                        seq.push(childINode);
+                        if (childINode.expanded) {
+                            loop(childINode);
+                        }
+                    });
+                };
+            loop(this._tree);
+            return (this._visibleSequence = seq);
+
+        },
 		/**
 		 * Overrides the default CONTENT_TEMPLATE to make it an unordered list instead of a div
 		 * @property CONTENT_TEMPLATE
@@ -110,44 +315,81 @@ Y.FWTreeView = Y.Base.create(
 			 * Enables toggling by clicking on the label item instead of just the toggle icon.
 			 * @attribute toggleOnLabelClick
 			 * @type Boolean
-			 * @value false
+			 * @default false
 			 */
 			toggleOnLabelClick: {
 				value:false,
 				validator:Lang.isBoolean
 			}
-
-
 		}
-
 	}
 );
-/** This class must not be generated directly.  
- *  Instances of it will be provided by FWTreeView as required.
- *  
- *  Subclasses might be defined based on it.  
- *  Usually, they will add further attributes and redefine the TEMPLATE to 
- *  show those extra attributes.
- *  
- *  @module gallery-fwt-treeview
+
+/**
+ * TreeView provides all the events that Widget relays from the DOM.
+ * It adds an additional property to the EventFacade called `node`
+ * that points to the TreeNode instance that received the event.
+ *
+ * This instance is pooled and will be discarded upon return from the listener.
+ * If you need to hold on to this instance,
+ * use the {{#crossLink "TreeNode/hold"}}{{/crossLink}} method to preserve it.
+ * @event -any DOM event-
+ * @param type {String} The full name of the event fired
+ * @param ev {EventFacade} Standard YUI event facade for DOM events plus:
+ * @param ev.node {TreeNode} TreeNode instance that received the event
  */
 /**
- *    
+ * Fires when the space bar is pressed.
+ * Used internally to toggle node selection.
+ * @event spacebar
+ * @param ev {EventFacade} YUI event facade for keyboard events, including:
+ * @param ev.domEvent {Object} The original event produced by the DOM, except:
+ * @param ev.domEvent.target {Node} The DOM element that had the focus when the key was pressed
+ * @param ev.node {FWTreeNode} The node that had the focus when the key was pressed
+ */
+/**
+ * Fires when the enter key is pressed.
+ * @event enterkey
+ * @param ev {EventFacade} YUI event facade for keyboard events, including:
+ * @param ev.domEvent {Object} The original event produced by the DOM, except:
+ * @param ev.domEvent.target {Node} The DOM element that had the focus when the key was pressed
+ * @param ev.node {FWTreeNode} The node that had the focus when the key was pressed
+ */
+Y.FWTreeView = FWTV;/**
+ *  This class must not be generated directly.
+ *  Instances of it will be provided by FWTreeView as required.
+ *
+ *  Subclasses might be defined based on it.
+ *  Usually, they will add further attributes and redefine the TEMPLATE to
+ *  show those extra attributes.
+ *
  *  @class FWTreeNode
  *  @extends FlyweightTreeNode
- */
-/**
  *  @constructor
  */
- Y.FWTreeNode = Y.Base.create(
+ FWTN = Y.Base.create(
 	'fw-treenode',
 	Y.FlyweightTreeNode,
 	[],
 	{
 		initializer: function() {
-			this.after('click', this._afterClick, this);
-			this.after('selectedChange', this._afterSelectedChange, this);
+			this._root._eventHandles.push(
+                this.after('click', this._afterClick),
+                this.after(SELECTED + CHANGE, this._afterSelectedChange),
+                this.after('spacebar', this.toggleSelection),
+                this.after(EXPANDED + CHANGE, this._afterExpandedChanged)
+            );
 		},
+        /**
+         * Listens to changes in the expanded attribute to invalidate and force
+         * a rebuild of the list of visible nodes
+         * the user can navigate through via the keyboard.
+         * @method _afterExpandedChanged
+         * @protected
+         */
+        _afterExpandedChanged: function () {
+            this._root._visibleSequence = null;
+        },
 		/**
 		 * Responds to the click event by toggling the node
 		 * @method _afterClick
@@ -155,12 +397,13 @@ Y.FWTreeView = Y.Base.create(
 		 * @private
 		 */
 		_afterClick: function (ev) {
-			var target = ev.domEvent.target;
-			if (target.hasClass(CNAMES.toggle)) {
+			var target = ev.domEvent.target,
+                CNAMES = FWTN.CNAMES;
+			if (target.hasClass(CNAMES.CNAME_TOGGLE)) {
 				this.toggle();
-			} else if (target.hasClass(CNAMES.selection)) {
+			} else if (target.hasClass(CNAMES.CNAME_SELECTION)) {
 				this.toggleSelection();
-			} else if (target.hasClass(CNAMES.content) || target.hasClass(CNAMES.icon)) {
+			} else if (target.hasClass(CNAMES.CNAME_LABEL) || target.hasClass(CNAMES.CNAME_ICON)) {
 				if (this.get('root').get('toggleOnLabelClick')) {
 					this.toggle();
 				}
@@ -168,33 +411,96 @@ Y.FWTreeView = Y.Base.create(
 		},
 		/**
 		 * Sugar method to toggle the selected state of a node.
+         * See {{#crossLink "selected:attribute"}}{{/crossLink}}.
 		 * @method toggleSelection
 		 */
 		toggleSelection: function() {
-			this.set('selected', (this.get('selected')?NOT_SELECTED:FULLY_SELECTED));
+			this.set(SELECTED, (this.get(SELECTED)?NOT_SELECTED:FULLY_SELECTED));
 		},
 		/**
+		 * Responds to the change in the {{#crossLink "label:attribute"}}{{/crossLink}} attribute.
+		 * @method _afterLabelChange
+		 * @param ev {EventFacade} standard attribute change event facade
+		 * @private
+		 */
+        _afterLabelChange: function (ev) {
+            var el = Y.one('#' + this._iNode.id + ' .' + FWTN.CNAMES.CNAME_LABEL);
+            if (el) {
+                el.setHTML(ev.newVal);
+            }
+        },		/**
 		 * Changes the UI to reflect the selected state and propagates the selection up and/or down.
 		 * @method _afterSelectedChange
 		 * @param ev {EventFacade} out of which
-		 * @param ev.src {String} if not undefined it can be `'propagateUp'` or `'propagateDown'` so that propagation goes in just one direction and doesn't bounce back.
+		 * @param ev.src {String} if not undefined it can be `'propagateUp'` or `'propagateDown'`
+         * so that propagation goes in just one direction and doesn't bounce back.
 		 * @private
 		 */
 		_afterSelectedChange: function (ev) {
-			var selected = ev.newVal;
-				
+			var selected = ev.newVal,
+                prefix = FWTN.CNAMES.CNAME_SEL_PREFIX + '-',
+                el;
+            if (!this.get(SEL_ENABLED)) {
+                return;
+            }
 			if (!this.isRoot()) {
-				Y.one('#' + this.get('id')).replaceClass('yui3-fw-treeview-selected-state-' + ev.prevVal,'yui3-fw-treeview-selected-state-' + selected);
+				el = Y.one('#' + this.get('id'));
+                if (el) {
+                    el.replaceClass(prefix + ev.prevVal, prefix + selected);
+                    el.set('aria-checked', this._ariaCheckedGetter());
+                }
 				if (this.get('propagateUp') && ev.src !== 'propagatingDown') {
 					this.getParent()._childSelectedChange().release();
 				}
+                if (this.get('propagateDown') && ev.src !== 'propagatingUp') {
+                    this.forSomeChildren(function(node) {
+                        node.set(SELECTED , selected, 'propagatingDown');
+                    });
+                }
 			}
-			if (this.get('propagateDown') && ev.src !== 'propagatingUp') {
-				this.forSomeChildren(function(node) {
-					node.set('selected' , selected, 'propagatingDown');
-				});
-			}
-		},
+        },
+        /**
+         * Getter for the {{#crossLink "_aria_checked:attribute"}}{{/crossLink}}.
+         * Translate the internal {{#crossLink "selected:attribute"}}{{/crossLink}}
+         * to the strings the `aria_checked` attribute expects
+         * @method _ariaCheckedGetter
+         * @return {String} One of 'false', 'true' or 'mixed'
+         * @private
+         */
+        _ariaCheckedGetter: function () {
+            return ['false','mixed','true'][this.get(SELECTED) ||0];
+        },
+        /**
+         * Setter for the {{ćrossLink "selected:attribute}}{{/crossLink}}.
+         * Translates a truish or falsy value into FULLY_SELECTED or NOT_SELECTED.
+         * @method _selectedSetter
+         * @param value
+         * @private
+         */
+        _selectedSetter: function (value) {
+            return (value?FULLY_SELECTED:NOT_SELECTED);
+        },
+        /**
+         * Getter for the `selected` attribute.
+         * Returns false when selection is not enabled.
+         * @method _selectedGetter
+         * @param value {integer} current value
+         * @return {integer} current value or false if not enabled
+         * @private
+         */
+        _selectedGetter: function (value) {
+            return (this.get(SEL_ENABLED)?value||0:null);
+        },
+        /**
+         * Getter for both the `propagateUp` and `propagateDown` attributes.
+         * @method _propagateGetter
+         * @param value {Boolean} current value
+         * @return {Boolean} the state of the attribute
+         * @private
+         */
+        _propagateGetter: function (value) {
+            return (this.get(SEL_ENABLED)?(value !== false):false);
+        },
 		/**
 		 * Overrides the original in FlyweightTreeNode so as to propagate the selected state
 		 * on dynamically loaded nodes.
@@ -202,14 +508,15 @@ Y.FWTreeView = Y.Base.create(
 		 * @private
 		 */
 		_dynamicLoadReturn: function () {
-			 Y.FWTreeNode.superclass._dynamicLoadReturn.apply(this, arguments);
-			 if (this.get('propagateDown')) {
-				var selected = this.get('selected');
+            FWTN.superclass._dynamicLoadReturn.apply(this, arguments);
+			if (this.get('propagateDown')) {
+				var selected = this.get(SELECTED);
 				this.forSomeChildren(function(node) {
-					node.set('selected' , selected, 'propagatingDown');
+					node.set(SELECTED , selected, 'propagatingDown');
 				});
 			}
-			 
+            this._root._visibleSequence = null;
+
 		},
 		/**
 		 * When propagating selection up, it is called by a child when changing its selected state
@@ -218,24 +525,65 @@ Y.FWTreeView = Y.Base.create(
 		 * @private
 		 */
 		_childSelectedChange: function () {
-			var count = 0, selCount = 0;
+			var count = 0, selCount = 0, value;
 			this.forSomeChildren(function (node) {
 				count +=2;
-				selCount += node.get('selected');
+				selCount += node.get(SELECTED);
 			});
-			this.set('selected', (selCount === 0?NOT_SELECTED:(selCount === count?FULLY_SELECTED:PARTIALLY_SELECTED)), {src:'propagatingUp'});
+            // While this is not solved:  http://yuilibrary.com/projects/yui3/ticket/2532810
+            // This is the good line:
+			//this.set(SELECTED, (selCount === 0?NOT_SELECTED:(selCount === count?FULLY_SELECTED:PARTIALLY_SELECTED)), {src:'propagatingUp'});
+            // This is the patch:
+            value = (selCount === 0?NOT_SELECTED:(selCount === count?FULLY_SELECTED:PARTIALLY_SELECTED));
+            this._afterSelectedChange({
+                prevVal: this._iNode.selected,
+                newVal: value,
+                src: 'propagatingUp'
+            });
+            this._iNode.selected = value;
+            // end of the patch
 			return this;
 		}
-		
+
 	},
 	{
 		/**
-		 * Template to produce the markup for a node in the tree.
-		 * @property TEMPLATE
+		 * Outer template to produce the markup for a node in the tree.
+         * It replaces the standard one provided by FlyweightTreeNode.
+         * Adds the proper ARIA role and node selection.
+		 * @property OUTER_TEMPLATE
 		 * @type String
 		 * @static
 		 */
-		TEMPLATE: Lang.sub('<li id="{id}" class="{cname_node} {sel_prefix}-{selected}"><div class="{toggle}"></div><div class="{icon}"></div><div class="{selection}"></div><div class="{content}">{label}</div><ul class="{cname_children}">{children}</ul></li>', CNAMES),
+		OUTER_TEMPLATE: '<li id="{id}" class="{CNAME_NODE} {CNAME_SEL_PREFIX}-{selected}" ' +
+                'role="treeitem" aria-expanded="{expanded}" aria-checked="{_aria_checked}">' +
+            '{INNER_TEMPLATE}' +
+            '<ul class="{CNAME_CHILDREN}" role="group">{children}</ul></li>',
+		/**
+		 * Template to produce the markup for a node in the tree.
+         * It replaces the standard one provided by FlyweightTreeNode.
+         * Adds places for the toggle and selection icons, an extra app-dependent icon and the label.
+		 * @property INNER_TEMPLATE
+		 * @type String
+         *
+		 * @static
+		 */
+		INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+            '<div class="{CNAME_ICON}"></div><div class="{CNAME_SELECTION}"></div><div class="{CNAME_LABEL}">{label}</div></div>',
+        /**
+         * Collection of classNames to set in the template.
+         * @property CNAMES
+         * @type Object
+         * @static
+         * @final
+         */
+        CNAMES: {
+            CNAME_TOGGLE: cName('toggle'),
+            CNAME_ICON: cName('icon'),
+            CNAME_SELECTION: cName('selection'),
+            CNAME_SEL_PREFIX: cName('selected-state'),
+            CNAME_LABEL: cName('label')
+        },
 		/**
 		 * Constant to use with the `selected` attribute to indicate the node is not selected.
 		 * @property NOT_SELECTED
@@ -246,7 +594,7 @@ Y.FWTreeView = Y.Base.create(
 		 */
 		NOT_SELECTED:NOT_SELECTED,
 		/**
-		 * Constant to use with the `selected` attribute to indicate some 
+		 * Constant to use with the `selected` attribute to indicate some
 		 * but not all of the children of this node are selected.
 		 * This state should only be acquired by upward propagation from descendants.
 		 * @property PARTIALLY_SELECTED
@@ -267,49 +615,118 @@ Y.FWTreeView = Y.Base.create(
 		FULLY_SELECTED:FULLY_SELECTED,
 		ATTRS: {
 			/**
-			 * Selected/highlighted state of the node. 
-			 * It can be
-			 * 
-			 * - Y.FWTreeNode.NOT_SELECTED (0) not selected
-			 * - Y.FWTreeNode.PARTIALLY_SELECTED (1) partially selected: some children are selected, some not or partially selected.
-			 * - Y.FWTreeNode.FULLY_SELECTED (2) fully selected.
-			 * 
+			 * Selected/highlighted state of the node.
+             *
+             * The node selection mechanism is always enabled though it might not be visible.
+             * It only sets a suitable className on the tree node.
+             * The module is provided with a default CSS style that makes node selection visible.
+             * To enable it, add the `yui3-fw-treeview-checkbox` className to the container of the tree.
+             *
+			 * `selected` can return
+			 *
+			 * - Y.FWTreeNode.NOT\_SELECTED (0) not selected
+			 * - Y.FWTreeNode.PARTIALLY\_SELECTED (1) partially selected: some children are selected, some not or partially selected.
+			 * - Y.FWTreeNode.FULLY\_SELECTED (2) fully selected.
+             * - null when {{#crossLing "selectionEnabled:attribute"}}{{/crossLink}} is not enabled
+             *
+             * `selected`can be set to:
+             *
+             * - any true value:  will produce a FULLY\_SELECTED state.
+             * - any false value: will produce a NOT\_SELECTED state.
+			 *
 			 * The partially selected state can only be the result of selection propagating up from a child node.
-			 * The attribute might return PARTIALLY_SELECTED but the developer should never set that value.
+			 * Since PARTIALLY\_SELECTED cannot be set, leaving just two possible values for setting,
+             * any true or false value will be valid when setting.  However, no matter what values were
+             * used when setting, one of the three possible values above will be returned.
+             *
 			 * @attribute selected
 			 * @type Integer
-			 * @value NOT_SELECTED
+			 * @default NOT_SELECTED
 			 */
 			selected: {
 				value:NOT_SELECTED,
-				validator:function (value) {
-					return value === NOT_SELECTED || value === FULLY_SELECTED || value === PARTIALLY_SELECTED;
-				}
+                setter: '_selectedSetter',
+                getter: '_selectedGetter'
 			},
+            /**
+             * String value equivalent to the {{#crossLink "selected:attribute"}}{{/crossLink}}
+             * for use in template expansion.
+             * @attribute _aria_checked
+             * @type String
+             * @default false
+             * @readonly
+             * @protected
+             */
+            _aria_checked: {
+                readOnly: true,
+                getter: '_ariaCheckedGetter'
+            },
+            /**
+             * Enables node selection. Nodes with selection enabled w
+             * @attribute selectEnabled
+             * @type Boolean
+             * @default true
+             */
+            selectionEnabled: {
+                value: true,
+                validator: Lang.isBoolean
+            },
 			/**
 			 * Whether selection of one node should propagate to its parent.
+             * See {{#crossLink "selected:attribute"}}{{/crossLink}}.
 			 * @attribute propagateUp
 			 * @type Boolean
-			 * @value true
+			 * @default true
 			 */
 			propagateUp: {
 				value: true,
-				validator: Lang.isBoolean
+				validator: Lang.isBoolean,
+                getter: '_propagageGetter'
 			},
 			/**
 			 * Whether selection of one node should propagate to its children.
-			 * @attribute propagateDown
+             * See {{#crossLink "selected:attribute"}}{{/crossLink}}.
+             * @attribute propagateDown
 			 * @type Boolean
-			 * @value true
+			 * @default true
 			 */
 			propagateDown: {
 				value: true,
-				validator: Lang.isBoolean
+				validator: Lang.isBoolean,
+                getter: '_propagageGetter'
 			}
 		}
 	}
 );
 
+/**
+ * Fires when the space bar is pressed.
+ * Used internally to toggle node selection.
+ * @event spacebar
+ * @param ev {EventFacade} YUI event facade for keyboard events, including:
+ * @param ev.domEvent {Object} The original event produced by the DOM, except:
+ * @param ev.domEvent.target {Node} The DOM element that had the focus when the key was pressed
+ * @param ev.node {FWTreeNode} The node that had the focus when the key was pressed
+ */
+/**
+ * Fires when the enter key is pressed.
+ * @event enterkey
+ * @param ev {EventFacade} YUI event facade for keyboard events, including:
+ * @param ev.domEvent {Object} The original event produced by the DOM, except:
+ * @param ev.domEvent.target {Node} The DOM element that had the focus when the key was pressed
+ * @param ev.node {FWTreeNode} The node that had the focus when the key was pressed
+ */
+/**
+ * Fires when this node is clicked.
+ * Used internally to toggle expansion or selection when clicked
+ * on the corresponding icons.
+ *
+ * It cannot be prevented.  This is a helper event, the actual event
+ * happens on the TreeView instance and it is relayed here for convenience.
+ * @event click
+ * @param ev {EventFacade} Standard YUI event facade for mouse events.
+ */
 
+Y.FWTreeNode = FWTN;
 
-}, 'gallery-2012.10.03-20-02' ,{requires:['gallery-flyweight-tree', 'widget', 'base-build'], skinnable:true});
+}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-flyweight-tree", "widget", "base-build"], "skinnable": true});

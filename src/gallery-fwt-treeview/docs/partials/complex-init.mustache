@@ -1,0 +1,39 @@
+
+    Y.YQL(
+        'select id, name, url from music.artist.search where keyword="Madonna" ' +
+        '| sort(field="trackCount", descending="true")',
+
+        function(response) {
+            if (!response.query.count) {
+                Y.one('#container').setHTML('YQL query for Madonna returned no records or failed');
+                return;
+            }
+            var treeDef = [ ],
+                results = response.query.results.Artist || [ ];
+
+            if (!Lang.isArray(results)) {
+                results = [results];
+            }
+            Y.Array.each(results, function (entry) {
+                treeDef.push( {
+                    label: entry.name,
+                    artistId: entry.id,
+                    url: entry.url,
+                    type:ArtistNode
+
+                });
+            });
+
+            var artistTree = new Y.FWTreeView({
+
+                tree: treeDef,
+
+                dynamicLoader: dynLoader
+
+            }
+        );
+        artistTree.render('#container');
+
+{{>event-listener}}
+
+    });
