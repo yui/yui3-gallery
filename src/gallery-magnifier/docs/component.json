@@ -1,0 +1,10 @@
+{
+    "name"       : "magnifier",
+    "displayName": "Gallery: magnifier",
+    "description": "This node plugin for images will provide a zoomed in view of a subset of the image either in a static location on the page, or a viewport that follows the mouse cursor around the attached image.",
+    "author"     : [ "foxxtrot" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

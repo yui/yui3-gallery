@@ -1,0 +1,46 @@
+<div class="intro">
+    <p>
+    This node plugin for images will provide a zoomed in view of a subset of the image either in a static location on the page, or a viewport that follows the mouse cursor around the attached image.
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>Magnifier is a node plugin meant to be attached to img nodes to provide a window that zooms into that section of the image. It can be configured so that the viewport is either statically placed on the page, or it will follow the mouse pointer around the page.<br>
+<br>
+The configuration object supports the following options:<br>
+<ul>
+<li>zoom - A numeric value describing how much to zoom into the image</li>
+<li>height - Height of the viewport</li>
+<li>width - Width of the viewport</li>
+<li>follow - Boolean value denoting if the viewport should follow the cursor</li>
+<li>staticX - Only valid if follow is 'false', the X coordinate that should be applied to the viewport</li>
+<li>staticY - Only valid if follow is 'false', the Y coordinate that should be applied to the viewport</li>
+</ul>
+<br>
+<br>
+Styling is applied through the class .yui3-magnifier-display which applies to the external bounding box of the viewport. When you leave the image, the style .yui3-magnifier-hidden is applied to this bounding box.<br>
+</p>
+
+```
+YUI().use('node', 'gallery-magnifier', function(Y) {
+
+    Y.one('#magnify-follow').plug(Y.Magnifier, {
+        follow: true,
+        height: 75,
+        width: 75,
+        zoom: 3
+    });
+
+    Y.one('#magnify-static').plug(Y.Magnifier, {
+        follow: false,
+        staticX: 750,
+        staticY: 240,
+        height: 150,
+        width: 150,
+        zoom: 4
+    });
+
+});
+```
+

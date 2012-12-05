@@ -1,0 +1,4 @@
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: magnifier
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
+[35myogi[39m [37m[37m[[39m[31mbail[39m[37m][39m[39m seems this module does not have tests, you should add some :)

@@ -1,0 +1,10 @@
+{
+    "name": "magnifier",
+    "builds": {
+        "gallery-magnifier": {
+            "jsfiles": [
+                "magnifier.js"
+            ]
+        }
+    }
+}
