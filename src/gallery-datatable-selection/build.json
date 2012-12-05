@@ -1,0 +1,19 @@
+{
+    "name": "gallery-datatable-selection",
+    "builds": {
+        "gallery-datatable-selection": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "base-build",
+                    "datatable-base",
+                    "event"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "datatable-selection.js"
+            ]
+        }
+    }
+}

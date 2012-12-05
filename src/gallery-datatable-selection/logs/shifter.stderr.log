@@ -1,0 +1,112 @@
+[35mshifter[0m [31m[err][0m /src/gallery-datatable-selection/js/datatable-selection.js contains 53 lint errors
+   #1: [33mExpected '{' and instead saw 'return'.[0m
+       if (!Y.Lang.isString(v)) return false;[37m // line 71, pos 38[0m
+   #2: [33mExpected '{' and instead saw 'return'.[0m
+       if (!Y.Lang.isString(v)) return false;[37m // line 88, pos 38[0m
+   #3: [33mToo many var statements.[0m
+       var colName;[37m // line 282, pos 13[0m
+   #4: [33mExpected '{' and instead saw 'tds'.[0m
+       tds.push( item );[37m // line 306, pos 17[0m
+   #5: [33mExpected '{' and instead saw 'tdNodes'.[0m
+       tdNodes.each(function(item){ tds.push( item )});[37m // line 310, pos 21[0m
+   #6: [33mMissing semicolon.[0m
+       tdNodes.each(function(item){ tds.push( item )});[37m // line 310, pos 66[0m
+   #7: [33mExpected '{' and instead saw 'this'.[0m
+       this._eventHandles.selectorSelect.detach();[37m // line 364, pos 13[0m
+   #8: [33mExpected '{' and instead saw 'keepPrev'.[0m
+       keepPrev =  this.get('selectionMulti') === true && this._clickModifiers.metaKey === true;[37m // line 427, pos 13[0m
+   #9: [33mExpected '{' and instead saw 'keepPrev'.[0m
+       keepPrev =  this.get('selectionMulti') === true && this._clickModifiers.ctrlKey === true;[37m // line 429, pos 13[0m
+   #10: [33mExpected '{' and instead saw 'this'.[0m
+       if ( !keepPrev && !keepRange && this._selections.length>1 ) this.clearSelections();[37m // line 437, pos 69[0m
+   #11: [33mToo many var statements.[0m
+       var tar = this._processNodeAction(o,'select', !keepPrev );[37m // line 446, pos 17[0m
+   #12: [33mExpected '{' and instead saw 'this'.[0m
+       if ( !keepPrev ) this._selections = [];[37m // line 448, pos 30[0m
+   #13: [33mToo many var statements.[0m
+       var sobj = { selectionMode : this.get('selectionMode')  };[37m // line 461, pos 13[0m
+   #14: [33mExpected '{' and instead saw 'sobj'.[0m
+       sobj['cells'] = this.get('selectedCells');[37m // line 464, pos 13[0m
+   #15: [33m['cells'] is better written in dot notation.[0m
+       sobj['cells'] = this.get('selectedCells');[37m // line 464, pos 17[0m
+   #16: [33mExpected '{' and instead saw 'sobj'.[0m
+       sobj['rows'] = this.get('selectedRows');[37m // line 466, pos 13[0m
+   #17: [33m['rows'] is better written in dot notation.[0m
+       sobj['rows'] = this.get('selectedRows');[37m // line 466, pos 17[0m
+   #18: [33mToo many var statements.[0m
+       var newRec  = this.getRecord(tarNew),[37m // line 506, pos 17[0m
+   #19: [33mToo many var statements.[0m
+       var delCol = newColI - prevColI,[37m // line 516, pos 17[0m
+   #20: [33mToo many var statements.[0m
+       var coldir = (delCol<0) ? -1 : 1,[37m // line 528, pos 25[0m
+   #21: [33mToo many var statements.[0m
+       for(var j=0; j<=Math.abs(delRow); j++)[37m // line 532, pos 29[0m
+   #22: [33mExpected '{' and instead saw 'for'.[0m
+       for(var i=0; i<=Math.abs(delCol); i++) {[37m // line 533, pos 25[0m
+   #23: [33mToo many var statements.[0m
+       for(var i=0; i<=Math.abs(delCol); i++) {[37m // line 533, pos 33[0m
+   #24: [33mToo many var statements.[0m
+       var rowdir = (delRow<0) ? -1 : 1,[37m // line 543, pos 25[0m
+   #25: [33m'rowdir' is already defined.[0m
+       var rowdir = (delRow<0) ? -1 : 1,[37m // line 543, pos 32[0m
+   #26: [33mToo many var statements.[0m
+       for(var j=0; j<=Math.abs(delRow); j++) {[37m // line 546, pos 29[0m
+   #27: [33m'j' is already defined.[0m
+       for(var j=0; j<=Math.abs(delRow); j++) {[37m // line 546, pos 30[0m
+   #28: [33mMixed spaces and tabs.[0m
+       if ( tr.get('tagName').toLowerCase() === 'tr' && Y.Array.indexOf(trs,tr) === -1) {[37m // line 586, pos 1[0m
+   #29: [33mExpected '{' and instead saw 'return'.[0m
+       if (!item) return;[37m // line 625, pos 24[0m
+   #30: [33mExpected '{' and instead saw 'row'.[0m
+       if ( item.record ) row = this.getRow( item.record );[37m // line 677, pos 36[0m
+   #31: [33mExpected '{' and instead saw 'col'.[0m
+       if ( item.column ) col = this.getColumn(item.column);[37m // line 678, pos 36[0m
+   #32: [33mToo many var statements.[0m
+       var ckey = col.key || col.name;[37m // line 681, pos 25[0m
+   #33: [33mExpected '{' and instead saw 'return'.[0m
+       if( !this._selections || this._selections.length === 0 ) return;[37m // line 727, pos 66[0m
+   #34: [33mExpected '{' and instead saw 'this'.[0m
+       this._selections.push( r.record );[37m // line 749, pos 21[0m
+   #35: [33mExpected '{' and instead saw 'this'.[0m
+       this._selections.push({record:r.record, colIndex:r.columnIndex});[37m // line 757, pos 21[0m
+   #36: [33mExpected '{' and instead saw 'return'.[0m
+       if( !this._selections || this._selections.length === 0 ) return;[37m // line 775, pos 66[0m
+   #37: [33mToo many var statements.[0m
+       var buffer = [];[37m // line 777, pos 13[0m
+   #38: [33mExpected '===' and instead saw '=='.[0m
+       if ( this.get(modeName) == "cell" ) {[37m // line 828, pos 33[0m
+   #39: [33mExpected '===' and instead saw '=='.[0m
+       } else if ( this.get(modeName) == "row" ) {[37m // line 831, pos 40[0m
+   #40: [33mLine too long.[0m
+       tarPrev = (tarPrev.get('tagName').search(/td/i) === 0 ) ? tarPrev.ancestor('tr') : ( tarPrev.get('tagName').search(/tr/i) === 0 ) ? tarPrev : null ;[37m // line 837, pos 164[0m
+   #41: [33mExpected '{' and instead saw 'tarPrev'.[0m
+       tarPrev = (tarPrev.get('tagName').search(/td/i) === 0 ) ? tarPrev.ancestor('tr') : ( tarPrev.get('tagName').search(/tr/i) === 0 ) ? tarPrev : null ;[37m // line 837, pos 17[0m
+   #42: [33mExpected '{' and instead saw 'tarPrev'.[0m
+       if ( tarPrev && erasePrev )  tarPrev.removeClass(className);[37m // line 840, pos 38[0m
+   #43: [33mExpected '{' and instead saw 'tarNew'.[0m
+       if ( tarNew ) tarNew.addClass(className);[37m // line 841, pos 23[0m
+   #44: [33mExpected '{' and instead saw 'nodes'.[0m
+       nodes.all('.'+type).removeClass(type);[37m // line 856, pos 13[0m
+   #45: [33mExpected '{' and instead saw 'this'.[0m
+       if ( this._eventHandles.selectorHighlight ) this._eventHandles.selectorHighlight.detach();[37m // line 871, pos 53[0m
+   #46: [33mExpected '{' and instead saw 'return'.[0m
+       if(val==='none') return;[37m // line 872, pos 26[0m
+   #47: [33mExpected '{' and instead saw 'this'.[0m
+       if ( this._eventHandles.selectorSelect ) this._eventHandles.selectorSelect.detach();[37m // line 895, pos 50[0m
+   #48: [33mExpected '{' and instead saw 'return'.[0m
+       if(val==='none') return;[37m // line 896, pos 26[0m
+   #49: [33mExpected '{' and instead saw 'sel'.[0m
+       if ( sel && sel.empty ) sel.empty();    // works on chrome[37m // line 926, pos 33[0m
+   #50: [33mExpected '{' and instead saw 'sel'.[0m
+       if ( sel && sel.removeAllRanges ) sel.removeAllRanges();    // works on FireFox[37m // line 927, pos 43[0m
+   #51: [33m'tar' is defined but never used.[0m
+       var tar = this._processNodeAction(o,'highlight',true);[37m // line 411, pos 16[0m
+   #52: [33m'tr' is defined but never used.[0m
+       tr, td;[37m // line 732, pos 15[0m
+   #53: [33m'td' is defined but never used.[0m
+       tr, td;[37m // line 732, pos 19[0m
+[35mshifter[0m [31m[err][0m /assets/skins/sam/gallery-datatable-selection-skin.css contains 2 lint errors
+   #1: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       .yui3-skin-sam .yui3-datatable td.yui3-datatable-sorted.yui3-datatable-sel-highlighted ,[37m // line 4, pos 32[0m
+   #2: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       .yui3-skin-sam .yui3-datatable td.yui3-datatable-sorted.yui3-datatable-sel-selected ,[37m // line 12, pos 32[0m

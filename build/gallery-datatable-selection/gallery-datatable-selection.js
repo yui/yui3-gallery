@@ -1,4 +1,4 @@
-YUI.add('gallery-datatable-selection', function(Y) {
+YUI.add('gallery-datatable-selection', function (Y, NAME) {
 
 /**
  A class extension for DataTable that adds "highlight" and "select" actions via mouse selection.
@@ -20,8 +20,9 @@ YUI.add('gallery-datatable-selection', function(Y) {
  Specific attributes are provided that can be read for current selections, including the ATTRS [selectedRows](#attr_selectedRows),
  and [selectedCells](#attr_selectedCells).
 
- Typical usage would be to set the "selectionMode" attribute (and selectionMulti if desired), and then to listen to for the
- [selection](#event_selection) event to respond to each "click" selection.
+ Typical usage would be to set the "selectionMode" and "highlightMode" attributes (and selectionMulti if desired) and then
+ to provide a positive control (like a BUTTON or A link) to process the selections.  Two events are provided,  [selection](#event_selection)
+ and [selected](#event_selected) but these fire for every "click" action, which may not be ideal -- especially for multi selections.
 
  @module DataTable
  @submodule Selection
@@ -58,34 +59,34 @@ DtSelection.ATTRS = {
 
     /**
      * Set the current mode for highlighting, either for a single TD (as "cell") or for a
-     * full TR (as "row")
+     * full TR (as "row") or "none" for no highlighting
      * @attribute highlightMode
      * @type {String}
-     * @default null
+     * @default 'none'
      */
     highlightMode:{
-        value:      null,
+        value:      'none',
         setter:     '_setHighlightMode',
         validator:  function(v){
             if (!Y.Lang.isString(v)) return false;
-            return (v === null || v === 'cell' || v ==='row' ) ? true : false;
+            return (v === 'none' || v === 'cell' || v ==='row' ) ? true : false;
         }
     },
 
     /**
      * Set the current mode for indicating selections, either for a single TD (as "cell") or for a
-     * full TR (as "row")
+     * full TR (as "row") or 'none' for no selection
      *
      * @attribute selectionMode
      * @type {String}
-     * @default null
+     * @default 'none'
      */
     selectionMode:{
-        value:      null,
+        value:      'none',
         setter:     '_setSelectionMode',
         validator:  function(v){
             if (!Y.Lang.isString(v)) return false;
-            return (v === null || v === 'cell' || v ==='row' ) ? true : false;
+            return (v === 'none' || v === 'cell' || v ==='row' ) ? true : false;
         }
     },
 
@@ -145,6 +146,7 @@ DtSelection.ATTRS = {
      * Flag to allow either single "selections" (false) or multiple selections (true).
      * For Macintosh OSX-type systems the modifier key "Cmd" is held for multiple selections,
      *  and for Windows or Linux type systems the modifier key is "Ctrl".
+     *
      * @attribute selectionMulti
      * @type {Boolean}
      * @default false
@@ -467,8 +469,11 @@ Y.mix( DtSelection.prototype, {
     },
 
     /**
+     * Event that fires on every "select" action and returns the LAST SELECTED item, either a cell or a row.
+     * Please see the event "selection" which provides a cumulative total of all selected items as opposed to
+     * just the last item.
+     *
      * @event selected
-     * @deprecated
      * @param {Object} obj Return object
      * @param {Object} obj.ochange Change event object passed from attribute 'selected'
      * @param {Object} obj.record DataTable record (Y.Model) instance for the selection
@@ -578,7 +583,7 @@ Y.mix( DtSelection.prototype, {
         Y.Array.each(this._selections,function(item){
             tr = ( item.get('tagName').toLowerCase() === 'tr' ) ? item : item.ancestor('tr');
             // if and only if, it's a TR and not in "trs" array ... then add it
-            if ( tr.get('tagName').toLowerCase() === 'tr' && trs.indexOf(tr) === -1) {
+	    if ( tr.get('tagName').toLowerCase() === 'tr' && Y.Array.indexOf(trs,tr) === -1) {
                 rec = this.data.getByClientId(tr.getData('yui3-record'));
                 trs.push(tr);
                 rows.push({
@@ -864,6 +869,7 @@ Y.mix( DtSelection.prototype, {
      */
     _setHighlightMode: function(val){
         if ( this._eventHandles.selectorHighlight ) this._eventHandles.selectorHighlight.detach();
+        if(val==='none') return;
         this._eventHandles.selectorHighlight = this.delegate("mouseover",function(e){
                 var tar = e.currentTarget;
                 this.set('highlighted',tar);
@@ -887,10 +893,12 @@ Y.mix( DtSelection.prototype, {
     _setSelectionMode: function(val){
         var oSelf = this;
         if ( this._eventHandles.selectorSelect ) this._eventHandles.selectorSelect.detach();
+        if(val==='none') return;
         this._eventHandles.selectorSelect = this.delegate("click",function(e){
                 var tar = e.currentTarget;
 
-                e.halt(true);
+               // Disabled 11/16/12: was preventing checkbox listeners to fire
+               // e.halt(true);
 
                 oSelf._clickModifiers = {
                     ctrlKey:  e.ctrlKey,
@@ -925,5 +933,4 @@ Y.DataTable.Selection = DtSelection;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Selection]);
 
 
-
-}, 'gallery-2012.09.26-20-36' ,{skinnable:true, requires:['base-build','datatable-base','event']});
+}, 'gallery-2012.12.05-21-01', {"skinnable": "true", "requires": ["base-build", "datatable-base", "event"]});

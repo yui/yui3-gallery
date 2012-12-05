@@ -94,7 +94,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="..&#x2F;files&#x2F;js_gallery-datatable-selection.js.html#l1"><code>js&#x2F;gallery-datatable-selection.js:1</code></a>
+            Defined in: <a href="..&#x2F;files&#x2F;js_datatable-selection.js.html#l1"><code>js&#x2F;datatable-selection.js:1</code></a>
         </div>
     
 
@@ -157,8 +157,9 @@ The extension has been written to allow preserving the "selected" rows or cells 
 Specific attributes are provided that can be read for current selections, including the ATTRS [selectedRows](#attr_selectedRows),
 and [selectedCells](#attr_selectedCells).
 
-Typical usage would be to set the "selectionMode" attribute (and selectionMulti if desired), and then to listen to for the
-[selection](#event_selection) event to respond to each "click" selection.
+Typical usage would be to set the "selectionMode" and "highlightMode" attributes (and selectionMulti if desired) and then
+to provide a positive control (like a BUTTON or A link) to process the selections.  Two events are provided,  [selection](#event_selection)
+and [selected](#event_selected) but these fire for every "click" action, which may not be ideal -- especially for multi selections.
                     </div>
                 </li>
             
