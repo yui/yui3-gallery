@@ -1,0 +1,15 @@
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-treeble
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5000
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [http://127.0.0.1:5000/tests/src/gallery-treeble/tests/unit/test.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       ReferenceError: Can't find variable: YUI
+       http://127.0.0.1:5000/tests/src/gallery-treeble/tests/unit/assets/gallery-treeble-tests.js:1
+Writing files in JSON format to: /src/gallery-treeble/logs/tests.json
+[35myogi[39m [37m[37m[[39m[31mbail[39m[37m][39m[39m grover returned a failure

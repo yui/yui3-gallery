@@ -1,0 +1,20 @@
+{
+    "name": "gallery-treeble",
+    "builds": {
+        "gallery-treeble": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "datasource",
+                    "datatable"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "TreebleDataSource.js",
+                "TreebleParser.js",
+                "Treeble.js"
+            ]
+        }
+    }
+}

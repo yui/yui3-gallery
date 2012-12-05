@@ -122,6 +122,13 @@ TreebleDataSource.ATTRS =
 	}
 };
 
+/**
+ * @event toggled
+ * @description Fires after an element is opened or closed.
+ * @param path {Array} the path to the toggled element
+ * @param open {Boolean} the new state of the element
+ */
+
 /*
 
 	Each element in this._open contains information about an openable,
@@ -280,9 +287,19 @@ function countVisibleNodes(
 	return total;
 }
 
-function requestTree()
+function requestTree(flush_toggle)
 {
+	if (!flush_toggle)
+	{
+		var save_toggle = this._toggle.slice(0);
+	}
+
 	this._cancelAllRequests();
+
+	if (!flush_toggle)
+	{
+		this._toggle = save_toggle;
+	}
 
 	this._redo                = false;
 	this._generating_requests = true;
@@ -353,7 +370,7 @@ function getVisibleSlicesPgTop(
 				end:   skip + show - 1
 			});
 
-			if (m + delta == skip + show)
+			if (m + delta == skip + show && node.childTotal > 0)
 			{
 				slices = slices.concat(
 					getVisibleSlicesPgTop(0, node.childTotal, node.ds,
@@ -715,7 +732,8 @@ function checkFinished()
 	}
 	else if (this._toggle.length > 0)
 	{
-		this.toggle(this._toggle[0], Y.clone(this._callback.request, true),
+		var t = this._toggle.shift();
+		this.toggle(t, Y.clone(this._callback.request, true),
 		{
 			fn: function()
 			{
@@ -762,7 +780,7 @@ function checkFinished()
 	this.fire('response', this._callback);
 }
 
-function toggleSuccess(e, node, completion)
+function toggleSuccess(e, node, completion, path)
 {
 	if (node.ds.treeble_config.totalRecordsExpr)
 	{
@@ -776,15 +794,27 @@ function toggleSuccess(e, node, completion)
 	node.open     = true;
 	node.children = [];
 	complete(completion);
+
+	this.fire('toggled',
+	{
+		path: path,
+		open: node.open
+	});
 }
 
-function toggleFailure(e, node, completion)
+function toggleFailure(e, node, completion, path)
 {
 	node.childTotal = 0;
 
 	node.open     = true;
 	node.children = [];
 	complete(completion);
+
+	this.fire('toggled',
+	{
+		path: path,
+		open: node.open
+	});
 }
 
 function complete(f)
@@ -925,8 +955,8 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 				cfg:     node.ds.treeble_config.requestCfg,
 				callback:
 				{
-					success: Y.rbind(toggleSuccess, this, node, completion),
-					failure: Y.rbind(toggleFailure, this, node, completion)
+					success: Y.rbind(toggleSuccess, this, node, completion, path),
+					failure: Y.rbind(toggleFailure, this, node, completion, path)
 				}
 			});
 		}
@@ -934,6 +964,12 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 		{
 			node.open = !node.open;
 			complete(completion);
+
+			this.fire('toggled',
+			{
+				path: path,
+				open: node.open
+			});
 		}
 		return true;
 	},
@@ -948,7 +984,7 @@ Y.extend(TreebleDataSource, Y.DataSource.Local,
 		}
 
 		this._callback = e;
-		requestTree.call(this);
+		requestTree.call(this, true);
 	},
 
 	_cancelAllRequests: function()

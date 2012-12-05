@@ -1,0 +1,9 @@
+{
+	"name": "gallery-treeble",
+	"displayName": "Treeble",
+	"description": "Displays hierarchical data in a table.",
+	"author": "jafl",
+
+	"use": ["gallery-treeble"],
+	"tags": ["jafl","treeble","tree","table","datatable"]
+}
