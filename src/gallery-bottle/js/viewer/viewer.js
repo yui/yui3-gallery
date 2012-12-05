@@ -27,9 +27,11 @@ var WIDTH_CHANGE = 'widthChange',
         var O = E.currentTarget,
             I = O.next('.' + CLASSES.IMAGE);
 
+        E.preventDefault();
         O.toggleClass(CLASSES.EXPAND);
         I.toggleClass(CLASSES.EXPAND);
         this._uiDimensionsChange();
+        this.syncScroll();
     },
 
 /**

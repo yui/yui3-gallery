@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-carousel', function(Y) {
+YUI.add('gallery-bt-carousel', function (Y, NAME) {
 
 /**
  * Provide Carousel class to rendering a lot of photo in many kinds of layout
@@ -305,4 +305,12 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
 Y.namespace('Bottle').Carousel = Carousel;
 
 
-}, '@VERSION@' ,{requires:['gallery-bt-syncscroll', 'gallery-zui-rascroll', 'gallery-zui-scrollsnapper', 'gallery-zui-attribute', 'gallery-zui-scrollhelper']});
+}, 'gallery-2012.12.05-21-01', {
+    "requires": [
+        "gallery-bt-syncscroll",
+        "gallery-zui-rascroll",
+        "gallery-zui-scrollsnapper",
+        "gallery-zui-attribute",
+        "gallery-zui-scrollhelper"
+    ]
+});

@@ -1,0 +1,143 @@
+[35mshifter[0m [33m[warn][0m no build.json file, downshifting to convert ant files
+[35mshifter[0m [37m[info][0m revving up
+[35mshifter[0m [37m[info][0m looking for build.json file
+[35mshifter[0m [37m[info][0m found build.json file, shifting
+[35mshifter[0m [37m[info][0m putting the hammer down, let's build this thing!
+[35mshifter[0m [33m[warn][0m down shifting, can't find a meta directory
+[35mshifter[0m [37m[info][0m putting the hammer down
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-viewer
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-viewer
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-syncscroll
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-syncscroll
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-carousel
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-carousel
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-photogrid
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-photogrid
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-slidetab
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-slidetab
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-device
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-device
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-pushpop
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-pushpop
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-overlay
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-overlay
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bottle
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bottle
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-page
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-page
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-container
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-container
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-loader
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-loader
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-bt-shortcut
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-bt-shortcut
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-viewer/gallery-bt-viewer.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-syncscroll/gallery-bt-syncscroll.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-photogrid/gallery-bt-photogrid.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-carousel/gallery-bt-carousel.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-slidetab/gallery-bt-slidetab.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-device/gallery-bt-device.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-pushpop/gallery-bt-pushpop.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-overlay/gallery-bt-overlay.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-loader/gallery-bt-loader.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-page/gallery-bt-page.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-shortcut/gallery-bt-shortcut.js with UglifyJS
+[35mshifter[0m [36m[queu][0m compressing gallery-bt-container/gallery-bt-container.js with UglifyJS
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-viewer/gallery-bt-viewer.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-syncscroll/gallery-bt-syncscroll.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-photogrid/gallery-bt-photogrid.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-carousel/gallery-bt-carousel.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-slidetab/gallery-bt-slidetab.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-pushpop/gallery-bt-pushpop.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-device/gallery-bt-device.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-overlay/gallery-bt-overlay.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-loader/gallery-bt-loader.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-page/gallery-bt-page.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-shortcut/gallery-bt-shortcut.js
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bt-container/gallery-bt-container.js
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-viewer/gallery-bt-viewer-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-syncscroll/gallery-bt-syncscroll-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-photogrid/gallery-bt-photogrid-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-carousel/gallery-bt-carousel-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-slidetab/gallery-bt-slidetab-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-pushpop/gallery-bt-pushpop-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-device/gallery-bt-device-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-overlay/gallery-bt-overlay-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-loader/gallery-bt-loader-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-page/gallery-bt-page-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-shortcut/gallery-bt-shortcut-coverage.js
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bt-container/gallery-bt-container-coverage.js
+[35mshifter[0m [36m[queu][0m compressing gallery-bottle/gallery-bottle.js with UglifyJS
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting skin for gallery-bottle
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-bottle/gallery-bottle.js
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul
+[35mshifter[0m [36m[queu][0m writing coverage file to gallery-bottle/gallery-bottle-coverage.js
+[35mshifter[0m [36m[queu][0m copying assets to skin for sam
+[35mshifter[0m [36m[queu][0m writing skin file with core wrapper
+[35mshifter[0m [36m[queu][0m writing skin file without core wrapper
+[35mshifter[0m [37m[info][0m done racing, the gears are toast
+[35mshifter[0m [37m[info][0m finished in 0.973 seconds, pretty fast huh?

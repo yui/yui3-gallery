@@ -15,21 +15,21 @@ YUI.add('container-testlib', function (Y) {
         },
 
         headerShouldBeNotFixed: function () {
-            var header = Y.one('.bt-header');
+            var header = Y.one('.btHeader');
 
             Y.containerTest.headerCommon(header);
             Y.Assert.isObject(header.get('parentNode').get('className').match(/bt-container-scroll/), 'Can not find bt-container-scroll class on header parent');
         },
 
         footerShouldBeNotFixed: function () {
-            var footer = Y.one('.bt-footer');
+            var footer = Y.one('.btFooter');
 
             Y.containerTest.footerCommon(footer);
             Y.Assert.isObject(footer.get('parentNode').get('className').match(/bt-container-scroll/), 'Can not find bt-container-scroll class on footer parent');
         },
 
         headerShouldBeFixed: function () {
-            var header = Y.one('.bt-header');
+            var header = Y.one('.btHeader');
 
             Y.containerTest.headerCommon(header);
             Y.Assert.isObject(header.get('parentNode').get('className').match(/yui3-btcontainer-content/), 'Can not find yui3-btcontainer-content class on header parent');
@@ -37,7 +37,7 @@ YUI.add('container-testlib', function (Y) {
         },
 
         footerShouldBeFixed: function () {
-            var footer = Y.one('.bt-footer');
+            var footer = Y.one('.btFooter');
 
             Y.containerTest.footerCommon(footer);
             Y.Assert.isObject(footer.get('parentNode').get('className').match(/yui3-btcontainer-content/), 'Can not find yui3-btcontainer-content class on footer parent');

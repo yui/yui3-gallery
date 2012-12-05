@@ -1,8 +1,15 @@
 html{height:100%}
 body{position:relative}
 body.btInit{-webkit-text-size-adjust:100%}
-body.btFocus .bt-header,
-body.btFocus .bt-footer {position:relative!important}
+body.btFixed .btFixed {position:fixed;z-Index:50}
+body.btFixed .btHeader.btFixed {top:0}
+body.btFixed .btFooter.btFixed {bottom:0}
+body.btFocus.btFixed .btHeader.btFixed,
+body.btFocus.btFixed .btFooter.btFixed {position:static}
+body.btFocus.btFixed .btFixedScroll {margin:0!important}
+
+body.btFixed .yui3-btshortcut,
+body.btFixed .yui3-btoverlay {position:fixed}
 
 .bt_posfixed{position:absolute;top:10px;left:0;overflow:scroll;width:30px;height:30px}
 .bt_posfixed div{height:100px;width:100%;position:relative}
@@ -13,7 +20,7 @@ body.btFocus .bt-footer {position:relative!important}
 .bt-overlay-mask{position:absolute;top:0;left:0;z-index:150;width:100%;height:100%;display:none}
 .yui3-btcontainer{position:absolute;width:100%}
 .btp-native .yui3-btcontainer{position:relative}
-.bt-header, .bt-footer{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0}
+.btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0}
 
 .yui3-widget-pushpop{overflow:hidden}
 
@@ -21,7 +28,7 @@ body.btFocus .bt-footer {position:relative!important}
 .yui3-btshortcut-hidden, .yui3-btoverlay-hidden{top:-9999px;left:-9999px}
 .yui3-btshortcut-disabled, .yui3-btoverlay-disabled{display:none}
 
-.yui3-btphotogrid .bpg_column{display:inline-block;overflow:hidden;vertical-align:top}
+.yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top}
 
 .yui3-btslidetab .bst_slide {white-space:nowrap}
 .bst_slidebox {overflow:hidden}

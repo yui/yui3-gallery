@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-syncscroll', function(Y) {
+YUI.add('gallery-bt-syncscroll', function (Y, NAME) {
 
 /**
  * Provide SyncScroll widget extension to sync status with parent scrollView
@@ -115,4 +115,4 @@ SyncScroll.prototype = {
 Y.namespace('Bottle').SyncScroll = SyncScroll;
 
 
-}, '@VERSION@' ,{requires:['gallery-bt-page']});
+}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-page"]});

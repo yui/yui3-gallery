@@ -9,12 +9,13 @@
  <dt><img src="{{projectAssets}}/img/issue_input_covered_position_fixed2.png" /></dt><dd>input focused</dd>
 </dl>
 
-<p>`{{projectName}}` will try to hide header and footer elements when any `INPUT`, `SELECT` or `TEXTAREA` are focused, this can prevent position fixed nodes be placed on focused input.
+<p>`{{projectName}}` will try to change header and footer elements styles when any `INPUT`, `SELECT` or `TEXTAREA` are focused, this can prevent position fixed nodes be placed on focused input. And, this only applied to native scroll mode.
 <dl class="illustration">
  <dt><img src="{{projectAssets}}/img/issue_input_covered_position_fixed3.png" /></dt><dd>hide header when input focused</dd>
 </dl>
 <p>When any input is focused, `{{projectName}}` added 'btFocus' class name on `BODY` element. If you want to disbale 'hide header/footer when input focused' behavior, you can overwrite these css rules:</p>
 <ul>
- <li>.btFocus .bt-header {...}</li>
- <li>.btFocus .bt-footer {...}</li>
+ <li>body.btFocus.btFixed .btHeader.btFixed {...}</li>
+ <li>body.btFocus.btFixed .btFooter.btFixed {...}</li>
+ <li>body.btFocus.btFixed .btFixedScroll {...}</li>
 </ul>

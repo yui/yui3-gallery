@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-viewer', function(Y) {
+YUI.add('gallery-bt-viewer', function (Y, NAME) {
 
 /**
  * Provide Viewer class to place html, text and images.
@@ -29,9 +29,11 @@ var WIDTH_CHANGE = 'widthChange',
         var O = E.currentTarget,
             I = O.next('.' + CLASSES.IMAGE);
 
+        E.preventDefault();
         O.toggleClass(CLASSES.EXPAND);
         I.toggleClass(CLASSES.EXPAND);
         this._uiDimensionsChange();
+        this.syncScroll();
     },
 
 /**
@@ -154,4 +156,11 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
 Y.namespace('Bottle').Viewer = Viewer;
 
 
-}, '@VERSION@' ,{requires:['gallery-bt-syncscroll', 'gallery-zui-rascroll', 'gallery-zui-attribute', 'gallery-zui-scrollhelper']});
+}, 'gallery-2012.12.05-21-01', {
+    "requires": [
+        "gallery-bt-syncscroll",
+        "gallery-zui-rascroll",
+        "gallery-zui-attribute",
+        "gallery-zui-scrollhelper"
+    ]
+});

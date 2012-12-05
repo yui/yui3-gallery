@@ -2,6 +2,26 @@
 <h3>nighty</h3>
 <h4>for test, only on github, not on cdn</h4>
 <ul>
+ <li>container: fix container js error when no footer node</li>
+ <li>slidetab: support lazy load</li>
+ <li>container: fix fullHeight height bug when header is fixed position or in nativeScroll mode</li>
+ <li>photogrid: fix rendering bug in IE</li>
+ <li>core: support Y.Bottle.lazyLoad()</li>
+ <li>shortcut: fix window resize bug (occured when only width or height changed)</li>
+ <li>pushpop: delay init children for better performance</li>
+ <li>page: fix scrollTo() in native scroll mode</li>
+ <li>photogrid: fix style bug in IE6</li>
+ <li>viewer: fix scroll size sync error for none native scroll page</li>
+ <li>pushpop: prevent topScroll bug when delay init children</li>
+ <li>container: better focused input support for native scroll mode</li>
+ <li>viewer: prevent default when click + / - button</li>
+ <li>overlay: better keyboard support (use fixed position when available)</li>
+ <li>shortcut: better keyboard support (use fixed position when available)</li>
+</ul>
+
+<h3>0.1.3</h3>
+<h4>2012-11-01</h4>
+<ul>
  <li>page: now nativeScroll mode the fixed header/footer style missing in Android devices bug fixed.</li>
  <li>overlay: now the bug of overlay size when using btHideSCO skin is fixed.</li>
  <li>device: fix getBrowserWidth and getBrowserHeight for IE</li>
@@ -10,7 +30,7 @@
  <li>core: auto hide header/footer when input focused (position:fixed work around)</li>
  <li>core: auto adjust overlay/shortcut size when input blur</li>
  <li>page: add scrollTo() support</li>
- <li>container: add fullHeight support, default is false</li>
+ <li>container: add fullHeight support, default is true</li>
 </ul>
 
 <h3>0.1.2</h3>

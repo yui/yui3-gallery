@@ -136,8 +136,15 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
                 image.load.once('load', function (E) {
                     var O = E.target;
 
-                    this.height = O.get('height');
-                    this.width = O.get('width');
+                    if (Y.UA.ie) {
+                        image.loadie = new Image();
+                        image.loadie.src = image.icon;
+                        this.height = this.loadie.height;
+                        this.width = this.loadie.width;
+                    } else {
+                        this.height = O.get('height');
+                        this.width = O.get('width');
+                    }
 
                     that._bpgPending -= 1;
                 }, image);

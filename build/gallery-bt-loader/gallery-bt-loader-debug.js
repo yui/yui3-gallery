@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-loader', function(Y) {
+YUI.add('gallery-bt-loader', function (Y, NAME) {
 
 /**
  * Provide Loader class to handle user interaction and ajax loading
@@ -270,4 +270,4 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').Loader = Loader;
 
 
-}, '@VERSION@' ,{requires:['gallery-bt-syncscroll', 'io-base', 'json-parse']});
+}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-syncscroll", "io-base", "json-parse"]});

@@ -143,7 +143,7 @@ Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosit
     scrollTo: function (position, duration) {
         var S = current ? current.topScroll() : null,
             Y;
-        if (current) {
+        if (current && !current.get('nativeScroll')) {
             if (position.getY) {
                 Y = S.get('scrollY');
                 S.scrollTo(0, 0, 0);

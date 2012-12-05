@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-shortcut', function(Y) {
+YUI.add('gallery-bt-shortcut', function (Y, NAME) {
 
 /**
  * This module provides ShortCut Widget which can show/hide with different transitions or directions.
@@ -103,21 +103,20 @@ var body = Y.one('body'),
          * @param [force=false] {Boolean} <b>true</b> to forece resize even when ShortCut is not visibile.
          */
         scResize: function (force) {
+            var sz = false;
             //reduce syncUI times
-            if (!force && (this.get('width') === Y.Bottle.Device.getBrowserWidth())) {
-                return;
-            }
-
-            if (!force && (this.get('height') === Y.Bottle.Device.getBrowserHeight())) {
-                return;
-            }
-
             if (!this.get('visible') && !force) {
                 return;
             }
 
-            this._updateFullSize();
-            this._updatePositionShow();
+            if (force || (this.get('width') !== Y.Bottle.Device.getBrowserWidth()) || (this.get('height') === Y.Bottle.Device.getBrowserHeight())) {
+                this._updateFullSize();
+                sz = true;
+            }
+
+            if (force || sz || this.get('showFrom').match(/right|bottom/)) {
+                this._updatePositionShow();
+            }
         },
 
         /**
@@ -148,7 +147,7 @@ var body = Y.one('body'),
 
             return [
                 Math.floor(posData[2] * Y.Bottle.Device.getBrowserWidth() + (selfDir * posData[0] - posData[2]) * this.get('width')), 
-                Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight() + (selfDir * posData[1] - posData[3]) * this.get('height')) + scrollBase.get('scrollTop')
+                Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight() + (selfDir * posData[1] - posData[3]) * this.get('height')) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
             ];
         },
 
@@ -179,7 +178,7 @@ var body = Y.one('body'),
             });
 
             XY = this.getShowHidePosition(true);
-            this.move(XY[0], XY[1]);
+            this.absMove(XY[0], XY[1]);
         },
 
         /**
@@ -193,7 +192,7 @@ var body = Y.one('body'),
                 vis = (E && (E.visible !== undefined)) ? E.visible : this.get('visible'),
                 XY = this.getShowHidePosition(vis || isUnveil);
 
-            this.move(XY[0], XY[1]);
+            this.absMove(XY[0], XY[1]);
         },
 
         /**
@@ -564,4 +563,4 @@ Mask.on('gesturemovestart', function (E) {
 });
 
 
-}, '@VERSION@' ,{requires:['gallery-bt-page']});
+}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-page"]});

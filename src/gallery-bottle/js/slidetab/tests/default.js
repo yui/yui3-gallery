@@ -13,6 +13,10 @@ YUI().use('slidetab-testlib', function (Y) {
             A.areSame(30, slide.get('labelWidth'));
         },
 
+        'test lazyLoad: true': function () {
+            A.isTrue(slide.get('lazyLoad'));
+        },
+
         // do not test scrollView default, it will be set when rendering
 
         'test selectedIndex: 0': function () {

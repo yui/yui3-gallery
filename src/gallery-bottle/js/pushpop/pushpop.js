@@ -10,6 +10,7 @@ var RENDERUI = 'renderUI',
 
     HEIGHT_CHANGE = 'heightChange',
     WIDTH_CHANGE = 'widthChange',
+    VISIBLE_CHANGE = 'visibleChange',
 
     ADDCHILD = 'addChild',
 
@@ -204,13 +205,36 @@ PushPop.HTML_PARSER = {
 
 PushPop.prototype = {
     initializer: function () {
+        var once;
+
+        if (this.get('visible')) {
+            this._addAllChildren();
+        } else {
+            once = this.after(VISIBLE_CHANGE, function (E) {
+                if (E.newVal) {
+                    once.detach();
+                    this._addAllChildren();
+                }
+            });
+        }
+    },
+
+    /**
+     * query and get all children then add into this widget
+     *
+     * @method _addAllChildren
+     * @prtected
+     */
+    _addAllChildren: function () {
         var srcNode = this.get('srcNode'),
             query = this.get('childQuery'),
             cfg = this.get('cfgChild');
 
-        if (!query) {
+        if (!query || this._bppAllAdded) {
             return;
         }
+
+        this._bppAllAdded = true;
 
         this.get('contentBox').all(query).each(function (O) {
             this.add(Y.merge(cfg, {srcNode: O}));
@@ -358,12 +382,29 @@ PushPop.prototype = {
     },
 
     /**
+     * move the widget by setting css top and left only
+     *
+     * @method absMove
+     * @param x {Number} x position
+     * @param y {Number} y position
+     * @chainable
+     */
+    absMove: function (x, y) {
+        this.get('boundingBox').setStyles({
+            top: y + 'px',
+            left: x + 'px'
+        });
+        return this;
+    },
+
+    /**
      * get top (last) item
      *
      * @method topItem
      * @return {WidgetChild} the top widget child
      */
     topItem: function () {
+        this._addAllChildren();
         return this.item(this.size() - 1);
     },
 
@@ -380,7 +421,7 @@ PushPop.prototype = {
     },
 
     /**
-     * sync a widget width and height with self
+     * get child by widget or index
      *
      * @method getChild
      * @param widget {Widget | Integer} the child widget or index of child

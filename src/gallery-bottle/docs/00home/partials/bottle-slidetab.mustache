@@ -7,23 +7,23 @@
    <li>really very long long tab name</li>
   </ul>
   <div>
-   <div>tab 1 content, this is a test.
+   <div>{{#if lazyLoad}}<!--{{/if}}tab 1 content, this is a test.
     <ul>
      <li><h2><img src="../assets/img/tmp1.png"/>Item1</h2></li>
      <li><h2><img src="../assets/img/tmp2.png"/>Item2</h2></li>
      <li><h2><img src="../assets/img/tmp3.png"/>Item3</h2></li>
     </ul>
-   </div>
-   <div><h2>tab 2 header</h2>
+   {{#if lazyLoad}}-->{{/if}}</div>
+   <div><h2>tab 2 header</h2>{{#if lazyLoad}}<!--{{/if}}
     <ul>
      <li><h2><img src="../assets/img/tmp4.png"/>Item4</h2></li>
      <li><h2><img src="../assets/img/tmp5.png"/>Item5</h2></li>
      <li><h2><img src="../assets/img/tmp6.png"/>Item6</h2></li>
      <li><h2><img src="../assets/img/tmp7.png"/>Item7</h2></li>
     </ul>
-   </div>
+   {{#if lazyLoad}}-->{{/if}}</div>
    <div>tab 3 content...</div>
-   <ul>
+   <ul>{{#if lazyLoad}}<!--{{/if}}
     <li><h2><img src="../assets/img/tmp1.png"/>(tab 4) Item8</h2></li>
     <li><h2><img src="../assets/img/tmp2.png"/>Item9</h2></li>
     <li><h2><img src="../assets/img/tmp3.png"/>Item10</h2></li>
@@ -32,7 +32,7 @@
     <li><h2><img src="../assets/img/tmp6.png"/>Item13</h2></li>
     <li><h2><img src="../assets/img/tmp7.png"/>Item14</h2></li>
     <li><h2><img src="../assets/img/tmp8.png"/>Item15</h2></li>
-   </ul>
+   {{#if lazyLoad}}-->{{/if}}</ul>
    <div>tab 5!</div>
   </div>
  </div>

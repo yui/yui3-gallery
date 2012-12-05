@@ -122,7 +122,7 @@ var body = Y.one('body'),
                 pos = move ? this.getShowHideXY(true) : 0;
 
             if (move) {
-                this.move(pos[0], pos[1]);
+                this.absMove(pos[0], pos[1]);
             }
         },
 
@@ -137,7 +137,7 @@ var body = Y.one('body'),
                 pos = vis ? 0 : this.getShowHideXY(false);
 
             if (!vis) {
-                this.move(pos[0], pos[1]);
+                this.absMove(pos[0], pos[1]);
             }
         },
 
@@ -210,7 +210,7 @@ var body = Y.one('body'),
 
             return [
                 selfDir * W * posData[0] + Math.floor((W - this.get('width')) / 2),
-                selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + scrollBase.get('scrollTop')
+                selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
             ]; 
         },
 

@@ -16,11 +16,13 @@ var HEIGHT_CHANGE = 'heightChange',
             node = this.get(header ? 'headerNode' : 'footerNode');
 
             if (node) {
+                if (ns && pfix) {
+                    node.addClass('btFixed');
+                }
+
                 node.setStyles({
-                    position: (ns && pfix) ? 'fixed' : '',
                     top: (header && ns && pfix) ? 0 : '',
                     bottom: (!header && ns && pfix) ? 0 : '',
-                    zIndex: (ns && pfix) ? 50 : ''
                 });
 
                 if (fixedPos) {
@@ -118,9 +120,9 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
      * @protected
      */
     _syncScrollHeight: function () {
-        var height = this.get('height'),
+        var nativeScroll = this.get('nativeScroll'),
+            height = nativeScroll ? Y.Bottle.Device.getBrowserHeight() : this.get('height'),
             footer,
-            H,
             P,
             scroll = this.get('scrollView');
 
@@ -129,21 +131,21 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
         }
 
         Y.later(1, this, function () {
-            height -= scroll.get('boundingBox').get('offsetTop');
             footer = this.get('footerNode');
 
             if (this.get('footerFixed')) {
                 height -= footer.get('clientHeight');
             } else {
-                if (this.get('fullHeight')) {
+                if (footer && this.get('fullHeight')) {
                     P = footer.previous();
-                    H = height - P.getY() - footer.get('clientHeight');
-                    if (H > P.get('offsetHeight')) {
-                        P.set('offsetHeight', H);
-                    }
+                    P.setStyle('minHeight', (height - P.getY() - footer.get('clientHeight')) + 'px');
                 }
             }
-            scroll.set('height', height);
+
+            if (!nativeScroll) {
+                height -= scroll.get('boundingBox').get('offsetTop');
+                scroll.set('height', height);
+            }
         });
     }
 }, {
@@ -171,6 +173,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
 
                 if (sv) {
                     sv.set('disabled', V);
+                    sv.get('boundingBox').addClass('btFixedScroll');
                     if (V) {
                         sv.unplug(Y.zui.RAScroll);
                     } else {
@@ -201,7 +204,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
             setter: function (node) {
                 var N = Y.one(node);
                 if (N) {
-                    N.addClass('bt-header');
+                    N.addClass('btHeader');
                     this.set('headerFixed', N.getData('position') === 'fixed');
                     return N;
                 }
@@ -222,7 +225,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
             setter: function (node) {
                 var N = Y.one(node);
                 if (N) {
-                    N.addClass('bt-footer');
+                    N.addClass('btFooter');
                     this.set('footerFixed', N.getData('position') === 'fixed');
                     return N;
                 }
@@ -374,10 +377,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
         },
 
         translate3D: function (srcNode) {
-            if (srcNode.getData('translate3d') === 'false') {
-                return false;
-            }
-            return true;
+            return (srcNode.getData('translate3d') === 'false') ? false : true;
         }
     }
 });

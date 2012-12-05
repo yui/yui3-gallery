@@ -49,12 +49,13 @@
         {
             "name": "test-default",
             "layout": "example",
+            "lazyLoad": true,
             "forTest": true
         },
         {
             "name": "test-data-attr",
             "layout": "example",
-            "slidetabAttrs": " data-selected-index=\"1\" data-slide-node=\"h2\" data-label-node=\"img\" data-label-width=\"60\" data-tab-node=\"ul\" data-show-neighbors=\"false\"",
+            "slidetabAttrs": " data-selected-index=\"1\" data-slide-node=\"h2\" data-label-node=\"img\" data-label-width=\"60\" data-tab-node=\"ul\" data-show-neighbors=\"false\" data-lazy-load=\"false\"",
             "forTest": true
         },
         {
@@ -71,6 +72,15 @@
             "description": "Demonstrates basic usage of the SlideTab Widget. This example do not use Page Widget to handle screen size and scroll.",
             "onlyInit": true,
             "noPage": true,
+            "layout": "example"
+        },
+        {
+            "name"       : "example-lazyload",
+            "displayName": "LazyLoad SlideTab",
+            "description": "Demonstrates lazyload of the SlideTab Widget.",
+            "onlyInit": true,
+            "lazyLoad": true,
+            "modules": ["syncscroll"],
             "layout": "example"
         }
     ]

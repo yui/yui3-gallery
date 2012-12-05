@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-page', function(Y) {
+YUI.add('gallery-bt-page', function (Y, NAME) {
 
 /**
  *
@@ -145,7 +145,7 @@ Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosit
     scrollTo: function (position, duration) {
         var S = current ? current.topScroll() : null,
             Y;
-        if (current) {
+        if (current && !current.get('nativeScroll')) {
             if (position.getY) {
                 Y = S.get('scrollY');
                 S.scrollTo(0, 0, 0);
@@ -171,4 +171,4 @@ Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosit
 });
 
 
-}, '@VERSION@' ,{requires:['widget-position', 'widget-stack', 'gallery-bt-pushpop']});
+}, 'gallery-2012.12.05-21-01', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});

@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-device', function(Y) {
+YUI.add('gallery-bt-device', function (Y, NAME) {
 
 /*global screen */
 /**
@@ -156,4 +156,4 @@ if (Y.UA.iphone) {
 Y.namespace('Bottle').Device = Device;
 
 
-}, '@VERSION@' ,{requires:['node-screen']});
+}, 'gallery-2012.12.05-21-01', {"requires": ["node-screen"]});

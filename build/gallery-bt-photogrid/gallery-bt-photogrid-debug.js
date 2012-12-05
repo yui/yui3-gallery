@@ -1,4 +1,4 @@
-YUI.add('gallery-bt-photogrid', function(Y) {
+YUI.add('gallery-bt-photogrid', function (Y, NAME) {
 
 /**
  * Provide PhotoGrid class to rendering a lot of photo in many kinds of layout
@@ -138,8 +138,15 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
                 image.load.once('load', function (E) {
                     var O = E.target;
 
-                    this.height = O.get('height');
-                    this.width = O.get('width');
+                    if (Y.UA.ie) {
+                        image.loadie = new Image();
+                        image.loadie.src = image.icon;
+                        this.height = this.loadie.height;
+                        this.width = this.loadie.width;
+                    } else {
+                        this.height = O.get('height');
+                        this.width = O.get('width');
+                    }
 
                     that._bpgPending -= 1;
                 }, image);
@@ -384,4 +391,4 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').PhotoGrid = PhotoGrid;
 
 
-}, '@VERSION@' ,{requires:['gallery-bt-syncscroll']});
+}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-syncscroll"]});

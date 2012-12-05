@@ -1,0 +1,197 @@
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/viewer/viewer.js contains 2 lint errors
+   #1: [33mLine too long.[0m
+       * is a Widget provides a HTML Viewer interface. When contents or images are wider then device, Viewer can be scroll horizontally. And, from beginning, all images in Viewer are scaled down to fit the device width, and a 'expand' button will be provided for each scaled images.[37m // line 40, pos 276[0m
+   #2: [33m'WIDTH_CHANGE' is defined but never used.[0m
+       var WIDTH_CHANGE = 'widthChange',[37m // line 10, pos 17[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/syncscroll/syncscroll.js contains 1 lint errors
+   #1: [33m'config' is defined but never used.[0m
+       SyncScroll = function (config) {[37m // line 20, pos 30[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/carousel/carousel.js contains 1 lint errors
+   #1: [33m'WIDTH_CHANGE' is defined but never used.[0m
+       var WIDTH_CHANGE = 'widthChange',[37m // line 10, pos 17[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/photogrid/photogrid.js contains 5 lint errors
+   #1: [33mMissing semicolon.[0m
+       this._bpgEventHandlers = this.after(COLUMN_CHANGE, this._updateColumns)[37m // line 63, pos 80[0m
+   #2: [33mExpected '===' and instead saw '=='.[0m
+       this.parseImageData((N.getDOMNode().nodeType == 11) ? Y.Node.create('<div>' + html + '</div>') : N, true);[37m // line 84, pos 54[0m
+   #3: [33mLine too long.[0m
+       * Default column width. Column number will be decided by Math.round(parentWidth / columnWidth), and then all these columns will be fitted equally.[37m // line 309, pos 155[0m
+   #4: [33m'WIDTH_CHANGE' is defined but never used.[0m
+       var WIDTH_CHANGE = 'widthChange',[37m // line 10, pos 17[0m
+   #5: [33m'E' is defined but never used.[0m
+       image.load.once('error', function (E) {[37m // line 154, pos 53[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/device/device.js contains 2 lint errors
+   #1: [33mMissing semicolon.[0m
+       getTouchSupport: function () { return ((Y.config.win && ('ontouchstart' in Y.config.win)) && !(Y.UA.chrome && Y.UA.chrome < 6))},[37m // line 59, pos 132[0m
+   #2: [33mDid you mean to return a conditional instead of an assignment?[0m
+       return positionFixedSupport = (py === 1);[37m // line 78, pos 16[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/slidetab/slidetab.js contains 1 lint errors
+   #1: [33m'WIDTH_CHANGE' is defined but never used.[0m
+       var WIDTH_CHANGE = 'widthChange',[37m // line 10, pos 17[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/pushpop/pushpop.js contains 6 lint errors
+   #1: [33mLine too long.[0m
+       * @param [direction] {String} should be one of 'right', 'left', 'top', 'bottom', 'tr', 'br', 'tl', 'bl'. If omitted, current 'pushFrom' attribute will be used[37m // line 261, pos 163[0m
+   #2: [33mExpected '===' and instead saw '=='.[0m
+       if (underlay == 'with') {[37m // line 484, pos 22[0m
+   #3: [33mExpected '===' and instead saw '=='.[0m
+       if ((underlay == 'with') && index) {[37m // line 520, pos 27[0m
+   #4: [33m'config' is defined but never used.[0m
+       PushPop = function (config) {[37m // line 50, pos 27[0m
+   #5: [33m'srcNode' is defined but never used.[0m
+       var srcNode = this.get('srcNode'),[37m // line 231, pos 20[0m
+   #6: [33m'O' is defined but never used.[0m
+       this.each(function (O) {[37m // line 295, pos 30[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/overlay/overlay.js contains 2 lint errors
+   #1: [33mLine too long.[0m
+       selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))[37m // line 215, pos 151[0m
+   #2: [33mTrailing whitespace.[0m
+       ];[37m // line 216, pos 15[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/shortcut/shortcut.js contains 4 lint errors
+   #1: [33mTrailing whitespace.[0m
+       Math.floor(posData[2] * Y.Bottle.Device.getBrowserWidth() + (selfDir * posData[0] - posData[2]) * this.get('width')),[37m // line 149, pos 134[0m
+   #2: [33mLine too long.[0m
+       Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight() + (selfDir * posData[1] - posData[3]) * this.get('height')) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))[37m // line 150, pos 202[0m
+   #3: [33mTrailing whitespace.[0m
+       E.halt();[37m // line 249, pos 22[0m
+   #4: [33mTrailing whitespace.[0m
+       B = this.get('contentBox'),[37m // line 375, pos 52[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/loader/loader.js contains 2 lint errors
+   #1: [33mExpected an identifier and instead saw 'arguments' (a reserved word).[0m
+       arguments: {[37m // line 124, pos 13[0m
+   #2: [33mLine too long.[0m
+       * Default selector string for responsed data. For HTML data, this value should be css selector; For json data, this value should be something like data.hash.value (will return JSONData.data.hash.value). When set to '*', all ajax response will be selected. If can not select anything, the ajax will be a 'failed' case.[37m // line 232, pos 326[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/container/container.js contains 11 lint errors
+   #1: [33mTrailing whitespace.[0m
+       *[37m // line 5, pos 3[0m
+   #2: [33mExtra comma.[0m
+       bottom: (!header && ns && pfix) ? 0 : '',[37m // line 27, pos 61[0m
+   #3: [33mLine too long.[0m
+       this.get('scrollView').get('boundingBox').setStyle(header ? 'marginTop' : 'marginBottom', (fixed && ns) ? (node.get('offsetHeight') + 'px') : 0);[37m // line 31, pos 165[0m
+   #4: [33mTrailing whitespace.[0m
+       *[37m // line 197, pos 11[0m
+   #5: [33mTrailing whitespace.[0m
+       * @writeOnce[37m // line 200, pos 22[0m
+   #6: [33mTrailing whitespace.[0m
+       * @writeOnce[37m // line 221, pos 22[0m
+   #7: [33mTrailing whitespace.[0m
+       * @writeOnce[37m // line 242, pos 22[0m
+   #8: [33mTrailing whitespace.[0m
+       * @writeOnce[37m // line 254, pos 22[0m
+   #9: [33mTrailing whitespace.[0m
+       * @writeOnce[37m // line 266, pos 22[0m
+   #10: [33mTrailing whitespace.[0m
+       * @writeOnce[37m // line 278, pos 22[0m
+   #11: [33m'config' is defined but never used.[0m
+       initializer: function (config) {[37m // line 53, pos 34[0m
+[35mshifter[0m [31m[err][0m /src/gallery-bottle/js/bottle/bottle.js contains 8 lint errors
+   #1: [33mA constructor name should start with an uppercase letter.[0m
+       var unused = new cls({[37m // line 80, pos 30[0m
+   #2: [33mLine too long.[0m
+       * @param hideURL {Boolean|Node} auto hide URL Bar when bottle inited or orientation changed. If a Node is provided, try to initialize Bottle widgets for this Node.[37m // line 91, pos 168[0m
+   #3: [33mExpected '===' and instead saw '=='.[0m
+       Y.on((Y.UA.mobile == 'Apple') ? 'orientationchange' : 'resize', handleResize, window);[37m // line 170, pos 27[0m
+   #4: [33m'unused' is defined but never used.[0m
+       var unused = new cls({[37m // line 80, pos 23[0m
+   #5: [33m'unused' is defined but never used.[0m
+       var unused = new Y.Bottle.ShortCut({[37m // line 149, pos 23[0m
+   #6: [33m'unused' is defined but never used.[0m
+       var unused = new Y.Bottle.Overlay({[37m // line 158, pos 23[0m
+   #7: [33m'E' is defined but never used.[0m
+       body.delegate('focus', function (E) {[37m // line 172, pos 43[0m
+   #8: [33m'E' is defined but never used.[0m
+       body.delegate('blur', function (E) {[37m // line 177, pos 42[0m
+[35mshifter[0m [31m[err][0m /assets/skins/sam/gallery-bottle-skin.css contains 47 lint errors
+   #1: [31m[warning][0m [33mThe property -ms-text-size-adjust is compatible with -webkit-text-size-adjust and should be included as well.[0m
+       body.btInit{-webkit-text-size-adjust:100%}[37m // line 3, pos 13[0m
+   #2: [31m[warning][0m [33mElement (body.btInit) is overqualified, just use .btInit without element name.[0m
+       body.btInit{-webkit-text-size-adjust:100%}[37m // line 3, pos 1[0m
+   #3: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       body.btFixed .btHeader.btFixed {top:0}[37m // line 5, pos 14[0m
+   #4: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       body.btFixed .btFooter.btFixed {bottom:0}[37m // line 6, pos 14[0m
+   #5: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       body.btFocus.btFixed .btHeader.btFixed,[37m // line 7, pos 1[0m
+   #6: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       body.btFocus.btFixed .btHeader.btFixed,[37m // line 7, pos 22[0m
+   #7: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       body.btFocus.btFixed .btFooter.btFixed {position:static}[37m // line 8, pos 1[0m
+   #8: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       body.btFocus.btFixed .btFooter.btFixed {position:static}[37m // line 8, pos 22[0m
+   #9: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       body.btFocus.btFixed .btFixedScroll {margin:0!important}[37m // line 9, pos 1[0m
+   #10: [31m[warning][0m [33mUse of !important[0m
+       body.btFocus.btFixed .btFixedScroll {margin:0!important}[37m // line 9, pos 38[0m
+   #11: [31m[warning][0m [33mThe property -o-transform is compatible with -webkit-transform and should be included as well.[0m
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)}[37m // line 18, pos 17[0m
+   #12: [31m[warning][0m [33mMissing standard property 'transform' to go along with '-webkit-transform'.[0m
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)}[37m // line 18, pos 17[0m
+   #13: [31m[warning][0m [33mThe property -moz-transform is compatible with -webkit-transform and should be included as well.[0m
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)}[37m // line 18, pos 17[0m
+   #14: [31m[warning][0m [33mThe property -ms-transform is compatible with -webkit-transform and should be included as well.[0m
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)}[37m // line 18, pos 17[0m
+   #15: [31m[warning][0m [33mStandard property 'box-sizing' should come after vendor-prefixed property '-moz-box-sizing'.[0m
+       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0}[37m // line 23, pos 55[0m
+   #16: [31m[warning][0m [33mThe property -webkit-box-sizing is compatible with -moz-box-sizing and should be included as well.[0m
+       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0}[37m // line 23, pos 55[0m
+   #17: [31m[warning][0m [33mThe box-sizing property isn't supported in IE6 and IE7.[0m
+       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0}[37m // line 23, pos 33[0m
+   #18: [31m[warning][0m [33mProperty with underscore prefix found.[0m
+       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top}[37m // line 31, pos 52[0m
+   #19: [31m[warning][0m [33mDuplicate property '_display' found.[0m
+       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top}[37m // line 31, pos 60[0m
+   #20: [31m[warning][0m [33mProperty with underscore prefix found.[0m
+       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top}[37m // line 31, pos 60[0m
+   #21: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .bst_tab > * {position:absolute!important;left:-10000px;width:100%}[37m // line 38, pos 12[0m
+   #22: [31m[warning][0m [33mUse of !important[0m
+       .bst_tab > * {position:absolute!important;left:-10000px;width:100%}[37m // line 38, pos 15[0m
+   #23: [31m[warning][0m [33mUse of !important[0m
+       .bst_tab > *.on {position:relative!important;left:auto}[37m // line 39, pos 18[0m
+   #24: [31m[warning][0m [33mElement (*.on) is overqualified, just use .on without element name.[0m
+       .bst_tab > *.on {position:relative!important;left:auto}[37m // line 39, pos 12[0m
+   #25: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .bst_tab > *.on {position:relative!important;left:auto}[37m // line 39, pos 12[0m
+   #26: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       .bcr_indexitem.bcr_on {background-color:#afc}[37m // line 57, pos 1[0m
+   #27: [31m[warning][0m [33mBackground image 'http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png' was used multiple times, first declared at line 58, col 46.[0m
+       .yui3-btviewer .bvi_botton {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer}[37m // line 62, pos 84[0m
+   #28: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       .yui3-btviewer .bvi_botton.bvi_expand {background-position:5px -395px}[37m // line 63, pos 16[0m
+   #29: [31m[warning][0m [33mDon't use adjoining classes.[0m
+       .yui3-btviewer .bvi_image.bvi_expand {max-width:none}[37m // line 64, pos 16[0m
+   #30: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=carousel],[37m // line 72, pos 26[0m
+   #31: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=viewer],[37m // line 73, pos 26[0m
+   #32: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=shortcut],[37m // line 74, pos 26[0m
+   #33: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=overlay],[37m // line 75, pos 26[0m
+   #34: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=photogrid],[37m // line 76, pos 26[0m
+   #35: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=slidetab][37m // line 77, pos 26[0m
+   #36: [31m[warning][0m [33mBackground image 'http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif' was used multiple times, first declared at line 66, col 37.[0m
+       {background:#fff url(http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif) no-repeat 50% 50%;min-height:50px}[37m // line 78, pos 3[0m
+   #37: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .btHideAll:not(.btReady) > *,[37m // line 81, pos 28[0m
+   #38: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=carousel] > *,[37m // line 82, pos 49[0m
+   #39: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=viewer] > *,[37m // line 83, pos 47[0m
+   #40: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=shortcut] > *,[37m // line 84, pos 49[0m
+   #41: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=overlay] > *,[37m // line 85, pos 48[0m
+   #42: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=photogrid] > *,[37m // line 86, pos 50[0m
+   #43: [31m[warning][0m [33mThe universal selector (*) is known to be slow.[0m
+       .btInPlace:not(.btReady) [data-role=slidetab] > *,[37m // line 87, pos 49[0m
+   #44: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btHideSCO:not(.btReady) [data-role=shortcut],[37m // line 88, pos 26[0m
+   #45: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btHideSCO:not(.btReady) [data-role=overlay][37m // line 89, pos 26[0m
+   #46: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btHideSCO:not(.btReady) [data-role=shortcut],[37m // line 92, pos 26[0m
+   #47: [31m[warning][0m [33mUnqualified attribute selectors are known to be slow.[0m
+       .btHideSCO:not(.btReady) [data-role=overlay][37m // line 93, pos 26[0m

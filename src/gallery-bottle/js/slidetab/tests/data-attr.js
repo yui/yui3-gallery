@@ -13,6 +13,10 @@ YUI().use('slidetab-testlib', function (Y) {
             A.areSame(60, slide.get('labelWidth'));
         },
 
+        'test lazyLoad: false': function () {
+            A.isFalse(slide.get('lazyLoad'));
+        },
+
         'test selectedIndex: 1': function () {
             A.areSame(1, slide.get('selectedIndex'));
         },
