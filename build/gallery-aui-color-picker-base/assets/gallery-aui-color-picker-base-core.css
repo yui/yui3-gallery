@@ -8,7 +8,7 @@
 }
 
 .yui3-colorpicker-canvas {
-	background: #f00 url(picker_bg.png);
+	background: #f00 url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-color-picker-base/assets/picker_bg.png);
 	background-color: #f00;
 	height: 184px;
 	left: 5px;
@@ -48,7 +48,7 @@
 }
 
 .yui3-colorpicker-hue-thumb-image {
-	background: url(color_indic.png) no-repeat 0 0;
+	background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-color-picker-base/assets/color_indic.png) no-repeat 0 0;
 	display: block;
 	height: 7px;
 	margin-left: -2px;
@@ -57,7 +57,7 @@
 }
 
 .yui3-colorpicker-hue-canvas {
-	background: url(hue.png) no-repeat -2px -2px;
+	background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-color-picker-base/assets/hue.png) no-repeat -2px -2px;
 	height: 186px;
 	left: 200px;
 	outline: 0 none;
@@ -103,7 +103,7 @@
 }
 
 .yui3-colorpicker-thumb-image {
-	background: url(select.png) no-repeat 0 0;
+	background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-color-picker-base/assets/select.png) no-repeat 0 0;
 	display: block;
 	height: 11px;
 	width: 11px;

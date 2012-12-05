@@ -1,4 +1,4 @@
-.yui3-slidecheckbox .edge,.yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-image:url(slider.png);height:27px;display:block;-moz-user-select:none;-khtml-user-select:none;}
+.yui3-slidecheckbox .edge,.yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-image:url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-slidecheckbox/assets/skins/green/slider.png);height:27px;display:block;-moz-user-select:none;-khtml-user-select:none;}
 .yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-color:transparent;}
 .yui3-slidecheckbox-handle span{height:27px;width:3px;}
 .yui3-slidecheckbox-handle .lt{background-position:0 -81px;}

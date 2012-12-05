@@ -49,19 +49,19 @@
 }
 
 .yui3-carousel-menu-next {
-	background-image: url(next.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-carousel/assets/next.png);
 }
 
 .yui3-carousel-menu-play {
-	background-image: url(play.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-carousel/assets/play.png);
 }
 
 .yui3-carousel-menu-pause {
-	background-image: url(pause.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-carousel/assets/pause.png);
 }
 
 .yui3-carousel-menu-prev {
-	background-image: url(prev.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-carousel/assets/prev.png);
 }
 
 .yui3-carousel-menu-index {

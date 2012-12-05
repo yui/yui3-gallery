@@ -38,7 +38,7 @@
 }
 
 .yui3-skin-sam  li.yui3-multivalueinput-list a{
-    background: url("close.gif") repeat scroll 0 0 transparent;
+    background: url("http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-multivalue-input/assets/skins/sam/close.gif") repeat scroll 0 0 transparent;
     display: block;
     font-size: 1px;
     height: 7px;

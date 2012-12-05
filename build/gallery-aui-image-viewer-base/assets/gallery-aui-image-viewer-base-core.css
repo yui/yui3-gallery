@@ -41,17 +41,17 @@
 }
 
 .yui3-image-viewer-arrow-left {
-	background-image: url(arrow-left.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-image-viewer-base/assets/arrow-left.png);
 	left: 100px;
 }
 
 .yui3-image-viewer-arrow-right {
-	background-image: url(arrow-right.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-image-viewer-base/assets/arrow-right.png);
 	right: 100px;
 }
 
 .yui3-image-viewer-close {
-	background-image: url(close.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-image-viewer-base/assets/close.png);
 	background-repeat: no-repeat;
 	height: 19px;
 	outline: 0;

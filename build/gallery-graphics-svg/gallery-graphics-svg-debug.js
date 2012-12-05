@@ -1659,4 +1659,4 @@ Y.Graphic = Graphic;
 
 
 
-}, '@VERSION@' ,{requires:['graphics'], skinnable:false});
+}, 'gallery-2012.12.05-21-01' ,{requires:['graphics'], skinnable:false});

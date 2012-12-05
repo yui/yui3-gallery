@@ -142,4 +142,4 @@ YUI.add('gallery-badge', function (Y, NAME) {
 
 
 
-}, '@VERSION@', {"requires": ["node", "event", "gallery-yql", "base"], "supersedes": [], "optional": [], "skinnable": false});
+}, 'gallery-2012.12.05-21-01', {"requires": ["node", "event", "gallery-yql", "base"], "supersedes": [], "optional": [], "skinnable": false});

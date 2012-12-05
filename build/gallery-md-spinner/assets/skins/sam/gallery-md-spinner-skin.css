@@ -4,10 +4,10 @@
 }
 
 .yui3-spinner .yui3-spinner-up {
-	background:transparent url(arrows.png) no-repeat 50% -3px;
+	background:transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-spinner/assets/skins/sam/arrows.png) no-repeat 50% -3px;
 }
 
 .yui3-spinner .yui3-spinner-down {
-	background:transparent url(arrows.png) no-repeat 50% -54px;
+	background:transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-spinner/assets/skins/sam/arrows.png) no-repeat 50% -54px;
  }
 

@@ -61,5 +61,5 @@
     text-indent: -1000px;
     cursor: pointer;
 }
-.yui3-icon-close { background: url(minus-circle.png) no-repeat 50% 50%; }
-.yui3-icon-edit { background: url(edit.png) no-repeat 50% 50%; }
+.yui3-icon-close { background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-taglist/assets/minus-circle.png) no-repeat 50% 50%; }
+.yui3-icon-edit { background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-taglist/assets/edit.png) no-repeat 50% 50%; }

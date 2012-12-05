@@ -1,6 +1,6 @@
 .yui3-icon {
 	background-repeat: no-repeat;
-	background: url(../images/icon_sprite.png) no-repeat 0 0;
+	background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-skin-classic/images/icon_sprite.png) no-repeat 0 0;
 	display: block;
 	height: 16px;
 	overflow: hidden;
@@ -701,7 +701,7 @@
 }
 
 .yui3-icon-loading {
-	background: url(../images/loading_indicator.gif) no-repeat 0 0;
+	background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-skin-classic/images/loading_indicator.gif) no-repeat 0 0;
 	width: 16px;
 	height: 16px;
 }

@@ -356,4 +356,4 @@ function regexpEscape (text) {
 }
 
 
-}, '@VERSION@' ,{requires:['widget','gallery-ac-plugin']});
+}, 'gallery-2012.12.05-21-01' ,{requires:['widget','gallery-ac-plugin']});

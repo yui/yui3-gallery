@@ -25,12 +25,12 @@
 }
 
 .yui3-tree-collapsed .yui3-tree-hitarea {
-	background-image: url(arrows.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-tree-view/assets/arrows.png);
 	background-repeat: no-repeat;
 }
 
 .yui3-tree-expanded .yui3-tree-hitarea {
-	background-image: url(arrows.png);
+	background-image: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-tree-view/assets/arrows.png);
 	background-repeat: no-repeat;
 	background-position: -16px 50%;
 }
@@ -73,15 +73,15 @@
 }
 
 .yui3-tree-node-leaf .yui3-tree-icon {
-	background: transparent url(file.png) no-repeat 50% 50%;
+	background: transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-tree-view/assets/file.png) no-repeat 50% 50%;
 }
 
 .yui3-tree-file .yui3-tree-expanded .yui3-tree-icon {
-	background: transparent url(folder_opened.png) no-repeat 50% 50%;
+	background: transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-tree-view/assets/folder_opened.png) no-repeat 50% 50%;
 }
 
 .yui3-tree-file .yui3-tree-collapsed .yui3-tree-icon {
-	background: transparent url(folder_closed.png) no-repeat 50% 50%;
+	background: transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-tree-view/assets/folder_closed.png) no-repeat 50% 50%;
 }
 
 .yui3-tree-collapsed .yui3-tree-node-hidden-hitarea,
@@ -92,14 +92,14 @@
 /* TreeNodeIO */
 
 .yui3-tree-view-content .yui3-tree-node-io-loading .yui3-tree-icon {
-	background: url(../../../../../build/gallery-aui-skin-base/images/loading_indicator.gif) no-repeat 50% 50% !important;
+	background: url(http://yui.yahooapis.com/build/gallery-aui-skin-base/images/loading_indicator.gif) no-repeat 50% 50% !important;
 }
 
 /* TreeNodeCheck */
 
 .yui3-tree-node-checkbox-container {
 	float: left;
-	background: transparent url(checks.png) no-repeat 0 50%;
+	background: transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-aui-tree-view/assets/checks.png) no-repeat 0 50%;
 	height: 18px;
 	width: 16px;
 }

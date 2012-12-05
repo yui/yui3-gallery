@@ -237,7 +237,7 @@
 .yui3-skin-xarno .tabView dd.active { display: block;}
 .yui3-skin-xarno .tabView dd .liner { border: 1px solid #ddd; padding: 5px 12px 5px 10px;}
 .yui3-skin-xarno-growl .yui3-button {
-	background: #d9d9d9 url('assets/growl/background.png') left top repeat-x;
+	background: #d9d9d9 url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/growl/background.png') left top repeat-x;
 	border: 1px solid #959595;
 	color: #3a3a3a;
 	height: 26px;
@@ -266,7 +266,7 @@
 }
 
 .yui3-skin-xarno-growl .yui3-icon {
-  background-image:url("assets/growl/icon-sprite.png");
+  background-image:url("http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/growl/icon-sprite.png");
 }
 
 .yui3-skin-xarno-growl .yui3-button-hover {
@@ -279,11 +279,11 @@
 
 .yui3-skin-xarno-growl .yui3-button-selected {
     border-color: CornflowerBlue;
-    background-image:url('assets/growl/background-active.png');
+    background-image:url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/growl/background-active.png');
 }
 
 .yui3-skin-xarno-growl .yui3-button-disabled span {
-    background-image: url('assets/growl/icon-sprite-bw.gif');
+    background-image: url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/growl/icon-sprite-bw.gif');
     text-shadow: none;
     opacity: .5;
     filter: alpha(opacity=50);
@@ -368,7 +368,7 @@
     -webkit-border-radius:0 3px 3px 0;
 }
 .yui3-skin-xarno-smooth .yui3-button {
-	background: #d9d9d9 url('assets/smooth/background.png') left top repeat-x;
+	background: #d9d9d9 url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/background.png') left top repeat-x;
 	border: 1px solid #959595;
 	color: #3a3a3a;
 	padding: 2px 4px;
@@ -390,7 +390,7 @@
 	-webkit-box-shadow: 0 0 2px #009ee7;
 }
 .yui3-skin-xarno-smooth .yui3-button .yui3-button-content {
-    background-image: url('assets/smooth/icon-sprite.gif');
+    background-image: url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/icon-sprite.gif');
     padding-left: 22px;
     line-height: 16px;
     text-shadow: 1px 1px #efefef;
@@ -424,11 +424,11 @@
 
 .yui3-skin-xarno-smooth .yui3-button-selected {
     border-color: CornflowerBlue;
-    background-image:url('assets/smooth/background-active.png');
+    background-image:url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/background-active.png');
 }
 
 .yui3-skin-xarno-smooth .yui3-button-disabled .yui3-button-content {
-    background-image: url('assets/smooth/icon-sprite-bw.gif');
+    background-image: url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/icon-sprite-bw.gif');
     text-shadow: none;
     opacity: .5;
     filter: alpha(opacity=50);
@@ -477,15 +477,15 @@
 }
 .yui3-skin-xarno-smooth .yui3-dialog-icon-alert .yui3-widget-bd {
 	padding-left: 60px;
-	background: url("assets/smooth/caution.png") no-repeat scroll 14px 11px transparent;
+	background: url("http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/caution.png") no-repeat scroll 14px 11px transparent;
 }
 .yui3-skin-xarno-smooth .yui3-dialog-icon-confirm .yui3-widget-bd {
 	padding-left: 60px;
-	background: url("assets/smooth/question.png") no-repeat scroll 14px 11px transparent;
+	background: url("http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/question.png") no-repeat scroll 14px 11px transparent;
 }
 .yui3-skin-xarno-smooth .yui3-dialog-icon-prompt .yui3-widget-bd {
 	padding-left: 60px;
-	background: url("assets/smooth/question.png") no-repeat scroll 14px 11px transparent;
+	background: url("http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/question.png") no-repeat scroll 14px 11px transparent;
 }
 .yui3-skin-xarno-smooth .yui3-dialog .yui3-widget-ft {
     border-color: #555555;
@@ -507,7 +507,7 @@
   border-bottom: 1px solid #959595;
   text-align: left;
   color:#7da2ce;
-  background: url('assets/smooth/background.png') left top repeat-x;
+  background: url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallerycss-xarno-skins/assets/smooth/background.png') left top repeat-x;
   padding-right: 0;
 }
 .yui3-skin-xarno-smooth .yui3-sdt th {

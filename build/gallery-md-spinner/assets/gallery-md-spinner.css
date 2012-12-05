@@ -45,14 +45,14 @@
 	top:1px;
 	*top:2px;
 	right:1px;
-	background:transparent url(arrows.png) no-repeat 50% -3px;
+	background:transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-spinner/assets/arrows.png) no-repeat 50% -3px;
 }
 
 .yui3-spinner .yui3-spinner-down {
 	bottom:1px;
 	*bottom:2px;
 	right:1px;
-	background:transparent url(arrows.png) no-repeat 50% -54px;
+	background:transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-spinner/assets/arrows.png) no-repeat 50% -54px;
  }
 
 .yui3-variablespeedtimespinner-multiplier {

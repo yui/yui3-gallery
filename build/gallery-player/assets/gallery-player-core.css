@@ -1,6 +1,6 @@
 .yui-player {position: relative;}
 .yui-player-focused {outline: none;}
-.yui-player-controls {position: absolute; top: 0; left: 0;width: 438px; height: 59px; overflow: hidden; background: url('images/bg.png') transparent no-repeat;}
+.yui-player-controls {position: absolute; top: 0; left: 0;width: 438px; height: 59px; overflow: hidden; background: url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-player/assets/images/bg.png') transparent no-repeat;}
 .yui-player-controls img {cursor: pointer;}
 .yui-player-controls span {position: absolute; cursor: default; color: #fff; font-family: 'Lucida Grande', Helvetica, Arial, sans-serif; font-size: 10px; font-weight: bold;}
 .yui-player-fullscreen {position: absolute; top: 13px; right: 13px;}

@@ -128,4 +128,4 @@ YUI.add('gallery-oauth', function (Y, NAME) {
     }
 
 
-}, '@VERSION@', {"requires": ["jsonp"], "supersedes": [], "optional": ["yql"], "skinnable": false});
+}, 'gallery-2012.12.05-21-01', {"requires": ["jsonp"], "supersedes": [], "optional": ["yql"], "skinnable": false});

@@ -1,5 +1,5 @@
 .yui3-slidecheckbox-content,.yui3-slidecheckbox-content > div{height:28px;}
-.yui3-slidecheckbox .edge,.yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-image:url(slider.png);height:28px;display:block;-moz-user-select:none;-khtml-user-select:none;}
+.yui3-slidecheckbox .edge,.yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-image:url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-slidecheckbox/assets/skins/ios5/slider.png);height:28px;display:block;-moz-user-select:none;-khtml-user-select:none;}
 .yui3-slidecheckbox-handle,.yui3-slidecheckbox-handle > span,.yui3-slidecheckbox-labelOn,.yui3-slidecheckbox-labelOff{background-color:transparent;}
 .yui3-slidecheckbox-handle{width:28px;background:none;}
 .yui3-slidecheckbox-handle span{height:28px;width:14px;}

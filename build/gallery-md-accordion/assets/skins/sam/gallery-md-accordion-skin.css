@@ -10,7 +10,7 @@
 
 .yui3-skin-sam .yui3-accordion .yui3-accordionpanel .yui3-widget-hd {
 
-	background: url("sprite.png") repeat-x scroll left top;
+	background: url("http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-accordion/assets/skins/sam/sprite.png") repeat-x scroll left top;
 	color:white;
 	font-weight:bold;
 	border: 1px solid #93B2CC;
@@ -18,7 +18,7 @@
 .yui3-skin-sam .yui3-accordionpanel-icon,
 .yui3-skin-sam .yui3-accordionpanel-status,
 .yui3-skin-sam .yui3-accordionpanel-close {
-    background: url(sprite.png ) transparent no-repeat center top;
+    background: url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-accordion/assets/skins/sam/sprite.png ) transparent no-repeat center top;
 
 }
 .yui3-skin-sam .yui3-accordionpanel-icon {
@@ -39,13 +39,13 @@
 }
 
 .yui3-skin-sam .yui3-accordionpanel-expanding .yui3-accordionpanel-status{
-    background-image: url( wait_expand.gif );
+    background-image: url( http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-accordion/assets/skins/sam/wait_expand.gif );
     background-position: 0px center;
 }
 
 
 .yui3-skin-sam .yui3-accordionpanel-collapsing .yui3-accordionpanel-status{
-    background-image: url( wait_collapse.gif );
+    background-image: url( http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-accordion/assets/skins/sam/wait_collapse.gif );
     background-position: 0px center;
 }
 

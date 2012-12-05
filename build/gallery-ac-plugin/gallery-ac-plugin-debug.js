@@ -283,4 +283,4 @@ function handleQueryResponse (e) {
 
 
 
-}, '@VERSION@' ,{requires:['node', 'plugin', 'gallery-value-change', 'event-key'], optional:['event-custom']});
+}, 'gallery-2012.12.05-21-01' ,{requires:['node', 'plugin', 'gallery-value-change', 'event-key'], optional:['event-custom']});

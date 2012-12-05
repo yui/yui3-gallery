@@ -30,7 +30,7 @@ HTML {
 	height: 100%;
 	position:absolute;
 	top: 0px;
-	background: transparent url(pix-blue.gif) repeat-x bottom;
+	background: transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-split-desktop/assets/pix-blue.gif) repeat-x bottom;
 
 }
 
@@ -81,7 +81,7 @@ HTML {
     border: none;
     clear: both;
     background-repeat: no-repeat;
-    background: transparent url(drag-here.png) no-repeat 162px 7px; /* xx */
+    background: transparent url(http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-split-desktop/assets/drag-here.png) no-repeat 162px 7px; /* xx */
     overflow-y: auto;
     overflow-x: hidden;
     width: 981px;/* hide scrollbar behind page_wrapper 960 + 21 */    

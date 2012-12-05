@@ -116,4 +116,4 @@ Bitly API Access
     Y.bitly = B;
 
 
-}, '@VERSION@', {"requires": ["base", "get"], "supersedes": [], "optional": [], "skinnable": false});
+}, 'gallery-2012.12.05-21-01', {"requires": ["base", "get"], "supersedes": [], "optional": [], "skinnable": false});

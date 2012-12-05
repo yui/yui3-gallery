@@ -3,7 +3,7 @@
  Skin derived from Anthony Pipkin's gallery-button component
 */
 .yui3-skin-sam .yui3-button {
-	background: #d9d9d9 url('background.png') left top repeat-x;
+	background: #d9d9d9 url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-button/assets/background.png') left top repeat-x;
 	border: 1px solid #959595;
 	color: #3a3a3a;
 	padding: 2px 4px;
@@ -27,7 +27,7 @@
 }
 .yui3-skin-sam .yui3-button .yui3-button-icon,
 .yui3-skin-sam .yui3-button-toggle .yui3-button-toggle-icon  {
-	background-image: url('icon-sprite.gif');
+	background-image: url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-button/assets/icon-sprite.gif');
 	padding-left: 22px;
 	line-height: 16px;
 	text-shadow: 1px 1px #efefef;
@@ -83,12 +83,12 @@
 
 .yui3-skin-sam .yui3-button-toggle-selected {
 	border-color: CornflowerBlue;
-	background-image:url('background-active.png');
+	background-image:url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-button/assets/background-active.png');
 }
 
 .yui3-skin-sam .yui3-button-disabled .yui3-button-icon,
 .yui3-skin-sam .yui3-button-toggle-disabled .yui3-button-toggle-icon {
-	background-image: url('icon-sprite.gif');
+	background-image: url('http://yui.yahooapis.com/gallery-2012.12.05-21-01/gallery-md-button/assets/icon-sprite.gif');
 	text-shadow: none;
 	opacity: .5;
 	filter: alpha(opacity=50);
