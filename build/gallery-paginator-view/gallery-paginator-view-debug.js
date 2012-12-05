@@ -1,4 +1,4 @@
-YUI.add('gallery-paginator-view', function(Y) {
+YUI.add('gallery-paginator-view', function (Y, NAME) {
 
 /**
  A Model class extension to be used to track "pagination state" of a paged set of control elements.
@@ -7,28 +7,28 @@ YUI.add('gallery-paginator-view', function(Y) {
 
  The primary tools for maintaining "page state" is through the following attributes;
 
-    * `totalItems` &nbsp;&nbsp;  Which represents the "Total count of items of interest" (See attribute [totalItems](#attr_totalItems) )
-    * `itemsPerPage` &nbsp;&nbsp; Which represents the "Count of items on each page" (See attribute [itemsPerPage](#attr_itemsPerPage) )
-    *  `page` &nbsp;&nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )
+ * `totalItems` &nbsp;&nbsp;  Which represents the "Total count of items of interest" (See attribute [totalItems](#attr_totalItems) )
+ * `itemsPerPage` &nbsp;&nbsp; Which represents the "Count of items on each page" (See attribute [itemsPerPage](#attr_itemsPerPage) )
+ *  `page` &nbsp;&nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )
 
  <h4>Usage</h4>
 
-        // setup a paginator model for 500 'foo' items, paged at 50 per page ...
-        var pagModel = new Y.PaginatorModel({
-            totalItems:     500,
-            itemsPerPage:   50
-        });
-        pagModel.get('totalPages');  // returns 10
+     // setup a paginator model for 500 'foo' items, paged at 50 per page ...
+     var pagModel = new Y.PaginatorModel({
+        totalItems:     500,
+        itemsPerPage:   50
+     });
+     pagModel.get('totalPages');  // returns 10
 
-        pagModel.set('page',3);
-        pagModel.getAttrs(['lastPage','page','itemIndexStart','itemIndexEnd']);
-        // returns ... { lastPage:1, page:3, itemIndexStart:100, itemIndexEnd:149 }
+     pagModel.set('page',3);
+     pagModel.getAttrs(['lastPage','page','itemIndexStart','itemIndexEnd']);
+     // returns ... { lastPage:1, page:3, itemIndexStart:100, itemIndexEnd:149 }
 
  @class Y.PaginatorModel
  @extends Y.Model
  @version 1.0.1
  @since 3.6.0
-**/
+ **/
 Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
 
     /**
@@ -77,9 +77,7 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
      * @private
      */
     destructor: function () {
-        Y.Array.each(this._subscr,function(item){
-            item.detach();
-        });
+        Y.Array.each(this._subscr,function(item){ item.detach(); });
         this._subscr = null;
     },
 
@@ -87,7 +85,7 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
      * Method responds to changes to "page" (via `pageChange` attribute change), validates the change compared to the
      *  current paginator settings, and stores the prior page in "lastPage".
      *
-     * If a page change is invalid (i.e. less than 1, non-numeric or greater than `totalPages` the change is prevented.
+     * If a page change is invalid (i.e. less than 1, non-numeric or greater than `totalPages`) the change is prevented.
      *
      * @method _changePage
      * @param {EventFacade} e
@@ -96,7 +94,7 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
      */
     _changePage: function(e) {
         var newPg = e.newVal,
-            validp = true;
+                validp = true;
 
         if ( newPg < 1 || !this.get('totalPages') || !this.get('itemsPerPage') ) validp = false;
         if ( this.get('totalPages') && newPg > this.get('totalPages') ) validp = false;
@@ -121,12 +119,18 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
         var nipp = this.get('itemsPerPage'),
             ni   = this.get('totalItems');
 
-        if ( ni && nipp && ni > 0 && nipp > 0 ) {
+        if ( nipp &&  nipp > 0 ) {
             np = Math.floor( ni / nipp );
             if ( ni % nipp > 0 ) np++;
-            //this.set('totalPages',np);
+            if(ni === 0) np = 1;
+
             this._npages = np;
-            this.set('page',1);
+
+            // If the current page is greater than the page count,
+            //   then set page to first ...
+            if(np < this.get('page') )
+                this.set('page',1);
+
             return true;
         }
         return false;
@@ -150,7 +154,7 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
      */
     _getItemIndexEnd: function(){
         var ni   = this.get('totalItems'),
-            iend = this.get('itemIndexStart') + this.get('itemsPerPage');
+                iend = this.get('itemIndexStart') + this.get('itemsPerPage');
         return ( iend > ni ) ? ni : iend;
     }
 
@@ -217,7 +221,7 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
          * @type {Integer}
          * @default 1
          */
-        page:    {
+        page: {
             value:      1,
             validator:  Y.Lang.isNumber
         },
@@ -303,15 +307,15 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
 
  <h4>Usage</h4>
 
-        // Setup a paginator view based on a data model for 500 items, paged at 50 per page ...
-        var pagView = new Y.PaginatorView(
-            container:  '#myPagDIV',
-            paginatorTemplate:  '#script-tmpl-mypag',
-            model:  new Y.PaginatorModel({
-                totalItems:     500,
-                itemsPerPage:   50
+     // Setup a paginator view based on a data model for 500 items, paged at 50 per page ...
+     var pagView = new Y.PaginatorView(
+        container:  '#myPagDIV',
+        paginatorTemplate:  '#script-tmpl-mypag',
+        model:  new Y.PaginatorModel({
+            totalItems:     500,
+            itemsPerPage:   50
             })
-        }).render();
+     }).render();
 
  <h4>View 'container'</h4>
  The [container](#attr_container) attribute is the only **REQUIRED** attribute for this View, primarily because we need to know *where* to
@@ -326,9 +330,9 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
 
  A definition of HTML Template for the paginator can be achieved through several methods;
  <ul>
-    <li>Including the HTML template as content within the original `container` DOM element ... template retrived via .getHTML()</li>
-    <li>Setting the <a href="#attr_paginatorTemplate">paginatorTemplate</a> attribute to either the template 'string', or giving a SCRIPT template DOM[id] or Y.Node</li>
-    <li>Doing neither of the above ... where the default template is used (from <a href="#property_TMPL_PAGINATOR">TMPL_PAGINATOR</a> static property)</li>
+ <li>Including the HTML template as content within the original `container` DOM element ... template retrived via .getHTML()</li>
+ <li>Setting the <a href="#attr_paginatorTemplate">paginatorTemplate</a> attribute to either the template 'string', or giving a SCRIPT template DOM[id] or Y.Node</li>
+ <li>Doing neither of the above ... where the default template is used (from <a href="#property_TMPL_PAGINATOR">TMPL_PAGINATOR</a> static property)</li>
  </ul>
  (Note: If for some reason it is desired to not have a "template" (because you are rendering one outside of this view), setting
  ```paginatorTemplate:''``` will override the default.)
@@ -352,9 +356,9 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
 
  For example, the following are all valid page link identifiers;
 
-        <a href="#" data-pglink="last" title="Last Page">Last</a>
-        <button data-pglink="6" class="myBtn">Page 6</button>
-        <select><option data-pglink="19" value="19">Page 19 : Rows 9501 - 10000</option></select>
+     <a href="#" data-pglink="last" title="Last Page">Last</a>
+     <button data-pglink="6" class="myBtn">Page 6</button>
+     <select><option data-pglink="19" value="19">Page 19 : Rows 9501 - 10000</option></select>
 
 
  <h4>Connecting to "other" UI Elements / Widgets</h4>
@@ -377,32 +381,31 @@ Y.PaginatorModel = Y.Base.create('paginatorModel', Y.Model,[],{
  **/
 Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
-
 //================   S T A T I C     P R O P E R T I E S     ====================
 
     /**
-    Default HTML content to be used as basis for Paginator.  This default is only used if the paginatorTemplate
-    attribute is unused OR the container does not contain the HTML template.
+     Default HTML content to be used as basis for Paginator.  This default is only used if the paginatorTemplate
+     attribute is unused OR the container does not contain the HTML template.
 
-    The paginator HTML content includes replacement tokens throughout.
+     The paginator HTML content includes replacement tokens throughout.
 
-    The DEFAULT setting is;
+     The DEFAULT setting is;
 
-            <a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page">First</a> |
-            <a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page">Prev</a> |
-            {pageLinks}
-            | <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">Next</a> |
-            <a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">Last</a>
+     <a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page">First</a> |
+     <a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page">Prev</a> |
+     {pageLinks}
+     | <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">Next</a> |
+     <a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">Last</a>
 
-    @property TMPL_PAGINATOR
-    @type String
-    **/
+     @property TMPL_PAGINATOR
+     @type String
+     **/
 
     TMPL_PAGINATOR :  '<a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page">First</a> | '
-        + '<a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page">Prev</a> | '
-        + '{pageLinks}'
-        + ' | <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">Next</a> | '
-        + '<a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">Last</a>',
+            + '<a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page">Prev</a> | '
+            + '{pageLinks}'
+            + ' | <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">Next</a> | '
+            + '<a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">Last</a>',
 
     /**
      Default HTML content that will be used to prepare individual links within the Paginator and inserted
@@ -410,7 +413,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
      The DEFAULT setting is;
 
-            <a href="#" data-pglink="{page}" class="{pageLinkClass}" title="Page {page}">{page}</a>
+     <a href="#" data-pglink="{page}" class="{pageLinkClass}" title="Page {page}">{page}</a>
 
      @property TMPL_LINK
      @type {String}
@@ -428,7 +431,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
      The DEFAULT setting is;
 
-            <select class="{selectRPPClass}"></select>
+     <select class="{selectRPPClass}"></select>
 
      @property TMPL_selectRPP
      @type String
@@ -441,7 +444,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
      The DEFAULT setting is;
 
-            <select class="{selectPageClass}"></select>
+     <select class="{selectPageClass}"></select>
 
      @property TMPL_selectPage
      @type String
@@ -454,7 +457,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
      The DEFAULT setting is;
 
-            <input type="text" class="{inputRPPClass}" value="{itemsPerPage}"/>
+     <input type="text" class="{inputRPPClass}" value="{itemsPerPage}"/>
 
      @property TMPL_inputRPP
      @type String
@@ -467,7 +470,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
      The DEFAULT setting is;
 
-            <input type="text" class="{inputPageClass}" value="{page}"/>
+     <input type="text" class="{inputPageClass}" value="{page}"/>
 
      @property TMPL_inputPage
      @type String
@@ -560,13 +563,13 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         this._classSelectRPP  = this._myClassName('select','rowsperpage');
         this._classInputRPP   = this._myClassName('input','rowsperpage');
 
-    //
-    //  Setup the container for the paginator, and retrieve the "HTML template"
-    //    from any of the following in order;
-    //      (a) the "container" HTML,
-    //      (b) user specified template via 'paginatorTemplate' attribute,
-    //      (c) finally, the default internal template via valueFn.
-    //
+        //
+        //  Setup the container for the paginator, and retrieve the "HTML template"
+        //    from any of the following in order;
+        //      (a) the "container" HTML,
+        //      (b) user specified template via 'paginatorTemplate' attribute,
+        //      (c) finally, the default internal template via valueFn.
+        //
         var cont = this.get('container');
         if (Y.Lang.isString(cont) && pagTmpl[0] === '#' )
             this.set('container', Y.one(cont) );
@@ -616,7 +619,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             this.model = this.get('model');
             this._subscr.push( this.model.after('pageChange', Y.bind(this._modelPageChange,this)) );
             this._subscr.push( this.model.after('itemsPerPageChange', Y.bind(this._modelStateChange,this)) );
-            this._subscr.push( this.model.after('totalItemsChange', Y.bind(this._modelStateChange,this)) );
+            this._subscr.push( this.model.after('totalItemsChange', Y.bind(this._modelItemsChange,this)) );
         }
 
         // update rowOptions
@@ -644,9 +647,13 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     destructor: function () {
         Y.Array.each(this._subscr,function(item){
-            item.detach();
+            if(Y.Lang.isArray(item))
+                Y.Array.each(item,function(si){ si.detach(); });
+            else
+                item.detach();
         });
         this._subscr = null;
+        this.get('container').empty();
     },
 
 
@@ -663,23 +670,23 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
      Tokens replaced within this method include all of the PaginatorModel attributes;
 
-        **{page}**, **{totalItems}**, **{itemsPerPage}**, **{lastPage}**, **{totalPages}**, **{itemIndexStart}**, **{itemIndexEnd}**
+     **{page}**, **{totalItems}**, **{itemsPerPage}**, **{lastPage}**, **{totalPages}**, **{itemIndexStart}**, **{itemIndexEnd}**
 
      Additionally, specific tokens intended for view HTML construction and recognized by PaginatorView are;
      <ul>
-        <li><b>{pageLinks}</b> : The placeholder within the html template where the View-generated page links will
-        <br/>be inserted via a loop over all pages (DEFAULT: see <a href="#property_TMPL_LINK">TMPL_LINK</a>)</li>
-        <li><b>{inputPage}</b> : An INPUT[type=text] box which the view listens for change events on (Default: see <a href="#property_TMPL_inputPage">TMPL_inputPage</a>)</li>
-        <li><b>{selectRowsPerPage}</b> : A SELECT type pulldown that will be populated with the <a href="#attr_pageOptions">pageOptions</a>
+     <li><b>{pageLinks}</b> : The placeholder within the html template where the View-generated page links will
+     <br/>be inserted via a loop over all pages (DEFAULT: see <a href="#property_TMPL_LINK">TMPL_LINK</a>)</li>
+     <li><b>{inputPage}</b> : An INPUT[type=text] box which the view listens for change events on (Default: see <a href="#property_TMPL_inputPage">TMPL_inputPage</a>)</li>
+     <li><b>{selectRowsPerPage}</b> : A SELECT type pulldown that will be populated with the <a href="#attr_pageOptions">pageOptions</a>
      array <br/>of "Rows per Page" selections (Default: see <a href="#property_TMPL_selectRPP">TMPL_selectRPP</a>)</li>
-        <li><b>{inputRowsPerPage}</b> : An INPUT[type=text] box what will be listened to for changes to "Rows per Page" (Default: see <a href="#property_TMPL_inputRPP">TMPL_inputRPP</a>)</li>
-        <li><b>{selectPage}</b> (Not implemented at this time!)</li>
-        <li><b>{pageStartIndex}</b> : Represents the starting index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>
-        <li><b>{pageEndIndex}</b> : Represents the ending index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>
+     <li><b>{inputRowsPerPage}</b> : An INPUT[type=text] box what will be listened to for changes to "Rows per Page" (Default: see <a href="#property_TMPL_inputRPP">TMPL_inputRPP</a>)</li>
+     <li><b>{selectPage}</b> (Not implemented at this time!)</li>
+     <li><b>{pageStartIndex}</b> : Represents the starting index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>
+     <li><b>{pageEndIndex}</b> : Represents the ending index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>
      </ul>
 
      And if that wasn't enough, the CSS class names supported by this view are also provided via tokens as;
-        **{pagClass}**, **{pageLinkClass}**, **{inputPageClass}**, **{selectRPPClass}**, **{selectPageClass}**, **{inputRPPClass}**
+     **{pagClass}**, **{pageLinkClass}**, **{inputPageClass}**, **{selectRPPClass}**, **{selectPageClass}**, **{inputRPPClass}**
 
 
      This method utilizes the Y.substitute tool (with recursion) for token replacement.
@@ -700,26 +707,34 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             npage    = model.get('totalPages'),
             cpage    = model.get('page') || 1;
 
-       if ( !nsize || !nperpage || !pag_cont ) return this;
+        if ( nsize<0 || !nperpage || !pag_cont ) return this;
 
-        //
-        //  Constructing the Paginator HTML,
-        //      first construct the individual Page links ...
-        //
+        //TODO: this may be unnecessary ...
+        if(nsize === 0) {
+            npage = 1;
+            cpage = 1;
+           // Y.log("in pagview:render ... nsize = 0!");
+        }
+
+    //
+    //  Constructing the Paginator HTML,
+    //      first construct the individual Page links ...
+    //
         var pl_html   = '',
-            plinkTMPL = this.get('pageLinkTemplate'), // || this.TMPL_LINK;
+            plinkTMPL = this.get('pageLinkTemplate'),
             plIStart  = 0,
             plIEnd    = 0;
 
         // ... only burn thru this if the token is included in template ...
         if ( this._pagHTML.search(/{pageLinks}/) !== -1 ) {
             for(var i=0; i<npage; i++) {
-                plClass = this._classLinkPage + ' ' + this._classLinkPageList;  //plItemCSS;
+                plClass = this._classLinkPage + ' ' + this._classLinkPageList;
                 if ( i+1 === cpage )
-                    plClass += ' '+ this._classLinkPageActive; //this._cssActivePage;
+                    plClass += ' '+ this._classLinkPageActive;
 
                 plIStart = i*nperpage + 1,
                 plIEnd   = plIStart + nperpage - 1;
+
                 if ( plIEnd >= nsize ) plIEnd = nsize;
 
                 pl_html += Y.Lang.sub( plinkTMPL, {
@@ -731,13 +746,15 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             }
         }
 
-    // ... then build the full HTML
+        // ... then build the full HTML
         var pg_html = this._pagHTML;
         pag_cont.setStyle('visibility','hidden');
         pag_cont.setHTML('');         //pag_cont.empty();
 
-    // and load it into the container
+        // and load it into the container
         pg_html = '<div class="{pagClass}" tabindex="-1">' + pg_html + '</div>';
+
+        // use Y.substitute, because it is recursive ...
         var plink_tmpl = Y.substitute( pg_html, Y.mix({
             pageLinks:          pl_html || '',
             pageLinkClass:      this._classLinkPage,
@@ -766,6 +783,9 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         return this;
     },
 
+    disable: function(){
+        this.fire('disablePaginator');
+    },
 
     /**
      * Main handler that accomodates Page changes and updates visual cues for highlighting
@@ -782,12 +802,12 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     _processPageChange: function(cpage) {
         var model      = this.get('model'),
-            npage      = model.get('totalPages'),
-            lastPage   = model.get('lastPage'),
-            maxpls     = this.get('maxPageLinks'),
-            pag_cont   = this.get('container'),
-            linkOffset = this.get('linkListOffset'),
-            plNodes    = pag_cont.all('.'+ this._classLinkPageList);
+                npage      = model.get('totalPages'),
+                lastPage   = model.get('lastPage'),
+                maxpls     = this.get('maxPageLinks'),
+                pag_cont   = this.get('container'),
+                linkOffset = this.get('linkListOffset'),
+                plNodes    = pag_cont.all('.'+ this._classLinkPageList);
 
         //
         //  Toggle highlighting of active page selector (if enabled)
@@ -818,7 +838,15 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         //
         //  Toggle "disabled" on First/Prev or Next/Last selectors
         //
-        if ( cpage === 1 && !this.get('circular') ) {
+        if(model.get('totalItems')===0)
+            this._disablePageSelector(['1'],false);
+
+        if( npage === 1 ) {
+            this._disablePageSelector(['first','prev','last','next'],false);
+
+            // Special Case :  If no items returned, disable the Page 1 selector
+
+        } else if ( cpage === 1 && !this.get('circular') ) {
 
             this._disablePageSelector(['first','prev']);
             this._disablePageSelector(['last','next'],true);
@@ -831,16 +859,18 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         } else   // enable all selectors ...
             this._disablePageSelector(['first','prev','last','next'],true);
 
-         this.fire('pageChange',{state: model.getAttrs() });
 
-    //
-    //  Following code is only if user requests limited pageLinks,
-    //    Only continue if partial links are requested ...
-    //
+
+        this.fire('pageChange',{state: model.getAttrs() });
+
+        //
+        //  Following code is only if user requests limited pageLinks,
+        //    Only continue if partial links are requested ...
+        //
         if ( npage <= maxpls || !plNodes || ( plNodes && plNodes.size() ==0 ) ) return;
 
         var moreNodeL  = Y.Node.create('<span class="'+this._myClassName('more')+'">'+this.get('pageLinkFiller')+'</span>'),
-            moreNodeR  = Y.Node.create('<span class="'+this._myClassName('more')+'">'+this.get('pageLinkFiller')+'</span>');
+                moreNodeR  = Y.Node.create('<span class="'+this._myClassName('more')+'">'+this.get('pageLinkFiller')+'</span>');
 
         // Clear out any old remaining 'more' nodes ...
         pag_cont.all('.'+this._myClassName('more')).remove();
@@ -887,8 +917,8 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     _calcOffset: function(cpage, offset) {
         var npage     = this.get('model').get('totalPages'),
-            left_off  = ( cpage-offset < 1 ) ? 1 : (cpage-offset),
-            right_off = ( cpage+offset > npage) ? npage : (cpage+offset);
+                left_off  = ( cpage-offset < 1 ) ? 1 : (cpage-offset),
+                right_off = ( cpage+offset > npage) ? npage : (cpage+offset);
         return {left:left_off, right:right_off};
     },
 
@@ -908,7 +938,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         linkSel = ( !Y.Lang.isArray(linkSel) ) ? [ linkSel ] : linkSel;
         visible = ( visible ) ? visible : false;
         var sel_srch = '[data-{suffix}="{sdata}"]',
-            pag_cont = this.get('container');
+                pag_cont = this.get('container');
 
         Y.Array.each(linkSel,function(pgid){
             var node = pag_cont.one(Y.Lang.sub(sel_srch,{suffix:'pglink',sdata:pgid}) );
@@ -923,6 +953,8 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             }
         },this);
     },
+
+
 
     /**
      * Setter for the "model" attribute, that for convenience also sets a public property to this View.
@@ -965,8 +997,29 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     _modelStateChange: function(e) {
         var newRPP = e.newVal;
-        if (newRPP && !e.silent ) this.render();
+        //if (newRPP && !e.silent ) this.render();
+        if (!e.silent) this.render();
     },
+
+    /**
+     * Handler responds to Model's `itemsPerPageChange` event
+     *
+     *  Listener set in _bindUI
+     *
+     * @method _modelItemsChange
+     * @param {EventFacade} e
+     * @private
+     */
+    _modelItemsChange: function(e) {
+        var newTotalItems = e.newVal;
+        if(newTotalItems == 0) {
+           // this.model.set('page',1);
+           // Y.log("in pagview:_modelItemsChange ... nsize = 0!");
+        }
+        this.render();
+      //  if (!e.silent) this.render();
+    },
+
 
 
     /**
@@ -980,24 +1033,23 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     _updateRPPSelect: function() {
         var pag_cont  = this.get('container'),
-            model     = this.get('model'),
-            selPage   = pag_cont.one('.'+this._classSelectRPP),
-            pgOptions = this.get('pageOptions');
+                model     = this.get('model'),
+                selPage   = pag_cont.one('.'+this._classSelectRPP),
+                pgOptions = this.get('pageOptions');
 
         // this part is to load "pageOptions" array
         if ( pgOptions && selPage ) {
             if ( Y.Lang.isArray(pgOptions) ) {
                 //
                 //  Clear out any initial options, and add new options
-                //    using DOMNode methods ... seems to work better.
                 //
-                var opts = selPage.getDOMNode().options;
-                opts.length = 0;
+                var opts = selPage.get('options');
+                selPage.empty();
 
                 Y.Array.each(pgOptions, function(optVal) {
-                    var opt = new Option(optVal);
-                    opts[opts.length] = opt;
+                    selPage.append('<option value="' + optVal + '">' + optVal + '</option>');
                 });
+
             }
         }
 
@@ -1007,7 +1059,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
             var opts = selPage.get('options');
             opts.each(function(opt) {
                 if ( opt.get('value') == model.get('itemsPerPage')
-                    || (opt.get('value').search(/all/i)!==-1 && isAll) )
+                        || (opt.get('value').search(/all/i)!==-1 && isAll) )
                     opt.set('selected',true);
                 //else if ( model.get('itemsPerPage') )
             },this);
@@ -1026,8 +1078,8 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      **/
     _updatePageSelect: function() {
         var pag_cont  = this.get('container'),
-            model     = this.get('model'),
-            selPage   = pag_cont.one('.'+this._classSelectPage);
+                model     = this.get('model'),
+                selPage   = pag_cont.one('.'+this._classSelectPage);
 
         //Y.log('updatePageSelect fired after render ...');
 
@@ -1046,8 +1098,8 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     _inputChangePage: function(e) {
         var tar = e.target,
-            val = +tar.get('value') || 1,
-            model = this.get('model');
+                val = +tar.get('value') || 1,
+                model = this.get('model');
 
         if (val<1 || val>model.get('totalPages') ) {
             val = 1;
@@ -1071,14 +1123,14 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     _clickChangePage: function(e) {
         var tar   = e.target,
-            model = this.get('model');
+                model = this.get('model');
         e.preventDefault();
 
         if (e.target.hasClass(this._myClassName('disabled')) || e.currentTarget.hasClass(this._myClassName('disabled'))) return;
 
         var page  = tar.getData('pglink') || e.currentTarget.getData('pglink'),
-            npage = model.get('totalPages'),
-            cpage = model.get('page'); //tar.get('text');
+                npage = model.get('totalPages'),
+                cpage = model.get('page'); //tar.get('text');
 
         if ( cpage && cpage === page ) return;
 
@@ -1114,7 +1166,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
      */
     _selectChangeRowOptions: function(e){
         var tar = e.target,
-            val = +tar.get('value') || tar.get('value');
+                val = +tar.get('value') || tar.get('value');
 
         if ( Y.Lang.isString(val) && val.toLowerCase() === 'all' ) {
             val = this.get('model').get('totalItems');
@@ -1150,10 +1202,10 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         /**
          * The base PaginatorModel that serves as data / change provider for this View.
          *
-		 *	@example
+         *	@example
          *      paginator:  new Y.PaginatorModel({
-         *          itemsPerPage:  250
-         *      }),
+*          itemsPerPage:  250
+*      }),
          *      OR
          *  	paginator:  myPagModel // where myPagModel is an instance previously created ...
          *
@@ -1163,26 +1215,26 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
          */
         model: {
             value:     null,
-           // validator: function(v){ return v instanceof Y.PaginatorModel; },
+            // validator: function(v){ return v instanceof Y.PaginatorModel; },
             setter:    '_setModel'
         },
 
         /**
-          The container holder for the contents of this View.  Can be entered either as
-          a Y.Node instance or as a DOM "id" attribute (if prepended by "#").
+         The container holder for the contents of this View.  Can be entered either as
+         a Y.Node instance or as a DOM "id" attribute (if prepended by "#").
 
-		 	@example
-                container: Y.one("#myDiv"),
-                OR
-                container: "#myDiv"
+         @example
+         container: Y.one("#myDiv"),
+         OR
+         container: "#myDiv"
 
-          NOTE: If the container node contains HTML <b>it will be used as the paginatorTemplate</b>
+         NOTE: If the container node contains HTML <b>it will be used as the paginatorTemplate</b>
 
 
-          @attribute container
-          @default null
-          @type {Node|String}
-          @required
+         @attribute container
+         @default null
+         @type {Node|String}
+         @required
          **/
         container: {
             value: null
@@ -1192,9 +1244,9 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
          An array that will be used to populate the rows per page SELECT box ( using string replacement "{selectRowsPerPage}" or
          class selector "yui3-pagview-select-rowsperpage" ).
 
-          @attribute pageOptions
-          @type {Array}
-          @default [ 10, 20, 'All' ]
+         @attribute pageOptions
+         @type {Array}
+         @default [ 10, 20, 'All' ]
          **/
         pageOptions: {
             value:      [ 10, 20, 'All' ],
@@ -1202,20 +1254,20 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
         },
 
         /**
-          A string that defines the Paginator HTML contents.  Can either be entered as a {String} including replacement parameters
-          or as a {Node} instance whose contents will be read via .getHTML() or a DOM "id" element (indicated by '#' in first character)
-          <br/><br/>
-          To disable creation of any template (in order to do your own replacements of the template), set this to ''.
+         A string that defines the Paginator HTML contents.  Can either be entered as a {String} including replacement parameters
+         or as a {Node} instance whose contents will be read via .getHTML() or a DOM "id" element (indicated by '#' in first character)
+         <br/><br/>
+         To disable creation of any template (in order to do your own replacements of the template), set this to ''.
 
-            @example
-                paginatorTemplate:  '<div data-pglink="first">FIRST</div> {pageLinks} <div data-pglink="last">LAST</div>',
-                paginatorTemplate:  Y.one('#script-id-tmpl'),
-                paginatorTemplate:  Y.one('#script-id-tmpl').getHTML(),
-                paginatorTemplate:  '#script-id-tmpl',   // where
+         @example
+         paginatorTemplate:  '<div data-pglink="first">FIRST</div> {pageLinks} <div data-pglink="last">LAST</div>',
+         paginatorTemplate:  Y.one('#script-id-tmpl'),
+         paginatorTemplate:  Y.one('#script-id-tmpl').getHTML(),
+         paginatorTemplate:  '#script-id-tmpl',   // where
 
-          @attribute paginatorTemplate
-          @type {Node|String}
-          @default See TMPL_PAGINATOR static property
+         @attribute paginatorTemplate
+         @type {Node|String}
+         @default See TMPL_PAGINATOR static property
          **/
         paginatorTemplate:  {
             valueFn: function(){
@@ -1233,7 +1285,7 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
          A few examples of this template are listed below;
          @example
-                pageLinkTemplate: '<a href="#" data-pglink="{page}" class="" title="Page No. {page}">{page}</a>'
+         pageLinkTemplate: '<a href="#" data-pglink="{page}" class="" title="Page No. {page}">{page}</a>'
 
          @attribute pageLinkTemplate
          @type String
@@ -1304,9 +1356,9 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 
          For Example;
          <br/>If our paginator state currently has 9 pages, and the current page is 5, if `alwaysShowLast:false` and `alwaysShowFirst:false`
-            the link list will resemble;<br/>First | Prev | ... 4 5 6 ... | Next | Last
+         the link list will resemble;<br/>First | Prev | ... 4 5 6 ... | Next | Last
 
-            Likewise, with `'alwaysShowLast:true` (and alwaysShowFirst:true) the link list will resemble;
+         Likewise, with `'alwaysShowLast:true` (and alwaysShowFirst:true) the link list will resemble;
          <br/>First | Prev | 1 ... 4 5 6 ... 9 | Next | Last
 
          @attribute alwaysShowFirst
@@ -1364,5 +1416,4 @@ Y.PaginatorView = Y.Base.create('paginatorView', Y.View, [], {
 });
 
 
-
-}, 'gallery-2012.08.29-20-10' ,{skinnable:true, requires:['base-build','model','view','substitute']});
+}, 'gallery-2012.12.05-21-01');

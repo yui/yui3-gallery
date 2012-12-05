@@ -1,0 +1,10 @@
+{
+    "name": "gallery-paginator-view",
+    "builds": {
+        "gallery-paginator-view": {
+            "jsfiles": [
+                "paginator-view.js"
+            ]
+        }
+    }
+}

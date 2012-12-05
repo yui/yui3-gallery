@@ -1,0 +1,105 @@
+<div class="intro">
+    <p>
+    A View extension that provides a user-interface for Paginated data.  Includes a custom PaginatorModel and a PaginatorView class.
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>This module consists of two elements; <b>PaginatorModel</b> and <b>PaginatorView</b> to provide both the data handling and User Interface for Pagination.  <br>
+<br>
+The View is a Y.View extension which provides for a variety of UI elements and user-supplied capability to setup a variety of Paginators which have a specific &quot;look and feel&quot;.  (see sample image below)<br>
+<br>
+https://dl.dropbox.com/u/14338200/pagview_sample.png<br>
+<br>
+An &quot;HTML template&quot; that includes replaceable text tokens is provided either in the initial <b>container</b> attribute or in the <b>paginatorTemplate</b> and associated page link attributes.  The PaginatorView also provides a few events that can be listened to in order for the user to link it to their own Widget, View or other YUI elements.<br>
+<br>
+<h2>Features</h2><br>
+<ul>
+<li>The PaginatorModel is simple and can easily be mixed-in to user-created custom Models</li>
+<li>PaginatorView includes a standard &quot;default&quot; set of CSS styles to get you up and running quickly (<i>the first example in the image above is the default</i>)</li>
+<li>An additional set of &quot;paginator bar&quot; CSS is provided to give the look of an integrated paginator within DataTable. (<i>the third example in the image above is the pag bar</i>)</li>
+<li>HTML templates can be provided as either strings, or as a Node instance or as a SCRIPT template</li>
+<li>Capability to provide an HTML &quot;select&quot; control for changing &quot;rows per page&quot; is provided</li>
+<li>Abbreviated links are provided to help limit a <i>very, very</i> long list of page links</li>
+<li>The View can be coupled with other YUI Widgets (buttons, button groups, slider, etc..) </li>
+<li>A &quot;circular&quot; capability is provided for cases where page selection wraps past the first or last item.</li>
+<li>Multiple PaginatorViews can be linked to <b>the same</b> PaginatorModel (for example, above and below a DataTable) and their changes sync amongst one another -- dual controls.</li>
+</ul>
+<br>
+<br>
+For more information, see the links below or the <a href="http://stlsmiths.github.com/yui3-gallery/docs/classes/Y.PaginatorView.html">PaginatorView Docs</a> and / or the examples.<br>
+<br>
+This extension was originally developed for use with <a href="http://yuilibrary.com/gallery/show/datatable-paginator">Gallery DataTable-Paginator</a>, but could probably be used for other situations looking to provide a UI for paged data.<br>
+</p>
+
+```
+<!--    Define HTML markup and script templates for the sample Paginators      -->
+<div id="pagDefACont"></div>
+
+<div id="pagBasicCCont"></div>
+<script type="text/x-template" id="tmpl-basic-C">
+  <fieldset>
+     <legend> Active Page: </legend>
+        <a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page"><<</a>
+        <a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page"><</a>
+        {pageLinks}
+        <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">></a>
+        <a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">>></a>
+        <span style="float:right;margin-right:15px;">Select rows/page: {selectRowsPerPage}</span>
+  </fieldset>
+</script>
+
+<!--  markup for "pagBar"  not shown, please see example .... -->
+
+<!--  your yuilibrary call goes here ....  -->
+
+<script type="text/javascript">
+YUI().use('gallery-paginator-view', function(Y) {
+//
+//  Define a single Model, that will be shared by EVERY following View
+//
+    var pmodel = new Y.PaginatorModel({
+        page:           2,
+        itemsPerPage:   25,
+        totalItems:     500
+    });
+
+//---------------------------------------------------------------------------
+//  Default Views ...
+//---------------------------------------------------------------------------
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   50,
+            totalItems:     500
+        }),
+        container:  '#pagDefACont'
+    }).render();
+
+ // A link list, wrapped in a FIELDSET ...
+    new Y.PaginatorView({
+        model:              pmodel,
+        container:          '#pagBasicCCont',
+        paginatorTemplate:  '#tmpl-basic-C',
+        maxPageLinks:       5,
+        pageLinkTemplate:  '<a href="#" data-pglink="{page}" class="{pageLinkClass}"  title="Rows {pageStartIndex} to {pageEndIndex}">{page}</a>'
+    }).render();
+
+// Provides a "Paginator Bar" 
+ 
+    var pagBar = new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   25,
+            totalItems:     500
+        }),
+        container:            '#pagBarACont',
+        paginatorTemplate:  Y.one('#tmpl-bar-A').getHTML(),
+        pageOptions:        [ 10, 25, 50, 100, 'All' ]
+    }).render();
+
+});
+</script>
+```
+

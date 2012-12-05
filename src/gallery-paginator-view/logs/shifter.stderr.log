@@ -1,0 +1,137 @@
+[35mshifter[0m [31m[err][0m /src/gallery-paginator-view/js/paginator-view.js contains 68 lint errors
+   #1: [33mLine too long.[0m
+       *  `page` &nbsp;&nbsp;  The currently selected page, within all pages required that encompass the above two attributes (See attribute [page](#attr_page) )[37m // line 12, pos 155[0m
+   #2: [33mExpected '{' and instead saw 'validp'.[0m
+       if ( newPg < 1 || !this.get('totalPages') || !this.get('itemsPerPage') ) validp = false;[37m // line 99, pos 82[0m
+   #3: [33mExpected '{' and instead saw 'validp'.[0m
+       if ( this.get('totalPages') && newPg > this.get('totalPages') ) validp = false;[37m // line 100, pos 73[0m
+   #4: [33mExpected '{' and instead saw 'this'.[0m
+       this.set('lastPage', e.prevVal);[37m // line 103, pos 13[0m
+   #5: [33mExpected '{' and instead saw 'e'.[0m
+       e.preventDefault();[37m // line 105, pos 13[0m
+   #6: [33mExpected '{' and instead saw 'np'.[0m
+       if ( ni % nipp > 0 ) np++;[37m // line 124, pos 34[0m
+   #7: [33mExpected '{' and instead saw 'np'.[0m
+       if(ni === 0) np = 1;[37m // line 125, pos 26[0m
+   #8: [33mExpected '{' and instead saw 'this'.[0m
+       this.set('page',1);[37m // line 132, pos 17[0m
+   #9: [33mLine too long.[0m
+       <li>Setting the <a href="#attr_paginatorTemplate">paginatorTemplate</a> attribute to either the template 'string', or giving a SCRIPT template DOM[id] or Y.Node</li>[37m // line 334, pos 166[0m
+   #10: [33mLine too long.[0m
+       <li>Doing neither of the above ... where the default template is used (from <a href="#property_TMPL_PAGINATOR">TMPL_PAGINATOR</a> static property)</li>[37m // line 335, pos 152[0m
+   #11: [33mToo many var statements.[0m
+       for(var i=0; i<arguments.length; i++)[37m // line 539, pos 21[0m
+   #12: [33mExpected '{' and instead saw 'rtn'.[0m
+       rtn += '-' + arguments[i];[37m // line 540, pos 17[0m
+   #13: [33mExpected '{' and instead saw 'this'.[0m
+       this.set('container', Y.one(cont) );[37m // line 575, pos 13[0m
+   #14: [33mToo many var statements.[0m
+       var pagTmpl = this.get('paginatorTemplate');[37m // line 584, pos 17[0m
+   #15: [33m'pagTmpl' was used before it was defined.[0m
+       var pagTmpl = this.get('paginatorTemplate');[37m // line 584, pos 25[0m
+   #16: [33mExpected '{' and instead saw 'this'.[0m
+       this._pagHTML = Y.one( pagTmpl).getHTML();[37m // line 589, pos 17[0m
+   #17: [33mExpected '{' and instead saw 'this'.[0m
+       this._pagHTML = pagTmpl;[37m // line 591, pos 17[0m
+   #18: [33mExpected '{' and instead saw 'Y'.[0m
+       Y.Array.each(item,function(si){ si.detach(); });[37m // line 651, pos 17[0m
+   #19: [33mExpected '{' and instead saw 'item'.[0m
+       item.detach();[37m // line 653, pos 17[0m
+   #20: [33mLine too long.[0m
+       <li><b>{inputPage}</b> : An INPUT[type=text] box which the view listens for change events on (Default: see <a href="#property_TMPL_inputPage">TMPL_inputPage</a>)</li>[37m // line 679, pos 171[0m
+   #21: [33mLine too long.[0m
+       <li><b>{inputRowsPerPage}</b> : An INPUT[type=text] box what will be listened to for changes to "Rows per Page" (Default: see <a href="#property_TMPL_inputRPP">TMPL_inputRPP</a>)</li>[37m // line 682, pos 188[0m
+   #22: [33mLine too long.[0m
+       <li><b>{pageStartIndex}</b> : Represents the starting index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>[37m // line 684, pos 172[0m
+   #23: [33mLine too long.[0m
+       <li><b>{pageEndIndex}</b> : Represents the ending index for a specific "page" (intended for use within <a href="#attr_pageLinkTemplate">pageLinkTemplate</a> )</li>[37m // line 685, pos 168[0m
+   #24: [33mExpected '{' and instead saw 'return'.[0m
+       if ( nsize<0 || !nperpage || !pag_cont ) return this;[37m // line 710, pos 50[0m
+   #25: [33mToo many var statements.[0m
+       var pl_html   = '',[37m // line 723, pos 13[0m
+   #26: [33mUnescaped '{'.[0m
+       if ( this._pagHTML.search(/{pageLinks}/) !== -1 ) {[37m // line 729, pos 36[0m
+   #27: [33mUnescaped '}'.[0m
+       if ( this._pagHTML.search(/{pageLinks}/) !== -1 ) {[37m // line 729, pos 46[0m
+   #28: [33mToo many var statements.[0m
+       for(var i=0; i<npage; i++) {[37m // line 730, pos 21[0m
+   #29: [33mExpected '{' and instead saw 'plClass'.[0m
+       plClass += ' '+ this._classLinkPageActive;[37m // line 733, pos 21[0m
+   #30: [33mExpected '{' and instead saw 'plIEnd'.[0m
+       if ( plIEnd >= nsize ) plIEnd = nsize;[37m // line 738, pos 40[0m
+   #31: [33mToo many var statements.[0m
+       var pg_html = this._pagHTML;[37m // line 750, pos 13[0m
+   #32: [33mToo many var statements.[0m
+       var plink_tmpl = Y.substitute( pg_html, Y.mix({[37m // line 758, pos 13[0m
+   #33: [33mToo many var statements.[0m
+       var plNodeCurrent = (plNodes && (cpage-1) < plNodes.size()) ? plNodes.item(cpage-1) : null;[37m // line 817, pos 17[0m
+   #34: [33mExpected '{' and instead saw 'plNodeCurrent'.[0m
+       plNodeCurrent.addClass( this._classLinkPageActive );[37m // line 821, pos 17[0m
+   #35: [33mExpected '{' and instead saw 'plNodeCurrent'.[0m
+       if (plNodeCurrent) plNodeCurrent.removeClass( this._classLinkPageActive );[37m // line 824, pos 36[0m
+   #36: [33mExpected '{' and instead saw 'this'.[0m
+       this._disablePageSelector(['1'],false);[37m // line 842, pos 13[0m
+   #37: [33mExpected '{' and instead saw 'this'.[0m
+       this._disablePageSelector(['first','prev','last','next'],true);[37m // line 860, pos 13[0m
+   #38: [33mExpected '===' and instead saw '=='.[0m
+       if ( npage <= maxpls || !plNodes || ( plNodes && plNodes.size() ==0 ) ) return;[37m // line 870, pos 73[0m
+   #39: [33mExpected '{' and instead saw 'return'.[0m
+       if ( npage <= maxpls || !plNodes || ( plNodes && plNodes.size() ==0 ) ) return;[37m // line 870, pos 81[0m
+   #40: [33mToo many var statements.[0m
+       var moreNodeL  = Y.Node.create('<span class="'+this._myClassName('more')+'">'+this.get('pageLinkFiller')+'</span>'),[37m // line 872, pos 13[0m
+   #41: [33mToo many var statements.[0m
+       var offs = this._calcOffset(cpage,linkOffset);[37m // line 879, pos 13[0m
+   #42: [33mExpected '===' and instead saw '=='.[0m
+       if ( index == 0 && this.get('alwaysShowFirst') || index == npage-1 && this.get('alwaysShowLast') ) return true;[37m // line 885, pos 24[0m
+   #43: [33mExpected '===' and instead saw '=='.[0m
+       if ( index == 0 && this.get('alwaysShowFirst') || index == npage-1 && this.get('alwaysShowLast') ) return true;[37m // line 885, pos 69[0m
+   #44: [33mExpected '{' and instead saw 'return'.[0m
+       if ( index == 0 && this.get('alwaysShowFirst') || index == npage-1 && this.get('alwaysShowLast') ) return true;[37m // line 885, pos 112[0m
+   #45: [33mExpected '{' and instead saw 'node'.[0m
+       node.addClass( this._myClassName('hide') );[37m // line 887, pos 17[0m
+   #46: [33mExpected '{' and instead saw 'node'.[0m
+       node.removeClass( this._myClassName('hide') );[37m // line 889, pos 17[0m
+   #47: [33mExpected '{' and instead saw 'plNodes'.[0m
+       plNodes.item(offs.left-1).insert(moreNodeL,'before');[37m // line 897, pos 13[0m
+   #48: [33mExpected '{' and instead saw 'plNodes'.[0m
+       plNodes.item(offs.right-1).insert( moreNodeR,'after');[37m // line 900, pos 13[0m
+   #49: [33mExpected '{' and instead saw 'return'.[0m
+       if ( !val ) return;[37m // line 968, pos 21[0m
+   #50: [33mExpected '{' and instead saw 'this'.[0m
+       this._processPageChange(newPage);[37m // line 986, pos 13[0m
+   #51: [33mExpected '{' and instead saw 'this'.[0m
+       if (!e.silent) this.render();[37m // line 1001, pos 24[0m
+   #52: [33mExpected '===' and instead saw '=='.[0m
+       if(newTotalItems == 0) {[37m // line 1015, pos 26[0m
+   #53: [33mEmpty block.[0m
+       this.render();[37m // line 1019, pos 9[0m
+   #54: [33mToo many var statements.[0m
+       var opts = selPage.get('options');[37m // line 1046, pos 21[0m
+   #55: [33mToo many var statements.[0m
+       var isAll = ( model && model.get('itemsPerPage') === model.get('totalItems') ) ? true : false;[37m // line 1058, pos 17[0m
+   #56: [33mToo many var statements.[0m
+       var opts = selPage.get('options');[37m // line 1059, pos 17[0m
+   #57: [33m'opts' is already defined.[0m
+       var opts = selPage.get('options');[37m // line 1059, pos 22[0m
+   #58: [33mExpected '===' and instead saw '=='.[0m
+       if ( opt.get('value') == model.get('itemsPerPage')[37m // line 1061, pos 39[0m
+   #59: [33mExpected '{' and instead saw 'opt'.[0m
+       opt.set('selected',true);[37m // line 1063, pos 21[0m
+   #60: [33mExpected '{' and instead saw 'this'.[0m
+       this._updatePageSelect();[37m // line 1069, pos 13[0m
+   #61: [33mExpected '{' and instead saw 'return'.[0m
+       if (e.target.hasClass(this._myClassName('disabled')) || e.currentTarget.hasClass(this._myClassName('disabled'))) return;[37m // line 1129, pos 122[0m
+   #62: [33mToo many var statements.[0m
+       var page  = tar.getData('pglink') || e.currentTarget.getData('pglink'),[37m // line 1131, pos 13[0m
+   #63: [33mExpected '{' and instead saw 'return'.[0m
+       if ( cpage && cpage === page ) return;[37m // line 1135, pos 40[0m
+   #64: [33mMixed spaces and tabs.[0m
+       *  	paginator:  myPagModel // where myPagModel is an instance previously created ...[37m // line 1210, pos 12[0m
+   #65: [33mLine too long.[0m
+       <br/>(See also attributes [`linkListOffset`](#attr_linkListOffset) and [`pageLinkFiller`](#attr_pageLinkFiller), which work in conjunction with this attribute).[37m // line 1312, pos 169[0m
+   #66: [33m'newRPP' is defined but never used.[0m
+       var newRPP = e.newVal;[37m // line 999, pos 19[0m
+   #67: [33m'model' is defined but never used.[0m
+       model     = this.get('model'),[37m // line 1081, pos 22[0m
+   #68: [33m'selPage' is defined but never used.[0m
+       selPage   = pag_cont.one('.'+this._classSelectPage);[37m // line 1082, pos 24[0m

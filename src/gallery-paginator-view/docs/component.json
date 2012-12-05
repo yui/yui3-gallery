@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-paginator-view",
+    "displayName": "Gallery: paginator-view",
+    "description": "A View extension that provides a user-interface for Paginated data.  Includes a custom PaginatorModel and a PaginatorView class.",
+    "author"     : [ "stlsmiths" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
