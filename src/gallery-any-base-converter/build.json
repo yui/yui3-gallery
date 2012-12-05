@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-any-base-converter": {
+            "jsfiles": [
+                "any-base-converter.js"
+            ]
+        }
+    },
+    "name": "gallery-any-base-converter"
+}

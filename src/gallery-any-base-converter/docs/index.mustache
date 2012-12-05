@@ -1,0 +1,130 @@
+<div class="intro">
+    <p>
+        Convert numbers to and from a custom positional notation.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    Y.AnyBaseConverter is an object that will convert numbers to and from a positional notation with a custom alphabet and base.
+</p>
+
+<p>
+    Numbers are generally displayed in base ten.  This means there are ten single-digit numbers (0, 1, 2, 3, 4, 5, 6, 7, 8, and 9) before the first two-digit number, 10.  Sometimes it is useful to work
+    with numbers in other bases.  Base 2, base 8, and base 16 tend to come up frequently in programming.  JavaScript provides a toString method on numbers which can convert a number to any base from base
+    2 to base 36 and a parseInt function for converting the strings back into numbers.  For bases greater than 10, lower-case letters are used for single digits greater than 9.  For example, base 16 uses
+    these single-digit numbers: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, a, b, c, d, e, and f.
+</p>
+
+<p>
+    Y.AnyBaseConverter is very similar to number.toString and parseInt except it can convert to and from bases greater than 36 and use a custom alphabet to represent the single-digit numbers.  In addition
+    to any convenient mathematical properties, it may be helpful to convert to a higher base as a simple way to compress a large number as a string or to use a custom alphabet as a method of obfuscation.
+</p>
+
+<dl>
+    <dt>
+        More information about positional notation and bases:
+    </dt>
+    <dd>
+        <a href="http://en.wikipedia.org/wiki/Positional_notation">
+            http://en.wikipedia.org/wiki/Positional_notation
+        </a>
+    </dd>
+    <dd>
+        <a href="http://en.wikipedia.org/wiki/Radix">
+            http://en.wikipedia.org/wiki/Radix
+        </a>
+    </dd>
+</dl>
+
+<h2>
+    Example
+</h2>
+
+```
+YUI().use('gallery-any-base-converter', 'node', function (Y) {
+    var anyBaseConverter,
+        bodyNode = Y.one('body'),
+        number = 1234567890,
+        numberConverted;
+
+    // By default, Y.AnyBaseConverter comes with a base 64 alphabet which
+    // supports floating-point numbers, negative numbers, and is completely URL
+    // safe. (This is not quite the same thing as base-64 encoding.)
+
+    bodyNode.append('<h3>Base 64 Alphabet</h3>');
+    anyBaseConverter = new Y.AnyBaseConverter();
+
+    // convert a number to a string
+    numberConverted = anyBaseConverter.to(number);
+    bodyNode.append('<p>' + number + ' converts to ' + numberConverted + '</p>');
+    bodyNode.append('<p>' + numberConverted + ' converts back to ' + anyBaseConverter.from(numberConverted) + '</p>');
+
+    //
+    // Binary - Used primarily by computer hardware.
+    //
+
+    bodyNode.append('<h3>Binary Alphabet</h3>');
+    anyBaseConverter = new Y.AnyBaseConverter({
+        alphabet: '01'
+    });
+
+    numberConverted = anyBaseConverter.to(number);
+    bodyNode.append('<p>' + number + ' converts to ' + numberConverted + '</p>');
+    bodyNode.append('<p>' + numberConverted + ' converts back to ' + anyBaseConverter.from(numberConverted) + '</p>');
+
+    //
+    // Base 58 - Only uses alphanumeric digits that are easily human readable.
+    //
+
+    bodyNode.append('<h3>Base 58 Alphabet</h3>');
+    anyBaseConverter = new Y.AnyBaseConverter({
+        alphabet: '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+    });
+
+    numberConverted = anyBaseConverter.to(number);
+    bodyNode.append('<p>' + number + ' converts to ' + numberConverted + '</p>');
+    bodyNode.append('<p>' + numberConverted + ' converts back to ' + anyBaseConverter.from(numberConverted) + '</p>');
+
+    //
+    // Confusing - Same base, same characters, different order.
+    //
+
+    bodyNode.append('<h3>Confusing Base 10 Alphabet</h3>');
+    anyBaseConverter = new Y.AnyBaseConverter({
+        alphabet: '8641359207'
+    });
+
+    numberConverted = anyBaseConverter.to(number);
+    bodyNode.append('<p>' + number + ' converts to ' + numberConverted + '</p>');
+    bodyNode.append('<p>' + numberConverted + ' converts back to ' + anyBaseConverter.from(numberConverted) + '</p>');
+
+    //
+    // Large Alphabet - Take care to encode characters correctly!
+    //
+
+    bodyNode.append('<h3>Large Alphabet</h3>');
+    anyBaseConverter = new Y.AnyBaseConverter({
+        alphabet: ' !"#$%&\'()*+,/0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~¡¢£¤¥¦§¨©ª«¬®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿ'
+    });
+
+    numberConverted = anyBaseConverter.to(number);
+    bodyNode.append('<p>' + number + ' converts to ' + numberConverted + '</p>');
+    bodyNode.append('<p>' + numberConverted + ' converts back to ' + anyBaseConverter.from(numberConverted) + '</p>');
+});
+```
+
+<h2>
+    Example Output
+</h2>
+
+<p>
+   This example produces the following output.
+</p>
+
+<h3>Base 64 Alphabet</h3><p>1234567890 converts to 19aWBI</p><p>19aWBI converts back to 1234567890</p><h3>Binary Alphabet</h3><p>1234567890 converts to 1001001100101100000001011010010</p><p>1001001100101100000001011010010 converts back to 1234567890</p><h3>Base 58 Alphabet</h3><p>1234567890 converts to 2t6V2H</p><p>2t6V2H converts back to 1234567890</p><h3>Confusing Base 10 Alphabet</h3><p>1234567890 converts to 6413592078</p><p>6413592078 converts back to 1234567890</p><h3>Large Alphabet</h3><p>1234567890 converts to !!Ù¼_</p><p>!!Ù¼_ converts back to 1234567890</p>

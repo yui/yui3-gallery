@@ -1,0 +1,24 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Convert numbers to and from a custom positional notation.",
+    "displayName": "Gallery: Any Base Converter",
+    "name": "gallery-any-base-converter",
+    "tags": [
+        "alphabet",
+        "base",
+        "convert",
+        "converter",
+        "gallery",
+        "notation",
+        "number",
+        "positional",
+        "radix",
+        "solmsted",
+        "string"
+    ],
+    "use": [
+        "gallery-any-base-converter"
+    ]
+}

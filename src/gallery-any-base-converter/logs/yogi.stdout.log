@@ -1,0 +1,32 @@
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-any-base-converter
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5001
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [gallery-any-base-converter]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (0.069 seconds) 100%
+Writing files in JSON format to: /src/gallery-any-base-converter/logs/tests.json
+
+----------------+-----------+-----------+-----------+-----------+
+File            |   % Stmts |% Branches |   % Funcs |   % Lines |
+----------------+-----------+-----------+-----------+-----------+
+   build/       |       100 |       100 |       100 |       100 |
+      All files |       100 |       100 |       100 |       100 |
+----------------+-----------+-----------+-----------+-----------+
+All files       |       100 |       100 |       100 |       100 |
+----------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 36/36 )
+Branches     : 100% ( 12/12 )
+Functions    : 100% ( 7/7 )
+Lines        : 100% ( 36/36 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (0.069 seconds)
+  [Grover Execution Timer] 0.725 seconds
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  [32mgrover tests complete[39m
