@@ -1,0 +1,299 @@
+<div class="intro">
+    <p>
+     {{displayName}} is an abstract  to help visualize tree structures such as TreeView, Menu or even forms.
+    </p>
+</div>
+{{>getting-started}}
+<h3>Description</h3>
+
+<p>This module is a Widget to help in the rendering and handling of
+tree-like data structures using the Flyweight pattern. It is the
+basis for gallery-fwt-treeview module, an implementation of a
+TreeView. It could be used to handle other data structures
+such as Menus or forms with fields grouped in fieldsets, tabs or
+accordion panels.</p>
+
+<p>It contains a manager class (`FlyweightTreeManager`) which is the
+factory that provides instances of a node class
+(`FlyweightTreeNode`), which inherits from Base and represents each
+of the nodes in the tree. The manager is a subclass of Widget and
+it is the overall container of the visible representation of the
+tree.</p>
+
+<p>The manager stores the tree internally as a plain object with no
+methods, events or attributes. The nodes in this tree are called
+`iNodes` (for internal nodes). It creates and pools as few node
+object instances as it can manage which it then positions over the
+iNodes to provide them with the trappings of an active object. In
+other words, the manager provides windows to the internal state of
+the tree by sliding node instances over the iNodes which hold the
+actual status information.</p>
+
+<p>This module is not meant to be instantiated as-is. It
+contains what in other languages would be called a abstract
+classes, their purpose is to serve as the basis for sets of
+classes that inherit from them. Thus, `Y.FWTreeView`
+inherits from `Y.FlyweightTreeManager` and `Y.FWTreeNode` inherits
+from `Y.FlyweightTreeNode`. </p>
+
+<h3>Performance</h3>
+
+<p>The overall memory consumption is very low. Assuming all nodes
+are of the same type, the number of objects the pool might contain
+equals the depth of the tree, regardless of the total number of
+nodes on the tree. While in a regular tree, the complexity would
+grow exponentially with the depth (assuming an average number of
+nodes per branch at each level), this module grows linearly with
+the depth, regardless of the width.</p>
+
+<p>In tests done with a tree where each and every node is a Widget
+instance all supplemented with the widget-parent and widget-child
+extensions, a TreeView with about 1000 nodes would be 12 times
+faster and take a tenth of the memory with this TreeView than with
+the Widget-based one.</p>
+
+<p>It is quite amazing that the speed increase is even higher than
+the savings in memory. Initially, I assumed there would be a
+tradeoff in between the memory savings and the execution speed and
+that might well be the case for trees with a small number of nodes
+but as the number of nodes increases, the burden of managing so
+much memory takes such an inordinate amount of time that the extra
+time the manager takes moving the pooled nodes around becomes
+insignificant and then it is overtaken quite easily.</p>
+
+
+<!--
+<h3>Performance Data</h3>
+
+<p>I timed a few rendering tests using this TreeView and one based on all Widgets each augmented with WidgetParent and WidgetChild.</p>
+
+<p>The test was simply building a tree with a certain depth and a certain number of children per node.
+That is why the resulting number of nodes are not round numbers as they are the consequence of adding all those nodes.
+I used FireFox at first, but with the Widget-based tree, it showed the &quot;script is taking too long&quot; message with less than a couple of hundred nodes.
+In Chrome I could go to almost 800 before any complaints so I ended up using Chrome for all tests.</p>
+
+<p>With a Widget-based tree, it took 16.5 seconds to draw a tree with 781 nodes.
+The same tree took 1.2 seconds using the Flyweight TreeView (all averages of several runs).
+So, it is almost 14 times faster.</p>
+
+<p>Then I wondered, how about memory consumption?
+With the Widget-based TreeView approach and 781 nodes, Chrome simply died when trying to take the heap snapshot while 10.4MB with this TreeView.
+So I made the tree one level shallower and with 156 nodes, the Widget-based TreeView took 49MB against 6MB with this version;
+less than one eighth the memory consumption.</p>
+
+<p>The obvious difference is that with 156 nodes in a tree 3 levels deep,
+the Widget-based approach requires 156 Widgets,
+one for each tree-node plus one for the TreeView container.
+When using the Flyweight pattern you get  just one Widget (the overall container for the TreeView)
+and only 3 tree-node instances, one for each level of depth.
+Of course, in both cases, the markup created is the same and in the flyweight TreeView,
+there is the tree configuration object, which is a passive object for data storage, no methods, no nothing in it.</p>
+-->
+
+<h3>Usage</h3>
+
+<p>Both classes in this module are meant to be subclassed, for example, in `gallery-fwt-treeview` you have:</p>
+
+```
+YUI.add('gallery-fwt-treeview', function (Y, NAME) {
+    Y.FWTreeView = Y.Base.create(
+        NAME,
+        Y.FlyweightTreeManager,
+        [ ],
+        {
+             // ......
+        }
+    );
+    Y.FWTreeNode = Y.Base.create(
+        'fw-treenode',
+        Y.FlyweightTreeNode,
+        [ ],
+        {
+             // ......
+        }
+    );
+
+}, '@VERSION@' , {
+    requires: ['gallery-flyweight-tree', 'base-build']
+});
+
+```
+
+<p>The FlyweightTreeManager expects to receive the initial tree configuration at instantiation,
+however, it does not read it automatically.  Depending on the type of widget,
+the initial configuration might have different names, it is called `tree` in
+FWTreeView, but it might be called `menu` on a Menu widget.  Thus, the `initializer`
+method does not extract the initial tree configuration directly.  It expects the
+`initializer` method of the subclass to call `_loadConfig` with the initial tree
+configuration taken from wherever it sees fit.  This also allows the subclass
+to manipulate the initial configuration, adding default values or doing any other
+transformation it might require, before passing it on to FlyweightTreeManager.</p>
+
+<h3>Built-in features</h3>
+
+<p>FlyweightTreeManager provides plenty of features on its own:</p>
+<ul>
+<li>Factory for FlyweightTreeNode instances</li>
+<li>Pooling and managing those instances</li>
+<li>Overall container for the Widget</li>
+<li>Template-based rendering with little interaction with the DOM</li>
+<li>Capture of DOM events and relaying of them to node instances</li>
+<li>Node expansion/collapse</li>
+<li>Tree navigation and traversal</li>
+<li>Focus management</li>
+<li>Dynamic loading</li>
+</ul>
+
+<p>Useful as all these features are, it is also important to note what it does not provide.
+It does not handle keyboard navigation, since the keys used to navigate a treeview
+are different from those to navigate a menu.  It does not handle node selection,
+as that is a feature not all nodes might have and, if they do, they might be handled
+differently and, though it uses CSS classNames to identify the various parts
+of the markup it produces, it does not provide any style sheets since the presentation
+will vary from one type of widget to the next.</p>
+
+<h3>Node Management</h3>
+
+<p>FlyweightTreeManager has a pool with separate slots for each node type.
+Nodes can be of different types, as signaled by their `type` property.
+When a node is needed, FlyweightTreeManager will check the type requested, look into the corresponding pool,
+create one if the pool is empty and return the corresponding node instance, already
+positioned over the iNode.</p>
+
+<p>It is important for developers, either of final Widgets such as FWTreeView,
+or of further modules to be careful to return all spent node instances
+to the FlyweightTreeManager to get them back to the pool.  Failure to do so will not prevent the
+widget from working and may this pass unseen, however, over time, this may produce
+memory leaks.</p>
+
+<p>As a rule, nodes provided as part of an event facade will automatically be
+returned to the pool once the last listener for that event has returned. Likewise,
+nodes provided as arguments to callback functions in enumerators such as `forSomeNodes`
+or `forSomeChildren` will be returned to their pools as soon as the callback returns.</p>
+
+<p>While in the previous cases FlyweightTreeManager can assume the nodes are no longer needed
+when those function return,
+the FlyweightTreeManager cannot determine the lifespan of nodes returned for any of the `getXxxx`
+methods (`getNodeBy`, `getNextSibling`, etc.).
+It is the responsitiliby of the developer to return those to the pool
+once done with them.</p>
+
+<p>The developer should not keep references to nodes after their lifespan.
+Event listening or enumerating functions must assume the node references
+are no longer valid once the function returns. There is a big chance that the
+node instance will be immediately repositioned over some other iNode and thus
+return unexpected results.</p>
+
+<p>If the developer does need
+to keep a reference to the node, the developer has to call the `hold` method.
+This will signal the FlyweightTreeManager to keep that instance out of the pool, where it would
+be reused and repositioned elsewhere.   All references returned by the `getXxxx`
+methods are on hold.  When such a reference is no longer needed, the developer
+must call the `release` method.  The FlyweightTreeManager will return that instance to the pool
+and reuse it at any time.</p>
+
+<p>In normal usage, there is usually as many node instances as the depth of the tree.
+This includes those in the pool and those held and assumes the developer is not
+holding too many nodes.
+With various node types, it will rarely
+exceed the number of types times the depth of the tree.  FlyweightTreeManager does lazy rendering,
+ie., the children are rendered the first time the parent is expanded, thus,
+the number of DOM elements is also reduced as much as possible.
+Holding on to nodes and not releasing them will usually not cause
+any errors in the short term, it is the performance of the application that will suffer.
+On the contrary, using nodes once released will probably cause funny though possibly
+non-fatal errors as they are repositioned where less expected.</p>
+
+<p>FlyweightTreeManager takes care of not positioning two instances over the same iNode.
+If any of the `getXxxx` methods returns a reference, another call to
+any of the `getXxxx` references that results in the same node, FlyweightTreeManager
+will actually return a reference to the very same node instance, not
+two instances positioned over the same iNode.</p>
+
+<h3>Templating</h3>
+
+<p>One of the main properties of a node is its templates.  These determine how
+they are drawn.  There are two templates, `OUTER_TEMPLATE` and `INNER_TEMPLATE`,
+the reason being that a single template was too big and, most of it was rarely
+changed when creating different subclasses of nodes.  So, to make it easier on the
+developer, it was broken into the outer one, which is the overall container for the node
+and its children and normally stays the same, and the inner one, which is the
+most visible part of the node itself and is the one most often changed.</p>
+
+<p>Both templates have plenty of placeholders enclosed in between curly braces.
+There are several mandatory ones, mostly CSS classNames that help in styling
+and as selectors to locate the parts of the node.
+See the API docs for further details on them.  When subclassing FlyweightTreeNode, the developer
+may add extra attributes to the new class and may show the content of any of those
+in a new `INNER_TEMPLATE` by adding their name enclosed in curly braces.</p>
+
+<p>There is no need to redefine both templates on each and ever subclass.
+If a node class does not have a template, it will search through its inheritance
+chain for the closest template of each kind.</p>
+
+<p>The CSS classNames used in the templates are taken from the `CNAMES` static
+property.  Actually, `CNAMES` is not final per-se, but its contents is, hence the
+all-uppercase spelling.
+It contains a series of strings used as CSS classNames, indexed by their internal names.
+Thus, the container for the children of a node is:</p>
+```
+<div class="{CNAME_CHILDREN}" role="group">{children}</div>
+```
+<p>were `CNAME_CHILDREN` is the property name within `CNAMES` of the string used
+to identify the container.   The developer is free to add other CSS classNames
+or, for that matter, any other string literal, to this hash so that it can be
+merged into the template.</p>
+
+<h3>Tree Navigation</h3>
+
+<p>Nodes can be traversed via the `forSomeNodes` method which, starting from the
+root will do a depth-first traversal of the whole tree or until the callback
+function provided to it returns exactly `true`.  The callback to `forSomeNodes`
+is provided with a node reference, the depth the node is at and the index position
+of this node amongst its siblings.  The developer should let go of the node
+reference provided to the callback unless placed on hold by calling the `hold` method.</p>
+
+<p>For a better control over how the tree is traversed, each node, including the root,
+have a `forSomeChildren` method.  `forSomeNodes` calls `forSomeChildren` recursively.</p>
+
+<p>These methods will only navigate through the loaded nodes. If a tree has dynamic loading
+enabled, these methods will not trigger loading.  </p>
+
+<p>For a more procedural style of navigation, FlyweightTreeManager have several `getXxxx` methods,
+`getRoot`, `getParent`, `getNextSibling`, `getPreviousSibling`, `getNodeBy`,
+`get("focusedNode")`.  They all return a node which is placed on hold.
+The developer is responsible to call `release` ASAP so that the node is returned
+to the pool and reused.  There is no `getChildren` method because that would
+force FlyweightTreeManager to create a possibly large array of node instances taking too much memory.
+Instead, the `forSomeChildren` uses one node instance at a time which is returned
+to the pool on each cycle.</p>
+
+<h3>Dynamic Loading</h3>
+
+<p>Trees might be large and might even have loops. For these cases, dynamic loading allows
+nodes to be loaded on-demand.  When a node not explicitly marked with the attribute
+`isLeaf:true` is first expanded the dynamic loader will be called.  The `isLeaf`
+attribute is only used in conjunction with the dynamic loader, otherwise,
+a node having no children is a terminal node.  With a dynamic loader set, a node
+having no children might actually have no children or they might have not been loaded
+yet.  That is when `isLeaf` becomes relevant, for static trees, it doesn't really matter.</p>
+
+<p>The dynamic loader must be a function which will receive a node reference and a function
+to be called when done.  The node is the one that by being expanded for the first time
+has triggered the loading.  Loading occurs the first time a node is expanded.  If a node
+is collapsed and expanded again, it won't trigger any loading.</p>
+
+<p>The function must extract any information it might need from the parent node and
+fetch or generate the child nodes by whichever means it needs.  When done, it must
+call the callback function (the second argument received) with an array containing
+the child nodes, in the same format as the original tree definition.</p>
+
+<p>The dynamic loader might fetch more than one level of nodes at once.  It is not
+restricted to a single, flat, level of nodes, it might load a whole branch at once.</p>
+
+
+<p>The callback might be called with no arguments at all.  This might be caused
+because no children have been found for the node or because of an error.
+The dynamic loader does not make a difference in between the two conditions,
+if there is an error, it is up to the developer to show that to the user.
+If no children are returned, the parent node will be marked with `isLeaf:true`.</p>

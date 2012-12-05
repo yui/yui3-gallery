@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<title>FWTreeView Tests</title>
+		<script type="text/javascript" src="/build/yui/yui.js"></script>
+        <script src="js/fw-tree-tests.js"></script>
+	</head>
+	<body  class="yui3-skin-sam">
+        <div id="log"></div>
+        <div id="container"></div>
+        <script type="text/javascript">
+			YUI({
+				filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+				coverage:['gallery-flyweight-tree']
+			}).use('gallery-flyweight-tree','fw-tree-tests', 'test','test-console','node-event-simulate', function (Y) {
+				(new Y.Console()).render('#log');
+
+                Y.Test.Runner.setName('gallery-flyweight-tree');
+				Y.Test.Runner.run();
+			});
+		</script>
+	</body>
+</html>
+

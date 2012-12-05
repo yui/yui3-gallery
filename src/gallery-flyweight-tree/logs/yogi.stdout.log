@@ -1,0 +1,32 @@
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-flyweight-tree
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5002
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [FWTreeView Test Suite]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (1.93 seconds) 91%
+Writing files in JSON format to: /src/gallery-flyweight-tree/logs/tests.json
+
+----------------+-----------+-----------+-----------+-----------+
+File            |   % Stmts |% Branches |   % Funcs |   % Lines |
+----------------+-----------+-----------+-----------+-----------+
+   build/       |     91.32 |     85.79 |      86.3 |     91.32 |
+      All files |     91.32 |     85.79 |      86.3 |     91.32 |
+----------------+-----------+-----------+-----------+-----------+
+All files       |     91.32 |     85.79 |      86.3 |     91.32 |
+----------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 91.32% ( 263/288 )
+Branches     : 85.79% ( 157/183 )
+Functions    : 86.3% ( 63/73 )
+Lines        : 91.32% ( 263/288 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (1.93 seconds)
+  [Grover Execution Timer] 3.993 seconds
+[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  [32mgrover tests complete[39m
