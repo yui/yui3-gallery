@@ -1,0 +1,27 @@
+[35mshifter[0m [31m[err][0m /src/gallery-busy/js/gallery-busy.js contains 13 lint errors
+   #1: [33mTrailing whitespace.[0m
+       *[37m // line 13, pos 3[0m
+   #2: [33mExpected '{' and instead saw 'this'.[0m
+       this.hide();[37m // line 84, pos 17[0m
+   #3: [33mExpected '!==' and instead saw '!='.[0m
+       return (this.o.getStyle('visibility') != 'hidden');[37m // line 121, pos 47[0m
+   #4: [33mTrailing whitespace.[0m
+       *[37m // line 126, pos 7[0m
+   #5: [33mTrailing whitespace.[0m
+       *[37m // line 136, pos 7[0m
+   #6: [33mTrailing whitespace.[0m
+       *[37m // line 146, pos 7[0m
+   #7: [33m'node' is already defined.[0m
+       var node = node || this.get('globalNode');[37m // line 153, pos 18[0m
+   #8: [33mExpected '{' and instead saw 'this'.[0m
+       this.resizeOverlay(node);[37m // line 159, pos 13[0m
+   #9: [33mMixed spaces and tabs.[0m
+       r.top    !== this.target_region.top    ||[37m // line 184, pos 3[0m
+   #10: [33mMixed spaces and tabs.[0m
+       r.bottom !== this.target_region.bottom ||[37m // line 185, pos 3[0m
+   #11: [33mMixed spaces and tabs.[0m
+       r.left   !== this.target_region.left   ||[37m // line 186, pos 3[0m
+   #12: [33mMixed spaces and tabs.[0m
+       r.right  !== this.target_region.right))[37m // line 187, pos 3[0m
+   #13: [33m'config' is defined but never used.[0m
+       function Busy(config)[37m // line 19, pos 21[0m

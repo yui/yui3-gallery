@@ -1,0 +1,18 @@
+[35mshifter[0m [33m[warn][0m no build.json file, downshifting to convert ant files
+[35mshifter[0m [37m[info][0m revving up
+[35mshifter[0m [37m[info][0m looking for build.json file
+[35mshifter[0m [37m[info][0m found build.json file, shifting
+[35mshifter[0m [37m[info][0m putting the hammer down, let's build this thing!
+[35mshifter[0m [33m[warn][0m down shifting, can't find a meta directory
+[35mshifter[0m [37m[info][0m putting the hammer down
+[35mshifter[0m [37m[info][0m shifting into gear for gallery-busy
+[35mshifter[0m [37m[info][0m deleting build dir: /build/gallery-busy
+[35mshifter[0m [36m[queu][0m writing RAW file
+[35mshifter[0m [36m[queu][0m compressing gallery-busy/gallery-busy.js with UglifyJS
+[35mshifter[0m [36m[queu][0m writing -min file
+[35mshifter[0m [37m[info][0m shifting for coverage
+[35mshifter[0m [37m[info][0m shifting skin for gallery-busy
+[35mshifter[0m [36m[queu][0m coverage file read, starting coverage for: gallery-busy/gallery-busy.js
+[35mshifter[0m [36m[queu][0m copying assets to skin for sam
+[35mshifter[0m [37m[info][0m istanbul providing coverage
+[35mshifter[0m [36m[queu][0m instrumenting with istanbul

@@ -42,9 +42,18 @@ YUI({
 	});
 	
 	Y.one('#fire').on('click',function(){
-		Y.Global.fire('msa-busy:show');
+		Y.Global.fire('msa-busy:show',{});
 	});
 
+	Y.one('#local').on('click',function(){
+		Y.fire('msa-busy:show',{});
+	});
+});
+
+YUI().use('node-base',function(Y){
+	Y.one('#other').on('click',function(){
+		Y.Global.fire('msa-busy:show');
+	});
 	
 });
 </script>
@@ -65,7 +74,9 @@ YUI({
 
 	<a href="javascript:void(0);" class="show" data-busy="div.busyBottom">Show busy bottom container</a><br/><br/>
 </div>
-<a href="javascript:void(0);" id="fire">Fire show event</a><br/>
-<a href="javascript:void(0);" class="show">Show default container</a> | <a href="javascript:void(0);" id="hide">Hide busy</a> 
+<a href="javascript:void(0);" id="fire">Fire global show event in local YUI container</a><br/>
+<a href="javascript:void(0);" id="local">Fire local show event in local YUI container</a><br/>
+<a href="javascript:void(0);" class="show">Show default container</a> | <a href="javascript:void(0);" id="hide">Hide busy</a> <br/>
+<a href="javascript:void(0);" id="other">Fire global show event in other YUI container</a><br/>
 </body>
 </html>

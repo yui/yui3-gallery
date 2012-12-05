@@ -87,11 +87,17 @@ Y.extend(Busy, Y.Base,
 			
 		}, config.container, config.selector, this);
 		
+		Y.on('msa-busy:show', function(e){
+			this.show(e && e.node);
+		}, this);
+		
 		Y.Global.on('msa-busy:show', function(e){
 			this.show(e && e.node);
 		}, this);
 		
 		Y.Global.on('msa-busy:hide',this.hide, this);
+		
+		Y.on('msa-busy:hide',this.hide, this);
 		
 		this.on('cssChange', function(e){
 			this.o.set('className', e.newVal);

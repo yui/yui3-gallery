@@ -1,4 +1,4 @@
-YUI.add('gallery-busy', function(Y) {
+YUI.add('gallery-busy', function (Y, NAME) {
 
 "use strict";
 
@@ -89,11 +89,17 @@ Y.extend(Busy, Y.Base,
 			
 		}, config.container, config.selector, this);
 		
+		Y.on('msa-busy:show', function(e){
+			this.show(e && e.node);
+		}, this);
+		
 		Y.Global.on('msa-busy:show', function(e){
 			this.show(e && e.node);
 		}, this);
 		
 		Y.Global.on('msa-busy:hide',this.hide, this);
+		
+		Y.on('msa-busy:hide',this.hide, this);
 		
 		this.on('cssChange', function(e){
 			this.o.set('className', e.newVal);
@@ -192,5 +198,15 @@ Y.extend(Busy, Y.Base,
 Y.namespace("MSA");
 Y.MSA.Busy = Busy;
 
-
-}, 'gallery-2012.11.07-21-32' ,{requires:['base','node-base','node-style','event-tap','event-delegate','node-screen'], skinnable:true});
+}, 'gallery-2012.12.05-21-01', {
+    "skinnable": "true",
+    "requires": [
+        "base",
+        "node-base",
+        "node-style",
+        "event-tap",
+        "event-delegate",
+        "node-screen",
+        "event-custom"
+    ]
+});

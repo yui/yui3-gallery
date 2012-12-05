@@ -1,0 +1,23 @@
+{
+    "name": "gallery-busy",
+    "builds": {
+        "gallery-busy": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "base",
+                    "node-base",
+                    "node-style",
+                    "event-tap",
+                    "event-delegate",
+                    "node-screen",
+                    "event-custom"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "gallery-busy.js"
+            ]
+        }
+    }
+}
