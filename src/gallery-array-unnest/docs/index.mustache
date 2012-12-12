@@ -1,0 +1,51 @@
+<div class="intro">
+    <p>
+        Utility function that flattens nested arrays.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    `Y.Array.unnest` is a utility function that flattens nested arrays.  The nesting depth can be specified.  For example:
+</p>
+
+```
+var array = [1, 2, [3, 4, 5], [6, [7, [8, 9]]]];
+
+Y.Array.unnest(array, 3); // returns [1,2,3,4,5,6,7,8,9]
+Y.Array.unnest(array, 2); // returns [1,2,3,4,5,6,7,[8,9]]
+Y.Array.unnest(array, 1); // returns [1,2,3,4,5,6,[7,[8,9]]]
+```
+
+<p>
+    The original array is not modified.  The returned array items are a shallow copy of the original array items.
+</p>
+
+<h2>
+    What about `Y.Array.flatten`?
+</h2>
+
+<p>
+    `Y.Array.flatten` does basically the same thing, is already part of `array-extras`, it can flatten to unknown depths, and it runs faster in the most common use cases.  Please use `Y.Array.flatten`
+    instead of `Y.Array.unnest`.  With that being said there are still some semi-valid reasons to use `Y.Array.unnest`.
+</p>
+
+<ul>
+    <li>
+        Use `Y.Array.unnest` if you have to stop flattening at a known depth.
+    </li>
+    <li>
+        `Y.Array.unnest` performs better than `Y.Array.flatten` on really really big arrays.
+    </li>
+    <li>
+        `Y.Array.unnest` performs better than `Y.Array.flatten` in some older browsers.
+    </li>
+    <li>
+        Use `Y.Array.unnest` if you enjoy being alternative.
+    </li>
+</ul>

@@ -1,0 +1,20 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Utility function that flattens nested arrays.",
+    "displayName": "Gallery: Array Unnest",
+    "name": "gallery-array-unnest",
+    "tags": [
+        "array",
+        "flatten",
+        "gallery",
+        "nest",
+        "nested",
+        "solmsted",
+        "unnest"
+    ],
+    "use": [
+        "gallery-array-unnest"
+    ]
+}

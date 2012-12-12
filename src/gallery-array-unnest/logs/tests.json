@@ -1,0 +1,327 @@
+{
+    "name": "gallery-array-unnest",
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 27,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 3,
+        "duration": 24,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:001-apiExists",
+            "duration": 1
+        },
+        "test:002-depth1": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:002-depth1",
+            "duration": 0
+        },
+        "test:003-depth3": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:003-depth3",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 12 Dec 2012 03:12:57 PM CST",
+    "coverage": {
+        "build/cdn_gallery-2012.12.12-21-11/": {
+            "path": "build/cdn_gallery-2012.12.12-21-11/",
+            "s": {
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 4,
+                "6": 4,
+                "7": 4,
+                "8": 2,
+                "9": 2,
+                "10": 1
+            },
+            "b": {
+                "1": [
+                    2,
+                    2
+                ],
+                "2": [
+                    4,
+                    3
+                ]
+            },
+            "f": {
+                "1": 1,
+                "2": 1,
+                "3": 4
+            },
+            "fnMap": {
+                "1": {
+                    "name": "(anonymous_1)",
+                    "line": 1,
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 32
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 51
+                        }
+                    }
+                },
+                "2": {
+                    "name": "(anonymous_2)",
+                    "line": 7,
+                    "loc": {
+                        "start": {
+                            "line": 7,
+                            "column": 1
+                        },
+                        "end": {
+                            "line": 7,
+                            "column": 14
+                        }
+                    }
+                },
+                "3": {
+                    "name": "(anonymous_3)",
+                    "line": 21,
+                    "loc": {
+                        "start": {
+                            "line": 21,
+                            "column": 18
+                        },
+                        "end": {
+                            "line": 21,
+                            "column": 43
+                        }
+                    }
+                }
+            },
+            "statementMap": {
+                "1": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 36,
+                        "column": 44
+                    }
+                },
+                "2": {
+                    "start": {
+                        "line": 7,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 34,
+                        "column": 6
+                    }
+                },
+                "3": {
+                    "start": {
+                        "line": 8,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 8,
+                        "column": 17
+                    }
+                },
+                "4": {
+                    "start": {
+                        "line": 21,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 31,
+                        "column": 6
+                    }
+                },
+                "5": {
+                    "start": {
+                        "line": 22,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 22,
+                        "column": 23
+                    }
+                },
+                "6": {
+                    "start": {
+                        "line": 24,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 24,
+                        "column": 49
+                    }
+                },
+                "7": {
+                    "start": {
+                        "line": 26,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 28,
+                        "column": 9
+                    }
+                },
+                "8": {
+                    "start": {
+                        "line": 27,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 27,
+                        "column": 46
+                    }
+                },
+                "9": {
+                    "start": {
+                        "line": 30,
+                        "column": 8
+                    },
+                    "end": {
+                        "line": 30,
+                        "column": 21
+                    }
+                },
+                "10": {
+                    "start": {
+                        "line": 33,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 33,
+                        "column": 29
+                    }
+                }
+            },
+            "branchMap": {
+                "1": {
+                    "line": 26,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 26,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 26,
+                                "column": 8
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 26,
+                                "column": 8
+                            },
+                            "end": {
+                                "line": 26,
+                                "column": 8
+                            }
+                        }
+                    ]
+                },
+                "2": {
+                    "line": 26,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 26,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 26,
+                                "column": 18
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 26,
+                                "column": 22
+                            },
+                            "end": {
+                                "line": 26,
+                                "column": 32
+                            }
+                        }
+                    ]
+                }
+            },
+            "code": [
+                "(function () { YUI.add('gallery-array-unnest', function (Y, NAME) {",
+                "",
+                "/**",
+                " * Utility function that flattens nested arrays.",
+                " * @module gallery-array-unnest",
+                " */",
+                "(function (Y) {",
+                "    'use strict';",
+                "",
+                "    /**",
+                "     * Utility function that flattens nested arrays.  The original array is not",
+                "     * modified. The returned array items are a shallow copy of the original",
+                "     * array items.",
+                "     * @for Array",
+                "     * @method unnest",
+                "     * @param {Array} array",
+                "     * @param {Number} [levels=1] If defined, must be a non-negative integer.",
+                "     * @return {Array}",
+                "     * @static",
+                "     */",
+                "    var _unnest = function (array, levels) {",
+                "        var empty = [];",
+                "",
+                "        array = empty.concat.apply(empty, array);",
+                "",
+                "        if (levels && levels - 1) {",
+                "            return _unnest(array, levels - 1);",
+                "        }",
+                "",
+                "        return array;",
+                "    };",
+                "",
+                "    Y.Array.unnest = _unnest;",
+                "}(Y));",
+                "",
+                "}, '@VERSION@', {\"requires\": [\"yui-base\"]});",
+                "",
+                "}());"
+            ],
+            "l": {
+                "1": 1,
+                "7": 1,
+                "8": 1,
+                "21": 1,
+                "22": 4,
+                "24": 4,
+                "26": 4,
+                "27": 2,
+                "30": 2,
+                "33": 1
+            }
+        }
+    },
+    "coverageType": "istanbul"
+}

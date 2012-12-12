@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-array-unnest": {
+            "jsfiles": [
+                "array-unnest.js"
+            ]
+        }
+    },
+    "name": "gallery-array-unnest"
+}

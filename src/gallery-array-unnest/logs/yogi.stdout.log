@@ -1,0 +1,32 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.52 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-array-unnest
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [gallery-array-unnest]: Passed: 3 Failed: 0 Total: 3 (ignored 0) (0.027 seconds) 100%
+Writing files in JSON format to: /src/gallery-array-unnest/logs/tests.json
+
+----------------+-----------+-----------+-----------+-----------+
+File            |   % Stmts |% Branches |   % Funcs |   % Lines |
+----------------+-----------+-----------+-----------+-----------+
+   build/       |       100 |       100 |       100 |       100 |
+      All files |       100 |       100 |       100 |       100 |
+----------------+-----------+-----------+-----------+-----------+
+All files       |       100 |       100 |       100 |       100 |
+----------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 10/10 )
+Branches     : 100% ( 4/4 )
+Functions    : 100% ( 3/3 )
+Lines        : 100% ( 10/10 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 3 Failed: 0 Total: 3 (ignored 0) (0.027 seconds)
+  [Grover Execution Timer] 1.144 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

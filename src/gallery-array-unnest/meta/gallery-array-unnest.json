@@ -1,0 +1,7 @@
+{
+    "gallery-array-unnest": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}
