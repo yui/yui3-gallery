@@ -1,0 +1,62 @@
+<div class="intro">
+    <p>
+        An object to store a list of values with a weighted distribution for random selection.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    `Y.WeightedList` has many features similar to an array list and can generally function as one.  Every value in a weighted list also has a weight value attached to it.  Values can be retrieved from a
+    weighted list by index as you would expect, but values can also be retrieved at random.  The probability of any value being selected at random is weighted.  For example, a value with a weight of 500
+    is twice as likely to be selected as a value with a weight of 250.
+</p>
+<p>
+    If `gallery-alea` is present, it will be used for random number generation instead of `Math.random`.  Seed values can be passed to the `Y.WeightedList` constructor in the same way as they would be
+    passed into the `Y.Alea` constructor.
+</p>
+
+<h2>
+    Basic Interface
+</h2>
+
+<p>
+    Creating a weighted list is as simple as `var weightedList = new Y.WeightedList();` Values can be added to the list using the `add` method.  The `add` method will accept the value to add and an
+    optional weight value.  The weight defaults to 1.  The `add` method returns the index of the item that was added.  Here is an example of adding values to a weighted list.
+</p>
+
+```
+weightedList.add('blackberries', 4.878);
+weightedList.add('blueberries', 4.579);
+weightedList.add('cranberries', 3.021);
+weightedList.add('raspberries', 5.487);
+weightedList.add('strawberries', 5.233);
+```
+
+<p>
+    Items can be updated by index with the `update` method.  The `update` method accepts an index, a value, and an optional weight.  The weight defaults to 1.  There are also convenience methods
+    'updateValue' and 'updateWeight' to update value and weight independently.
+</p>
+
+<p>
+    Values can be retrieved from the weighted list by index.  `weightedList.value(4) === 'strawberries'`  Weights can also be retrieved by index.  `weightedList.weight(4) === 5.23`  Values and weights can
+    be retrieved together by index using the `item` method.  The `item` method returns an object containing the index, value, and weight.
+</p>
+
+<p>
+    The main feature of weighted lists is the ability to retrieve values at random.  Calling the `item`, `value`, or `weight` methods without passing in an index will return something at random.  The
+    probability of returning a specific value is determined by its weight.  In this example, 'raspberries' is the most likely value to be chosen at random and 'cranberries' is the least.  When the total
+    sum of all weights in the weighted list is 0, random selection will not work and will return null.  Negative weights can yield unexpected results.
+</p>
+
+<p>
+    Values can be removed from the weighted list by index with the `removeIndex` method.
+</p>
+
+<p>
+   Many common array list methods are available such as `filter`, `map`, `reduce`, and many others.  Refer to the API documentation for more details.
+</p>

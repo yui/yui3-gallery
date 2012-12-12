@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-weighted-list": {
+            "jsfiles": [
+                "weighted-list.js"
+            ]
+        }
+    },
+    "name": "gallery-weighted-list"
+}

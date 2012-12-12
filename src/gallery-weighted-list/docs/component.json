@@ -1,0 +1,21 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "An object to store a list of values with a weighted distribution for random selection.",
+    "displayName": "Gallery: weighted-list",
+    "name": "gallery-weighted-list",
+    "tags": [
+        "array",
+        "distribution",
+        "gallery",
+        "list",
+        "random",
+        "selection",
+        "weight",
+        "weighted"
+    ],
+    "use": [
+        "gallery-weighted-list"
+    ]
+}

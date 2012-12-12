@@ -1,0 +1,11 @@
+{
+    "gallery-weighted-list": {
+        "optional": [
+            "gallery-alea"
+        ],
+        "requires": [
+            "array-extras",
+            "gallery-array-iterate"
+        ]
+    }
+}
