@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-datatable-selection",
+    "displayName": "Gallery: datatable-selection",
+    "description": "A DataTable class extension that adds capability to either highlight or select cells or columns using the mouse.  Also allows multiple selections.",
+    "author"     : [ "stlsmiths" ],
+    "use"        : [ "gallery-datatable-selection" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

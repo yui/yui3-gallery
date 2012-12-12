@@ -22,12 +22,10 @@
  to provide a positive control (like a BUTTON or A link) to process the selections.  Two events are provided,  [selection](#event_selection)
  and [selected](#event_selected) but these fire for every "click" action, which may not be ideal -- especially for multi selections.
 
- @module DataTable
- @submodule Selection
+ @module gallery-datatable-selection
  @class Y.DataTable.Selection
  @extends Y.DataTable
  @author Todd Smith
- @version 1.0.0
  @since 3.6.0
  **/
 function DtSelection() {}

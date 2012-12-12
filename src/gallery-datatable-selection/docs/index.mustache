@@ -1,0 +1,88 @@
+<div class="intro">
+    <p>
+    A DataTable class extension that adds capability to either highlight or select cells or columns using the mouse.  Also allows multiple selections.
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>Provides a class extension to DataTable that allows for row or cell selection or highlighting via mouse action.  <br>
+<br>
+<br>
+<br>
+Allows for multiple row / cell selections via use of browser modifier key (i.e. Cmd on Mac or Ctrl on other OS'es).  Also permits using &quot;range&quot; selection for rows or cells using the SHIFT key while clicking!<br>
+<br>
+<br>
+<br>
+Attributes are provided to change from single to multiple selection mode and setting either &quot;cell&quot; or &quot;row&quot; mode for highlighting / selecting.  <br>
+<br>
+<br>
+<br>
+Attributes are also provided to return the selected rows and/or the selected DataTable records.<br>
+<br>
+<br>
+<br>
+Two CSS classes are added to the DataTable setting to indicating highlighted and/or selected mode (currently set to &quot;yui3-datatable-sel-highlighted&quot; and &quot;yui3-datatable-sel-selected&quot;).  The source module and CSS are loaded automatically if you use the &quot;gallery&quot; tag below, or you can access both from the github page at the &quot;Source&quot; tab.<br>
+<br>
+<br>
+<br>
+I may look to add keyboard (i.e. arrow key) capability in the near future.<br>
+<br>
+<br>
+<br>
+<h2>==Typical Usage==</h2><br>
+<br>
+Most implementers should plan on NOT listening to the &quot;selection&quot; event - especially for multi mode, but provide their own handler that polls the &quot;selectedCells&quot; or &quot;selectedRows&quot; attribute settings (i.e. a BUTTON click event, or a FORM processor, etc..).  <br>
+<br>
+<br>
+<br>
+Both of the &quot;selection&quot; and &quot;selected&quot; events fire on every click within the DT, where &quot;selected&quot; shows the last selected item and &quot;selection&quot; shows a cumulative list of items for multi mode.<br>
+<br>
+<br>
+</p>
+
+```
+YUI().use('gallery-datatable-selection', function(Y) {
+
+   var dtable = new Y.DataTable({
+        columns:    myColumns,
+        data:       myData,
+        scrollable: 'y',
+        sortable:   true,
+    // 
+    //  Add new attributes for datatable-selection ...
+    //
+        highlightMode: 'cell',
+        selectionMode: 'row',
+        selectionMulti: true     // allow multiple selections ...
+
+    }).render('#tableDiv');
+
+// THAT'S IT .... 
+//  Now your users can click away happily, or mouseover cells to highlight them ....
+//   (mouse, mouse, click, click !)
+
+    // Now, say you want to retrieve the "selected" row (or rows), 
+    //   ... just use DT's get('selectedRows') attribute ...
+    Y.one("#myBtn").on("click",function(){
+         Y.log( this.get('selectedRows') );
+    },dtable);
+
+    // you could define a listener to the "selection" Event, BUT NOT RECOMMENDED !!!
+    // see the discussion above in the Gallery description.
+
+
+    // Or, say you want to select some specific records programmatically ...
+    // Set as initially selected, record indices 1,3,5 and 7 ...
+    dtable.set('selectedRecords', [1,3,5,7] );
+
+   // Or set some cells programmatically ...
+   // set initial selected cells ... an array of coordinates
+   dtable.set('selectedCells',[
+        {record:1, column:'pint'},
+        {record:5, column:1 }
+   ]);
+
+});
+```
+

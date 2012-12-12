@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+    <title>Gallery datatable-selection</title>
+    <script src="/build/yui/yui.js"></script>
+    <script src="js/tests.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="logger"></div>
+
+<div id="tableDiv"></div>
+
+<div id="testTableDiv" style="visibility: hidden;"></div>
+
+​
+<script>
+YUI({
+    coverage: ['gallery-datatable-selection'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use( 'gallery-datatable-selection', 'test-console', 'test', 'module-tests', function(Y) {
+
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-datatable-selection');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

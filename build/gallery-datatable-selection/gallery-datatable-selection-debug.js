@@ -24,12 +24,10 @@ YUI.add('gallery-datatable-selection', function (Y, NAME) {
  to provide a positive control (like a BUTTON or A link) to process the selections.  Two events are provided,  [selection](#event_selection)
  and [selected](#event_selected) but these fire for every "click" action, which may not be ideal -- especially for multi selections.
 
- @module DataTable
- @submodule Selection
+ @module gallery-datatable-selection
  @class Y.DataTable.Selection
  @extends Y.DataTable
  @author Todd Smith
- @version 1.0.0
  @since 3.6.0
  **/
 function DtSelection() {}
@@ -933,4 +931,4 @@ Y.DataTable.Selection = DtSelection;
 Y.Base.mix(Y.DataTable, [Y.DataTable.Selection]);
 
 
-}, 'gallery-2012.12.05-21-01', {"skinnable": "true", "requires": ["base-build", "datatable-base", "event"]});
+}, 'gallery-2012.12.12-21-11', {"skinnable": "true", "requires": ["base-build", "datatable-base", "event"]});
