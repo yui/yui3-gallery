@@ -5,7 +5,7 @@
         <title>Button test</title>
         <script type="text/javascript" src="http://yui.yahooapis.com/3.5.0pr2/build/yui/yui.js"></script>
         <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?3.5.0pr2/build/cssreset/reset-min.css&3.5.0pr2/build/cssfonts/fonts-min.css&3.5.0pr2/build/cssbase/base-min.css&3.5.0pr2/build/cssgrids/grids-min.css" />
-        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.5.0pr2/build/cssbutton/cssbutton.css" />
+        <!-- link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.5.0pr2/build/cssbutton/cssbutton.css" / -->
         <style>
             body {
                 width:700px;
@@ -16,6 +16,7 @@
 
     </head>
     <body class="yui3-skin-sam">
+        <div id="log"></div>
         <div id="toolbar">
             <button id="toggle0" class="yui3-button yui3-button-toggle">toggle</button>
             <p>You should be able to toggle this one and get the selected state logged on each click</p>
@@ -52,16 +53,17 @@
             Initially the three label should show. The state of the selected option will be logged by showing an X
             in the position of the one selected.</p>
         </div>
-        <script type="text/javascript" src="../../../build/gallery-button-plugin/gallery-button-plugin.js"></script>
+        <!--script type="text/javascript" src="../../../build/gallery-button-plugin/gallery-button-plugin.js"></script -->
         <script type="text/javascript" >
             YUI({
-                filter:'raw'
+                filter:'raw',
+                gallery: 'gallery-2012.12.05-17-54'
 
-            }).use('gallery-button-plugin','node','event','console', function (Y) {
+            }).use('gallery-button-plugin','node','event','console', 'cssbutton', function (Y) {
                 "use strict";
 
 
-                new Y.Console().render();
+                new Y.Console().render('#log');
 
                 /*
                  * usage examples below:

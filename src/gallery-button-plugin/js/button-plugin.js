@@ -69,7 +69,6 @@ var C_BUTTON = 'yui3-button',
             @private
         */
         _selectedGetter: function () {
-            console.log('_selectedSetter', this.get('id'));
             switch (this._toggleType) {
                 case BUTTON_TOGGLE:
                     return this._toggleSelected;
@@ -89,7 +88,6 @@ var C_BUTTON = 'yui3-button',
             @private
         */
         _selectedSetter: function(value) {
-            console.log('_selectedSetter', this.get('id'), value);
             var target = null,
                 classes = this._cssClasses;
             switch (this._toggleType) {
@@ -109,7 +107,7 @@ var C_BUTTON = 'yui3-button',
                     if (value) {
                         target = Y.one(value);
                         target.set(SELECTED, true);
-                        this._selectedToggle = (target.get(SELECTED)?target:null);
+                        this._selectedToggle = target;
                     } else {
                         this._selectedToggle = null;
                     }
@@ -134,7 +132,6 @@ var C_BUTTON = 'yui3-button',
             @static
         */
         _addToggleButton: function (node) {
-            console.log('_addToggleButton', node.get('id'),this);
             node._toggleType = BUTTON_TOGGLE;
             node._cssClasses = this;
 
@@ -157,7 +154,6 @@ var C_BUTTON = 'yui3-button',
             @static
         */
         _addButtonGroup: function (node) {
-            console.log('_addButtonGroup', node.get('id'), this);
             node._toggleType = GROUP_TOGGLE;
             node._cssClasses = this;
 
@@ -189,7 +185,6 @@ var C_BUTTON = 'yui3-button',
         */
 
         addToggles: function (container, cssClasses) {
-            console.log('addToggles', container, cssClasses);
             cssClasses = Y.merge({
                 C_TOGGLE: btn.C_TOGGLE,
                 C_SELECTED: btn.C_SELECTED,

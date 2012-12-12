@@ -14,7 +14,7 @@
 				filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
 				coverage:['gallery-button-plugin']
 			}).use('gallery-button-plugin' ,'button-plugin-tests', 'test','test-console','node-event-simulate','cssbutton', function (Y) {
-				(new Y.Console()).render('#log');
+				(new Y.Test.Console()).render('#log');
 
                 Y.Test.Runner.setName('gallery-button-plugin');
 				Y.Test.Runner.run();
