@@ -1,0 +1,32 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.52 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-scrollfix
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5008
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [gallery-scrollfix]: Passed: 4 Failed: 0 Total: 4 (ignored 0) (0.043 seconds) 72%
+Writing files in JSON format to: /src/gallery-scrollfix/logs/tests.json
+
+----------------+-----------+-----------+-----------+-----------+
+File            |   % Stmts |% Branches |   % Funcs |   % Lines |
+----------------+-----------+-----------+-----------+-----------+
+   build/       |     72.41 |        25 |      87.5 |     72.41 |
+      All files |     72.41 |        25 |      87.5 |     72.41 |
+----------------+-----------+-----------+-----------+-----------+
+All files       |     72.41 |        25 |      87.5 |     72.41 |
+----------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 72.41% ( 21/29 )
+Branches     : 25% ( 4/16 )
+Functions    : 87.5% ( 7/8 )
+Lines        : 72.41% ( 21/29 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 4 Failed: 0 Total: 4 (ignored 0) (0.043 seconds)
+  [Grover Execution Timer] 1.129 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

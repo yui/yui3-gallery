@@ -1,0 +1,10 @@
+{
+    "name": "gallery-scrollfix",
+    "builds": {
+        "gallery-scrollfix": {
+            "jsfiles": [
+                "js/gallery-scrollfix.js"
+            ]
+        }
+    }
+}

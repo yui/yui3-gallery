@@ -1,0 +1,7 @@
+{
+    "gallery-scrollfix": {
+        "requires": [
+        	"event-mouseenter","plugin"
+        ]
+    }
+}

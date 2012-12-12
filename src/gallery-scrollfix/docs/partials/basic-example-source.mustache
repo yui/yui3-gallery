@@ -1,0 +1,17 @@
+<div class='my-scrollable-div'>
+	<div class='my-scrollable-div-content'>
+		<p>This div will scroll the parent when using the mousewheel to scroll to the bottom.</p>
+	</div>
+</div>
+<div class='my-scrollable-div my-scrollable-div-fixed'>
+	<div class='my-scrollable-div-content'>
+		<p>This div uses ScrollFix and will not.</p>
+	</div>
+</div>
+
+<script>
+YUI().use('node','gallery-scrollfix', function (Y) {
+	var scroller = Y.one('.my-scrollable-div-fixed');
+	scroller.plug(Y.Plugin.NodeScrollFix);
+});
+</script>

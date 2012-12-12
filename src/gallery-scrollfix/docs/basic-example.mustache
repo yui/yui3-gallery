@@ -1,0 +1,53 @@
+<style scoped>
+	body {
+		height: 3000px;
+	}
+	.my-scrollable-div-fixed {
+
+	}
+	.my-scrollable-div {
+		height: 200px;
+		width: 200px;
+		overflow-y: scroll;
+		overflow-x: hidden;
+		display: inline-block;
+	}
+	.my-scrollable-div p {
+		margin: 0px;
+		font-weight: bold;
+		font-size: 108%;
+		padding: 10px;
+		color:white;
+	}
+	.my-scrollable-div-content {
+		height: 500px;
+		width: 200px;
+		background: #87e0fd;
+		background: -moz-linear-gradient(top,  #87e0fd 0%, #05abe0 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#87e0fd), color-stop(100%,#05abe0));
+		background: -webkit-linear-gradient(top,  #87e0fd 0%,#05abe0 100%);
+		background: -o-linear-gradient(top,  #87e0fd 0%,#05abe0 100%);
+		background: -ms-linear-gradient(top,  #87e0fd 0%,#05abe0 100%);
+		background: linear-gradient(to bottom,  #87e0fd 0%,#05abe0 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#05abe0',GradientType=0 );
+	}
+</style>
+
+<div class='intro'>
+	<p>The ScrollFix plugin prevents mousewheel events inside an inner-scrollable node from scrolling the parent document.</p>
+</div>
+
+<div class='example yui3-skin-sam'>
+	{{>basic-example-source}}
+</div>
+
+<h2>Basic Usage</h2>
+<p>In this example we just attach a ScrollFix plugin to our scrollable node. Note there are two scrollable divs in the example above, the first does not have the ScrollFix plugin attached, the second does using the code below:</p>
+```
+<script>
+YUI().use('node','gallery-scrollfix', function (Y) {
+	var scroller = Y.one('.my-scrollable-div-fixed');
+	scroller.plug(Y.Plugin.NodeScrollFix);
+});
+</script>
+```

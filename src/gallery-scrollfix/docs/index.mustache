@@ -1,0 +1,39 @@
+<div class="intro">
+    <p>
+    ScrollFix is a Node plugin that can be used to stop scroll events from
+    escaping an inner scroll area when the scroll reaches the bottom of the area
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>ScrollFix is a simple Node plugin that prevents mousewheel events inside
+the host node from bubbling up to parent nodes if the scroll has reached the
+bottom of the host node. This fixes an issue commonly seen in websites where
+the user scrolls an inner-scroll area but then the whole page moves as the
+scroll reaches the bottom of the inner-scroll area.</p>
+
+{{>getting-started}}
+
+<h2>Basic Setup</h2>
+<p>To use the module simply plug it onto a node that will show scrollbars:</p>
+
+```
+<script>
+YUI().use('node','gallery-scrollfix', function (Y) {
+	var scroller = Y.one('.my-scrollable-div');
+	scroller.plug(Y.Plugin.NodeScrollFix);
+});
+</script>
+```
+
+<h2>Advanced Usage</h2>
+<p>ScrollFix works by attaching a MouseWheel event listener to the document.body by default. It does this whenever your mouse enters the host node. If you wish to have ScrollFix listen on a different element than the document body then you can use the `target` attribute. It is unlikely you'll need to do this, but just in case here's how:</p>
+```
+<script>
+YUI().use('node','gallery-scrollfix', function (Y) {
+	var scroller = Y.one('.my-scrollable-div');
+	scroller.plug(Y.Plugin.NodeScrollFix,{target:Y.one('.my-containing-div')});
+});
+</script>
+```

@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-scrollfix</title>
+    <script src="/build/yui/yui.js"></script>
+    <script src="js/tests.js"></script>
+    <style type='text/css'>
+    	body {
+    		height: 3000px;
+    	}
+    	.inner-scroll {
+    		margin-top: 50px;
+    		height: 200px;
+    		width: 100px;
+    		overflow-y: scroll;
+    		overflow-x: hidden;
+    	}
+    	.inner-scroll-content {
+    		height: 500px;
+    		width: 100px;
+			background: #87e0fd;
+			background: -moz-linear-gradient(top,  #87e0fd 0%, #05abe0 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#87e0fd), color-stop(100%,#05abe0));
+			background: -webkit-linear-gradient(top,  #87e0fd 0%,#05abe0 100%);
+			background: -o-linear-gradient(top,  #87e0fd 0%,#05abe0 100%);
+			background: -ms-linear-gradient(top,  #87e0fd 0%,#05abe0 100%);
+			background: linear-gradient(to bottom,  #87e0fd 0%,#05abe0 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#05abe0',GradientType=0 );
+    	}
+    </style>
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+<div class='inner-scroll'>
+	<div class='inner-scroll-content'>
+	</div>
+</div>
+<script>
+YUI({
+    coverage: ['gallery-scrollfix'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', function(Y) {
+
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-scrollfix');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>
