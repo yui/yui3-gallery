@@ -1,0 +1,13 @@
+shifter [err] /src/gallery-composite-image/js/composite-image.js contains 6 lint errors
+   #1: A constructor name should start with an uppercase letter.
+       me._data = new _ArrayBuffer(me.pixelCount * me._pixelSize); // line 399, pos 32
+   #2: A constructor name should start with an uppercase letter.
+       return new _Class({ // line 411, pos 28
+   #3: Line too long.
+       return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value); // line 630, pos 157
+   #4: Line too long.
+       return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian); // line 770, pos 170
+   #5: Line too long.
+       me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian); // line 792, pos 164
+   #6: 'Uint8ClampedArray' is not defined.
+       return Uint8ClampedArray; // line 714, pos 28

@@ -1,0 +1,41 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Y.Composite.Image is an interface for manipulating multi-dimensional arrays of uncompressed binary data.",
+    "displayName": "Gallery: Composite Image",
+    "name": "gallery-composite-image",
+    "use": [
+        "gallery-composite-image"
+    ],
+    "tags": [
+        "array",
+        "arrays",
+        "binary",
+        "bitmap",
+        "canvas",
+        "channel",
+        "channels",
+        "color",
+        "composite",
+        "data",
+        "dimension",
+        "dimensional",
+        "dimensions",
+        "gallery",
+        "graphics",
+        "image",
+        "multi-channel",
+        "multi-dimensional",
+        "picture",
+        "pixel",
+        "pixels",
+        "raster",
+        "solmsted",
+        "type",
+        "typed",
+        "types",
+        "voxel",
+        "voxels"
+    ]
+}

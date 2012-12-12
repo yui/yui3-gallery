@@ -1,0 +1,64 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.52 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-composite-image
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5009
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-composite-image]: Passed: 8 Failed: 26 Total: 34 (ignored 0) (0.519 seconds) 66%
+    test:001-apiExists
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:002-_getDataViewConstructor
+       Unexpected error: Can't find variable: Float64Array
+    test:003-_getDataView
+       Unexpected error: Can't find variable: Float64Array
+    test:006-constructor-channels-f64
+       Unexpected error: Can't find variable: Float64Array
+    test:012-constructor-channels-u8
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:014-constructor-dimensions-1
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:015-constructor-dimensions-2
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:016-constructor-dimensions-3
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:017-constructor-dimensions-4
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:018-constructor-data
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:019-constructor-littleEndian
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:020-_getPixelIndex
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:021-_getValue_setValue
+       Unexpected error: Can't find variable: Float64Array
+    test:022-clear
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:023-clone
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:024-eachPixelIndex
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:025-eachPixelLocation
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:026-getValueSetValue
+       Unexpected error: Can't find variable: Float64Array
+    test:027-getDataArray
+       Unexpected error: Can't find variable: Float64Array
+    test:028-getPixelIndex
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:029-getPixelValues
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:030-setDataArray
+       Unexpected error: Can't find variable: Float64Array
+    test:031-setPixelValues
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:032-toJSON
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:033-toString
+       Unexpected error: Can't find variable: Uint8ClampedArray
+    test:034-validate
+       Unexpected error: Can't find variable: Uint8ClampedArray
+Writing files in JSON format to: /src/gallery-composite-image/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

@@ -1,0 +1,3828 @@
+{
+    "name": "gallery-composite-image",
+    "passed": 8,
+    "failed": 26,
+    "errors": 0,
+    "ignored": 0,
+    "total": 34,
+    "duration": 519,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 8,
+        "failed": 26,
+        "errors": 0,
+        "ignored": 0,
+        "total": 34,
+        "duration": 517,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:001-apiExists",
+            "duration": 4
+        },
+        "test:002-_getDataViewConstructor": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Float64Array",
+            "type": "test",
+            "name": "test:002-_getDataViewConstructor",
+            "duration": 4
+        },
+        "test:003-_getDataView": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Float64Array",
+            "type": "test",
+            "name": "test:003-_getDataView",
+            "duration": 2
+        },
+        "test:004-_getTypeName": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:004-_getTypeName",
+            "duration": 1
+        },
+        "test:005-constructor-channels-f32": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:005-constructor-channels-f32",
+            "duration": 28
+        },
+        "test:006-constructor-channels-f64": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Float64Array",
+            "type": "test",
+            "name": "test:006-constructor-channels-f64",
+            "duration": 5
+        },
+        "test:007-constructor-channels-s16": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:007-constructor-channels-s16",
+            "duration": 12
+        },
+        "test:008-constructor-channels-s32": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:008-constructor-channels-s32",
+            "duration": 23
+        },
+        "test:009-constructor-channels-s8": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:009-constructor-channels-s8",
+            "duration": 9
+        },
+        "test:010-constructor-channels-u16": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:010-constructor-channels-u16",
+            "duration": 16
+        },
+        "test:011-constructor-channels-u32": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:011-constructor-channels-u32",
+            "duration": 20
+        },
+        "test:012-constructor-channels-u8": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:012-constructor-channels-u8",
+            "duration": 4
+        },
+        "test:013-constructor-channels-mixed": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:013-constructor-channels-mixed",
+            "duration": 2
+        },
+        "test:014-constructor-dimensions-1": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:014-constructor-dimensions-1",
+            "duration": 1
+        },
+        "test:015-constructor-dimensions-2": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:015-constructor-dimensions-2",
+            "duration": 2
+        },
+        "test:016-constructor-dimensions-3": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:016-constructor-dimensions-3",
+            "duration": 4
+        },
+        "test:017-constructor-dimensions-4": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:017-constructor-dimensions-4",
+            "duration": 8
+        },
+        "test:018-constructor-data": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:018-constructor-data",
+            "duration": 1
+        },
+        "test:019-constructor-littleEndian": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:019-constructor-littleEndian",
+            "duration": 1
+        },
+        "test:020-_getPixelIndex": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:020-_getPixelIndex",
+            "duration": 1
+        },
+        "test:021-_getValue_setValue": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Float64Array",
+            "type": "test",
+            "name": "test:021-_getValue_setValue",
+            "duration": 8
+        },
+        "test:022-clear": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:022-clear",
+            "duration": 1
+        },
+        "test:023-clone": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:023-clone",
+            "duration": 1
+        },
+        "test:024-eachPixelIndex": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:024-eachPixelIndex",
+            "duration": 1
+        },
+        "test:025-eachPixelLocation": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:025-eachPixelLocation",
+            "duration": 1
+        },
+        "test:026-getValueSetValue": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Float64Array",
+            "type": "test",
+            "name": "test:026-getValueSetValue",
+            "duration": 9
+        },
+        "test:027-getDataArray": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Float64Array",
+            "type": "test",
+            "name": "test:027-getDataArray",
+            "duration": 2
+        },
+        "test:028-getPixelIndex": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:028-getPixelIndex",
+            "duration": 1
+        },
+        "test:029-getPixelValues": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:029-getPixelValues",
+            "duration": 2
+        },
+        "test:030-setDataArray": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Float64Array",
+            "type": "test",
+            "name": "test:030-setDataArray",
+            "duration": 1
+        },
+        "test:031-setPixelValues": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:031-setPixelValues",
+            "duration": 2
+        },
+        "test:032-toJSON": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:032-toJSON",
+            "duration": 1
+        },
+        "test:033-toString": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:033-toString",
+            "duration": 1
+        },
+        "test:034-validate": {
+            "result": "fail",
+            "message": "Unexpected error: Can't find variable: Uint8ClampedArray",
+            "type": "test",
+            "name": "test:034-validate",
+            "duration": 2
+        }
+    },
+    "timestamp": "Wed 12 Dec 2012 03:12:58 PM CST",
+    "coverage": {
+        "build/cdn_gallery-2012.12.12-21-11/": {
+            "path": "build/cdn_gallery-2012.12.12-21-11/",
+            "s": {
+                "1": 1,
+                "2": 1,
+                "3": 1,
+                "4": 1,
+                "5": 72,
+                "6": 72,
+                "7": 142,
+                "8": 264,
+                "9": 264,
+                "10": 72,
+                "11": 192,
+                "12": 6,
+                "13": 264,
+                "14": 72,
+                "15": 118,
+                "16": 72,
+                "17": 72,
+                "18": 72,
+                "19": 72,
+                "20": 72,
+                "21": 72,
+                "22": 0,
+                "23": 72,
+                "24": 52,
+                "25": 1,
+                "26": 52,
+                "27": 1,
+                "28": 72,
+                "29": 72,
+                "30": 52,
+                "31": 0,
+                "32": 0,
+                "33": 2,
+                "34": 2,
+                "35": 200,
+                "36": 2,
+                "37": 0,
+                "38": 0,
+                "39": 0,
+                "40": 0,
+                "41": 0,
+                "42": 0,
+                "43": 0,
+                "44": 0,
+                "45": 0,
+                "46": 0,
+                "47": 0,
+                "48": 2,
+                "49": 2,
+                "50": 0,
+                "51": 0,
+                "52": 0,
+                "53": 0,
+                "54": 0,
+                "55": 6,
+                "56": 0,
+                "57": 0,
+                "58": 0,
+                "59": 0,
+                "60": 6,
+                "61": 2,
+                "62": 2,
+                "63": 200,
+                "64": 600,
+                "65": 600,
+                "66": 0,
+                "67": 0,
+                "68": 0,
+                "69": 0,
+                "70": 0,
+                "71": 606,
+                "72": 0,
+                "73": 0,
+                "74": 0,
+                "75": 0,
+                "76": 0,
+                "77": 72,
+                "78": 72,
+                "79": 74,
+                "80": 28,
+                "81": 1,
+                "82": 6,
+                "83": 1,
+                "84": 1,
+                "85": 1,
+                "86": 1,
+                "87": 1,
+                "88": 15,
+                "89": 1,
+                "90": 8,
+                "91": 8,
+                "92": 3,
+                "93": 3,
+                "94": 6,
+                "95": 6,
+                "96": 3,
+                "97": 6,
+                "98": 3,
+                "99": 52,
+                "100": 52,
+                "101": 9,
+                "102": 0,
+                "103": 52,
+                "104": 52,
+                "105": 609,
+                "106": 609,
+                "107": 0,
+                "108": 0,
+                "109": 0,
+                "110": 8,
+                "111": 8
+            },
+            "b": {
+                "1": [
+                    72,
+                    6
+                ],
+                "2": [
+                    72,
+                    14
+                ],
+                "3": [
+                    72,
+                    60
+                ],
+                "4": [
+                    72,
+                    192
+                ],
+                "5": [
+                    264,
+                    74
+                ],
+                "6": [
+                    6,
+                    186
+                ],
+                "7": [
+                    192,
+                    190
+                ],
+                "8": [
+                    0,
+                    72
+                ],
+                "9": [
+                    1,
+                    51
+                ],
+                "10": [
+                    0,
+                    0
+                ],
+                "11": [
+                    0,
+                    2
+                ],
+                "12": [
+                    0,
+                    0
+                ],
+                "13": [
+                    0,
+                    0
+                ],
+                "14": [
+                    3,
+                    3
+                ],
+                "15": [
+                    0,
+                    0
+                ],
+                "16": [
+                    0,
+                    0
+                ],
+                "17": [
+                    3,
+                    603
+                ],
+                "18": [
+                    0,
+                    0
+                ],
+                "19": [
+                    72,
+                    70
+                ],
+                "20": [
+                    72,
+                    0
+                ],
+                "21": [
+                    1,
+                    6,
+                    1,
+                    1,
+                    1,
+                    1,
+                    1,
+                    15
+                ],
+                "22": [
+                    46,
+                    6
+                ],
+                "23": [
+                    46,
+                    6
+                ],
+                "24": [
+                    2,
+                    6
+                ],
+                "25": [
+                    3,
+                    3
+                ]
+            },
+            "f": {
+                "1": 1,
+                "2": 1,
+                "3": 72,
+                "4": 142,
+                "5": 264,
+                "6": 118,
+                "7": 72,
+                "8": 72,
+                "9": 0,
+                "10": 2,
+                "11": 0,
+                "12": 2,
+                "13": 0,
+                "14": 0,
+                "15": 6,
+                "16": 0,
+                "17": 0,
+                "18": 0,
+                "19": 6,
+                "20": 2,
+                "21": 200,
+                "22": 0,
+                "23": 0,
+                "24": 0,
+                "25": 606,
+                "26": 0,
+                "27": 0,
+                "28": 72,
+                "29": 74,
+                "30": 28,
+                "31": 8,
+                "32": 3,
+                "33": 52,
+                "34": 9,
+                "35": 0,
+                "36": 52,
+                "37": 609,
+                "38": 0,
+                "39": 8
+            },
+            "fnMap": {
+                "1": {
+                    "name": "(anonymous_1)",
+                    "line": 1,
+                    "loc": {
+                        "start": {
+                            "line": 1,
+                            "column": 35
+                        },
+                        "end": {
+                            "line": 1,
+                            "column": 54
+                        }
+                    }
+                },
+                "2": {
+                    "name": "(anonymous_2)",
+                    "line": 6,
+                    "loc": {
+                        "start": {
+                            "line": 6,
+                            "column": 1
+                        },
+                        "end": {
+                            "line": 6,
+                            "column": 14
+                        }
+                    }
+                },
+                "3": {
+                    "name": "(anonymous_3)",
+                    "line": 163,
+                    "loc": {
+                        "start": {
+                            "line": 163,
+                            "column": 17
+                        },
+                        "end": {
+                            "line": 163,
+                            "column": 42
+                        }
+                    }
+                },
+                "4": {
+                    "name": "(anonymous_4)",
+                    "line": 172,
+                    "loc": {
+                        "start": {
+                            "line": 172,
+                            "column": 52
+                        },
+                        "end": {
+                            "line": 172,
+                            "column": 85
+                        }
+                    }
+                },
+                "5": {
+                    "name": "(anonymous_5)",
+                    "line": 175,
+                    "loc": {
+                        "start": {
+                            "line": 175,
+                            "column": 49
+                        },
+                        "end": {
+                            "line": 175,
+                            "column": 87
+                        }
+                    }
+                },
+                "6": {
+                    "name": "(anonymous_6)",
+                    "line": 250,
+                    "loc": {
+                        "start": {
+                            "line": 250,
+                            "column": 25
+                        },
+                        "end": {
+                            "line": 250,
+                            "column": 37
+                        }
+                    }
+                },
+                "7": {
+                    "name": "(anonymous_7)",
+                    "line": 253,
+                    "loc": {
+                        "start": {
+                            "line": 253,
+                            "column": 25
+                        },
+                        "end": {
+                            "line": 253,
+                            "column": 44
+                        }
+                    }
+                },
+                "8": {
+                    "name": "(anonymous_8)",
+                    "line": 396,
+                    "loc": {
+                        "start": {
+                            "line": 396,
+                            "column": 19
+                        },
+                        "end": {
+                            "line": 396,
+                            "column": 31
+                        }
+                    }
+                },
+                "9": {
+                    "name": "(anonymous_9)",
+                    "line": 408,
+                    "loc": {
+                        "start": {
+                            "line": 408,
+                            "column": 19
+                        },
+                        "end": {
+                            "line": 408,
+                            "column": 31
+                        }
+                    }
+                },
+                "10": {
+                    "name": "(anonymous_10)",
+                    "line": 435,
+                    "loc": {
+                        "start": {
+                            "line": 435,
+                            "column": 28
+                        },
+                        "end": {
+                            "line": 435,
+                            "column": 57
+                        }
+                    }
+                },
+                "11": {
+                    "name": "(anonymous_11)",
+                    "line": 467,
+                    "loc": {
+                        "start": {
+                            "line": 467,
+                            "column": 31
+                        },
+                        "end": {
+                            "line": 467,
+                            "column": 60
+                        }
+                    }
+                },
+                "12": {
+                    "name": "(anonymous_12)",
+                    "line": 501,
+                    "loc": {
+                        "start": {
+                            "line": 501,
+                            "column": 26
+                        },
+                        "end": {
+                            "line": 501,
+                            "column": 38
+                        }
+                    }
+                },
+                "13": {
+                    "name": "(anonymous_13)",
+                    "line": 506,
+                    "loc": {
+                        "start": {
+                            "line": 506,
+                            "column": 56
+                        },
+                        "end": {
+                            "line": 506,
+                            "column": 68
+                        }
+                    }
+                },
+                "14": {
+                    "name": "(anonymous_14)",
+                    "line": 510,
+                    "loc": {
+                        "start": {
+                            "line": 510,
+                            "column": 38
+                        },
+                        "end": {
+                            "line": 510,
+                            "column": 60
+                        }
+                    }
+                },
+                "15": {
+                    "name": "(anonymous_15)",
+                    "line": 528,
+                    "loc": {
+                        "start": {
+                            "line": 528,
+                            "column": 27
+                        },
+                        "end": {
+                            "line": 528,
+                            "column": 39
+                        }
+                    }
+                },
+                "16": {
+                    "name": "(anonymous_16)",
+                    "line": 547,
+                    "loc": {
+                        "start": {
+                            "line": 547,
+                            "column": 28
+                        },
+                        "end": {
+                            "line": 547,
+                            "column": 76
+                        }
+                    }
+                },
+                "17": {
+                    "name": "(anonymous_17)",
+                    "line": 550,
+                    "loc": {
+                        "start": {
+                            "line": 550,
+                            "column": 76
+                        },
+                        "end": {
+                            "line": 550,
+                            "column": 100
+                        }
+                    }
+                },
+                "18": {
+                    "name": "(anonymous_18)",
+                    "line": 552,
+                    "loc": {
+                        "start": {
+                            "line": 552,
+                            "column": 20
+                        },
+                        "end": {
+                            "line": 552,
+                            "column": 61
+                        }
+                    }
+                },
+                "19": {
+                    "name": "(anonymous_19)",
+                    "line": 566,
+                    "loc": {
+                        "start": {
+                            "line": 566,
+                            "column": 22
+                        },
+                        "end": {
+                            "line": 566,
+                            "column": 68
+                        }
+                    }
+                },
+                "20": {
+                    "name": "(anonymous_20)",
+                    "line": 577,
+                    "loc": {
+                        "start": {
+                            "line": 577,
+                            "column": 26
+                        },
+                        "end": {
+                            "line": 577,
+                            "column": 47
+                        }
+                    }
+                },
+                "21": {
+                    "name": "(anonymous_21)",
+                    "line": 583,
+                    "loc": {
+                        "start": {
+                            "line": 583,
+                            "column": 41
+                        },
+                        "end": {
+                            "line": 583,
+                            "column": 63
+                        }
+                    }
+                },
+                "22": {
+                    "name": "(anonymous_22)",
+                    "line": 607,
+                    "loc": {
+                        "start": {
+                            "line": 607,
+                            "column": 28
+                        },
+                        "end": {
+                            "line": 607,
+                            "column": 89
+                        }
+                    }
+                },
+                "23": {
+                    "name": "(anonymous_23)",
+                    "line": 610,
+                    "loc": {
+                        "start": {
+                            "line": 610,
+                            "column": 70
+                        },
+                        "end": {
+                            "line": 610,
+                            "column": 111
+                        }
+                    }
+                },
+                "24": {
+                    "name": "(anonymous_24)",
+                    "line": 612,
+                    "loc": {
+                        "start": {
+                            "line": 612,
+                            "column": 20
+                        },
+                        "end": {
+                            "line": 612,
+                            "column": 56
+                        }
+                    }
+                },
+                "25": {
+                    "name": "(anonymous_25)",
+                    "line": 629,
+                    "loc": {
+                        "start": {
+                            "line": 629,
+                            "column": 22
+                        },
+                        "end": {
+                            "line": 629,
+                            "column": 75
+                        }
+                    }
+                },
+                "26": {
+                    "name": "(anonymous_26)",
+                    "line": 638,
+                    "loc": {
+                        "start": {
+                            "line": 638,
+                            "column": 20
+                        },
+                        "end": {
+                            "line": 638,
+                            "column": 32
+                        }
+                    }
+                },
+                "27": {
+                    "name": "(anonymous_27)",
+                    "line": 659,
+                    "loc": {
+                        "start": {
+                            "line": 659,
+                            "column": 22
+                        },
+                        "end": {
+                            "line": 659,
+                            "column": 34
+                        }
+                    }
+                },
+                "28": {
+                    "name": "(anonymous_28)",
+                    "line": 670,
+                    "loc": {
+                        "start": {
+                            "line": 670,
+                            "column": 22
+                        },
+                        "end": {
+                            "line": 670,
+                            "column": 38
+                        }
+                    }
+                },
+                "29": {
+                    "name": "(anonymous_29)",
+                    "line": 685,
+                    "loc": {
+                        "start": {
+                            "line": 685,
+                            "column": 22
+                        },
+                        "end": {
+                            "line": 685,
+                            "column": 48
+                        }
+                    }
+                },
+                "30": {
+                    "name": "(anonymous_30)",
+                    "line": 697,
+                    "loc": {
+                        "start": {
+                            "line": 697,
+                            "column": 41
+                        },
+                        "end": {
+                            "line": 697,
+                            "column": 61
+                        }
+                    }
+                },
+                "31": {
+                    "name": "(anonymous_31)",
+                    "line": 728,
+                    "loc": {
+                        "start": {
+                            "line": 728,
+                            "column": 41
+                        },
+                        "end": {
+                            "line": 728,
+                            "column": 53
+                        }
+                    }
+                },
+                "32": {
+                    "name": "(anonymous_32)",
+                    "line": 733,
+                    "loc": {
+                        "start": {
+                            "line": 733,
+                            "column": 27
+                        },
+                        "end": {
+                            "line": 733,
+                            "column": 39
+                        }
+                    }
+                },
+                "33": {
+                    "name": "(anonymous_33)",
+                    "line": 764,
+                    "loc": {
+                        "start": {
+                            "line": 764,
+                            "column": 36
+                        },
+                        "end": {
+                            "line": 764,
+                            "column": 83
+                        }
+                    }
+                },
+                "34": {
+                    "name": "(anonymous_34)",
+                    "line": 767,
+                    "loc": {
+                        "start": {
+                            "line": 767,
+                            "column": 30
+                        },
+                        "end": {
+                            "line": 767,
+                            "column": 66
+                        }
+                    }
+                },
+                "35": {
+                    "name": "(anonymous_35)",
+                    "line": 769,
+                    "loc": {
+                        "start": {
+                            "line": 769,
+                            "column": 16
+                        },
+                        "end": {
+                            "line": 769,
+                            "column": 52
+                        }
+                    }
+                },
+                "36": {
+                    "name": "(anonymous_36)",
+                    "line": 784,
+                    "loc": {
+                        "start": {
+                            "line": 784,
+                            "column": 36
+                        },
+                        "end": {
+                            "line": 784,
+                            "column": 83
+                        }
+                    }
+                },
+                "37": {
+                    "name": "(anonymous_37)",
+                    "line": 787,
+                    "loc": {
+                        "start": {
+                            "line": 787,
+                            "column": 30
+                        },
+                        "end": {
+                            "line": 787,
+                            "column": 73
+                        }
+                    }
+                },
+                "38": {
+                    "name": "(anonymous_38)",
+                    "line": 790,
+                    "loc": {
+                        "start": {
+                            "line": 790,
+                            "column": 16
+                        },
+                        "end": {
+                            "line": 790,
+                            "column": 59
+                        }
+                    }
+                },
+                "39": {
+                    "name": "(anonymous_39)",
+                    "line": 805,
+                    "loc": {
+                        "start": {
+                            "line": 805,
+                            "column": 30
+                        },
+                        "end": {
+                            "line": 805,
+                            "column": 50
+                        }
+                    }
+                }
+            },
+            "statementMap": {
+                "1": {
+                    "start": {
+                        "line": 1,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 812,
+                        "column": 48
+                    }
+                },
+                "2": {
+                    "start": {
+                        "line": 6,
+                        "column": 0
+                    },
+                    "end": {
+                        "line": 810,
+                        "column": 6
+                    }
+                },
+                "3": {
+                    "start": {
+                        "line": 7,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 7,
+                        "column": 17
+                    }
+                },
+                "4": {
+                    "start": {
+                        "line": 9,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 346,
+                        "column": 10
+                    }
+                },
+                "5": {
+                    "start": {
+                        "line": 164,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 164,
+                        "column": 48
+                    }
+                },
+                "6": {
+                    "start": {
+                        "line": 166,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 188,
+                        "column": 21
+                    }
+                },
+                "7": {
+                    "start": {
+                        "line": 173,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 173,
+                        "column": 50
+                    }
+                },
+                "8": {
+                    "start": {
+                        "line": 176,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 176,
+                        "column": 51
+                    }
+                },
+                "9": {
+                    "start": {
+                        "line": 178,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 182,
+                        "column": 21
+                    }
+                },
+                "10": {
+                    "start": {
+                        "line": 179,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 179,
+                        "column": 51
+                    }
+                },
+                "11": {
+                    "start": {
+                        "line": 180,
+                        "column": 27
+                    },
+                    "end": {
+                        "line": 182,
+                        "column": 21
+                    }
+                },
+                "12": {
+                    "start": {
+                        "line": 181,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 181,
+                        "column": 40
+                    }
+                },
+                "13": {
+                    "start": {
+                        "line": 184,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 184,
+                        "column": 72
+                    }
+                },
+                "14": {
+                    "start": {
+                        "line": 190,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 294,
+                        "column": 15
+                    }
+                },
+                "15": {
+                    "start": {
+                        "line": 251,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 251,
+                        "column": 36
+                    }
+                },
+                "16": {
+                    "start": {
+                        "line": 254,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 254,
+                        "column": 39
+                    }
+                },
+                "17": {
+                    "start": {
+                        "line": 267,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 267,
+                        "column": 75
+                    }
+                },
+                "18": {
+                    "start": {
+                        "line": 304,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 304,
+                        "column": 85
+                    }
+                },
+                "19": {
+                    "start": {
+                        "line": 314,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 314,
+                        "column": 90
+                    }
+                },
+                "20": {
+                    "start": {
+                        "line": 325,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 325,
+                        "column": 90
+                    }
+                },
+                "21": {
+                    "start": {
+                        "line": 327,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 335,
+                        "column": 13
+                    }
+                },
+                "22": {
+                    "start": {
+                        "line": 328,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 328,
+                        "column": 45
+                    }
+                },
+                "23": {
+                    "start": {
+                        "line": 330,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 330,
+                        "column": 27
+                    }
+                },
+                "24": {
+                    "start": {
+                        "line": 332,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 334,
+                        "column": 17
+                    }
+                },
+                "25": {
+                    "start": {
+                        "line": 333,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 333,
+                        "column": 55
+                    }
+                },
+                "26": {
+                    "start": {
+                        "line": 345,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 345,
+                        "column": 60
+                    }
+                },
+                "27": {
+                    "start": {
+                        "line": 348,
+                        "column": 4
+                    },
+                    "end": {
+                        "line": 809,
+                        "column": 13
+                    }
+                },
+                "28": {
+                    "start": {
+                        "line": 397,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 397,
+                        "column": 30
+                    }
+                },
+                "29": {
+                    "start": {
+                        "line": 399,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 399,
+                        "column": 75
+                    }
+                },
+                "30": {
+                    "start": {
+                        "line": 401,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 401,
+                        "column": 26
+                    }
+                },
+                "31": {
+                    "start": {
+                        "line": 409,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 409,
+                        "column": 30
+                    }
+                },
+                "32": {
+                    "start": {
+                        "line": 411,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 416,
+                        "column": 19
+                    }
+                },
+                "33": {
+                    "start": {
+                        "line": 436,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 437,
+                        "column": 35
+                    }
+                },
+                "34": {
+                    "start": {
+                        "line": 439,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 441,
+                        "column": 17
+                    }
+                },
+                "35": {
+                    "start": {
+                        "line": 440,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 440,
+                        "column": 50
+                    }
+                },
+                "36": {
+                    "start": {
+                        "line": 443,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 443,
+                        "column": 28
+                    }
+                },
+                "37": {
+                    "start": {
+                        "line": 468,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 474,
+                        "column": 39
+                    }
+                },
+                "38": {
+                    "start": {
+                        "line": 476,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 478,
+                        "column": 17
+                    }
+                },
+                "39": {
+                    "start": {
+                        "line": 477,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 477,
+                        "column": 54
+                    }
+                },
+                "40": {
+                    "start": {
+                        "line": 480,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 492,
+                        "column": 17
+                    }
+                },
+                "41": {
+                    "start": {
+                        "line": 481,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 481,
+                        "column": 73
+                    }
+                },
+                "42": {
+                    "start": {
+                        "line": 483,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 491,
+                        "column": 21
+                    }
+                },
+                "43": {
+                    "start": {
+                        "line": 484,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 484,
+                        "column": 59
+                    }
+                },
+                "44": {
+                    "start": {
+                        "line": 486,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 488,
+                        "column": 25
+                    }
+                },
+                "45": {
+                    "start": {
+                        "line": 487,
+                        "column": 28
+                    },
+                    "end": {
+                        "line": 487,
+                        "column": 34
+                    }
+                },
+                "46": {
+                    "start": {
+                        "line": 490,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 490,
+                        "column": 58
+                    }
+                },
+                "47": {
+                    "start": {
+                        "line": 494,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 494,
+                        "column": 28
+                    }
+                },
+                "48": {
+                    "start": {
+                        "line": 502,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 504,
+                        "column": 44
+                    }
+                },
+                "49": {
+                    "start": {
+                        "line": 506,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 517,
+                        "column": 41
+                    }
+                },
+                "50": {
+                    "start": {
+                        "line": 507,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 508,
+                        "column": 39
+                    }
+                },
+                "51": {
+                    "start": {
+                        "line": 510,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 514,
+                        "column": 23
+                    }
+                },
+                "52": {
+                    "start": {
+                        "line": 511,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 513,
+                        "column": 25
+                    }
+                },
+                "53": {
+                    "start": {
+                        "line": 512,
+                        "column": 28
+                    },
+                    "end": {
+                        "line": 512,
+                        "column": 82
+                    }
+                },
+                "54": {
+                    "start": {
+                        "line": 516,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 516,
+                        "column": 37
+                    }
+                },
+                "55": {
+                    "start": {
+                        "line": 529,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 529,
+                        "column": 76
+                    }
+                },
+                "56": {
+                    "start": {
+                        "line": 548,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 548,
+                        "column": 30
+                    }
+                },
+                "57": {
+                    "start": {
+                        "line": 550,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 554,
+                        "column": 19
+                    }
+                },
+                "58": {
+                    "start": {
+                        "line": 551,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 551,
+                        "column": 75
+                    }
+                },
+                "59": {
+                    "start": {
+                        "line": 553,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 553,
+                        "column": 75
+                    }
+                },
+                "60": {
+                    "start": {
+                        "line": 567,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 567,
+                        "column": 150
+                    }
+                },
+                "61": {
+                    "start": {
+                        "line": 578,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 581,
+                        "column": 35
+                    }
+                },
+                "62": {
+                    "start": {
+                        "line": 583,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 588,
+                        "column": 19
+                    }
+                },
+                "63": {
+                    "start": {
+                        "line": 584,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 587,
+                        "column": 21
+                    }
+                },
+                "64": {
+                    "start": {
+                        "line": 585,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 585,
+                        "column": 85
+                    }
+                },
+                "65": {
+                    "start": {
+                        "line": 586,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 586,
+                        "column": 40
+                    }
+                },
+                "66": {
+                    "start": {
+                        "line": 608,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 608,
+                        "column": 30
+                    }
+                },
+                "67": {
+                    "start": {
+                        "line": 610,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 614,
+                        "column": 19
+                    }
+                },
+                "68": {
+                    "start": {
+                        "line": 611,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 611,
+                        "column": 98
+                    }
+                },
+                "69": {
+                    "start": {
+                        "line": 613,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 613,
+                        "column": 80
+                    }
+                },
+                "70": {
+                    "start": {
+                        "line": 616,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 616,
+                        "column": 26
+                    }
+                },
+                "71": {
+                    "start": {
+                        "line": 630,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 630,
+                        "column": 157
+                    }
+                },
+                "72": {
+                    "start": {
+                        "line": 639,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 646,
+                        "column": 22
+                    }
+                },
+                "73": {
+                    "start": {
+                        "line": 648,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 650,
+                        "column": 17
+                    }
+                },
+                "74": {
+                    "start": {
+                        "line": 649,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 649,
+                        "column": 55
+                    }
+                },
+                "75": {
+                    "start": {
+                        "line": 652,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 652,
+                        "column": 30
+                    }
+                },
+                "76": {
+                    "start": {
+                        "line": 660,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 660,
+                        "column": 83
+                    }
+                },
+                "77": {
+                    "start": {
+                        "line": 671,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 671,
+                        "column": 42
+                    }
+                },
+                "78": {
+                    "start": {
+                        "line": 672,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 672,
+                        "column": 109
+                    }
+                },
+                "79": {
+                    "start": {
+                        "line": 686,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 686,
+                        "column": 72
+                    }
+                },
+                "80": {
+                    "start": {
+                        "line": 698,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 715,
+                        "column": 13
+                    }
+                },
+                "81": {
+                    "start": {
+                        "line": 700,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 700,
+                        "column": 40
+                    }
+                },
+                "82": {
+                    "start": {
+                        "line": 702,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 702,
+                        "column": 40
+                    }
+                },
+                "83": {
+                    "start": {
+                        "line": 704,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 704,
+                        "column": 38
+                    }
+                },
+                "84": {
+                    "start": {
+                        "line": 706,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 706,
+                        "column": 38
+                    }
+                },
+                "85": {
+                    "start": {
+                        "line": 708,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 708,
+                        "column": 37
+                    }
+                },
+                "86": {
+                    "start": {
+                        "line": 710,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 710,
+                        "column": 39
+                    }
+                },
+                "87": {
+                    "start": {
+                        "line": 712,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 712,
+                        "column": 39
+                    }
+                },
+                "88": {
+                    "start": {
+                        "line": 714,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 714,
+                        "column": 45
+                    }
+                },
+                "89": {
+                    "start": {
+                        "line": 717,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 717,
+                        "column": 29
+                    }
+                },
+                "90": {
+                    "start": {
+                        "line": 729,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 731,
+                        "column": 57
+                    }
+                },
+                "91": {
+                    "start": {
+                        "line": 733,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 751,
+                        "column": 15
+                    }
+                },
+                "92": {
+                    "start": {
+                        "line": 734,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 738,
+                        "column": 27
+                    }
+                },
+                "93": {
+                    "start": {
+                        "line": 740,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 748,
+                        "column": 17
+                    }
+                },
+                "94": {
+                    "start": {
+                        "line": 741,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 741,
+                        "column": 49
+                    }
+                },
+                "95": {
+                    "start": {
+                        "line": 743,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 745,
+                        "column": 21
+                    }
+                },
+                "96": {
+                    "start": {
+                        "line": 744,
+                        "column": 24
+                    },
+                    "end": {
+                        "line": 744,
+                        "column": 54
+                    }
+                },
+                "97": {
+                    "start": {
+                        "line": 747,
+                        "column": 20
+                    },
+                    "end": {
+                        "line": 747,
+                        "column": 36
+                    }
+                },
+                "98": {
+                    "start": {
+                        "line": 750,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 750,
+                        "column": 29
+                    }
+                },
+                "99": {
+                    "start": {
+                        "line": 765,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 765,
+                        "column": 53
+                    }
+                },
+                "100": {
+                    "start": {
+                        "line": 767,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 771,
+                        "column": 14
+                    }
+                },
+                "101": {
+                    "start": {
+                        "line": 768,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 768,
+                        "column": 80
+                    }
+                },
+                "102": {
+                    "start": {
+                        "line": 770,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 770,
+                        "column": 170
+                    }
+                },
+                "103": {
+                    "start": {
+                        "line": 785,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 785,
+                        "column": 53
+                    }
+                },
+                "104": {
+                    "start": {
+                        "line": 787,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 794,
+                        "column": 14
+                    }
+                },
+                "105": {
+                    "start": {
+                        "line": 788,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 788,
+                        "column": 81
+                    }
+                },
+                "106": {
+                    "start": {
+                        "line": 789,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 789,
+                        "column": 28
+                    }
+                },
+                "107": {
+                    "start": {
+                        "line": 791,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 791,
+                        "column": 30
+                    }
+                },
+                "108": {
+                    "start": {
+                        "line": 792,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 792,
+                        "column": 164
+                    }
+                },
+                "109": {
+                    "start": {
+                        "line": 793,
+                        "column": 16
+                    },
+                    "end": {
+                        "line": 793,
+                        "column": 26
+                    }
+                },
+                "110": {
+                    "start": {
+                        "line": 806,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 806,
+                        "column": 42
+                    }
+                },
+                "111": {
+                    "start": {
+                        "line": 807,
+                        "column": 12
+                    },
+                    "end": {
+                        "line": 807,
+                        "column": 99
+                    }
+                }
+            },
+            "branchMap": {
+                "1": {
+                    "line": 164,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 164,
+                                "column": 28
+                            },
+                            "end": {
+                                "line": 164,
+                                "column": 41
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 164,
+                                "column": 45
+                            },
+                            "end": {
+                                "line": 164,
+                                "column": 47
+                            }
+                        }
+                    ]
+                },
+                "2": {
+                    "line": 168,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 168,
+                                "column": 36
+                            },
+                            "end": {
+                                "line": 168,
+                                "column": 58
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 168,
+                                "column": 62
+                            },
+                            "end": {
+                                "line": 168,
+                                "column": 84
+                            }
+                        }
+                    ]
+                },
+                "3": {
+                    "line": 171,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 171,
+                                "column": 38
+                            },
+                            "end": {
+                                "line": 171,
+                                "column": 62
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 171,
+                                "column": 66
+                            },
+                            "end": {
+                                "line": 171,
+                                "column": 90
+                            }
+                        }
+                    ]
+                },
+                "4": {
+                    "line": 178,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 178,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 178,
+                                "column": 20
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 178,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 178,
+                                "column": 20
+                            }
+                        }
+                    ]
+                },
+                "5": {
+                    "line": 178,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 178,
+                                "column": 24
+                            },
+                            "end": {
+                                "line": 178,
+                                "column": 33
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 178,
+                                "column": 37
+                            },
+                            "end": {
+                                "line": 178,
+                                "column": 54
+                            }
+                        }
+                    ]
+                },
+                "6": {
+                    "line": 180,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 180,
+                                "column": 27
+                            },
+                            "end": {
+                                "line": 180,
+                                "column": 27
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 180,
+                                "column": 27
+                            },
+                            "end": {
+                                "line": 180,
+                                "column": 27
+                            }
+                        }
+                    ]
+                },
+                "7": {
+                    "line": 180,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 180,
+                                "column": 31
+                            },
+                            "end": {
+                                "line": 180,
+                                "column": 39
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 180,
+                                "column": 43
+                            },
+                            "end": {
+                                "line": 180,
+                                "column": 71
+                            }
+                        }
+                    ]
+                },
+                "8": {
+                    "line": 327,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 327,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 327,
+                                "column": 12
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 327,
+                                "column": 12
+                            },
+                            "end": {
+                                "line": 327,
+                                "column": 12
+                            }
+                        }
+                    ]
+                },
+                "9": {
+                    "line": 332,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 332,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 332,
+                                "column": 16
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 332,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 332,
+                                "column": 16
+                            }
+                        }
+                    ]
+                },
+                "10": {
+                    "line": 486,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 486,
+                                "column": 24
+                            },
+                            "end": {
+                                "line": 486,
+                                "column": 24
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 486,
+                                "column": 24
+                            },
+                            "end": {
+                                "line": 486,
+                                "column": 24
+                            }
+                        }
+                    ]
+                },
+                "11": {
+                    "line": 506,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 506,
+                                "column": 55
+                            },
+                            "end": {
+                                "line": 517,
+                                "column": 20
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 517,
+                                "column": 23
+                            },
+                            "end": {
+                                "line": 517,
+                                "column": 40
+                            }
+                        }
+                    ]
+                },
+                "12": {
+                    "line": 550,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 550,
+                                "column": 28
+                            },
+                            "end": {
+                                "line": 550,
+                                "column": 42
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 550,
+                                "column": 46
+                            },
+                            "end": {
+                                "line": 550,
+                                "column": 57
+                            }
+                        }
+                    ]
+                },
+                "13": {
+                    "line": 550,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 550,
+                                "column": 76
+                            },
+                            "end": {
+                                "line": 552,
+                                "column": 17
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 552,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 554,
+                                "column": 17
+                            }
+                        }
+                    ]
+                },
+                "14": {
+                    "line": 567,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 567,
+                                "column": 71
+                            },
+                            "end": {
+                                "line": 567,
+                                "column": 111
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 567,
+                                "column": 114
+                            },
+                            "end": {
+                                "line": 567,
+                                "column": 134
+                            }
+                        }
+                    ]
+                },
+                "15": {
+                    "line": 610,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 610,
+                                "column": 22
+                            },
+                            "end": {
+                                "line": 610,
+                                "column": 36
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 610,
+                                "column": 40
+                            },
+                            "end": {
+                                "line": 610,
+                                "column": 51
+                            }
+                        }
+                    ]
+                },
+                "16": {
+                    "line": 610,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 610,
+                                "column": 70
+                            },
+                            "end": {
+                                "line": 612,
+                                "column": 17
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 612,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 614,
+                                "column": 17
+                            }
+                        }
+                    ]
+                },
+                "17": {
+                    "line": 630,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 630,
+                                "column": 71
+                            },
+                            "end": {
+                                "line": 630,
+                                "column": 111
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 630,
+                                "column": 114
+                            },
+                            "end": {
+                                "line": 630,
+                                "column": 134
+                            }
+                        }
+                    ]
+                },
+                "18": {
+                    "line": 648,
+                    "type": "if",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 648,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 648,
+                                "column": 16
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 648,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 648,
+                                "column": 16
+                            }
+                        }
+                    ]
+                },
+                "19": {
+                    "line": 671,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 671,
+                                "column": 23
+                            },
+                            "end": {
+                                "line": 671,
+                                "column": 27
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 671,
+                                "column": 31
+                            },
+                            "end": {
+                                "line": 671,
+                                "column": 41
+                            }
+                        }
+                    ]
+                },
+                "20": {
+                    "line": 672,
+                    "type": "binary-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 672,
+                                "column": 23
+                            },
+                            "end": {
+                                "line": 672,
+                                "column": 51
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 672,
+                                "column": 55
+                            },
+                            "end": {
+                                "line": 672,
+                                "column": 108
+                            }
+                        }
+                    ]
+                },
+                "21": {
+                    "line": 698,
+                    "type": "switch",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 700,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 700,
+                                "column": 40
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 702,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 702,
+                                "column": 40
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 704,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 704,
+                                "column": 38
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 706,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 706,
+                                "column": 38
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 708,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 708,
+                                "column": 37
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 710,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 710,
+                                "column": 39
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 712,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 712,
+                                "column": 39
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 714,
+                                "column": 20
+                            },
+                            "end": {
+                                "line": 714,
+                                "column": 45
+                            }
+                        }
+                    ]
+                },
+                "22": {
+                    "line": 767,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 767,
+                                "column": 30
+                            },
+                            "end": {
+                                "line": 769,
+                                "column": 13
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 769,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 771,
+                                "column": 13
+                            }
+                        }
+                    ]
+                },
+                "23": {
+                    "line": 787,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 787,
+                                "column": 30
+                            },
+                            "end": {
+                                "line": 790,
+                                "column": 13
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 790,
+                                "column": 16
+                            },
+                            "end": {
+                                "line": 794,
+                                "column": 13
+                            }
+                        }
+                    ]
+                },
+                "24": {
+                    "line": 807,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 807,
+                                "column": 35
+                            },
+                            "end": {
+                                "line": 807,
+                                "column": 42
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 807,
+                                "column": 45
+                            },
+                            "end": {
+                                "line": 807,
+                                "column": 76
+                            }
+                        }
+                    ]
+                },
+                "25": {
+                    "line": 807,
+                    "type": "cond-expr",
+                    "locations": [
+                        {
+                            "start": {
+                                "line": 807,
+                                "column": 61
+                            },
+                            "end": {
+                                "line": 807,
+                                "column": 66
+                            }
+                        },
+                        {
+                            "start": {
+                                "line": 807,
+                                "column": 69
+                            },
+                            "end": {
+                                "line": 807,
+                                "column": 75
+                            }
+                        }
+                    ]
+                }
+            },
+            "code": [
+                "(function () { YUI.add('gallery-composite-image', function (Y, NAME) {",
+                "",
+                "/**",
+                " * @module gallery-composite-image",
+                " */",
+                "(function (Y) {",
+                "    'use strict';",
+                "",
+                "    var _string_f32 = 'f32',",
+                "        _string_f64 = 'f64',",
+                "        _string_s16 = 's16',",
+                "        _string_s32 = 's32',",
+                "        _string_s8 = 's8',",
+                "        _string_u16 = 'u16',",
+                "        _string_u32 = 'u32',",
+                "        _string_u8 = 'u8',",
+                "",
+                "        _ArrayBuffer = ArrayBuffer,",
+                "        _DataView = DataView,",
+                "        _Lang = Y.Lang,",
+                "        _Object = Object,",
+                "        _YArray = Y.Array,",
+                "",
+                "        _cached = Y.cached,",
+                "        _defineProperties = _Object.defineProperties,",
+                "        _each = _YArray.each,",
+                "        _flatten = _YArray.flatten,",
+                "        _freeze = _Object.freeze,",
+                "        _isArray = _Lang.isArray,",
+                "        _map = _YArray.map,",
+                "        _reduce = _YArray.reduce,",
+                "",
+                "        /**",
+                "         * Y.Composite.Image is an interface for manipulating multi-dimensional",
+                "         * arrays of uncompressed binary data.  It is primarily designed for",
+                "         * working with images and its internal data is compatible with the RGBA",
+                "         * image format used by the canvas context2d object.  Above and beyond",
+                "         * two-dimensional images, Y.Composite.Image is theoretically capable of",
+                "         * supporting unlimited pixel dimensions and unlimited data channels.",
+                "         * This opens up a wide range of potential uses including working with",
+                "         * compositing layers, animation or video, or voxel data sets like those",
+                "         * used for 3D rendering simulations or a world map in games like",
+                "         * Minecraft.",
+                "         *",
+                "         * Y.Composite.Image internally stores and interacts with its data by",
+                "         * using typed arrays.  It uses some relatively new features of typed",
+                "         * arrays including DataView and Uint8ClampedArray.  There is no support",
+                "         * for older browsers without these features.",
+                "         *",
+                "         * The Y.Composite.Image constructor accepts an optional configuration",
+                "         * object with the following optional parameters:",
+                "         *",
+                "         * * `channels`: Every pixel within an image may contain one or more",
+                "         *   values.  These are called channels.  A default image has four",
+                "         *   channels referred to as RGBA.  The first channel stores the red",
+                "         *   component of the pixel's color, the second channel stores the green",
+                "         *   component, then blue is third, and the alpha channel is last.",
+                "         *   These channels are all unsigned 8-bit integers.  In other words the",
+                "         *   value can be an integer from 0 to 255.",
+                "         *",
+                "         *   When creating a new image, these default channels may be used or",
+                "         *   custom channels may be defined.  There must be at least one channel",
+                "         *   but there is no upper limit on the number of channels an image may",
+                "         *   have.  Channels may also be a data type other than unsigned 8-bit",
+                "         *   integers; they may be any numerical type used by typed arrays.",
+                "         *",
+                "         *   To specify custom channels, pass in an array.  The length of the",
+                "         *   array will determine the number of channels and the value of each",
+                "         *   item in the array will denote the data type of that channel.  The",
+                "         *   accepted types are:",
+                "         *",
+                "         *   * 'f32' - 32-bit floating point number",
+                "         *   * 'f64' - 64-bit floating point number",
+                "         *   * 's16' - Signed 16-bit integer",
+                "         *   * 's32' - Signed 32-bit integer",
+                "         *   * 's8' - Signed 8-bit integer",
+                "         *   * 'u16' - Unsigned 16-bit integer",
+                "         *   * 'u32' - Unsigned 32-bit integer",
+                "         *   * 'u8' - Unsigned 8-bit integer",
+                "         *",
+                "         *   If left undefined, channels is set to ['u8', 'u8', 'u8', 'u8']",
+                "         *",
+                "         *   It is permitted to use channels of different types such as",
+                "         *   ['u8', 's16', 'f64', 's8', 'f32'] but due to technical and boring",
+                "         *   reasons including byte alignment and endianness this is much less",
+                "         *   efficient than using homogeneous channel types.",
+                "         *",
+                "         *   Also note that the total byte size and number of channels can have",
+                "         *   a huge impact on memory usage.",
+                "         *",
+                "         * * `data`: The initial data to populate the image with.  If this is",
+                "         *   left undefined, the image will be entirely initialized with zeros.",
+                "         *   Data may be passed in as either an ArrayBuffer or a regular Array.",
+                "         *   If a regular array is passed in, nothing is done to validate the",
+                "         *   data or the size of the array.  An invalid array will probably",
+                "         *   yield undesired results.",
+                "         *",
+                "         * * `dimensions`: An image is basically just a multi-dimensional array",
+                "         *   and the dimensions determine the size, shape, and number of pixels",
+                "         *   in the image.  If left undefined, dimensions defaults to the",
+                "         *   two-dimensional square [512, 512].  For standard two-dimensional",
+                "         *   images, think of this as [width, height]",
+                "         *",
+                "         *   There must be at least one dimension but there is no upper limit on",
+                "         *   the number of dimensions an image may have.  Each dimension must",
+                "         *   have at least one pixel but there is no upper limit on the number",
+                "         *   of pixels a dimension may have.",
+                "         *",
+                "         *   For example a really long line could be defined with the dimensions",
+                "         *   [9999999999] or a 3D box could be defined with the dimensions",
+                "         *   [24, 37, 42] or a 4D hypercube could be defined with the dimensions",
+                "         *   [21, 21, 21, 21]",
+                "         *",
+                "         *   This API standardizes on the term `pixel` to mean an element of a",
+                "         *   multi-dimensional array even when there are more dimensions and a",
+                "         *   term like voxel might be more technically correct.",
+                "         *",
+                "         *   Also note that the total size and number of dimensions can have a",
+                "         *   huge impact on memory usage.",
+                "         *",
+                "         * * `littleEndian`: This boolean option defaults to false and it only",
+                "         *   matters when there are channels of mixed types and at least one of",
+                "         *   them is bigger than 8 bits.  In most common uses, it can be",
+                "         *   ignored.",
+                "         *",
+                "         * The internal data structure of Y.Composite.Image is an ArrayBuffer,",
+                "         * which is like a single-dimensional array of binary numbers.  The",
+                "         * dimensions and channels are sequentially stacked behind each other.",
+                "         * For example, for an image with three channels and dimensions [2, 3]",
+                "         * the binary data is arranged like this:",
+                "         *",
+                "         * * pixel 0 at (0, 0) channel 0",
+                "         * * pixel 0 at (0, 0) channel 1",
+                "         * * pixel 0 at (0, 0) channel 2",
+                "         * * pixel 1 at (1, 0) channel 0",
+                "         * * pixel 1 at (1, 0) channel 1",
+                "         * * pixel 1 at (1, 0) channel 2",
+                "         * * pixel 2 at (0, 1) channel 0",
+                "         * * pixel 2 at (0, 1) channel 1",
+                "         * * pixel 2 at (0, 1) channel 2",
+                "         * * pixel 3 at (1, 1) channel 0",
+                "         * * pixel 3 at (1, 1) channel 1",
+                "         * * pixel 3 at (1, 1) channel 2",
+                "         * * pixel 4 at (0, 2) channel 0",
+                "         * * pixel 4 at (0, 2) channel 1",
+                "         * * pixel 4 at (0, 2) channel 2",
+                "         * * pixel 5 at (1, 2) channel 0",
+                "         * * pixel 5 at (1, 2) channel 1",
+                "         * * pixel 5 at (1, 2) channel 2",
+                "         *",
+                "         * Notice that there are two ways to identify a pixel.  A pixel can be",
+                "         * identified by its dimensional location or by its unique array index.",
+                "         * This API refers to these values as pixelLocation and pixelIndex.  In",
+                "         * some places the API may accept them interchangeably.  Accessing",
+                "         * pixels by pixelIndex is generally more efficient.",
+                "         * @class Image",
+                "         * @constructor",
+                "         * @namespace Composite",
+                "         * @param {Object} [configuration] A configuration object with the",
+                "         * following optional parameters: `channels`, `data`, `dimensions`,",
+                "         * `littleEndian`",
+                "         */",
+                "        _Class = function (configuration) {",
+                "            configuration = configuration || {};",
+                "",
+                "            var me = this,",
+                "",
+                "                channels = _freeze((configuration.channels || _Class.defaultChannels).slice()),",
+                "                channelOffsets = [],",
+                "                dataType,",
+                "                dimensions = _freeze((configuration.dimensions || _Class.defaultDimensions).slice()),",
+                "                pixelCount = _reduce(dimensions, 1, function (pixelCount, dimension) {",
+                "                    return pixelCount * dimension;",
+                "                }),",
+                "                pixelSize = _reduce(channels, 0, function (pixelSize, channelDataType) {",
+                "                    channelOffsets.push(pixelSize);",
+                "",
+                "                    if (!dataType && dataType !== null) {",
+                "                        dataType = channelDataType;",
+                "                    } else if (dataType && dataType !== channelDataType) {",
+                "                        dataType = null;",
+                "                    }",
+                "",
+                "                    return pixelSize + (+channelDataType.substr(1)) / 8;",
+                "                }),",
+                "",
+                "                configurationData = configuration.data,",
+                "                data;",
+                "",
+                "            _defineProperties(me, {",
+                "                /**",
+                "                 * The channels property is an array of strings representing",
+                "                 * each channel's data type.  The number of channels in the",
+                "                 * image is determined by the length of this array.  This is a",
+                "                 * read only copy of the channels array that was passed to the",
+                "                 * constructor.",
+                "                 * @property channels",
+                "                 * @final",
+                "                 * @type [String]",
+                "                 */",
+                "                channels: {",
+                "                    enumerable: true,",
+                "                    value: channels",
+                "                },",
+                "                /**",
+                "                 * The dimensions property is an array of numbers representing",
+                "                 * the length of each dimension.  The number of dimensions in",
+                "                 * the image is determined by the length of this array.  This is",
+                "                 * a read only copy of the dimensions array that was passed to",
+                "                 * the constructor.",
+                "                 * @property dimensions",
+                "                 * @final",
+                "                 * @type [Number]",
+                "                 */",
+                "                dimensions: {",
+                "                    enumerable: true,",
+                "                    value: dimensions",
+                "                },",
+                "                /**",
+                "                 * The total number of pixels in the image.",
+                "                 * @property pixelCount",
+                "                 * @final",
+                "                 * @type Number",
+                "                 */",
+                "                pixelCount: {",
+                "                    enumberable: true,",
+                "                    value: pixelCount",
+                "                },",
+                "                /**",
+                "                 * The _channelOffsets property is a read only array of numbers",
+                "                 * describing the byte offset of each specific channel from the",
+                "                 * beginning of a pixel.",
+                "                 * @property _channelOffsets",
+                "                 * @final",
+                "                 * @protected",
+                "                 * @type [Number]",
+                "                 */",
+                "                _channelOffsets: {",
+                "                    enumerable: true,",
+                "                    value: _freeze(channelOffsets)",
+                "                },",
+                "                /**",
+                "                 * The ArrayBuffer that stores the image's data.",
+                "                 * @property _data",
+                "                 * @protected",
+                "                 * @type ArrayBuffer",
+                "                 */",
+                "                _data: {",
+                "                    enumerable: true,",
+                "                    get: function () {",
+                "                        return data;",
+                "                    },",
+                "                    set: function (newData) {",
+                "                        data = newData;",
+                "",
+                "                        /**",
+                "                         * The ArrayBufferView used to access the image's data.",
+                "                         * If the image's channel types are homogeneous, this",
+                "                         * will be an instance of the specific ArrayBufferView",
+                "                         * class that matches the data type.  This will be an",
+                "                         * instance of DataView if the image's channel types are",
+                "                         * mixed.",
+                "                         * @property _dataView",
+                "                         * @protected",
+                "                         * @type ArrayBufferView",
+                "                         */",
+                "                        me._dataView = _Class._getDataView(data, dataType);",
+                "                    }",
+                "                },",
+                "                /**",
+                "                 * If the image's channel types are homogeneous, this will be",
+                "                 * the common channel type.  This will be null if the image's",
+                "                 * channel types are mixed.",
+                "                 * @property _dataType",
+                "                 * @final",
+                "                 * @protected",
+                "                 * @type String",
+                "                 */",
+                "                _dataType: {",
+                "                    enumerable: true,",
+                "                    value: dataType",
+                "                },",
+                "                /**",
+                "                 * The size of each pixel in bytes.",
+                "                 * @property _pixelSize",
+                "                 * @final",
+                "                 * @protected",
+                "                 * @type Number",
+                "                 */",
+                "                _pixelSize: {",
+                "                    enumerable: true,",
+                "                    value: pixelSize",
+                "                }",
+                "            });",
+                "",
+                "            /**",
+                "             * Returns the pixel index for the given dimension indices.",
+                "             * @method _getPixelIndex",
+                "             * @param {Number} dimensionIndices* The number of arguments must",
+                "             * match the number of dimensions in the image.",
+                "             * @protected",
+                "             * @return {Number}",
+                "             */",
+                "            me._getPixelIndex = _Class._getGetPixelIndexMethod.apply(me, dimensions);",
+                "",
+                "            /**",
+                "             * Returns the value from a specific channel of a specific pixel.",
+                "             * @method _getValue",
+                "             * @param {Number} pixelIndex",
+                "             * @param {Number} channelIndex",
+                "             * @protected",
+                "             * @return {Number}",
+                "             */",
+                "            me._getValue = _Class._getGetValueMethod(channelOffsets, pixelSize, dataType);",
+                "",
+                "            /**",
+                "             * Sets the value of a specific channel of a specific pixel.",
+                "             * @method _setValue",
+                "             * @chainable",
+                "             * @param {Number} pixelIndex",
+                "             * @param {Number} channelIndex",
+                "             * @param {Number} value",
+                "             * @protected",
+                "             */",
+                "            me._setValue = _Class._getSetValueMethod(channelOffsets, pixelSize, dataType);",
+                "",
+                "            if (me.validate(configurationData)) {",
+                "                me._data = configurationData;",
+                "            } else {",
+                "                me.clear();",
+                "",
+                "                if (_isArray(configurationData)) {",
+                "                    me.setDataArray(configurationData);",
+                "                }",
+                "            }",
+                "",
+                "            /**",
+                "             * The boolean value of the littleEndian parameter that will be",
+                "             * passed to a DataView's accessor methods.",
+                "             * @property _littleEndian",
+                "             * @final",
+                "             * @protected",
+                "             * @type Boolean",
+                "             */",
+                "            me._littleEndian = !!configuration.littleEndian;",
+                "        };",
+                "",
+                "    Y.namespace('Composite').Image = Y.mix(_Class, {",
+                "        /**",
+                "         * A static list of all the valid channel data types.",
+                "         * @property dataTypes",
+                "         * @final",
+                "         * @static",
+                "         * @type Object",
+                "         */",
+                "        dataTypes: {",
+                "            f32: _string_f32,",
+                "            f64: _string_f64,",
+                "            s16: _string_s16,",
+                "            s32: _string_s32,",
+                "            s8: _string_s8,",
+                "            u16: _string_u16,",
+                "            u32: _string_u32,",
+                "            u8: _string_u8",
+                "        },",
+                "        /**",
+                "         * The channels value to use when custom channels are not passed in to",
+                "         * the constructor.",
+                "         * @property defaultChannels",
+                "         * @static",
+                "         * @type [String]",
+                "         */",
+                "        defaultChannels: [",
+                "            _string_u8,",
+                "            _string_u8,",
+                "            _string_u8,",
+                "            _string_u8",
+                "        ],",
+                "        /**",
+                "         * The dimensions value to use when custom dimensions are not passed in",
+                "         * to the constructor.",
+                "         * @property defaultDimensions",
+                "         * @static",
+                "         * @type [Number]",
+                "         */",
+                "        defaultDimensions: [",
+                "            512,",
+                "            512",
+                "        ],",
+                "        prototype: {",
+                "            /**",
+                "             * Reset all channel values of all pixels to zero.",
+                "             * @method clear",
+                "             * @chainable",
+                "             */",
+                "            clear: function () {",
+                "                var me = this;",
+                "",
+                "                me._data = new _ArrayBuffer(me.pixelCount * me._pixelSize);",
+                "",
+                "                return me;",
+                "            },",
+                "            /**",
+                "             * Returns an exact copy of this image.",
+                "             * @method clone",
+                "             * @return {Composite.Image}",
+                "             */",
+                "            clone: function () {",
+                "                var me = this;",
+                "",
+                "                return new _Class({",
+                "                    channels: me.channels,",
+                "                    data: me._data.slice(),",
+                "                    dimensions: me.dimensions,",
+                "                    littleEndian: me._littleEndian",
+                "                });",
+                "            },",
+                "            /**",
+                "             * Call an iteration function for each pixel index in the image.",
+                "             * This method is more efficient than `eachPixelLocation` but it",
+                "             * does not provide pixel locations.",
+                "             * @method eachPixelIndex",
+                "             * @chainable",
+                "             * @param {Function} iteractionFunction The iteration function",
+                "             * receives one argument:",
+                "             * <dl>",
+                "             *     <dt>",
+                "             *         pixelIndex",
+                "             *     </dt>",
+                "             *     <dd>",
+                "             *         The pixel's unique index within the image.",
+                "             *     </dd>",
+                "             * </dl>",
+                "             */",
+                "            eachPixelIndex: function (iterationFunction) {",
+                "                var pixelCount = this.pixelCount,",
+                "                    pixelIndex = 0;",
+                "",
+                "                for (; pixelIndex < pixelCount; pixelIndex += 1) {",
+                "                    iterationFunction(pixelIndex);",
+                "                }",
+                "",
+                "                return this;",
+                "            },",
+                "            /**",
+                "             * Call an iteration function for each pixel location in the image.",
+                "             * @method eachPixelLocation",
+                "             * @chainable",
+                "             * @param {Function} iterationFunction The iteration function",
+                "             * receives two arguments:",
+                "             * <dl>",
+                "             *     <dt>",
+                "             *         pixelLocation",
+                "             *     <dt>",
+                "             *     <dd>",
+                "             *         An array of dimension indicies.  The length of this array",
+                "             *         will match the number of dimensions in the image.",
+                "             *     </dd>",
+                "             *     <dt>",
+                "             *         pixelIndex",
+                "             *     </dt>",
+                "             *     <dd>",
+                "             *         The pixel's unique index within the image.",
+                "             *     </dd>",
+                "             * </dl>",
+                "             */",
+                "            eachPixelLocation: function (iterationFunction) {",
+                "                var dimensions = this.dimensions,",
+                "",
+                "                    dimensionCount = dimensions.length,",
+                "                    dimensionIndex = 0,",
+                "                    pixelCount = this.pixelCount,",
+                "                    pixelIndex = 0,",
+                "                    pixelLocation = [];",
+                "",
+                "                for (; dimensionIndex < dimensionCount; dimensionIndex += 1) {",
+                "                    pixelLocation[dimensionIndex] = 0;",
+                "                }",
+                "",
+                "                for (; pixelIndex < pixelCount; pixelIndex += 1) {",
+                "                    iterationFunction(pixelLocation.slice(), pixelIndex);",
+                "",
+                "                    for (dimensionIndex = 0; dimensionIndex < dimensionCount; dimensionIndex += 1) {",
+                "                        pixelLocation[dimensionIndex] += 1;",
+                "",
+                "                        if (pixelLocation[dimensionIndex] < dimensions[dimensionIndex]) {",
+                "                            break;",
+                "                        }",
+                "",
+                "                        pixelLocation[dimensionIndex] = 0;",
+                "                    }",
+                "                }",
+                "",
+                "                return this;",
+                "            },",
+                "            /**",
+                "             * Returns a copy of the image data as a regular JavaScript array.",
+                "             * @method getDataArray",
+                "             * @return {[Number]}",
+                "             */",
+                "            getDataArray: function () {",
+                "                var me = this,",
+                "",
+                "                    dataView = me._dataView;",
+                "",
+                "                return dataView instanceof _DataView ? (function () {",
+                "                    var channelCount = me.channels.length,",
+                "                        dataArray = [];",
+                "",
+                "                    me.eachPixelIndex(function (pixelIndex) {",
+                "                        for (var channelIndex = 0; channelIndex < channelCount; channelIndex += 1) {",
+                "                            dataArray.push(me.getValue(pixelIndex, channelIndex));",
+                "                        }",
+                "                    });",
+                "",
+                "                    return dataArray;",
+                "                }()) : _YArray(dataView);",
+                "            },",
+                "            /**",
+                "             * Returns the pixel index for the given dimension indices.",
+                "             * @method getPixelIndex",
+                "             * @param {Number|[Number]} dimensionIndices* The dimensionIndices",
+                "             * may be provided either as positional arguments or as a single",
+                "             * array.  The number of indices must match the number of dimensions",
+                "             * in the image.",
+                "             * @return {Number}",
+                "             */",
+                "            getPixelIndex: function () {",
+                "                return this._getPixelIndex.apply(this, _flatten(arguments));",
+                "            },",
+                "            /**",
+                "             * Returns an array of channel values for a specific pixel.",
+                "             * @method getPixelValues",
+                "             * @param {Number|[Number]} pixelIndexOrLocation This may be either",
+                "             * the pixel's unique index within the image or an array of",
+                "             * dimension indicies.  The length of this array must match the",
+                "             * number of dimensions in the image.",
+                "             * @param {[Number]} [channelIndices] By default, all channel values",
+                "             * are returned in order.  Specific channels may be excluded,",
+                "             * rearranged, or duplicated by passing in an array of channel",
+                "             * indices.  For example, if the image has four channels, the array",
+                "             * [3, 2, 1, 0] would retrieve them in reverse order and the array",
+                "             * [0, 1, 2] would retrieve the first three channels and ignore the",
+                "             * fourth.",
+                "             * @return {[Number]}",
+                "             */",
+                "            getPixelValues: function (pixelIndexOrLocation, channelIndices) {",
+                "                var me = this;",
+                "",
+                "                return _map(channelIndices || me.channels, channelIndices ? function (channelIndex) {",
+                "                    return me.getValue(pixelIndexOrLocation, channelIndex);",
+                "                } : function (channelDataType, channelIndex) {",
+                "                    return me.getValue(pixelIndexOrLocation, channelIndex);",
+                "                });",
+                "            },",
+                "            /**",
+                "             * Returns the value from a specific channel of a specific pixel.",
+                "             * @method getValue",
+                "             * @param {Number|[Number]} pixelIndexOrLocation This may be either",
+                "             * the pixel's unique index within the image or an array of",
+                "             * dimension indicies.  The length of this array must match the",
+                "             * number of dimensions in the image.",
+                "             * @param {Number} channelIndex The specific channel index to get.",
+                "             * @return {Number}",
+                "             */",
+                "            getValue: function (pixelIndexOrLocation, channelIndex) {",
+                "                return this._getValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex);",
+                "            },",
+                "            /**",
+                "             * Sets the image data from a regular JavaScript array.  Nothing is",
+                "             * done to validate the data or the size of the array.  An invalid",
+                "             * array will probably yield undesired results.",
+                "             * @method setDataArray",
+                "             * @chainable",
+                "             * @param {[Number]} dataArray",
+                "             */",
+                "            setDataArray: function (dataArray) {",
+                "                var me = this,",
+                "",
+                "                    channelCount = me.channels.length,",
+                "                    valueIndex = 0;",
+                "",
+                "                return me.eachPixelIndex(function (pixelIndex) {",
+                "                    for (var channelIndex = 0; channelIndex < channelCount; channelIndex += 1) {",
+                "                        me.setValue(pixelIndex, channelIndex, dataArray[valueIndex]);",
+                "                        valueIndex += 1;",
+                "                    }",
+                "                });",
+                "            },",
+                "            /**",
+                "             * Set channel values for a specific pixel.",
+                "             * @method setPixelValues",
+                "             * @chainable",
+                "             * @param {Number|[Number]} pixelIndexOrLocation This may be either",
+                "             * the pixel's unique index within the image or an array of",
+                "             * dimension indicies.  The length of this array must match the",
+                "             * number of dimensions in the image.",
+                "             * @param {[Number]} pixelValues The values to set.",
+                "             * @param {[Number]} [channelIndices] By default, all channels are",
+                "             * set in order.  Specific channels may be excluded or rearranged by",
+                "             * passing in an array of channel indices.  For example, if the",
+                "             * image has four channels, the array [3, 2, 1, 0] would set them in",
+                "             * reverse order and the array [2, 3] would set the third and fourth",
+                "             * channels but ignore the first two.  If a channel is duplicated in",
+                "             * this array, later values will overwrite previous values.",
+                "             */",
+                "            setPixelValues: function (pixelIndexOrLocation, pixelValues, channelIndices) {",
+                "                var me = this;",
+                "",
+                "                _each(channelIndices || pixelValues, channelIndices ? function (channelIndex, pixelValueIndex) {",
+                "                    me.setValue(pixelIndexOrLocation, channelIndex, pixelValues[pixelValueIndex]);",
+                "                } : function (pixelValue, channelIndex) {",
+                "                    me.setValue(pixelIndexOrLocation, channelIndex, pixelValue);",
+                "                });",
+                "",
+                "                return me;",
+                "            },",
+                "            /**",
+                "             * Sets the value of a specific channel of a specific pixel.",
+                "             * @method setValue",
+                "             * @chainable",
+                "             * @param {Number|[Number]} pixelIndexOrLocation This may be either",
+                "             * the pixel's unique index within the image or an array of",
+                "             * dimension indicies.  The length of this array must match the",
+                "             * number of dimensions in the image.",
+                "             * @param {Number} channelIndex The specific channel index to set.",
+                "             * @param {Number} value The value to set.",
+                "             */",
+                "            setValue: function (pixelIndexOrLocation, channelIndex, value) {",
+                "                return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value);",
+                "            },",
+                "            /**",
+                "             * Returns a serializable object.  This object can be passed to the",
+                "             * Y.Composite.Image constructor to recreate this image.",
+                "             * @method toJSON",
+                "             * @return {Object}",
+                "             */",
+                "            toJSON: function () {",
+                "                var me = this,",
+                "",
+                "                    littleEndian = me._littleEndian,",
+                "                    object = {",
+                "                        channels: me.channels,",
+                "                        data: me.getDataArray(),",
+                "                        dimensions: me.dimensions",
+                "                    };",
+                "",
+                "                if (littleEndian) {",
+                "                    object.littleEndian = littleEndian;",
+                "                }",
+                "",
+                "                return object;",
+                "            },",
+                "            /**",
+                "             * Returns a string describing this image.",
+                "             * @method toString",
+                "             * @return {String}",
+                "             */",
+                "            toString: function () {",
+                "                return 'image[' + this.dimensions.join('x') + '] ' + this.channels;",
+                "            },",
+                "            /**",
+                "             * Returns true if the ArrayBuffer has the correct byteLength for",
+                "             * this image.",
+                "             * @method validate",
+                "             * @param {ArrayBuffer} [data] The ArrayBuffer to test.  If left",
+                "             * undefined, this image's internal ArrayBuffer is used.",
+                "             * @return {Boolean}",
+                "             */",
+                "            validate: function (data) {",
+                "                data = data || this._data;",
+                "                return data instanceof _ArrayBuffer && data.byteLength === this.pixelCount * this._pixelSize;",
+                "            }",
+                "        },",
+                "        /**",
+                "         * Returns the correct ArrayBufferView object for the given ArrayBuffer",
+                "         * and dataType.",
+                "         * @method _getDataView",
+                "         * @param {ArrayBuffer} data",
+                "         * @param {String} dataType",
+                "         * @protected",
+                "         * @return {ArrayBufferView}",
+                "         * @static",
+                "         */",
+                "        _getDataView: function (data, dataType) {",
+                "            return new (_Class._getDataViewConstructor(dataType))(data);",
+                "        },",
+                "        /**",
+                "         * Returns the correct ArrayBufferView constructor function for the",
+                "         * given dataType.",
+                "         * @method _getDataViewConstructor",
+                "         * @param {String} dataType",
+                "         * @protected",
+                "         * @return {Function}",
+                "         * @static",
+                "         */",
+                "        _getDataViewConstructor: _cached(function (dataType) {",
+                "            switch (dataType) {",
+                "                case _string_f32:",
+                "                    return Float32Array;",
+                "                case _string_f64:",
+                "                    return Float64Array;",
+                "                case _string_s16:",
+                "                    return Int16Array;",
+                "                case _string_s32:",
+                "                    return Int32Array;",
+                "                case _string_s8:",
+                "                    return Int8Array;",
+                "                case _string_u16:",
+                "                    return Uint16Array;",
+                "                case _string_u32:",
+                "                    return Uint32Array;",
+                "                case _string_u8:",
+                "                    return Uint8ClampedArray;",
+                "            }",
+                "",
+                "            return _DataView;",
+                "        }),",
+                "        /**",
+                "         * Returns a getPixelIndex function that works with the given image",
+                "         * dimensions.",
+                "         * @method _getGetPixelIndexMethod",
+                "         * @param {Number} dimensionLength*",
+                "         * @protected",
+                "         * @return {Function}",
+                "         * @static",
+                "         */",
+                "        _getGetPixelIndexMethod: _cached(function () {",
+                "            var dimensionLengths = arguments,",
+                "",
+                "                dimensionCount = dimensionLengths.length;",
+                "",
+                "            return _cached(function () {",
+                "                var dimensionIndices = arguments,",
+                "                    i,",
+                "                    index = 0,",
+                "                    j,",
+                "                    offset;",
+                "",
+                "                for (i = 0; i < dimensionCount; i += 1) {",
+                "                    offset = dimensionIndices[i];",
+                "",
+                "                    for (j = i - 1; j >= 0; j -= 1) {",
+                "                        offset *= dimensionLengths[j];",
+                "                    }",
+                "",
+                "                    index += offset;",
+                "                }",
+                "",
+                "                return index;",
+                "            });",
+                "        }),",
+                "        /**",
+                "         * Returns a getValue function that works with the given channelOffsets,",
+                "         * pixelSize, and dataType.",
+                "         * @method _getGetValueMethod",
+                "         * @param {[Number]} channelOffsets",
+                "         * @param {Number} pixelSize",
+                "         * @param {String} dataType",
+                "         * @protected",
+                "         * @return {Function}",
+                "         * @static",
+                "         */",
+                "        _getGetValueMethod: _cached(function (channelOffsets, pixelSize, dataType) {",
+                "            var channelCount = channelOffsets.length;",
+                "",
+                "            return dataType ? function (pixelIndex, channelIndex) {",
+                "                return this._dataView[pixelIndex * channelCount + channelIndex];",
+                "            } : function (pixelIndex, channelIndex) {",
+                "                return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian);",
+                "            };",
+                "        }),",
+                "        /**",
+                "         * Returns a setValue function that works with the given channelOffsets,",
+                "         * pixelSize, and dataType.",
+                "         * @method _getSetValueMethod",
+                "         * @param {[Number]} channelOffsets",
+                "         * @param {Number} pixelSize",
+                "         * @param {String} dataType",
+                "         * @protected",
+                "         * @return {Function}",
+                "         * @static",
+                "         */",
+                "        _getSetValueMethod: _cached(function (channelOffsets, pixelSize, dataType) {",
+                "            var channelCount = channelOffsets.length;",
+                "",
+                "            return dataType ? function (pixelIndex, channelIndex, value) {",
+                "                this._dataView[pixelIndex * channelCount + channelIndex] = value;",
+                "                return this;",
+                "            } : function (pixelIndex, channelIndex, value) {",
+                "                var me = this;",
+                "                me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian);",
+                "                return me;",
+                "            };",
+                "        }),",
+                "        /**",
+                "         * Returns a type name that matches a DataView accessor method for",
+                "         * the given dataType.",
+                "         * @method _getTypeName",
+                "         * @param {String} dataType",
+                "         * @protected",
+                "         * @return {String}",
+                "         * @static",
+                "         */",
+                "        _getTypeName: _cached(function (dataType) {",
+                "            var type = dataType.charAt(0);",
+                "            return (type === 'f' ? 'Float' : (type === 's' ? 'Int' : 'Uint')) + dataType.substr(1);",
+                "        })",
+                "    }, true);",
+                "}(Y));",
+                "",
+                "}, '@VERSION@', {\"requires\": [\"array-extras\"]});",
+                "",
+                "}());"
+            ],
+            "l": {
+                "1": 1,
+                "6": 1,
+                "7": 1,
+                "9": 1,
+                "164": 72,
+                "166": 72,
+                "173": 142,
+                "176": 264,
+                "178": 264,
+                "179": 72,
+                "180": 192,
+                "181": 6,
+                "184": 264,
+                "190": 72,
+                "251": 118,
+                "254": 72,
+                "267": 72,
+                "304": 72,
+                "314": 72,
+                "325": 72,
+                "327": 72,
+                "328": 0,
+                "330": 72,
+                "332": 52,
+                "333": 1,
+                "345": 52,
+                "348": 1,
+                "397": 72,
+                "399": 72,
+                "401": 52,
+                "409": 0,
+                "411": 0,
+                "436": 2,
+                "439": 2,
+                "440": 200,
+                "443": 2,
+                "468": 0,
+                "476": 0,
+                "477": 0,
+                "480": 0,
+                "481": 0,
+                "483": 0,
+                "484": 0,
+                "486": 0,
+                "487": 0,
+                "490": 0,
+                "494": 0,
+                "502": 2,
+                "506": 2,
+                "507": 0,
+                "510": 0,
+                "511": 0,
+                "512": 0,
+                "516": 0,
+                "529": 6,
+                "548": 0,
+                "550": 0,
+                "551": 0,
+                "553": 0,
+                "567": 6,
+                "578": 2,
+                "583": 2,
+                "584": 200,
+                "585": 600,
+                "586": 600,
+                "608": 0,
+                "610": 0,
+                "611": 0,
+                "613": 0,
+                "616": 0,
+                "630": 606,
+                "639": 0,
+                "648": 0,
+                "649": 0,
+                "652": 0,
+                "660": 0,
+                "671": 72,
+                "672": 72,
+                "686": 74,
+                "698": 28,
+                "700": 1,
+                "702": 6,
+                "704": 1,
+                "706": 1,
+                "708": 1,
+                "710": 1,
+                "712": 1,
+                "714": 15,
+                "717": 1,
+                "729": 8,
+                "733": 8,
+                "734": 3,
+                "740": 3,
+                "741": 6,
+                "743": 6,
+                "744": 3,
+                "747": 6,
+                "750": 3,
+                "765": 52,
+                "767": 52,
+                "768": 9,
+                "770": 0,
+                "785": 52,
+                "787": 52,
+                "788": 609,
+                "789": 609,
+                "791": 0,
+                "792": 0,
+                "793": 0,
+                "806": 8,
+                "807": 8
+            }
+        }
+    },
+    "coverageType": "istanbul"
+}

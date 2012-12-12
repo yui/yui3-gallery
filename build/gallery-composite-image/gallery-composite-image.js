@@ -1,513 +1,812 @@
-YUI.add('gallery-composite-image', function(Y) {
+YUI.add('gallery-composite-image', function (Y, NAME) {
 
+/**
+ * @module gallery-composite-image
+ */
 (function (Y) {
     'use strict';
 
-    /**
-     * @module gallery-composite-image
-     */
+    var _string_f32 = 'f32',
+        _string_f64 = 'f64',
+        _string_s16 = 's16',
+        _string_s32 = 's32',
+        _string_s8 = 's8',
+        _string_u16 = 'u16',
+        _string_u32 = 'u32',
+        _string_u8 = 'u8',
 
-    var _namespace = Y.namespace('Composite'),
+        _ArrayBuffer = ArrayBuffer,
+        _DataView = DataView,
+        _Lang = Y.Lang,
+        _Object = Object,
+        _YArray = Y.Array,
 
-        _getGetAtFunction,
-        _getGetPixelIndexFunction,
+        _cached = Y.cached,
+        _defineProperties = _Object.defineProperties,
+        _each = _YArray.each,
+        _flatten = _YArray.flatten,
+        _freeze = _Object.freeze,
+        _isArray = _Lang.isArray,
+        _map = _YArray.map,
+        _reduce = _YArray.reduce,
 
-        _class;
-
-    /**
-     * Image Class
-     * @class Image
-     * @constructor
-     * @extends Base
-     * @namespace Composite
-     * @param {Object} config Configuration Object.
-     */
-
-    _class = function (config) {
-        _class.superclass.constructor.call(this, config);
-    };
-
-    _class.ATTRS = {
         /**
-         * Defines the color space for the image.
+         * Y.Composite.Image is an interface for manipulating multi-dimensional
+         * arrays of uncompressed binary data.  It is primarily designed for
+         * working with images and its internal data is compatible with the RGBA
+         * image format used by the canvas context2d object.  Above and beyond
+         * two-dimensional images, Y.Composite.Image is theoretically capable of
+         * supporting unlimited pixel dimensions and unlimited data channels.
+         * This opens up a wide range of potential uses including working with
+         * compositing layers, animation or video, or voxel data sets like those
+         * used for 3D rendering simulations or a world map in games like
+         * Minecraft.
          *
-         * An image can have as many channels as needed.  3 or 4 channels is
-         * most common.  Usually the first channel is the red color component,
-         * the second is green, the third is blue, and the fourth is alpha.
+         * Y.Composite.Image internally stores and interacts with its data by
+         * using typed arrays.  It uses some relatively new features of typed
+         * arrays including DataView and Uint8ClampedArray.  There is no support
+         * for older browsers without these features.
          *
-         * There are various ways to represent the value of a channel.
-         * Values can either be stored as integers or floating-point numbers.
-         * Values may be constrained within a minimum and maximum value.
+         * The Y.Composite.Image constructor accepts an optional configuration
+         * object with the following optional parameters:
          *
-         * Most commonly red, green, and blue channels are represented by
-         * integers between 0 and 255.  In this case the values 0, 0, 0
-         * represent black and the values 255, 255, 255 represent white.
+         * * `channels`: Every pixel within an image may contain one or more
+         *   values.  These are called channels.  A default image has four
+         *   channels referred to as RGBA.  The first channel stores the red
+         *   component of the pixel's color, the second channel stores the green
+         *   component, then blue is third, and the alpha channel is last.
+         *   These channels are all unsigned 8-bit integers.  In other words the
+         *   value can be an integer from 0 to 255.
          *
-         * The alpha channel is commonly stored as a floating-point value from 0
-         * to 1.  1 represents a completely visible pixel while 0 is completely
-         * transparent.
+         *   When creating a new image, these default channels may be used or
+         *   custom channels may be defined.  There must be at least one channel
+         *   but there is no upper limit on the number of channels an image may
+         *   have.  Channels may also be a data type other than unsigned 8-bit
+         *   integers; they may be any numerical type used by typed arrays.
          *
-         * Values are not required to be constrained.  For example, sometimes it
-         * is interesting or useful to store colors which have brightness beyond
-         * white.
+         *   To specify custom channels, pass in an array.  The length of the
+         *   array will determine the number of channels and the value of each
+         *   item in the array will denote the data type of that channel.  The
+         *   accepted types are:
          *
-         * This attribute should be set to an array of objects.  This array
-         * represents the channels in order.  This array should have at least
-         * one element.  This should not be a sparse array.  Each object must
-         * have a mode property.  The mode property must be set to either 'f'
-         * for floating-point values or 'i' for integer values.  Each object may
-         * include the optional maximum and/or minimum properties.  Each object
-         * may include the optional blackValue and/or whiteValue properties.  If
-         * undefined, blackValue will default to 0 and whiteValue will default
-         * to 255 when mode is set to 'i' or 1 otherwise.
-         * 
-         * @attribute channels
-         * @default [
-         *     {maximum: 255, minimum: 0, mode:'i'},
-         *     {maximum: 255, minimum: 0, mode:'i'},
-         *     {maximum: 255, minimum: 0, mode:'i'},
-         *     {maximum: 1, minimum: 0, mode:'f'}
-         * ]
-         * @type Array
-         * @writeOnce
+         *   * 'f32' - 32-bit floating point number
+         *   * 'f64' - 64-bit floating point number
+         *   * 's16' - Signed 16-bit integer
+         *   * 's32' - Signed 32-bit integer
+         *   * 's8' - Signed 8-bit integer
+         *   * 'u16' - Unsigned 16-bit integer
+         *   * 'u32' - Unsigned 32-bit integer
+         *   * 'u8' - Unsigned 8-bit integer
+         *
+         *   If left undefined, channels is set to ['u8', 'u8', 'u8', 'u8']
+         *
+         *   It is permitted to use channels of different types such as
+         *   ['u8', 's16', 'f64', 's8', 'f32'] but due to technical and boring
+         *   reasons including byte alignment and endianness this is much less
+         *   efficient than using homogeneous channel types.
+         *
+         *   Also note that the total byte size and number of channels can have
+         *   a huge impact on memory usage.
+         *
+         * * `data`: The initial data to populate the image with.  If this is
+         *   left undefined, the image will be entirely initialized with zeros.
+         *   Data may be passed in as either an ArrayBuffer or a regular Array.
+         *   If a regular array is passed in, nothing is done to validate the
+         *   data or the size of the array.  An invalid array will probably
+         *   yield undesired results.
+         *
+         * * `dimensions`: An image is basically just a multi-dimensional array
+         *   and the dimensions determine the size, shape, and number of pixels
+         *   in the image.  If left undefined, dimensions defaults to the
+         *   two-dimensional square [512, 512].  For standard two-dimensional
+         *   images, think of this as [width, height]
+         *
+         *   There must be at least one dimension but there is no upper limit on
+         *   the number of dimensions an image may have.  Each dimension must
+         *   have at least one pixel but there is no upper limit on the number
+         *   of pixels a dimension may have.
+         *
+         *   For example a really long line could be defined with the dimensions
+         *   [9999999999] or a 3D box could be defined with the dimensions
+         *   [24, 37, 42] or a 4D hypercube could be defined with the dimensions
+         *   [21, 21, 21, 21]
+         *
+         *   This API standardizes on the term `pixel` to mean an element of a
+         *   multi-dimensional array even when there are more dimensions and a
+         *   term like voxel might be more technically correct.
+         *
+         *   Also note that the total size and number of dimensions can have a
+         *   huge impact on memory usage.
+         *
+         * * `littleEndian`: This boolean option defaults to false and it only
+         *   matters when there are channels of mixed types and at least one of
+         *   them is bigger than 8 bits.  In most common uses, it can be
+         *   ignored.
+         *
+         * The internal data structure of Y.Composite.Image is an ArrayBuffer,
+         * which is like a single-dimensional array of binary numbers.  The
+         * dimensions and channels are sequentially stacked behind each other.
+         * For example, for an image with three channels and dimensions [2, 3]
+         * the binary data is arranged like this:
+         *
+         * * pixel 0 at (0, 0) channel 0
+         * * pixel 0 at (0, 0) channel 1
+         * * pixel 0 at (0, 0) channel 2
+         * * pixel 1 at (1, 0) channel 0
+         * * pixel 1 at (1, 0) channel 1
+         * * pixel 1 at (1, 0) channel 2
+         * * pixel 2 at (0, 1) channel 0
+         * * pixel 2 at (0, 1) channel 1
+         * * pixel 2 at (0, 1) channel 2
+         * * pixel 3 at (1, 1) channel 0
+         * * pixel 3 at (1, 1) channel 1
+         * * pixel 3 at (1, 1) channel 2
+         * * pixel 4 at (0, 2) channel 0
+         * * pixel 4 at (0, 2) channel 1
+         * * pixel 4 at (0, 2) channel 2
+         * * pixel 5 at (1, 2) channel 0
+         * * pixel 5 at (1, 2) channel 1
+         * * pixel 5 at (1, 2) channel 2
+         *
+         * Notice that there are two ways to identify a pixel.  A pixel can be
+         * identified by its dimensional location or by its unique array index.
+         * This API refers to these values as pixelLocation and pixelIndex.  In
+         * some places the API may accept them interchangeably.  Accessing
+         * pixels by pixelIndex is generally more efficient.
+         * @class Image
+         * @constructor
+         * @namespace Composite
+         * @param {Object} [configuration] A configuration object with the
+         * following optional parameters: `channels`, `data`, `dimensions`,
+         * `littleEndian`
          */
-        channels: {
-            value: [{
-                maximum: 255,
-                minimum: 0,
-                mode: 'i'
-            }, {
-                maximum: 255,
-                minimum: 0,
-                mode: 'i'
-            }, {
-                maximum: 255,
-                minimum: 0,
-                mode: 'i'
-            }, {
-                maximum: 1,
-                minimum: 0,
-                mode: 'f'
-            }],
-            writeOnce: 'initOnly'
-        },
-        /**
-         * Defines the pixel dimensions of the image.
-         *
-         * An image can have as many dimensions as needed.  2 dimensions is most
-         * common.  Usually the first dimension is width and the second is
-         * height.
-         *
-         * @attribute dimensions
-         * @default [512, 512]
-         * @type Array
-         * @writeOnce
-         */
-        dimensions: {
-            value: [
-                512,
-                512
-            ],
-            writeOnce: 'initOnly'
-        },
-        /**
-         * Contains the number of pixels in the image.
-         * @attribute pixelCount
-         * @readOnly
-         * @type Number
-         */
-        pixelCount: {
-            readOnly: true
-        }
-    };
+        _Class = function (configuration) {
+            configuration = configuration || {};
 
-    _class.NAME = 'Composite-Image';
-
-    Y.extend(_class, Y.Base, {
-        /**
-         * Clears the image.
-         * This method is chainable.
-         * @method clear
-         * @chainable
-         */
-        clear: function () {
             var me = this,
-                pixelData = [];
-            
-            pixelData.length = me._pixelData.length;
-            
-            me._pixelData = pixelData;
 
-            return me;
-        },
-        /**
-         * Returns a new identical image.
-         * @method clone
-         * @return {Object}
-         */
-        clone: function () {
-            var me = this,
-                other = new _class({
-                    channels: me.get('channels'),
-                    dimensions: me.get('dimensions')
-                });
+                channels = _freeze((configuration.channels || _Class.defaultChannels).slice()),
+                channelOffsets = [],
+                dataType,
+                dimensions = _freeze((configuration.dimensions || _Class.defaultDimensions).slice()),
+                pixelCount = _reduce(dimensions, 1, function (pixelCount, dimension) {
+                    return pixelCount * dimension;
+                }),
+                pixelSize = _reduce(channels, 0, function (pixelSize, channelDataType) {
+                    channelOffsets.push(pixelSize);
 
-            other._pixelData = me._pixelData.slice();
-
-            return other;
-        },
-        /**
-         * Invokes a function for each pixel in the image.
-         * This method is chainable.
-         * @method eachPixel
-         * @chainable
-         * @param {Object} pixelParameters This object contains the following
-         * members
-         * <ul>
-         *     <li>
-         *         ctx - Object - Optional scope with which to call fn.
-         *     </li>
-         *     <li>
-         *         fn - Function - This function is invoked once per pixel.
-         *         This function will receive an object with the following
-         *         parameters
-         *         <ul>
-         *             <li>
-         *                 at - Array of image pixel coordinates.
-         *             </li>
-         *             <li>
-         *                 chs - Array of image channel definitions.
-         *             </li>
-         *             <li>
-         *                 dims - Array of image dimension lengths.
-         *             </li>
-         *             <li>
-         *                 img - Reference to this image.
-         *             </li>
-         *             <li>
-         *                 pch - Array of pixel channel indices.
-         *             </li>
-         *             <li>
-         *                 pcnt - Number of pixels in this image.
-         *             </li>
-         *             <li>
-         *                 pix - Integer index of this pixel.
-         *             </li>
-         *             <li>
-         *                 pxl - Array of pixel channel values.
-         *             </li>
-         *         </ul>
-         *         If this function returns true, eachPixel will stop and ignore
-         *         the remaining pixels.
-         *     </li>
-         *     <li>
-         *         pch - Array - Optional array of channel indexes.  If
-         *         undefined, pixels will contain all channels in order.
-         *     </li>
-         * </ul>
-         * @param {Function} callbackFunction This function is invoked after the
-         * function has been invoked for each pixel in the image.  This function
-         * will receive an object with the following members
-         * <ul>
-         *     <li>
-         *         chs - Array of image channel definitions.
-         *     </li>
-         *     <li>
-         *         dims - Array of image dimension lengths.
-         *     </li>
-         *     <li>
-         *         img - Reference to this image.
-         *     </li>
-         *     <li>
-         *         pcnt - Number of pixels in this image.
-         *     </li>
-         *     <li>
-         *         pix - The last integer pixel index processed.  If eachPixel
-         *         was not stopped early, this value should be equal to pcnt and
-         *         not a valid pixel index.
-         *     </li>
-         * </ul>
-         * @param {Object} contextObject Optional scope with which to call the
-         * callback function.
-         */
-        eachPixel: function (pixelParameters, callbackFunction, contextObject) {
-            var ctx = pixelParameters.ctx,
-                fn = pixelParameters.fn,
-                me = this,
-                pixelChannels = pixelParameters.pch,
-                pixelCount = me.get('pixelCount'),
-            
-                channels = Y.clone(me.get('channels')),
-                dimensions = me.get('dimensions').slice(),
-                getAt = _getGetAtFunction.apply(me, dimensions),
-
-                thisPixel;
-
-            thisPixel = function (pixelIndex) {
-                if (pixelIndex >= pixelCount) {
-                    callbackFunction.call(contextObject, {
-                        chs: channels,
-                        dims: dimensions,
-                        img: this,
-                        pcnt: pixelCount,
-                        pix: pixelIndex
-                    });
-                    return;
-                }
-
-                Y.later(0, this, function () {
-                    var at = getAt(pixelIndex),
-                        me = this;
-
-                    if (fn.call(ctx, {
-                        at: at,
-                        chs: channels,
-                        dims: dimensions,
-                        img: me,
-                        pch: pixelChannels,
-                        pcnt: pixelCount,
-                        pix: pixelIndex,
-                        pxl: me.getPixel(at, pixelChannels)
-                    })) {
-                        callbackFunction.call(contextObject, {
-                            chs: channels,
-                            dims: dimensions,
-                            img: me,
-                            pcnt: pixelCount,
-                            pix: pixelIndex
-                        });
-                    } else {
-                        thisPixel.call(me, pixelIndex + 1);
-                    }
-                });
-            };
-
-            thisPixel.call(me, 0);
-            return me;
-        },
-        /**
-         * Converts a pixel index to an at array.
-         * @method getAt
-         * @param {Number} pixelIndex
-         * @return {Array}
-         */
-        getAt: function (pixelIndex) {
-            return _getGetAtFunction.apply(this, this.get('dimensions'))(pixelIndex);
-        },
-        /**
-         * Accessor method to get a pixel from the image.
-         * @method getPixel
-         * @param {Array} at Array containing pixel coordinates.  The length of
-         * this array should match the number of dimensions of the image.
-         * @param {Array} pixelChannels Optional array of channel indexes.  If
-         * undefined, returned pixel will contain all channels in order.
-         * @return {Array}
-         */
-        getPixel: function (at, pixelChannels) {
-            var me = this,
-                pixelData = me._pixelData,
-                pixelDataIndex,
-
-                channelsLength = me.get('channels.length');
-
-            pixelDataIndex = _getGetPixelIndexFunction.apply(me, me.get('dimensions'))(at) * channelsLength;
-
-            if (pixelChannels) {
-                return (function (pixelData, pixelDataIndex) {
-                    var i,
-                        pixel = [],
-                        pixelChannelsLength;
-
-                    for (i = 0, pixelChannelsLength = pixelChannels.length; i < pixelChannelsLength; i += 1) {
-                        pixel[i] = pixelData[pixelDataIndex + pixelChannels[i]];
+                    if (!dataType && dataType !== null) {
+                        dataType = channelDataType;
+                    } else if (dataType && dataType !== channelDataType) {
+                        dataType = null;
                     }
 
-                    return pixel;
-                }(pixelData, pixelDataIndex));
-            }
+                    return pixelSize + (+channelDataType.substr(1)) / 8;
+                }),
 
-            return pixelData.slice(pixelDataIndex, pixelDataIndex + channelsLength);
-        },
-        /**
-         * Converts an at array to a pixel index.
-         * @method getPixelIndex
-         * @param {Array} at
-         * @return {Number}
-         */
-        getPixelIndex: function (at) {
-            return _getGetPixelIndexFunction.apply(this, this.get('dimensions'))(at);
-        },
-        initializer: function () {
-            var me = this,
+                configurationData = configuration.data,
+                data;
 
-                channels = me.get('channels'),
-                dimensions = me.get('dimensions'),
-                pixelCount = 1,
-                pixelData = [];
+            _defineProperties(me, {
+                /**
+                 * The channels property is an array of strings representing
+                 * each channel's data type.  The number of channels in the
+                 * image is determined by the length of this array.  This is a
+                 * read only copy of the channels array that was passed to the
+                 * constructor.
+                 * @property channels
+                 * @final
+                 * @type [String]
+                 */
+                channels: {
+                    enumerable: true,
+                    value: channels
+                },
+                /**
+                 * The dimensions property is an array of numbers representing
+                 * the length of each dimension.  The number of dimensions in
+                 * the image is determined by the length of this array.  This is
+                 * a read only copy of the dimensions array that was passed to
+                 * the constructor.
+                 * @property dimensions
+                 * @final
+                 * @type [Number]
+                 */
+                dimensions: {
+                    enumerable: true,
+                    value: dimensions
+                },
+                /**
+                 * The total number of pixels in the image.
+                 * @property pixelCount
+                 * @final
+                 * @type Number
+                 */
+                pixelCount: {
+                    enumberable: true,
+                    value: pixelCount
+                },
+                /**
+                 * The _channelOffsets property is a read only array of numbers
+                 * describing the byte offset of each specific channel from the
+                 * beginning of a pixel.
+                 * @property _channelOffsets
+                 * @final
+                 * @protected
+                 * @type [Number]
+                 */
+                _channelOffsets: {
+                    enumerable: true,
+                    value: _freeze(channelOffsets)
+                },
+                /**
+                 * The ArrayBuffer that stores the image's data.
+                 * @property _data
+                 * @protected
+                 * @type ArrayBuffer
+                 */
+                _data: {
+                    enumerable: true,
+                    get: function () {
+                        return data;
+                    },
+                    set: function (newData) {
+                        data = newData;
 
-            if (!channels.length) {
-                throw 'Image must have at least one channel.';
-            }
-
-            if (!dimensions.length) {
-                throw 'Image must have at least one dimension.';
-            }
-
-            Y.each(channels, function (channel) {
-                channel.blackValue = channel.blackValue || 0;
-                channel.whiteValue = channel.whiteValue || (channel.mode === 'i' ? 255 : 1);
+                        /**
+                         * The ArrayBufferView used to access the image's data.
+                         * If the image's channel types are homogeneous, this
+                         * will be an instance of the specific ArrayBufferView
+                         * class that matches the data type.  This will be an
+                         * instance of DataView if the image's channel types are
+                         * mixed.
+                         * @property _dataView
+                         * @protected
+                         * @type ArrayBufferView
+                         */
+                        me._dataView = _Class._getDataView(data, dataType);
+                    }
+                },
+                /**
+                 * If the image's channel types are homogeneous, this will be
+                 * the common channel type.  This will be null if the image's
+                 * channel types are mixed.
+                 * @property _dataType
+                 * @final
+                 * @protected
+                 * @type String
+                 */
+                _dataType: {
+                    enumerable: true,
+                    value: dataType
+                },
+                /**
+                 * The size of each pixel in bytes.
+                 * @property _pixelSize
+                 * @final
+                 * @protected
+                 * @type Number
+                 */
+                _pixelSize: {
+                    enumerable: true,
+                    value: pixelSize
+                }
             });
 
-            Y.each(dimensions, function (dimension) {
-                if (dimension <= 0) {
-                    throw 'Dimension must have at least 1 pixel.';
-                }
+            /**
+             * Returns the pixel index for the given dimension indices.
+             * @method _getPixelIndex
+             * @param {Number} dimensionIndices* The number of arguments must
+             * match the number of dimensions in the image.
+             * @protected
+             * @return {Number}
+             */
+            me._getPixelIndex = _Class._getGetPixelIndexMethod.apply(me, dimensions);
 
-                pixelCount *= dimension;
-            });
+            /**
+             * Returns the value from a specific channel of a specific pixel.
+             * @method _getValue
+             * @param {Number} pixelIndex
+             * @param {Number} channelIndex
+             * @protected
+             * @return {Number}
+             */
+            me._getValue = _Class._getGetValueMethod(channelOffsets, pixelSize, dataType);
 
-            me._set('pixelCount', pixelCount);
+            /**
+             * Sets the value of a specific channel of a specific pixel.
+             * @method _setValue
+             * @chainable
+             * @param {Number} pixelIndex
+             * @param {Number} channelIndex
+             * @param {Number} value
+             * @protected
+             */
+            me._setValue = _Class._getSetValueMethod(channelOffsets, pixelSize, dataType);
 
-            pixelData.length = pixelCount * channels.length;
-            
-            this._pixelData = pixelData;
-        },
-        /**
-         * Accessor method to set a pixel in the image.
-         * This method is chainable.
-         * @method setPixel
-         * @chainable
-         * @param {Array} at Array containing pixel coordinates.  The length of
-         * this array should match the number of dimensions of the image.
-         * @param {Array} pixel Array containing the pixel's channel values.
-         * @param {Array} pixelChannels Optional array of channel indexes.  If
-         * undefined, the given pixel is assumed to contain all channels in
-         * order.
-         */
-        setPixel: function (at, pixel, pixelChannels) {
-            var i,
-                me = this,
-                pixelChannelsLength,
-                pixelData = me._pixelData,
-                pixelDataIndex,
-
-                channels = me.get('channels'),
-                channelsLength = channels.length;
-
-            pixelDataIndex = _getGetPixelIndexFunction.apply(me, me.get('dimensions'))(at) * channelsLength;
-
-            if (pixelChannels) {
-                for (i = 0, pixelChannelsLength = pixelChannels.length; i < pixelChannelsLength; i += 1) {
-                    pixelData[pixelDataIndex + pixelChannels[i]] = _class.conformChannelValue(pixel[i], channels[pixelChannels[i]]);
-                }
+            if (me.validate(configurationData)) {
+                me._data = configurationData;
             } else {
-                for (i = 0; i < channelsLength; i += 1) {
-                    pixelData[pixelDataIndex + i] = _class.conformChannelValue(pixel[i], channels[i]);
+                me.clear();
+
+                if (_isArray(configurationData)) {
+                    me.setDataArray(configurationData);
                 }
             }
 
-            return this;
-        }
-    }, {
+            /**
+             * The boolean value of the littleEndian parameter that will be
+             * passed to a DataView's accessor methods.
+             * @property _littleEndian
+             * @final
+             * @protected
+             * @type Boolean
+             */
+            me._littleEndian = !!configuration.littleEndian;
+        };
+
+    Y.namespace('Composite').Image = Y.mix(_Class, {
         /**
-         * Conforms the given value to the channel's specifications.
-         * @method conformChannelValue
-         * @param {Number} value
-         * @param {Object} channel
-         * @return {Number}
+         * A static list of all the valid channel data types.
+         * @property dataTypes
+         * @final
+         * @static
+         * @type Object
+         */
+        dataTypes: {
+            f32: _string_f32,
+            f64: _string_f64,
+            s16: _string_s16,
+            s32: _string_s32,
+            s8: _string_s8,
+            u16: _string_u16,
+            u32: _string_u32,
+            u8: _string_u8
+        },
+        /**
+         * The channels value to use when custom channels are not passed in to
+         * the constructor.
+         * @property defaultChannels
+         * @static
+         * @type [String]
+         */
+        defaultChannels: [
+            _string_u8,
+            _string_u8,
+            _string_u8,
+            _string_u8
+        ],
+        /**
+         * The dimensions value to use when custom dimensions are not passed in
+         * to the constructor.
+         * @property defaultDimensions
+         * @static
+         * @type [Number]
+         */
+        defaultDimensions: [
+            512,
+            512
+        ],
+        prototype: {
+            /**
+             * Reset all channel values of all pixels to zero.
+             * @method clear
+             * @chainable
+             */
+            clear: function () {
+                var me = this;
+
+                me._data = new _ArrayBuffer(me.pixelCount * me._pixelSize);
+
+                return me;
+            },
+            /**
+             * Returns an exact copy of this image.
+             * @method clone
+             * @return {Composite.Image}
+             */
+            clone: function () {
+                var me = this;
+
+                return new _Class({
+                    channels: me.channels,
+                    data: me._data.slice(),
+                    dimensions: me.dimensions,
+                    littleEndian: me._littleEndian
+                });
+            },
+            /**
+             * Call an iteration function for each pixel index in the image.
+             * This method is more efficient than `eachPixelLocation` but it
+             * does not provide pixel locations.
+             * @method eachPixelIndex
+             * @chainable
+             * @param {Function} iteractionFunction The iteration function
+             * receives one argument:
+             * <dl>
+             *     <dt>
+             *         pixelIndex
+             *     </dt>
+             *     <dd>
+             *         The pixel's unique index within the image.
+             *     </dd>
+             * </dl>
+             */
+            eachPixelIndex: function (iterationFunction) {
+                var pixelCount = this.pixelCount,
+                    pixelIndex = 0;
+
+                for (; pixelIndex < pixelCount; pixelIndex += 1) {
+                    iterationFunction(pixelIndex);
+                }
+
+                return this;
+            },
+            /**
+             * Call an iteration function for each pixel location in the image.
+             * @method eachPixelLocation
+             * @chainable
+             * @param {Function} iterationFunction The iteration function
+             * receives two arguments:
+             * <dl>
+             *     <dt>
+             *         pixelLocation
+             *     <dt>
+             *     <dd>
+             *         An array of dimension indicies.  The length of this array
+             *         will match the number of dimensions in the image.
+             *     </dd>
+             *     <dt>
+             *         pixelIndex
+             *     </dt>
+             *     <dd>
+             *         The pixel's unique index within the image.
+             *     </dd>
+             * </dl>
+             */
+            eachPixelLocation: function (iterationFunction) {
+                var dimensions = this.dimensions,
+
+                    dimensionCount = dimensions.length,
+                    dimensionIndex = 0,
+                    pixelCount = this.pixelCount,
+                    pixelIndex = 0,
+                    pixelLocation = [];
+
+                for (; dimensionIndex < dimensionCount; dimensionIndex += 1) {
+                    pixelLocation[dimensionIndex] = 0;
+                }
+
+                for (; pixelIndex < pixelCount; pixelIndex += 1) {
+                    iterationFunction(pixelLocation.slice(), pixelIndex);
+
+                    for (dimensionIndex = 0; dimensionIndex < dimensionCount; dimensionIndex += 1) {
+                        pixelLocation[dimensionIndex] += 1;
+
+                        if (pixelLocation[dimensionIndex] < dimensions[dimensionIndex]) {
+                            break;
+                        }
+
+                        pixelLocation[dimensionIndex] = 0;
+                    }
+                }
+
+                return this;
+            },
+            /**
+             * Returns a copy of the image data as a regular JavaScript array.
+             * @method getDataArray
+             * @return {[Number]}
+             */
+            getDataArray: function () {
+                var me = this,
+
+                    dataView = me._dataView;
+
+                return dataView instanceof _DataView ? (function () {
+                    var channelCount = me.channels.length,
+                        dataArray = [];
+
+                    me.eachPixelIndex(function (pixelIndex) {
+                        for (var channelIndex = 0; channelIndex < channelCount; channelIndex += 1) {
+                            dataArray.push(me.getValue(pixelIndex, channelIndex));
+                        }
+                    });
+
+                    return dataArray;
+                }()) : _YArray(dataView);
+            },
+            /**
+             * Returns the pixel index for the given dimension indices.
+             * @method getPixelIndex
+             * @param {Number|[Number]} dimensionIndices* The dimensionIndices
+             * may be provided either as positional arguments or as a single
+             * array.  The number of indices must match the number of dimensions
+             * in the image.
+             * @return {Number}
+             */
+            getPixelIndex: function () {
+                return this._getPixelIndex.apply(this, _flatten(arguments));
+            },
+            /**
+             * Returns an array of channel values for a specific pixel.
+             * @method getPixelValues
+             * @param {Number|[Number]} pixelIndexOrLocation This may be either
+             * the pixel's unique index within the image or an array of
+             * dimension indicies.  The length of this array must match the
+             * number of dimensions in the image.
+             * @param {[Number]} [channelIndices] By default, all channel values
+             * are returned in order.  Specific channels may be excluded,
+             * rearranged, or duplicated by passing in an array of channel
+             * indices.  For example, if the image has four channels, the array
+             * [3, 2, 1, 0] would retrieve them in reverse order and the array
+             * [0, 1, 2] would retrieve the first three channels and ignore the
+             * fourth.
+             * @return {[Number]}
+             */
+            getPixelValues: function (pixelIndexOrLocation, channelIndices) {
+                var me = this;
+
+                return _map(channelIndices || me.channels, channelIndices ? function (channelIndex) {
+                    return me.getValue(pixelIndexOrLocation, channelIndex);
+                } : function (channelDataType, channelIndex) {
+                    return me.getValue(pixelIndexOrLocation, channelIndex);
+                });
+            },
+            /**
+             * Returns the value from a specific channel of a specific pixel.
+             * @method getValue
+             * @param {Number|[Number]} pixelIndexOrLocation This may be either
+             * the pixel's unique index within the image or an array of
+             * dimension indicies.  The length of this array must match the
+             * number of dimensions in the image.
+             * @param {Number} channelIndex The specific channel index to get.
+             * @return {Number}
+             */
+            getValue: function (pixelIndexOrLocation, channelIndex) {
+                return this._getValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex);
+            },
+            /**
+             * Sets the image data from a regular JavaScript array.  Nothing is
+             * done to validate the data or the size of the array.  An invalid
+             * array will probably yield undesired results.
+             * @method setDataArray
+             * @chainable
+             * @param {[Number]} dataArray
+             */
+            setDataArray: function (dataArray) {
+                var me = this,
+
+                    channelCount = me.channels.length,
+                    valueIndex = 0;
+
+                return me.eachPixelIndex(function (pixelIndex) {
+                    for (var channelIndex = 0; channelIndex < channelCount; channelIndex += 1) {
+                        me.setValue(pixelIndex, channelIndex, dataArray[valueIndex]);
+                        valueIndex += 1;
+                    }
+                });
+            },
+            /**
+             * Set channel values for a specific pixel.
+             * @method setPixelValues
+             * @chainable
+             * @param {Number|[Number]} pixelIndexOrLocation This may be either
+             * the pixel's unique index within the image or an array of
+             * dimension indicies.  The length of this array must match the
+             * number of dimensions in the image.
+             * @param {[Number]} pixelValues The values to set.
+             * @param {[Number]} [channelIndices] By default, all channels are
+             * set in order.  Specific channels may be excluded or rearranged by
+             * passing in an array of channel indices.  For example, if the
+             * image has four channels, the array [3, 2, 1, 0] would set them in
+             * reverse order and the array [2, 3] would set the third and fourth
+             * channels but ignore the first two.  If a channel is duplicated in
+             * this array, later values will overwrite previous values.
+             */
+            setPixelValues: function (pixelIndexOrLocation, pixelValues, channelIndices) {
+                var me = this;
+
+                _each(channelIndices || pixelValues, channelIndices ? function (channelIndex, pixelValueIndex) {
+                    me.setValue(pixelIndexOrLocation, channelIndex, pixelValues[pixelValueIndex]);
+                } : function (pixelValue, channelIndex) {
+                    me.setValue(pixelIndexOrLocation, channelIndex, pixelValue);
+                });
+
+                return me;
+            },
+            /**
+             * Sets the value of a specific channel of a specific pixel.
+             * @method setValue
+             * @chainable
+             * @param {Number|[Number]} pixelIndexOrLocation This may be either
+             * the pixel's unique index within the image or an array of
+             * dimension indicies.  The length of this array must match the
+             * number of dimensions in the image.
+             * @param {Number} channelIndex The specific channel index to set.
+             * @param {Number} value The value to set.
+             */
+            setValue: function (pixelIndexOrLocation, channelIndex, value) {
+                return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value);
+            },
+            /**
+             * Returns a serializable object.  This object can be passed to the
+             * Y.Composite.Image constructor to recreate this image.
+             * @method toJSON
+             * @return {Object}
+             */
+            toJSON: function () {
+                var me = this,
+
+                    littleEndian = me._littleEndian,
+                    object = {
+                        channels: me.channels,
+                        data: me.getDataArray(),
+                        dimensions: me.dimensions
+                    };
+
+                if (littleEndian) {
+                    object.littleEndian = littleEndian;
+                }
+
+                return object;
+            },
+            /**
+             * Returns a string describing this image.
+             * @method toString
+             * @return {String}
+             */
+            toString: function () {
+                return 'image[' + this.dimensions.join('x') + '] ' + this.channels;
+            },
+            /**
+             * Returns true if the ArrayBuffer has the correct byteLength for
+             * this image.
+             * @method validate
+             * @param {ArrayBuffer} [data] The ArrayBuffer to test.  If left
+             * undefined, this image's internal ArrayBuffer is used.
+             * @return {Boolean}
+             */
+            validate: function (data) {
+                data = data || this._data;
+                return data instanceof _ArrayBuffer && data.byteLength === this.pixelCount * this._pixelSize;
+            }
+        },
+        /**
+         * Returns the correct ArrayBufferView object for the given ArrayBuffer
+         * and dataType.
+         * @method _getDataView
+         * @param {ArrayBuffer} data
+         * @param {String} dataType
+         * @protected
+         * @return {ArrayBufferView}
          * @static
          */
-        conformChannelValue: function (value, channel) {
-            value = +value || 0;
-
-            if (channel.maximum) {
-                value = Math.min(value, channel.maximum);
+        _getDataView: function (data, dataType) {
+            return new (_Class._getDataViewConstructor(dataType))(data);
+        },
+        /**
+         * Returns the correct ArrayBufferView constructor function for the
+         * given dataType.
+         * @method _getDataViewConstructor
+         * @param {String} dataType
+         * @protected
+         * @return {Function}
+         * @static
+         */
+        _getDataViewConstructor: _cached(function (dataType) {
+            switch (dataType) {
+                case _string_f32:
+                    return Float32Array;
+                case _string_f64:
+                    return Float64Array;
+                case _string_s16:
+                    return Int16Array;
+                case _string_s32:
+                    return Int32Array;
+                case _string_s8:
+                    return Int8Array;
+                case _string_u16:
+                    return Uint16Array;
+                case _string_u32:
+                    return Uint32Array;
+                case _string_u8:
+                    return Uint8ClampedArray;
             }
 
-            if (channel.minimum) {
-                value = Math.max(value, channel.minimum);
-            }
+            return _DataView;
+        }),
+        /**
+         * Returns a getPixelIndex function that works with the given image
+         * dimensions.
+         * @method _getGetPixelIndexMethod
+         * @param {Number} dimensionLength*
+         * @protected
+         * @return {Function}
+         * @static
+         */
+        _getGetPixelIndexMethod: _cached(function () {
+            var dimensionLengths = arguments,
 
-            if (channel.mode === 'i') {
-                value = Math.round(value);
-            }
+                dimensionCount = dimensionLengths.length;
 
-            return value;
-        }
-    });
+            return _cached(function () {
+                var dimensionIndices = arguments,
+                    i,
+                    index = 0,
+                    j,
+                    offset;
 
-    /**
-     * Call this function with the length of each dimension followed by the
-     * number of channels.  Returns a function which accepts a pixel index and
-     * returns an at array.
-     * @method _getGetAtFunction
-     * @private
-     * @return Function
-     */
-    _getGetAtFunction = Y.cached(function () {
-        var dimensionLengths = arguments,
-            floor = Math.floor,
+                for (i = 0; i < dimensionCount; i += 1) {
+                    offset = dimensionIndices[i];
 
-            dimensionsLength = dimensionLengths.length;
+                    for (j = i - 1; j >= 0; j -= 1) {
+                        offset *= dimensionLengths[j];
+                    }
 
-        return Y.cached(function (pixelIndex) {
-            var at = [
-                    pixelIndex % dimensionLengths[0]
-                ],
-                i,
-                j,
-                product;
-
-            for (i = 1; i < dimensionsLength; i += 1) {
-                product = 1;
-
-                for (j = 0; j < i; j += 1) {
-                    product *= dimensionLengths[j];
+                    index += offset;
                 }
 
-                at[i] = floor(pixelIndex / product) % i;
-            }
+                return index;
+            });
+        }),
+        /**
+         * Returns a getValue function that works with the given channelOffsets,
+         * pixelSize, and dataType.
+         * @method _getGetValueMethod
+         * @param {[Number]} channelOffsets
+         * @param {Number} pixelSize
+         * @param {String} dataType
+         * @protected
+         * @return {Function}
+         * @static
+         */
+        _getGetValueMethod: _cached(function (channelOffsets, pixelSize, dataType) {
+            var channelCount = channelOffsets.length;
 
-            return at;
-        });
-    });
+            return dataType ? function (pixelIndex, channelIndex) {
+                return this._dataView[pixelIndex * channelCount + channelIndex];
+            } : function (pixelIndex, channelIndex) {
+                return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian);
+            };
+        }),
+        /**
+         * Returns a setValue function that works with the given channelOffsets,
+         * pixelSize, and dataType.
+         * @method _getSetValueMethod
+         * @param {[Number]} channelOffsets
+         * @param {Number} pixelSize
+         * @param {String} dataType
+         * @protected
+         * @return {Function}
+         * @static
+         */
+        _getSetValueMethod: _cached(function (channelOffsets, pixelSize, dataType) {
+            var channelCount = channelOffsets.length;
 
-    /**
-     * Call this function with the length of each dimension.
-     * Returns a function which accepts dimension indices and returns a pixel
-     * index.
-     * @method _getGetPixelIndexFunction
-     * @private
-     * @return Function
-     */
-    _getGetPixelIndexFunction = Y.cached(function () {
-        var dimensionLengths = arguments,
-
-            dimensionsLength = dimensionLengths.length;
-
-        return Y.cached(function () {
-            var dimensionIndices = arguments,
-                i,
-                index = 0,
-                j,
-                offset;
-
-            for (i = 0; i < dimensionsLength; i += 1) {
-                offset = dimensionIndices[i];
-
-                for (j = i - 1; j > 0; j -= 1) {
-                    offset *= dimensionLengths[j];
-                }
-
-                index += offset;
-            }
-
-            return index;
-        });
-    });
-
-    _namespace.Image = _class;
+            return dataType ? function (pixelIndex, channelIndex, value) {
+                this._dataView[pixelIndex * channelCount + channelIndex] = value;
+                return this;
+            } : function (pixelIndex, channelIndex, value) {
+                var me = this;
+                me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian);
+                return me;
+            };
+        }),
+        /**
+         * Returns a type name that matches a DataView accessor method for
+         * the given dataType.
+         * @method _getTypeName
+         * @param {String} dataType
+         * @protected
+         * @return {String}
+         * @static
+         */
+        _getTypeName: _cached(function (dataType) {
+            var type = dataType.charAt(0);
+            return (type === 'f' ? 'Float' : (type === 's' ? 'Int' : 'Uint')) + dataType.substr(1);
+        })
+    }, true);
 }(Y));
 
-
-}, 'gallery-2012.06.20-20-07' ,{requires:['base'], skinnable:false});
+}, 'gallery-2012.12.12-21-11', {"requires": ["array-extras"]});

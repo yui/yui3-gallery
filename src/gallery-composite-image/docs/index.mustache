@@ -1,0 +1,185 @@
+<div class="intro">
+    <p>
+        Y.Composite.Image is an interface for manipulating multi-dimensional arrays of uncompressed binary data.  It is primarily designed for working with images and its internal data is compatible with
+        the RGBA image format used by the canvas context2d object.  Above and beyond two-dimensional images, Y.Composite.Image is theoretically capable of supporting unlimited pixel dimensions and unlimited
+        data channels.  This opens up a wide range of potential uses including working with compositing layers, animation or video, or voxel data sets like those used for 3D rendering simulations or a world
+        map in games like Minecraft.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Image Concepts
+</h2>
+
+<h3>
+    Dimensions
+</h3>
+
+<p>
+    An image is basically just a multi-dimensional array and the dimensions determine the size, shape, and number of pixels in the image.  If left undefined, dimensions defaults to the two-dimensional
+    square [512, 512].  For standard two-dimensional images, think of this as [width, height]
+</p>
+
+<p>
+    There must be at least one dimension but there is no upper limit on the number of dimensions an image may have.  Each dimension must have at least one pixel but there is no upper limit on the number of
+    pixels a dimension may have.
+</p>
+
+<p>
+    For example a really long line could be defined with the dimensions [9999999999] or a 3D box could be defined with the dimensions [24, 37, 42] or a 4D hypercube could be defined with the dimensions
+    [21, 21, 21, 21]
+</p>
+
+<p>
+    This API standardizes on the term `pixel` to mean an element of a multi-dimensional array even when there are more dimensions and a term like voxel might be more technically correct.
+</p>
+
+<p>
+    Also note that the total size and number of dimensions can have a huge impact on memory usage.
+</p>
+
+<h3>
+    Channels
+</h3>
+
+<p>
+    Every pixel within an image may contain one or more values.  These are called channels.  A default image has four channels referred to as RGBA.  The first channel stores the red component of the
+    pixel's color, the second channel stores the green component, then blue is third, and the alpha channel is last.  These channels are all unsigned 8-bit integers.  In other words the value can be an
+    integer from 0 to 255.
+</p>
+
+<p>
+    When creating a new image, these default channels may be used or custom channels may be defined.  There must be at least one channel but there is no upper limit on the number of channels an image may
+    have.  Channels may also be a data type other than unsigned 8-bit integers; they may be any numerical type used by typed arrays.
+</p>
+
+<p>
+    To specify custom channels, pass in an array.  The length of the array will determine the number of channels and the value of each item in the array will denote the data type of that channel.  The
+    accepted types are:
+</p>
+
+<ul>
+    <li>
+        'f32' - 32-bit floating point number
+    </li>
+    <li>
+        'f64' - 64-bit floating point number
+    </li>
+    <li>
+        's16' - Signed 16-bit integer
+    </li>
+    <li>
+        's32' - Signed 32-bit integer
+    </li>
+    <li>
+        's8' - Signed 8-bit integer
+    </li>
+    <li>
+        'u16' - Unsigned 16-bit integer
+    </li>
+    <li>
+        'u32' - Unsigned 32-bit integer
+    </li>
+    <li>
+        'u8' - Unsigned 8-bit integer
+    </li>
+</ul>
+
+<p>
+    If left undefined, channels is set to ['u8', 'u8', 'u8', 'u8']
+</p>
+
+<p>
+    It is permitted to use channels of different types such as ['u8', 's16', 'f64', 's8', 'f32'] but due to technical and boring reasons including byte alignment and endianness this is much less efficient
+    than using homogeneous channel types.
+</p>
+
+<p>
+    Also note that the total byte size and number of channels can have a huge impact on memory usage.
+</p>
+
+<h3>
+    Image Data
+</h3>
+
+<p>
+    Y.Composite.Image internally stores and interacts with its data by using typed arrays.  It uses some relatively new features of typed arrays including DataView and Uint8ClampedArray.  There is no
+    support for older browsers without these features.
+</p>
+
+<p>
+    The internal data structure of Y.Composite.Image is an ArrayBuffer, which is like a single-dimensional array of binary numbers.  The dimensions and channels are sequentially stacked behind each
+    other.  For example, for an image with three channels and dimensions [2, 3] the binary data is arranged like this:
+</p>
+
+<ul>
+    <li>
+        pixel 0 at (0, 0) channel 0
+    </li>
+    <li>
+        pixel 0 at (0, 0) channel 1
+    </li>
+    <li>
+        pixel 0 at (0, 0) channel 2
+    </li>
+    <li>
+        pixel 1 at (1, 0) channel 0
+    </li>
+    <li>
+        pixel 1 at (1, 0) channel 1
+    </li>
+    <li>
+        pixel 1 at (1, 0) channel 2
+    </li>
+    <li>
+        pixel 2 at (0, 1) channel 0
+    </li>
+    <li>
+        pixel 2 at (0, 1) channel 1
+    </li>
+    <li>
+        pixel 2 at (0, 1) channel 2
+    </li>
+    <li>
+        pixel 3 at (1, 1) channel 0
+    </li>
+    <li>
+        pixel 3 at (1, 1) channel 1
+    </li>
+    <li>
+        pixel 3 at (1, 1) channel 2
+    </li>
+    <li>
+        pixel 4 at (0, 2) channel 0
+    </li>
+    <li>
+        pixel 4 at (0, 2) channel 1
+    </li>
+    <li>
+        pixel 4 at (0, 2) channel 2
+    </li>
+    <li>
+        pixel 5 at (1, 2) channel 0
+    </li>
+    <li>
+        pixel 5 at (1, 2) channel 1
+    </li>
+    <li>
+        pixel 5 at (1, 2) channel 2
+    </li>
+</ul>
+
+<p>
+    Notice that there are two ways to identify a pixel.  A pixel can be identified by its dimensional location or by its unique array index.  This API refers to these values as pixelLocation and
+    pixelIndex.  In some places the API may accept them interchangeably.  Accessing pixels by pixelIndex is generally more efficient.
+</p>
+
+<h2>
+    TODO: Write more docs and examples.
+</h2>
+
+<p>
+    Check out the API documentation for more information on how to use Y.Composite.Image.
+</p>
