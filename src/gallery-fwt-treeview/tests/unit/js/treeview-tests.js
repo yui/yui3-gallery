@@ -2,110 +2,29 @@ YUI.add('treeview-tests', function(Y) {
     var A = Y.Assert,
         TV = Y.FWTreeView,
         SELECTED = 'selected',
+        EXPANDED = 'expanded',
         LABEL = 'label',
         ID = 'id',
 
-        treeDef = [
-           {
-                label: 'label 0',
-                expanded: false,
-                children: [
-                    {
-                        label: 'label 0-0',
-                        expanded: false,
-                        children: [
-                            'label 0-0-0',
-                            'label 0-0-1',
-                            'label 0-0-2'
-                        ]
-                    },
-                    {
-                        label: 'label 0-1',
-                        expanded: false,
-                        children: [
-                            'label 0-1-0',
-                            'label 0-1-1',
-                            'label 0-1-2'
-                        ]
-                    },
-                    {
-                        label: 'label 0-2',
-                        expanded: false,
-                        children: [
-                            'label 0-2-0',
-                            'label 0-2-1',
-                            'label 0-2-2'
-                        ]
-                    },
-                ]
-            },
-            {
-                label: 'label 1',
-                expanded: false,
-                children: [
-                    {
-                        label: 'label 1-0',
-                        expanded: false,
-                        children: [
-                            'label 1-0-0',
-                            'label 1-0-1',
-                            'label 1-0-2'
-                        ]
-                    },
-                    {
-                        label: 'label 1-1',
-                        expanded: false,
-                        children: [
-                            'label 1-1-0',
-                            'label 1-1-1',
-                            'label 1-1-2'
-                        ]
-                    },
-                    {
-                        label: 'label 1-2',
-                        expanded: false,
-                        children: [
-                            'label 1-2-0',
-                            'label 1-2-1',
-                            'label 1-2-2'
-                        ]
-                    },
-                ]
-            },
-            {
-                label: 'label 2',
-                expanded: false,
-                children: [
-                    {
-                        label: 'label 2-0',
-                        expanded: false,
-                        children: [
-                            'label 2-0-0',
-                            'label 2-0-1',
-                            'label 2-0-2'
-                        ]
-                    },
-                    {
-                        label: 'label 2-1',
-                        expanded: false,
-                        children: [
-                            'label 2-1-0',
-                            'label 2-1-1',
-                            'label 2-1-2'
-                        ]
-                    },
-                    {
-                        label: 'label 2-2',
-                        expanded: false,
-                        children: [
-                            'label 2-2-0',
-                            'label 2-2-1',
-                            'label 2-2-2'
-                        ]
-                    },
-                ]
-            }
-        ],
+        buildTree = function (levels, width, expanded) {
+             var build = function (prefix, depth) {
+
+                 var i, branch = [];
+
+                 for (i = 0; i < width; i += 1) {
+                     branch[i] = {label: prefix + '-' + i};
+                     if (expanded !== undefined) {
+                         branch[i].expanded = expanded;
+                     }
+                     if (depth < levels -1) {
+                         branch[i].children = build(prefix + '-' + i, depth + 1);
+                     }
+                 }
+                 return branch;
+             };
+             return build('label', 0);
+        },
+        treeDef = buildTree(3,3,false),
 
         suite = new Y.Test.Suite("FWTreeView Test Suite");
 
@@ -114,9 +33,9 @@ YUI.add('treeview-tests', function(Y) {
         'Test dynamic Loading': function () {
             var node, other, tv = new TV({
                 tree: [
-                    'label 0',
-                    'label 1',
-                    'label 2'
+                    'label-0',
+                    'label-1',
+                    'label-2'
                 ],
                 dynamicLoader: function (node, callback) {
                     var i, branch = [],
@@ -130,26 +49,26 @@ YUI.add('treeview-tests', function(Y) {
                 }
             });
             tv.render();
-            tv.getNodeBy(LABEL,'label 1').expand().release();
-            tv.getNodeBy(LABEL,'label 1-1').expand().release();
-            tv.getNodeBy(LABEL,'label 1-1-0').expand().release();
-            tv.getNodeBy(LABEL,'label 2').expand().release();
-            node = tv.getNodeBy(LABEL,'label 1-1-0-1');
+            tv.getNodeBy(LABEL,'label-1').expand().release();
+            tv.getNodeBy(LABEL,'label-1-1').expand().release();
+            tv.getNodeBy(LABEL,'label-1-1-0').expand().release();
+            tv.getNodeBy(LABEL,'label-2').expand().release();
+            node = tv.getNodeBy(LABEL,'label-1-1-0-1');
             A.areEqual(3, node.get('depth'), 'node 1-1-0-1 should be at depth 3');
-            A.areEqual('label 1-1-0-1', node.get(LABEL), 'node should be labeled label 1-1-0-1');
+            A.areEqual('label-1-1-0-1', node.get(LABEL), 'node should be labeled label 1-1-0-1');
             other = node.getNextSibling();
             A.areEqual(3, other.get('depth'), 'node 1-1-0-2 should be at depth 3');
-            A.areEqual('label 1-1-0-2', other.get(LABEL), 'node should be labeled label 1-1-0-2');
+            A.areEqual('label-1-1-0-2', other.get(LABEL), 'node should be labeled label 1-1-0-2');
             A.isNull(other.getNextSibling(),' there should be no next to 1-1-0-2');
             other.release();
             other = node.getPreviousSibling();
             A.areEqual(3, other.get('depth'), 'node 1-1-0-0 should be at depth 3');
-            A.areEqual('label 1-1-0-0', other.get(LABEL), 'node should be labeled label 1-1-0-0');
+            A.areEqual('label-1-1-0-0', other.get(LABEL), 'node should be labeled label 1-1-0-0');
             A.isNull(other.getPreviousSibling(),' there should be no next to 1-1-0-0');
             other.release();
             other = node.getParent();
             A.areEqual(2, other.get('depth'), 'node 1-1-0 should be at depth 2');
-            A.areEqual('label 1-1-0', other.get(LABEL), 'node should be labeled label 1-1-0');
+            A.areEqual('label-1-1-0', other.get(LABEL), 'node should be labeled label 1-1-0');
             other.release();
             node.release();
             tv.destroy();
@@ -203,31 +122,82 @@ YUI.add('treeview-tests', function(Y) {
             check('selection should have moved up');
             tv.destroy();
         },
+        'test a node type with no label': function () {
+            var TVNoLabel = Y.Base.create(
+                    'no-label-node',
+                    Y.FWTreeNode,
+                    [ ],
+                    { },
+                    {
+                        INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+                                        '<div class="{CNAME_BAD_LABEL}" role="link">{label}</div></div>'
+
+                    }
+                ), tv = new TV({
+                    tree: [
+                        {
+                            label: 'abc',
+                            type: TVNoLabel
+                        },{
+                            label: 'def',
+                            type: TVNoLabel
+                        }
+                    ]
+                });
+            tv.render('#container');
+            var node = tv.getNodeBy(LABEL,'abc');
+            node.set(LABEL,'123');
+            A.areEqual('123', node.get(LABEL));
+            node.release();
+            tv.destroy();
+
+
+
+        },
         'Test some clicking': function () {
             var tv = new TV({tree: treeDef}),
-                node = tv.getNodeBy(LABEL, 'label 1-1'),
+                node = tv.getNodeBy(LABEL, 'label-1-1'),
                 el;
 
             tv.render('#container');
             tv.set('focusedNode', node);
 
-            A.isFalse(node.get('expanded'), 'node should not be expanded yet');
+            A.isFalse(node.get(EXPANDED), 'node should not be expanded yet');
             el = Y.one('#' + node.get(ID) + ' .' + Y.FWTreeNode.CNAMES.CNAME_TOGGLE);
             el.simulate('click');
-            A.isTrue(node.get('expanded'), 'node should be expanded');
+            A.isTrue(node.get(EXPANDED), 'node should be expanded');
+
             el.simulate('click');
-            A.isFalse(node.get('expanded'), 'node should not be expanded');
+            A.isFalse(node.get(EXPANDED), 'node should not be expanded');
+
             A.areEqual(0, node.get(SELECTED), 'node should not be selected');
             el = Y.one('#' + node.get(ID) + ' .' + Y.FWTreeNode.CNAMES.CNAME_SELECTION);
             el.simulate('click');
             A.areEqual(2, node.get(SELECTED), 'node should now be selected');
+
+
             el = Y.one('#' + node.get(ID) + ' .' + Y.FWTreeNode.CNAMES.CNAME_LABEL);
             el.simulate('click');
             A.areEqual(2, node.get(SELECTED), 'clicking on the label should not change anything');
-            A.isFalse(node.get('expanded'), 'clicking on the label should not change anything');
+            A.isFalse(node.get(EXPANDED), 'clicking on the label should not change anything');
+
             tv.set('toggleOnLabelClick', true);
             el.simulate('click');
-            A.isTrue(node.get('expanded'), 'with toggleOnLabelClick set, it should expand');
+            A.isTrue(node.get(EXPANDED), 'with toggleOnLabelClick set, it should expand');
+
+            el = Y.one('#' + node.get(ID) + ' .' + Y.FWTreeNode.CNAMES.CNAME_ICON);
+            el.simulate('click');
+            A.isFalse(node.get(EXPANDED), 'clicking on the label should not change anything');
+
+            tv.set('toggleOnLabelClick', true);
+            el.simulate('click');
+            A.isTrue(node.get(EXPANDED), 'with toggleOnLabelClick set, it should expand');
+
+            el = Y.one('#' + node.get(ID) + ' .' + Y.FWTreeNode.CNAMES.CNAME_CONTENT);
+            el.simulate('click');
+            A.isTrue(node.get(EXPANDED), 'with toggleOnLabelClick set, it should expand');
+            A.areEqual(2, node.get(SELECTED), 'clicking on the label should not change anything');
+
             node.release();
             tv.destroy();
         },
@@ -237,7 +207,7 @@ YUI.add('treeview-tests', function(Y) {
             var tv = new TV({tree: treeDef});
             tv.render('#container');
             tv.forSomeNodes(function (node) {
-                A.isFalse(node.hasChildren() && node.get('expanded'), 'All nodes should be collapsed:' + node.get(LABEL));
+                A.isFalse(node.hasChildren() && node.get(EXPANDED), 'All nodes should be collapsed:' + node.get(LABEL));
             });
             var focusedTest = function (label) {
                 var focusedNode = tv.getNodeBy(LABEL, label);
@@ -255,28 +225,99 @@ YUI.add('treeview-tests', function(Y) {
                 }
                 tv.forSomeNodes(function (node) {
                     if (ancestry.indexOf(node.get(ID)) !== -1) {
-                        A.isTrue(node.get('expanded'), 'Ancestors of ' + label + ' should be expanded: ' + node.get(LABEL));
+                        A.isTrue(node.get(EXPANDED), 'Ancestors of ' + label + ' should be expanded: ' + node.get(LABEL));
                     } else {
-                        A.isFalse(node.hasChildren() && node.get('expanded'), 'Only the ancestors of ' + label + ' should be expanded:' + node.get(LABEL));
+                        A.isFalse(node.hasChildren() && node.get(EXPANDED), 'Only the ancestors of ' + label + ' should be expanded:' + node.get(LABEL));
                     }
                 });
                 focusedNode.release();
             };
-            focusedTest('label 1-1-1');
+            focusedTest('label-1-1-1');
             tv.collapseAll();
-            focusedTest('label 1-1');
+            focusedTest('label-1-1');
             tv.destroy();
 
         },
         'Requesting a held node should return the same reference': function () {
             var tv = new TV({tree:treeDef}),
-                node = tv.getNodeBy(LABEL, 'label 1'),
-                other = tv.getNodeBy(LABEL, 'label 1');
+                node = tv.getNodeBy(LABEL, 'label-1'),
+                other = tv.getNodeBy(LABEL, 'label-1');
 
             A.areSame(node, other, 'Node references should be the same');
             node.release();
             other.release();
             tv.destroy();
+        },
+        'test toggle Selection' : function () {
+            var tv = new TV({tree: treeDef});
+            tv.render('#container');
+            var node = tv.getNodeBy(LABEL, 'label-1');
+            A.areEqual(0,node.get(SELECTED), 'node should start unselected');
+            node.toggleSelection();
+            A.areEqual(2,node.get(SELECTED), 'node should now be selected');
+            node.toggleSelection();
+            A.areEqual(0,node.get(SELECTED), 'node should now be unselected');
+            node.toggleSelection();
+            A.areEqual(2,node.get(SELECTED), 'node should now be selected again');
+            A.isTrue(node.get('propagateUp'),'propagateUp should be enabled');
+            A.isTrue(node.get('propagateDown'),'propagateDown should be enabled');
+            node.set('selectionEnabled', false);
+            A.isNull(node.get(SELECTED), 'When selection is not enabled it should return null');
+            A.isFalse(node.get('propagateUp'),'propagateUp should be disabled (disabled nodes do not propagete)');
+            A.isFalse(node.get('propagateDown'),'propagateDown should be disabled (disabled nodes do not propagete)');
+            node.toggleSelection();
+            A.isNull(node.get(SELECTED), 'even when toggled');
+            A.areEqual(0,node._iNode[SELECTED], 'Internally it should really change');
+            var el = Y.one('#' + node.get(ID) + ' .' + Y.FWTreeNode.CNAMES.CNAME_SELECTION);
+            el.simulate('click');
+            A.isNull(node.get(SELECTED), 'even when toggled');
+            node.set('selectionEnabled', true);
+            A.areEqual(2,node.get(SELECTED), 'node should be selected again as before');
+            node.toggleSelection();
+            A.areEqual(0,node.get(SELECTED), 'selection should toggle as before');
+
+            tv.destroy();
+
+        },
+        'testing initial values': function () {
+            var oneTest = function (which) {
+                var TVNoSelection = Y.Base.create(
+                    'no-selection-node',
+                    Y.FWTreeNode,
+                    [ ],
+                    { },
+                    {
+                        ATTRS: {
+                            selectionEnabled: {
+                                value: which
+                            },
+                            propagateUp: {
+                                value: which
+                            },
+                            propagateDown: {
+                                value: which
+                            },
+                            expanded: {
+                                value: which
+                            }
+                        }
+                    }
+                ),
+                tv = new TV({
+                     tree: buildTree(3,3),
+                     defaultType: TVNoSelection
+                });
+                tv.render('#container');
+                tv.forSomeNodes(function (node) {
+                    A.areEqual(which,node.get('selectionEnabled'),which + ' selectionEnabled failed: ' + node.get(LABEL));
+                    A.areEqual(which,node.get('propagateUp'),which + ' propagateUp failed: ' + node.get(LABEL));
+                    A.areEqual(which,node.get('propagateDown'),which + ' propagateDown failed: ' + node.get(LABEL));
+                    A.areEqual(which,node.get(EXPANDED),which + ' expanded failed: ' + node.get(LABEL));
+                });
+                tv.destroy();
+            };
+            oneTest(true);
+            oneTest(false);
         },
         'Moving around with the keys': function () {
 
@@ -289,7 +330,7 @@ YUI.add('treeview-tests', function(Y) {
                 },
                 is = function (label, step) {
                     var node = tv.get('focusedNode');
-                    A.areEqual('label ' + label, node.get('label'), step + ' Should have moved to: ' + label);
+                    A.areEqual('label-' + label, node.get('label'), step + ' Should have moved to: ' + label);
                     node.release();
                 },
                 test = function (key, label, step) {
@@ -298,7 +339,7 @@ YUI.add('treeview-tests', function(Y) {
                 },
                 expanded = function (state, step) {
                     var node = tv.get('focusedNode');
-                    A.areEqual(state, node.get('expanded'), 'Should be expanded?: ' + step);
+                    A.areEqual(state, node.get(EXPANDED), 'Should be expanded?: ' + step);
                     node.release();
                 },
                 selected = function (state, step) {
@@ -307,7 +348,7 @@ YUI.add('treeview-tests', function(Y) {
                     node.release();
                 },
 
-                node = tv.getNodeBy(LABEL, 'label 1');
+                node = tv.getNodeBy(LABEL, 'label-1');
             tv.set('focusedNode', node);
             node.release();
 
@@ -353,17 +394,17 @@ YUI.add('treeview-tests', function(Y) {
             selected(false,28);
             test(32, '1-2',29); // space bar
             selected(2,29);
-            test(39, '1-2-0',30);
+            test(39, '1-2-0',30); // right
             selected(2,30);
             test(38, '1-2',31); //up
-            test(37, '1-2',32); // up
-            test(37, '1',32); // up
-            selected(1,32);
-            test(38,'0-2-2',33);
-            selected(0,33);
+            test(37, '1-2',32); // left
+            test(37, '1',33); // left
+            selected(1,33);
+            test(38,'0-2-2',34);
+            selected(0,35);
 
             tv.after('enterkey', function (ev) {
-                A.areEqual('label 0-2-2', ev.node.get(LABEL), 'Label on enter');
+                A.areEqual('label-0-2-2', ev.node.get(LABEL), 'Label on enter');
                 enterPressed = true;
             });
             A.isFalse(enterPressed, 'before enter key');
@@ -372,6 +413,29 @@ YUI.add('treeview-tests', function(Y) {
             test(65, '0-2-2',35);  // nothing special should happen with any other key
 
 
+            tv.destroy();
+        },
+
+        'doing things in an empty tree': function () {
+            var tv = new TV({tree: []}),
+                cbx = tv.get('contentBox'),
+                press = function (key) {
+                    cbx.simulate('keydown', {keyCode: key});
+                };
+            tv.render('#container');
+            press(13); // enter
+            press(32); // spacebar
+            press(35); //end
+            press(36); // home
+            press(37); // left
+            press(38); // up
+            press(39); //right
+            press(40); // down
+            tv.expandAll();
+            tv.collapseAll();
+            tv.forSomeNodes(function(node) {
+               A.fail('shouldn\'t be here: ' + node.get('label'));
+            });
             tv.destroy();
         }
     }));

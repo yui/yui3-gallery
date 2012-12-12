@@ -65,6 +65,9 @@
 .yui3-skin-sam  .yui3-gallery-fwt-treeview .yui3-fw-treeview-selection {
 	display:none;
 }
+.yui3-skin-sam  .yui3-fw-treeview-checkbox .yui3-gallery-fwt-treeview ul {
+	padding-left: 30px;
+}
 .yui3-skin-sam  .yui3-fw-treeview-checkbox .yui3-gallery-fwt-treeview .yui3-fw-treeview-selection {
 	width: 16px;
 	height:22px;

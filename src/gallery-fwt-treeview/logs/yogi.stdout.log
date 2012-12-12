@@ -1,32 +1,32 @@
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-fwt-treeview
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5001
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.52 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-fwt-treeview
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [FWTreeView Test Suite]: Passed: 6 Failed: 0 Total: 6 (ignored 0) (0.65 seconds) 97%
+✔ [FWTreeView Test Suite]: Passed: 10 Failed: 0 Total: 10 (ignored 0) (0.63 seconds) 99%
 Writing files in JSON format to: /src/gallery-fwt-treeview/logs/tests.json
 
 ----------------+-----------+-----------+-----------+-----------+
 File            |   % Stmts |% Branches |   % Funcs |   % Lines |
 ----------------+-----------+-----------+-----------+-----------+
-   build/       |     97.78 |     86.67 |      96.3 |     97.78 |
-      All files |     97.78 |     86.67 |      96.3 |     97.78 |
+   build/       |      99.3 |     97.87 |       100 |      99.3 |
+      All files |      99.3 |     97.87 |       100 |      99.3 |
 ----------------+-----------+-----------+-----------+-----------+
-All files       |     97.78 |     86.67 |      96.3 |     97.78 |
+All files       |      99.3 |     97.87 |       100 |      99.3 |
 ----------------+-----------+-----------+-----------+-----------+
 
 
 =============================== Coverage summary ===============================
-Statements   : 97.78% ( 132/135 )
-Branches     : 86.67% ( 78/90 )
-Functions    : 96.3% ( 26/27 )
-Lines        : 97.78% ( 132/135 )
+Statements   : 99.3% ( 142/143 )
+Branches     : 97.87% ( 92/94 )
+Functions    : 100% ( 28/28 )
+Lines        : 99.3% ( 142/143 )
 ================================================================================
 ----------------------------------------------------------------
-✔ [Total]: Passed: 6 Failed: 0 Total: 6 (ignored 0) (0.65 seconds)
-  [Grover Execution Timer] 2.86 seconds
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  [32mgrover tests complete[39m
+✔ [Total]: Passed: 10 Failed: 0 Total: 10 (ignored 0) (0.63 seconds)
+  [Grover Execution Timer] 2.697 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

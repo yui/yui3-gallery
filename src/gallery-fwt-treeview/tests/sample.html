@@ -26,6 +26,7 @@
 		<div id="output"></div>
 		<script>
 			YUI({
+//                gallery: 'gallery-2012.12.05-17-54'
 //                filter:'raw',
 //                combine:false,
 				groups: {
@@ -44,8 +45,7 @@
 							}
 						}
 					}
-				},
-				lang:'es'
+				}
 			}).use('gallery-fwt-treeview','yql', 'json', function (Y) {
 				'use strict';
 				/*jslint white:true*/
@@ -99,7 +99,7 @@
                     }
                 })).render('#plainDynLoader');
 
-//
+/*
                 var ArtistNode = Y.Base.create(
 					'artist-node',
 					Y.FWTreeNode,
@@ -107,7 +107,8 @@
 					{
 
 					},{
-						TEMPLATE: Y.Lang.sub('<li id="{id}" class="artistnode {cname_node}"><div tabIndex="{tabIndex}" class="{cname_content}"><div class="{cname_toggle}"><\/div><div class="{cname_label}">{label} <div class="artistNavigate"></div><\/div></div><ul class="{cname_children}">{children}<\/ul><\/li>',Y.FWTreeNode.CNAMES),
+                        INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+                                        '<div class="{CNAME_LABEL} role="link">{label}</div> <div class="www-go"></div></div>',
 						ATTRS: {
 							url: {},
 							artistId: {}
@@ -122,7 +123,8 @@
 					{
 
 					},{
-						TEMPLATE: '<li id="{id}" class="albumnode {cname_node}"><div tabIndex="{tabIndex}" class="yui3-flyweight-tree-node-content"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-label">{label} ({publisher})<\/div></div><ul class="{cname_children}">{children}<\/ul><\/li>',
+                        INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+                                        '<div class="{CNAME_LABEL}" role="link">{label} ({publisher})</div><div class="www-go"></div></div>',
 						ATTRS: {
 							url: {},
 							albumId: {},
@@ -138,8 +140,8 @@
 					{
 
 					},{
-						// {"Track":{"discNumber":"1","duration":"0","popularity":"3","title":"Karaoke: Crazy For You","trackNumber":"1"}}
- 						TEMPLATE: '<li id="{id}" class="tracknode {cname_node}"><div tabIndex="{tabIndex}" class="yui3-flyweight-tree-node-content"><div class="yui3-fw-treeview-toggle"><\/div><div class="yui3-fw-treeview-label">[disc:{discNumber} - track:{trackNumber} - duration: {duration}]: {label}<\/div></div><ul class="{cname_children}">{children}<\/ul><\/li>',
+                        INNER_TEMPLATE: '<div tabIndex="{tabIndex}" class="{CNAME_CONTENT}"><div class="{CNAME_TOGGLE}"></div>' +
+                                        '<div class="{CNAME_LABEL}" role="link">[disc:{discNumber} - track:{trackNumber} - duration: {duration}]: {label}</div></div>',
 						ATTRS: {
 							discNumber: {},
 							trackNumber: {},
@@ -245,7 +247,7 @@
                             window.location = url;
                         }
                     });
-			    });
+			    });*/
 				var sampleString = ("In computer programming, flyweight is a software design pattern. " +
 					"A flyweight is an object that minimizes memory use by sharing as much data as possible with other similar objects; " +
 					"it is a way to use objects in large numbers when a simple repeated representation would use an unacceptable amount of memory." +
