@@ -1,0 +1,11 @@
+{
+    "name": "gallery-node-autogrow",
+    "builds": {
+        "gallery-node-autogrow": {
+            "jsfiles": [
+                "js/gallery-node-autogrow.js"
+            ],
+            "skinnable": true
+        }
+    }
+}

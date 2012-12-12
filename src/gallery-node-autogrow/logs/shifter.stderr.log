@@ -1,0 +1,6 @@
+shifter [err] { [Error: ENOENT, open '/src/gallery-node-autogrow/assets/gallery-node-autogrow-core.css']
+  errno: 34,
+  code: 'ENOENT',
+  path: '/src/gallery-node-autogrow/assets/gallery-node-autogrow-core.css' }
+shifter [error] skin file is missing: /src/gallery-node-autogrow/assets/gallery-node-autogrow-core.css
+build exited with code 1

@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-node-autogrow</title>
+    <script src="http://yui.yahooapis.com/3.7.3/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+<div id="container"></div>
+<script>
+YUI({
+    coverage: ['gallery-node-autogrow'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    groups: {
+        gallery: {
+            base: '//' + location.host + '/build/',
+            modules: {
+                'gallery-node-autogrow': {
+                    fullpath: '/build/gallery-node-autogrow/gallery-node-autogrow.js',
+                    requires: [
+                        'node-pluginhost',
+                        'event-valuechange',
+                        'classnamemanager',
+                        'plugin'
+                    ],
+                    skinnable: true
+                },
+                'gallery-node-autogrow-tests': {
+                    fullpath: './js/gallery-node-autogrow-tests.js',
+                    requires: [
+                        'gallery-node-autogrow',
+                        'test'
+                    ]
+                }
+            }
+        }
+    }
+}).use('gallery-node-autogrow-tests', 'test-console', function (Y) {
+    (new Y.Test.Console()).render('#logger');
+    Y.Test.Runner.setName('gallery-node-autogrow');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

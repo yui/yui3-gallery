@@ -1,0 +1,42 @@
+{
+    "name": "gallery-node-autogrow",
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 46,
+    "type": "report",
+    "attributes": {
+        "name": "attributes",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 3,
+        "duration": 43,
+        "type": "testcase",
+        "Required HTML structure": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Required HTML structure",
+            "duration": 9
+        },
+        "Initial value": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Initial value",
+            "duration": 2
+        },
+        "Initial height": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Initial height",
+            "duration": 3
+        }
+    },
+    "timestamp": "Wed 12 Dec 2012 03:12:57 PM CST"
+}

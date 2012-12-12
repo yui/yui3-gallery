@@ -1,0 +1,50 @@
+<style>
+.hint {
+    color: red;
+    visibility: hidden;
+    font-size: 11px;
+}
+</style>
+
+<div class="intro">
+    <p>This example demonstrates how to use the AutoGrow Node Plugin.</p>
+</div>
+
+<p>
+    <code>Y.one(&lt;CSS Selector&gt;).plug(Y.Plugin.AutoGrow);</code>
+</p>
+
+<p>
+    <button>Click to use the AutoGrow Node Plugin</button>
+</p>
+
+<textarea>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan tincidunt velit feugiat pretium. Sed consectetur elit volutpat neque consequat dignissim. Donec ornare, purus sed venenatis volutpat, magna tellus suscipit diam, vitae ultrices diam urna tristique massa. Praesent quis justo mi, quis rhoncus erat. Vivamus varius orci nibh, quis consequat odio. Phasellus eu velit nec turpis placerat dapibus. Etiam volutpat facilisis sem, placerat ullamcorper lectus posuere eu. Duis faucibus, orci vitae consequat pulvinar, diam urna mollis nisi, at commodo ipsum arcu non magna. Cras id velit et nisl faucibus vulputate vitae ut sapien. Praesent non adipiscing lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam vitae venenatis massa.
+Nulla eget libero est. Nulla eget mollis odio. Pellentesque quis mi eu turpis placerat gravida. Etiam ut ullamcorper urna. Aenean consectetur gravida nunc, in convallis sapien molestie at. Cras massa nulla, eleifend eget ultrices sit amet, pellentesque volutpat odio. Praesent pellentesque ultricies est at tincidunt.</textarea>
+<p class="hint">Type some words to change the height of textarea.</p>
+<script>
+YUI({
+    groups: {
+        gallery: {
+            base: '//' + location.host + '/build/',
+            modules: {
+                'gallery-node-autogrow': {
+                    path: 'gallery-node-autogrow/gallery-node-autogrow.js',
+                    requires: [
+                        'node-pluginhost',
+                        'node-style',
+                        'event-valuechange',
+                        'classnamemanager',
+                        'plugin'
+                    ],
+                    skinnable: true
+                }
+            }
+        }
+    }
+}).use('gallery-node-autogrow', function (Y) {
+    Y.one('button').on('click', function () {
+        Y.one('textarea').plug(Y.Plugin.NodeAutoGrow, {width: 400});
+        Y.one('.hint').setStyle('visibility', 'visible');
+    });
+});
+</script>

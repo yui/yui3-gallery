@@ -1,0 +1,19 @@
+{
+    "name"       : "gallery-node-autogrow",
+    "displayName": "Gallery: Node Autogrow Plugin",
+    "description": "The AutoGrow Node Plugin makes textarea expands in height to fit its contents automatically. ",
+    "author"     : [ "josephj" ],
+    "tags": [ "gallery", "plugin", "gallery-node-autogrow" ],
+    "use" : ["gallery-node-autogrow"],
+    "yuiSeedUrl" : "http://yui.yahooapis.com/3.7.3/build/yui/yui-min.js",
+    "examples": [
+        {
+            "name"       : "basic",
+            "displayName": "Basic Example",
+            "description": "How to use a Node Autogrow Plugin.",
+            "modules"    : ["gallery-node-autogrow"],
+            "tags"       : ["gallery-node-autogrow"],
+            "hideTableOfContents": true
+        }
+    ]
+}

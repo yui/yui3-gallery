@@ -1,0 +1,100 @@
+<div class="intro">
+    <p>
+    The AutoGrow Node Plugin makes textarea expands in height
+    to fit its contents automatically. This user interface is
+    commonly found in websites including Facebook comments.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h3>Use AutoGrow Node Plugin</h3>
+
+<p>
+You just simply get a textarea Node reference and then call the plug method,
+passing in a reference to the AutoGrow Node Plugin.
+</p>
+
+```
+YUI().use('gallery-node-autogrow', function (Y) {
+    Y.one("textarea").plug(Y.Plugin.NodeAutoGrow);
+});
+```
+
+<h2>How it works?</h2>
+
+<p>
+Unlike other similar implementations use scrollHeight attribute,
+this plugin uses mirror element technique.
+</p>
+
+<p>
+It needs a sibling <code>pre</code>
+element as mirror and an outer <code>div</code> element as wrapper.
+This plugin will check if you provide the required HTML markup.
+If not, it creates the following structure automatically.
+</p>
+
+```
+<div class="yui3-autogrow">
+    <pre><span></span><br></pre>
+    <textarea></textarea>
+</div>
+```
+
+<p>
+The <code>textarea</code> element needs to be absolutely positioned,
+keeping 100% width and height with the wrapper.
+</p>
+
+<p>
+While AutoGrow Node Plugin is plugged or the <code>valuechange</code> event is
+triggered by user, The text in <code>pre</code> element will also be updated.
+Thus the height of wrapper can be influenced. The following stylesheet is just
+for illustrating how it works.
+</p>
+
+```
+.yui3-autogrow {
+    background: #fff;
+    border: 1px solid #abadb3;
+    position: relative;
+    min-height: 50px;
+    width: 150px; /* The default width. */
+}
+.yui3-autogrow textarea {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    resize: none;
+    overflow: hidden;
+}
+.yui3-autogrow textarea pre {
+    visibility: hidden; /* Hide the text; just using it for sizing */
+}
+```
+
+<h3>Benefits</h3>
+
+<h4>Better Performance</h4>
+<p>
+JavaScript is only used for event binding and update the text in
+mirror element. It has no need to update the DOM style.
+</p>
+
+<h4>More Accurate</h4>
+<p>
+The scrollHeight isn't very accurate because it may be influenced by
+line height, font family and mixed multiple languages words.
+However, this approach works perfectly without guessing.
+</p>
+
+<h3>Disadvantages</h3>
+
+<h4>More Styling</h4>
+<p>
+Both the textrarea and pre elements need to be reset to have exactly the same
+style. You might have to customize stylesheet to satisfy your needs.
+</p>
