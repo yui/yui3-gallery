@@ -1,0 +1,10 @@
+{
+    "name": "gallery-datetime-input",
+    "builds": {
+        "gallery-datetime-input": {
+            "jsfiles": [
+                "js/gallery-datetime-input.js"
+            ]
+        }
+    }
+}

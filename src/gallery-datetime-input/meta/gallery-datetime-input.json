@@ -1,0 +1,15 @@
+{
+    "gallery-datetime-input": {
+        "requires": [
+            "yui-base",
+            "overlay", 
+            "cssbutton",
+             "event", 
+             "calendar", 
+             "slider", 
+             "widget-position",
+             "widget-position-align",
+             "widget-autohide"
+        ]
+    }
+}

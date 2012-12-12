@@ -1,0 +1,17 @@
+{
+    "name"       : "gallery-datetime-input",
+    "displayName": "Gallery: gallery-datetime-input",
+    "description": "This is YUI3 module to progressively enhance \"date-time form input\" to popup (calendar and slider based) UI to input date and time with TimeZone.",
+    "author"     : [ "markandey" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+    				{
+			            "name"       : "datetimeinput-simple",
+			            "displayName": "Simple DateTime Input",
+			            "description": "Simple example showing the datetime input",
+			            "modules"    : ["gallery-datetime-input"]
+			        }
+    			]
+}

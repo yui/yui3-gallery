@@ -1,0 +1,34 @@
+<style>
+    .mydatetime{
+      font-size: 20px;
+      font-family: sans-serif;
+      width:400px;
+    }
+</style>
+
+<div id="demo" class="yui3-skin-sam">
+    <form action="">
+      <div>
+        <input class="mydatetime" id="mydatetime1" type="datetime" value="Fri Nov 02 2017 03:00:00 GMT+0000 (UTC)"/>
+        </div>
+        <div>
+        <input class="mydatetime" id="mydatetime2" type="datetime" value="Fri Nov 15 2012 03:00:00 GMT+0000 (UTC)"/>
+      </div>
+    </form>
+</div>
+<script type="text/javascript">
+      YUI({
+        modules:{'gallery-datetime-input':{
+          fullpath:"/build/gallery-datetime-input/gallery-datetime-input.js"
+          }
+        }
+        }).use('gallery-datetime-input',function (Y) {
+          new Y.DateTimeInput({
+            inputBox:"#mydatetime1"
+          });
+
+          new Y.DateTimeInput({
+            inputBox:"#mydatetime2"
+          });
+      });
+</script>

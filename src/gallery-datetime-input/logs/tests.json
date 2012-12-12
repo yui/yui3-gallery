@@ -1,0 +1,63 @@
+{
+    "name": "gallery-datetime-input",
+    "passed": 6,
+    "failed": 0,
+    "errors": 4,
+    "ignored": 0,
+    "total": 6,
+    "duration": 3243,
+    "type": "report",
+    "basic sanity": {
+        "name": "basic sanity",
+        "passed": 6,
+        "failed": 0,
+        "errors": 4,
+        "ignored": 0,
+        "total": 6,
+        "duration": 3242,
+        "type": "testcase",
+        "test instantiation": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test instantiation",
+            "duration": 3
+        },
+        "test focus": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test focus",
+            "duration": 62
+        },
+        "test instantiation with wrong id": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test instantiation with wrong id",
+            "duration": 2
+        },
+        "test with invalid date": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test with invalid date",
+            "duration": 1041
+        },
+        "test with valid date": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test with valid date",
+            "duration": 1035
+        },
+        "test with valid date of different zone": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test with valid date of different zone",
+            "duration": 1044
+        }
+    },
+    "timestamp": "Wed 12 Dec 2012 03:13:02 PM CST"
+}

@@ -1,0 +1,19 @@
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-datetime-input
+shifter [info] deleting build dir: /build/gallery-datetime-input
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-datetime-input/gallery-datetime-input.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting assets for gallery-datetime-input
+shifter [queu] coverage file read, starting coverage for: gallery-datetime-input/gallery-datetime-input.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-datetime-input/gallery-datetime-input-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.5 seconds, pretty fast huh?
