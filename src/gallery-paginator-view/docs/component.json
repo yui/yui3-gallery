@@ -2,9 +2,19 @@
     "name"       : "gallery-paginator-view",
     "displayName": "Gallery: paginator-view",
     "description": "A View extension that provides a user-interface for Paginated data.  Includes a custom PaginatorModel and a PaginatorView class.",
-    "author"     : [ "stlsmiths" ],
+    "author"     :  [ "stlsmiths" ],
+    "use"		:	[ "gallery-paginator-view" ],
+    "tags": [ "gallery", "paginator", "model", "view" ],
 
-    "tags": [ "gallery" ],
+    "examples": [
+		{
+            "name"       : "pagv-default",
+            "displayName": "PaginatorView Default Example",
+            "description": "Demonstrates creating a PaginatorView using the default settings",
+            "modules"    : ["gallery-paginator-view"],
+            "tags"       : ["gallery-paginator-view", "default"],
+            "hideTableOfContents": true
+        }
 
-    "examples": []
+    ]
 }

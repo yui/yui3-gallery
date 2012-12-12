@@ -3,17 +3,45 @@
 <head>
     <title>gallery-paginator-view</title>
     <script src="/build/yui/yui.js"></script>
-    <script src="js/tests.js"></script>
+    <script src="js/tests-pagview.js"></script>
 </head>
 <body class="yui3-skin-sam">
+<div id="pagCont"></div>
 <div id="logger"></div>
+
+<div id="pagBarACont" class="pagBar yui3-pagview-bar"></div>
+<script type="text/x-template" id="tmpl-bar-A">
+    <img src="/yui/images/glyph/glyphicons_170_step_backward.png" class="pgControls {pageLinkClass}" data-pglink="first" title="First Page" border="0" />
+    <img src="/yui/images/glyph/glyphicons_173_backTES.png" class="pgControls {pageLinkClass}" data-pglink="prev" title="Prior Page" border="0" />
+    {inputPage} of {totalPages}
+    <img src="/yui/images/glyph/glyphicons_173_play.png" class="pgControls {pageLinkClass}" data-pglink="next" title="Next Page" border="0" />
+    <img src="/yui/images/glyph/glyphicons_178_step_forward.png" class="pgControls {pageLinkClass}" data-pglink="last" title="Last Page" border="0" />
+    <span style="float:right;margin-right:20px;margin-top:2px;">Rows per Page: {selectRowsPerPage}</span>
+</script>
+
+<div id="pagBasicCCont" class="pagBasic"></div>
+<script type="text/x-template" id="tmpl-basic-C">
+    <fieldset>
+        <legend> Active Page: </legend>
+        <!--  Define a Basic Paginator -->
+            <a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page"><<</a>
+            <a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page"><</a>
+            {pageLinks}
+            <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">></a>
+            <a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">>></a>
+            <span style="float:right;margin-right:15px;">Select rows/page: {selectRowsPerPage}</span>
+    </fieldset>
+</script>
+
+
 
 <script>
 YUI({
-    coverage: ['paginator-view'],
+    coverage: ['gallery-paginator-view'],
     filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-}).use('test-console', 'test', 'module-tests', function(Y) {
-    
+}).use('gallery-paginator-view', 'test-console', 'test', 'module-tests-pagview',
+    "node-event-simulate",  function(Y) {
+
     (new Y.Test.Console()).render('#logger');
 
     Y.Test.Runner.setName('gallery-paginator-view');

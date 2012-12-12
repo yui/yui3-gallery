@@ -1,20 +1,42 @@
 <div class="intro">
     <p>
-    A View extension that provides a user-interface for Paginated data.  Includes a custom PaginatorModel and a PaginatorView class.
+    A {{displayName}} module includes a View extension that provides a user-interface for Paginated data.  
+    Includes a custom PaginatorModel and a PaginatorView class.
     </p>
 </div>
 
-<h2>Description</h2>
+<div id="pagDefACont" class="example"></div>
+<script>
+YUI().use( 'node', '{{use}}', function(Y){
+    new Y.PaginatorView({
+        model:      new Y.PaginatorModel({
+            page:           2,
+            itemsPerPage:   50,
+            totalItems:     500
+        }),
+        container:  '#pagDefACont'
+    }).render();
+});
+</script>           
+
+{{>getting-started}}
+
+<h2 id="desc">Description</h2>
 
 <p>This module consists of two elements; <b>PaginatorModel</b> and <b>PaginatorView</b> to provide both the data handling and User Interface for Pagination.  <br>
 <br>
-The View is a Y.View extension which provides for a variety of UI elements and user-supplied capability to setup a variety of Paginators which have a specific &quot;look and feel&quot;.  (see sample image below)<br>
+The View is a Y.View extension which provides for a variety of UI elements and user-supplied capability to setup a variety of Paginators 
+which have a specific &quot;look and feel&quot;.  (see sample image below)<br>
+
 <br>
-https://dl.dropbox.com/u/14338200/pagview_sample.png<br>
+<!--
+<img src="https://dl.dropbox.com/u/14338200/pagview_sample.png" /><br>
+-->
 <br>
 An &quot;HTML template&quot; that includes replaceable text tokens is provided either in the initial <b>container</b> attribute or in the <b>paginatorTemplate</b> and associated page link attributes.  The PaginatorView also provides a few events that can be listened to in order for the user to link it to their own Widget, View or other YUI elements.<br>
 <br>
-<h2>Features</h2><br>
+
+<h2 id="features">Features</h2>
 <ul>
 <li>The PaginatorModel is simple and can easily be mixed-in to user-created custom Models</li>
 <li>PaginatorView includes a standard &quot;default&quot; set of CSS styles to get you up and running quickly (<i>the first example in the image above is the default</i>)</li>
@@ -26,12 +48,289 @@ An &quot;HTML template&quot; that includes replaceable text tokens is provided e
 <li>A &quot;circular&quot; capability is provided for cases where page selection wraps past the first or last item.</li>
 <li>Multiple PaginatorViews can be linked to <b>the same</b> PaginatorModel (for example, above and below a DataTable) and their changes sync amongst one another -- dual controls.</li>
 </ul>
-<br>
-<br>
+<br/><br/>
 For more information, see the links below or the <a href="http://stlsmiths.github.com/yui3-gallery/docs/classes/Y.PaginatorView.html">PaginatorView Docs</a> and / or the examples.<br>
-<br>
+<br/>
 This extension was originally developed for use with <a href="http://yuilibrary.com/gallery/show/datatable-paginator">Gallery DataTable-Paginator</a>, but could probably be used for other situations looking to provide a UI for paged data.<br>
 </p>
+
+<h2 id="examples">Basic Examples</h2>
+
+<h4>Basic with "abbreviated" Page Links</h4>
+A simple example that doesn't list each individual page link, but lists the current page and `linkListOffset` pages either side of the current one.
+<br/>This is most useful for situations that may involve a large number of page links that would extend off of the visual page.
+<br/>
+<b>Example:</b>
+{{>basic-abbrev-html}}
+<script>
+YUI().use( 'node', '{{use}}', function(Y){
+{{>basic-abbrev-js}}
+});
+</script>
+
+<h5>HTML</h5>
+```
+{{>basic-abbrev-html}}
+```
+
+<h5>Code</h5>
+```
+{{>basic-abbrev-js}}
+```
+
+<h4>Pagination Bar</h4>
+<br/>
+<b>Example:</b>
+{{>basic-bar-css}}
+{{>basic-bar-html}}
+<script>
+YUI().use( 'node', '{{use}}', function(Y){
+{{>basic-bar-js}}
+});
+</script>
+
+
+
+<h2 id="config">Configuration</h2>
+This module provides two components, the model and the view, whose configuration attributes are described below;
+<h4>PaginatorModel</h4>
+The attributes for the model that are user-definable are `page`, `totalItems` and `itemsPerPage`, all other attributes are read-only.
+<table>
+    <thead>
+        <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>page</td>
+            <td>Integer</td>
+            <td>1</td>
+            <td>Current active page.</td>
+        </tr>
+        <tr>
+            <td>totalItems</td>
+            <td>Integer</td>
+            <td>null</td>
+            <td>Total number of items.</td>
+        </tr>
+        <tr>
+            <td>itemsPerPage</td>
+            <td>Integer</td>
+            <td>null</td>
+            <td>Setting for number of items per page.</td>
+        </tr>
+        <tr>
+            <td>totalPages</td>
+            <td>Integer</td>
+            <td>null</td>
+            <td>Total page count for current settings (read-only)</td>
+        </tr>
+        <tr>
+            <td>lastPage</td>
+            <td>Integer</td>
+            <td>null</td>
+            <td>Last page referenced (read-only)</td>
+        </tr>
+        <tr>
+            <td>itemIndexStart</td>
+            <td>Integer</td>
+            <td>null</td>
+            <td>Calculated starting index for current page, zero-based (read-only)</td>
+        </tr>
+        <tr>
+            <td>itemIndexEnd</td>
+            <td>Integer</td>
+            <td>null</td>
+            <td>Calculated ending index for current page, zero-based (read-only)</td>
+        </tr>
+</tbody>
+</table>
+
+<h4>PaginatorView</h4>
+The view extension includes all standard view attributes, plus the following attributes (of which `model` and `container` are REQUIRED);
+<table>
+    <thead>
+        <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>model</td>
+            <td>Y.Model instance</td>
+            <td>null</td>
+            <td>Model instance for this View, that supports pagination attributes (i.e. Y.PaginatorModel).</td>
+        </tr>
+        <tr>
+            <td>container</td>
+            <td>Node | HTML ID</td>
+            <td>null</td>
+            <td>Location of DIV for container for this View within the HTML markup.  <br/>Either a Node instance or an HTML id (prepend by #)</td>
+        </tr>
+        <tr>
+            <td>paginatorTemplate</td>
+            <td>HTML String | Node | HTML id</td>
+            <td>See below</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>pageLinkTemplate</td>
+            <td>HTML String | Node | HTML id</td>
+            <td>See docs</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>pageOptions</td>
+            <td>Array</td>
+            <td>See docs</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>pageLinkFiller</td>
+            <td>String</td>
+            <td>"..."</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>paginatorTemplate</td>
+            <td>HTML String | Node | HTML id</td>
+            <td>See docs</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>maxPageLinks</td>
+            <td>Integer</td>
+            <td>9999</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>linkListOffset</td>
+            <td>Integer</td>
+            <td>1</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>circular</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Defines this View's HTML contents.</td>
+        </tr>
+        <tr>
+            <td>alwaysShowFirst</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Flag to indicate if the first page number within {pageLinks} <Br/>is to be displayed. (See abbreviated page links)</td>
+        </tr>
+        <tr>
+            <td>alwaysShowLast</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>Flag to indicate if the last page number within {pageLinks} <Br/>is to be displayed. (See abbreviated page links)</td>
+        </tr>
+
+
+    </tbody>
+</table>
+
+
+<h4>replaceable Tokens</h4>
+The PaginatorView uses the `Y.lang.sub` utility during construction of the container's HTML content.  So the View recognizes several replaceable tokens, 
+which are identified by a set a single curly braces.  Each token serves as a <i>placeholder</i> for generated content during the view rendering. 
+
+<br/><br/>
+Replaceable tokens include all attributes of the PaginatorModel (e.g. {page}, {totalPages}, etc..) plus and the following items;
+<table>
+    <thead>
+        <tr>
+            <th>Token</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{pageLinks}</td>
+            <td>`<a href="#" data-pglink="{page}" class="{pageLinkClass}" title="Page {page}">{page}</a>`</td>
+            <td>Placeholder for individual page links related to each page.</td>
+        </tr>
+        <tr>
+            <td>{inputPage}</td>
+            <td>`<input type="text" class="{inputPageClass}" value="{page}"/>`</td>
+            <td>Placeholder to add an INPUT textbox to allow changing the current page</td>
+        </tr>
+        <tr>
+            <td>{selectRowsPerPage}</td>
+            <td>`<select class="{selectRPPClass}"></select>`</td>
+            <td>Placeholder for a SELECT element to populate with pageOptions</td>
+        </tr>
+
+    </tbody>
+</table>
+<br/>
+In addition, the following tokens can be used to replace the View's default CSS classes that are used;
+<br/>`{pagClass}, {pageLinkClass}, {inputPageClass}, {selectRPPClass}, {selectPageClass}, {inputRPPClass}`
+
+
+<h4 id="defaults">PaginatorView HTML Defaults</h4>
+
+The default HTML for the {paginatorTemplate} is;
+ ```
+ <a href="#" data-pglink="first" class="{pageLinkClass}" title="First Page">First</a> |
+<a href="#" data-pglink="prev" class="{pageLinkClass}" title="Prior Page">Prev</a> |
+{pageLinks}
+| <a href="#" data-pglink="next" class="{pageLinkClass}" title="Next Page">Next</a> |
+<a href="#" data-pglink="last" class="{pageLinkClass}" title="Last Page">Last</a>
+```
+and the {pageLinks} default setting is (NOTE: the {page} token within pageLinks refers to the page link number and NOT the PaginatorModel current `page` attribute);
+```
+<a href="#" data-pglink="{page}" class="{pageLinkClass}" title="Page {page}">{page}</a>
+```
+
+Please refer to the API Docs in order to review all of the details and defaults. 
+
+
+
+<h2 id="events">Events</h2>
+Since the PaginatorModel and the PaginatorView are extensions of Y.Model and Y.View all of their ATTRS emit "change" events, which is key to how the 
+Model-View architecture works for this module.
+
+<br/><br/>
+Specifically, PaginatorView listens to the 'pageChange' event of the Model in order to update the UI.  As such, the design of this module is focused 
+on users implementing the 'xxxChange' events as their chief programmatic access to the module operations.
+
+<br/><br/>
+Two custom events are available from the PaginatorView, these are;
+<table>
+    <thead>
+        <tr>
+            <th>Event</th>
+            <th>Payload</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>pageChange</td>
+            <td>`{state: model.getAttrs()}`</td>
+            <td>Fires on each change of page of the View (in method _processPageChange)</td>
+        </tr>
+        <tr>
+            <td>render</td>
+            <td>null</td>
+            <td>Fires on each call to `render` the View 
+            <br/>
+            (note: the View re-renders on `totalItems` and `itemsPerPage` change events)</td>
+        </tr>
+    </tbody>
+</table>
+
 
 ```
 <!--    Define HTML markup and script templates for the sample Paginators      -->

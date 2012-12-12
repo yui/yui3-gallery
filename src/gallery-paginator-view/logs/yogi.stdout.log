@@ -1,14 +1,32 @@
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-paginator-view
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5003
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.52 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-paginator-view
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-paginator-view]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
-    test is empty
-       No Tests Provided For This Module
+✔ [gallery-paginator-view]: Passed: 25 Failed: 0 Total: 25 (ignored 0) (1.564 seconds) 94%
 Writing files in JSON format to: /src/gallery-paginator-view/logs/tests.json
-[35myogi[39m [37m[37m[[39m[31mbail[39m[37m][39m[39m grover returned a failure
+
+----------------+-----------+-----------+-----------+-----------+
+File            |   % Stmts |% Branches |   % Funcs |   % Lines |
+----------------+-----------+-----------+-----------+-----------+
+   build/       |     93.64 |     84.06 |     88.57 |     94.04 |
+      All files |     93.64 |     84.06 |     88.57 |     94.04 |
+----------------+-----------+-----------+-----------+-----------+
+All files       |     93.64 |     84.06 |     88.57 |     94.04 |
+----------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 93.64% ( 206/220 )
+Branches     : 84.06% ( 174/207 )
+Functions    : 88.57% ( 31/35 )
+Lines        : 94.04% ( 205/218 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 25 Failed: 0 Total: 25 (ignored 0) (1.564 seconds)
+  [Grover Execution Timer] 3.642 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

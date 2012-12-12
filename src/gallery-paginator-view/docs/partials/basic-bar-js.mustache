@@ -1,0 +1,6 @@
+var pagBar = new Y.PaginatorView({
+    model:      		new Y.PaginatorModel({  page:7, itemsPerPage:200, totalItems:5000 }),
+    container:          '#pagBarACont',
+    paginatorTemplate:  Y.one('#tmpl-bar-A').getHTML(),
+    pageOptions:        [ 10, 25, 50, 100, 'All' ]
+}).render();
