@@ -14,7 +14,7 @@
 				filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
 				coverage:['gallery-flyweight-tree']
 			}).use('gallery-flyweight-tree','fw-tree-tests', 'test','test-console','node-event-simulate', function (Y) {
-				(new Y.Console()).render('#log');
+				(new Y.Test.Console()).render('#log');
 
                 Y.Test.Runner.setName('gallery-flyweight-tree');
 				Y.Test.Runner.run();

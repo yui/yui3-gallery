@@ -93,8 +93,12 @@ FWMgr = Y.Base.create(
          * @protected
          */
         destructor: function () {
-            YArray.each(this._pool, function (fwNode) {
-                fwNode.destroy();
+            var pool = this._pool;
+            Y.Object.each(pool, function (value, key) {
+                YArray.each(value, function (fwNode) {
+                    fwNode.destroy();
+                });
+                delete pool[key];
             });
             this._pool = null;
             YArray.each(this._eventHandles, function (evHandle) {
@@ -138,8 +142,7 @@ FWMgr = Y.Base.create(
          * @protected
          */
         _initNodes: function (parentINode) {
-            var self = this,
-                dynLoad = !!self.get(DYNAMIC_LOADER);
+            var self = this;
             YArray.each(parentINode.children, function (iNode, i) {
                 if (Lang.isString(iNode)) {
                     iNode = {label: iNode};
@@ -150,22 +153,18 @@ FWMgr = Y.Base.create(
                 }
                 iNode._parent = parentINode;
                 iNode.id = iNode.id || Y.guid();
-                if (dynLoad && !iNode.children) {
-                    iNode.expanded = !!iNode.isLeaf;
-                } else {
-                    iNode.expanded = (iNode.expanded === undefined) || !!iNode.expanded;
-                }
+
                 self._initNodes(iNode);
             });
         },
-		/**
-		 * Widget lifecyle method.
+        /**
+         * Widget lifecyle method.
          *
          * Gets the HTML markup for the visible nodes and inserts it into the contentbox.
-		 * @method renderUI
-		 * @protected
-		 */
-		renderUI: function () {
+         * @method renderUI
+         * @protected
+         */
+        renderUI: function () {
             var root = this.getRoot();
             root._renderChildren(this.get(CBX));
             root.release();
@@ -206,7 +205,9 @@ FWMgr = Y.Base.create(
             if (ev && ev.domEvent) {
                 ev.node = self._poolFetchFromEvent(ev);
                 ret = FWMgr.superclass.fire.call(self, type, ev);
-                self._poolReturn(ev.node);
+                if (ev.node) {
+                    self._poolReturn(ev.node);
+                }
                 return ret;
             }
             return FWMgr.superclass.fire.apply(self, arguments);
@@ -220,10 +221,8 @@ FWMgr = Y.Base.create(
          * @chainable
          */
         expandAll: function () {
-            this._forSomeINode(function(iNode) {
-                if (iNode.children && !iNode.expanded) {
-                    this._poolReturn(this._poolFetch(iNode).set(EXPANDED, true));
-                }
+            this.forSomeNodes(function(node) {
+                node.set(EXPANDED, true);
             });
         },
         /**
@@ -233,10 +232,8 @@ FWMgr = Y.Base.create(
          * @chainable
          */
         collapseAll: function () {
-            this._forSomeINode(function(iNode) {
-                if (iNode.children && iNode.expanded) {
-                    this._poolReturn(this._poolFetch(iNode).set(EXPANDED, false));
-                }
+            this.forSomeNodes(function(node) {
+                node.set(EXPANDED, false);
             });
         },
         /**
@@ -254,14 +251,17 @@ FWMgr = Y.Base.create(
          */
         getNodeBy: function (attr, value) {
             var fn, found = null;
-            if (Lang.isFunction(attr)) {
-                fn = attr;
-            } else if (Lang.isString(attr)) {
-                fn = function (node) {
-                    return node.get(attr) === value;
-                };
-            } else {
-                return null;
+            switch (Lang.type(attr)) {
+                case 'function':
+                    fn = attr;
+                    break;
+                case 'string':
+                    fn = function (node) {
+                        return node.get(attr) === value;
+                    };
+                    break;
+                default:
+                    return null;
             }
             this.forSomeNodes(function (node) {
                 if (fn(node)) {
@@ -300,12 +300,15 @@ FWMgr = Y.Base.create(
             if (!type) {
                 return DEFAULT_POOL;
             }
-            if (Lang.isString(type)) {
+            if (typeof type === 'string') {
+                if (!Y[type]) {
+                    throw new TypeError('Missing node class: Y.' + type );
+                }
                 type = Y[type];
             }
             type = type.NAME;
             if (!type) {
-                throw "Node contains unknown type";
+                throw new TypeError("Node contains unknown type");
             }
             return type;
         },
@@ -411,7 +414,7 @@ FWMgr = Y.Base.create(
          * @protected
          */
         _findINodeByElement: function(el) {
-            var id = el.ancestor(DOT + FWNode.CNAMES.CNAME_NODE, true).get('id'),
+            var id,
                 found = null,
                 scan = function (iNode) {
                     if (iNode.id === id) {
@@ -423,8 +426,13 @@ FWMgr = Y.Base.create(
                     }
                     return false;
                 };
-            if (scan(this._tree)) {
-                return found;
+            el = el.ancestor(DOT + FWNode.CNAMES.CNAME_NODE, true);
+            if (el) {
+                id = el.get('id');
+
+                if (scan(this._tree)) {
+                    return found;
+                }
             }
             return null;
         },
@@ -447,9 +455,9 @@ FWMgr = Y.Base.create(
          * If the function returns true, the traversing will terminate.
          * @method _forSomeINode
          * @param fn {Function} Function to call on each configuration iNode
-         *		@param fn.iNode {Object} iNode in the configuration tree
-         *		@param fn.depth {Integer} depth of this iNode within the tree
-         *		@param fn.index {Integer} index of this iNode within the array of its siblings
+         *        @param fn.iNode {Object} iNode in the configuration tree
+         *        @param fn.depth {Integer} depth of this iNode within the tree
+         *        @param fn.index {Integer} index of this iNode within the array of its siblings
          * @param scope {Object} scope to run the function in, defaults to `this`.
          * @return true if any of the function calls returned true (the traversal was terminated earlier)
          * @protected
@@ -471,9 +479,9 @@ FWMgr = Y.Base.create(
          * If dynamic loading is enabled, it will not run over nodes not yet loaded.
          * @method forSomeNodes
          * @param fn {function} function to execute on each node.  It will receive:
-         *	@param fn.node {FlyweightTreeNode} node being visited.
-         *	@param fn.depth {Integer} depth from the root. The root node is level zero and it is not traversed.
-         *	@param fn.index {Integer} position of this node within its branch
+         *    @param fn.node {FlyweightTreeNode} node being visited.
+         *    @param fn.depth {Integer} depth from the root. The root node is level zero and it is not traversed.
+         *    @param fn.index {Integer} position of this node within its branch
          * @param scope {Object} Scope to run the function in.  Defaults to the FlyweightTreeManager instance.
          * @return {Boolean} true if any function calls returned true (the traversal was interrupted)
          */
@@ -532,19 +540,19 @@ FWMgr = Y.Base.create(
                     iNode = iNode._parent;
                     if (iNode && iNode._parent) {
                         expand(iNode);
-                        self._poolReturn(self._poolFetch(iNode).set('expanded', true));
+                        self._poolReturn(self._poolFetch(iNode).set(EXPANDED, true));
                     }
                 };
 
             if (iNode && iNode !== prevINode) {
 
-                el = Y.one('#' + prevINode.id + ' .' + FWNode.CNAMES.CNAME_CONTENT);
+                el = Y.one(HASH + prevINode.id + ' .' + FWNode.CNAMES.CNAME_CONTENT);
                 el.blur();
                 el.set(TABINDEX, -1);
 
                 expand(iNode);
 
-                el = Y.one('#' + iNode.id + ' .' + FWNode.CNAMES.CNAME_CONTENT);
+                el = Y.one(HASH + iNode.id + ' .' + FWNode.CNAMES.CNAME_CONTENT);
                 el.focus();
                 el.set(TABINDEX,0);
 
@@ -565,13 +573,6 @@ FWMgr = Y.Base.create(
         _dynamicLoaderSetter: function (value) {
             if (!Lang.isFunction(value) &&  value !== null) {
                 return Y.Attribute.INVALID_VALUE;
-            }
-            if (value) {
-                this._forSomeINode(function(iNode) {
-                    if (!iNode.children) {
-                        iNode.expanded = !!iNode.isLeaf;
-                    }
-                });
             }
             return value;
         }
