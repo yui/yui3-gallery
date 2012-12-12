@@ -1,11 +1,10 @@
 {
-    "name": "gallery-alea",
     "builds": {
         "gallery-alea": {
             "jsfiles": [
                 "alea.js"
-            ],
-            "meta": {}
+            ]
         }
-    }
+    },
+    "name": "gallery-alea"
 }

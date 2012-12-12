@@ -20,7 +20,7 @@
 
         Y.one('#rollDice').on('click', function () {
             var numberOfDice = +numberOfDiceInputNode.get('value');
-            
+
             if (numberOfDice > 0) {
                 resultsNode.append('<span> ' + rollD6(numberOfDice) + ' </span>');
             }

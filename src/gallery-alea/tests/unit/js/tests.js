@@ -55,7 +55,11 @@ YUI.add('module-tests', function (Y) {
                 seed2 = Math.random(),
 
                 alea0 = new Y.Alea(seed0, seed1, seed2),
-                alea1 = new Y.Alea(seed0, seed1, seed2),
+                alea1 = new Y.Alea([
+                    seed0,
+                    seed1,
+                    seed2
+                ]),
                 alea2 = new Y.Alea(seed0, seed1, seed2);
 
             for (; i < 144; i += 1) {
