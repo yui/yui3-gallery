@@ -1,3 +1,10 @@
 {
-    "gallery-datatable-paginator": {}
+    "gallery-datatable-paginator": {
+         "requires":[
+             "datatable-base",
+             "base-build",
+             "datatype",
+             "json"
+          ]
+    }
 }

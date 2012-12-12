@@ -3,20 +3,27 @@
 <head>
     <title>gallery-datatable-paginator</title>
     <script src="/build/yui/yui.js"></script>
-    <script src="js/tests.js"></script>
+    <script src="js/tests-dtpag.js"></script>
 </head>
 <body class="yui3-skin-sam">
+
+<div id="pagCont"></div>
+<div id="dtable"></div>
 <div id="logger"></div>
 
 <script>
 YUI({
-    coverage: ['datatable-paginator'],
+    coverage: ['gallery-datatable-paginator'],
     filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-}).use('test-console', 'test', 'module-tests', function(Y) {
-    
+}).use('gallery-datatable-paginator', 'test-console', 'test', 'module-tests-dtpag',
+    "gallery-paginator-view",
+    "datatable-sort", "datatable-scroll", "datatable-datasource", "model-sync-rest",
+    "datasource-function", "datasource-jsonschema", "querystring-parse", 
+    "node-event-simulate",  function(Y) {
+
     (new Y.Test.Console()).render('#logger');
 
-    Y.Test.Runner.setName('gallery-datatable-paginator');
+    Y.Test.Runner.setName('gallery-paginator-view');
     Y.Test.Runner.run();
 });
 </script>
