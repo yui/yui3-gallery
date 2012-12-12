@@ -213,7 +213,7 @@ Y.namespace('Bottle').get = get;
 Y.namespace('Bottle').lazyLoad = lazyLoad;
 
 
-}, 'gallery-2012.12.05-21-01', {
+}, 'gallery-2012.12.12-21-11', {
     "skinnable": "true",
     "requires": [
         "gallery-bt-shortcut",

@@ -390,4 +390,4 @@ Mask.on('gesturemovestart', function (E) {
 });
 
 
-}, 'gallery-2012.12.05-21-01', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});
+}, 'gallery-2012.12.12-21-11', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});

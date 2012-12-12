@@ -146,6 +146,17 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
             return this._handleIOFailure(id, R, cfg);
         }
 
+        /**
+         * Static property, a callback function executed when a loader success loaded new data. arguments are: Loader, dara, clickedNode.
+         *
+         * @property SUCCESSCB
+         * @type Function
+         * @static
+         */
+        if (Y.Bottle.Loader.SUCCESSCB) {
+            Y.Bottle.Loader.SUCCESSCB(this, data, O);
+        }
+
         if (this._selector) {
             data = this._selector(data, this.get('selector'));
         }
@@ -164,6 +175,17 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
         var O = cfg.target;
 
         O.removeClass(CLASSES.LOADING).addClass(CLASSES.ERROR);
+
+        /**
+         * Static property, a callback function executed when a loader failed loaded new data. arguments are: Loader, response, clickedNode.
+         *
+         * @property FAILURECB
+         * @type Function
+         * @static
+         */
+        if (Y.Bottle.Loader.FAILURECB) {
+            Y.Bottle.Loader.FAILURECB(this, R, cfg);
+        }
     }
 }, {
     /**
@@ -270,4 +292,4 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').Loader = Loader;
 
 
-}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-syncscroll", "io-base", "json-parse"]});
+}, 'gallery-2012.12.12-21-11', {"requires": ["gallery-bt-syncscroll", "io-base", "json-parse"]});

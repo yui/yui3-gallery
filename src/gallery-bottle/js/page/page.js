@@ -165,5 +165,22 @@ Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosit
      */
     getCurrent: function () {
         return current;
+    },
+
+    /**
+     * Update content size and scroll position
+     *
+     * @method updateContent
+     * @static
+     */
+    updateContent: function () {
+        var s = current.topScroll();
+
+        if (s) {
+            s._uiDimensionsChange();
+            if (s && s._maxScrollY) {
+                s.scrollTo(s.get('scrollX'), Math.min(s.get('scrollY'), s._maxScrollY));
+            }
+        }
     }
 });

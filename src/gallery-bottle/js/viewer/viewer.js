@@ -11,7 +11,7 @@ var WIDTH_CHANGE = 'widthChange',
 
     CLASSES = {
         IMAGE: PREFIX + 'image',
-        BOTTON: PREFIX + 'botton',
+        BOTTON: PREFIX + 'button',
         EXPAND: PREFIX + 'expand'
     },
 
@@ -82,6 +82,7 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
                 O.once('load', function (E) {
                     initImage(E.target);
                     that._uiDimensionsChange();
+                    that.syncScroll();
                 });
             }
         });
@@ -98,6 +99,9 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
         ]);
 
         Y.once('btNative', this._nativeScroll, this);
+
+        this._uiDimensionsChange();
+        this.syncScroll();
     },
 
     /**

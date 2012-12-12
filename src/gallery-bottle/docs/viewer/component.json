@@ -4,6 +4,7 @@
     "description": "is a Widget provides a HTML Viewer interface. When contents or images are wider then device, Viewer can be scroll horizontally. And, from beginning, all images in Viewer are scaled down to fit the device width, and a 'expand' button will be provided for each scaled images.",
     "className": "Viewer",
     "dataRole": "viewer",
+    "galleryTag": "gallery-2012.10.31-20-00",
 
     "hidePage": true,
     "hideShortcut": true,

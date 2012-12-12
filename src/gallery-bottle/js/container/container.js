@@ -22,7 +22,7 @@ var HEIGHT_CHANGE = 'heightChange',
 
                 node.setStyles({
                     top: (header && ns && pfix) ? 0 : '',
-                    bottom: (!header && ns && pfix) ? 0 : '',
+                    bottom: (!header && ns && pfix) ? 0 : ''
                 });
 
                 if (fixedPos) {

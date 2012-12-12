@@ -24,7 +24,7 @@ var HEIGHT_CHANGE = 'heightChange',
 
                 node.setStyles({
                     top: (header && ns && pfix) ? 0 : '',
-                    bottom: (!header && ns && pfix) ? 0 : '',
+                    bottom: (!header && ns && pfix) ? 0 : ''
                 });
 
                 if (fixedPos) {
@@ -385,7 +385,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
 });
 
 
-}, 'gallery-2012.12.05-21-01', {
+}, 'gallery-2012.12.12-21-11', {
     "requires": [
         "scrollview",
         "widget-child",

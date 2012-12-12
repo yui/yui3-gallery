@@ -58,7 +58,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
          * @type EventHandle
          * @private
          */
-        this._bpgEventHandlers = this.after(COLUMN_CHANGE, this._updateColumns)
+        this._bpgEventHandlers = this.after(COLUMN_CHANGE, this._updateColumns);
     },
 
     destructor: function () {

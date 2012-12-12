@@ -563,4 +563,4 @@ Mask.on('gesturemovestart', function (E) {
 });
 
 
-}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-page"]});
+}, 'gallery-2012.12.12-21-11', {"requires": ["gallery-bt-page"]});

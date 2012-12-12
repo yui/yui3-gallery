@@ -13,7 +13,7 @@ var WIDTH_CHANGE = 'widthChange',
 
     CLASSES = {
         IMAGE: PREFIX + 'image',
-        BOTTON: PREFIX + 'botton',
+        BOTTON: PREFIX + 'button',
         EXPAND: PREFIX + 'expand'
     },
 
@@ -84,6 +84,7 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
                 O.once('load', function (E) {
                     initImage(E.target);
                     that._uiDimensionsChange();
+                    that.syncScroll();
                 });
             }
         });
@@ -100,6 +101,9 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
         ]);
 
         Y.once('btNative', this._nativeScroll, this);
+
+        this._uiDimensionsChange();
+        this.syncScroll();
     },
 
     /**
@@ -156,7 +160,7 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
 Y.namespace('Bottle').Viewer = Viewer;
 
 
-}, 'gallery-2012.12.05-21-01', {
+}, 'gallery-2012.12.12-21-11', {
     "requires": [
         "gallery-bt-syncscroll",
         "gallery-zui-rascroll",

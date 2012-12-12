@@ -221,7 +221,7 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
         },
 
         /**
-         * Display left button and right botton when set to true.
+         * Display left button and right button when set to true.
          *
          * @attribute showButtons
          * @type Boolean
@@ -305,7 +305,7 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
 Y.namespace('Bottle').Carousel = Carousel;
 
 
-}, 'gallery-2012.12.05-21-01', {
+}, 'gallery-2012.12.12-21-11', {
     "requires": [
         "gallery-bt-syncscroll",
         "gallery-zui-rascroll",

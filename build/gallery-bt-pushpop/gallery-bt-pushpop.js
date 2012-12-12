@@ -539,4 +539,4 @@ PushPop.prototype = {
 Y.namespace('Bottle').PushPop = PushPop;
 
 
-}, 'gallery-2012.12.05-21-01', {"requires": ["base-build", "widget-parent", "gallery-bt-container"]});
+}, 'gallery-2012.12.12-21-11', {"requires": ["base-build", "widget-parent", "gallery-bt-container"]});

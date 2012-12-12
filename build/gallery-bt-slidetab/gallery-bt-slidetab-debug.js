@@ -319,7 +319,7 @@ SlideTab = Y.Base.create('btslidetab', Y.Widget, [Y.WidgetStdMod, Y.Bottle.SyncS
 Y.namespace('Bottle').SlideTab = SlideTab;
 
 
-}, 'gallery-2012.12.05-21-01', {
+}, 'gallery-2012.12.12-21-11', {
     "requires": [
         "gallery-bt-syncscroll",
         "widget-stdmod",

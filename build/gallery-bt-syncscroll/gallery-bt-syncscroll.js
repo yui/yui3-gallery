@@ -18,7 +18,18 @@ YUI.add('gallery-bt-syncscroll', function (Y, NAME) {
 var  WIDTH_CHANGE = 'widthChange',
 
 SyncScroll = function (config) {
-    Y.on('btReady', this._bssInitParentScroll, this);
+    var firstInit = false,
+        that = this;
+    Y.once('btReady', function () {
+        if (firstInit) {
+            that._bssInitParentScroll();
+        } else {
+            that.after('render', function (E) {
+                that._bssInitParentScroll();
+            });
+        }
+    });
+    firstInit = true;
 };
 
 /**
@@ -115,4 +126,4 @@ SyncScroll.prototype = {
 Y.namespace('Bottle').SyncScroll = SyncScroll;
 
 
-}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-page"]});
+}, 'gallery-2012.12.12-21-11', {"requires": ["gallery-bt-page"]});

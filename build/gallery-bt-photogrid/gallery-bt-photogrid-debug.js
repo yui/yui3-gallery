@@ -60,7 +60,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
          * @type EventHandle
          * @private
          */
-        this._bpgEventHandlers = this.after(COLUMN_CHANGE, this._updateColumns)
+        this._bpgEventHandlers = this.after(COLUMN_CHANGE, this._updateColumns);
     },
 
     destructor: function () {
@@ -391,4 +391,4 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').PhotoGrid = PhotoGrid;
 
 
-}, 'gallery-2012.12.05-21-01', {"requires": ["gallery-bt-syncscroll"]});
+}, 'gallery-2012.12.12-21-11', {"requires": ["gallery-bt-syncscroll"]});

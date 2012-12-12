@@ -54,7 +54,9 @@ var positionFixedSupport = null,
      * @method getTouchSupport
      * @return {Boolean}
      */
-    getTouchSupport: function () { return ((Y.config.win && ('ontouchstart' in Y.config.win)) && !(Y.UA.chrome && Y.UA.chrome < 6))},
+    getTouchSupport: function () {
+        return ((Y.config.win && ('ontouchstart' in Y.config.win)) && !(Y.UA.chrome && Y.UA.chrome < 6));
+    },
 
     /**
      * get current Device touch support status

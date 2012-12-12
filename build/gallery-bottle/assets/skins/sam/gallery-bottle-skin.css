@@ -9,8 +9,8 @@
 .bcr_btnr {background-position:10px -595px}
 .bcr_off {opacity:0.5;filter:alpha(opacity='50',style=0)}
 
-.yui3-btviewer .bvi_botton {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer}
-.yui3-btviewer .bvi_botton.bvi_expand {background-position:5px -395px}
+.yui3-btviewer .bvi_button {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer}
+.yui3-btviewer .bvi_button.bvi_expand {background-position:5px -395px}
 .yui3-btviewer .bvi_image.bvi_expand {max-width:none}
 
 .yui3-btloader-content .blo_loading{background:#fff url(http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif) no-repeat 50% 50%;min-height:40px}

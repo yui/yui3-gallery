@@ -16,7 +16,18 @@
 var  WIDTH_CHANGE = 'widthChange',
 
 SyncScroll = function (config) {
-    Y.on('btReady', this._bssInitParentScroll, this);
+    var firstInit = false,
+        that = this;
+    Y.once('btReady', function () {
+        if (firstInit) {
+            that._bssInitParentScroll();
+        } else {
+            that.after('render', function (E) {
+                that._bssInitParentScroll();
+            });
+        }
+    });
+    firstInit = true;
 };
 
 /**
