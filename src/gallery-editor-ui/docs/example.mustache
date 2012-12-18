@@ -1,0 +1,20 @@
+<div class="intro">
+    <p>Intro example</p>
+</div>
+
+<h2>Example EditorUI</h2>
+<p>Description</p>
+
+{{>example-html}}
+
+<script>
+YUI().use('{{use}}', function(Y) {
+	
+	Y.on('domready', function() {
+		/* create editor */		
+		{{>example-js}}
+	});
+});
+</script>
+
+

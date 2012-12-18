@@ -1,0 +1,70 @@
+<!-- https://github.com/apipkin/yuiconf2012/tree/master/src/gallery-sizer example -->
+<!-- http://www.youtube.com/watch?v=xp-S1I7iEDs&feature=player_embedded -->
+<div class="intro">
+    <p>
+   This module builds on top of YUI <a href="http://yuilibrary.com/yui/docs/editor/">Rich Text Editor</a> base to create a user interface for editting and formatting content. The interface is similair to the one used in Gmail to compose html messages.
+    </p>
+	<p>This module adds the following functionality:
+	<ul>
+	  <li>bold, italic, underline, headers, blockquote formatting support</li>
+	  <li>lists create, indent and outdent support</li>
+	  <li>aligning of text</li>
+	  <li>advanced modal to upload, zoom, position images (needs HTML5 browser)</li>
+	  <li>modal to for inserting links</li>
+	  <li>toggle between visual and html edit mode</li>
+	  <li>html is stripped from unwanted tags and styles</li>
+	  <li>html is transformed to use html5 semantic tags</li>
+	  <li>html is formatted for clear outline</li>
+	  <li>visual edit mode can be matched with your existing style</li>
+	  <li>clear styling from elements</li>
+	  <li>copy+paste events are stripped from unwanted html</li>
+	</ul>
+	</p>
+</div>	
+
+<h2>Description</h2>
+
+<p>The module extends a &lt;textarea&gt; node in a form.</p>
+<p>Their are currently limited configuration and skinning options available.</p>
+<p>The module was designed to be more lightweight and completely based on the YUI3 framework unlike CKeditor or tinyMCE.</p
+
+<h2>Example</h2>
+Html
+```
+<form method="post" id="postForm">
+  <textarea name="html" id="editContent">
+    <!-- example html encoded -->
+    Hello &lt;strong&gt;World&lt;/strong&gt;!
+  </textarea>
+  <button type="submit">Save</button>
+</form>
+```
+JS gallery module init
+```
+<script>
+	Y.on('domready', function() {
+		{{>example-js}}
+	});
+</script>
+```
+
+<h2>Configuration</h2>
+<p>Default text is picked up from the textarea content. Set the CSS for the visual edit mode. Set the image max width (same as composer?).</p>
+
+<h2>Backend Setup</h2>
+<p>Resize and crop image script</p>
+
+<h2>Known issues</h2>
+<p>The image manager module only supports HTML5 capable browsers. IE<=10 Seems to have issues with the image uploader.</p>
+
+<h2>Todo</h2>
+<ul>
+<li>Image border, float left/right</li>
+<li>Undo/redo support</li>
+<li>Editor.Render() call</li>
+<li>Accessibility</li>
+<li>Skins</li>
+</ul>
+
+
+

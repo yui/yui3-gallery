@@ -1,0 +1,12 @@
+{
+    "name": "gallery-editor-ui",
+    "builds": {
+        "gallery-editor-ui": {
+            "jsfiles": [
+                "js/gallery-editor-ui.js",
+				"js/gallery-editor-image-manage.js",
+				"js/gallery-editor-formatter.js"
+            ]
+        }
+    }
+}
