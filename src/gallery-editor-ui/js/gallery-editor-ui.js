@@ -387,13 +387,13 @@
 					//}else{
 						//Y.log('no html5 browser');
 					//}
-					g.on("upload:start", function(event) {
+					g.on("upload:start",Y.bind(function(event){
 						//disable save button
-					});
-					g.on("upload:error", function(event) {
+					},this));
+					g.on("upload:error",Y.bind(function(event){
 						//notify user of upload error
-					});
-					g.on("upload:complete", function(event) {
+					},this));
+					g.on("upload:complete",Y.bind(function(event){
 						//enable save button
 						
 						var data = Y.JSON.parse(event.data);//return span with title of image, keep
@@ -405,7 +405,7 @@
 							Y.log(data);	
 						}
 
-					});	
+					},this));
 					
 					//Y.one("#mediadialog-data").set("value","");//existing gallery?
 					Y.one("#mediadialog-source").set("value",src);

@@ -508,22 +508,13 @@
 				var uploader = new Y.UploaderHTML5;
 				
 				uploader.on("uploadstart",Y.bind(function(event) {
-					//if(lnk){
-						//lnk.set("text","Saving...");	
-					//}
-					this.fire("upload:start");
+					this.fire("upload:start",event);
 				},this));
 				uploader.on("uploaderror",Y.bind(function(event) {
-					//if(lnk){
-						//lnk.set("text","Saving...");	
-					//}
-					this.fire("upload:error");
+					this.fire("upload:error",event);
 				},this));
 				uploader.on("uploadcomplete",Y.bind(function(event) {
-					//if(lnk){
-						//lnk.set("text","Saving...");	
-					//}
-					this.fire("upload:complete");
+					this.fire("upload:complete",event);
 				},this));
 
 				uploader.upload(file, this.get('uploadToUrl'), this.getFileDetails());
