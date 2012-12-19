@@ -18,7 +18,9 @@
 YUI({
     coverage: ['gallery-datatable-selection'],
     filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-}).use( 'gallery-datatable-selection', 'test-console', 'test', 'module-tests', function(Y) {
+}).use( 'gallery-datatable-selection', 'test-console', 'test', 'module-tests', 
+        'node-event-simulate', 
+	function(Y) {
 
     (new Y.Test.Console()).render('#logger');
 

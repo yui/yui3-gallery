@@ -13,9 +13,7 @@
  Additionally, a "range" selection capability is provided by using the browser range selector click key modifier,
  specifically the Shift key on most systems.
 
- The extension has been written to allow preserving the "selected" rows or cells during "sort" operations.  This is
- accomplished by storing the selected TR's basis record, specifically the "clientId" attribute which remains unique
- after sorting operations.
+ The extension has been written to allow preserving the "selected" rows or cells during "sort" operations.
 
  Specific attributes are provided that can be read for current selections, including the ATTRS [selectedRows](#attr_selectedRows),
  and [selectedCells](#attr_selectedCells).
@@ -155,6 +153,7 @@ DtSelection.ATTRS = {
      */
     selectionMulti: {
         value:      false,
+//        setter:     '_setSelectionMulti',
         validator:  Y.Lang.isBoolean
     }
 
@@ -388,7 +387,7 @@ Y.mix( DtSelection.prototype, {
         //  These listeners are here solely for "sort" actions, to allow preserving the "selections"
         //   pre-sort and re-applying them after the TBODY has been sorted and displayed
         //
-    //    this._subscrSelectComp.push( this.before('sort', this._beforeResetDataSelect) );
+        this._subscrSelectComp.push( this.before('sort', this._beforeResetDataSelect) );
         this._subscrSelectComp.push( this.after('sort', this._afterResetDataSelect) );
     //        this._subscrSelectComp.push( this.data.before('*:reset', Y.bind('_beforeResetDataSelect', this) ) );
     //        this._subscrSelectComp.push( this.data.after('*:reset', Y.bind('_afterResetDataSelect', this) ) );
@@ -429,7 +428,6 @@ Y.mix( DtSelection.prototype, {
         }
         this._subscrHighlight = null;
 
-        // Clear up the overall component listeners (array)
         Y.Array.each( this._subscrSelectComp,function(item){
             if (!item) {
                 return;
@@ -505,12 +503,7 @@ Y.mix( DtSelection.prototype, {
             if ( !keepPrev ) {
                 this._selections = [];
             }
-
-            if(this.get('selectionMode')==='row') {
-                this._selections.push( this._selectTr(tar) );
-            } else {
-                this._selections.push( this._selectTd(tar) );
-            }
+            this._selections.push(tar);
 
         }
 
@@ -524,9 +517,9 @@ Y.mix( DtSelection.prototype, {
         //
         sobj = { selectionMode : this.get('selectionMode')  };
 
-        if(this.get('selectionMode')==='cell') {
+        if(this.get('selectionMode').toLowerCase && this.get('selectionMode')==='cell') {
             sobj.cells = this.get('selectedCells');
-        } else if (this.get('selectionMode')==='row') {
+        } else if (this.get('selectionMode').toLowerCase && this.get('selectionMode')==='row') {
             sobj.rows = this.get('selectedRows');
         }
 
@@ -536,7 +529,7 @@ Y.mix( DtSelection.prototype, {
     /**
      * Event that fires on every "select" action and returns the LAST SELECTED item, either a cell or a row.
      * Please see the event "selection" which provides a cumulative total of all selected items as opposed to
-     * just the last item.   (Fired from method [_selectedChange](#method__selectedChange)
+     * just the last item.
      *
      * @event selected
      * @param {Object} obj Return object
@@ -546,9 +539,7 @@ Y.mix( DtSelection.prototype, {
 
     /**
      * Event that fires on every DataTable "select" event, returns current selections, either cells or rows depending
-     * on the current "selectionMode".  (Fired from method [_selectedChange](#method__selectedChange)
-     *
-     *
+     * on the current "selectionMode".
      * @event selection
      * @param {Object} obj Return object
      * @param {Object} obj.selectionMode Current setting of attribute [selectionMode](#attr_selectionMode)
@@ -569,11 +560,8 @@ Y.mix( DtSelection.prototype, {
         var tarNew  = o.newVal,
             tarPrev = o.prevVal || null,
             newRec, newRecI, newCol, newColI, prevRec, prevRecI, prevCol, prevColI, delCol, delRow,
-            coldir, rowdir, cell, i, j, tr, sel;
+            coldir, rowdir, cell, i, j, tr;
 
-        //
-        //  Process through the first and last targets ...
-        //
         if ( tarNew && tarPrev ) {
             newRec  = this.getRecord(tarNew);
             newRecI = this.data.indexOf(newRec);
@@ -606,8 +594,7 @@ Y.mix( DtSelection.prototype, {
                             cell = this.getCell(tarPrev,[rowdir*(j),coldir*(i)]);
                             if (cell) {
                                 cell.addClass(this._classSelected);
-                                sel = this._selectTd(cell);
-                                this._selections.push( sel );
+                                this._selections.push(cell);
                             }
                         }
                     }
@@ -621,8 +608,7 @@ Y.mix( DtSelection.prototype, {
                         tr = this.getRow(prevRecI+rowdir*(j));
                         if (tr) {
                             tr.addClass(this._classSelected);
-                            sel = this._selectTr(tr);
-                            this._selections.push( sel );
+                            this._selections.push(tr);
                         }
                     }
 
@@ -645,7 +631,6 @@ Y.mix( DtSelection.prototype, {
      *   <li>`rows.tr` {Node} Node instance of the TR that was selected</li>
      *   <li>`rows.record` {Model} The Model associated with the data record for the selected TR</li>
      *   <li>`rows.recordIndex` {Integer} The record index of the selected TR within the current "data" set</li>
-     *   <li>`rows.recordClientId {String} The record clientId attribute setting</li>
      * </ul>
 
      * @method _getSelectedRows
@@ -658,21 +643,18 @@ Y.mix( DtSelection.prototype, {
             tr, rec;
         
         Y.Array.each(this._selections,function(item){
-            if(!item || !item.recClient) {
+            if(!item) {
                 return;
             }
-
-            tr  = this.getRow(item.recClient);
-
+            tr = ( item.get('tagName').toLowerCase() === 'tr' ) ? item : item.ancestor('tr');
             // if and only if, it's a TR and not in "trs" array ... then add it
-            if ( Y.Array.indexOf(trs,tr) === -1 ) {
-                rec = this.data.getByClientId( item.recClient );
-                trs.push( tr );
+            if ( tr.get('tagName').toLowerCase() === 'tr' && Y.Array.indexOf(trs,tr) === -1) {
+                rec = this.data.getByClientId(tr.getData('yui3-record'));
+                trs.push(tr);
                 rows.push({
-                    tr:             tr,    // this is an OLD, stale TR from pre-sort
-                    record:         rec,
-                    recordIndex:    this.data.indexOf(rec),
-                    recordClientId: item.recClient
+                    tr:     tr,   // this is an OLD, stale TR from pre-sort
+                    record: rec,
+                    recordIndex: this.data.indexOf(rec)
                 });
             }
         },this);
@@ -709,23 +691,22 @@ Y.mix( DtSelection.prototype, {
                 return;
             }
 
-            if ( item.td ) {
-                col = this.getColumn(item.colName);
-                tr  = item.tr;
-                rec = this.data.getByClientId(item.recClient);
+            if ( item.get('tagName').toLowerCase() === 'td' ) {
+                col = this.getColumnByTd(item);
+                tr  = item.ancestor("tr");
+                rec = this.data.getByClientId(tr.getData('yui3-record'));
 
                 cells.push({
-                    td:          item.td,
+                    td:          item,
                     record:      rec,
                     recordIndex: this.data.indexOf(rec),
-                    recordClientId:  item.recClient,
                     column:      col,
-                    columnName:  item.colName,
+                    columnName:  col.key || col.name,
                     columnIndex: Y.Array.indexOf(cols,col)
                 });
-            } else if ( item.tr ) {
-                tr = item.tr;
-                rec = this.data.getByClientId(item.recClient);
+            } else if ( item.get('tagName').toLowerCase() === 'tr' ) {
+                tr = item;
+                rec = this.data.getByClientId(tr.getData('yui3-record'));
                 var tdNodes = tr.all("td");
                 if ( tdNodes ) {
                     tdNodes.each(function(td){
@@ -734,7 +715,6 @@ Y.mix( DtSelection.prototype, {
                             td:          td,
                             record:      rec,
                             recordIndex: this.data.indexOf(rec),
-                            recordClientId:  item.recClient,
                             column:      col,
                             columnName:  col.key || col.name,
                             columnIndex: Y.Array.indexOf(cols,col)
@@ -761,20 +741,16 @@ Y.mix( DtSelection.prototype, {
         this._selections = [];
         if ( Y.Lang.isArray(val) && this.data.size() > val.length ) {
             Y.Array.each(val,function(item) {
-                var row, col, td, ckey,sel;
-                row = ( Y.Lang.isNumber(item.record) ||
-                    typeof item.record ==='string') ? this.getRow( item.record ) : row;
+                var row, col, td, ckey;
+                row = ( Y.Lang.isNumber(item.record) ) ? this.getRow( item.record ) : row;
                 col = ( Y.Lang.isNumber(item.column) ||
                     typeof item.column ==='string' ) ? this.getColumn(item.column) : col;
 
                 if ( row && col ) {
                     ckey = col.key || col.name;
                     if ( ckey ) {
-                        td  = row.one('.'+this.getClassName('col')+'-'+ckey);
-                        sel = this._selectTd(td);
-                        if(sel) {
-                            this._selections.push(sel);
-                        }
+                        td = row.one('.'+this.getClassName('col')+'-'+ckey);
+                        this._selections.push(td);
                         td.addClass(this._classSelected);
                     }
                 }
@@ -784,14 +760,13 @@ Y.mix( DtSelection.prototype, {
         return val;
     },
 
-
     /**
      * A setter method for attribute `selectedRows` that takes as input an array of desired DataTable
      * record indices to be "selected", clears existing selections and sets the "selected" records and
      * highlights the TR's
      *
      * @method _setSelectedRows
-     * @param  {Array} val Array of record indices (or record "clientId") desired to be set as selected.
+     * @param val {Array} recIndices Array of record indices desired to be set as selected.
      * @return {Array} records Array of DataTable records (Y.Model) for each selection chosen
      * @private
      */
@@ -799,13 +774,9 @@ Y.mix( DtSelection.prototype, {
         this._selections = [];
         if ( Y.Lang.isArray(val) && this.data.size() > val.length ) {
             Y.Array.each(val,function(item){
-                var tr = this.getRow(item),
-                    sel;
+                var tr = this.getRow(item);
                 if ( tr ) {
-                    sel = this._selectTr(tr);
-                    if(sel) {
-                        this._selections.push( sel );
-                    }
+                    this._selections.push( tr );
                     tr.addClass(this._classSelected);
                 }
             },this);
@@ -813,48 +784,53 @@ Y.mix( DtSelection.prototype, {
         return val;
     },
 
-
     /**
-     * Method that returns a TD's "selection obj" expected for the _selections buffer
-     * @method _selectTd
-     * @param tar {Node}  A Node instance of TD to be prepared for selection
-     * @return {Object} obj Returned object includes properties (td,tr,recClient,colName)
+     * Method is fired BEFORE a "reset" action takes place on the "data", usually related to a column sort.
+     * This is used to preserve the pre-sorted data (temporarily in _selections) prior to sorting so that
+     * we can reapply the "selections" after the sort is completed (see [_afterResetDataSelect](#method__afterResetDataSelect))
+     *
+     * @method _beforeResetDataSelect
      * @private
      */
-    _selectTd : function(tar){
-        var rec,col,rtn=false;
-        if(tar && tar.get('tagName').toLowerCase() === 'td') {
-            rec = this.getRecord(tar.ancestor());
-            col = this.getColumnByTd(tar);
-            rtn = {
-                td:        tar,
-                tr:        tar.ancestor(),
-                recClient: (rec) ? rec.get('clientId') : null,
-                colName:   col.key || col.name || null
-            };
+    _beforeResetDataSelect: function() {
+        if( !this._selections || this._selections.length === 0 ) {
+            return;
         }
-        return rtn;
-    },
 
-    /**
-     * Method that returns a TR's "selection obj" expected for the _selections buffer
-     * @method _selectTr
-     * @param tar {Node}  A Node instance of TR to be prepared for selection
-     * @return {Object} obj Returned object includes properties (tr,recClient)
-     * @private
-     */
-    _selectTr : function(tar){
-        var rec, rtn = false;
-        if(tar && tar.get('tagName').toLowerCase() === 'tr') {
-            rec = this.getRecord(tar);
-            rtn = {
-                tr:        tar,
-                recClient: (rec) ? rec.get('clientId') : null
-            };
+        // Save a copy of the current pre-sort rows and/or cells ...
+        var rows  = this.get('selectedRows'),   // array as {record,tr}
+            cells = this.get('selectedCells');  // array as {record,td,column,columnIndex,columnName}
+
+        // Clear out the selections, reset selected and remove "selected" CSS on table
+        this._selections = [];
+        this.set('selected',null);
+        this._clearAll(this._classSelected);
+
+        //
+        //  Loop over all of the rows or cells (depending on mode),
+        //    and push a temporary record to the _selections array,
+        //    to be used in _afterResetDataSelect to reconstruct selections
+        //
+        if( this.get('selectionMode') === 'row' && rows && rows.length > 0 ) {
+
+            // Push the Model data only to the _selections array ...
+            Y.Array.each(rows,function(r){
+                if ( r && r.record ) {
+                    this._selections.push( r.record );
+                }
+            },this);
+
+        } else if ( this.get('selectionMode') === 'cell' && cells && cells.length > 0 ) {
+
+            // Push the Model data and column index only to the _selections array
+            Y.Array.each(cells,function(r){
+                if(r && r.record && r.columnIndex) {
+                    this._selections.push({record:r.record, colIndex:r.columnIndex});
+                }
+            },this);
         }
-        return rtn;
-    },
 
+    },
 
     /**
      * Method is fired AFTER a "reset" action takes place on the "data", usually related to a column sort.
@@ -871,27 +847,22 @@ Y.mix( DtSelection.prototype, {
         if( !this._selections || this._selections.length === 0 ) {
             return;
         }
-        var tr, td, buffer = [], colIndex, col,
-            cols = this.get('columns');
-
-        this._clearAll(this._classSelected);
-
+        var tr, td, buffer = [];
 
         Y.Array.each(this._selections,function(item){
-            if( this.get('selectionMode') === 'row' && item.recClient ) {
+            if( this.get('selectionMode') === 'row' && item ) {
                 // the "item" is a Model pushed prior to the "sort" action ...
-                tr = this.getRow(item.recClient);
+                tr = this.getRow(item);
                 if( tr ) {
-                    buffer.push( this._selectTr(tr) );
+                    buffer.push(tr);
                     tr.addClass(this._classSelected);
                 }
-            } else if (this.get('selectionMode') === 'cell' && item.recClient && item.colName ) {
-                tr = this.getRow(item.recClient);
-                col = this.getColumn(item.colName);
-                colIndex = Y.Array.indexOf(cols,col);
-                td = (tr && colIndex >= 0) ? tr.all("td").item(colIndex) : null;
+            } else if (this.get('selectionMode') === 'cell' && item ) {
+                // the item is an object as {record,colIndex} pushed prior to "sort" action ...
+                tr = this.getRow(item.record),
+                td = (tr) ? tr.all("td").item(item.colIndex) : null;
                 if(tr && td) {
-                    buffer.push( this._selectTd(td) );
+                    buffer.push(td);
                     td.addClass(this._classSelected);
                 }
             }
@@ -994,8 +965,7 @@ Y.mix( DtSelection.prototype, {
                 this.set('highlighted',tar);
             },"tr td",this);
 
-        //this._clearAll(this._classHighlight);
-        this.clearHighlighted();
+        this._clearAll(this._classHighlight);
         return val;
     },
 
@@ -1040,8 +1010,7 @@ Y.mix( DtSelection.prototype, {
                 oSelf.set('selected',tar);
 
             },"tr td",oSelf);
-        //this._clearAll(this._classSelected);
-        this.clearSelections();
+        this._clearAll(this._classSelected);
         return val;
     },
 
@@ -1051,9 +1020,7 @@ Y.mix( DtSelection.prototype, {
      * @private
      */
     _clearDOMSelection: function(){
-        var sel = (Y.config.win.getSelection) ? Y.config.win.getSelection()
-            : (Y.config.doc.selection) ? Y.config.doc.selection : null;
-
+        var sel = (Y.config.win.getSelection) ? Y.config.win.getSelection() : (Y.config.doc.selection) ? Y.config.doc.selection : null;
         if ( sel && sel.empty ) {
             sel.empty();   // works on chrome
         }
