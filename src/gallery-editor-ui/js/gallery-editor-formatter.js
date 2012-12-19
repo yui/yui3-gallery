@@ -1,6 +1,6 @@
 	/**
 	 * @class HtmlFormat
-	 * @description HtmlFormat formats a DOM to string with easy to ready outlining of the tags.
+	 * @description HtmlFormat formats a DOM to correctly outlined easy to read HTML. (not a class but object)
 	 */	
 	var formatter = {
 		html: [],
