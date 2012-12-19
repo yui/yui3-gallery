@@ -42,6 +42,7 @@ YUI.add('module-tests', function (Y) {
 
             Y.Assert.isFunction(image._getPixelIndex, 'image._getPixelIndex should be a function.');
             Y.Assert.isFunction(image._getValue, 'image._getValue should be a function.');
+            Y.Assert.isFunction(image._init, 'image._init should be a function.');
             Y.Assert.isFunction(image._setValue, 'image._setValue should be a function.');
 
             Y.Assert.isArray(image.channels, 'image.channels should be an array.');

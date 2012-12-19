@@ -1,13 +1,13 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.52 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.55 on node@0.8.15
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-composite-image
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5009
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5001
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-composite-image]: Passed: 8 Failed: 26 Total: 34 (ignored 0) (0.519 seconds) 66%
+✖ [gallery-composite-image]: Passed: 8 Failed: 26 Total: 34 (ignored 0) (0.555 seconds) 66%
     test:001-apiExists
        Unexpected error: Can't find variable: Uint8ClampedArray
     test:002-_getDataViewConstructor

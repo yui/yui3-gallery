@@ -158,189 +158,8 @@
          * following optional parameters: `channels`, `data`, `dimensions`,
          * `littleEndian`
          */
-        _Class = function (configuration) {
-            configuration = configuration || {};
-
-            var me = this,
-
-                channels = _freeze((configuration.channels || _Class.defaultChannels).slice()),
-                channelOffsets = [],
-                dataType,
-                dimensions = _freeze((configuration.dimensions || _Class.defaultDimensions).slice()),
-                pixelCount = _reduce(dimensions, 1, function (pixelCount, dimension) {
-                    return pixelCount * dimension;
-                }),
-                pixelSize = _reduce(channels, 0, function (pixelSize, channelDataType) {
-                    channelOffsets.push(pixelSize);
-
-                    if (!dataType && dataType !== null) {
-                        dataType = channelDataType;
-                    } else if (dataType && dataType !== channelDataType) {
-                        dataType = null;
-                    }
-
-                    return pixelSize + (+channelDataType.substr(1)) / 8;
-                }),
-
-                configurationData = configuration.data,
-                data;
-
-            _defineProperties(me, {
-                /**
-                 * The channels property is an array of strings representing
-                 * each channel's data type.  The number of channels in the
-                 * image is determined by the length of this array.  This is a
-                 * read only copy of the channels array that was passed to the
-                 * constructor.
-                 * @property channels
-                 * @final
-                 * @type [String]
-                 */
-                channels: {
-                    enumerable: true,
-                    value: channels
-                },
-                /**
-                 * The dimensions property is an array of numbers representing
-                 * the length of each dimension.  The number of dimensions in
-                 * the image is determined by the length of this array.  This is
-                 * a read only copy of the dimensions array that was passed to
-                 * the constructor.
-                 * @property dimensions
-                 * @final
-                 * @type [Number]
-                 */
-                dimensions: {
-                    enumerable: true,
-                    value: dimensions
-                },
-                /**
-                 * The total number of pixels in the image.
-                 * @property pixelCount
-                 * @final
-                 * @type Number
-                 */
-                pixelCount: {
-                    enumberable: true,
-                    value: pixelCount
-                },
-                /**
-                 * The _channelOffsets property is a read only array of numbers
-                 * describing the byte offset of each specific channel from the
-                 * beginning of a pixel.
-                 * @property _channelOffsets
-                 * @final
-                 * @protected
-                 * @type [Number]
-                 */
-                _channelOffsets: {
-                    enumerable: true,
-                    value: _freeze(channelOffsets)
-                },
-                /**
-                 * The ArrayBuffer that stores the image's data.
-                 * @property _data
-                 * @protected
-                 * @type ArrayBuffer
-                 */
-                _data: {
-                    enumerable: true,
-                    get: function () {
-                        return data;
-                    },
-                    set: function (newData) {
-                        data = newData;
-
-                        /**
-                         * The ArrayBufferView used to access the image's data.
-                         * If the image's channel types are homogeneous, this
-                         * will be an instance of the specific ArrayBufferView
-                         * class that matches the data type.  This will be an
-                         * instance of DataView if the image's channel types are
-                         * mixed.
-                         * @property _dataView
-                         * @protected
-                         * @type ArrayBufferView
-                         */
-                        me._dataView = _Class._getDataView(data, dataType);
-                    }
-                },
-                /**
-                 * If the image's channel types are homogeneous, this will be
-                 * the common channel type.  This will be null if the image's
-                 * channel types are mixed.
-                 * @property _dataType
-                 * @final
-                 * @protected
-                 * @type String
-                 */
-                _dataType: {
-                    enumerable: true,
-                    value: dataType
-                },
-                /**
-                 * The size of each pixel in bytes.
-                 * @property _pixelSize
-                 * @final
-                 * @protected
-                 * @type Number
-                 */
-                _pixelSize: {
-                    enumerable: true,
-                    value: pixelSize
-                }
-            });
-
-            /**
-             * Returns the pixel index for the given dimension indices.
-             * @method _getPixelIndex
-             * @param {Number} dimensionIndices* The number of arguments must
-             * match the number of dimensions in the image.
-             * @protected
-             * @return {Number}
-             */
-            me._getPixelIndex = _Class._getGetPixelIndexMethod.apply(me, dimensions);
-
-            /**
-             * Returns the value from a specific channel of a specific pixel.
-             * @method _getValue
-             * @param {Number} pixelIndex
-             * @param {Number} channelIndex
-             * @protected
-             * @return {Number}
-             */
-            me._getValue = _Class._getGetValueMethod(channelOffsets, pixelSize, dataType);
-
-            /**
-             * Sets the value of a specific channel of a specific pixel.
-             * @method _setValue
-             * @chainable
-             * @param {Number} pixelIndex
-             * @param {Number} channelIndex
-             * @param {Number} value
-             * @protected
-             */
-            me._setValue = _Class._getSetValueMethod(channelOffsets, pixelSize, dataType);
-
-            if (me.validate(configurationData)) {
-                me._data = configurationData;
-            } else {
-                me.clear();
-
-                if (_isArray(configurationData)) {
-                    me.setDataArray(configurationData);
-                }
-            }
-
-            /**
-             * The boolean value of the littleEndian parameter that will be
-             * passed to a DataView's accessor methods.
-             * @property _littleEndian
-             * @final
-             * @protected
-             * @type Boolean
-             */
-            me._littleEndian = !!configuration.littleEndian;
+        _Class = function () {
+            this._init.apply(this, arguments);
         };
 
     Y.namespace('Composite').Image = Y.mix(_Class, {
@@ -668,6 +487,199 @@
             validate: function (data) {
                 data = data || this._data;
                 return data instanceof _ArrayBuffer && data.byteLength === this.pixelCount * this._pixelSize;
+            },
+            /**
+             * This method is called by the constructor.  It is here so that
+             * the initialization process can be hooked, overridden, or
+             * extended.
+             * @method _init
+             * @param {Object} configuration See the constructor's documentation
+             * for details.
+             * @protected
+             */
+            _init: function (configuration) {
+                configuration = configuration || {};
+
+                var me = this,
+
+                    channels = _freeze((configuration.channels || _Class.defaultChannels).slice()),
+                    channelOffsets = [],
+                    dataType,
+                    dimensions = _freeze((configuration.dimensions || _Class.defaultDimensions).slice()),
+                    pixelCount = _reduce(dimensions, 1, function (pixelCount, dimension) {
+                        return pixelCount * dimension;
+                    }),
+                    pixelSize = _reduce(channels, 0, function (pixelSize, channelDataType) {
+                        channelOffsets.push(pixelSize);
+
+                        if (!dataType && dataType !== null) {
+                            dataType = channelDataType;
+                        } else if (dataType && dataType !== channelDataType) {
+                            dataType = null;
+                        }
+
+                        return pixelSize + (+channelDataType.substr(1)) / 8;
+                    }),
+
+                    configurationData = configuration.data,
+                    data;
+
+                _defineProperties(me, {
+                    /**
+                    * The channels property is an array of strings representing
+                    * each channel's data type.  The number of channels in the
+                    * image is determined by the length of this array.  This is a
+                    * read only copy of the channels array that was passed to the
+                    * constructor.
+                    * @property channels
+                    * @final
+                    * @type [String]
+                    */
+                    channels: {
+                        enumerable: true,
+                        value: channels
+                    },
+                    /**
+                    * The dimensions property is an array of numbers representing
+                    * the length of each dimension.  The number of dimensions in
+                    * the image is determined by the length of this array.  This is
+                    * a read only copy of the dimensions array that was passed to
+                    * the constructor.
+                    * @property dimensions
+                    * @final
+                    * @type [Number]
+                    */
+                    dimensions: {
+                        enumerable: true,
+                        value: dimensions
+                    },
+                    /**
+                    * The total number of pixels in the image.
+                    * @property pixelCount
+                    * @final
+                    * @type Number
+                    */
+                    pixelCount: {
+                        enumberable: true,
+                        value: pixelCount
+                    },
+                    /**
+                    * The _channelOffsets property is a read only array of numbers
+                    * describing the byte offset of each specific channel from the
+                    * beginning of a pixel.
+                    * @property _channelOffsets
+                    * @final
+                    * @protected
+                    * @type [Number]
+                    */
+                    _channelOffsets: {
+                        enumerable: true,
+                        value: _freeze(channelOffsets)
+                    },
+                    /**
+                    * The ArrayBuffer that stores the image's data.
+                    * @property _data
+                    * @protected
+                    * @type ArrayBuffer
+                    */
+                    _data: {
+                        enumerable: true,
+                        get: function () {
+                            return data;
+                        },
+                        set: function (newData) {
+                            data = newData;
+
+                            /**
+                            * The ArrayBufferView used to access the image's data.
+                            * If the image's channel types are homogeneous, this
+                            * will be an instance of the specific ArrayBufferView
+                            * class that matches the data type.  This will be an
+                            * instance of DataView if the image's channel types are
+                            * mixed.
+                            * @property _dataView
+                            * @protected
+                            * @type ArrayBufferView
+                            */
+                            me._dataView = _Class._getDataView(data, dataType);
+                        }
+                    },
+                    /**
+                    * If the image's channel types are homogeneous, this will be
+                    * the common channel type.  This will be null if the image's
+                    * channel types are mixed.
+                    * @property _dataType
+                    * @final
+                    * @protected
+                    * @type String
+                    */
+                    _dataType: {
+                        enumerable: true,
+                        value: dataType
+                    },
+                    /**
+                    * The size of each pixel in bytes.
+                    * @property _pixelSize
+                    * @final
+                    * @protected
+                    * @type Number
+                    */
+                    _pixelSize: {
+                        enumerable: true,
+                        value: pixelSize
+                    }
+                });
+
+                /**
+                * Returns the pixel index for the given dimension indices.
+                * @method _getPixelIndex
+                * @param {Number} dimensionIndices* The number of arguments must
+                * match the number of dimensions in the image.
+                * @protected
+                * @return {Number}
+                */
+                me._getPixelIndex = _Class._getGetPixelIndexMethod.apply(me, dimensions);
+
+                /**
+                * Returns the value from a specific channel of a specific pixel.
+                * @method _getValue
+                * @param {Number} pixelIndex
+                * @param {Number} channelIndex
+                * @protected
+                * @return {Number}
+                */
+                me._getValue = _Class._getGetValueMethod(channelOffsets, pixelSize, dataType);
+
+                /**
+                * Sets the value of a specific channel of a specific pixel.
+                * @method _setValue
+                * @chainable
+                * @param {Number} pixelIndex
+                * @param {Number} channelIndex
+                * @param {Number} value
+                * @protected
+                */
+                me._setValue = _Class._getSetValueMethod(channelOffsets, pixelSize, dataType);
+
+                if (me.validate(configurationData)) {
+                    me._data = configurationData;
+                } else {
+                    me.clear();
+
+                    if (_isArray(configurationData)) {
+                        me.setDataArray(configurationData);
+                    }
+                }
+
+                /**
+                * The boolean value of the littleEndian parameter that will be
+                * passed to a DataView's accessor methods.
+                * @property _littleEndian
+                * @final
+                * @protected
+                * @type Boolean
+                */
+                me._littleEndian = !!configuration.littleEndian;
             }
         },
         /**

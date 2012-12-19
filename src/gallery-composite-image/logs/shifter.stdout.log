@@ -16,4 +16,4 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-composite-image/gallery-composite-image-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.782 seconds, pretty fast huh?
+shifter [info] finished in 0.211 seconds, pretty fast huh?
