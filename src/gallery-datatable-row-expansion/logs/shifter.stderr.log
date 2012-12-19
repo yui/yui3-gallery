@@ -1,0 +1,96 @@
+shifter [err] /src/gallery-datatable-row-expansion/js/row-expansion.js contains 44 lint errors
+   #1: Trailing whitespace.
+       * // line 13, pos 3
+   #2: Possible strict violation.
+       var plugin = this.rowexpander; // line 87, pos 18
+   #3: Too many var statements.
+       var pre_cells = ''; // line 89, pos 9
+   #4: Too many var statements.
+       for (var i=0; i<=plugin.col_count.pre; i++) // line 90, pos 14
+   #5: Too many var statements.
+       var tmpl = plugin.get('template'); // line 95, pos 9
+   #6: Too many var statements.
+       var s = tmpl.call(this, o.data); // line 98, pos 13
+   #7: Possible strict violation.
+       var s = tmpl.call(this, o.data); // line 98, pos 27
+   #8: Too many var statements.
+       var s = Y.Lang.sub(tmpl, o.data); // line 102, pos 13
+   #9: 's' is already defined.
+       var s = Y.Lang.sub(tmpl, o.data); // line 102, pos 15
+   #10: Too many var statements.
+       var row       = o.cell.ancestor(); // line 105, pos 9
+   #11: Too many var statements.
+       var extra_row = Y.Lang.sub( // line 106, pos 9
+   #12: 's' used out of scope.
+       tmpl: s // line 115, pos 19
+   #13: Possible strict violation.
+       var plugin = this.rowexpander, // line 123, pos 18
+   #14: Possible strict violation.
+       this); // line 143, pos 5
+   #15: Possible strict violation.
+       insertRow.call(this, o); // line 149, pos 24
+   #16: Expected '===' and instead saw '=='.
+       if (col.key == RowExpansion.column_key) // line 157, pos 21
+   #17: Possible strict violation.
+       this.col_count = Y.reduce( // line 173, pos 5
+   #18: Possible strict violation.
+       this.get('host').get('columns'), // line 174, pos 9
+   #19: Possible strict violation.
+       var tbody = this.tbodyNode, // line 216, pos 17
+   #20: Missing 'new' prefix when invoking a constructor.
+       throw Error('unknown shift in getCell: ' + shift); // line 229, pos 23
+   #21: Possible strict violation.
+       cell = seed.ancestor('.' + this.getClassName('cell'), true); // line 248, pos 40
+   #22: Missing 'new' prefix when invoking a constructor.
+       throw Error('getCell cannot be called with an element from an expansion row'); // line 251, pos 23
+   #23: Too many var statements.
+       var firstRowIndex = tbody.get('firstChild.rowIndex'); // line 257, pos 17
+   #24: Too many var statements.
+       var delta = Math.sign(shift[0]); // line 261, pos 21
+   #25: Too many var statements.
+       var rows  = tbody.get('children'); // line 264, pos 25
+   #26: Too many var statements.
+       var index = row.get('rowIndex') - firstRowIndex; // line 265, pos 25
+   #27: Too many var statements.
+       var count = Math.abs(shift[0]); // line 266, pos 25
+   #28: Too many var statements.
+       for (var i=0; i<count && row; i++) // line 267, pos 30
+   #29: 'index' used out of scope.
+       index = cell.get('cellIndex') + shift[1]; // line 279, pos 17
+   #30: 'index' used out of scope.
+       cell  = row && row.get('children').item(index); // line 280, pos 57
+   #31: Possible strict violation.
+       var tbody = this.tbodyNode, // line 300, pos 17
+   #32: Possible strict violation.
+       id = this._idMap[id.get ? id.get('clientId') : id] || id; // line 307, pos 18
+   #33: Possible strict violation.
+       row = Y.one(Y.Lang.isNumber(id) ? this.getCell([id,0]).ancestor() : '#' + id); // line 310, pos 43
+   #34: Possible strict violation.
+       var view = this.get('host').view; // line 318, pos 16
+   #35: Too many var statements.
+       var body = view.body; // line 322, pos 13
+   #36: Possible strict violation.
+       this.orig_getCell = body.getCell; // line 324, pos 9
+   #37: Possible strict violation.
+       this.orig_getRow  = body.getRow; // line 325, pos 9
+   #38: Possible strict violation.
+       var view = this.get('host').view; // line 334, pos 16
+   #39: Possible strict violation.
+       if (view.body && this.orig_getCell) // line 335, pos 22
+   #40: Possible strict violation.
+       view.body.getCell = this.orig_getCell; // line 337, pos 29
+   #41: Possible strict violation.
+       if (view.body && this.orig_getRow) // line 340, pos 22
+   #42: Possible strict violation.
+       view.body.getRow = this.orig_getRow; // line 342, pos 28
+   #43: 's' is defined but never used.
+       var s = Y.Lang.sub(tmpl, o.data); // line 102, pos 14
+   #44: 'config' is defined but never used.
+       initializer: function(config) // line 348, pos 33
+shifter [err] /assets/skins/sam/gallery-datatable-row-expansion-skin.css contains 3 lint errors
+   #1: [warning] Element (tr.row-expansion) is overqualified, just use .row-expansion without element name.
+       /* nothing to see here */.yui3-skin-sam .yui3-datatable tr.row-expansion td.post-row-expansion // line 1, pos 57
+   #2: [warning] Element (td.post-row-expansion) is overqualified, just use .post-row-expansion without element name.
+       /* nothing to see here */.yui3-skin-sam .yui3-datatable tr.row-expansion td.post-row-expansion // line 1, pos 74
+   #3: [warning] Property with star prefix found.
+       *display:inline-block; // line 11, pos 2

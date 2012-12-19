@@ -1,0 +1,9 @@
+{
+	"name": "gallery-datatable-row-expansion",
+	"displayName": "DataTable Row Expansion",
+	"description": "Plugin for DataTable that enables expandable rows.",
+	"author": "jafl",
+
+	"use": ["gallery-datatable-row-expansion"],
+	"tags": ["jafl","plugin","datatable","table","row","expand","expansion"]
+}

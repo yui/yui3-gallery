@@ -1,0 +1,21 @@
+{
+    "name": "gallery-datatable-row-expansion",
+    "builds": {
+        "gallery-datatable-row-expansion": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "datatable",
+                    "plugin",
+                    "gallery-funcprog",
+                    "gallery-node-optimizations",
+                    "gallery-math"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "row-expansion.js"
+            ]
+        }
+    }
+}

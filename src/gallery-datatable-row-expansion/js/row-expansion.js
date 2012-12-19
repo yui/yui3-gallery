@@ -80,22 +80,63 @@ RowExpansion.column_key = 'row-expander';
  */
 RowExpansion.row_class = 'row-expansion';
 
-function formatTwistdown(o)
+function insertRow(o)
 {
 	var plugin = this.rowexpander;
-	var row_id = o.data[ plugin.get('uniqueIdKey') ];
-	var open   = plugin.open_rows[ row_id ];
+
+	var pre_cells = '';
+	for (var i=0; i<=plugin.col_count.pre; i++)
+	{
+		pre_cells += '<td class="yui3-datatable-cell pre-row-expansion">&nbsp;</td>';
+	}
+
+	var tmpl = plugin.get('template');
+	if (Y.Lang.isFunction(tmpl))
+	{
+		var s = tmpl.call(this, o.data);
+	}
+	else
+	{
+		var s = Y.Lang.sub(tmpl, o.data);
+	}
+
+	var row       = o.cell.ancestor();
+	var extra_row = Y.Lang.sub(
+		'<tr class="{c}">' +
+			'{pre}' +
+			'<td colspan="{post}" class="yui3-datatable-cell post-row-expansion">{tmpl}</td>' +
+		'</tr>',
+		{
+			c:    row.get('className') + ' ' + RowExpansion.row_class,
+			pre:  pre_cells,
+			post: plugin.col_count.post,
+			tmpl: s
+		});
+
+	row.insert(extra_row, 'after');
+}
+
+function formatTwistdown(o)
+{
+	var plugin = this.rowexpander,
+		row_id = o.data[ plugin.get('uniqueIdKey') ],
+		open   = plugin.open_rows[ row_id ];
 
 	o.td.addClass('row-toggle');
 	o.td.replaceClass('row-(open|closed)', open ? 'row-open' : 'row-closed');
 
 	o.td.on('click', function()
 	{
-		plugin.open_rows[ row_id ] = ! plugin.open_rows[ row_id ];
-		Y.later(0, this, function()
+		var open = plugin.open_rows[ row_id ] = ! plugin.open_rows[ row_id ];
+
+		if (open)
 		{
-			this.syncUI();
-		});
+			insertRow.call(this, o);
+		}
+		else
+		{
+			o.cell.ancestor().next().remove();
+		}
 	},
 	this);
 
@@ -103,36 +144,7 @@ function formatTwistdown(o)
 
 	if (open)
 	{
-		var pre_cells = '';
-		for (var i=0; i<=plugin.col_count.pre; i++)
-		{
-			pre_cells += '<td class="yui3-datatable-cell pre-row-expansion">&nbsp;</td>';
-		}
-
-		var tmpl = plugin.get('template');
-		if (Y.Lang.isFunction(tmpl))
-		{
-			var s = tmpl.call(this, o.data);
-		}
-		else
-		{
-			var s = Y.Lang.sub(tmpl, o.data);
-		}
-
-		var row       = o.cell.ancestor();
-		var extra_row = Y.Lang.sub(
-			'<tr class="{c}">' +
-				'{pre}' +
-				'<td colspan="{post}" class="yui3-datatable-cell post-row-expansion">{tmpl}</td>' +
-			'</tr>',
-			{
-				c:    row.get('className') + ' ' + RowExpansion.row_class,
-				pre:  pre_cells,
-				post: plugin.col_count.post,
-				tmpl: s
-			});
-
-		row.insert(extra_row, 'after');
+		insertRow.call(this, o);
 	}
 }
 
