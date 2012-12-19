@@ -75,7 +75,7 @@ var positionFixedSupport = null,
         py = positionFixedParent.one('div').set('scrollTop', '30px').one('span').getY();
         positionFixedParent.remove();
 
-        return positionFixedSupport = (py === 1);
+        return (positionFixedSupport = (py === 1));
     },
 
     /**

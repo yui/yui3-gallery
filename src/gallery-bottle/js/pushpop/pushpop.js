@@ -45,7 +45,7 @@ var RENDERUI = 'renderUI',
  * @namespace Bottle
  * @param [config] {Object} User configuration object
  */
-PushPop = function (config) {
+PushPop = function () {
     /**
      * internal eventhandlers, keep for destructor
      *
@@ -223,11 +223,10 @@ PushPop.prototype = {
      * query and get all children then add into this widget
      *
      * @method _addAllChildren
-     * @prtected
+     * @protected
      */
     _addAllChildren: function () {
-        var srcNode = this.get('srcNode'),
-            query = this.get('childQuery'),
+        var query = this.get('childQuery'),
             cfg = this.get('cfgChild');
 
         if (!query || this._bppAllAdded) {
@@ -290,7 +289,7 @@ PushPop.prototype = {
      */
     _syncOneSide: function (HW) {
         var hw = this.get(HW);
-        this.each(function (O) {
+        this.each(function () {
             this.set(HW, hw);
         });
         this._updateTransitions();
@@ -479,7 +478,7 @@ PushPop.prototype = {
         var index = this.size() - 1,
             underlay = this.get('underlay');
 
-        if (underlay == 'with') {
+        if (underlay === 'with') {
             this.moveChild(index, this._UNDERLAY_TRANS);
         }
 
@@ -515,7 +514,7 @@ PushPop.prototype = {
 
         if (underlay !== 'none') {
             this.moveChild(index - 1, this._UNDERLAY_TRANS, true);
-            if ((underlay == 'with') && index) {
+            if ((underlay === 'with') && index) {
                 this.moveChild(index - 1, this._DONE_TRANS);
             }
         }

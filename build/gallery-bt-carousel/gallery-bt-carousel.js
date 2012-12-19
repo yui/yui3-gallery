@@ -7,9 +7,7 @@ YUI.add('gallery-bt-carousel', function (Y, NAME) {
  * @static
  */
 
-var WIDTH_CHANGE = 'widthChange',
-
-    PREFIX = 'bcr_',
+var PREFIX = 'bcr_',
 
     CLASSES = {
         INDEXBOX: PREFIX + 'indexbox',
@@ -305,7 +303,7 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
 Y.namespace('Bottle').Carousel = Carousel;
 
 
-}, 'gallery-2012.12.12-21-11', {
+}, 'gallery-2012.12.19-21-23', {
     "requires": [
         "gallery-bt-syncscroll",
         "gallery-zui-rascroll",

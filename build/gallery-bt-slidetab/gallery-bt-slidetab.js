@@ -7,8 +7,7 @@ YUI.add('gallery-bt-slidetab', function (Y, NAME) {
  * @static
  */
 
-var WIDTH_CHANGE = 'widthChange',
-    LABELWIDTH_CHANGE = 'labelWidthChange',
+var LABELWIDTH_CHANGE = 'labelWidthChange',
 
     PREFIX = 'bst_',
 
@@ -319,7 +318,7 @@ SlideTab = Y.Base.create('btslidetab', Y.Widget, [Y.WidgetStdMod, Y.Bottle.SyncS
 Y.namespace('Bottle').SlideTab = SlideTab;
 
 
-}, 'gallery-2012.12.12-21-11', {
+}, 'gallery-2012.12.19-21-23', {
     "requires": [
         "gallery-bt-syncscroll",
         "widget-stdmod",

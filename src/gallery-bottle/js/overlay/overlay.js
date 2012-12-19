@@ -211,7 +211,7 @@ var body = Y.one('body'),
             return [
                 selfDir * W * posData[0] + Math.floor((W - this.get('width')) / 2),
                 selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
-            ]; 
+            ];
         },
 
         /**
@@ -221,8 +221,8 @@ var body = Y.one('body'),
          * @protected
          */
         _doShowHide: function (E) {
-            var show = E.newVal;
-                runthese = show && this.enable() && this._updateFullSize(),
+            var show = E.newVal,
+                runthese = (show && this.enable() && this._updateFullSize()),
                 finalPos = this.getShowHideXY(show),
                 node = this.get('boundingBox');
 

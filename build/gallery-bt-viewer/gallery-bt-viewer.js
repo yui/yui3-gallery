@@ -7,9 +7,7 @@ YUI.add('gallery-bt-viewer', function (Y, NAME) {
  * @static
  */
 
-var WIDTH_CHANGE = 'widthChange',
-
-    PREFIX = 'bvi_',
+var PREFIX = 'bvi_',
 
     CLASSES = {
         IMAGE: PREFIX + 'image',
@@ -160,7 +158,7 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
 Y.namespace('Bottle').Viewer = Viewer;
 
 
-}, 'gallery-2012.12.12-21-11', {
+}, 'gallery-2012.12.19-21-23', {
     "requires": [
         "gallery-bt-syncscroll",
         "gallery-zui-rascroll",

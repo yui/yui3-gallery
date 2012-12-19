@@ -22,7 +22,7 @@ SyncScroll = function (config) {
         if (firstInit) {
             that._bssInitParentScroll();
         } else {
-            that.after('render', function (E) {
+            that.after('render', function () {
                 that._bssInitParentScroll();
             });
         }

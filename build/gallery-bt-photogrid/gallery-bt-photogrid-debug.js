@@ -7,8 +7,7 @@ YUI.add('gallery-bt-photogrid', function (Y, NAME) {
  * @static
  */
 
-var WIDTH_CHANGE = 'widthChange',
-    COLUMN_CHANGE = 'columnWidthChange',
+var COLUMN_CHANGE = 'columnWidthChange',
     RENDER_FINISHED = 'renderFinished',
 
     RENDER_INTERVAL = 100,
@@ -17,7 +16,8 @@ var WIDTH_CHANGE = 'widthChange',
 
     CLASSES = {
         COLUMN: PREFIX + 'column',
-        MODULE: PREFIX + 'module'
+        MODULE: PREFIX + 'module',
+        HIDDEN: PREFIX + 'hidden'
     },
 
     HTMLS = {
@@ -81,7 +81,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
     append: function (html) {
         var N = Y.Node.create(html);
 
-        this.parseImageData((N.getDOMNode().nodeType == 11) ? Y.Node.create('<div>' + html + '</div>') : N, true);
+        this.parseImageData((N.getDOMNode().nodeType === 11) ? Y.Node.create('<div>' + html + '</div>') : N, true);
         this.renderImages(true);
     },
 
@@ -96,6 +96,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
         var images = append ? this._bpgImages : [],
             that = this,
             css = this.get('photoNode'),
+            hid = Y.one('.btHidden') || Y.one('body').appendChild(Y.Node.create('<div class="btHidden"></div>')),
             P = node || this.get('contentBox');
 
         if (!append) {
@@ -151,12 +152,14 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
                     that._bpgPending -= 1;
                 }, image);
 
-                image.load.once('error', function (E) {
+                image.load.once('error', function () {
                     this.error = true;
                     that._bpgPending -= 1;
                 }, image);
             }
 
+            // Append to document to start image load, only required by IE9+
+            hid.append(O);
             images.push(image);
         }, this);
 
@@ -391,4 +394,4 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').PhotoGrid = PhotoGrid;
 
 
-}, 'gallery-2012.12.12-21-11', {"requires": ["gallery-bt-syncscroll"]});
+}, 'gallery-2012.12.19-21-23', {"requires": ["gallery-bt-syncscroll"]});

@@ -73,9 +73,9 @@ var BOTTLE_INIT = 'btInit',
         }
     },
 
-    initWidgets = function(css, cls, Root) {
+    initWidgets = function(css, Cls, Root) {
         Root.all(css).each(function (srcNode) {
-            var unused = new cls({
+            new Cls({
                 srcNode: srcNode,
                 render: true
             });
@@ -144,7 +144,7 @@ var BOTTLE_INIT = 'btInit',
         }
 
         initRoot.all('[data-role=shortcut]').each(function (shortcutNode) {
-            var unused = new Y.Bottle.ShortCut({
+            new Y.Bottle.ShortCut({
                 srcNode: shortcutNode,
                 visible: false,
                 disabled: true,
@@ -153,7 +153,7 @@ var BOTTLE_INIT = 'btInit',
         });
 
         initRoot.all('[data-role=overlay]').each(function (overlayNode) {
-            var unused = new Y.Bottle.Overlay({
+            new Y.Bottle.Overlay({
                 srcNode: overlayNode,
                 visible: false,
                 disabled: true,
@@ -165,14 +165,14 @@ var BOTTLE_INIT = 'btInit',
             return;
         }
 
-        Y.on((Y.UA.mobile == 'Apple') ? 'orientationchange' : 'resize', handleResize, window);
+        Y.on((Y.UA.mobile === 'Apple') ? 'orientationchange' : 'resize', handleResize, window);
 
-        body.delegate('focus', function (E) {
+        body.delegate('focus', function () {
             body.addClass(BOTTLE_FOCUS);
         }, 'input, select, textarea');
 
 
-        body.delegate('blur', function (E) {
+        body.delegate('blur', function () {
             body.removeClass(BOTTLE_FOCUS);
             handleResize(true);
         }, 'input, select, textarea');

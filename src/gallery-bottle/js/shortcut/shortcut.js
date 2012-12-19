@@ -144,7 +144,7 @@ var body = Y.one('body'),
                 posData = POSITIONS[this.get('showFrom')];
 
             return [
-                Math.floor(posData[2] * Y.Bottle.Device.getBrowserWidth() + (selfDir * posData[0] - posData[2]) * this.get('width')), 
+                Math.floor(posData[2] * Y.Bottle.Device.getBrowserWidth() + (selfDir * posData[0] - posData[2]) * this.get('width')),
                 Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight() + (selfDir * posData[1] - posData[3]) * this.get('height')) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
             ];
         },
@@ -244,7 +244,7 @@ var body = Y.one('body'),
             }
 
             next = this;
-            E.halt(); 
+            E.halt();
             current.hide();
         },
 
@@ -370,7 +370,7 @@ var body = Y.one('body'),
                 },
                 setter: function (V) {
                     var F,
-                        B = this.get('contentBox'), 
+                        B = this.get('contentBox'),
                         fwh = POSITIONS[V][0];
 
                     if (V === this.get('showFrom')) {

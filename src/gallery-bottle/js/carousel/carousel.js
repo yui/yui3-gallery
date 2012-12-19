@@ -5,9 +5,7 @@
  * @static
  */
 
-var WIDTH_CHANGE = 'widthChange',
-
-    PREFIX = 'bcr_',
+var PREFIX = 'bcr_',
 
     CLASSES = {
         INDEXBOX: PREFIX + 'indexbox',

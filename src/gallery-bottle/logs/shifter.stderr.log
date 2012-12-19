@@ -1,101 +1,34 @@
-shifter [err] /src/gallery-bottle/js/viewer/viewer.js contains 2 lint errors
+shifter [err] /src/gallery-bottle/js/viewer/viewer.js contains 1 lint errors
    #1: Line too long.
-       * is a Widget provides a HTML Viewer interface. When contents or images are wider then device, Viewer can be scroll horizontally. And, from beginning, all images in Viewer are scaled down to fit the device width, and a 'expand' button will be provided for each scaled images. // line 40, pos 276
-   #2: 'WIDTH_CHANGE' is defined but never used.
-       var WIDTH_CHANGE = 'widthChange', // line 10, pos 17
-shifter [err] /src/gallery-bottle/js/syncscroll/syncscroll.js contains 2 lint errors
+       * is a Widget provides a HTML Viewer interface. When contents or images are wider then device, Viewer can be scroll horizontally. And, from beginning, all images in Viewer are scaled down to fit the device width, and a 'expand' button will be provided for each scaled images. // line 38, pos 276
+shifter [err] /src/gallery-bottle/js/photogrid/photogrid.js contains 1 lint errors
+   #1: Line too long.
+       * Default column width. Column number will be decided by Math.round(parentWidth / columnWidth), and then all these columns will be fitted equally. // line 312, pos 155
+shifter [err] /src/gallery-bottle/js/syncscroll/syncscroll.js contains 1 lint errors
    #1: 'config' is defined but never used.
        SyncScroll = function (config) { // line 20, pos 30
-   #2: 'E' is defined but never used.
-       that.after('render', function (E) { // line 27, pos 45
-shifter [err] /src/gallery-bottle/js/carousel/carousel.js contains 1 lint errors
-   #1: 'WIDTH_CHANGE' is defined but never used.
-       var WIDTH_CHANGE = 'widthChange', // line 10, pos 17
-shifter [err] /src/gallery-bottle/js/photogrid/photogrid.js contains 4 lint errors
-   #1: Expected '===' and instead saw '=='.
-       this.parseImageData((N.getDOMNode().nodeType == 11) ? Y.Node.create('<div>' + html + '</div>') : N, true); // line 84, pos 54
-   #2: Line too long.
-       * Default column width. Column number will be decided by Math.round(parentWidth / columnWidth), and then all these columns will be fitted equally. // line 309, pos 155
-   #3: 'WIDTH_CHANGE' is defined but never used.
-       var WIDTH_CHANGE = 'widthChange', // line 10, pos 17
-   #4: 'E' is defined but never used.
-       image.load.once('error', function (E) { // line 154, pos 53
-shifter [err] /src/gallery-bottle/js/device/device.js contains 1 lint errors
-   #1: Did you mean to return a conditional instead of an assignment?
-       return positionFixedSupport = (py === 1); // line 80, pos 16
-shifter [err] /src/gallery-bottle/js/pushpop/pushpop.js contains 6 lint errors
-   #1: Line too long.
-       * @param [direction] {String} should be one of 'right', 'left', 'top', 'bottom', 'tr', 'br', 'tl', 'bl'. If omitted, current 'pushFrom' attribute will be used // line 261, pos 163
-   #2: Expected '===' and instead saw '=='.
-       if (underlay == 'with') { // line 484, pos 22
-   #3: Expected '===' and instead saw '=='.
-       if ((underlay == 'with') && index) { // line 520, pos 27
-   #4: 'config' is defined but never used.
-       PushPop = function (config) { // line 50, pos 27
-   #5: 'srcNode' is defined but never used.
-       var srcNode = this.get('srcNode'), // line 231, pos 20
-   #6: 'O' is defined but never used.
-       this.each(function (O) { // line 295, pos 30
 shifter [err] /src/gallery-bottle/js/overlay/overlay.js contains 2 lint errors
    #1: Line too long.
        selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop')) // line 215, pos 151
-   #2: Trailing whitespace.
-       ]; // line 216, pos 15
-shifter [err] /src/gallery-bottle/js/slidetab/slidetab.js contains 1 lint errors
-   #1: 'WIDTH_CHANGE' is defined but never used.
-       var WIDTH_CHANGE = 'widthChange', // line 10, pos 17
-shifter [err] /src/gallery-bottle/js/loader/loader.js contains 2 lint errors
-   #1: Expected an identifier and instead saw 'arguments' (a reserved word).
-       arguments: { // line 124, pos 13
-   #2: Line too long.
-       * Default selector string for responsed data. For HTML data, this value should be css selector; For json data, this value should be something like data.hash.value (will return JSONData.data.hash.value). When set to '*', all ajax response will be selected. If can not select anything, the ajax will be a 'failed' case. // line 254, pos 326
-shifter [err] /src/gallery-bottle/js/shortcut/shortcut.js contains 4 lint errors
-   #1: Trailing whitespace.
-       Math.floor(posData[2] * Y.Bottle.Device.getBrowserWidth() + (selfDir * posData[0] - posData[2]) * this.get('width')), // line 149, pos 134
-   #2: Line too long.
-       Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight() + (selfDir * posData[1] - posData[3]) * this.get('height')) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop')) // line 150, pos 202
-   #3: Trailing whitespace.
-       E.halt(); // line 249, pos 22
-   #4: Trailing whitespace.
-       B = this.get('contentBox'), // line 375, pos 52
-shifter [err] /src/gallery-bottle/js/container/container.js contains 10 lint errors
-   #1: Trailing whitespace.
-       * // line 5, pos 3
-   #2: Line too long.
+   #2: 'runthese' is defined but never used.
+       runthese = (show && this.enable() && this._updateFullSize()), // line 227, pos 25
+shifter [err] /src/gallery-bottle/js/pushpop/pushpop.js contains 1 lint errors
+   #1: Line too long.
+       * @param [direction] {String} should be one of 'right', 'left', 'top', 'bottom', 'tr', 'br', 'tl', 'bl'. If omitted, current 'pushFrom' attribute will be used // line 260, pos 163
+shifter [err] /src/gallery-bottle/js/container/container.js contains 2 lint errors
+   #1: Line too long.
        this.get('scrollView').get('boundingBox').setStyle(header ? 'marginTop' : 'marginBottom', (fixed && ns) ? (node.get('offsetHeight') + 'px') : 0); // line 31, pos 165
-   #3: Trailing whitespace.
-       * // line 197, pos 11
-   #4: Trailing whitespace.
-       * @writeOnce // line 200, pos 22
-   #5: Trailing whitespace.
-       * @writeOnce // line 221, pos 22
-   #6: Trailing whitespace.
-       * @writeOnce // line 242, pos 22
-   #7: Trailing whitespace.
+   #2: Trailing whitespace.
        * @writeOnce // line 254, pos 22
-   #8: Trailing whitespace.
-       * @writeOnce // line 266, pos 22
-   #9: Trailing whitespace.
-       * @writeOnce // line 278, pos 22
-   #10: 'config' is defined but never used.
-       initializer: function (config) { // line 53, pos 34
-shifter [err] /src/gallery-bottle/js/bottle/bottle.js contains 8 lint errors
-   #1: A constructor name should start with an uppercase letter.
-       var unused = new cls({ // line 80, pos 30
-   #2: Line too long.
+shifter [err] /src/gallery-bottle/js/loader/loader.js contains 1 lint errors
+   #1: Line too long.
+       * Default selector string for responsed data. For HTML data, this value should be css selector; For json data, this value should be something like data.hash.value (will return JSONData.data.hash.value). When set to '*', all ajax response will be selected. If can not select anything, the ajax will be a 'failed' case. // line 254, pos 326
+shifter [err] /src/gallery-bottle/js/shortcut/shortcut.js contains 1 lint errors
+   #1: Line too long.
+       Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight() + (selfDir * posData[1] - posData[3]) * this.get('height')) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop')) // line 150, pos 202
+shifter [err] /src/gallery-bottle/js/bottle/bottle.js contains 1 lint errors
+   #1: Line too long.
        * @param hideURL {Boolean|Node} auto hide URL Bar when bottle inited or orientation changed. If a Node is provided, try to initialize Bottle widgets for this Node. // line 91, pos 168
-   #3: Expected '===' and instead saw '=='.
-       Y.on((Y.UA.mobile == 'Apple') ? 'orientationchange' : 'resize', handleResize, window); // line 170, pos 27
-   #4: 'unused' is defined but never used.
-       var unused = new cls({ // line 80, pos 23
-   #5: 'unused' is defined but never used.
-       var unused = new Y.Bottle.ShortCut({ // line 149, pos 23
-   #6: 'unused' is defined but never used.
-       var unused = new Y.Bottle.Overlay({ // line 158, pos 23
-   #7: 'E' is defined but never used.
-       body.delegate('focus', function (E) { // line 172, pos 43
-   #8: 'E' is defined but never used.
-       body.delegate('blur', function (E) { // line 177, pos 42
 shifter [err] /assets/skins/sam/gallery-bottle-skin.css contains 47 lint errors
    #1: [warning] The property -ms-text-size-adjust is compatible with -webkit-text-size-adjust and should be included as well.
        body.btInit{-webkit-text-size-adjust:100%} // line 3, pos 13
@@ -118,76 +51,76 @@ shifter [err] /assets/skins/sam/gallery-bottle-skin.css contains 47 lint errors
    #10: [warning] Use of !important
        body.btFocus.btFixed .btFixedScroll {margin:0!important} // line 9, pos 38
    #11: [warning] The property -o-transform is compatible with -webkit-transform and should be included as well.
-       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 18, pos 17
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 20, pos 17
    #12: [warning] Missing standard property 'transform' to go along with '-webkit-transform'.
-       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 18, pos 17
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 20, pos 17
    #13: [warning] The property -moz-transform is compatible with -webkit-transform and should be included as well.
-       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 18, pos 17
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 20, pos 17
    #14: [warning] The property -ms-transform is compatible with -webkit-transform and should be included as well.
-       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 18, pos 17
+       .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 20, pos 17
    #15: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-moz-box-sizing'.
-       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 23, pos 55
+       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 25, pos 55
    #16: [warning] The property -webkit-box-sizing is compatible with -moz-box-sizing and should be included as well.
-       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 23, pos 55
+       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 25, pos 55
    #17: [warning] The box-sizing property isn't supported in IE6 and IE7.
-       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 23, pos 33
+       .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 25, pos 33
    #18: [warning] Property with underscore prefix found.
-       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 31, pos 52
+       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 33, pos 52
    #19: [warning] Duplicate property '_display' found.
-       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 31, pos 60
+       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 33, pos 60
    #20: [warning] Property with underscore prefix found.
-       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 31, pos 60
+       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 33, pos 60
    #21: [warning] The universal selector (*) is known to be slow.
-       .bst_tab > * {position:absolute!important;left:-10000px;width:100%} // line 38, pos 12
+       .bst_tab > * {position:absolute!important;left:-10000px;width:100%} // line 40, pos 12
    #22: [warning] Use of !important
-       .bst_tab > * {position:absolute!important;left:-10000px;width:100%} // line 38, pos 15
+       .bst_tab > * {position:absolute!important;left:-10000px;width:100%} // line 40, pos 15
    #23: [warning] Use of !important
-       .bst_tab > *.on {position:relative!important;left:auto} // line 39, pos 18
+       .bst_tab > *.on {position:relative!important;left:auto} // line 41, pos 18
    #24: [warning] Element (*.on) is overqualified, just use .on without element name.
-       .bst_tab > *.on {position:relative!important;left:auto} // line 39, pos 12
+       .bst_tab > *.on {position:relative!important;left:auto} // line 41, pos 12
    #25: [warning] The universal selector (*) is known to be slow.
-       .bst_tab > *.on {position:relative!important;left:auto} // line 39, pos 12
+       .bst_tab > *.on {position:relative!important;left:auto} // line 41, pos 12
    #26: [warning] Don't use adjoining classes.
-       .bcr_indexitem.bcr_on {background-color:#afc} // line 57, pos 1
-   #27: [warning] Background image 'http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png' was used multiple times, first declared at line 58, col 46.
-       .yui3-btviewer .bvi_button {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer} // line 62, pos 84
+       .bcr_indexitem.bcr_on {background-color:#afc} // line 59, pos 1
+   #27: [warning] Background image 'http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png' was used multiple times, first declared at line 60, col 46.
+       .yui3-btviewer .bvi_button {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer} // line 64, pos 84
    #28: [warning] Don't use adjoining classes.
-       .yui3-btviewer .bvi_button.bvi_expand {background-position:5px -395px} // line 63, pos 16
+       .yui3-btviewer .bvi_button.bvi_expand {background-position:5px -395px} // line 65, pos 16
    #29: [warning] Don't use adjoining classes.
-       .yui3-btviewer .bvi_image.bvi_expand {max-width:none} // line 64, pos 16
+       .yui3-btviewer .bvi_image.bvi_expand {max-width:none} // line 66, pos 16
    #30: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=carousel], // line 72, pos 26
+       .btInPlace:not(.btReady) [data-role=carousel], // line 74, pos 26
    #31: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=viewer], // line 73, pos 26
+       .btInPlace:not(.btReady) [data-role=viewer], // line 75, pos 26
    #32: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=shortcut], // line 74, pos 26
+       .btInPlace:not(.btReady) [data-role=shortcut], // line 76, pos 26
    #33: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=overlay], // line 75, pos 26
+       .btInPlace:not(.btReady) [data-role=overlay], // line 77, pos 26
    #34: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=photogrid], // line 76, pos 26
+       .btInPlace:not(.btReady) [data-role=photogrid], // line 78, pos 26
    #35: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=slidetab] // line 77, pos 26
-   #36: [warning] Background image 'http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif' was used multiple times, first declared at line 66, col 37.
-       {background:#fff url(http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif) no-repeat 50% 50%;min-height:50px} // line 78, pos 3
+       .btInPlace:not(.btReady) [data-role=slidetab] // line 79, pos 26
+   #36: [warning] Background image 'http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif' was used multiple times, first declared at line 68, col 37.
+       {background:#fff url(http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif) no-repeat 50% 50%;min-height:50px} // line 80, pos 3
    #37: [warning] The universal selector (*) is known to be slow.
-       .btHideAll:not(.btReady) > *, // line 81, pos 28
+       .btHideAll:not(.btReady) > *, // line 83, pos 28
    #38: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=carousel] > *, // line 82, pos 49
+       .btInPlace:not(.btReady) [data-role=carousel] > *, // line 84, pos 49
    #39: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=viewer] > *, // line 83, pos 47
+       .btInPlace:not(.btReady) [data-role=viewer] > *, // line 85, pos 47
    #40: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=shortcut] > *, // line 84, pos 49
+       .btInPlace:not(.btReady) [data-role=shortcut] > *, // line 86, pos 49
    #41: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=overlay] > *, // line 85, pos 48
+       .btInPlace:not(.btReady) [data-role=overlay] > *, // line 87, pos 48
    #42: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=photogrid] > *, // line 86, pos 50
+       .btInPlace:not(.btReady) [data-role=photogrid] > *, // line 88, pos 50
    #43: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=slidetab] > *, // line 87, pos 49
+       .btInPlace:not(.btReady) [data-role=slidetab] > *, // line 89, pos 49
    #44: [warning] Unqualified attribute selectors are known to be slow.
-       .btHideSCO:not(.btReady) [data-role=shortcut], // line 88, pos 26
+       .btHideSCO:not(.btReady) [data-role=shortcut], // line 90, pos 26
    #45: [warning] Unqualified attribute selectors are known to be slow.
-       .btHideSCO:not(.btReady) [data-role=overlay] // line 89, pos 26
+       .btHideSCO:not(.btReady) [data-role=overlay] // line 91, pos 26
    #46: [warning] Unqualified attribute selectors are known to be slow.
-       .btHideSCO:not(.btReady) [data-role=shortcut], // line 92, pos 26
+       .btHideSCO:not(.btReady) [data-role=shortcut], // line 94, pos 26
    #47: [warning] Unqualified attribute selectors are known to be slow.
-       .btHideSCO:not(.btReady) [data-role=overlay] // line 93, pos 26
+       .btHideSCO:not(.btReady) [data-role=overlay] // line 95, pos 26

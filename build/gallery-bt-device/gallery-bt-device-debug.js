@@ -77,7 +77,7 @@ var positionFixedSupport = null,
         py = positionFixedParent.one('div').set('scrollTop', '30px').one('span').getY();
         positionFixedParent.remove();
 
-        return positionFixedSupport = (py === 1);
+        return (positionFixedSupport = (py === 1));
     },
 
     /**
@@ -158,4 +158,4 @@ if (Y.UA.iphone) {
 Y.namespace('Bottle').Device = Device;
 
 
-}, 'gallery-2012.12.12-21-11', {"requires": ["node-screen"]});
+}, 'gallery-2012.12.19-21-23', {"requires": ["node-screen"]});

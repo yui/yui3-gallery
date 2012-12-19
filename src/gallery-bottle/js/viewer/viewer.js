@@ -5,9 +5,7 @@
  * @static
  */
 
-var WIDTH_CHANGE = 'widthChange',
-
-    PREFIX = 'bvi_',
+var PREFIX = 'bvi_',
 
     CLASSES = {
         IMAGE: PREFIX + 'image',

@@ -119,7 +119,7 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
                 failure: this._handleIOFailure
             },
             context: this,
-            arguments: {
+            'arguments': {
                 target: O
             }
         });

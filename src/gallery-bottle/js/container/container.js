@@ -1,6 +1,6 @@
 /**
  * This module provides Container Widget which can handle scrollView with/without header/footer.
- * 
+ *
  * @module gallery-bt-container
  */
 var HEIGHT_CHANGE = 'heightChange',
@@ -48,7 +48,7 @@ var HEIGHT_CHANGE = 'heightChange',
  * @constructor
  */
 Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.WidgetChild, Y.zui.Attribute], {
-    initializer: function (config) {
+    initializer: function () {
         /**
          * internal eventhandlers, keep for destructor
          *
@@ -192,10 +192,10 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
 
         /**
          * header node of the container
-         * 
+         *
          * @attribute headerNode
          * @type Node
-         * @writeOnce 
+         * @writeOnce
          * @default undefined
          */
         headerNode: {
@@ -216,7 +216,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
          *
          * @attribute footerNode
          * @type Node
-         * @writeOnce 
+         * @writeOnce
          * @default undefined
          */
         footerNode: {
@@ -237,7 +237,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
          *
          * @attribute bodyNode
          * @type Node
-         * @writeOnce 
+         * @writeOnce
          * @default undefined
          */
         bodyNode: {
@@ -261,7 +261,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
          *
          * @attribute scrollView
          * @type ScrollView
-         * @writeOnce 
+         * @writeOnce
          * @default undefined
          */
         scrollView: {
@@ -273,7 +273,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
          *
          * @attribute cfgScroll
          * @type Object
-         * @writeOnce 
+         * @writeOnce
          * @default {flick: {minDistance: 10, minVelocity: 0.3}}
          */
         cfgScroll: {

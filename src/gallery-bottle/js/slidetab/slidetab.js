@@ -5,8 +5,7 @@
  * @static
  */
 
-var WIDTH_CHANGE = 'widthChange',
-    LABELWIDTH_CHANGE = 'labelWidthChange',
+var LABELWIDTH_CHANGE = 'labelWidthChange',
 
     PREFIX = 'bst_',
 
