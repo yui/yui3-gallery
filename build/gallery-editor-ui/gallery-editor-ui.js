@@ -1,3 +1,5 @@
+YUI.add('gallery-editor-ui', function (Y, NAME) {
+
 
 	/**
 	//Add Description
@@ -150,9 +152,7 @@
 					//reference
 					this.set("textArea",textArea);
 					this.set("editor",editor);
-					Y.log('Textarea tranformed OK');
 				}else{
-					Y.log('No valid textarea element ID');
 					return false;	
 				}
 
@@ -167,7 +167,6 @@
 				
 				//if we don't get a form ID, find the ancestor and set that one.
 				if(this.get("formEl") === null){
-					Y.log('Need valid form element ID');
 					/*
 					var form = editor.ancestor("form");
 					if(form){
@@ -197,7 +196,6 @@
 					this.set("frameInstance",baseEditor.getInstance());
 					
 					this.get("frameInstance").one("body").addClass(this.get("editorClass")).addClass('editing');/* our css style holder */
-					this.get("frameInstance").on("resizestart",Y.bind(function(){ return false; },this)); //some browsers allow image resizing, we dont. Another option unselectable=on on ellements.
 					this._buildToolbar();
 					this._registerCommands();
 					this._initToolbar();
@@ -242,7 +240,6 @@
 				baseEditor.render(htmlFrame);
 				
 			}else{
-				Y.log('Need textarea ID in DOM.');	
 			}
 			
 		},
@@ -260,7 +257,6 @@
 					var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '', editor = inst.host.editorUI;
 					//remove end and start space of selection
 					if(selection && selection.anchorNode.get("tagName") === "STRONG"){
-						Y.log('unbold');
 						if (!selection.isCollapsed) {
 							this._command('bold');
 						}else{
@@ -294,7 +290,6 @@
 					var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '', editor = inst.host.editorUI;
 					//remove end and start space of selection
 					if(selection && selection.anchorNode.get("tagName") === "EM"){
-						Y.log('unitalic');
 						if (!selection.isCollapsed){
 							this._command('italic');
 						}else{
@@ -305,7 +300,6 @@
 						//the top
 						return;
 					}else if(selection){
-						Y.log(selection.anchorNode.get("tagName"));
 						if (!selection.isCollapsed) {
 							node = selection.wrapContent('em');
 							selection.focusCursor(true, true);
@@ -326,7 +320,6 @@
 				},
 
 				size: function(cmd,node) {
-					Y.log('what size selection show');
 					var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '', editor = inst.host.editorUI;
 					//remove end and start space of selection
 					if(selection && selection.isCollapsed){
@@ -345,13 +338,11 @@
 					}
 				},
 				media: function(cmd,node) {
-					Y.log('media modal show');
 
 					var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, grid, text = '', src = 'http://', editor = inst.host.editorUI;
 
 					if(node && node.changedType === "mouseup") {
 						if (!selection.isCollapsed) {
-							Y.log('no modal on selection');
 							return false;
 						}
 					}
@@ -374,7 +365,6 @@
 					var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");
 					var parent_width = editor.get("editor").get("offsetWidth");/* get textarea width = width image upload max */
 					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame ,resizeHeight: true};
-					Y.log(cfg);
 					
 					//before rendering overlay, set .image-upload-frame with the correct height and width for centerized to work correctly
 					frame.setStyle("width",cfg.cellImageSizes.width).setStyle("height",cfg.cellImageSizes.height);
@@ -387,7 +377,6 @@
 					//g.support() === true){
 						//g.render();
 					//}else{
-						//Y.log('no html5 browser');
 					//}
 					g.on("upload:start",Y.bind(function(event){
 						//disable save button
@@ -402,9 +391,7 @@
 						if(data && data.status === 1){
 							Y.one("#mediadialog-source").set("value",data.file);
 						}else{
-							Y.log('No image data returned from endpoint');
 							//notify user
-							Y.log(data);	
 						}
 
 					},this));
@@ -432,14 +419,12 @@
 
 				},
 				link: function(cmd,node) {
-					Y.log('link modal show');
 					//http://yuiblog.com/sandbox/yui/3.2.0pr1/api/createlink-base.js.html
 					
 					var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '',href = 'http://',editor = inst.host.editorUI;
 
 					if(node && node.changedType === "mouseup") {
 						if (!selection.isCollapsed) {
-							Y.log('no modal on selection');
 							return false;
 						}
 					}
@@ -497,12 +482,10 @@
 
 				},
 				blockquote: function(cmd) {
-					Y.log('custom tag');
 					////scope.baseEditor.execCommand('wrap','em');
 				    var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '',editor = inst.host.editorUI;
 					//remove end and start space of selection
 					if(selection && selection.anchorNode.get("tagName") === "BLOCKQUOTE"){
-						Y.log('unblock');
 						if (!selection.isCollapsed){
 							this._command('outdent');
 						}else{
@@ -517,7 +500,6 @@
 							node = selection.wrapContent('blockquote');
 							selection.focusCursor(true, true);
 						} else {
-							Y.log('no selection, but cursor');
 							//text = editor._getInnerText(selection.anchorNode);
 							node = selection.insertContent('<blockquote>&nbsp;</blockquote>');	
 							selection.focusCursor(true, true);//selection.selectNode(node., true);
@@ -527,7 +509,6 @@
 					}
 				},
 				clear: function(cmd) {
-					Y.log('clear formatting');
 					var inst = this.get('host').getInstance(), selection = new inst.Selection(), node;
 												
 					var answer = confirm('You will lose the html formatting. Are you sure?');	
@@ -595,7 +576,6 @@
 					e.preventDefault();
 					
 					var command = e.currentTarget.getAttribute("command"); 
-					Y.log('button mousedown: '+command);
 					if(command){
 						var node = this.get("baseEditor").execCommand(command);
 					}
@@ -634,7 +614,6 @@
 				switch (e.changedType) {
 					case 'backspace-up':
 					if (Y.UA.webkit){
-						Y.log('overwrite YUI backspace event');
 						e.preventDefault();
 						e.stopPropagation();
 						return false;
@@ -649,7 +628,6 @@
 					case 'enter':
 						if (e.changedNode.get("tagName") === 'BLOCKQUOTE' && !e.changedEvent.shiftKey) {
 							/* we don't want enters in blockquote creating a new blockquote (use shift enter)*/
-							Y.log('indent on enter in blockquote');
 							e.preventDefault();
 							//this.get('baseEditor').execCommand('outdent', '');
 							this.get("baseEditor").execCommand("insertandfocus","</blockquote><p><br></p>");
@@ -680,7 +658,6 @@
 						break;
 					case 'keyup':
 						if(this.flagPaste === true){
-							Y.log('stripped paste');
 							e.changedNode.set('innerHTML', e.changedNode.get('text'));//allow a, strong, li, ul, ol, p, br?
 						}
 					default:
@@ -726,7 +703,6 @@
 				this.get("baseEditor").set('content',html);//don't do anything with the formatting
 				
 				var formatted_html = formatter.init(this.get("frameInstance").one('body'));
-				//Y.log('format it:'+ formatted_html);
 				this.get("textArea").set("value",formatted_html);
 				//after switch we clean it up
 			}
@@ -762,7 +738,6 @@
 		_toggleComposer: function(toggle){
 			var editor = this.get("editor");
 			try{
-				Y.log('toggle: '+toggle);
 				this.set("visualEditMode",toggle);
 				if(toggle === true){
 					//wysiwyg editor
@@ -791,8 +766,6 @@
 				}
 			}catch(err){
 				
-				Y.log("Could not switch view: _toggleComposer()");
-				Y.log(err);
 				
 			}
 		},
@@ -818,7 +791,6 @@
 			tags.each(function(node){
 				
 				if(node.ancestor(".gridbuilder",true)){
-					Y.log("don't touch grid");
 					return;
 				}
 
@@ -826,14 +798,12 @@
 					var newNode = Y.Node.create('<strong></strong>');
 					newNode.set("innerHTML",node.get("innerHTML"));				
 					node.replace(newNode);
-					Y.log("b altered to strong");
 				}
 
 				if(node.get("tagName") === "I") {
 					var newNode = Y.Node.create('<em></em>');
 					newNode.set("innerHTML",node.get("innerHTML"));				
 					node.replace(newNode);
-					Y.log("i altered to em");
 				}
 
 				//remove spans without a whitelisted meaning
@@ -844,7 +814,6 @@
 						style = node.getStyle(key);//return textDecoration = none, equals; drop line-height and stuff
 						if(value === true && style && (style !== "normal" && style !== "justify" && style !== "none"  && style !== "start" )){
 							//keep
-							Y.log("span with "+key+"=>"+style+" ok");
 							flag = true;
 						}else{
 							//remove style
@@ -853,7 +822,6 @@
 					});
 					/* safari adds spans with Apple-style-span stuff */
 					if(flag === false || node.hasClass("Apple-style-span")){
-						Y.log("moving span out of the way");
 						node.get("parentNode").insertBefore(node.get("childNodes"),node);
 						node.remove();
 					}
@@ -861,29 +829,23 @@
 												
 				if(node.get("tagName") === "DIV" && this._getInnerText(node,true).length > 0) {
 					if (node.get("innerHTML").search(this.regexps.divToPElementsRe) === -1)	{
-						Y.log("altering div to p");
 						var newNode = Y.Node.create('<p></p>');//kills all div information
 						newNode.set("innerHTML",node.get("innerHTML"));				
 						node.replace(newNode);
 					}else{
-						Y.log("not altering div to p");
 					}
 				}
 				
 				//if has no child node text, what are you doing here (p with an image?)
 				if(node.get("tagName").match(/^(ul|ol|blockquote|p|li|em|strong|h3|h2)$/i)){
-					//Y.log('tag '+node.get("tagName")+' has '+this._getInnerText(node,true));
 					if(this._getInnerText(node,true).length === 0 && node.all("img, iframe, object, br").size() === 0){
-						Y.log("remove containing node "+node.get("tagName")+" = "+this._getInnerText(node,true));
 						node.remove();
 					}else{
-						Y.log("node not removed: "+node.get("tagName")+" = "+this._getInnerText(node,true).length +" = "+node.all("img, iframe, object").size());
 					}
 				}
 
 				//if youtube object/iframe, strip parent <p>
 				if(node.get("tagName") === "P" && this._getInnerText(node,true).length === 0 && (node.one('*') && (node.one('*').get("tagName") === "IFRAME" || node.one('*').get("tagName") === "IMG"))) {
-					Y.log("found "+node.get("tagName")+" with "+node.one('*').get("tagName"));	
 					var newNode = Y.Node.create('<div></div>');
 					newNode.addClass("media");
 					newNode.set("innerHTML",node.get("innerHTML"));					
@@ -892,7 +854,6 @@
 				
 				//some editor-base node for IE and cursors
 				if(node.get("tagName") === "VAR") {
-					Y.log("moving VAR out of the way");
 					node.get("parentNode").insertBefore(node.get("childNodes"),node);
 					node.remove();
 				}
@@ -949,7 +910,6 @@
 		 * Submit form
 		 **/	
 		submitForm: function(e){
-			Y.log("submitForm call");
 			e.preventDefault();
 			
 			//if in 'wysiwyg' mode
@@ -969,4 +929,658 @@
 		}
 	});
 	
-	Y.EditorUI = EditorUI;
+	Y.EditorUI = EditorUI;	/**
+	 * @class EditorImageManage
+	 * @description EditorImageManage class
+	 * @constructor
+	 * @extends EventTarget
+	 * @param cfg {Object} configuration object
+	 */	
+	function EditorImageManage(config) {
+		EditorImageManage.superclass.constructor.apply(this, arguments);
+	}
+	
+	EditorImageManage.NAME = 'EditorImageManage';
+	EditorImageManage.ATTRS = {
+		/**
+		 * The DOM element to render our image in. Can be YUI3 node or selector.
+		 * @attribute frameEl
+		 * @type Object
+		 */
+		frameEl: {
+			value: null,
+			writeOnce:true
+		},
+		/**
+		 * The URL to upload the image to, resize image and return JSON. In the assets folder look at upload.phps for an example.
+		 * @attribute uploadToUrl
+		 * @type String
+		 */
+		uploadToUrl: {
+			value: '/build/gallery-editor-ui/assets/fake-upload.html',
+			validator: Y.Lang.isString,
+			writeOnce:true
+		},
+		/**
+		 * Can we adjust the height of the image.
+		 * @attribute resizeHeight
+		 * @type Boolean
+		 */
+		resizeHeight: {
+			value: true,
+			validator: Y.Lang.isBoolean,
+			writeOnce:true
+		},
+		/**
+		 * Draw UI buttons in manager
+		 * @attribute drawUI
+		 * @type Boolean
+		 */
+		drawUI: {
+			value: true	
+		},
+		/**
+		 * Image URL which pre-loads into our manager
+		 * @attribute file
+		 * @type String
+		 */
+		file: null,
+		/**
+		 * The frame's initial size dimentsions (height and width) to hold image in
+		 * @attribute cellImageSizes
+		 * @type Object
+		 */
+		cellImageSizes: {
+			value: {width: 0, height: 0 }	
+		},
+		/**
+		 * The image size dimentsions (height and width)
+		 * @attribute cellImageSizes
+		 * @type Object
+		 */
+		canvasImageSizes: {
+			value: {width: 0, height: 0 }	
+		},
+		cell: null,
+		top:{
+			value: 0
+		},
+		left:{
+			value: 0	
+		},
+		img: null,
+		img_src: null,
+		zoom: {
+			value: 1
+		},
+		resize: {
+			value: 1,
+			validator: Y.Lang.isNumber
+		}
+	};
+	
+	Y.extend(EditorImageManage, Y.Base, {
+		
+		renderUI : function() {},/* is only for Widget? */
+		destructor : function() {},
+		
+		/**
+		 * @method initializer
+		 * @description main render method
+		 */
+		initializer: function() {
+			var cellImageSizes = this.get('cellImageSizes'), canvasImageSizes = this.get('canvasImageSizes'), frameEl = this.get("frameEl"), cell;
+			
+			//init vars
+			if(frameEl && frameEl._node){
+				//ok
+			}else if(frameEl && Y.one(frameEl)){//is string
+				frameEl = Y.one(this.get("frameEl"));//set frameEl as node
+				this.set("frameEl",frameEl);
+			}else{
+				return;
+			}
+
+			//events
+			this.publish("upload:start");
+			this.publish("upload:error");
+			this.publish("upload:complete");
+
+			cell = Y.Node.create('<div class="visual"></div>');
+			this.set("cell",cell);			
+			//cellImageSizes is obligated
+			
+			
+			frameEl.empty().appendChild(cell);//clear and add manage cell
+			
+			//do all this in a cell
+			if(canvasImageSizes.width == 0 && canvasImageSizes.height == 0){
+				canvasImageSizes = { width: cellImageSizes.width, height: cellImageSizes.height };
+			}
+			this.set('canvasImageSizes',canvasImageSizes);
+			
+			//this.set('cellImageSizes',cellImageSizes);
+			cell.setStyle("width",cellImageSizes.width+"px").setStyle("height",cellImageSizes.height+"px");	
+
+			//init upload-to canvas:
+			this.uploadCanvas = Y.Node.create('<canvas class="canvas"></canvas>');
+			
+			//init canvas draw
+			this.uploadTo = this.uploadCanvas.invoke('getContext', '2d');//node: _node.getContext("2d");			
+			
+			//canvas copy (due to crazy sizing issues)
+			this.uploadCanvasCopy = Y.Node.create('<canvas class="canvas"></canvas>');
+			this.uploadToCopy = this.uploadCanvasCopy.invoke('getContext', '2d');//node: _node.getContext("2d");
+					
+			//init upload button
+			this.uploadButton = Y.Node.create('<input type="file" class="upload" accept="image/*">');//multiple="multiple"
+			cell.appendChild(this.uploadButton);
+			cell.appendChild(this.uploadCanvas);
+			
+			if(this.get("drawUI")){
+				//create zoom button
+				this.zoomBtn = Y.Node.create('<div class="zoom button"><a class="in" title="Zoom In">+</a> <a class="out" title="Zoom Out">-</a></div>');
+				
+				this.zoomBtn.one(".in").on("click",Y.bind(function(e){		
+					var zoom = this.get("zoom");
+					this.set("zoom",zoom * 1.05);
+					this.drawCanvas();
+					
+				},this));
+				this.zoomBtn.one(".out").on("click",Y.bind(function(e){		
+
+					var zoom = this.get("zoom") * .95;
+					if(zoom > 1){
+						this.set("zoom", zoom);
+					}else{
+						this.set("zoom",1);//reset						
+					}
+					this.drawCanvas();
+					
+				},this));
+				cell.appendChild(this.zoomBtn);
+
+				//save image button
+				this.saveBtn = Y.Node.create('<a class="save button" title="Save image">Save</a>');
+				this.saveBtn.on("click",Y.bind(function(e){	
+					this.saveImage();
+				},this));
+				cell.appendChild(this.saveBtn);
+								
+				//remove image button
+				this.clearBtn = Y.Node.create('<a class="delete button" title="Remove image">x</a>');
+				this.clearBtn.on("click",Y.bind(function(e){				
+					this.get("cell").removeClass("active");
+					this.clearCanvas();
+				},this));
+				cell.appendChild(this.clearBtn);
+				
+				if(this.get("resizeHeight") === true){
+					var heightInpt = Y.Node.create('<input class="height_row" value="'+cellImageSizes.height+'">');
+					heightInpt.on(["blur","submit"],Y.bind(function(evt){
+						var row = evt.currentTarget.get("parentNode");
+						var height = parseInt(evt.currentTarget.get("value"),10);
+						if(height > 10){
+							this.setHeight(height+6);
+						}
+					},this));
+					cell.appendChild(heightInpt);	
+				}
+			}
+
+			//add resizer of cell
+			if(this.get("resizeHeight") === true){
+
+				var resize = new Y.Resize({
+					node: frameEl,
+					handles: 'b',
+					minHeight: 55,
+					maxHeight: 600,
+					preserveRatio: false
+				});
+
+				resize.on('resize:resize', Y.bind(function(event) {
+					var cell = event.currentTarget.get("node");				
+					var height = parseInt(event.currentTarget.info.offsetHeight,10);
+					this.setHeight(height);
+					
+					cell.all(".height_row").set("value",(height-6)+"px");/* 6 = handlebar adjust upload.js */
+				},this));
+			}
+
+			//have a image to fill cell? Load into canvas!
+			if(this.get("file")){
+				this.set("img",Y.Node.create('<img>'));	
+				this.get("img").on("load",Y.bind(this.prepareImg,this));
+				this.get("img").on("error",Y.bind(this.errorImg,this));
+				
+				//only local files can load to crossdomain, else use our proxy to load
+				if(this.get("file").indexOf(document.location.hostname) > 0 || this.get("file").substr(0,1) === "/") {
+					this.get("img").set('src',this.get("file"));
+				}else{
+					this.get("img").set('src',this.get('uploadToUrl')+'?proxy='+encodeURIComponent(this.get("file")));
+				}
+
+				//initial offset
+				this.uploadCanvas.setStyle('position','relative');
+				this.uploadCanvas.setStyle('top',this.get("top")+'px');
+				this.uploadCanvas.setStyle('left',this.get("left")+'px');		
+			}
+			
+			//events
+			this.uploadButton.on("change",Y.bind(this.loadLocalImage,this));
+			
+			//events resize
+			Y.on('windowresize', Y.bind(this.contrainMove,this));
+		},
+		
+		/**
+		 * Only works for html5 browsers, else fallback to browser upload only?
+		 * 
+		**/			
+		support: function(){
+			if ( !( window.File && window.FileReader && window.FileList && window.Blob ) ) {	
+				return false;	
+			}
+			return true;
+		},
+		/**
+		 * 
+		**/				
+		loadLocalImage: function(evt){	
+						
+			//clear canvas
+			this.clearCanvas();
+			
+			//create image holder and attach event listener
+			this.set("img",Y.Node.create('<img>'));
+			this.get("img").detach('load');
+			this.get("img").on("load",Y.bind(this.prepareImg,this));
+
+			var files = evt.target.get('files');/* ie10 :( */				
+			if (files && files.size() > 0) {
+				var file = files._nodes[0];
+				//file.name , file.size, file.lastModifiedDate
+				if (typeof FileReader !== "undefined" && file.type.indexOf("image") != -1) {
+					var reader = new FileReader();
+					//addEventListener doesn't work in Google Chrome for this event
+					reader.onload = Y.bind(function (evt) {
+						this.get("img").set('src',evt.target.result);//this will call load on prepareImg			
+					},this);	
+					reader.readAsDataURL(file);//readAsText				
+				}
+			}
+			
+			evt.stopPropagation();
+			evt.preventDefault();	
+		},
+		/**
+		 * 
+		**/				
+		prepareImg: function(evt){		
+			//save local source file
+			this.set("img_src",evt.target._node);
+
+			this.uploadCanvasCopy.set("width",evt.target._node.width);
+			this.uploadCanvasCopy.set("height",evt.target._node.height);		
+			this.uploadToCopy.drawImage(evt.target._node, 0, 0, evt.target._node.width, evt.target._node.height);
+			
+			this.drawCanvas();
+		},
+		/**
+		 * 
+		**/				
+		errorImg: function(evt){		
+		},
+		/**
+		 * 
+		**/				
+		drawCanvas: function(){
+			var img = this.get("img"),
+				img_src = this.get("img_src"),
+				canvasImageSizes = this.get("canvasImageSizes"),
+				cell = this.get("cell");
+			
+			//set cell active
+			cell.addClass("active");
+			
+			//to allow moving
+			
+			//get dimentsions, and set them
+			var newDimensions = this.resizeDimensions(img_src,canvasImageSizes);			
+			
+			img_src.width = newDimensions.width;
+			img_src.height = newDimensions.height;
+			
+			//zoom
+			img_src.height = img_src.height * this.get("zoom");
+			img_src.width = img_src.width * this.get("zoom");
+			
+			//do we allow canvas to be < max-width|max-height? -> result is too small image send back 
+			this.uploadCanvas.set("width",img_src.width);
+			this.uploadCanvas.set("height",img_src.height);
+
+			//calc ratio between our source canvas and and target (preview) canvas
+			this.set("resize",(this.uploadCanvasCopy.get("height") / this.uploadCanvas.get("height")));
+			
+			//support zoom
+			this.uploadTo.drawImage(img_src, 0, 0, img_src.width,img_src.height);
+			
+			//draggable reset
+			this.contrainMove();
+		},
+		/**
+		 * 
+		**/		
+		resizeDimensions: function(node,minDimensions){
+			//get image dimensions
+			var ratio = node.height / node.width;
+			var newDimensions = {height: node.height, width: node.width, resize: 100};
+						
+			if(node.width >= minDimensions.width || node.height >= minDimensions.height){
+				//start with the shortest target lenght
+				if(minDimensions.width <= minDimensions.height && node.height <= node.width && node.height >= minDimensions.height){
+					//match up height with max height
+					//newDimensions.resize = (Math.round((newDimensions.width / node.width)*100));				
+				}else{
+					//match up width with height
+					if(node.width >= minDimensions.width){
+						newDimensions.width = minDimensions.width;
+						newDimensions.height = Math.round(minDimensions.width * ratio);	
+						//newDimensions.resize = (Math.round((newDimensions.width / node.width)*100));				
+					}else{
+						//fits within max (too small)
+					}
+				}
+			}else{
+				//no resize
+			}	
+			return newDimensions;	
+		},
+		
+		/**
+		 * 
+		**/				
+		contrainMove: function(){
+			var img = this.get("img"),
+				cell = this.get("cell");
+			
+			/* is the canvas already offset */
+			var offsetTop = parseInt(this.uploadCanvas.getStyle("top"),10);
+			var offsetLeft = parseInt(this.uploadCanvas.getStyle("left"),10);
+			
+			/* for if image is smaller then canvas */
+			if(this.uploadCanvas.get("width") < parseInt(cell.getStyle("width"),10)){
+				var fillWidth = parseInt(cell.getStyle("width"),10) - this.uploadCanvas.get("width");
+			}else{			
+				var fillWidth = 0;
+			}
+
+			/* for if image is smaller then canvas */
+			if(this.uploadCanvas.get("height") < parseInt(cell.getStyle("height"),10)){
+				var fillHeight = parseInt(cell.getStyle("height"),10) - this.uploadCanvas.get("height");
+			}else{			
+				var fillHeight = 0;
+			}
+						
+			//make draggable in div (set when new image is loaded, unset previous node)
+			var location = this.uploadCanvas.getXY();
+			
+			if(this.drag){ this.drag.destroy(); }//cleanup reset
+			
+			this.drag = new Y.DD.Drag({
+				node: this.uploadCanvas,
+			}).plug(Y.Plugin.DDConstrained,{
+					constrain: { 
+					top: (location[1] - offsetTop - (this.uploadCanvas.get("height") - (this.uploadCanvas.get("height") > parseInt(cell.getStyle("height"),10) ?  parseInt(cell.getStyle("height"),10) : this.uploadCanvas.get("height")))),
+					left: (location[0] - offsetLeft - (this.uploadCanvas.get("width") - (this.uploadCanvas.get("width") >  parseInt(cell.getStyle("width"),10) ?  parseInt(cell.getStyle("width"),10) : this.uploadCanvas.get("width")))), 
+					right: location[0] + this.uploadCanvas.get("width") + fillWidth - offsetLeft,
+					bottom: location[1] + this.uploadCanvas.get("height") + fillHeight - offsetTop }
+			});
+
+			this.drag.on("drag:end",Y.bind(function(e){
+				this.set("top",parseInt(this.uploadCanvas.getStyle("top"),10));
+				this.set("left",parseInt(this.uploadCanvas.getStyle("left"),10));
+				
+				//and calc new drag area
+				this.contrainMove();
+			},this));		
+		},
+		/**
+		 * 
+		**/				
+		clearCanvas: function(){
+			//reset offset
+			this.uploadCanvas.setStyle('top','0px');
+			this.uploadCanvas.setStyle('left','0px');
+			
+			//zoom
+			this.set("zoom",1);
+			
+			//cleanup canvas pixels
+			this.uploadTo.clearRect(0, 0, this.uploadCanvas.get("width"), this.uploadCanvas.get("height"));	
+		},
+
+		/**
+		 * 
+		**/			
+		convertToBlob: function(dataURI){
+			
+			//http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
+			//https://github.com/josefrichter/resize/blob/master/public/preprocess.js
+			var binary = atob(dataURI.split(',')[1]);
+			var array = [];
+			for(var i = 0; i < binary.length; i++) {
+				array.push(binary.charCodeAt(i));
+			}
+			return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});		
+		},
+		/**
+		 * 
+		**/				
+		getFile: function(){	
+			//var blob = this.uploadCanvas._node.mozGetAsFile("file.jpg");			
+			if(this.get("cell").hasClass("active")){
+				var blob = this.convertToBlob(this.getImage());
+				Y.FileHTML5.prototype._isValidFile = function(){ return true; };//overwrite
+				
+				return new Y.FileHTML5({file: blob});
+			}else{
+				return false;	
+			}
+		},
+		/**
+		 * Height and width of output cell not actual image!
+		**/		
+		getFileDetails: function(){	
+			var cellImageSizes = this.get("cellImageSizes");			
+			//todo: if cellImageSizes < canvas size, push that out
+			return {top: this.get("top"), left: this.get("left"), zoom: this.get("zoom"), width: cellImageSizes.width, height: cellImageSizes.height, resize: this.get("resize") };
+		},	
+		/**
+		 * 
+		**/				
+		getImage: function(){		
+			//this string is a file
+			return this.uploadCanvasCopy._node.toDataURL("image/jpeg","0.8");//png,jpeg,.8
+		},
+		/**
+		 * Called externally
+		**/				
+		setHeight: function(pixels){
+			
+			var cellImageSizes = this.get('cellImageSizes');
+			cellImageSizes.height = pixels - 6; /*6 is so we have an resize handle bar */
+			this.set('cellImageSizes',cellImageSizes);
+			this.get("cell").setStyle("height",cellImageSizes.height+"px").setStyle("width",cellImageSizes.width+"px");	
+			
+			this.contrainMove();/* redrawn image */	
+		},
+		
+		saveImage: function(){
+			var file = this.getFile();
+			if(file){
+				var uploader = new Y.UploaderHTML5;
+				
+				uploader.on("uploadstart",Y.bind(function(event) {
+					this.fire("upload:start",event);
+				},this));
+				uploader.on("uploaderror",Y.bind(function(event) {
+					this.fire("upload:error",event);
+				},this));
+				uploader.on("uploadcomplete",Y.bind(function(event) {
+					this.fire("upload:complete",event);
+				},this));
+
+				uploader.upload(file, this.get('uploadToUrl'), this.getFileDetails());
+			}
+			
+		},
+	});
+	
+	Y.EditorImageManage = EditorImageManage;	/**
+	 * @class HtmlFormat
+	 * @description HtmlFormat formats a DOM to string with easy to ready outlining of the tags.
+	 */	
+	var formatter = {
+		html: [],
+		indent: '  ',
+		trimRe: /^\s+|\s+$/gi,
+		inlineNodeRe: /^(img|br|sup|sub)$/i,
+		newLineNodeRe: /^(div|p|img|blockquote|q|iframe|pre|code|table|tbody|th|td|tr|ul|ol|li|h1|h2|h3|h4|h5|h6|dl|dt|dd|form|fieldset|legend|iframe)$/i,
+		notCloseNodesRe: /^(img|br)$/i,
+		firstNodeRe: /^(<[^>]+>)/i,
+		replaceNodesRe: /^(script|style|meta|body|head|title)/i,
+		keepAttributesRe: /^(src|style|width|height|class|title|alt|data-)/i,//no id
+		/* span, ul, b, strong, em, i, ul are all online */
+
+		/**
+		 * @method init
+		 * @description main render method
+		 * @param dom {Object} native DOM element or YUI Node
+		 */		
+		init: function(dom){
+			this.html = [];
+			if(dom === null){
+				return '';//overwrites so maybe return dom
+			}else if(dom && dom._node){
+				this.dive(dom.getDOMNode(),0);//for YUI
+			}else{
+				this.dive(dom,0);//native DOM assumed
+			}
+			return this.html.join('');
+		},
+		
+		dive: function (e,level) {
+			var node = e.firstChild;
+	
+			if(!e) {
+				return;
+			}
+	
+			//go until no more child nodes
+			while(node !== null) {
+				//https://developer.mozilla.org/en-US/docs/DOM/Node.nodeType
+				var hasTextChild = node.hasChildNodes() > 0 && node.firstChild.nodeType === 3 && node.firstChild.nodeValue.replace(this.trimRe,'').length > 0;
+				if (node.nodeType === 1) {
+					var nodeName = node.nodeName.toLowerCase();
+					//add all atributes
+	
+					//var node_str = node.outerHTML.replace(node.innerHTML,'').replace(this.trimRe, '');//works with new lines and stuff?
+					//rebuild node
+					var collection = node.attributes;
+					var node_str = "<"+nodeName;
+					for(var i=0; i<collection.length; i++){
+						 node_str += " "+collection[i].name + "=\"" + collection[i].value+"\"";
+					}	
+					node_str += ">";		
+					/*
+					node_match = node_str.match(this.firstNodeRe);//extract only first node
+					if(node_match){
+						node_str = node_match[0];
+					}
+					*/	
+					
+					//only certain nodes get indent
+					var new_line = '', indent_str = '';
+					if (nodeName.search(this.newLineNodeRe) === -1) {
+						indent_str = '';
+					}else if(hasTextChild || !nodeName.search(this.inlineNodeRe)  === -1){
+						//text node
+						indent_str = ''+this.indenter(level);
+					}else{//inline block
+						new_line = '\n';
+						indent_str = ''+this.indenter(level);
+					}
+					
+					this.html.push(indent_str+node_str);
+					
+					//if first child is not empty textnode, add new line
+					if (!hasTextChild){
+						this.html.push(new_line);
+					}
+					
+					this.dive(node,(level + 1));
+				}else if(node.nodeType === 3){
+					//text nodes (only non empty)
+					if(node.nodeValue.replace(this.trimRe, '').length > 0)
+						this.html.push(node.nodeValue);			
+				}else if(node.nodeType === 8){
+					//ignore all comment nodes
+				}
+	
+				
+				if (node.nodeType === 1) {
+					var nodeName = node.nodeName.toLowerCase();
+					
+					//if to another level, close tag
+					if (nodeName.search(this.notCloseNodesRe) === -1) {		
+						if (nodeName.search(this.newLineNodeRe) === -1) {
+							this.html.push('</'+nodeName+'>');	//just close tag
+						}else if(hasTextChild){
+							/* if has no childeren of main node, don't indent */
+							this.html.push('</'+nodeName+'>\n');
+						}else{
+							var indent_str = this.indenter(level);
+							this.html.push(indent_str+'</'+nodeName+'>\n'); //new line node (block) end tag
+						}
+					}
+				}
+				
+				//move to next
+				node = node.nextSibling;
+			}           
+		},
+		
+		indenter: function(level){
+			var indent_str = '';
+			for(var i=0; i < level; i++){
+				indent_str = indent_str + this.indent; 
+			}	
+			return indent_str;
+		},
+		
+		/**
+		 * 
+		 **/		
+		end : function(){
+			
+		}
+	}
+
+}, '@VERSION@', {
+    "skinnable": true,
+    "requires": [
+        "base",
+        "editor",
+        "event",
+        "node",
+        "panel",
+        "overlay",
+        "dd-drag",
+        "dd-constrain",
+        "uploader",
+        "resize",
+        "json"
+    ]
+});
