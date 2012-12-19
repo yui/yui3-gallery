@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 3,
-    "duration": 46,
+    "duration": 37,
     "type": "report",
     "attributes": {
         "name": "attributes",
@@ -14,14 +14,14 @@
         "errors": 0,
         "ignored": 0,
         "total": 3,
-        "duration": 43,
+        "duration": 35,
         "type": "testcase",
         "Required HTML structure": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Required HTML structure",
-            "duration": 9
+            "duration": 7
         },
         "Initial value": {
             "result": "pass",
@@ -38,5 +38,5 @@
             "duration": 3
         }
     },
-    "timestamp": "Wed 12 Dec 2012 03:12:57 PM CST"
+    "timestamp": "Wed 19 Dec 2012 03:25:14 PM CST"
 }

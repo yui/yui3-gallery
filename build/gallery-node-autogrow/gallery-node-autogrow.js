@@ -142,4 +142,4 @@ Y.namespace("Plugin");
 Y.Plugin.NodeAutoGrow = NodeAutoGrow;
 
 
-}, 'gallery-2012.12.12-21-11', {"requires": ["node-pluginhost", "node-style", "event-valuechange", "classnamemanager", "plugin"]});
+}, 'gallery-2012.12.19-21-23', {"requires": ["node-pluginhost", "node-style", "event-valuechange", "classnamemanager", "plugin"]});

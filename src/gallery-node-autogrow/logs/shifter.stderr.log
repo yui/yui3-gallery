@@ -1,6 +1,21 @@
-shifter [err] { [Error: ENOENT, open '/src/gallery-node-autogrow/assets/gallery-node-autogrow-core.css']
-  errno: 34,
-  code: 'ENOENT',
-  path: '/src/gallery-node-autogrow/assets/gallery-node-autogrow-core.css' }
-shifter [error] skin file is missing: /src/gallery-node-autogrow/assets/gallery-node-autogrow-core.css
-build exited with code 1
+shifter [err] /assets/skins/sam/gallery-node-autogrow-skin.css contains 10 lint errors
+   #1: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #abadb3; // line 3, pos 5
+   #2: [warning] Outlines should only be modified using :focus.
+       .yui3-autogrow pre, // line 8, pos 1
+   #3: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 26, pos 5
+   #4: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-webkit-box-sizing'.
+       -webkit-box-sizing: border-box; // line 27, pos 5
+   #5: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-moz-box-sizing'.
+       -moz-box-sizing: border-box; // line 28, pos 5
+   #6: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #abadb3; // line 43, pos 5
+   #7: [warning] Outlines should only be modified using :focus.
+       .yui3-autogrow pre, // line 48, pos 1
+   #8: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 66, pos 5
+   #9: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-webkit-box-sizing'.
+       -webkit-box-sizing: border-box; // line 67, pos 5
+   #10: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-moz-box-sizing'.
+       -moz-box-sizing: border-box; // line 68, pos 5

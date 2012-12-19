@@ -11,3 +11,12 @@ shifter [queu] compressing gallery-node-autogrow/gallery-node-autogrow.js with U
 shifter [queu] writing -min file
 shifter [info] shifting for coverage
 shifter [info] shifting skin for gallery-node-autogrow
+shifter [queu] coverage file read, starting coverage for: gallery-node-autogrow/gallery-node-autogrow.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-node-autogrow/gallery-node-autogrow-coverage.js
+shifter [queu] copying assets to skin for sam
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.104 seconds, pretty fast huh?
