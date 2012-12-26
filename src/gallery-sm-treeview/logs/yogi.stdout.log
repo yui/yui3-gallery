@@ -1,0 +1,35 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.58 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-sm-treeview
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [TreeView]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.016 seconds) 51%
+Writing files in JSON format to: /src/gallery-sm-treeview/logs/tests.json
+
+---------------------------------------+-----------+-----------+-----------+-----------+
+File                                   |   % Stmts |% Branches |   % Funcs |   % Lines |
+---------------------------------------+-----------+-----------+-----------+-----------+
+   gallery-sm-treeview-templates/      |       100 |       100 |       100 |       100 |
+      gallery-sm-treeview-templates.js |       100 |       100 |       100 |       100 |
+   gallery-sm-treeview/                |      2.44 |         0 |      4.55 |      2.44 |
+      gallery-sm-treeview.js           |      2.44 |         0 |      4.55 |      2.44 |
+---------------------------------------+-----------+-----------+-----------+-----------+
+All files                              |      4.76 |         0 |       8.7 |      4.76 |
+---------------------------------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 4.76% ( 6/126 )
+Branches     : 0% ( 0/72 )
+Functions    : 8.7% ( 2/23 )
+Lines        : 4.76% ( 6/126 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.016 seconds)
+  [Grover Execution Timer] 0.74 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

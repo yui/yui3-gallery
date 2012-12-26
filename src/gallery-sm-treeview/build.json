@@ -1,0 +1,17 @@
+{
+    "name": "gallery-sm-treeview",
+
+    "builds": {
+        "gallery-sm-treeview": {
+            "jsfiles": [
+                "js/treeview.js"
+            ]
+        },
+
+        "gallery-sm-treeview-templates": {
+            "jsfiles": [
+                "js/treeview-templates.js"
+            ]
+        }
+    }
+}
