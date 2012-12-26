@@ -1,0 +1,24 @@
+{
+    "name": "gallery-accordion-horiz-vert",
+    "builds": {
+        "gallery-accordion-horiz-vert": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "widget",
+                    "selector-css3",
+                    "plugin",
+                    "gallery-dimensions"
+                ],
+                "optional": [
+                    "anim-base"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "Accordion.js",
+                "FixedSizePlugin.js"
+            ]
+        }
+    }
+}

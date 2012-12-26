@@ -5,9 +5,9 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 	section_min_size = (use_nonzero_empty_div ? 1 : 0);
 
 /**********************************************************************
- * <p>Widget to manage an accordion, either horizontally or vertically.
+ * Widget to manage an accordion, either horizontally or vertically.
  * Allows either multiple open sections or only a single open section.
- * Provides option to always force at least one item to be open.</p>
+ * Provides option to always force at least one item to be open.
  * 
  * @module gallery-accordion-horiz-vert
  * @main gallery-accordion-horiz-vert
@@ -321,7 +321,7 @@ function cleanContainer(
 
 	while (el.hasChildNodes())
 	{
-		el.removeChild(el.lastChild);
+		el.removeChild(el.get('lastChild'));
 	}
 }
 

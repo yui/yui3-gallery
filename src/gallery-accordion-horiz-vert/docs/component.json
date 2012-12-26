@@ -1,0 +1,9 @@
+{
+	"name": "gallery-accordion-horiz-vert",
+	"displayName": "Accordion (horiz/vert)",
+	"description": "Provides an accordion that can expand either vertically or horizontally.",
+	"author": "jafl",
+
+	"use": ["gallery-accordion-horiz-vert"],
+	"tags": ["jafl","accordion"]
+}

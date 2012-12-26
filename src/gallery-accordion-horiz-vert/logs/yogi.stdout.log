@@ -1,0 +1,30 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.58 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-accordion-horiz-vert
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [http://127.0.0.1:5000/tests/src/gallery-accordion-horiz-vert/tests/unit/test.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       TypeError: 'undefined' is not an object (evaluating 'new Y.Test.Console')
+       http://127.0.0.1:5000/tests/src/gallery-accordion-horiz-vert/tests/unit/test.html?filter=coverage:17
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+       http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7
+Writing files in JSON format to: /src/gallery-accordion-horiz-vert/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

@@ -1,4 +1,4 @@
-YUI.add('gallery-accordion-horiz-vert', function(Y) {
+YUI.add('gallery-accordion-horiz-vert', function (Y, NAME) {
 
 "use strict";
 
@@ -7,9 +7,9 @@ var use_nonzero_empty_div = (0 < Y.UA.ie && Y.UA.ie < 8),
 	section_min_size = (use_nonzero_empty_div ? 1 : 0);
 
 /**********************************************************************
- * <p>Widget to manage an accordion, either horizontally or vertically.
+ * Widget to manage an accordion, either horizontally or vertically.
  * Allows either multiple open sections or only a single open section.
- * Provides option to always force at least one item to be open.</p>
+ * Provides option to always force at least one item to be open.
  * 
  * @module gallery-accordion-horiz-vert
  * @main gallery-accordion-horiz-vert
@@ -323,7 +323,7 @@ function cleanContainer(
 
 	while (el.hasChildNodes())
 	{
-		el.removeChild(el.lastChild);
+		el.removeChild(el.get('lastChild'));
 	}
 }
 
@@ -1266,4 +1266,15 @@ Y.namespace("Plugin");
 Y.Plugin.FixedSizeAccordion = FixedSizeAccordionPlugin;
 
 
-}, 'gallery-2012.05.23-19-56' ,{skinnable:true, optional:['anim-base'], requires:['widget','selector-css3','plugin','gallery-dimensions']});
+}, 'gallery-2012.12.26-20-48', {
+    "skinnable": "true",
+    "requires": [
+        "widget",
+        "selector-css3",
+        "plugin",
+        "gallery-dimensions"
+    ],
+    "optional": [
+        "anim-base"
+    ]
+});

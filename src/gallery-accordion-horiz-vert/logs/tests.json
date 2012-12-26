@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 1,
+    "total": 1,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5000/tests/src/gallery-accordion-horiz-vert/tests/unit/test.html?filter=coverage",
+    "error": "TypeError: 'undefined' is not an object (evaluating 'new Y.Test.Console')\nhttp://127.0.0.1:5000/tests/src/gallery-accordion-horiz-vert/tests/unit/test.html?filter=coverage:17\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7\nhttp://yui.yahooapis.com/3.8.0/build/yui/yui-min.js:7"
+}

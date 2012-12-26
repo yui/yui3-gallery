@@ -1,0 +1,258 @@
+shifter [err] /src/gallery-accordion-horiz-vert/js/FixedSizePlugin.js contains 122 lint errors
+   #1: Trailing whitespace.
+       * // line 13, pos 3
+   #2: Trailing whitespace.
+       * // line 23, pos 3
+   #3: Trailing whitespace.
+       * // line 28, pos 3
+   #4: Trailing whitespace.
+       * // line 38, pos 3
+   #5: Trailing whitespace.
+       * // line 42, pos 3
+   #6: Trailing whitespace.
+       * // line 78, pos 7
+   #7: Trailing whitespace.
+       * // line 94, pos 7
+   #8: Trailing whitespace.
+       * // line 108, pos 7
+   #9: Trailing whitespace.
+       * // line 123, pos 7
+   #10: Trailing whitespace.
+       * // line 137, pos 7
+   #11: Trailing whitespace.
+       * // line 151, pos 7
+   #12: Trailing whitespace.
+       * // line 171, pos 7
+   #13: Trailing whitespace.
+       * // line 184, pos 7
+   #14: Trailing whitespace.
+       * // line 199, pos 7
+   #15: Trailing whitespace.
+       * // line 213, pos 7
+   #16: Trailing whitespace.
+       * // line 227, pos 7
+   #17: Trailing whitespace.
+       * // line 243, pos 7
+   #18: Too many var statements.
+       var open_class   = Y.ClassNameManager.getClassName(Accordion.NAME, 'open'); // line 316, pos 5
+   #19: Too many var statements.
+       var closed_class = Y.ClassNameManager.getClassName(Accordion.NAME, 'closed'); // line 317, pos 5
+   #20: Too many var statements.
+       var sections = this.get('sections'); // line 383, pos 13
+   #21: Expected '===' and instead saw '=='.
+       titles.size() == sections.size()) // line 390, pos 27
+   #22: Too many var statements.
+       var save_animate_insert = this.get('animateInsertRemove'); // line 392, pos 17
+   #23: Too many var statements.
+       var count = titles.size(); // line 395, pos 17
+   #24: Too many var statements.
+       for (var i=0; i<count; i++) // line 396, pos 22
+   #25: Mixed spaces and tabs.
+       titles.length == sections.length) // line 404, pos 4
+   #26: Expected '===' and instead saw '=='.
+       titles.length == sections.length) // line 404, pos 32
+   #27: Too many var statements.
+       var save_animate_insert = this.get('animateInsertRemove'); // line 406, pos 17
+   #28: 'save_animate_insert' is already defined.
+       var save_animate_insert = this.get('animateInsertRemove'); // line 406, pos 37
+   #29: Too many var statements.
+       var count = titles.length; // line 409, pos 17
+   #30: 'count' is already defined.
+       var count = titles.length; // line 409, pos 23
+   #31: Too many var statements.
+       for (var i=0; i<count; i++) // line 410, pos 22
+   #32: 'i' is already defined.
+       for (var i=0; i<count; i++) // line 410, pos 23
+   #33: Trailing whitespace.
+       * // line 447, pos 7
+   #34: Too many var statements.
+       var el; // line 459, pos 13
+   #35: Too many var statements.
+       var el = Y.one(title); // line 462, pos 17
+   #36: 'el' is already defined.
+       var el = Y.one(title); // line 462, pos 20
+   #37: Too many var statements.
+       var p = t.get('parentNode'); // line 475, pos 17
+   #38: Too many var statements.
+       var n = t.get('nextSibling'); // line 476, pos 17
+   #39: Trailing whitespace.
+       * // line 516, pos 7
+   #40: Too many var statements.
+       var el; // line 528, pos 13
+   #41: Too many var statements.
+       var el = Y.one(content); // line 531, pos 17
+   #42: 'el' is already defined.
+       var el = Y.one(content); // line 531, pos 20
+   #43: Too many var statements.
+       var display = d.getStyle('display'); // line 544, pos 17
+   #44: Too many var statements.
+       var p = d.get('parentNode'); // line 546, pos 17
+   #45: Too many var statements.
+       var n = d.get('nextSibling'); // line 547, pos 17
+   #46: Trailing whitespace.
+       * // line 584, pos 7
+   #47: Trailing whitespace.
+       * // line 598, pos 7
+   #48: Trailing whitespace.
+       * // line 612, pos 7
+   #49: Too many var statements.
+       var c = Y.Node.create('<div/>'); // line 633, pos 13
+   #50: Too many var statements.
+       var d = Y.Node.create('<div/>'); // line 643, pos 13
+   #51: Too many var statements.
+       var size = t.get(this.slide_size_name); // line 674, pos 13
+   #52: Too many var statements.
+       var params = // line 679, pos 17
+   #53: Too many var statements.
+       var anim = this._createAnimator(params); // line 694, pos 17
+   #54: Trailing whitespace.
+       { // line 697, pos 14
+   #55: Trailing whitespace.
+       * // line 738, pos 7
+   #56: Possible strict violation.
+       this.fire('remove', index); // line 754, pos 17
+   #57: Too many var statements.
+       var params = // line 768, pos 17
+   #58: Too many var statements.
+       var anim    = this._createAnimator(params); // line 789, pos 17
+   #59: Too many var statements.
+       for (var i=0; i<count; i++) // line 823, pos 18
+   #60: Too many var statements.
+       var title   = Y.Node.getDOMNode(this.section_list[i].title); // line 825, pos 17
+   #61: Too many var statements.
+       var content = Y.Node.getDOMNode(this.section_list[i].content); // line 826, pos 17
+   #62: Expected '===' and instead saw '=='.
+       if (el == title   || Y.DOM.contains(title, el) || // line 827, pos 20
+   #63: Expected '===' and instead saw '=='.
+       el == content || Y.DOM.contains(content, el)) // line 828, pos 20
+   #64: Trailing whitespace.
+       * // line 849, pos 7
+   #65: Trailing whitespace.
+       * // line 864, pos 7
+   #66: Too many var statements.
+       for (var i=0; i<count; i++) // line 884, pos 18
+   #67: Too many var statements.
+       for (var i=0; i<count; i++) // line 902, pos 18
+   #68: Trailing whitespace.
+       * // line 915, pos 7
+   #69: Possible strict violation.
+       this.section_list[index].clip.setStyle(this.slide_style_name, 'auto'); // line 942, pos 13
+   #70: Possible strict violation.
+       this.section_list[index].clip.setStyle(this.slide_style_name, 'auto'); // line 942, pos 52
+   #71: Possible strict violation.
+       this.fire('open', index); // line 943, pos 13
+   #72: Possible strict violation.
+       this.section_list[index].content.setStyle('display', 'none'); // line 948, pos 13
+   #73: Possible strict violation.
+       this.fire('close', index); // line 949, pos 13
+   #74: Too many var statements.
+       var size = this.section_list[index].content.get(this.slide_size_name); // line 962, pos 17
+   #75: Too many var statements.
+       var params = // line 965, pos 21
+   #76: Too many var statements.
+       var anim = this._startAnimator(index, params); // line 980, pos 21
+   #77: Too many var statements.
+       var clip = this.section_list[index].clip; // line 985, pos 21
+   #78: Expected '===' and instead saw '=='.
+       if (clip.getStyle('opacity') == '0') // line 986, pos 46
+   #79: Too many var statements.
+       var params = // line 1003, pos 21
+   #80: 'params' is already defined.
+       var params = // line 1003, pos 28
+   #81: Too many var statements.
+       var anim = this._startAnimator(index, params); // line 1018, pos 21
+   #82: 'anim' is already defined.
+       var anim = this._startAnimator(index, params); // line 1018, pos 26
+   #83: Trailing whitespace.
+       * // line 1031, pos 7
+   #84: Too many var statements.
+       for (var i=0; i<count; i++) // line 1039, pos 22
+   #85: Trailing whitespace.
+       * // line 1051, pos 7
+   #86: Too many var statements.
+       var first = true; // line 1057, pos 13
+   #87: Too many var statements.
+       for (var i=0; i<count; i++) // line 1058, pos 18
+   #88: Too many var statements.
+       var easing = this.get('animateEasing'); // line 1090, pos 13
+   #89: Expected '===' and instead saw '=='.
+       this.section_list[ index ].anim == anim) // line 1116, pos 49
+   #90: Trailing whitespace.
+       * // line 1138, pos 3
+   #91: Trailing whitespace.
+       * // line 1141, pos 3
+   #92: Too many var statements.
+       var animation_attrs = // line 1158, pos 5
+   #93: Too many var statements.
+       var total_size = // line 1165, pos 5
+   #94: Too many var statements.
+       var overflow = // line 1171, pos 5
+   #95: Too many var statements.
+       var surrounding = // line 1177, pos 5
+   #96: Possible strict violation.
+       this.set(name, false); // line 1186, pos 5
+   #97: Possible strict violation.
+       this.modifyAttr(name, { readOnly: true }); // line 1187, pos 5
+   #98: Possible strict violation.
+       var host = this.get('host'); // line 1192, pos 16
+   #99: Possible strict violation.
+       if (!this.init_fixed_size) // line 1193, pos 10
+   #100: Possible strict violation.
+       this.afterHostEvent('render', adjust, this); // line 1199, pos 13
+   #101: Possible strict violation.
+       this.afterHostEvent('render', adjust, this); // line 1199, pos 51
+   #102: Possible strict violation.
+       this.onHostEvent('insert', function() // line 1202, pos 9
+   #103: Possible strict violation.
+       this); // line 1206, pos 9
+   #104: Possible strict violation.
+       this.onHostEvent('remove', adjust, this); // line 1208, pos 9
+   #105: Possible strict violation.
+       this.onHostEvent('remove', adjust, this); // line 1208, pos 44
+   #106: Possible strict violation.
+       this.onHostEvent('open', adjust, this); // line 1209, pos 9
+   #107: Possible strict violation.
+       this.onHostEvent('open', adjust, this); // line 1209, pos 42
+   #108: Possible strict violation.
+       this.onHostEvent('close', adjust, this); // line 1210, pos 9
+   #109: Possible strict violation.
+       this.onHostEvent('close', adjust, this); // line 1210, pos 43
+   #110: Possible strict violation.
+       this.init_fixed_size = true; // line 1212, pos 9
+   #111: Too many var statements.
+       var dim   = host.slide_style_name; // line 1215, pos 9
+   #112: Too many var statements.
+       var total = host.get('boundingBox').parseDimensionStyle(dim); // line 1216, pos 9
+   #113: Too many var statements.
+       var count = host.getSectionCount(); // line 1217, pos 9
+   #114: Too many var statements.
+       var open  = []; // line 1218, pos 9
+   #115: Too many var statements.
+       for (var i=0; i<count; i++) // line 1219, pos 14
+   #116: Too many var statements.
+       var size  = Math.floor(total / count); // line 1229, pos 9
+   #117: Too many var statements.
+       var extra = total % count; // line 1230, pos 9
+   #118: Too many var statements.
+       var section = host.getSection(open[i]); // line 1233, pos 13
+   #119: Too many var statements.
+       var size1   = size - section[ surrounding[dim] ](); // line 1234, pos 13
+   #120: Too many var statements.
+       var dim  = host.slide_style_name; // line 1250, pos 13
+   #121: 'config' is defined but never used.
+       initializer: function(config) // line 332, pos 33
+   #122: 'config' is defined but never used.
+       initializer: function(config) // line 1247, pos 33
+
+/ssd/home/yui/src/shifter/lib/module.js:466
+            Object.keys(mod.skins).forEach(function(skinName) {
+                   ^
+TypeError: Object.keys called on non-object
+    at Function.keys (native)
+    at buildSkin (/ssd/home/yui/src/shifter/lib/module.js:466:20)
+    at /ssd/home/yui/src/shifter/lib/stack.js:24:38
+    at confirm (/ssd/home/yui/src/cpr/lib/index.js:195:9)
+    at Object.Stack.test (/ssd/home/yui/src/cpr/lib/stack.js:31:27)
+    at /ssd/home/yui/src/cpr/lib/stack.js:25:18
+    at Object.oncomplete (fs.js:297:15)
+build exited with code 1
