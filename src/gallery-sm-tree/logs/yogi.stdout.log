@@ -1,0 +1,41 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.58 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-sm-tree
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [testSuite_yui_3_5_0_1_1356555005889_61]: Passed: 143 Failed: 0 Total: 143 (ignored 0) (1.846 seconds) 96%
+Writing files in JSON format to: /src/gallery-sm-tree/logs/tests.json
+
+-----------------------------------------+-----------+-----------+-----------+-----------+
+File                                     |   % Stmts |% Branches |   % Funcs |   % Lines |
+-----------------------------------------+-----------+-----------+-----------+-----------+
+   gallery-sm-tree-lazy/                 |      96.3 |     90.91 |       100 |      96.3 |
+      gallery-sm-tree-lazy.js            |      96.3 |     90.91 |       100 |      96.3 |
+   gallery-sm-tree-node-selectable/      |       100 |       100 |       100 |       100 |
+      gallery-sm-tree-node-selectable.js |       100 |       100 |       100 |       100 |
+   gallery-sm-tree-node/                 |     98.39 |     97.14 |       100 |     98.39 |
+      gallery-sm-tree-node.js            |     98.39 |     97.14 |       100 |     98.39 |
+   gallery-sm-tree-selectable/           |     92.11 |      87.5 |     92.86 |     92.11 |
+      gallery-sm-tree-selectable.js      |     92.11 |      87.5 |     92.86 |     92.11 |
+   gallery-sm-tree/                      |     96.08 |     92.47 |       100 |     96.08 |
+      gallery-sm-tree.js                 |     96.08 |     92.47 |       100 |     96.08 |
+-----------------------------------------+-----------+-----------+-----------+-----------+
+All files                                |     96.19 |      92.9 |     98.63 |     96.19 |
+-----------------------------------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 96.19% ( 278/289 )
+Branches     : 92.9% ( 144/155 )
+Functions    : 98.63% ( 72/73 )
+Lines        : 96.19% ( 278/289 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 143 Failed: 0 Total: 143 (ignored 0) (1.846 seconds)
+  [Grover Execution Timer] 2.599 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test Page</title>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="log"></div>
+
+<script src="/build/yui/yui.js"></script>
+<script>
+var Y = YUI({
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+
+    coverage: [
+        'gallery-sm-tree',
+        'gallery-sm-tree-lazy',
+        'gallery-sm-tree-node',
+        'gallery-sm-tree-node-selectable',
+        'gallery-sm-tree-selectable'
+    ],
+
+    modules: {
+        'tree-test': {
+            fullpath: 'assets/tree-test.js',
+            requires: ['gallery-sm-tree', 'gallery-sm-tree-lazy', 'json', 'test']
+        },
+
+        'tree-selectable-test': {
+            fullpath: 'assets/tree-selectable-test.js',
+            requires: ['gallery-sm-tree-selectable', 'test']
+        }
+    },
+    useBrowserConsole: false
+}).use('tree-test', 'tree-selectable-test', 'test-console', function (Y) {
+    new Y.Test.Console().render('#log');
+
+    Y.Test.Runner.add(Y.TreeTestSuite);
+    Y.Test.Runner.add(Y.TreeSelectableTestSuite);
+    Y.Test.Runner.run();
+});
+</script>
+
+</body>
+</html>

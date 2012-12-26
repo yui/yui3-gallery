@@ -1,0 +1,35 @@
+{
+    "name": "gallery-sm-tree",
+
+    "builds": {
+        "gallery-sm-tree": {
+            "jsfiles": [
+                "js/tree.js"
+            ]
+        },
+
+        "gallery-sm-tree-lazy": {
+            "jsfiles": [
+                "js/plugins/tree-lazy.js"
+            ]
+        },
+
+        "gallery-sm-tree-node": {
+            "jsfiles": [
+                "js/tree-node.js"
+            ]
+        },
+
+        "gallery-sm-tree-node-selectable": {
+            "jsfiles": [
+                "js/extensions/tree-node-selectable.js"
+            ]
+        },
+
+        "gallery-sm-tree-selectable": {
+            "jsfiles": [
+                "js/extensions/tree-selectable.js"
+            ]
+        }
+    }
+}
