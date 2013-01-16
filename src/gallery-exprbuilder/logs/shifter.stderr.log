@@ -1,0 +1,139 @@
+shifter [err] /src/gallery-exprbuilder/js/ExpressionBuilder.js contains 69 lint errors
+   #1: Trailing whitespace.
+       * // line 11, pos 3
+   #2: Trailing whitespace.
+       * // line 29, pos 7
+   #3: Trailing whitespace.
+       * // line 44, pos 7
+   #4: Trailing whitespace.
+       * // line 59, pos 7
+   #5: Trailing whitespace.
+       * // line 77, pos 7
+   #6: Trailing whitespace.
+       * // line 95, pos 7
+   #7: Trailing whitespace.
+       * // line 107, pos 7
+   #8: Trailing whitespace.
+       * // line 122, pos 7
+   #9: Trailing whitespace.
+       * // line 137, pos 7
+   #10: Trailing whitespace.
+       * // line 152, pos 7
+   #11: Trailing whitespace.
+       * // line 167, pos 7
+   #12: Trailing whitespace.
+       * // line 182, pos 7
+   #13: Trailing whitespace.
+       * // line 197, pos 7
+   #14: Trailing whitespace.
+       * // line 213, pos 7
+   #15: Trailing whitespace.
+       * // line 226, pos 7
+   #16: Trailing whitespace.
+       * // line 239, pos 7
+   #17: Trailing whitespace.
+       * // line 253, pos 7
+   #18: Possible strict violation.
+       this.ie_range = document.selection.createRange(); // line 267, pos 5
+   #19: Possible strict violation.
+       this.field.focus(); // line 274, pos 5
+   #20: Possible strict violation.
+       var el = Y.Node.getDOMNode(this.field); // line 275, pos 32
+   #21: Too many var statements.
+       var start = el.selectionStart; // line 279, pos 13
+   #22: Too many var statements.
+       var index = start + offset; // line 285, pos 13
+   #23: Possible strict violation.
+       if (!this.ie_range) // line 290, pos 14
+   #24: Possible strict violation.
+       this.ie_range = document.selection.createRange(); // line 292, pos 13
+   #25: Too many var statements.
+       var r  = this.ie_range.duplicate(); // line 295, pos 13
+   #26: Possible strict violation.
+       var r  = this.ie_range.duplicate(); // line 295, pos 18
+   #27: Possible strict violation.
+       this.ie_range.move('character', offset); // line 298, pos 9
+   #28: Possible strict violation.
+       this.ie_range.select(); // line 299, pos 9
+   #29: Possible strict violation.
+       insertText.call(this, '()', 1); // line 305, pos 21
+   #30: Possible strict violation.
+       this.clear(); // line 320, pos 5
+   #31: Possible strict violation.
+       var qb = this.get('queryBuilder'); // line 326, pos 14
+   #32: Too many var statements.
+       var query = qb.toDatabaseQuery(); // line 333, pos 9
+   #33: Too many var statements.
+       var el = qb.get('contentBox').one('select'); // line 336, pos 13
+   #34: Possible strict violation.
+       qb.displayFieldMessage(el, this.get('noVariableSelectedError'), 'error'); // line 337, pos 36
+   #35: Too many var statements.
+       var map = this.get('combinatorMap'); // line 342, pos 9
+   #36: Possible strict violation.
+       var map = this.get('combinatorMap'); // line 342, pos 15
+   #37: Too many var statements.
+       var s     = ''; // line 344, pos 9
+   #38: Too many var statements.
+       var op    = ' ' + this.get('andLabel') + ' '; // line 345, pos 9
+   #39: Possible strict violation.
+       var op    = ' ' + this.get('andLabel') + ' '; // line 345, pos 23
+   #40: Too many var statements.
+       for (var i=0; i<query.length; i++) // line 346, pos 14
+   #41: Too many var statements.
+       var q = query[i]; // line 348, pos 13
+   #42: Too many var statements.
+       var pattern = q[1]; // line 356, pos 13
+   #43: Expected '===' and instead saw '=='.
+       if (pattern.indexOf('{') == -1) // line 357, pos 34
+   #44: Too many var statements.
+       var combinator = map && map[ q[1] ]; // line 362, pos 13
+   #45: Possible strict violation.
+       insertText.call(this, s); // line 375, pos 21
+   #46: Possible strict violation.
+       this.get('queryBuilder').reset(); // line 382, pos 5
+   #47: Possible strict violation.
+       var self = this; // line 397, pos 16
+   #48: Too many var statements.
+       var orig_validateForm = f.validateForm; // line 399, pos 9
+   #49: Possible strict violation.
+       f.setFunction(this.get('fieldId'), function(form, e) // line 406, pos 19
+   #50: Too many var statements.
+       var op = [ 'and', 'or', 'not' ]; // line 448, pos 13
+   #51: Too many var statements.
+       for (var i=0; i<op.length; i++) // line 449, pos 18
+   #52: Too many var statements.
+       var qb = this.get('queryBuilder'); // line 458, pos 13
+   #53: Trailing whitespace.
+       * // line 483, pos 7
+   #54: Trailing whitespace.
+       * // line 494, pos 7
+   #55: Too many var statements.
+       var paren = 0; // line 502, pos 13
+   #56: Too many var statements.
+       var pi    = -1; // line 503, pos 13
+   #57: Too many var statements.
+       var quote = false; // line 504, pos 13
+   #58: Too many var statements.
+       var qi    = -1; // line 505, pos 13
+   #59: Too many var statements.
+       for (var i=0; i<s.length; i++) // line 506, pos 18
+   #60: Too many var statements.
+       var c = s.charAt(i); // line 508, pos 17
+   #61: Expected '===' and instead saw '=='.
+       if (!quote && c == '(') // line 509, pos 29
+   #62: Expected '===' and instead saw '=='.
+       else if (!quote && c == ')') // line 517, pos 34
+   #63: Too many var statements.
+       var msg = Y.Lang.substitute(this.get('tooManyParensError'), // line 522, pos 25
+   #64: Expected '===' and instead saw '=='.
+       else if (c == '\'' && (i === 0 || s.charAt(i-1) != '\\')) // line 530, pos 24
+   #65: Expected '!==' and instead saw '!='.
+       else if (c == '\'' && (i === 0 || s.charAt(i-1) != '\\')) // line 530, pos 61
+   #66: Too many var statements.
+       var msg = Y.Lang.substitute(this.get('unmatchedSingleQuoteError'), // line 542, pos 17
+   #67: 'msg' is already defined.
+       var msg = Y.Lang.substitute(this.get('unmatchedSingleQuoteError'), // line 542, pos 21
+   #68: Too many var statements.
+       var msg = Y.Lang.substitute(this.get('unclosedParenError'), // line 551, pos 17
+   #69: 'msg' is already defined.
+       var msg = Y.Lang.substitute(this.get('unclosedParenError'), // line 551, pos 21

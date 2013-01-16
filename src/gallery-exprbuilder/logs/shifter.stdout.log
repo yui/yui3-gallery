@@ -1,0 +1,23 @@
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-exprbuilder
+shifter [info] deleting build dir: /build/gallery-exprbuilder
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-exprbuilder/gallery-exprbuilder.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-exprbuilder
+shifter [queu] coverage file read, starting coverage for: gallery-exprbuilder/gallery-exprbuilder.js
+shifter [queu] copying assets to skin for sam
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [info] css lint passed for /assets/skins/sam/gallery-exprbuilder-skin.css
+shifter [queu] writing coverage file to gallery-exprbuilder/gallery-exprbuilder-coverage.js
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.664 seconds, pretty fast huh?

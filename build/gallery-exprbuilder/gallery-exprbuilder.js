@@ -1,4 +1,4 @@
-YUI.add('gallery-exprbuilder', function(Y) {
+YUI.add('gallery-exprbuilder', function (Y, NAME) {
 
 "use strict";
 
@@ -575,11 +575,11 @@ Y.extend(ExpressionBuilder, Y.Widget,
 				'<textarea id="{tid}" name="{tn}" class="{ff} {ta}"></textarea>' +
 			'</div>' +
 			'<div class="{fctl}">' +
-				'<button class="yui3-button {pc}">{paren}</button>' +
-				'<button class="yui3-button {ac}">{and}</button>' +
-				'<button class="yui3-button {oc}">{or}</button>' +
-				'<button class="yui3-button {nc}">{not}</button>' +
-				'<button class="yui3-button {cc}">{clear}</button>' +
+				'<button type="button" class="yui3-button {pc}">{paren}</button>' +
+				'<button type="button" class="yui3-button {ac}">{and}</button>' +
+				'<button type="button" class="yui3-button {oc}">{or}</button>' +
+				'<button type="button" class="yui3-button {nc}">{not}</button>' +
+				'<button type="button" class="yui3-button {cc}">{clear}</button>' +
 			'</div>';
 
 		return Y.Lang.substitute(markup,
@@ -613,8 +613,8 @@ Y.extend(ExpressionBuilder, Y.Widget,
 		var markup =
 			'<div class="{qb}"></div>' +
 			'<div class="{qbctl} {fr}">' +
-				'<button class="yui3-button {ic}">{insert}</button>' +
-				'<button class="yui3-button {rc}">{reset}</button>' +
+				'<button type="button" class="yui3-button {ic}">{insert}</button>' +
+				'<button type="button" class="yui3-button {rc}">{reset}</button>' +
 			'</div>';
 
 		return Y.Lang.substitute(markup,
@@ -633,4 +633,4 @@ Y.extend(ExpressionBuilder, Y.Widget,
 Y.ExpressionBuilder = ExpressionBuilder;
 
 
-}, 'gallery-2012.06.20-20-07' ,{requires:['gallery-querybuilder','gallery-formmgr'], skinnable:true});
+}, 'gallery-2013.01.16-21-05', {"skinnable": "true", "requires": ["gallery-querybuilder", "gallery-formmgr"]});
