@@ -1,0 +1,11 @@
+{
+    "name": "gallery-contextmenu-view",
+    "builds": {
+        "gallery-contextmenu-view": {
+            "skinnable": "true",
+            "jsfiles": [
+                "contextmenu-view.js"
+            ]
+        }
+    }
+}

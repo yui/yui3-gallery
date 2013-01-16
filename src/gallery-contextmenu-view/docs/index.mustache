@@ -1,0 +1,88 @@
+<div class="intro">
+    <p>
+    Provides a &quot;contextmenu&quot; (aka a right-click menu) which can be attached to any Node instance along with a target definition to provide a &quot;right-click menu&quot; capability.
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>This module includes a Y.View class extension that attaches to an existing &quot;trigger&quot; Node and uses event delegation to listen for &quot;contextmenu&quot; requests (i.e. right-click).  When the context menu is invoked, a Y.Overlay object is rendered and displayed that includes user-defined menu items <b>that are related to the context</b> where the menu was invoked.   This view utilizes several attributes and fires several events that users can listen to in order to take specific actions based on the &quot;trigger target&quot; node.<br>
+<br>
+<br>
+<br>
+A natural application for this ContextMenu View is for a DataTable. https://dl.dropbox.com/u/14338200/contextmenu_view_dt.png<br>
+<br>
+<br>
+<br>
+This image shows a DataTable which uses two Y.ContextMenuView's, one is attached to the TBODY as the &quot;trigger&quot; node, with the &quot;target&quot; as the individual TR's.   The other view is attached to the DT's THEAD as the &quot;trigger&quot; node, with the &quot;target&quot; being the TH nodes.<br>
+<br>
+<br>
+<br>
+A few CSS classes are used to track the context menu overlay and each individual menu item in the menu.<br>
+<br>
+<br>
+<br>
+Another example of this contextmenu usage for a non-DataTable usage is at <br>
+<br>
+http://blunderalong.com/yui/dtb/contextmenu_node.html.<br>
+<br>
+<br>
+<br>
+Please see the docs and examples for much more detailed usage instructions.<br>
+</p>
+
+```
+YUI().use('datatable', 'gallery-contextmenu-view', function(Y) {
+//
+//  Define a simple DataTable ...
+//
+   var dt = new Y.DataTable({
+       data:  [ .... ],
+       columns: [ ....]
+   });
+
+//
+//  Create the ContextMenuView 
+//    - in a new container 
+//    - with nested DIV's as the menu item template
+//    - define the menu items
+//    - configure the menu to fire on the DataTable's <table>, 
+//         with specific "target" as the TR node 
+//
+   var cmenu = new Y.ContextMenuView({
+    container: Y.Node.create('<div id="cmenuView" class="cmenu"></div>'),
+    menuItemTemplate: '<div class="yui3-contextmenu-menuitem" data-cmenu="{menuIndex}">{menuContent}</div>',
+    menuItems: [
+       {label:"Edit", value:"e"},
+       {label:"Update", value:"u"},
+       {label:"Insert Before", value:"i"},
+       {label:"Insert After", value:"a"},
+       {label:"<hr/>", value:null},
+       {label:"Delete Record", value:"d"},
+       {label:"Destroy Cmenu", value:"dc"}
+    ],
+    trigger: {
+       node:    dt.get('srcNode').one('table .yui3-datatable-data'),
+       target:  'tr'
+    }
+  });
+
+//
+//  Set a listener on the ContextMenuView's "selectedMenu" attribute when it changes ...
+//
+   cmenu.after('selectedMenuChange',  function(e) {
+       var tr = this.get('contextTarget'),
+           mindx = +(e.newVal.menuIndex);
+
+       Y.log("For targeted TR of;");
+       Y.log(tr);
+
+       Y.log("Selected menu choice was menu index " + mindx);
+       Y.log("with menu object as;");
+       Y.log(e.newVal.menuItem);
+    });
+
+
+});
+```
+

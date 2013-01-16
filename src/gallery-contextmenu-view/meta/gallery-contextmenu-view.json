@@ -1,0 +1,12 @@
+{
+    "gallery-contextmenu-view": {
+        "skinnable": "true",
+        "requires": [
+            "base-build",
+            "view",
+            "overlay",
+            "event-mouseenter",
+            "template"
+        ]
+    }
+}

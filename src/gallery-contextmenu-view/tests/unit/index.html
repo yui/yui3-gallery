@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-contextmenu-view</title>
+    <script src="/build/yui/yui.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+
+<div class="box">
+    <br/>
+    <ul class="box-row">
+        <li>duck</li>
+        <li>duck</li>
+        <li>duck</li>
+        <li>duck</li>
+        <li>duck</li>
+        <li>duck</li>
+        <li>duck</li>
+    </ul>
+</div>
+
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-contextmenu-view'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests-cmenu',  'node-event-simulate',
+		'node', 'event',
+	   'gallery-contextmenu-view',
+       // 'module-contextmenu-view',
+        function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-contextmenu-view');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

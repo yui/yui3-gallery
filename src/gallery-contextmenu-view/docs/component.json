@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-contextmenu-view",
+    "displayName": "Gallery: contextmenu-view",
+    "description": "Provides a &quot;contextmenu&quot; (aka a right-click menu) which can be attached to any Node instance along with a target definition to provide a &quot;right-click menu&quot; capability.",
+    "author"     : [ "stlsmiths" ],
+    "use"        : [ "gallery-contextmenu-view" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
