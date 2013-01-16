@@ -12,6 +12,11 @@ shifter [queu] writing -min file
 shifter [info] shifting for coverage
 shifter [info] shifting skin for gallery-accordion-horiz-vert
 shifter [queu] coverage file read, starting coverage for: gallery-accordion-horiz-vert/gallery-accordion-horiz-vert.js
+shifter [queu] copying assets to skin for sam
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-accordion-horiz-vert/gallery-accordion-horiz-vert-coverage.js
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 1.775 seconds, pretty fast huh?

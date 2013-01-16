@@ -1266,7 +1266,7 @@ Y.namespace("Plugin");
 Y.Plugin.FixedSizeAccordion = FixedSizeAccordionPlugin;
 
 
-}, 'gallery-2012.12.26-20-48', {
+}, 'gallery-2013.01.16-21-05', {
     "skinnable": "true",
     "requires": [
         "widget",

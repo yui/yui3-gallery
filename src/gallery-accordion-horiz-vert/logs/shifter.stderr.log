@@ -243,16 +243,6 @@ shifter [err] /src/gallery-accordion-horiz-vert/js/FixedSizePlugin.js contains 1
        initializer: function(config) // line 332, pos 33
    #122: 'config' is defined but never used.
        initializer: function(config) // line 1247, pos 33
-
-/ssd/home/yui/src/shifter/lib/module.js:466
-            Object.keys(mod.skins).forEach(function(skinName) {
-                   ^
-TypeError: Object.keys called on non-object
-    at Function.keys (native)
-    at buildSkin (/ssd/home/yui/src/shifter/lib/module.js:466:20)
-    at /ssd/home/yui/src/shifter/lib/stack.js:24:38
-    at confirm (/ssd/home/yui/src/cpr/lib/index.js:195:9)
-    at Object.Stack.test (/ssd/home/yui/src/cpr/lib/stack.js:31:27)
-    at /ssd/home/yui/src/cpr/lib/stack.js:25:18
-    at Object.oncomplete (fs.js:297:15)
-build exited with code 1
+shifter [err] /assets/skins/sam/gallery-accordion-horiz-vert-skin.css contains 1 lint errors
+   #1: [warning] Element (ul.yui3-accordion-content) is overqualified, just use .yui3-accordion-content without element name.
+       .yui3-accordion ul.yui3-accordion-content // line 59, pos 17
