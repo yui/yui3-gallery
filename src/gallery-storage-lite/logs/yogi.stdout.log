@@ -1,0 +1,4 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-storage-lite
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

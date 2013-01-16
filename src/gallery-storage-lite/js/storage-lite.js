@@ -1,3 +1,6 @@
+/*global YUI */
+/*jslint onevar: true, browser: true, undef: true, bitwise: true, regexp: true, newcap: true, immed: true */
+
 /**
  * Implements a persistent local key/value data store similar to HTML5's
  * localStorage. Should work in IE5+, Firefox 2+, Safari 3.1+, Chrome 4+, and
@@ -162,6 +165,14 @@ if (storageMode === MODE_HTML5 || storageMode === MODE_GECKO) {
         // HTML5 localStorage methods. Currently supported by IE8, Firefox 3.5+,
         // Safari 4+, Chrome 4+, and Opera 10.5+.
         storageDriver = w.localStorage;
+
+        // Mobile Safari in iOS 5 loses track of storageDriver when page is
+        // restored from the bfcache. This fixes the reference.
+        Y.Node.DOM_EVENTS.pageshow = 1;
+
+        Y.on('pageshow', function () {
+            storageDriver = w.localStorage;
+        });
 
         Y.mix(StorageLite, {
             clear: function () {

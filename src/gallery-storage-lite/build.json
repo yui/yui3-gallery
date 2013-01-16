@@ -1,0 +1,11 @@
+{
+    "name": "gallery-storage-lite",
+
+    "builds": {
+        "gallery-storage-lite": {
+            "jsfiles": [
+                "js/storage-lite.js"
+            ]
+        }
+    }
+}

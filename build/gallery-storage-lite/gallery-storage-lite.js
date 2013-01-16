@@ -1,4 +1,7 @@
-YUI.add('gallery-storage-lite', function(Y) {
+YUI.add('gallery-storage-lite', function (Y, NAME) {
+
+/*global YUI */
+/*jslint onevar: true, browser: true, undef: true, bitwise: true, regexp: true, newcap: true, immed: true */
 
 /**
  * Implements a persistent local key/value data store similar to HTML5's
@@ -165,6 +168,14 @@ if (storageMode === MODE_HTML5 || storageMode === MODE_GECKO) {
         // Safari 4+, Chrome 4+, and Opera 10.5+.
         storageDriver = w.localStorage;
 
+        // Mobile Safari in iOS 5 loses track of storageDriver when page is
+        // restored from the bfcache. This fixes the reference.
+        Y.Node.DOM_EVENTS.pageshow = 1;
+
+        Y.on('pageshow', function () {
+            storageDriver = w.localStorage;
+        });
+
         Y.mix(StorageLite, {
             clear: function () {
                 storageDriver.clear();
@@ -316,4 +327,4 @@ if (storageMode === MODE_HTML5 || storageMode === MODE_GECKO) {
 }
 
 
-}, 'gallery-2012.01.25-21-14' ,{requires:['event-base','event-custom','event-custom-complex','json']});
+}, 'gallery-2013.01.16-21-05', {"requires": ["event-base", "event-custom", "event-custom-complex", "json", "node-base"]});

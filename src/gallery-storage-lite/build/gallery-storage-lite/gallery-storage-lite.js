@@ -327,4 +327,4 @@ if (storageMode === MODE_HTML5 || storageMode === MODE_GECKO) {
 }
 
 
-}, 'gallery-2013.01.16-21-05', {"requires": ["event-base", "event-custom", "event-custom-complex", "json", "node-base"]});
+}, '@VERSION@', {"requires": ["event-base", "event-custom", "event-custom-complex", "json", "node-base"]});

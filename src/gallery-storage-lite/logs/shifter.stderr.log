@@ -1,0 +1,15 @@
+shifter [err] /src/gallery-storage-lite/js/storage-lite.js contains 7 lint errors
+   #1: 'json' is defined but never used.
+       getItem: function (key, json) { return null; }, // line 116, pos 33
+   #2: 'key' is defined but never used.
+       getItem: function (key, json) { return null; }, // line 116, pos 27
+   #3: 'key' is defined but never used.
+       removeItem: function (key) {}, // line 132, pos 30
+   #4: 'value' is defined but never used.
+       setItem: function (key, value) {} // line 144, pos 34
+   #5: 'key' is defined but never used.
+       setItem: function (key, value) {} // line 144, pos 27
+   #6: 'json' is defined but never used.
+       getItem: function (key, json) { // line 232, pos 37
+   #7: 'json' is defined but never used.
+       setItem: function (key, value, json) { // line 253, pos 44

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Storage Lite: Simple Notepad Example</title>
+    <style type="text/css">
+        html {
+            background: #fff;
+            color: #000;
+        }
+
+        #notes { width: 99%; }
+    </style>
+</head>
+<body>
+
+<h1>Storage Lite: Simple Notepad Example</h1>
+
+<form>
+    <p>
+    Anything you type in this textarea will be stored and persisted between
+    pageviews and browser sessions using
+    <a href="http://github.com/rgrove/storage-lite/">Storage Lite</a>.
+    </p>
+
+    <p><textarea id="notes" cols="80" rows="20"></textarea></p>
+</form>
+
+<script src="http://yui.yahooapis.com/3.4.1/build/yui/yui-min.js"></script>
+<script src="../src/storage-lite.js"></script>
+<script>
+YUI().use('gallery-storage-lite', 'node-base', function (Y) {
+
+    Y.StorageLite.on('storage-lite:ready', function () {
+        var notes = Y.one('#notes');
+
+        // Populate the textarea with the stored note text on page load.
+        notes.set('value', Y.StorageLite.getItem('notes') || '');
+
+        // Save the contents of the textarea after each keystroke.
+        notes.on('keyup', function () {
+            Y.StorageLite.setItem('notes', notes.get('value'));
+        });
+    });
+
+});
+</script>
+
+</body>
+</html>

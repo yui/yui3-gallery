@@ -1,0 +1,11 @@
+{
+    "gallery-storage-lite": {
+        "requires": [
+            "event-base",
+            "event-custom",
+            "event-custom-complex",
+            "json",
+            "node-base"
+        ]
+    }
+}

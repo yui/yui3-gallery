@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>storage-lite test</title>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="log"></div>
+
+<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
+<script src="../src/storage-lite.js"></script>
+<script src="storage-lite-test.js"></script>
+<script>
+var Y = YUI({
+    modules: {
+        'storage-lite-test': {
+            fullpath: 'storage-lite-test.js',
+            requires: ['gallery-storage-lite', 'test']
+        }
+    }
+}).use('storage-lite-test', 'test-console', function (Y) {
+
+    new Y.Test.Console().render('#log');
+
+    Y.Test.Runner.add(Y.StorageLiteTest);
+
+    Y.StorageLite.on('storage-lite:ready', function () {
+        Y.log('running tests…');
+        Y.Test.Runner.run();
+    });
+
+    // iOS 5/5.1 loses reference to storageDriver when page is restored from bfcache
+    if (~Y.config.win.location.search.indexOf('bfcache')) {
+        history.go(-1);
+        return;
+    }
+
+    // listen for pageshow event and run tests again
+    Y.Node.DOM_EVENTS.pageshow = 1;
+    Y.on('pageshow', function () {
+        Y.log('page restored from bfcache, running tests again…');
+        Y.Test.Runner.run();
+    });
+
+});
+</script>
+
+<p><a href="?bfcache">Test bfcache bug (issue #5)</a></p>
+
+</body>
+</html>
