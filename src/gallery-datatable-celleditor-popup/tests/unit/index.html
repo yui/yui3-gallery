@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-datatable-celleditor-popup</title>
+    <script src="/build/yui/yui.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="dtable"></div>
+<div id="logger"></div>
+
+<script src="js/test-dt-popup.js"></script>
+<script src="/build/gallery-datatable-editable/gallery-datatable-editable.js"></script>
+
+<script>
+YUI({
+    coverage: ['gallery-datatable-celleditor-popup'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use( 'test-console', 'test', 'module-tests-dtpopup',  "node-event-simulate",
+        "gallery-datatable-editable",  "datatable", "template",
+        "gallery-datatable-celleditor-popup", 
+        function(Y) {
+
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-datatable-celleditor-popup');
+
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

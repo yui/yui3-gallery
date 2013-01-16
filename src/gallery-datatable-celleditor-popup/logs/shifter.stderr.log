@@ -1,0 +1,3 @@
+shifter [err] /src/gallery-datatable-celleditor-popup/js/datatable-celleditor-popup.js contains 1 lint errors
+   #1: Expected '===' and instead saw '=='.
+       if(n && n.get('value') == val) {  // not a === check, to account for mixed vars // line 2548, pos 40

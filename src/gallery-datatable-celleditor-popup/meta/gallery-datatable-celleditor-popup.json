@@ -1,0 +1,21 @@
+{
+    "gallery-datatable-celleditor-popup": {
+        "supersedes": [
+            ""
+        ],
+        "skinnable": "true",
+        "requires": [
+            "gallery-datatable-editable",
+            "base-build",
+            "view",
+            "cssbutton",
+            "event-outside",
+            "overlay",
+            "dd-plugin", 
+            "template"
+        ],
+        "optional": [
+            ""
+        ]
+    }
+}

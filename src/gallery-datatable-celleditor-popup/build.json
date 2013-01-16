@@ -1,0 +1,12 @@
+{
+    "name": "gallery-datatable-celleditor-popup",
+    "builds": {
+        "gallery-datatable-celleditor-popup": {
+            "skinnable": "true",
+            "jsfiles": [
+                "datatable-celleditor-popup.js"
+            ],
+            "meta": {}
+        }
+    }
+}
