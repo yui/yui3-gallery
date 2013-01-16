@@ -1,4 +1,4 @@
-YUI.add('gallery-querybuilder', function(Y) {
+YUI.add('gallery-querybuilder', function (Y, NAME) {
 
 "use strict";
 
@@ -778,8 +778,8 @@ Y.extend(QueryBuilder, Y.Widget,
 	_rowControls: function()
 	{
 		var markup =
-			'<button class="{cr}">&ndash;</button>' +
-			'<button class="{ci}">+</button>';
+			'<button type="button" class="{cr}">&ndash;</button>' +
+			'<button type="button" class="{ci}">+</button>';
 
 		if (!this._controls_markup)
 		{
@@ -1168,4 +1168,14 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2012.10.31-20-00' ,{optional:['gallery-scrollintoview','autocomplete'], requires:['widget','gallery-formmgr'], skinnable:true});
+}, 'gallery-2013.01.16-21-05', {
+    "skinnable": "true",
+    "requires": [
+        "widget",
+        "gallery-formmgr"
+    ],
+    "optional": [
+        "gallery-scrollintoview",
+        "autocomplete"
+    ]
+});

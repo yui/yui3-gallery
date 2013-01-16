@@ -1,0 +1,25 @@
+{
+    "name": "gallery-querybuilder",
+    "builds": {
+        "gallery-querybuilder": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "widget",
+                    "gallery-formmgr"
+                ],
+                "optional": [
+                    "gallery-scrollintoview",
+                    "autocomplete"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "QueryBuilder.js",
+                "String.js",
+                "Select.js",
+                "Types.js"
+            ]
+        }
+    }
+}

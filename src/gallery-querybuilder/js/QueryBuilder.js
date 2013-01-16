@@ -776,8 +776,8 @@ Y.extend(QueryBuilder, Y.Widget,
 	_rowControls: function()
 	{
 		var markup =
-			'<button class="{cr}">&ndash;</button>' +
-			'<button class="{ci}">+</button>';
+			'<button type="button" class="{cr}">&ndash;</button>' +
+			'<button type="button" class="{ci}">+</button>';
 
 		if (!this._controls_markup)
 		{
