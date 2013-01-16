@@ -1,4 +1,4 @@
-shifter [err] /src/gallery-datetime-utils/js/utils.js contains 22 lint errors
+shifter [err] /src/gallery-datetime-utils/js/utils.js contains 25 lint errors
    #1: Trailing whitespace.
        * // line 11, pos 3
    #2: Wrap the /regexp/ literal in parens to disambiguate the slash operator.
@@ -10,36 +10,42 @@ shifter [err] /src/gallery-datetime-utils/js/utils.js contains 22 lint errors
    #5: Trailing whitespace.
        * // line 124, pos 7
    #6: Too many var statements.
-       var result = Y.clone(input); // line 150, pos 13
+       var result = Y.clone(input); // line 155, pos 13
    #7: 'result' is already defined.
-       var result = Y.clone(input); // line 150, pos 20
+       var result = Y.clone(input); // line 155, pos 20
    #8: Trailing whitespace.
-       * // line 183, pos 7
+       * // line 188, pos 7
    #9: Trailing whitespace.
-       * // line 221, pos 7
-   #10: Expected '!==' and instead saw '!='.
-       if (d.length != 3 || !Y.every(d, validInteger)) // line 239, pos 22
-   #11: Missing 'new' prefix when invoking a constructor.
-       throw Error('Unparseable date format.'); // line 241, pos 19
-   #12: Too many var statements.
-       var obj = self.normalize( // line 244, pos 13
-   #13: Too many var statements.
-       var result = // line 253, pos 13
+       * // line 231, pos 7
+   #10: Too many var statements.
+       var result = // line 261, pos 13
+   #11: 'obj' used out of scope.
+       year:  obj.year, // line 263, pos 20
+   #12: 'obj' used out of scope.
+       month: obj.month, // line 264, pos 20
+   #13: 'obj' used out of scope.
+       day:   obj.day // line 265, pos 20
    #14: Missing semicolon.
-       } // line 258, pos 10
+       } // line 266, pos 10
    #15: Trailing whitespace.
-       * // line 264, pos 7
-   #16: Expected '===' and instead saw '=='.
-       else if (self.CLOCK_DISPLAY_TYPE == 12) // line 280, pos 42
-   #17: Trailing whitespace.
-       * // line 297, pos 7
-   #18: Too many var statements.
-       var t = time.split(self.TIME_FIELD_DELIMITER); // line 326, pos 13
-   #19: Expected '!==' and instead saw '!='.
-       if (t.length != 2 || !Y.every(t, validInteger)) // line 327, pos 22
-   #20: Missing 'new' prefix when invoking a constructor.
-       throw Error('Unparseable time format.'); // line 329, pos 19
+       * // line 273, pos 7
+   #16: Expected '!==' and instead saw '!='.
+       if (d.length != 3 || !Y.every(d, validInteger)) // line 286, pos 22
+   #17: Missing 'new' prefix when invoking a constructor.
+       throw Error('Unparseable date format.'); // line 288, pos 19
+   #18: Trailing whitespace.
+       * // line 303, pos 7
+   #19: Expected '===' and instead saw '=='.
+       if (self.CLOCK_DISPLAY_TYPE == 12) // line 334, pos 37
+   #20: Trailing whitespace.
+       * // line 351, pos 7
    #21: Too many var statements.
-       var result = // line 332, pos 13
-   #22: Missing 'new' prefix when invoking a constructor.
-       throw Error('Invalid time values: ' + result.hour + self.TIME_FIELD_DELIMITER + pad2(result.minute)); // line 341, pos 19
+       var t = time.split(self.TIME_FIELD_DELIMITER); // line 380, pos 13
+   #22: Expected '!==' and instead saw '!='.
+       if (t.length != 2 || !Y.every(t, validInteger)) // line 381, pos 22
+   #23: Missing 'new' prefix when invoking a constructor.
+       throw Error('Unparseable time format.'); // line 383, pos 19
+   #24: Too many var statements.
+       var result = // line 386, pos 13
+   #25: Missing 'new' prefix when invoking a constructor.
+       throw Error('Invalid time values: ' + result.hour + self.TIME_FIELD_DELIMITER + pad2(result.minute)); // line 395, pos 19

@@ -1,4 +1,21 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.55 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datetime-utils
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5023
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5022
+Starting Grover on 1 files with PhantomJS@1.8.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-datetime-utils]: Passed: 5 Failed: 4 Total: 9 (ignored 0) (0.097 seconds) 88%
+    testNormalize
+       Unexpected error: 'undefined' is not an object (evaluating 'default_time.hour')
+    testFormatDate
+       Unexpected error: 'undefined' is not an object (evaluating 'date.year.toString')
+    testParseDate
+       Unexpected error: Unparseable date format.
+    testFormatTime
+       Unexpected error: 'undefined' is not an object (evaluating 'n.toString')
+Writing files in JSON format to: /src/gallery-datetime-utils/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

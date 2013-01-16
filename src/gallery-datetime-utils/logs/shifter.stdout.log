@@ -15,4 +15,4 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-datetime-utils/gallery-datetime-utils-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.365 seconds, pretty fast huh?
+shifter [info] finished in 0.946 seconds, pretty fast huh?

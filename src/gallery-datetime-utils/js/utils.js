@@ -122,8 +122,9 @@ Y.DateTimeUtils =
 	 * 
 	 * @method normalize
 	 * @static
-	 * @param input {Object}
-	 *	Can be specified either as instance of Date or as an object defining
+	 * @param input {Date|Number|Object}
+	 *	Can be specified either as instance of Date, a number specifying
+	 *	milliseconds since midnight Jan 1, 1970, or as an object defining
 	 *	date_str or year,month,day and (optional) either time_str or
 	 *	hour,minute.
 	 * @param default_time {Object} Default hour and minute to use if input only has date.
@@ -143,6 +144,10 @@ Y.DateTimeUtils =
 				date:   input
 			};
 			return result;
+		}
+		else if (Y.Lang.isNumber(input))
+		{
+			return self.normalize(new Date(input));
 		}
 
 		var result = Y.clone(input);
@@ -181,7 +186,7 @@ Y.DateTimeUtils =
 	 * 
 	 * @method formatDate
 	 * @static
-	 * @param date {Mixed} string (returned as-is), Date, or object specifying day,month,year
+	 * @param date {Mixed} string (returned as-is), Date, milliseconds, or object specifying day,month,year
 	 * @return {String} formatted date, using positions and delimiters
 	 */
 	formatDate: function(date)
@@ -193,6 +198,11 @@ Y.DateTimeUtils =
 		else if (Y.Lang.isString(date))
 		{
 			return date;
+		}
+
+		if (Y.Lang.isNumber(date))
+		{
+			date = new Date(date);
 		}
 
 		var a = [];
@@ -233,20 +243,18 @@ Y.DateTimeUtils =
 			return date;
 		}
 
-		var d = date.split(self.DATE_FIELD_DELIMITER);
-		if (d.length != 3 || !Y.every(d, validInteger))
+		try
 		{
-			throw Error('Unparseable date format.');
+			var obj = self.parseDateString(date, self.DATE_FIELD_DELIMITER,
+				self.YEAR_POSITION, self.MONTH_POSITION, self.DAY_POSITION);
 		}
-
-		var obj = self.normalize(
+		catch (e)
 		{
-			year:   parseInt(d[ self.YEAR_POSITION-1 ], 10),
-			month:  parseInt(d[ self.MONTH_POSITION-1 ], 10),
-			day:    parseInt(d[ self.DAY_POSITION-1 ], 10),
-			hour:   0,
-			minute: 0
-		});
+			// Try the standard format provided by <input type="date">.
+			// If this fails, we let the exception propagate.
+
+			obj = self.parseDateString(date, '-', 1, 2, 3);
+		}
 
 		var result =
 		{
@@ -258,11 +266,42 @@ Y.DateTimeUtils =
 	},
 
 	/**
+	 * Utility for parsing a date string that is not formatted based on the
+	 * Y.DateTime configuration.
+	 * 
+	 * @method parseDate
+	 * @static
+	 * @param date {String} string from DateTimeUtils.formatDate()
+	 * @param delimiater {String} delimiter between the date fields
+	 * @param year_pos {Number} position of the year in the string representation: 1,2,3
+	 * @param month_pos {Number} position of the month in the string representation: 1,2,3
+	 * @param day_pos {Number} position of the day in the string representation: 1,2,3
+	 * @return {Object} normalized object defining date
+	 */
+	parseDateString: function(date, delimiter, year_pos, month_pos, day_pos)
+	{
+		var d = date.split(delimiter);
+		if (d.length != 3 || !Y.every(d, validInteger))
+		{
+			throw Error('Unparseable date format.');
+		}
+
+		return self.normalize(
+		{
+			year:   parseInt(d[ year_pos-1 ], 10),
+			month:  parseInt(d[ month_pos-1 ], 10),
+			day:    parseInt(d[ day_pos-1 ], 10),
+			hour:   0,
+			minute: 0
+		});
+	},
+
+	/**
 	 * Format the time portion of a Date object.
 	 * 
 	 * @method formatTime
 	 * @static
-	 * @param time {Mixed} string (returned as-is), Date, or object specifying hour,minute
+	 * @param time {Mixed} string (returned as-is), Date, milliseconds, or object specifying hour,minute
 	 * @return {String} formatted date, using positions and delimiters
 	 */
 	formatTime: function(time)
@@ -275,7 +314,22 @@ Y.DateTimeUtils =
 		{
 			return time;
 		}
-		else if (self.CLOCK_DISPLAY_TYPE == 12)
+
+		if (Y.Lang.isNumber(time))
+		{
+			time = new Date(time);
+		}
+
+		if (time instanceof Date)
+		{
+			time =
+			{
+				hour:   time.getHours(),
+				minute: time.getMinutes()
+			};
+		}
+
+		if (self.CLOCK_DISPLAY_TYPE == 12)
 		{
 			var s = self.TIME_FIELD_DELIMITER + pad2(time.minute) + ' ';
 			return (time.hour > 12 ?
