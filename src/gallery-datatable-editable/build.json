@@ -1,0 +1,11 @@
+{
+    "name": "gallery-datatable-editable",
+    "builds": {
+        "gallery-datatable-editable": {
+            "skinnable": "true",
+            "jsfiles": [
+                "datatable-editable.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,34 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datatable-editable
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.8.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-datatable-editable]: Passed: 7 Failed: 6 Total: 13 (ignored 0) (1.01 seconds) 47%
+    check ATTR default values
+       default editor not null
+       Expected: null (object)
+       Actual: none (string)
+    check ATTR editOpenType setting
+       set editOpenType failed on null
+       Expected: null (object)
+       Actual: dblclick (string)
+    check ATTR defaultEditor setting
+       default defaultEditor not none
+       Expected: null (object)
+       Actual: none (string)
+    check editor counts
+       there should be 7 cell editors
+       Expected: 7 (number)
+       Actual: 0 (number)
+    check public methods - open/hide cell editors
+       Unexpected error: 'null' is not an object (evaluating 'dt._openEditor.get')
+    check initial setup - inline row 0
+       cell editor col 1 should be open
+       Unexpected: null (object) 
+Writing files in JSON format to: /src/gallery-datatable-editable/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

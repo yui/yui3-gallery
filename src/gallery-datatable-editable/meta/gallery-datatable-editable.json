@@ -1,0 +1,15 @@
+{
+    "gallery-datatable-editable": {
+        "supersedes": [
+            ""
+        ],
+        "skinnable": "true",
+        "requires": [
+            "datatable-base",
+            "datatype"
+        ],
+        "optional": [
+            ""
+        ]
+    }
+}

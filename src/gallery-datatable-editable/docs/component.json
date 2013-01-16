@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-datatable-editable",
+    "displayName": "Gallery: datatable-editable",
+    "description": "A class extension to DataTable that serves as a wrapper to provide functionality for cell editing, and hopefully row editing capability",
+    "author"     : [ "stlsmiths" ],
+    "use"        : [ "gallery-datatable-editable" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

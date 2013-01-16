@@ -1,0 +1,56 @@
+<div class="intro">
+    <p>
+    A class extension to DataTable that serves as a wrapper to provide functionality for cell editing, and hopefully row editing capability
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>A very verbose description will be here soon ...<br>
+</p>
+
+```
+YUI().use('gallery-datatable-editable', function(Y) {
+
+   var dt = new Y.DataTable({
+       columns: [
+             { key:'sid',    label:"sID", editable:false },
+             { key:'sopen',  label:"Open?",
+               editor:"checkbox", 
+               editorOptions:{ 
+                    checkboxHash:{ 'true':1, 'false':0 } 
+                }
+              },
+
+             { key:'sname',  label:"Item Name",
+               editor:"text", editorOptions:{ offsetXY: [5,5] }
+             },
+
+             { key:'sdesc',  label:"Description",  editor:"textarea" },
+
+             { key:'stype',  label:"Condition",
+               editor:"select", editorOptions:{ selectOptions:stypes }
+             },
+
+             { key:'stock',  label:"In Stock?",
+               editor:"radio",
+               editorOptions:{ radioOptions:stock }
+             },
+
+             { key:'sprice', label:"Retail Price", editor:"number" },
+
+             { key:'sdate',  label:"Trans Date", editor:"date" }
+      ],
+
+      data: someData,
+
+      editable: true,
+      defaultEditor: 'text',
+      editOpenType: 'click',
+
+   }).render('#dtable');
+
+
+});
+```
+
