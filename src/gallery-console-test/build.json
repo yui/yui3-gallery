@@ -1,0 +1,19 @@
+{
+    "name": "gallery-console-test",
+    "builds": {
+        "gallery-console-test": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "console",
+                    "plugin",
+                    "test"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "console-test.js"
+            ]
+        }
+    }
+}

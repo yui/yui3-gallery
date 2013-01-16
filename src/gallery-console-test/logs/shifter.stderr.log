@@ -1,0 +1,16 @@
+shifter [err] /src/gallery-console-test/js/console-test.js contains 6 lint errors
+   #1: Too many var statements.
+       var menu = this.container.one('select'); // line 74, pos 17
+   #2: Too many var statements.
+       var tests = Y.Test.Runner.masterSuite.items; // line 82, pos 25
+   #3: Too many var statements.
+       var h = Y.Test.Runner.on('complete', function() // line 86, pos 25
+   #4: Too many var statements.
+       var n1 = ft.one('.'+Y.Console.CHROME_CLASSES.console_controls_class); // line 105, pos 17
+   #5: Too many var statements.
+       var n2 = n1.get('nextSibling'); // line 106, pos 17
+   #6: 'config' is defined but never used.
+       initializer: function(config) // line 41, pos 33
+shifter [err] /assets/skins/sam/gallery-console-test-skin.css contains 1 lint errors
+   #1: [warning] Element (select.menu) is overqualified, just use .menu without element name.
+       .yui3-skin-sam .yui3-console-test-container select.menu { // line 6, pos 45
