@@ -300,15 +300,17 @@ Y.mix( DtPaginator.prototype, {
             // If PaginatorModel exists, set listeners for "change" events ...
             if ( this.paginator.get('model') ) {
                 this.pagModel = this.get('paginator').get('model');
-                this._evtHandlesPag.push( this.pagModel.after('pageChange', Y.bind(this._pageChangeListener,this) ) );
-                this._evtHandlesPag.push( this.pagModel.after('itemsPerPageChange', Y.bind(this._pageChangeListener,this)) );
-                this._evtHandlesPag.push( this.pagModel.after('totalItemsChange', Y.bind(this._totalItemsListener,this)) );
+                this._evtHandlesPag.push(
+                    this.pagModel.after('pageChange', Y.bind(this._pageChangeListener,this) ),
+                    this.pagModel.after('itemsPerPageChange', Y.bind(this._pageChangeListener,this)),
+                    this.pagModel.after('totalItemsChange', Y.bind(this._totalItemsListener,this))
+                 );
             }
 
             // Define listeners to the "data" change events ....
-            this._evtHandlesPag.push( this.data.after("reset", Y.bind(this._afterDataReset,this)) );
-            this._evtHandlesPag.push( this.data.after("add", Y.bind(this._afterDataAdd,this)) );
-            this._evtHandlesPag.push( this.data.after("remove", Y.bind(this._afterDataRemove,this)) );
+            this._evtHandlesPag.push( this.data.after(["reset","add","remove"], Y.bind(this._afterDataReset,this)) );
+          //  this._evtHandlesPag.push( this.data.after("add", Y.bind(this._afterDataAdd,this)) );
+          //  this._evtHandlesPag.push( this.data.after("remove", Y.bind(this._afterDataRemove,this)) );
 
             // Added listener to sniff for DataSource existence, for its binding
             this._evtHandlesPag.push( Y.Do.after( this._afterSyncUI, this, '_syncUI', this) );
@@ -585,14 +587,15 @@ Y.mix( DtPaginator.prototype, {
     paginatorSortLocalData: function(){
         var rdata  = [], //this._mlistArray,
             sortBy = this.get('sortBy'),
+         //   sortBy = this._pagSortBy || this.get('sortBy'),
             sortObj,sortKey,sortDir;
 
         if(Y.Lang.isArray(sortBy)) {
 
             Y.Array.each(this._mlistArray, function(r){ rdata.push(r); });
 
-            sortObj = sortBy[0],
-            sortKey = Y.Object.keys(sortObj)[0],
+            sortObj = sortBy[0];
+            sortKey = Y.Object.keys(sortObj)[0];
             sortDir = sortObj[sortKey];
 
         //
@@ -601,19 +604,19 @@ Y.mix( DtPaginator.prototype, {
         //
             rdata.sort(function(a,b){
                 var rtn,atime,btime;
-                if(Y.Lang.isString(a[sortKey])) {
 
-                    rtn = ( a[sortKey]<b[sortKey] ) ? -sortDir : sortDir;
-
-                } else if(Y.Lang.isNumber(a[sortKey])){
+                if(Y.Lang.isNumber(a[sortKey])) {
 
                     rtn = (a[sortKey]-b[sortKey]<0) ? -sortDir : sortDir;
 
+                } else if(Y.Lang.isString(a[sortKey])){
+
+                    rtn = ( a[sortKey]<b[sortKey] ) ? -sortDir : sortDir;
+
                 } else if(Y.Lang.isDate(a[sortKey]) ){
 
-                    //rtn = ((a[sortKey].getTime() - b[sortKey].getTime())<0) ? -sortDir : sortDir;
-                    atime = a[sortKey], //.getTime(),
-                    btime = b[sortKey]; //.getTime();
+                    atime = a[sortKey];
+                    btime = b[sortKey];
                     rtn = (sortDir === -1) ? (btime - atime) : (atime - btime);
 
                 }
@@ -626,7 +629,6 @@ Y.mix( DtPaginator.prototype, {
         }
 
         this.refreshPaginator();
-
     },
 
 
@@ -954,6 +956,110 @@ Y.mix( DtPaginator.prototype, {
      *  @param {Object} oPayload Event payload from ModelList.remove
      *  @param {Number} pagIndex Calculated absolute index of the record within the entire dataset
      */
+
+    /**
+     * This is an OVERRIDE of the dt-scroll afterSortByChange event, which in the case of pagination
+     * needs to be amended to remove the ModelList comparator and sort method.
+     *
+     * Added by T.Smith on 1/13/2013 to resolve sorting error on remote sortBy pagination
+     * (Thanks to blicksky on GitHub for raising this issue)
+     *
+     * @method _afterSortByChange
+     * @since 3.8.0
+     * @private
+     */
+    _afterSortByChange: function() {
+        // Can't use a setter because it's a chicken and egg problem. The
+        // columns need to be set up to translate, but columns are initialized
+        // from Core's initializer.  So construction-time assignment would
+        // fail.
+        this._setSortBy();
+
+        // Don't sort unless sortBy has been set
+        if (this._sortBy.length) {
+
+            // Added by T. Smith - for gallery-datatable-paginator
+            if(this.get('paginator') && this._pagDataSrc) {
+                 delete this.data.comparator;
+                 this.data.sort = function() {
+                     return this;
+                 };
+
+            } else {
+            //----- END ADD ------
+
+                if (!this.data.comparator) {
+                     this.data.comparator = this._sortComparator;
+                }
+
+                this.data.sort();
+            }  // Also added endif }
+        }
+
+    },
+
+    /**
+     * PATCH : This is an override of the DT _initSortFn from DT to help with a sorting problem
+     * Added by T.Smith on 1/13/2013 to resolve sorting error on remote sortBy pagination
+     * (Thanks to blicksky on GitHub for raising this issue)
+     *
+     * @method _initSortFn
+     * @private
+     */
+    _initSortFn: function () {
+
+        if(this.get('paginator') && this._pagDataSrc) {
+
+            delete this.data.comparator;
+
+        } else {
+            // This is the original _initSortFn
+
+            var self = this;
+
+            // TODO: This should be a ModelList extension.
+            // FIXME: Modifying a component of the host seems a little smelly
+            // FIXME: Declaring inline override to leverage closure vs
+            // compiling a new function for each column/sortable change or
+            // binding the _compare implementation to this, resulting in an
+            // extra function hop during sorting. Lesser of three evils?
+            this.data._compare = function (a, b) {
+                var cmp = 0,
+                    i, len, col, dir, aa, bb;
+
+                for (i = 0, len = self._sortBy.length; !cmp && i < len; ++i) {
+                    col = self._sortBy[i];
+                    dir = col.sortDir;
+
+                    if (col.sortFn) {
+                        cmp = col.sortFn(a, b, (dir === -1));
+                    } else {
+                        // FIXME? Requires columns without sortFns to have key
+                        aa = a.get(col.key) || '';
+                        bb = b.get(col.key) || '';
+
+                        cmp = (aa > bb) ? dir : ((aa < bb) ? -dir : 0);
+                    }
+                }
+
+                return cmp;
+            };
+
+            if (this._sortBy.length) {
+                this.data.comparator = this._sortComparator;
+
+                // TODO: is this necessary? Should it be elsewhere?
+                this.data.sort();
+            } else {
+                // Leave the _compare method in place to avoid having to set it
+                // up again.  Mistake?
+                delete this.data.comparator;
+            }
+
+        }
+
+    },
+
 
     /**
      * Listener that fires after the DT "sort" event processes.  The Paginator must be

@@ -15,4 +15,4 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-datatable-paginator/gallery-datatable-paginator-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.345 seconds, pretty fast huh?
+shifter [info] finished in 1.534 seconds, pretty fast huh?

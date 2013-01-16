@@ -1,32 +1,21 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.52 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datatable-paginator
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5001
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.7.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5019
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5018
+Starting Grover on 1 files with PhantomJS@1.8.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-datatable-paginator]: Passed: 15 Failed: 0 Total: 15 (ignored 0) (3.323 seconds) 55%
+✔ [gallery-datatable-paginator]: Passed: 35 Failed: 0 Total: 35 (ignored 0) (3.188 seconds)
 Writing files in JSON format to: /src/gallery-datatable-paginator/logs/tests.json
-
-----------------+-----------+-----------+-----------+-----------+
-File            |   % Stmts |% Branches |   % Funcs |   % Lines |
-----------------+-----------+-----------+-----------+-----------+
-   build/       |     55.66 |     37.58 |     60.47 |     55.71 |
-      All files |     55.66 |     37.58 |     60.47 |     55.71 |
-----------------+-----------+-----------+-----------+-----------+
-All files       |     55.66 |     37.58 |     60.47 |     55.71 |
-----------------+-----------+-----------+-----------+-----------+
-
-
-=============================== Coverage summary ===============================
-Statements   : 55.66% ( 123/221 )
-Branches     : 37.58% ( 62/165 )
-Functions    : 60.47% ( 26/43 )
-Lines        : 55.71% ( 122/219 )
-================================================================================
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 15 Failed: 0 Total: 15 (ignored 0) (3.323 seconds)
-  [Grover Execution Timer] 5.375 seconds
+✔ [Total]: Passed: 35 Failed: 0 Total: 35 (ignored 0) (3.188 seconds)
+  [Grover Execution Timer] 4.666 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

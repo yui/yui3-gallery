@@ -14,7 +14,8 @@
 <script>
 YUI({
     coverage: ['gallery-datatable-paginator'],
-    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+  //gallery: 'gallery-2012.12.12-21-11'
+//    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
 }).use('gallery-datatable-paginator', 'test-console', 'test', 'module-tests-dtpag',
     "gallery-paginator-view",
     "datatable-sort", "datatable-scroll", "datatable-datasource", "model-sync-rest",
@@ -23,7 +24,7 @@ YUI({
 
     (new Y.Test.Console()).render('#logger');
 
-    Y.Test.Runner.setName('gallery-paginator-view');
+    Y.Test.Runner.setName('gallery-datatable-paginator');
     Y.Test.Runner.run();
 });
 </script>

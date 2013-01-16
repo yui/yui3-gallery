@@ -1,0 +1,42 @@
+//
+//  Make some sample data
+//
+    var rdata = [];
+    var totalRec = 500;
+    for(var i=0; i<totalRec; i++)
+        rdata.push({
+            foo: i+1,
+            bar: 'text ' + (i+1),
+            baz: 'a'+i,
+            qux: new Date(1978+Math.random()*34, Math.random()*11, Math.random()*30)
+        });
+
+//
+//   Create the DataTable ....
+//
+    function fmtDate(o){
+        return Y.DataType.Date.format(o.value,{format:"%m/%d/%Y"});
+    }
+
+
+    var myDT = new Y.DataTable({
+        columns : [
+            {key:'foo', label:'Foo label'},
+            {key:'bar', label:'Bar label'},
+            {key:'baz', label:'Baz label'},
+            {key:'qux', label:'Qux label', formatter:fmtDate }
+        ],
+        data: rdata,
+
+        scrollable: 'y',
+        height:     '315px',
+        sortable:   true,
+/*
+        paginator: new Y.PaginatorView({
+            model:      new Y.PaginatorModel({ itemsPerPage: 50 }),
+            container:  '#pagCont'
+        }),
+
+        paginationSource: 'client'
+*/
+    }).render("#divtable");

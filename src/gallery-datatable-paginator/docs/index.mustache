@@ -9,6 +9,35 @@
 <p>This component is a Y.DataTable class extension that provides the capability to link the displayed `data` within a DataTable to a Paginator View class.   This extension was specifically designed to work with  <a href="http://yuilibrary.com/gallery/show/paginator-view|Gallery-Paginator-View">http://yuilibrary.com/gallery/show/paginator-view|Gallery-Paginator-View</a> but could be configured to work with a user's own custom paginator View class.<br>
 <br>
 https://dl.dropbox.com/u/14338200/dt_pag_sample.png<br>
+
+
+<br/>
+<ul>
+{{#mydata}}
+<li>{{val}} : {{txt}}</li>
+{{/mydata}}
+</ul>
+
+<div id="pagCont"></div>
+<div id="divtable" class="yui3-skin-sam"></div>
+
+<script>
+YUI().use( "gallery-datatable-paginator", "gallery-paginator-view", "datatable-scroll", "datatable-sort", "datatype-date",
+//YUI().use( "gallery-datatable-paginator", "gallery-paginator-view", "datatable-scroll", "datatable-sort",
+    function(Y){
+{{>basic-js}}
+});
+</script>
+
+```
+YUI().use( "gallery-datatable-paginator", "gallery-paginator-view", "datatable-scroll", "datatable-sort", "datatype-date",
+//YUI().use( "gallery-datatable-paginator", "gallery-paginator-view", "datatable-scroll", "datatable-sort",
+    function(Y){
+{{>basic-js}}
+});
+```
+
+
 <br>
 The extension defines one new DataTable attribute <b>paginator</b>, which represents the only UI element (wherein this extension has no UI).  It also defines listeners on the model for the view that updates the DT when `pageChange` events are fired.<br>
 <br>

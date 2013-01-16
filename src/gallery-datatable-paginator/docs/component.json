@@ -3,8 +3,29 @@
     "displayName": "Gallery: datatable-paginator",
     "description": "A class extension to allow display of data in DataTable via the PaginatorView paginator.",
     "author"     : [ "stlsmiths" ],
-
+    "use"		:	[ "gallery-paginator-view", "gallery-datatable-paginator" ],
+ 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "mydata" : [ {"val":1, "txt":"text1"}, {"val":2, "txt":"text2"}  ],
+
+    "examples": [
+    		{
+            "name"       : "ex-basic",
+            "displayName": "Basic Datatable with Pagination",
+            "description": "Demonstrates using DataTable with local data and basic Paginator",
+            "modules"    : ["gallery-paginator-view", "gallery-datatable-paginator"],
+            "tags"       : ["gallery-paginator-view", "default"],
+            "hideTableOfContents": false
+        },
+		{
+            "name"       : "ex-default",
+            "displayName": "PaginatorView default example",
+            "description": "Demonstrates creating a PaginatorView using the default settings",
+            "modules"    : ["gallery-paginator-view"],
+            "tags"       : ["gallery-paginator-view", "default"],
+            "hideTableOfContents": false
+        }
+
+    ]
 }
