@@ -1,0 +1,23 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-algorithms
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5015
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5014
+Starting Grover on 1 files with PhantomJS@1.8.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-algorithms]: Passed: 0 Failed: 5 Total: 5 (ignored 0) (0.052 seconds)
+    testSwap
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.swap(list, 0, 2)')
+    testCompareStringsCaseSensitive
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.compareStringsCaseSensitive("ABC", "ABC")')
+    testCompareStringsCaseInsensitive
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.compareStringsCaseInsensitive("ABC", "ABC")')
+    testQuickSort
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.quickSort(list)')
+    testBinarySearch
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.binarySearch()')
+Writing files in JSON format to: /src/gallery-algorithms/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

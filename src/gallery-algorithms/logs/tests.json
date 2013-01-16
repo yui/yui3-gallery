@@ -1,0 +1,56 @@
+{
+    "name": "gallery-algorithms",
+    "passed": 0,
+    "failed": 15,
+    "errors": 0,
+    "ignored": 0,
+    "total": 15,
+    "duration": 156,
+    "type": "report",
+    "Algorithms": {
+        "name": "Algorithms",
+        "passed": 0,
+        "failed": 5,
+        "errors": 0,
+        "ignored": 0,
+        "total": 5,
+        "duration": 50,
+        "type": "testcase",
+        "testSwap": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.swap(list, 0, 2)')",
+            "type": "test",
+            "name": "testSwap",
+            "duration": 1
+        },
+        "testCompareStringsCaseSensitive": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.compareStringsCaseSensitive(\"ABC\", \"ABC\")')",
+            "type": "test",
+            "name": "testCompareStringsCaseSensitive",
+            "duration": 2
+        },
+        "testCompareStringsCaseInsensitive": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.compareStringsCaseInsensitive(\"ABC\", \"ABC\")')",
+            "type": "test",
+            "name": "testCompareStringsCaseInsensitive",
+            "duration": 2
+        },
+        "testQuickSort": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.quickSort(list)')",
+            "type": "test",
+            "name": "testQuickSort",
+            "duration": 1
+        },
+        "testBinarySearch": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.binarySearch()')",
+            "type": "test",
+            "name": "testBinarySearch",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 16 Jan 2013 03:06:49 PM CST"
+}

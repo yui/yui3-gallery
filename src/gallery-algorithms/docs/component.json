@@ -1,0 +1,9 @@
+{
+	"name": "gallery-algorithms",
+	"displayName": "Algorithms",
+	"description": "Provides useful algorithms like quick sort, binary search, and swapping elements.",
+	"author": "jafl",
+
+	"use": ["gallery-algorithms"],
+	"tags": ["jafl","algorithms","sort","array","swap","quicksort","search"]
+}

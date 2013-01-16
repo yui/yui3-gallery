@@ -1,0 +1,18 @@
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-algorithms
+shifter [info] deleting build dir: /build/gallery-algorithms
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-algorithms/gallery-algorithms.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-algorithms/gallery-algorithms.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-algorithms/gallery-algorithms-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.623 seconds, pretty fast huh?

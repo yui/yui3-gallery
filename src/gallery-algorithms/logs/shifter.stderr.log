@@ -1,0 +1,37 @@
+shifter [err] /src/gallery-algorithms/js/ArrayList.js contains 18 lint errors
+   #1: Trailing whitespace.
+       * // line 18, pos 3
+   #2: Trailing whitespace.
+       * // line 34, pos 3
+   #3: Expected '===' and instead saw '=='.
+       if (s1 == s2) // line 43, pos 12
+   #4: Trailing whitespace.
+       * // line 55, pos 3
+   #5: Mixed spaces and tabs.
+       used as desired without restrictions. // line 76, pos 3
+   #6: Expected '!==' and instead saw '!='.
+       if (center!=-1) // line 139, pos 19
+   #7: Trailing whitespace.
+       * // line 149, pos 3
+   #8: Trailing whitespace.
+       * // line 169, pos 3
+   #9: Too many var statements.
+       var high = list.length - 1; // line 190, pos 9
+   #10: Too many var statements.
+       var lastTry; // line 192, pos 9
+   #11: Too many var statements.
+       var mid  = (low + high) / 2; // line 195, pos 13
+   #12: Too many var statements.
+       var aTry = (mid < 1) ? 0 : parseInt(mid, 10); // line 196, pos 13
+   #13: Too many var statements.
+       var c = compare(list[aTry], target); // line 198, pos 13
+   #14: Trailing whitespace.
+       * // line 225, pos 7
+   #15: Trailing whitespace.
+       * // line 233, pos 11
+   #16: Trailing whitespace.
+       * // line 245, pos 11
+   #17: Trailing whitespace.
+       * // line 256, pos 11
+   #18: Trailing whitespace.
+       * // line 266, pos 11

@@ -1,0 +1,16 @@
+{
+    "name": "gallery-algorithms",
+    "builds": {
+        "gallery-algorithms": {
+            "config": {
+                "optional": [
+                    "collection"
+                ]
+            },
+            "jsfiles": [
+                "Array.js",
+                "ArrayList.js"
+            ]
+        }
+    }
+}

@@ -1,4 +1,4 @@
-YUI.add('gallery-algorithms', function(Y) {
+YUI.add('gallery-algorithms', function (Y, NAME) {
 
 "use strict";
 
@@ -62,23 +62,6 @@ Y.Array.compareStringsCaseSensitive = function(s1, s2)
 Y.Array.compareStringsCaseInsensitive = function(s1, s2)
 {
 	return Y.Array.compareStringsCaseSensitive(s1.toLowerCase(), s2.toLowerCase());
-};
-
-/**********************************************************************
- * <p>Converts a -1,0,+1 comparator into a boolean comparator, for use by
- * Y.Array.find().</p>
- * 
- * @method compareForFind
- * @static
- * @param f {Function} -1,0,+1 comparator function
- * @return {Function} function that returns true if the arguments are equal
- */
-Y.Array.compareForFind = function(f)
-{
-	return function(a,b)
-	{
-		return (f(a,b) === 0);
-	};
 };
 
 /*
@@ -188,7 +171,7 @@ binary search history:
  * @static
  * @param list {Array} the list to search (sorted on the compare function)
  * @param target {Mixed} the object to search for
- * @param compare=Y.Array.compareStringsCaseSensitive {Function} the comparison function
+ * @param [compare=Y.Array.compareStringsCaseSensitive] {Function} the comparison function
  * @return {int} index of matched item or -1 if no match
  */
 Y.Array.binarySearch = function(list, target, compare)
@@ -223,13 +206,9 @@ Y.Array.binarySearch = function(list, target, compare)
 			high = aTry - 1;
 			continue;
 		}
-		if (c === 0)
-		{
-			high = aTry - 1;
-			lastTry = aTry;
-			continue;
-		}
-		return aTry;
+
+		high    = aTry - 1;
+		lastTry = aTry;
 	}
 
 	return (Y.Lang.isUndefined(lastTry) ? -1 : lastTry);
@@ -297,4 +276,4 @@ if (Y.ArrayList)
 }
 
 
-}, 'gallery-2012.05.16-20-37' ,{optional:['collection']});
+}, 'gallery-2013.01.16-21-05', {"optional": ["collection"]});
