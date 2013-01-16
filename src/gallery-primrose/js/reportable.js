@@ -16,8 +16,8 @@
       Y.Do.before( this.report, this, 'run', this, 'enter');
       Y.Do.after(  this.report, this, 'run', this, 'exit');
 
-      Y.Do.before( this.report, this, '_runBeforeList', this, 'enter', 'beforeEach' );
-      Y.Do.before( this.report, this, '_runBeforeList', this, 'exit',  'beforeEach' );
+      Y.Do.before( this.report, this, '_runBeforeList', this, 'enter', 'beforeEaches' );
+      Y.Do.before( this.report, this, '_runBeforeList', this, 'exit',  'beforeEaches' );
     },
 
     /**

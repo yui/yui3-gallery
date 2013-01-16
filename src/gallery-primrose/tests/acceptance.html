@@ -9,27 +9,22 @@
   <body>
     <script src="http://yui.yahooapis.com/3.7.3/build/yui/yui-min.js"></script>
     <script>
-      YUI({
-        modules: {
-          'gallery-primrose': {
-            fullpath: '../../../build/gallery-primrose/gallery-primrose.js'
-          }
-        }
-      }).use('gallery-primrose', 'node', function (Y) {
 
-        var P = Y.Primrose, 
-            describe = P.describe, 
-            beforeEach = P.beforeEach,
-            it = P.it;
+      YUI.add('matcher-spec', function (Y) {
+        var P           = Y.Primrose, 
+            describe    = P.describe, 
+            beforeEach  = P.beforeEach,
+            spyOn       = P.spyOn,
+            it          = P.it;
 
         describe('Matchers', function () {
+
           describe('toBe', function () {
             it('asserts simple matches', function (expect) {
               expect( 1 ).toBe( 1 );
               expect( 1 ).not().toBe( 2 );
             });
           });
-          /*
 
           describe('toBeTypeof', function () {
             it('assets the type', function (expect) {
@@ -52,7 +47,6 @@
               expect( undefined ).not().toBeDefined();
             });
           });
-          */
 
           describe('toBeUndefined', function () {
             it('checks if undefined', function (expect) {
@@ -87,13 +81,47 @@
           });
         });
 
-        describe('word', function () {
-          describe('fucking rad', function () {
-            it('is something', function (expect) {
+        describe('Spies', function () {
+          describe('methodSpy', function () {
+            it('works', function (expect) {
+              var obj = {
+                meth: function () {}
+              };
+
+              var spy = spyOn( obj, 'method', 'meth' );
+
+              obj.meth();
+
+              expect( spy.get('occurrences') ).toBe( 1 );
+            });
+          });
+        });
+
+      });
+
+      YUI.add('modular-spec', function (Y) {
+        var P = Y.Primrose, 
+            describe = P.describe, 
+            beforeEach = P.beforeEach,
+            it = P.it;
+
+        describe('Modular', function () {
+          describe('x', function () {
+            it('is b', function (expect) {
               expect( 1 ).toBe( 1 );
             });
           });
         });
+
+      });
+
+      YUI({
+        modules: {
+          'gallery-primrose': {
+            fullpath: '../../../build/gallery-primrose/gallery-primrose.js'
+          }
+        }
+      }).use('gallery-primrose', 'node', 'matcher-spec', 'modular-spec', function (Y) {
 
         Y.Primrose.addReporter(new Y.Primrose.LogReporter());
 

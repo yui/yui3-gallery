@@ -74,6 +74,22 @@
   };
 
   /**
+  @method spyOn
+  @param {Object} host
+  @param {String} type
+  @param {String} targetName
+  **/
+  Y.Primrose.spyOn = function (host, type, targetName) {
+    // uppercase the first letter
+    type = type.charAt(0).toUpperCase() + type.slice(1);
+
+    return new Y.Primrose[type + 'Spy']({
+      host: host,
+      targetName: targetName
+    });
+  };
+
+  /**
   add a reporter to listen for results
 
   @method addReporter
@@ -81,6 +97,7 @@
   **/
   Y.Primrose.addReporter = function (reporter) {
     _reporters.push(reporter);
+
     Y.Array.each(topSuites, function (suite) {
       reporter.observe(suite);
     });

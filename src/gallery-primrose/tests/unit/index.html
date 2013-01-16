@@ -3,9 +3,11 @@
   <head>
     <title>gallery-primrose</title>
     <script src="/build/yui/yui.js"></script>
+    <script src="js/api_test.js"></script>
     <script src="js/suite_test.js"></script>
     <script src="js/spec_test.js"></script>
     <script src="js/expectation_test.js"></script>
+    <script src="js/method_spy_test.js"></script>
   </head>
   <body class="yui3-skin-sam">
     <div id="logger"></div>
@@ -19,15 +21,17 @@
         },
         coverage: ['gallery-primrose'],
         filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-      }).use('test-console', 'test', 'primrose-suite-test', 'primrose-spec-test', 'primrose-expectation-test', function(Y) {
+      }).use('test-console', 'test', 'primrose-api-test', 'primrose-suite-test', 'primrose-spec-test', 'primrose-expectation-test', 'primrose-method-spy-test', function(Y) {
 
         var suite = new Y.Test.Suite({
           name: 'Primrose Test Suite'
         });
 
+        suite.add(Y.Primrose.APITest);
         suite.add(Y.Primrose.SuiteTest);
         suite.add(Y.Primrose.SpecTest);
         suite.add(Y.Primrose.ExpectationTest);
+        suite.add(Y.Primrose.MethodSpyTest);
 
         Y.Test.TestRunner.add(suite);
 

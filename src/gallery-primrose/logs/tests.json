@@ -1,12 +1,29 @@
 {
     "name": "Primrose Test Suite",
-    "passed": 11,
+    "passed": 45,
     "failed": 0,
     "errors": 0,
     "ignored": 0,
-    "total": 11,
-    "duration": 160,
+    "total": 45,
+    "duration": 654,
     "type": "report",
+    "API": {
+        "name": "API",
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 14,
+        "type": "testcase",
+        "spyOn: it creates a spy based on the type": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "spyOn: it creates a spy based on the type",
+            "duration": 1
+        }
+    },
     "Suite": {
         "name": "Suite",
         "passed": 2,
@@ -14,21 +31,21 @@
         "errors": 0,
         "ignored": 0,
         "total": 2,
-        "duration": 32,
+        "duration": 35,
         "type": "testcase",
         "add: it should add children": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "add: it should add children",
-            "duration": 9
+            "duration": 2
         },
         "run: it should run all children": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "run: it should run all children",
-            "duration": 9
+            "duration": 3
         }
     },
     "Spec": {
@@ -38,7 +55,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 5,
-        "duration": 67,
+        "duration": 66,
         "type": "testcase",
         "add: it add an expectation": {
             "result": "pass",
@@ -59,7 +76,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "run: it runs beforeList",
-            "duration": 2
+            "duration": 1
         },
         "run: it should run the block": {
             "result": "pass",
@@ -90,7 +107,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "run: it runs validate",
-            "duration": 2
+            "duration": 1
         },
         "not: it negates the expectation": {
             "result": "pass",
@@ -114,5 +131,36 @@
             "duration": 1
         }
     },
-    "timestamp": "Wed 05 Dec 2012 03:02:52 PM CST"
+    "MethodSpy": {
+        "name": "MethodSpy",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 3,
+        "duration": 46,
+        "type": "testcase",
+        "it displaces method": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "it displaces method",
+            "duration": 0
+        },
+        "it records the number of runs": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "it records the number of runs",
+            "duration": 1
+        },
+        "it runs the original function": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "it runs the original function",
+            "duration": 0
+        }
+    },
+    "timestamp": "Wed 16 Jan 2013 03:06:49 PM CST"
 }

@@ -9,6 +9,9 @@
                 "js/spec.js",
                 "js/matchers.js",
                 "js/expectation.js",
+                "js/spy.js",
+                "js/method_spy.js",
+                "js/event_spy.js",
                 "js/log_reporter.js",
                 "js/primrose.js"
             ]
