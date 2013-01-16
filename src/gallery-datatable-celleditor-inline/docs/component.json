@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-datatable-celleditor-inline",
+    "displayName": "Gallery: datatable-celleditor-inline",
+    "description": "This module provides a View class extension to support cell &quot;inline&quot; editors, similar to a &quot;spreadsheet&quot; type of editing where the entire cell becomes editable.  \\n\\nSupports the following types of cell editors: text, textarea, checkbox, radio, date, select/dropdown/combobox, autocomplete ",
+    "author"     : [ "stlsmiths" ],
+    "use"        : [ "gallery-datatable-celleditor-inline" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

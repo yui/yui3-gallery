@@ -1,0 +1,17 @@
+{
+    "gallery-datatable-celleditor-inline": {
+        "supersedes": [
+            ""
+        ],
+        "skinnable": "true",
+        "requires": [
+            "gallery-datatable-editable",
+            "view",
+            "base-build",
+            "event-mouseenter"
+        ],
+        "optional": [
+            ""
+        ]
+    }
+}

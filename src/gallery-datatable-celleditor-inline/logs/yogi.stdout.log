@@ -1,0 +1,33 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datatable-celleditor-inline
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+Starting Grover on 1 files with PhantomJS@1.8.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [gallery-datatable-celleditor-inline]: Passed: 26 Failed: 0 Total: 26 (ignored 0) (2.109 seconds) 87%
+Writing files in JSON format to: /src/gallery-datatable-celleditor-inline/logs/tests.json
+
+---------------------------------------------+-----------+-----------+-----------+-----------+
+File                                         |   % Stmts |% Branches |   % Funcs |   % Lines |
+---------------------------------------------+-----------+-----------+-----------+-----------+
+   gallery-datatable-celleditor-inline/      |     87.83 |     67.07 |        80 |     87.83 |
+      gallery-datatable-celleditor-inline.js |     87.83 |     67.07 |        80 |     87.83 |
+---------------------------------------------+-----------+-----------+-----------+-----------+
+All files                                    |     87.83 |     67.07 |        80 |     87.83 |
+---------------------------------------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 87.83% ( 101/115 )
+Branches     : 67.07% ( 55/82 )
+Functions    : 80% ( 20/25 )
+Lines        : 87.83% ( 101/115 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 26 Failed: 0 Total: 26 (ignored 0) (2.109 seconds)
+  [Grover Execution Timer] 4.801 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

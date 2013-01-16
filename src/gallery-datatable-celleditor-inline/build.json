@@ -1,0 +1,11 @@
+{
+    "name": "gallery-datatable-celleditor-inline",
+    "builds": {
+        "gallery-datatable-celleditor-inline": {
+            "skinnable": "true",
+            "jsfiles": [
+                "datatable-celleditor-inline.js"
+            ]
+        }
+    }
+}
