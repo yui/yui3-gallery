@@ -329,7 +329,7 @@ QuickEdit.copyDownFormatter = function(o, td)
 {
 	if (o.column.quickEdit.copyDown && o.rowIndex === 0)
 	{
-		return Y.Lang.sub('<button title="Copy down" class="{c}">&darr;</button>',
+		return Y.Lang.sub('<button type="button" title="Copy down" class="{c}">&darr;</button>',
 		{
 			c: QuickEdit.copy_down_button_class
 		});
@@ -504,9 +504,9 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 //			this.saveEdit.push(col.editor);
 //			col.editor = null;
 
-			var qe  = col.quickEdit;
-			var qef = col.qeFormatter;
-			if (/*!col.hidden &&*/ (qe || qef))
+			var qe  = col.quickEdit,
+				qef = col.qeFormatter;
+			if (/* !col.hidden && */ (qe || qef))
 			{
 				var fn = null;
 				if (qe && Y.Lang.isFunction(qe.formatter))

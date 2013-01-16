@@ -1,0 +1,123 @@
+shifter [err] /src/gallery-quickedit/js/QuickEdit.js contains 61 lint errors
+   #1: Line too long.
+       * @description If true, getChanges() returns a record for every row, even if the record is empty.  Set to false if you want getChanges() to only return records that contain data. // line 147, pos 183
+   #2: Too many var statements.
+       var qe = o.column.quickEdit; // line 219, pos 9
+   #3: Too many var statements.
+       var qe = o.column.quickEdit; // line 243, pos 9
+   #4: Too many var statements.
+       var field = cell.one('.quickedit-field'); // line 293, pos 9
+   #5: Too many var statements.
+       var value = Y.Lang.trim(field.get('value')); // line 299, pos 9
+   #6: Possible strict violation.
+       cell = this.getCell(cell, 'below'); // line 307, pos 16
+   #7: Possible strict violation.
+       var cell = this.getCell(e.target, e.charCode == 38 ? 'above' : 'below'); // line 365, pos 16
+   #8: Expected '===' and instead saw '=='.
+       var cell = this.getCell(e.target, e.charCode == 38 ? 'above' : 'below'); // line 365, pos 50
+   #9: Too many var statements.
+       var input = cell.one('.quickedit-field'); // line 368, pos 13
+   #10: Possible strict violation.
+       var forest = this.get('host').get('columns'); // line 383, pos 18
+   #11: Too many var statements.
+       var map    = {}; // line 384, pos 9
+   #12: Possible strict violation.
+       this.column_list = Y.reduce(forest, [], accumulate); // line 407, pos 5
+   #13: Possible strict violation.
+       this.column_map  = map; // line 408, pos 5
+   #14: Possible strict violation.
+       var host = this.get('host'); // line 422, pos 16
+   #15: Too many var statements.
+       var status = true; // line 424, pos 9
+   #16: Too many var statements.
+       var count  = list.size(); // line 425, pos 9
+   #17: Too many var statements.
+       for (var i=0; i<count; i++) // line 426, pos 14
+   #18: Too many var statements.
+       var e  = list.item(i); // line 428, pos 13
+   #19: Too many var statements.
+       var qe = this.column_map[ this._getColumnKey(e) ].quickEdit; // line 429, pos 13
+   #20: Possible strict violation.
+       var qe = this.column_map[ this._getColumnKey(e) ].quickEdit; // line 429, pos 18
+   #21: Possible strict violation.
+       var qe = this.column_map[ this._getColumnKey(e) ].quickEdit; // line 429, pos 35
+   #22: Too many var statements.
+       var msg_list = qe.validation ? qe.validation.msg : null; // line 434, pos 13
+   #23: Too many var statements.
+       var info = Y.FormManager.validateFromCSSData(e, msg_list); // line 436, pos 13
+   #24: Possible strict violation.
+       this.displayMessage(e, info.error, 'error'); // line 439, pos 13
+   #25: Possible strict violation.
+       this.displayMessage(e, msg_list ? msg_list.regex : null, 'error'); // line 450, pos 17
+   #26: Too many var statements.
+       var h = this.afterHostEvent('render', function() // line 479, pos 13
+   #27: Trailing whitespace.
+       * // line 489, pos 7
+   #28: Too many var statements.
+       for (var i=0; i<this.column_list.length; i++) // line 500, pos 18
+   #29: Too many var statements.
+       var col = this.column_list[i]; // line 502, pos 17
+   #30: Too many var statements.
+       var key = col.key; // line 503, pos 17
+   #31: Too many var statements.
+       var qe  = col.quickEdit, // line 509, pos 17
+   #32: Too many var statements.
+       var fn = null; // line 513, pos 21
+   #33: Too many var statements.
+       var container = host.get('contentBox'); // line 543, pos 13
+   #34: Trailing whitespace.
+       * // line 556, pos 7
+   #35: Too many var statements.
+       var col      = this.column_list[i]; // line 565, pos 17
+   #36: Too many var statements.
+       var host      = this.get('host'); // line 582, pos 13
+   #37: Too many var statements.
+       var container = host.get('contentBox'); // line 583, pos 13
+   #38: Trailing whitespace.
+       * // line 603, pos 7
+   #39: Too many var statements.
+       var host      = this.get('host'); // line 624, pos 13
+   #40: Too many var statements.
+       var rows      = host._tbodyNode.get('children'); // line 625, pos 13
+   #41: Too many var statements.
+       var change  = {}, // line 630, pos 17
+   #42: Too many var statements.
+       var field_count = list.size(); // line 633, pos 17
+   #43: Too many var statements.
+       for (var j=0; j<field_count; j++) // line 634, pos 22
+   #44: Too many var statements.
+       var field = list.item(j); // line 636, pos 21
+   #45: Too many var statements.
+       var key   = this._getColumnKey(field); // line 637, pos 21
+   #46: Too many var statements.
+       var qe    = this.column_map[key].quickEdit; // line 638, pos 21
+   #47: Too many var statements.
+       var prev  = rec.get(key); // line 639, pos 21
+   #48: Too many var statements.
+       var val = Y.Lang.trim(field.get('value')); // line 641, pos 21
+   #49: Too many var statements.
+       for (var j=0; j<always_include.length; j++) // line 652, pos 26
+   #50: 'j' is already defined.
+       for (var j=0; j<always_include.length; j++) // line 652, pos 27
+   #51: Too many var statements.
+       var key     = always_include[j]; // line 654, pos 25
+   #52: 'key' is already defined.
+       var key     = always_include[j]; // line 654, pos 33
+   #53: Too many var statements.
+       var host   = this.get('host'); // line 681, pos 13
+   #54: Too many var statements.
+       var e1 = host._tbodyNode.getElementsByTagName('input'); // line 683, pos 13
+   #55: Too many var statements.
+       var e2 = host._tbodyNode.getElementsByTagName('textarea'); // line 684, pos 13
+   #56: Too many var statements.
+       var e3 = host._tbodyNode.getElementsByTagName('select'); // line 685, pos 13
+   #57: Trailing whitespace.
+       * // line 701, pos 7
+   #58: Too many var statements.
+       var cell = e.getAncestorByTagName('td'); // line 753, pos 13
+   #59: Trailing whitespace.
+       * // line 786, pos 7
+   #60: 'td' is defined but never used.
+       QuickEdit.copyDownFormatter = function(o, td) // line 330, pos 45
+   #61: 'config' is defined but never used.
+       initializer: function(config) // line 470, pos 33

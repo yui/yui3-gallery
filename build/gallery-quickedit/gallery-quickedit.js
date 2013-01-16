@@ -1,4 +1,4 @@
-YUI.add('gallery-quickedit', function(Y) {
+YUI.add('gallery-quickedit', function (Y, NAME) {
 
 "use strict";
 
@@ -331,7 +331,7 @@ QuickEdit.copyDownFormatter = function(o, td)
 {
 	if (o.column.quickEdit.copyDown && o.rowIndex === 0)
 	{
-		return Y.Lang.sub('<button title="Copy down" class="{c}">&darr;</button>',
+		return Y.Lang.sub('<button type="button" title="Copy down" class="{c}">&darr;</button>',
 		{
 			c: QuickEdit.copy_down_button_class
 		});
@@ -506,9 +506,9 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 //			this.saveEdit.push(col.editor);
 //			col.editor = null;
 
-			var qe  = col.quickEdit;
-			var qef = col.qeFormatter;
-			if (/*!col.hidden &&*/ (qe || qef))
+			var qe  = col.quickEdit,
+				qef = col.qeFormatter;
+			if (/* !col.hidden && */ (qe || qef))
 			{
 				var fn = null;
 				if (qe && Y.Lang.isFunction(qe.formatter))
@@ -801,4 +801,15 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableQuickEdit = QuickEdit;
 
 
-}, 'gallery-2012.10.31-20-00' ,{optional:['gallery-scrollintoview'], requires:['datatable-base','gallery-formmgr-css-validation','gallery-node-optimizations','gallery-funcprog'], skinnable:true});
+}, 'gallery-2013.01.16-21-05', {
+    "skinnable": "true",
+    "requires": [
+        "datatable-base",
+        "gallery-formmgr-css-validation",
+        "gallery-node-optimizations",
+        "gallery-funcprog"
+    ],
+    "optional": [
+        "gallery-scrollintoview"
+    ]
+});
