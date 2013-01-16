@@ -8,7 +8,7 @@
     </head>
     <body class="yui3-skin-sam yui-skin-sam">
 
-		
+
 		<div id="test"></div>
 
 		<script src="http://yui.yahooapis.com/3.4.1pr1/build/yui/yui-min.js"></script>
@@ -32,7 +32,7 @@
 					}
 				}
 			}).use(
-				'node','substitute','base', 'widget', 'gallery-makenode','test', 'console','node-event-simulate', 'event-valuechange', // 'event-simulate',
+				'node','base', 'widget', 'gallery-makenode','test', 'console','node-event-simulate', 'event-valuechange', // 'event-simulate',
 				function(Y) {
 					"use strict";
 					var A = Y.Assert,
@@ -44,9 +44,9 @@
 						testNode = Y.one('#test'),
 						MN = null,
 						mn = null;
-						
+
 				new Y.Console().render();
-				
+
 				var suite = new Y.Test.Suite("TestSuite Name");
 
 				suite.add(new Y.Test.Case({
@@ -63,7 +63,7 @@
 							},
 							{
 							}
-						);	
+						);
 					},
 
 					tearDown : function () {
@@ -149,7 +149,7 @@
 						delete MN.ATTRS;
 					},
 					testWithIntl: function () {
-						
+
 						Y.use('intl', function (Y) {
 							if (Y.Intl.add) {
 								Y.Intl.add('someModule','es_ES',{
@@ -204,7 +204,7 @@
 					}
 				}));
 
-				
+
 				suite.add(new Y.Test.Case({
 					name: "tests _classNames and _locateNodes",
 					setUp : function () {
@@ -223,7 +223,7 @@
 								_CLASS_NAMES: [INPUT, FORM],
 								_TEMPLATE: '<form class="{c form}"><input class="{c input}" value="{p value}" /><\/form>'
 							}
-						);	
+						);
 					},
 
 					tearDown : function () {
@@ -240,7 +240,7 @@
 						A.isTrue(mn._formNode.hasClass('yui3-makenodetest-form'));
 						A.areEqual(5,mn._inputNode.get(VALUE));
 					}
-				}));		
+				}));
 
 				suite.add(new Y.Test.Case({
 					name: "tests _Events",
@@ -255,7 +255,7 @@
 									this._locateNodes();
 								},
 								value: 5,
-								
+
 								inputChanged: false,
 								buttonClicked: false,
 								inputValueChanged: false,
@@ -283,9 +283,9 @@
 										{type: 'click', when: 'delegate'}
 									]
 								}
-									
+
 							}
-						);	
+						);
 					},
 
 					tearDown : function () {
@@ -307,10 +307,10 @@
 							A.isTrue(mn.inputValueChanged, 'inputValueChanged');
 						},100);
 					}
-						
-				}));		
 
-				
+				}));
+
+
 				suite.add(new Y.Test.Case({
 					name: "tests _uiSetXxxx",
 					setUp : function () {
@@ -334,9 +334,9 @@
 									value: {
 										value: 5
 									}
-								}								
+								}
 							}
-						);	
+						);
 					},
 
 					tearDown : function () {
@@ -347,7 +347,7 @@
 					testValueThroughTemplate : function () {
 						mn = new MN();
 						mn.render(testNode);
-						
+
 						A.areEqual(5, mn._inputNode.get(VALUE));
 						mn.set(VALUE, 3);
 						A.areEqual(5, mn._inputNode.get(VALUE)); // should not change
@@ -359,7 +359,7 @@
 						MN._TEMPLATE = '<form class="{c form}"><input class="{c input}" /><\/form>';
 						mn = new MN();
 						mn.render(testNode);
-						
+
 						A.areEqual(5, mn._inputNode.get(VALUE));
 						mn.set(VALUE, 3);
 						A.areEqual(5, mn._inputNode.get(VALUE)); // should not change
@@ -372,14 +372,14 @@
 						MN._TEMPLATE = '<form class="{c form}"><input class="{c input}" /><\/form>';
 						mn = new MN();
 						mn.render(testNode);
-						
+
 						A.areEqual(5, mn._inputNode.get(VALUE));
 						mn.set(VALUE, 3);
 						A.areEqual(3, mn._inputNode.get(VALUE));
 					}
 
 
-				}));		
+				}));
 
 				var MNChild, mnChild;
 				suite.add(new Y.Test.Case({
@@ -400,7 +400,7 @@
 								_CLASS_NAMES: [INPUT, FORM],
 								_TEMPLATE: '<form class="{c form}"><input class="{c input}" value="{p value}" /><\/form>'
 							}
-						);	
+						);
 						MNChild = Y.Base.create(
 							'MakeNodeTestChild',
 							MN,
@@ -443,9 +443,9 @@
 						A.isTrue(mnChild._formNode.hasClass('yui3-makenodetest-form'));
 						A.isTrue(mnChild._buttonNode.hasClass('yui3-makenodetestchild-button'));
 						A.areEqual(5,mnChild._inputNode.get(VALUE));
-					
+
 					}
-				}));		
+				}));
 				suite.add(new Y.Test.Case({
 					name: "tests after attribute change",
 					setUp : function () {
@@ -478,7 +478,7 @@
 						}
 						testNode.setContent('');
 						MN = mn = null;
-					},					
+					},
 					testOnInit: function () {
 						mn = new MN({value:42}).render(testNode);
 						A.isUndefined(mn.actualValue,'value should remain undefined');
@@ -501,7 +501,7 @@
 						A.areEqual(5,mn.get('value'),'value should have remained at 5');
 					}
 				}));
-				
+
 				suite.add(new Y.Test.Case({
 					setUp : function () {
 						MN = Y.Base.create(
@@ -530,7 +530,7 @@
 					tearDown : function () {
 						mn.destroy();
 						MN = mn = null;
-					},					
+					},
 					testOnInit: function () {
 						mn = new MN({value:42});
 						A.isUndefined(mn.actualValue,'value will remain undefined, but shouldn\'t');
@@ -547,7 +547,7 @@
 					tearDown : function () {
 						mn.destroy();
 						MN = mn = null;
-					},					
+					},
 					testAutoRenderUI: function () {
 						MN = Y.Base.create(
 							'MakeNodeTest',
@@ -607,7 +607,7 @@
 								_TEMPLATE: '{n p prop @ attr}'
 							}
 						);
-						var MNOther = Y.Base.create( 
+						var MNOther = Y.Base.create(
 							'other',
 							Y.Base,
 							[],
@@ -631,7 +631,7 @@
 						mn = MN = MNOther = null;
 					}
 				}));
-					
+
 
 
 				Y.Test.Runner.add(suite);
@@ -641,7 +641,7 @@
 		);
 
 		</script>
-        
+
     </body>
 </html>
 

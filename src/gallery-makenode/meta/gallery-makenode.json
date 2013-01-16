@@ -1,0 +1,5 @@
+{
+    "gallery-makenode": {
+        "requires":["classnamemanager"]
+    }
+}

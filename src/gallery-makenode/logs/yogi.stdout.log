@@ -1,0 +1,78 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-makenode
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.8.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [TestSuite Name]: Passed: 2 Failed: 30 Total: 32 (ignored 0) (0.48 seconds)
+    testConstants
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={LBRACE}p prop{RBRACE}==='')
+    testP
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={p prop}==='')
+    testM
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={m method 3.14 null true false "this is a \\"test\\""}==='')
+    testUnquotedString
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={m method 3.14 null true false this is a "test"}==='')
+    testAt
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={@ value}==='')
+    testC
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={c input}==='')
+    testS
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={s text}==='')
+    testSNested
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={s text}==='')
+    testWithIntl
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={s text}==='')
+    testTrue
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={? {p prop} "true" "false"}==='')
+    testFalse
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={? {p prop} "true" "false"}==='')
+    test1nested
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={1 {p prop} "one" "many"}==='')
+    test12nested
+       Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={1 {p prop} "one" "many"}==='')
+    testNodesGetTheirClasses
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+    testStdModGetTheirClasses
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+    testLocateOnlySomeNodes
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+    testEventsGetFired
+       Unexpected error: 'null' is not a constructor (evaluating 'new MN()')
+    testValueThroughTemplate
+       Unexpected error: 'null' is not a constructor (evaluating 'new MN()')
+    testValueThroughSync
+       Unexpected error: 'null' is not an object (evaluating 'MN._ATTRS_2_UI = {
+                       SYNC: VALUE
+                   }')
+    testValueBound
+       Unexpected error: 'null' is not an object (evaluating 'MN._ATTRS_2_UI = {
+                       SYNC: VALUE,
+                       BIND: VALUE
+                   }')
+    testNodesKeepTheirClassNames
+       Unexpected error: 'undefined' is not a constructor (evaluating 'new MNChild()')
+    testNodesGetTheRightClasses
+       Unexpected error: 'undefined' is not an object (evaluating 'MNChild._CLASS_NAMES = [BUTTON]')
+    testOnInit
+       Unexpected error: 'null' is not a constructor (evaluating 'new MN({value:42})')
+    testSetLater
+       Unexpected error: 'null' is not a constructor (evaluating 'new MN()')
+    testSetPrevented
+       Unexpected error: 'null' is not an object (evaluating 'MN._EVENTS')
+    testAutoRenderUI
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+    testNoAutoRenderUI
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+    testNestedObjects
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+    testBadlyNestedObjects
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+    testPublish
+       Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')
+Writing files in JSON format to: /src/gallery-makenode/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

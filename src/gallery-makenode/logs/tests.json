@@ -1,0 +1,335 @@
+{
+    "name": "TestSuite Name",
+    "passed": 6,
+    "failed": 90,
+    "errors": 138,
+    "ignored": 0,
+    "total": 96,
+    "duration": 1440,
+    "type": "report",
+    "tests template processor": {
+        "name": "tests template processor",
+        "passed": 0,
+        "failed": 13,
+        "errors": 26,
+        "ignored": 0,
+        "total": 13,
+        "duration": 156,
+        "type": "testcase",
+        "testConstants": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={LBRACE}p prop{RBRACE}==='')",
+            "type": "test",
+            "name": "testConstants",
+            "duration": 9
+        },
+        "testP": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={p prop}==='')",
+            "type": "test",
+            "name": "testP",
+            "duration": 2
+        },
+        "testM": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={m method 3.14 null true false \"this is a \\\\\"test\\\\\"\"}==='')",
+            "type": "test",
+            "name": "testM",
+            "duration": 1
+        },
+        "testUnquotedString": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={m method 3.14 null true false this is a \"test\"}==='')",
+            "type": "test",
+            "name": "testUnquotedString",
+            "duration": 2
+        },
+        "testAt": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={@ value}==='')",
+            "type": "test",
+            "name": "testAt",
+            "duration": 3
+        },
+        "testC": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={c input}==='')",
+            "type": "test",
+            "name": "testC",
+            "duration": 2
+        },
+        "testS": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={s text}==='')",
+            "type": "test",
+            "name": "testS",
+            "duration": 1
+        },
+        "testSNested": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={s text}==='')",
+            "type": "test",
+            "name": "testSNested",
+            "duration": 2
+        },
+        "testWithIntl": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={s text}==='')",
+            "type": "test",
+            "name": "testWithIntl",
+            "duration": 1
+        },
+        "testTrue": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={? {p prop} \"true\" \"false\"}==='')",
+            "type": "test",
+            "name": "testTrue",
+            "duration": 1
+        },
+        "testFalse": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={? {p prop} \"true\" \"false\"}==='')",
+            "type": "test",
+            "name": "testFalse",
+            "duration": 1
+        },
+        "test1nested": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={1 {p prop} \"one\" \"many\"}==='')",
+            "type": "test",
+            "name": "test1nested",
+            "duration": 2
+        },
+        "test12nested": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._TEMPLATE = '==={1 {p prop} \"one\" \"many\"}==='')",
+            "type": "test",
+            "name": "test12nested",
+            "duration": 2
+        }
+    },
+    "tests _classNames and _locateNodes": {
+        "name": "tests _classNames and _locateNodes",
+        "passed": 0,
+        "failed": 3,
+        "errors": 3,
+        "ignored": 0,
+        "total": 3,
+        "duration": 46,
+        "type": "testcase",
+        "testNodesGetTheirClasses": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testNodesGetTheirClasses",
+            "duration": 2
+        },
+        "testStdModGetTheirClasses": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testStdModGetTheirClasses",
+            "duration": 2
+        },
+        "testLocateOnlySomeNodes": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testLocateOnlySomeNodes",
+            "duration": 2
+        }
+    },
+    "tests _Events": {
+        "name": "tests _Events",
+        "passed": 0,
+        "failed": 1,
+        "errors": 2,
+        "ignored": 0,
+        "total": 1,
+        "duration": 23,
+        "type": "testcase",
+        "testEventsGetFired": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not a constructor (evaluating 'new MN()')",
+            "type": "test",
+            "name": "testEventsGetFired",
+            "duration": 3
+        }
+    },
+    "tests _uiSetXxxx": {
+        "name": "tests _uiSetXxxx",
+        "passed": 0,
+        "failed": 3,
+        "errors": 6,
+        "ignored": 0,
+        "total": 3,
+        "duration": 47,
+        "type": "testcase",
+        "testValueThroughTemplate": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not a constructor (evaluating 'new MN()')",
+            "type": "test",
+            "name": "testValueThroughTemplate",
+            "duration": 2
+        },
+        "testValueThroughSync": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._ATTRS_2_UI = {\n                SYNC: VALUE\n            }')",
+            "type": "test",
+            "name": "testValueThroughSync",
+            "duration": 2
+        },
+        "testValueBound": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._ATTRS_2_UI = {\n                SYNC: VALUE,\n                BIND: VALUE\n            }')",
+            "type": "test",
+            "name": "testValueBound",
+            "duration": 3
+        }
+    },
+    "tests inheritance": {
+        "name": "tests inheritance",
+        "passed": 0,
+        "failed": 2,
+        "errors": 4,
+        "ignored": 0,
+        "total": 2,
+        "duration": 35,
+        "type": "testcase",
+        "testNodesKeepTheirClassNames": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new MNChild()')",
+            "type": "test",
+            "name": "testNodesKeepTheirClassNames",
+            "duration": 3
+        },
+        "testNodesGetTheRightClasses": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'MNChild._CLASS_NAMES = [BUTTON]')",
+            "type": "test",
+            "name": "testNodesGetTheRightClasses",
+            "duration": 2
+        }
+    },
+    "tests after attribute change": {
+        "name": "tests after attribute change",
+        "passed": 0,
+        "failed": 3,
+        "errors": 3,
+        "ignored": 0,
+        "total": 3,
+        "duration": 43,
+        "type": "testcase",
+        "testOnInit": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not a constructor (evaluating 'new MN({value:42})')",
+            "type": "test",
+            "name": "testOnInit",
+            "duration": 1
+        },
+        "testSetLater": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not a constructor (evaluating 'new MN()')",
+            "type": "test",
+            "name": "testSetLater",
+            "duration": 1
+        },
+        "testSetPrevented": {
+            "result": "fail",
+            "message": "Unexpected error: 'null' is not an object (evaluating 'MN._EVENTS')",
+            "type": "test",
+            "name": "testSetPrevented",
+            "duration": 1
+        }
+    },
+    "testCase_yui_3_9_0pr1_1_1358370408803_72": {
+        "name": "testCase_yui_3_9_0pr1_1_1358370408803_72",
+        "passed": 2,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 2,
+        "duration": 36,
+        "type": "testcase",
+        "testOnInit": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testOnInit",
+            "duration": 4
+        },
+        "testSetLater": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testSetLater",
+            "duration": 2
+        }
+    },
+    "Auto renderUI": {
+        "name": "Auto renderUI",
+        "passed": 0,
+        "failed": 2,
+        "errors": 2,
+        "ignored": 0,
+        "total": 2,
+        "duration": 34,
+        "type": "testcase",
+        "testAutoRenderUI": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testAutoRenderUI",
+            "duration": 2
+        },
+        "testNoAutoRenderUI": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testNoAutoRenderUI",
+            "duration": 2
+        }
+    },
+    "Nested objects": {
+        "name": "Nested objects",
+        "passed": 0,
+        "failed": 2,
+        "errors": 0,
+        "ignored": 0,
+        "total": 2,
+        "duration": 33,
+        "type": "testcase",
+        "testNestedObjects": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testNestedObjects",
+            "duration": 1
+        },
+        "testBadlyNestedObjects": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testBadlyNestedObjects",
+            "duration": 2
+        }
+    },
+    "test _PUBLISH": {
+        "name": "test _PUBLISH",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 21,
+        "type": "testcase",
+        "testPublish": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'c._buildCfg')",
+            "type": "test",
+            "name": "testPublish",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 16 Jan 2013 03:06:49 PM CST"
+}

@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-makenode",
+    "displayName": "Gallery: makenode",
+    "description": "An extension for Widget to make it easier to build Widgets, allowing for a more declarative style and requiring less pieces of executable code, which is makes it much clearer and simple.",
+    "author"     : [ "Daniel Barreiro (a.k.a.: satyam)" ],
+    "use"        : ["gallery-makenode"],
+    "tags": [ "gallery", "makenode", "widget creation" ],
+
+    "examples": []
+}

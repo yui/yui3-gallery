@@ -1,0 +1,11 @@
+{
+    "name": "gallery-makenode",
+    "builds": {
+        "gallery-makenode": {
+            "jsfiles": [
+                "gallery-makenode.js"
+            ],
+            "meta": {}
+        }
+    }
+}
