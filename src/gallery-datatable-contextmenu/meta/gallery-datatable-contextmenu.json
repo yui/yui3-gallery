@@ -1,0 +1,9 @@
+{
+    "gallery-datatable-contextmenu": {
+        "skinnable": "false",
+        "requires": [
+            "plugin",
+            "gallery-contextmenu-view"
+        ]
+    }
+}

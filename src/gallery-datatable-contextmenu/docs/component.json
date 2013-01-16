@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-datatable-contextmenu",
+    "displayName": "Gallery: datatable-contextmenu",
+    "description": "Provides a simple context menu (i.e. right-click menu) that can be used on a DataTable instance as a plugin",
+    "author"     : [ "stlsmiths" ],
+    "use"        : [ "gallery-datatable-contextmenu" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

@@ -1,0 +1,63 @@
+<div class="intro">
+    <p>
+    Provides a simple context menu (i.e. right-click menu) that can be used on a DataTable instance as a plugin
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>This module includes a Plugin that uses the <a href="http://yuilibrary.com/gallery/show/contextmenu-view">Gallery-ContextMenu-View</a> to create an easy &quot;right-click&quot;-type menu to use with DataTable.<br>
+<br>
+<br>
+<br>
+It includes the capability to define different context menus for the THEAD, TBODY or TFOOT elements of a DataTable.  <br>
+<br>
+<br>
+<br>
+The plugin fires events that can be listened to that include references to the TR or TD (or TH) Node that the context menu was opened on in addition to the menu selection that was made.<br>
+</p>
+
+```
+YUI().use('datatable', 'gallery-datatable-contextmenu', function(Y) {
+
+//
+//  Create the DataTable
+//
+    var dt = new Y.DataTable({
+        columns: [ 'rid', 'rtext', 'rnum' ],
+        data:    myData,
+        sortable: true,
+    });
+    dt.render('#tablediv');
+
+//
+//  Setup a context-menu on the TBODY
+//
+dt.plug(Y.Plugin.DataTableContextMenu,{
+  tbodyMenu:{
+    menuItems: [
+      {label:"Edit",  value:"e" },
+      {label:"Update", value:"u"},
+      {label:"Insert Before", value:"i"},
+      {label:"Insert After",  value:"a"},
+      {label:"Delete Record", value:"d"},
+    ],
+    after:{
+      'selectedMenuChange': tdMenuChange
+    }
+  },
+
+  theadMenu:{
+     menuItems:  [ "Sort A-Z",  "Sort Z-A",  "Hide" ],
+     after: {
+       'selectedMenuChange': thMenuSelect
+     }
+  }
+});
+
+
+
+
+});
+```
+

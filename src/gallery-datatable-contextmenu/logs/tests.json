@@ -1,0 +1,66 @@
+{
+    "name": "gallery-contextmenu-view",
+    "passed": 15,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 15,
+    "duration": 1122,
+    "type": "report",
+    "Initial setup and instance checks": {
+        "name": "Initial setup and instance checks",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 3,
+        "duration": 241,
+        "type": "testcase",
+        "should be a Plugin extension": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "should be a Plugin extension",
+            "duration": 124
+        },
+        "should instantiate as a View": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "should instantiate as a View",
+            "duration": 27
+        },
+        "should destroy and kill Overlay okay": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "should destroy and kill Overlay okay",
+            "duration": 48
+        }
+    },
+    "DT context menu tbody": {
+        "name": "DT context menu tbody",
+        "passed": 2,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 2,
+        "duration": 125,
+        "type": "testcase",
+        "contextmenu on first row / cell rtext": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "contextmenu on first row / cell rtext",
+            "duration": 53
+        },
+        "hide contextmenu on contextTarget": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "hide contextmenu on contextTarget",
+            "duration": 42
+        }
+    },
+    "timestamp": "Wed 16 Jan 2013 03:06:48 PM CST"
+}
