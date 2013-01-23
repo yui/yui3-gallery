@@ -1,0 +1,45 @@
+{
+    "name": "gallery-composite-image-pixels",
+    "passed": 0,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 12,
+    "total": 12,
+    "duration": 111,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 4,
+        "total": 4,
+        "duration": 34,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:001-apiExists"
+        },
+        "test:002-pixels": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:002-pixels"
+        },
+        "test:003-toJSON": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:003-toJSON"
+        },
+        "test:004-toString": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:004-toString"
+        }
+    },
+    "timestamp": "Wed 23 Jan 2013 04:01:35 PM CST"
+}

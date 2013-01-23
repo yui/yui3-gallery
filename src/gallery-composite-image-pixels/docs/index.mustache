@@ -1,0 +1,48 @@
+<div class="intro">
+    <p>
+        This is an experimental array-like interface for interacting with image pixels.  An image's pixels can be accessed by pixel index or pixel location array in the same way normal array items are
+        accessed.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Using a Pixels object
+</h2>
+
+<p>
+    The preferred way to create a pixels object is to access the pixels property on an instance of Y.Composite.Image.  This object will be created on-demand the first time it is used.
+</p>
+
+```
+pixels = image.pixels;
+```
+
+<p>
+    The pixels object can then be used like an array to access individual pixel objects.  A pixel object can then be used like an array to access the individual channel values.
+</p>
+
+```
+red = pixels[0][0];
+green = pixels[0][1];
+blue = pixels[0][2];
+alpha = pixels[0][3];
+```
+
+<p>
+    The pixel objects can also be used to set channel values and they will be automatically updated in the image.
+</p>
+
+```
+// reset to white
+pixels[0][0] = 255;
+pixels[0][1] = 255;
+pixels[0][2] = 255;
+pixels[0][3] = 255;
+```
+
+<p>
+    Note that this interface is experimental.  The pixels object acts like a proxy for pixel objects and the pixel objects act like a proxy to the image's internal data.  Constructing these objects is far
+    less efficient than just using the getValue and setValue methods, especially since true proxies are not yet available in ECMAScript.
+</p>
