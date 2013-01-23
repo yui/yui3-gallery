@@ -1,0 +1,10 @@
+{
+    "name": "gallery-md-ibutton",
+    "builds": {
+        "gallery-md-ibutton": {
+            "jsfiles": [
+                "gallery-md-ibutton.js"
+            ]
+        }
+    }
+}

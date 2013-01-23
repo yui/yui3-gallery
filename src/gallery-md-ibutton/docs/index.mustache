@@ -1,0 +1,30 @@
+<div class="intro">
+    <p>
+    Produces a sliding button like those on iPhones
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>Mostly a visual trick, produces a sliding button like those on iPhones.  <br>
+<br>
+<a href="http://yuilibrary.com/forum/memberlist.php?mode=viewprofile&amp;u=4628">Marc</a> has made a much better version:<br>
+<br>
+http://yuilibrary.com/gallery/show/slidecheckbox<br>
+</p>
+
+```
+YUI().use('gallery-md-ibutton', function(Y) {
+	"use strict";
+
+	var iButton = new Y.IButton({
+		labelOn:'yes',
+		labelOff: 'no'
+	}).render('#test');
+
+	iButton.on('valueChange', function (ev) {
+		Y.log(ev.newVal,'info','iButton');
+	});
+});
+```
+

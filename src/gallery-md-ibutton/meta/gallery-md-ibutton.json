@@ -1,0 +1,6 @@
+{
+    "gallery-md-ibutton": {
+        "requires": ["base-build", "widget", "gallery-makenode", "anim"],
+        "skinnable":true
+    }
+}
