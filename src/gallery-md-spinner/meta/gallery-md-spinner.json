@@ -1,0 +1,6 @@
+{
+    "gallery-md-spinner": {
+        "requires":["base-build", "event-key", "widget", "node-focusmanager", "gallery-makenode"],
+        "skinnable":true
+    }
+}

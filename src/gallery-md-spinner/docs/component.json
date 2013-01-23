@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-md-spinner",
+    "displayName": "Gallery: md-spinner",
+    "description": "Based on the Spinner example for Widget, I made a new version using MakeNode.",
+    "author"     : [ "satyam" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

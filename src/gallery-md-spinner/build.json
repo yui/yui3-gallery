@@ -1,0 +1,10 @@
+{
+    "name": "gallery-md-spinner",
+    "builds": {
+        "gallery-md-spinner": {
+            "jsfiles": [
+                "gallery-md-spinner.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,32 @@
+<div class="intro">
+    <p>
+    Based on the Spinner example for Widget, I made a new version using MakeNode.
+
+
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>To the basic Spinner it adds:<br>
+<ul>
+<li>wraparound (for example, it allows you to jump from 59 to 0 when going up in a minute counter)</li>
+<li>fires event when it wraps (allows to move the hour up when the minutes jump from 59 to 0)</li>
+<li>has formatter (for example, it allows 0 to be represented as &quot;AM&quot; and 1 as &quot;PM&quot;)</li>
+<li>has parser (so AM and PM can be entered in the input box and converted to 0 and 1)</li>
+</ul>
+<br>
+<br>
+See <a href="http://yuilibrary.com/yui/docs/widget/widget-extend.html">Spinner</a> from the Widget User Guide examples<br>
+<br>
+</p>
+
+```
+YUI().use('gallery-md-spinner', function(Y) {
+
+var plain = (new Y.Spinner()).render('#plain'),
+    markup = (new Y.Spinner({srcNode:'#markup', wraparound:true})).render(),
+    translated = (new Y.Spinner({strings: Y.Intl.get('someLanguageModule')})).render('#translated');
+});
+```
+
