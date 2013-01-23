@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 15,
-    "duration": 1899,
+    "duration": 1881,
     "type": "report",
     "Initial setup and instance checks": {
         "name": "Initial setup and instance checks",
@@ -14,28 +14,28 @@
         "errors": 0,
         "ignored": 0,
         "total": 3,
-        "duration": 563,
+        "duration": 578,
         "type": "testcase",
         "should be a View class": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "should be a View class",
-            "duration": 31
+            "duration": 35
         },
         "should instantiate as a View": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "should instantiate as a View",
-            "duration": 8
+            "duration": 11
         },
         "should destroy and kill Overlay okay": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "should destroy and kill Overlay okay",
-            "duration": 506
+            "duration": 509
         }
     },
     "Context menu on NodeList": {
@@ -45,14 +45,14 @@
         "errors": 0,
         "ignored": 0,
         "total": 2,
-        "duration": 64,
+        "duration": 47,
         "type": "testcase",
         "contextmenu on first LI item": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "contextmenu on first LI item",
-            "duration": 23
+            "duration": 10
         },
         "hide contextmenu on contextTarget": {
             "result": "pass",
@@ -62,7 +62,7 @@
             "duration": 6
         }
     },
-    "timestamp": "Wed 16 Jan 2013 03:06:49 PM CST",
+    "timestamp": "Wed 23 Jan 2013 04:01:32 PM CST",
     "coverage": {
         "/build/gallery-contextmenu-view/gallery-contextmenu-view.js": {
             "lines": {
