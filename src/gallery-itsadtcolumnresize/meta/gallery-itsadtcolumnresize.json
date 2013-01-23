@@ -1,0 +1,17 @@
+{
+    "gallery-itsadtcolumnresize": {
+        "requires": [
+            "base-build",
+            "plugin",
+            "node-base",
+            "node-screen",
+            "node-event-delegate",
+            "event-mouseenter",
+            "event-custom",
+            "event-resize",
+            "event-touch",
+            "datatable-column-widths"
+        ],
+        "skinnable": true
+    }
+}

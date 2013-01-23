@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsadtcolumnresize",
+    "builds": {
+        "gallery-itsadtcolumnresize": {
+            "jsfiles": [
+                "js/gallery-itsadtcolumnresize.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-itsadtcolumnresize",
+    "displayName": "Gallery: gallery-itsadtcolumnresize",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsadtcolumnresize" ],
+
+    "tags": [ "gallery", "plugin"],
+
+    "examples": []
+}

@@ -1,0 +1,26 @@
+<div class="intro">
+    <p>
+	The Itsa ColumnResize module.
+	Also has fixes for the following DataTable bugs:
+
+	xy-scrollable tables have y-scroller in safari and chrome
+	setColumnWidth() works with y-scrollable DataTables
+	Columnwidths of DataTables that have a total width beyond the viewport will keep their original width-value (DataTable shrinks the table to the viewportwidth)
+
+	In case DataTable has defined width (either in percent or in pixels), than a x-scroller will be added even when not declared by the user.
+	This is because resizing can cause columns to expand the DataTable's width. x-scrollers will automaticly be hidden when not needed.
+
+	In case (x)y-scrollable DataTables width a width in percent: will always be transformed to pixels. This we MUST do, because of a bug that doesn't replace the y-scroller on a window-resize.
+    </p>
+</div>
+
+{{getting-started}}
+
+<h2>Description</h2>
+
+<p>*Module Description Goes Here*</p>
+
+```
+//Module example code
+```
+
