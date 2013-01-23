@@ -14,6 +14,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
         _string_u16 = 'u16',
         _string_u32 = 'u32',
         _string_u8 = 'u8',
+        _true = true,
 
         _ArrayBuffer = ArrayBuffer,
         _DataView = DataView,
@@ -157,8 +158,11 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
          * @constructor
          * @namespace Composite
          * @param {Object} [configuration] A configuration object with the
-         * following optional parameters: `channels`, `data`, `dimensions`,
-         * `littleEndian`
+         * following optional parameters:
+         * @param {[String]} [configuration.channels]
+         * @param {ArrayBuffer|[Number]} [configuration.data]
+         * @param {[Number]} [configuration.dimensions]
+         * @param {Boolean} [configuration.littleEndian]
          */
         _Class = function () {
             this._init.apply(this, arguments);
@@ -229,7 +233,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
 
                 return new _Class({
                     channels: me.channels,
-                    data: me._data.slice(),
+                    data: me._data.slice(0),
                     dimensions: me.dimensions,
                     littleEndian: me._littleEndian
                 });
@@ -240,55 +244,43 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
              * does not provide pixel locations.
              * @method eachPixelIndex
              * @chainable
-             * @param {Function} iteractionFunction The iteration function
-             * receives one argument:
-             * <dl>
-             *     <dt>
-             *         pixelIndex
-             *     </dt>
-             *     <dd>
-             *         The pixel's unique index within the image.
-             *     </dd>
-             * </dl>
+             * @param {Function} iterationFunction The iteration function
+             * receives two arguments:
+             * @param {Number} iterationFunction.pixelIndex The pixel's unique
+             * index within the image.
+             * @param {Composite.Image} iterationFunction.image This image.
              */
             eachPixelIndex: function (iterationFunction) {
-                var pixelCount = this.pixelCount,
+                var me = this,
+                    pixelCount = me.pixelCount,
                     pixelIndex = 0;
 
                 for (; pixelIndex < pixelCount; pixelIndex += 1) {
-                    iterationFunction(pixelIndex);
+                    iterationFunction(pixelIndex, me);
                 }
 
-                return this;
+                return me;
             },
             /**
              * Call an iteration function for each pixel location in the image.
              * @method eachPixelLocation
              * @chainable
              * @param {Function} iterationFunction The iteration function
-             * receives two arguments:
-             * <dl>
-             *     <dt>
-             *         pixelLocation
-             *     <dt>
-             *     <dd>
-             *         An array of dimension indicies.  The length of this array
-             *         will match the number of dimensions in the image.
-             *     </dd>
-             *     <dt>
-             *         pixelIndex
-             *     </dt>
-             *     <dd>
-             *         The pixel's unique index within the image.
-             *     </dd>
-             * </dl>
+             * receives three arguments:
+             * @param {[Number]} iterationFunction.pixelLocation An array of
+             * dimension indicies.  The length of this array will match the
+             * number of dimensions in the image.
+             * @param {Number} iterationFunction.pixelIndex The pixel's unique
+             * index within the image.
+             * @param {Composite.Image} iterationFunction.image This image.
              */
             eachPixelLocation: function (iterationFunction) {
-                var dimensions = this.dimensions,
+                var me = this,
+                    dimensions = me.dimensions,
 
                     dimensionCount = dimensions.length,
                     dimensionIndex = 0,
-                    pixelCount = this.pixelCount,
+                    pixelCount = me.pixelCount,
                     pixelIndex = 0,
                     pixelLocation = [];
 
@@ -297,7 +289,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                 }
 
                 for (; pixelIndex < pixelCount; pixelIndex += 1) {
-                    iterationFunction(pixelLocation.slice(), pixelIndex);
+                    iterationFunction(pixelLocation.slice(), pixelIndex, me);
 
                     for (dimensionIndex = 0; dimensionIndex < dimensionCount; dimensionIndex += 1) {
                         pixelLocation[dimensionIndex] += 1;
@@ -310,7 +302,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     }
                 }
 
-                return this;
+                return me;
             },
             /**
              * Returns a copy of the image data as a regular JavaScript array.
@@ -538,7 +530,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     * @type [String]
                     */
                     channels: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: channels
                     },
                     /**
@@ -552,7 +544,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     * @type [Number]
                     */
                     dimensions: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: dimensions
                     },
                     /**
@@ -562,7 +554,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     * @type Number
                     */
                     pixelCount: {
-                        enumberable: true,
+                        enumberable: _true,
                         value: pixelCount
                     },
                     /**
@@ -575,7 +567,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     * @type [Number]
                     */
                     _channelOffsets: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: _freeze(channelOffsets)
                     },
                     /**
@@ -585,7 +577,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     * @type ArrayBuffer
                     */
                     _data: {
-                        enumerable: true,
+                        enumerable: _true,
                         get: function () {
                             return data;
                         },
@@ -616,7 +608,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     * @type String
                     */
                     _dataType: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: dataType
                     },
                     /**
@@ -627,7 +619,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
                     * @type Number
                     */
                     _pixelSize: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: pixelSize
                     }
                 });
@@ -818,7 +810,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
             var type = dataType.charAt(0);
             return (type === 'f' ? 'Float' : (type === 's' ? 'Int' : 'Uint')) + dataType.substr(1);
         })
-    }, true);
+    }, _true);
 }(Y));
 
-}, 'gallery-2012.12.19-21-23', {"requires": ["array-extras"]});
+}, 'gallery-2013.01.23-21-59', {"requires": ["array-extras"]});

@@ -1,64 +1,68 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.55 on node@0.8.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.66 on node@0.8.18
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-composite-image
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-composite-image
+   #1: A constructor name should start with an uppercase letter.
+       me._data = new _ArrayBuffer(me.pixelCount * me._pixelSize); // line 222, pos 32
+   #2: A constructor name should start with an uppercase letter.
+       return new _Class({ // line 234, pos 28
+   #3: Line too long.
+       return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value); // line 441, pos 157
+   #4: Line too long.
+       return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian); // line 774, pos 170
+   #5: Line too long.
+       me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian); // line 796, pos 164
+   #6: 'Uint8ClampedArray' is not defined.
+       return Uint8ClampedArray; // line 718, pos 28
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-composite-image/gallery-composite-image.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting assets for gallery-composite-image
+shifter [queu] coverage file read, starting coverage for: gallery-composite-image/gallery-composite-image.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-composite-image/gallery-composite-image-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.238 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5001
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.7.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+Starting Grover on 1 files with PhantomJS@1.8.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-composite-image]: Passed: 8 Failed: 26 Total: 34 (ignored 0) (0.555 seconds) 66%
-    test:001-apiExists
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:002-_getDataViewConstructor
-       Unexpected error: Can't find variable: Float64Array
-    test:003-_getDataView
-       Unexpected error: Can't find variable: Float64Array
-    test:006-constructor-channels-f64
-       Unexpected error: Can't find variable: Float64Array
-    test:012-constructor-channels-u8
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:014-constructor-dimensions-1
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:015-constructor-dimensions-2
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:016-constructor-dimensions-3
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:017-constructor-dimensions-4
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:018-constructor-data
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:019-constructor-littleEndian
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:020-_getPixelIndex
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:021-_getValue_setValue
-       Unexpected error: Can't find variable: Float64Array
-    test:022-clear
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:023-clone
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:024-eachPixelIndex
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:025-eachPixelLocation
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:026-getValueSetValue
-       Unexpected error: Can't find variable: Float64Array
-    test:027-getDataArray
-       Unexpected error: Can't find variable: Float64Array
-    test:028-getPixelIndex
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:029-getPixelValues
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:030-setDataArray
-       Unexpected error: Can't find variable: Float64Array
-    test:031-setPixelValues
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:032-toJSON
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:033-toString
-       Unexpected error: Can't find variable: Uint8ClampedArray
-    test:034-validate
-       Unexpected error: Can't find variable: Uint8ClampedArray
+✔ [gallery-composite-image]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.463 seconds) 42%
 Writing files in JSON format to: /src/gallery-composite-image/logs/tests.json
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
+
+---------------------------------+-----------+-----------+-----------+-----------+
+File                             |   % Stmts |% Branches |   % Funcs |   % Lines |
+---------------------------------+-----------+-----------+-----------+-----------+
+   gallery-composite-image/      |     42.86 |     55.36 |        40 |     42.86 |
+      gallery-composite-image.js |     42.86 |     55.36 |        40 |     42.86 |
+---------------------------------+-----------+-----------+-----------+-----------+
+All files                        |     42.86 |     55.36 |        40 |     42.86 |
+---------------------------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 42.86% ( 48/112 )
+Branches     : 55.36% ( 31/56 )
+Functions    : 40% ( 16/40 )
+Lines        : 42.86% ( 48/112 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.463 seconds)
+  [Grover Execution Timer] 1.429 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

@@ -12,6 +12,7 @@
         _string_u16 = 'u16',
         _string_u32 = 'u32',
         _string_u8 = 'u8',
+        _true = true,
 
         _ArrayBuffer = ArrayBuffer,
         _DataView = DataView,
@@ -155,8 +156,11 @@
          * @constructor
          * @namespace Composite
          * @param {Object} [configuration] A configuration object with the
-         * following optional parameters: `channels`, `data`, `dimensions`,
-         * `littleEndian`
+         * following optional parameters:
+         * @param {[String]} [configuration.channels]
+         * @param {ArrayBuffer|[Number]} [configuration.data]
+         * @param {[Number]} [configuration.dimensions]
+         * @param {Boolean} [configuration.littleEndian]
          */
         _Class = function () {
             this._init.apply(this, arguments);
@@ -227,7 +231,7 @@
 
                 return new _Class({
                     channels: me.channels,
-                    data: me._data.slice(),
+                    data: me._data.slice(0),
                     dimensions: me.dimensions,
                     littleEndian: me._littleEndian
                 });
@@ -238,55 +242,43 @@
              * does not provide pixel locations.
              * @method eachPixelIndex
              * @chainable
-             * @param {Function} iteractionFunction The iteration function
-             * receives one argument:
-             * <dl>
-             *     <dt>
-             *         pixelIndex
-             *     </dt>
-             *     <dd>
-             *         The pixel's unique index within the image.
-             *     </dd>
-             * </dl>
+             * @param {Function} iterationFunction The iteration function
+             * receives two arguments:
+             * @param {Number} iterationFunction.pixelIndex The pixel's unique
+             * index within the image.
+             * @param {Composite.Image} iterationFunction.image This image.
              */
             eachPixelIndex: function (iterationFunction) {
-                var pixelCount = this.pixelCount,
+                var me = this,
+                    pixelCount = me.pixelCount,
                     pixelIndex = 0;
 
                 for (; pixelIndex < pixelCount; pixelIndex += 1) {
-                    iterationFunction(pixelIndex);
+                    iterationFunction(pixelIndex, me);
                 }
 
-                return this;
+                return me;
             },
             /**
              * Call an iteration function for each pixel location in the image.
              * @method eachPixelLocation
              * @chainable
              * @param {Function} iterationFunction The iteration function
-             * receives two arguments:
-             * <dl>
-             *     <dt>
-             *         pixelLocation
-             *     <dt>
-             *     <dd>
-             *         An array of dimension indicies.  The length of this array
-             *         will match the number of dimensions in the image.
-             *     </dd>
-             *     <dt>
-             *         pixelIndex
-             *     </dt>
-             *     <dd>
-             *         The pixel's unique index within the image.
-             *     </dd>
-             * </dl>
+             * receives three arguments:
+             * @param {[Number]} iterationFunction.pixelLocation An array of
+             * dimension indicies.  The length of this array will match the
+             * number of dimensions in the image.
+             * @param {Number} iterationFunction.pixelIndex The pixel's unique
+             * index within the image.
+             * @param {Composite.Image} iterationFunction.image This image.
              */
             eachPixelLocation: function (iterationFunction) {
-                var dimensions = this.dimensions,
+                var me = this,
+                    dimensions = me.dimensions,
 
                     dimensionCount = dimensions.length,
                     dimensionIndex = 0,
-                    pixelCount = this.pixelCount,
+                    pixelCount = me.pixelCount,
                     pixelIndex = 0,
                     pixelLocation = [];
 
@@ -295,7 +287,7 @@
                 }
 
                 for (; pixelIndex < pixelCount; pixelIndex += 1) {
-                    iterationFunction(pixelLocation.slice(), pixelIndex);
+                    iterationFunction(pixelLocation.slice(), pixelIndex, me);
 
                     for (dimensionIndex = 0; dimensionIndex < dimensionCount; dimensionIndex += 1) {
                         pixelLocation[dimensionIndex] += 1;
@@ -308,7 +300,7 @@
                     }
                 }
 
-                return this;
+                return me;
             },
             /**
              * Returns a copy of the image data as a regular JavaScript array.
@@ -536,7 +528,7 @@
                     * @type [String]
                     */
                     channels: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: channels
                     },
                     /**
@@ -550,7 +542,7 @@
                     * @type [Number]
                     */
                     dimensions: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: dimensions
                     },
                     /**
@@ -560,7 +552,7 @@
                     * @type Number
                     */
                     pixelCount: {
-                        enumberable: true,
+                        enumberable: _true,
                         value: pixelCount
                     },
                     /**
@@ -573,7 +565,7 @@
                     * @type [Number]
                     */
                     _channelOffsets: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: _freeze(channelOffsets)
                     },
                     /**
@@ -583,7 +575,7 @@
                     * @type ArrayBuffer
                     */
                     _data: {
-                        enumerable: true,
+                        enumerable: _true,
                         get: function () {
                             return data;
                         },
@@ -614,7 +606,7 @@
                     * @type String
                     */
                     _dataType: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: dataType
                     },
                     /**
@@ -625,7 +617,7 @@
                     * @type Number
                     */
                     _pixelSize: {
-                        enumerable: true,
+                        enumerable: _true,
                         value: pixelSize
                     }
                 });
@@ -816,5 +808,5 @@
             var type = dataType.charAt(0);
             return (type === 'f' ? 'Float' : (type === 's' ? 'Int' : 'Uint')) + dataType.substr(1);
         })
-    }, true);
+    }, _true);
 }(Y));

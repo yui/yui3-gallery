@@ -1,7 +1,19 @@
 YUI.add('module-tests', function (Y) {
     'use strict';
 
-    var suite = new Y.Test.Suite('gallery-composite-image');
+    var global = Y.config.global,
+        suite = new Y.Test.Suite('gallery-composite-image'),
+        
+        arrayBufferExists = 'ArrayBuffer' in global,
+        dataViewExists = 'DataView' in global,
+        f32Exists = 'Float32Array' in global,
+        f64Exists = 'Float64Array' in global,
+        s16Exists = 'Int16Array' in global,
+        s32Exists = 'Int32Array' in global,
+        s8Exists = 'Int8Array' in global,
+        u16Exists = 'Uint16Array' in global,
+        u32Exists = 'Uint32Array' in global,
+        u8Exists = 'Uint8ClampedArray' in global;
 
     suite.add(new Y.Test.Case({
         name: 'Automated Tests',
@@ -3598,7 +3610,8 @@ YUI.add('module-tests', function (Y) {
                 }),
                 pixelIndices = [];
 
-            image.eachPixelIndex(function (pixelIndex) {
+            image.eachPixelIndex(function (pixelIndex, thisImage) {
+                Y.Assert.areSame(image, thisImage, 'thisImage should be the same as image.');
                 pixelIndices.push(pixelIndex);
             });
 
@@ -3623,7 +3636,8 @@ YUI.add('module-tests', function (Y) {
             });
             pixelIndices = [];
 
-            image.eachPixelIndex(function (pixelIndex) {
+            image.eachPixelIndex(function (pixelIndex, thisImage) {
+                Y.Assert.areSame(image, thisImage, 'thisImage should be the same as image.');
                 pixelIndices.push(pixelIndex);
             });
 
@@ -3664,7 +3678,8 @@ YUI.add('module-tests', function (Y) {
             });
             pixelIndices = [];
 
-            image.eachPixelIndex(function (pixelIndex) {
+            image.eachPixelIndex(function (pixelIndex, thisImage) {
+                Y.Assert.areSame(image, thisImage, 'thisImage should be the same as image.');
                 pixelIndices.push(pixelIndex);
             });
 
@@ -3707,7 +3722,8 @@ YUI.add('module-tests', function (Y) {
                 pixelIndices = [],
                 pixelLocations = [];
 
-            image.eachPixelLocation(function (pixelLocation, pixelIndex) {
+            image.eachPixelLocation(function (pixelLocation, pixelIndex, thisImage) {
+                Y.Assert.areSame(image, thisImage, 'thisImage should be the same as image.');
                 pixelIndices.push(pixelIndex);
                 pixelLocations = pixelLocations.concat(pixelLocation);
             });
@@ -3746,7 +3762,8 @@ YUI.add('module-tests', function (Y) {
             pixelIndices = [];
             pixelLocations = [];
 
-            image.eachPixelLocation(function (pixelLocation, pixelIndex) {
+            image.eachPixelLocation(function (pixelLocation, pixelIndex, thisImage) {
+                Y.Assert.areSame(image, thisImage, 'thisImage should be the same as image.');
                 pixelIndices.push(pixelIndex);
                 pixelLocations = pixelLocations.concat(pixelLocation);
             });
@@ -3841,7 +3858,8 @@ YUI.add('module-tests', function (Y) {
             pixelIndices = [];
             pixelLocations = [];
 
-            image.eachPixelLocation(function (pixelLocation, pixelIndex) {
+            image.eachPixelLocation(function (pixelLocation, pixelIndex, thisImage) {
+                Y.Assert.areSame(image, thisImage, 'thisImage should be the same as image.');
                 pixelIndices.push(pixelIndex);
                 pixelLocations = pixelLocations.concat(pixelLocation);
             });
@@ -6069,6 +6087,44 @@ YUI.add('module-tests', function (Y) {
             Y.Assert.isTrue(image.validate(new ArrayBuffer(image.pixelCount * image._pixelSize)), 'image.validate(new ArrayBuffer(image.pixelCount * image._pixelSize)) should be true.');
             Y.Assert.isFalse(image.validate(new ArrayBuffer(21)), 'image.validate(new ArrayBuffer(21)) should be false.');
             Y.Assert.isFalse(image.validate([0, 1, 2, 3, 4, 5]), 'image.validate([0, 1, 2, 3, 4, 5]) should be false.');
+        },
+        _should: {
+            ignore: {
+                'test:001-apiExists': !arrayBufferExists || !u8Exists,
+                'test:002-_getDataViewConstructor': !(dataViewExists && f32Exists && f64Exists && s16Exists && s32Exists && s8Exists && u16Exists && u32Exists && u8Exists),
+                'test:003-_getDataView': !(arrayBufferExists && dataViewExists && f32Exists && f64Exists && s16Exists && s32Exists && s8Exists && u16Exists && u32Exists && u8Exists),
+                'test:004-_getTypeName': false,
+                'test:005-constructor-channels-f32': !f32Exists,
+                'test:006-constructor-channels-f64': !f64Exists,
+                'test:007-constructor-channels-s16': !s16Exists,
+                'test:008-constructor-channels-s32': !s32Exists,
+                'test:009-constructor-channels-s8': !s8Exists,
+                'test:010-constructor-channels-u16': !u16Exists,
+                'test:011-constructor-channels-u32': !u32Exists,
+                'test:012-constructor-channels-u8': !u8Exists,
+                'test:013-constructor-channels-mixed': !dataViewExists,
+                'test:014-constructor-dimensions-1': !u8Exists,
+                'test:015-constructor-dimensions-2': !u8Exists,
+                'test:016-constructor-dimensions-3': !u8Exists,
+                'test:017-constructor-dimensions-4': !u8Exists,
+                'test:018-constructor-data': !arrayBufferExists || !u8Exists,
+                'test:019-constructor-littleEndian': !u8Exists,
+                'test:020-_getPixelIndex': !u8Exists,
+                'test:021-_getValue_setValue': !(f32Exists && f64Exists && s16Exists && s32Exists && s8Exists && u16Exists && u32Exists && u8Exists),
+                'test:022-clear': !arrayBufferExists || !u8Exists,
+                'test:023-clone': !arrayBufferExists || !u8Exists,
+                'test:024-eachPixelIndex': !u8Exists,
+                'test:025-eachPixelLocation': !u8Exists,
+                'test:026-getValueSetValue': !(f32Exists && f64Exists && s16Exists && s32Exists && s8Exists && u16Exists && u32Exists && u8Exists),
+                'test:027-getDataArray': !(f32Exists && f64Exists && s16Exists && s32Exists && s8Exists && u16Exists && u32Exists && u8Exists),
+                'test:028-getPixelIndex': !u8Exists,
+                'test:029-getPixelValues': !u8Exists,
+                'test:030-setDataArray': !(f32Exists && f64Exists && s16Exists && s32Exists && s8Exists && u16Exists && u32Exists && u8Exists),
+                'test:031-setPixelValues': !u8Exists,
+                'test:032-toJSON': !arrayBufferExists || !u8Exists,
+                'test:033-toString': !u8Exists,
+                'test:034-validate': !arrayBufferExists || !u8Exists
+            }
         }
     }));
 
