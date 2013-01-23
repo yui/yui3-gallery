@@ -1,0 +1,582 @@
+<link href="{{componentAssets}}/composite-image-canvas.css" rel="stylesheet" type="text/css">
+
+<div class="intro">
+    <p>
+        This demonstrates how to use <code>Y.Composite.Image</code> to implement some simple image filters.
+    </p>
+</div>
+
+<div class="example">
+    {{>simple-image-filters-source}}
+</div>
+
+<h2>
+    Setting up the HTML
+</h2>
+<p>
+    First we add the HTML form.
+</p>
+
+```
+{{>simple-image-filters-source-html}}
+```
+
+<h2>
+    Dynamic UI elements
+</h2>
+<p>
+    The blur filters have extra parameters.  We can dynamically hide or show the form elements as the user chooses which filter to use.  In this case, the CSS class `display-none` has been set up to hide
+    the elements.
+</p>
+
+```
+// Update the UI to present specific filter options.
+selectFilterNode.on('change', function () {
+    var selectedFilter = selectFilterNode.get('value');
+
+    if (selectedFilter === 'Horizontal Blur' || selectedFilter === 'Box Blur') {
+        blurWidthLabelNode.removeClass('display-none');
+        blurWidthNode.removeClass('display-none');
+    } else {
+        blurWidthLabelNode.addClass('display-none');
+        blurWidthNode.addClass('display-none');
+    }
+
+    if (selectedFilter === 'Vertical Blur' || selectedFilter === 'Box Blur') {
+        blurHeightLabelNode.removeClass('display-none');
+        blurHeightNode.removeClass('display-none');
+    } else {
+        blurHeightLabelNode.addClass('display-none');
+        blurHeightNode.addClass('display-none');
+    }
+});
+```
+
+<h2>
+    Clear images button
+</h2>
+<p>
+    The images take up a lot of room when they are rendered, so we'll provide a simple way to remove them.
+</p>
+
+```
+// Handle clear images button click.
+Y.one('#clearImagesButton').on('click', function () {
+    displayNode.empty();
+});
+```
+
+<h2>
+    Render image button
+</h2>
+<p>
+    When the render image button is clicked, the form inputs are read and an image is rendered.
+</p>
+
+```
+// Handle render image button click.
+Y.one('#renderImageButton').on('click', function () {
+    // Gather values from the form.
+    var blurHeight = +blurHeightNode.get('value'),
+        blurWidth = +blurWidthNode.get('value'),
+        selectedFilter = selectFilterNode.get('value'),
+        selectedImage = selectImageNode.get('value'),
+
+        // Create the node where the image will be rendered.
+        resultNode = Y.Node.create(
+            '<div class="yui3-u">' +
+                '<h3>' +
+                    selectedFilter +
+                '</h3>' +
+                '<h6>' +
+                    selectedImage +
+                '</h6>' +
+                '<p class="loading">' +
+                    'Loading&hellip;' +
+                '</p>' +
+            '</div>'
+        ).appendTo(displayNode);
+
+    // Create an instance of Y.Canvas.Image.
+    createImageFromUrl('{{componentAssets}}/' + selectedImage, function (image) {
+        // Apply the appropriate filter.
+        switch (selectedFilter) {
+            case 'Horizontal Blur':
+                horizontalBlur(image, blurWidth);
+                break;
+            case 'Vertical Blur':
+                verticalBlur(image, blurHeight);
+                break;
+            case 'Box Blur':
+                boxBlur(image, blurWidth, blurHeight);
+                break;
+            case 'Sobel Edge Detect':
+                sobelEdgeDetect(image);
+                break;
+        }
+
+        // Remove the loading text and render the image to a canvas.
+        resultNode.one('.loading').replace(image.toCanvas());
+    });
+});
+```
+
+<h2>
+    Reading an image from file
+</h2>
+<p>
+    There isn't currently a direct method to load file contents into an image object, but an img node can point to a file, a canvas can draw the contents of an img node, and a Y.Composite.Image object
+    can be instantiated from a canvas.  These two functions were created to help out.
+</p>
+
+```
+createImageFromImgNode = function (imgNode) {
+    // Create a canvas to draw the image on.
+    var canvasNode = Y.Node.create(
+            '<canvas height="' + imgNode.get('height') + '" width="' + imgNode.get('width') + '">' +
+            '</canvas>'
+        );
+
+    // Draw the image.
+    canvasNode.getDOMNode().getContext('2d').drawImage(imgNode.getDOMNode(), 0, 0);
+
+    // Create and return an image object from the canvas.
+    return Y.Composite.Image.fromCanvas(canvasNode);
+};
+
+createImageFromUrl = function (url, callbackFunction) {
+    // Create an img node to fetch the file.
+    var imgNode = Y.Node.create('<img alt="' + url + '" src="' + url + '" />');
+
+    // Wait for the file to load.
+    imgNode.on('load', function () {
+        // Create the image object from the img node and pass it to the callback function.
+        callbackFunction(createImageFromImgNode(imgNode));
+    });
+};
+```
+
+<h2>
+    Horizontal blur
+</h2>
+<p>
+    The procedure for applying a horizontal blur filter is to loop through every pixel in the image.  At each pixel, a new value is calculated for each color channel.  This new value is the average of
+    all of the values from the pixels to the left and right of the one currently being modified.  The number of pixels being averaged is called the blur width.  For example, a blur width of 11 would
+    result in the averaging of a pixel's value with the 5 pixels to its left and the 5 pixels to its right.  Larger blur widths cause a larger loss of detail in the image.
+</p>
+<p>
+    All of the looping required to calculate the averages for each pixel make this a relatively expensive operation.  Luckily there is a small shortcut that can be taken.  We're calculating the averages
+    in the usual way; take the sum of all the pixel values divided by the number of pixels.  For two pixels that are next to each other horizontally, most of the pixel values to be averaged will be the
+    same.  Only one pixel will be removed from one side while one pixel will be added to the other side.  To take advantage of this shortcut, the sum will be remembered after an average is calculated.
+    The next pixel must only perform one addition and one subtraction on that sum instead of looping through an entire blur width worth of pixels.
+</p>
+
+```
+horizontalBlur = function (image, blurWidth) {
+    var blue,
+        blurLength,
+        blurPixelCount,
+        blurX,
+        clone = image.clone(),
+        dimensions = image.dimensions,
+        green,
+        halfBlurWidth = Math.floor(blurWidth / 2),
+        height = dimensions[1],
+        pixelIndex = 0,
+        red,
+        width = dimensions[0],
+        x,
+        y;
+
+    // Loop through the pixels of the image.  Start at the upper left corner and travel to the right.
+    // When the right edge of the image is reached, move down a row and start over from the left.
+    for (y = 0; y < height; y += 1) {
+        for (x = 0; x < width; x += 1) {
+            if (x <= halfBlurWidth) {
+                // If we're near the left edge of the image, get the sum of the pixel values
+                // by looping through and adding.
+                red = 0;
+                green = 0;
+                blue = 0;
+                blurPixelCount = 0;
+
+                // So close to the left edge, there aren't enough pixels to the left to use the full
+                // blur width.  Start at column 0 and continue until we either reach the right side of
+                // blur width or the right side of the image.
+                for (
+                    blurX = 0, blurLength = Math.min(x + halfBlurWidth, width - 1);
+                    blurX <= blurLength;
+                    blurPixelCount += 1, blurX += 1
+                ) {
+                    // Add up the color channel values for each pixel we visit.
+                    // The values are read from a clone of the image.  We can't read the values from
+                    // this image since we are manipulating those values as we loop through them.
+                    red += clone.getValue([
+                        blurX,
+                        y
+                    ], 0);
+                    green += clone.getValue([
+                        blurX,
+                        y
+                    ], 1);
+                    blue += clone.getValue([
+                        blurX,
+                        y
+                    ], 2);
+                }
+            } else {
+                // Since we are not near the left edge, we have access to the sums calculated for the
+                // blur width of the previous pixel.  We can subtract the values from the leftmost pixel.
+                blurX = x - halfBlurWidth - 1;
+
+                red -= clone.getValue([
+                    blurX,
+                    y
+                ], 0);
+                green -= clone.getValue([
+                    blurX,
+                    y
+                ], 1);
+                blue -= clone.getValue([
+                    blurX,
+                    y
+                ], 2);
+
+                if (x + halfBlurWidth < width) {
+                    // If we are not near the right edge of the image, we can add the values from the
+                    // next pixel to the right.
+                    blurX = x + halfBlurWidth;
+
+                    red += clone.getValue([
+                        blurX,
+                        y
+                    ], 0);
+                    green += clone.getValue([
+                        blurX,
+                        y
+                    ], 1);
+                    blue += clone.getValue([
+                        blurX,
+                        y
+                    ], 2);
+                } else {
+                    // As we approach the right edge, there aren't enough pixels to the right to use the
+                    // full blur width.
+                    blurPixelCount -= 1;
+                }
+            }
+
+            // Take the sum divided by the number of pixels to produce the average.
+            // Set the new pixel values.
+            image
+                .setValue(pixelIndex, 0, Math.round(red / blurPixelCount))
+                .setValue(pixelIndex, 1, Math.round(green / blurPixelCount))
+                .setValue(pixelIndex, 2, Math.round(blue / blurPixelCount));
+
+            // We are looping through the x,y pixel locations but it is much more efficient to access
+            // values by pixel index instead of by pixel location.  In this case we are looping through
+            // the pixels in the same order they are stored internally, so keeping a simple pixel index
+            // counter improves our efficiency.
+            pixelIndex += 1;
+        }
+    }
+
+    return image;
+};
+```
+
+<h2>
+    Vertical Blur
+</h2>
+<p>
+    A vertical blur filter is very much the same as a horizontal blur filter except the averages are calculated from pixels up and down instead of left and right.  The same procedure and the same
+    shortcut can be implemented.  Notice how the vertical blur loops through the pixels in a different order than the horizontal blur.
+</p>
+
+```
+verticalBlur = function (image, blurHeight) {
+    var blue,
+        blurLength,
+        blurPixelCount,
+        blurY,
+        clone = image.clone(),
+        dimensions = image.dimensions,
+        green,
+        halfBlurHeight = Math.floor(blurHeight / 2),
+        height = dimensions[1],
+        pixelCount = image.pixelCount,
+        pixelIndex = 0,
+        red,
+        width = dimensions[0],
+        x,
+        y;
+
+    // Loop through the pixels of the image.  Start at the upper left corner and travel downward.
+    // When the bottom edge of the image is reached, move to the right one column and start over from
+    // the top.
+    for (x = 0; x < width; x += 1) {
+        for (y = 0; y < height; y += 1) {
+            if (y <= halfBlurHeight) {
+                // If we're near the top edge of the image, get the sum of the pixel values
+                // by looping through and adding.
+                red = 0;
+                green = 0;
+                blue = 0;
+                blurPixelCount = 0;
+
+                // So close to the top edge, there aren't enough pixels above to use the full blur
+                // height.  Start at row 0 and continue until we either reach the bottom of the blur
+                // height or the bottom edge of the image.
+                for (
+                    blurY = 0, blurLength = Math.min(y + halfBlurHeight, height - 1);
+                    blurY <= blurLength;
+                    blurPixelCount += 1, blurY += 1
+                ) {
+                    // Add up the color channel values for each pixel we visit.
+                    // The values are read from a clone of the image.  We can't read the values from
+                    // this image since we are manipulating those values as we loop through them.
+                    red += clone.getValue([
+                        x,
+                        blurY
+                    ], 0);
+                    green += clone.getValue([
+                        x,
+                        blurY
+                    ], 1);
+                    blue += clone.getValue([
+                        x,
+                        blurY
+                    ], 2);
+                }
+            } else {
+                // Since we are not near the top edge, we have access to the sums calculated for the
+                // blur height of the previous pixel.  We can subtract the values from the topmost
+                // pixel.
+                blurY = y - halfBlurHeight - 1;
+
+                red -= clone.getValue([
+                    x,
+                    blurY
+                ], 0);
+                green -= clone.getValue([
+                    x,
+                    blurY
+                ], 1);
+                blue -= clone.getValue([
+                    x,
+                    blurY
+                ], 2);
+
+                if (y + halfBlurHeight < height) {
+                    // If we are not near the bottom edge of the image, we can add the values from the
+                    // next pixel below.
+                    blurY = y + halfBlurHeight;
+
+                    red += clone.getValue([
+                        x,
+                        blurY
+                    ], 0);
+                    green += clone.getValue([
+                        x,
+                        blurY
+                    ], 1);
+                    blue += clone.getValue([
+                        x,
+                        blurY
+                    ], 2);
+                } else {
+                    // As we approach the bottom edge, there aren't enough pixels below to use the full
+                    // blur width.
+                    blurPixelCount -= 1;
+                }
+            }
+
+            // Take the sum divided by the number of pixels to produce the average.
+            // Set the new pixel values.
+            image
+                .setValue(pixelIndex, 0, Math.round(red / blurPixelCount))
+                .setValue(pixelIndex, 1, Math.round(green / blurPixelCount))
+                .setValue(pixelIndex, 2, Math.round(blue / blurPixelCount));
+
+            // We are looping through the x,y pixel locations but it is much more efficient to access
+            // values by pixel index instead of by pixel location.  In this case we are not looping
+            // through the pixels in the same order they are stored internally; even so, it's not too
+            // difficult to keep track of the pixel index to improve our efficiency.
+            pixelIndex += width;
+
+            if (pixelIndex >= pixelCount) {
+                pixelIndex -= pixelCount - 1;
+            }
+        }
+    }
+
+    return image;
+};
+```
+
+<h2>
+    Box blur
+</h2>
+<p>
+    A box blur is again similar to a horizontal blur or a vertical blur except this is a two-dimensional blur.  The averages are calculated from pixels within a rectangle centered on the current pixel.
+    Luckily there is a huge shortcut for applying a box blur so it isn't necessary to loop through all the pixels in that rectangle for each pixel in the image.  A box blur is mathematically identical to
+    applying a horizontal blur and a vertical blur.  Therefore the implementation is pretty straightforward.
+</p>
+
+```
+boxBlur = function (image, blurWidth, blurHeight) {
+    return horizontalBlur(verticalBlur(image, blurHeight), blurWidth);
+};
+```
+
+<h2>
+    Sobel edge detect
+</h2>
+<p>
+    The procedure for applying a Sobel edge detect filter is to loop through every pixel in the image.  At each pixel, the values of all the neighboring pixels are compared.  If the neighboring pixel
+    values are all very similar, than this pixel is given a low value.  If the neighboring pixel values are all very different, than this pixel is given a high value.  The result is that sharp edges
+    of vastly differing colors in the original image will become highlighted while areas of solid color or gradually changing colors will disappear.  A more complete explanation of the process can be
+    found here <a href="http://en.wikipedia.org/wiki/Sobel_operator" target="_blank">http://en.wikipedia.org/wiki/Sobel_operator</a>
+</p>
+
+```
+sobelEdgeDetect = function (image) {
+    var blue,
+        blueX,
+        blueY,
+        clone = image.clone(),
+        dimensions = image.dimensions,
+        green,
+        greenX,
+        greenY,
+        height = dimensions[1],
+        heightMinusOne = height - 1,
+        pixelLocation,
+        pixelIndex = 0,
+        red,
+        redX,
+        redY,
+        width = dimensions[0],
+        widthMinusOne = width - 1,
+        x,
+        y;
+
+    for (y = 0; y < height; y += 1) {
+        for (x = 0; x < width; x += 1) {
+            if (x === 0 || x === widthMinusOne || y === 0 || y === heightMinusOne) {
+                red = 0;
+                green = 0;
+                blue = 0;
+            } else {
+                redX = 0;
+                redY = 0;
+                greenX = 0;
+                greenY = 0;
+                blueX = 0;
+                blueY = 0;
+
+                pixelLocation = [
+                    x - 1,
+                    y - 1
+                ];
+
+                red = clone.getValue(pixelLocation, 0);
+                green = clone.getValue(pixelLocation, 1);
+                blue = clone.getValue(pixelLocation, 2);
+
+                redX -= red;
+                redY += red;
+                greenX -= green;
+                greenY += green;
+                blueX -= blue;
+                blueY += blue;
+
+                pixelLocation[0] += 1;
+
+                redY += 2 * clone.getValue(pixelLocation, 0);
+                greenY += 2 * clone.getValue(pixelLocation, 1);
+                blueY += 2 * clone.getValue(pixelLocation, 2);
+
+                pixelLocation[0] += 1;
+
+                red = clone.getValue(pixelLocation, 0);
+                green = clone.getValue(pixelLocation, 1);
+                blue = clone.getValue(pixelLocation, 2);
+
+                redX += red;
+                redY += red;
+                greenX += green;
+                greenY += green;
+                blueX += blue;
+                blueY += blue;
+
+                pixelLocation[1] += 1;
+
+                redX += 2 * clone.getValue(pixelLocation, 0);
+                greenX += 2 * clone.getValue(pixelLocation, 1);
+                blueX += 2 * clone.getValue(pixelLocation, 2);
+
+                pixelLocation[1] += 1;
+
+                red = clone.getValue(pixelLocation, 0);
+                green = clone.getValue(pixelLocation, 1);
+                blue = clone.getValue(pixelLocation, 2);
+
+                redX += red;
+                redY -= red;
+                greenX += green;
+                greenY -= green;
+                blueX += blue;
+                blueY -= blue;
+
+                pixelLocation[0] -= 1;
+
+                redY -= 2 * clone.getValue(pixelLocation, 0);
+                greenY -= 2 * clone.getValue(pixelLocation, 1);
+                blueY -= 2 * clone.getValue(pixelLocation, 2);
+
+                pixelLocation[0] -= 1;
+
+                red = clone.getValue(pixelLocation, 0);
+                green = clone.getValue(pixelLocation, 1);
+                blue = clone.getValue(pixelLocation, 2);
+
+                redX -= red;
+                redY -= red;
+                greenX -= green;
+                greenY -= green;
+                blueX -= blue;
+                blueY -= blue;
+
+                pixelLocation[1] -= 1;
+
+                redX -= 2 * clone.getValue(pixelLocation, 0);
+                greenX -= 2 * clone.getValue(pixelLocation, 1);
+                blueX -= 2 * clone.getValue(pixelLocation, 2);
+
+                red = Math.sqrt(redX * redX + redY * redY);
+                green = Math.sqrt(greenX * greenX + greenY * greenY);
+                blue = Math.sqrt(blueX * blueX + blueY * blueY);
+            }
+
+            image
+                .setValue(pixelIndex, 0, Math.max(Math.min(Math.round(red), 255), 0))
+                .setValue(pixelIndex, 1, Math.max(Math.min(Math.round(green), 255), 0))
+                .setValue(pixelIndex, 2, Math.max(Math.min(Math.round(blue), 255), 0));
+
+            pixelIndex += 1;
+        }
+    };
+```
+
+<h2>
+    Complete Example Source
+</h2>
+
+```
+{{>simple-image-filters-source}}
+```
+
+<p>
+    The images used in this example are in the public domain.  They were taken from <a href="http://www.public-domain-image.com/" target="_blank">http://www.public-domain-image.com/</a>
+</p>

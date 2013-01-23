@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <script src="/build/yui/yui.js">
+        </script>
+        <script src="js/tests.js">
+        </script>
+        <title>
+            gallery-composite-image-canvas
+        </title>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="logger">
+        </div>
+        <script>
+            YUI({
+                coverage: [
+                    'gallery-composite-image-canvas'
+                ],
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+            }).use('module-tests', 'test', 'test-console', function (Y) {
+                (new Y.Test.Console()).render('#logger');
+                Y.Test.Runner.setName('gallery-composite-image-canvas');
+                Y.Test.Runner.run();
+            });
+        </script>
+    </body>
+</html>

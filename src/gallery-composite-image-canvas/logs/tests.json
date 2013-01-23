@@ -1,0 +1,69 @@
+{
+    "name": "gallery-composite-image-canvas",
+    "passed": 0,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 24,
+    "total": 24,
+    "duration": 231,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 8,
+        "total": 8,
+        "duration": 76,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:001-apiExists"
+        },
+        "test:002-supportsCanvasFalse": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:002-supportsCanvasFalse"
+        },
+        "test:003-supportsCanvasTrue": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:003-supportsCanvasTrue"
+        },
+        "test:004-_getContext": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:004-_getContext"
+        },
+        "test:005-_getImageData": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:005-_getImageData"
+        },
+        "test:006-fromCanvas-static": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:006-fromCanvas-static"
+        },
+        "test:007-fromCanvas": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:007-fromCanvas"
+        },
+        "test:008-toCanvas": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test:008-toCanvas"
+        }
+    },
+    "timestamp": "Wed 23 Jan 2013 04:01:39 PM CST"
+}

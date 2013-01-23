@@ -1,0 +1,48 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "This module enhances Y.Composite.Image with functionality for working with canvas elements.",
+    "displayName": "Gallery: Composite Image Canvas",
+    "examples": [{
+        "description": "Simple image filters.",
+        "displayName": "Simple image filters.",
+        "hideTableOfContents": true,
+        "name": "simple-image-filters",
+        "modules": [
+            "gallery-composite-image-canvas"
+        ]
+    }],
+    "name": "gallery-composite-image-canvas",
+    "tags": [
+        "array",
+        "arrays",
+        "binary",
+        "bitmap",
+        "canvas",
+        "channel",
+        "channels",
+        "color",
+        "composite",
+        "data",
+        "dimension",
+        "dimensional",
+        "dimensions",
+        "gallery",
+        "graphics",
+        "image",
+        "multi-channel",
+        "multi-dimensional",
+        "picture",
+        "pixel",
+        "pixels",
+        "raster",
+        "solmsted",
+        "type",
+        "typed",
+        "types"
+    ],
+    "use": [
+        "gallery-composite-image-canvas"
+    ]
+}

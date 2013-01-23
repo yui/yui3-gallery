@@ -1,0 +1,84 @@
+<div class="intro">
+    <p>
+        This module enhances Y.Composite.Image with functionality for working with canvas elements.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Image Concepts
+</h2>
+
+<h3>
+    Dimensions
+</h3>
+
+<p>
+    The documentation for gallery-composite-image explains dimensions in greater detail.  To pass pixel data to and from a canvas, an image is required to have exactly two dimensions.  There is nothing
+    preventing the creation or use of multi-dimensional images, but the canvas APIs will not work with such images.
+</p>
+
+<h3>
+    Channels
+</h3>
+
+<p>
+    The documentation for gallery-composite-image explains channels in greater detail.  To pass pixel data to and from a canvas, an image is required to have exactly four channels.  There is nothing
+    preventing the creation or use of images with a greater or lesser number of channels, but the canvas APIs will not work with such images.  The four channels in order represent red, green, blue, and
+    alpha.
+</p>
+
+<p>
+    It is recommended to use the default unsigned 8-bit integer channel type because this is the type used by Canvas.  The other channel types are supported and channel types may be mixed but a color
+    space conversion is required when passing the data to and from a Canvas.
+<p>
+
+<p>
+    This API does not prevent setting channel values outside of the valid range of 0 to 255.  Working with values beyond the valid range is useful for a number of reasons including HDR imaging.  For
+    example, a signed 16-bit integer channel could be set to 32452 or -243 and that would not be an issue.  When the color space conversion occurs to pass the data back to a Canvas, the values outside of
+    the valid range will get clamped back to the valid range yielding 255 instead of 32452 and 0 instead of -243.
+</p>
+
+<p>
+    Floating point channels work similarly except the integers from 0 to 255 will get converted to floating point values from 0 to 1.  When converted back values outside the range 0 to 1 will get clamped
+    back to 0 and 255.
+</p>
+
+<p>
+    Signed 8-bit integer channels are a strange exception and they are only included here for completeness.  The integers from 0 to 255 will get converted to integers from 0 to 127 resulting in a
+    significant loss of precision.  When converted back, values less than 0 will get clamped to 0.
+<p>
+
+<h3>
+    Image Data
+</h3>
+
+<p>
+    The documentation for gallery-composite-image explains image data in greater detail.  In addition to Y.Composite.Image's requirement of Typed Arrays, for canvas support it is also necessary for the
+    ImageData interface to use a Uint8ClampedArray for its data property.  There is no support for older browsers that use CanvasPixelArray instead of Uint8ClampedArray.  (An obviously the rest of the
+    canvas interface is necessary.)
+</p>
+
+<p>
+    It is also important to know that the same origin policy applies to canvas.  A canvas can be filled with the image data from an img tag.  If the src attribute of that img tag is from a different
+    origin, it will not be possible to copy that data from the canvas into an image object.
+</p>
+
+<h2>
+    Lazy Loading
+</h2>
+
+<p>
+    This module enhances gallery-composite-image with new features.  It is possible to load gallery-composite-image, use it for a while, then load gallery-composite-image-canvas some time later.  One
+    caveat is, any image instances created before gallery-composite-image-canvas was loaded will not be able to use the canvas APIs.  A simple workaround for this situation is to call the clone method on
+    the image; the newly created image will have exactly the same data and will be able to use the canvas APIs.
+</p>
+
+<h2>
+    TODO: Write more docs and examples.
+</h2>
+
+<p>
+    Check out the API documentation for more information on how to use Y.Composite.Image.
+</p>

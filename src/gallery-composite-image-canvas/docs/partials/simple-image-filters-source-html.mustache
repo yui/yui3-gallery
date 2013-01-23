@@ -1,0 +1,117 @@
+<style>
+    input[type="number"] {
+        width: 2em;
+    }
+
+    #display canvas,
+    #display img {
+        margin: .5em;
+    }
+
+    #display h3,
+    #display h6,
+    .loading {
+        text-align: center;
+        width: 377px;
+    }
+
+    .display-none {
+        display: none;
+    }
+</style>
+
+<div id="demo" class="yui3-module">
+    <div class="yui3-hd">
+        <h3>
+            Simple image filters
+        </h3>
+    </div>
+    <div class="yui3-bd">
+        <p>
+            <label for="selectImage">
+                Image:
+            </label>
+            <select id="selectImage">
+                <option>
+                    african-daisy-with-studio-lighting.png
+                </option>
+                <option>
+                    amsterdam-main-train-station.png
+                </option>
+                <option>
+                    arches-lamps.png
+                </option>
+                <option>
+                    beautiful-duck-on-water.png
+                </option>
+                <option>
+                    cat-in-a-tube.png
+                </option>
+                <option>
+                    cheese-and-strawberry-on-palte-still-life-photo.png
+                </option>
+                <option>
+                    eagle-release-during-migratory.png
+                </option>
+                <option>
+                    girl-and-dog.png
+                </option>
+                <option>
+                    grant-african-zebra.png
+                </option>
+                <option>
+                    inverted-roller-coaster.png
+                </option>
+                <option>
+                    manager-speaks-to-visitors.png
+                </option>
+                <option>
+                    orion-nebula-space-galaxy.png
+                </option>
+                <option>
+                    photographers-in-a-flock-of-birds.png
+                </option>
+            </select>
+            <label for="selectFilter">
+                Filter:
+            </label>
+            <select id="selectFilter">
+                <option>
+                    Original Image
+                </option>
+                <option>
+                    Horizontal Blur
+                </option>
+                <option>
+                    Vertical Blur
+                </option>
+                <option>
+                    Box Blur
+                </option>
+                <option>
+                    Sobel Edge Detect
+                </option>
+            </select>
+        </p>
+        <p>
+            <label class="display-none" for="blurHeight" id="blurHeightLabel">
+                Blur height:
+            </label>
+            <input class="display-none" id="blurHeight" type="number" value="21" />
+            <label class="display-none" for="blurWidth" id="blurWidthLabel">
+                Blur width:
+            </label>
+            <input class="display-none" id="blurWidth" type="number" value="21" />
+        </p>
+        <p>
+            <button class="yui3-button" id="renderImageButton">
+                Render Image
+            </button>
+            <button class="yui3-button" id="clearImagesButton">
+                Clear Images
+            </button>
+        </p>
+        <div class="yui3-g" id="display">
+        </div>
+    </div>
+</div>

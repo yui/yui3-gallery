@@ -1,0 +1,8 @@
+{
+    "gallery-composite-image-canvas": {
+        "requires": [
+            "gallery-composite-image",
+            "node-base"
+        ]
+    }
+}
