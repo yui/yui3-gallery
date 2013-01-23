@@ -1,0 +1,47 @@
+<div class="intro">
+    <p>
+        This is an experimental array-like interface for interacting with image pixels.  A pixel's channel values can be accessed by channel id in the same way normal array items are accessed.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Using a Pixel object
+</h2>
+
+<p>
+    The preferred way to create a pixel object is to call the getPixel method on an instance of Y.Composite.Image.  The getPixel method will accept either a pixel index or a pixel location array.
+</p>
+
+```
+pixel = image.getPixel([27, 34]);
+```
+
+<p>
+    The pixel object can then be used like an array to access the individual channel values.
+</p>
+
+```
+red = pixel[0];
+green = pixel[1];
+blue = pixel[2];
+alpha = pixel[3];
+```
+
+<p>
+    The pixel object can also be used to set channel values and they will be automatically updated in the image.
+</p>
+
+```
+// reset to white
+pixel[0] = 255;
+pixel[1] = 255;
+pixel[2] = 255;
+pixel[3] = 255;
+```
+
+<p>
+    Note that this interface is experimental.  The pixel objects act like a proxy to the image's internal data.  Constructing these objects is far less efficient than just using the getValue and setValue
+    methods, especially since true proxies are not yet available in ECMAScript.
+</p>
