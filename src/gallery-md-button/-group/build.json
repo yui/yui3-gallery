@@ -1,0 +1,11 @@
+{
+    "name": "gallery-md-button-group",
+    "builds": {
+        "gallery-md-button-group": {
+            "jsfiles": [
+                "gallery-md-button-group.js"
+            ],
+            "meta": {}
+        }
+    }
+}

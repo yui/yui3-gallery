@@ -1,0 +1,55 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.66 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-md-button
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-md-button
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-md-button/gallery-md-button.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-md-button
+shifter [queu] coverage file read, starting coverage for: gallery-md-button/gallery-md-button.js
+shifter [queu] copying assets to skin for sam
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+   #1: [warning] Duplicate property '*display' found.
+       *display: inline; // line 8, pos 5
+   #2: [warning] Property with star prefix found.
+       *display: inline; // line 8, pos 5
+   #3: [warning] Standard property 'border-radius' should come after vendor-prefixed property '-moz-border-radius'.
+       -moz-border-radius: 3px; // line 41, pos 5
+   #4: [warning] Standard property 'border-radius' should come after vendor-prefixed property '-webkit-border-radius'.
+       -webkit-border-radius: 3px; // line 42, pos 5
+   #5: [warning] Standard property 'box-shadow' should come after vendor-prefixed property '-moz-box-shadow'.
+       -moz-box-shadow: 0 0 2px #009ee7; // line 48, pos 5
+   #6: [warning] Standard property 'box-shadow' should come after vendor-prefixed property '-webkit-box-shadow'.
+       -webkit-box-shadow: 0 0 2px #009ee7; // line 49, pos 5
+   #7: [warning] Background image 'icon-sprite.gif' was used multiple times, first declared at line 52, col 5.
+       background-image: url('icon-sprite.gif'); // line 89, pos 5
+shifter [queu] writing coverage file to gallery-md-button/gallery-md-button-coverage.js
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.385 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5002
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
+Starting Grover on 1 files with PhantomJS@1.8.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-md-button]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallery-md-button/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

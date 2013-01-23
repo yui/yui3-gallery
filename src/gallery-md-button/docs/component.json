@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-md-button",
+    "displayName": "Gallery: md-button",
+    "description": "An implementation of Anthony Pipkin's Gallery Button using my own Gallery Makenode. It provides a regular button and a two position (toggle) button.",
+    "author"     : [ "satyam" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

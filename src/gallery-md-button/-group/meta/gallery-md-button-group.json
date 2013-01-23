@@ -1,0 +1,6 @@
+{
+    "gallery-md-button-group": {
+        "requires":["base-base", "widget-parent", "widget-child", "gallery-makenode", "gallery-md-button"],
+        "skinnable":true
+    }
+}

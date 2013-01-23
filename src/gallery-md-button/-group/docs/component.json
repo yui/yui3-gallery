@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-md-button-group",
+    "displayName": "Gallery: md-button-group",
+    "description": "A subclass of WidgetParent holding Button, ButtonToggle or ButtonSeparator items.  Default child type for ButtonGroup is Button, other button types have to be explicitly instantiated. This is derived from Anthony Pipkin's Buttons",
+    "author"     : [ "satyam" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

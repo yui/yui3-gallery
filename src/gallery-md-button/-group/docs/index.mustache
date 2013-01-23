@@ -1,0 +1,95 @@
+<div class="intro">
+    <p>
+    A subclass of WidgetParent holding Button, ButtonToggle or ButtonSeparator items.  
+
+Default child type for ButtonGroup is Button, other button types have to be explicitly instantiated.
+
+This is derived from Anthony Pipkin's Buttons
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>ButtonGroup surrounds its set of buttons with a &lt;fieldset&gt; and if the label property is set, it will add a &lt;legend&gt;.  The active buttons, Button and ButtonToggle come from gallery-md-button, which can be used independently.  This module also contains ButtonSeparator, which draws a vertical separator in between buttons and doesn't make sense out of a Button Group.<br>
+<br>
+ButtonGroup uses WidgetParent so it inherits all its methods and becomes the target of its children events.  <br>
+</p>
+
+```
+/*   Markup for the example below:
+
+<p>Plain button, only label set: <span id="plain"></span></p>
+
+<p>Button from existing markup: <button id="markup" >Click Here!</button></p>
+
+<form method="get" action="#here">
+    <input type="text" name="input" /><br/>
+    <input type="submit" id="submit" value="Submit"/>
+    <input type="reset" id="reset" value="Reset" />
+</form>
+
+<p>Toggle button, icon added: <span id="toggle"></span></p>
+
+<p>Group of plain buttons with one separator: <span id="multiButton"></span></p>
+
+<p>Group of toggle buttons, some with icons: <span id="multiToggle"></span></p>
+
+*/
+
+YUI().use('gallery-md-button', 'gallery-md-button-group', function (Y) {
+    'use strict';
+    
+    var PRESS = 'press',
+        INFO = 'info';
+        
+    
+    var plain = (new Y.Button({label:'Ok'})).render('#plain'),
+        // reads button type from markup
+        markup = (new Y.Button({srcNode:'#markup'})).render(),
+        submit = (new Y.Button({srcNode:'#submit'})).render(),
+        reset = (new Y.Button({srcNode:'#reset'})).render(),
+        toggle = (new Y.ButtonToggle({label:'B'})).render('#toggle'),
+        
+        // default child type for ButtonGroup is plain Button, 
+        // other button types need to be explictly instantiated
+        multiButton = (new Y.ButtonGroup({
+            label:'Plain Buttons',
+            children:[
+                {label:'A'},
+                new Y.ButtonSeparator(),
+                {label:'B'},
+                {label:'C'}
+            ]
+        })).render('#multiButton'),
+        
+        multiToggle = (new Y.ButtonGroup({
+            label:'Toggle Buttons',
+            children:[
+                new Y.ButtonToggle({label:'A',icon:'arrow-sw'}),
+                new Y.ButtonToggle({label:'B'}),
+                new Y.ButtonToggle({label:'C',icon:'arrow-se', iconPosition:'right'})
+            ]
+        })).render('#multiToggle');
+        
+    plain.after(PRESS, function(ev) {
+        Y.log('Click: '+ ev.target.get('label'), INFO,'plain');
+    });
+    
+    // toggles report their 'selected' (pushed or active) state
+    toggle.after(PRESS, function(ev) {
+        Y.log('toggle selected: ' + this.get('selected') , INFO,'toggle');
+    });
+    
+    // Button groups report which button was pressed
+    multiButton.after(PRESS, function(ev) {
+        Y.log('multiButton pressed: ' + ev.pressed.get('label') , INFO,'multiButton');
+    });
+    multiToggle.after('selectionChange', function(ev) {
+        var sel = this.get('selection');
+        Y.log('multiToggle selected: ' + (sel?sel.get('label'):'none') , INFO,'multiToggle');
+    });
+        
+});
+
+```
+
