@@ -1,0 +1,5 @@
+{
+    "gallery-md-timespinner": {
+        "requires":["gallery-md-spinner", "gallery-makenode"]
+    }
+}

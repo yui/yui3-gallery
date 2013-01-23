@@ -1,0 +1,32 @@
+<div class="intro">
+    <p>
+    TimeSpinner is a set of Gallery Spinner buttons to show and set time values and run  
+
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>It uses the Gallery Spinner widget to show and set time values.  It will show hours and minutes and optionally seconds and an am/pm setting. <br>
+It can optionally run from whichever time it is set.  <br>
+<br>
+</p>
+
+```
+YUI().use('gallery-md-timespinner', function(Y) {
+    // Produces a running 24hr Time Spinner starting at the current time
+    var ts = new Y.TimeSpinner().render('#bd');
+    // Stops it (either way)
+    ts.stop();
+    ts.set('running',false);
+
+    // Displays the time from the given date, not running
+    var ts1= new Y.TimeSpinner({
+        running:false,
+        value: someDate
+   }).render('#bd');
+
+
+});
+```
+

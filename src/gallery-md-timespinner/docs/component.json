@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-md-timespinner",
+    "displayName": "Gallery: md-timespinner",
+    "description": "TimeSpinner is a set of Gallery Spinner buttons to show and set time values and run  ",
+    "author"     : [ "satyam" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

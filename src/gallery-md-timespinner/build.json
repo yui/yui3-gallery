@@ -1,0 +1,10 @@
+{
+    "name": "gallery-md-timespinner",
+    "builds": {
+        "gallery-md-timespinner": {
+            "jsfiles": [
+                "gallery-md-timespinner.js"
+            ]
+        }
+    }
+}
