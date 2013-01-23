@@ -1,0 +1,7 @@
+{
+    "gallery-md-accordion": {
+        "requires":["widget", "widget-parent", "widget-child", "widget-stdmod", "gallery-makenode"],
+        "optional":["resize-plugin", "transition"],
+        "skinnable":true
+    }
+}

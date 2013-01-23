@@ -1,0 +1,10 @@
+{
+    "name"       : "gallery-md-accordion",
+    "displayName": "Gallery: md-accordion",
+    "description": "An accordion using Gallery MakeNode.   ",
+    "author"     : [ "satyam" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

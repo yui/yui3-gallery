@@ -1,0 +1,28 @@
+<div class="intro">
+    <p>
+    An accordion using Gallery MakeNode.   
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>Panels in this accordion can be resized (via Y.Resize) and if transition is present, they will expand and collapse nicely.  Panels may have a X-close button on their headers and they will be removed from the collection and destroyed when clicked upon.  Panels can be opened exclusive of one another.<br>
+<br>
+Though the code was written from scratch, the styling is borrowed from Iliyan Peychev's Gallery Accordion<br>
+</p>
+
+```
+YUI().use('gallery-md-accordion','resize-plugin', 'transition', function(Y) {
+
+    var acc = new Y.Accordion({
+        children:[
+            {label:'one', content:'this is the content  <br/> of the first'},
+            {label:'two', expanded:true, content:'this is the content  <br/> of the second'},
+            {label:'three', content:'this is the content  <br/> of the third'}
+        ],
+        multiExpand:false,
+        closeable: true
+    }).render('#acc'),
+});
+```
+

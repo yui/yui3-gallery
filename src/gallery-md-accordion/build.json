@@ -1,0 +1,10 @@
+{
+    "name": "gallery-md-accordion",
+    "builds": {
+        "gallery-md-accordion": {
+            "jsfiles": [
+                "gallery-md-accordion.js"
+            ]
+        }
+    }
+}
