@@ -1,0 +1,119 @@
+html {
+    background-color: #000;
+}
+
+body {
+    overflow: hidden; /* stops the scrolling out of bounds behavior in Safari that messes up the scroll animation */
+    width: 1200px;
+    margin: 0 auto;
+}
+
+section {
+	height: 1000px;
+    color: #f8f8f8;	
+}
+
+h1, 
+h2, 
+h3 {
+    font-family: 'Ultra', serif;
+}
+
+p {
+	font-family: 'Andada', serif;
+}
+
+#scrollanim-container{
+    width: inherit;
+}
+
+#verticalScrollArea{
+    position: absolute;
+    width: inherit;
+}
+
+#kittens { 
+    background: url("http://lorempixel.com/g/300/200/abstract") 50% 50% no-repeat fixed;
+    background-size: 100% 100%;
+    position: relative;
+    z-index: 1;
+}
+
+#kittens article{
+    position: absolute;
+    top: 250px;
+    width: 100%;
+    text-align: center;
+}
+
+#kittens p { 
+    font-size: 197%;
+}
+
+#kittens img, 
+#dogs img {
+	margin: 0 auto;
+	display: block;
+}
+
+#kittens > img, 
+#dogs > img {
+	position: absolute;
+	opacity: 0;  /* better to set opacity to 0 so elements don't show before their animation starts */
+}
+
+#mainTitle {
+	font-weight: bold;
+	font-size: 369%;
+}
+
+#kittens > img:first-of-type {
+	left: 50%;
+}
+
+#kittens > img:nth-of-type(2) {
+    left: 30%;
+}
+
+#kittens > img:nth-of-type(3) {
+    top: 450px;
+}
+
+#kittens > img:last-of-type {
+    top: 700px;
+}
+
+#dogs { 
+    background: url("http://lorempixel.com/g/300/300/abstract") 50% 50% no-repeat fixed;
+    background-size: 100% 100%;
+    position: relative;
+    z-index: 0;
+}
+
+#dogs > article { 
+    position: absolute;
+    width: 300px;
+    text-align: center;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #686868;
+    left: 50px;
+    opacity: 0;
+}
+
+#dogs > img:first-of-type {
+	left: 50%;
+}
+
+#dogs > img:nth-of-type(2) {
+    left: 50%;
+}
+
+#dogs > img:nth-of-type(3) {
+    top: 200px;
+}
+
+#dogs > img:last-of-type {
+    top: 200px;
+}

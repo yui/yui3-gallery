@@ -1,0 +1,14 @@
+{
+    "gallery-scrollanim": {
+        "requires": [
+            "base", 
+            "widget", 
+            "yui-throttle", 
+            "transition", 
+            "event-mousewheel",
+            "event-resize", 
+            "event-touch"
+        ],
+        "skinnable": false
+    }
+}

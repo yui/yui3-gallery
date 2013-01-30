@@ -1,0 +1,343 @@
+<div id="scrollanim-container">
+	<div id="verticalScrollArea">
+	    <section id="kittens">
+		    <article>
+			    <h2 id="mainTitle">Simple Scrolling Animation</h2>
+			    <p>Please scroll down!</p>
+	            <img src="http://placekitten.com/300/200">
+	        </article> 
+ 	        <img src="http://placekitten.com/200/300">
+            <img src="http://placekitten.com/300/300">
+            <img src="http://placekitten.com/240/360">
+            <img src="http://placekitten.com/350/250">        
+        </section>
+        <section id="dogs">
+		    <article>
+			    <h2 id="secondTitle">Lorem Ipsum</h2>
+			    <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus quis blandit metus. Duis nec fringilla sapien. In fermentum hendrerit odio in egestas. Pellentesque sit amet mauris dui. Phasellus id tortor arcu. Fusce nec risus vitae dui laoreet gravida. Curabitur ullamcorper ipsum sit amet erat congue pharetra. Integer aliquam interdum nulla, eget egestas leo commodo non. Integer a dictum nibh. Phasellus a urna ac lorem luctus ultricies in at nisl.</p>
+	        </article>
+ 	        <img src="http://placedog.com/200/300">
+            <img src="http://placedog.com/300/300">
+            <img src="http://placedog.com/240/360">
+            <img src="http://placedog.com/350/250">    
+        </section>
+    </div>
+</div>
+
+<script>
+YUI().use('gallery-scrollanim', function(Y){
+    var animations = [
+            {
+	           selector: '#verticalScrollArea',
+	           startAt: 0,
+	           endAt: 1500, /* should be same as maxScroll config to the widget */
+	           onEndAnimate:function( anim ) {
+	               //TODO: Now need this so scroll animator will not set display property to none at the end of the animation
+	            },
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    top: 0
+	         		    }
+	         	    },
+	         	    {
+	         		    position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    onInit: function( anim ) {
+					        //this.properties['top'] = -detailStart +  Math.max( ((wHeight-1000)/2) , 0);
+					        //this.properties['top'] = -totalHeightPx +  Math.max( ((wHeight-1000)/2) , 0);
+     				    },
+	         		    properties: {
+	         		        top: -1000
+	         		    }
+	         	    }
+	            ]
+	        },    
+    	    {
+	            selector: '#kittens',
+	            startAt: 200,
+	            endAt: 1200,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         		    	"top": 0,
+                            "background-position" : {x:"50%",y:0}
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		    	"top": 100,
+                            "background-position" : {x:"50%",y:-500}
+	         		    }
+	         	    }
+	            ]
+	        },    
+    	    {
+	            selector: '#kittens article',
+	            startAt: 0,
+	            endAt: 600,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         		    	"top": 250,
+	         			    "opacity": 1
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		    	"top": -100,
+	         		        "opacity": 0
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#kittens > img:first-of-type',
+	            startAt: 0,
+	            endAt: 700,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "top": -400, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "top": 500,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#kittens > img:nth-of-type(2)',
+	            startAt: 0,
+	            endAt: 500,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "top": -100, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "top": 600,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#kittens > img:nth-of-type(3)',
+	            startAt: 0,
+	            endAt: 600,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "left": 900, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "left": 180,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#kittens > img:last-of-type',
+	            startAt: 0,
+	            endAt: 800,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "left": -100, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "left": 800,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+    	    {
+	            selector: '#dogs',
+	            startAt: 500,
+	            endAt: 1500,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+                            "top": -100,
+                            "background-position" : {x:"50%",y:-150}
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseOut,
+	         		    properties: {
+                            "top": 0,
+                            "background-position" : {x:"50%",y:0}                          
+	         		    }
+	         	    }
+	            ]
+	        },
+    	    {
+	            selector: '#dogs article',
+	            startAt: 800,
+	            endAt: 1400,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         		    	"top": -10,
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Bounce.EaseOut,
+	         		    properties: {
+	         		    	"top": 300,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#dogs > img:first-of-type',
+	            startAt: 800,
+	            endAt: 1200,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "top": -400, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "top": 150,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#dogs > img:nth-of-type(2)',
+	            startAt: 1000,
+	            endAt: 1300,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "top": -100, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "top": 450,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#dogs > img:nth-of-type(3)',
+	            startAt: 900,
+	            endAt: 1300,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "left": 970, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "left": 400,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#dogs > img:last-of-type',
+	            startAt: 850,
+	            endAt: 1350,
+	            onEndAnimate: function( anim ) {},
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "left": -100, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "left": 840,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        }               
+        ], 
+        scrollAnimConfig = {
+            node: '#scrollanim-container',            // main container selector
+            animations: animations,                   // animation data
+            maxScroll: 1500                           // max scroll
+        },
+        scrollAnimWidget;
+
+    scrollAnimWidget = new Y.ScrollAnim(scrollAnimConfig);
+});
+</script>

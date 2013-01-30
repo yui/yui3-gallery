@@ -1,0 +1,121 @@
+YUI().use('gallery-scrollanim', function(Y){
+    var animations = [
+            {
+	            selector: '#verticalScrollArea',
+	            startAt: 0,
+	            endAt: 1500, /* should be same as maxScroll config to the widget */
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    top: 0
+	         		    }
+	         	    },
+	         	    {
+	         		    position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        top: -1000
+	         		    }
+	         	    }
+	            ]
+	        },    
+    	    {
+	            selector: '#kittens',
+	            startAt: 500,
+	            endAt: 1200,
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         		    	"top": 0,
+                            "background-position" : {x:"50%",y:0}
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		    	"top": 100,
+                            "background-position" : {x:"50%",y:-100}
+	         		    }
+	         	    }
+	            ]
+	        },  
+    	    {
+	            selector: '#kittens article',
+	            startAt: 0,
+	            endAt: 600,
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         		    	"top": 250,
+	         			    "opacity": 1
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		    	"top": -100,
+	         		        "opacity": 0
+	         		    }
+	         	    }
+	            ]
+	        },
+	        {
+	            selector: '#kittens > img:first-of-type',
+	            startAt: 0,
+	            endAt: 700,
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "top": -400, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "top": 500,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },
+	        /* Other animation objects */
+	        {
+	            selector: '#kittens > img:last-of-type',
+	            startAt: 0,
+	            endAt: 800,
+	            keyframes: [
+	                { 
+	         	        position: 0,
+	         		    properties: {
+	         			    "left": -100, 
+	         			    "opacity": 0
+	         		    }	
+	         	    },
+	                {
+	         	        position: 1,
+	         		    ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		    properties: {
+	         		        "left": 800,
+	         		        "opacity": 1
+	         		    }
+	         	    }
+	            ]
+	        },             
+        ], 
+        scrollAnimConfig = {
+            node: '#scrollanim-container',            // main container selector
+            animations: animations,                   // animation data
+            maxScroll: 1500                           // max scroll
+        },
+        scrollAnimWidget;
+
+    scrollAnimWidget = new Y.ScrollAnim(scrollAnimConfig);
+});

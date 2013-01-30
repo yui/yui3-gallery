@@ -1,0 +1,219 @@
+<div class="intro">
+    <p>
+    ScrollAnim is a widget that animates HTML elements based on vertical page scroll.  With ScrollAnim widget, you can quickly create sites that have various HTML elements move or fade according to how far the user has scrolled down the site.  The animation for each HTML element is also gracefully controlled by easing functions of your choosing.  Also the widget is great for achieving the popular "parallax effects", when certain elements (especially the backgrounds) move at a different speed than the user-controlled scrolling speed.   
+    </p>
+</div>
+
+<h2>Getting Started</h2>
+
+<p>To include the source files for ScrollAnim and its dependencies, first load the YUI seed file if you haven't already loaded it.</p>
+
+```
+<script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
+```
+
+<p>Next, create a new YUI instance for your application and populate it with the modules you need by specifying them as arguments to the `YUI().use()` method. YUI will automatically load any dependencies required by the modules you specify.</p>
+
+```
+<script>
+// Create a new YUI instance and populate it with the required modules.
+YUI().use('gallery-scrollanim', function (Y) {
+    // ScrollAnim is available and ready for use. Add implementation
+    // code here.
+});
+</script>
+```
+
+<p>For more information on creating YUI instances and on the <a href="http://yuilibrary.com/yui/docs/api/classes/YUI.html#method_use">use() method</a>, see the documentation for the <a href="http://yuilibrary.com/yui/docs/yui/index.html">YUI Global Object</a>. </p>
+
+<h2>Using ScrollAnim</h2>
+
+<h3>Instantiating a ScrollAnim Widget</h3>
+<p>The following code example shows the basic widget configuration and how instantiate the ScrollAnim widget.  The widget will be up and running after it is successfully instantiated.</p>
+
+```
+/* Somewhere inside YUI().use() callback function */
+var scrollAnimConfig = {
+        node: '#scrollanim-container',            // main container selector
+        animations: animations,                   // animation data (IMPORTANT)
+        maxScroll: 1500                           // max scroll
+    },
+    scrollAnimWidget;
+
+/* Scroll animation will start immediately after instantiation */
+scrollAnimWidget = new Y.ScrollAnim(scrollAnimConfig);
+```
+<p>The most important data to the widget is the `animation` attribute.  Please see the following section for more information on the structure and required properties in the `animation` attribute.</p>
+
+<h3>ScrollAnim Attributes</h3>
+
+<p>ScrollAnim requires the following attributes to be set, in addition to the attributes provided by the base <a href="http://yuilibrary.com/yui/docs/widget/index.html#attributes">Widget</a> class:</p>
+
+<table>
+    <tr><th>Attribute (Required)</th><th>Description</th></tr>
+    <tr><td>`node`</td><td>Main container selector</td></tr>
+    <tr><td>`animations`</td><td>Animation data for all animated HTML elements</td></tr>    
+    <tr><td>`maxScroll`</td><td>Maximum `window.scrollTop` value in which the scrolling animation should stop</td></tr>
+</table>
+
+<p>The following are optional attributes:</p>
+
+<table>
+    <tr><th>Attribute (Optional)</th><th>Description</th><th>Default Value</th></tr>
+    <tr><td>`startAt`</td><td>Minimum `window.scrollTop` value in which the scrolling animation should start</td><td>0 (pixel)</td></tr>
+    <tr><td>`useRAF`</td><td>Set if the widget should use `window.requestAnimationFrame` method when available.</td><td>true</td></tr>
+    <tr><td>`tickSpeed`</td><td>Set interval (ms) for `window.setInterval` if not using RAF</td><td>100 (milliseconds)</td></tr>
+    <tr><td>`scrollSpeed`</td><td>Scrolling animation speed, controlling how responsive the animation is to user mouse wheel scroll, from 0-100</td><td>20</td></tr>
+    <tr><td>`tweenSpeed`</td><td>`window.scrollTop` tween speed</td><td>0.3</td></tr>
+    <tr><td>`debug`</td><td>Turn on debug mode</td><td>false</td></tr>
+    <tr><td>`onStart`</td><td>Custom function called once when the widget starts the animation</td><td>Null</td></tr>
+    <tr><td>`onUpdate`</td><td>Custom function called every time an animation frame is rendered</td><td>Null</td></tr>
+    <tr><td>`onResize`</td><td>Custom function called when the window is resized</td><td>Null</td></tr>
+</table>
+
+<h3>`Animation` Attribute</h3>
+
+<p>The `animation` attribute will contain individual animation details for each HTML element.  Below is an example of the animation attribute:</p>
+
+```
+var animation = 
+    [
+        {
+	        selector: '#divContainer',
+	        startAt: 500,
+	        endAt: 1200,
+	        onEndAnimate: function( anim ) {},
+	        keyframes: [
+	            {
+	         	    position: 0,
+	         		properties: {
+	         		    "top": 0,
+	         		    "background-position" : {x:"50%",y:0}
+	         		}
+	         	},
+	            {
+	         	    position: 1,
+	         		ease: TWEEN.Easing.Linear.EaseNone,
+	         		properties: {
+	         		    "top": 100,
+                        "background-position" : {x:"50%",y:-100}
+	         		}
+	         	}
+	        ]
+	    },
+	    {
+	        selector: '#divContainer article',
+	        startAt: 0,
+	        endAt: 600,
+	        onEndAnimate: function( anim ) {},
+	        keyframes: [
+	            {
+	         	    position: 0,
+	         		properties: {
+	         		    "top": 250,
+	         			"opacity": 1
+	         		}
+	         	},
+	            {
+	         	    position: 1,
+	         		ease: TWEEN.Easing.Quadratic.EaseInOut,
+	         		properties: {
+	         		    "top": -100,
+	         		    "opacity": 0
+	         		}
+	         	}
+	        ]
+	    }
+	]
+```
+
+<p>The following table shows all possible properties to each object in the animation attribute:</p>
+<table>
+    <tr><th>Property</th><th>Description</th><th>Type</th><th>Required</th></tr>
+    <tr><td>`selector`</td><td>CSS selector used to retrieve an element</td><td>String</td><td>Yes</td></tr>
+    <tr><td>`startAt`</td><td>`window.scrollTop` position where the animation for this element should start</td><td>Integer</td><td>Yes</td></tr>
+    <tr><td>`endAt`</td><td>`window.scrollTop` position where the animation for this element should end</td><td>Integer</td><td>Yes</td></tr>
+    <tr><td>`keyframes`</td><td>ScrollAnim widget uses this to determine which CSS properties to update at each time interval or request animation frame and what are the values for the CSS properties at the start and end of the animation.<br><br>Please see the next table about the `keyframe` array on exactly what should be included.</td><td>Array</td><td>Yes</td></tr>
+    <tr><td>`onInit`</td><td>Custom function called only once at the start of the element's animation</td><td>Function</td><td>No</td></tr>
+    <tr><td>`onStartAnimate`</td><td>Custom function to call at each animation frame</td><td>Function</td><td>No</td></tr>
+    <tr><td>`onEndAnimate`</td><td>Custom function to call at the end of the element's animation</td><td>Function</td><td>No</td></tr>
+</table>
+
+<p>The following table shows what properties should be included in the objects in the `keyframe` array:</p>
+<table>
+    <tr><th>Property</th><th>Description</th></tr>
+    <tr><td>`position`</td><td>Either 0 or 1.<br>0 indicates this is the keyframe at the start of the animation.<br>1 indicates this is the keyframe at the end of the animation.</td></tr>
+    <tr><td>`properties`</td><td>An object containing all the CSS properties whose values need to be updated when the element is animated.</td></tr>
+    <tr><td>`ease`</td><td>The easing function used to animate the element.  This property only need to be included in the end position object.  Please see 3rd Party Dependency section below for more information on how to specify the easing function to use.</td></tr>
+    <tr><td>`onInit`</td><td>Custom function invoked at the beginning of the element's animation.  Should only be included in the position "0" object.</td></tr>
+</table>
+
+<h2>Markup, CSS, and Configuration for a Vertically Scrolling Page</h2>
+
+<p>The widget does not require much markup beyond the widget container.  However, for most cases you will have a site that needs the users to scroll vertically.  In this case, you will need a parent element containing the rest of the animated elements that will move upward.  To achieve this you will need specific markup, CSS, and configuration in the `animation` attribute.  You can also see a working example of a long scrolling animation site from the examples page.</p>
+
+<p>The markup needed:</p>
+```
+<div id="scrollAnimContainer">
+	<!-- The "verticalScrollArea" element will be used to move the page vertically as the user scrolls the page.  Easing effects will be included if specificed in the animation configuration for this element. -->
+    <div id="verticalScrollArea">
+        <!-- All other elements will be in here -->
+    </div>
+</div>
+```
+
+<p>The configuration needed:</p>
+```
+    var animations = [
+        {
+	        selector: '#verticalScrollArea',
+	        startAt: 0,                                     /* Vertical scroll element should animate at the very top */
+	        endAt: 1500,                                    /* End animation at the same position as the "maxScroll" attribute */
+	        keyframes: [
+	            {
+	         	    position: 0,                            /* Start keyframe */
+	         		properties: {
+	         			top: 0                              /* Set "top" to 0 at the beginning of the animation */
+	         		}
+	         	},
+	         	{
+	         		position: 1,                            /* End keyframe */
+	         		ease: TWEEN.Easing.Linear.EaseInOut,    /* Easing effects on vertical scroll container if needed */
+	         		properties: {
+	         		    top: -1000                          /* Set "top" to how much the vertical container should scorll in the end */
+	         		}
+	         	}
+	        ]
+	    },
+	    /* ... animation objects for children elements */
+    ]
+```
+
+<p>CSS needed:</p>
+
+```
+body {
+    /* Browser does not render the correct scroll progress in the default scrollbar when we're simply adjusting a container element's "top" property to simulate vertical scrolling. */
+    overflow: hidden;
+}
+
+#verticalScrollArea{
+    /* This is important so this element can be moved vertically by the widget to create vertical scrolling page. */
+    position: absolute;
+}
+```
+
+<h2>3rd Party Library</h2>
+
+<h3>Disclaimer</h3>
+<p>Except as specifically stated here, the 3rd party software packages are not distributed as part of this project, but instead are separately downloaded from the respective provider and built on the developer’s machine as a pre-build step.</p>
+
+<h3>Tween.js</h3>
+
+For tweening/easing functions to use with the widget, the recommended library will be tween.js, which is an open-source library available on Github.
+
+<ul>
+	<li>tween.js (<a href="https://github.com/sole/tween.js/blob/master/LICENSE">MIT License</a>) - Javascript Tweening Engine</li>
+	<li>Super simple, fast and easy to use tweening engine which incorporates optimised Robert Penner's equations.</li>
+	<li><a href="https://github.com/sole/tween.js">Tween.js Github Page</a></li>
+</ul>

@@ -1,0 +1,155 @@
+{
+    "name": "gallery-scrollanim",
+    "passed": 57,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 57,
+    "duration": 564,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 19,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 19,
+        "duration": 187,
+        "type": "testcase",
+        "testScrollanim_initializer": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_initializer",
+            "duration": 5
+        },
+        "testScrollanim_requestAnimationFramePolyfill": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_requestAnimationFramePolyfill",
+            "duration": 0
+        },
+        "testScrollanim_resize": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_resize",
+            "duration": 1
+        },
+        "testScrollanim_start": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_start",
+            "duration": 0
+        },
+        "testScrollanim_animationLoop": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_animationLoop",
+            "duration": 0
+        },
+        "testScrollanim_render": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_render",
+            "duration": 1
+        },
+        "testScrollanim_destructor": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_destructor",
+            "duration": 0
+        },
+        "testScrollanim_startAnimatable": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_startAnimatable",
+            "duration": 1
+        },
+        "testScrollanim_stopAnimatable": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_stopAnimatable",
+            "duration": 0
+        },
+        "testScrollanim_setAnimatable": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_setAnimatable",
+            "duration": 1
+        },
+        "testScrollanim_resetAnimatable": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_resetAnimatable",
+            "duration": 0
+        },
+        "testScrollanim_wheelHandler": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_wheelHandler",
+            "duration": 1
+        },
+        "testScrollanim_resizeHandler": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_resizeHandler",
+            "duration": 0
+        },
+        "testScrollanim_scrollTo": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_scrollTo",
+            "duration": 0
+        },
+        "testScrollanim_touchStartHandler": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_touchStartHandler",
+            "duration": 0
+        },
+        "testScrollanim_touchEndHandler": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_touchEndHandler",
+            "duration": 0
+        },
+        "testScrollanim_touchMoveHandler": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_touchMoveHandler",
+            "duration": 1
+        },
+        "testScrollanim_getTweenedValue": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_getTweenedValue",
+            "duration": 0
+        },
+        "testScrollanim_checkScrollExtents": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testScrollanim_checkScrollExtents",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 30 Jan 2013 03:00:59 PM CST",
+    "consoleInfo": []
+}
