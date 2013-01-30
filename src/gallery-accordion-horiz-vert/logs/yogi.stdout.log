@@ -1,14 +1,290 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.67 on node@0.8.18
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-accordion-horiz-vert
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-accordion-horiz-vert
+   #1: Trailing whitespace.
+       * // line 13, pos 3
+   #2: Trailing whitespace.
+       * // line 23, pos 3
+   #3: Trailing whitespace.
+       * // line 28, pos 3
+   #4: Trailing whitespace.
+       * // line 38, pos 3
+   #5: Trailing whitespace.
+       * // line 42, pos 3
+   #6: Trailing whitespace.
+       * // line 78, pos 7
+   #7: Trailing whitespace.
+       * // line 94, pos 7
+   #8: Trailing whitespace.
+       * // line 108, pos 7
+   #9: Trailing whitespace.
+       * // line 123, pos 7
+   #10: Trailing whitespace.
+       * // line 137, pos 7
+   #11: Trailing whitespace.
+       * // line 151, pos 7
+   #12: Trailing whitespace.
+       * // line 171, pos 7
+   #13: Trailing whitespace.
+       * // line 184, pos 7
+   #14: Trailing whitespace.
+       * // line 199, pos 7
+   #15: Trailing whitespace.
+       * // line 213, pos 7
+   #16: Trailing whitespace.
+       * // line 227, pos 7
+   #17: Trailing whitespace.
+       * // line 243, pos 7
+   #18: Too many var statements.
+       var open_class   = Y.ClassNameManager.getClassName(Accordion.NAME, 'open'); // line 316, pos 5
+   #19: Too many var statements.
+       var closed_class = Y.ClassNameManager.getClassName(Accordion.NAME, 'closed'); // line 317, pos 5
+   #20: Too many var statements.
+       var sections = this.get('sections'); // line 383, pos 13
+   #21: Expected '===' and instead saw '=='.
+       titles.size() == sections.size()) // line 390, pos 27
+   #22: Too many var statements.
+       var save_animate_insert = this.get('animateInsertRemove'); // line 392, pos 17
+   #23: Too many var statements.
+       var count = titles.size(); // line 395, pos 17
+   #24: Too many var statements.
+       for (var i=0; i<count; i++) // line 396, pos 22
+   #25: Mixed spaces and tabs.
+       titles.length == sections.length) // line 404, pos 4
+   #26: Expected '===' and instead saw '=='.
+       titles.length == sections.length) // line 404, pos 32
+   #27: Too many var statements.
+       var save_animate_insert = this.get('animateInsertRemove'); // line 406, pos 17
+   #28: 'save_animate_insert' is already defined.
+       var save_animate_insert = this.get('animateInsertRemove'); // line 406, pos 37
+   #29: Too many var statements.
+       var count = titles.length; // line 409, pos 17
+   #30: 'count' is already defined.
+       var count = titles.length; // line 409, pos 23
+   #31: Too many var statements.
+       for (var i=0; i<count; i++) // line 410, pos 22
+   #32: 'i' is already defined.
+       for (var i=0; i<count; i++) // line 410, pos 23
+   #33: Trailing whitespace.
+       * // line 447, pos 7
+   #34: Too many var statements.
+       var el; // line 459, pos 13
+   #35: Too many var statements.
+       var el = Y.one(title); // line 462, pos 17
+   #36: 'el' is already defined.
+       var el = Y.one(title); // line 462, pos 20
+   #37: Too many var statements.
+       var p = t.get('parentNode'); // line 475, pos 17
+   #38: Too many var statements.
+       var n = t.get('nextSibling'); // line 476, pos 17
+   #39: Too many var statements.
+       var clip = this.section_list[index].clip; // line 504, pos 13
+   #40: Trailing whitespace.
+       * // line 526, pos 7
+   #41: Too many var statements.
+       var el; // line 538, pos 13
+   #42: Too many var statements.
+       var el = Y.one(content); // line 541, pos 17
+   #43: 'el' is already defined.
+       var el = Y.one(content); // line 541, pos 20
+   #44: Too many var statements.
+       var display = d.getStyle('display'); // line 554, pos 17
+   #45: Too many var statements.
+       var p = d.get('parentNode'); // line 556, pos 17
+   #46: Too many var statements.
+       var n = d.get('nextSibling'); // line 557, pos 17
+   #47: Trailing whitespace.
+       * // line 594, pos 7
+   #48: Trailing whitespace.
+       * // line 608, pos 7
+   #49: Trailing whitespace.
+       * // line 622, pos 7
+   #50: Too many var statements.
+       var c = Y.Node.create('<div/>'); // line 643, pos 13
+   #51: Too many var statements.
+       var d = Y.Node.create('<div/>'); // line 654, pos 13
+   #52: Too many var statements.
+       var size = t.get(this.slide_size_name); // line 685, pos 13
+   #53: Too many var statements.
+       var params = // line 690, pos 17
+   #54: Too many var statements.
+       var anim = this._createAnimator(params); // line 705, pos 17
+   #55: Trailing whitespace.
+       { // line 708, pos 14
+   #56: Trailing whitespace.
+       * // line 749, pos 7
+   #57: Possible strict violation.
+       this.fire('remove', index); // line 765, pos 17
+   #58: Too many var statements.
+       var params = // line 779, pos 17
+   #59: Too many var statements.
+       var anim    = this._createAnimator(params); // line 800, pos 17
+   #60: Too many var statements.
+       for (var i=0; i<count; i++) // line 834, pos 18
+   #61: Too many var statements.
+       var title   = Y.Node.getDOMNode(this.section_list[i].title); // line 836, pos 17
+   #62: Too many var statements.
+       var content = Y.Node.getDOMNode(this.section_list[i].content); // line 837, pos 17
+   #63: Expected '===' and instead saw '=='.
+       if (el == title   || Y.DOM.contains(title, el) || // line 838, pos 20
+   #64: Expected '===' and instead saw '=='.
+       el == content || Y.DOM.contains(content, el)) // line 839, pos 20
+   #65: Trailing whitespace.
+       * // line 860, pos 7
+   #66: Trailing whitespace.
+       * // line 875, pos 7
+   #67: Too many var statements.
+       for (var i=0; i<count; i++) // line 895, pos 18
+   #68: Too many var statements.
+       for (var i=0; i<count; i++) // line 913, pos 18
+   #69: Trailing whitespace.
+       * // line 926, pos 7
+   #70: Possible strict violation.
+       var clip = this.section_list[index].clip; // line 953, pos 24
+   #71: Possible strict violation.
+       clip.setStyle(this.slide_style_name, 'auto'); // line 954, pos 27
+   #72: Possible strict violation.
+       this.fire('open', index); // line 956, pos 13
+   #73: Possible strict violation.
+       this.section_list[index].content.setStyle('display', 'none'); // line 961, pos 13
+   #74: Possible strict violation.
+       this.section_list[index].clip.setAttribute('aria-hidden', 'true'); // line 962, pos 13
+   #75: Possible strict violation.
+       this.fire('close', index); // line 963, pos 13
+   #76: Too many var statements.
+       var size = this.section_list[index].content.get(this.slide_size_name); // line 976, pos 17
+   #77: Too many var statements.
+       var params = // line 979, pos 21
+   #78: Too many var statements.
+       var anim = this._startAnimator(index, params); // line 994, pos 21
+   #79: Too many var statements.
+       var clip = this.section_list[index].clip; // line 999, pos 21
+   #80: Expected '===' and instead saw '=='.
+       if (clip.getStyle('opacity') == '0') // line 1000, pos 46
+   #81: Too many var statements.
+       var params = // line 1017, pos 21
+   #82: 'params' is already defined.
+       var params = // line 1017, pos 28
+   #83: Too many var statements.
+       var anim = this._startAnimator(index, params); // line 1032, pos 21
+   #84: 'anim' is already defined.
+       var anim = this._startAnimator(index, params); // line 1032, pos 26
+   #85: Trailing whitespace.
+       * // line 1045, pos 7
+   #86: Too many var statements.
+       for (var i=0; i<count; i++) // line 1053, pos 22
+   #87: Trailing whitespace.
+       * // line 1065, pos 7
+   #88: Too many var statements.
+       var first = true; // line 1071, pos 13
+   #89: Too many var statements.
+       for (var i=0; i<count; i++) // line 1072, pos 18
+   #90: Too many var statements.
+       var easing = this.get('animateEasing'); // line 1104, pos 13
+   #91: Expected '===' and instead saw '=='.
+       this.section_list[ index ].anim == anim) // line 1130, pos 49
+   #92: Trailing whitespace.
+       * // line 1152, pos 3
+   #93: Trailing whitespace.
+       * // line 1155, pos 3
+   #94: Too many var statements.
+       var animation_attrs = // line 1172, pos 5
+   #95: Too many var statements.
+       var total_size = // line 1179, pos 5
+   #96: Too many var statements.
+       var overflow = // line 1185, pos 5
+   #97: Too many var statements.
+       var surrounding = // line 1191, pos 5
+   #98: Possible strict violation.
+       this.set(name, false); // line 1200, pos 5
+   #99: Possible strict violation.
+       this.modifyAttr(name, { readOnly: true }); // line 1201, pos 5
+   #100: Possible strict violation.
+       var host = this.get('host'); // line 1206, pos 16
+   #101: Possible strict violation.
+       if (!this.init_fixed_size) // line 1207, pos 10
+   #102: Possible strict violation.
+       this.afterHostEvent('render', adjust, this); // line 1213, pos 13
+   #103: Possible strict violation.
+       this.afterHostEvent('render', adjust, this); // line 1213, pos 51
+   #104: Possible strict violation.
+       this.onHostEvent('insert', function() // line 1216, pos 9
+   #105: Possible strict violation.
+       this); // line 1220, pos 9
+   #106: Possible strict violation.
+       this.onHostEvent('remove', adjust, this); // line 1222, pos 9
+   #107: Possible strict violation.
+       this.onHostEvent('remove', adjust, this); // line 1222, pos 44
+   #108: Possible strict violation.
+       this.onHostEvent('open', adjust, this); // line 1223, pos 9
+   #109: Possible strict violation.
+       this.onHostEvent('open', adjust, this); // line 1223, pos 42
+   #110: Possible strict violation.
+       this.onHostEvent('close', adjust, this); // line 1224, pos 9
+   #111: Possible strict violation.
+       this.onHostEvent('close', adjust, this); // line 1224, pos 43
+   #112: Possible strict violation.
+       this.init_fixed_size = true; // line 1226, pos 9
+   #113: Too many var statements.
+       var dim   = host.slide_style_name; // line 1229, pos 9
+   #114: Too many var statements.
+       var total = host.get('boundingBox').parseDimensionStyle(dim); // line 1230, pos 9
+   #115: Too many var statements.
+       var count = host.getSectionCount(); // line 1231, pos 9
+   #116: Too many var statements.
+       var open  = []; // line 1232, pos 9
+   #117: Too many var statements.
+       for (var i=0; i<count; i++) // line 1233, pos 14
+   #118: Too many var statements.
+       var size  = Math.floor(total / count); // line 1243, pos 9
+   #119: Too many var statements.
+       var extra = total % count; // line 1244, pos 9
+   #120: Too many var statements.
+       var section = host.getSection(open[i]); // line 1247, pos 13
+   #121: Too many var statements.
+       var size1   = size - section[ surrounding[dim] ](); // line 1248, pos 13
+   #122: Too many var statements.
+       var dim  = host.slide_style_name; // line 1264, pos 13
+   #123: 'config' is defined but never used.
+       initializer: function(config) // line 332, pos 33
+   #124: 'config' is defined but never used.
+       initializer: function(config) // line 1261, pos 33
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-accordion-horiz-vert/gallery-accordion-horiz-vert.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-accordion-horiz-vert
+shifter [queu] coverage file read, starting coverage for: gallery-accordion-horiz-vert/gallery-accordion-horiz-vert.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-accordion-horiz-vert/gallery-accordion-horiz-vert-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] Element (ul.yui3-accordion-content) is overqualified, just use .yui3-accordion-content without element name.
+       .yui3-accordion ul.yui3-accordion-content // line 59, pos 17
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.471 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5021
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5020
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5002
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5001
 Starting Grover on 1 files with PhantomJS@1.8.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-accordion-horiz-vert]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds) 8%
+✔ [gallery-accordion-horiz-vert]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds) 8%
 Writing files in JSON format to: /src/gallery-accordion-horiz-vert/logs/tests.json
 
 --------------------------------------+-----------+-----------+-----------+-----------+
@@ -28,6 +304,6 @@ Functions    : 2.17% ( 1/46 )
 Lines        : 8.16% ( 27/331 )
 ================================================================================
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds)
-  [Grover Execution Timer] 1.351 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+  [Grover Execution Timer] 1.327 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

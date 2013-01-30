@@ -498,6 +498,16 @@ Y.extend(Accordion, Y.Widget,
 		{
 			t.setStyle('display', t.get('innerHTML') ? '' : 'none');
 		}
+
+		// aria
+
+		var clip = this.section_list[index].clip;
+
+		t.setAttribute('aria-controls', clip.generateID());
+		t.setAttribute('role', 'tab');
+
+		clip.setAttribute('aria-labeledby', t.generateID());
+		clip.setAttribute('role', 'tabpanel');
 	},
 
 	/**
@@ -633,6 +643,7 @@ Y.extend(Accordion, Y.Widget,
 		var c = Y.Node.create('<div/>');
 		c.addClass(this.getClassName('section-clip'));
 		c.setStyle(this.slide_style_name, section_min_size+'px');
+		c.setAttribute('aria-hidden', 'true');
 		if (this.get('animateOpenClose'))
 		{
 			c.setStyle('opacity', 0);
@@ -939,13 +950,16 @@ Y.extend(Accordion, Y.Widget,
 
 		function onCompleteOpenSection(type, index)
 		{
-			this.section_list[index].clip.setStyle(this.slide_style_name, 'auto');
+			var clip = this.section_list[index].clip;
+			clip.setStyle(this.slide_style_name, 'auto');
+			clip.setAttribute('aria-hidden', 'false');
 			this.fire('open', index);
 		}
 
 		function onCompleteCloseSection(type, index)
 		{
 			this.section_list[index].content.setStyle('display', 'none');
+			this.section_list[index].clip.setAttribute('aria-hidden', 'true');
 			this.fire('close', index);
 		}
 
@@ -1267,7 +1281,7 @@ Y.namespace("Plugin");
 Y.Plugin.FixedSizeAccordion = FixedSizeAccordionPlugin;
 
 
-}, 'gallery-2013.01.16-21-05', {
+}, 'gallery-2013.01.30-21-00', {
     "skinnable": "true",
     "requires": [
         "widget",

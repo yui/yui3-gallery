@@ -5,9 +5,9 @@
     "errors": 0,
     "ignored": 0,
     "total": 0,
-    "duration": 3,
+    "duration": 6,
     "type": "report",
-    "timestamp": "Wed 16 Jan 2013 03:06:49 PM CST",
+    "timestamp": "Wed 30 Jan 2013 03:01:01 PM CST",
     "coverage": {
         "build/gallery-accordion-horiz-vert/gallery-accordion-horiz-vert.js": {
             "path": "build/gallery-accordion-horiz-vert/gallery-accordion-horiz-vert.js",
@@ -7237,5 +7237,6 @@
             }
         }
     },
-    "coverageType": "istanbul"
+    "coverageType": "istanbul",
+    "consoleInfo": []
 }
