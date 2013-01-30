@@ -1,0 +1,9 @@
+{
+    "name"       : "gallery-zui-rascroll",
+    "displayName": "Gallery: zui-rascroll",
+    "description": "ZUI RAScroll is a scrollView plugin to handle Horizontal scroll behaviors when\\na scrollView (horizontal) is be placed in another scrollView (vertical) .",
+    "author"     : [ "zordius" ],
+    "use"        : [ "gallery-zui-rascroll" ],
+
+    "tags": ["scrollview", "multiple scrollviews", "right angel", "zordius"]
+}

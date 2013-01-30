@@ -1,0 +1,12 @@
+{
+    "name": "gallery-zui-rascroll",
+    "builds": {
+        "gallery-zui-rascroll": {
+            "skinnable": "false",
+            "jsfiles": [
+                "zui-rascroll.js"
+            ],
+            "meta": {}
+        }
+    }
+}

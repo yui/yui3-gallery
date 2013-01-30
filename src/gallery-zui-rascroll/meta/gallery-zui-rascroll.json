@@ -1,0 +1,8 @@
+{
+    "gallery-zui-rascroll": {
+        "skinnable": false,
+        "requires": [
+            "scrollview"
+        ]
+    }
+}

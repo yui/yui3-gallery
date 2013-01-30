@@ -4,7 +4,7 @@
  * user can do only x or y direction slick.
  *
  * @module gallery-zui-rascroll
- */ 
+ */
 var dragging = 0,
     dragStart = false,
     onlyX = false,
@@ -12,7 +12,7 @@ var dragging = 0,
  * RAScrollPlugin is a ScrollView plugin that adds right angle flick behaviors.
  *
  * @class RAScrollPlugin
- * @namespace zui 
+ * @namespace zui
  * @extends Plugin.Base
  * @constructor
  */
@@ -66,7 +66,10 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
         this._start = false;
 
         if (!this._hori) {
-            this._cnt.setStyle('overflowX', 'hidden');
+            this._cnt.setStyles({
+                overflowX: 'hidden',
+                height: 'auto'
+            });
         }
 
         this._handles.push(new Y.EventHandle([
@@ -84,7 +87,7 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
      * @method handleGestureMoveStart
      * @protected
      */
-    handleGestureMoveStart: function (E) {
+    handleGestureMoveStart: function () {
         dragging++;
     },
 
@@ -102,7 +105,7 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
         this._start = true;
 
         if (!dragStart) {
-            onlyX = Math.abs(this._host._startClientX - E.clientX) > Math.abs(this._host._startClientY - E.clientY);
+            onlyX = Math.abs(this._host._gesture.startClientX - E.clientX) > Math.abs(this._host._gesture.startClientY - E.clientY);
             dragStart = true;
         }
 
@@ -123,7 +126,7 @@ Y.namespace('zui').RAScroll = Y.extend(RAScrollPlugin, Y.Plugin.Base, {
      * @method handleGestureMoveEnd
      * @protected
      */
-    handleGestureMoveEnd: function (E) {
+    handleGestureMoveEnd: function () {
         this._start = false;
         dragStart = false;
         dragging = 0;

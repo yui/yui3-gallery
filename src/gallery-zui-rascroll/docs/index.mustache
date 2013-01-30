@@ -1,0 +1,33 @@
+<div class="intro">
+ <p>ZUI RAScroll is a scrollView plugin to handle Horizontal scroll behaviors when a scrollView (horizontal) is be placed in another scrollView (vertical) .</p>
+</div>
+
+<h2>Description</h2>
+<p>Just plug Y.zui.RAScroll into a scrollView. If user flick up or down, the scrollView will ignore it. If you want a vertical scroll, plug Y.zui.RAscroll with {horizontal: false} .</p>
+<p>Now ZUI RAScroll also support browser native scroll, that means: If the horizontal scrollView is scrolling, the vertical page scroll will be disabled, too.</p>
+<h2>Note</h2>
+<ul>
+ <li>When Y.zui.RAScroll be plugged as horizontal mode, it will try to adjust host height to ensure the scrollView is horizontal. Or, if Y.zui.RAScroll be plugged as vertical mode, it will try to ensure the native browser scroll will not happen by adjust the contentBox height. If the contents in the scrollView changed, you may need to execute scrollview.hs.syncScroll() to do the adjustment again.</li>
+</ul>
+<h2>Known Issue</h2>
+<ul>
+ <li>Can not cowork with YUI 3.7.0+</li>
+</ul>
+<h2>Sample Code</h2>
+```
+YUI().use('gallery-zui-rascroll', function(Y) {
+
+    // Make the scrollView become a horizontal scroll.
+    var scroll = new Y.ScrollView(...).plug(Y.zui.RAScroll);
+
+    // Make another scrollView become a vertical scroll.
+    var scroll2 = new Y.ScrollView(...).plug(Y.zui.RAScroll, {horizontal: false});
+
+    // Update scroll size when content changed.
+    var updateContent = function (C) {
+        scroll.get('contentBox').set('innerHTML', C);
+        scroll.zras.syncScroll();
+    };
+
+});
+```
