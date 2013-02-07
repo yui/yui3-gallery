@@ -1,0 +1,10 @@
+{
+    "gallery-zui-placeholder": {
+        "requires": [
+            "node-base", "event-focus"
+        ],
+        "optional": [
+            "node-event-delegate"
+        ]
+    }
+}

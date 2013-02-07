@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <title>Test ZUI Placeholder</title>
+</head>
+<body class="yui3-skin-sam">
+<form>
+ <input id="test1" type="button" />
+ <input id="test2" type="text" placeholder="test 2" />
+ <input id="test3" type="text" placeholder="" />
+ <input id="test4" type="text" value="test4" />
+ <input id="test5" type="text" placeholder="test 5" value="test5" />
+ <input id="test6" type="text" placeholder="test 6" value="test 6" />
+</form>
+<div>
+ <input id="test7" type="button" />
+ <input id="test8" type="text" placeholder="test 2" />
+ <input id="test9" type="text" placeholder="" />
+ <input id="test10" type="text" value="test4" />
+ <input id="test11" type="text" placeholder="test 5" value="test5" />
+ <input id="test12" type="text" placeholder="test 6" value="test 6" />
+</div>
+</div>
+
+<link rel="stylesheet" type="text/css" href="../build/gallery-zui-placeholder/assets/gallery-zui-placeholder-core.css"></link>
+<script src="/build/yui/yui-debug.js"></script>
+<script>
+
+YUI({
+    coverage: ['gallery-zui-placeholder'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test', 'gallery-zui-placeholder', function (Y) {
+    var testSuite = new Y.Test.Suite('ZUI placeholder');
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test nativeSupport detection',
+
+        testFirefox: function () {
+            if (Y.UA.gecko > 5) {
+                Y.Assert.isTrue(Y.zui.placeholder.isNative);
+            }
+        },
+
+        testChrome: function () {
+            if (Y.UA.chrome > 10) {
+                Y.Assert.isTrue(Y.zui.placeholder.isNative);
+            }
+        },
+
+        testIE: function () {
+            if (Y.UA.ie > 1 && Y.UA.ie < 9) {
+                Y.Assert.isFalse(Y.zui.placeholder.isNative);
+            }
+        }
+    }));
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test install placeholder',
+
+        testInstallWithIDNoPlaceholder: function () {
+            var ret = Y.zui.placeholder.install('#test1');
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(1, ret[0]);
+                Y.Assert.areSame(0, ret[1]);
+            }
+        },
+
+        testInstallWithIDHasPlaceholder: function () {
+            var ret = Y.zui.placeholder.install('#test2');
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(1, ret[0]);
+                Y.Assert.areSame(1, ret[1]);
+            }
+        },
+
+        testInstallWithIDHasEmptyPlaceholder: function () {
+            var ret = Y.zui.placeholder.install('#test3');
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(1, ret[0]);
+                Y.Assert.areSame(0, ret[1]);
+            }
+        },
+
+        testInstallManyElements: function () {
+            var ret = Y.zui.placeholder.install('#test4, #test5');
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(2, ret[0]);
+                Y.Assert.areSame(1, ret[1]);
+            }
+        },
+
+        testInstallDupeElements: function () {
+            var ret = Y.zui.placeholder.install('form input');
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(6, ret[0]);
+                Y.Assert.areSame(1, ret[1]);
+            }
+        },
+
+        testInstallDelegateError: function () {
+            var ret = Y.zui.placeholder.installDelegate('div', 'input');
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(-1, ret[0]);
+                Y.Assert.areSame(-1, ret[1]);
+            }
+        },
+
+        testUninstall: function () {
+            var ret = Y.zui.placeholder.uninstall('form input');
+
+            if (Y.zui.placeholder.isNative) {
+                Y.Assert.isUndefined(ret);
+            } else {
+                Y.Assert.isObject(ret);
+                Y.Assert.areSame(6, ret[0]);
+                Y.Assert.areSame(3, ret[1]);
+                Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
+                Y.Assert.isFalse(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
+                Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
+                Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
+                Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
+                Y.Assert.isFalse(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
+                Y.Assert.areSame('', Y.one('#test2').get('value'));
+                Y.Assert.areSame('test4', Y.one('#test4').get('value'));
+                Y.Assert.areSame('test5', Y.one('#test5').get('value'));
+                Y.Assert.areSame('', Y.one('#test6').get('value'));
+            }
+        }
+    }));
+    
+    testSuite.add(new Y.Test.Case({
+        name: 'Test focus/blur placeholder',
+
+        testFocusPlaceholder: function () {
+            if (Y.zui.placeholder.isNative) {
+                return;
+            }
+
+            var ret = Y.zui.placeholder.install('form input');
+            Y.Assert.isObject(ret);
+            Y.Assert.areSame(6, ret[0]);
+            Y.Assert.areSame(3, ret[1]);
+
+            Y.one('#test1').focus();
+            Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.areSame('test 2', Y.one('#test2').get('value'));
+            Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+        },
+
+        testNotInstalledPlaceholder: function () {
+            if (Y.zui.placeholder.isNative) {
+                return;
+            }
+
+            Y.Assert.isFalse(Y.one('#test7').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test8').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test9').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test10').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test11').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test12').hasClass(Y.zui.placeholder.clsBlur));
+        },
+
+        testFocusChangePlaceholder: function () {
+            if (Y.zui.placeholder.isNative) {
+                return;
+            }
+
+            Y.one('#test2').focus();
+            Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.areSame('', Y.one('#test2').get('value'));
+            Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+        },
+
+        testFocusNoPlaceholder: function () {
+            if (Y.zui.placeholder.isNative) {
+                return;
+            }
+
+            self.focus();
+            Y.one('#test3').focus();
+
+            Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.areSame('test 2', Y.one('#test2').get('value'));
+            Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+        },
+
+        testFocusOnDiv: function () {
+            if (Y.zui.placeholder.isNative) {
+                return;
+            }
+
+            self.focus();
+            Y.one('div').focus();
+
+            Y.Assert.isFalse(Y.one('#test1').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test2').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test3').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test4').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isFalse(Y.one('#test5').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.isTrue(Y.one('#test6').hasClass(Y.zui.placeholder.clsBlur));
+            Y.Assert.areSame('test 2', Y.one('#test2').get('value'));
+            Y.Assert.areSame('test 6', Y.one('#test6').get('value'));
+        }
+    }));
+
+    Y.Test.Runner.add(testSuite);
+    Y.Test.Runner.run();
+});
+</script>
+</body></html>

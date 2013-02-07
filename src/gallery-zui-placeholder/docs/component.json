@@ -1,0 +1,8 @@
+{
+    "name"       : "gallery-zui-placeholder",
+    "displayName": "Gallery: zui-placeholder",
+    "description": "ZUI placeholder provides utilities to enable placeholder support for older browsers.",
+    "author"     : [ "zordius" ],
+
+    "tags": ["ie6", "ie7", "ie8", "ie9", "html5", "placeholder", "zordius"]
+}

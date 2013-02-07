@@ -1,43 +1,27 @@
-ZUI placeholder
-===============
+<div class="intro">
+ <p>ZUI placeholder provides utilities to enable placeholder support for older browsers.</p>
+</div>
 
-Summary
--------
-
-ZUI placeholder provides utilities to enable placeholder support for older browsers.
-
-Description
------------
-
-Simplest way to enable placeholder support in IE: Y.zui.placeholder.install().
-
-You do not need to provide more congifuration to ZUI placeholder, just use 
-standard html5 placeholder attribute. ZUI placeholder will scan for this 
-attribute then change classname and value when focus status changed.
-
-When user using browser which supports placeholder natively, ZUI placeholder
+<h2>Description</h2>
+<p>Simplest way to enable placeholder support in IE: Y.zui.placeholder.install().</p>
+<p>You do not need to provide more congifuration to ZUI placeholder, just use
+standard html5 placeholder attribute. ZUI placeholder will scan for this
+attribute then change classname and value when focus status changed.</p>
+<p>When user using browser which supports placeholder natively, ZUI placeholder
 just skip installation when utilities called. You do not need to care about
-user browser versions, and no any event handling cost in this case.
-
-Note
-----
-
-*   2nd installDelegate() on the same node will not be executed, even
-    when you changed the css selector.
-
-Known Issue
------------
-
-*   If user input a value same with placeholder exactly, the value will be 
-    cleaned when this input is blured.
-
-*   If the form submit triggered and zui placeholder is not uninstalled,
-    inputs with empty value will send values to server as placeholder.
-
-Code Sample
------------
-
-
+user browser versions, and no any event handling cost in this case.</p>
+<h2>Note</h2>
+<ul>
+ <li>2nd installDelegate() on the same node will not be executed, even when you changed the css selector.</li>
+</ul>
+<h2>Known Issue</h2>
+<ul>
+ <li>If user input a value same with placeholder exactly, the value will be cleaned when this input is blured.</li>
+ <li>If the form submit triggered and zui placeholder is not uninstalled, inputs with empty value will send values to server as placeholder.</li>
+</ul>
+<h2>Sample Code</h2>
+```
+YUI().use('gallery-zui-placeholder', function(Y) {
     // You may need to include css file
     // <link rel="stylesheet" type="text/css" href="../../../build/gallery-zui-placeholder/assets/gallery-zui-placeholder-core.css"></link>
     // or define your own style on 'input.zui-phblur, textarea.zui-phblur'
@@ -75,3 +59,5 @@ Code Sample
 
     // Same with previous
     Y.zui.placeholder.installDelegate(new_div, 'input, textarea');
+});
+```

@@ -1,0 +1,10 @@
+{
+    "name": "gallery-zui-placeholder",
+    "builds": {
+        "gallery-zui-placeholder": {
+            "jsfiles": [
+                "zui-placeholder.js"
+            ]
+        }
+    }
+}
