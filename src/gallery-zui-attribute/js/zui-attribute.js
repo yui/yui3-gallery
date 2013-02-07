@@ -7,9 +7,10 @@
 
 /**
  * A augmentable implementation for Attribute, providing extended
- * methods for Attribute management such as toggle() and set_again()   
+ * methods for Attribute management such as toggle() and set_again()
  *
- * @class ZAttribute
+ * @namespace zui
+ * @class Attribute
 */
 function ZAttribute() {}
 
@@ -59,7 +60,7 @@ ZAttribute.prototype = {
          * @property _doRevert
          * @type Boolean
          * @protected
-         */  
+         */
         var doRevert = this._doRevert;
 
        /**
@@ -100,7 +101,7 @@ ZAttribute.prototype = {
      * @param name {String} The name of the attribute.
      * @chainable
      */
-    revert: function (name, value) {
+    revert: function (name) {
         if (!this._revertStack || !this._revertStack[name] || (this._revertStack[name].length < 2)) {
             return this;
         }

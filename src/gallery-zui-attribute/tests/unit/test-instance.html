@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <title>Test ZUI Attribute</title>
+</head>
+<body>
+<script src="/build/yui/yui-debug.js"></script>
+<script src="../testlib.js"></script> 
+<script>
+YUI({
+    coverage: ['gallery-zui-attribute'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test', 'base', 'gallery-zui-attribute', function (Y) {
+    var myClass = function () {
+            myClass.superclass.constructor.apply(this, arguments);
+        },
+        myInstance;
+
+    myClass.NAME = 'myClass';
+    myClass.ATTRS = {
+        attrA: {value: 0},
+        attrB: {value: 1},
+        attrC: {value: true},
+        attrD: {value: false},
+        attrE: {value: null},
+        attrF: {value: 'string'}
+    };
+
+    Y.extend(myClass, Y.Base);
+    myInstance = new myClass();
+
+    Y.mix(myInstance, Y.zui.Attribute.prototype, true);
+
+    runTestLib(Y, myInstance, 'Test mix zui.Attribute.prototype on an instance');
+});
+</script>
+</body></html>

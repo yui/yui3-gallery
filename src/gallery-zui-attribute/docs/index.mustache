@@ -1,0 +1,76 @@
+<div class="intro">
+ <p>ZUI attribute provides revert() , toggle() , set_again(), sync(), unsync() methods for Attribute.</p>
+</div>
+
+<h2>Description</h2>
+This module provides 5 more methods for Attribute:
+<ul>
+ <li>revert() : rollback attribute value to previous one</li>
+ <li>toggle() : set attribute value to opposite boolean</li>
+ <li>set_again() : set attribute value to current value, use this to trigger setter function or change event again.</li>
+ <li>sync() : sync an attribute from other Object when the attribute value of other object changed, everytime.</li>
+ <li>unsync() : remove the sync binding.</li>
+</ul>
+<h2>Note</h2>
+<ul>
+ <li>do not use toggle() on none boolean value. It works, but the result may changed in future version.</li>
+ <li>Now revert() is disabled by default for performance. You can set _doRevert property to true to enable revert() for all properties, or set _revertList as {propertyName: true, ...} hash for specified properties.</li>
+ <li>YUI Base object mixed Attribute when Y.use('base') , if you try to Y.mix(Y.AttributeCore.prototype, Y.zui.Attribute.prototype, true) , it seens not work. 2 ways to resolve this:
+ <ol>
+  <li>Y.mix(Y.Base.prototype, Y.zui.Attribute.prototype, true);</li>
+  <li>Y.mix(Y.AttributeCore.prototype, Y.zui.Attribute.prototype, true); then Y.use('base', ...);</li>
+ </ol>
+</li>
+ <li>Same with previous, you may need to Y.mix() Widget or all other Base child classes.</li>
+</ul>
+<ul>
+ <li>You may use Y.mix(ClassA, ClassB, true, null, 1) to mix on prototype, check document: <a href="http://yuilibrary.com/yui/docs/api/classes/YUI.html#method_mix">http://yuilibrary.com/yui/docs/api/classes/YUI.html#method_mix</a> . I like to use Y.mix(ClassA.prototype, ClassB.prototype, true), it makes code more readable.</li>
+</ul>
+<h2>Known Issue</h2>
+ <li>set() will be tracked after Y.zui.Attribute mix into your class, then revert() use tracked value information to work. So, revert() can not get older values before Y.zui.Attribute mixed.</li>
+</ul>
+<h2>Sample Code</h2>
+```
+YUI().use('gallery-zui-attribute', function(Y) {
+
+    // Add ZUI attribute support to one instance
+    Y.mix(myInstance, Y.zui.Attribute.prototype);
+
+    // enable revert() on 'testAttr2'
+    myInstance._revertList = {testAttr2: true};
+
+    // Or, enable revert() on all attributes
+    myInstance._doRevert = true;
+
+    // Now, set an attribute
+    myInstance.set('testAttr', 3);
+
+    // And you can revert the attribute
+    myInstance.revert('testAttr');
+
+    // Sync an attribute from another object
+    // Everytime objterObject.get('testAttr') changed, set() the value to myInstance
+    myInstance.sync('testAttr', otherObject);
+
+    // Sync an attribute from another object, specify a different attribute name
+    // Everytime objterObject.get('Attr2') changed, set() the value to myInstance
+    myInstance.sync('testAttr', otherObject, 'Attr2');
+
+    // Stop to monitering the attribute change
+    myInstance.unsync('testAttr', otherObject);
+
+
+    // Or, add ZUI attribute support to a class (before creating any instance)
+    Y.mix(myClass.prototype, Y.zui.Attribute.prototype);
+
+    // Now, all myClass instances support revert(), toggle(), etc ...
+    var testInstance = new myClass();
+    testInstance.toggle('testAttr');
+
+    // Add ZUI attribute support for all Attribute object
+    Y.mix(Y.Attribute.prototype, Y.zui.Attribute.prototype, true);
+
+    // Add ZUI attribute support for all Base object
+    Y.mix(Y.Base.prototype, Y.zui.Attribute.prototype, true);
+});
+```

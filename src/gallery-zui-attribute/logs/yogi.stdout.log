@@ -1,0 +1,58 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.67 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-zui-attribute
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-zui-attribute
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-zui-attribute/gallery-zui-attribute.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting assets for gallery-zui-attribute
+shifter [queu] coverage file read, starting coverage for: gallery-zui-attribute/gallery-zui-attribute.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-zui-attribute/gallery-zui-attribute-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.174 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5008
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5007
+Starting Grover on 3 files with PhantomJS@1.8.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [ZUI attribute]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (0.081 seconds) 97%
+✔ [ZUI attribute]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (0.064 seconds) 97%
+✔ [ZUI attribute]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (0.066 seconds) 97%
+Writing files in JSON format to: /src/gallery-zui-attribute/logs/tests.json
+
+-------------------------------+-----------+-----------+-----------+-----------+
+File                           |   % Stmts |% Branches |   % Funcs |   % Lines |
+-------------------------------+-----------+-----------+-----------+-----------+
+   gallery-zui-attribute/      |     97.37 |     88.57 |     88.89 |     97.37 |
+      gallery-zui-attribute.js |     97.37 |     88.57 |     88.89 |     97.37 |
+-------------------------------+-----------+-----------+-----------+-----------+
+All files                      |     97.37 |     88.57 |     88.89 |     97.37 |
+-------------------------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 97.37% ( 37/38 )
+Branches     : 88.57% ( 31/35 )
+Functions    : 88.89% ( 8/9 )
+Lines        : 97.37% ( 37/38 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 21 Failed: 0 Total: 21 (ignored 0) (0.211 seconds)
+  [Grover Execution Timer] 1.268 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

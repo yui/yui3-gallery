@@ -1,4 +1,4 @@
-YUI.add('gallery-zui-attribute', function(Y) {
+YUI.add('gallery-zui-attribute', function (Y, NAME) {
 
 /**
  * The Attribute module provides more methods for Attribute object
@@ -9,9 +9,10 @@ YUI.add('gallery-zui-attribute', function(Y) {
 
 /**
  * A augmentable implementation for Attribute, providing extended
- * methods for Attribute management such as toggle() and set_again()   
+ * methods for Attribute management such as toggle() and set_again()
  *
- * @class ZAttribute
+ * @namespace zui
+ * @class Attribute
 */
 function ZAttribute() {}
 
@@ -61,7 +62,7 @@ ZAttribute.prototype = {
          * @property _doRevert
          * @type Boolean
          * @protected
-         */  
+         */
         var doRevert = this._doRevert;
 
        /**
@@ -102,7 +103,7 @@ ZAttribute.prototype = {
      * @param name {String} The name of the attribute.
      * @chainable
      */
-    revert: function (name, value) {
+    revert: function (name) {
         if (!this._revertStack || !this._revertStack[name] || (this._revertStack[name].length < 2)) {
             return this;
         }
@@ -171,4 +172,4 @@ mit this parameter.
 Y.namespace('zui').Attribute = ZAttribute;
 
 
-}, 'gallery-2012.08.29-20-10' ,{requires:['attribute-base'], skinnable:false});
+}, 'gallery-2013.02.07-15-27', {"requires": ["attribute-base"]});

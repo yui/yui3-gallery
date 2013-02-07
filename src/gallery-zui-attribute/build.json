@@ -1,0 +1,10 @@
+{
+    "name": "gallery-zui-attribute",
+    "builds": {
+        "gallery-zui-attribute": {
+            "jsfiles": [
+                "zui-attribute.js"
+            ]
+        }
+    }
+}

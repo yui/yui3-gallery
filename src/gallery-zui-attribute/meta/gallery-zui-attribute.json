@@ -1,0 +1,7 @@
+{
+    "gallery-zui-attribute": {
+        "requires": [
+            "attribute-base"
+        ]
+    }
+}
