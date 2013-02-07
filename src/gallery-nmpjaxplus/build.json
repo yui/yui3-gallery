@@ -1,0 +1,32 @@
+{
+    "name": "gallery-nmpjaxplus",
+    "builds": {
+        "gallery-nmpjaxplus": {
+            "config": {
+                "supersedes": [
+                    ""
+                ],
+                "skinnable": "false",
+                "requires": [
+                    "base-build",
+                    "widget",
+                    "node",
+                    "io",
+                    "history",
+                    "pjax",
+                    "event-delegate",
+                    "cache-base",
+                    "selector-css3"
+                ],
+                "optional": [
+                    ""
+                ]
+            },
+            "skinnable": "false",
+            "jsfiles": [
+                "nmpjaxplus.js"
+            ],
+            "meta": {}
+        }
+    }
+}

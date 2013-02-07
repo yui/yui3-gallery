@@ -1,0 +1,137 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.67 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-nmpjaxplus
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [warn] no build.json file, downshifting to convert ant files
+shifter [info] looking for ant files
+shifter [info] found 1 .properties files, upshifting to convert
+shifter [info] parsing build.properties
+shifter [info] saving newly parsed build.json file for gallery-nmpjaxplus
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-nmpjaxplus
+   #1: Trailing whitespace.
+       Y.PjaxPlus = Y.Base.create('pjaxplus', Y.Widget, [], { // line 3, pos 55
+   #2: Bad escapement.
+       this.domain = new RegExp('^(http|https):\/\/' + window.location.hostname.replace('.','\.')); // line 12, pos 96
+   #3: Too many var statements.
+       var goodext = false; // line 26, pos 17
+   #4: Too many var statements.
+       var pathnameidx = pathnamearr.length - 1; // line 29, pos 21
+   #5: Too many var statements.
+       var filename = pathnamearr[pathnameidx]; // line 30, pos 21
+   #6: Bad escapement.
+       var thisregex = new RegExp('\.' + ext + '$'); // line 39, pos 54
+   #7: Trailing whitespace.
+       if (goodext && !node.get('href').match(/^(mailto|javascript):/) && !node.get('href').match(/^#/) && // line 46, pos 116
+   #8: Too many var statements.
+       var PjaxLoader = new Y.Pjax({ // line 52, pos 17
+   #9: Trailing whitespace.
+       var html5support = this.get('html5support'); // line 67, pos 61
+   #10: Trailing whitespace.
+       if (this.get('startCallbackFunc')) { // line 69, pos 53
+   #11: Mixed spaces and tabs.
+       url:e.originEvent.target.get('href'), // line 74, pos 4
+   #12: Mixed spaces and tabs.
+       url:clickedTarget.get('href'), // line 89, pos 4
+   #13: Trailing whitespace.
+       queryString:clickedTarget.get('search'), // line 90, pos 65
+   #14: Too many var statements.
+       var historyhash = e.target.get('pathname').replace(/_/g,'-'); // line 116, pos 25
+   #15: Trailing whitespace.
+       historyhash = e.target.get('pathname').replace(/\//g,'_'); // line 117, pos 79
+   #16: Trailing whitespace.
+       if (this.get('callbackFunc')) { // line 127, pos 56
+   #17: Mixed spaces and tabs.
+       this.get('callbackFunc').call(null, { // line 129, pos 6
+   #18: Mixed spaces and tabs.
+       url:e.target.get('href'), // line 132, pos 6
+   #19: Mixed spaces and tabs.
+       }, this); // line 136, pos 6
+   #20: Trailing whitespace.
+       } // line 139, pos 22
+   #21: Too many var statements.
+       var goodext = false; // line 142, pos 21
+   #22: Expected '===' and instead saw '=='.
+       if (typeof e.target.get('pathname') == "undefined") { // line 143, pos 53
+   #23: Too many var statements.
+       var pathnamearr = e.target.get('pathname').split(/\//); // line 152, pos 25
+   #24: Too many var statements.
+       var pathnameidx = pathnamearr.length - 1; // line 153, pos 25
+   #25: Too many var statements.
+       var filename = pathnamearr[pathnameidx]; // line 154, pos 25
+   #26: Bad escapement.
+       var thisregex = new RegExp('\.' + ext + '$'); // line 163, pos 58
+   #27: Trailing whitespace.
+       } // line 168, pos 22
+   #28: Trailing whitespace.
+       if (goodext && !e.target.get('href').match(/^(mailto|javascript):/) && !e.target.get('href').match(/^#/) && // line 170, pos 128
+   #29: 'historyhash' used out of scope.
+       historyhash:historyhash, // line 178, pos 45
+   #30: Too many var statements.
+       var cfg = { // line 204, pos 13
+   #31: Too many var statements.
+       var frag = Y.Node.create(transport.responseText); // line 213, pos 29
+   #32: Too many var statements.
+       var output = frag.one(this.get('contentSelector')).getHTML(); // line 215, pos 29
+   #33: 'output' is already defined.
+       var output = frag.one(this.get('contentSelector')).getHTML(); // line 215, pos 36
+   #34: 'output' used out of scope.
+       this.ppCache.add(configObj.url, output); // line 224, pos 53
+   #35: Trailing whitespace.
+       if (this.get('callbackFunc')) { // line 231, pos 52
+   #36: Mixed spaces and tabs.
+       this.get('callbackFunc').call(null, configObj, this); // line 233, pos 5
+   #37: Mixed spaces and tabs.
+        // line 241, pos 2
+   #38: Trailing whitespace.
+       ATTRS : { // line 243, pos 14
+   #39: 'config' is defined but never used.
+       initializer : function( config ) { // line 4, pos 35
+   #40: 'e' is defined but never used.
+       PjaxLoader.after('load', function(e) { // line 82, pos 48
+   #41: 'output' is defined but never used.
+       var output = frag.one(this.get('contentSelector')).getHTML(); // line 215, pos 35
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-nmpjaxplus/gallery-nmpjaxplus.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-nmpjaxplus
+{ config: 
+   { supersedes: [ '' ],
+     skinnable: 'false',
+     requires: 
+      [ 'base-build',
+        'widget',
+        'node',
+        'io',
+        'history',
+        'pjax',
+        'event-delegate',
+        'cache-base',
+        'selector-css3' ],
+     optional: [ '' ] },
+  skinnable: 'false',
+  jsfiles: [ 'nmpjaxplus.js' ],
+  meta: {},
+  buildDir: '/build',
+  stamp: true,
+  cssproc: 'http://yui.yahooapis.com/gallery-2013.02.07-15-27/' }
+shifter [queu] coverage file read, starting coverage for: gallery-nmpjaxplus/gallery-nmpjaxplus.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-nmpjaxplus/gallery-nmpjaxplus-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.229 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)
