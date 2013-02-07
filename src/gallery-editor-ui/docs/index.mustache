@@ -27,7 +27,7 @@
 <p>The module was designed to be more lightweight and completely based on the YUI3 framework unlike CKeditor or tinyMCE.</p
 
 <h2>Example</h2>
-Html
+Html:
 ```
 <form method="post" id="postForm">
   <textarea id="editContent">
@@ -37,7 +37,7 @@ Html
   <button type="submit">Save</button>
 </form>
 ```
-JS gallery module init
+Javascript gallery module init:
 ```
 <script>
 	Y.on('domready', function() {
@@ -49,7 +49,7 @@ JS gallery module init
 <h2>Configuration</h2>
 <p>Default text is picked up from the textarea content. Set the CSS for the visual edit mode. Set the image max width (same as composer?).</p>
 
-<p>Instead of submitting the data to a form you can also get the content for your own call:<p>
+<p>Instead of submitting the data to a form you can also get the content for your own call with getContent():<p>
 ```
 <script>
 	Y.on('domready', function() {
@@ -59,10 +59,10 @@ JS gallery module init
 ```
 
 <h2>Backend Setup</h2>
-<p>Resize and crop image script</p>
+<p>Resize and crop image script please see the example file assets/upload.phps which uses ImageMagick.</p>
 
 <h2>Known issues</h2>
-<p>The image manager module only supports HTML5 capable browsers. IE<=10 Seems to have issues with the image uploader.</p>
+<p>The image manager module only supports HTML5 capable browsers, and has no fallback. IE<=10 Seems to have issues with the image uploader.</p>
 
 <h2>Todo</h2>
 <ul>

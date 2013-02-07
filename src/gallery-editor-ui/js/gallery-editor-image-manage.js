@@ -189,7 +189,7 @@
 				cell.appendChild(this.clearBtn);
 				
 				if(this.get("resizeHeight") === true){
-					var heightInpt = Y.Node.create('<input class="height_row" value="'+cellImageSizes.height+'">');
+					var heightInpt = Y.Node.create('<input class="heightRow" value="'+cellImageSizes.height+'">');
 					heightInpt.on(["blur","submit"],Y.bind(function(evt){
 						var row = evt.currentTarget.get("parentNode");
 						var height = parseInt(evt.currentTarget.get("value"),10);

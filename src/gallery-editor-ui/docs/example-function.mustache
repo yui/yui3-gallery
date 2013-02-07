@@ -2,7 +2,7 @@
     <p>Intro example</p>
 </div>
 
-<h2>Example EditorUI</h2>
+<h2>Example EditorUI - custom function</h2>
 <p>Description</p>
 
 {{>example-html}}
@@ -11,8 +11,7 @@
 YUI().use('{{use}}', function(Y) {
 	
 	Y.on('domready', function() {
-		/* create editor */		
-		{{>example-js}}
+		{{>example-js-non-submit}}
 	});
 });
 </script>

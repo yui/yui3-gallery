@@ -149,7 +149,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 				if(textArea){					
 					//build html for editor UI
 					textArea.addClass("Ak");//styling class
-					editor = Y.Node.create('<div style="width: '+textArea.getComputedStyle("width")+'; height: '+textArea.getComputedStyle("height")+'""></div>');//inherit width + height
+					editor = Y.Node.create('<div style="width: '+textArea.getComputedStyle("width")+'""></div>');//inherit width
 					textFrame = Y.Node.create('<div class="f9 Ar" style="display: none"></div>');//todo: allow config option to set initial state
 					htmlFrame = Y.Node.create('<div class="f8 Ar"></div>');//height from css
 					
@@ -218,7 +218,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 							zIndex: 150,
 							shim: true,
 							headerContent: "Add Link",
-							bodyContent: '<table><tr><td>Text to display:</td><td><input id="linkdialog-text" style="width: 300px"></td></tr><tr><td>To what URL should this link go?</td><td><input id="linkdialog-input" type="url" style="width: 300px; margin-right: 5px;"><small><a href="#" id="testLink" target="_blank">test link</a></small></td></tr><tr><td colspan="2"><div class="Kj-JD-Jl"><button name="ok" id="linkSubmitButton">Insert Link</button><button name="cancel" class="linkHideWindow">Cancel</button></div></td></tr></table>',
+							bodyContent: '<table class="space"><tr><td>Text to display:</td><td><input id="linkdialog-text" style="width: 300px"></td></tr><tr><td>To what URL should this link go?</td><td><input id="linkdialog-input" type="url" style="width: 300px; margin-right: 5px;"><small><a href="#" id="testLink" target="_blank">test link</a></small></td></tr><tr><td colspan="2"><div class="Kj-JD-Jl"><button name="ok" id="linkSubmitButton">Insert Link</button><button name="cancel" class="linkHideWindow">Cancel</button></div></td></tr></table>',
 							render: true
 				}));
 				this.set("mediaWindow", new Y.Panel({
@@ -228,7 +228,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 							zIndex: 150,
 							shim: true,
 							headerContent: "Add Media",
-							bodyContent: '<table><tr><td colspan="2"><div class="image-upload-frame"></div></td></tr><tr><td>URL:</td><td><input id="mediadialog-source" style="width: 300px" placeholder="http://"></td></tr><tr><td>Title:</td><td><input id="mediadialog-text" style="width: 300px" placeholder=""></td></tr><tr><td colspan="2"><div class="Kj-JD-Jl"><button name="ok" id="mediaSubmitButton">Add Media</button><button name="cancel" class="mediaHideWindow">Cancel</button></div></td></tr></table>',
+							bodyContent: '<table class="space"><tr><td colspan="2"><div class="image-upload-frame"></div></td></tr><tr><td>URL:</td><td><input id="mediadialog-source" style="width: 300px" placeholder="http://"></td></tr><tr><td>Title:</td><td><input id="mediadialog-text" style="width: 300px" placeholder=""></td></tr><tr><td colspan="2"><div class="Kj-JD-Jl"><button name="ok" id="mediaSubmitButton">Add Media</button><button name="cancel" class="mediaHideWindow">Cancel</button></div></td></tr></table>',
 							render: true
 				}));
 				this.set("sizeWindow", new Y.Overlay({
@@ -411,7 +411,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 					
 					Y.one("#mediaSubmitButton").destroy();//destroy
 					Y.one("#mediaSubmitButton").on("click",Y.bind(function(e){
-						e.preventDefault()
+						e.preventDefault();
 						
 						if(node){
 							//update node src
@@ -1138,7 +1138,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 				cell.appendChild(this.clearBtn);
 				
 				if(this.get("resizeHeight") === true){
-					var heightInpt = Y.Node.create('<input class="height_row" value="'+cellImageSizes.height+'">');
+					var heightInpt = Y.Node.create('<input class="heightRow" value="'+cellImageSizes.height+'">');
 					heightInpt.on(["blur","submit"],Y.bind(function(evt){
 						var row = evt.currentTarget.get("parentNode");
 						var height = parseInt(evt.currentTarget.get("value"),10);
