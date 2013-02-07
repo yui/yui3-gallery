@@ -1,0 +1,85 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.67 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-sm-menu
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-sm-menu
+shifter [info] shifting into gear for gallery-sm-menu-base
+shifter [info] shifting into gear for gallery-sm-menu-item
+shifter [info] shifting into gear for gallery-sm-menu-plugin
+shifter [info] shifting into gear for gallery-sm-menu-templates
+shifter [queu] writing RAW file
+shifter [queu] writing RAW file
+shifter [queu] writing RAW file
+shifter [queu] writing RAW file
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-sm-menu/gallery-sm-menu.js with UglifyJS
+shifter [queu] compressing gallery-sm-menu-base/gallery-sm-menu-base.js with UglifyJS
+shifter [queu] compressing gallery-sm-menu-item/gallery-sm-menu-item.js with UglifyJS
+shifter [queu] compressing gallery-sm-menu-plugin/gallery-sm-menu-plugin.js with UglifyJS
+shifter [queu] compressing gallery-sm-menu-templates/gallery-sm-menu-templates.js with UglifyJS
+shifter [queu] writing -min file
+shifter [queu] writing -min file
+shifter [queu] writing -min file
+shifter [queu] writing -min file
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-sm-menu
+{ jsfiles: [ 'js/menu.js' ],
+  config: 
+   { requires: 
+      [ 'classnamemanager',
+        'escape',
+        'event-hover',
+        'gallery-sm-menu-base',
+        'gallery-sm-menu-templates',
+        'node-screen',
+        'view' ],
+     skinnable: true },
+  buildDir: '/build',
+  stamp: true,
+  cssproc: 'http://yui.yahooapis.com/gallery-2013.02.07-15-27/' }
+shifter [info] shifting for coverage
+shifter [info] shifting for coverage
+shifter [info] shifting for coverage
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-sm-menu/gallery-sm-menu.js
+shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-base/gallery-sm-menu-base.js
+shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-item/gallery-sm-menu-item.js
+shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-plugin/gallery-sm-menu-plugin.js
+shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-templates/gallery-sm-menu-templates.js
+shifter [queu] copying assets to skin for sam
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+   #1: [warning] Don't use adjoining classes.
+       .yui3-menu.yui3-menu-open { // line 7, pos 1
+   #2: [warning] Missing vendor-prefixed CSS gradients for Old Webkit (Safari 4+, Chrome).
+       .yui3-skin-sam a.yui3-menu-label:hover { // line 83, pos 1
+   #3: [warning] Don't use adjoining classes.
+       .yui3-skin-sam .yui3-menu-can-have-children.yui3-menu-disabled > .yui3-menu-label:after { // line 102, pos 16
+shifter [queu] writing coverage file to gallery-sm-menu/gallery-sm-menu-coverage.js
+shifter [queu] writing coverage file to gallery-sm-menu-base/gallery-sm-menu-base-coverage.js
+shifter [queu] writing coverage file to gallery-sm-menu-item/gallery-sm-menu-item-coverage.js
+shifter [queu] writing coverage file to gallery-sm-menu-plugin/gallery-sm-menu-plugin-coverage.js
+shifter [queu] writing coverage file to gallery-sm-menu-templates/gallery-sm-menu-templates-coverage.js
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.874 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

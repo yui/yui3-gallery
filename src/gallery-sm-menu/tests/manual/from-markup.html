@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Menu creation from markup</title>
+    <!-- <link rel="stylesheet" href="../../assets/menu-core.css"> -->
+    <!-- <link rel="stylesheet" href="../../assets/skins/sam/menu-skin.css"> -->
+    <style>
+    html {
+        background: #fff;
+        color: #333;
+        font: 14px Helvetica, sans-serif;
+    }
+    </style>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="menu"></div>
+
+<ul id="list">
+    <li class="yui3-menu-heading">
+        Test Menu
+    </li>
+
+    <li>Item 1</li>
+    <li>
+        Item 2
+
+        <ul>
+            <li class="yui3-menu-heading">
+                <span>Submenu</span>
+            </li>
+
+            <li><a href="http://wonko.com/">Item 2.1</a></li>
+            <li><a href="#">Item 2.2</a></li>
+            <li class="yui3-menu-separator"></li>
+
+            <li>
+                Item 2.3
+
+                <ul>
+                    <li>Item 2.3.1</li>
+                    <li>Item 2.3.2</li>
+                    <li>Item 2.3.3</li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+    <li>Item 2</li>
+    <li>Item 3</li>
+</ul>
+
+<script src="/build/yui/yui.js"></script>
+<script>
+var Y = YUI({
+    filter: 'raw'
+}).use('gallery-sm-menu', function (Y) {
+
+var menu = new Y.Menu({
+    container : '#menu',
+    sourceNode: '#list',
+    hideOnClick: false,
+    hideOnOutsideClick: false
+});
+
+menu.render();
+menu.show();
+
+menu.on('itemClick', function (e) {
+    console.log('click!');
+});
+
+});
+</script>
+
+</body>
+</html>

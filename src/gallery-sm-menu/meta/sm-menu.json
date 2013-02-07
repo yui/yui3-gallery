@@ -1,0 +1,44 @@
+{
+    "gallery-sm-menu": {
+        "requires": [
+            "classnamemanager",
+            "escape",
+            "event-hover",
+            "gallery-sm-menu-base",
+            "gallery-sm-menu-templates",
+            "node-screen",
+            "view"
+        ],
+
+        "skinnable": true
+    },
+
+    "gallery-sm-menu-base": {
+        "requires": [
+            "gallery-sm-menu-item",
+            "gallery-sm-tree-openable"
+        ]
+    },
+
+    "gallery-sm-menu-item": {
+        "requires": [
+            "gallery-sm-tree-node",
+            "oop"
+        ]
+    },
+
+    "gallery-sm-menu-plugin": {
+        "requires": [
+            "event-focus",
+            "gallery-sm-menu",
+            "node-pluginhost",
+            "plugin"
+        ]
+    },
+
+    "gallery-sm-menu-templates": {
+        "requires": [
+            "template-micro"
+        ]
+    }
+}

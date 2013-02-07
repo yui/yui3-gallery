@@ -1,0 +1,35 @@
+{
+    "name": "gallery-sm-menu",
+
+    "builds": {
+        "gallery-sm-menu": {
+            "jsfiles": [
+                "js/menu.js"
+            ]
+        },
+
+        "gallery-sm-menu-base": {
+            "jsfiles": [
+                "js/menu-base.js"
+            ]
+        },
+
+        "gallery-sm-menu-item": {
+            "jsfiles": [
+                "js/menu-item.js"
+            ]
+        },
+
+        "gallery-sm-menu-plugin": {
+            "jsfiles": [
+                "js/plugins/menu-plugin.js"
+            ]
+        },
+
+        "gallery-sm-menu-templates": {
+            "jsfiles": [
+                "js/menu-templates.js"
+            ]
+        }
+    }
+}
