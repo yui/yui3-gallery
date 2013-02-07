@@ -1,0 +1,29 @@
+{
+    "name": "gallery-i18n-formats",
+    "builds": {
+        "gallery-i18n-formats": {
+            "jsfiles": [
+                "js/number/BaseFormat.js",
+                "js/number/NumberFormat.js",
+                "js/number/format-numbers-advanced.js",
+                "js/timezone/license.js",
+		"js/timezone/timezoneData.js",
+		"js/timezone/timezoneLinks.js",
+                "js/timezone/timezone.js",
+                "js/date/DateFormat.js",
+                "js/date/format-relative.js",
+                "js/date/format-duration.js",
+                "js/date/format-date-advanced.js",
+		"js/message/MsgBaseFormatter.js",
+		"js/message/MsgStringFormatter.js",
+		"js/message/MsgDateFormatter.js",
+		"js/message/MsgTimeFormatter.js",
+		"js/message/MsgNumberFormatter.js",
+		"js/message/MsgSelectFormatter.js",
+		"js/message/MsgPluralFormatter.js",
+		"js/message/MsgChoiceFormatter.js",
+                "js/message/format-message.js"
+            ]
+        }
+    }
+}

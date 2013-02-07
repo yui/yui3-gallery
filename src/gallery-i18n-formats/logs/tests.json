@@ -1,0 +1,268 @@
+{
+    "name": "gallery-i18n-formats",
+    "passed": 84,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 84,
+    "duration": 1110,
+    "type": "report",
+    "Number Format Tests": {
+        "name": "Number Format Tests",
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 6,
+        "duration": 59,
+        "type": "testcase",
+        "Test Currency Style": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test Currency Style",
+            "duration": 2
+        },
+        "Test ISO Currency Style": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test ISO Currency Style",
+            "duration": 1
+        },
+        "Test Number Style": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test Number Style",
+            "duration": 0
+        },
+        "Test Percent Style": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test Percent Style",
+            "duration": 1
+        },
+        "Test Plural Currency Style": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test Plural Currency Style",
+            "duration": 0
+        },
+        "Test Scientific Style": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test Scientific Style",
+            "duration": 1
+        }
+    },
+    "TimeZone Tests": {
+        "name": "TimeZone Tests",
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 8,
+        "duration": 102,
+        "type": "testcase",
+        "Test conversion between Incremental UTC, RFC3339 Format and SQL Format": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test conversion between Incremental UTC, RFC3339 Format and SQL Format",
+            "duration": 2
+        },
+        "testGetCurrentTimeZoneIds": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testGetCurrentTimeZoneIds",
+            "duration": 3
+        },
+        "testGetRawOffset": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testGetRawOffset",
+            "duration": 1
+        },
+        "testGetTimeZoneIdForOffset": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testGetTimeZoneIdForOffset",
+            "duration": 2
+        },
+        "Test conversion between WallTime and UnixTime": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Test conversion between WallTime and UnixTime",
+            "duration": 1
+        },
+        "testIsValidTimeZoneId": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testIsValidTimeZoneId",
+            "duration": 2
+        },
+        "testGetNormalizedTimezoneId": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testGetNormalizedTimezoneId",
+            "duration": 0
+        },
+        "testIsValidTimestamp": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testIsValidTimestamp",
+            "duration": 1
+        }
+    },
+    "DateFormat Tests": {
+        "name": "DateFormat Tests",
+        "passed": 6,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 6,
+        "duration": 101,
+        "type": "testsuite",
+        "Absolute DateFormat Tests": {
+            "name": "Absolute DateFormat Tests",
+            "passed": 2,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 2,
+            "duration": 37,
+            "type": "testcase",
+            "testAbsoluteDateFormat": {
+                "result": "pass",
+                "message": "Test passed",
+                "type": "test",
+                "name": "testAbsoluteDateFormat",
+                "duration": 5
+            },
+            "testBuddhistCalendar": {
+                "result": "pass",
+                "message": "Test passed",
+                "type": "test",
+                "name": "testBuddhistCalendar",
+                "duration": 1
+            }
+        },
+        "Absoulte Date Format with Relative Dates": {
+            "name": "Absoulte Date Format with Relative Dates",
+            "passed": 4,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 4,
+            "duration": 53,
+            "type": "testcase",
+            "testToday": {
+                "result": "pass",
+                "message": "Test passed",
+                "type": "test",
+                "name": "testToday",
+                "duration": 1
+            },
+            "testYesterday": {
+                "result": "pass",
+                "message": "Test passed",
+                "type": "test",
+                "name": "testYesterday",
+                "duration": 1
+            },
+            "testTomorrow": {
+                "result": "pass",
+                "message": "Test passed",
+                "type": "test",
+                "name": "testTomorrow",
+                "duration": 1
+            },
+            "testDayAfterTomorrow": {
+                "result": "pass",
+                "message": "Test passed",
+                "type": "test",
+                "name": "testDayAfterTomorrow",
+                "duration": 0
+            }
+        }
+    },
+    "Message Format Tests": {
+        "name": "Message Format Tests",
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 8,
+        "duration": 104,
+        "type": "testcase",
+        "testStringFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testStringFormat",
+            "duration": 3
+        },
+        "testDateFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testDateFormat",
+            "duration": 3
+        },
+        "testTimeFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testTimeFormat",
+            "duration": 2
+        },
+        "testNumberFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testNumberFormat",
+            "duration": 1
+        },
+        "testSelectFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testSelectFormat",
+            "duration": 1
+        },
+        "testPluralFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testPluralFormat",
+            "duration": 2
+        },
+        "testChoiceFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testChoiceFormat",
+            "duration": 1
+        },
+        "testNoMatch": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testNoMatch",
+            "duration": 1
+        }
+    },
+    "timestamp": "Thu 07 Feb 2013 09:28:36 AM CST",
+    "consoleInfo": []
+}

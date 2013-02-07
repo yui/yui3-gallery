@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-i18n-formats",
+    "displayName": "Gallery: gallery-i18n-formats",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "ashiksmd" ],
+    "use"        : [ "gallery-i18n-formats" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
