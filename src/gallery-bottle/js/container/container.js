@@ -26,7 +26,13 @@ var HEIGHT_CHANGE = 'heightChange',
                 });
 
                 if (fixedPos) {
-                    this.get('scrollView').get('boundingBox').setStyle(header ? 'marginTop' : 'marginBottom', (fixed && ns) ? (node.get('offsetHeight') + 'px') : 0);
+                    this.get('scrollView').get('boundingBox').setStyle(
+                        header
+                        ? 'marginTop'
+                        : 'marginBottom',
+                        (fixed && ns)
+                        ? (node.get('offsetHeight') + 'px')
+                        : 0);
                 }
             }
 
@@ -79,6 +85,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
             bodyNode = this.get('bodyNode'),
             footerNode = this.get('footerNode'),
             scrollView = new Y.ScrollView(Y.merge(this.get('cfgScroll'), {
+                axis: 'y',
                 srcNode: scrollNode
             }));
 
@@ -249,7 +256,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
          *
          * @attribute scrollNode
          * @type Node
-         * @writeOnce 
+         * @writeOnce
          * @default undefined
          */
         scrollNode: {

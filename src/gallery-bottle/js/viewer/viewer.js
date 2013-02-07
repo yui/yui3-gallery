@@ -33,7 +33,10 @@ var PREFIX = 'bvi_',
     },
 
 /**
- * is a Widget provides a HTML Viewer interface. When contents or images are wider then device, Viewer can be scroll horizontally. And, from beginning, all images in Viewer are scaled down to fit the device width, and a 'expand' button will be provided for each scaled images.
+ * Viewer is a Widget provides a HTML Viewer interface. When contents or images
+   are wider then device, Viewer can be scroll horizontally. And, from beginning,
+   all images in Viewer are scaled down to fit the device width, and a 'expand'
+   button will be provided for each scaled images.
  *
  * @class Viewer
  * @constructor

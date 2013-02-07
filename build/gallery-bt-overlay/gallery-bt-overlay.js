@@ -212,7 +212,8 @@ var body = Y.one('body'),
 
             return [
                 selfDir * W * posData[0] + Math.floor((W - this.get('width')) / 2),
-                selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
+                selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2)
+                + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
             ];
         },
 
@@ -224,9 +225,12 @@ var body = Y.one('body'),
          */
         _doShowHide: function (E) {
             var show = E.newVal,
-                runthese = (show && this.enable() && this._updateFullSize()),
-                finalPos = this.getShowHideXY(show),
+                finalPos,
                 node = this.get('boundingBox');
+
+            if (show && this.enable()) {
+                this._updateFullSize();
+            }
 
             if (show) {
                 this._updatePositionHide({visible: false});
@@ -235,6 +239,8 @@ var body = Y.one('body'),
                 this._updatePositionShow({visible: true});
                 current = undefined;
             }
+
+            finalPos = this.getShowHideXY(show);
 
             this._doTransition(node, finalPos[0], finalPos[1], this._doneShowHide);
         }
@@ -390,4 +396,4 @@ Mask.on('gesturemovestart', function (E) {
 });
 
 
-}, 'gallery-2012.12.19-21-23', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});
+}, 'gallery-2013.02.07-15-27', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});

@@ -13,11 +13,10 @@ YUI.add('gallery-bt-syncscroll', function (Y, NAME) {
  * @class SyncScroll
  * @namespace Bottle
  * @constructor
- * @param [config] {Object} Object literal with initial attribute values
  */
 var  WIDTH_CHANGE = 'widthChange',
 
-SyncScroll = function (config) {
+SyncScroll = function () {
     var firstInit = false,
         that = this;
     Y.once('btReady', function () {
@@ -126,4 +125,4 @@ SyncScroll.prototype = {
 Y.namespace('Bottle').SyncScroll = SyncScroll;
 
 
-}, 'gallery-2012.12.19-21-23', {"requires": ["gallery-bt-page"]});
+}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-bt-page"]});

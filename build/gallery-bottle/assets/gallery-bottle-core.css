@@ -12,6 +12,7 @@ body.btFixed .yui3-btshortcut,
 body.btFixed .yui3-btoverlay {position:fixed}
 
 .btHidden {display:none}
+.btRoot {position:absolute;top:0;left:0}
 
 .bt_posfixed{position:absolute;top:10px;left:0;overflow:scroll;width:30px;height:30px}
 .bt_posfixed div{height:100px;width:100%;position:relative}
@@ -21,6 +22,7 @@ body.btFixed .yui3-btoverlay {position:fixed}
 .bt-shortcut-mask,
 .bt-overlay-mask{position:absolute;top:0;left:0;z-index:150;width:100%;height:100%;display:none}
 .yui3-btcontainer{position:absolute;width:100%}
+.bt-container-scroll.yui3-widget-content-expanded{height:auto}
 .btp-native .yui3-btcontainer{position:relative}
 .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0}
 

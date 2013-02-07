@@ -188,4 +188,4 @@ Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosit
 });
 
 
-}, 'gallery-2012.12.19-21-23', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});
+}, 'gallery-2013.02.07-15-27', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});

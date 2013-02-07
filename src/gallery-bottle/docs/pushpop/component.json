@@ -54,6 +54,12 @@
             "forTest": true
         },
         {
+            "name"       : "example-pp",
+            "displayName": "Basic push and pop",
+            "modules": ["page"],
+            "layout": "example"
+        },
+        {
             "name"       : "example-push-right",
             "displayName": "Basic push from right",
             "description": "Demonstrates basic usage of the Plugin.PushPop, do push from right after 2 seconds.",

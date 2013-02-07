@@ -1,76 +1,6 @@
 {
-    "name": "gallery-bottle",
+    "name": "bottle",
     "builds": {
-        "gallery-bt-viewer": {
-            "config": {
-                "requires": [
-                    "gallery-bt-syncscroll",
-                    "gallery-zui-rascroll",
-                    "gallery-zui-attribute",
-                    "gallery-zui-scrollhelper"
-                ]
-            },
-            "jsfiles": [
-                "viewer/viewer.js"
-            ]
-        },
-        "gallery-bt-syncscroll": {
-            "config": {
-                "requires": [
-                    "gallery-bt-page"
-                ]
-            },
-            "jsfiles": [
-                "syncscroll/syncscroll.js"
-            ]
-        },
-        "gallery-bt-carousel": {
-            "config": {
-                "requires": [
-                    "gallery-bt-syncscroll",
-                    "gallery-zui-rascroll",
-                    "gallery-zui-scrollsnapper",
-                    "gallery-zui-attribute",
-                    "gallery-zui-scrollhelper"
-                ]
-            },
-            "jsfiles": [
-                "carousel/carousel.js"
-            ]
-        },
-        "gallery-bt-photogrid": {
-            "config": {
-                "requires": [
-                    "gallery-bt-syncscroll"
-                ]
-            },
-            "jsfiles": [
-                "photogrid/photogrid.js"
-            ]
-        },
-        "gallery-bt-slidetab": {
-            "config": {
-                "requires": [
-                    "gallery-bt-syncscroll",
-                    "widget-stdmod",
-                    "gallery-zui-rascroll",
-                    "gallery-zui-scrollsnapper"
-                ]
-            },
-            "jsfiles": [
-                "slidetab/slidetab.js"
-            ]
-        },
-        "gallery-bt-device": {
-            "config": {
-                "requires": [
-                    "node-screen"
-                ]
-            },
-            "jsfiles": [
-                "device/device.js"
-            ]
-        },
         "gallery-bt-pushpop": {
             "config": {
                 "requires": [
@@ -95,34 +25,30 @@
                 "overlay/overlay.js"
             ]
         },
-        "gallery-bottle": {
+        "gallery-bt-viewer": {
             "config": {
-                "skinnable": "true",
                 "requires": [
-                    "gallery-bt-shortcut",
-                    "gallery-bt-overlay",
-                    "gallery-bt-photogrid",
-                    "gallery-bt-slidetab",
-                    "gallery-bt-carousel",
-                    "gallery-bt-loader",
-                    "gallery-bt-viewer"
+                    "gallery-bt-syncscroll",
+                    "gallery-zui-rascroll",
+                    "gallery-zui-attribute",
+                    "gallery-zui-scrollhelper"
                 ]
             },
-            "skinnable": "true",
             "jsfiles": [
-                "bottle/bottle.js"
+                "viewer/viewer.js"
             ]
         },
-        "gallery-bt-page": {
+        "gallery-bt-slidetab": {
             "config": {
                 "requires": [
-                    "widget-position",
-                    "widget-stack",
-                    "gallery-bt-pushpop"
+                    "gallery-bt-syncscroll",
+                    "widget-stdmod",
+                    "gallery-zui-rascroll",
+                    "gallery-zui-scrollsnapper"
                 ]
             },
             "jsfiles": [
-                "page/page.js"
+                "slidetab/slidetab.js"
             ]
         },
         "gallery-bt-container": {
@@ -141,6 +67,24 @@
                 "container/container.js"
             ]
         },
+        "gallery-bottle": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "gallery-bt-shortcut",
+                    "gallery-bt-overlay",
+                    "gallery-bt-photogrid",
+                    "gallery-bt-slidetab",
+                    "gallery-bt-carousel",
+                    "gallery-bt-loader",
+                    "gallery-bt-viewer"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "bottle/bottle.js"
+            ]
+        },
         "gallery-bt-loader": {
             "config": {
                 "requires": [
@@ -151,6 +95,62 @@
             },
             "jsfiles": [
                 "loader/loader.js"
+            ]
+        },
+        "gallery-bt-photogrid": {
+            "config": {
+                "requires": [
+                    "gallery-bt-syncscroll"
+                ]
+            },
+            "jsfiles": [
+                "photogrid/photogrid.js"
+            ]
+        },
+        "gallery-bt-syncscroll": {
+            "config": {
+                "requires": [
+                    "gallery-bt-page"
+                ]
+            },
+            "jsfiles": [
+                "syncscroll/syncscroll.js"
+            ]
+        },
+        "gallery-bt-device": {
+            "config": {
+                "requires": [
+                    "node-screen"
+                ]
+            },
+            "jsfiles": [
+                "device/device.js"
+            ]
+        },
+        "gallery-bt-page": {
+            "config": {
+                "requires": [
+                    "widget-position",
+                    "widget-stack",
+                    "gallery-bt-pushpop"
+                ]
+            },
+            "jsfiles": [
+                "page/page.js"
+            ]
+        },
+        "gallery-bt-carousel": {
+            "config": {
+                "requires": [
+                    "gallery-bt-syncscroll",
+                    "gallery-zui-rascroll",
+                    "gallery-zui-scrollsnapper",
+                    "gallery-zui-attribute",
+                    "gallery-zui-scrollhelper"
+                ]
+            },
+            "jsfiles": [
+                "carousel/carousel.js"
             ]
         },
         "gallery-bt-shortcut": {

@@ -1,0 +1,20 @@
+<span>Click me : </span>
+<div class='btSwitcher'>
+    <button>on</button>
+    <button>off</button>
+</div>
+
+<p class="show"></p>
+
+<script>
+YUI({{{yuiParams}}}).use({{{useParams}}}, function (Y) {
+
+    Y.Bottle.init(true);
+    
+    Y.on('btSwitcher', function (e) {
+        alert(e.action);
+    });
+});
+
+</script>
+

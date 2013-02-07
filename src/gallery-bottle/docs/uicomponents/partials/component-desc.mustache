@@ -1,0 +1,25 @@
+<div class="intro">
+ <p>The `{{displayName}}` {{description}}
+ {{#if galleryTag}}This component is on CDN since gallery build: '{{galleryTag}}'.{{else}}This component is in <b>TESTING</b> status; it is not hosted on CDN. If you want to try this, please use <a href="../versions.html">nighty version</a>.{{/if}}
+ </p>
+</div>
+
+{{>getting-started}}
+{{>data-attributes}}
+
+<h2>Using {{displayName}}</h2>
+{{#each uiComponents}}
+<h3>{{name}}</h3>
+<h4>{{description}}</h4>
+<p>{{subdescription}}</p>
+{{#each sampleHtml}}
+<h5>Sample Code</h5>
+```
+{{{code}}}
+```
+<h5>Sample Result</h5>
+{{{code}}}
+{{/each}}
+
+{{/each}}
+<p></p>

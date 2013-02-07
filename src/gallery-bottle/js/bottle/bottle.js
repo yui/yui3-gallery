@@ -16,6 +16,8 @@ var BOTTLE_INIT = 'btInit',
     BOTTLE_NATIVE = 'btNative',
     BOTTLE_FIXED = 'btFixed',
     BOTTLE_FOCUS = 'btFocus',
+    BOTTLE_SWITCHER = 'btSwitcher',
+    BOTTLE_SWITCHER_ACTIVE = 'btActive',
 
     MATCH_HTML_COMMENT = /^<!--([\s\S]+)-->$/,
 
@@ -81,12 +83,33 @@ var BOTTLE_INIT = 'btInit',
             });
         });
     },
+    
+    switcher = function(e) {
+        var t = e.currentTarget,
+            ani = (t.getAttribute('data-auto') === "false") ? false : true;
+            act = true;
+
+        if (t.hasClass(BOTTLE_SWITCHER_ACTIVE)) {
+            if (ani) {
+                t.removeClass(BOTTLE_SWITCHER_ACTIVE);
+            }
+            act = false;
+        } else {
+            if (ani) {
+                t.addClass(BOTTLE_SWITCHER_ACTIVE);
+            }
+        }
+        Y.publish(BOTTLE_SWITCHER);
+        Y.fire(BOTTLE_SWITCHER, {event: e, action: act});
+    },
 
     /**
      * Initialize bottle UI library , create instances with supported data-roles.
      *
      * @method init
-     * @param hideURL {Boolean|Node} auto hide URL Bar when bottle inited or orientation changed. If a Node is provided, try to initialize Bottle widgets for this Node.
+     * @param hideURL {Boolean|Node} auto hide URL Bar when bottle inited or
+              orientation changed. If a Node is provided, try to initialize
+              Bottle widgets for this Node.
      */
     init = function (initCfg) {
         var pageNode = Y.one('[data-role=page]'),
@@ -128,7 +151,10 @@ var BOTTLE_INIT = 'btInit',
                 }
                 htmlbody.setStyles(styles.scroll);
                 body.addClass(BOTTLE_NATIVE);
-                pageWidget.item(0).get('scrollView').disable();
+                pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars)._cAxis = {
+                    x: 0,
+                    y: 0
+                };
                 Y.publish(BOTTLE_NATIVE, {fireOnce: true});
                 Y.fire(BOTTLE_NATIVE);
                 Y.publish(SYNC_SCREEN);
@@ -176,6 +202,8 @@ var BOTTLE_INIT = 'btInit',
             body.removeClass(BOTTLE_FOCUS);
             handleResize(true);
         }, 'input, select, textarea');
+
+        body.delegate('click', switcher, '.btSwitcher');
 
         body.addClass(BOTTLE_READY).removeClass('btHideSCO').removeClass('btInPlace').removeClass('btHideAll');
         Y.publish(BOTTLE_READY, {fireOnce: true});

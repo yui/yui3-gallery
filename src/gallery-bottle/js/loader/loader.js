@@ -145,7 +145,8 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
         }
 
         /**
-         * Static property, a callback function executed when a loader success loaded new data. arguments are: Loader, dara, clickedNode.
+         * Static property, a callback function executed when a loader success
+           loaded new data. arguments are: Loader, dara, clickedNode.
          *
          * @property SUCCESSCB
          * @type Function
@@ -175,7 +176,8 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
         O.removeClass(CLASSES.LOADING).addClass(CLASSES.ERROR);
 
         /**
-         * Static property, a callback function executed when a loader failed loaded new data. arguments are: Loader, response, clickedNode.
+         * Static property, a callback function executed when a loader failed
+           loading new data. arguments are: Loader, response, clickedNode.
          *
          * @property FAILURECB
          * @type Function
@@ -230,7 +232,8 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
         },
 
         /**
-         * Default parser for ajax data, should be one of 'json', 'none', or a Function. If data can not be parsed, the ajax will be a 'failed' case.
+         * Default parser for ajax data, should be one of 'json', 'none', or a Function.
+           If data can not be parsed, the ajax will be a 'failed' case.
          *
          * @attribute parser
          * @type String|Function
@@ -249,7 +252,10 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
         },
 
         /**
-         * Default selector string for responsed data. For HTML data, this value should be css selector; For json data, this value should be something like data.hash.value (will return JSONData.data.hash.value). When set to '*', all ajax response will be selected. If can not select anything, the ajax will be a 'failed' case.
+         * Default selector string for responsed data. For HTML data, this value should be
+           css selector; For json data, this value should be something like data.hash.value
+           (will return JSONData.data.hash.value). When set to '*', all ajax response will
+           be selected. If can not select anything, the ajax will be a 'failed' case.
          *
          * @attribute selector
          * @type String

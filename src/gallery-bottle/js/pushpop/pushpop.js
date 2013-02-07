@@ -255,7 +255,8 @@ PushPop.prototype = {
      * sync one size (height or width) with all children
      *
      * @method _updateTransitions
-     * @param [direction] {String} should be one of 'right', 'left', 'top', 'bottom', 'tr', 'br', 'tl', 'bl'. If omitted, current 'pushFrom' attribute will be used
+     * @param [direction] {String} should be one of 'right', 'left', 'top', 'bottom',
+              'tr', 'br', 'tl', 'bl'. If omitted, current 'pushFrom' attribute will be used
      * @param [transition] {Object} transition config. If omitted, current 'ppTrans' attribute will be used
      * @protected
      */
@@ -522,7 +523,9 @@ PushPop.prototype = {
         return this.moveChild(widget, this._PUSHPOP_TRANS, function () {
             widget.remove();
             if (!keep) {
-                widget.destroy(true);
+                Y.later(850, null, function() {
+                    widget.destroy(true);
+                });
             }
             if (index && Y.Lang.isNumber(underlay)) {
                 Y.later(underlay, this, function () {

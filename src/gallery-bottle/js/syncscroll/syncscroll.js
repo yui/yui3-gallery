@@ -11,11 +11,10 @@
  * @class SyncScroll
  * @namespace Bottle
  * @constructor
- * @param [config] {Object} Object literal with initial attribute values
  */
 var  WIDTH_CHANGE = 'widthChange',
 
-SyncScroll = function (config) {
+SyncScroll = function () {
     var firstInit = false,
         that = this;
     Y.once('btReady', function () {

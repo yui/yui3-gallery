@@ -180,7 +180,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
      * @protected
      */
     _minColumn: function () {
-        var minI = 9999,
+        var minI = Number.MAX_VALUE,
             minO;
 
         this.get('contentBox').all('> div').each(function (O) {
@@ -309,7 +309,8 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
         },
 
         /**
-         * Default column width. Column number will be decided by Math.round(parentWidth / columnWidth), and then all these columns will be fitted equally.
+         * Default column width. Column number will be decided by
+           Math.round(parentWidth / columnWidth), and then all these columns will be fitted equally.
          *
          * @attribute columnWidth
          * @type Number
@@ -394,4 +395,4 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').PhotoGrid = PhotoGrid;
 
 
-}, 'gallery-2012.12.19-21-23', {"requires": ["gallery-bt-syncscroll"]});
+}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-bt-syncscroll"]});

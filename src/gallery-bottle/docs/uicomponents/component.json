@@ -1,0 +1,49 @@
+{
+    "name"       : "uicomponents",
+    "displayName": "UI Components",
+    "description": "is a tool sets for User Interface",
+    "className": "Uicomponents",
+    "dataRole": false,
+    "galleryTag": false,
+    "noAttrs"     : true,
+
+    "hideShortcut": true,
+    "hideOverlay": true,
+
+    "data-attrs": [
+        {
+            "name": "auto",
+            "description": "When user clicks the button, the switcher will change type without setting.",
+            "default": "true"
+        }
+    ],
+    
+    "examples": [
+        {
+            "name"       : "example-basic",
+            "displayName": "Basic switcher",
+            "modules": ["page"],
+            "layout": "example"
+        },
+        {
+            "name"       : "example-basic-nonAuto",
+            "displayName": "Basic switcher without auto switcher",
+            "modules": ["page"],
+            "layout": "example"
+        }
+    ],
+
+    "uiComponents": [
+        {
+            "name"       : "Swithcer",
+            "description": "switch is a common UI element on mobile devices that is used for switch on/off or true/false data input.",
+            "subdescription": "When switch is clicked, it will send globle event which calls ' btSwitcher '. The event includes click event and action value.",
+            "sampleHtml" : [
+                {"code": "<div class='btSwitcher'>\n    <button>on</button>\n    <button>off</button>\n</div>"},
+                {"code": "<div class='btSwitcher btActive'>\n    <button>on</button>\n    <button>off</button>\n</div>"}
+            ],
+            "switcher" : true
+        }
+
+    ]
+}
