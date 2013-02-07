@@ -15,7 +15,9 @@ Usage
 -----
 
 ```js
-YUI().use('gallery-sm-tree', function (Y) {
+YUI({
+    gallery: 'gallery-2013.01.09-23-24'
+}).use('gallery-sm-tree', function (Y) {
     // Y.Tree is available and ready to use.
 });
 ```
@@ -28,7 +30,7 @@ Documentation
 License
 -------
 
-Copyright (c) 2012 SmugMug, Inc.
+Copyright (c) 2013 SmugMug, Inc.
 
 Redistribution and use of this software in source and binary forms, with or
 without modification, are permitted provided that the following conditions are

@@ -1,3 +1,5 @@
+/*jshint expr:true, onevar:false */
+
 /**
 Provides the `Y.TreeView` widget.
 
@@ -12,12 +14,13 @@ TreeView widget.
 @constructor
 @extends View
 @uses Tree
+@uses Tree.Openable
 @uses Tree.Selectable
 **/
 
 var getClassName = Y.ClassNameManager.getClassName,
 
-TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Selectable], {
+TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Selectable], {
     // -- Public Properties ----------------------------------------------------
 
     /**
@@ -217,11 +220,12 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Selectable], {
         var classNames     = this.classNames,
             hasChildren    = treeNode.hasChildren(),
             htmlNode       = treeNode._htmlNode,
-            nodeClassNames = {};
+            nodeClassNames = {},
+            className;
 
         // Build the hash of CSS classes for this node.
         nodeClassNames[classNames.node]            = true;
-        nodeClassNames[classNames.canHaveChildren] = treeNode.canHaveChildren;
+        nodeClassNames[classNames.canHaveChildren] = !!treeNode.canHaveChildren;
         nodeClassNames[classNames.hasChildren]     = hasChildren;
         nodeClassNames[classNames.open]            = treeNode.isOpen();
 
@@ -230,7 +234,7 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Selectable], {
             // the DOM instead of re-rendering it from scratch.
             htmlNode.one('.' + classNames.label).setHTML(treeNode.label);
 
-            for (var className in nodeClassNames) {
+            for (className in nodeClassNames) {
                 if (nodeClassNames.hasOwnProperty(className)) {
                     htmlNode.toggleClass(className, nodeClassNames[className]);
                 }
@@ -239,7 +243,7 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Selectable], {
             // This node hasn't been rendered yet, so render it from scratch.
             var enabledClassNames = [];
 
-            for (var className in nodeClassNames) {
+            for (className in nodeClassNames) {
                 if (nodeClassNames.hasOwnProperty(className) && nodeClassNames[className]) {
                     enabledClassNames.push(className);
                 }
@@ -329,14 +333,12 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Selectable], {
         if (parent === this.rootNode) {
             htmlChildrenNode = this._childrenNode;
         } else {
-            htmlNode         = this.getHTMLNode(parent);
-            htmlChildrenNode = htmlNode && htmlNode.one('.' + this.classNames.children);
+            // Re-render the parent to update its state.
+            htmlNode         = this.renderNode(parent);
+            htmlChildrenNode = htmlNode.one('.' + this.classNames.children);
 
             if (!htmlChildrenNode) {
-                // Parent node hasn't been rendered yet, or hasn't yet been
-                // rendered with children. Render it.
-                htmlNode = this.renderNode(parent);
-
+                // Children haven't yet been rendered. Render them.
                 this.renderChildren(parent, {
                     container: htmlNode
                 });
@@ -345,8 +347,11 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Selectable], {
             }
         }
 
+        // Parent's children have already been rendered. Instead of re-rendering
+        // all of them, just render the new node and insert it at the correct
+        // position.
         htmlChildrenNode.insert(this.renderNode(e.node, {
-            renderChildren: true
+            renderChildren: !this._lazyRender || e.node.isOpen()
         }), e.index);
     },
 
@@ -403,6 +408,12 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Selectable], {
         if (htmlNode) {
             htmlNode.remove(true);
             delete e.node._htmlNode;
+        }
+
+        // Re-render the parent to update its state in case this was its last
+        // child.
+        if (e.parent) {
+            this.renderNode(e.parent);
         }
     },
 

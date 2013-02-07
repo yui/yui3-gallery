@@ -28,7 +28,7 @@ Useful Links
 ------------
 
 * [API Docs][api-docs]
-* [Performance Stress Test](http://jsbin.com/udayaz/49)
+* [Performance Stress Test](http://jsbin.com/udayaz/54/)
 * [YUI TreeView Shootout][jsperf]
 
 [api-docs]:http://smugmug.github.com/yui-gallery/api/modules/gallery-sm-treeview.html
@@ -49,21 +49,12 @@ Load YUI onto the page if you haven't already.
 <script src="http://yui.yahooapis.com/3.8.0/build/yui/yui-min.js"></script>
 ```
 
-At the moment you'll also need to manually load the TreeView JS and CSS as well, since it's not yet available on the Yahoo! CDN (it'll be there soon though, we promise).
-
-```html
-<link rel="stylesheet" href="http://smugmug.github.com/yui-gallery/build/gallery-sm-treeview/assets/skins/sam/gallery-sm-treeview.css">
-
-<script src="http://smugmug.github.com/yui-gallery/build/gallery-sm-tree/gallery-sm-tree-min.js"></script>
-<script src="http://smugmug.github.com/yui-gallery/build/gallery-sm-tree-node/gallery-sm-tree-node-min.js"></script>
-<script src="http://smugmug.github.com/yui-gallery/build/gallery-sm-treeview/gallery-sm-treeview-min.js"></script>
-<script src="http://smugmug.github.com/yui-gallery/build/gallery-sm-treeview-templates/gallery-sm-treeview-templates-min.js"></script>
-```
-
-Next, in your JS, create an instance of `Y.TreeView`, specify some nodes to add to the tree, then render the view into a container node.
+Next, in your JS, create an instance of `Y.TreeView`, specify some nodes to add to the tree, then render the view into a container element.
 
 ```js
-YUI().use('gallery-sm-treeview', function (Y) {
+YUI({
+    gallery: 'gallery-2013.01.09-23-24'
+}).use('gallery-sm-treeview', function (Y) {
     // Create a new TreeView with a few nodes.
     var treeview = new Y.TreeView({
         // Tell the TreeView where to render itself.
@@ -216,7 +207,7 @@ Event | Fired When
 License
 -------
 
-Copyright (c) 2012 SmugMug, Inc.
+Copyright (c) 2013 SmugMug, Inc.
 
 Redistribution and use of this software in source and binary forms, with or
 without modification, are permitted provided that the following conditions are

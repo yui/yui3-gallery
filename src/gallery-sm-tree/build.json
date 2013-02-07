@@ -20,9 +20,21 @@
             ]
         },
 
+        "gallery-sm-tree-node-openable": {
+            "jsfiles": [
+                "js/extensions/tree-node-openable.js"
+            ]
+        },
+
         "gallery-sm-tree-node-selectable": {
             "jsfiles": [
                 "js/extensions/tree-node-selectable.js"
+            ]
+        },
+
+        "gallery-sm-tree-openable": {
+            "jsfiles": [
+                "js/extensions/tree-openable.js"
             ]
         },
 

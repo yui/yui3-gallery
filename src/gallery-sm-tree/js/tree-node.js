@@ -1,3 +1,5 @@
+/*jshint expr:true, onevar:false */
+
 /**
 Provides the `Tree.Node` class, which represents a tree node contained in a
 `Tree` data structure.
@@ -57,6 +59,10 @@ function TreeNode(tree, config) {
     } else if (this.children.length) {
         this.canHaveChildren = true;
     }
+
+    // Mix in arbitrary properties on the config object, but don't overwrite any
+    // existing properties of this node.
+    Y.mix(this, config);
 
     // If this node has children, loop through them and ensure their parent
     // references are all set to this node.
@@ -132,7 +138,6 @@ TreeNode.prototype = {
     Current state of this node.
 
     @property {Object} state
-    @param {Boolean} [open=false] Whether or not this node is open (expanded).
     **/
 
     /**
@@ -202,20 +207,6 @@ TreeNode.prototype = {
     },
 
     // TODO: clone()?
-
-    /**
-    Closes this node if it's currently open.
-
-    @method close
-    @param {Object} [options] Options.
-        @param {Boolean} [options.silent=false] If `true`, the `close` event
-            will be suppressed.
-    @chainable
-    **/
-    close: function (options) {
-        this.tree.closeNode(this, options);
-        return this;
-    },
 
     /**
     Removes all children from this node. The removed children will still be
@@ -321,16 +312,6 @@ TreeNode.prototype = {
     },
 
     /**
-    Returns `true` if this node is currently open.
-
-    @method isOpen
-    @return {Boolean} `true` if this node is currently open, `false` otherwise.
-    **/
-    isOpen: function () {
-        return !!this.state.open || this.isRoot();
-    },
-
-    /**
     Returns `true` if this node is the root of the tree.
 
     @method isRoot
@@ -339,20 +320,6 @@ TreeNode.prototype = {
     **/
     isRoot: function () {
         return this.tree.rootNode === this;
-    },
-
-    /**
-    Opens this node if it's currently closed.
-
-    @method open
-    @param {Object} [options] Options.
-        @param {Boolean} [options.silent=false] If `true`, the `open` event
-            will be suppressed.
-    @chainable
-    **/
-    open: function (options) {
-        this.tree.openNode(this, options);
-        return this;
     },
 
     /**
@@ -409,20 +376,6 @@ TreeNode.prototype = {
         }
 
         return total;
-    },
-
-    /**
-    Toggles the open/closed state of this node.
-
-    @method toggle
-    @param {Object} [options] Options.
-        @param {Boolean} [options.silent=false] If `true`, events will be
-            suppressed.
-    @chainable
-    **/
-    toggle: function (options) {
-        this.tree.toggleNode(this, options);
-        return this;
     },
 
     /**

@@ -63,4 +63,4 @@ NodeSelectable.prototype = {
 Y.Tree.Node.Selectable = NodeSelectable;
 
 
-}, 'gallery-2012.12.26-20-48', {"requires": ["gallery-sm-tree-node", "oop"]});
+}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-sm-tree-node", "oop"]});

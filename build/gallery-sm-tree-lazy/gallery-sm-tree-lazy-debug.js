@@ -1,21 +1,25 @@
 YUI.add('gallery-sm-tree-lazy', function (Y, NAME) {
 
+/*jshint expr:true, maxlen:200, onevar:false */
+
 /**
-Provides `Plugin.Tree.Lazy`, a plugin for `Tree` that makes it easy to lazily
-load and populate the contents of tree nodes the first time they're opened.
+Provides `Plugin.Tree.Lazy`, a plugin for `Tree.Openable` that makes it easy to
+lazily load and populate the contents of tree nodes the first time they're
+opened.
 
 @module gallery-sm-tree
 @submodule gallery-sm-tree-lazy
 **/
 
 /**
-A plugin for `Tree` that makes it easy to lazily load and populate the contents
-of tree nodes the first time they're opened.
+A plugin for `Tree.Openable` that makes it easy to lazily load and populate the
+contents of tree nodes the first time they're opened.
 
 ### Example
 
-    YUI().use('jsonp', 'tree', 'tree-lazy', function (Y) {
-        var tree = new Y.Tree();
+    YUI().use('jsonp', 'gallery-sm-tree-openable', 'gallery-sm-tree-lazy', function (Y) {
+        var Tree = Y.Base.create('openableTree', Y.Tree, [Y.Tree.Openable]),
+            tree = new Tree();
 
         tree.plug(Y.Plugin.Tree.Lazy, {
 
@@ -101,6 +105,12 @@ Y.namespace('Plugin.Tree').Lazy = Y.Base.create('lazyTreePlugin', Y.Plugin.Base,
             this.load = config.load;
         }
 
+        // Make sure we've been plugged into a Tree that mixes in the
+        // Tree.Openable extension.
+        if (!this._host.openNode) {
+            Y.log("Plugin.Tree.Lazy was plugged into a Tree that doesn't mix in the Tree.Openable extension. This probably won't do you much good.", 'warn', 'gallery-sm-tree-lazy');
+        }
+
         this._published = {};
         this._attachEvents();
     },
@@ -111,13 +121,11 @@ Y.namespace('Plugin.Tree').Lazy = Y.Base.create('lazyTreePlugin', Y.Plugin.Base,
     },
 
     // -- Protected Methods ----------------------------------------------------
-
     _attachEvents: function () {
         this.onHostEvent('open', this._onOpen);
     },
 
     // -- Protected Event Handlers ---------------------------------------------
-
     _onOpen: function (e) {
         var node = e.node;
 
@@ -137,7 +145,6 @@ Y.namespace('Plugin.Tree').Lazy = Y.Base.create('lazyTreePlugin', Y.Plugin.Base,
     },
 
     // -- Default Event Handlers -----------------------------------------------
-
     _defLoadingFn: function (e) {
         var node = e.node,
             self = this;
@@ -166,4 +173,4 @@ Y.namespace('Plugin.Tree').Lazy = Y.Base.create('lazyTreePlugin', Y.Plugin.Base,
 });
 
 
-}, 'gallery-2012.12.26-20-48', {"requires": ["base-pluginhost", "plugin", "gallery-sm-tree"]});
+}, 'gallery-2013.02.07-15-27', {"requires": ["base-pluginhost", "plugin", "gallery-sm-tree"]});

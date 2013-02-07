@@ -3,7 +3,9 @@ YUI.add('tree-test', function (Y) {
 var Assert      = Y.Assert,
     ArrayAssert = Y.ArrayAssert,
     Mock        = Y.Mock,
-    Tree        = Y.Tree,
+
+    Tree     = Y.Tree,
+    LazyTree = Y.Base.create('lazyTree', Tree, [Tree.Openable]),
 
     mainSuite = Y.TreeTestSuite = new Y.Test.Suite('Tree');
 
@@ -267,20 +269,6 @@ treeSuite.add(new Y.Test.Case({
         Assert.areSame(this.tree, this.tree.clear());
     },
 
-    "closeNode() should close the specified node": function () {
-        var node = this.tree.children[0];
-
-        this.tree.openNode(node);
-        Assert.isTrue(node.isOpen(), 'sanity check');
-
-        this.tree.closeNode(node);
-        Assert.isFalse(node.isOpen(), 'node should be closed');
-    },
-
-    'closeNode() should be chainable': function () {
-        Assert.areSame(this.tree, this.tree.closeNode(this.tree.children[0]));
-    },
-
     'createNode() should create a node and associate it with this tree': function () {
         var node = this.tree.createNode({
                 label: 'new node',
@@ -430,20 +418,6 @@ treeSuite.add(new Y.Test.Case({
         Assert.areSame(-1, this.tree.rootNode.indexOf(node), 'node should no longer be a child of the root node');
     },
 
-    'openNode() should open the specified node': function () {
-        var node = this.tree.children[0];
-
-        this.tree.closeNode(node);
-        Assert.isFalse(node.isOpen(), 'sanity check');
-
-        this.tree.openNode(node);
-        Assert.isTrue(node.isOpen(), 'node should be open');
-    },
-
-    'openNode() should be chainable': function () {
-        Assert.areSame(this.tree, this.tree.openNode(this.tree.children[0]));
-    },
-
     'prependNode() should prepend a node to the beginning of the specified parent node': function () {
         var parent = this.tree.rootNode,
             node   = this.tree.prependNode(parent, {label: 'prepended'});
@@ -505,29 +479,6 @@ treeSuite.add(new Y.Test.Case({
 
     'size() should return the total number of nodes in the tree': function () {
         Assert.areSame(6, this.tree.size());
-    },
-
-    'toggleNode() should open a closed node': function () {
-        var node = this.tree.children[0];
-
-        Assert.isFalse(node.isOpen(), 'sanity check');
-
-        this.tree.toggleNode(node);
-        Assert.isTrue(node.isOpen(), 'node should be open');
-    },
-
-    'toggleNode() should close an open node': function () {
-        var node = this.tree.children[0];
-
-        this.tree.openNode(node);
-        Assert.isTrue(node.isOpen(), 'sanity check');
-
-        this.tree.toggleNode(node);
-        Assert.isFalse(node.isOpen(), 'node should be closed');
-    },
-
-    'toggleNode() should be chainable': function () {
-        Assert.areSame(this.tree, this.tree.toggleNode(this.tree.children[0]));
     },
 
     'toJSON() should return a serializable object representing the tree': function () {
@@ -623,58 +574,6 @@ treeSuite.add(new Y.Test.Case({
         this.tree.clear(null, {silent: true});
     },
 
-    'closeNode() should fire a `close` event': function () {
-        var node = this.tree.children[0],
-            fired;
-
-        this.tree.openNode(node);
-
-        this.tree.once('close', function (e) {
-            fired = true;
-            Assert.areSame(node, e.node, 'node should be the node being closed');
-        });
-
-        this.tree.closeNode(node);
-        Assert.isTrue(fired, 'event should fire');
-    },
-
-    'closeNode() should not fire a `close` event if options.silent is truthy': function () {
-        var node = this.tree.children[0];
-
-        this.tree.openNode(node);
-
-        this.tree.once('close', function () {
-            Assert.fail('close event should not fire');
-        });
-
-        this.tree.closeNode(node, {silent: true});
-    },
-
-    "closeNode() should not fire a `close` event if the specified node can't have children": function () {
-        var node = this.tree.children[0];
-
-        this.tree.openNode(node);
-        node.canHaveChildren = false;
-
-        this.tree.once('close', function () {
-            Assert.fail('close event should not fire');
-        });
-
-        this.tree.closeNode(node);
-    },
-
-    'closeNode() should not fire a `close` event if the specified node is already closed': function () {
-        var node = this.tree.children[0];
-
-        this.tree.closeNode(node);
-
-        this.tree.once('close', function () {
-            Assert.fail('close event should not fire');
-        });
-
-        this.tree.closeNode(node);
-    },
-
     'destroyNode() should fire a `remove` event': function () {
         var node = this.tree.children[0],
             fired;
@@ -695,58 +594,6 @@ treeSuite.add(new Y.Test.Case({
         });
 
         this.tree.destroyNode(node, {silent: true});
-    },
-
-    'openNode() should fire an `open` event': function () {
-        var node = this.tree.children[0],
-            fired;
-
-        this.tree.closeNode(node);
-
-        this.tree.once('open', function (e) {
-            fired = true;
-            Assert.areSame(node, e.node, 'node should be the node being opened');
-        });
-
-        this.tree.openNode(node);
-        Assert.isTrue(fired, 'event should fire');
-    },
-
-    'openNode() should not fire an `open` event if options.silent is truthy': function () {
-        var node = this.tree.children[0];
-
-        this.tree.closeNode(node);
-
-        this.tree.once('open', function () {
-            Assert.fail('open event should not fire');
-        });
-
-        this.tree.openNode(node, {silent: true});
-    },
-
-    "openNode() should not fire an `open` event if the specified node can't have children": function () {
-        var node = this.tree.children[0];
-
-        this.tree.closeNode(node);
-        node.canHaveChildren = false;
-
-        this.tree.once('open', function () {
-            Assert.fail('open event should not fire');
-        });
-
-        this.tree.openNode(node);
-    },
-
-    'openNode() should not fire an `open` event if the specified node is already open': function () {
-        var node = this.tree.children[0];
-
-        this.tree.openNode(node);
-
-        this.tree.once('open', function () {
-            Assert.fail('event should not fire');
-        });
-
-        this.tree.openNode(node);
     },
 
     'prependNode() should fire an `add` event with src "prepend"': function () {
@@ -840,21 +687,6 @@ treeSuite.add(new Y.Test.Case({
         this.tree.removeNode(this.tree.children[1], {silent: true});
     },
 
-    'toggleNode() should not fire any events if options.silent is truthy': function () {
-        var node = this.tree.children[0];
-
-        this.tree.once('close', function () {
-            Assert.fail('close event should not fire');
-        });
-
-        this.tree.once('open', function () {
-            Assert.fail('open event should not fire');
-        });
-
-        this.tree.toggleNode(node, {silent: true});
-        this.tree.toggleNode(node, {silent: true});
-    },
-
     '`add` event should be preventable': function () {
         this.tree.once('add', function (e) {
             e.preventDefault();
@@ -871,32 +703,6 @@ treeSuite.add(new Y.Test.Case({
 
         this.tree.clear();
         Assert.areSame(6, this.tree.size(), 'tree should not have been cleared');
-    },
-
-    '`close` event should be preventable': function () {
-        var node = this.tree.children[0];
-
-        this.tree.openNode(node);
-
-        this.tree.once('close', function (e) {
-            e.preventDefault();
-        });
-
-        this.tree.closeNode(node);
-        Assert.isTrue(node.isOpen(), 'node should not be closed');
-    },
-
-    '`open` event should be preventable': function () {
-        var node = this.tree.children[0];
-
-        this.tree.closeNode(node);
-
-        this.tree.once('open', function (e) {
-            e.preventDefault();
-        });
-
-        this.tree.openNode(node);
-        Assert.isFalse(node.isOpen(), 'node should not be open');
     },
 
     '`remove` event should be preventable': function () {
@@ -959,6 +765,13 @@ nodeSuite.add(new Y.Test.Case({
         Assert.areSame('mynode', node.id, 'custom id should be set');
         Assert.areSame('pants', node.label, 'custom label should be set');
         Assert.isTrue(node.state.tested, 'custom state should be set');
+    },
+
+    'constructor should mix arbitrary config properties into the instance': function () {
+        var node = new Tree.Node(this.tree, {foo: 'bar', _isYUITreeNode: 'moo'});
+
+        Assert.areSame('bar', node.foo, 'node should have a `foo` property');
+        Assert.isTrue(node._isYUITreeNode, '`_isYUITreeNode` property should not be overwritten');
     }
 }));
 
@@ -1064,26 +877,6 @@ nodeSuite.add(new Y.Test.Case({
         Mock.verify(mock);
     },
 
-    'close() should wrap Tree#closeNode()': function () {
-        var mock    = Mock(),
-            options = {};
-
-        Mock.expect(mock, {
-            method : 'closeNode',
-            args   : [this.node, options],
-            run    : Y.bind(this.tree.closeNode, this.tree)
-        });
-
-        this.node.tree = mock;
-        this.node.close(options);
-
-        Mock.verify(mock);
-    },
-
-    'close() should be chainable': function () {
-        Assert.areSame(this.node, this.node.close());
-    },
-
     'empty() should wrap Tree#emptyNode()': function () {
         var mock    = Mock(),
             options = {};
@@ -1149,45 +942,10 @@ nodeSuite.add(new Y.Test.Case({
         Assert.isFalse(this.unattachedNode.isInTree(), 'should be false for an unattached node');
     },
 
-    'isOpen() should return `true` if this node is open, `false` otherwise': function () {
-        Assert.isFalse(this.node.isOpen(), 'should return false if not open');
-
-        this.node.append({});
-        this.node.open();
-
-        Assert.isTrue(this.node.isOpen(), 'should return true if open');
-    },
-
-    'isOpen() should always return `true` for a root node': function () {
-        Assert.isTrue(this.tree.rootNode.isOpen());
-        this.tree.rootNode.close();
-        Assert.isTrue(this.tree.rootNode.isOpen());
-    },
-
     'isRoot() should return `true` if this node is the root of a tree, `false` otherwise': function () {
         Assert.isTrue(this.tree.rootNode.isRoot(), 'should be true for root node');
         Assert.isFalse(this.node.isRoot(), 'should be false for non-root node');
         Assert.isFalse(this.unattachedNode.isRoot(), 'should be false for an unattached node');
-    },
-
-    'open() should wrap Tree#openNode()': function () {
-        var mock    = Mock(),
-            options = {};
-
-        Mock.expect(mock, {
-            method : 'openNode',
-            args   : [this.node, options],
-            run    : Y.bind(this.tree.openNode, this.tree)
-        });
-
-        this.node.tree = mock;
-        this.node.open(options);
-
-        Mock.verify(mock);
-    },
-
-    'open() should be chainable': function () {
-        Assert.areSame(this.node, this.node.open());
     },
 
     'prepend() should wrap Tree#prependNode()': function () {
@@ -1235,26 +993,6 @@ nodeSuite.add(new Y.Test.Case({
 
         this.node.children[0].append([{}, {}, {}]);
         Assert.areSame(4, this.node.size(), 'should be 4');
-    },
-
-    'toggle() should wrap Tree#toggleNode()': function () {
-        var mock    = Mock(),
-            options = {};
-
-        Mock.expect(mock, {
-            method : 'toggleNode',
-            args   : [this.node, options],
-            run    : Y.bind(this.tree.toggleNode, this.tree)
-        });
-
-        this.node.tree = mock;
-        this.node.toggle(options);
-
-        Mock.verify(mock);
-    },
-
-    'toggle() should be chainable': function () {
-        Assert.areSame(this.node, this.node.toggle());
     },
 
     'toJSON() should return a serializable object representing this node': function () {
@@ -1353,7 +1091,7 @@ lazySuite.add(new Y.Test.Case({
     name: 'Events',
 
     setUp: function () {
-        this.tree = new Tree({
+        this.tree = new LazyTree({
             nodes: [
                 {
                     label: 'test node',
@@ -1467,7 +1205,7 @@ lazySuite.add(new Y.Test.Case({
     name: 'Functionality',
 
     setUp: function () {
-        this.tree = new Tree({
+        this.tree = new LazyTree({
             nodes: [
                 {
                     label: 'test node',
@@ -1536,5 +1274,5 @@ lazySuite.add(new Y.Test.Case({
 }));
 
 }, '@VERSION@', {
-    requires: ['gallery-sm-tree', 'gallery-sm-tree-lazy', 'json', 'test']
+    requires: ['gallery-sm-tree-openable', 'gallery-sm-tree-lazy', 'json', 'test']
 });

@@ -1,5 +1,7 @@
 YUI.add('gallery-sm-tree', function (Y, NAME) {
 
+/*jshint expr:true, onevar:false */
+
 /**
 Provides the `Tree` class.
 
@@ -50,24 +52,6 @@ var Lang = Y.Lang,
     @preventable _defClearFn
     **/
     EVT_CLEAR = 'clear',
-
-    /**
-    Fired when a node is closed.
-
-    @event close
-    @param {Tree.Node} node Node being closed.
-    @preventable _defCloseFn
-    **/
-    EVT_CLOSE = 'close',
-
-    /**
-    Fired when a node is opened.
-
-    @event open
-    @param {Tree.Node} node Node being opened.
-    @preventable _defOpenFn
-    **/
-    EVT_OPEN = 'open',
 
     /**
     Fired when a node is removed from this Tree.
@@ -255,26 +239,6 @@ var Tree = Y.Base.create('tree', Y.Base, [], {
             defaultFn: this._defClearFn,
             silent   : options && options.silent
         });
-    },
-
-    /**
-    Closes the specified node if it isn't already closed.
-
-    @method closeNode
-    @param {Object} [options] Options.
-        @param {Boolean} [options.silent=false] If `true`, the `close` event
-            will be suppressed.
-    @chainable
-    **/
-    closeNode: function (node, options) {
-        if (node.canHaveChildren && node.isOpen()) {
-            this._fire(EVT_CLOSE, {node: node}, {
-                defaultFn: this._defCloseFn,
-                silent   : options && options.silent
-            });
-        }
-
-        return this;
     },
 
     /**
@@ -470,26 +434,6 @@ var Tree = Y.Base.create('tree', Y.Base, [], {
     },
 
     /**
-    Opens the specified node if it isn't already open.
-
-    @method openNode
-    @param {Object} [options] Options.
-        @param {Boolean} [options.silent=false] If `true`, the `open` event
-            will be suppressed.
-    @chainable
-    **/
-    openNode: function (node, options) {
-        if (node.canHaveChildren && !node.isOpen()) {
-            this._fire(EVT_OPEN, {node: node}, {
-                defaultFn: this._defOpenFn,
-                silent   : options && options.silent
-            });
-        }
-
-        return this;
-    },
-
-    /**
     Prepends a node or array of nodes at the beginning of the specified parent
     node.
 
@@ -555,21 +499,6 @@ var Tree = Y.Base.create('tree', Y.Base, [], {
     **/
     size: function () {
         return this.rootNode.size();
-    },
-
-    /**
-    Toggles the open/closed state of the specified node.
-
-    @method toggleNode
-    @param {Tree.Node} node Node to toggle.
-    @param {Object} [options] Options.
-        @param {Boolean} [options.silent=false] If `true`, events will be
-            suppressed.
-    @chainable
-    **/
-    toggleNode: function (node, options) {
-        return node.isOpen() ? this.closeNode(node, options) :
-            this.openNode(node, options);
     },
 
     /**
@@ -760,14 +689,6 @@ var Tree = Y.Base.create('tree', Y.Base, [], {
         this.children = newRootNode.children;
     },
 
-    _defCloseFn: function (e) {
-        delete e.node.state.open;
-    },
-
-    _defOpenFn: function (e) {
-        e.node.state.open = true;
-    },
-
     _defRemoveFn: function (e) {
         var node = e.node;
 
@@ -786,4 +707,4 @@ var Tree = Y.Base.create('tree', Y.Base, [], {
 Y.Tree = Y.mix(Tree, Y.Tree);
 
 
-}, 'gallery-2012.12.26-20-48', {"requires": ["base-build", "gallery-sm-tree-node"]});
+}, 'gallery-2013.02.07-15-27', {"requires": ["base-build", "gallery-sm-tree-node"]});
