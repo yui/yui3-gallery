@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>Test ZUI ScrollSnapper</title>
+</head>
+<style>
+li {width:200px;height:300px;border:2px solid #000;background#f00}
+</style>
+<body class="yui3-skin-sam">
+<ul>
+ <li>this is page 1</li>
+ <li>this is page 2</li>
+ <li>this is page 3</li>
+ <li>this is page 4</li>
+ <li>this is page 5</li>
+ <li>this is page 6</li>
+ <li>this is page 7</li>
+ <li>this is page 8</li>
+ <li>this is page 9</li>
+ <li>this is page 0</li>
+</ul>
+</body>
+<script src="/build/yui/yui-debug.js"></script>
+<script>
+YUI({
+    coverage: ['gallery-zui-scrollsnapper'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test', 'node-event-simulate', 'gallery-zui-scrollsnapper', function (Y) {
+    var scroll = (new Y.ScrollView({srcNode: 'ul', height: 400, width: 300, render: true})).plug(Y.zui.ScrollSnapper),
+        testSuite = new Y.Test.Suite('ZUI scrollsnapper'),
+        pageH = Y.one('li').get('offsetHeight'),
+        dragTime = 800,
+        flickTime = 50,
+        testDelay = 1500,
+        skip_phantomjs = Y.UA.phantomjs,
+
+        doDrag = function (y, ms) {
+            var node = scroll.get('contentBox'),
+                xy = [10, 10];
+
+            node.simulate('mousedown', {clientX: xy[0], clientY: xy[1]});
+            node.simulate('mousemove', {clientX: xy[0], clientY: xy[1] + y});
+            Y.later(ms, null, function () {
+                node.simulate('mouseup', {clientX: xy[0], clientY: xy[1] + y});
+            });
+        },
+
+        testScrollMethod = function (test, y, diff) {
+            scroll.pages.set('index', 5);
+            Y.later(testDelay, null, function() {
+                Y.Assert.areSame(5 * pageH, scroll.get('scrollY'));
+                scroll.scrollTo(0, y * pageH);
+            });
+            test.wait(function () {
+                Y.Assert.areSame(y * pageH, scroll.get('scrollY'));
+            }, testDelay * 2);
+        },
+
+        testGesture = function (test, y, time, diff) {
+            var startPage,
+                startOffset;
+
+            scroll.pages.set('index', 0);
+            scroll.pages.set('index', 5);
+            startPage = scroll.pages.get('index');
+            startOffset = scroll.get('scrollY');
+            doDrag(y, time);
+            test.wait(function () {
+                Y.Assert.areSame(startPage + diff, scroll.pages.get('index'));
+                Y.Assert.areSame(startOffset + diff * pageH, scroll.get('scrollY'));
+            }, dragTime + testDelay);
+        };
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test attributes',
+
+        testAxis: function () {
+            Y.Assert.isTrue(Y.Lang.isArray(scroll.pages.get('axis')));
+        },
+
+        testTotal: function () {
+            Y.Assert.areSame(10, scroll.pages.get('total'));
+        },
+
+        testIndex: function () {
+            Y.Assert.areSame(0, scroll.pages.get('index'));
+        },
+
+        testSetIndex: function () {
+            scroll.pages.set('index', 2);
+            Y.Assert.areSame(2 * pageH, scroll.get('scrollY'));
+            scroll.pages.set('index', 0);
+        }
+    }));
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test plugin methods',
+
+        testPrev: function () {
+            scroll.pages.prev();
+            Y.Assert.areSame(0, scroll.pages.get('index'));
+            Y.Assert.areSame(0, scroll.get('scrollX'));
+            Y.Assert.areSame(0, scroll.get('scrollY'));
+        },
+
+        testNext: function () {
+            scroll.pages.next();
+            this.wait(function () {
+                Y.Assert.areSame(1, scroll.pages.get('index'));
+                Y.Assert.areSame(0, scroll.get('scrollX'));
+                Y.Assert.areSame(pageH, scroll.get('scrollY'));
+            }, testDelay);
+        },
+
+        testNextNext: function () {
+            scroll.pages.next().next();
+            this.wait(function () {
+                Y.Assert.areSame(3, scroll.pages.get('index'));
+                Y.Assert.areSame(0, scroll.get('scrollX'));
+                Y.Assert.areSame(3 * pageH, scroll.get('scrollY'));
+            }, testDelay);
+        },
+
+        testPrevPrev: function () {
+            scroll.pages.prev().prev();
+            this.wait(function () {
+                Y.Assert.areSame(1, scroll.pages.get('index'));
+                Y.Assert.areSame(0, scroll.get('scrollX'));
+                Y.Assert.areSame(1 * pageH, scroll.get('scrollY'));
+            }, testDelay);
+        }
+    }));
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test programming scroll behavior',
+
+        testScrollHalf: function () {
+            testScrollMethod(this, 0.48, 0);
+        },
+
+        testScrollOne: function () {
+            testScrollMethod(this, 0.52, 1);
+        }
+    }));
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test drag hehaviors',
+
+        _should: {
+            ignore: {
+                 testDragDownBack: skip_phantomjs,
+                 testDragDownOK: skip_phantomjs,
+                 testFlickDown: skip_phantomjs,
+                 testFlickDownFar: skip_phantomjs,
+                 testDragUpBack: skip_phantomjs,
+                 testDragUpOK: skip_phantomjs,
+                 testFlickUp: skip_phantomjs,
+                 testFlickUpFar: skip_phantomjs
+            }
+        },
+
+        testDragDownBack: function () {
+            testGesture(this, -100, dragTime, 0);
+        },
+
+        testDragDownOK: function () {
+            testGesture(this, -250, dragTime, 1);
+        },
+
+        testFlickDown: function () {
+            testGesture(this, -50, flickTime, 1);
+        },
+
+        testFlickDownFar: function () {
+            testGesture(this, -120, flickTime, 2);
+        },
+
+        testDragUpBack: function () {
+            testGesture(this, 100, dragTime, 0);
+        },
+
+        testDragUpOK: function () {
+            testGesture(this, 250, dragTime, -1);
+        },
+
+        testFlickUp: function () {
+            testGesture(this, 50, flickTime, -1);
+        },
+
+        testFlickUpFar: function () {
+            testGesture(this, 120, flickTime, -2);
+        }
+    }));
+
+    Y.Test.Runner.add(testSuite);
+    Y.Test.Runner.run();
+});
+</script>
+</html>

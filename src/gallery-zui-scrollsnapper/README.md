@@ -26,8 +26,13 @@ Note
     better performance. Now we just use linear search, when user scrollTo last
     items we run into worst case.
 
+*   This plugin only handle gestures, do not handle scrollTo() method.
+
 Known Issue
 -----------
+
+*   Some webkit browsers will cause page position calculation wrong, in this case you
+    may add a style 'position:relative' on contentBox to fix it.
 
 *   If you have a lots of pages in the scrollView, the 'snapTo' calculation may take
     longer time. You should do performance test for this case.

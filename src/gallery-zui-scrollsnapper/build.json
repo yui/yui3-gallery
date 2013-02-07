@@ -1,0 +1,11 @@
+{
+    "name": "gallery-zui-scrollsnapper",
+    "builds": {
+        "gallery-zui-scrollsnapper": {
+            "jsfiles": [
+                "zui-scrollsnapper.js"
+            ],
+            "meta": {}
+        }
+    }
+}

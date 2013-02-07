@@ -1,0 +1,8 @@
+{
+    "gallery-zui-scrollsnapper": {
+        "requires": [
+            "scrollview-base",
+            "plugin"
+        ]
+    }
+}
