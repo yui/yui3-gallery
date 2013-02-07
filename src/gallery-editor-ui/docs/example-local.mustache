@@ -1,0 +1,35 @@
+<div class="intro">
+    <p>Intro example</p>
+</div>
+
+<h2>Example EditorUI</h2>
+<p>Description</p>
+
+{{>example-html}}
+
+<script>
+YUI({
+	groups: {
+			/* set own own gallery */
+            gallery: {
+                combine:   false,
+                base:      "/build/",
+                root:      "/build/",
+                comboBase: "/combo?",
+                patterns: {
+                    "gallery-":    {},
+                    "gallerycss-": { type: "css" }
+                }   
+            }, 
+	}
+
+}).use('{{use}}', function(Y) {
+	
+	Y.on('domready', function() {
+		/* create editor */		
+		{{>example-js}}
+	});
+});
+</script>
+
+

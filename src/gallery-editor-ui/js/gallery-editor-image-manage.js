@@ -64,7 +64,7 @@
 		},
 		/**
 		 * The image size dimentsions (height and width)
-		 * @attribute cellImageSizes
+		 * @attribute canvasImageSizes
 		 * @type Object
 		 */
 		canvasImageSizes: {
@@ -144,7 +144,7 @@
 			this.uploadToCopy = this.uploadCanvasCopy.invoke('getContext', '2d');//node: _node.getContext("2d");
 					
 			//init upload button
-			this.uploadButton = Y.Node.create('<input type="file" class="upload" accept="image/*">');//multiple="multiple"
+			this.uploadButton = Y.Node.create('<input type="file" class="upload" accept="image/*">');//multiple="multiple", size="0"
 			cell.appendChild(this.uploadButton);
 			cell.appendChild(this.uploadCanvas);
 			

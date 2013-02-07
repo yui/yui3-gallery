@@ -9,8 +9,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 	
 	/**
 	Notes:
-	- Based on CustomEditor-1.2 known as gallery-editor-ui within YUI3 Gallery.
-	- on submit or interface switch cleans up the browser created html (classes, styles)
+	- gallery-editor-ui within YUI3 Gallery.
 	- limited configuration options
 	- not skinnable yet
 	*/
@@ -68,7 +67,16 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			value: '/build/gallery-editor-ui/assets/gallery-editor-ui-content.css',
 			writeOnce:true
 		},
-		
+		/**
+		 * The URL to upload the image to, resize image and return JSON. In the assets folder look at upload.phps for an example. Used by image-manager, only passed along.
+		 * @attribute uploadToUrl
+		 * @type String
+		 */
+		uploadToUrl: {
+			value: '/build/gallery-editor-ui/assets/fake-upload.html',
+			validator: Y.Lang.isString,
+			writeOnce:true
+		},		
 		visualEditMode: {
 			value: true	
 		},
@@ -141,7 +149,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 				if(textArea){					
 					//build html for editor UI
 					textArea.addClass("Ak");//styling class
-					editor = Y.Node.create('<div style="width: '+textArea.getComputedStyle("width")+'"></div>');//inherit width
+					editor = Y.Node.create('<div style="width: '+textArea.getComputedStyle("width")+'; height: '+textArea.getComputedStyle("height")+'""></div>');//inherit width + height
 					textFrame = Y.Node.create('<div class="f9 Ar" style="display: none"></div>');//todo: allow config option to set initial state
 					htmlFrame = Y.Node.create('<div class="f8 Ar"></div>');//height from css
 					
@@ -196,6 +204,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 					this.set("frameInstance",baseEditor.getInstance());
 					
 					this.get("frameInstance").one("body").addClass(this.get("editorClass")).addClass('editing');/* our css style holder */
+					this.get("frameInstance").on("resizestart",Y.bind(function(){ return false; },this)); //some browsers allow image resizing, we dont. Another option unselectable=on on ellements.
 					this._buildToolbar();
 					this._registerCommands();
 					this._initToolbar();
@@ -362,9 +371,9 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 						inst.focus();	
 					}
 					
-					var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");
+					var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");//where to insert the image manager
 					var parent_width = editor.get("editor").get("offsetWidth");/* get textarea width = width image upload max */
-					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame ,resizeHeight: true};
+					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame ,resizeHeight: true, uploadToUrl: this.get('uploadToUrl')};
 					
 					//before rendering overlay, set .image-upload-frame with the correct height and width for centerized to work correctly
 					frame.setStyle("width",cfg.cellImageSizes.width).setStyle("height",cfg.cellImageSizes.height);
@@ -690,7 +699,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			
 			//on form submit
 			if(this.get("formEl") && Y.all(this.get("formEl")).size() === 1){
-				Y.one(this.get("formEl")).on("submit", Y.bind(this.submitForm, this));//should be referenced in config
+				Y.one(this.get("formEl")).before("submit", Y.bind(this.submitForm, this));//should be referenced in config
 			}
 		},
 		/**
@@ -907,10 +916,10 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			return textContent;
 		},
 		/**
-		 * Submit form
-		 **/	
+		 * @method submitForm
+		 * @description called before form is submitted
+		 */		
 		submitForm: function(e){
-			e.preventDefault();
 			
 			//if in 'wysiwyg' mode
 			if(this.get("visualEditMode") === true){
@@ -919,7 +928,20 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			
 			this.get("textArea").set("value",this._formatDom());
 			
-			Y.one(this.get("formEl")).submit();	//remove submitForm from event listener?		
+			//Y.one(this.get("formEl")).submit();	//remove submitForm from event listener?		
+		},
+		/**
+		 * @method getContent
+		 * @description Return the html content from the active view
+		 */	
+		getContent: function(){
+			
+			//if in 'wysiwyg' mode
+			if(this.get("visualEditMode") === true){
+				this.get("textArea").set("value",this._cleanDom());/* take content from wysig editor and push to textarea */
+			}
+			
+			return this._formatDom();			
 		},
 		/**
 		 * 
@@ -995,7 +1017,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		},
 		/**
 		 * The image size dimentsions (height and width)
-		 * @attribute cellImageSizes
+		 * @attribute canvasImageSizes
 		 * @type Object
 		 */
 		canvasImageSizes: {
@@ -1073,7 +1095,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			this.uploadToCopy = this.uploadCanvasCopy.invoke('getContext', '2d');//node: _node.getContext("2d");
 					
 			//init upload button
-			this.uploadButton = Y.Node.create('<input type="file" class="upload" accept="image/*">');//multiple="multiple"
+			this.uploadButton = Y.Node.create('<input type="file" class="upload" accept="image/*">');//multiple="multiple", size="0"
 			cell.appendChild(this.uploadButton);
 			cell.appendChild(this.uploadCanvas);
 			
@@ -1440,7 +1462,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 	
 	Y.EditorImageManage = EditorImageManage;	/**
 	 * @class HtmlFormat
-	 * @description HtmlFormat formats a DOM to string with easy to ready outlining of the tags.
+	 * @description HtmlFormat formats a DOM to correctly outlined easy to read HTML. (not a class but object)
 	 */	
 	var formatter = {
 		html: [],

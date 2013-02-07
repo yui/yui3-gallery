@@ -1,7 +1,7 @@
 YUI.add('module-tests', function(Y) {
 
     var suite = new Y.Test.Suite('gallery-editor-ui');
-
+	/*
     suite.add(new Y.Test.Case({
         name: 'Automated Tests',
         'test is empty': function() {
@@ -10,6 +10,7 @@ YUI.add('module-tests', function(Y) {
     }));
 
     Y.Test.Runner.add(suite);
+	*/
 
 
 },'', { requires: [ 'test' ] });

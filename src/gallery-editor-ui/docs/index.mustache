@@ -1,5 +1,3 @@
-<!-- https://github.com/apipkin/yuiconf2012/tree/master/src/gallery-sizer example -->
-<!-- http://www.youtube.com/watch?v=xp-S1I7iEDs&feature=player_embedded -->
 <div class="intro">
     <p>
    This module builds on top of YUI <a href="http://yuilibrary.com/yui/docs/editor/">Rich Text Editor</a> base to create a user interface for editting and formatting content. The interface is similair to the one used in Gmail to compose html messages.
@@ -32,7 +30,7 @@
 Html
 ```
 <form method="post" id="postForm">
-  <textarea name="html" id="editContent">
+  <textarea id="editContent">
     <!-- example html encoded -->
     Hello &lt;strong&gt;World&lt;/strong&gt;!
   </textarea>
@@ -50,6 +48,15 @@ JS gallery module init
 
 <h2>Configuration</h2>
 <p>Default text is picked up from the textarea content. Set the CSS for the visual edit mode. Set the image max width (same as composer?).</p>
+
+<p>Instead of submitting the data to a form you can also get the content for your own call:<p>
+```
+<script>
+	Y.on('domready', function() {
+		{{>example-js-non-submit}}
+	});
+</script>
+```
 
 <h2>Backend Setup</h2>
 <p>Resize and crop image script</p>

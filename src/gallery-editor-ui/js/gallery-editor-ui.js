@@ -7,8 +7,7 @@
 	
 	/**
 	Notes:
-	- Based on CustomEditor-1.2 known as gallery-editor-ui within YUI3 Gallery.
-	- on submit or interface switch cleans up the browser created html (classes, styles)
+	- gallery-editor-ui within YUI3 Gallery.
 	- limited configuration options
 	- not skinnable yet
 	*/
@@ -66,7 +65,16 @@
 			value: '/build/gallery-editor-ui/assets/gallery-editor-ui-content.css',
 			writeOnce:true
 		},
-		
+		/**
+		 * The URL to upload the image to, resize image and return JSON. In the assets folder look at upload.phps for an example. Used by image-manager, only passed along.
+		 * @attribute uploadToUrl
+		 * @type String
+		 */
+		uploadToUrl: {
+			value: '/build/gallery-editor-ui/assets/fake-upload.html',
+			validator: Y.Lang.isString,
+			writeOnce:true
+		},		
 		visualEditMode: {
 			value: true	
 		},
@@ -139,7 +147,7 @@
 				if(textArea){					
 					//build html for editor UI
 					textArea.addClass("Ak");//styling class
-					editor = Y.Node.create('<div style="width: '+textArea.getComputedStyle("width")+'"></div>');//inherit width
+					editor = Y.Node.create('<div style="width: '+textArea.getComputedStyle("width")+'; height: '+textArea.getComputedStyle("height")+'""></div>');//inherit width + height
 					textFrame = Y.Node.create('<div class="f9 Ar" style="display: none"></div>');//todo: allow config option to set initial state
 					htmlFrame = Y.Node.create('<div class="f8 Ar"></div>');//height from css
 					
@@ -371,10 +379,9 @@
 						inst.focus();	
 					}
 					
-					var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");
+					var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");//where to insert the image manager
 					var parent_width = editor.get("editor").get("offsetWidth");/* get textarea width = width image upload max */
-					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame ,resizeHeight: true};
-					Y.log(cfg);
+					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame ,resizeHeight: true, uploadToUrl: this.get('uploadToUrl')};
 					
 					//before rendering overlay, set .image-upload-frame with the correct height and width for centerized to work correctly
 					frame.setStyle("width",cfg.cellImageSizes.width).setStyle("height",cfg.cellImageSizes.height);
@@ -713,7 +720,7 @@
 			
 			//on form submit
 			if(this.get("formEl") && Y.all(this.get("formEl")).size() === 1){
-				Y.one(this.get("formEl")).on("submit", Y.bind(this.submitForm, this));//should be referenced in config
+				Y.one(this.get("formEl")).before("submit", Y.bind(this.submitForm, this));//should be referenced in config
 			}
 		},
 		/**
@@ -946,11 +953,11 @@
 			return textContent;
 		},
 		/**
-		 * Submit form
-		 **/	
+		 * @method submitForm
+		 * @description called before form is submitted
+		 */		
 		submitForm: function(e){
 			Y.log("submitForm call");
-			e.preventDefault();
 			
 			//if in 'wysiwyg' mode
 			if(this.get("visualEditMode") === true){
@@ -959,7 +966,20 @@
 			
 			this.get("textArea").set("value",this._formatDom());
 			
-			Y.one(this.get("formEl")).submit();	//remove submitForm from event listener?		
+			//Y.one(this.get("formEl")).submit();	//remove submitForm from event listener?		
+		},
+		/**
+		 * @method getContent
+		 * @description Return the html content from the active view
+		 */	
+		getContent: function(){
+			
+			//if in 'wysiwyg' mode
+			if(this.get("visualEditMode") === true){
+				this.get("textArea").set("value",this._cleanDom());/* take content from wysig editor and push to textarea */
+			}
+			
+			return this._formatDom();			
 		},
 		/**
 		 * 

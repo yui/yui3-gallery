@@ -12,7 +12,7 @@ For a list of all functions and the documentation:
 
 ```html
 <form method="get" id="postForm">
-  <textarea name="content" id="editContent" class="Ak">
+  <textarea id="editContent">
     &lt;p&gt;Hello &lt;strong&gt;World&lt;/strong&gt;&lt;/p&gt;
   </textarea>
 </form>
