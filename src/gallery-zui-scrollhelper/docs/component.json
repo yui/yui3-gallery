@@ -1,0 +1,7 @@
+{
+    "name"       : "gallery-zui-scrollhelper",
+    "displayName": "Gallery: zui-scrollhelper",
+    "description": "ZUI ScrollHelper help you to handle desktop img/a dragging problem in scrollView.",
+    "author"     : [ "zordius" ],
+    "tags": ["scrollview", "drag", "click", "firefox", "img", "a", "zordius"]
+}

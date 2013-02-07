@@ -1,0 +1,16 @@
+<div class="intro">
+ <p>ZUI ScrollHelper help you to handle desktop img/a dragging problem in scrollView.</p>
+</div>
+
+<h2>Description</h2>
+<p>Just plug Y.zui.ScrollHelper into a scrollView. If user dragging with Desktop
+browsers, the scrollView still work well even when user start dragging on an A
+ or IMG.</p>
+<h2>Sample Code</h2>
+```
+YUI().use('gallery-zui-scrollhelper', function(Y) {
+    // Make the scrollView more happy when you use mouse, prevent A/IMG dragging bug.
+    new Y.ScrollView(...).plug(Y.zui.ScrollHelper);
+});
+```
+

@@ -1,0 +1,10 @@
+{
+    "name": "gallery-zui-scrollhelper",
+    "builds": {
+        "gallery-zui-scrollhelper": {
+            "jsfiles": [
+                "zui-scrollhelper.js"
+            ]
+        }
+    }
+}

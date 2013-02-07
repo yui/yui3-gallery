@@ -1,4 +1,4 @@
-YUI.add('gallery-zui-scrollhelper', function(Y) {
+YUI.add('gallery-zui-scrollhelper', function (Y, NAME) {
 
 /**
  * ZUI ScrollHelper help you to handle desktop img/a dragging problem in scrollView.
@@ -7,19 +7,16 @@ YUI.add('gallery-zui-scrollhelper', function(Y) {
  ( or IMG.
  *
  * @module gallery-zui-scrollhelper
- */ 
-var dragging = 0,
-    dragStart = false,
-    onlyX = false,
+ */
 /**
  * ScrollHelperPlugin is a ScrollView plugin that help to handle A/IMG dragging bug.
  *
  * @class ScrollHelperPlugin
- * @namespace zui 
+ * @namespace zui
  * @extends Plugin.Base
  * @constructor
  */
-    ScrollHelperPlugin = function () {
+var ScrollHelperPlugin = function () {
         ScrollHelperPlugin.superclass.constructor.apply(this, arguments);
     };
 
@@ -104,4 +101,4 @@ Y.namespace('zui').ScrollHelper = Y.extend(ScrollHelperPlugin, Y.Plugin.Base, {
 });
 
 
-}, 'gallery-2012.09.26-20-36' ,{requires:['scrollview'], skinnable:false});
+}, 'gallery-2013.02.07-15-27', {"requires": ["scrollview"]});
