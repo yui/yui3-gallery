@@ -15,12 +15,19 @@ shifter [queu] compressing gallery-zui-rascroll/gallery-zui-rascroll.js with Ugl
 shifter [queu] writing -min file
 shifter [info] shifting for coverage
 shifter [info] shifting skin for gallery-zui-rascroll
+{ skinnable: 'false',
+  jsfiles: [ 'zui-rascroll.js' ],
+  meta: {},
+  config: { skinnable: false, requires: [ 'scrollview' ] },
+  buildDir: '/build',
+  stamp: true,
+  cssproc: 'http://yui.yahooapis.com/gallery-2013.02.07-15-27/' }
 shifter [queu] coverage file read, starting coverage for: gallery-zui-rascroll/gallery-zui-rascroll.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-zui-rascroll/gallery-zui-rascroll-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.118 seconds, pretty fast huh?
+shifter [info] finished in 0.149 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
@@ -31,7 +38,7 @@ shifter [info] finished in 0.118 seconds, pretty fast huh?
 Starting Grover on 1 files with PhantomJS@1.8.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [ZUI rascroll]: Passed: 32 Failed: 0 Total: 32 (ignored 0) (0.363 seconds) 54%
+✔ [ZUI rascroll]: Passed: 32 Failed: 0 Total: 32 (ignored 0) (0.373 seconds) 54%
 Writing files in JSON format to: /src/gallery-zui-rascroll/logs/tests.json
 ┌─────────────────────────────────────────────────────────┬─────────┬───────┬─────────────┬───────┐
 │[34m  path                                                   [39m│[34m  lines  [39m│[34m    %  [39m│[34m  functions  [39m│[34m    %  [39m│
@@ -41,7 +48,7 @@ Writing files in JSON format to: /src/gallery-zui-rascroll/logs/tests.json
 │  total                                                  │  24/44  │  54%  │       7/10  │  70%  │
 └─────────────────────────────────────────────────────────┴─────────┴───────┴─────────────┴───────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 32 Failed: 0 Total: 32 (ignored 0) (0.363 seconds)
-  [Grover Execution Timer] 2.614 seconds
+✔ [Total]: Passed: 32 Failed: 0 Total: 32 (ignored 0) (0.373 seconds)
+  [Grover Execution Timer] 1.637 seconds
 Failed to find source file: /build/gallery-zui-rascroll/gallery-zui-rascroll.js
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

@@ -31,7 +31,7 @@ Known Issue
 -----------
 
 *   gallery-2012.11.07-21-32 or older version can not cowork with YUI 3.7.0+
-*   gallery-2013.* or newer version can not cowork with YUI 3.6.0-
+*   gallery-2013.01.30-21-00 or newer version can not cowork with YUI 3.6.0-
 
 Code Sample
 -----------

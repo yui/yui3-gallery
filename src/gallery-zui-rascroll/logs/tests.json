@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 96,
-    "duration": 1089,
+    "duration": 1119,
     "type": "report",
     "Test Vertical Scroll": {
         "name": "Test Vertical Scroll",
@@ -35,7 +35,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testScroll2Down",
-            "duration": 1
+            "duration": 0
         },
         "testScroll2Up": {
             "result": "pass",
@@ -56,7 +56,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testScroll3Up",
-            "duration": 0
+            "duration": 1
         }
     },
     "Test Horizontal Scroll": {
@@ -87,7 +87,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testScroll2Left",
-            "duration": 0
+            "duration": 1
         },
         "testScroll2Right": {
             "result": "pass",
@@ -101,7 +101,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testScroll3Left",
-            "duration": 1
+            "duration": 0
         },
         "testScroll3Right": {
             "result": "pass",
@@ -118,7 +118,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 8,
-        "duration": 91,
+        "duration": 92,
         "type": "testcase",
         "testScroll1UL": {
             "result": "pass",
@@ -139,7 +139,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testScroll1UR",
-            "duration": 1
+            "duration": 0
         },
         "testScroll1RU": {
             "result": "pass",
@@ -153,7 +153,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testScroll1DL",
-            "duration": 0
+            "duration": 1
         },
         "testScroll1LD": {
             "result": "pass",
@@ -184,7 +184,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 8,
-        "duration": 91,
+        "duration": 92,
         "type": "testcase",
         "testScroll1UL": {
             "result": "pass",
@@ -219,14 +219,14 @@
             "message": "Test passed",
             "type": "test",
             "name": "testScroll1DL",
-            "duration": 0
+            "duration": 1
         },
         "testScroll1LD": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testScroll1LD",
-            "duration": 1
+            "duration": 0
         },
         "testScroll1DR": {
             "result": "pass",
@@ -250,21 +250,21 @@
         "errors": 0,
         "ignored": 0,
         "total": 4,
-        "duration": 51,
+        "duration": 54,
         "type": "testcase",
         "testScroll1VFree": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testScroll1VFree",
-            "duration": 0
+            "duration": 1
         },
         "testScroll1HLock": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testScroll1HLock",
-            "duration": 1
+            "duration": 0
         },
         "testScroll2VLock": {
             "result": "pass",
@@ -281,7 +281,7 @@
             "duration": 0
         }
     },
-    "timestamp": "Wed 30 Jan 2013 03:01:02 PM CST",
+    "timestamp": "Thu 07 Feb 2013 09:28:09 AM CST",
     "coverage": {
         "/build/gallery-zui-rascroll/gallery-zui-rascroll.js": {
             "lines": {
