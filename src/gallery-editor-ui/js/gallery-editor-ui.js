@@ -1,23 +1,17 @@
 
 	/**
-	//Add Description
-	@module gallery-editor-ui
-	@author Yvo Schaap
-	*/
-	
-	/**
-	Notes:
-	- gallery-editor-ui within YUI3 Gallery.
-	- limited configuration options
-	- not skinnable yet
+	* The Editor UI builds on top of YUI's Rich Text Editor base to create a user interface for editting and formatting HTML content.
+	* Besides basic formatting support (text style, outlining, lists) it has an easy to use image upload manager and link manager.
+	* @module gallery-editor-ui
+	* @author Yvo Schaap
 	*/
 
 	/**
 	 * @class EditorUI
 	 * @description EditorUI class
 	 * @constructor
-	 * @extends EventTarget
-	 * @param cfg {Object} configuration object
+	 * @extends Base
+	 * @param config {Object} configuration object
 	 */		
 	function EditorUI(config) {
 		EditorUI.superclass.constructor.apply(this, arguments);
@@ -92,7 +86,12 @@
 
 	
 	Y.extend(EditorUI, Y.Base, {		
-		
+
+		/**
+		* @property regexps
+		* @type object
+		* @protected
+		*/		
 		regexps: {
 			divToPElementsRe:       /<(a|blockquote|dl|div|ol|p|pre|table|ul|img)/i,
 			replaceBrsRe:           /(<br[^>]*>[ \n\r\t]*){2,}/gi,
@@ -167,7 +166,7 @@
 												
 				//for styling of panel (make configurable)
 				if(!Y.one("body").hasClass("yui3-skin-sam")){
-					Y.one("body").addClass("yui3-skin-sam");	
+					Y.one("body").addClass("yui3-skin-sam");
 				}
 								
 				//build toolbar html			
@@ -256,8 +255,10 @@
 		},
 
 		/**
-		 * 
-		**/			
+		*
+		* @method _registerCommands
+		* @protected
+		*/		
 		_registerCommands: function(){
 			/* this mixes YUI commands with our commands into one; doesn't link with browsers execCommand */
 			/* http://yuilibrary.com/forum/viewtopic.php?p=35065 */
@@ -549,6 +550,11 @@
 				}				
 			});			
 		},
+		/**
+		*
+		* @method _buildToolbar
+		* @protected
+		*/
 		_buildToolbar: function(){
 			var editor = this.get("editor"), toolbars = Y.Node.create('<div class="toolbars"></div>'), html_toolbar = Y.Node.create('<div class="html_toolbar"></div>'), plain_toolbar = Y.Node.create('<div class="plain_toolbar" style="display: none"></div>');/* todo: no inline styles */
 			
@@ -586,13 +592,21 @@
 			
 			editor.insert(toolbars,editor.one("*"));
 		},
+		/**
+		*
+		* @method _createToolbarButton
+		* @param cfg {Object} Config for button.
+		* @protected
+		*/
 		_createToolbarButton: function(cfg){
 			//todo: support arrow
 			return Y.Node.create('<div class="button" role="button" title="'+(cfg.desc ? cfg.desc : cfg.fn)+'" command="'+cfg.fn+'"><div class="'+cfg.cls+' icon"></div></div>');
 		},
 		/**
 		 * 
-		**/			
+		 * @method _initToolbar
+		 * @protected
+		 */			
 		_initToolbar: function(){
 			var editor = this.get("editor"), sizeWindow = this.get("sizeWindow");
 			
@@ -724,8 +738,11 @@
 			}
 		},
 		/**
-		 * 
-		**/		
+		 *
+		 * @method _formatHtml
+		 * @param e {Event} events
+		 * @protected
+		 */	
 		_formatHtml : function(e) {
 			if(!(typeof formatter === 'undefined')){
 				//bit crazy way around but it works
@@ -739,8 +756,11 @@
 			}
 		},	
 		/**
-		 * 
-		**/		
+		 *
+		 * @method _updateButtons
+		 * @param e {Event} events
+		 * @protected
+		 */	
 		_updateButtons : function(e) {
 			//e.preventDefault();
 			var editor = this.get("editor"), node = e.changedNode, cmds = e.commands;
@@ -764,8 +784,11 @@
 			}
 		},		
 		/**
-		 * 
-		**/
+		 *
+		 * @method _toggleComposer
+		 * @param toggle {Boolean} Toggle between WYSIWYG editor or HTML.
+		 * @protected
+		 */
 		_toggleComposer: function(toggle){
 			var editor = this.get("editor");
 			try{
@@ -804,8 +827,10 @@
 			}
 		},
 		/**
-		 * 
-		**/	
+		*
+		* @method _formatDom
+		* @protected
+		*/
 		_formatDom : function(){
 			var content = this.get("textArea").get("value");;
 			//content = content.replace(this.regexps.normalizeRe, " ");/* clean up whitespace */
@@ -816,8 +841,10 @@
 			return content;
 		},
 		/**
-		 * 
-		**/	
+		*
+		* @method _cleanNodes
+		* @protected
+		*/
 		_cleanNodes : function(){
 			/* http://yuilibrary.com/yui/docs/node/ */
 			
@@ -855,7 +882,7 @@
 							flag = true;
 						}else{
 							//remove style
-							node.setStyle(key,'')
+							node.setStyle(key,'');
 						}
 					});
 					/* safari adds spans with Apple-style-span stuff */
@@ -908,8 +935,10 @@
 			},this);
 		},
 		/**
-		 * Return WYSIWYG content as HTML.
-		**/	
+		* Return WYSIWYG content as HTML.
+		* @method _cleanNodes
+		* @protected
+		*/
 		_cleanDom : function(){
 			
 			//clean up dom
@@ -939,7 +968,11 @@
 		},
 		/**
 		 * 
-		**/			
+		 * @method _getInnerText
+		 * @param e {Event}
+		 * @param normalizeSpaces {Boolean}
+		 * @protected
+		 */			
 		_getInnerText: function (e, normalizeSpaces) {
 			var textContent = "";
 			normalizeSpaces = (typeof normalizeSpaces === 'undefined') ? true : normalizeSpaces;
@@ -954,7 +987,8 @@
 		},
 		/**
 		 * @method submitForm
-		 * @description called before form is submitted
+		 * @param e {Event}
+		 * @description Called before form is submitted
 		 */		
 		submitForm: function(e){
 			Y.log("submitForm call");

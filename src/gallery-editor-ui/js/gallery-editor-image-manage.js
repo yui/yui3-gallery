@@ -1,9 +1,13 @@
 	/**
+	 * @module gallery-editor-ui
+	 */
+ 
+	/**
 	 * @class EditorImageManage
 	 * @description EditorImageManage class
 	 * @constructor
-	 * @extends EventTarget
-	 * @param cfg {Object} configuration object
+	 * @extends Base
+	 * @param config {Object} configuration object
 	 */	
 	function EditorImageManage(config) {
 		EditorImageManage.superclass.constructor.apply(this, arguments);
@@ -125,7 +129,7 @@
 			frameEl.empty().appendChild(cell);//clear and add manage cell
 			
 			//do all this in a cell
-			if(canvasImageSizes.width == 0 && canvasImageSizes.height == 0){
+			if(canvasImageSizes.width === 0 && canvasImageSizes.height === 0){
 				canvasImageSizes = { width: cellImageSizes.width, height: cellImageSizes.height };
 			}
 			this.set('canvasImageSizes',canvasImageSizes);
@@ -251,7 +255,7 @@
 		
 		/**
 		 * Only works for html5 browsers, else fallback to browser upload only?
-		 * 
+		 * @method support
 		**/			
 		support: function(){
 			if ( !( window.File && window.FileReader && window.FileList && window.Blob ) ) {	
@@ -260,7 +264,9 @@
 			return true;
 		},
 		/**
-		 * 
+		 * @method loadLocalImage
+		 * @param evt {Event} events
+		 * @protected
 		**/				
 		loadLocalImage: function(evt){	
 						
@@ -276,7 +282,7 @@
 			if (files && files.size() > 0) {
 				var file = files._nodes[0];
 				//file.name , file.size, file.lastModifiedDate
-				if (typeof FileReader !== "undefined" && file.type.indexOf("image") != -1) {
+				if (typeof FileReader !== "undefined" && file.type.indexOf("image") !== -1) {
 					var reader = new FileReader();
 					//addEventListener doesn't work in Google Chrome for this event
 					reader.onload = Y.bind(function (evt) {
@@ -290,7 +296,9 @@
 			evt.preventDefault();	
 		},
 		/**
-		 * 
+		 * @method prepareImg
+		 * @param evt {Event} events
+		 * @protected
 		**/				
 		prepareImg: function(evt){		
 			//save local source file
@@ -303,13 +311,16 @@
 			this.drawCanvas();
 		},
 		/**
-		 * 
+		 * @method errorImg
+		 * @param evt {Event} events
+		 * @protected
 		**/				
 		errorImg: function(evt){		
 			Y.log("could not load image into canvas.");
 		},
 		/**
-		 * 
+		 * @method drawCanvas
+		 * @protected
 		**/				
 		drawCanvas: function(){
 			var img = this.get("img"),
@@ -348,8 +359,9 @@
 			this.contrainMove();
 		},
 		/**
-		 * 
-		**/		
+		 * @method resizeDimensions
+		 * @protected
+		**/			
 		resizeDimensions: function(node,minDimensions){
 			//get image dimensions
 			var ratio = node.height / node.width;
@@ -381,10 +393,10 @@
 			}	
 			return newDimensions;	
 		},
-		
 		/**
-		 * 
-		**/				
+		 * @method contrainMove
+		 * @protected
+		**/					
 		contrainMove: function(){
 			var img = this.get("img"),
 				cell = this.get("cell");
@@ -431,7 +443,8 @@
 			},this));		
 		},
 		/**
-		 * 
+		 * @method clearCanvas
+		 * @protected
 		**/				
 		clearCanvas: function(){
 			//reset offset
@@ -444,10 +457,9 @@
 			//cleanup canvas pixels
 			this.uploadTo.clearRect(0, 0, this.uploadCanvas.get("width"), this.uploadCanvas.get("height"));	
 		},
-
 		/**
-		 * 
-		**/			
+		 * @method convertToBlob
+		**/		
 		convertToBlob: function(dataURI){
 			
 			//http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
@@ -460,8 +472,8 @@
 			return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});		
 		},
 		/**
-		 * 
-		**/				
+		 * @method getFile
+		**/					
 		getFile: function(){	
 			//var blob = this.uploadCanvas._node.mozGetAsFile("file.jpg");			
 			if(this.get("cell").hasClass("active")){
@@ -475,6 +487,7 @@
 		},
 		/**
 		 * Height and width of output cell not actual image!
+		 * @method getFileDetails		
 		**/		
 		getFileDetails: function(){	
 			var cellImageSizes = this.get("cellImageSizes");			
@@ -482,14 +495,14 @@
 			return {top: this.get("top"), left: this.get("left"), zoom: this.get("zoom"), width: cellImageSizes.width, height: cellImageSizes.height, resize: this.get("resize") };
 		},	
 		/**
-		 * 
+		 * @method getImage		
 		**/				
 		getImage: function(){		
 			//this string is a file
 			return this.uploadCanvasCopy._node.toDataURL("image/jpeg","0.8");//png,jpeg,.8
 		},
 		/**
-		 * Called externally
+		 * @method setHeight		
 		**/				
 		setHeight: function(pixels){
 			Y.log('height set: '+pixels);
@@ -501,7 +514,9 @@
 			
 			this.contrainMove();/* redrawn image */	
 		},
-		
+		/**
+		 * @method saveImage		
+		**/			
 		saveImage: function(){
 			var file = this.getFile();
 			if(file){

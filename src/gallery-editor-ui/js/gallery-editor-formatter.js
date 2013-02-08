@@ -1,6 +1,10 @@
 	/**
-	 * @class HtmlFormat
-	 * @description HtmlFormat formats a DOM to correctly outlined easy to read HTML. (not a class but object)
+	 * @module gallery-editor-ui
+	 */
+
+	/**
+	 * @class formatter
+	 * @description formatter formats a DOM to correctly outlined easy to read HTML.
 	 */	
 	var formatter = {
 		html: [],
@@ -10,7 +14,7 @@
 		newLineNodeRe: /^(div|p|img|blockquote|q|iframe|pre|code|table|tbody|th|td|tr|ul|ol|li|h1|h2|h3|h4|h5|h6|dl|dt|dd|form|fieldset|legend|iframe)$/i,
 		notCloseNodesRe: /^(img|br)$/i,
 		firstNodeRe: /^(<[^>]+>)/i,
-		replaceNodesRe: /^(script|style|meta|body|head|title)/i,
+		replaceNodesRe: /^(script|style|meta|body|head|title|link)/i,
 		keepAttributesRe: /^(src|style|width|height|class|title|alt|data-)/i,//no id
 		/* span, ul, b, strong, em, i, ul are all online */
 
@@ -24,14 +28,18 @@
 			if(dom === null){
 				return '';//overwrites so maybe return dom
 			}else if(dom && dom._node){
-				this.dive(dom.getDOMNode(),0);//for YUI
+				this._dive(dom.getDOMNode(),0);//for YUI
 			}else{
-				this.dive(dom,0);//native DOM assumed
+				this._dive(dom,0);//native DOM assumed
 			}
 			return this.html.join('');
 		},
-		
-		dive: function (e,level) {
+		/**
+		*
+		* @method _dive
+		* @protected
+		*/			
+		_dive: function (e,level) {
 			var node = e.firstChild;
 	
 			if(!e) {
@@ -67,10 +75,10 @@
 						indent_str = '';
 					}else if(hasTextChild || !nodeName.search(this.inlineNodeRe)  === -1){
 						//text node
-						indent_str = ''+this.indenter(level);
+						indent_str = ''+this._indenter(level);
 					}else{//inline block
 						new_line = '\n';
-						indent_str = ''+this.indenter(level);
+						indent_str = ''+this._indenter(level);
 					}
 					
 					this.html.push(indent_str+node_str);
@@ -80,7 +88,7 @@
 						this.html.push(new_line);
 					}
 					
-					this.dive(node,(level + 1));
+					this._dive(node,(level + 1));
 				}else if(node.nodeType === 3){
 					//text nodes (only non empty)
 					if(node.nodeValue.replace(this.trimRe, '').length > 0)
@@ -101,7 +109,7 @@
 							/* if has no childeren of main node, don't indent */
 							this.html.push('</'+nodeName+'>\n');
 						}else{
-							var indent_str = this.indenter(level);
+							var indent_str = this._indenter(level);
 							this.html.push(indent_str+'</'+nodeName+'>\n'); //new line node (block) end tag
 						}
 					}
@@ -111,19 +119,16 @@
 				node = node.nextSibling;
 			}           
 		},
-		
-		indenter: function(level){
+		/**
+		*
+		* @method _indenter
+		* @protected
+		*/			
+		_indenter: function(level){
 			var indent_str = '';
 			for(var i=0; i < level; i++){
 				indent_str = indent_str + this.indent; 
 			}	
 			return indent_str;
-		},
-		
-		/**
-		 * 
-		 **/		
-		end : function(){
-			
 		}
 	}
