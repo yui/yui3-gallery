@@ -256,6 +256,7 @@
 		/**
 		 * Only works for html5 browsers, else fallback to browser upload only?
 		 * @method support
+		 * @return {Boolean}
 		**/			
 		support: function(){
 			if ( !( window.File && window.FileReader && window.FileList && window.Blob ) ) {	
@@ -361,6 +362,7 @@
 		/**
 		 * @method resizeDimensions
 		 * @protected
+		 * @return {Object} Dimensions
 		**/			
 		resizeDimensions: function(node,minDimensions){
 			//get image dimensions
@@ -459,6 +461,7 @@
 		},
 		/**
 		 * @method convertToBlob
+		 * @return {Blob} Blob image data.
 		**/		
 		convertToBlob: function(dataURI){
 			
@@ -473,6 +476,7 @@
 		},
 		/**
 		 * @method getFile
+		 * @return {FileHTML5} Y.FileHTML5 object.
 		**/					
 		getFile: function(){	
 			//var blob = this.uploadCanvas._node.mozGetAsFile("file.jpg");			
@@ -487,7 +491,8 @@
 		},
 		/**
 		 * Height and width of output cell not actual image!
-		 * @method getFileDetails		
+		 * @method getFileDetails
+		 * @return {Object} File dimensions (top, left, zoom, width, height, resize)
 		**/		
 		getFileDetails: function(){	
 			var cellImageSizes = this.get("cellImageSizes");			
@@ -495,7 +500,8 @@
 			return {top: this.get("top"), left: this.get("left"), zoom: this.get("zoom"), width: cellImageSizes.width, height: cellImageSizes.height, resize: this.get("resize") };
 		},	
 		/**
-		 * @method getImage		
+		 * @method getImage	
+		 * @return {String} Base64 binary image data.
 		**/				
 		getImage: function(){		
 			//this string is a file

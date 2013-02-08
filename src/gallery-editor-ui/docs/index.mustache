@@ -1,6 +1,6 @@
 <div class="intro">
     <p>
-   This module builds on top of YUI <a href="http://yuilibrary.com/yui/docs/editor/">Rich Text Editor</a> base to create a user interface for editting and formatting HTML content. Besides basic formatting support (text style, outlining, lists) it has an easy to use image upload manager and link manager. The interface is similar to the one used in Gmail to compose rich text messages.
+   This module builds on top of YUI <a href="http://yuilibrary.com/yui/docs/editor/">Rich Text Editor</a> base to create a user interface for editting and formatting HTML content. Besides basic formatting support (text style, outlining, lists) it has an easy to use image upload manager and link manager. The interface is similar to the one used in gmail to compose rich text messages.
     </p>
 	<p>This module adds the following functionality:
 	<ul>
@@ -22,12 +22,11 @@
 
 <h2>Description</h2>
 
-<p>The module extends a &lt;textarea&gt; node in a form.</p>
-<p>Their are currently limited configuration and skinning options available.</p>
+<p>The module transforms a &lt;textarea&gt; node to an rich text editor.</p>
 <p>The module was designed to be more lightweight and completely based on the YUI3 framework unlike CKeditor or tinyMCE.</p
 
 <h2>Example</h2>
-A textarea field containing the default html is obligated:
+A mandatory textarea element containing the default html are the fundamentals:
 ```
 <form method="post" id="postForm">
   <textarea id="editContent">
@@ -37,7 +36,7 @@ A textarea field containing the default html is obligated:
   <button type="submit">Save</button>
 </form>
 ```
-Gallery module init:
+Gallery module init by javascript:
 ```
 <script>
 	Y.on('domready', function() {
@@ -45,6 +44,8 @@ Gallery module init:
 	});
 </script>
 ```
+
+<p>See the <a href="http://www.directlyrics.com/">DirectLyrics</a> blog articles to see the result.</p>
 
 <h2>Configuration</h2>
 <p>Default text is picked up from the textarea content.</p>
@@ -62,11 +63,11 @@ Gallery module init:
 <p>Resize and crop image script please see the example file assets/upload.phps which uses ImageMagick.</p>
 
 <h2>Known issues</h2>
-<p>The image manager module only supports HTML5 capable browsers, and has no fallback. IE<=10 Seems to have issues with the image uploader.</p>
+<p>The image manager module only supports HTML5 capable browsers due to use of the canvas element, and has no fallback. IE<=10 Seems to have issues with the image uploader.</p>
 
 <h2>Todo</h2>
 <ul>
-<li>Image border, float left/right</li>
+<li>Image styling: border, float left/right positioning</li>
 <li>Undo/redo support</li>
 <li>Editor.Render() call</li>
 <li>Accessibility</li>

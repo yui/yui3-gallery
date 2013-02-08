@@ -597,6 +597,7 @@
 		* @method _createToolbarButton
 		* @param cfg {Object} Config for button.
 		* @protected
+		* @return {Object} YUI Node object.
 		*/
 		_createToolbarButton: function(cfg){
 			//todo: support arrow
@@ -740,16 +741,15 @@
 		/**
 		 *
 		 * @method _formatHtml
-		 * @param e {Event} events
 		 * @protected
 		 */	
-		_formatHtml : function(e) {
-			if(!(typeof formatter === 'undefined')){
+		_formatHtml : function() {
+			if(!(typeof EditorHTMLFormatter === 'undefined')){
 				//bit crazy way around but it works
 				var html = this.get("textArea").get("value");
 				this.get("baseEditor").set('content',html);//don't do anything with the formatting
 				
-				var formatted_html = formatter.init(this.get("frameInstance").one('body'));
+				var formatted_html = EditorHTMLFormatter.init(this.get("frameInstance").one('body'));
 				//Y.log('format it:'+ formatted_html);
 				this.get("textArea").set("value",formatted_html);
 				//after switch we clean it up
@@ -830,6 +830,7 @@
 		*
 		* @method _formatDom
 		* @protected
+		* @return {String} textArea value.
 		*/
 		_formatDom : function(){
 			var content = this.get("textArea").get("value");;
@@ -935,9 +936,10 @@
 			},this);
 		},
 		/**
-		* Return WYSIWYG content as HTML.
+		* Cleans up the DOM the editor created.
 		* @method _cleanNodes
 		* @protected
+		* @return {String} WYSIWYG to clean HTML string.
 		*/
 		_cleanDom : function(){
 			
@@ -969,9 +971,10 @@
 		/**
 		 * 
 		 * @method _getInnerText
-		 * @param e {Event}
+		 * @param e {HTMLElement}
 		 * @param normalizeSpaces {Boolean}
 		 * @protected
+		 * @return {String} Node text contents as string.
 		 */			
 		_getInnerText: function (e, normalizeSpaces) {
 			var textContent = "";
@@ -1005,6 +1008,7 @@
 		/**
 		 * @method getContent
 		 * @description Return the html content from the active view
+		 * @return {String} Editor content as html string.
 		 */	
 		getContent: function(){
 			

@@ -3,10 +3,10 @@
 	 */
 
 	/**
-	 * @class formatter
-	 * @description formatter formats a DOM to correctly outlined easy to read HTML.
+	 * @class EditorHTMLFormatter
+	 * @description Formats a DOM to correctly outlined easy to read HTML.
 	 */	
-	var formatter = {
+	var EditorHTMLFormatter = {
 		html: [],
 		indent: '  ',
 		trimRe: /^\s+|\s+$/gi,
@@ -22,6 +22,7 @@
 		 * @method init
 		 * @description main render method
 		 * @param dom {Object} native DOM element or YUI Node
+		 * @return {String} HTML
 		 */		
 		init: function(dom){
 			this.html = [];

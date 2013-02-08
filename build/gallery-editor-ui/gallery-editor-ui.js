@@ -2,24 +2,18 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 
 
 	/**
-	//Add Description
-	@module gallery-editor-ui
-	@author Yvo Schaap
-	*/
-	
-	/**
-	Notes:
-	- gallery-editor-ui within YUI3 Gallery.
-	- limited configuration options
-	- not skinnable yet
+	* The Editor UI builds on top of YUI's Rich Text Editor base to create a user interface for editting and formatting HTML content.
+	* Besides basic formatting support (text style, outlining, lists) it has an easy to use image upload manager and link manager.
+	* @module gallery-editor-ui
+	* @author Yvo Schaap
 	*/
 
 	/**
 	 * @class EditorUI
 	 * @description EditorUI class
 	 * @constructor
-	 * @extends EventTarget
-	 * @param cfg {Object} configuration object
+	 * @extends Base
+	 * @param config {Object} configuration object
 	 */		
 	function EditorUI(config) {
 		EditorUI.superclass.constructor.apply(this, arguments);
@@ -94,7 +88,12 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 
 	
 	Y.extend(EditorUI, Y.Base, {		
-		
+
+		/**
+		* @property regexps
+		* @type object
+		* @protected
+		*/		
 		regexps: {
 			divToPElementsRe:       /<(a|blockquote|dl|div|ol|p|pre|table|ul|img)/i,
 			replaceBrsRe:           /(<br[^>]*>[ \n\r\t]*){2,}/gi,
@@ -167,7 +166,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 												
 				//for styling of panel (make configurable)
 				if(!Y.one("body").hasClass("yui3-skin-sam")){
-					Y.one("body").addClass("yui3-skin-sam");	
+					Y.one("body").addClass("yui3-skin-sam");
 				}
 								
 				//build toolbar html			
@@ -254,8 +253,10 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		},
 
 		/**
-		 * 
-		**/			
+		*
+		* @method _registerCommands
+		* @protected
+		*/		
 		_registerCommands: function(){
 			/* this mixes YUI commands with our commands into one; doesn't link with browsers execCommand */
 			/* http://yuilibrary.com/forum/viewtopic.php?p=35065 */
@@ -532,6 +533,11 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 				}				
 			});			
 		},
+		/**
+		*
+		* @method _buildToolbar
+		* @protected
+		*/
 		_buildToolbar: function(){
 			var editor = this.get("editor"), toolbars = Y.Node.create('<div class="toolbars"></div>'), html_toolbar = Y.Node.create('<div class="html_toolbar"></div>'), plain_toolbar = Y.Node.create('<div class="plain_toolbar" style="display: none"></div>');/* todo: no inline styles */
 			
@@ -569,13 +575,22 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			
 			editor.insert(toolbars,editor.one("*"));
 		},
+		/**
+		*
+		* @method _createToolbarButton
+		* @param cfg {Object} Config for button.
+		* @protected
+		* @return {Object} YUI Node object.
+		*/
 		_createToolbarButton: function(cfg){
 			//todo: support arrow
 			return Y.Node.create('<div class="button" role="button" title="'+(cfg.desc ? cfg.desc : cfg.fn)+'" command="'+cfg.fn+'"><div class="'+cfg.cls+' icon"></div></div>');
 		},
 		/**
 		 * 
-		**/			
+		 * @method _initToolbar
+		 * @protected
+		 */			
 		_initToolbar: function(){
 			var editor = this.get("editor"), sizeWindow = this.get("sizeWindow");
 			
@@ -703,22 +718,27 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			}
 		},
 		/**
-		 * 
-		**/		
-		_formatHtml : function(e) {
-			if(!(typeof formatter === 'undefined')){
+		 *
+		 * @method _formatHtml
+		 * @protected
+		 */	
+		_formatHtml : function() {
+			if(!(typeof EditorHTMLFormatter === 'undefined')){
 				//bit crazy way around but it works
 				var html = this.get("textArea").get("value");
 				this.get("baseEditor").set('content',html);//don't do anything with the formatting
 				
-				var formatted_html = formatter.init(this.get("frameInstance").one('body'));
+				var formatted_html = EditorHTMLFormatter.init(this.get("frameInstance").one('body'));
 				this.get("textArea").set("value",formatted_html);
 				//after switch we clean it up
 			}
 		},	
 		/**
-		 * 
-		**/		
+		 *
+		 * @method _updateButtons
+		 * @param e {Event} events
+		 * @protected
+		 */	
 		_updateButtons : function(e) {
 			//e.preventDefault();
 			var editor = this.get("editor"), node = e.changedNode, cmds = e.commands;
@@ -742,8 +762,11 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			}
 		},		
 		/**
-		 * 
-		**/
+		 *
+		 * @method _toggleComposer
+		 * @param toggle {Boolean} Toggle between WYSIWYG editor or HTML.
+		 * @protected
+		 */
 		_toggleComposer: function(toggle){
 			var editor = this.get("editor");
 			try{
@@ -779,8 +802,11 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			}
 		},
 		/**
-		 * 
-		**/	
+		*
+		* @method _formatDom
+		* @protected
+		* @return {String} textArea value.
+		*/
 		_formatDom : function(){
 			var content = this.get("textArea").get("value");;
 			//content = content.replace(this.regexps.normalizeRe, " ");/* clean up whitespace */
@@ -791,8 +817,10 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			return content;
 		},
 		/**
-		 * 
-		**/	
+		*
+		* @method _cleanNodes
+		* @protected
+		*/
 		_cleanNodes : function(){
 			/* http://yuilibrary.com/yui/docs/node/ */
 			
@@ -826,7 +854,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 							flag = true;
 						}else{
 							//remove style
-							node.setStyle(key,'')
+							node.setStyle(key,'');
 						}
 					});
 					/* safari adds spans with Apple-style-span stuff */
@@ -871,8 +899,11 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			},this);
 		},
 		/**
-		 * Return WYSIWYG content as HTML.
-		**/	
+		* Cleans up the DOM the editor created.
+		* @method _cleanNodes
+		* @protected
+		* @return {String} WYSIWYG to clean HTML string.
+		*/
 		_cleanDom : function(){
 			
 			//clean up dom
@@ -902,7 +933,12 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		},
 		/**
 		 * 
-		**/			
+		 * @method _getInnerText
+		 * @param e {HTMLElement}
+		 * @param normalizeSpaces {Boolean}
+		 * @protected
+		 * @return {String} Node text contents as string.
+		 */			
 		_getInnerText: function (e, normalizeSpaces) {
 			var textContent = "";
 			normalizeSpaces = (typeof normalizeSpaces === 'undefined') ? true : normalizeSpaces;
@@ -917,7 +953,8 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		},
 		/**
 		 * @method submitForm
-		 * @description called before form is submitted
+		 * @param e {Event}
+		 * @description Called before form is submitted
 		 */		
 		submitForm: function(e){
 			
@@ -933,6 +970,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		/**
 		 * @method getContent
 		 * @description Return the html content from the active view
+		 * @return {String} Editor content as html string.
 		 */	
 		getContent: function(){
 			
@@ -952,11 +990,15 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 	});
 	
 	Y.EditorUI = EditorUI;	/**
+	 * @module gallery-editor-ui
+	 */
+ 
+	/**
 	 * @class EditorImageManage
 	 * @description EditorImageManage class
 	 * @constructor
-	 * @extends EventTarget
-	 * @param cfg {Object} configuration object
+	 * @extends Base
+	 * @param config {Object} configuration object
 	 */	
 	function EditorImageManage(config) {
 		EditorImageManage.superclass.constructor.apply(this, arguments);
@@ -1076,7 +1118,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			frameEl.empty().appendChild(cell);//clear and add manage cell
 			
 			//do all this in a cell
-			if(canvasImageSizes.width == 0 && canvasImageSizes.height == 0){
+			if(canvasImageSizes.width === 0 && canvasImageSizes.height === 0){
 				canvasImageSizes = { width: cellImageSizes.width, height: cellImageSizes.height };
 			}
 			this.set('canvasImageSizes',canvasImageSizes);
@@ -1198,7 +1240,8 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		
 		/**
 		 * Only works for html5 browsers, else fallback to browser upload only?
-		 * 
+		 * @method support
+		 * @return {Boolean}
 		**/			
 		support: function(){
 			if ( !( window.File && window.FileReader && window.FileList && window.Blob ) ) {	
@@ -1207,7 +1250,9 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			return true;
 		},
 		/**
-		 * 
+		 * @method loadLocalImage
+		 * @param evt {Event} events
+		 * @protected
 		**/				
 		loadLocalImage: function(evt){	
 						
@@ -1223,7 +1268,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			if (files && files.size() > 0) {
 				var file = files._nodes[0];
 				//file.name , file.size, file.lastModifiedDate
-				if (typeof FileReader !== "undefined" && file.type.indexOf("image") != -1) {
+				if (typeof FileReader !== "undefined" && file.type.indexOf("image") !== -1) {
 					var reader = new FileReader();
 					//addEventListener doesn't work in Google Chrome for this event
 					reader.onload = Y.bind(function (evt) {
@@ -1237,7 +1282,9 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			evt.preventDefault();	
 		},
 		/**
-		 * 
+		 * @method prepareImg
+		 * @param evt {Event} events
+		 * @protected
 		**/				
 		prepareImg: function(evt){		
 			//save local source file
@@ -1250,12 +1297,15 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			this.drawCanvas();
 		},
 		/**
-		 * 
+		 * @method errorImg
+		 * @param evt {Event} events
+		 * @protected
 		**/				
 		errorImg: function(evt){		
 		},
 		/**
-		 * 
+		 * @method drawCanvas
+		 * @protected
 		**/				
 		drawCanvas: function(){
 			var img = this.get("img"),
@@ -1292,8 +1342,10 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			this.contrainMove();
 		},
 		/**
-		 * 
-		**/		
+		 * @method resizeDimensions
+		 * @protected
+		 * @return {Object} Dimensions
+		**/			
 		resizeDimensions: function(node,minDimensions){
 			//get image dimensions
 			var ratio = node.height / node.width;
@@ -1319,10 +1371,10 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			}	
 			return newDimensions;	
 		},
-		
 		/**
-		 * 
-		**/				
+		 * @method contrainMove
+		 * @protected
+		**/					
 		contrainMove: function(){
 			var img = this.get("img"),
 				cell = this.get("cell");
@@ -1369,7 +1421,8 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			},this));		
 		},
 		/**
-		 * 
+		 * @method clearCanvas
+		 * @protected
 		**/				
 		clearCanvas: function(){
 			//reset offset
@@ -1382,10 +1435,10 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			//cleanup canvas pixels
 			this.uploadTo.clearRect(0, 0, this.uploadCanvas.get("width"), this.uploadCanvas.get("height"));	
 		},
-
 		/**
-		 * 
-		**/			
+		 * @method convertToBlob
+		 * @return {Blob} Blob image data.
+		**/		
 		convertToBlob: function(dataURI){
 			
 			//http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
@@ -1398,8 +1451,9 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});		
 		},
 		/**
-		 * 
-		**/				
+		 * @method getFile
+		 * @return {FileHTML5} Y.FileHTML5 object.
+		**/					
 		getFile: function(){	
 			//var blob = this.uploadCanvas._node.mozGetAsFile("file.jpg");			
 			if(this.get("cell").hasClass("active")){
@@ -1413,6 +1467,8 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		},
 		/**
 		 * Height and width of output cell not actual image!
+		 * @method getFileDetails
+		 * @return {Object} File dimensions (top, left, zoom, width, height, resize)
 		**/		
 		getFileDetails: function(){	
 			var cellImageSizes = this.get("cellImageSizes");			
@@ -1420,14 +1476,15 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			return {top: this.get("top"), left: this.get("left"), zoom: this.get("zoom"), width: cellImageSizes.width, height: cellImageSizes.height, resize: this.get("resize") };
 		},	
 		/**
-		 * 
+		 * @method getImage	
+		 * @return {String} Base64 binary image data.
 		**/				
 		getImage: function(){		
 			//this string is a file
 			return this.uploadCanvasCopy._node.toDataURL("image/jpeg","0.8");//png,jpeg,.8
 		},
 		/**
-		 * Called externally
+		 * @method setHeight		
 		**/				
 		setHeight: function(pixels){
 			
@@ -1438,7 +1495,9 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			
 			this.contrainMove();/* redrawn image */	
 		},
-		
+		/**
+		 * @method saveImage		
+		**/			
 		saveImage: function(){
 			var file = this.getFile();
 			if(file){
@@ -1461,10 +1520,14 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 	});
 	
 	Y.EditorImageManage = EditorImageManage;	/**
-	 * @class HtmlFormat
-	 * @description HtmlFormat formats a DOM to correctly outlined easy to read HTML. (not a class but object)
+	 * @module gallery-editor-ui
+	 */
+
+	/**
+	 * @class EditorHTMLFormatter
+	 * @description Formats a DOM to correctly outlined easy to read HTML.
 	 */	
-	var formatter = {
+	var EditorHTMLFormatter = {
 		html: [],
 		indent: '  ',
 		trimRe: /^\s+|\s+$/gi,
@@ -1472,7 +1535,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		newLineNodeRe: /^(div|p|img|blockquote|q|iframe|pre|code|table|tbody|th|td|tr|ul|ol|li|h1|h2|h3|h4|h5|h6|dl|dt|dd|form|fieldset|legend|iframe)$/i,
 		notCloseNodesRe: /^(img|br)$/i,
 		firstNodeRe: /^(<[^>]+>)/i,
-		replaceNodesRe: /^(script|style|meta|body|head|title)/i,
+		replaceNodesRe: /^(script|style|meta|body|head|title|link)/i,
 		keepAttributesRe: /^(src|style|width|height|class|title|alt|data-)/i,//no id
 		/* span, ul, b, strong, em, i, ul are all online */
 
@@ -1480,20 +1543,25 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		 * @method init
 		 * @description main render method
 		 * @param dom {Object} native DOM element or YUI Node
+		 * @return {String} HTML
 		 */		
 		init: function(dom){
 			this.html = [];
 			if(dom === null){
 				return '';//overwrites so maybe return dom
 			}else if(dom && dom._node){
-				this.dive(dom.getDOMNode(),0);//for YUI
+				this._dive(dom.getDOMNode(),0);//for YUI
 			}else{
-				this.dive(dom,0);//native DOM assumed
+				this._dive(dom,0);//native DOM assumed
 			}
 			return this.html.join('');
 		},
-		
-		dive: function (e,level) {
+		/**
+		*
+		* @method _dive
+		* @protected
+		*/			
+		_dive: function (e,level) {
 			var node = e.firstChild;
 	
 			if(!e) {
@@ -1529,10 +1597,10 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 						indent_str = '';
 					}else if(hasTextChild || !nodeName.search(this.inlineNodeRe)  === -1){
 						//text node
-						indent_str = ''+this.indenter(level);
+						indent_str = ''+this._indenter(level);
 					}else{//inline block
 						new_line = '\n';
-						indent_str = ''+this.indenter(level);
+						indent_str = ''+this._indenter(level);
 					}
 					
 					this.html.push(indent_str+node_str);
@@ -1542,7 +1610,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 						this.html.push(new_line);
 					}
 					
-					this.dive(node,(level + 1));
+					this._dive(node,(level + 1));
 				}else if(node.nodeType === 3){
 					//text nodes (only non empty)
 					if(node.nodeValue.replace(this.trimRe, '').length > 0)
@@ -1563,7 +1631,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 							/* if has no childeren of main node, don't indent */
 							this.html.push('</'+nodeName+'>\n');
 						}else{
-							var indent_str = this.indenter(level);
+							var indent_str = this._indenter(level);
 							this.html.push(indent_str+'</'+nodeName+'>\n'); //new line node (block) end tag
 						}
 					}
@@ -1573,20 +1641,17 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 				node = node.nextSibling;
 			}           
 		},
-		
-		indenter: function(level){
+		/**
+		*
+		* @method _indenter
+		* @protected
+		*/			
+		_indenter: function(level){
 			var indent_str = '';
 			for(var i=0; i < level; i++){
 				indent_str = indent_str + this.indent; 
 			}	
 			return indent_str;
-		},
-		
-		/**
-		 * 
-		 **/		
-		end : function(){
-			
 		}
 	}
 
