@@ -374,13 +374,13 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 					
 					var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");//where to insert the image manager
 					var parent_width = editor.get("editor").get("offsetWidth");/* get textarea width = width image upload max */
-					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame ,resizeHeight: true, uploadToUrl: this.get('uploadToUrl')};
+					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame, resizeHeight: true, uploadToUrl: this.get('uploadToUrl')};
 					
 					//before rendering overlay, set .image-upload-frame with the correct height and width for centerized to work correctly
-					frame.setStyle("width",cfg.cellImageSizes.width).setStyle("height",cfg.cellImageSizes.height);
+					//frame.setStyle("width",cfg.cellImageSizes.width).setStyle("height",cfg.cellImageSizes.height);
 					
 					if(node){
-						cfg = Y.mix(cfg,{file: src, canvasImageSizes: {width: node.getStyle("width"), height: node.getStyle("height")}});//canvas = image
+						cfg = Y.mix(cfg,{file: src, cellImageSizes: {width: node.getStyle("width"), height: node.getStyle("height")}},true);//overwrite
 					}
 					
 					var g = new Y.EditorImageManage(cfg);/* mix image data with other cfg */
@@ -1055,7 +1055,13 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		 * @type Object
 		 */
 		cellImageSizes: {
-			value: {width: 0, height: 0 }	
+			value: {width: 0, height: 0 },
+			setter: function (cellImageSizes) {
+				cellImageSizes.height = parseInt(cellImageSizes.height,10);
+				cellImageSizes.width = parseInt(cellImageSizes.width,10);
+				
+				return cellImageSizes;
+			}
 		},
 		/**
 		 * The image size dimentsions (height and width)
@@ -1063,7 +1069,13 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		 * @type Object
 		 */
 		canvasImageSizes: {
-			value: {width: 0, height: 0 }	
+			value: {width: 0, height: 0 },
+			setter: function (canvasImageSizes) {
+				canvasImageSizes.height = parseInt(canvasImageSizes.height,10);
+				canvasImageSizes.width = parseInt(canvasImageSizes.width,10);
+				
+				return canvasImageSizes;
+			}
 		},
 		cell: null,
 		top:{
@@ -1078,8 +1090,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			value: 1
 		},
 		resize: {
-			value: 1,
-			validator: Y.Lang.isNumber
+			value: 1
 		}
 	};
 	
@@ -1094,6 +1105,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 		 */
 		initializer: function() {
 			var cellImageSizes = this.get('cellImageSizes'), canvasImageSizes = this.get('canvasImageSizes'), frameEl = this.get("frameEl"), cell;
+			
 			
 			//init vars
 			if(frameEl && frameEl._node){
@@ -1142,18 +1154,18 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 			cell.appendChild(this.uploadCanvas);
 			
 			if(this.get("drawUI")){
-				//create zoom button
-				this.zoomBtn = Y.Node.create('<div class="zoom button"><a class="in" title="Zoom In">+</a> <a class="out" title="Zoom Out">-</a></div>');
+				//create zoom buttons
+				this.zoomBtns = Y.Node.create('<div class="zoom button in" title="Zoom In">+</div> <div class=" zoom button out" title="Zoom Out">-</div>');
 				
-				this.zoomBtn.one(".in").on("click",Y.bind(function(e){		
-					var zoom = this.get("zoom");
-					this.set("zoom",zoom * 1.05);
+				this.zoomBtns.one(".in").on("click",Y.bind(function(e){		
+					var zoom = parseFloat(this.get("zoom") * 1.05);
+					this.set("zoom",zoom);
 					this.drawCanvas();
 					
 				},this));
-				this.zoomBtn.one(".out").on("click",Y.bind(function(e){		
+				this.zoomBtns.one(".out").on("click",Y.bind(function(e){		
 
-					var zoom = this.get("zoom") * .95;
+					var zoom = parseFloat(this.get("zoom") * .95);
 					if(zoom > 1){
 						this.set("zoom", zoom);
 					}else{
@@ -1162,7 +1174,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 					this.drawCanvas();
 					
 				},this));
-				cell.appendChild(this.zoomBtn);
+				cell.appendChild(this.zoomBtns);
 
 				//save image button
 				this.saveBtn = Y.Node.create('<a class="save button" title="Save image">Save</a>');
@@ -1180,12 +1192,12 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 				cell.appendChild(this.clearBtn);
 				
 				if(this.get("resizeHeight") === true){
-					var heightInpt = Y.Node.create('<input class="heightRow" value="'+cellImageSizes.height+'">');
+					var heightInpt = Y.Node.create('<input class="heightRow" value="'+cellImageSizes.height+'px">');
 					heightInpt.on(["blur","submit"],Y.bind(function(evt){
 						var row = evt.currentTarget.get("parentNode");
 						var height = parseInt(evt.currentTarget.get("value"),10);
-						if(height > 10){
-							this.setHeight(height+6);
+						if(height > 10){/* minimum height */
+							this.setHeight(height+6);/* this shouldn't be here +6 */
 						}
 					},this));
 					cell.appendChild(heightInpt);	
@@ -1208,7 +1220,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 					var height = parseInt(event.currentTarget.info.offsetHeight,10);
 					this.setHeight(height);
 					
-					cell.all(".height_row").set("value",(height-6)+"px");/* 6 = handlebar adjust upload.js */
+					cell.all(".heightRow").set("value",(height-6)+"px");/* 6 = handlebar adjust upload.js */
 				},this));
 			}
 
@@ -1616,7 +1628,7 @@ YUI.add('gallery-editor-ui', function (Y, NAME) {
 					if(node.nodeValue.replace(this.trimRe, '').length > 0)
 						this.html.push(node.nodeValue);			
 				}else if(node.nodeType === 8){
-					//ignore all comment nodes
+					this.html.push("<!-- "+node.nodeValue.replace(this.trimRe, '')+" -->\n");//comment node
 				}
 	
 				

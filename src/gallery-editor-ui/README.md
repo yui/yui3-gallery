@@ -4,7 +4,7 @@ YUI3 Gallery module which adds a user interface and advanced functions for [Rich
 
 Besides basic formatting support (text style, outlining, lists) it has an easy to use image upload manager and link manager. 
 
-For a list of all functions and the documentation: 
+For a list of all functions and the documentation see below: 
 
 ### Live example ###
 

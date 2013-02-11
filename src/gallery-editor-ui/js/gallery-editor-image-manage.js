@@ -64,7 +64,13 @@
 		 * @type Object
 		 */
 		cellImageSizes: {
-			value: {width: 0, height: 0 }	
+			value: {width: 0, height: 0 },
+			setter: function (cellImageSizes) {
+				cellImageSizes.height = parseInt(cellImageSizes.height,10);
+				cellImageSizes.width = parseInt(cellImageSizes.width,10);
+				
+				return cellImageSizes;
+			}
 		},
 		/**
 		 * The image size dimentsions (height and width)
@@ -72,7 +78,13 @@
 		 * @type Object
 		 */
 		canvasImageSizes: {
-			value: {width: 0, height: 0 }	
+			value: {width: 0, height: 0 },
+			setter: function (canvasImageSizes) {
+				canvasImageSizes.height = parseInt(canvasImageSizes.height,10);
+				canvasImageSizes.width = parseInt(canvasImageSizes.width,10);
+				
+				return canvasImageSizes;
+			}
 		},
 		cell: null,
 		top:{
@@ -87,8 +99,7 @@
 			value: 1
 		},
 		resize: {
-			value: 1,
-			validator: Y.Lang.isNumber
+			value: 1
 		}
 	};
 	
@@ -103,6 +114,8 @@
 		 */
 		initializer: function() {
 			var cellImageSizes = this.get('cellImageSizes'), canvasImageSizes = this.get('canvasImageSizes'), frameEl = this.get("frameEl"), cell;
+			
+			Y.log(cellImageSizes);
 			
 			//init vars
 			if(frameEl && frameEl._node){
@@ -153,29 +166,30 @@
 			cell.appendChild(this.uploadCanvas);
 			
 			if(this.get("drawUI")){
-				//create zoom button
-				this.zoomBtn = Y.Node.create('<div class="zoom button"><a class="in" title="Zoom In">+</a> <a class="out" title="Zoom Out">-</a></div>');
+				//create zoom buttons
+				this.zoomBtns = Y.Node.create('<div class="zoom button in" title="Zoom In">+</div> <div class=" zoom button out" title="Zoom Out">-</div>');
 				
-				this.zoomBtn.one(".in").on("click",Y.bind(function(e){		
-					var zoom = this.get("zoom");
-					this.set("zoom",zoom * 1.05);
-					Y.log('zoom in: '+zoom);						
+				this.zoomBtns.one(".in").on("click",Y.bind(function(e){		
+					var zoom = parseFloat(this.get("zoom") * 1.05);
+					this.set("zoom",zoom);
+					Y.log('zoom in to: '+zoom);						
 					this.drawCanvas();
 					
 				},this));
-				this.zoomBtn.one(".out").on("click",Y.bind(function(e){		
+				this.zoomBtns.one(".out").on("click",Y.bind(function(e){		
 
-					var zoom = this.get("zoom") * .95;
-					Y.log('zoom out: '+zoom);	
+					var zoom = parseFloat(this.get("zoom") * .95);
 					if(zoom > 1){
+						Y.log('zoom out to: '+zoom);	
 						this.set("zoom", zoom);
 					}else{
+						Y.log('back to zoom: 1');
 						this.set("zoom",1);//reset						
 					}
 					this.drawCanvas();
 					
 				},this));
-				cell.appendChild(this.zoomBtn);
+				cell.appendChild(this.zoomBtns);
 
 				//save image button
 				this.saveBtn = Y.Node.create('<a class="save button" title="Save image">Save</a>');
@@ -193,12 +207,12 @@
 				cell.appendChild(this.clearBtn);
 				
 				if(this.get("resizeHeight") === true){
-					var heightInpt = Y.Node.create('<input class="heightRow" value="'+cellImageSizes.height+'">');
+					var heightInpt = Y.Node.create('<input class="heightRow" value="'+cellImageSizes.height+'px">');
 					heightInpt.on(["blur","submit"],Y.bind(function(evt){
 						var row = evt.currentTarget.get("parentNode");
 						var height = parseInt(evt.currentTarget.get("value"),10);
-						if(height > 10){
-							this.setHeight(height+6);
+						if(height > 10){/* minimum height */
+							this.setHeight(height+6);/* this shouldn't be here +6 */
 						}
 					},this));
 					cell.appendChild(heightInpt);	
@@ -221,7 +235,7 @@
 					var height = parseInt(event.currentTarget.info.offsetHeight,10);
 					this.setHeight(height);
 					
-					cell.all(".height_row").set("value",(height-6)+"px");/* 6 = handlebar adjust upload.js */
+					cell.all(".heightRow").set("value",(height-6)+"px");/* 6 = handlebar adjust upload.js */
 				},this));
 			}
 

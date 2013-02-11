@@ -298,11 +298,18 @@
 	display: none;
 }
 .active .zoom {
-	left: 5px;
 	top: 0px;
 	display: block;
 	cursor: pointer;
 }
+.active .in {
+	left: 5px;	
+}
+
+.active .out {
+	left: 45px;	
+}
+
 .active .delete {
 	right: 5px;
 	top: 0px;
@@ -317,7 +324,7 @@
 	cursor: pointer;
 }
 
-.height_row{
+.heightRow{
 	color: #333;
 	border: 1px solid rgba(0,0,0,.4);
 	background-color: rgba(255,255,255,.5);
@@ -332,13 +339,9 @@
 	
 	position: absolute;
 	display: block;	
-	right: -13px;
+	right: -5px;
 	top: 55px;
 	width: 40px;
 	cursor: pointer;
 	z-index: 1;
-}
-/* overlay */
-.yui3-overlay {
-	background-color: #fff;
 }

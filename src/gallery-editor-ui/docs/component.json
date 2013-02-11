@@ -1,7 +1,7 @@
 {
     "name"       : "gallery-editor-ui",
     "displayName": "Gallery: gallery-editor-ui",
-    "description": "Adds a toolbar for the Editor with basic formatting options.",
+    "description": "Adds a toolbar for the Rich Text Editor with basic formatting options.",
     "author"     : [ "ymschaap" ],
     "use"        : [ "gallery-editor-ui" ],
 
@@ -24,6 +24,12 @@
 			"name": "example-multiple",
 			"displayName" : "Editor UI Mutiple",
 			"description" : "An example of mutiple Editor UI's.",
+			"modules": ["gallery-editor-ui"]
+		},
+		{
+			"name": "example-local",
+			"displayName" : "Editor UI - local build",
+			"description" : "An example Editor UI pulled from local build.",
 			"modules": ["gallery-editor-ui"]
 		}
 	]

@@ -382,13 +382,15 @@
 					
 					var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");//where to insert the image manager
 					var parent_width = editor.get("editor").get("offsetWidth");/* get textarea width = width image upload max */
-					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame ,resizeHeight: true, uploadToUrl: this.get('uploadToUrl')};
+					Y.log('Width of image uploader: '+parent_width);
+					var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame, resizeHeight: true, uploadToUrl: this.get('uploadToUrl')};
 					
 					//before rendering overlay, set .image-upload-frame with the correct height and width for centerized to work correctly
-					frame.setStyle("width",cfg.cellImageSizes.width).setStyle("height",cfg.cellImageSizes.height);
+					//frame.setStyle("width",cfg.cellImageSizes.width).setStyle("height",cfg.cellImageSizes.height);
 					
 					if(node){
-						cfg = Y.mix(cfg,{file: src, canvasImageSizes: {width: node.getStyle("width"), height: node.getStyle("height")}});//canvas = image
+						Y.log('Width of image uploader from file: '+node.getStyle("width"));
+						cfg = Y.mix(cfg,{file: src, cellImageSizes: {width: node.getStyle("width"), height: node.getStyle("height")}},true);//overwrite
 					}
 					
 					var g = new Y.EditorImageManage(cfg);/* mix image data with other cfg */

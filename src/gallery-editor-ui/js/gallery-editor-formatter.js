@@ -95,7 +95,7 @@
 					if(node.nodeValue.replace(this.trimRe, '').length > 0)
 						this.html.push(node.nodeValue);			
 				}else if(node.nodeType === 8){
-					//ignore all comment nodes
+					this.html.push("<!-- "+node.nodeValue.replace(this.trimRe, '')+" -->\n");//comment node
 				}
 	
 				
