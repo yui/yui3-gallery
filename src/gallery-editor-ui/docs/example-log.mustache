@@ -1,0 +1,23 @@
+<div class="intro">
+    <p>This example pulls the gallery module raw files to allow Y.log to do its job.</p>
+</div>
+
+<h2>Example EditorUI - with logger</h2>
+<p>Description</p>
+
+{{>example-html}}
+
+<script>
+YUI({
+	filter: 'raw',
+	filters: { 'gallery-editor-ui': 'debug' }
+}).use('{{use}}', function(Y) {
+	
+	Y.on('domready', function() {
+		/* create editor */		
+		{{>example-js}}
+	});
+});
+</script>
+
+
