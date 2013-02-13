@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.67 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.68 on node@0.8.18
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: bottle
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -21,6 +21,14 @@ shifter [info] shifting into gear for gallery-bt-device
 shifter [info] shifting into gear for gallery-bt-page
 shifter [info] shifting into gear for gallery-bt-carousel
 shifter [info] shifting into gear for gallery-bt-shortcut
+   #1: Bad assignment.
+       pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars).set('axis') = ''; // line 156, pos 114
+   #2: Expected an assignment or function call and instead saw an expression.
+       pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars).set('axis') = ''; // line 156, pos 114
+   #3: Missing semicolon.
+       pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars).set('axis') = ''; // line 156, pos 115
+   #4: Expected an assignment or function call and instead saw an expression.
+       pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars).set('axis') = ''; // line 156, pos 116
 shifter [queu] file has changed, continuing build
 shifter [queu] file has changed, continuing build
 shifter [queu] file has changed, continuing build
@@ -47,19 +55,19 @@ shifter [queu] writing RAW file
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
-shifter [queu] compressing gallery-bt-pushpop/gallery-bt-pushpop.js with UglifyJS
-shifter [queu] compressing gallery-bt-viewer/gallery-bt-viewer.js with UglifyJS
 shifter [queu] compressing gallery-bt-overlay/gallery-bt-overlay.js with UglifyJS
 shifter [queu] compressing gallery-bt-slidetab/gallery-bt-slidetab.js with UglifyJS
-shifter [queu] compressing gallery-bt-container/gallery-bt-container.js with UglifyJS
 shifter [queu] compressing gallery-bottle/gallery-bottle.js with UglifyJS
-shifter [queu] compressing gallery-bt-syncscroll/gallery-bt-syncscroll.js with UglifyJS
-shifter [queu] compressing gallery-bt-loader/gallery-bt-loader.js with UglifyJS
-shifter [queu] compressing gallery-bt-page/gallery-bt-page.js with UglifyJS
+shifter [queu] compressing gallery-bt-viewer/gallery-bt-viewer.js with UglifyJS
+shifter [queu] compressing gallery-bt-pushpop/gallery-bt-pushpop.js with UglifyJS
+shifter [queu] compressing gallery-bt-container/gallery-bt-container.js with UglifyJS
 shifter [queu] compressing gallery-bt-photogrid/gallery-bt-photogrid.js with UglifyJS
+shifter [queu] compressing gallery-bt-page/gallery-bt-page.js with UglifyJS
 shifter [queu] compressing gallery-bt-device/gallery-bt-device.js with UglifyJS
 shifter [queu] compressing gallery-bt-carousel/gallery-bt-carousel.js with UglifyJS
+shifter [queu] compressing gallery-bt-loader/gallery-bt-loader.js with UglifyJS
 shifter [queu] compressing gallery-bt-shortcut/gallery-bt-shortcut.js with UglifyJS
+shifter [queu] compressing gallery-bt-syncscroll/gallery-bt-syncscroll.js with UglifyJS
 shifter [queu] writing -min file
 shifter [queu] writing -min file
 shifter [queu] writing -min file
@@ -73,28 +81,10 @@ shifter [queu] writing -min file
 shifter [queu] writing -min file
 shifter [queu] writing -min file
 shifter [queu] writing -min file
-shifter [info] shifting for coverage
-shifter [info] shifting for coverage
-shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting skin for gallery-bottle
-{ config: 
-   { skinnable: 'true',
-     requires: 
-      [ 'gallery-bt-shortcut',
-        'gallery-bt-overlay',
-        'gallery-bt-photogrid',
-        'gallery-bt-slidetab',
-        'gallery-bt-carousel',
-        'gallery-bt-loader',
-        'gallery-bt-viewer' ] },
-  skinnable: 'true',
-  jsfiles: [ 'bottle/bottle.js' ],
-  buildDir: '/build',
-  stamp: true,
-  cssproc: 'http://yui.yahooapis.com/gallery-2013.02.07-15-27/' }
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
@@ -102,18 +92,21 @@ shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
-shifter [queu] coverage file read, starting coverage for: gallery-bt-pushpop/gallery-bt-pushpop.js
-shifter [queu] coverage file read, starting coverage for: gallery-bt-overlay/gallery-bt-overlay.js
+shifter [info] shifting for coverage
+shifter [info] shifting for coverage
+shifter [info] shifting for coverage
 shifter [queu] coverage file read, starting coverage for: gallery-bt-slidetab/gallery-bt-slidetab.js
-shifter [queu] coverage file read, starting coverage for: gallery-bt-viewer/gallery-bt-viewer.js
-shifter [queu] coverage file read, starting coverage for: gallery-bt-container/gallery-bt-container.js
+shifter [queu] coverage file read, starting coverage for: gallery-bt-overlay/gallery-bt-overlay.js
 shifter [queu] coverage file read, starting coverage for: gallery-bottle/gallery-bottle.js
-shifter [queu] coverage file read, starting coverage for: gallery-bt-syncscroll/gallery-bt-syncscroll.js
-shifter [queu] coverage file read, starting coverage for: gallery-bt-loader/gallery-bt-loader.js
+shifter [queu] coverage file read, starting coverage for: gallery-bt-viewer/gallery-bt-viewer.js
+shifter [queu] coverage file read, starting coverage for: gallery-bt-pushpop/gallery-bt-pushpop.js
 shifter [queu] coverage file read, starting coverage for: gallery-bt-page/gallery-bt-page.js
+shifter [queu] coverage file read, starting coverage for: gallery-bt-container/gallery-bt-container.js
 shifter [queu] coverage file read, starting coverage for: gallery-bt-photogrid/gallery-bt-photogrid.js
 shifter [queu] coverage file read, starting coverage for: gallery-bt-device/gallery-bt-device.js
 shifter [queu] coverage file read, starting coverage for: gallery-bt-carousel/gallery-bt-carousel.js
+shifter [queu] coverage file read, starting coverage for: gallery-bt-loader/gallery-bt-loader.js
+shifter [queu] coverage file read, starting coverage for: gallery-bt-syncscroll/gallery-bt-syncscroll.js
 shifter [queu] coverage file read, starting coverage for: gallery-bt-shortcut/gallery-bt-shortcut.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
@@ -141,18 +134,17 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
-shifter [queu] writing coverage file to gallery-bt-pushpop/gallery-bt-pushpop-coverage.js
-shifter [queu] writing coverage file to gallery-bt-overlay/gallery-bt-overlay-coverage.js
 shifter [queu] writing coverage file to gallery-bt-slidetab/gallery-bt-slidetab-coverage.js
+shifter [queu] writing coverage file to gallery-bt-overlay/gallery-bt-overlay-coverage.js
 shifter [queu] writing coverage file to gallery-bt-viewer/gallery-bt-viewer-coverage.js
-shifter [queu] writing coverage file to gallery-bt-container/gallery-bt-container-coverage.js
-shifter [queu] writing coverage file to gallery-bottle/gallery-bottle-coverage.js
-shifter [queu] writing coverage file to gallery-bt-syncscroll/gallery-bt-syncscroll-coverage.js
-shifter [queu] writing coverage file to gallery-bt-loader/gallery-bt-loader-coverage.js
+shifter [queu] writing coverage file to gallery-bt-pushpop/gallery-bt-pushpop-coverage.js
 shifter [queu] writing coverage file to gallery-bt-page/gallery-bt-page-coverage.js
+shifter [queu] writing coverage file to gallery-bt-container/gallery-bt-container-coverage.js
 shifter [queu] writing coverage file to gallery-bt-photogrid/gallery-bt-photogrid-coverage.js
 shifter [queu] writing coverage file to gallery-bt-device/gallery-bt-device-coverage.js
 shifter [queu] writing coverage file to gallery-bt-carousel/gallery-bt-carousel-coverage.js
+shifter [queu] writing coverage file to gallery-bt-loader/gallery-bt-loader-coverage.js
+shifter [queu] writing coverage file to gallery-bt-syncscroll/gallery-bt-syncscroll-coverage.js
 shifter [queu] writing coverage file to gallery-bt-shortcut/gallery-bt-shortcut-coverage.js
 shifter [queu] copying assets to skin for sam
    #1: [warning] The property -ms-text-size-adjust is compatible with -webkit-text-size-adjust and should be included as well.
@@ -164,107 +156,127 @@ shifter [queu] copying assets to skin for sam
    #4: [warning] Don't use adjoining classes.
        body.btFixed .btFooter.btFixed {bottom:0} // line 6, pos 14
    #5: [warning] Don't use adjoining classes.
-       body.btFocus.btFixed .btHeader.btFixed, // line 7, pos 1
-   #6: [warning] Don't use adjoining classes.
        body.btFocus.btFixed .btHeader.btFixed, // line 7, pos 22
+   #6: [warning] Don't use adjoining classes.
+       body.btFocus.btFixed .btHeader.btFixed, // line 7, pos 1
    #7: [warning] Don't use adjoining classes.
-       body.btFocus.btFixed .btFooter.btFixed {position:static} // line 8, pos 1
-   #8: [warning] Don't use adjoining classes.
        body.btFocus.btFixed .btFooter.btFixed {position:static} // line 8, pos 22
-   #9: [warning] Don't use adjoining classes.
-       body.btFocus.btFixed .btFixedScroll {margin:0!important} // line 9, pos 1
-   #10: [warning] Use of !important
+   #8: [warning] Don't use adjoining classes.
+       body.btFocus.btFixed .btFooter.btFixed {position:static} // line 8, pos 1
+   #9: [warning] Use of !important
        body.btFocus.btFixed .btFixedScroll {margin:0!important} // line 9, pos 38
-   #11: [warning] The property -o-transform is compatible with -webkit-transform and should be included as well.
+   #10: [warning] Don't use adjoining classes.
+       body.btFocus.btFixed .btFixedScroll {margin:0!important} // line 9, pos 1
+   #11: [warning] The property -moz-transform is compatible with -webkit-transform and should be included as well.
        .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 21, pos 17
-   #12: [warning] Missing standard property 'transform' to go along with '-webkit-transform'.
+   #12: [warning] The property -o-transform is compatible with -webkit-transform and should be included as well.
        .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 21, pos 17
-   #13: [warning] The property -moz-transform is compatible with -webkit-transform and should be included as well.
+   #13: [warning] Missing standard property 'transform' to go along with '-webkit-transform'.
        .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 21, pos 17
    #14: [warning] The property -ms-transform is compatible with -webkit-transform and should be included as well.
        .bt-translate3d{-webkit-transform: translate3d(0, 0, 0)} // line 21, pos 17
    #15: [warning] Don't use adjoining classes.
        .bt-container-scroll.yui3-widget-content-expanded{height:auto} // line 25, pos 1
-   #16: [warning] The property -webkit-box-sizing is compatible with -moz-box-sizing and should be included as well.
+   #16: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-moz-box-sizing'.
        .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 27, pos 55
-   #17: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-moz-box-sizing'.
+   #17: [warning] The property -webkit-box-sizing is compatible with -moz-box-sizing and should be included as well.
        .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 27, pos 55
    #18: [warning] The box-sizing property isn't supported in IE6 and IE7.
        .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0} // line 27, pos 33
-   #19: [warning] Property with underscore prefix found.
-       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 35, pos 52
-   #20: [warning] Duplicate property '_display' found.
-       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 35, pos 60
-   #21: [warning] Property with underscore prefix found.
-       .yui3-btphotogrid .bpg_column{display:inline-block;_zoom:1;_display:inline;overflow:hidden;vertical-align:top} // line 35, pos 60
-   #22: [warning] The universal selector (*) is known to be slow.
+   #19: [warning] Duplicate property '*display' found.
+       .yui3-btphotogrid .bpg_column{display:inline-block;zoom:1;*display:inline;overflow:hidden;vertical-align:top} // line 35, pos 59
+   #20: [warning] Property with star prefix found.
+       .yui3-btphotogrid .bpg_column{display:inline-block;zoom:1;*display:inline;overflow:hidden;vertical-align:top} // line 35, pos 59
+   #21: [warning] Duplicate property '*display' found.
+       .bst_slide li {display:inline-block;zoom:1;*display:inline} // line 40, pos 44
+   #22: [warning] Property with star prefix found.
+       .bst_slide li {display:inline-block;zoom:1;*display:inline} // line 40, pos 44
+   #23: [warning] The universal selector (*) is known to be slow.
        .bst_tab > * {position:absolute!important;left:-10000px;width:100%} // line 42, pos 12
-   #23: [warning] Use of !important
-       .bst_tab > * {position:absolute!important;left:-10000px;width:100%} // line 42, pos 15
    #24: [warning] Use of !important
+       .bst_tab > * {position:absolute!important;left:-10000px;width:100%} // line 42, pos 15
+   #25: [warning] Use of !important
        .bst_tab > *.on {position:relative!important;left:auto} // line 43, pos 18
-   #25: [warning] Element (*.on) is overqualified, just use .on without element name.
+   #26: [warning] Element (*.on) is overqualified, just use .on without element name.
        .bst_tab > *.on {position:relative!important;left:auto} // line 43, pos 12
-   #26: [warning] The universal selector (*) is known to be slow.
+   #27: [warning] The universal selector (*) is known to be slow.
        .bst_tab > *.on {position:relative!important;left:auto} // line 43, pos 12
-   #27: [warning] Don't use adjoining classes.
+   #28: [warning] height can't be used with display: inline.
+       .bcr_indexitem {display:inline-block;zoom:1;*display:inline;width:8px;height:8px;margin:4px 8px} // line 49, pos 71
+   #29: [warning] margin can't be used with display: inline.
+       .bcr_indexitem {display:inline-block;zoom:1;*display:inline;width:8px;height:8px;margin:4px 8px} // line 49, pos 82
+   #30: [warning] Property with star prefix found.
+       .bcr_indexitem {display:inline-block;zoom:1;*display:inline;width:8px;height:8px;margin:4px 8px} // line 49, pos 45
+   #31: [warning] Duplicate property '*display' found.
+       .bcr_indexitem {display:inline-block;zoom:1;*display:inline;width:8px;height:8px;margin:4px 8px} // line 49, pos 45
+   #32: [warning] width can't be used with display: inline.
+       .bcr_indexitem {display:inline-block;zoom:1;*display:inline;width:8px;height:8px;margin:4px 8px} // line 49, pos 61
+   #33: [warning] Don't use adjoining classes.
        .bcr_indexitem.bcr_on {background-color:#afc} // line 61, pos 1
-   #28: [warning] Background image 'http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png' was used multiple times, first declared at line 62, col 46.
+   #34: [warning] Background image 'http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png' was used multiple times, first declared at line 62, col 46.
        .yui3-btviewer .bvi_button {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer} // line 66, pos 84
-   #29: [warning] Don't use adjoining classes.
+   #35: [warning] Don't use adjoining classes.
        .yui3-btviewer .bvi_button.bvi_expand {background-position:5px -395px} // line 67, pos 16
-   #30: [warning] Don't use adjoining classes.
+   #36: [warning] Don't use adjoining classes.
        .yui3-btviewer .bvi_image.bvi_expand {max-width:none} // line 68, pos 16
-   #31: [warning] The universal selector (*) is known to be slow.
-       .btSwitcher>*{display:none;background:0;border:0;margin:0} // line 76, pos 13
-   #32: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=carousel], // line 85, pos 26
-   #33: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=viewer], // line 86, pos 26
-   #34: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=shortcut], // line 87, pos 26
-   #35: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=overlay], // line 88, pos 26
-   #36: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=photogrid], // line 89, pos 26
-   #37: [warning] Unqualified attribute selectors are known to be slow.
-       .btInPlace:not(.btReady) [data-role=slidetab] // line 90, pos 26
-   #38: [warning] Background image 'http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif' was used multiple times, first declared at line 70, col 37.
-       {background:#fff url(http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif) no-repeat 50% 50%;min-height:50px} // line 91, pos 3
+   #37: [warning] Duplicate property '*display' found.
+       .btSwitcher{display:inline-block;zoom:1;*display:inline;font-size:0} // line 75, pos 41
+   #38: [warning] Property with star prefix found.
+       .btSwitcher{display:inline-block;zoom:1;*display:inline;font-size:0} // line 75, pos 41
    #39: [warning] The universal selector (*) is known to be slow.
-       .btHideAll:not(.btReady) > *, // line 94, pos 28
-   #40: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=carousel] > *, // line 95, pos 49
-   #41: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=viewer] > *, // line 96, pos 47
-   #42: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=shortcut] > *, // line 97, pos 49
-   #43: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=overlay] > *, // line 98, pos 48
-   #44: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=photogrid] > *, // line 99, pos 50
-   #45: [warning] The universal selector (*) is known to be slow.
-       .btInPlace:not(.btReady) [data-role=slidetab] > *, // line 100, pos 49
+       .btSwitcher>*{display:none;background:0;border:0;margin:0} // line 76, pos 13
+   #40: [warning] Duplicate property '*display' found.
+       .btSwitcher>button:first-child,.btSwitcher>button:last-child{display:inline-block;zoom:1;*display:inline;background-color:#ccc} // line 77, pos 90
+   #41: [warning] Property with star prefix found.
+       .btSwitcher>button:first-child,.btSwitcher>button:last-child{display:inline-block;zoom:1;*display:inline;background-color:#ccc} // line 77, pos 90
+   #42: [warning] Unqualified attribute selectors are known to be slow.
+       .btInPlace:not(.btReady) [data-role=carousel], // line 85, pos 26
+   #43: [warning] Unqualified attribute selectors are known to be slow.
+       .btInPlace:not(.btReady) [data-role=viewer], // line 86, pos 26
+   #44: [warning] Unqualified attribute selectors are known to be slow.
+       .btInPlace:not(.btReady) [data-role=shortcut], // line 87, pos 26
+   #45: [warning] Unqualified attribute selectors are known to be slow.
+       .btInPlace:not(.btReady) [data-role=overlay], // line 88, pos 26
    #46: [warning] Unqualified attribute selectors are known to be slow.
-       .btHideSCO:not(.btReady) [data-role=shortcut], // line 101, pos 26
+       .btInPlace:not(.btReady) [data-role=photogrid], // line 89, pos 26
    #47: [warning] Unqualified attribute selectors are known to be slow.
+       .btInPlace:not(.btReady) [data-role=slidetab] // line 90, pos 26
+   #48: [warning] Background image 'http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif' was used multiple times, first declared at line 70, col 37.
+       {background:#fff url(http://yuilibrary.com/yui/docs/assets/widget/img/ajax-loader.gif) no-repeat 50% 50%;min-height:50px} // line 91, pos 3
+   #49: [warning] The universal selector (*) is known to be slow.
+       .btHideAll:not(.btReady) > *, // line 94, pos 28
+   #50: [warning] The universal selector (*) is known to be slow.
+       .btInPlace:not(.btReady) [data-role=carousel] > *, // line 95, pos 49
+   #51: [warning] The universal selector (*) is known to be slow.
+       .btInPlace:not(.btReady) [data-role=viewer] > *, // line 96, pos 47
+   #52: [warning] The universal selector (*) is known to be slow.
+       .btInPlace:not(.btReady) [data-role=shortcut] > *, // line 97, pos 49
+   #53: [warning] The universal selector (*) is known to be slow.
+       .btInPlace:not(.btReady) [data-role=overlay] > *, // line 98, pos 48
+   #54: [warning] The universal selector (*) is known to be slow.
+       .btInPlace:not(.btReady) [data-role=photogrid] > *, // line 99, pos 50
+   #55: [warning] The universal selector (*) is known to be slow.
+       .btInPlace:not(.btReady) [data-role=slidetab] > *, // line 100, pos 49
+   #56: [warning] Unqualified attribute selectors are known to be slow.
+       .btHideSCO:not(.btReady) [data-role=shortcut], // line 101, pos 26
+   #57: [warning] Unqualified attribute selectors are known to be slow.
        .btHideSCO:not(.btReady) [data-role=overlay] // line 102, pos 26
-   #48: [warning] Unqualified attribute selectors are known to be slow.
+   #58: [warning] Unqualified attribute selectors are known to be slow.
        .btHideSCO:not(.btReady) [data-role=shortcut], // line 105, pos 26
-   #49: [warning] Unqualified attribute selectors are known to be slow.
+   #59: [warning] Unqualified attribute selectors are known to be slow.
        .btHideSCO:not(.btReady) [data-role=overlay] // line 106, pos 26
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 1.223 seconds, pretty fast huh?
+shifter [info] finished in 1.183 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5002
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5001
-Starting Grover on 1 files with PhantomJS@1.8.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
+Starting Grover on 1 files with PhantomJS@1.8.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
 ✖ [bottle]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)

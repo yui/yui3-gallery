@@ -18,9 +18,9 @@
 .yui3-btloader-content .blo_error{color:#f00;background:#fcc}
 
 /* Skins for switcher*/
-.btSwitcher{display:inline-block;font-size:0}
+.btSwitcher{display:inline-block;zoom:1;*display:inline;font-size:0}
 .btSwitcher>*{display:none;background:0;border:0;margin:0}
-.btSwitcher>button:first-child,.btSwitcher>button:last-child{display:inline-block;background-color:#ccc}
+.btSwitcher>button:first-child,.btSwitcher>button:last-child{display:inline-block;zoom:1;*display:inline;background-color:#ccc}
 .btSwitcher>button:first-child{-webkit-border-top-left-radius:10px;-webkit-border-bottom-left-radius:10px;-moz-border-radius-topleft:10px;-moz-border-radius-bottomleft:10px;border-top-left-radius:10px;border-bottom-left-radius:10px}
 .btSwitcher>button:last-child{background-color:#99f;-webkit-border-top-right-radius:10px;-webkit-border-bottom-right-radius:10px;-moz-border-radius-topright:10px;-moz-border-radius-bottomright:10px;border-top-right-radius:10px;border-bottom-right-radius:10px}
 .btActive>button:last-child,.btSwitcher>button:only-child{background-color:#ccc}
@@ -50,4 +50,4 @@
 
 .btHideSCO:not(.btReady) [data-role=shortcut],
 .btHideSCO:not(.btReady) [data-role=overlay]
- {position:absolute}
+ {position:absolute;left:-99999px;top:-99999px}

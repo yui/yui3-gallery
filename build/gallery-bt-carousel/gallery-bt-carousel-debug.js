@@ -303,7 +303,7 @@ Carousel = Y.Base.create('btcarousel', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui
 Y.namespace('Bottle').Carousel = Carousel;
 
 
-}, 'gallery-2013.02.07-15-27', {
+}, 'gallery-2013.02.13-21-08', {
     "requires": [
         "gallery-bt-syncscroll",
         "gallery-zui-rascroll",

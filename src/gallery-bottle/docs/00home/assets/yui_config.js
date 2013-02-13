@@ -1,7 +1,7 @@
 var debug = location.href.match(/(#|:)debug/),
     YUI_config = {
-        gallery: 'gallery-2012.10.03-20-02',
-        debug: debug,
+        gallery: 'gallery-2013.02.07-15-27',
+        debug: false,
         combine: debug ? false : true,
         filter: debug ? 'debug' : 'min',
         groups: {

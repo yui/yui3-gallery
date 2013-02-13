@@ -395,4 +395,4 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').PhotoGrid = PhotoGrid;
 
 
-}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-bt-syncscroll"]});
+}, 'gallery-2013.02.13-21-08', {"requires": ["gallery-bt-syncscroll"]});

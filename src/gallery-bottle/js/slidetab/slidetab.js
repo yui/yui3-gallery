@@ -53,6 +53,7 @@ SlideTab = Y.Base.create('btslidetab', Y.Widget, [Y.WidgetStdMod, Y.Bottle.SyncS
         var slideNode = this.get('slideNode'),
             slideParent = Y.Node.create('<div class="bst_slidebox"></div>'),
             scrollView = new Y.ScrollView({
+                axis: 'x',
                 srcNode: slideNode.replace(slideParent)
             }).plug(Y.zui.RAScroll);
 

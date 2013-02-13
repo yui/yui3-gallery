@@ -125,4 +125,4 @@ SyncScroll.prototype = {
 Y.namespace('Bottle').SyncScroll = SyncScroll;
 
 
-}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-bt-page"]});
+}, 'gallery-2013.02.13-21-08', {"requires": ["gallery-bt-page"]});

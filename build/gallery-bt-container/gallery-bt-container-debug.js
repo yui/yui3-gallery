@@ -392,7 +392,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
 });
 
 
-}, 'gallery-2013.02.07-15-27', {
+}, 'gallery-2013.02.13-21-08', {
     "requires": [
         "scrollview",
         "widget-child",

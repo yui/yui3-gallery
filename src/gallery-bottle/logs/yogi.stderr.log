@@ -1,1 +1,3 @@
-shifter [err] /assets/skins/sam/gallery-bottle-skin.css contains 49 lint errors
+shifter [err] /src/gallery-bottle/js/bottle/bottle.js contains 4 lint errors
+shifter [err] coverage: Error: Line 156: Invalid left-hand side in assignment
+shifter [err] /assets/skins/sam/gallery-bottle-skin.css contains 59 lint errors

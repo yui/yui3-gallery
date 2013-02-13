@@ -298,4 +298,4 @@ Loader = Y.Base.create('btloader', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').Loader = Loader;
 
 
-}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-bt-syncscroll", "io-base", "json-parse"]});
+}, 'gallery-2013.02.13-21-08', {"requires": ["gallery-bt-syncscroll", "io-base", "json-parse"]});

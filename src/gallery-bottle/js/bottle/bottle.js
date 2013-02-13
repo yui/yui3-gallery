@@ -75,12 +75,12 @@ var BOTTLE_INIT = 'btInit',
         }
     },
 
-    initWidgets = function(css, Cls, Root) {
+    initWidgets = function(css, Cls, Root, param) {
         Root.all(css).each(function (srcNode) {
-            new Cls({
+            new Cls(Y.merge({
                 srcNode: srcNode,
                 render: true
-            });
+            }, param));
         });
     },
     
@@ -132,9 +132,9 @@ var BOTTLE_INIT = 'btInit',
             inited = true;
         }
 
-        initWidgets('[data-role=viewer]', Y.Bottle.Viewer, initRoot);
+        initWidgets('[data-role=viewer]', Y.Bottle.Viewer, initRoot, {axis: 'x'});
         initWidgets('[data-role=photogrid]', Y.Bottle.PhotoGrid, initRoot);
-        initWidgets('[data-role=carousel]', Y.Bottle.Carousel, initRoot);
+        initWidgets('[data-role=carousel]', Y.Bottle.Carousel, initRoot, {axis: 'x'});
         initWidgets('[data-role=slidetab]', Y.Bottle.SlideTab, initRoot);
         initWidgets('[data-role=loader]', Y.Bottle.Loader, initRoot);
 
@@ -151,10 +151,7 @@ var BOTTLE_INIT = 'btInit',
                 }
                 htmlbody.setStyles(styles.scroll);
                 body.addClass(BOTTLE_NATIVE);
-                pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars)._cAxis = {
-                    x: 0,
-                    y: 0
-                };
+                pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars).set('axis') = '';
                 Y.publish(BOTTLE_NATIVE, {fireOnce: true});
                 Y.fire(BOTTLE_NATIVE);
                 Y.publish(SYNC_SCREEN);

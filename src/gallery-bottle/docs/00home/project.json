@@ -4,6 +4,8 @@
     "yuiVersion": "3.8.1",
     "useParams": "'gallery-bottle'",
     "apiDocUrl": "http://devel-stage.corp.yahoo.com/aff/bottle/api/",
+    "localTest": true,
+    "relUrl": false,
     "y3GuideUrl": "http://yuilibrary.com/yui/docs/",
     "sourceUrl": "http://svn.corp.yahoo.com/view/yahoo/asia/mobile/trunk/web/bottle/",
     "bugUrl": "http://bug.corp.yahoo.com/enter_bug.cgi?product=Asia%20F2E&component=Mobile%20UI%20Lib",

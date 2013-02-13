@@ -1,7 +1,7 @@
 {
     "name": "Mobile UI Library - Bottle",
     "description": "A mobile html5 framework javascript library, provides a lot of Mobile UI components",
-    "version": "0.0.1",
+    "version": "0.1.7",
     "url": "http://twiki.corp.yahoo.com/view/AsiaEng/MobileUILibrary/",
     "options": {
         "linkNatives": "true",
