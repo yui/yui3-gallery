@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-cssform",
+    "builds": {
+        "gallerycss-cssform": {
+            "cssfiles": [
+                "forms.css",
+                "forms-responsive.css"
+            ]
+        }
+    }
+}

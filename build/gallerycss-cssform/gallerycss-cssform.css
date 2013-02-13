@@ -1,0 +1,178 @@
+input,
+select {
+  padding: 9px 9px;
+  border: 1px solid #bbb;
+  box-sizing: border-box;
+  display: inline-block;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 3px #ddd;
+  -webkit-transition: all 150ms ease-out;
+  -webkit-font-smoothing: antialiased;
+  font-size:90%;
+}
+input:focus,
+select:focus {
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+
+  border-color: #129FEA;
+  box-shadow: 0 0 5px #11AFED;
+
+}
+.yui3-checkbox,
+.yui3-radio {
+  margin-top: 5px;
+}
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly] {
+  cursor: not-allowed;
+  background-color: #ddd;
+}
+input:focus:invalid,
+textarea:focus:invalid,
+select:focus:invalid {
+  color: #b94a48;
+  border: 1px solid #ee5f5b;
+}
+input:focus:invalid:focus,
+textarea:focus:invalid:focus,
+select:focus:invalid:focus {
+  border-color: #e9322d;
+  box-shadow: 0 0 5px #ce1a15;
+}
+select {
+  width: 220px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+select[multiple] {
+  height: auto;
+}
+label {
+  display: block;
+  padding: 4px 0;
+  margin-bottom: 2.5px;
+  vertical-align: middle;
+  color: #999;
+  font-size:90%;
+}
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+legend {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: 10px;
+  font-size: 125%;
+  line-height: 10px;
+  color: #333;
+  border-bottom: 1px solid #e5e5e5;
+}
+.yui3-form-inline input,
+.yui3-form-horizontal input,
+.yui3-form-inline textarea,
+.yui3-form-horizontal textarea,
+.yui3-form-inline select,
+.yui3-form-horizontal select,
+.yui3-form-inline .yui3-help-inline,
+.yui3-form-horizontal .yui3-help-inline {
+  display: inline-block;
+  *display: inline;
+  /* IE7 inline-block hack */
+
+  *zoom: 1;
+  vertical-align: middle;
+}
+.yui3-form-inline label {
+  display: inline-block;
+}
+.yui3-form-horizontal .yui3-control-group {
+  margin-bottom: 10px;
+}
+.yui3-form-horizontal .yui3-control-group label {
+  text-align: right;
+  float: left;
+  width: 160px;
+  margin: 8px 10px 0 0;
+}
+.yui3-form-horizontal .yui3-controls {
+  margin: 20px 0 0 170px;
+}
+.yui3-input-rounded {
+  border-radius: 20px;
+  padding-left: 10px;
+}
+.yui3-group {
+  margin-bottom: 10px;
+}
+.yui3-group input {
+  display: block;
+  padding: 10px;
+  margin: 0;
+  border-radius: 0;
+  position: relative;
+  top: -1px;
+}
+.yui3-group :focus {
+  z-index: 2;
+}
+.yui3-group :first-child {
+  border-radius: 4px 4px 0 0;
+  top: 1px;
+}
+.yui3-group :last-child {
+  border-radius: 0 0 4px 4px;
+  top: -2px;
+}
+.yui3-input-mini {
+  width: 60px;
+}
+.yui3-input-small {
+  width: 90px;
+}
+.yui3-input-medium {
+  width: 150px;
+}
+.yui3-input-large {
+  width: 210px;
+}
+.yui3-input-xlarge {
+  width: 270px;
+}
+.yui3-input-xxlarge {
+  width: 530px;
+}
+button[type='submit'] {
+  font-size: 90%;
+}
+.yui3-help-inline {
+  display: inline-block;
+  padding-left: 5px;
+  vertical-align: middle;
+}
+@media only screen and (max-width : 480px) {
+	button[type='submit'] {
+		margin: 10px 0 0;
+	}
+
+	.yui3-form-horizontal .yui3-control-group label {
+		display: block;
+		text-align: left;
+		float: none;
+	}
+
+	.yui3-form-horizontal .yui3-controls {
+		margin:20px 0 0;
+	}
+}
+/* YUI CSS Detection Stamp */
+#yui3-css-stamp.gallerycss-cssform { display: none; }

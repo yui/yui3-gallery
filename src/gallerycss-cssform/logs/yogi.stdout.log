@@ -1,0 +1,31 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.68 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-cssform
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-cssform
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 5, pos 3
+   #2: [warning] The property -moz-transition is compatible with -webkit-transition and should be included as well.
+       -webkit-transition: all 150ms ease-out; // line 10, pos 3
+   #3: [warning] The property -o-transition is compatible with -webkit-transition and should be included as well.
+       -webkit-transition: all 150ms ease-out; // line 10, pos 3
+   #4: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #ccc; // line 51, pos 3
+   #5: [warning] vertical-align can't be used with display: block.
+       vertical-align: middle; // line 61, pos 3
+   #6: [warning] Property with star prefix found.
+       *display: inline; // line 89, pos 3
+   #7: [warning] Property with star prefix found.
+       *zoom: 1; // line 92, pos 3
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.046 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

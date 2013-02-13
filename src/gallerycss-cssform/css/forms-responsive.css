@@ -1,0 +1,15 @@
+@media only screen and (max-width : 480px) {
+	button[type='submit'] {
+		margin: 10px 0 0;
+	}
+
+	.yui3-form-horizontal .yui3-control-group label {
+		display: block;
+		text-align: left;
+		float: none;
+	}
+
+	.yui3-form-horizontal .yui3-controls {
+		margin:20px 0 0;
+	}
+}
