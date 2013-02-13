@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+ <meta charset="utf-8">
+ <title>Test</title>
+<style>
+#scroll, #scroll div {
+    width: 100px;
+    height: 100px;
+}
+</style>
+</head>
+<body class="yui3-skin-sam">
+<div id="scroll">
+ <div>test content</div>
+</div>
+</body>
+<script src="/build/yui/yui-debug.js"></script>
+<script>
+YUI({
+    coverage: ['gallery-gallery-patch-373-scrollbar-ie7'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test', 'gallery-patch-373-scrollbar-ie7', function (Y) {
+    var testSuite = new Y.Test.Suite('gallery-patch-373-scrollbar-ie7');
+
+    testSuite.add(new Y.Test.Case({
+        name: 'Test Patch',
+
+        testNoJsError: function () {
+            var scroll = new Y.ScrollView({srcNode: '#scroll', axis: 'y', height: 100, width: 100, render: true});
+        }
+
+    }));
+
+    Y.Test.Runner.add(testSuite);
+    Y.Test.Runner.run();
+});
+</script>
+</html>
