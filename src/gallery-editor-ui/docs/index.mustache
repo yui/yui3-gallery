@@ -1,0 +1,92 @@
+<div class="intro">
+    <p>
+   This module builds on top of YUI's <a href="http://yuilibrary.com/yui/docs/editor/">Rich Text Editor</a> base to create a user interface for editing and formatting HTML content. The main element is a toolbar above the editor. Besides basic formatting support (text style, outlining, lists) it has an easy to use image upload manager and link manager. The interface is similar to the one used in gmail to compose rich text messages.
+    </p>
+	<p>This module adds the following functionality:
+	<ul>
+	  <li>bold, italic, underline, headers, blockquote formatting support</li>
+	  <li>lists create, indent and outdent support</li>
+	  <li>aligning of text</li>
+	  <li>advanced modal to upload, zoom, position images (needs HTML5 capable browser)</li>
+	  <li>modal for inserting links</li>
+	  <li>toggle between visual and html edit mode</li>
+	  <li>html is stripped from unwanted tags and inline styles</li>
+	  <li>html is transformed to use html5 semantic tags e.g. <i> to <em>.</li>
+	  <li>html is formatted for clear outline</li>
+	  <li>visual edit mode can be matched with your existing style</li>
+	  <li>clear styling from selected text</li>
+	  <li>copy+paste events are stripped from unwanted html</li>
+	</ul>
+	</p>
+</div>	
+
+<h2>Description</h2>
+
+<p>The module transforms a &lt;textarea&gt; node to an rich text editor with a toolbar.</p>
+<p>The module was designed to be more lightweight and completely based on the YUI3 framework unlike CKeditor or tinyMCE.</p>
+
+<h2>Example</h2>
+A mandatory textarea element containing the default html are the fundamentals:
+```
+<form method="post" id="postForm">
+  <textarea id="editContent">
+    <!-- example html encoded -->
+    Hello &lt;strong&gt;World&lt;/strong&gt;!
+  </textarea>
+  <button type="submit">Save</button>
+</form>
+```
+Gallery module init and render by Javascript:
+```
+<script>
+	Y.on('domready', function() {
+		{{>example-js}}
+	});
+</script>
+```
+
+<p>Check out this <a href="example.html">example editor</a> and see the <a href="http://www.directlyrics.com/">DirectLyrics</a> blog articles as result.</p>
+
+<h2>Configuration</h2>
+<p>Default text is picked up from the textarea content.</p>
+
+<p>Instead of submitting the data to a form you can also get the content for your own call with getContent():<p>
+```
+<script>
+	Y.on('domready', function() {
+		{{>example-js-non-submit}}
+	});
+</script>
+```
+
+<p>The config object:
+ ```
+ textareaEl: mandatory DOM textarea element to render rich text editor on.
+ formEl: form element which on before submit updates the textarea with the correct value.
+ contentStylesheetUrl:  url to the CSS file which contains basic formatting.
+ editorClass: the parent class name used in contentStylesheetUrl.
+ uploadToUrl: url to upload images to and proxy for external domain images.
+ ```
+</p>
+
+
+<h2>Backend Setup</h2>
+<p>The image manager allows the users to resize and crop images. The result is saved to backend script, which saves the image to the server. A script example can be found <a href="/build/gallery-editor-ui/assets/upload.phps">assets/upload.phps</a> which uses ImageMagick to transform the image.</p>
+<p>The backend script also serves as proxy to allow editing images on a different domain.</p>
+
+<h2>Known issues</h2>
+<p>The image manager module only supports HTML5 capable browsers due to use of the canvas element, and has no fallback. IE<=10 has issues with the image uploader.</p>
+
+<h2>Todo</h2>
+<ul>
+	<li>Image styling: border, float left/right positioning.</li>
+	<li>Better Undo/redo support.</li>
+	<li>Y.EditorUI() call similar to Y.editor().</li>
+	<li>Basic fallback for image uploader.</li>
+	<li>Accessibility.</li>
+	<li>Remove need for <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">sam</a> skin.</li>
+	<li>Stylesheet classes are a mess, needs cleanup.</li>
+</ul>
+
+
+

@@ -1,0 +1,9 @@
+{
+    "gallery-editor-ui": {
+		"skinnable":true,
+        "requires": [
+            "base","editor","event","node","panel","overlay","dd-drag","dd-constrain","uploader","resize","json"
+        ]
+		
+    }
+}

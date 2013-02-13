@@ -1,0 +1,19 @@
+<div class="intro">
+    <p>This example shows how to use Rich Text Editor UI without a form wrapped around it but extract the content using a function.</p>
+</div>
+
+<h2>Example EditorUI - custom function</h2>
+<p>Description</p>
+
+{{>example-html}}
+
+<script>
+YUI().use('{{use}}', function(Y) {
+	
+	Y.on('domready', function() {
+		{{>example-js-non-submit}}
+	});
+});
+</script>
+
+

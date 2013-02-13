@@ -1,0 +1,37 @@
+<div class="intro">
+    <p>This example pulls the gallery module locally.</p>
+</div>
+
+<h2>Example EditorUI</h2>
+<p>Description</p>
+
+{{>example-html}}
+
+<script>
+YUI({
+	/* logger on */
+	filter: 'raw',
+	filters: { 'gallery-editor-ui': 'debug' },
+	groups: {
+			/* set own own gallery */
+            gallery: {
+                combine:   false,
+                base:      "/build/",
+                root:      "/build/",
+                patterns: {
+                    "gallery-":    {},
+                    "gallerycss-": { type: "css" }
+                }   
+            }, 
+	}
+
+}).use('{{use}}', function(Y) {
+	
+	Y.on('domready', function() {
+		/* create editor */		
+		{{>example-js}}
+	});
+});
+</script>
+
+

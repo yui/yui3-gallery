@@ -1,0 +1,6 @@
+var editor = new Y.EditorUI({textareaEl: '#editContent'});
+
+		//create a example button, which provides content as alert box
+		var button = Y.Node.create('<button>Get Content</button>');
+		button.on("click",function(e){ alert(editor.getContent());  });
+		Y.one('#editContent').appendChild(button);

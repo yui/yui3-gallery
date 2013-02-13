@@ -1,0 +1,61 @@
+<div class="intro">
+    <p>This example loads two Rich Text Editors in one form.</p>
+</div>
+
+<h2>Example Multiple EditorUI's</h2>
+<p>Description</p>
+<style scope>
+.Ar{
+	height: 120px;
+}
+</style>
+<form method="get" id="postForm">
+  <textarea name="content_one" id="editContent1" class="Ak">
+    &lt;p&gt;Hello &lt;strong&gt;World&lt;/strong&gt;&lt;/p&gt;
+		
+	
+  </textarea>
+  <hr>
+  <textarea name="content_two" id="editContent2" class="Ak">
+		
+	&lt;h3&gt;Header #3&lt;/h3&gt;
+	&lt;p&gt;More information:
+	&lt;ul&gt;
+	  &lt;li&gt;&lt;a href=&quot;http://yuilibrary.com/gallery/&quot;&gt;YUI Library&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a href=&quot;http://yvoschaap.com&quot;&gt;Yvo Schaap&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;&lt;/p&gt;
+	
+  </textarea>
+  <button type="submit">Save</button>
+</form>
+
+<script>
+YUI({
+	filter: 'raw',
+	filters: { 'gallery-editor-ui': 'debug' }
+}).use('gallery-editor-ui', function(Y) {
+	
+	Y.on('domready', function() {
+		/* create editor's */		
+		var editor = new Y.EditorUI({textareaEl: '#editContent1',formEl:'#postForm'});
+		var editor = new Y.EditorUI({textareaEl: '#editContent2',formEl:'#postForm'});
+	});
+});
+</script>
+
+
+
+<script>
+YUI({
+	filter: 'raw',
+	filters: { 'gallery-editor-ui': 'debug' }
+}).use('{{use}}', function(Y) {
+	
+	Y.on('domready', function() {
+		/* create editor */		
+		{{>example-js}}
+	});
+});
+</script>
+
+

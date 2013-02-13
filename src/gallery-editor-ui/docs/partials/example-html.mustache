@@ -1,0 +1,32 @@
+<style>
+<!-- because our button classes colide with docs buttons -->
+div.button {
+	padding: 0;
+	background: 0;
+	margin: 0;
+}
+#editContent{
+	width: 720px;
+	height: 350px;
+}
+</style>
+<form id="postForm">
+  <!-- the following content is html encoded -->
+  <textarea id="editContent">
+    &lt;p&gt;Hello &lt;strong&gt;World&lt;/strong&gt;&lt;/p&gt;
+	
+	&lt;!-- example image --&gt;
+	&lt;p&gt;&lt;img src=&quot;/build/gallery-editor-ui/assets/example-logo.png&quot; title=&quot;YUI3&quot;&gt;&lt;/p&gt;
+	
+	&lt;blockquote&gt;To be or not to be&lt;/blockquote&gt;
+	
+	&lt;h3&gt;Header #3&lt;/h3&gt;
+	&lt;p&gt;More information:
+	&lt;ul&gt;
+	  &lt;li&gt;&lt;a href=&quot;http://yuilibrary.com/gallery/&quot;&gt;YUI Library&lt;/a&gt;&lt;/li&gt;
+	  &lt;li&gt;&lt;a href=&quot;http://yvoschaap.com&quot;&gt;Yvo Schaap&lt;/a&gt;&lt;/li&gt;
+	&lt;/ul&gt;&lt;/p&gt;
+	
+  </textarea>
+  <button type="submit">Save</button>
+</form>

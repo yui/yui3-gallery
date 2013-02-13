@@ -1,0 +1,655 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.68 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-editor-ui
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-editor-ui
+   #1: Trailing whitespace.
+       */ // line 17, pos 8
+   #2: Line too long.
+       * The URL to upload the image to, resize image and return JSON. In the assets folder look at upload.phps for an example. Used by image-manager, only passed along. // line 65, pos 171
+   #3: Trailing whitespace.
+       }, // line 73, pos 11
+   #4: Trailing whitespace.
+       value: true // line 75, pos 24
+   #5: Trailing whitespace.
+       Y.extend(EditorUI, Y.Base, { // line 90, pos 33
+   #6: Trailing whitespace.
+       */ // line 96, pos 11
+   #7: Trailing whitespace.
+       if(textArea){ // line 148, pos 30
+   #8: Trailing whitespace.
+       return false; // line 165, pos 34
+   #9: Trailing whitespace.
+       //build toolbar html // line 174, pos 37
+   #10: Trailing whitespace.
+       */ // line 185, pos 23
+   #11: Too many var statements.
+       var baseEditor = new Y.EditorBase({ // line 188, pos 21
+   #12: Line too long.
+       extracss: 'body {margin: 0; padding: 0; overflow-y: scroll; overflow-x: hidden;} img, iframe, object, embed { -webkit-user-select: none; user-select: none; user-select: none;}', // line 190, pos 197
+   #13: Trailing whitespace.
+       this.set("baseEditor",baseEditor);//set in class // line 198, pos 65
+   #14: Trailing whitespace.
+       baseEditor.on('frame:ready', function(){ // line 205, pos 57
+   #15: Line too long.
+       this.get("frameInstance").on("resizestart",Y.bind(function(){ return false; },this)); //some browsers allow image resizing, we dont. Another option unselectable=on on ellements. // line 209, pos 197
+   #16: Trailing whitespace.
+       this._toggleComposer(true);//init contents // line 213, pos 63
+   #17: Line too long.
+       bodyContent: '<table class="space"><tr><td>Text to display:</td><td><input id="linkdialog-text" style="width: 300px"></td></tr><tr><td>To what URL should this link go?</td><td><input id="linkdialog-input" type="url" style="width: 300px; margin-right: 5px;"><small><a href="#" id="testLink" target="_blank">test link</a></small></td></tr><tr><td colspan="2"><div class="Kj-JD-Jl"><button name="ok" id="linkSubmitButton">Insert Link</button><button name="cancel" class="linkHideWindow">Cancel</button></div></td></tr></table>', // line 223, pos 553
+   #18: Line too long.
+       bodyContent: '<table class="space"><tr><td colspan="2"><div class="image-upload-frame"></div></td></tr><tr><td>URL:</td><td><input id="mediadialog-source" style="width: 300px" placeholder="http://"></td></tr><tr><td>Title:</td><td><input id="mediadialog-text" style="width: 300px" placeholder=""></td></tr><tr><td colspan="2"><div class="Kj-JD-Jl"><button name="ok" id="mediaSubmitButton">Add Media</button><button name="cancel" class="mediaHideWindow">Cancel</button></div></td></tr></table>', // line 233, pos 522
+   #19: Line too long.
+       bodyContent: '<div class="J-M"><div class="J-N" role="menuitem" style="font-size: normal;" command="p">Paragraph</div><div class="J-N" role="menuitem" style="font-size: x-large;" command="h2">Header One</div><div class="J-N" role="menuitem" style="font-size: large;" command="h3">Header Two</div><div class="J-N" role="menuitem" style="font-size: 1.2em" command="h3">Header Three</div></div>', // line 240, pos 421
+   #20: Mixed spaces and tabs.
+       node:".eY", // line 242, pos 4
+   #21: Trailing whitespace.
+       render: true // line 245, pos 41
+   #22: Trailing whitespace.
+       Y.one(".linkHideWindow").on("click",Y.bind(function(){ this.get("linkWindow").hide(); },this)); // line 249, pos 112
+   #23: Trailing whitespace.
+       Y.log('Need textarea ID in DOM.'); // line 254, pos 51
+   #24: Trailing whitespace.
+       */ // line 263, pos 11
+   #25: Empty block.
+       return node; // line 301, pos 21
+   #26: Trailing whitespace.
+       node = selection.insertContent('<em>&nbsp;</em>'); // line 326, pos 83
+   #27: Trailing whitespace.
+       node = selection.insertContent('<em>&nbsp;</em><br>'); // line 328, pos 87
+   #28: Empty block.
+       return node; // line 336, pos 21
+   #29: 'node' is already defined.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '', editor = inst.host.editorUI; // line 341, pos 102
+   #30: Empty block.
+       }else if(node && node.get("tagName")){ // line 345, pos 22
+   #31: Empty block.
+       }else if(selection && selection.anchorNode.get("tagName") === "P"){ // line 347, pos 22
+   #32: Empty block.
+       selection.focusCursor(true, true); // line 350, pos 21
+   #33: Line too long.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, grid, text = '', src = 'http://', editor = inst.host.editorUI; // line 361, pos 165
+   #34: 'node' is already defined.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, grid, text = '', src = 'http://', editor = inst.host.editorUI; // line 361, pos 102
+   #35: Trailing whitespace.
+       }else if(selection){ // line 377, pos 41
+   #36: Trailing whitespace.
+       inst.focus(); // line 382, pos 38
+   #37: Too many var statements.
+       var frame = editor.get("mediaWindow").get("contentBox").one(".image-upload-frame");//where to insert the image manager // line 385, pos 25
+   #38: Too many var statements.
+       var parent_width = editor.get("editor").get("offsetWidth");/* get textarea width = width image upload max */ // line 386, pos 25
+   #39: Line too long.
+       var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame, resizeHeight: true, uploadToUrl: this.get('uploadToUrl')}; // line 388, pos 161
+   #40: Too many var statements.
+       var cfg = {cellImageSizes: {height: '300px', width: parent_width}, frameEl: frame, resizeHeight: true, uploadToUrl: this.get('uploadToUrl')}; // line 388, pos 25
+   #41: Line too long.
+       cfg = Y.mix(cfg,{file: src, cellImageSizes: {width: node.getStyle("width"), height: node.getStyle("height")}},true);//overwrite // line 395, pos 151
+   #42: Too many var statements.
+       var g = new Y.EditorImageManage(cfg);/* mix image data with other cfg */ // line 398, pos 25
+   #43: Trailing whitespace.
+       Y.log(data); // line 419, pos 41
+   #44: Line too long.
+       this.command("insertandfocus",'<img src="'+Y.one("#mediadialog-source").get("value")+'" title="'+Y.one("#mediadialog-text").get("value")+'">'+editor.textAreaTextDefault); // line 438, pos 198
+   #45: Missing semicolon.
+       editor.get("mediaWindow").setAttrs({visible: true}) // line 443, pos 72
+   #46: Line too long.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '',href = 'http://',editor = inst.host.editorUI; // line 450, pos 158
+   #47: 'node' is already defined.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '',href = 'http://',editor = inst.host.editorUI; // line 450, pos 102
+   #48: Trailing whitespace.
+       href = node.get("href"); // line 467, pos 49
+   #49: Trailing whitespace.
+       }else if(selection){ // line 468, pos 41
+   #50: Trailing whitespace.
+       inst.focus(); // line 475, pos 38
+   #51: Missing semicolon.
+       e.preventDefault() // line 484, pos 43
+   #52: Missing semicolon.
+       editor.get("linkWindow").setAttrs({visible: true}) // line 508, pos 71
+   #53: Mixed spaces and tabs.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '',editor = inst.host.editorUI; // line 514, pos 4
+   #54: Line breaking error 'return'.
+       return // line 526, pos 25
+   #55: Missing semicolon.
+       return // line 526, pos 31
+   #56: Trailing whitespace.
+       node = selection.insertContent('<blockquote>&nbsp;</blockquote>'); // line 534, pos 95
+   #57: Trailing whitespace.
+       var answer = confirm('You will lose the html formatting. Are you sure?'); // line 545, pos 94
+   #58: Too many var statements.
+       var answer = confirm('You will lose the html formatting. Are you sure?'); // line 545, pos 25
+   #59: Trailing whitespace.
+       } // line 554, pos 18
+   #60: Trailing whitespace.
+       }); // line 555, pos 16
+   #61: Line too long.
+       var editor = this.get("editor"), toolbars = Y.Node.create('<div class="toolbars"></div>'), html_toolbar = Y.Node.create('<div class="html_toolbar"></div>'), plain_toolbar = Y.Node.create('<div class="plain_toolbar" style="display: none"></div>');/* todo: no inline styles */ // line 563, pos 286
+   #62: Too many var statements.
+       var toolbar_buttons = [ // line 565, pos 17
+   #63: Trailing whitespace.
+       {fn: 'clear', cls:'fb',desc: 'Clear formatting selection'} // line 581, pos 75
+   #64: Line too long.
+       return Y.Node.create('<div class="button" role="button" title="'+(cfg.desc ? cfg.desc : cfg.fn)+'" command="'+cfg.fn+'"><div class="'+cfg.cls+' icon"></div></div>'); // line 608, pos 177
+   #65: Trailing whitespace.
+       * // line 611, pos 11
+   #66: Trailing whitespace.
+       */ // line 614, pos 12
+   #67: Trailing whitespace.
+       var command = e.currentTarget.getAttribute("command"); // line 623, pos 75
+   #68: Too many var statements.
+       var node = this.get("baseEditor").execCommand(command); // line 626, pos 29
+   #69: Trailing whitespace.
+       }, this); // line 630, pos 22
+   #70: Too many var statements.
+       var style = style.split(": "); // line 640, pos 33
+   #71: 'style' was used before it was defined.
+       var style = style.split(": "); // line 640, pos 39
+   #72: Expected a conditional expression and instead saw an assignment.
+       }else if(command = target.getAttribute("command")){ // line 642, pos 42
+   #73: Expected a conditional expression and instead saw an assignment.
+       if(command = target.getAttribute("command")){ // line 648, pos 36
+   #74: Line too long.
+       this.get("baseEditor").execCommand("insertandfocus","<"+target.getAttribute("command")+">&nbsp;<br></"+target.getAttribute("command")+">"); // line 649, pos 167
+   #75: Trailing whitespace.
+       return false;//so we keep focus // line 654, pos 52
+   #76: Trailing whitespace.
+       },this)); // line 655, pos 26
+   #77: Trailing whitespace.
+       } // line 667, pos 22
+   #78: Trailing whitespace.
+       break; // line 668, pos 27
+   #79: Trailing whitespace.
+       },this); // line 670, pos 21
+   #80: This 'switch' should be an 'if'.
+       switch (e.changedType) { // line 660, pos 17
+   #81: Trailing whitespace.
+       e.backgroundColor = ""; // line 696, pos 40
+   #82: Line too long.
+       //strip any styles added (except, execcommand, which allows styles (incl. "question") doesn't pick up on browser exceccommand CTRL+B capture ourselves and bubble to this) // line 699, pos 182
+   #83: Expected a 'break' statement before 'default'.
+       } // line 711, pos 25
+   #84: Missing semicolon.
+       this.flagPaste = false // line 713, pos 47
+   #85: Trailing whitespace.
+       */ // line 749, pos 12
+   #86: Confusing use of '!'.
+       if(!(typeof EditorHTMLFormatter === 'undefined')){ // line 751, pos 16
+   #87: Too many var statements.
+       var formatted_html = EditorHTMLFormatter.init(this.get("frameInstance").one('body')); // line 756, pos 21
+   #88: Trailing whitespace.
+       }, // line 761, pos 11
+   #89: Trailing whitespace.
+       */ // line 767, pos 12
+   #90: Trailing whitespace.
+       if(node) { // line 772, pos 23
+   #91: Too many var statements.
+       var parents = this.get("baseEditor").getDomPath(node, false);//get parent DOM nodes // line 774, pos 21
+   #92: Trailing whitespace.
+       }, // line 789, pos 11
+   #93: Trailing whitespace.
+       //html format editor // line 815, pos 41
+   #94: Unnecessary semicolon.
+       var content = this.get("textArea").get("value");; // line 840, pos 61
+   #95: Trailing whitespace.
+       newNode.set("innerHTML",node.get("innerHTML")); // line 866, pos 68
+   #96: Too many var statements.
+       var newNode = Y.Node.create('<em></em>'); // line 872, pos 25
+   #97: 'newNode' is already defined.
+       var newNode = Y.Node.create('<em></em>'); // line 872, pos 33
+   #98: Trailing whitespace.
+       newNode.set("innerHTML",node.get("innerHTML")); // line 873, pos 68
+   #99: Too many var statements.
+       var flag = false; // line 881, pos 25
+   #100: Too many var statements.
+       var newNode = Y.Node.create('<p></p>');//kills all div information // line 904, pos 29
+   #101: 'newNode' is already defined.
+       var newNode = Y.Node.create('<p></p>');//kills all div information // line 904, pos 37
+   #102: Trailing whitespace.
+       newNode.set("innerHTML",node.get("innerHTML")); // line 905, pos 72
+   #103: Line too long.
+       Y.log("node not removed: "+node.get("tagName")+" = "+this._getInnerText(node,true).length +" = "+node.all("img, iframe, object").size()); // line 919, pos 161
+   #104: Line too long.
+       if(node.get("tagName") === "P" && this._getInnerText(node,true).length === 0 && (node.one('*') && (node.one('*').get("tagName") === "IFRAME" || node.one('*').get("tagName") === "IMG"))) { // line 924, pos 203
+   #105: Trailing whitespace.
+       Y.log("found "+node.get("tagName")+" with "+node.one('*').get("tagName")); // line 925, pos 95
+   #106: Too many var statements.
+       var newNode = Y.Node.create('<div></div>'); // line 926, pos 25
+   #107: 'newNode' is already defined.
+       var newNode = Y.Node.create('<div></div>'); // line 926, pos 33
+   #108: Trailing whitespace.
+       newNode.set("innerHTML",node.get("innerHTML")); // line 928, pos 68
+   #109: Trailing whitespace.
+       * // line 976, pos 11
+   #110: Trailing whitespace.
+       */ // line 982, pos 12
+   #111: Trailing whitespace.
+       */ // line 999, pos 12
+   #112: Trailing whitespace.
+       //Y.one(this.get("formEl")).submit();	//remove submitForm from event listener? // line 1010, pos 94
+   #113: Trailing whitespace.
+       */ // line 1016, pos 12
+   #114: Trailing whitespace.
+       return this._formatDom(); // line 1024, pos 38
+   #115: Trailing whitespace.
+       * // line 1027, pos 11
+   #116: Trailing whitespace.
+       **/ // line 1028, pos 13
+   #117: Trailing whitespace.
+       */ // line 1044, pos 8
+   #118: Trailing whitespace.
+       value: true // line 1086, pos 24
+   #119: Trailing whitespace.
+       value: 0 // line 1127, pos 21
+   #120: Empty block.
+       }else if(frameEl && Y.one(frameEl)){//is string // line 1156, pos 14
+   #121: Trailing whitespace.
+       Y.log(frameEl); // line 1161, pos 32
+   #122: Trailing whitespace.
+       this.set("cell",cell); // line 1171, pos 35
+   #123: Trailing whitespace.
+       cell.setStyle("width",cellImageSizes.width+"px").setStyle("height",cellImageSizes.height+"px"); // line 1184, pos 108
+   #124: Trailing whitespace.
+       this.uploadTo = this.uploadCanvas.invoke('getContext', '2d');//node: _node.getContext("2d"); // line 1190, pos 105
+   #125: Line too long.
+       this.zoomBtns = Y.Node.create('<div class="zoom button in" title="Zoom In">+</div> <div class=" zoom button out" title="Zoom Out">-</div>'); // line 1203, pos 156
+   #126: Trailing whitespace.
+       this.zoomBtns.one(".in").on("click",Y.bind(function(e){ // line 1205, pos 72
+   #127: Trailing whitespace.
+       Y.log('zoom in to: '+zoom); // line 1208, pos 48
+   #128: Trailing whitespace.
+       this.zoomBtns.one(".out").on("click",Y.bind(function(e){ // line 1212, pos 73
+   #129: A leading decimal point can be confused with a dot: '.95'.
+       var zoom = parseFloat(this.get("zoom") * .95); // line 1214, pos 62
+   #130: Trailing whitespace.
+       Y.log('zoom out to: '+zoom); // line 1216, pos 53
+   #131: Trailing whitespace.
+       this.set("zoom",1);//reset // line 1220, pos 51
+   #132: Trailing whitespace.
+       this.saveBtn.on("click",Y.bind(function(e){ // line 1229, pos 60
+   #133: Trailing whitespace.
+       this.clearBtn.on("click",Y.bind(function(e){ // line 1236, pos 61
+   #134: Too many var statements.
+       var heightInpt = Y.Node.create('<input class="heightRow" value="'+cellImageSizes.height+'px">'); // line 1243, pos 25
+   #135: Too many var statements.
+       var height = parseInt(evt.currentTarget.get("value"),10); // line 1246, pos 29
+   #136: Trailing whitespace.
+       cell.appendChild(heightInpt); // line 1251, pos 50
+   #137: Too many var statements.
+       var resize = new Y.Resize({ // line 1258, pos 21
+   #138: Trailing whitespace.
+       var cell = event.currentTarget.get("node"); // line 1267, pos 64
+   #139: Too many var statements.
+       var height = parseInt(event.currentTarget.info.offsetHeight,10); // line 1268, pos 25
+   #140: Trailing whitespace.
+       this.set("img",Y.Node.create('<img>')); // line 1277, pos 56
+   #141: Trailing whitespace.
+       this.uploadCanvas.setStyle('left',this.get("left")+'px'); // line 1293, pos 74
+   #142: Trailing whitespace.
+       **/ // line 1307, pos 12
+   #143: Trailing whitespace.
+       if ( !( window.File && window.FileReader && window.FileList && window.Blob ) ) { // line 1309, pos 93
+   #144: Trailing whitespace.
+       return false; // line 1310, pos 30
+   #145: Trailing whitespace.
+       **/ // line 1318, pos 12
+   #146: Trailing whitespace.
+       loadLocalImage: function(evt){ // line 1319, pos 39
+   #147: Trailing whitespace.
+       var files = evt.target.get('files');/* ie10 :( */ // line 1329, pos 62
+   #148: Too many var statements.
+       var file = files._nodes[0]; // line 1331, pos 21
+   #149: Too many var statements.
+       var reader = new FileReader(); // line 1334, pos 25
+   #150: Trailing whitespace.
+       this.get("img").set('src',evt.target.result);//this will call load on prepareImg // line 1337, pos 105
+   #151: Trailing whitespace.
+       },this); // line 1338, pos 29
+   #152: Trailing whitespace.
+       reader.readAsDataURL(file);//readAsText // line 1339, pos 60
+   #153: Trailing whitespace.
+       evt.preventDefault(); // line 1344, pos 34
+   #154: Trailing whitespace.
+       **/ // line 1350, pos 12
+   #155: Trailing whitespace.
+       prepareImg: function(evt){ // line 1351, pos 35
+   #156: Trailing whitespace.
+       this.uploadCanvasCopy.set("height",evt.target._node.height); // line 1356, pos 73
+   #157: Trailing whitespace.
+       **/ // line 1365, pos 12
+   #158: Trailing whitespace.
+       errorImg: function(evt){ // line 1366, pos 33
+   #159: Trailing whitespace.
+       **/ // line 1372, pos 12
+   #160: Trailing whitespace.
+       var newDimensions = this.resizeDimensions(img_src,canvasImageSizes); // line 1386, pos 81
+   #161: Too many var statements.
+       var newDimensions = this.resizeDimensions(img_src,canvasImageSizes); // line 1386, pos 17
+   #162: Trailing whitespace.
+       //do we allow canvas to be < max-width|max-height? -> result is too small image send back // line 1395, pos 102
+   #163: Trailing whitespace.
+       **/ // line 1413, pos 12
+   #164: Too many var statements.
+       var newDimensions = {height: node.height, width: node.width, resize: 100}; // line 1417, pos 17
+   #165: Missing semicolon.
+       Y.log('Resize scenario #1') // line 1423, pos 48
+   #166: Trailing whitespace.
+       newDimensions.width = Math.round((minDimensions.height * (1 / ratio))); // line 1425, pos 92
+   #167: Trailing whitespace.
+       //newDimensions.resize = (Math.round((newDimensions.width / node.width)*100)); // line 1426, pos 99
+   #168: Trailing whitespace.
+       Y.log('Resize scenario #2'); // line 1430, pos 53
+   #169: Trailing whitespace.
+       newDimensions.height = Math.round(minDimensions.width * ratio); // line 1432, pos 88
+   #170: Trailing whitespace.
+       //newDimensions.resize = (Math.round((newDimensions.width / node.width)*100)); // line 1433, pos 103
+   #171: Trailing whitespace.
+       Y.log('Unknown resize scenario'); // line 1436, pos 58
+   #172: Trailing whitespace.
+       } // line 1442, pos 14
+   #173: Trailing whitespace.
+       return newDimensions; // line 1443, pos 34
+   #174: Trailing whitespace.
+       **/ // line 1448, pos 12
+   #175: Too many var statements.
+       var offsetTop = parseInt(this.uploadCanvas.getStyle("top"),10); // line 1454, pos 17
+   #176: Too many var statements.
+       var offsetLeft = parseInt(this.uploadCanvas.getStyle("left"),10); // line 1455, pos 17
+   #177: Too many var statements.
+       var fillWidth = parseInt(cell.getStyle("width"),10) - this.uploadCanvas.get("width"); // line 1459, pos 21
+   #178: Trailing whitespace.
+       }else{ // line 1460, pos 19
+   #179: Too many var statements.
+       var fillWidth = 0; // line 1461, pos 21
+   #180: 'fillWidth' is already defined.
+       var fillWidth = 0; // line 1461, pos 31
+   #181: Too many var statements.
+       var fillHeight = parseInt(cell.getStyle("height"),10) - this.uploadCanvas.get("height"); // line 1466, pos 21
+   #182: Trailing whitespace.
+       }else{ // line 1467, pos 19
+   #183: Too many var statements.
+       var fillHeight = 0; // line 1468, pos 21
+   #184: 'fillHeight' is already defined.
+       var fillHeight = 0; // line 1468, pos 32
+   #185: Too many var statements.
+       var location = this.uploadCanvas.getXY(); // line 1472, pos 17
+   #186: Extra comma.
+       node: this.uploadCanvas, // line 1477, pos 40
+   #187: Trailing whitespace.
+       constrain: { // line 1479, pos 33
+   #188: Line too long.
+       top: (location[1] - offsetTop - (this.uploadCanvas.get("height") - (this.uploadCanvas.get("height") > parseInt(cell.getStyle("height"),10) ?  parseInt(cell.getStyle("height"),10) : this.uploadCanvas.get("height")))), // line 1480, pos 236
+   #189: Line too long.
+       left: (location[0] - offsetLeft - (this.uploadCanvas.get("width") - (this.uploadCanvas.get("width") >  parseInt(cell.getStyle("width"),10) ?  parseInt(cell.getStyle("width"),10) : this.uploadCanvas.get("width")))), // line 1481, pos 235
+   #190: Trailing whitespace.
+       left: (location[0] - offsetLeft - (this.uploadCanvas.get("width") - (this.uploadCanvas.get("width") >  parseInt(cell.getStyle("width"),10) ?  parseInt(cell.getStyle("width"),10) : this.uploadCanvas.get("width")))), // line 1481, pos 235
+   #191: 'fillWidth' used out of scope.
+       right: location[0] + this.uploadCanvas.get("width") + fillWidth - offsetLeft, // line 1482, pos 75
+   #192: 'fillHeight' used out of scope.
+       bottom: location[1] + this.uploadCanvas.get("height") + fillHeight - offsetTop } // line 1483, pos 77
+   #193: Trailing whitespace.
+       },this)); // line 1492, pos 22
+   #194: Trailing whitespace.
+       **/ // line 1497, pos 12
+   #195: Trailing whitespace.
+       this.uploadTo.clearRect(0, 0, this.uploadCanvas.get("width"), this.uploadCanvas.get("height")); // line 1507, pos 108
+   #196: Trailing whitespace.
+       **/ // line 1512, pos 12
+   #197: Too many var statements.
+       var array = []; // line 1518, pos 17
+   #198: Too many var statements.
+       for(var i = 0; i < binary.length; i++) { // line 1519, pos 21
+   #199: Trailing whitespace.
+       return new Blob([new Uint8Array(array)], {type: 'image/jpeg'}); // line 1522, pos 76
+   #200: Trailing whitespace.
+       **/ // line 1527, pos 12
+   #201: Trailing whitespace.
+       getFile: function(){ // line 1528, pos 29
+   #202: Trailing whitespace.
+       //var blob = this.uploadCanvas._node.mozGetAsFile("file.jpg"); // line 1529, pos 75
+   #203: Trailing whitespace.
+       return false; // line 1536, pos 30
+   #204: Trailing whitespace.
+       **/ // line 1543, pos 12
+   #205: Trailing whitespace.
+       getFileDetails: function(){ // line 1544, pos 36
+   #206: Trailing whitespace.
+       var cellImageSizes = this.get("cellImageSizes"); // line 1545, pos 61
+   #207: Line too long.
+       return {top: this.get("top"), left: this.get("left"), zoom: this.get("zoom"), width: cellImageSizes.width, height: cellImageSizes.height, resize: this.get("resize") }; // line 1547, pos 179
+   #208: Trailing whitespace.
+       }, // line 1548, pos 11
+   #209: Trailing whitespace.
+       * @method getImage // line 1550, pos 28
+   #210: Trailing whitespace.
+       **/ // line 1552, pos 12
+   #211: Trailing whitespace.
+       getImage: function(){ // line 1553, pos 30
+   #212: Trailing whitespace.
+       * @method setHeight // line 1558, pos 29
+   #213: Trailing whitespace.
+       **/ // line 1559, pos 12
+   #214: Trailing whitespace.
+       this.get("cell").setStyle("height",cellImageSizes.height+"px").setStyle("width",cellImageSizes.width+"px"); // line 1566, pos 120
+   #215: Trailing whitespace.
+       this.contrainMove();/* redrawn image */ // line 1568, pos 52
+   #216: Trailing whitespace.
+       * @method saveImage // line 1571, pos 29
+   #217: Trailing whitespace.
+       **/ // line 1572, pos 12
+   #218: Too many var statements.
+       var uploader = new Y.UploaderHTML5; // line 1576, pos 21
+   #219: Missing '()' invoking a constructor.
+       var uploader = new Y.UploaderHTML5; // line 1576, pos 38
+   #220: Extra comma.
+       }, // line 1591, pos 10
+   #221: Trailing whitespace.
+       */ // line 1601, pos 8
+   #222: Line too long.
+       newLineNodeRe: /^(div|p|img|blockquote|q|iframe|pre|code|table|tbody|th|td|tr|ul|ol|li|h1|h2|h3|h4|h5|h6|dl|dt|dd|form|fieldset|legend|iframe)$/i, // line 1607, pos 154
+   #223: Trailing whitespace.
+       */ // line 1619, pos 12
+   #224: Trailing whitespace.
+       */ // line 1635, pos 11
+   #225: Line too long.
+       var hasTextChild = node.hasChildNodes() > 0 && node.firstChild.nodeType === 3 && node.firstChild.nodeValue.replace(this.trimRe,'').length > 0; // line 1646, pos 158
+   #226: Too many var statements.
+       var hasTextChild = node.hasChildNodes() > 0 && node.firstChild.nodeType === 3 && node.firstChild.nodeValue.replace(this.trimRe,'').length > 0; // line 1646, pos 21
+   #227: Too many var statements.
+       var nodeName = node.nodeName.toLowerCase(); // line 1648, pos 25
+   #228: Too many var statements.
+       var collection = node.attributes; // line 1653, pos 25
+   #229: Too many var statements.
+       var node_str = "<"+nodeName; // line 1654, pos 25
+   #230: Too many var statements.
+       for(var i=0; i<collection.length; i++){ // line 1655, pos 29
+   #231: Mixed spaces and tabs.
+       node_str += " "+collection[i].name + "=\"" + collection[i].value+"\""; // line 1656, pos 6
+   #232: Trailing whitespace.
+       } // line 1657, pos 22
+   #233: Trailing whitespace.
+       node_str += ">"; // line 1658, pos 37
+   #234: Trailing whitespace.
+       */ // line 1664, pos 23
+   #235: Too many var statements.
+       var new_line = '', indent_str = ''; // line 1667, pos 25
+   #236: Confusing use of '!'.
+       }else if(hasTextChild || !nodeName.search(this.inlineNodeRe)  === -1){ // line 1670, pos 46
+   #237: Trailing whitespace.
+       this.html.push(node.nodeValue); // line 1689, pos 56
+   #238: Expected '{' and instead saw 'this'.
+       this.html.push(node.nodeValue); // line 1689, pos 25
+   #239: Too many var statements.
+       var nodeName = node.nodeName.toLowerCase(); // line 1696, pos 25
+   #240: 'nodeName' is already defined.
+       var nodeName = node.nodeName.toLowerCase(); // line 1696, pos 34
+   #241: Trailing whitespace.
+       if (nodeName.search(this.notCloseNodesRe) === -1) { // line 1699, pos 72
+   #242: Too many var statements.
+       var indent_str = this._indenter(level); // line 1706, pos 33
+   #243: 'indent_str' is already defined.
+       var indent_str = this._indenter(level); // line 1706, pos 44
+   #244: Trailing whitespace.
+       } // line 1714, pos 14
+   #245: Trailing whitespace.
+       */ // line 1720, pos 11
+   #246: Too many var statements.
+       for(var i=0; i < level; i++){ // line 1723, pos 21
+   #247: Trailing whitespace.
+       indent_str = indent_str + this.indent; // line 1724, pos 55
+   #248: Trailing whitespace.
+       } // line 1725, pos 14
+   #249: Missing semicolon.
+       } // line 1728, pos 6
+   #250: 'EditorHTMLFormatter' is defined but never used.
+       var EditorHTMLFormatter = { // line 1602, pos 28
+   #251: 'config' is defined but never used.
+       function EditorUI(config) { // line 18, pos 29
+   #252: 'cmd' is defined but never used.
+       bold: function(cmd) { // line 270, pos 35
+   #253: 'cmd' is defined but never used.
+       italic: function(cmd) { // line 303, pos 37
+   #254: 'text' is defined but never used.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '', editor = inst.host.editorUI; // line 341, pos 108
+   #255: 'grid' is defined but never used.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, grid, text = '', src = 'http://', editor = inst.host.editorUI; // line 361, pos 108
+   #256: 'event' is defined but never used.
+       g.on("upload:start",Y.bind(function(event){ // line 404, pos 62
+   #257: 'event' is defined but never used.
+       g.on("upload:error",Y.bind(function(event){ // line 407, pos 62
+   #258: 'text' is defined but never used.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '',editor = inst.host.editorUI; // line 514, pos 108
+   #259: 'editor' is defined but never used.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node, text = '',editor = inst.host.editorUI; // line 514, pos 120
+   #260: 'cmd' is defined but never used.
+       blockquote: function(cmd) { // line 511, pos 41
+   #261: 'node' is defined but never used.
+       var inst = this.get('host').getInstance(), selection = new inst.Selection(), node; // line 543, pos 102
+   #262: 'cmd' is defined but never used.
+       clear: function(cmd) { // line 541, pos 36
+   #263: 'node' is defined but never used.
+       var node = this.get("baseEditor").execCommand(command); // line 626, pos 33
+   #264: 'cmds' is defined but never used.
+       var editor = this.get("editor"), node = e.changedNode, cmds = e.commands; // line 770, pos 72
+   #265: 'e' is defined but never used.
+       submitForm: function(e){ // line 1000, pos 31
+   #266: 'config' is defined but never used.
+       function EditorImageManage(config) { // line 1045, pos 38
+   #267: 'e' is defined but never used.
+       this.zoomBtns.one(".in").on("click",Y.bind(function(e){ // line 1205, pos 70
+   #268: 'e' is defined but never used.
+       this.zoomBtns.one(".out").on("click",Y.bind(function(e){ // line 1212, pos 71
+   #269: 'e' is defined but never used.
+       this.saveBtn.on("click",Y.bind(function(e){ // line 1229, pos 58
+   #270: 'e' is defined but never used.
+       this.clearBtn.on("click",Y.bind(function(e){ // line 1236, pos 59
+   #271: 'row' is defined but never used.
+       var row = evt.currentTarget.get("parentNode"); // line 1245, pos 32
+   #272: 'evt' is defined but never used.
+       errorImg: function(evt){ // line 1366, pos 31
+   #273: 'img' is defined but never used.
+       var img = this.get("img"), // line 1374, pos 20
+   #274: 'img' is defined but never used.
+       var img = this.get("img"), // line 1450, pos 20
+   #275: 'fillWidth' is defined but never used.
+       var fillWidth = 0; // line 1461, pos 30
+   #276: 'fillHeight' is defined but never used.
+       var fillHeight = 0; // line 1468, pos 31
+   #277: 'e' is defined but never used.
+       this.drag.on("drag:end",Y.bind(function(e){ // line 1486, pos 54
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-editor-ui/gallery-editor-ui.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-editor-ui
+shifter [queu] coverage file read, starting coverage for: gallery-editor-ui/gallery-editor-ui.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-editor-ui/gallery-editor-ui-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 4, pos 2
+   #2: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-moz-box-sizing'.
+       -moz-box-sizing: border-box; // line 5, pos 2
+   #3: [warning] Standard property 'box-sizing' should come after vendor-prefixed property '-webkit-box-sizing'.
+       -webkit-box-sizing: border-box; // line 6, pos 2
+   #4: [warning] Standard property 'border-radius' should come after vendor-prefixed property '-webkit-border-radius'.
+       -webkit-border-radius: 1px; // line 8, pos 2
+   #5: [warning] Standard property 'border-radius' should come after vendor-prefixed property '-moz-border-radius'.
+       -moz-border-radius: 1px; // line 9, pos 2
+   #6: [warning] Outlines should only be modified using :focus.
+       .Ak { /* textarea text */ // line 14, pos 1
+   #7: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 24, pos 2
+   #8: [warning] The property -ms-user-select is compatible with -webkit-user-select and -moz-user-select and should be included as well.
+       -webkit-user-select: none; // line 34, pos 2
+   #9: [warning] Missing vendor-prefixed CSS gradients for Old Webkit (Safari 4+, Chrome).
+       .toolbars .button:active, .toolbars .active { // line 82, pos 1
+   #10: [warning] Missing vendor-prefixed CSS gradients for Old Webkit (Safari 4+, Chrome).
+       .toolbars .button:hover { // line 94, pos 1
+   #11: [warning] Use of !important
+       border-color: #C6C6C6!important; // line 104, pos 2
+   #12: [warning] Missing vendor-prefixed CSS gradients for Old Webkit (Safari 4+, Chrome).
+       .Kj-JD-Jl button:hover { // line 187, pos 1
+   #13: [warning] Outlines should only be modified using :focus.
+       .Kj-JD-Jl button { // line 200, pos 1
+   #14: [warning] Missing vendor-prefixed CSS gradients for Old Webkit (Safari 4+, Chrome).
+       .Kj-JD-Jl button { // line 200, pos 1
+   #15: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 1px solid rgba(0, 0, 0, 0.1); // line 211, pos 2
+   #16: [warning] Outlines should only be modified using :focus.
+       .J-M { // line 224, pos 1
+   #17: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 266, pos 2
+   #18: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; /* so including border we have the right size */ // line 273, pos 2
+   #19: [warning] The property -ms-user-select is compatible with -webkit-user-select and -moz-user-select and should be included as well.
+       -webkit-user-select: none; // line 293, pos 2
+   #20: [warning] Values of 0 shouldn't have units specified.
+       top: 0px; // line 301, pos 7
+   #21: [warning] Values of 0 shouldn't have units specified.
+       top: 0px; // line 315, pos 7
+   #22: [warning] Fallback border (hex or RGB) should precede RGBA border.
+       border: 1px solid rgba(0,0,0,.4); // line 329, pos 2
+   #23: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid rgba(0,0,0,.4); // line 329, pos 2
+   #24: [warning] Fallback background-color (hex or RGB) should precede RGBA background-color.
+       background-color: rgba(255,255,255,.5); // line 330, pos 2
+   #25: [warning] Standard property 'transform' should come after vendor-prefixed property '-o-transform'.
+       -o-transform: rotate(90deg); // line 335, pos 2
+   #26: [warning] Standard property 'transform' should come after vendor-prefixed property '-ms-transform'.
+       -ms-transform: rotate(90deg); // line 336, pos 2
+   #27: [warning] Standard property 'transform' should come after vendor-prefixed property '-moz-transform'.
+       -moz-transform: rotate(90deg); // line 337, pos 2
+   #28: [warning] Standard property 'transform' should come after vendor-prefixed property '-webkit-transform'.
+       -webkit-transform: rotate(90deg); // line 338, pos 2
+shifter [queu] writing skin file with core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.94 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
+Starting Grover on 1 files with PhantomJS@1.8.1
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [gallery-editor-ui]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+Writing files in JSON format to: /src/gallery-editor-ui/logs/tests.json
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
+----------------------------------------------------------------
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+  [Grover Execution Timer] 0.655 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
