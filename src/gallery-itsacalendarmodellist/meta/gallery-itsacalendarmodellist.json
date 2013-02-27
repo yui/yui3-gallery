@@ -1,0 +1,12 @@
+{
+    "gallery-itsacalendarmodellist": {
+        "requires": [
+            "base-build",
+            "calendar-base",
+            "model",
+            "model-list",
+            "datatype-date-math",
+            "gallery-itsacalendarmarkeddates"
+        ]
+    }
+}
