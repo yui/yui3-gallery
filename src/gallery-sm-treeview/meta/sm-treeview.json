@@ -1,0 +1,21 @@
+{
+    "gallery-sm-treeview": {
+        "requires": [
+            "base-build",
+            "classnamemanager",
+            "gallery-sm-tree",
+            "gallery-sm-tree-openable",
+            "gallery-sm-tree-selectable",
+            "gallery-sm-treeview-templates",
+            "view"
+        ],
+
+        "skinnable": true
+    },
+
+    "gallery-sm-treeview-templates": {
+        "requires": [
+            "template-micro"
+        ]
+    }
+}
