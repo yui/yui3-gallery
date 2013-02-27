@@ -1,0 +1,11 @@
+{
+    "gallery-itsacalendarmarkeddates": {
+        "requires": [
+            "base-build",
+            "calendar-base",
+            "datatype-date",
+            "datatype-date-math"
+        ],
+        "skinnable": true
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsacalendarmarkeddates",
+    "builds": {
+        "gallery-itsacalendarmarkeddates": {
+            "jsfiles": [
+                "js/gallery-itsacalendarmarkeddates.js"
+            ]
+        }
+    }
+}
