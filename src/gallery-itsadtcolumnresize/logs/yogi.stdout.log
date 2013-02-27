@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.67 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.68 on node@0.8.21
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsadtcolumnresize
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -28,15 +28,15 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.726 seconds, pretty fast huh?
+shifter [info] finished in 0.988 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5002
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5001
-Starting Grover on 1 files with PhantomJS@1.8.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
+Starting Grover on 1 files with PhantomJS@1.8.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
 ✖ [gallery-itsadtcolumnresize]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)

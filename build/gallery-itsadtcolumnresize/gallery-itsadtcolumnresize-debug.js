@@ -23,12 +23,12 @@ YUI.add('gallery-itsadtcolumnresize', function (Y, NAME) {
  *
  *
  * @module gallery-itsadtcolumnresize
- * @class Plugin.ITSADTColumnResize
+ * @class ITSADTColumnResize
  * @extends Plugin.Base
  * @constructor
  * @since 0.1
  *
- * <i>Copyright (c) 2012 Marco Asbreuk - http://theinternetwizard.net</i>
+ * <i>Copyright (c) 2013 Marco Asbreuk - http://itsasbreuk.nl</i>
  * YUI BSD License - http://developer.yahoo.com/yui/license.html
  *
 */
@@ -726,11 +726,11 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
                         realDataTable.setStyle('width', '1px');
                     }
                 }
-                
+
                 // next setCellWidth can handle both with in pixels as well as in percent
                 setCellWidth(width, true);
                 // From now on: we MUST take the final reached width, because due to cellrestrictions, it might differ from what is set.
-                
+
                 widthPxAttempt = (newWidthPercented ? Math.round((dtWidthWithBorder*width/100)) : width) + expansion;
 
                 width = instance.getColumnWidthPx(colIndex);
@@ -754,7 +754,7 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
                     }
                 }
                 newWidth = bkpDatatableWidth + width - prevWidthPx;
-                
+
                 // was there any change anyway? Then reset the tableUI
                 // reset the datatable-width or the container width. What need to be set -or justified- depends on the scroll-type of DataTable
                 if ((width !== prevWidthPx) || busyTransformAllColumnWidthToPixels) {
@@ -965,12 +965,23 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
                 )
             );
 
+            eventhandlers.push(
+                dt.after(
+                    'renderView',
+                    function() {
+                        instance._initPrivateVars();
+                        instance._syncTableUI();
+                    },
+                    instance
+                )
+            );
+
             // Justify the tablewidth again after one of these changes:
             // CAUTION: as soon as row-update or cell-update comes available in datatable, dataChange might not be fired!
             // We need to bind that new event also (at that time)
             eventhandlers.push(
                 dt.after(
-                    ['renderView', 'columnsChange', 'dataChange', 'scrollableChange'],
+                    ['columnsChange', 'dataChange', 'scrollableChange'],
                     instance._syncTableUI,
                     instance
                 )
@@ -1006,7 +1017,7 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
                 Y.rbind(instance._syncScrollUIPercentedDT, instance)
             );
 
-            if (Lang.isBoolean(sortable) && sortable) {
+            if ((sortable==='auto') || (Lang.isBoolean(sortable) && sortable)) {
                 // first detach current handler
                 currentSortEventHandler = dt._eventHandles.sortUITrigger;
                 if (currentSortEventHandler) {
@@ -1644,13 +1655,13 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
                 allThRealHeader = instance._dtRealDataTableTHNodes, fireInPercent,
                 width, configWidth, colConfigObject, percentWidth, total, thcell,
                 storedPercentedWidth, expansion, definedColWidth, percentedIsStored;
-            
+
             Y.log('_transformAllColumnWidthToPixels start', 'info', 'DTColumnResize');
             // prevent expanding last cell at this stage:
             instance._busyTransformAllColumnWidthToPixels = true;
             // empty current definition of notspeccols:
             notSpecCols.length = 0;
-            
+
             allThRealHeader.each(
                 function(th, index) {
                     colConfigObject = dt.getColumn(index);
@@ -2060,7 +2071,7 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
     }
 );
 
-}, 'gallery-2013.01.30-21-00', {
+}, 'gallery-2013.02.27-21-03', {
     "requires": [
         "base-build",
         "plugin",
