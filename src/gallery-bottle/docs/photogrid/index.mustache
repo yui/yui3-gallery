@@ -9,3 +9,5 @@ photogridWidget.on('renderFinished', function (E) {
     alert('Rendered grids:' + photogridWidget.get('contentBox').all('.bpg_module').size());
 });
 ```
+
+<p>When rendering, the contentBox of the `{{displayName}}` widget will be applied with `bpg_render` class. After render finished, this class will be removed.</p>

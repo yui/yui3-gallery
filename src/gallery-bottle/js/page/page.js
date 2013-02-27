@@ -168,6 +168,34 @@ Y.Bottle.Page = Y.Base.create('btpage', Y.Widget, [Y.WidgetParent, Y.WidgetPosit
     },
 
     /**
+     * Get scroll position for both native scroll or Page Container scrollView.
+     *
+     * @method lazyLoad
+     * @return scrollY {Number} the position of vertical scroll
+     */
+    getScrollY: function () {
+        return (Y.Bottle.get('nativeScroll') || !current) ? Y.DOM.docScrollY() : current.topScroll().get('scrollY');
+    },
+
+    /**
+     * Run callback function when native scroll end or Page Container scroll end.
+     *
+     * @method lazyLoad
+     * @param cb {Function} do callback when scroll end
+     */
+    onScroll: function (cb) {
+        if (!cb) {
+            return;
+        }
+
+        if (Y.Bottle.get('nativeScroll')) {
+            Y.on('scroll', cb);
+        } else {
+            current.topScroll().on('scrollEnd', cb);
+        }
+    },
+
+    /**
      * Update content size and scroll position
      *
      * @method updateContent

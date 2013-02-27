@@ -19,6 +19,19 @@ YUI().use('page-testlib', function (Y) {
         'test getInstances': function () {
             A.areSame(page, Y.Bottle.Page.getInstances()[0]);
             A.areSame(1, Y.Bottle.Page.getInstances().length);
+        },
+
+        'test getScrollY': function () {
+            A.areSame(0, Y.Bottle.Page.getScrollY());
+            Y.Bottle.Page.scrollTo(50);
+            A.areSame(50, Y.Bottle.Page.getScrollY());
+        },
+
+        'test onScroll': function () {
+            Y.Bottle.Page.onScroll(function () {
+                alert('dummy function not exec in test');
+            });
+            A.isTrue(true);
         }
     }));
 

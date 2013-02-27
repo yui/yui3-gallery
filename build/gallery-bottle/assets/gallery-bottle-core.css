@@ -10,9 +10,11 @@ body.btFocus.btFixed .btFixedScroll {margin:0!important}
 
 body.btFixed .yui3-btshortcut,
 body.btFixed .yui3-btoverlay {position:fixed}
-
+html.bov_display{overflow-y:scroll!important}
+html.bov_display body{position:absolute!important;overflow:hidden!important}
 .btHidden {display:none}
-.btRoot {position:absolute;top:0;left:0}
+.btRoot {position:absolute;top:0;left:0;*z-index:160}
+.btDummy {overflow:hidden;height:0}
 
 .bt_posfixed{position:absolute;top:10px;left:0;overflow:scroll;width:30px;height:30px}
 .bt_posfixed div{height:100px;width:100%;position:relative}
@@ -23,6 +25,7 @@ body.btFixed .yui3-btoverlay {position:fixed}
 .bt-overlay-mask{position:absolute;top:0;left:0;z-index:150;width:100%;height:100%;display:none}
 .yui3-btcontainer{position:absolute;width:100%}
 .bt-container-scroll.yui3-widget-content-expanded{height:auto}
+.bt-container-scroll{*overflow:visible!important}
 .btp-native .yui3-btcontainer{position:relative}
 .btHeader, .btFooter{width:100%;box-sizing:border-box;-moz-box-sizing:border-box;left:0}
 
@@ -42,8 +45,9 @@ body.btFixed .yui3-btoverlay {position:fixed}
 .bst_tab > * {position:absolute!important;left:-10000px;width:100%}
 .bst_tab > *.on {position:relative!important;left:auto}
 
-.yui3-btcarousel-content {white-space:nowrap}
+.yui3-btcarousel-content {white-space:nowrap;*position:relative!important}
 .yui3-btcarousel-content > li {display:inline-block}
+.yui3-btcarousel-content li {zoom:1;*display:inline}
 
 .bcr_indexbox {position:absolute;bottom:0;width:100%;text-align:center;white-space:nowrap}
 .bcr_indexitem {display:inline-block;zoom:1;*display:inline;width:8px;height:8px;margin:4px 8px}

@@ -161,7 +161,7 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
 Y.namespace('Bottle').Viewer = Viewer;
 
 
-}, 'gallery-2013.02.13-21-08', {
+}, 'gallery-2013.02.27-21-03', {
     "requires": [
         "gallery-bt-syncscroll",
         "gallery-zui-rascroll",

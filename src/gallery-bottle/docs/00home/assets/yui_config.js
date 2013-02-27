@@ -1,10 +1,24 @@
 var debug = location.href.match(/(#|:)debug/),
     YUI_config = {
-        gallery: 'gallery-2013.02.07-15-27',
-        debug: false,
+        gallery: 'gallery-2013.02.13-21-08',
+        debug: debug,
         combine: debug ? false : true,
         filter: debug ? 'debug' : 'min',
         groups: {
+            'patches': {
+                base: 'http://yui.yahooapis.com/gallery-2013.02.13-21-08/build/',
+                modules: {
+                    'gallery-patch-373-scrollbar-ie7': {
+                        condition: {
+                            trigger: 'scrollview-scrollbars',
+                            test: function () {
+                                var IE = navigator.userAgent.match(/MSIE (\d+)/);
+                                return IE && (IE[1] < 9);
+                            }
+                        }
+                    }
+                }
+            },
             'bottle-modules': {
                 base: jsURL,
                 modules: {

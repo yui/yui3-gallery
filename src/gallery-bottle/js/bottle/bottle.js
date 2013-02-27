@@ -23,7 +23,7 @@ var BOTTLE_INIT = 'btInit',
 
     SYNC_SCREEN = 'btSyncScreen',
     htmlbody = Y.all('html, body'),
-    body = Y.one('body'),
+    body = htmlbody.item(1),
     btRoot = Y.one('.btRoot') || body.appendChild(Y.Node.create('<div class="btRoot"></div>')),
     inited = body.hasClass(BOTTLE_INIT),
     hideURL = false,
@@ -149,9 +149,13 @@ var BOTTLE_INIT = 'btInit',
                     flags.positionFixed = true;
                     body.addClass(BOTTLE_FIXED);
                 }
+                if (Y.UA.ie > 9) {
+                    styles.scroll.overflowX = '';
+                    styles.scroll.height = 'auto';
+                }
                 htmlbody.setStyles(styles.scroll);
                 body.addClass(BOTTLE_NATIVE);
-                pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars).set('axis') = '';
+                pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars)._set('axis', '')._bindDrag();
                 Y.publish(BOTTLE_NATIVE, {fireOnce: true});
                 Y.fire(BOTTLE_NATIVE);
                 Y.publish(SYNC_SCREEN);

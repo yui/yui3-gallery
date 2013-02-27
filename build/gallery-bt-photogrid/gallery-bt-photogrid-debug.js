@@ -17,7 +17,8 @@ var COLUMN_CHANGE = 'columnWidthChange',
     CLASSES = {
         COLUMN: PREFIX + 'column',
         MODULE: PREFIX + 'module',
-        HIDDEN: PREFIX + 'hidden'
+        RENDER: PREFIX + 'render',
+        ERROR: PREFIX + 'error'
     },
 
     HTMLS = {
@@ -209,10 +210,15 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
             return;
         }
 
+        if (start) {
+            this.get('contentBox').addClass(CLASSES.RENDER);
+        }
+
         this._bpgRendering = true;
 
         if (this._bpgImages.length <= this._bpgRendered) {
             this._bpgRendering = false;
+            this.get('contentBox').removeClass(CLASSES.RENDER);
             this.syncScroll();
             this.fire(RENDER_FINISHED);
             return;
@@ -223,6 +229,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
         if (img.width || img.error) {
             if (img.error) {
                 img.load.setAttribute('src', this.get('errorImage'));
+                img.module.addClass(CLASSES.ERROR);
             }
             this._minColumn().append(img.module);
             this._bpgRendered += 1;
@@ -395,4 +402,4 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').PhotoGrid = PhotoGrid;
 
 
-}, 'gallery-2013.02.13-21-08', {"requires": ["gallery-bt-syncscroll"]});
+}, 'gallery-2013.02.27-21-03', {"requires": ["gallery-bt-syncscroll"]});

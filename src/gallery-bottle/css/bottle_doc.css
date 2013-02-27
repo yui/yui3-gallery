@@ -32,12 +32,37 @@
     border-top:3px double #ccc;
 }
 
+pre.code {
+    clear:both;
+}
+
 h3 {
     color:#c84;
 }
 
+div.video a {
+    display:none;
+}
+
+div.video {
+    float:right;
+}
+
 body.btInit {
     background:#aaa;
+}
+
+body.btInit div.video {
+    float: none;
+    display: inline;
+}
+
+body.btInit div.video a {
+    display: inline;
+}
+
+body.btInit div.video iframe {
+    display: none;
 }
 
 .btInit #doc {
@@ -45,10 +70,6 @@ body.btInit {
     padding:0;
     min-width:0;
     max-width:100%;
-}
-
-.bt-container-scroll {
-    overflow:hidden;
 }
 
 .btInit #hd {

@@ -15,6 +15,7 @@ YUI.add('gallery-bt-device', function (Y, NAME) {
  * @namespace Bottle
  */
 var positionFixedSupport = null,
+    touchSupport = null,
 
     Device = {
 
@@ -57,7 +58,13 @@ var positionFixedSupport = null,
      * @return {Boolean}
      */
     getTouchSupport: function () {
-        return ((Y.config.win && ('ontouchstart' in Y.config.win)) && !(Y.UA.chrome && Y.UA.chrome < 6));
+        if (touchSupport !== null) {
+            return touchSupport;
+        }
+
+        touchSupport = (((Y.config.win && ('ontouchstart' in Y.config.win)) || (Y.config.win && ('msPointerEnabled' in Y.config.win.navigator))) && !(Y.UA.chrome && Y.UA.chrome < 6));
+
+        return touchSupport;
     },
 
     /**
@@ -158,4 +165,4 @@ if (Y.UA.iphone) {
 Y.namespace('Bottle').Device = Device;
 
 
-}, 'gallery-2013.02.13-21-08', {"requires": ["node-screen"]});
+}, 'gallery-2013.02.27-21-03', {"requires": ["node-screen"]});

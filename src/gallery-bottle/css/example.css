@@ -10,6 +10,7 @@
 .bpg_module img {display:block;width:100%;position:relative;z-index:-1;background:#a44}
 .bpg_module h1 {font-weight:900;margin:3px}
 .bpg_module p {font-style:italic;margin:3px}
+.bpg_render {background-color:#ffc}
 
 /*User Defined*/
 .bd{color:#333;font-weight:bold;}
