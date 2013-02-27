@@ -1,0 +1,13 @@
+{
+    "name": "gallerycss-csslist",
+    "builds": {
+        "gallerycss-csslist": {
+            "cssfiles": [
+            	"list-core.css",
+                "list.css",
+                "list-responsive.css",
+                "list-paginator.css"
+            ]
+        }
+    }
+}

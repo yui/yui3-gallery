@@ -1,0 +1,9 @@
+{
+    "name"       : "gallerycss-csslist",
+    "displayName": "Gallery: gallerycss-csslist",
+    "description": "Simple CSS for HTML List Elements",
+    "author"     : [ "tilomitra" ],
+
+    "tags": [ "gallery" ]
+
+}

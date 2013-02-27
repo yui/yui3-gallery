@@ -1,0 +1,41 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.68 on node@0.8.21
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-csslist
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-csslist
+   #1: [warning] Don't use adjoining classes.
+       .yui3-menu.yui3-menu-open { // line 7, pos 1
+   #2: [warning] Don't use adjoining classes.
+       .yui3-menu.yui3-menu-horizontal > ul { // line 104, pos 1
+   #3: [warning] Element (ul.yui3-menu-light) is overqualified, just use .yui3-menu-light without element name.
+       .yui3-menu ul.yui3-menu-light { // line 108, pos 12
+   #4: [warning] Don't use adjoining classes.
+       .yui3-menu .yui3-menu-can-have-children.yui3-menu-disabled > a:after { // line 177, pos 12
+   #5: [warning] Don't use adjoining classes.
+       .yui3-menu.yui3-menu-fixed > ul { // line 197, pos 1
+   #6: [warning] Expected end of value but found 'block'.
+       border-bottom:1px solid block; // line 233, pos 9
+   #7: [warning] Property with star prefix found.
+       *display: inline; // line 244, pos 5
+   #8: [warning] Property with star prefix found.
+       *zoom: 1; // line 246, pos 5
+   #9: [warning] margin can't be used with display: inline.
+       margin: 0 -0.35em 0 0; // line 247, pos 5
+   #10: [warning] Using height with padding can sometimes make elements larger than you expect.
+       padding: 0.8em 1.4em; // line 251, pos 5
+   #11: [warning] Values of 0 shouldn't have units specified.
+       text-shadow: 0px -1px 0px rgba(0,0,0, 0.45); // line 260, pos 18
+   #12: [warning] Values of 0 shouldn't have units specified.
+       text-shadow: 0px -1px 0px rgba(0,0,0, 0.45); // line 260, pos 27
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.079 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

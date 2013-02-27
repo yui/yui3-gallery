@@ -1,0 +1,128 @@
+/* MAIN MENU STYLING */
+
+.yui3-menu ul {
+    background: #ffffff; /* Old browsers */    
+    border-radius: 3px;
+    border: 1px solid #b7b7b7;
+}
+
+/* horizontal menus should not have a border*/
+.yui3-menu.yui3-menu-horizontal > ul {
+    border:none;
+}
+
+.yui3-menu ul.yui3-menu-light {
+    background: -moz-linear-gradient(top, #ffffff 1%, #f2f2f2 54%, #e3e4e6 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#ffffff), color-stop(54%,#f2f2f2), color-stop(100%,#e3e4e6)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 1%,#f2f2f2 54%,#e3e4e6 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 1%,#f2f2f2 54%,#e3e4e6 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 1%,#f2f2f2 54%,#e3e4e6 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ffffff 1%,#f2f2f2 54%,#e3e4e6 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e3e4e6',GradientType=0 ); /* IE6-9 */
+    box-shadow: 0 2px 2px rgba(0,0,0,0.13);
+    border: 1px solid #b7b7b7;
+}
+
+.yui3-menu ul.yui3-menu-dark {
+    background: #2d2f33; /* Old browsers */
+    background: -moz-linear-gradient(top, #2d2f33 0%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2d2f33), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #2d2f33 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #2d2f33 0%,#000000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #2d2f33 0%,#000000 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #2d2f33 0%,#000000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d2f33', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+    box-shadow: 0 2px 2px rgba(0,0,0,0.33);
+    border: 1px solid #000;
+}
+
+/* LINK STYLES */
+
+.yui3-menu a {
+    border: 1px solid transparent;
+    border-left: none;
+    border-right: none;
+    text-shadow: 1px 1px 1px #fff;
+
+}
+
+.yui3-menu a,
+.yui3-menu .yui3-menu-can-have-children > li:after {
+    color: #777;
+}
+
+.yui3-menu .yui3-menu-can-have-children > li:hover:after {
+    color: #fff;
+}
+
+
+/* DISABLED STATES */
+
+.yui3-menu li:not(.yui3-menu-disabled) a:hover {
+    background: #46b9e3; /* Old browsers */
+    background: -moz-linear-gradient(top, #46b9e3 0%, #35a9dc 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#46b9e3), color-stop(100%,#35a9dc)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #46b9e3 0%,#35a9dc 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #46b9e3 0%,#35a9dc 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #46b9e3 0%,#35a9dc 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #46b9e3 0%,#35a9dc 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#46b9e3', endColorstr='#35a9dc',GradientType=0 ); /* IE6-9 */
+    border-bottom-color: #5ba6c3;
+    border-top-color: #4dc2ed;
+    color: #fff;
+    text-shadow: 1px 1px 1px #5ba6c3;
+}
+
+.yui3-menu .yui3-menu-disabled > a {
+    background-image: none;
+    border-color: transparent;
+    cursor: default;
+}
+
+.yui3-menu .yui3-menu-disabled > a,
+.yui3-menu .yui3-menu-can-have-children.yui3-menu-disabled > a:after {
+    color: #bfbfbf;
+}
+
+/* HEADINGS */
+.yui3-menu .yui3-menu-heading {
+    color: #565d64;
+    text-transform: uppercase;
+    font-size:90%;
+    margin-top:0.5em;
+}
+
+
+/* ACTIVE MENU ITEM */
+.yui3-menu .yui3-menu-active a {
+    font-weight: bold;
+    color: #000;
+}
+
+/* FIXED MENU */
+.yui3-menu.yui3-menu-fixed > ul {
+    border-radius: 0;
+}
+
+
+
+
+/* DARK MENU STYLES */
+
+.yui3-menu-dark a,
+.yui3-menu-dark .yui3-menu-can-have-children > li:after {
+    color: #bbb;
+}
+
+.yui3-menu-dark a {
+    text-shadow: 1px 1px 1px #000;
+}
+
+.yui3-menu-dark .yui3-menu-separator {
+    background-color: #3B3D42;
+    box-shadow: 0 -1px 1px #010101;
+}
+
+.yui3-menu-dark .yui3-menu-active a, .yui3-menu-dark .yui3-menu-heading {
+    color: #fff;
+}
