@@ -1,0 +1,19 @@
+{
+    "name"       : "gallery-datepicker",
+    "displayName": "Gallery: gallery-datepicker",
+    "description": "A calendar popup for date input form elements",
+    "author"     : [ "jacob" ],
+    "use"        : [ "gallery-datepicker" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name": "datepicker-demo",
+            "displayName": "Demo",
+            "description": "Demonstrates the use of a datepicker.",
+            "modules": ["datepicker"],
+            "tags": ["datepicker", "demo"]
+        }
+    ]
+}

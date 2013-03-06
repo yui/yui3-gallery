@@ -1,0 +1,10 @@
+{
+    "name": "gallery-datepicker",
+    "builds": {
+        "gallery-datepicker": {
+            "jsfiles": [
+                "js/gallery-datepicker.js"
+            ]
+        }
+    }
+}

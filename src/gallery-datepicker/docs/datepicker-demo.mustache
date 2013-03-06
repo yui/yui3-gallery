@@ -1,0 +1,28 @@
+<div class="intro">
+    <p>{{description}}</p>
+</div>
+
+<div id="demo" class="example">
+<label for="date">Date:</label><input name="date" id="date" value="1985-06-08"/>
+
+<script>
+YUI().use("gallery-datepicker", function (Y) {
+    new Y.DatePicker({
+        input: "#date", btnContent: '<img src="calendar.png"/>'});
+});
+</script>
+</div>
+
+<h2 id="source">Full Source</h2>
+```
+<label for="date">Date:</label><input name="date" id="date" value="1985-06-08"/>
+
+<script src="http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js"></script>
+<script src="datepicker.js"></script>
+<script>
+YUI().use("datepicker", function (Y) {
+    new Y.DatePicker({
+        input: "#date", btnContent: '<img src="calendar.png"/>'});
+});
+</script>
+```
