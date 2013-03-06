@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-introtour-ui",
+    "displayName": "Gallery: gallery-introtour-ui",
+    "description": "Integrate step by step tour of features on your web page.",
+    "author"     : [ "nbprithv" ],
+    "use"        : [ "gallery-introtour-ui" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

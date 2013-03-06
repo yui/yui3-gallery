@@ -1,0 +1,173 @@
+.yui-galleryintrotourui-card{
+	position:absolute;
+	width:200px;
+	-moz-box-shadow: 0 0 11px #888;
+	-webkit-box-shadow: 0 0 11px#888;
+	box-shadow: 0 0 11px #888;
+	border:1px solid #999;
+	display:none;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;;
+}
+.yui-galleryintrotourui-clearfix{
+	clear:both;
+}
+.yui-galleryintrotourui-card-container{
+	background-color:#FFF;
+	color:#000;
+	/*-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;*/
+	word-wrap:break-word;
+}
+.yui-galleryintrotourui-card-closebutton{
+	height:8px;
+	margin:6px 8px;
+	float:right;
+	cursor:pointer;
+	color:#CCC;
+}
+.yui-galleryintrotourui-card-closebutton:hover{
+	color:#444;
+}
+.yui-galleryintrotourui-card-text{
+	min-height:50px;
+	padding:0px 14px 14px 14px;
+}
+.yui-galleyintroui-card-title{
+	font-size:18px;
+}
+.yui-galleryintrotourui-card-content{
+	font-size:14px;
+}
+.yui-galleryintrotourui-card-nav{
+	border-top:1px solid #ddd;
+	padding:4px;
+	font-size:12px;
+	height:28px;
+	color:#444;
+	background-color:#f5f5f5;
+}
+.yui-galleryintrotourui-card-next{
+	float:right;
+	margin:4px 8px 6px;
+}
+.yui-galleryintrotourui-card-arrow,.yui-galleryintrotourui-card-arrow:after {
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+
+.yui-galleryintrotourui-card-arrow {
+  border-width: 11px;
+}
+
+.yui-galleryintrotourui-card-arrow:after {
+  border-width: 10px;
+  content: "";
+}
+
+.yui-galleryintrotourui-card-arrow.top {
+  left: 10%;
+  bottom:-11px;
+  border-top-color: #999;
+  border-top-color: rgba(0, 0, 0, 0.25);
+  border-bottom-width: 0;
+}
+
+.top.yui-galleryintrotourui-card-arrow:after {
+  bottom: 1px;
+  margin-left: -10px;
+  border-top-color: #F1F1F1;
+  border-bottom-width: 0;
+}
+
+.yui-galleryintrotourui-card-arrow.right {
+  top: 15%;
+  left: -11px;
+  border-right-color: #999;
+  border-right-color: rgba(0, 0, 0, 0.25);
+  border-left-width: 0;
+}
+
+.right.yui-galleryintrotourui-card-arrow:after {
+  bottom: -10px;
+  left: 1px;
+  border-right-color: #ffffff;
+  border-left-width: 0;
+}
+
+.yui-galleryintrotourui-card-arrow.bottom {
+  left: 10%;
+  top:-11px;
+  border-bottom-color: #999;
+  border-bottom-color: rgba(0, 0, 0, 0.25);
+  border-top-width: 0;
+}
+
+.bottom.yui-galleryintrotourui-card-arrow:after {
+  top: 1px;
+  margin-left: -10px;
+  border-bottom-color: #ffffff;
+  border-top-width: 0;
+}
+
+.yui-galleryintrotourui-card-arrow.left {
+  top: 15%;
+  right:-11px;
+  border-left-color: #999;
+  border-left-color: rgba(0, 0, 0, 0.25);
+  border-right-width: 0;
+}
+
+.left.yui-galleryintrotourui-card-arrow:after {
+  right: 1px;
+  bottom: -10px;
+  border-left-color: #ffffff;
+  border-right-width: 0;
+}
+.yui3-button {
+    margin:3px;
+}
+
+.warning{
+    background-color:#FAF55F;
+}
+
+.success{
+    background-color:#57A957;
+    color:white;
+}
+
+.error{
+    background-color:#C43C35;
+    color:white;
+}
+
+.notice{
+    background-color:#1B7AE0;
+    color:white;
+}
+
+.yui3-button-icon {
+    background-image: url("../assets/button/icon-sprite-dark-and-light-24.png");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 20px;
+    vertical-align: middle;
+    width: 20px;
+}
+
+.yui3-button-icon-bold {
+    background-position: 1px 1px;
+}
+
+.yui3-button-icon-italic {
+    background-position: 1px -35px;
+}
+
+.yui3-button-icon-underline {
+    background-position: 1px -71px;
+}

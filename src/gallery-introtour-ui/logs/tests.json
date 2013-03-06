@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5004/tests/src/gallery-introtour-ui/tests/unit/index.html?filter=coverage",
+    "error": "TypeError: 'undefined' is not an object (evaluating 'Y.Introtour.init')\nhttp://127.0.0.1:5004/tests/src/gallery-introtour-ui/tests/unit/js/testintrotour.js:8\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6\nhttp://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6"
+}

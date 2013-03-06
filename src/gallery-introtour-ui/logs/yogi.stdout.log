@@ -1,0 +1,109 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.69 on node@0.8.21
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-introtour-ui
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-introtour-ui
+   #1: [warning] Property with star prefix found.
+       *display: inline; /*IE 6/7*/ // line 5, pos 5
+   #2: [warning] Property with star prefix found.
+       *font-size: 90%; /*IE 6/7 - To reduce IE's oversized button text*/ // line 8, pos 5
+   #3: [warning] Property with star prefix found.
+       *overflow: visible; /*IE 6/7 - Because of IE's overly large left/right padding on buttons */ // line 9, pos 5
+   #4: [warning] The property -ms-user-select is compatible with -webkit-user-select and -moz-user-select and should be included as well.
+       -webkit-user-select: none; // line 17, pos 5
+   #5: [warning] Property with star prefix found.
+       *color: #444; /* IE 6 & 7 */ // line 24, pos 5
+   #6: [warning] Fallback color (hex or RGB) should precede RGBA color.
+       color: rgba(0,0,0, 0.80); // line 52, pos 5
+   #7: [warning] Expected end of value but found '#999'.
+       border: inset 1px solid #999;  /*IE 6/7/8*/ // line 70, pos 5
+   #8: [warning] Unqualified attribute selectors are known to be slow.
+       .yui3-button[disabled], // line 84, pos 1
+   #9: [warning] Values of 0 shouldn't have units specified.
+       border: 0px; // line 126, pos 13
+   #10: [warning] Don't use IDs in selectors.
+       #yui3-css-stamp.cssbutton { display: none; } // line 144, pos 1
+   #11: [warning] Using width with border can sometimes make elements larger than you expect.
+       border:1px solid #999; // line 151, pos 2
+   #12: [warning] Values of 0 shouldn't have units specified.
+       padding:0px 14px 14px 14px; // line 178, pos 10
+   #13: [warning] Using height with border-top can sometimes make elements larger than you expect.
+       border-top:1px solid #ddd; // line 187, pos 2
+   #14: [warning] Using height with padding can sometimes make elements larger than you expect.
+       padding:4px; // line 188, pos 2
+   #15: [warning] Don't use adjoining classes.
+       .yui-galleryintrotourui-card-arrow.top { // line 216, pos 1
+   #16: [warning] Don't use adjoining classes.
+       .top.yui-galleryintrotourui-card-arrow:after { // line 224, pos 1
+   #17: [warning] Don't use adjoining classes.
+       .top.yui-galleryintrotourui-card-arrow:after { // line 224, pos 1
+   #18: [warning] Don't use adjoining classes.
+       .yui-galleryintrotourui-card-arrow.right { // line 231, pos 1
+   #19: [warning] Don't use adjoining classes.
+       .right.yui-galleryintrotourui-card-arrow:after { // line 239, pos 1
+   #20: [warning] Don't use adjoining classes.
+       .right.yui-galleryintrotourui-card-arrow:after { // line 239, pos 1
+   #21: [warning] Don't use adjoining classes.
+       .yui-galleryintrotourui-card-arrow.bottom { // line 246, pos 1
+   #22: [warning] Don't use adjoining classes.
+       .bottom.yui-galleryintrotourui-card-arrow:after { // line 254, pos 1
+   #23: [warning] Don't use adjoining classes.
+       .bottom.yui-galleryintrotourui-card-arrow:after { // line 254, pos 1
+   #24: [warning] Don't use adjoining classes.
+       .yui-galleryintrotourui-card-arrow.left { // line 261, pos 1
+   #25: [warning] Don't use adjoining classes.
+       .left.yui-galleryintrotourui-card-arrow:after { // line 269, pos 1
+   #26: [warning] Don't use adjoining classes.
+       .left.yui-galleryintrotourui-card-arrow:after { // line 269, pos 1
+   #1: Expected '===' and instead saw '=='.
+       } while (obj == obj.offsetParent); // line 31, pos 30
+   #2: Line too long.
+       "<button data-seqid='"+seqid+"' id='"+buttonid+"' class='yui-galleryintrotourui-card-next yui3-button notice'>"+button.content+"</button>"+ // line 76, pos 167
+   #3: Too many var statements.
+       var ci = cardinfo[i], // line 153, pos 17
+   #4: Too many var statements.
+       var toppos = Y.one(carddivid).getStyle('top'), // line 194, pos 25
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-introtour-ui/gallery-introtour-ui.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-introtour-ui/gallery-introtour-ui.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-introtour-ui/gallery-introtour-ui-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.266 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
+Starting Grover on 1 files with PhantomJS@1.8.2
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [http://127.0.0.1:5004/tests/src/gallery-introtour-ui/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       TypeError: 'undefined' is not an object (evaluating 'Y.Introtour.init')
+       http://127.0.0.1:5004/tests/src/gallery-introtour-ui/tests/unit/js/testintrotour.js:8
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:3
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:10
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6
+       http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js:6
+Writing files in JSON format to: /src/gallery-introtour-ui/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

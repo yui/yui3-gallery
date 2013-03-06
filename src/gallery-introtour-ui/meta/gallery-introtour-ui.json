@@ -1,0 +1,7 @@
+{
+    "gallery-introtour-ui": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}

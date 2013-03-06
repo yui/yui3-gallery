@@ -1,0 +1,22 @@
+{
+    "name": "gallery-introtour-ui",
+    "builds": {
+        "gallery-introtour-ui": {
+            "jsfiles": [
+                "js/gallery-introtour-ui.js"
+            ],
+            "cssfiles": [
+                "css/yui3-cssbuttons.css",
+                "css/gallery-introtour-ui.css"
+            ],
+			"config": {
+                "use": [
+                    "yui-base",
+					"yui3",
+					"node",
+					"event"
+                ]
+            }
+        }
+    }
+}
