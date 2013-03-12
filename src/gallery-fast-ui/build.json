@@ -1,0 +1,17 @@
+{
+    "name": "gallery-fast-ui",
+    "builds": {
+        "gallery-fast-ui": {
+            "jsfiles": [
+                "get-attribute.ts",
+                "custom-widget-config.ts",
+                "custom-widget.ts",
+                "xml-to-html-parsing.ts",
+                "fast-ui.ts"
+            ],
+            "config": {
+                "requires": [ "datatype-xml", "node", "widget" ]
+            }
+        }
+    }
+}
