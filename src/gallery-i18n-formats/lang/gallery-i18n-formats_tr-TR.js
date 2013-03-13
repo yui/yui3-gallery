@@ -758,6 +758,8 @@
 	"hours" : "saat",
 	"hours_abbr" : "sa.",
 	"infinitySign" : "∞",
+	"listPatternEnd" : "{0} ve {1}",
+	"listPatternTwo" : "{0} ve {1}",
 	"minusSign" : "-",
 	"minute" : "dakika",
 	"minute_abbr" : "dk.",

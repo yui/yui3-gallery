@@ -902,7 +902,7 @@ BuddhistDateFormat.EraSegment.prototype.format = function(/*date*/) {
  */
 Y.Date.__YDateFormat = function(timeZone, dateFormat, timeFormat, timeZoneFormat) {
         
-    if(timeZone === null) {
+    if(timeZone === undefined || timeZone === null) {
         timeZone = "Etc/GMT";
     }
 

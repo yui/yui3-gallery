@@ -758,6 +758,10 @@
 	"hours" : "h",
 	"hours_abbr" : "h",
 	"infinitySign" : "∞",
+	"listPatternEnd" : "{0}, {1}",
+	"listPatternMiddle" : "{0}, {1}",
+	"listPatternStart" : "{0}, {1}",
+	"listPatternTwo" : "{0}, {1}",
 	"minusSign" : "-",
 	"minute" : "minutu",
 	"minute_abbr" : "minutu",
@@ -798,6 +802,7 @@
 	"percentSign" : "%",
 	"periodAm" : "Dayperiod",
 	"periodPm" : "Dayperiod",
+	"pluralRule" : "set3",
 	"plusSign" : "+",
 	"scientificFormat" : "#E0",
 	"second" : "segundo",
@@ -823,6 +828,5 @@
 	"year" : "urtea",
 	"year_abbr" : "urtea",
 	"years" : "urte",
-	"years_abbr" : "urte",
-	"yesterday" : ""
+	"years_abbr" : "urte"
 }

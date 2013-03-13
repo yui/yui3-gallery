@@ -6,7 +6,10 @@ var MODULE_NAME = "gallery-i18n-formats",
     Format, NumberFormat, YNumberFormat,    //number
     TimezoneData, TimezoneLinks, Timezone, AjxTimezone,  //timezone
     ShortNames, DateFormat, BuddhistDateFormat, YDateFormat, YRelativeTimeFormat, YDurationFormat,   //date
-    Formatter, StringFormatter, DateFormatter, TimeFormatter, NumberFormatter,SelectFormatter, PluralFormatter, ChoiceFormatter, formatters; //message
+    ListFormatter, //list
+    PluralRules, inRange,  //plural
+    Formatter, StringFormatter, DateFormatter, TimeFormatter, NumberFormatter,SelectFormatter, //message
+    PluralFormatter, ChoiceFormatter, MsgListFormatter, formatters; //message
 
 /**
  * Pad string to specified length

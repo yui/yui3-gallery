@@ -758,6 +758,8 @@
 	"hours" : "jam",
 	"hours_abbr" : "jam",
 	"infinitySign" : "∞",
+	"listPatternEnd" : "{0}, dan  {1}",
+	"listPatternTwo" : "{0} dan {1}",
 	"minusSign" : "-",
 	"minute" : "menit",
 	"minute_abbr" : "mnt",

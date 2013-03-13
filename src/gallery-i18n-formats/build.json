@@ -14,14 +14,17 @@
                 "js/date/format-relative.js",
                 "js/date/format-duration.js",
                 "js/date/format-date-advanced.js",
+                "js/list/format-list.js",
 		"js/message/MsgBaseFormatter.js",
 		"js/message/MsgStringFormatter.js",
 		"js/message/MsgDateFormatter.js",
 		"js/message/MsgTimeFormatter.js",
 		"js/message/MsgNumberFormatter.js",
 		"js/message/MsgSelectFormatter.js",
+                "js/message/PluralRules.js",
 		"js/message/MsgPluralFormatter.js",
 		"js/message/MsgChoiceFormatter.js",
+                "js/message/MsgListFormatter.js",
                 "js/message/format-message.js"
             ]
         }

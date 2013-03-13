@@ -8,7 +8,10 @@ var MODULE_NAME = "gallery-i18n-formats",
     Format, NumberFormat, YNumberFormat,    //number
     TimezoneData, TimezoneLinks, Timezone, AjxTimezone,  //timezone
     ShortNames, DateFormat, BuddhistDateFormat, YDateFormat, YRelativeTimeFormat, YDurationFormat,   //date
-    Formatter, StringFormatter, DateFormatter, TimeFormatter, NumberFormatter,SelectFormatter, PluralFormatter, ChoiceFormatter, formatters; //message
+    ListFormatter, //list
+    PluralRules, inRange,  //plural
+    Formatter, StringFormatter, DateFormatter, TimeFormatter, NumberFormatter,SelectFormatter, //message
+    PluralFormatter, ChoiceFormatter, MsgListFormatter, formatters; //message
 
 /**
  * Pad string to specified length
@@ -5843,7 +5846,7 @@ BuddhistDateFormat.EraSegment.prototype.format = function(/*date*/) {
  */
 Y.Date.__YDateFormat = function(timeZone, dateFormat, timeFormat, timeZoneFormat) {
         
-    if(timeZone === null) {
+    if(timeZone === undefined || timeZone === null) {
         timeZone = "Etc/GMT";
     }
 
@@ -6571,6 +6574,65 @@ Y.mix(Y.Date, {
     }
 }, true);
 /**
+ * ListFormatter formats lists with locale dependent rules.
+ * For example, in locale en, lists are formatted into a
+ * string of comma-separated values
+ * @class ListFormatter
+ * @namespace Intl
+ * @static
+ */
+ListFormatter = {
+    /**
+     * Substitute items into corrrect positions in pattern
+     * For internal use only
+     * @method __sub
+     * @private
+     * @static
+     * @param pattern {String} The pattern
+     * @param item0 {String} item to replace {0} in pattern
+     * @param item1 {String} item to replace {1} in pattern
+     * @return {String} Result string after substitutions
+     */
+    __sub: function(pattern, item0, item1) {
+         return pattern.replace("{0}", item0).replace("{1}", item1);
+    },
+
+    /**
+     * Format list into string
+     * @method format
+     * @static
+     * @param list {Array} The list to be formatted
+     * @return {String} formatted result
+     */
+    format: function(list) {
+         if(!Y.Lang.isArray(list)) { return ""; }
+        
+         var localeData = Y.Intl.get(MODULE_NAME),
+             middle = localeData.listPatternMiddle || "{0}, {1}",
+             start = localeData.listPatternStart || middle,
+             end = localeData.listPatternEnd,
+             two = localeData.listPatternTwo || end,
+             len = list.length,
+             result, i;
+
+         if(len === 0) { return ""; }
+         if(len === 1) { return list[0]; }
+         if(len === 2) {
+             return ListFormatter.__sub(two, list[0], list[1]);
+         }
+
+         result = ListFormatter.__sub(start, list[0], list[1]);
+         for(i=2; i<len-1; i++) {
+              result = ListFormatter.__sub(middle, result, list[i]);
+         }
+         result = ListFormatter.__sub(end, result, list[i]);
+
+         return result;
+    }
+};
+
+Y.Intl.ListFormatter = ListFormatter;
+/**
  * Formatter base class
  * @class MsgBaseFormatter
  * @namespace Intl
@@ -7094,6 +7156,306 @@ Y.mix(SelectFormatter.prototype, {
         return str;
     }
 }, true);/**
+ * PluralRules is used to determine the plural form in MessageFormat
+ * @class PluralRules
+ * @namespace Intl
+ * @static
+ */
+Y.Intl.PluralRules = {
+    /**
+     * Check if n is between start and end
+     * @method _inRange
+     * @static
+     * @private
+     * @param n {Number} Number to test
+     * @param start {Number} Start of range
+     * @param end {Number} End of range
+     * @return {Boolean} true if n is between start and end, false otherwise
+     */
+    _inRange: function(n, start, end) {
+        return n >= start && n <= end;
+    },
+
+    /**
+     * Find matching plural form for the set of rules
+     * @method _matchRule
+     * @static
+     * @private
+     * @param rules {Object} Keys will be plural forms one,two,.. Values will be boolean
+     * @return {String} Returns key that has value true
+     */
+    _matchRule: function(rules) {
+        for(var key in rules) {
+            if(rules[key]) { return key; }
+        }
+        return "other";
+    },
+
+    /**
+     * Set of rules. Each locale will have a matching rule. The corresponding functions in each set
+     * will take a number as parameter and return the relevant plural form.
+     */
+    rules: {
+        set1: function(n) {
+            var mod = n % 100;
+            return PluralRules._matchRule({
+                few:  inRange(mod, 3, 10),
+                many: inRange(mod, 11, 99),
+                one:  n === 1,
+                two:  n === 2,
+                zero: n === 0
+            });
+        },
+
+        set2: function(n) {
+            return PluralRules._matchRule({
+               many: n !== 0 && n%10 === 0,
+               one:  n === 1,
+               two:  n === 2
+            });
+        },
+
+        set3: function(n) {
+            return PluralRules._matchRule({
+               one: n === 1
+            });
+        },
+
+        set4: function(n) {
+            return PluralRules._matchRule({
+                one: inRange(n, 0, 1)
+            });
+        },
+
+        set5: function(n) {
+            return PluralRules._matchRule({
+                one: inRange(n, 0, 2) && n !== 2
+            });
+        },
+
+        set6: function(n) {
+            return PluralRules._matchRule({
+                one:  n%10 === 1 && n%100 !== 11,
+                zero: n === 0
+            });
+        },
+
+        set7: function(n) {
+            return PluralRules._matchRule({
+                one: n === 1,
+                two: n === 2
+            });
+        },
+
+        set8: function(n) {
+            return PluralRules._matchRule({
+                few:  inRange(n, 3, 6),
+                many: inRange(n, 7, 10),
+                one:  n === 1,
+                two:  n === 2
+            });
+        },
+
+        set9: function(n) {
+            return PluralRules._matchRule({
+                few: n === 0 || (n !== 1 && inRange(n%100, 1, 19)),
+                one: n === 1
+            });
+        },
+
+        set10: function(n) {
+            var mod10 = n%10, mod100 = n%100;
+            return PluralRules._matchRule({
+                few: inRange(mod10, 2, 9) && !inRange(mod100, 11, 19),
+                one: mod10 === 1 && !inRange(mod100, 11, 19)
+            });
+        },
+
+        set11: function(n) {
+            var mod10 = n%10, mod100 = n%100;
+            return PluralRules._matchRule({
+                few:  inRange(mod10, 2, 4) && !inRange(mod100, 12, 14),
+                many: mod10 === 0 || inRange(mod10, 5, 9) || inRange(mod100, 11, 14),
+                one:  mod10 === 1 && mod100 !== 11
+            });
+        },
+
+        set12: function(n) {
+            return PluralRules._matchRule({
+                few: inRange(n, 2, 4),
+                one: n === 1
+            });
+        },
+
+        set13: function(n) {
+            var mod10 = n%10, mod100 = n%100;
+            return PluralRules._matchRule({
+                few:  inRange(mod10, 2, 4) && !inRange(mod100, 12, 14),
+                many: n !== 1 && inRange(mod10, 0, 1) || inRange(mod10, 5, 9) || inRange(mod100, 12, 14),
+                one:  n === 1
+            });
+        },
+
+        set14: function(n) {
+            var mod = n%100;
+            return PluralRules._matchRule({
+                few: inRange(mod, 3, 4),
+                one: mod === 1,
+                two: mod === 2
+            });
+        },
+
+        set15: function(n) {
+            var mod = n%100;
+            return PluralRules._matchRule({
+                few:  n === 0 || inRange(mod, 2, 10),
+                many: inRange(mod, 11, 19),
+                one:  n === 1
+            });
+        },
+
+        set16: function(n) {
+            return PluralRules._matchRule({
+                one: n%10 === 1 && n !== 11
+            });
+        },
+
+        set17: function(n) {
+            return PluralRules._matchRule({
+                few:  n === 3,
+                many: n === 6,
+                one:  n === 1,
+                two:  n === 2,
+                zero: n === 0
+            });
+        },
+
+        set18: function(n) {
+            return PluralRules._matchRule({
+                one:  inRange(n, 0, 2) && n !== 0 && n !== 2,
+                zero: n === 0
+            });
+        },
+
+        set19: function(n) {
+            return PluralRules._matchRule({
+                few: inRange(n, 2, 10),
+                one: inRange(n, 0, 1)
+            });
+        },
+
+        set20: function(n) {
+            var mod1 = n%10, mod2 = n%100, mod6 = n%1000000;
+            return PluralRules._matchRule({
+                few:  (inRange(mod1, 3, 4) || mod1 === 9) && !inRange(mod2, 10, 19) && !inRange(mod2, 70, 79) && !inRange(mod2, 90, 99),
+                many: n !== 0 && mod6 === 0,
+                one:  mod1 === 1 && mod2 !== 11 && mod2 !== 71 && mod2 !== 91,
+                two:  mod1 === 2 && mod2 !== 12 && mod2 !== 72 && mod2 !== 92
+            });
+        },
+
+        set21: function(n) {
+            return PluralRules._matchRule({
+                one:  n === 1,
+                zero: n === 0
+            });
+        },
+
+        set22: function(n) {
+            return PluralRules._matchRule({
+                one: inRange(n, 0, 1) || inRange(n, 11, 99)
+            });
+        },
+
+        set23: function(n) {
+            return PluralRules._matchRule({
+                one: inRange(n%10, 1, 2) || n%20 === 0
+            });
+        },
+
+        set24: function(n) {
+            return PluralRules._matchRule({
+                few: inRange(n, 3, 10) || inRange(n, 13, 19),
+                one: n === 1 || n === 11,
+                two: n === 2 || n === 12
+            });
+        },
+
+        set25: function(n) {
+            return PluralRules._matchRule({
+                one: n === 1 || n === 5
+            });
+        },
+
+        set26: function(n) {
+            var mod10 = n%10, mod100 = n%100;
+            return PluralRules._matchRule({
+                one: (mod10 === 1 || mod10 === 2) && (mod100 !== 11 && mod100 !== 12)
+            });
+        },
+
+        set27: function(n) {
+            var mod10 = n%10, mod100 = n%100;
+            return PluralRules._matchRule({
+                few: mod10 === 3 && mod100 !== 13,
+                one: mod10 === 1 && mod100 !== 11,
+                two: mod10 === 2 && mod100 !== 12
+            });
+        },
+
+        set28: function(n) {
+            return PluralRules._matchRule({
+                many: n === 11 || n === 8 || n === 80 || n === 800
+            });
+        },
+
+        set29: function(n) {
+            return PluralRules._matchRule({
+                few: n === 4,
+                one: n === 1 || n === 3,
+                two: n === 2
+            });
+        },
+
+        set30: function(n) {
+            return PluralRules._matchRule({
+                few: n === 4,
+                one: n === 1,
+                two: n === 2 || n === 3
+            });
+        },
+
+        set31: function(n) {
+            return PluralRules._matchRule({
+                few:  n === 4,
+                many: n === 6,
+                one:  n === 1,
+                two:  n === 2 || n === 3
+            });
+        },
+
+        set32: function(n) {
+            return PluralRules._matchRule({
+                few:  n === 4,
+                many: n === 6,
+                one:  Y.Array.indexOf([1,5,7,8,9,10], n) > -1,
+                two: n === 2 || n === 3
+            });
+        },
+
+        set33: function(n) {
+            return PluralRules._matchRule({
+                few:  inRange(n, 2, 9),
+                many: inRange(n, 10, 19) || inRange(n, 100, 199) || inRange(n, 1000, 1999),
+                one:  n === 1
+            });
+        }
+    }
+};
+
+PluralRules = Y.Intl.PluralRules;
+inRange = PluralRules._inRange;
+/**
  * Plural formatter. Select ouput based on whether value of key is singular/plural
  * @class PluralFormatter
  * @extends SelectFormatter
@@ -7105,6 +7467,17 @@ Y.mix(SelectFormatter.prototype, {
 Y.Intl.PluralFormatter = function(values) {
     PluralFormatter.superclass.constructor.call(this, values);
     this.regex = "{\\s*([a-zA-Z0-9_]+)\\s*,\\s*plural\\s*,\\s*";
+    
+    var formats = Y.Intl.get(MODULE_NAME),
+        ruleSet = formats.pluralRule;
+
+    if(ruleSet) {
+         this.rule = PluralRules.rules[ruleSet];
+    }
+
+    if(this.rule === undefined) {
+         this.rule = function() { return "other"; };
+    }
 };
 
 PluralFormatter = Y.Intl.PluralFormatter;
@@ -7128,16 +7501,8 @@ PluralFormatter.createInstance = function(values) {
  * @return {String} selected result
  */
 PluralFormatter.prototype.select = function(options, params) {
-    var result = options.other;
-    if(params.value === 0 && options.zero) {
-        result = options.zero;
-    }
-    if(params.value === 1 && options.one) {
-        result = options.one;
-    }
-    if(params.value === 2 && options.two) {
-        result = options.two;
-    }
+    var pluralForm = this.rule(params.value),
+        result = options[pluralForm];
 
     result = result.replace("#", new NumberFormatter({VAL: params.value}).format("{VAL, number, integer}"));	//Use 'number' to format this part
 
@@ -7265,6 +7630,61 @@ Y.mix(ChoiceFormatter.prototype, {
         return str;
     }
 }, true);/**
+ * List formatter
+ * @class MsgListFormatter
+ * @namespace Intl
+ * @extends StringFormatter
+ * @private
+ * @constructor
+ * @param values {Array|Object} The data to be processed and inserted.
+ */
+Y.Intl.MsgListFormatter = function(values) {
+      MsgListFormatter.superclass.constructor.call(this, values);
+      this.regex = "{\\s*([a-zA-Z0-9_]+)\\s*,\\s*list\\s*}";
+};
+
+MsgListFormatter = Y.Intl.MsgListFormatter;
+Y.extend(MsgListFormatter, StringFormatter);
+
+/**
+ * Create an instance of the formatter
+ * @method createInstance
+ * @static
+ * @param values {Array|Object} The data to be processed and inserted.
+ */
+MsgListFormatter.createInstance = function(values) {
+     return new MsgListFormatter(values);
+};
+
+Y.mix(MsgListFormatter.prototype, {
+     /**
+      * Format all instances in str that can be handled by MsgListFormatter
+      * @method format
+      * @param str {String} Input string/pattern
+      * @return {String} Formatted result
+      */
+     format: function(str) {
+          var regex = new RegExp(this.regex, "gm"),
+              matches = null,
+              params;
+
+          while((matches = regex.exec(str))) {
+              params = {};
+
+              if(this.getParams(params, matches)) {
+                  //Got a match
+                  str = str.replace(
+                             matches[0],
+                             Y.Intl.ListFormatter.format( params.value )
+                  );
+              }
+          }
+
+          return str;
+     }
+}, true);
+
+/**
  * MessageFormat enables the construction of localizable messages that combine static strings with information that only becomes available at runtime.
  * @module intl-format
  * @requires datatype-date-advanced-format, datatype-number-advanced-format, intl
@@ -7274,7 +7694,7 @@ Y.mix(ChoiceFormatter.prototype, {
  * Formatter classes. For each group found in the pattern, will try to parse with all of these formatters.
  * If a formatter fails to parse, the next one in the list try to do so.
  */
-formatters = [ StringFormatter, DateFormatter, TimeFormatter, NumberFormatter, ChoiceFormatter, PluralFormatter, SelectFormatter ];
+formatters = [ StringFormatter, DateFormatter, TimeFormatter, NumberFormatter, ChoiceFormatter, PluralFormatter, SelectFormatter, MsgListFormatter ];
 
 Y.mix(Y.Intl, {
 
@@ -7329,20 +7749,20 @@ Y.mix(Y.Intl, {
 });
 
 
-}, 'gallery-2013.02.07-15-27', {
+}, 'gallery-2013.03.13-20-05', {
     "lang": [
         "af",
         "af-NA",
         "af-ZA",
-        "am",
         "am-ET",
-        "ar",
+        "am",
         "ar-AE",
         "ar-BH",
         "ar-DZ",
         "ar-EG",
         "ar-IQ",
         "ar-JO",
+        "ar",
         "ar-KW",
         "ar-LB",
         "ar-LY",
@@ -7354,41 +7774,41 @@ Y.mix(Y.Intl, {
         "ar-SY",
         "ar-TN",
         "ar-YE",
-        "as",
         "as-IN",
-        "az",
+        "as",
         "az-AZ",
-        "az-Cyrl",
         "az-Cyrl-AZ",
+        "az-Cyrl",
+        "az",
         "az-Latn-AZ",
-        "be",
         "be-BY",
-        "bg",
+        "be",
         "bg-BG",
-        "bn",
+        "bg",
         "bn-BD",
         "bn-IN",
-        "bo",
+        "bn",
         "bo-CN",
         "bo-IN",
-        "ca",
+        "bo",
         "ca-ES",
-        "cs",
+        "ca",
         "cs-CZ",
-        "cy",
+        "cs",
         "cy-GB",
-        "da",
+        "cy",
         "da-DK",
-        "de",
+        "da",
         "de-AT",
         "de-BE",
         "de-CH",
         "de-DE",
+        "de",
         "de-LI",
         "de-LU",
-        "el",
         "el-CY",
         "el-GR",
+        "el",
         "en-AU",
         "en-BE",
         "en-BW",
@@ -7416,7 +7836,6 @@ Y.mix(Y.Intl, {
         "en-ZA",
         "en-ZW",
         "eo",
-        "es",
         "es-AR",
         "es-BO",
         "es-CL",
@@ -7427,6 +7846,7 @@ Y.mix(Y.Intl, {
         "es-ES",
         "es-GT",
         "es-HN",
+        "es",
         "es-MX",
         "es-NI",
         "es-PA",
@@ -7437,39 +7857,39 @@ Y.mix(Y.Intl, {
         "es-US",
         "es-UY",
         "es-VE",
-        "et",
         "et-EE",
-        "eu",
+        "et",
         "eu-ES",
-        "fa",
+        "eu",
         "fa-AF",
         "fa-IR",
-        "fi",
+        "fa",
         "fi-FI",
+        "fi",
         "fil",
         "fil-PH",
-        "fo",
         "fo-FO",
-        "fr",
+        "fo",
         "fr-BE",
         "fr-CA",
         "fr-CH",
         "fr-FR",
+        "fr",
         "fr-LU",
         "fr-MC",
         "fr-SN",
-        "ga",
         "ga-IE",
-        "gl",
+        "ga",
         "gl-ES",
-        "gsw",
+        "gl",
         "gsw-CH",
-        "gu",
+        "gsw",
         "gu-IN",
-        "gv",
+        "gu",
         "gv-GB",
-        "ha",
+        "gv",
         "ha-GH",
+        "ha",
         "ha-Latn-GH",
         "ha-Latn-NE",
         "ha-Latn-NG",
@@ -7477,94 +7897,95 @@ Y.mix(Y.Intl, {
         "ha-NG",
         "haw",
         "haw-US",
-        "he",
         "he-IL",
-        "hi",
+        "he",
         "hi-IN",
-        "hr",
+        "hi",
         "hr-HR",
-        "hu",
+        "hr",
         "hu-HU",
-        "hy",
+        "hu",
         "hy-AM",
-        "id",
+        "hy",
         "id-ID",
-        "ii",
+        "id",
         "ii-CN",
-        "in",
+        "ii",
         "in-ID",
-        "is",
+        "in",
         "is-IS",
-        "it",
+        "is",
         "it-CH",
         "it-IT",
-        "iw",
+        "it",
         "iw-IL",
-        "ja",
+        "iw",
         "ja-JP",
         "ja-JP-TRADITIONAL",
-        "ka",
+        "ja",
+        "",
         "ka-GE",
-        "kk",
+        "ka",
         "kk-Cyrl-KZ",
+        "kk",
         "kk-KZ",
-        "kl",
         "kl-GL",
+        "kl",
         "km",
         "km-KH",
-        "kn",
         "kn-IN",
+        "kn",
         "ko",
-        "kok",
         "kok-IN",
+        "kok",
         "ko-KR",
-        "kw",
         "kw-GB",
+        "kw",
         "lt",
         "lt-LT",
         "lv",
         "lv-LV",
         "mk",
         "mk-MK",
-        "ml",
         "ml-IN",
-        "mr",
+        "ml",
         "mr-IN",
-        "ms",
+        "mr",
         "ms-BN",
+        "ms",
         "ms-MY",
         "mt",
         "mt-MT",
         "nb",
         "nb-NO",
-        "ne",
         "ne-IN",
+        "ne",
         "ne-NP",
-        "nl",
         "nl-BE",
+        "nl",
         "nl-NL",
         "nn",
         "nn-NO",
         "no",
         "no-NO",
         "no-NO-NY",
-        "om",
         "om-ET",
+        "om",
         "om-KE",
-        "or",
         "or-IN",
-        "pa",
+        "or",
         "pa-Arab",
         "pa-Arab-PK",
         "pa-Guru-IN",
         "pa-IN",
+        "pa",
         "pa-PK",
         "pl",
         "pl-PL",
-        "ps",
         "ps-AF",
-        "pt",
+        "ps",
         "pt-BR",
+        "pt",
         "pt-PT",
         "ro",
         "ro-MD",
@@ -7572,9 +7993,9 @@ Y.mix(Y.Intl, {
         "ru",
         "ru-RU",
         "ru-UA",
-        "sh",
         "sh-BA",
         "sh-CS",
+        "sh",
         "sh-YU",
         "si",
         "si-LK",
@@ -7582,14 +8003,13 @@ Y.mix(Y.Intl, {
         "sk-SK",
         "sl",
         "sl-SI",
-        "so",
         "so-DJ",
         "so-ET",
+        "so",
         "so-KE",
         "so-SO",
-        "sq",
         "sq-AL",
-        "sr",
+        "sq",
         "sr-BA",
         "sr-CS",
         "sr-Cyrl-BA",
@@ -7597,60 +8017,62 @@ Y.mix(Y.Intl, {
         "sr-Cyrl-ME",
         "sr-Cyrl-RS",
         "sr-Cyrl-YU",
-        "sr-Latn",
+        "sr",
         "sr-Latn-BA",
         "sr-Latn-CS",
+        "sr-Latn",
         "sr-Latn-ME",
         "sr-Latn-RS",
         "sr-Latn-YU",
         "sr-ME",
         "sr-RS",
         "sr-YU",
-        "sv",
         "sv-FI",
+        "sv",
         "sv-SE",
         "sw",
         "sw-KE",
         "sw-TZ",
-        "ta",
         "ta-IN",
-        "te",
+        "ta",
         "te-IN",
+        "te",
         "th",
         "th-TH",
-        "ti",
+        "th-TH-TRADITIONAL",
         "ti-ER",
         "ti-ET",
+        "ti",
         "tl",
         "tl-PH",
         "tr",
         "tr-TR",
         "uk",
         "uk-UA",
-        "ur",
         "ur-IN",
+        "ur",
         "ur-PK",
-        "uz",
         "uz-AF",
-        "uz-Arab",
         "uz-Arab-AF",
+        "uz-Arab",
         "uz-Cyrl-UZ",
+        "uz",
         "uz-Latn",
         "uz-Latn-UZ",
         "uz-UZ",
         "vi",
         "vi-VN",
-        "zh",
         "zh-CN",
         "zh-Hans-CN",
         "zh-Hans-HK",
         "zh-Hans-MO",
         "zh-Hans-SG",
-        "zh-Hant",
         "zh-Hant-HK",
+        "zh-Hant",
         "zh-Hant-MO",
         "zh-Hant-TW",
         "zh-HK",
+        "zh",
         "zh-MO",
         "zh-SG",
         "zh-TW",

@@ -8,7 +8,7 @@
  * Formatter classes. For each group found in the pattern, will try to parse with all of these formatters.
  * If a formatter fails to parse, the next one in the list try to do so.
  */
-formatters = [ StringFormatter, DateFormatter, TimeFormatter, NumberFormatter, ChoiceFormatter, PluralFormatter, SelectFormatter ];
+formatters = [ StringFormatter, DateFormatter, TimeFormatter, NumberFormatter, ChoiceFormatter, PluralFormatter, SelectFormatter, MsgListFormatter ];
 
 Y.mix(Y.Intl, {
 

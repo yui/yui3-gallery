@@ -1,11 +1,11 @@
 {
     "name": "gallery-i18n-formats",
-    "passed": 84,
-    "failed": 0,
+    "passed": 81,
+    "failed": 9,
     "errors": 0,
     "ignored": 0,
-    "total": 84,
-    "duration": 1110,
+    "total": 90,
+    "duration": 1251,
     "type": "report",
     "Number Format Tests": {
         "name": "Number Format Tests",
@@ -66,14 +66,14 @@
         "errors": 0,
         "ignored": 0,
         "total": 8,
-        "duration": 102,
+        "duration": 104,
         "type": "testcase",
         "Test conversion between Incremental UTC, RFC3339 Format and SQL Format": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Test conversion between Incremental UTC, RFC3339 Format and SQL Format",
-            "duration": 2
+            "duration": 3
         },
         "testGetCurrentTimeZoneIds": {
             "result": "pass",
@@ -101,21 +101,21 @@
             "message": "Test passed",
             "type": "test",
             "name": "Test conversion between WallTime and UnixTime",
-            "duration": 1
+            "duration": 2
         },
         "testIsValidTimeZoneId": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testIsValidTimeZoneId",
-            "duration": 2
+            "duration": 1
         },
         "testGetNormalizedTimezoneId": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testGetNormalizedTimezoneId",
-            "duration": 0
+            "duration": 1
         },
         "testIsValidTimestamp": {
             "result": "pass",
@@ -127,12 +127,12 @@
     },
     "DateFormat Tests": {
         "name": "DateFormat Tests",
-        "passed": 6,
-        "failed": 0,
+        "passed": 3,
+        "failed": 3,
         "errors": 0,
         "ignored": 0,
         "total": 6,
-        "duration": 101,
+        "duration": 111,
         "type": "testsuite",
         "Absolute DateFormat Tests": {
             "name": "Absolute DateFormat Tests",
@@ -155,63 +155,80 @@
                 "message": "Test passed",
                 "type": "test",
                 "name": "testBuddhistCalendar",
-                "duration": 1
+                "duration": 2
             }
         },
         "Absoulte Date Format with Relative Dates": {
             "name": "Absoulte Date Format with Relative Dates",
-            "passed": 4,
-            "failed": 0,
+            "passed": 1,
+            "failed": 3,
             "errors": 0,
             "ignored": 0,
             "total": 4,
-            "duration": 53,
+            "duration": 62,
             "type": "testcase",
             "testToday": {
-                "result": "pass",
-                "message": "Test passed",
+                "result": "fail",
+                "message": "Values should be equal.\nExpected: Today (string)\nActual: Tomorrow (string)",
                 "type": "test",
                 "name": "testToday",
-                "duration": 1
+                "duration": 2
             },
             "testYesterday": {
-                "result": "pass",
-                "message": "Test passed",
+                "result": "fail",
+                "message": "Values should be equal.\nExpected: Yesterday (string)\nActual: Today (string)",
                 "type": "test",
                 "name": "testYesterday",
-                "duration": 1
+                "duration": 7
             },
             "testTomorrow": {
-                "result": "pass",
-                "message": "Test passed",
+                "result": "fail",
+                "message": "Values should be equal.\nExpected: Tomorrow (string)\nActual: 3/15/13 (string)",
                 "type": "test",
                 "name": "testTomorrow",
-                "duration": 1
+                "duration": 2
             },
             "testDayAfterTomorrow": {
                 "result": "pass",
                 "message": "Test passed",
                 "type": "test",
                 "name": "testDayAfterTomorrow",
-                "duration": 0
+                "duration": 1
             }
+        }
+    },
+    "List Format Tests": {
+        "name": "List Format Tests",
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 22,
+        "type": "testcase",
+        "testListFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testListFormat",
+            "duration": 1
         }
     },
     "Message Format Tests": {
         "name": "Message Format Tests",
-        "passed": 8,
+        "passed": 9,
         "failed": 0,
         "errors": 0,
         "ignored": 0,
-        "total": 8,
-        "duration": 104,
+        "total": 9,
+        "duration": 118,
         "type": "testcase",
         "testStringFormat": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testStringFormat",
-            "duration": 3
+            "duration": 4
         },
         "testDateFormat": {
             "result": "pass",
@@ -232,7 +249,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testNumberFormat",
-            "duration": 1
+            "duration": 2
         },
         "testSelectFormat": {
             "result": "pass",
@@ -246,13 +263,20 @@
             "message": "Test passed",
             "type": "test",
             "name": "testPluralFormat",
-            "duration": 2
+            "duration": 3
         },
         "testChoiceFormat": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testChoiceFormat",
+            "duration": 2
+        },
+        "testListFormat": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testListFormat",
             "duration": 1
         },
         "testNoMatch": {
@@ -260,9 +284,9 @@
             "message": "Test passed",
             "type": "test",
             "name": "testNoMatch",
-            "duration": 1
+            "duration": 0
         }
     },
-    "timestamp": "Thu 07 Feb 2013 09:28:36 AM CST",
+    "timestamp": "Wed 13 Mar 2013 03:07:03 PM CDT",
     "consoleInfo": []
 }

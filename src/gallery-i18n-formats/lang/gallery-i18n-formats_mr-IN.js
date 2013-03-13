@@ -758,6 +758,8 @@
 	"hours" : "तास",
 	"hours_abbr" : "तास",
 	"infinitySign" : "∞",
+	"listPatternEnd" : "{0}  आणि  {1}",
+	"listPatternTwo" : "{0} आणि {1}",
 	"minusSign" : "-",
 	"minute" : "मिनिट",
 	"minute_abbr" : "मि",
@@ -798,13 +800,13 @@
 	"percentSign" : "%",
 	"periodAm" : "Dayperiod",
 	"periodPm" : "Dayperiod",
+	"pluralRule" : "set3",
 	"plusSign" : "+",
 	"scientificFormat" : "#E0",
 	"second" : "सेकंद",
 	"second_abbr" : "सेकंद",
 	"seconds" : "सेकंद",
 	"seconds_abbr" : "से",
-	"today" : "",
 	"tomorrow" : "उद्या",
 	"weekdayFriLong" : "शुक्रवार",
 	"weekdayFriMedium" : "शुक्र",
@@ -823,6 +825,5 @@
 	"year" : "वर्ष",
 	"year_abbr" : "वर्ष",
 	"years" : "वर्षे",
-	"years_abbr" : "वर्षे",
-	"yesterday" : ""
+	"years_abbr" : "वर्षे"
 }

@@ -30,7 +30,9 @@ YUI.add('module-tests', function(Y) {
         },
                     
         "Test Currency Style" : function() {
-            var config = { style: "CURRENCY_STYLE" };           
+            var config = {
+                style: "CURRENCY_STYLE"
+            };           
             
             var value = 10000000;
             var result1 = Y.Number.format(value, config);
@@ -43,7 +45,9 @@ YUI.add('module-tests', function(Y) {
         },
                     
         "Test ISO Currency Style" : function() {
-            var config = { style:  "ISO_CURRENCY_STYLE" };
+            var config = {
+                style:  "ISO_CURRENCY_STYLE"
+            };
 
             var value = 10000000;
             var result1 = Y.Number.format(value, config);
@@ -56,7 +60,9 @@ YUI.add('module-tests', function(Y) {
         },
                     
         "Test Number Style" : function() {
-            var config = { style: "NUMBER_STYLE" };
+            var config = {
+                style: "NUMBER_STYLE"
+            };
                        
             var value = -10000000;
             var result1 = Y.Number.format(value, config);
@@ -69,7 +75,9 @@ YUI.add('module-tests', function(Y) {
         },
                     
         "Test Percent Style" : function() {
-            var config = { style: "PERCENT_STYLE" };
+            var config = {
+                style: "PERCENT_STYLE"
+            };
             
             var value = 0.25;
             var result1 = Y.Number.format(value, config);
@@ -82,7 +90,9 @@ YUI.add('module-tests', function(Y) {
         },
                     
         "Test Plural Currency Style" : function() {
-            var config = { style: "PLURAL_CURRENCY_STYLE" };
+            var config = {
+                style: "PLURAL_CURRENCY_STYLE"
+            };
                        
             var value = 10000000;
             var result1 = Y.Number.format(value, config);
@@ -95,7 +105,9 @@ YUI.add('module-tests', function(Y) {
         },
                     
         "Test Scientific Style" : function() {
-            var config = { style: "SCIENTIFIC_STYLE" };
+            var config = {
+                style: "SCIENTIFIC_STYLE"
+            };
                        
             var value = 10000000;
             var result1 = Y.Number.format(value, config);
@@ -553,13 +565,57 @@ YUI.add('module-tests', function(Y) {
             Y.Assert.areEqual("0 secs ago", result);
         }
     });
+
+    var listFormatTests = new Y.Test.Case({
+        name: "List Format Tests",
+        setUp: function() {
+            Y.Intl.add(
+                "gallery-i18n-formats",
+                "en",
+                {
+                    listPatternTwo: "{0} and {1}",
+                    listPatternEnd: "{0}, and {1}"
+                }
+                );
+        },
+
+        testListFormat: function() {
+            var input = [];
+
+            var result = Y.Intl.ListFormatter.format(input);
+            Y.Assert.areEqual("", result);
+
+            input.push("US");
+            result = Y.Intl.ListFormatter.format(input);
+            Y.Assert.areEqual("US", result);
+
+            input.push("UK");
+            result = Y.Intl.ListFormatter.format(input);
+            Y.Assert.areEqual("US and UK", result);
+
+            input.push("Canada");
+            result = Y.Intl.ListFormatter.format(input);
+            Y.Assert.areEqual("US, UK, and Canada", result);
+        }
+    });
     
-        var messageFormatTests = new Y.Test.Case({
+    var messageFormatTests = new Y.Test.Case({
     
         name : "Message Format Tests",
             
         setUp: function() {
 
+            Y.Intl.add(
+                "gallery-i18n-formats",
+                "ru",
+                {
+                    "pluralRule": "set11",
+                    "decimalFormat" : "#,##0.###",
+                    "decimalSeparator" : ".",
+                    "groupingSeparator" : ",",
+                    "numberZero" : "0"
+                }
+                );
             Y.Intl.add(
                 "gallery-i18n-formats",
                 "en",
@@ -587,7 +643,7 @@ YUI.add('module-tests', function(Y) {
                     "groupingSeparator" : ",",
                     "numberZero" : "0",
                     "percentFormat" : "#,##0%",
-	            "percentSign" : "%",
+                    "percentSign" : "%",
                     "USD_currencyISO" : "US Dollar",
                     "USD_currencyPlural" : "US dollars",
                     "USD_currencySingular" : "US dollar",
@@ -598,7 +654,10 @@ YUI.add('module-tests', function(Y) {
                     "minusSign" : "-",
                     "scientificFormat" : "#E0",
                     "currencyPatternPlural" : "{0} {1}",
-                    "currencyPatternSingular" : "{0} {1}"
+                    "currencyPatternSingular" : "{0} {1}",
+                    "listPatternTwo": "{0} and {1}",
+                    "listPatternEnd": "{0}, and {1}",
+                    "pluralRule": "set3"
                 }
                 );
         },
@@ -701,6 +760,23 @@ YUI.add('module-tests', function(Y) {
                 "COMPANY_COUNT": 2
             });
             Y.Assert.areEqual("2 companies published new books.", result);
+            
+            //Change language to russian
+            Y.Intl.setLang("gallery-i18n-formats", "ru");
+            
+            pattern = "{COMPANY_COUNT, plural, one {\u041E\u0434\u043D\u0430 \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u044F \u043E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043B\u0430} few {# \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438 \u043E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043B\u0438} many {# \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0439 \u043E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043B\u0438} other {# \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0439 \u043E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043B\u0438}} \u043D\u043E\u0432\u044B\u0435 \u043A\u043D\u0438\u0433\u0438.";
+            result = Y.Intl.formatMessage(pattern, {
+                "COMPANY_COUNT": 23   //Should match few
+            });
+            Y.Assert.areEqual("23 \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0438 \u043E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043B\u0438 \u043D\u043E\u0432\u044B\u0435 \u043A\u043D\u0438\u0433\u0438.", result);
+            
+            result = Y.Intl.formatMessage(pattern, {
+                "COMPANY_COUNT": 36   //Should match many
+            });
+            Y.Assert.areEqual("36 \u043A\u043E\u043C\u043F\u0430\u043D\u0438\u0439 \u043E\u043F\u0443\u0431\u043B\u0438\u043A\u043E\u0432\u0430\u043B\u0438 \u043D\u043E\u0432\u044B\u0435 \u043A\u043D\u0438\u0433\u0438.", result);
+            
+            //Change language back to english for remaining tests
+            Y.Intl.setLang("gallery-i18n-formats", "en");
         },
 
         testChoiceFormat: function() {
@@ -722,6 +798,27 @@ YUI.add('module-tests', function(Y) {
             Y.Assert.areEqual("There are 2 files on disk.", result);
         },
 
+        testListFormat: function() {
+            var input = {
+                COUNTRIES: []
+            };
+
+            var result = Y.Intl.formatMessage("{COUNTRIES, list}", input);
+            Y.Assert.areEqual("", result);
+
+            input.COUNTRIES.push("US");
+            result = Y.Intl.formatMessage("{COUNTRIES, list}", input);
+            Y.Assert.areEqual("US", result);
+
+            input.COUNTRIES.push("UK");
+            result = Y.Intl.formatMessage("{COUNTRIES, list}", input);
+            Y.Assert.areEqual("US and UK", result);
+
+            input.COUNTRIES.push("Canada");
+            result = Y.Intl.formatMessage("{COUNTRIES, list}", input);
+            Y.Assert.areEqual("US, UK, and Canada", result);
+        },
+
         testNoMatch: function() {
             var pattern = "Test string. {blah}. blah should not match any type.";
             var result = Y.Intl.formatMessage(pattern, {});
@@ -736,6 +833,9 @@ YUI.add('module-tests', function(Y) {
     Y.Test.Runner.add(numberFormatTests);
     Y.Test.Runner.add(timeZoneTests);
     Y.Test.Runner.add(dateFormatTestSuite);
+    Y.Test.Runner.add(listFormatTests);
     Y.Test.Runner.add(messageFormatTests);
 
-},'', { requires: [ 'test', 'gallery-i18n-formats' ] });
+},'', {
+    requires: [ 'test', 'gallery-i18n-formats' ]
+});
