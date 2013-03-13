@@ -1,5 +1,14 @@
-YUI.add("gallery-datepicker", function (Y) {
+/**
+ * YUI3 Date Picker - A calendar popup for date input form elements
+ *
+ * @module gallery-datepicker
+ */
 
+/**
+ * @param args {Object} arguments for constructing the datepicker, most important is the "input" argument.
+ * @class DatePicker
+ * @constructor
+ */
 Y.DatePicker = function (args) {
     this.args = args;
     this.format = "%Y-%m-%d";
@@ -10,6 +19,14 @@ Y.DatePicker = function (args) {
     this.createPopup();
 };
 
+/**
+ * Creates the popup calendar panel, with an invisible overlay that will
+ * hide it whenever you click outside the popup. The popup will be hidden
+ * by default.
+ *
+ * @method createPopup
+ * @protected
+ */
 Y.DatePicker.prototype.createPopup = function () {
     var zIndex = 10055, body = Y.one("body");
     this.container = Y.Node.create("<div/>");
@@ -46,12 +63,17 @@ Y.DatePicker.prototype.createPopup = function () {
     this.container.on("click", function (e) {e.stopPropagation();});
 };
 
+/**
+ * Creates the form elements around the input box, such as the button
+ * which launches the calendar.
+ *
+ * @method createFormElements
+ * @protected
+ */
 Y.DatePicker.prototype.createFormElements = function () {
     this.input = Y.one(this.args.input);
     this.calendarLauncher = Y.Node.create('<input type="button"/>');
-    if (this.args.btnClass) {
-        this.calendarLauncher.addClass(this.args.btnClass);
-    }
+    this.calendarLauncher.addClass("cal-launcher");
     if (this.args.btnContent) {
         this.calendarLauncher.setHTML(this.args.btnContent);
     }
@@ -62,10 +84,26 @@ Y.DatePicker.prototype.createFormElements = function () {
     }
 };
 
+/**
+ * Parses the input box and returns the currently selected date object.
+ *
+ * @method getDate
+ * @return {Date}
+ */
 Y.DatePicker.prototype.getDate = function () {
     return this.parseDate(this.input.get("value"));
 };
 
+/**
+ * Sets the currently selected date, if discardOldTime is false (or not
+ * used) it will merge the previously selected time into the new date,
+ * which is useful when a date is selected from the calendar widget.
+ *
+ * @method setDate
+ * @protected
+ * @param {Date} newDate
+ * @param {boolean} discardOldTime
+ */
 Y.DatePicker.prototype.setDate = function (newDate, discardOldTime) {
     var oldDate, str;
     if (!discardOldTime) {
@@ -81,16 +119,35 @@ Y.DatePicker.prototype.setDate = function (newDate, discardOldTime) {
     this.input.set("value", str);
 };
 
+/**
+ * Sets the minimum selectable date.
+ *
+ * @method setMinimumDate
+ * @param {Date} minimumDate
+ */
 Y.DatePicker.prototype.setMinimumDate = function (minimumDate) {
     this.minimumDate = minimumDate;
     this.setCustomRenderer();
 };
 
+/**
+ * Sets the maximum selectable date.
+ *
+ * @method setMaximumDate
+ * @param {Date} maximumDate
+ */
 Y.DatePicker.prototype.setMaximumDate = function (maximumDate) {
     this.maximumDate = maximumDate;
     this.setCustomRenderer();
 };
 
+/**
+ * Sets the custom renderer for the calendar to respect the minimum and
+ * maximum dates selected if used.
+ *
+ * @method setCustomRenderer
+ * @protected
+ */
 Y.DatePicker.prototype.setCustomRenderer = function () {
     if (this.customRenderer) {
         return;
@@ -126,6 +183,16 @@ Y.DatePicker.prototype.setCustomRenderer = function () {
     this.customRenderer = true;
 };
 
+/**
+ * Parses the date in the input box. It recognizes iso8601 formatted
+ * dates with everything optional up to the year. So "1999" is valid,
+ * just as "2006-04-20", or "2008-01-01 15:30:55", but "foo" is not. Used
+ * just before the calendar is * shown so that it can be focused on the
+ * correct date.
+ *
+ * @method parseDate
+ * @protected
+ */
 Y.DatePicker.prototype.parseDate = function (str) {
     if (!str) {
         return null;
@@ -137,6 +204,12 @@ Y.DatePicker.prototype.parseDate = function (str) {
     return new Date(m[1], m[2] - 1 || 0, m[3] || 1, m[4] || 0, m[5] || 0, m[6] || 0);
 };
 
+/**
+ * Shows the calendar popup.
+ *
+ * @method showContainer
+ * @protected
+ */
 Y.DatePicker.prototype.showContainer = function (e) {
     if (e) {
         e.preventDefault();
@@ -161,10 +234,14 @@ Y.DatePicker.prototype.showContainer = function (e) {
     this.container.setStyle("display", "block");
 };
 
+/**
+ * Hides the calendar popup.
+ *
+ * @method hideContainer
+ * @protected
+ */
 Y.DatePicker.prototype.hideContainer = function () {
     this.overlay.setStyle("display", "none");
     this.container.setStyle("display", "none");
 };
-
-}, "1.0", {requires: ["calendar", "node", "datatype-date"]});
 

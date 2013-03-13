@@ -12,9 +12,10 @@
 <script>
 YUI({
     coverage: ['gallery-datepicker'],
-    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-}).use('test-console', 'test', 'module-tests', function(Y) {
-    
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    gallery: "gallery-2013.03.06-21-07"
+}).use('test-console', 'test', 'module-tests', 'gallery-datepicker', function(Y) {
+
     (new Y.Test.Console()).render('#logger');
 
     Y.Test.Runner.setName('gallery-datepicker');

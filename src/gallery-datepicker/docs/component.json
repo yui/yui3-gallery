@@ -12,7 +12,7 @@
             "name": "datepicker-demo",
             "displayName": "Demo",
             "description": "Demonstrates the use of a datepicker.",
-            "modules": ["datepicker"],
+            "modules": ["gallery-datepicker"],
             "tags": ["datepicker", "demo"]
         }
     ]

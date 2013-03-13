@@ -7,11 +7,9 @@ SYNOPSIS
 ========
 
     <script src="http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js"></script>
-    <script src="datepicker.js"></script>
     <script>
-    YUI().use("datepicker", function (Y) {
-        new Y.DatePicker({
-            input: "#date", btnContent: '<img src="calendar.png"/>'});
+    YUI({gallery: "gallery-2013.03.06-21-07"}).use("datepicker", function (Y) {
+        new Y.DatePicker({input: "#date"});
     });
     </script>
 
@@ -21,8 +19,6 @@ ARGUMENTS
 - input (String|Node): The date input field to transform. Required.
 
 - btnContent (String): HTML to place inside the generated calendar launcher button.
-
-- btnClass (String): A classname to give to the generated button.
 
 - date (Date): The default selected date. If not provided, the calendar uses
 whatever is initially in the input's value.

@@ -1,7 +1,6 @@
 {
     "gallery-datepicker": {
-        "requires": [
-            "yui-base", "calendar", "node", "datatype-date"
-        ]
+        "requires": ["yui-base", "calendar", "node", "datatype-date"],
+        "skinnable": true
     }
 }
