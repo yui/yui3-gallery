@@ -1,0 +1,73 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.74 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-cssextras
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-cssextras
+   #1: [warning] Fallback border (hex or RGB) should precede RGBA border.
+       border: 1px solid rgba(0, 0, 0, 0.2); // line 14, pos 5
+   #2: [warning] Property with star prefix found.
+       *display: inline; // line 25, pos 5
+   #3: [warning] Property with star prefix found.
+       *zoom: 1; // line 27, pos 5
+   #4: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 31, pos 5
+   #5: [warning] Property with star prefix found.
+       *display: inline; // line 42, pos 5
+   #6: [warning] Property with star prefix found.
+       *zoom: 1; // line 44, pos 5
+   #7: [warning] Fallback border (hex or RGB) should precede RGBA border.
+       border: 1px solid rgba(0, 0, 0, 0.2); // line 71, pos 5
+   #8: [warning] Missing vendor-prefixed CSS gradients for Firefox 3.6+.
+       .yui3-alert, // line 161, pos 1
+   #9: [error] Expected RBRACE at line 172, col 5.
+       67c0d7 // line 172, pos 5
+   #10: [warning] Duplicate property 'display' found.
+       display: inline-block; // line 186, pos 5
+   #11: [warning] Property with star prefix found.
+       *display: inline; // line 187, pos 5
+   #12: [warning] Property with star prefix found.
+       *zoom: 1; // line 189, pos 5
+   #13: [warning] Using width with padding can sometimes make elements larger than you expect.
+       padding: 15px; // line 217, pos 5
+   #14: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #bfc0c8; // line 219, pos 5
+   #15: [warning] Unknown property 'box-padding'.
+       box-padding: border-box; // line 227, pos 5
+   #16: [warning] Don't use adjoining classes.
+       .yui3-popover.bottom .yui3-arrow-border { // line 244, pos 1
+   #17: [warning] Don't use adjoining classes.
+       .yui3-popover.bottom .yui3-arrow { // line 249, pos 1
+   #18: [warning] Don't use adjoining classes.
+       .yui3-popover.top .yui3-arrow-border { // line 257, pos 1
+   #19: [warning] Don't use adjoining classes.
+       .yui3-popover.top .yui3-arrow { // line 262, pos 1
+   #20: [warning] Don't use adjoining classes.
+       .yui3-popover.right .yui3-arrow-border { // line 270, pos 1
+   #21: [warning] Don't use adjoining classes.
+       .yui3-popover.right .yui3-arrow { // line 275, pos 1
+   #22: [warning] Don't use adjoining classes.
+       .yui3-popover.left .yui3-arrow-border { // line 284, pos 1
+   #23: [warning] Don't use adjoining classes.
+       .yui3-popover.left .yui3-arrow { // line 289, pos 1
+   #24: [warning] Don't use adjoining classes.
+       .yui3-button.block { // line 302, pos 1
+   #25: [warning] Don't use adjoining classes.
+       .yui3-button.small { // line 306, pos 1
+   #26: [warning] Don't use adjoining classes.
+       .yui3-button.large { // line 310, pos 1
+   #27: [warning] Don't use adjoining classes.
+       .yui3-button.primary { // line 314, pos 1
+   #28: [warning] Don't use adjoining classes.
+       .yui3-button.error { // line 320, pos 1
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.082 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

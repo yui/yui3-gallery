@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>YUI CSS Extras</title>
+<link rel="stylesheet" type="text/css" href="http://necolas.github.com/normalize.css/1.0.2/normalize.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssbutton/cssbutton-min.css">
+<link rel="stylesheet" type="text/css" href="../../../../build/gallerycss-cssextras/gallerycss-cssextras.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.0pr1/build/cssgrids-responsive/cssgrids-responsive-min.css">
+
+<style>
+body {
+    font-family: sans-serif;
+    color: #333;
+}
+
+.header {
+     background: black;
+     min-height: 80px;
+     margin: 0;
+     color:white;
+     padding: 30px 20px;
+ }
+     .header h2 {
+         font-weight:300;
+         color: #666;
+         margin:0;
+     }
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light",
+                 "Helvetica Neue", sans-serif;
+    font-weight: 300;
+}
+.content {
+    padding: 0 30px 2em;
+}
+
+.content h2 {
+    color:#2B474F;
+    margin:50px 0 20px 0;
+    font-weight:bold;
+}
+
+
+.yui3-img-eliptical,
+.yui3-img-shadow,
+.yui3-img-rounded,
+.yui3-img-bordered {
+    margin: 1em; /* remove this. it's only for viewing during dev */
+}
+
+.spacer {
+    margin:8px 0 8px;
+}
+.wide-popover {
+    width:70%;
+}
+.rightAligned {
+    text-align: right;
+}
+.bolded {
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+    <div class="header y-u-1">
+
+        <h1 class="yui3-u-1">YUI3 CSS Extras</h1>
+        <h2 class="yui3-u">Simple styling for images, thumbnails, code, badges, contextual menus, alerts</h2>
+
+    </div>
+    <div class="content">
+        <h2>First, include it on your page</h2>
+        <p>Add the CSS on your page:</p>
+
+<pre><code>
+&lt;!-- This module depends on Normalize.css so pull that in first --&gt;<br/>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://necolas.github.com/normalize.css/1.0.2/normalize.css&quot;&gt;<br/>
+&lt;!-- Now, the CSS file for CSSExtras... --&gt;<br/>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/gallery-2013.01.09-23-24/build/gallerycss-cssextras/gallerycss-cssextras.css&quot;&gt;
+</code></pre>
+
+        <p>Optionally, you can load it through the <code>YUI().use()</code>:</p>
+
+<pre><code>
+  YUI({
+    //specify a gallery build
+    gallery: 'gallery-2013.01.09-23-24'
+  }).use(gallerycss-cssextras', function(Y) {
+    Y.log('YUI Loaded');
+  });
+
+</code></pre>
+
+        <h2>Images</h2>
+        <p>
+            Styling of three different types are available for images, eliptical, rounded, bordered.
+            To use them, just add one of these classes to the <code>&lt;img&gt;</code> tag
+        </p>
+        <p>
+            <script src="https://gist.github.com/4710293.js"></script>
+        </p>
+
+        <img class="yui3-img-eliptical" src="http://dribbble.s3.amazonaws.com/users/9418/screenshots/928345/suhio_shoot.png" width="200" height="150"/>
+        <img class="yui3-img-rounded" src="http://dribbble.s3.amazonaws.com/users/9418/screenshots/928345/suhio_shoot.png" width="200" height="150"/>
+        <img class="yui3-img-bordered" src="http://dribbble.s3.amazonaws.com/users/9418/screenshots/928345/suhio_shoot.png" width="200" height="150"/>
+        <br>
+<!--        <img class="yui3-img-eliptical" src="assets/images/pic_dark.jpg"/>
+        <img class="yui3-img-rounded" src="assets/images/pic_dark.jpg"/>
+        <img class="yui3-img-bordered" src="assets/images/pic_dark.jpg"/>
+        <br>
+        <img class="yui3-img-eliptical" src="assets/images/pic_medium.jpg"/>
+        <img class="yui3-img-rounded" src="assets/images/pic_medium.jpg"/>
+        <img class="yui3-img-bordered" src="assets/images/pic_medium.jpg"/>
+        <br>
+        <img class="yui3-img-eliptical" src="assets/images/pic_light.jpg"/>
+        <img class="yui3-img-rounded" src="assets/images/pic_light.jpg"/>
+        <img class="yui3-img-bordered" src="assets/images/pic_light.jpg"/>
+ -->        
+        <p>
+            When using class <code>yui3-img-eliptical</code>, if the width and height of the image
+            are equal, it will appear as a circle.
+        </p>
+        <img class="yui3-img-eliptical" src="http://dribbble.s3.amazonaws.com/users/23832/screenshots/928731/wigu_closing.jpg" width="200" height="150" width="115" height="115"/>
+        <p>
+            <script src="https://gist.github.com/4710691.js"></script>
+        </p>
+
+        <h2>Thumbnails</h2>
+        <p>
+            Add the class <code>yui3-thumbnails</code> to the container <code>&lt;ul&gt;</code>,
+            Then add one of the classes, <code>yui3-thumb-eliptical, yui3-thumb-rounded, or yui3-thumb-bordered</code>, to the <code>&lt;a&gt;</code>,
+            .
+        </p>
+        <ul class="yui3-thumbnails">
+            <li>
+                <a class="yui3-thumb-eliptical" href="#">
+                    <img src="http://dribbble.s3.amazonaws.com/users/30431/screenshots/271351/rocket-dribbble.png" width="80"/>
+                </a>
+            </li>
+            <li>
+                <a class="yui3-thumb-rounded" href="#">
+                    <img src="http://dribbble.s3.amazonaws.com/users/30431/screenshots/271351/rocket-dribbble.png" width="80"/>
+                </a>
+            </li>
+            <li>
+                <a class="yui3-thumb-bordered" href="#"><img src="http://dribbble.s3.amazonaws.com/users/30431/screenshots/271351/rocket-dribbble.png" width="80"/></a>
+            </li>
+            <li>
+                <a class="yui3-thumb-bordered" href="#"><img src="http://dribbble.s3.amazonaws.com/users/30431/screenshots/271351/rocket-dribbble.png" width="80"/> 
+                    <div class="caption">
+                        <h3 class="caption-head">Rocket – game concept</h3>
+                        <p>This is a great shot from Jozef Mak from Dribbble.
+                        </p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <p>
+            Adding a <code>&lt;div class="caption"&gt;</code> allows you to customize the thumbnail with additional content.
+        </p>
+
+        <p>
+            <script src="https://gist.github.com/4710836.js"></script>
+        </p>
+
+        <p>
+            if you have YUI grids on the page, add <code>yui3-u-*</code> for multi-column thumbnails that scale to fit the columns.
+        </p>
+        <ul class="yui3-thumbnails yui3-g">
+            <li class="yui3-u-1-3">
+                <a class="yui3-thumb-eliptical">
+                    <img src="http://dribbble.s3.amazonaws.com/users/4467/screenshots/661196/sasquatch-troop-full.jpg" width="180"/>
+                </a>
+            </li>
+            <li class="yui3-u-1-3">
+                <a class="yui3-thumb-rounded">
+                    <img src="http://dribbble.s3.amazonaws.com/users/4467/screenshots/661196/sasquatch-troop-full.jpg" width="180"/>
+                </a>
+            </li>
+            <li class="yui3-u-1-3">
+                <a class="yui3-thumb-bordered"><img src="http://dribbble.s3.amazonaws.com/users/4467/screenshots/661196/sasquatch-troop-full.jpg" width="180"/> 
+                    <div class="caption">
+                        <h3>Thumbnail label</h3>
+                        <p>Curabitur et sapien ac diam pharetra lacinia quis ac tortor. Suspendisse dictum fermentum dui at mollis. Nunc pulvinar blandit diam in vehicula.
+                        </p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        <p>
+            <script src="https://gist.github.com/4710717.js"></script>
+        </p>
+
+
+
+        <h2>Code</h2>
+        <p>
+            Designate text as being code as in this example...
+        </p> 
+            example: When using a <code>&lt;div&gt;</code> make sure to...<br>
+        
+        <p>     
+            <script src="https://gist.github.com/jconniff/4715460.js"></script>
+        </p>
+        <p>
+            To show a block of code, wrap it in a <code>&lt;pre&gt;</code>...<code>&lt;/pre&gt;</code> tag.
+        </p>            
+<pre>
+for (i = 0; i < 10; i+=1) {
+    myValue = i;
+}
+</pre>
+        <p>
+            <script src="https://gist.github.com/jconniff/4715512.js"></script>
+        </p>
+        <!-- <code>&lt;&gt;</code> -->
+
+        <h2>Badges/Pills</h2>
+        <p>
+            To create a badge/pill, use a <code>&lt;span&gt;</code> tag, and add one of the badge classes as shown below
+        </p>
+        <span class="yui3-badge">A badge</span>
+        <span class="yui3-badge-success">Success badge</span>
+        <span class="yui3-badge-warning">4</span>
+        <span class="yui3-badge-important">Badges can have a bunch of content</span>
+        <span class="yui3-badge-info">8</span>
+        <span class="yui3-badge-inverse">or not much at all.</span>
+        <p>
+        <script src="https://gist.github.com/jconniff/4715697.js"></script>
+        </p>
+        <h2>Notifications</h2>
+        <p>
+            Create notifications by adding a class to it's <code>&lt;div&gt;</code>,
+        </p>
+        <div class="alert-container">
+            <div class="yui3-alert-subtle">
+                <label>System Notification</label>
+                This system will be temporarily out of service.
+            </div>
+            <div class="yui3-alert-urgent">
+                <label>Breaking News</label>
+                Official: 'Most' of Atlanic City Underwater. Atlantic City Boardwalk Destroyed by Sandy...
+            </div>
+            <div class="yui3-alert-normal">
+                <label>Green Bay Packers</label>
+                Looks like you like the Green Bay Packers so we added the team to your Sports App!
+            </div>
+        </div>
+        <p>
+            <script src="https://gist.github.com/jconniff/4716486.js"></script>
+        </p>
+
+
+
+        <h2>Contextual Modals</h2>
+
+        <div class="yui3-g spacer">
+            <div class="yui3-u-1-2">
+                <h3>Bottom Arrow</h3>
+                <div class="yui3-popover bottom">
+                    <div>
+                        <p>You have no new notifications.</p>
+                        <p>Receive notifications when you comment or discuss content with friends on Yahoo!</p>
+                        <p><a href="#" class="yui3-button block">Learn More</a></p>
+                    </div>
+                    <div class="yui3-arrow-border"></div>
+                    <div class="yui3-arrow"></div>
+                </div>
+            </div>
+            <div class="yui3-u-1-2">
+                <h3>Left Arrow</h3>
+                <div class="yui3-popover left">
+                    <div>
+                        <p>You have no new notifications.</p>
+                        <p>Receive notifications when you comment or discuss content with friends on Yahoo!</p>
+                        <p><a href="#" class="yui3-button block">Learn More</a></p>
+                    </div>
+                    <div class="yui3-arrow-border"></div>
+                    <div class="yui3-arrow"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="yui3-g spacer">
+            <div class="yui3-u-1-2">
+                <h3>Top Arrow</h3>
+                <div class="yui3-popover top">
+                    <div>
+                        <p>You have no new notifications.</p>
+                        <p>Receive notifications when you comment or discuss content with friends on Yahoo!</p>
+                        <p><a href="#" class="yui3-button block">Learn More</a></p>
+                    </div>
+                    <div class="yui3-arrow-border"></div>
+                    <div class="yui3-arrow"></div>
+                </div>
+            </div>
+            <div class="yui3-u-1-2">
+                <h3>Right Arrow</h3>
+                <div class="yui3-popover right">
+                    <div>
+                        <p>You have no new notifications.</p>
+                        <p>Receive notifications when you comment or discuss content with friends on Yahoo!</p>
+                        <p><a href="#" class="yui3-button block">Learn More</a></p>
+                    </div>
+                    <div class="yui3-arrow-border"></div>
+                    <div class="yui3-arrow"></div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Contextual Modals with Grids</h2>
+        <h3>You can use grids within these contextual menus for interesting effects.</h3>
+
+        <div class="yui3-g spacer">
+            <div class="yui3-u-1">
+                <h4>You have mail.</h4>
+                <div class="yui3-popover bottom wide-popover">
+                    <div class="yui3-g">
+                        <div class="yui3-u-1-5 bolded">Yahoo! Mail</div>
+                        <div class="yui3-u-3-5">You have 3 new messages.</div>
+                        <div class="yui3-u-1-5 rightAligned"><a href="#" class="small yui3-button">Read</a></div>
+                    </div>
+                    <div class="yui3-arrow-border"></div>
+                    <div class="yui3-arrow"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="yui3-g spacer">
+            <div class="yui3-u-1">
+                <h4>Multiple Notification Sources.</h4>
+                <div class="yui3-popover top wide-popover">
+                    <div class="yui3-g spacer">
+                        <div class="yui3-u-1-5 bolded">Finance:</div>
+                        <div class="yui3-u-3-5"><strong>AAPL</strong> dropped <strong>5%</strong> to $612.26 in After Hours trading.</div>
+                        <div class="yui3-u-1-5 rightAligned"><a href="#" class="small yui3-button">Full Chart</a></div>
+                    </div>
+                    <div class="yui3-g spacer">
+                        <div class="yui3-u-1-5 bolded">Messenger:</div>
+                        <div class="yui3-u-3-5">3 unread messages from Chad Michaels.</div>
+                        <div class="yui3-u-1-5 rightAligned"><a href="#" class="small yui3-button">Read</a></div>
+                    </div>
+                    <div class="yui3-g spacer">
+                        <div class="yui3-u-1-5 bolded">Sports:</div>
+                        <div class="yui3-u-3-5"><strong>Final Score</strong> Oakland <strong>3-1</strong> Baltimore</div>
+                        <div class="yui3-u-1-5 rightAligned"><a href="#" class="small yui3-button">Highlights</a></div>
+                    </div>
+                    <div class="yui3-arrow-border"></div>
+                    <div class="yui3-arrow"></div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Buttons</h2>
+
+        <p>Buttons are provided through <code>cssbutton</code>, so you'll need the following stylesheet:</p>
+        
+        <pre><code>
+&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://yui.yahooapis.com/3.8.0/build/cssbutton/cssbutton-min.css&quot;&gt;
+        </code></pre>
+
+    
+        <p>Attach the <code>.primary</code> or <code>.error</code> class names to toggle styles.</p>
+
+        <a href="#" class="yui3-button">Highlights</a>
+        <a href="#" class="yui3-button primary">Primary Button</a>
+        <a href="#" class="yui3-button error">Be Careful!</a>
+
+        <h3>Large Button</h3>
+        <p>Large buttons have twice the padding of regular buttons. Apply the <code>.large</code> class name.</p>
+        <a href="#" class="yui3-button large">Big click target</a>
+
+        <h3>Small Buttons</h3>
+        <p>Small buttons have half the padding of regular buttons. Apply the <code>.small</code> class name.</p>
+        <a href="#" class="yui3-button small">Smaller target.</a>
+    </div>
+</body>
+</html>
