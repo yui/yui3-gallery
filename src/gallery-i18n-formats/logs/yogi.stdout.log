@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.74 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.76 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-i18n-formats
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -348,7 +348,7 @@ shifter [info] shifted lang for gallery-i18n-formats
 shifter [info] shifted lang for gallery-i18n-formats
 shifter [info] shifted lang for gallery-i18n-formats
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 11.363 seconds, pretty fast huh?
+shifter [info] finished in 11.622 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
@@ -359,18 +359,14 @@ shifter [info] finished in 11.363 seconds, pretty fast huh?
 Starting Grover on 1 files with PhantomJS@1.8.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-i18n-formats]: Passed: 27 Failed: 3 Total: 30 (ignored 0) (0.417 seconds)
-    testToday
-       Values should be equal.
-       Expected: Today (string)
-       Actual: Tomorrow (string)
-    testYesterday
-       Values should be equal.
-       Expected: Yesterday (string)
-       Actual: Today (string)
-    testTomorrow
-       Values should be equal.
-       Expected: Tomorrow (string)
-       Actual: 3/15/13 (string)
+✔ [gallery-i18n-formats]: Passed: 30 Failed: 0 Total: 30 (ignored 0) (0.412 seconds)
 Writing files in JSON format to: /src/gallery-i18n-formats/logs/tests.json
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
+----------------------------------------------------------------
+✔ [Total]: Passed: 30 Failed: 0 Total: 30 (ignored 0) (0.412 seconds)
+  [Grover Execution Timer] 1.323 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

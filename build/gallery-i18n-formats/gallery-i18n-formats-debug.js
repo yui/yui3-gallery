@@ -5839,7 +5839,8 @@ BuddhistDateFormat.EraSegment.prototype.format = function(/*date*/) {
  * namespace Date
  * @private
  * @constructor
- * @param {String} [timeZone='Etc/GMT'] TZ database ID for the time zone that should be used.
+ * @param {String} [timeZone] TZ database ID for the time zone that should be used.
+ *                            If omitted, defaults to the system timezone
  * @param {Number} [dateFormat=0] Selector for the desired date format from Y.Date.DATE_FORMATS.
  * @param {Number} [timeFormat=0] Selector for the desired time format from Y.Date.TIME_FORMATS.
  * @param {Number} [timeZoneFormat=0] Selector for the desired time zone format from Y.Date.TIMEZONE_FORMATS.
@@ -5847,7 +5848,7 @@ BuddhistDateFormat.EraSegment.prototype.format = function(/*date*/) {
 Y.Date.__YDateFormat = function(timeZone, dateFormat, timeFormat, timeZoneFormat) {
         
     if(timeZone === undefined || timeZone === null) {
-        timeZone = "Etc/GMT";
+        timeZone = Y.Date.Timezone.getTimezoneIdForOffset( new Date().getTimezoneOffset() * -60 );
     }
 
     this._Formats = Y.Intl.get(MODULE_NAME);
@@ -6118,9 +6119,8 @@ Y.mix(YDateFormat.prototype, {
             today = new Date(),
             tomorrow = new Date(today.getTime() + 24 * 60 * 60 * 1000),
             yesterday = new Date(today.getTime() - 24 * 60 * 60 * 1000);
-
         date = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000 + offset);
-        
+
         if(this._relative) {
             if(date.getFullYear() === today.getFullYear() && date.getMonth() === today.getMonth() && date.getDate() === today.getDate()) {
                 relativeDate = this._Formats.today;
@@ -6134,6 +6134,7 @@ Y.mix(YDateFormat.prototype, {
                 relativeDate = this._Formats.yesterday;
             }
         }
+
         return this._dateFormatInstance.format(date, relativeDate);
     }
 }, true);
@@ -7749,7 +7750,7 @@ Y.mix(Y.Intl, {
 });
 
 
-}, 'gallery-2013.03.13-20-05', {
+}, 'gallery-2013.03.20-19-59', {
     "lang": [
         "af",
         "af-NA",

@@ -1,11 +1,11 @@
 {
     "name": "gallery-i18n-formats",
-    "passed": 81,
-    "failed": 9,
+    "passed": 90,
+    "failed": 0,
     "errors": 0,
     "ignored": 0,
     "total": 90,
-    "duration": 1251,
+    "duration": 1236,
     "type": "report",
     "Number Format Tests": {
         "name": "Number Format Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 6,
-        "duration": 59,
+        "duration": 60,
         "type": "testcase",
         "Test Currency Style": {
             "result": "pass",
@@ -35,21 +35,21 @@
             "message": "Test passed",
             "type": "test",
             "name": "Test Number Style",
-            "duration": 0
+            "duration": 1
         },
         "Test Percent Style": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Test Percent Style",
-            "duration": 1
+            "duration": 0
         },
         "Test Plural Currency Style": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Test Plural Currency Style",
-            "duration": 0
+            "duration": 1
         },
         "Test Scientific Style": {
             "result": "pass",
@@ -115,24 +115,24 @@
             "message": "Test passed",
             "type": "test",
             "name": "testGetNormalizedTimezoneId",
-            "duration": 1
+            "duration": 0
         },
         "testIsValidTimestamp": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testIsValidTimestamp",
-            "duration": 1
+            "duration": 2
         }
     },
     "DateFormat Tests": {
         "name": "DateFormat Tests",
-        "passed": 3,
-        "failed": 3,
+        "passed": 6,
+        "failed": 0,
         "errors": 0,
         "ignored": 0,
         "total": 6,
-        "duration": 111,
+        "duration": 106,
         "type": "testsuite",
         "Absolute DateFormat Tests": {
             "name": "Absolute DateFormat Tests",
@@ -141,14 +141,14 @@
             "errors": 0,
             "ignored": 0,
             "total": 2,
-            "duration": 37,
+            "duration": 39,
             "type": "testcase",
             "testAbsoluteDateFormat": {
                 "result": "pass",
                 "message": "Test passed",
                 "type": "test",
                 "name": "testAbsoluteDateFormat",
-                "duration": 5
+                "duration": 7
             },
             "testBuddhistCalendar": {
                 "result": "pass",
@@ -160,33 +160,33 @@
         },
         "Absoulte Date Format with Relative Dates": {
             "name": "Absoulte Date Format with Relative Dates",
-            "passed": 1,
-            "failed": 3,
+            "passed": 4,
+            "failed": 0,
             "errors": 0,
             "ignored": 0,
             "total": 4,
-            "duration": 62,
+            "duration": 54,
             "type": "testcase",
             "testToday": {
-                "result": "fail",
-                "message": "Values should be equal.\nExpected: Today (string)\nActual: Tomorrow (string)",
+                "result": "pass",
+                "message": "Test passed",
                 "type": "test",
                 "name": "testToday",
-                "duration": 2
+                "duration": 1
             },
             "testYesterday": {
-                "result": "fail",
-                "message": "Values should be equal.\nExpected: Yesterday (string)\nActual: Today (string)",
+                "result": "pass",
+                "message": "Test passed",
                 "type": "test",
                 "name": "testYesterday",
-                "duration": 7
+                "duration": 1
             },
             "testTomorrow": {
-                "result": "fail",
-                "message": "Values should be equal.\nExpected: Tomorrow (string)\nActual: 3/15/13 (string)",
+                "result": "pass",
+                "message": "Test passed",
                 "type": "test",
                 "name": "testTomorrow",
-                "duration": 2
+                "duration": 1
             },
             "testDayAfterTomorrow": {
                 "result": "pass",
@@ -204,7 +204,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 22,
+        "duration": 21,
         "type": "testcase",
         "testListFormat": {
             "result": "pass",
@@ -235,7 +235,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "testDateFormat",
-            "duration": 3
+            "duration": 4
         },
         "testTimeFormat": {
             "result": "pass",
@@ -249,21 +249,21 @@
             "message": "Test passed",
             "type": "test",
             "name": "testNumberFormat",
-            "duration": 2
+            "duration": 1
         },
         "testSelectFormat": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testSelectFormat",
-            "duration": 1
+            "duration": 2
         },
         "testPluralFormat": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testPluralFormat",
-            "duration": 3
+            "duration": 2
         },
         "testChoiceFormat": {
             "result": "pass",
@@ -287,6 +287,6 @@
             "duration": 0
         }
     },
-    "timestamp": "Wed 13 Mar 2013 03:07:03 PM CDT",
+    "timestamp": "Wed 20 Mar 2013 03:01:27 PM CDT",
     "consoleInfo": []
 }

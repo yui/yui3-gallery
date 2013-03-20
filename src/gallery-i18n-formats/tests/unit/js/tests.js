@@ -325,7 +325,6 @@ YUI.add('module-tests', function(Y) {
                     
         testToday : function () {
             var result = Y.Date.format(this.date, {
-                timezone: "Asia/Kolkata",
                 dateFormat:  Y.Date.DATE_FORMATS.YMD_FULL | Y.Date.DATE_FORMATS.RELATIVE_DATE
             });
             Y.Assert.areEqual("Today", result);
@@ -334,7 +333,6 @@ YUI.add('module-tests', function(Y) {
         testYesterday : function () {
             var date = new Date(this.date.getTime() - 24*60*60*1000);
             var result = Y.Date.format(date, {
-                timezone: "Asia/Kolkata",
                 dateFormat:  Y.Date.DATE_FORMATS.YMD_FULL | Y.Date.DATE_FORMATS.RELATIVE_DATE
             });
                         
@@ -344,7 +342,6 @@ YUI.add('module-tests', function(Y) {
         testTomorrow : function () {
             var date = new Date(this.date.getTime() + 24*60*60*1000);
             var result = Y.Date.format(date, {
-                timezone: "Asia/Kolkata",
                 dateFormat:  Y.Date.DATE_FORMATS.YMD_FULL | Y.Date.DATE_FORMATS.RELATIVE_DATE
             });
                         
@@ -354,11 +351,9 @@ YUI.add('module-tests', function(Y) {
         testDayAfterTomorrow: function() {
             var date = new Date(this.date.getTime() + 2*24*60*60*1000);
             var result = Y.Date.format(date, {
-                timezone: "Asia/Kolkata",
                 dateFormat:  Y.Date.DATE_FORMATS.YMD_FULL | Y.Date.DATE_FORMATS.RELATIVE_DATE
             });
             var expected = Y.Date.format(date, {
-                timezone: "Asia/Kolkata",
                 dateFormat:  Y.Date.DATE_FORMATS.YMD_FULL
             });
                         
