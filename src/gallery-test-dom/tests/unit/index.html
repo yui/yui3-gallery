@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-test-dom</title>
+    <script src="/build/yui/yui.js"></script>
+    <script src="/build/gallery-test-dom/gallery-test-dom.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+    <style type="text/css">
+        .visuallyhidden {
+            border: 0;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+        .absPosOffscreen {
+            position: absolute;
+            top: 0;
+            left: -9000px;
+        }
+        .absPosOnscreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .scrolledOff {
+            position: absolute;
+            top: 100%;
+        }
+    </style>
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-test-dom'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', 'gallery-test-dom', function(Y) {
+
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-test-dom');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

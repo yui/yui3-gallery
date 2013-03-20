@@ -1,0 +1,50 @@
+{
+    "name": "gallery-test-dom",
+    "passed": 12,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 12,
+    "duration": 159,
+    "type": "report",
+    "Visibility Tests": {
+        "name": "Visibility Tests",
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 4,
+        "duration": 51,
+        "type": "testcase",
+        "isHidden should pass if node is hidden": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "isHidden should pass if node is hidden",
+            "duration": 3
+        },
+        "isHidden should fail if node is visible": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "isHidden should fail if node is visible",
+            "duration": 2
+        },
+        "isNotHidden should pass if node is visible": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "isNotHidden should pass if node is visible",
+            "duration": 1
+        },
+        "isNotHidden should fail if node is hidden": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "isNotHidden should fail if node is hidden",
+            "duration": 3
+        }
+    },
+    "timestamp": "Wed 20 Mar 2013 03:01:02 PM CDT",
+    "consoleInfo": []
+}

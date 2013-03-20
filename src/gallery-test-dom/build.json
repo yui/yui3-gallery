@@ -1,0 +1,10 @@
+{
+    "name": "gallery-test-dom",
+    "builds": {
+        "gallery-test-dom": {
+            "jsfiles": [
+                "js/gallery-test-dom.js"
+            ]
+        }
+    }
+}

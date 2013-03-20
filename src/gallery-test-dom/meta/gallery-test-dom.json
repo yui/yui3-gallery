@@ -1,0 +1,10 @@
+{
+    "gallery-test-dom": {
+        "requires": [
+            "yui-base",
+            "test",
+            "node",
+            "gallery-test-extras"
+        ]
+    }
+}

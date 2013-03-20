@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-test-dom",
+    "displayName": "Gallery: gallery-test-dom",
+    "description": "A set of extra assertions for testing a node's DOM properties for functional testing.",
+    "author"     : [ "Klamping" ],
+    "use"        : [ "gallery-test-dom" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
