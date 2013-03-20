@@ -56,7 +56,7 @@ Fired when a menu item is shown.
 **/
 var EVT_SHOW = 'show';
 
-var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Openable], {
+var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Labelable, Y.Tree.Openable], {
     nodeClass: Y.Menu.Item,
 
     // -- Lifecycle ------------------------------------------------------------
@@ -95,7 +95,7 @@ var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Openable], {
     **/
     disableItem: function (item, options) {
         if (!item.isDisabled()) {
-            this._fire(EVT_DISABLE, {item: item}, {
+            this._fireTreeEvent(EVT_DISABLE, {item: item}, {
                 defaultFn: this._defDisableFn,
                 silent   : options && options.silent
             });
@@ -116,7 +116,7 @@ var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Openable], {
     **/
     enableItem: function (item, options) {
         if (item.isDisabled()) {
-            this._fire(EVT_ENABLE, {item: item}, {
+            this._fireTreeEvent(EVT_ENABLE, {item: item}, {
                 defaultFn: this._defEnableFn,
                 silent   : options && options.silent
             });
@@ -137,7 +137,7 @@ var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Openable], {
     **/
     hideItem: function (item, options) {
         if (!item.isHidden()) {
-            this._fire(EVT_HIDE, {item: item}, {
+            this._fireTreeEvent(EVT_HIDE, {item: item}, {
                 defaultFn: this._defHideFn,
                 silent   : options && options.silent
             });
@@ -158,7 +158,7 @@ var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Openable], {
     **/
     showItem: function (item, options) {
         if (item.isHidden()) {
-            this._fire(EVT_SHOW, {item: item}, {
+            this._fireTreeEvent(EVT_SHOW, {item: item}, {
                 defaultFn: this._defShowFn,
                 silent   : options && options.silent
             });
@@ -217,4 +217,4 @@ var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Openable], {
 Y.namespace('Menu').Base = MenuBase;
 
 
-}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-sm-menu-item", "gallery-sm-tree-openable"]});
+}, 'gallery-2013.03.20-19-59', {"requires": ["gallery-sm-menu-item", "tree-labelable", "tree-openable"]});

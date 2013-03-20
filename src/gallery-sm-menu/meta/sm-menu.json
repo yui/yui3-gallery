@@ -16,13 +16,14 @@
     "gallery-sm-menu-base": {
         "requires": [
             "gallery-sm-menu-item",
-            "gallery-sm-tree-openable"
+            "tree-labelable",
+            "tree-openable"
         ]
     },
 
     "gallery-sm-menu-item": {
         "requires": [
-            "gallery-sm-tree-node",
+            "tree-node",
             "oop"
         ]
     },

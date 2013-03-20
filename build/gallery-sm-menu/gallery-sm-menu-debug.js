@@ -1253,7 +1253,7 @@ var Menu = Y.Base.create('menu', Y.Menu.Base, [Y.View], {
 Y.Menu = Y.mix(Menu, Y.Menu);
 
 
-}, 'gallery-2013.02.07-15-27', {
+}, 'gallery-2013.03.20-19-59', {
     "requires": [
         "classnamemanager",
         "escape",

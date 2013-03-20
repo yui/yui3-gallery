@@ -219,4 +219,4 @@ Y.namespace('Plugin').Menu = Y.Base.create('menuPlugin', Y.Menu, [Y.Plugin.Base]
 });
 
 
-}, 'gallery-2013.02.07-15-27', {"requires": ["event-focus", "gallery-sm-menu", "node-pluginhost", "plugin"]});
+}, 'gallery-2013.03.20-19-59', {"requires": ["event-focus", "gallery-sm-menu", "node-pluginhost", "plugin"]});

@@ -91,25 +91,29 @@ Y.extend(MenuItem, Y.Tree.Node, {
     },
 
     /**
-    Returns `true` if this menu item is currently disabled.
+    Returns `true` if this menu item or one of its ancestors is currently
+    disabled.
 
     @method isDisabled
-    @return {Boolean} `true` if this menu item is currently disabled, `false`
-        otherwise.
+    @return {Boolean} `true` if this menu item or one of its ancestors is
+        currently disabled, `false` otherwise.
     **/
     isDisabled: function () {
-        return !!this.state.disabled;
+        return !!this.state.disabled ||
+            (this.parent ? this.parent.isDisabled() : false);
     },
 
     /**
-    Returns `true` if this menu item is currently hidden.
+    Returns `true` if this menu item or one of its ancestors is currently
+    hidden.
 
     @method isHidden
-    @return {Boolean} `true` if this menu item is currently hidden, `false`
-        otherwise.
+    @return {Boolean} `true` if this menu item or one of its ancestors is
+        currently hidden, `false` otherwise.
     **/
     isHidden: function () {
-        return !!this.state.hidden;
+        return !!this.state.hidden ||
+            (this.parent ? this.parent.isHidden() : false);
     },
 
     /**
@@ -130,4 +134,4 @@ Y.extend(MenuItem, Y.Tree.Node, {
 Y.namespace('Menu').Item = MenuItem;
 
 
-}, 'gallery-2013.02.07-15-27', {"requires": ["gallery-sm-tree-node", "oop"]});
+}, 'gallery-2013.03.20-19-59', {"requires": ["tree-node", "oop"]});

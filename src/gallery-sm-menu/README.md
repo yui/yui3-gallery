@@ -29,7 +29,9 @@ Load YUI onto the page if you haven't already.
 Next, in your JS, create an instance of `Y.Menu`, specify some menu items, then render the menu into its container element.
 
 ```js
-YUI().use('gallery-sm-menu', function (Y) {
+YUI({
+    gallery: 'gallery-2013.02.07-15-27'
+}).use('gallery-sm-menu', function (Y) {
     // Create a new menu and render it inside the #menu node.
     var menu = new Y.Menu({
         container: '#menu',

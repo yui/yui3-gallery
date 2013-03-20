@@ -42,4 +42,4 @@ Y.namespace('Menu').Templates = {
 };
 
 
-}, 'gallery-2013.02.07-15-27', {"requires": ["template-micro"]});
+}, 'gallery-2013.03.20-19-59', {"requires": ["template-micro"]});
