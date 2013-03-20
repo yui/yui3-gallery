@@ -70,6 +70,13 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Se
     **/
     rendered: false,
 
+    /**
+    Default templates used to render this TreeView.
+
+    @property {Object} templates
+    **/
+    templates: Y.TreeView.Templates,
+
     // -- Protected Properties -------------------------------------------------
 
     /**
@@ -90,7 +97,11 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Se
 
     // -- Lifecycle Methods ----------------------------------------------------
 
-    initializer: function () {
+    initializer: function (config) {
+        if (config && config.templates) {
+            this.templates = Y.merge(this.templates, config.templates);
+        }
+
         this._attachTreeViewEvents();
     },
 
@@ -168,7 +179,7 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Se
             lazyRender   = this._lazyRender;
 
         if (!childrenNode) {
-            childrenNode = Y.Node.create(TreeView.Templates.children({
+            childrenNode = Y.Node.create(this.templates.children({
                 classNames: this.classNames,
                 node      : treeNode,
                 treeview  : this // not currently used, but may be useful for custom templates
@@ -249,7 +260,7 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Se
                 }
             }
 
-            htmlNode = treeNode._htmlNode = Y.Node.create(TreeView.Templates.node({
+            htmlNode = treeNode._htmlNode = Y.Node.create(this.templates.node({
                 classNames    : classNames,
                 nodeClassNames: enabledClassNames,
                 node          : treeNode,
@@ -479,7 +490,7 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Se
         // this event to propagate to the _onRowClick() handler.
         e.stopImmediatePropagation();
 
-        this.getNodeById(rowNode.getData('node-id')).toggle();
+        this.getNodeById(rowNode.getData('node-id')).toggleOpen();
     },
 
     _onMouseDown: function (e) {
@@ -499,7 +510,7 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Se
     },
 
     _onRowDoubleClick: function (e) {
-        this.getNodeById(e.currentTarget.getData('node-id')).toggle();
+        this.getNodeById(e.currentTarget.getData('node-id')).toggleOpen();
     }
 }, {
     ATTRS: {
