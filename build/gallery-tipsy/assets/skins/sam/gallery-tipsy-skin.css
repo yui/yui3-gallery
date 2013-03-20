@@ -1,0 +1,15 @@
+.yui3-skin-sam .yui3-tipsy {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    line-height: normal;
+    opacity:0.9;
+    z-index:1000;
+    padding: 4px 10px 8px;
+    margin: 10px;
+    background: black;
+    color: white;
+    font-size:80%;
+    max-width:200px;
+
+}

@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-tipsy",
+    "displayName": "Gallery: gallery-tipsy",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "tilomitra" ],
+    "use"        : [ "gallery-tipsy" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

@@ -1,0 +1,10 @@
+{
+    "name": "gallery-tipsy",
+    "builds": {
+        "gallery-tipsy": {
+            "jsfiles": [
+                "js/gallery-tipsy.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.0pr3/build/cssnormalize/cssnormalize-min.css">
+        <link rel="stylesheet" type="text/css" href="../../assets/gallery-tipsy-core.css">
+        <link rel="stylesheet" type="text/css" href="../../../../build/gallery-widget-pointer/assets/gallery-widget-pointer-core.css">
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.0pr1/build/cssgrids-responsive/cssgrids-responsive-min.css">
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssbutton/cssbutton-min.css">
+        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/yuicss-common/master/ui.css">
+        <style>
+
+            #demoButtons {
+                text-align: center;
+            }
+
+            li {
+                margin-bottom:1.2em;
+            }
+            .header {
+                background: rgb(81, 115, 126);
+            }
+            .header h2 {
+                color: rgb(145, 175, 192);
+            }
+
+            .notice {
+                background: #61B842;
+                color: white !important;
+            }
+
+            #fork {
+                font-size:150%;
+            }
+
+            .yui3-button {
+                font-size: 80%;
+                padding: 0.8em 2.5em;
+            }
+        
+        </style>
+    </head>
+    
+    <body class="yui3-skin-sam">
+
+
+        <div class="header yui3-u-1">
+
+            <h1 class="yui3-u-1">YUI3 Tooltip and Popover</h1>
+            <h2 class="yui3-u">Contextual Tooltips and popovers</h2>
+
+        </div>
+        
+        <div class="content">        
+            <h2>What is it?</h2>
+            <p><strong>Y.Tipsy</strong> is a tooltip for the YUI3 Library.</p>        
+            
+            <a id="fork" href="https://github.com/tilomitra/tipsy" title="Fork from Github" class="yui3-button notice">Fork from Github</a>
+            
+            <h2>What features are supported?</h2>
+            <p>Currently Y.Tipsy tooltip supports the following:
+                <ul>
+                    <li>Placement of tooltip above, below, left or right of content</li>
+                    <li><del>Offset support (how far the tooltip should be from the content</del> <strong>(broken)</strong></li>
+                    <li>Ability to set placement and tooltip content through data-attributes on DOM elemnts</li>
+                    <li>Customizable triggers (events that should show or hide the tooltip)</li>
+                    <li>Animation (no customization yet)</li>
+                    <li>The cool "tip" that points to the content</li>
+                    <li>Totally skinnable</li>
+                </ul>
+                YTipsy is built as a Y.Node plugin and it's goal is to be as lightweight as possible.
+            </p>
+            
+            <h2>What about the popover?</h2>
+            
+            <p>Y.Popover extends Y.Tipsy and has the feature set of Y.Tipsy. In addition it currently supports passing in 
+                a title. Additional features are planned. Let me know if you have any ideas on Github.</p>
+            
+            
+            <h2>See it in action</h2>
+            
+            <p>Hover over the links below to see Tipsy in action.</p>
+            
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur aliquet mollis turpis non tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad <a href="#" id="someContent1" class="yui3-tooltip-trigger" data-placement="above" rel="tipsy" data-content="Lorem Ipsum Dolor Sit Amet?">hover to show tooltip</a> per conubia nostra, per inceptos himenaeos. Nunc posuere eros non orci auctor non faucibus nunc feugiat. Etiam tellus erat, bibendum non rutrum nec, commodo at tellus. Etiam feugiat risus vitae leo tincidunt ac venenatis purus vulputate. Donec at nisl ut nunc euismod varius. <a href="#" class="yui3-tooltip-trigger" id="someContent2" data-placement="right" rel="tipsy" data-content="I'm aligned to the right.">hover</a> id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, fringilla malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.</p>
+            
+            <div id="demoButtons">
+                <p>
+                    <button id="topbutton" class="yui3-button yui3-tooltip-trigger" data-placement="above" rel="click-tipsy" data-content="YUI rocks.">Click to activate a tooltip.</button>
+                </p>
+                <p>
+                    <button id="leftbutton" class="yui3-button yui3-tooltip-trigger" data-placement="left" rel="tipsy" data-content="Ut eget nunc nulla. <br/>Curabitur mollis, purus eu sodales luctus<br/>, metus sem sagittis justo">Tooltip positioned to the left with a lot of content</button>
+                </p>
+                <p>
+                    <button id="rightbutton" class="yui3-button" data-placement="left" rel="tipsy" data-title="Hello, Popover!" data-content="id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, fringilla malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.">Popover positioned to the left</button>
+                </p>
+                <p>
+                    <button id="bottombutton" class="yui3-button yui3-tooltip-trigger" data-placement="below" rel="tipsy" data-content="*hugs* the button">Tooltip positioned below</button>
+                </p>
+            </div>
+
+        </div>
+
+        <script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-debug.js"></script>
+        <script>
+            YUI({
+                groups: {
+                    gallery: {
+                        base    : '../../../../build/',
+                        patterns: {
+                            'gallery-'   : {},
+                            'gallerycss-': { type: 'css' }
+                        },
+                        modules: {
+                            'gallery-widget-pointer': {
+                                path     : 'gallery-widget-pointer/gallery-widget-pointer.js',
+                            },
+                            'gallery-tipsy': {
+                                path     : 'gallery-tipsy/gallery-tipsy.js',
+                            }
+                        }
+                    }
+                },
+                
+                filter: 'raw',
+            
+            }).use("gallery-tipsy", 'event-outside', function(Y) {
+                var regularTipsy = new Y.Tipsy({
+                    selector: "[rel='tipsy']",
+                    zIndex: 2
+                });
+                regularTipsy.render();  
+
+
+                var clickTipsy = new Y.Tipsy({
+                    selector: "[rel='click-tipsy']",
+                    zIndex: 2,
+                    showOn: { selector: '#topbutton', events: 'click' },
+                    hideOn: { selector: '#topbutton', events: 'clickoutside' },
+                });
+
+                clickTipsy.render();            
+            });
+        </script>
+        <script type="text/javascript" src="//use.typekit.net/ajf8ggy.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    </body>
+    
+</html>
+
+

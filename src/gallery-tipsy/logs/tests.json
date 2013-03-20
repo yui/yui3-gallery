@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5007/tests/src/gallery-tipsy/tests/unit/index.html?filter=coverage",
+    "error": "SyntaxError: Parse error"
+}

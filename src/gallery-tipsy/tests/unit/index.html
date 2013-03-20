@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-tipsy</title>
+    <link rel="stylesheet" type="text/css" href="../../assets/gallery-tipsy-core.css">
+    <link rel="stylesheet" type="text/css" href="../../../../build/gallery-widget-pointer/assets/gallery-widget-pointer-core.css">
+    <script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-debug.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<h2>Tipsy Unit Tests</h2>
+
+<p>Hover over the links below to see Tipsy in action.</p>
+
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur aliquet mollis turpis non tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad <a href="#" id="someContent1" data-placement="above" rel="tipsy" data-content="Lorem Ipsum Dolor Sit Amet?">hover to show tooltip</a> per conubia nostra, per inceptos himenaeos. Nunc posuere eros non orci auctor non faucibus nunc feugiat. Etiam tellus erat, bibendum non rutrum nec, commodo at tellus. Etiam feugiat risus vitae leo tincidunt ac venenatis purus vulputate. Donec at nisl ut nunc euismod varius. <a href="#" id="someContent2" data-placement="right" rel="tipsy">hover</a> id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, <a href="#" id="someContent3">fringilla</a> malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.</p>
+
+<div id="demoButtons">
+    <p>
+        <button id="topbutton" class="yui3-button" data-placement="above" rel="click-tipsy" data-content="YUI rocks.">Click to activate a tooltip.</button>
+    </p>
+    <p>
+        <button id="leftbutton" class="yui3-button" data-placement="left" rel="tipsy" data-content="Ut eget nunc nulla. <br/>Curabitur mollis, purus eu sodales luctus<br/>, metus sem sagittis justo">Tooltip positioned to the left with a lot of content</button>
+    </p>
+    <p>
+        <button id="rightbutton" class="yui3-button" data-placement="left" rel="tipsy" data-title="Hello, Popover!" data-content="id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, fringilla malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.">Popover positioned to the left</button>
+    </p>
+    <p>
+        <button id="bottombutton" class="yui3-button" data-placement="below" rel="tipsy" data-content="*hugs* the button">Tooltip positioned below</button>
+    </p>
+</div>
+
+<script>
+YUI({
+    groups: {
+        gallery: {
+            base    : '../../../../build/',
+            patterns: {
+                'gallery-'   : {},
+                'gallerycss-': { type: 'css' }
+            },
+            modules: {
+                'gallery-widget-pointer': {
+                    path     : 'gallery-widget-pointer/gallery-widget-pointer.js',
+                },
+                'gallery-tipsy': {
+                    path     : 'gallery-tipsy/gallery-tipsy.js',
+                }
+            }
+        }
+    },
+    coverage: ['gallery-tipsy'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-tipsy');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>
