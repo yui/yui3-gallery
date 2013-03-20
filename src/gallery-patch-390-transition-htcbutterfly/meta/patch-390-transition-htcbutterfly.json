@@ -1,0 +1,7 @@
+{
+    "patch-390-transition-htcbutterfly": {
+        "requires": [
+            "yui-base", "transition"
+        ]
+    }
+}

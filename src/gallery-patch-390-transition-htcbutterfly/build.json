@@ -1,0 +1,10 @@
+{
+    "name": "patch-390-transition-htcbutterfly",
+    "builds": {
+        "patch-390-transition-htcbutterfly": {
+            "jsfiles": [
+                "js/patch-390-transition-htcbutterfly.js"
+            ]
+        }
+    }
+}
