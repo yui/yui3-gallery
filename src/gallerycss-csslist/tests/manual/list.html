@@ -61,10 +61,6 @@
             margin-bottom:15px;
         }
 
-        .dark-ribbon {
-            background: #383B3F;
-            padding-bottom:10px;
-        }
     </style>
 </head>
 <body class="yui3-skin-sam">
@@ -89,12 +85,14 @@
         </p>
 
         <div class="yui3-menu yui3-menu-open yui3-menu-horizontal">
+            <a href="#" class="yui3-menu-heading">Site Title</a>
             <ul>
                 <li><a href="#">Home</a></li>
                 <li class="yui3-menu-active"><a href="#">Flickr</a></li>
                 <li><a href="#">Messenger</a></li>
                 <li><a href="#">Sports</a></li>
                 <li><a href="#">Finance</a></li>
+                <li class="yui3-menu-disabled"><a href="#">Disabled</a></li>
             </ul>
         </div>
 
@@ -109,6 +107,7 @@
                 <li><a href="#">Messenger</a></li>
                 <li><a href="#">Sports</a></li>
                 <li><a href="#">Finance</a></li>
+                <li class="yui3-menu-disabled"><a href="#">Disabled</a></li>
             </ul>
         </div>
 
@@ -121,6 +120,7 @@
 
 
         <div id="horizontal-menu">
+            <a href="#" class="yui3-menu-heading">Site Title</a>
             <ul id="std-menu-items">
                 <li class="yui3-menu-active"><a href="#">Flickr</a></li>
                 <li><a href="#">Messenger</a></li>
@@ -160,72 +160,12 @@
         </p>
 
         <div id="fixed-menu" class="yui3-menu yui3-menu-horizontal yui3-menu-fixed">
-            <ul class="yui3-menu-dark">
+            <ul>
                 <li class="yui3-menu-active"><a href="#">Flickr</a></li>
                 <li><a href="#">Messenger</a></li>
                 <li><a href="#">Sports</a></li>
                 <li><a href="#">Finance</a></li>
             </ul>
-        </div>
-
-
-        <h2>Styled Menus</h2>
-
-        <h3>Light</h3>
-        <p>
-            Don't want a plain menu? Just add the class <code>yui3-menu-light</code> to add some more styles to your menu.
-        </p>
-
-        <div id="vertical-menu2" class="yui3-menu yui3-menu-open">
-            <ul class="yui3-menu-light">
-                <li class="yui3-menu-heading">Yahoo! Sites</li>
-                <li class="yui3-menu-separator"></li>
-                <li class="yui3-menu-active"><a href="#">Flickr</a></li>
-                <li><a href="#">Messenger</a></li>
-                <li><a href="#">Sports</a></li>
-                <li><a href="#">Finance</a></li>
-                <li class="yui3-menu-separator"></li>
-                <li class="yui3-menu-heading">YUI</li>
-                <li class="yui3-menu-separator"></li>
-                <li><a href="#">YUILibrary</a></li>
-                <li><a href="#">YUI on Youtube</a></li>
-                <li><a href="#">Gallery</a></li>
-            </ul>
-        </div>
-
-        <h3>Dark</h3>
-        <p>
-            Optionally, you could use a darker menu by adding the class <code>yui3-menu-dark</code>. 
-        </p>
-
-        <div class="dark-ribbon">
-
-            <div class="yui3-menu yui3-menu-horizontal yui3-menu-open">
-                <ul class="yui3-menu-dark">
-                    <li class="yui3-menu-active"><a href="#">Flickr</a></li>
-                    <li><a href="#">Messenger</a></li>
-                    <li><a href="#">Sports</a></li>
-                    <li><a href="#">Finance</a></li>
-                </ul>
-            </div>
-
-            <div id="vertical-menu3" class="yui3-menu yui3-menu-open">
-                <ul class="yui3-menu-dark">
-                    <li class="yui3-menu-heading">Yahoo! Sites</li>
-                    <li class="yui3-menu-separator"></li>
-                    <li class="yui3-menu-active"><a href="#">Flickr</a></li>
-                    <li><a href="#">Messenger</a></li>
-                    <li><a href="#">Sports</a></li>
-                    <li><a href="#">Finance</a></li>
-                    <li class="yui3-menu-separator"></li>
-                    <li class="yui3-menu-heading">YUI</li>
-                    <li class="yui3-menu-separator"></li>
-                    <li><a href="#">YUILibrary</a></li>
-                    <li><a href="#">YUI on Youtube</a></li>
-                    <li><a href="#">Gallery</a></li>
-                </ul>
-            </div>
-
         </div>
 
 
@@ -233,32 +173,8 @@
     </div>
     <script src="../../../../../yui3/build/yui/yui.js"></script>
     <script>
-    YUI.applyConfig({
-        groups: {
-            gallery: {
-                combine: false,
-                root: '/build/',
-                patterns: {
-                    'gallery-': { 
-                        configFn: function(me) {
-                            if (!me.fullpath) {
-                                me.fullpath = 'http://localhost/yui3-gallery/build/' + me.path;
-                                me.path = undefined;
-                            }
-                        }
-                    },
-                    'lang/gallery-': {},
-                    'gallerycss-': { type: 'css' }
-                }
-            }
-        }
-    });
     var Y = YUI({
-        modules: {
-            'gallery-sm-menu': {
-                fullpath: '../../../../build/gallery-sm-menu/gallery-sm-menu.js'
-            }
-        }
+        fetchCSS: false
     }).use('gallery-sm-menu', 'event-tap', 'node-base', function (Y) {
 
         var horizontalMenu = new Y.Menu({

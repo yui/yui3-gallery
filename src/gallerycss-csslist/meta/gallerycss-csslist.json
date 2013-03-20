@@ -1,7 +1,8 @@
 {
     "gallerycss-csslist": {
         "requires": [],
-        "type": "css"
+        "type": "css",
+        "version": 0.2
     }
 }
 
