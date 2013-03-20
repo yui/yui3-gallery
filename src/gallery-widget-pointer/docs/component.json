@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-widget-pointer",
+    "displayName": "Gallery: gallery-widget-pointer",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "tilomitra" ],
+    "use"        : [ "gallery-widget-pointer" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

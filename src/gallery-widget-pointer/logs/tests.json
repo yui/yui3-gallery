@@ -1,0 +1,57 @@
+{
+    "name": "gallery-widget-pointer",
+    "passed": 15,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 15,
+    "duration": 264,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 5,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 5,
+        "duration": 86,
+        "type": "testcase",
+        "test pointer left": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test pointer left",
+            "duration": 15
+        },
+        "test pointer right": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test pointer right",
+            "duration": 6
+        },
+        "test pointer up": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test pointer up",
+            "duration": 6
+        },
+        "test pointer down": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test pointer down",
+            "duration": 6
+        },
+        "test placementChange": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test placementChange",
+            "duration": 10
+        }
+    },
+    "timestamp": "Wed 20 Mar 2013 03:01:03 PM CDT",
+    "consoleInfo": []
+}

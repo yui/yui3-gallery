@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.0pr3/build/cssnormalize/cssnormalize-min.css">
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.0pr1/build/cssgrids-responsive/cssgrids-responsive-min.css">
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssbutton/cssbutton-min.css">
+        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/yuicss-common/master/ui.css">
+    
+        <link rel="stylesheet" type="text/css" href="../../assets/gallery-widget-pointer-core.css">
+
+        <style>
+
+            #demoButtons {
+                text-align: center;
+            }
+
+            li {
+                margin-bottom:1.2em;
+            }
+            .header {
+                background: rgb(81, 115, 126);
+            }
+            .header h2 {
+                color: rgb(145, 175, 192);
+            }
+
+            .notice {
+                background: #61B842;
+                color: white !important;
+            }
+
+            #fork {
+                font-size:150%;
+            }
+        
+            #myContent {
+                background: white;
+                box-shadow: 0 0 5px rgba(0,0,0,0.5);
+                border: 2px solid #111;
+                padding: 10px;
+            }
+
+            .yui3-skin-sam .content .yui3-widget-mask {
+                background: white;
+                opacity: 0.7;
+            }
+        </style>
+    </head>
+    
+    <body class="yui3-skin-sam">
+
+
+        <div class="header yui3-u-1">
+
+            <h1 class="yui3-u-1">YUI3 Tooltip and Popover</h1>
+            <h2 class="yui3-u">Contextual Tooltips and popovers</h2>
+
+        </div>
+        
+        <div class="content">        
+            <h2>What is it?</h2>
+            <p><strong>Y.Twipsy</strong> is a tooltip for the YUI3 Library. It is built to replicate the functionality of Twipsy, the popular tooltip used in Twitter's Bootstrap.
+            </p>        
+            <p><strong>Y.Popover</strong> is a node plugin that extends Y.Twipsy, and provides the ability to create popovers for content. <a id="popoverDemo" href='#' rel="twipsy" data-placement="below" data-title="A Popover!" data-content="I can place my content here. There are more demos below. Check em out. This is still very rough, and not all features have been listed.">Click for a popover demo.</a></p>
+            
+            <a id="fork" href="https://github.com/tilomitra/YTwipsy" title="Fork from Github" class="yui3-button notice">Fork from Github</a>
+            
+            <h2>What features are supported?</h2>
+            <p>Currently Y.Twipsy tooltip supports the following:
+                <ul>
+                    <li>Placement of tooltip above, below, left or right of content</li>
+                    <li><del>Offset support (how far the tooltip should be from the content</del> <strong>(broken)</strong></li>
+                    <li>Ability to set placement and tooltip content through data-attributes on DOM elemnts</li>
+                    <li>Customizable triggers (events that should show or hide the tooltip)</li>
+                    <li>Animation (no customization yet)</li>
+                    <li>The cool "tip" that points to the content</li>
+                    <li>Totally skinnable</li>
+                </ul>
+                YTwipsy is built as a Y.Node plugin and it's goal is to be as lightweight as possible.
+            </p>
+            
+            <h2>What about the popover?</h2>
+            
+            <p>Y.Popover extends Y.Twipsy and has the feature set of Y.Twipsy. In addition it currently supports passing in 
+                a title. Additional features are planned. Let me know if you have any ideas on Github.</p>
+            
+            
+            <h2>See it in action</h2>
+            
+            <p>Hover over the links below to see Twipsy in action.</p>
+            
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur aliquet mollis turpis non tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad <a href="#" id="someContent1" data-placement="above" rel="twipsy" data-content="Lorem Ipsum Dolor Sit Amet?">hover to show tooltip</a> per conubia nostra, per inceptos himenaeos. Nunc posuere eros non orci auctor non faucibus nunc feugiat. Etiam tellus erat, bibendum non rutrum nec, commodo at tellus. Etiam feugiat risus vitae leo tincidunt ac venenatis purus vulputate. Donec at nisl ut nunc euismod varius. <a href="#" id="someContent2" data-placement="right" rel="twipsy" data-content="I'm aligned to the right.">hover</a> id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, fringilla malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.</p>
+            
+            <div id="demoButtons">
+                <p>
+                    <button id="topbutton" class="yui3-button" data-placement="above" rel="twipsy" data-content="YUI rocks.">Click to activate a tooltip.</button>
+                </p>
+                <p>
+                    <button id="leftbutton" class="yui3-button" data-placement="left" rel="twipsy" data-content="Ut eget nunc nulla. <br/>Curabitur mollis, purus eu sodales luctus<br/>, metus sem sagittis justo">Tooltip positioned to the left with a lot of content</button>
+                </p>
+                <p>
+                    <button id="rightbutton" class="yui3-button" data-placement="left" rel="twipsy" data-title="Hello, Popover!" data-content="id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, fringilla malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.">Popover positioned to the left</button>
+                </p>
+                <p>
+                    <button id="bottombutton" class="yui3-button" data-placement="below" rel="twipsy" data-content="*hugs* the button">Tooltip positioned below</button>
+                </p>
+            </div>
+
+        </div>
+
+        <script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-debug.js"></script>
+        <script>
+            YUI({
+                modules:  {
+                    "gallery-widget-pointer": {
+                        fullpath: '../../../../build/gallery-widget-pointer/gallery-widget-pointer.js',
+                        requires: [
+                            "widget", 
+                            "base-build", 
+                            "align-plugin", 
+                            "classnamemanager"
+                        ]
+                    }
+                },
+                
+                filter: 'raw',
+            
+            }).use("gallery-widget-pointer", "panel", function(Y) {
+                Y.CustomOverlay = Y.Base.create("customOverlay", Y.Widget, [Y.WidgetStdMod, Y.WidgetPosition, Y.WidgetStack, Y.WidgetPositionAlign, Y.WidgetPositionConstrain, Y.WidgetPointer, Y.WidgetModality]);
+
+                var overlay = new Y.CustomOverlay({
+                    // Specify a reference to a node which already exists 
+                    // on the page and contains header/body/footer content
+                    srcNode:"#myContent",
+                    // Also set some of the attributes inherited from
+                    // the base Widget class.
+                    visible:true,
+                    modal: true,
+                    placement: "right",
+                    centered: true,
+                    width: '50%',
+                    render: true
+                });
+
+                var points = ['above', 'below', 'left', 'right'],
+                    i = 0;
+                
+                window.setInterval(function () {
+                    console.log("changing placement...");
+                    overlay.set('placement', points[i]);
+                    i++;
+                    if (i > 3) {
+                        i = 0;
+                    }
+                }, 300);
+                
+            });
+        </script>
+        <script type="text/javascript" src="//use.typekit.net/ajf8ggy.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+    </body>
+    
+</html>
+
+

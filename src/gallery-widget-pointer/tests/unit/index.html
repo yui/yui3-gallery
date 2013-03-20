@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-widget-pointer</title>
+    <script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-min.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="../../assets/gallery-widget-pointer-core.css">
+
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-widget-pointer'],
+    groups: {
+        gallery: {
+            base    : '../../../../build/',
+            patterns: {
+                'gallery-'   : {},
+                'gallerycss-': { type: 'css' }
+            },
+            modules: {
+                'gallery-widget-pointer': {
+                    path     : 'gallery-widget-pointer/gallery-widget-pointer.js',
+                }
+            }
+        }
+    },
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', 'gallery-widget-pointer', 'panel', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-widget-pointer');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

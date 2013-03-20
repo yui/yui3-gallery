@@ -1,0 +1,12 @@
+{
+    "gallery-widget-pointer": {
+        "requires": [
+            "widget", 
+            "base-build", 
+            "align-plugin", 
+            "classnamemanager"
+        ],
+        "skinnable": true,
+        "version": 0.1
+    }
+}

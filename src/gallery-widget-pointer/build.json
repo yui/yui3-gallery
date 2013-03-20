@@ -1,0 +1,10 @@
+{
+    "name": "gallery-widget-pointer",
+    "builds": {
+        "gallery-widget-pointer": {
+            "jsfiles": [
+                "js/gallery-widget-pointer.js"
+            ]
+        }
+    }
+}
