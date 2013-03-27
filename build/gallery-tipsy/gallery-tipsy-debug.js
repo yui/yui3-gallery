@@ -1,6 +1,6 @@
 YUI.add('gallery-tipsy', function (Y, NAME) {
 
-
+    
 
 var Lang = Y.Lang,
     getCN = Y.ClassNameManager.getClassName,
@@ -108,7 +108,11 @@ Y.Tipsy = Y.Base.create("tipsy", Y.Widget, [Y.WidgetPointer, Y.WidgetPosition, Y
     },
 
     hideTooltip : function () {
-        this.get('boundingBox').removeClass(CLASSES.fadeIn).setAttribute('aria-hidden', 'true');
+        this.get('boundingBox').removeClass(CLASSES.fadeIn).setAttrs({
+            'aria-hidden': 'true',
+            //clear out all inline styles
+            'styles': ''
+        });
         this._hideTooltip();
     },
     
@@ -121,7 +125,7 @@ Y.Tipsy = Y.Base.create("tipsy", Y.Widget, [Y.WidgetPointer, Y.WidgetPosition, Y
         var content = (node.hasAttribute(DATA_CONTENT)) ? node.getAttribute(DATA_CONTENT) : this.get('content'),
             contentBox = this.get('contentBox');
 
-        contentBox.setContent(content);
+        contentBox.setHTML(content);
     },
     
     _alignTooltip : function (node) {
@@ -179,7 +183,7 @@ Y.Tipsy = Y.Base.create("tipsy", Y.Widget, [Y.WidgetPointer, Y.WidgetPosition, Y
 });
 
 
-}, 'gallery-2013.03.20-19-59', {
+}, 'gallery-2013.03.27-22-06', {
     "requires": [
         "yui-base",
         "widget",

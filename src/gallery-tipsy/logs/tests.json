@@ -1,8 +1,85 @@
 {
-    "passed": 0,
-    "failed": 3,
-    "total": 3,
+    "name": "gallery-tipsy",
+    "passed": 27,
+    "failed": 0,
+    "errors": 0,
     "ignored": 0,
-    "name": "http://127.0.0.1:5007/tests/src/gallery-tipsy/tests/unit/index.html?filter=coverage",
-    "error": "SyntaxError: Parse error"
+    "total": 27,
+    "duration": 444,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 9,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 9,
+        "duration": 146,
+        "type": "testcase",
+        "test render standard tipsy": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test render standard tipsy",
+            "duration": 10
+        },
+        "test tipsy singleton": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test tipsy singleton",
+            "duration": 4
+        },
+        "test showTooltip": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test showTooltip",
+            "duration": 9
+        },
+        "test hideTooltip": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test hideTooltip",
+            "duration": 5
+        },
+        "test content": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test content",
+            "duration": 5
+        },
+        "test data-placement": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test data-placement",
+            "duration": 4
+        },
+        "test placement attribute": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test placement attribute",
+            "duration": 9
+        },
+        "test delegate": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test delegate",
+            "duration": 8
+        },
+        "test custom show and hide": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test custom show and hide",
+            "duration": 7
+        }
+    },
+    "timestamp": "Wed 27 Mar 2013 05:07:21 PM CDT",
+    "consoleInfo": []
 }

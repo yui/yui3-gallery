@@ -112,7 +112,7 @@ YUI.add('module-tests', function(Y) {
             this.tipsy.showTooltip(Y.one('#someContent3'));
 
             Y.Assert.areSame(true, Y.one('.yui3-tipsy .yui3-widget-pointer').hasClass('yui3-widget-pointer-right'), 'Tipsy should have a right arrow');
-        }
+        },
 
 
         /*  

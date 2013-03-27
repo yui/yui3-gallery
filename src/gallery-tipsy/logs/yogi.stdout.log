@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.76 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-tipsy
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -14,9 +14,9 @@ shifter [info] shifting into gear for gallery-tipsy
    #2: Line too long.
        Y.log('The hideOn attribute should contain an array of events, or an object with keys "selector" (string), and "events" (array of events)'); // line 87, pos 152
    #3: Trailing whitespace.
-       } // line 145, pos 10
+       } // line 149, pos 10
    #4: Trailing whitespace.
-       content : { // line 152, pos 20
+       content : { // line 156, pos 20
    #5: 'config' is defined but never used.
        initializer : function(config) { // line 28, pos 34
    #6: 'o' is defined but never used.
@@ -25,6 +25,7 @@ shifter [info] shifting into gear for gallery-tipsy
        Y.each(this._handles, function(v, k, o) { // line 34, pos 44
    #8: 'e' is defined but never used.
        _handleDelegateEnd: function (e) { // line 93, pos 36
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-tipsy/gallery-tipsy.js with UglifyJS
 shifter [queu] writing -min file
@@ -36,23 +37,29 @@ shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-tipsy/gallery-tipsy-coverage.js
 shifter [queu] copying assets to skin for sam
    #1: [warning] Don't use adjoining classes.
-       .yui3-tipsy-fade.yui3-tipsy-in { // line 21, pos 1
+       .yui3-tipsy-fade.yui3-tipsy-in { // line 36, pos 1
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.311 seconds, pretty fast huh?
+shifter [info] finished in 0.424 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5008
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5006
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5005
 Starting Grover on 1 files with PhantomJS@1.8.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [http://127.0.0.1:5007/tests/src/gallery-tipsy/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
-    Javascript Error
-       SyntaxError: Parse error
+✔ [gallery-tipsy]: Passed: 9 Failed: 0 Total: 9 (ignored 0) (0.148 seconds)
 Writing files in JSON format to: /src/gallery-tipsy/logs/tests.json
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
+----------------------------------------------------------------
+✔ [Total]: Passed: 9 Failed: 0 Total: 9 (ignored 0) (0.148 seconds)
+  [Grover Execution Timer] 2.24 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
