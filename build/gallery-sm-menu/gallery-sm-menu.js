@@ -466,7 +466,7 @@ var Menu = Y.Base.create('menu', Y.Menu.Base, [Y.View], {
     Toggles the visibility of this menu, showing it if it's currently hidden or
     hiding it if it's currently visible.
 
-    @method toggle
+    @method toggleVisible
     @param {Object} [options] Options.
         @param {Node|Number[]|Object} [options.anchorPoint] Anchor point at
             which this menu should be positioned when shown. The point may be
@@ -474,7 +474,7 @@ var Menu = Y.Base.create('menu', Y.Menu.Base, [Y.View], {
             and Y pixel coordinates.
     @chainable
     **/
-    toggle: function (options) {
+    toggleVisible: function (options) {
         return this[this.get('visible') ? 'hide' : 'show'](options);
     },
 
@@ -992,7 +992,16 @@ var Menu = Y.Base.create('menu', Y.Menu.Base, [Y.View], {
     @protected
     **/
     _afterVisibleChange: function (e) {
-        this.get('container').toggleClass(this.classNames.open, e.newVal);
+        var container = this.get('container');
+
+        container.toggleClass(this.classNames.open, e.newVal);
+
+        // Ensure that the container doesn't take up space when it's not
+        // visible. We have to manually remove the style attribute because it's
+        // set when the menu is positioned, and it overrides CSS.
+        if (!e.newVal) {
+            container.removeAttribute('style');
+        }
     },
 
     /**
@@ -1125,7 +1134,7 @@ var Menu = Y.Base.create('menu', Y.Menu.Base, [Y.View], {
             clearTimeout(this._timeouts.item);
             clearTimeout(this._timeouts.menu);
 
-            e.item.toggle();
+            e.item.toggleOpen();
         } else if (this.get('hideOnClick')) {
             this.closeSubMenus();
             this.hide();
@@ -1253,7 +1262,7 @@ var Menu = Y.Base.create('menu', Y.Menu.Base, [Y.View], {
 Y.Menu = Y.mix(Menu, Y.Menu);
 
 
-}, 'gallery-2013.03.20-19-59', {
+}, 'gallery-2013.03.27-22-06', {
     "requires": [
         "classnamemanager",
         "escape",

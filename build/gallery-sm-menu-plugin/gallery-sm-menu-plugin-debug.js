@@ -26,7 +26,7 @@ Node plugin that toggles a dropdown menu when the host node is clicked.
 
         // The menu will automatically be displayed whenever the button is
         // clicked, but you can also toggle it manually.
-        button.menu.toggle();
+        button.menu.toggleVisible();
     });
 
 @class Plugin.Menu
@@ -128,7 +128,7 @@ Y.namespace('Plugin').Menu = Y.Base.create('menuPlugin', Y.Menu, [Y.Plugin.Base]
             this.render();
         }
 
-        this.toggle({anchorPoint: this._host});
+        this.toggleVisible({anchorPoint: this._host});
     },
 
     _afterHostFocus: function () {
@@ -219,4 +219,4 @@ Y.namespace('Plugin').Menu = Y.Base.create('menuPlugin', Y.Menu, [Y.Plugin.Base]
 });
 
 
-}, 'gallery-2013.03.20-19-59', {"requires": ["event-focus", "gallery-sm-menu", "node-pluginhost", "plugin"]});
+}, 'gallery-2013.03.27-22-06', {"requires": ["event-focus", "gallery-sm-menu", "node-pluginhost", "plugin"]});

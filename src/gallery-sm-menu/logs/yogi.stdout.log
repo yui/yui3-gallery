@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.76 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-sm-menu
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -41,9 +41,9 @@ shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [queu] coverage file read, starting coverage for: gallery-sm-menu/gallery-sm-menu.js
 shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-base/gallery-sm-menu-base.js
+shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-item/gallery-sm-menu-item.js
 shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-plugin/gallery-sm-menu-plugin.js
 shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-templates/gallery-sm-menu-templates.js
-shifter [queu] coverage file read, starting coverage for: gallery-sm-menu-item/gallery-sm-menu-item.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [info] istanbul providing coverage
@@ -56,20 +56,20 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-sm-menu/gallery-sm-menu-coverage.js
 shifter [queu] writing coverage file to gallery-sm-menu-base/gallery-sm-menu-base-coverage.js
+shifter [queu] writing coverage file to gallery-sm-menu-item/gallery-sm-menu-item-coverage.js
 shifter [queu] writing coverage file to gallery-sm-menu-plugin/gallery-sm-menu-plugin-coverage.js
 shifter [queu] writing coverage file to gallery-sm-menu-templates/gallery-sm-menu-templates-coverage.js
-shifter [queu] writing coverage file to gallery-sm-menu-item/gallery-sm-menu-item-coverage.js
 shifter [queu] copying assets to skin for sam
    #1: [warning] Don't use adjoining classes.
        .yui3-menu.yui3-menu-open { // line 9, pos 1
    #2: [warning] Missing vendor-prefixed CSS gradients for Old Webkit (Safari 4+, Chrome).
-       .yui3-skin-sam a.yui3-menu-label:hover { // line 89, pos 1
+       .yui3-skin-sam a.yui3-menu-label:hover { // line 87, pos 1
    #3: [warning] Don't use adjoining classes.
-       .yui3-skin-sam .yui3-menu-can-have-children.yui3-menu-disabled > .yui3-menu-label:after { // line 108, pos 16
+       .yui3-skin-sam .yui3-menu-can-have-children.yui3-menu-disabled > .yui3-menu-label:after { // line 106, pos 16
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.678 seconds, pretty fast huh?
+shifter [info] finished in 1.409 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests

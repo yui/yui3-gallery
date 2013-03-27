@@ -1,15 +1,15 @@
 .yui3-menu,
 .yui3-menu-children {
-    height: 0;
+    left: -10000px;
     position: absolute;
+    top: -10000px;
     visibility: hidden;
-    width: 0;
 }
 
 .yui3-menu.yui3-menu-open {
-    height: auto;
+    left: auto;
+    top: auto;
     visibility: visible;
-    width: auto;
     z-index: 2;
 }
 
@@ -25,11 +25,9 @@
 .yui3-menu > .yui3-menu-children { position: relative; }
 
 .yui3-menu-open > .yui3-menu-children {
-    height: auto;
     left: 0;
     top: 0;
     visibility: visible;
-    width: auto;
 }
 
 .yui3-menu-item { position: relative; }

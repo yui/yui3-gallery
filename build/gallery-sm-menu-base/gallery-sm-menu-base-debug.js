@@ -217,4 +217,4 @@ var MenuBase = Y.Base.create('menuBase', Y.Tree, [Y.Tree.Labelable, Y.Tree.Opena
 Y.namespace('Menu').Base = MenuBase;
 
 
-}, 'gallery-2013.03.20-19-59', {"requires": ["gallery-sm-menu-item", "tree-labelable", "tree-openable"]});
+}, 'gallery-2013.03.27-22-06', {"requires": ["gallery-sm-menu-item", "tree-labelable", "tree-openable"]});

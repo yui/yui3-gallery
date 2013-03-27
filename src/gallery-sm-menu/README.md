@@ -23,14 +23,14 @@ In your HTML, create a container element for the menu. Be sure to add the `yui3-
 Load YUI onto the page if you haven't already.
 
 ```html
-<script src="http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-min.js"></script>
 ```
 
 Next, in your JS, create an instance of `Y.Menu`, specify some menu items, then render the menu into its container element.
 
 ```js
 YUI({
-    gallery: 'gallery-2013.02.07-15-27'
+    gallery: 'gallery-2013.03.20-19-59'
 }).use('gallery-sm-menu', function (Y) {
     // Create a new menu and render it inside the #menu node.
     var menu = new Y.Menu({
