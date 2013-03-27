@@ -119,7 +119,7 @@
 }
 
 /* remove borders for horizontal menus */
-.yui3-menu.yui3-menu-horizontal {
+.yui3-menu.yui3-menu-horizontal, .yui3-menu.yui3-menu-horizontal .yui3-menu-heading {
     border: none;
 }
 
@@ -175,11 +175,13 @@
     text-transform: uppercase;
     font-size:90%;
     margin-top:0.5em;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: #dfdfdf;
 }
 
-
 /* ACTIVE MENU ITEM */
-.yui3-menu .yui3-menu-active a {
+.yui3-menu .yui3-menu-selected a {
     font-weight: bold;
     color: #000;
 }

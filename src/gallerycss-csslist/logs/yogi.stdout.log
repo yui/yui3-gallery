@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.76 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-csslist
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -21,9 +21,9 @@ shifter [info] shifting into gear for gallerycss-csslist
        *display: inline; // line 44, pos 5
    #6: [warning] Don't use adjoining classes.
        .yui3-menu.yui3-menu-horizontal > ul { // line 47, pos 1
-   #7: [warning] Property with star prefix found.
+   #7: [warning] Duplicate property '*display' found.
        *display: inline; // line 50, pos 5
-   #8: [warning] Duplicate property '*display' found.
+   #8: [warning] Property with star prefix found.
        *display: inline; // line 50, pos 5
    #9: [warning] Duplicate property '*display' found.
        *display: inline; // line 94, pos 5
@@ -34,30 +34,32 @@ shifter [info] shifting into gear for gallerycss-csslist
    #12: [warning] Don't use adjoining classes.
        .yui3-menu.yui3-menu-horizontal li .yui3-menu-children { // line 115, pos 1
    #13: [warning] Don't use adjoining classes.
-       .yui3-menu.yui3-menu-horizontal { // line 122, pos 1
+       .yui3-menu.yui3-menu-horizontal, .yui3-menu.yui3-menu-horizontal .yui3-menu-heading { // line 122, pos 1
    #14: [warning] Don't use adjoining classes.
-       .yui3-menu .yui3-menu-can-have-children.yui3-menu-disabled > a:after { // line 168, pos 12
+       .yui3-menu.yui3-menu-horizontal, .yui3-menu.yui3-menu-horizontal .yui3-menu-heading { // line 122, pos 34
    #15: [warning] Don't use adjoining classes.
-       .yui3-menu.yui3-menu-open.yui3-menu-fixed { // line 188, pos 1
+       .yui3-menu .yui3-menu-can-have-children.yui3-menu-disabled > a:after { // line 168, pos 12
    #16: [warning] Don't use adjoining classes.
-       .yui3-menu.yui3-menu-open.yui3-menu-fixed { // line 188, pos 1
-   #17: [warning] Expected end of value but found 'block'.
-       border-bottom:1px solid block; // line 203, pos 9
-   #18: [warning] Property with star prefix found.
-       *display: inline; // line 214, pos 5
+       .yui3-menu.yui3-menu-open.yui3-menu-fixed { // line 190, pos 1
+   #17: [warning] Don't use adjoining classes.
+       .yui3-menu.yui3-menu-open.yui3-menu-fixed { // line 190, pos 1
+   #18: [warning] Expected end of value but found 'block'.
+       border-bottom:1px solid block; // line 205, pos 9
    #19: [warning] Property with star prefix found.
-       *zoom: 1; // line 216, pos 5
-   #20: [warning] margin can't be used with display: inline.
-       margin: 0 -0.35em 0 0; // line 217, pos 5
-   #21: [warning] Using height with padding can sometimes make elements larger than you expect.
-       padding: 0.8em 1.4em; // line 221, pos 5
-   #22: [warning] Values of 0 shouldn't have units specified.
-       text-shadow: 0px -1px 0px rgba(0,0,0, 0.45); // line 230, pos 18
+       *display: inline; // line 216, pos 5
+   #20: [warning] Property with star prefix found.
+       *zoom: 1; // line 218, pos 5
+   #21: [warning] margin can't be used with display: inline.
+       margin: 0 -0.35em 0 0; // line 219, pos 5
+   #22: [warning] Using height with padding can sometimes make elements larger than you expect.
+       padding: 0.8em 1.4em; // line 223, pos 5
    #23: [warning] Values of 0 shouldn't have units specified.
-       text-shadow: 0px -1px 0px rgba(0,0,0, 0.45); // line 230, pos 27
+       text-shadow: 0px -1px 0px rgba(0,0,0, 0.45); // line 232, pos 18
+   #24: [warning] Values of 0 shouldn't have units specified.
+       text-shadow: 0px -1px 0px rgba(0,0,0, 0.45); // line 232, pos 27
 shifter [queu] file has changed, continuing build
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.054 seconds, pretty fast huh?
+shifter [info] finished in 0.056 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
