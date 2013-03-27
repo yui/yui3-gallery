@@ -3,5 +3,6 @@
         "requires": [
             "tables.css"
         ]
-    }
+    },
+    "version": "0.2"
 }

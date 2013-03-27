@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.68 on node@0.8.21
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-csstable
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -9,10 +9,10 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallerycss-csstable
-   #1: [warning] Missing vendor-prefixed CSS gradients for Old Webkit (Safari 4+, Chrome).
-       .yui3-table thead { // line 52, pos 1
+shifter [info] css lint passed for /css/tables.css
+shifter [queu] file has changed, continuing build
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.034 seconds, pretty fast huh?
+shifter [info] finished in 0.038 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
