@@ -3,9 +3,11 @@
     "builds": {
         "gallerycss-cssform": {
             "cssfiles": [
+                "forms-core.css",
                 "forms.css",
                 "forms-responsive.css"
             ]
         }
-    }
+    },
+    "version": "0.2.1"
 }

@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.68 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-cssform
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -9,22 +9,41 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallerycss-cssform
-   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
-       box-sizing: border-box; // line 5, pos 3
-   #2: [warning] The property -moz-transition is compatible with -webkit-transition and should be included as well.
-       -webkit-transition: all 150ms ease-out; // line 10, pos 3
-   #3: [warning] The property -o-transition is compatible with -webkit-transition and should be included as well.
-       -webkit-transition: all 150ms ease-out; // line 10, pos 3
-   #4: [warning] Using width with border can sometimes make elements larger than you expect.
-       border: 1px solid #ccc; // line 51, pos 3
-   #5: [warning] vertical-align can't be used with display: block.
-       vertical-align: middle; // line 61, pos 3
+   #1: [warning] Property with star prefix found.
+       *margin-left: -7px; /* 3 */ // line 41, pos 5
+   #2: [warning] Property with star prefix found.
+       *vertical-align: middle; /* 3 */ // line 58, pos 5
+   #3: [warning] The property -moz-appearance is compatible with -webkit-appearance and should be included as well.
+       -webkit-appearance: button; /* 2 */ // line 85, pos 5
+   #4: [warning] Property with star prefix found.
+       *overflow: visible;  /* 4 */ // line 87, pos 5
+   #5: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; /* 1 */ // line 108, pos 5
    #6: [warning] Property with star prefix found.
-       *display: inline; // line 89, pos 3
+       *height: 13px; /* 3 */ // line 110, pos 5
    #7: [warning] Property with star prefix found.
-       *zoom: 1; // line 92, pos 3
+       *width: 13px; /* 3 */ // line 111, pos 5
+   #8: [warning] The property -moz-appearance is compatible with -webkit-appearance and should be included as well.
+       -webkit-appearance: textfield; /* 1 */ // line 121, pos 5
+   #9: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: content-box; // line 124, pos 5
+   #10: [warning] The property -moz-appearance is compatible with -webkit-appearance and should be included as well.
+       -webkit-appearance: none; // line 134, pos 5
+   #11: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 171, pos 3
+   #12: [warning] Don't use adjoining classes.
+       .yui3-form.yui3-form-stacked input[type='text'], // line 235, pos 1
+   #13: [warning] Don't use adjoining classes.
+       .yui3-form.yui3-form-stacked select, // line 236, pos 1
+   #14: [warning] Don't use adjoining classes.
+       .yui3-form.yui3-form-stacked label { // line 237, pos 1
+   #15: [warning] Property with star prefix found.
+       *display: inline; /* IE7 inline-block hack */ // line 246, pos 3
+   #16: [warning] Property with star prefix found.
+       *zoom: 1; // line 247, pos 3
+shifter [queu] file has changed, continuing build
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.046 seconds, pretty fast huh?
+shifter [info] finished in 0.102 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
