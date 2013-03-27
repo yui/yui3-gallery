@@ -48,6 +48,104 @@ var Lang                = Y.Lang,
                               return (YDate.isGreater(aDate, bDate) || dateEqualDays(aDate, bDate));
                           };
 
+//===============================================================================================
+// First: extend Y.LazyModelList with 2 sugar methods for set- and get- attributes
+// We mix it to both Y.LazyModelList as well as Y.ModelList
+// this way we can always call these methods regardsless of a ModelList or LazyModelList as used
+//===============================================================================================
+
+function ITSAModellistAttrExtention() {}
+
+Y.mix(ITSAModellistAttrExtention.prototype, {
+
+    /**
+     * Gets an attribute-value from a Model OR object. Depends on the class (Y.ModelList v.s. Y.LazyModelList).
+     * Will always work, whether an Y.ModelList or Y.LazyModelList is attached.
+     *
+     * @method getModelAttr
+     * @param {Y.Model} model the model (or extended class) from which the attribute has to be read.
+     * @param {String} name Attribute name or object property path.
+     * @return {Any} Attribute value, or `undefined` if the attribute doesn't exist, or 'null' if no model is passed.
+     * @since 0.1
+     *
+    */
+    getModelAttr: function(model, name) {
+        Y.log('getModelAttr', 'info', 'Itsa-LazyModelListAttr');
+        return model && ((model.get && (Lang.type(model.get) === 'function')) ? model.get(name) : model[name]);
+    },
+
+    /**
+     * Sets an attribute-value of a Model OR object. Depends on the class (Y.ModelList v.s. Y.LazyModelList).
+     * Will always work, whether an Y.ModelList or Y.LazyModelList is attached.
+     * If you want to be sure the Model fires an attributeChange-event, then set 'revive' true. This way
+     * lazy-Models will become true Models and fire an attributeChange-event. When the attibute was lazy before,
+     * it will return lazy afterwards.
+     *
+     * @method setModelAttr
+     * @param {Y.Model} model the model (or extended class) from which the attribute has to be read.
+     * @param {String} name Attribute name or object property path.
+     * @param {any} value Value to set.
+     * @param {Object} [options] Data to be mixed into the event facade of the `change` event(s) for these attributes.
+     * In case of Lazy-Model, this only has effect when 'revive' is true.
+     *    @param {Boolean} [options.silent=false] If `true`, no `change` event will be fired.
+     * @since 0.1
+     *
+    */
+    setModelAttr: function(model, name, value, options) {
+        var instance = this,
+            modelIsLazy, revivedModel;
+
+        Y.log('setModelAttr', 'info', 'Itsa-LazyModelListAttr');
+        if (model) {
+            modelIsLazy = !model.get || (Lang.type(model.get) !== 'function');
+            if (modelIsLazy) {
+                revivedModel = instance.revive(model);
+                model[name] = value;
+                if (revivedModel) {
+                    //======================================================================================
+                    // due to a bug, we need to sync cliendId first https://github.com/yui/yui3/issues/530
+                    //
+                    revivedModel._set('clientId', model.clientId, {silent: true});
+                    //
+                    //======================================================================================
+                    revivedModel.set(name, value, options);
+                    instance.free(revivedModel);
+                }
+            }
+            else {
+                model.set(name, value, options);
+            }
+        }
+    },
+
+    /**
+     * Returns the Model as an object. Regardless whether it is a Model-instance, or an item of a LazyModelList
+     * which might be an Object or a Model. Caution: If it is a Model-instance, than you get a Clone. If not
+     * -in case of an object from a LazyModelList- than you get the reference to the original object.
+     *
+     * @method getModelToJSON
+     * @param {Y.Model} model Model or Object from the (Lazy)ModelList
+     * @return {Object} Object or model.toJSON()
+     * @since 0.1
+     *
+    */
+    getModelToJSON : function(model) {
+        Y.log('getModelToJSON', 'info', 'Itsa-LazyModelListAttr');
+        return (model.get && (Lang.type(model.get) === 'function')) ? model.toJSON() : model;
+    }
+
+}, true);
+
+Y.ITSAModellistAttrExtention = ITSAModellistAttrExtention;
+
+Y.Base.mix(Y.ModelList, [ITSAModellistAttrExtention]);
+
+//==========================================================================================================
+//
+// Now the final extention
+//
+//==========================================================================================================
+
 function ITSACalendarModelList() {}
 
 ITSACalendarModelList.ATTRS = {
@@ -63,7 +161,7 @@ ITSACalendarModelList.ATTRS = {
     modelList : {
         value: null,
         lazyAdd: false,
-        validator: function(v){ return (v instanceof Y.ModelList) || v === null; },
+        validator: function(v){ return (v instanceof Y.ModelList) || (v instanceof Y.LazyModelList) || v === null; },
         setter: '_setModelList'
     },
 
@@ -525,13 +623,13 @@ Y.mix(ITSACalendarModelList.prototype, {
         var instance = this,
             modellist = attrmodellist || instance.get('modelList'),
             modelconfig = attrmodelconfig || instance.get('modelConfig') || {},
-            attrDate = modelconfig.date,
-            attrEnddate = modelconfig.enddate,
-            attrCount = modelconfig.count,
-            attrIntervalMinutes = modelconfig.intervalMinutes,
-            attrIntervalHours = modelconfig.intervalHours,
-            attrIntervalDays = modelconfig.intervalDays,
-            attrIntervalMonths = modelconfig.intervalMonths,
+            attrDate = modelconfig && modelconfig.date,
+            attrEnddate = modelconfig && modelconfig.enddate,
+            attrCount = modelconfig && modelconfig.count,
+            attrIntervalMinutes = modelconfig && modelconfig.intervalMinutes,
+            attrIntervalHours = modelconfig && modelconfig.intervalHours,
+            attrIntervalDays = modelconfig && modelconfig.intervalDays,
+            attrIntervalMonths = modelconfig && modelconfig.intervalMonths,
             dates = [],
             modelfunc, pushDate, i, prevDate, prevCount;
 
@@ -545,7 +643,7 @@ Y.mix(ITSACalendarModelList.prototype, {
             if (!attrEnddate && !attrCount) {
                 Y.log('_doSyncModelList will sync only the startdates without interval', 'info', 'Itsa-CalendarModelList');
                 modelfunc = function(model) {
-                    var modelDate = model.get(attrDate);
+                    var modelDate = modellist.getModelAttr(model, attrDate);
                     if (dateIsValid(modelDate)) {
                         dates.push(modelDate);
                         instance._storeModelDate(model, modelDate);
@@ -555,8 +653,8 @@ Y.mix(ITSACalendarModelList.prototype, {
             else if (attrEnddate && !attrCount) {
                 Y.log('_doSyncModelList will sync startdates and enddates without interval', 'info', 'Itsa-CalendarModelList');
                 modelfunc = function(model) {
-                    var modelDate = model.get(attrDate),
-                        modelEndDate = model.get(attrEnddate) || modelDate;
+                    var modelDate = modellist.getModelAttr(model, attrDate),
+                        modelEndDate = modellist.getModelAttr(model, attrEnddate) || modelDate;
                     if (dateIsValid(modelDate)) {
                         if (!dateIsValid(modelEndDate)) {
                             modelEndDate = modelDate;
@@ -574,12 +672,12 @@ Y.mix(ITSACalendarModelList.prototype, {
             else if (!attrEnddate && attrCount) {
                 Y.log('_doSyncModelList will sync only the startdates with intervals', 'info', 'Itsa-CalendarModelList');
                 modelfunc = function(model) {
-                    var modelDate = model.get(attrDate),
-                        modelCount = model.get(attrCount) || 1,
-                        modelIntervalMinutes = (attrIntervalMinutes && model.get(attrIntervalMinutes)),
-                        modelIntervalHours = (attrIntervalHours && model.get(attrIntervalHours)),
-                        modelIntervalDays = (attrIntervalDays && model.get(attrIntervalDays)),
-                        modelIntervalMonths = (attrIntervalMonths && model.get(attrIntervalMonths)),
+                    var modelDate = modellist.getModelAttr(model, attrDate),
+                        modelCount = modellist.getModelAttr(model, attrCount) || 1,
+                        modelIntervalMinutes = (attrIntervalMinutes && modellist.getModelAttr(model, attrIntervalMinutes)),
+                        modelIntervalHours = (attrIntervalHours && modellist.getModelAttr(model, attrIntervalHours)),
+                        modelIntervalDays = (attrIntervalDays && modellist.getModelAttr(model, attrIntervalDays)),
+                        modelIntervalMonths = (attrIntervalMonths && modellist.getModelAttr(model, attrIntervalMonths)),
                         stepMinutes;
                     if (dateIsValid(modelDate)) {
                         if (!Lang.isNumber(modelCount)) {
@@ -624,13 +722,13 @@ Y.mix(ITSACalendarModelList.prototype, {
                 // Make pushDate a Date object, so we can copy Date-values to it
                 pushDate = new Date(0);
                 modelfunc = function(model) {
-                    var modelDate = model.get(attrDate),
-                        modelEndDate = model.get(attrEnddate) || modelDate,
-                        modelCount = model.get(attrCount) || 1,
-                        modelIntervalMinutes = (attrIntervalMinutes && model.get(attrIntervalMinutes)),
-                        modelIntervalHours = (attrIntervalHours && model.get(attrIntervalHours)),
-                        modelIntervalDays = (attrIntervalDays && model.get(attrIntervalDays)),
-                        modelIntervalMonths = (attrIntervalMonths && model.get(attrIntervalMonths)),
+                    var modelDate = modellist.getModelAttr(model, attrDate),
+                        modelEndDate = modellist.getModelAttr(model, attrEnddate) || modelDate,
+                        modelCount = modellist.getModelAttr(model, attrCount) || 1,
+                        modelIntervalMinutes = (attrIntervalMinutes && modellist.getModelAttr(model, attrIntervalMinutes)),
+                        modelIntervalHours = (attrIntervalHours && modellist.getModelAttr(model, attrIntervalHours)),
+                        modelIntervalDays = (attrIntervalDays && modellist.getModelAttr(model, attrIntervalDays)),
+                        modelIntervalMonths = (attrIntervalMonths && modellist.getModelAttr(model, attrIntervalMonths)),
                         stepMinutes, startPushDate, endPushDate;
                     if (dateIsValid(modelDate)) {
                         if (!dateIsValid(modelEndDate)) {
@@ -797,12 +895,14 @@ Y.Calendar.ITSACalendarModelList = ITSACalendarModelList;
 
 Y.Base.mix(Y.Calendar, [ITSACalendarModelList]);
 
-}, 'gallery-2013.02.27-21-03', {
+}, 'gallery-2013.03.27-22-06', {
     "requires": [
         "base-build",
+        "node-base",
         "calendar-base",
         "model",
         "model-list",
+        "lazy-model-list",
         "datatype-date-math",
         "gallery-itsacalendarmarkeddates"
     ]

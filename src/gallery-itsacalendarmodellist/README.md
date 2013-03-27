@@ -10,10 +10,10 @@ myCalendar.getModelsInYear(2015);
 
 Coupling a ModelList to Calendar-instance results in highlighted dates for each Model that has a 'Date-match'.
 To determine a 'Date-match' the Model must have a field of a Date-type.
-This can be defined with the attribute 'modelConfig.date'. When not defined, this Module will
+This can be defined with the <b>Calendar-attribute</b> <i>'modelConfig.date'</i>. When not defined, this Module will
 automaticly search in the first Model-structure for an appropriate modelConfig.date.
 
-The attribute modelConfig can be omitted. But when applied, it should be an object with
+The Calendar-attribute 'modelConfig' can be omitted. But when applied, it should be an object with
 the next possible fields: <b>date</b>, <b>enddate</b>, <b>count</b>, <b>intervalMinutes</b>,
 <b>intervalHours</b>, <b>intervalDays</b> and <b>intervalMonths</b>.
 
@@ -32,12 +32,13 @@ var someEvent = new Y.Model({
 });
 ```
 
-Without specifying modelConfig, this would lead to just marking 25 feb. 2013.
-But when modelConfig specifies which Model-fields hold what values, we can enhance the behaviour in a way that startDate-endDate is marked
-and that the marking is repeated over 10 years.
+Without specifying Calendar.modelConfig, this would lead to just marking 25 feb. 2013.
+But when Calendar.modelConfig specifies which Model-attributes can be used to extract the appropriate values,
+we can enhance the Model-behaviour in a way that startDate-endDate is marked and that the marking is repeated over 10 years.
 
 So, we need to specify modelConfig like this:
 ```js
+// define Calendar-attribute
 myModelConfig = {
         date: 'starts',
         enddate: 'ends',
@@ -48,6 +49,9 @@ myModelConfig = {
         count: 'repeattimes'
 };
 ```
+
+The Calendar-instance will automaticly be updated when there are changes in the Models or ModelList. It also updates when the
+modelList-attribute is changed (attaching another ModelList).
 
 When a Date in the Calendar is clicked, Calendar fires a <b>modelSelectionChange</b>-event which holds an Array of unique bound Models
 regarding to the selectedDates.
@@ -66,6 +70,7 @@ Usage
 
 <u><b>Usage 1:</b></u>
 ```js
+YUI({gallery: 'gallery-2013.02.27-21-03'}).use('calendar', 'gallery-itsacalendarmodellist', function(Y) {
 var myModelList = new Y.ModelList(),
     appointment1, appointment2;
 
@@ -92,10 +97,12 @@ var myModelList = new Y.ModelList(),
 
      // now check if Calendar has a Model at 3-feb 2013 (no need to wait for Calendar to be rendered):
      Y.log('Is there an event at 3-feb 2013? '+myCalendar.dateHasModels(new Date(2013, 01, 03)));
+});
 ```
 
  <u><b>Usage 2:</b></u>
 ```js
+YUI({gallery: 'gallery-2013.02.27-21-03'}).use('calendar', 'gallery-itsacalendarmodellist', function(Y) {
 var myModelList = new Y.ModelList(),
     appointment1, appointment2, myModelConfig;
 
@@ -130,6 +137,7 @@ var myModelList = new Y.ModelList(),
      });
 
      myCalendar.render();
+});
 ```
 
 <u><b>Custom styling:</b></u>
