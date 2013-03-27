@@ -1,0 +1,63 @@
+<div class="intro">
+    <p>
+    Facebook dao is an utility to add progressive functionality to retrieve and update data from facebook using graph api and the facebook js components, so basically this gallery component is a sort of wrapper to easily implement facebook widgets
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>To start using facebook dao the only file requirement is to include yui seed source files</p>
+
+```
+<script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-min.js"></script>
+```
+<p>
+Next, create a new YUI instance for your application and populate it with the modules you need by specifying them as arguments to the YUI().use() method. YUI will automatically load any dependencies required by the modules you specify.
+</p>
+
+<pre class="prettyprint">
+// Create a new YUI instance and populate it with the required modules.
+YUI().use('gallery-facebook-dao', function (Y) {
+    // FacebookDAO is available and ready for use. Add implementation
+    // code here.
+});
+</pre>
+
+
+<h2>Basics</h2>
+
+<p>Instantiate the facebook dao is pretty simple, as can see in the following code:</p>
+
+<pre class="prettyprint">
+var fbDataConfig = {
+    fbAppId: '12345798989',
+    fbChannelFile: '/channel.html',
+    onInit: function (e) {
+        /* after user is logged or already verified that user is logged to facebook and has the permissions */
+    }
+};
+var fbDao = new Y.FacebookDAO(fbDataConfig);
+
+</pre>
+
+<h2>Constructor arguments</h2>
+
+<p>The following table details the object arguments</p>
+<table>
+<thead><tr><th>Argument</th><th>Description</th></tr></thead>
+<tr><td>fbAppId</td><td>Is the app id number provided by facebook to connect to graph api, an application need to be registered from <a href="https://developers.facebook.com/apps">facebook app developer page</a></td></tr>
+<tr><td>fbChannelFile</td><td>File used by facebook api to solve cross domain issues in some browsers</td></tr>
+<tr><td>onInit</td><td>Is a callback <strong>function(e)</strong> provided, is executed after the module has already verified the user permissions and that user is already logged, also is triggered when the user gets logged, so it can be used to start using the dao methods, because if user is not logged it is not going to work</td></tr>
+</table>
+
+
+<h2>Listing some site's posts with the image of the user who posted</h2>
+
+<p>Currently one function added to this component, is a function that retrieves the list of posts of a sites or page from facebook, of course after onInit callback has been executed.</p>
+<p>The method <strong>listSitePosts</strong> receives 2 parameters, the site id and the callback that is going to be triggered with the posts</p>
+<pre class="prettyprint">
+fbDao.listSitePosts('136614686409487', function (data) {
+
+});
+</pre>
+

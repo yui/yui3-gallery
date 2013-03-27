@@ -1,0 +1,10 @@
+{
+    "name": "gallery-facebook-dao",
+    "builds": {
+        "gallery-facebook-dao": {
+            "jsfiles": [
+                "js/gallery-facebook-dao.js"
+            ]
+        }
+    }
+}

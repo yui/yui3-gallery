@@ -1,0 +1,8 @@
+{
+    "gallery-facebook-dao": {
+        "requires": [
+            "base-build",
+            "base"
+        ]
+    }
+}

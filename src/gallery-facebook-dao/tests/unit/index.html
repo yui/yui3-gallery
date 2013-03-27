@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-facebook-dao</title>
+    <script src="/build/yui/yui.js"></script>
+    <script src="/build/gallery-facebook-dao/gallery-facebook-dao.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-facebook-dao'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-facebook-dao');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

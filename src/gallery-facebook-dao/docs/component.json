@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-facebook-dao",
+    "displayName": "Gallery: gallery-facebook-dao",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "asotog88" ],
+    "use"        : [ "gallery-facebook-dao" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

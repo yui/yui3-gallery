@@ -1,0 +1,56 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-facebook-dao
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-facebook-dao
+   #1: Expected an identifier and instead saw 'arguments' (a reserved word).
+       function FacebookDAO(arguments) { // line 9, pos 22
+   #2: Too many var statements.
+       var postsCount = posts.data.length; // line 22, pos 17
+   #3: Too many var statements.
+       for (var i = 0; i < posts.data.length; i++) { // line 23, pos 22
+   #4: Too many var statements.
+       var messageFrom = posts.data[i].from.id; // line 24, pos 21
+   #5: Too many var statements.
+       var message = (post.message) ? post.message : ((post.story) ? post.story : null); // line 29, pos 29
+   #6: Too many var statements.
+       var fb_data = { message: message, portrait_image: image.data.url}; // line 30, pos 29
+   #7: Expected '===' and instead saw '=='.
+       if (postsCount == 0) { // line 32, pos 40
+   #8: Trailing whitespace.
+       }); // line 35, pos 24
+   #9: Don't make functions within a loop.
+       })(messageFrom, i); // line 36, pos 18
+   #10: 'arguments' is defined but never used.
+       function FacebookDAO(arguments) { // line 9, pos 31
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-facebook-dao/gallery-facebook-dao.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-facebook-dao/gallery-facebook-dao.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-facebook-dao/gallery-facebook-dao-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.181 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5012
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5011
+Starting Grover on 1 files with PhantomJS@1.8.2
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-facebook-dao]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (4.028 seconds)
+    test list posts
+       Unexpected error: 'null' is not an object (evaluating 'posts.data')
+Writing files in JSON format to: /src/gallery-facebook-dao/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
