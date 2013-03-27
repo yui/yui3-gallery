@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-popover",
+    "displayName": "Gallery: gallery-popover",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "tilomitra" ],
+    "use"        : [ "gallery-popover" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

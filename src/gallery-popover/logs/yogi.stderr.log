@@ -1,0 +1,6 @@
+shifter [err] /src/gallery-popover/js/gallery-popover.js contains 2 lint errors
+shifter [err] { [Error: ENOENT, open '/src/gallery-popover/assets/gallery-popover-core.css']
+  errno: 34,
+  code: 'ENOENT',
+  path: '/src/gallery-popover/assets/gallery-popover-core.css' }
+shifter [error] skin file is missing: /src/gallery-popover/assets/gallery-popover-core.css

@@ -1,0 +1,342 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="http://localhost/yui3/build/cssnormalize/cssnormalize-min.css">
+        <link rel="stylesheet" type="text/css" href="../../../../build/gallery-widget-pointer/assets/gallery-widget-pointer-core.css">
+
+        <link rel="stylesheet" type="text/css" href="../../../../build/gallery-tipsy/assets/skins/sam/gallery-tipsy.css">
+        <link rel="stylesheet" type="text/css" href="../../../../build/gallery-popover/assets/skins/sam/gallery-popover-skin.css">
+        <link rel="stylesheet" type="text/css" href="http://localhost/yui3/build/cssgrids-responsive/cssgrids-responsive-min.css">
+        <link rel="stylesheet" type="text/css" href="http://localhost/yui3/build/cssbutton/cssbutton-min.css">
+        <link rel="stylesheet" type="text/css" href="http://localhost/yuicss-common/ui.css">
+        <link rel="stylesheet" type="text/css" href="https://rawgithub.com/ccampbell/rainbow/master/themes/github.css">
+
+        <script type="text/javascript" src="//use.typekit.net/ajf8ggy.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+        <style>
+
+            #demoButtons {
+                text-align: center;
+            }
+
+            li {
+                margin-bottom:1.2em;
+            }
+            .header {
+                padding: 20px;
+                background: rgb(81, 115, 126);
+            }
+            .header h1 {
+                color: #fff;
+            }
+            .header h2 {
+                color: rgb(145, 175, 192);
+            }
+
+            .notice {
+                background: #61B842;
+                color: white !important;
+            }
+
+            #fork {
+                font-size:150%;
+            }
+
+            .yui3-button {
+                font-size: 80%;
+                padding: 0.8em 2.5em;
+            }
+
+            .l-centered {
+                text-align: center;
+            }
+
+            code {
+                font-family: Consolas, 'Liberation Mono', Courier, monospace;
+                -moz-border-radius: 3px;
+                -webkit-border-radius: 3px;
+                font-size: 0.8em;
+                border-radius: 3px;
+                border: none;
+                background: #f8f8f8;
+                padding: 0.4em 0.6em;
+            }
+
+            pre {
+                border-radius: 5px;
+            }
+            pre code {
+                font-size:1em;
+                background: none;
+            }
+            .content code {
+                white-space: pre;
+                line-height: normal;
+            }
+
+            .content h3 {
+                font-weight: bold;
+                color: #333;
+                margin-top: 2em;
+            }
+
+            .content .subtitle {
+                font-weight: 100;
+                font-size: 170%;
+            }
+
+            #popoverButton {
+                background: rgb(30, 66, 148);
+                color: rgb(121, 167, 248);
+                display: block;
+                font-size: 130%;
+            }
+        </style>
+    </head>
+    
+    <body class="yui3-skin-sam">
+
+
+        <div class="header yui3-u-1">
+
+            <h1 class="yui3-u-1">Y.Tipsy</h1>
+            <h2 class="yui3-u">Contextual Tooltips and popovers</h2>
+
+        </div>
+        
+        <div class="content l-centered">        
+            <h2 class="subtitle"><code>Y.Tipsy</code> is a YUI widget for easy tooltips and popovers.</h2>        
+            
+            <a id="fork" href="https://github.com/tilomitra/tipsy" data-placement="left" data-content="Fork from Github. Really, don't be shy!" class="yui3-button notice">Fork from Github</a>
+        </div>
+
+        <div class="content">
+            <h2>Getting Started</h2>
+
+            <p>You can get <code>Y.Tipsy</code> from the YUI Gallery.</p>
+
+            <pre><code data-language="javascript">
+    YUI({
+        gallery: 'gallery-2013.03.20-19-59'
+    }).use('gallery-tipsy', function (Y) { 
+        //Y.Tipsy is loaded and good to go.
+    });
+            </code></pre>
+
+
+            <h2>Usage</h2>
+
+            <p><code>Y.Tipsy</code> is a <code>Y.Widget</code> subclass that lets you easily create tooltips. Each instantiation renders a single tooltip and can support multiple HTML elements. For example, lets say you have this HTML:</p>
+
+            <pre><code data-language="html">
+    <a href="#" data-placement="above" rel="tipsy" data-content="Lorem Ipsum Dolor Sit Amet?">Hover to show tooltip</a>
+    <a href="#" data-placement="right" rel="tipsy" data-content="Some more content here. This is my second tooltip.">This tooltip will be positioned to my right.</a>
+            </code></pre>
+
+            <p>You can set up a single <code>Y.Tipsy</code> instance to handle both of these:</p>
+
+            <pre><code data-language="javascript">
+                
+    var tipsy = new Y.Tipsy({
+        selector: "[rel='tipsy']"
+    });
+
+    tipsy.render();  
+            </code></pre>
+
+
+            <h2>Under the hood</h2>
+
+            <p><code>Y.Tipsy</code> is built using the following Widget Extensions:</p>
+
+            <ul>
+                <li><code>WidgetStack</code></li>
+                <li><code>WidgetPositionAlign</code></li>
+                <li><code>WidgetPointer</code></li>
+            </ul>
+
+            <p>As a result, it has all the attributes that are exposed by these extensions in addition to those provided by <code>Y.Widget</code>.</p>
+            
+
+            <h3>Pointing to a node</h3>
+
+    
+            <p>The <code>WidgetPointer</code> extension exposes a <code>placement</code> attribute that lets you position the tooltip relative to an HTML node. The possible values are <code>"above"</code>, <code>"below"</code>, <code>"left"</code>, and <code>"right"</code>.</p>
+
+            <p>You can do this via JavaScript:</p>
+
+            <pre><code data-language="javascript">
+    var tipsy = new Y.Tipsy({
+        selector: "[rel='tipsy']",
+        placement: 'above' //the tooltip will be above the content, with the pointer facing down.
+    });
+
+    tipsy.render();  
+            </code></pre>
+
+            <p>Or you can do it through the <code>data-placement</code> data attribute.</p>
+
+            <pre><code data-language="html">
+    <a href="#" data-placement="above" rel="tipsy" data-content="Lorem Ipsum Dolor Sit Amet?">Hover to show tooltip</a>
+            </code></pre>
+
+            <h3>Setting Content</h3>
+
+            <p>Content can be set either through the <code>data-content</code> HTML attribute, or through the <code>content</code> ATTR.</p>
+
+            <pre><code data-language="javascript">
+        var tipsy = new Y.Tipsy({
+            selector: "[rel='tipsy']",
+            content: "Here's some content I want to show."
+        });
+
+        tipsy.render();  
+            </code></pre>
+
+            <h3>Delegating</h3>
+
+            <p>Under the hood, <code>Y.Tipsy</code> creates a single listener to listen for events on multiple nodes. It does this through a <code>delegate</code> attribute. If one is not supplied, it resorts to using the <code>document</code>. An event listener is set on the delegate, and the supplied <code>selector</code> is passed in as a filter.</p>
+
+            <h3>Setting Events</h3>
+
+            <p>To set events on <code>Y.Tipsy</code>, use the <code>showOn</code> and <code>hideOn</code> attributes. By default, the tooltip will show on <code>['mouseover', 'touchstart', 'focus']</code>, and will hide on <code>['mouseout', 'touchend', 'blur']</code>. You can customize that pretty easily. Let's say you want a <code>Y.Tipsy</code> that you want to show and hide on <code>click</code>:</p>
+
+            <pre><code data-language="javascript">
+    var clickTipsy = new Y.Tipsy({
+        selector: "[rel='click-tipsy']",
+        showOn: { selector: '#topbutton', events: 'click' },
+        hideOn: { selector: '#topbutton', events: 'clickoutside' },
+    });
+            </code></pre>
+
+            <h2>Y.Popover</h2>
+            
+            <p>
+                <a class="popover" href="#" data-placement="below">Y.Popover</a> extends Y.Tipsy 
+                and mixes in the <code>Y.WidgetStdMod</code> extension to introduce the notion of a header, body and footer. You can use it exactly how you would use <code>Y.Tipsy</code>, but now you have access to three new attributes: <code>headerContent</code>, <code>bodyContent</code>, and <code>footerContent</code>.
+            </p>
+
+            <h3>Usage</h3>
+
+            <p>You can get <code>Y.Tipsy</code> from the YUI Gallery (it's not there yet).</p>
+
+            <pre><code data-language="javascript">
+    YUI({
+    }).use('gallery-popover', function (Y) { 
+        //Y.Popover is loaded and good to go.
+    });
+            </code></pre>
+
+            <a id="popoverButton" class="popover yui3-button" href="#" data-placement="above" data-header="Additional Features" data-content="Here are some additional features that are on the roadmap." data-footer="A little footer.">Popover Demo</a>
+
+            <p>You can set these through HTML data-attributes too:</p>
+
+            <pre><code data-language="html">
+    <a class="popover yui3-button" href="#" data-placement="below" data-header="Additional Features" data-content="Here are some additional features that are on the roadmap." data-footer="A little footer.">Popover Demo</a>
+            </code></pre>
+            
+            <pre><code data-language="javascript">
+    var popover = new Y.Popover({
+        selector: ".popover",
+        width: 300
+    });
+
+    popover.render();
+            </code></pre>
+
+            
+            <h2>See it in action</h2>
+            
+            <p>Hover over the links below to see <code>Y.Tipsy</code> in action.</p>
+            
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur aliquet mollis turpis non tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Class aptent taciti sociosqu ad <a href="#" id="someContent1" class="yui3-tooltip-trigger" data-placement="above" rel="tipsy" data-content="Lorem Ipsum Dolor Sit Amet?">hover to show tooltip</a> per conubia nostra, per inceptos himenaeos. Nunc posuere eros non orci auctor non faucibus nunc feugiat. Etiam tellus erat, bibendum non rutrum nec, commodo at tellus. Etiam feugiat risus vitae leo tincidunt ac venenatis purus vulputate. Donec at nisl ut nunc euismod varius. <a href="#" class="yui3-tooltip-trigger" id="someContent2" data-placement="right" rel="tipsy" data-content="I'm aligned to the right.">hover</a> id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, fringilla malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.</p>
+            
+            <div id="demoButtons">
+                <p>
+                    <button id="topbutton" class="yui3-button yui3-tooltip-trigger" data-placement="above" rel="click-tipsy" data-header="A Clicked Popover" data-content="YUI rocks.">Click to activate a popover.</button>
+                </p>
+                <p>
+                    <button id="leftbutton" class="yui3-button yui3-tooltip-trigger" data-placement="left" rel="tipsy" data-content="Ut eget nunc nulla. <br/>Curabitur mollis, purus eu sodales luctus<br/>, metus sem sagittis justo">Tooltip positioned to the left with a lot of content</button>
+                </p>
+                <p>
+                    <button id="rightbutton" class="yui3-button" data-placement="left" rel="tipsy" data-title="Hello, Popover!" data-content="id lorem erat. Ut eget nunc nulla. Curabitur mollis, purus eu sodales luctus, metus sem sagittis justo, fringilla malesuada augue nunc sed quam. Curabitur ac magna eu sapien convallis tristique.">Popover positioned to the left</button>
+                </p>
+                <p>
+                    <button id="bottombutton" class="yui3-button yui3-tooltip-trigger" data-placement="below" rel="tipsy" data-content="*hugs* the button">Tooltip positioned below</button>
+                </p>
+            </div>
+
+        </div>
+
+        <script src="http://localhost/yui3/build/yui/yui-debug.js"></script>
+        <script>
+            YUI({
+                groups: {
+                    gallery: {
+                        base    : '../../../../build/',
+                        patterns: {
+                            'gallery-'   : {},
+                            'gallerycss-': { type: 'css' }
+                        },
+                        modules: {
+                            'gallery-widget-pointer': {
+                                path     : 'gallery-widget-pointer/gallery-widget-pointer.js',
+                            },
+                            'gallery-tipsy': {
+                                path     : 'gallery-tipsy/gallery-tipsy.js',
+                            },
+                            'gallery-popover': {
+                                path     : 'gallery-popover/gallery-popover.js',
+                            }
+                        }
+                    }
+                },
+                
+                filter: 'raw',
+            
+            }).use("gallery-tipsy", "gallery-popover", 'event-outside', function(Y) {
+
+                var forkTipsy = new Y.Tipsy({
+                    selector: "#fork",
+                });
+                forkTipsy.render(); 
+
+                var regularTipsy = new Y.Tipsy({
+                    selector: "[rel='tipsy']",
+                    zIndex: 2
+                });
+                regularTipsy.render();  
+
+
+                var clickTipsy = new Y.Popover({
+                    selector: "[rel='click-tipsy']",
+                    zIndex: 2,
+                    showOn: { selector: '#topbutton', events: 'click' },
+                    hideOn: { selector: '#topbutton', events: 'clickoutside' },
+                });
+
+                clickTipsy.render();
+
+                var popover = new Y.Popover({
+                    selector: ".popover",
+                    zIndex: 2,
+                    width: 300,
+                    headerContent: 'Header',
+                    bodyContent: 'This is my body'
+                });
+                popover.render();             
+            });
+        </script>
+        <script src="https://rawgithub.com/ccampbell/rainbow/master/js/rainbow.min.js"></script>
+        <script src="https://rawgithub.com/ccampbell/rainbow/master/js/language/html.js"></script>
+        <script src="https://rawgithub.com/ccampbell/rainbow/master/js/language/javascript.js"></script>
+
+
+    </body>
+    
+</html>
+
+

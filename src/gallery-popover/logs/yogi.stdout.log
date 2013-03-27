@@ -1,0 +1,25 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-popover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-popover
+   #1: Trailing whitespace.
+       _setTooltipContent: function (node) { // line 11, pos 42
+   #2: 'contentBox' is defined but never used.
+       contentBox = this.get('contentBox'); // line 15, pos 23
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-popover/gallery-popover.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-popover
+shifter [queu] coverage file read, starting coverage for: gallery-popover/gallery-popover.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[31mERROR[0m[37m][0m yogi detected an error, exiting code 1

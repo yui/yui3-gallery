@@ -1,0 +1,11 @@
+{
+    "gallery-popover": {
+        "requires": [
+            "base-build",
+            "gallery-tipsy",
+            "widget-stdmod"
+        ],
+        "skinnable": true
+    },
+    "version": 0.1
+}
