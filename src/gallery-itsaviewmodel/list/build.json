@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsaviewmodellist",
+    "builds": {
+        "gallery-itsaviewmodellist": {
+            "jsfiles": [
+                "js/gallery-itsaviewmodellist.js"
+            ]
+        }
+    }
+}

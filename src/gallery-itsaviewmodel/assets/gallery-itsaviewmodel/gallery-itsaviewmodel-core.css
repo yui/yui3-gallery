@@ -1,0 +1,16 @@
+.yui3-js-enabled .yui3-itsaviewmodel-loading {
+    display: none;
+}
+
+.yui3-itsaviewmodel {
+    overflow: auto;
+}
+
+.yui3-skin-sam .yui3-itsaviewmodel.itsa-modelview-styled {
+    border: solid 1px #CCC;
+    padding: 18px 14px;
+    background-color: #EDF5FF;
+    -webkit-box-shadow: 5px 5px 6px rgba(50, 50, 50, 0.45);
+    -moz-box-shadow:    5px 5px 6px rgba(50, 50, 50, 0.45);
+    box-shadow:         5px 5px 6px rgba(50, 50, 50, 0.45);
+}

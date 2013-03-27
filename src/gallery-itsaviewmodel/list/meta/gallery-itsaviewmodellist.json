@@ -1,0 +1,10 @@
+{
+    "gallery-itsaviewmodellist": {
+        "requires": [
+            "base-build",
+            "widget",
+            "gallery-itsamodellistviewextention"
+        ],
+        "skinnable": true
+    }
+}
