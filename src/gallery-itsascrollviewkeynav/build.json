@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsascrollviewkeynav",
+    "builds": {
+        "gallery-itsascrollviewkeynav": {
+            "jsfiles": [
+                "js/gallery-itsascrollviewkeynav.js"
+            ]
+        }
+    }
+}
