@@ -124,7 +124,7 @@ YUI.add('gallery-widget-pointer', function (Y, NAME) {
 
 
 
-}, 'gallery-2013.03.20-19-59', {
+}, 'gallery-2013.03.27-22-06', {
     "requires": [
         "widget",
         "base-build",

@@ -12,7 +12,7 @@
     border-right: 5px solid transparent;
     border-bottom: 5px solid black;
     bottom: 0;
-    top: 0 !important;
+    top: 0;
     left: 50%;
     margin-left: -5px;
 }

@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 15,
-    "duration": 264,
+    "duration": 411,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,44 +14,44 @@
         "errors": 0,
         "ignored": 0,
         "total": 5,
-        "duration": 86,
+        "duration": 135,
         "type": "testcase",
         "test pointer left": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test pointer left",
-            "duration": 15
+            "duration": 37
         },
         "test pointer right": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test pointer right",
-            "duration": 6
+            "duration": 14
         },
         "test pointer up": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test pointer up",
-            "duration": 6
+            "duration": 8
         },
         "test pointer down": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test pointer down",
-            "duration": 6
+            "duration": 7
         },
         "test placementChange": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test placementChange",
-            "duration": 10
+            "duration": 24
         }
     },
-    "timestamp": "Wed 20 Mar 2013 03:01:03 PM CDT",
+    "timestamp": "Wed 27 Mar 2013 05:07:18 PM CDT",
     "consoleInfo": []
 }
