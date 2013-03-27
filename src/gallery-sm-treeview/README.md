@@ -46,14 +46,14 @@ In your HTML, create a container element for the TreeView. Be sure to add the `y
 Load YUI onto the page if you haven't already.
 
 ```html
-<script src="http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-min.js"></script>
 ```
 
 Next, in your JS, create an instance of `Y.TreeView`, specify some nodes to add to the tree, then render the view into a container element.
 
 ```js
 YUI({
-    gallery: 'gallery-2013.02.27-21-03'
+    gallery: 'gallery-2013.03.20-19-59'
 }).use('gallery-sm-treeview', function (Y) {
     // Create a new TreeView with a few nodes.
     var treeview = new Y.TreeView({

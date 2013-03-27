@@ -3,6 +3,11 @@ SmugMug TreeView History
 
 ## git
 
+* `Y.TreeView` now mixes in `Y.Tree.Labelable`, which it should have been doing
+  already. Oops.
+
+## 2013-03-20
+
 * Now using `Y.Tree` from YUI core, which means TreeView requires YUI 3.9.0+.
 
 * TreeView templates can now be more easilly overridden by passing a

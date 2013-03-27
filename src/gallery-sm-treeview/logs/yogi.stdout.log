@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.76 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-sm-treeview
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -14,21 +14,21 @@ shifter [queu] file has changed, continuing build
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
+shifter [queu] compressing gallery-sm-treeview/gallery-sm-treeview.js with UglifyJS
 shifter [queu] compressing gallery-sm-treeview-templates/gallery-sm-treeview-templates.js with UglifyJS
 shifter [queu] writing -min file
-shifter [queu] compressing gallery-sm-treeview/gallery-sm-treeview.js with UglifyJS
 shifter [queu] writing -min file
 shifter [info] shifting for coverage
-shifter [info] shifting for coverage
 shifter [info] shifting skin for gallery-sm-treeview
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-sm-treeview/gallery-sm-treeview.js
 shifter [queu] coverage file read, starting coverage for: gallery-sm-treeview-templates/gallery-sm-treeview-templates.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
-shifter [queu] writing coverage file to gallery-sm-treeview-templates/gallery-sm-treeview-templates-coverage.js
-shifter [queu] coverage file read, starting coverage for: gallery-sm-treeview/gallery-sm-treeview.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-sm-treeview/gallery-sm-treeview-coverage.js
+shifter [queu] writing coverage file to gallery-sm-treeview-templates/gallery-sm-treeview-templates-coverage.js
 shifter [queu] copying assets to skin for sam
    #1: [warning] The universal selector (*) is known to be slow.
        .yui3-treeview * { // line 2, pos 16
@@ -51,18 +51,18 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.317 seconds, pretty fast huh?
+shifter [info] finished in 0.825 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5004
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5008
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5007
 Starting Grover on 1 files with PhantomJS@1.8.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [TreeView]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.024 seconds) 51%
+✔ [TreeView]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.029 seconds) 51%
 Writing files in JSON format to: /src/gallery-sm-treeview/logs/tests.json
 
 ---------------------------------------+-----------+-----------+-----------+-----------+
@@ -84,6 +84,6 @@ Functions    : 8.7% ( 2/23 )
 Lines        : 4.72% ( 6/127 )
 ================================================================================
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.024 seconds)
-  [Grover Execution Timer] 1.064 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.029 seconds)
+  [Grover Execution Timer] 1.076 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

@@ -16,13 +16,16 @@ TreeView widget.
 @constructor
 @extends View
 @uses Tree
+@uses Tree.Labelable
 @uses Tree.Openable
 @uses Tree.Selectable
 **/
 
 var getClassName = Y.ClassNameManager.getClassName,
 
-TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Selectable], {
+TreeView = Y.Base.create('treeView', Y.View, [
+    Y.Tree, Y.Tree.Labelable, Y.Tree.Openable, Y.Tree.Selectable
+], {
     // -- Public Properties ----------------------------------------------------
 
     /**
@@ -538,7 +541,7 @@ TreeView = Y.Base.create('treeView', Y.View, [Y.Tree, Y.Tree.Openable, Y.Tree.Se
 Y.TreeView = Y.mix(TreeView, Y.TreeView);
 
 
-}, 'gallery-2013.03.20-19-59', {
+}, 'gallery-2013.03.27-22-06', {
     "requires": [
         "base-build",
         "classnamemanager",

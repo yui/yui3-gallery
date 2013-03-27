@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 0,
-    "duration": 72,
+    "duration": 87,
     "type": "report",
     "TreeView": {
         "name": "TreeView",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 23,
+        "duration": 26,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -23,11 +23,11 @@
             "errors": 0,
             "ignored": 0,
             "total": 0,
-            "duration": 10,
+            "duration": 14,
             "type": "testcase"
         }
     },
-    "timestamp": "Wed 20 Mar 2013 03:01:04 PM CDT",
+    "timestamp": "Wed 27 Mar 2013 05:07:21 PM CDT",
     "coverage": {
         "build/gallery-sm-treeview/gallery-sm-treeview.js": {
             "path": "build/gallery-sm-treeview/gallery-sm-treeview.js",
