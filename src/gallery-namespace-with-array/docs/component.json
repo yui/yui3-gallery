@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-namespace-with-array",
+    "displayName": "Gallery: gallery-namespace-with-array",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "wenbing" ],
+    "use"        : [ "gallery-namespace-with-array" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

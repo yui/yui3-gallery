@@ -1,0 +1,10 @@
+{
+    "name": "gallery-namespace-with-array",
+    "builds": {
+        "gallery-namespace-with-array": {
+            "jsfiles": [
+                "js/gallery-namespace-with-array.js"
+            ]
+        }
+    }
+}

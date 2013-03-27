@@ -1,0 +1,7 @@
+{
+    "gallery-namespace-with-array": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}

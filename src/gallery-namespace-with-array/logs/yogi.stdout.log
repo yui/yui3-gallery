@@ -1,0 +1,42 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-namespace-with-array
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-namespace-with-array
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-namespace-with-array/gallery-namespace-with-array.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-namespace-with-array/gallery-namespace-with-array.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-namespace-with-array/gallery-namespace-with-array-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.104 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5004
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.8.2
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [gallery-namespace-with-array]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.006 seconds)
+Writing files in JSON format to: /src/gallery-namespace-with-array/logs/tests.json
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
+----------------------------------------------------------------
+✔ [Total]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.006 seconds)
+  [Grover Execution Timer] 0.743 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

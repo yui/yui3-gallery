@@ -1,0 +1,29 @@
+{
+    "name": "gallery-namespace-with-array",
+    "passed": 3,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 18,
+    "type": "report",
+    "namespace regular function works": {
+        "name": "namespace regular function works",
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 5,
+        "type": "testcase",
+        "test namespace works correct": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test namespace works correct",
+            "duration": 2
+        }
+    },
+    "timestamp": "Wed 27 Mar 2013 05:07:19 PM CDT",
+    "consoleInfo": []
+}

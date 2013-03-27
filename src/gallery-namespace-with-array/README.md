@@ -1,0 +1,2 @@
+gallery-namespace-with-array
+========
