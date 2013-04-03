@@ -423,7 +423,12 @@ function validateElements(
 	var count  = list.size();
 	for (var i=0; i<count; i++)
 	{
-		var e  = list.item(i);
+		var e = list.item(i);
+		if (!Y.DOM.hasClass(e, 'quickedit-field'))
+		{
+			continue;
+		}
+
 		var qe = this.column_map[ this._getColumnKey(e) ].quickEdit;
 		if (!qe)
 		{

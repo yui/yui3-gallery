@@ -1,14 +1,163 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.3 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-quickedit
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-quickedit
+   #1: Line too long.
+       * @description If true, getChanges() returns a record for every row, even if the record is empty.  Set to false if you want getChanges() to only return records that contain data. // line 147, pos 183
+   #2: Too many var statements.
+       var qe = o.column.quickEdit; // line 219, pos 9
+   #3: Too many var statements.
+       var qe = o.column.quickEdit; // line 243, pos 9
+   #4: Too many var statements.
+       var field = cell.one('.quickedit-field'); // line 293, pos 9
+   #5: Too many var statements.
+       var value = Y.Lang.trim(field.get('value')); // line 299, pos 9
+   #6: Possible strict violation.
+       cell = this.getCell(cell, 'below'); // line 307, pos 16
+   #7: Possible strict violation.
+       var cell = this.getCell(e.target, e.charCode == 38 ? 'above' : 'below'); // line 365, pos 16
+   #8: Expected '===' and instead saw '=='.
+       var cell = this.getCell(e.target, e.charCode == 38 ? 'above' : 'below'); // line 365, pos 50
+   #9: Too many var statements.
+       var input = cell.one('.quickedit-field'); // line 368, pos 13
+   #10: Possible strict violation.
+       var forest = this.get('host').get('columns'); // line 383, pos 18
+   #11: Too many var statements.
+       var map    = {}; // line 384, pos 9
+   #12: Possible strict violation.
+       this.column_list = Y.reduce(forest, [], accumulate); // line 407, pos 5
+   #13: Possible strict violation.
+       this.column_map  = map; // line 408, pos 5
+   #14: Possible strict violation.
+       var host = this.get('host'); // line 422, pos 16
+   #15: Too many var statements.
+       var status = true; // line 424, pos 9
+   #16: Too many var statements.
+       var count  = list.size(); // line 425, pos 9
+   #17: Too many var statements.
+       for (var i=0; i<count; i++) // line 426, pos 14
+   #18: Too many var statements.
+       var e = list.item(i); // line 428, pos 13
+   #19: Too many var statements.
+       var qe = this.column_map[ this._getColumnKey(e) ].quickEdit; // line 434, pos 13
+   #20: Possible strict violation.
+       var qe = this.column_map[ this._getColumnKey(e) ].quickEdit; // line 434, pos 18
+   #21: Possible strict violation.
+       var qe = this.column_map[ this._getColumnKey(e) ].quickEdit; // line 434, pos 35
+   #22: Too many var statements.
+       var msg_list = qe.validation ? qe.validation.msg : null; // line 439, pos 13
+   #23: Too many var statements.
+       var info = Y.FormManager.validateFromCSSData(e, msg_list); // line 441, pos 13
+   #24: Possible strict violation.
+       this.displayMessage(e, info.error, 'error'); // line 444, pos 13
+   #25: Possible strict violation.
+       this.displayMessage(e, msg_list ? msg_list.regex : null, 'error'); // line 455, pos 17
+   #26: Too many var statements.
+       var h = this.afterHostEvent('render', function() // line 484, pos 13
+   #27: Trailing whitespace.
+       * // line 494, pos 7
+   #28: Too many var statements.
+       for (var i=0; i<this.column_list.length; i++) // line 505, pos 18
+   #29: Too many var statements.
+       var col = this.column_list[i]; // line 507, pos 17
+   #30: Too many var statements.
+       var key = col.key; // line 508, pos 17
+   #31: Too many var statements.
+       var qe  = col.quickEdit, // line 514, pos 17
+   #32: Too many var statements.
+       var fn = null; // line 518, pos 21
+   #33: Too many var statements.
+       var container = host.get('contentBox'); // line 548, pos 13
+   #34: Trailing whitespace.
+       * // line 561, pos 7
+   #35: Too many var statements.
+       var col      = this.column_list[i]; // line 570, pos 17
+   #36: Too many var statements.
+       var host      = this.get('host'); // line 587, pos 13
+   #37: Too many var statements.
+       var container = host.get('contentBox'); // line 588, pos 13
+   #38: Trailing whitespace.
+       * // line 608, pos 7
+   #39: Too many var statements.
+       var host      = this.get('host'); // line 629, pos 13
+   #40: Too many var statements.
+       var rows      = host._tbodyNode.get('children'); // line 630, pos 13
+   #41: Too many var statements.
+       var change  = {}, // line 635, pos 17
+   #42: Too many var statements.
+       var field_count = list.size(); // line 638, pos 17
+   #43: Too many var statements.
+       for (var j=0; j<field_count; j++) // line 639, pos 22
+   #44: Too many var statements.
+       var field = list.item(j); // line 641, pos 21
+   #45: Too many var statements.
+       var key   = this._getColumnKey(field); // line 642, pos 21
+   #46: Too many var statements.
+       var qe    = this.column_map[key].quickEdit; // line 643, pos 21
+   #47: Too many var statements.
+       var prev  = rec.get(key); // line 644, pos 21
+   #48: Too many var statements.
+       var val = Y.Lang.trim(field.get('value')); // line 646, pos 21
+   #49: Too many var statements.
+       for (var j=0; j<always_include.length; j++) // line 657, pos 26
+   #50: 'j' is already defined.
+       for (var j=0; j<always_include.length; j++) // line 657, pos 27
+   #51: Too many var statements.
+       var key     = always_include[j]; // line 659, pos 25
+   #52: 'key' is already defined.
+       var key     = always_include[j]; // line 659, pos 33
+   #53: Too many var statements.
+       var host   = this.get('host'); // line 686, pos 13
+   #54: Too many var statements.
+       var e1 = host._tbodyNode.getElementsByTagName('input'); // line 688, pos 13
+   #55: Too many var statements.
+       var e2 = host._tbodyNode.getElementsByTagName('textarea'); // line 689, pos 13
+   #56: Too many var statements.
+       var e3 = host._tbodyNode.getElementsByTagName('select'); // line 690, pos 13
+   #57: Trailing whitespace.
+       * // line 706, pos 7
+   #58: Too many var statements.
+       var cell = e.getAncestorByTagName('td'); // line 758, pos 13
+   #59: Trailing whitespace.
+       * // line 791, pos 7
+   #60: 'td' is defined but never used.
+       QuickEdit.copyDownFormatter = function(o, td) // line 330, pos 45
+   #61: 'config' is defined but never used.
+       initializer: function(config) // line 475, pos 33
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-quickedit/gallery-quickedit.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-quickedit
+shifter [queu] coverage file read, starting coverage for: gallery-quickedit/gallery-quickedit.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-quickedit/gallery-quickedit-coverage.js
+shifter [queu] copying assets to skin for sam
+shifter [info] css lint passed for /assets/skins/sam/gallery-quickedit-skin.css
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.382 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
-Starting Grover on 1 files with PhantomJS@1.8.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.9.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-quickedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.023 seconds) 10%
+✔ [gallery-quickedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds) 10%
 Writing files in JSON format to: /src/gallery-quickedit/logs/tests.json
 ┌───────────────────────────────────────────────────┬──────────┬───────┬─────────────┬──────┐
 │[34m  path                                             [39m│[34m   lines  [39m│[34m    %  [39m│[34m  functions  [39m│[34m   %  [39m│
@@ -18,6 +167,7 @@ Writing files in JSON format to: /src/gallery-quickedit/logs/tests.json
 │  total                                            │  23/214  │  10%  │       1/26  │  3%  │
 └───────────────────────────────────────────────────┴──────────┴───────┴─────────────┴──────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.023 seconds)
-  [Grover Execution Timer] 2.079 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds)
+  [Grover Execution Timer] 1.064 seconds
 Failed to find source file: /build/gallery-quickedit/gallery-quickedit.js
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

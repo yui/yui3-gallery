@@ -5,9 +5,9 @@
     "errors": 0,
     "ignored": 0,
     "total": 0,
-    "duration": 69,
+    "duration": 3,
     "type": "report",
-    "timestamp": "Wed 16 Jan 2013 03:06:48 PM CST",
+    "timestamp": "Wed 03 Apr 2013 02:55:31 PM CDT",
     "coverage": {
         "/build/gallery-quickedit/gallery-quickedit.js": {
             "lines": {
@@ -260,5 +260,6 @@
             "calledFunctions": 1,
             "path": "/build/gallery-quickedit/gallery-quickedit.js"
         }
-    }
+    },
+    "consoleInfo": []
 }
