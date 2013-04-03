@@ -1,15 +1,439 @@
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using yogi@0.0.47 on node@0.8.15
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  using module: gallery-treeble
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  prepping grover tests
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  adding tests route
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  listening on: http://127.0.0.1:5000
-[35myogi[39m [37m[37m[[39m[37minfo[39m[37m][39m[39m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.7.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.3 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-treeble
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-treeble
+   #1: Trailing whitespace.
+       * // line 16, pos 3
+   #2: Trailing whitespace.
+       * // line 21, pos 3
+   #3: Trailing whitespace.
+       * // line 40, pos 7
+   #4: Trailing whitespace.
+       * // line 45, pos 7
+   #5: Trailing whitespace.
+       * // line 86, pos 7
+   #6: Trailing whitespace.
+       * // line 100, pos 7
+   #7: Trailing whitespace.
+       * // line 117, pos 7
+   #8: Too many var statements.
+       var startIndex    = req.start; // line 158, pos 9
+   #9: Too many var statements.
+       var childNodesKey = req.ds.treeble_config.childNodesKey; // line 159, pos 9
+   #10: Too many var statements.
+       var nodeOpenKey   = req.ds.treeble_config.nodeOpenKey; // line 160, pos 9
+   #11: Too many var statements.
+       for (var j=0; j<open.length; j++) // line 162, pos 14
+   #12: Too many var statements.
+       var uniqueIdKey = this.get('uniqueIdKey'); // line 170, pos 9
+   #13: Possible strict violation.
+       var uniqueIdKey = this.get('uniqueIdKey'); // line 170, pos 23
+   #14: Too many var statements.
+       var result = true; // line 172, pos 9
+   #15: Too many var statements.
+       for (var k=0; k<data.length; k++) // line 173, pos 14
+   #16: Too many var statements.
+       var i = startIndex + k; // line 175, pos 13
+   #17: Too many var statements.
+       var ds = data[k][ childNodesKey ]; // line 176, pos 13
+   #18: Possible strict violation.
+       delete this._open_cache[ data[k][ uniqueIdKey ] ]; // line 189, pos 24
+   #19: Too many var statements.
+       var item = // line 195, pos 17
+   #20: Too many var statements.
+       var cached_item = null; // line 205, pos 17
+   #21: Possible strict violation.
+       cached_item = this._open_cache[ data[k][ uniqueIdKey ] ]; // line 208, pos 31
+   #22: Possible strict violation.
+       this._redo      = this._redo || item.open; // line 213, pos 21
+   #23: Possible strict violation.
+       this._redo      = this._redo || item.open; // line 213, pos 39
+   #24: Possible strict violation.
+       this._open_cache[ data[k][ uniqueIdKey ] ] = item; // line 216, pos 17
+   #25: Possible strict violation.
+       this._toggle.push(req.path.concat(i)); // line 221, pos 17
+   #26: Expected '===' and instead saw '=='.
+       if (list[i].index == nodeIndex) // line 240, pos 27
+   #27: Possible strict violation.
+       var open = this._open; // line 252, pos 16
+   #28: Too many var statements.
+       var last = path.length-1; // line 253, pos 9
+   #29: Too many var statements.
+       for (var i=0; i<last; i++) // line 254, pos 14
+   #30: Too many var statements.
+       var node = searchOpen(open, path[i]); // line 256, pos 13
+   #31: Possible strict violation.
+       open  = this._open; // line 272, pos 17
+   #32: Possible strict violation.
+       total = this._topNodeTotal; // line 273, pos 17
+   #33: Possible strict violation.
+       if (this.get('paginateChildren')) // line 276, pos 9
+   #34: Too many var statements.
+       for (var i=0; i<open.length; i++) // line 278, pos 18
+   #35: Too many var statements.
+       var node = open[i]; // line 280, pos 17
+   #36: Possible strict violation.
+       total += countVisibleNodes.call(this, node.children); // line 284, pos 49
+   #37: Possible strict violation.
+       var save_toggle = this._toggle.slice(0); // line 296, pos 27
+   #38: Possible strict violation.
+       this._cancelAllRequests(); // line 299, pos 5
+   #39: Possible strict violation.
+       this._toggle = save_toggle; // line 303, pos 9
+   #40: 'save_toggle' used out of scope.
+       this._toggle = save_toggle; // line 303, pos 24
+   #41: Possible strict violation.
+       this._redo                = false; // line 306, pos 5
+   #42: Possible strict violation.
+       this._generating_requests = true; // line 307, pos 5
+   #43: Too many var statements.
+       var req = this._callback.request; // line 309, pos 9
+   #44: Possible strict violation.
+       var req = this._callback.request; // line 309, pos 15
+   #45: Possible strict violation.
+       if (this.get('paginateChildren')) // line 310, pos 9
+   #46: Possible strict violation.
+       this._slices = getVisibleSlicesPgAll(req.startIndex, req.resultCount, // line 312, pos 9
+   #47: Mixed spaces and tabs.
+       this.get('root'), this._open); // line 313, pos 11
+   #48: Possible strict violation.
+       this.get('root'), this._open); // line 313, pos 46
+   #49: Possible strict violation.
+       this.get('root'), this._open); // line 313, pos 64
+   #50: Possible strict violation.
+       this._slices = getVisibleSlicesPgTop(req.startIndex, req.resultCount, // line 317, pos 9
+   #51: Mixed spaces and tabs.
+       this.get('root'), this._open); // line 318, pos 11
+   #52: Possible strict violation.
+       this.get('root'), this._open); // line 318, pos 46
+   #53: Possible strict violation.
+       this.get('root'), this._open); // line 318, pos 64
+   #54: Possible strict violation.
+       requestSlices.call(this, req); // line 321, pos 24
+   #55: Possible strict violation.
+       this._generating_requests = false; // line 323, pos 5
+   #56: Possible strict violation.
+       checkFinished.call(this); // line 324, pos 24
+   #57: Too many var statements.
+       var m = 0, prev = -1, presend = false; // line 353, pos 9
+   #58: Too many var statements.
+       for (var i=0; i<open.length; i++) // line 354, pos 14
+   #59: Too many var statements.
+       var node = open[i]; // line 356, pos 13
+   #60: Too many var statements.
+       var delta = node.index - prev; // line 362, pos 13
+   #61: Expected '===' and instead saw '=='.
+       node.index == -1) // line 365, pos 24
+   #62: Expected '===' and instead saw '=='.
+       if (m + delta == skip + show && node.childTotal > 0) // line 375, pos 27
+   #63: Mixed spaces and tabs.
+       node.children, path.concat(node.index))); // line 379, pos 10
+   #64: Expected '===' and instead saw '=='.
+       else if (!send && m + delta == skip) // line 384, pos 37
+   #65: Mixed spaces and tabs.
+       node.children, path.concat(node.index))); // line 406, pos 9
+   #66: Too many var statements.
+       var n = 0, m = 0, prev = -1; // line 447, pos 9
+   #67: Too many var statements.
+       for (var i=0; i<open.length; i++) // line 448, pos 14
+   #68: Too many var statements.
+       var node = open[i]; // line 450, pos 13
+   #69: Too many var statements.
+       var delta = node.index - prev; // line 456, pos 13
+   #70: Expected '===' and instead saw '=='.
+       node.index == -1) // line 463, pos 24
+   #71: Expected '===' and instead saw '=='.
+       else if (!send && pre + n + delta == skip) // line 475, pos 43
+   #72: Too many var statements.
+       var info = getVisibleSlicesPgAll(skip, show, rootDS, node.children, // line 496, pos 17
+   #73: Mixed spaces and tabs.
+       path.concat(node.index), // line 497, pos 11
+   #74: Mixed spaces and tabs.
+       node, pre+n, send, slices); // line 498, pos 11
+   #75: Too many var statements.
+       var info = // line 515, pos 9
+   #76: 'info' is already defined.
+       var info = // line 515, pos 14
+   #77: Possible strict violation.
+       for (var i=0; i<this._slices.length; i++) // line 526, pos 21
+   #78: Too many var statements.
+       var slice = this._slices[i]; // line 528, pos 13
+   #79: Possible strict violation.
+       var slice = this._slices[i]; // line 528, pos 21
+   #80: Too many var statements.
+       var ds    = slice.ds; // line 529, pos 13
+   #81: Too many var statements.
+       var req   = findRequest.call(this, ds); // line 530, pos 13
+   #82: Possible strict violation.
+       var req   = findRequest.call(this, ds); // line 530, pos 38
+   #83: Expected '!==' and instead saw '!='.
+       if (req.path.length != slice.path.length) // line 540, pos 37
+   #84: Too many var statements.
+       for (var j=0; j<slice.path.length; j++) // line 546, pos 30
+   #85: Expected '!==' and instead saw '!='.
+       if (req.path[j] != slice.path[j]) // line 548, pos 41
+   #86: Possible strict violation.
+       this._req.push( // line 561, pos 13
+   #87: Too many var statements.
+       for (var i=0; i<this._req.length; i++) // line 572, pos 14
+   #88: 'i' is already defined.
+       for (var i=0; i<this._req.length; i++) // line 572, pos 15
+   #89: Possible strict violation.
+       for (var i=0; i<this._req.length; i++) // line 572, pos 21
+   #90: Too many var statements.
+       var req             = this._req[i]; // line 574, pos 13
+   #91: 'req' is already defined.
+       var req             = this._req[i]; // line 574, pos 29
+   #92: Possible strict violation.
+       var req             = this._req[i]; // line 574, pos 31
+   #93: Possible strict violation.
+       success: Y.rbind(treeSuccess, this, i), // line 584, pos 47
+   #94: Possible strict violation.
+       failure: Y.rbind(treeFailure, this, i) // line 585, pos 47
+   #95: Possible strict violation.
+       for (var i=0; i<this._req.length; i++) // line 594, pos 21
+   #96: Too many var statements.
+       var req = this._req[i]; // line 596, pos 13
+   #97: Possible strict violation.
+       var req = this._req[i]; // line 596, pos 19
+   #98: Expected '===' and instead saw '=='.
+       if (ds == req.ds) // line 597, pos 16
+   #99: Possible strict violation.
+       treeFailure.apply(this, arguments); // line 611, pos 27
+   #100: Possible strict violation.
+       var req = searchTxId(this._req, e.tId, reqIndex); // line 615, pos 26
+   #101: Possible strict violation.
+       if (!this._topResponse && req.ds == this.get('root')) // line 621, pos 10
+   #102: Possible strict violation.
+       if (!this._topResponse && req.ds == this.get('root')) // line 621, pos 41
+   #103: Expected '===' and instead saw '=='.
+       if (!this._topResponse && req.ds == this.get('root')) // line 621, pos 38
+   #104: Possible strict violation.
+       this._topResponse = e.response; // line 623, pos 9
+   #105: Too many var statements.
+       var dataStartIndex = 0; // line 630, pos 9
+   #106: eval is evil.
+       eval('dataStartIndex=req.resp'+req.ds.treeble_config.startIndexExpr); // line 633, pos 9
+   #107: Too many var statements.
+       var sliceStartIndex = req.start - dataStartIndex; // line 636, pos 9
+   #108: Too many var statements.
+       var parent = (req.path.length > 0 ? getNode.call(this, req.path) : null); // line 640, pos 9
+   #109: Possible strict violation.
+       var parent = (req.path.length > 0 ? getNode.call(this, req.path) : null); // line 640, pos 54
+   #110: Too many var statements.
+       var open   = (parent !== null ? parent.children : this._open); // line 641, pos 9
+   #111: Possible strict violation.
+       var open   = (parent !== null ? parent.children : this._open); // line 641, pos 55
+   #112: Possible strict violation.
+       if (!populateOpen.call(this, parent, open, req)) // line 642, pos 28
+   #113: Possible strict violation.
+       treeFailure.apply(this, arguments); // line 644, pos 27
+   #114: eval is evil.
+       eval('this._topNodeTotal=e.response'+req.ds.treeble_config.totalRecordsExpr); // line 650, pos 9
+   #115: Possible strict violation.
+       this._topNodeTotal = e.response.results.length; // line 654, pos 9
+   #116: Possible strict violation.
+       checkFinished.call(this); // line 657, pos 24
+   #117: Possible strict violation.
+       var req = searchTxId(this._req, e.tId, reqIndex); // line 662, pos 26
+   #118: Possible strict violation.
+       this._cancelAllRequests(); // line 668, pos 5
+   #119: Possible strict violation.
+       this._callback.error    = e.error; // line 670, pos 5
+   #120: Possible strict violation.
+       this._callback.response = e.response; // line 671, pos 5
+   #121: Possible strict violation.
+       this.fire('response', this._callback); // line 672, pos 5
+   #122: Possible strict violation.
+       this.fire('response', this._callback); // line 672, pos 27
+   #123: Too many var statements.
+       for (var i=0; i<list.length; i++) // line 682, pos 14
+   #124: Possible strict violation.
+       if (this._generating_requests) // line 716, pos 9
+   #125: Possible strict violation.
+       var count = this._req.length; // line 721, pos 17
+   #126: Too many var statements.
+       for (var i=0; i<count; i++) // line 722, pos 14
+   #127: Possible strict violation.
+       if (!this._req[i].resp) // line 724, pos 14
+   #128: Possible strict violation.
+       if (this._redo) // line 730, pos 9
+   #129: Possible strict violation.
+       Y.Lang.later(0, this, requestTree); // line 732, pos 25
+   #130: Possible strict violation.
+       else if (this._toggle.length > 0) // line 735, pos 14
+   #131: Too many var statements.
+       var t = this._toggle.shift(); // line 737, pos 13
+   #132: Possible strict violation.
+       var t = this._toggle.shift(); // line 737, pos 17
+   #133: Possible strict violation.
+       this.toggle(t, Y.clone(this._callback.request, true), // line 738, pos 9
+   #134: Possible strict violation.
+       this.toggle(t, Y.clone(this._callback.request, true), // line 738, pos 32
+   #135: Possible strict violation.
+       scope: this // line 744, pos 20
+   #136: Too many var statements.
+       var response = { meta:{} }; // line 749, pos 9
+   #137: Possible strict violation.
+       Y.mix(response, this._topResponse, true); // line 750, pos 21
+   #138: Possible strict violation.
+       count = this._slices.length; // line 754, pos 13
+   #139: Too many var statements.
+       var slice = this._slices[i]; // line 757, pos 13
+   #140: Possible strict violation.
+       var slice = this._slices[i]; // line 757, pos 21
+   #141: Too many var statements.
+       var req   = findRequest.call(this, slice.ds); // line 758, pos 13
+   #142: Possible strict violation.
+       var req   = findRequest.call(this, slice.ds); // line 758, pos 38
+   #143: Too many var statements.
+       var j    = slice.start - req.start; // line 765, pos 13
+   #144: Too many var statements.
+       var data = req.data.slice(j, j + slice.end - slice.start + 1); // line 766, pos 13
+   #145: Too many var statements.
+       var rootDS = this.get('root'); // line 771, pos 9
+   #146: Possible strict violation.
+       var rootDS = this.get('root'); // line 771, pos 18
+   #147: Possible strict violation.
+       eval('response'+rootDS.treeble_config.totalRecordsExpr+'='+countVisibleNodes.call(this)); // line 774, pos 91
+   #148: eval is evil.
+       eval('response'+rootDS.treeble_config.totalRecordsExpr+'='+countVisibleNodes.call(this)); // line 774, pos 9
+   #149: Possible strict violation.
+       eval('response'+rootDS.treeble_config.totalRecordsReturnExpr+'='+countVisibleNodes.call(this)); // line 778, pos 97
+   #150: eval is evil.
+       eval('response'+rootDS.treeble_config.totalRecordsReturnExpr+'='+countVisibleNodes.call(this)); // line 778, pos 9
+   #151: Possible strict violation.
+       this._callback.response = response; // line 781, pos 5
+   #152: Possible strict violation.
+       this.fire('response', this._callback); // line 782, pos 5
+   #153: Possible strict violation.
+       this.fire('response', this._callback); // line 782, pos 27
+   #154: eval is evil.
+       eval('node.childTotal=e.response'+node.ds.treeble_config.totalRecordsExpr); // line 789, pos 9
+   #155: Possible strict violation.
+       this.fire('toggled', // line 800, pos 5
+   #156: Possible strict violation.
+       this.fire('toggled', // line 815, pos 5
+   #157: Expected '!==' and instead saw '!='.
+       if (k1.length != k2.length) // line 839, pos 19
+   #158: Too many var statements.
+       for (var i=0; i<k1.length; i++) // line 844, pos 14
+   #159: Too many var statements.
+       var k = k1[i]; // line 846, pos 13
+   #160: Expected '!==' and instead saw '!='.
+       if (k != 'startIndex' && k != 'resultCount' && r1[k] !== r2[k]) // line 847, pos 15
+   #161: Expected '!==' and instead saw '!='.
+       if (k != 'startIndex' && k != 'resultCount' && r1[k] !== r2[k]) // line 847, pos 36
+   #162: Too many var statements.
+       for (var i=0; i<fields.length; i++) // line 873, pos 22
+   #163: Expected '===' and instead saw '=='.
+       if (Y.Lang.isObject(fields[i]) && fields[i].parser == 'treebledatasource') // line 875, pos 68
+   #164: Line too long.
+       Y.error('TreebleDataSource requires either treeble_config.totalRecordsExpr or treeble_config.totalRecordsReturnExpr configuration to be set on root DataSource'); // line 895, pos 173
+   #165: Too many var statements.
+       for (var i=0; i<path.length; i++) // line 912, pos 18
+   #166: Too many var statements.
+       var node = searchOpen.call(this, list, path[i]); // line 914, pos 17
+   #167: Trailing whitespace.
+       * // line 930, pos 7
+   #168: Too many var statements.
+       for (var i=0; i<path.length; i++) // line 940, pos 18
+   #169: Too many var statements.
+       var node = searchOpen.call(this, list, path[i]); // line 942, pos 17
+   #170: 'node' used out of scope.
+       if (node.open === null) // line 950, pos 13
+   #171: 'node' used out of scope.
+       node.ds.sendRequest( // line 954, pos 13
+   #172: 'node' used out of scope.
+       request: node.ds.treeble_config.generateRequest(request, path), // line 956, pos 26
+   #173: 'node' used out of scope.
+       cfg:     node.ds.treeble_config.requestCfg, // line 957, pos 26
+   #174: 'node' used out of scope.
+       success: Y.rbind(toggleSuccess, this, node, completion, path), // line 960, pos 59
+   #175: 'node' used out of scope.
+       failure: Y.rbind(toggleFailure, this, node, completion, path) // line 961, pos 59
+   #176: 'node' used out of scope.
+       node.open = !node.open; // line 967, pos 13
+   #177: 'node' used out of scope.
+       node.open = !node.open; // line 967, pos 26
+   #178: 'node' used out of scope.
+       open: node.open // line 973, pos 23
+   #179: Empty block.
+       else if (Y.Lang.isString(oData)) // line 1032, pos 5
+   #180: Too many var statements.
+       var src            = oData.dataType ? oData.liveData : oData; // line 1045, pos 9
+   #181: Too many var statements.
+       var treeble_config = this.get('host').treeble_config; // line 1046, pos 9
+   #182: Expected '===' and instead saw '=='.
+       if (type == 'Local') // line 1047, pos 14
+   #183: Expected '===' and instead saw '=='.
+       else if (type == 'Function') // line 1053, pos 19
+   #184: Too many var statements.
+       var ds            = new Y.DataSource[ type ]({ source: src }); // line 1058, pos 9
+   #185: Too many var statements.
+       var key = ds.get('root').treeble_config.childNodesKey; // line 1109, pos 13
+   #186: Too many var statements.
+       var path = o.data._yui_node_path; // line 1113, pos 17
+   #187: 'save_toggle' is defined but never used.
+       var save_toggle = this._toggle.slice(0); // line 296, pos 24
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-treeble/gallery-treeble.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-treeble
+shifter [queu] coverage file read, starting coverage for: gallery-treeble/gallery-treeble.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-treeble/gallery-treeble-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] Element (td.treeble-nub) is overqualified, just use .treeble-nub without element name.
+       /* nothing to see here */.yui3-skin-sam .yui3-datatable td.treeble-nub // line 1, pos 57
+   #2: [warning] Element (td.treeble-value) is overqualified, just use .treeble-value without element name.
+       .yui3-skin-sam .yui3-datatable td.treeble-value // line 6, pos 32
+   #3: [warning] Property with star prefix found.
+       *display:inline-block; // line 16, pos 2
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.514 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.9.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [http://127.0.0.1:5000/tests/src/gallery-treeble/tests/unit/test.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
-    Javascript Error
-       ReferenceError: Can't find variable: YUI
-       http://127.0.0.1:5000/tests/src/gallery-treeble/tests/unit/assets/gallery-treeble-tests.js:1
+✔ [gallery-treeble]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (0.347 seconds) 77%
 Writing files in JSON format to: /src/gallery-treeble/logs/tests.json
-[35myogi[39m [37m[37m[[39m[31mbail[39m[37m][39m[39m grover returned a failure
+
+-------------------------+-----------+-----------+-----------+-----------+
+File                     |   % Stmts |% Branches |   % Funcs |   % Lines |
+-------------------------+-----------+-----------+-----------+-----------+
+   gallery-treeble/      |     77.95 |     68.67 |     75.76 |     77.95 |
+      gallery-treeble.js |     77.95 |     68.67 |     75.76 |     77.95 |
+-------------------------+-----------+-----------+-----------+-----------+
+All files                |     77.95 |     68.67 |     75.76 |     77.95 |
+-------------------------+-----------+-----------+-----------+-----------+
+
+
+=============================== Coverage summary ===============================
+Statements   : 77.95% ( 304/390 )
+Branches     : 68.67% ( 160/233 )
+Functions    : 75.76% ( 25/33 )
+Lines        : 77.95% ( 304/390 )
+================================================================================
+----------------------------------------------------------------
+✔ [Total]: Passed: 7 Failed: 0 Total: 7 (ignored 0) (0.347 seconds)
+  [Grover Execution Timer] 1.303 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
