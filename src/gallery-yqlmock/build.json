@@ -1,0 +1,10 @@
+{
+    "name": "gallery-yqlmock",
+    "builds": {
+        "gallery-yqlmock": {
+            "jsfiles": [
+                "js/gallery-yqlmock.js"
+            ]
+        }
+    }
+}

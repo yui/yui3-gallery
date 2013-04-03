@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-yqlmock</title>
+    <script src="/build/yui/yui.js"></script>
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script src="/build/gallery-yqlmock/gallery-yqlmock.js"></script>
+<script src="js/tests.js"></script>
+
+<script>
+YUI({
+    coverage: ['gallery-yqlmock'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', 'gallery-yqlmock', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-yqlmock');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

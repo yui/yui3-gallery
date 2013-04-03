@@ -1,0 +1,7 @@
+{
+    "gallery-yqlmock": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}

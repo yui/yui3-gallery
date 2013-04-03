@@ -1,0 +1,60 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.3 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-yqlmock
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-yqlmock
+   #1: Line too long.
+       obj.message = "YQL Call numbers unexpected.\nExpected calls: " + msgObj.expectedCalls + "\nActual calls: " + msgObj.actuallCalls + "\nDetails:\nsql: " + msgObj.sql + "\nparams: " + msgObj.params + "\nopts: " + msgObj.opts; // line 34, pos 238
+   #2: Line too long.
+       obj.message = "Unexpected YQL call:\nsql: " + msgObj.sql + "\ncallback: " + msgObj.callback + "\nparams: " + msgObj.params + "\nopts: " + msgObj.opts + "\nPlease check your expectation again."; // line 46, pos 209
+   #3: Line too long.
+       return "sql=" + String(obj.sql) + "&params=" + JSON.stringify(deepSortObjKeys(obj.params)) + "&opts=" + JSON.stringify(deepSortObjKeys(obj.opts)); // line 96, pos 158
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-yqlmock/gallery-yqlmock.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-yqlmock/gallery-yqlmock.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-yqlmock/gallery-yqlmock-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.125 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.9.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-yqlmock]: Passed: 0 Failed: 8 Total: 8 (ignored 0) (0.089 seconds)
+    yqlmock - good
+       Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')
+    yqlmock - good, out of order object
+       Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')
+    yqlmock - callback not required
+       Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')
+    yqlmock - bad object expectation
+       Values should be the same.
+       Expected: 1 (number)
+       Actual: undefined (undefined)
+    yqlmock - bad sql expectation
+       Values should be the same.
+       Expected: 2 (number)
+       Actual: undefined (undefined)
+    yqlmock - unexpected call
+       Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')
+    yqlmock - unexpected call times
+       Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')
+    yqlmock - yql release and mock
+       Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.restoreYQL')
+Writing files in JSON format to: /src/gallery-yqlmock/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

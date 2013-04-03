@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-yqlmock",
+    "displayName": "Gallery: gallery-yqlmock",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "chenghan" ],
+    "use"        : [ "gallery-yqlmock" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

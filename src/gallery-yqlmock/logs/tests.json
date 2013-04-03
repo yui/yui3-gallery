@@ -1,0 +1,78 @@
+{
+    "name": "gallery-yqlmock",
+    "passed": 0,
+    "failed": 24,
+    "errors": 48,
+    "ignored": 0,
+    "total": 24,
+    "duration": 267,
+    "type": "report",
+    "testCase_yui_3_9_0pr1_1_1365018929534_55": {
+        "name": "testCase_yui_3_9_0pr1_1_1365018929534_55",
+        "passed": 0,
+        "failed": 8,
+        "errors": 16,
+        "ignored": 0,
+        "total": 8,
+        "duration": 88,
+        "type": "testcase",
+        "yqlmock - good": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')",
+            "type": "test",
+            "name": "yqlmock - good",
+            "duration": 4
+        },
+        "yqlmock - good, out of order object": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')",
+            "type": "test",
+            "name": "yqlmock - good, out of order object",
+            "duration": 1
+        },
+        "yqlmock - callback not required": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')",
+            "type": "test",
+            "name": "yqlmock - callback not required",
+            "duration": 2
+        },
+        "yqlmock - bad object expectation": {
+            "result": "fail",
+            "message": "Values should be the same.\nExpected: 1 (number)\nActual: undefined (undefined)",
+            "type": "test",
+            "name": "yqlmock - bad object expectation",
+            "duration": 1
+        },
+        "yqlmock - bad sql expectation": {
+            "result": "fail",
+            "message": "Values should be the same.\nExpected: 2 (number)\nActual: undefined (undefined)",
+            "type": "test",
+            "name": "yqlmock - bad sql expectation",
+            "duration": 2
+        },
+        "yqlmock - unexpected call": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')",
+            "type": "test",
+            "name": "yqlmock - unexpected call",
+            "duration": 2
+        },
+        "yqlmock - unexpected call times": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.expect')",
+            "type": "test",
+            "name": "yqlmock - unexpected call times",
+            "duration": 1
+        },
+        "yqlmock - yql release and mock": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'yqlmock.restoreYQL')",
+            "type": "test",
+            "name": "yqlmock - yql release and mock",
+            "duration": 2
+        }
+    },
+    "timestamp": "Wed 03 Apr 2013 02:55:29 PM CDT",
+    "consoleInfo": []
+}
