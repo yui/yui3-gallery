@@ -1,4 +1,4 @@
-YUI.add('gallery-layout-datatable', function(Y) {
+YUI.add('gallery-layout-datatable', function (Y, NAME) {
 
 "use strict";
 
@@ -55,8 +55,10 @@ Y.extend(PLDTModule, Y.Plugin.Base,
 				layout = this.get('layout'),
 
 				module_bd =
-				table.get('boundingBox')
-					 .ancestor('.' + Y.PageLayout.module_body_class);
+					table.get('boundingBox')
+						 .ancestor('.' + Y.PageLayout.module_body_class),
+
+				scroll_top = 0;
 
 			module_bd.generateID();
 
@@ -64,6 +66,11 @@ Y.extend(PLDTModule, Y.Plugin.Base,
 			{
 				if (e.bd.get('id') == module_bd.get('id') && e.height == 'auto')
 				{
+					if (table._yScrollNode)
+					{
+						scroll_top = table._yScrollNode.get('scrollTop');
+					}
+
 					table.set('height', 'auto');
 					table.set('scrollable', 'x');
 				}
@@ -73,8 +80,14 @@ Y.extend(PLDTModule, Y.Plugin.Base,
 			{
 				if (e.bd.get('id') == module_bd.get('id'))
 				{
+					table.set('width', (e.width - Y.DOM.getScrollbarWidth())+'px');
 					table.set('height', e.height+'px');
 					table.set('scrollable', true);
+
+					if (table._yScrollNode)
+					{
+						table._yScrollNode.set('scrollTop', scroll_top);
+					}
 				}
 			});
 		});
@@ -85,4 +98,4 @@ Y.namespace("Plugin");
 Y.Plugin.PageLayoutDataTableModule = PLDTModule;
 
 
-}, 'gallery-2012.05.23-19-56' ,{requires:['gallery-layout','datatable-scroll','plugin']});
+}, 'gallery-2013.04.03-19-53', {"requires": ["gallery-layout", "datatable-scroll", "plugin"]});
