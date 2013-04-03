@@ -1,0 +1,17 @@
+{
+    "name": "gallery-formmgr-overlay-plugin",
+    "builds": {
+        "gallery-formmgr-overlay-plugin": {
+            "config": {
+                "requires": [
+                    "plugin",
+                    "overlay",
+                    "gallery-formmgr"
+                ]
+            },
+            "jsfiles": [
+                "OverlayFormPlugin.js"
+            ]
+        }
+    }
+}

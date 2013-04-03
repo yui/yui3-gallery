@@ -1,0 +1,20 @@
+{
+    "name": "gallery-formmgr",
+    "builds": {
+        "gallery-formmgr": {
+            "config": {
+                "requires": [
+                    "pluginhost-base",
+                    "gallery-node-optimizations",
+                    "gallery-formmgr-css-validation"
+                ],
+                "optional": [
+                    "gallery-scrollintoview"
+                ]
+            },
+            "jsfiles": [
+                "FormManager.js"
+            ]
+        }
+    }
+}

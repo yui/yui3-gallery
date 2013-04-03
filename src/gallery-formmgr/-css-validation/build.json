@@ -1,0 +1,15 @@
+{
+    "name": "gallery-formmgr-css-validation",
+    "builds": {
+        "gallery-formmgr-css-validation": {
+            "config": {
+                "requires": [
+                    "substitute"
+                ]
+            },
+            "jsfiles": [
+                "CSSValidation.js"
+            ]
+        }
+    }
+}

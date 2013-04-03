@@ -298,7 +298,7 @@ function getId(
 	}
 }
 
-function populateForm1()
+function _populateForm()
 {
 	var collect_buttons = (this.button_list.length === 0);
 
@@ -387,6 +387,60 @@ function populateForm1()
 		{
 			e.value = v;
 		}
+	}
+}
+
+function _isChanged(i)
+{
+	var e = this.form.elements[i];
+	if (!e.name)
+	{
+		return false;
+	}
+
+	var type = (e.type ? e.type.toLowerCase() : null);
+	var name = e.tagName.toLowerCase();
+	var v    = this.default_value_map[ e.name ];
+	if (v === null || typeof v === 'undefined')
+	{
+		v = '';
+	}
+
+	if (name == 'input' && type == 'file')
+	{
+		if (e.value)
+		{
+			return true;
+		}
+	}
+	else if (name == 'input' &&
+			 (type == 'password' || type == 'text' || type == 'file'))
+	{
+		if (e.value != v)
+		{
+			return true;
+		}
+	}
+	else if (name == 'input' &&
+			 (type == 'checkbox' || type == 'radio'))
+	{
+		var checked = (e.value == v);
+		if ((checked && !e.checked) || (!checked && e.checked))
+		{
+			return true;
+		}
+	}
+	else if ((name == 'select' && type == 'select-one') ||
+			 name == 'textarea')
+	{
+		if (e.value != v)
+		{
+			return true;
+		}
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -567,7 +621,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 	{
 		this.default_value_map = {};
 		this.button_list       = [];
-		populateForm1.call(this);
+		_populateForm.call(this);
 	},
 
 	/* *********************************************************************
@@ -693,7 +747,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 	},
 
 	/**
-	 * Reset all values in the form to the defaults passed to the constructor.
+	 * Reset all values in the form to the defaults passed to the
+	 * constructor or to `setDefaultValues()`.
 	 * 
 	 * @method populateForm
 	 */
@@ -706,7 +761,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 		this.clearMessages();
 
-		populateForm1.call(this);
+		_populateForm.call(this);
 
 		// let derived class adjust
 
@@ -733,55 +788,34 @@ Y.extend(FormManager, Y.Plugin.Host,
 	{
 		for (var i=0; i<this.form.elements.length; i++)
 		{
-			var e = this.form.elements[i];
-			if (!e.name)
+			if (_isChanged.call(this, i))
 			{
-				continue;
-			}
-
-			var type = (e.type ? e.type.toLowerCase() : null);
-			var name = e.tagName.toLowerCase();
-			var v    = this.default_value_map[ e.name ];
-			if (v === null || typeof v === 'undefined')
-			{
-				v = "";
-			}
-
-			if (name == 'input' && type == 'file')
-			{
-				if (e.value)
-				{
-					return true;
-				}
-			}
-			else if (name == 'input' &&
-					 (type == 'password' || type == 'text' || type == 'file'))
-			{
-				if (e.value != v)
-				{
-					return true;
-				}
-			}
-			else if (name == 'input' &&
-					 (type == 'checkbox' || type == 'radio'))
-			{
-				var checked = (e.value == v);
-				if ((checked && !e.checked) || (!checked && e.checked))
-				{
-					return true;
-				}
-			}
-			else if ((name == 'select' && type == 'select-one') ||
-					 name == 'textarea')
-			{
-				if (e.value != v)
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 
 		return false;
+	},
+
+	/**
+	 * Return the modified values.
+	 * 
+	 * @method getChanges
+	 * @return {Object} map of form element names to new values
+	 */
+	getChanges: function()
+	{
+		var result = {};
+		for (var i=0; i<this.form.elements.length; i++)
+		{
+			if (_isChanged.call(this, i))
+			{
+				var e            = this.form.elements[i];
+				result[ e.name ] = e.value;
+			}
+		}
+
+		return result;
 	},
 
 	/**
