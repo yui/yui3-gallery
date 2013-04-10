@@ -1,0 +1,14 @@
+{
+    "name": "gallery-advanced-date-format",
+    "builds": {
+        "gallery-advanced-date-format": {
+            "jsfiles": [
+                "js/BaseFormat.js",
+                "js/DateFormat.js",
+                "js/format-relative.js",
+                "js/format-duration.js",
+                "js/format-date-advanced.js"
+            ]
+        }
+    }
+}

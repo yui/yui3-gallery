@@ -1,0 +1,8 @@
+{
+    "gallery-advanced-date-format": {
+        "lang": ["af", "am", "ar-DZ", "ar-JO", "ar", "ar-LB", "ar-MA", "ar-SY", "ar-TN", "as", "az-Cyrl", "az", "be", "bg", "bn-IN", "bn", "bo", "ca", "cs", "cy", "da", "de-AT", "de-BE", "de", "el", "en-AU", "en-BE", "en-BW", "en-CA", "en-GB", "en-HK", "en-IE", "en-IN", "en-JO", "en-MT", "en-MY", "en-NZ", "en-PH", "en-RH", "en-SG", "en-US", "en-US-POSIX", "en-ZA", "en-ZW", "eo", "es-AR", "es-CL", "es-CO", "es-EC", "es-GT", "es-HN", "es", "es-PA", "es-PE", "es-PR", "es-US", "et", "eu", "fa-AF", "fa", "fi", "fil", "fo", "fr-BE", "fr-CA", "fr-CH", "fr", "ga", "gl", "gsw", "gu", "gv", "ha", "haw", "he", "hi", "hr", "hu", "hy", "id", "ii", "in", "is", "it-CH", "it", "iw", "ja-JP-TRADITIONAL", "ja", "", "ka", "kk", "kl", "km", "kn", "ko", "kok", "kw", "lt", "lv", "mk", "ml", "mr", "ms-BN", "ms", "mt", "nb", "ne-IN", "ne", "nl-BE", "nl", "nn", "no", "no-NO-NY", "om", "or", "pa-Arab", "pa", "pa-PK", "pl", "ps", "pt", "pt-PT", "ro", "ru", "ru-UA", "sh", "si", "sk", "sl", "so", "sq", "sr-BA", "sr-Cyrl-BA", "sr", "sr-Latn", "sr-Latn-ME", "sr-ME", "sv-FI", "sv", "sw", "ta", "te", "th", "ti-ER", "ti", "tl", "tr", "uk", "ur-IN", "ur", "ur-PK", "uz", "uz-Latn", "vi", "zh-Hans-SG", "zh-Hant-HK", "zh-Hant", "zh-Hant-MO", "zh-HK", "zh", "zh-MO", "zh-SG", "zh-TW", "zu"],
+        "requires": [
+            "gallery-advanced-date-timezone"
+        ]
+    }
+}

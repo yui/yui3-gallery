@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-advanced-date-format",
+    "displayName": "Gallery: gallery-advanced-date-format",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "ashiksmd" ],
+    "use"        : [ "gallery-advanced-date-format" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

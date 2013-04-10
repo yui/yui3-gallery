@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-advanced-date-format</title>
+    <script src="http://yui.yahooapis.com/3.8.1/build/yui/yui-min.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI.GlobalConfig = {
+    modules: {
+          'gallery-advanced-number-format': '../../../../build/gallery-advanced-number-format/gallery-advanced-number-format.js',
+          'gallery-advanced-date-format': '../../../../build/gallery-advanced-date-format/gallery-advanced-date-format-coverage.js',
+          'gallery-advanced-date-timezone': '../../../../build/gallery-advanced-date-timezone/gallery-advanced-date-timezone.js'
+    }
+};
+
+YUI({
+    coverage: ['gallery-advanced-date-format'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-advanced-date-format');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>
