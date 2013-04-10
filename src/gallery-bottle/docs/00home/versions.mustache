@@ -12,3 +12,35 @@ Here is dropbox version:</p>
 ```
 
 <p>You may check <a href="history.html">release history</a>, too.
+
+<h2>Patches</h2>
+<p>To support different devices, sometimes you will need to require more patch module to fix some issue. Here is a YUI config to auto include required patch for you:</p>
+
+```
+var YUI_config = {
+        groups: {
+            'patches': {
+                base: 'http://yui.yahooapis.com/gallery-2013.03.20-19-59/build/',
+                modules: {
+                    'gallery-patch-373-scrollbar-ie7': {
+                        condition: {
+                            trigger: 'scrollview-scrollbars',
+                            test: function () {
+                                var IE = navigator.userAgent.match(/MSIE (\d+)/);
+                                return (YUI.version < '3.9') && IE && (IE[1] < 9);
+                            }
+                        }
+                    },
+                    'patch-390-transition-htcbutterfly': {
+                        condition: {
+                            trigger: 'transition',
+                            test: function () {
+                                return (YUI.version > '3.6.0') && navigator.userAgent.match(/Butterfly/) && ! navigator.userAgent.match(/(Chrome|CrMo|CriOS)\//);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    };
+```

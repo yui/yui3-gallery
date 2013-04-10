@@ -13,6 +13,7 @@
  * @constructor
  */
 var  WIDTH_CHANGE = 'widthChange',
+     SYNC_SCREEN = 'btSyncScreen',
 
 SyncScroll = function () {
     var firstInit = false,
@@ -84,7 +85,7 @@ SyncScroll.prototype = {
 
             // sync width with screen width
             if (!pg || pg.get('nativeScroll')) {
-                hs.push(Y.on('btSyncScreen', Y.bind(V, this)));
+                hs.push(Y.on(SYNC_SCREEN, Y.bind(V, this)));
             }
 
             this._bssHandle = new Y.EventHandle(hs);

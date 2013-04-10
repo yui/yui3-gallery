@@ -1,2 +1,9 @@
-shifter [err] /src/gallery-bottle/js/device/device.js contains 1 lint errors
-shifter [err] /assets/skins/sam/gallery-bottle-skin.css contains 68 lint errors
+
+module.js:340
+    throw err;
+          ^
+Error: Cannot find module '/Users/eferraiuolo/Code/yui/grifter/node_modules/yogi/node_modules/shifter/bin/shifter'
+    at Function.Module._resolveFilename (module.js:338:15)
+    at Function.Module._load (module.js:280:25)
+    at Module.runMain (module.js:492:10)
+    at process.startup.processNextTick.process._tickCallback (node.js:245:9)

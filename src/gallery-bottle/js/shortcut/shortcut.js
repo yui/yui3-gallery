@@ -9,10 +9,7 @@ var body = Y.one('body'),
     HEIGHT_CHANGE = 'heightChange',
     VISIBLE_CHANGE = 'visibleChange',
 
-    hasTouch = Y.Bottle.Device.getTouchSupport(),
     fixedPos = Y.Bottle.Device.getPositionFixedSupport(),
-
-    scrollBase = hasTouch ? body : Y.one('html'),
     pageWidget,
     pageNode,
 
@@ -47,13 +44,11 @@ var body = Y.one('body'),
      * @extends Widget
      * @namespace Bottle
      * @uses WidgetParent
-     * @uses WidgetPosition
      * @uses WidgetStack
-     * @uses WidgetPositionAlign
      * @uses Bottle.PushPop
      * @constructor
      */
-    ShortCut = Y.Base.create('btshortcut', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.Bottle.PushPop], {
+    ShortCut = Y.Base.create('btshortcut', Y.Widget, [Y.WidgetParent, Y.WidgetStack, Y.Bottle.PushPop], {
         initializer: function () {
             if (!pageWidget) {
                 pageWidget = Y.Bottle.Page.getCurrent();
@@ -108,8 +103,7 @@ var body = Y.one('body'),
             }
 
             if (force || (this.get('width') !== Y.Bottle.Device.getBrowserWidth()) || (this.get('height') === Y.Bottle.Device.getBrowserHeight())) {
-                this._updateFullSize();
-                sz = true;
+                sz = this._updateFullSize();
             }
 
             if (force || sz || this.get('showFrom').match(/right|bottom/)) {
@@ -124,13 +118,16 @@ var body = Y.one('body'),
          * @protected
          */
         _updateFullSize: function () {
+            if (this.get('nativeScroll')) {
+                return;
+            }
             if (this.get('fullHeight')) {
                 this.set('height', Y.Bottle.Device.getBrowserHeight(), {noAlign: true});
             }
-
             if (this.get('fullWidth')) {
                 this.set('width', Y.Bottle.Device.getBrowserWidth(), {noAlign: true});
             }
+            return true;
         },
 
 
@@ -141,14 +138,15 @@ var body = Y.one('body'),
          */
         getShowHidePosition: function (show) {
             var selfDir = show ? 0 : 1,
+                NS = this.get('nativeScroll'),
                 posData = POSITIONS[this.get('showFrom')];
 
             return [
                 Math.floor(posData[2] * Y.Bottle.Device.getBrowserWidth()
                 + (selfDir * posData[0] - posData[2]) * this.get('width')),
-                Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight()
-                + (selfDir * posData[1] - posData[3]) * this.get('height'))
-                + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
+                (NS ? 0 : Math.floor(posData[3] * Y.Bottle.Device.getBrowserHeight())
+                + (selfDir * posData[1] - (NS ? 0 : posData[3])) * this.get('height'))
+                + (Y.Bottle.get('positionFixed' && !NS) ? 0 : Y.Bottle.Device.getScrollY())
             ];
         },
 
@@ -240,9 +238,7 @@ var body = Y.one('body'),
          * @protected
          */
         _beforeShowHide: function (E) {
-            var show = E.newVal;
-
-            if (!current || !show || (current === this)) {
+            if (!current || !E.newVal || (current === this)) {
                 return;
             }
 
@@ -259,7 +255,14 @@ var body = Y.one('body'),
          */
         _doneShowHide: function () {
             var show = this.get('visible'),
-                mask = this.get('mask');
+                mask = this.get('mask'),
+                XY;
+
+            if (show && this.get('nativeScroll')) {
+                Y.Bottle.Page.getCurrent().resetScroll(this.get('boundingBox'));
+                XY = this.getShowHidePosition(true);
+                this.absMove(XY[0], XY[1]);
+            }
 
             if (mask) {
                 this._displayMask(show);
@@ -293,6 +296,9 @@ var body = Y.one('body'),
                 this._updatePositionHide({visible: false});
                 current = this;
             } else {
+                if (this.get('nativeScroll')) {
+                    Y.Bottle.Page.getCurrent().resetScroll();
+                }
                 this._updatePositionShow({visible: true});
                 if (this.get('mask')) {
                     this._displayMask(false);
@@ -554,7 +560,7 @@ var body = Y.one('body'),
 Y.Bottle.ShortCut = ShortCut;
 
 // hide shortcut when click mask
-Mask.on(hasTouch ? 'gesturemoveend' : 'click', function () {
+Mask.on(Y.Bottle.Device.getTouchSupport() ? 'gesturemoveend' : 'click', function () {
     current.hide();
 });
 

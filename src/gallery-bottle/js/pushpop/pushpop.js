@@ -31,6 +31,9 @@ var RENDERUI = 'renderUI',
         bl: [-1, 1]
     },
 
+    nodeBody = Y.one('body'),
+    pfixed = Y.Bottle.Device.getPositionFixedSupport(),
+
     moveWidget = function (W, T) {
         W.get('boundingBox').setStyles({
             left: T.left,
@@ -73,6 +76,27 @@ PushPop = function () {
  * @static
  */
 PushPop.ATTRS = {
+    /**
+     * Use native browser scroll
+     *
+     * @attribute action
+     * @type String
+     * @default unveil
+     */
+    nativeScroll: {
+        value: true,
+        validator: Y.Lang.isBool,
+        writeOnce: 'initOnly',
+        setter: function (V) {
+            var B = this.get('boundingBox');
+
+            if (B) {
+                B.toggleClass('btp-nscroll', V);
+            }
+            return V;
+        }
+    },
+
     /**
      * Default child class
      *
@@ -180,6 +204,18 @@ PushPop.ATTRS = {
  * @type Object
  */
 PushPop.HTML_PARSER = {
+    nativeScroll: function (srcNode) {
+        var D = srcNode.getData('native-scroll');
+
+        if (D === 'false') {
+            return false;
+        }
+
+        if (D === 'true') {
+            return true;
+        }
+        return Y.Bottle.Device.getTouchSupport();
+    },
     childQuery: function (srcNode) {
         return srcNode.getData('child-query');
     },
@@ -227,7 +263,8 @@ PushPop.prototype = {
      */
     _addAllChildren: function () {
         var query = this.get('childQuery'),
-            cfg = this.get('cfgChild');
+            cfg = this.get('cfgChild'),
+            L;
 
         if (!query || this._bppAllAdded) {
             return;
@@ -236,8 +273,13 @@ PushPop.prototype = {
         this._bppAllAdded = true;
 
         this.get('contentBox').all(query).each(function (O) {
-            this.add(Y.merge(cfg, {srcNode: O}));
+            this.add(Y.merge(cfg, {srcNode: O, disabled: true}));
         }, this);
+
+        L = this.item(this.size() - 1);
+        if (L) {
+            L.enable();
+        }
     },
 
     /**
@@ -323,7 +365,9 @@ PushPop.prototype = {
      * @protected
      */
     _beforePPAddChild: function (E) {
-        if (!Y.instanceOf(E.child, this.get('defaultChildType'))) {
+        if (Y.instanceOf(E.child, this.get('defaultChildType'))) {
+            E.child.set('nativeScroll', this.get('nativeScroll'));
+        } else {
             E.halt();
         }
     },
@@ -349,6 +393,95 @@ PushPop.prototype = {
     },
 
     /**
+     * Get scroll position for both native scroll or Page Container scrollView.
+     *
+     * @method getScrollY
+     * @return scrollY {Number} the position of vertical scroll
+     */
+    getScrollY: function () {
+        return this.get('nativeScroll') ? Y.Bottle.Device.getScrollY() : this.topScroll().get('scrollY');
+    },
+
+    /**
+     * Get scroll content height for both native scroll or Page Container scrollView.
+     *
+     * @method getScrollHeight
+     * @return scrollY {Number} the position of vertical scroll
+     */
+    getScrollHeight: function () {
+        return this.get('nativeScroll') ? Y.DOM.docHeight() : this.topScroll()._maxScrollY;
+    },
+
+    /**
+     * Scroll the page to a position or a Node, works in scrollView mode and native scroll mode.
+     *
+     * @method scrollTo
+     * @param position {Number|Node} the Y position or the Node to scroll into viewport.
+     * @param [duration] {Number} ms of the scroll animation.
+     * @static
+     */
+    scrollTo: function (position, duration) {
+        var S = this.topScroll(),
+            Y;
+        if (this.get('nativeScroll')) {
+            Y.Bottle.Device.scrollTo(0, position.getY ? position.getY() : position);
+        } else {
+            if (position.getY) {
+                Y = S.get('scrollY');
+                S.scrollTo(0, 0, 0);
+                position = position.getY() - S.get('boundingBox').getY();
+                S.scrollTo(0, Y, 0);
+            }
+            S.scrollTo(0, position, duration);
+        }
+    },
+
+    /**
+     * When nativeScroll enabled, set page size and simulate original scroll position
+     * with new top position; or restore to original page size and scroll position.
+     *
+     * @method resetScroll
+     * @param height {Number|Node} new page height, or new Node element to align with height.
+     *        if undefined, restore to original page size and scroll position.
+     * @param position {Number} new page position. if undefined, scroll to 0.
+     */
+    resetScroll: function (height, position) {
+        var bb = this.get('boundingBox'),
+            S,
+            H = (height && height.get) ? height.get('offsetHeight') : height;
+
+        if (height) {
+            S = this.getScrollY();
+            Y.Bottle.nativeScrollPositions.push({
+                height: H,
+                pageHeight: nodeBody.getComputedStyle('height'),
+                pageScroll: S,
+                node: height.get ? height : null
+            });
+            nodeBody.setStyles({
+                overflow: 'hidden',
+                height: Math.max(H, Y.Bottle.Device.getBrowserHeight()) + 'px'
+            });
+            Y.Bottle.Device.scrollTo(0, (position ? position : 0));
+            bb.setStyles({
+                top: - S + 'px',
+                position: pfixed ? 'fixed' : 'relative'
+            });
+        } else {
+            H = Y.Bottle.nativeScrollPositions.pop();
+            nodeBody.setStyles({
+                overflow: '',
+                height: 'auto'
+            });
+            bb.setStyles({
+                top: 0,
+                position: ''
+            });
+            Y.Bottle.Device.scrollTo(0, H.pageScroll);
+        }
+    },
+
+    /**
      * sync width and height from DOM to widget object
      *
      * @method syncWH
@@ -359,7 +492,7 @@ PushPop.prototype = {
             W = O.get('offsetWidth') || P.get('offsetWidth'),
             H = O.get('offsetHeight') || P.get('offsetHeight');
 
-        if (!this.get('height') && H) {
+        if (!this.get('height') && H && !this.get('nativeScroll')) {
             this.set('height', H);
         }
 
@@ -406,6 +539,23 @@ PushPop.prototype = {
     topItem: function () {
         this._addAllChildren();
         return this.item(this.size() - 1);
+    },
+
+    /**
+     * Update content size and scroll position
+     *
+     * @method updateContentSize
+     * @return updated {Boolean} true when content size updated, false when no child
+     */
+    updateContentSize: function () {
+        var O = this.topItem();
+
+        if (O) {
+            O.updateContentSize();
+            return true;
+        } else {
+            return false;
+        }
     },
 
     /**
@@ -489,11 +639,15 @@ PushPop.prototype = {
         if (Y.Lang.isNumber(underlay)) {
             return this.moveChild(index, this._UNDERLAY_TRANS, function () {
                 Y.later(underlay, this, function () {
-                    this.moveChild(widget, this._DONE_TRANS);
+                    this.moveChild(widget, this._DONE_TRANS, function () {
+                        this.item(index).disable();
+                    });
                 });
             });
         } else {
-            return this.moveChild(widget, this._DONE_TRANS);
+            return this.moveChild(widget, this._DONE_TRANS, function () {
+                this.item(index).disable();
+            });
         }
     },
 
@@ -507,10 +661,15 @@ PushPop.prototype = {
     pop: function (keep) {
         var index = this.size() - 1,
             widget = this.item(index),
+            w2 = this.item(index - 1),
             underlay = this.get('underlay');
 
         if (!widget) {
             return this;
+        }
+
+        if (w2) {
+            w2.enable();
         }
 
         if (underlay !== 'none') {

@@ -4,19 +4,16 @@
  *
  * @module gallery-bt-overlay
  */
-var html = Y.one('html'),
-    body = Y.one('body'),
+var body = Y.one('body'),
     Mask = Y.one('.bt-overlay-mask') || body.appendChild(Y.Node.create('<div class="bt-overlay-mask"></div>')),
     WIDTH_CHANGE = 'widthChange',
     HEIGHT_CHANGE = 'heightChange',
     VISIBLE_CHANGE = 'visibleChange',
 
     hasTouch = Y.Bottle.Device.getTouchSupport(),
-    scrollBase = hasTouch ? body : Y.one('html'),
 
     instances = [],
     current,
-    scrollY,
 
     POSITIONS = {
         top: [0, -1],
@@ -34,14 +31,12 @@ var html = Y.one('html'),
      * @param [config] {Object} Object literal with initial attribute values
      * @extends Widget
      * @uses WidgetParent
-     * @uses WidgetPosition
      * @uses WidgetStack
-     * @uses WidgetPositionAlign
      * @uses Bottle.PushPop
      * @constructor
      * @namespace Bottle
      */
-    Overlay = Y.Base.create('btoverlay', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.Bottle.PushPop], {
+    Overlay = Y.Base.create('btoverlay', Y.Widget, [Y.WidgetParent, Y.WidgetStack, Y.Bottle.PushPop], {
         initializer: function (cfg) {
             var msk = this.get('contentBox').getData('mask');
 
@@ -107,7 +102,9 @@ var html = Y.one('html'),
         _updateFullSize: function () {
             if (this.get('fullPage')) {
                 this.set('width', Y.Bottle.Device.getBrowserWidth(), {noAlign: true});
-                this.set('height', Y.Bottle.Device.getBrowserHeight(), {noAlign: true});
+                if (!this.get('nativeScroll')) {
+                    this.set('height', Y.Bottle.Device.getBrowserHeight(), {noAlign: true});
+                }
             }
         },
 
@@ -189,6 +186,12 @@ var html = Y.one('html'),
             var show = this.get('visible'),
                 mask = this.get('mask');
 
+            if (show && this.get('nativeScroll')) {
+                Y.Bottle.Page.getCurrent().resetScroll(this.get('boundingBox'));
+                XY = this.getShowHideXY(true);
+                this.absMove(XY[0], XY[1]);
+            }
+
             if (mask) {
                 this._displayMask(show);
             }
@@ -207,13 +210,14 @@ var html = Y.one('html'),
         getShowHideXY: function (show) {
             var selfDir = show ? 0 : 1,
                 posData = POSITIONS[this.get('showFrom')],
+                NS = this.get('nativeScroll'),
                 W = Y.Bottle.Device.getBrowserWidth(),
                 H = Y.Bottle.Device.getBrowserHeight();
 
             return [
                 selfDir * W * posData[0] + Math.floor((W - this.get('width')) / 2),
-                selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2)
-                + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
+                selfDir * H * posData[1] + (NS ? 0 : Math.floor((H - this.get('height')) / 2))
+                + (Y.Bottle.get('positionFixed') ? 0 : Y.Bottle.Device.getScrollY())
             ];
         },
 
@@ -236,28 +240,11 @@ var html = Y.one('html'),
                 this._updatePositionHide({visible: false});
                 current = this;
             } else {
+                if (this.get('nativeScroll')) {
+                    Y.Bottle.Page.getCurrent().resetScroll();
+                }
                 this._updatePositionShow({visible: true});
                 current = undefined;
-            }
-
-            if (Y.Bottle.get('nativeScroll') && !Y.Bottle.Device.getTouchSupport()) {
-                if (show) {
-                    scrollY = Y.Bottle.Page.getScrollY();
-                    html.addClass('bov_display');
-                    body.setStyles({
-                        top: -scrollY + 'px',
-                        height: scrollY + Y.Bottle.Device.getBrowserHeight()
-                    });
-                } else {
-                    html.removeClass('bov_display');
-                    body.setStyles({
-                        top: '',
-                        height: 'auto'
-                    });
-                    if (scrollY) {
-                        Y.Bottle.Page.scrollTo(scrollY);
-                    }
-                }
             }
 
             finalPos = this.getShowHideXY(show);

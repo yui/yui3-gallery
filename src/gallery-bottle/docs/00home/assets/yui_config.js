@@ -1,19 +1,27 @@
 var debug = location.href.match(/(#|:)debug/),
     YUI_config = {
-        gallery: 'gallery-2013.02.13-21-08',
+        gallery: 'gallery-2013.03.20-19-59',
         debug: debug,
         combine: debug ? false : true,
         filter: debug ? 'debug' : 'min',
         groups: {
             'patches': {
-                base: 'http://yui.yahooapis.com/gallery-2013.02.13-21-08/build/',
+                base: 'http://yui.yahooapis.com/gallery-2013.03.20-19-59/build/',
                 modules: {
                     'gallery-patch-373-scrollbar-ie7': {
                         condition: {
                             trigger: 'scrollview-scrollbars',
                             test: function () {
                                 var IE = navigator.userAgent.match(/MSIE (\d+)/);
-                                return IE && (IE[1] < 9);
+                                return (YUI.version < '3.9') && IE && (IE[1] < 9);
+                            }
+                        }
+                    },
+                    'patch-390-transition-htcbutterfly': {
+                        condition: {
+                            trigger: 'transition',
+                            test: function () {
+                                return (YUI.version > '3.6.0') && navigator.userAgent.match(/Butterfly/) && ! navigator.userAgent.match(/(Chrome|CrMo|CriOS)\//);
                             }
                         }
                     }

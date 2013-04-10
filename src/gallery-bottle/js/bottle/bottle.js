@@ -22,6 +22,7 @@ var BOTTLE_INIT = 'btInit',
     MATCH_HTML_COMMENT = /^<!--([\s\S]+)-->$/,
 
     SYNC_SCREEN = 'btSyncScreen',
+    SYNC_CONTENT = 'btSyncContent',
     htmlbody = Y.all('html, body'),
     body = htmlbody.item(1),
     btRoot = Y.one('.btRoot') || body.appendChild(Y.Node.create('<div class="btRoot"></div>')),
@@ -34,24 +35,40 @@ var BOTTLE_INIT = 'btInit',
             overflowX: 'hidden'
         }
     },
+
+    nativeScrollPositions = [
+    ],
+
     flags = {
         nativeScroll: true,
         positionFixed: false
     },
 
     resetBodySize = function (resize) {
+        var I = nativeScrollPositions.length - 1,
+            S, H;
+
         if (hideURL && !resize) {
             window.scrollTo(0, 1);
         }
 
-        if (flags.nativeScroll) {
-            return;
+        if (I >= 0) {
+            S = nativeScrollPositions[I];
         }
 
-        body.setStyles({
-            width: Y.Bottle.Device.getBrowserWidth(),
-            height: Y.Bottle.Device.getBrowserHeight()
-        });
+        H = {
+            width: Y.Bottle.Device.getBrowserWidth()
+        };
+
+        if (flags.nativeScroll) {
+            if (S) {
+                H.height = Math.max(S.node ? S.node.get('offsetHeight') : S.height, Y.Bottle.Device.getBrowserHeight());
+            }
+        } else {
+            H.height = Y.Bottle.Device.getBrowserHeight();
+        }
+
+        body.setStyles(H);
     },
 
     handleResize = function (force) {
@@ -155,15 +172,9 @@ var BOTTLE_INIT = 'btInit',
                 }
                 htmlbody.setStyles(styles.scroll);
                 body.addClass(BOTTLE_NATIVE);
-                pageWidget.item(0).get('scrollView').disable().unplug(Y.Plugin.ScrollViewScrollbars)._set('axis', '')._bindDrag();
                 Y.publish(BOTTLE_NATIVE, {fireOnce: true});
                 Y.fire(BOTTLE_NATIVE);
                 Y.publish(SYNC_SCREEN);
-
-                // disable scroll on shortcut and overlay
-                btRoot.on('gesturemove', function (E) {
-                    E.preventDefault();
-                }, {standAlone:true, root: btRoot});
             } else {
                 flags.nativeScroll = false;
                 resetBodySize();
@@ -193,6 +204,7 @@ var BOTTLE_INIT = 'btInit',
         }
 
         Y.on((Y.UA.mobile === 'Apple') ? 'orientationchange' : 'resize', handleResize, window);
+        Y.on(SYNC_CONTENT, handleResize);
 
         body.delegate('focus', function () {
             body.addClass(BOTTLE_FOCUS);
@@ -208,6 +220,7 @@ var BOTTLE_INIT = 'btInit',
 
         body.addClass(BOTTLE_READY).removeClass('btHideSCO').removeClass('btInPlace').removeClass('btHideAll');
         Y.publish(BOTTLE_READY, {fireOnce: true});
+        Y.publish(SYNC_CONTENT);
         Y.fire(BOTTLE_READY);
     },
 
@@ -238,3 +251,4 @@ var BOTTLE_INIT = 'btInit',
 Y.namespace('Bottle').init = init;
 Y.namespace('Bottle').get = get;
 Y.namespace('Bottle').lazyLoad = lazyLoad;
+Y.namespace('Bottle').nativeScrollPositions = nativeScrollPositions;
