@@ -37,17 +37,23 @@ YUI.add('gallery-itsascrollviewkeynav', function (Y, NAME) {
  * @type Array
  */
 
+/**
+ * The plugin's host, which should be a ScrollView-instance
+ * @property host
+ * @type ScrollView-instance
+ */
+
 
 var Lang = Y.Lang,
     YArray = Y.Array,
-    MODEL_CLASS = 'itsa-scrollviewmodel',
+    MODEL_CLASS = 'itsa-model',
     FOCUS_CLASS = MODEL_CLASS + '-focus',
     GETSTYLE = function(node, style) {
         return parseInt(node.getStyle(style), 10);
     };
 
 
-Y.namespace('Plugin').ITSAScrollViewKeyNav = Y.Base.create('itsscrollviewkeynav', Y.Plugin.Base, [], {
+Y.namespace('Plugin').ITSAScrollViewKeyNav = Y.Base.create('itsascrollviewkeynav', Y.Plugin.Base, [], {
 
         _eventhandlers : [],
         host : null,
@@ -726,4 +732,4 @@ Y.namespace('Plugin').ITSAScrollViewKeyNav = Y.Base.create('itsscrollviewkeynav'
     }
 );
 
-}, 'gallery-2013.03.27-22-06', {"requires": ["base-build", "plugin", "pluginhost-base", "node", "dom-screen"]});
+}, 'gallery-2013.04.10-22-48', {"requires": ["base-build", "plugin", "pluginhost-base", "node", "scrollview", "dom-screen"]});
