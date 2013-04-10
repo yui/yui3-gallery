@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-itsadatetimepicker",
+    "displayName": "Gallery: gallery-itsadatetimepicker",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsadatetimepicker" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

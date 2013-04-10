@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsadatetimepicker",
+    "builds": {
+        "gallery-itsadatetimepicker": {
+            "jsfiles": [
+                "js/gallery-itsadatetimepicker.js"
+            ]
+        }
+    }
+}

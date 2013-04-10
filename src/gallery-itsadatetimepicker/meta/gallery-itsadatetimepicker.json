@@ -1,0 +1,17 @@
+{
+    "gallery-itsadatetimepicker": {
+        "requires": [
+            "base",
+            "node-base",
+            "node-screen",
+            "panel",
+            "calendar",
+            "dial",
+            "promise",
+            "cssbutton",
+            "datatype-date-format",
+            "dd-plugin"
+        ],
+        "skinnable": true
+    }
+}
