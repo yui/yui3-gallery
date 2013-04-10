@@ -1,0 +1,12 @@
+{
+    "name": "gallery-advanced-number-format",
+    "builds": {
+        "gallery-advanced-number-format": {
+            "jsfiles": [
+                "js/BaseFormat.js",
+                "js/NumberFormat.js",
+                "js/format-numbers-advanced.js"
+            ]
+        }
+    }
+}
