@@ -5,6 +5,7 @@
             "plugin",
             "pluginhost-base",
             "node",
+            "scrollview",
             "dom-screen"
         ]
     }
