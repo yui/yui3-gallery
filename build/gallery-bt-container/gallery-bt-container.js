@@ -7,38 +7,40 @@ YUI.add('gallery-bt-container', function (Y, NAME) {
  */
 var HEIGHT_CHANGE = 'heightChange',
     WIDTH_CHANGE = 'widthChange',
+    SYNC_CONTENT = 'btSyncContent',
     fixedPos = Y.Bottle.Device.getPositionFixedSupport(),
 
     handleFixPos = function (header, fixed, nativeScroll) {
         var node,
             pfix = fixed && fixedPos,
-            ns = (nativeScroll !== undefined) ? nativeScroll : this.get('nativeScroll');
+            ns = (nativeScroll !== undefined) ? nativeScroll : this.get('nativeScroll'),
+            sv = ns ? null : this.get('scrollView');
 
-        if (this.get('scrollView')) {
-            node = this.get(header ? 'headerNode' : 'footerNode');
+        node = this.get(header ? 'headerNode' : 'footerNode');
 
-            if (node) {
-                if (ns && pfix) {
-                    node.addClass('btFixed');
-                }
-
-                node.setStyles({
-                    top: (header && ns && pfix) ? 0 : '',
-                    bottom: (!header && ns && pfix) ? 0 : ''
-                });
-
-                if (fixedPos) {
-                    this.get('scrollView').get('boundingBox').setStyle(
-                        header
-                        ? 'marginTop'
-                        : 'marginBottom',
-                        (fixed && ns)
-                        ? (node.get('offsetHeight') + 'px')
-                        : 0);
-                }
+        if (node) {
+            if (ns && pfix) {
+                node.addClass('btFixed');
             }
 
-            this.get(fixed ? 'srcNode' : 'scrollNode').insert(node, header ? 0 : undefined);
+            node.setStyles({
+                top: (header && ns && pfix) ? 0 : '',
+                bottom: (!header && ns && pfix) ? 0 : ''
+            });
+
+            if (fixedPos) {
+                this.get('scrollNode').setStyle(
+                     header
+                     ? 'marginTop'
+                     : 'marginBottom',
+                     (fixed && ns)
+                     ? (node.get('offsetHeight') + 'px')
+                     : 0);
+            }
+
+            if (sv) {
+                this.get(fixed ? 'srcNode' : 'scrollNode').insert(node, header ? 0 : undefined);
+            }
 
             this._syncScrollHeight();
         }
@@ -73,7 +75,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
     destructor: function () {
         this._btcEventHandlers.detach();
 
-        if (this.get('rendered')) {
+        if (this.get('rendered') && !this.get('nativeScroll')) {
             this.get('scrollView').destroy(true);
         }
 
@@ -81,12 +83,13 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
     },
 
     renderUI: function () {
-        var scrollNode = Y.Node.create('<div class="bt-container-scroll"></div>'),
+        var ns = this.get('nativeScroll'),
             srcNode = this.get('srcNode'),
             headerNode = this.get('headerNode'),
             bodyNode = this.get('bodyNode'),
             footerNode = this.get('footerNode'),
-            scrollView = new Y.ScrollView(Y.merge(this.get('cfgScroll'), {
+            scrollNode = ns ? bodyNode : Y.Node.create('<div class="bt-container-scroll"></div>'),
+            scrollView = ns ? null : new Y.ScrollView(Y.merge(this.get('cfgScroll'), {
                 axis: 'y',
                 srcNode: scrollNode
             }));
@@ -94,23 +97,35 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
         this.set('scrollNode', scrollNode);
         this.set('scrollView', scrollView);
 
-        srcNode.append(scrollNode);
-        scrollNode.append(headerNode);
-
-        if (Y.UA.ie && Y.UA.ie < 8) {
-            scrollNode.append('<div class="btDummy"></div>');
+        if (ns) {
+            this.get('boundingBox').addClass('btFixedScroll');
+            this.set_again('headerFixed');
+            this.set_again('footerFixed');
+            return;
         }
 
+        scrollView.plug(Y.zui.RAScroll, {horizontal: false, cooperation: true});
+        if (!Y.Bottle.Device.getTouchSupport()) {
+            scrollView.plug(Y.zui.ScrollHelper);
+        }
+
+        srcNode.append(scrollNode);
+        scrollNode.append(headerNode);
         scrollNode.append(bodyNode);
         scrollNode.append(footerNode);
         scrollView.render();
+
+        if (Y.UA.ie && Y.UA.ie < 8) {
+            scrollView.get('boundingBox').insert('<div class="btDummy"></div>', 'before');
+        }
 
         // When HTML_PARSER running, there was no scrollView,
         // so we trigger value setter function again here.
         this.set_again('headerFixed');
         this.set_again('footerFixed');
         this.set_again('translate3D');
-        this.set_again('nativeScroll');
+
+        this._syncScrollHeight();
     },
 
     /**
@@ -161,6 +176,61 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
                 scroll.set('height', height);
             }
         });
+    },
+
+    /**
+     * Update content size and scroll position
+     *
+     * @method updateContentSize
+     * @static
+     */
+    updateContentSize: function () {
+        var s = this.get('scrollView'),
+            H, NS;
+
+        if (s) {
+            s._uiDimensionsChange();
+            if (s && s._maxScrollY) {
+                s.scrollTo(s.get('scrollX'), Math.min(s.get('scrollY'), s._maxScrollY));
+            }
+        } else {
+            H = this.get('contentBox').get('scrollHeight');
+            NS = this.get('nativeScroll');
+            if (!NS || this.get('height')) {
+                this.set('height', H);
+            }
+            if (NS) {
+                Y.fire(SYNC_CONTENT);
+            }
+        }
+    },
+
+    /**
+     * Change content html and monitoring image loading events
+     *
+     * @method setContent
+     * @param html {String} new html. if null, do not change html
+     * @param monitoring {Boolean} if true, monitoring all image loading to update content size
+     */
+    setContent: function (html, monitoring) {
+        var cb = this.get('contentBox'),
+            that = this;
+
+        if (html) {
+            cb.setHTML(html);
+        }
+
+        if (!monitoring) {
+            return;
+        }
+
+        cb.all('img').each(function (O) {
+            if (!O.get('naturalWidth')) {
+                O.once('load', function () {
+                    that.updateContentSize();
+                });
+            }
+        });
     }
 }, {
     /**
@@ -180,27 +250,9 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
          * @default false
          */
         nativeScroll: {
-            value: false,
-            validator: Y.Lang.isBoolean,
-            setter: function (V) {
-                var sv = this.get('scrollView');
-
-                if (sv) {
-                    sv.set('disabled', V);
-                    sv.get('boundingBox').addClass('btFixedScroll');
-                    if (V) {
-                        sv.unplug(Y.zui.RAScroll);
-                    } else {
-                        sv.plug(Y.zui.RAScroll, {horizontal: false, cooperation: true});
-                        if (!Y.Bottle.Device.getTouchSupport()) {
-                            sv.plug(Y.zui.ScrollHelper);
-                        }
-                    }
-                }
-
-                handleFixPos.apply(this, [true, this.get('headerFixed'), V]);
-                handleFixPos.apply(this, [false, this.get('footerFixed'), V]);
-                return V;
+            value: true,
+            validator: function (V) {
+                return Y.Lang.isBoolean(V) && !this.get('rendered');
             }
         },
 
@@ -397,7 +449,7 @@ Y.namespace('Bottle').Container = Y.Base.create('btcontainer', Y.Widget, [Y.Widg
 });
 
 
-}, 'gallery-2013.02.27-21-03', {
+}, 'gallery-2013.04.10-22-48', {
     "requires": [
         "scrollview",
         "widget-child",

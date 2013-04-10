@@ -1,5 +1,5 @@
 .bt-shortcut-mask,
-.bt-overlay-mask{opacity:0.5;filter:alpha(opacity='50',style=0);background-color:#000}
+.bt-overlay-mask{opacity:0.5;filter:alpha(opacity=50);background-color:#000}
 
 .yui3-btslidetab .bst_index {border:2px solid #444;background:#eee}
 
@@ -7,7 +7,7 @@
 .bcr_indexitem.bcr_on {background-color:#afc}
 .bcr_btnl, .bcr_btnr {width:60px;height:30px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 10px -545px}
 .bcr_btnr {background-position:10px -595px}
-.bcr_off {opacity:0.5;filter:alpha(opacity='50',style=0)}
+.bcr_off {opacity:0.5;filter:alpha(opacity=50)}
 
 .yui3-btviewer .bvi_button {position:absolute;display:block;width:25px;height:25px;background:transparent url(http://yui.yahooapis.com/3.6.0/build/assets/skins/sam/sprite.png) no-repeat 5px -345px;z-index:2;cursor:pointer}
 .yui3-btviewer .bvi_button.bvi_expand {background-position:5px -395px}

@@ -1,0 +1,29 @@
+{
+    "name": "bottle",
+    "passed": 0,
+    "failed": 3,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 21,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 5,
+        "type": "testcase",
+        "test is empty": {
+            "result": "fail",
+            "message": "No Tests Provided For This Module",
+            "type": "test",
+            "name": "test is empty",
+            "duration": 2
+        }
+    },
+    "timestamp": "Wed Apr 10 15:50:30 2013",
+    "consoleInfo": []
+}
