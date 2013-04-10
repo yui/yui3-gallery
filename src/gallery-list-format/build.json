@@ -1,0 +1,10 @@
+{
+    "name": "gallery-list-format",
+    "builds": {
+        "gallery-list-format": {
+            "jsfiles": [
+                "js/format-list.js"
+            ]
+        }
+    }
+}

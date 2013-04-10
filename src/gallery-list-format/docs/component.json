@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-list-format",
+    "displayName": "Gallery: gallery-list-format",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "ashiksmd" ],
+    "use"        : [ "gallery-list-format" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
