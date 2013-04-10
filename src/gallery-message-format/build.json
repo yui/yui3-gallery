@@ -1,0 +1,20 @@
+{
+    "name": "gallery-message-format",
+    "builds": {
+        "gallery-message-format": {
+            "jsfiles": [
+                "js/MsgBaseFormatter.js",
+		"js/MsgStringFormatter.js",
+		"js/MsgDateFormatter.js",
+		"js/MsgTimeFormatter.js",
+		"js/MsgNumberFormatter.js",
+		"js/MsgSelectFormatter.js",
+                "js/PluralRules.js",
+		"js/MsgPluralFormatter.js",
+		"js/MsgChoiceFormatter.js",
+                "js/MsgListFormatter.js",
+                "js/format-message.js"
+            ]
+        }
+    }
+}

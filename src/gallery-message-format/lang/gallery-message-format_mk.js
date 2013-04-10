@@ -1,0 +1,3 @@
+{
+	"pluralRule" : "set16"
+}

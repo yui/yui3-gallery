@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-message-format",
+    "displayName": "Gallery: gallery-message-format",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "ashiksmd" ],
+    "use"        : [ "gallery-message-format" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

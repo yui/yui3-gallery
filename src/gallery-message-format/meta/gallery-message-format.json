@@ -1,0 +1,8 @@
+{
+    "gallery-message-format": {
+        "lang": ["am", "ar", "be", "cs", "cy", "fil", "fr", "ga", "gv", "he", "hi", "hr", "", "kw", "lt", "lv", "mk", "mt", "pl", "ro", "ru", "sh", "sk", "sl", "sr", "ti", "tl", "uk"],
+        "requires": [
+            "intl"
+        ]
+    }
+}
