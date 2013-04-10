@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-advanced-date-timezone",
+    "displayName": "Gallery: gallery-advanced-date-timezone",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "ashiksmd" ],
+    "use"        : [ "gallery-advanced-date-timezone" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

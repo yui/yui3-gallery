@@ -1,0 +1,5 @@
+{
+    "gallery-advanced-date-timezone": {
+        "requires": ["datatype-date-format"]
+    }
+}

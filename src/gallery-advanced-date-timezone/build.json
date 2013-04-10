@@ -1,0 +1,13 @@
+{
+    "name": "gallery-advanced-date-timezone",
+    "builds": {
+        "gallery-advanced-date-timezone": {
+            "jsfiles": [
+                "js/license.js",
+		"js/timezoneData.js",
+		"js/timezoneLinks.js",
+                "js/timezone.js"
+            ]
+        }
+    }
+}
