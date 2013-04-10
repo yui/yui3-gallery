@@ -6,7 +6,6 @@ YUI.add('gallery-yqlmock', function (Y, NAME) {
 
 /*global YUITest*/
 
-YUI.add('yqlmock', function (Y, NAME) {
     'use strict';
     function YQLMock() {
         var A = YUITest.Assert,
@@ -31,7 +30,8 @@ YUI.add('yqlmock', function (Y, NAME) {
             switch (errno) {
             case 0:
                 obj.name = "Unexpected numbers of calls";
-                obj.message = "YQL Call numbers unexpected.\nExpected calls: " + msgObj.expectedCalls + "\nActual calls: " + msgObj.actuallCalls + "\nDetails:\nsql: " + msgObj.sql + "\nparams: " + msgObj.params + "\nopts: " + msgObj.opts;
+                obj.message = "YQL Call numbers unexpected.\nExpected calls: " + msgObj.expectedCalls + "\nActual calls: " + msgObj.actuallCalls;
+                obj.message +=  "\nDetails:\nsql: " + msgObj.sql + "\nparams: " + msgObj.params + "\nopts: " + msgObj.opts;
                 break;
             case 1:
                 obj.name = "Invalid expectation object";
@@ -43,7 +43,8 @@ YUI.add('yqlmock', function (Y, NAME) {
                 break;
             case 3:
                 obj.name = "Unexpected Query";
-                obj.message = "Unexpected YQL call:\nsql: " + msgObj.sql + "\ncallback: " + msgObj.callback + "\nparams: " + msgObj.params + "\nopts: " + msgObj.opts + "\nPlease check your expectation again.";
+                obj.message = "Unexpected YQL call:\nsql: " + msgObj.sql + "\ncallback: " + msgObj.callback + "\nparams: ";
+                obj.message +=  msgObj.params + "\nopts: " + msgObj.opts + "\nPlease check your expectation again.";
                 break;
             }
 
@@ -88,12 +89,16 @@ YUI.add('yqlmock', function (Y, NAME) {
          * return hashkey
          */
         function generateSignature(obj) {
+            var signature;
+
             if (typeof obj.sql !== "string") {
                 // Sql needs to be a string
                 throw getErrorObj(2);
             }
             // Callback not considered in signature!!
-            return "sql=" + String(obj.sql) + "&params=" + JSON.stringify(deepSortObjKeys(obj.params)) + "&opts=" + JSON.stringify(deepSortObjKeys(obj.opts));
+            signature = "sql=" + String(obj.sql) + "&params=" + JSON.stringify(deepSortObjKeys(obj.params));
+            signature += "&opts=" + JSON.stringify(deepSortObjKeys(obj.opts));
+            return signature;
         }
 
         /**
@@ -206,7 +211,5 @@ YUI.add('yqlmock', function (Y, NAME) {
 
     Y.YQLMock = YQLMock;
 
-}, '0.0.6');
 
-
-}, 'gallery-2013.04.03-19-53', {"requires": ["yui-base"]});
+}, 'gallery-2013.04.10-22-48', {"requires": ["yui-base"]});

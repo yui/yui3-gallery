@@ -1,0 +1,78 @@
+{
+    "name": "gallery-yqlmock",
+    "passed": 24,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 24,
+    "duration": 255,
+    "type": "report",
+    "testCase_yui_3_5_0_1_1365634215681_55": {
+        "name": "testCase_yui_3_5_0_1_1365634215681_55",
+        "passed": 8,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 8,
+        "duration": 82,
+        "type": "testcase",
+        "yqlmock - good": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - good",
+            "duration": 3
+        },
+        "yqlmock - good, out of order object": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - good, out of order object",
+            "duration": 1
+        },
+        "yqlmock - callback not required": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - callback not required",
+            "duration": 1
+        },
+        "yqlmock - bad object expectation": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - bad object expectation",
+            "duration": 1
+        },
+        "yqlmock - bad sql expectation": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - bad sql expectation",
+            "duration": 0
+        },
+        "yqlmock - unexpected call": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - unexpected call",
+            "duration": 0
+        },
+        "yqlmock - unexpected call times": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - unexpected call times",
+            "duration": 1
+        },
+        "yqlmock - yql release and mock": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "yqlmock - yql release and mock",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed Apr 10 15:50:16 2013",
+    "consoleInfo": []
+}
