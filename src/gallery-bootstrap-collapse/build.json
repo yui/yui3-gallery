@@ -1,0 +1,10 @@
+{
+  "name": "gallery-bootstrap-collapse",
+  "builds": {
+    "gallery-bootstrap-collapse": {
+      "jsfiles": [
+        "bootstrap-collapse.js"
+      ]
+    }
+  }
+}
