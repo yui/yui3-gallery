@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 3,
-    "duration": 48,
+    "duration": 21,
     "type": "report",
     "List Format Tests": {
         "name": "List Format Tests",
@@ -14,20 +14,20 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 13,
+        "duration": 4,
         "type": "testcase",
         "testListFormat": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testListFormat",
-            "duration": 9
+            "duration": 1
         }
     },
-    "timestamp": "Wed Apr 10 15:50:18 2013",
+    "timestamp": "Wed Apr 17 14:53:17 2013",
     "coverage": {
-        "/Users/eferraiuolo/Code/yui/gallery-build/cdn_gallery-2013.04.10-22-48/build/gallery-list-format/gallery-list-format.js": {
-            "path": "/Users/eferraiuolo/Code/yui/gallery-build/cdn_gallery-2013.04.10-22-48/build/gallery-list-format/gallery-list-format.js",
+        "/Users/eferraiuolo/Code/yui/gallery-build/cdn_gallery-2013.04.17-18-52/build/gallery-list-format/gallery-list-format.js": {
+            "path": "/Users/eferraiuolo/Code/yui/gallery-build/cdn_gallery-2013.04.17-18-52/build/gallery-list-format/gallery-list-format.js",
             "s": {
                 "1": 1,
                 "2": 1,

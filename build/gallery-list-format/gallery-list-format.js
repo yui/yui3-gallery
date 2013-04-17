@@ -64,8 +64,8 @@ ListFormatter = {
 Y.Intl.ListFormatter = ListFormatter;
 
 
-}, 'gallery-2013.04.10-22-48', {
-    "requires": [
+}, 'gallery-2013.04.17-18-52', {
+    "lang": [
         "af",
         "am",
         "ar",
