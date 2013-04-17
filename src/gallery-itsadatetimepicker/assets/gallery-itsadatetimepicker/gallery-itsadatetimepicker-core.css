@@ -77,3 +77,33 @@
 .itsa-datetimepicker-panel .itsa-datetimepicker-timepicker-hidden {
     display: none;
 }
+
+.yui3-skin-sam .yui3-form .itsa-button-datetime {
+   -moz-box-sizing: border-box;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 0 1px 3px #DDDDDD inset;
+    display: inline-block;
+    font-size: 0.8em;
+    padding: 0.27em 0.31em;
+    transition: border 0.3s linear 0s;
+}
+
+.yui3-skin-sam .yui3-form .itsa-button-datetime::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+.yui3-skin-sam .yui3-form .itsa-button-datetime:focus {
+  outline: 0;
+  outline: thin dotted \9; /* IE6-9 */
+  border-color: #129FEA;
+}
+
+.yui3-skin-sam .yui3-form .itsa-datetimepicker-icondate, .yui3-skin-sam .yui3-form .itsa-datetimepicker-icondatetime {
+    background-position: 0 0;
+ }
+
+.yui3-skin-sam .yui3-form .itsa-datetimepicker-icontime {
+    background-position: -20px 1px;
+}

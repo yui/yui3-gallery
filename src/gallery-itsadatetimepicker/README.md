@@ -120,7 +120,7 @@ Usage
 
 <b>Example 1: Getting a timevalue and process the promise in one statement:</b>
 ```js
-YUI().use('gallery-itsadatetimepicker', function(Y) {
+YUI({gallery: 'gallery-2013.04.10-22-48'}).use('gallery-itsadatetimepicker', function(Y) {
     // Y.ItsaDateTimePicker is ready to be used...
 
     Y.ItsaDateTimePicker.getTime().then(
@@ -142,7 +142,7 @@ YUI().use('gallery-itsadatetimepicker', function(Y) {
 
 <b>Example 2: Getting a datevalue and handle it later on:</b>
 ```js
-YUI().use('gallery-itsadatetimepicker', function(Y) {
+YUI({gallery: 'gallery-2013.04.10-22-48'}).use('gallery-itsadatetimepicker', function(Y) {
     // Y.ItsaDateTimePicker is ready to be used...
 
     var datepromise = Y.ItsaDateTimePicker.getDate();
@@ -194,7 +194,7 @@ YUI().use('gallery-itsadatetimepicker', function(Y) {
 ```
 
 ```js
-YUI().use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function(Y) {
+YUI({gallery: 'gallery-2013.04.10-22-48'}).use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function(Y) {
     // Y.ItsaDateTimePicker is ready to be used...
 
     var date = new Date(2010, 05, 20);
@@ -233,7 +233,7 @@ YUI().use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function
 ```
 
 ```js
-YUI().use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function(Y) {
+YUI({gallery: 'gallery-2013.04.10-22-48'}).use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function(Y) {
     // Y.ItsaDateTimePicker is ready to be used...
 
     var picker = Y.ItsaDateTimePicker; // for shorter reference
@@ -283,7 +283,7 @@ YUI().use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function
 ```
 
 ```js
-YUI().use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function(Y) {
+YUI({gallery: 'gallery-2013.04.10-22-48'}).use('node', 'gallery-itsadatetimepicker', 'datatype-date-format', function(Y) {
     // Y.ItsaDateTimePicker is ready to be used...
 
     var picker1 = Y.ItsaDateTimePicker; // for shorter reference --> default Picker which is always available
