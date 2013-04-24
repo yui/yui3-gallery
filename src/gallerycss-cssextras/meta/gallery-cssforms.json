@@ -1,9 +1,0 @@
-{
-    "gallerycss-cssform": {
-        "requires": [
-            "cssbutton"
-        ],
-        "type": "css"
-    }
-}
-
