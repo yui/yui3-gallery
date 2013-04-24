@@ -19,7 +19,6 @@ Since it's all CSS, nothing breaks in older browsers. This module is tested on I
 Dependencies
 ------------
 
-* [normalize.css 1.x](http://necolas.github.com/normalize.css/) Pull this in before you start using CSSExtras.
 * [cssbutton](http://yuilibrary.com/yui/docs/button/#usecssbutton) if you wish to adopt the button styles.
 
 Links

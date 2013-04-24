@@ -1,0 +1,11 @@
+{
+    "gallerycss-cssextras": {
+        "requires": [
+            "cssbutton",
+            "cssgrids-responsive"
+        ],
+        "type": "css"
+    },
+    "version": 0.2
+}
+
