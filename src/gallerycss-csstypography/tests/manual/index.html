@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<!--   <link rel="stylesheet" type="text/css" href="http://necolas.github.com/normalize.css/1.0.2/normalize.css"> -->
+  <link rel="stylesheet" type="text/css" href="../../../../../yui3/build/cssbutton/cssbutton.css">
+  <link rel="stylesheet" type="text/css" href="../../../../../yui3/build/cssgrids-responsive/cssgrids-responsive.css">
+
+<!--   <link rel="stylesheet" type="text/css" href="../../css/typography-core.css"> 
+  <link rel="stylesheet" type="text/css" href="../../css/typography.css">
+  <link rel="stylesheet" type="text/css" href="../../css/typography-responsive.css"> -->
+  
+  <link rel="stylesheet" type="text/css" href="../../../../build/gallerycss-csstypography/gallerycss-csstypography.css">
+
+  <style>
+    body {
+      font-size: 1em;
+    }
+
+    .splash-custom {
+      color: white;
+      text-align: center;
+      background: url(http://farm1.staticflickr.com/49/143032778_00ccbb3659_o_d.jpg) no-repeat;
+      background-size: cover;
+      padding: 6em 0;
+    }
+    .pull-right {
+      text-align: right;
+    }
+    .bordered {
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="splash">
+    <h1 class="splash-head">CSSTypography</h1>
+    <h2 class="splash-subhead">
+      Simple CSS for Typography
+    </h2>
+
+    <a class="yui3-button splash-button">Get Started</a>
+  </div>
+    
+  
+  <div class="splash splash-dark yui3-g-r">
+    <div class="yui3-u-1-2">
+      <img src="http://placehold.it/350x350">
+    </div>
+    <div class="yui3-u-1-2">
+      <h1 class="splash-head">A really really really *really* long splash heading.</h1>
+      <h2 class="splash-subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</h2>
+    </div>
+
+  </div>
+
+  <div class="splash splash-custom yui3-g-r">
+    <div class="yui3-u-1">
+      <h1 class="splash-head">A custom splash</h1>
+    </div>
+  </div>
+  <p class="pull-right">
+    <small class="muted">
+    Photo Credit: <a href="http://www.flickr.com/photos/74519001@N00/143032778/">Pierre Lesage</a> // <a href="http://creativecommons.org/licenses/by-nc-nd/2.0/">cc</a>.
+  </small>
+  </p>
+
+
+  <div class="csstype">
+
+    <h2>Getting Started</h2>
+    <p>
+      All styles should be used inside an element with a class name of <code>csstype</code>. This way, you can use the CSSTypography module in conjunction with other CSS on your page. Only elements within an element with the <code>csstype</code> class name will be styled with this module.
+    </p>
+  
+    <h3 class="title">Titles</h3>
+    <h4 class="subtitle">...and subtitles</h4>
+    <p>
+      Sometimes, you want a title and a lighter subtitle, like the one above this paragraph. You can do this by adding a <code>title</code> class to a heading, and a <code>subtitle</code> class to a sub-heading. This will adjust the margins to group the title and subtitle together without much spacing between them.
+    </p>
+    
+    <h3 class="title">Headings</h3>
+    <h4 class="subtitle">Fairly useful.</h4>
+    <h1>Here's an H1</h1>
+    <h2>Here's an H2</h2>
+    <h3>Here's an H3</h3>
+    <h4>Here's an H4</h4>
+    <h5>Here's an H5</h5>
+    <h6>Here's an H6</h6>
+    <h4 class="subhead">Content Subhead Heading</h4>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </p>
+
+    <h3>Blockquotes and Cites</h3>
+    <blockquote>
+      Typography is the craft of endowing human language with a durable visual form.
+      <cite title="citation">Anonymous</cite>
+    </blockquote>
+  
+
+    <h3>Code</h3>
+    <p>
+      You can pull down CSSForm from the YUI Gallery. Just include this <code>&lt;link&gt;</code> element in your <code>&lt;head&gt;</code>.
+    </p>
+
+    <h3>Pre</h3>
+
+    <pre>
+  link rel="stylesheet" href="http://yui.yahooapis.com/gallery-2013.03.27-22-06/build/gallerycss-cssform/gallerycss-cssform-min.css"
+    </pre>
+
+    <h3>Small</h3>
+    <small>Here is some small text.</small>
+
+    <h3>Strong</h3>
+    <p>Here is some <strong>strong</strong> text.</p>
+
+    <h3>Emphasis</h3>
+    <p>Here is <em>some text that we want to emphasize.</em></p>
+
+    <h3>Text Alignment</h3>
+    <p>
+      You can align text through the <code>text-left</code>, <code>text-center</code>, and <code>text-right</code> class names.
+    </p>
+
+    <div class="bordered">
+      <p class="text-left">Text aligned to the left.</p>
+      <p class="text-center">Text aligned to the center.</p>
+      <p class="text-right">Text aligned to the right.</p>
+    </div>
+
+    <h3>Muted Colors</h3>
+    <p>
+      Add the <code>muted</code> class name to an element <span class="muted">to add a muted color to the text within.</span>
+    </p>
+  
+    <div class="yui3-g">
+      <div class="yui3-u-1">
+
+        <p class="ribbon ribbon-success">
+          You can pull down CSSForm from the YUI Gallery. Just include this <code>&lt;link&gt;</code> element in your <code>&lt;head&gt;</code>. Here's a <a>link</a>
+        </p>
+      </div>
+      <div class="yui3-u-1">
+        <p class="ribbon ribbon-error">
+          You can pull down CSSForm from the YUI Gallery. Just include this <code>&lt;link&gt;</code> element in your <code>&lt;head&gt;</code>. Here's a <a>link</a>
+        </p>  
+      </div>
+
+      <div class="yui3-u-1">
+        <p class="ribbon ribbon-warn">
+          You can pull down CSSForm from the YUI Gallery. Just include this <code>&lt;link&gt;</code> element in your <code>&lt;head&gt;</code>. Here's a <a>link</a>
+        </p>  
+      </div>
+    </div>
+
+  <h3>Definition Lists</h3>
+
+  <dl>
+    <dt>Definition lists</dt>
+    <dd>A description list is perfect for defining terms.</dd>
+    <dt>Euismod</dt>
+    <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
+    <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+    <dt>Malesuada porta</dt>
+    <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+    <dt>Felis euismod semper eget lacinia</dt>
+    <dd>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
+  </dl>
+
+  <h3 class="title">List Elements</h3>
+  <h4 class="subtitle">Add a <code>list</code> class to style ordered and unordered lists. Add the <code>plain</code> class to remove the default browser styles.</h4>
+  
+  <div class="yui3-g-r">
+    <div class="yui3-u-1-2">
+
+      <h4><code>ul</code> Default Styling</h4>
+
+      <p class="muted">Add the <code>list</code> classes to an unordered list element to apply these styles.</p>
+
+      <ul class="list">
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Consectetur adipiscing elit</li>
+        <li>Integer molestie lorem at massa</li>
+        <li>Facilisis in pretium nisl aliquet</li>
+        <li>Nulla volutpat aliquam velit
+          <ul class="list">
+            <li>Phasellus iaculis neque</li>
+            <li>Purus sodales ultricies</li>
+            <li>Vestibulum laoreet porttitor sem</li>
+            <li>Ac tristique libero volutpat at</li>
+          </ul>
+        </li>
+        <li>Faucibus porta lacus fringilla vel</li>
+        <li>Aenean sit amet erat nunc</li>
+        <li>Eget porttitor lorem</li>
+      </ul>    
+    </div>
+    <div class="yui3-u-1-2">
+
+      <h4><code>ul</code> Plain Styling</h4>
+      
+      <p class="muted">Add the <code>list</code> classes to an unordered list element to apply these styles.</p>
+
+      <ul class="list plain">
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Consectetur adipiscing elit</li>
+        <li>Integer molestie lorem at massa</li>
+        <li>Facilisis in pretium nisl aliquet</li>
+        <li>Nulla volutpat aliquam velit
+          <ul class="list plain">
+            <li>Phasellus iaculis neque</li>
+            <li>Purus sodales ultricies</li>
+            <li>Vestibulum laoreet porttitor sem</li>
+            <li>Ac tristique libero volutpat at</li>
+          </ul>
+        </li>
+        <li>Faucibus porta lacus fringilla vel</li>
+        <li>Aenean sit amet erat nunc</li>
+        <li>Eget porttitor lorem</li>
+      </ul>
+    </div>
+
+
+    <div class="yui3-u-1-2">
+
+      <h4><code>ol</code> Default Styling</h4>
+  
+      <p class="muted">Add the <code>list</code> classes to an ordered list element to apply these styles.</p>
+
+      <ol class="list">
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Consectetur adipiscing elit</li>
+        <li>Integer molestie lorem at massa</li>
+        <li>Facilisis in pretium nisl aliquet</li>
+        <li>Nulla volutpat aliquam velit
+          <ol class="list">
+            <li>Phasellus iaculis neque</li>
+            <li>Purus sodales ultricies</li>
+            <li>Vestibulum laoreet porttitor sem</li>
+            <li>Ac tristique libero volutpat at</li>
+          </ol>
+        </li>
+        <li>Faucibus porta lacus fringilla vel</li>
+        <li>Aenean sit amet erat nunc</li>
+        <li>Eget porttitor lorem</li>
+      </ul>    
+    </div>
+    <div class="yui3-u-1-2">
+
+      <h4><code>ol</code> Plain Styling</h4>
+
+      <p class="muted">Add the <code>list plain</code> classes to an ordered list element to apply these styles.</p>
+
+      <ol class="list plain">
+        <li>Lorem ipsum dolor sit amet</li>
+        <li>Consectetur adipiscing elit</li>
+        <li>Integer molestie lorem at massa</li>
+        <li>Facilisis in pretium nisl aliquet</li>
+        <li>Nulla volutpat aliquam velit
+          <ol class="list plain">
+            <li>Phasellus iaculis neque</li>
+            <li>Purus sodales ultricies</li>
+            <li>Vestibulum laoreet porttitor sem</li>
+            <li>Ac tristique libero volutpat at</li>
+          </ol>
+        </li>
+        <li>Faucibus porta lacus fringilla vel</li>
+        <li>Aenean sit amet erat nunc</li>
+        <li>Eget porttitor lorem</li>
+      </ul>
+    </div>
+  </div>
+  
+
+
+  </div>
+
+  <script type="text/javascript" src="//use.typekit.net/ajf8ggy.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+</body>
+</html>

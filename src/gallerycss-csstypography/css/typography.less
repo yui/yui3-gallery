@@ -1,0 +1,157 @@
+/* 
+
+CSS Typography
+Simple CSS for Typography
+Author: Tilo Mitra
+
+*/
+@import "_typography-settings";
+
+.splash {
+    padding: 3em 1.6em;
+}
+    .splash-button {
+        font-size: 120%;
+    }
+
+    .splash-head {
+        font-size: 300%;
+        margin: 0.3em 0 0;
+        line-height: 1.2em;
+    }
+    .splash-subhead {
+        color: #999;
+        font-weight: 300;
+        line-height: 1.4em;
+        margin: 0.5em 0;
+    }
+
+.splash-dark {
+    background: @darkSplashColor;
+    color: lighten(@darkSplashColor, 90%);
+}
+    .splash-dark .splash-subhead {
+        color: lighten(@darkSplashColor, 40%);
+    }
+
+/* Parent selector that everything must fall within. */
+.csstype {
+
+    p {
+        margin-top: 0.5em;
+        line-height: 1.4em;
+    }
+
+    .muted, .subtitle {
+        color: #999;
+    }
+
+    .title {
+        margin-bottom: 0;
+    }
+    .subtitle {
+        margin-top: 0;
+        font-weight: normal;
+    }
+
+    /* Subheader Styling */
+    .subhead {
+        color: #999;
+        text-transform: uppercase;
+        border-bottom: 2px solid #eee;
+        display: inline-block;
+    }
+
+    /* Blockquote Styling */
+    blockquote {
+        font-family: "Georgia", serif;
+        color: #666;
+        font-style: italic;
+        line-height: 1.8em;
+        border-left: 5px solid #ddd;
+        padding-left: 1.5em;
+    }
+        blockquote cite {
+            font-size: 80%;
+            display: block;
+            font-family: sans-serif;
+            font-style: normal;
+        }
+        
+        /* Adds the little dash before the cite */
+        .quote cite:before {
+            content: '';
+            display: inline-block;
+            width: 1em;
+            height: 1px;
+            background: #ccc;
+            vertical-align: middle;
+            margin-right: 0.3em;
+        }
+
+    code, pre {
+        font-family: Consolas, 'Liberation Mono', Courier, monospace;
+        background: lighten(@splashColor, 2%);
+        font-size: 0.8em;
+        padding: 0.3em 0.5em;
+    }
+        code {
+            border: none;
+            margin: 0 0.2em;
+        }
+        pre {
+            border: 1px solid #ddd;
+            border-radius: @borderRadius;
+            white-space: pre-line;
+        }
+
+    .ribbon {
+        padding: 0.7em;
+        border-radius: @borderRadius;
+    }
+        .ribbon-success {
+            background: @successColor;
+            color: darken(@successColor, 40%);
+            a {
+                color: darken(@successColor, 25%);
+            }
+        }
+        .ribbon-error {
+            background: @errorColor;
+            color: darken(@errorColor, 40%);
+            a {
+                color: darken(@errorColor, 25%);
+            }
+        }
+        .ribbon-warn {
+            background: @warnColor;
+            color: darken(@warnColor, 40%);
+            a {
+                color: darken(@warnColor, 25%);
+            }
+        }
+
+    dl dt {
+        font-weight: bold;
+    }
+    dl dd {
+        margin: 0 0 0 0.75em;
+    }
+
+    .list {
+        margin: 0.5em 0;
+    }
+        .plain {
+            list-style: none;
+        }
+
+    .text-left {
+        text-align: left;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align: right
+    }
+}

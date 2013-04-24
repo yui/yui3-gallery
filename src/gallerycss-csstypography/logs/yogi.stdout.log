@@ -1,0 +1,30 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-csstypography
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-csstypography
+   #1: [warning] Unqualified attribute selectors are known to be slow.
+       [hidden] { // line 30, pos 1
+   #2: [warning] Outlines should only be modified using :focus.
+       a:active, // line 72, pos 1
+   #3: [warning] The property -webkit-box-sizing is compatible with -moz-box-sizing and should be included as well.
+       -moz-box-sizing: content-box; // line 155, pos 5
+   #4: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: content-box; // line 156, pos 5
+   #5: [warning] Property with underscore prefix found.
+       _font-family: 'courier new', monospace; // line 187, pos 5
+   #6: [warning] Rule is empty.
+       .csstype { // line 320, pos 1
+   #7: [warning] Too many font-size declarations (17), abstraction needed.
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.047 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)
