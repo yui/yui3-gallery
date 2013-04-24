@@ -1,17 +1,17 @@
 'use strict';
 
 /**
- * ViewModelList Widget
+ * View ModelList Extention
  *
  *
  * Adds an Y.ModelList  or Y.LazyModelList to a View instance, where the Models are rendered inside an ul-element
  * which acts as the 'container'-attribute. This results in an ul-list with rendered Models. The Models are rendered
- * through a template (Y.Lang.sub or Y.Template.Micro) which needs to be defined with the <b>'modelTemplate'-attribute</b>.
+ * through a template (Y.Lang.sub or Y.Template.Micro) which needs to be defined with the <b>'template'-attribute</b>.
  *
  * @module gallery-itsaviewmodellist
  * @extends Widget
  * @uses ITSAModellistViewExtention
- * @class ITSAViewModelList
+ * @class ITSAViewModellist
  * @constructor
  * @since 0.1
  *

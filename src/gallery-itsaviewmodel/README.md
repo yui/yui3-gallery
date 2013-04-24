@@ -2,11 +2,12 @@ gallery-itsaviewmodel
 =====================
 
 
-Widget Y.ITSAViewModel.
+<b<Widget Y.ITSAViewModel</b>
 
 This widget renderes Y.Model-instances -or just plain objects- inside the widgets contentBox.
 It uses Y.View under the hood, where Y.View.container is bound to the 'contentBox'. The render-method must be defined
 by the widget's attribute 'template'. The Model (or object) must be set through the attribute 'model'.
+
 
 Events can be set through the attribute 'events' and follow the same pattern as Y.View does. As a matter of fact, all attributes
 (template, model, events) are passed through to the widgets Y.View instance (which has the property 'view').
@@ -15,11 +16,18 @@ Events can be set through the attribute 'events' and follow the same pattern as 
 Using this widget is great to render Model on the page, where the widget keeps synced with the model. Whenever a new Model-instance
 is attached to the widget, or another template is used, the wodget will be re-rendered automaticly.
 
+
 Attaching Y.Model-instances or objects?
+
 Both can be attached. Whenever widgetattribute change, the widget will be re-rendered is needed (template- or model-attribute). This also
 counts for attached objects. However, changes inside an object itself (updated property-value) cannot be caught by the widget, so you need
 to call syncUI() yourself after an object-change. Y.Model-instances -on the other hand- do fire a *:change-event which is caught by the widget.
 This makes the widget re-render after a Model-instance changes some of its attributes.
+
+
+Creating an editable modelview:
+By plugin Y.Plugin.ITSAEditModel and setting the attribute 'modelEditable' to true, you create an editable Model.
+[See ITSAEditModel](src/gallery-itsaeditmodel). This will also automaticly plugin [Y.Plugin.ITSATabKeyManager](src/gallery-itsatabkeymanager).
 
 
 By default, the widget comes with its own style. You can disable this by setting the attribute 'styled' to false.

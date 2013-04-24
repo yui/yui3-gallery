@@ -1,6 +1,9 @@
 {
     "gallery-itsaviewmodellist": {
         "requires": [
+            "yui-base",
+            "node-style",
+            "base-base",
             "base-build",
             "widget",
             "gallery-itsamodellistviewextention"

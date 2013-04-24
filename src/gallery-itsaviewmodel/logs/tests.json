@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 3,
-    "duration": 18,
+    "duration": 15,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -21,9 +21,9 @@
             "message": "No Tests Provided For This Module",
             "type": "test",
             "name": "test is empty",
-            "duration": 1
+            "duration": 0
         }
     },
-    "timestamp": "Wed 27 Mar 2013 05:07:21 PM CDT",
+    "timestamp": "Wed 24 Apr 2013 02:57:48 PM PDT",
     "consoleInfo": []
 }

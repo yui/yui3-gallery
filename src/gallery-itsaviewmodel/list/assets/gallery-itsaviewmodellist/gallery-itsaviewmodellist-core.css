@@ -1,5 +1,5 @@
-.yui3-itsaviewmodellist table {
-    empty-cells: show;
+.yui3-js-enabled .yui3-itsaviewmodellist-loading {
+    visibility: hidden;
 }
 
 .itsa-modellistview-unselectable {

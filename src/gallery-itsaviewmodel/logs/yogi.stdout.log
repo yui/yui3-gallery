@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsaviewmodel
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -9,6 +9,7 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-itsaviewmodel
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-itsaviewmodel/gallery-itsaviewmodel.js with UglifyJS
 shifter [queu] writing -min file
@@ -22,21 +23,25 @@ shifter [queu] writing coverage file to gallery-itsaviewmodel/gallery-itsaviewmo
 shifter [queu] copying assets to skin for sam
    #1: [warning] Don't use adjoining classes.
        .yui3-skin-sam .yui3-itsaviewmodel.itsa-modelview-styled { // line 9, pos 16
+   #2: [warning] Don't use adjoining classes.
+       .yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton { // line 18, pos 1
+   #3: [warning] Don't use adjoining classes.
+       .yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton { // line 18, pos 1
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.373 seconds, pretty fast huh?
+shifter [info] finished in 0.274 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5010
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5009
-Starting Grover on 1 files with PhantomJS@1.8.2
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
+Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsaviewmodel]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
+✖ [gallery-itsaviewmodel]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)
     test is empty
        No Tests Provided For This Module
 Writing files in JSON format to: /src/gallery-itsaviewmodel/logs/tests.json

@@ -5,7 +5,8 @@
             "widget",
             "view",
             "template-micro",
-            "model"
+            "model",
+            "pluginhost-base"
         ],
         "skinnable": true
     }

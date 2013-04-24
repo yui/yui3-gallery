@@ -14,3 +14,7 @@
     -moz-box-shadow:    5px 5px 6px rgba(50, 50, 50, 0.45);
     box-shadow:         5px 5px 6px rgba(50, 50, 50, 0.45);
 }
+
+.yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton {
+    margin-left: 10px;
+}
