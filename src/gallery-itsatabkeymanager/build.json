@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsatabkeymanager",
+    "builds": {
+        "gallery-itsatabkeymanager": {
+            "jsfiles": [
+                "js/gallery-itsatabkeymanager.js"
+            ]
+        }
+    }
+}
