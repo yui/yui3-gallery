@@ -28,27 +28,6 @@ The promises can be called at any time and will pop-up the Picker. Which will re
 * <b>initialDate</b>: <i>{Date}</i> date-object that holds the initial date-time for the Picker. If not set, then the current date-time is used.
 * <b>config</b>: <i>{Object}</i> object to adjust the behaviour of the Picker.
 
-config is an object through which you can adjust the behaviour of the Picker. The next properties may be set:
-* <b>title</b>: <i>{String}</i> Title on the Picker
-* <b>alignToNode</b>: <i>{Y.Node}</i> When set, the Picker is aligned to this Node
-* <b>modal</b>: <i>{Boolean}</i> Whether the Picker should appear modal
-* <b>dragable</b>: <i>{Boolean}</i> Whether the Picker is dragable
-* <b>forceSelectdate</b>: <i>{Boolean}</i> Force the promise always to become fulfilled by hiding the close-button
-* <b>defaultConfig.minTime</b>: <i>{String}</i> Lowest timevalue that can be picked. Should be in format 'h:m', 'h:mm' or 'hh:mm'
-* <b>defaultConfig.maxTime</b>: <i>{String}</i> Highest timevalue that can be picked. Should be in format 'h:m', 'h:mm' or 'hh:mm'
-* <b>timeformat</b>: <i>{String}</i> Format of the rendered timestring
-* <b>resetStr</b>: <i>{String}</i> resetStr that is passed to the Dial-instance (timepicker)
-* <b>tooltipHandle</b>: <i>{String}</i> tooltipHandle that is passed to the Dial-instance (timepicker)
-* <b>selectOnRelease</b>: <i>{boolean}</i> When only timepicker: select time when mouse releases the dial, without a Selectbutton
-* <b>customRenderer</b>: <i>{Object}</i> customRenderer that is passed to the Calendar-instance
-* <b>showPrevMonth</b>: <i>{Boolean}</i> showPrevMonth that is passed to the Calendar-instance
-* <b>showNextMonth</b>: <i>{Boolean}</i> showNextMonth that is passed to the Calendar-instance
-* <b>headerRenderer</b>: <i>{String}</i> headerRenderer that is passed to the Calendar-instance
-* <b>minimumDate</b>: <i>{Date}</i> minimumDate that is passed to the Calendar-instance
-* <b>maximumDate</b>: <i>{Date}</i> maximumDate that is passed to the Calendar-instance
-* <b>enabledDatesRule</b>: <i>{String}</i> enabledDatesRule that is passed to the Calendar-instance
-* <b>disabledDatesRule</b>: <i>{String}</i> disabledDatesRule that is passed to the Calendar-instance
-
 The applied config is a mix of the Picker's attribute <i>'defaultConfig'</i>, combined with the 'config' of the promise-call. If you find yourself supplying the same config for all promise-calls over and over again, you better change the 'defaultConfig' with <b>Y.ItsaDateTimePicker.set('defaultConfig', {...});</b>. You only need to define the properties you want to be overruled: they get mixed with a baseConfig that holds the initial config-properties.
 
 <b>Calling the Promise by buttons</b>

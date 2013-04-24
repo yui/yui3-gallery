@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 3,
-    "duration": 18,
+    "duration": 15,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -24,6 +24,6 @@
             "duration": 1
         }
     },
-    "timestamp": "Wed Apr 17 14:53:15 2013",
+    "timestamp": "Wed 24 Apr 2013 02:57:47 PM PDT",
     "consoleInfo": []
 }

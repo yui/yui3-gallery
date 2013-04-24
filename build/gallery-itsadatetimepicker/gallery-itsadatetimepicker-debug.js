@@ -461,10 +461,10 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          *
          * @method hide
          * @param [force] {Boolean} Force closing, even when config.forceSelectdate is set to true
-         * @param [noCancelevent] {Boolean} To suppres the cancelevent
+         * @param [silent] {Boolean} To suppres the cancelevent
          * @since 0.1
         */
-        hide : function(force, noCancelevent) {
+        hide : function(force, silent) {
             var instance = this;
 
             Y.log('hide', 'info', 'Itsa-DateTimePicker');
@@ -473,7 +473,7 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                 instance.calendar.hide();
                 instance._toggleTimePicker(false, false);
                 instance.panel.hide();
-                if (!noCancelevent) {
+                if (!silent) {
                     Y.fire(EVENT_CANCEL);
                 }
             }
@@ -538,7 +538,7 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                     eventhandlers.push(
                         closebutton.on(
                             'click',
-                            function() {
+                            function(e) {
                                 /**
                                 * Fired when the Panel is closed without saving the values.
                                 * No need to listen to --> the promises are using this event internally.
@@ -548,6 +548,8 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                                 * @since 0.1
                                 */
                                 if (!instance._unclosable) {
+                                    // we must first set visibility of the panel to true, otherwise hide() supresses the action.
+                                    instance.panel.set('visible', true);
                                     instance.hide();
                                 }
                             }
@@ -1096,7 +1098,7 @@ if (!Y.Global.ItsaDateTimePicker) {
 
 Y.ItsaDateTimePicker = Y.Global.ItsaDateTimePicker;
 
-}, 'gallery-2013.04.17-18-52', {
+}, 'gallery-2013.04.24-22-00', {
     "requires": [
         "base",
         "node-base",

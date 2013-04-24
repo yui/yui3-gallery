@@ -79,7 +79,9 @@
 }
 
 .yui3-skin-sam .yui3-form .itsa-button-datetime {
-   -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;
     border: 1px solid #CCCCCC;
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 3px #DDDDDD inset;
