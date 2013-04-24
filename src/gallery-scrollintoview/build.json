@@ -1,0 +1,16 @@
+{
+    "name": "gallery-scrollintoview",
+    "builds": {
+        "gallery-scrollintoview": {
+            "config": {
+                "requires": [
+                    "gallery-dimensions",
+                    "dom-screen"
+                ]
+            },
+            "jsfiles": [
+                "ScrollIntoView.js"
+            ]
+        }
+    }
+}

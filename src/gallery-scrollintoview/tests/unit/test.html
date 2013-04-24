@@ -1,9 +1,8 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
-<script type="text/javascript" src="assets/gallery-scrollintoview-tests.js"></script>
-<script type="text/javascript" src="../../../../build/gallery-scrollintoview/gallery-scrollintoview.js"></script>
+<script src="/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="assets/tests.js"></script>
 </head>
 
 <body class="yui3-skin-sam">
@@ -11,6 +10,7 @@
 
 <script type="text/javascript">
 YUI({
+    coverage:["gallery-scrollintoview"],
     filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
 }).use("test-console", "gallery-scrollintoview-tests", function(Y) {
 
