@@ -1,0 +1,74 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-nmmenus
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [warn] no build.json file, downshifting to convert ant files
+shifter [info] looking for ant files
+shifter [info] found 1 .properties files, upshifting to convert
+shifter [info] parsing build.properties
+shifter [info] saving newly parsed build.json file for gallery-nmmenus
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-nmmenus
+   #1: Trailing whitespace.
+       Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], { // line 3, pos 53
+   #2: Trailing whitespace.
+       if (this.get('ajaxLoadFunc')) { // line 10, pos 40
+   #3: Mixed spaces and tabs.
+       this.get('ajaxLoadFunc').call(null, this, this); // line 12, pos 2
+   #4: Trailing whitespace.
+       if (!node.hasClass('hasSubMenu')) { // line 26, pos 48
+   #5: Trailing whitespace.
+       }); // line 60, pos 24
+   #6: Trailing whitespace.
+       // set absolute position properites dynamically // line 65, pos 68
+   #7: Too many var statements.
+       var menuWidth = subMenu.getComputedStyle('width'); // line 107, pos 13
+   #8: Trailing whitespace.
+       initNavMenuPulsate : function(callbackFunc, callbackArgs) { // line 153, pos 64
+   #9: Trailing whitespace.
+       else if (Y.one('#' + e.target.get('id')).hasClass('noajax')) { // line 163, pos 79
+   #10: Trailing whitespace.
+       return; // line 165, pos 28
+   #11: Trailing whitespace.
+       topLi:Y.one('#' + this.get('menudivid') + ' li.active') // line 203, pos 96
+   #12: Mixed spaces and tabs.
+        // line 222, pos 1
+   #13: Trailing whitespace.
+       ATTRS : { // line 224, pos 14
+   #14: 'config' is defined but never used.
+       initializer : function( config ) { // line 4, pos 35
+   #15: 'e' is defined but never used.
+       Y.on('mouseleave', function(e) { // line 28, pos 46
+   #16: 'idx' is defined but never used.
+       Y.all('#' + this.get('menudivid') + ' .hasSubMenu').each(function(node, idx) { // line 34, pos 84
+   #17: 'e' is defined but never used.
+       Y.on('mouseenter', function(e) { // line 39, pos 42
+   #18: 'e' is defined but never used.
+       Y.on('mouseleave', function(e) { // line 91, pos 42
+   #19: 'callbackArgs' is defined but never used.
+       initNavMenuPulsate : function(callbackFunc, callbackArgs) { // line 153, pos 61
+   #20: 'callbackFunc' is defined but never used.
+       initNavMenuPulsate : function(callbackFunc, callbackArgs) { // line 153, pos 47
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-nmmenus/gallery-nmmenus.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-nmmenus/gallery-nmmenus.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-nmmenus/gallery-nmmenus-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.303 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

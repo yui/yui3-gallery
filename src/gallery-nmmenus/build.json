@@ -1,0 +1,26 @@
+{
+    "name": "gallery-nmmenus",
+    "builds": {
+        "gallery-nmmenus": {
+            "config": {
+                "supersedes": [
+                    ""
+                ],
+                "requires": [
+                    "base-build",
+                    "widget",
+                    "event-mouseenter",
+                    "node",
+                    "transition"
+                ],
+                "optional": [
+                    ""
+                ]
+            },
+            "jsfiles": [
+                "nmmenus.js"
+            ],
+            "meta": {}
+        }
+    }
+}

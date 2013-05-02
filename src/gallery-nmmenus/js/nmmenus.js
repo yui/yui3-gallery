@@ -206,8 +206,7 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 									}
 									else {
 										// no custom JS load trigger, just navigate to href
-										Y.log('load page');
-										window.location.href = Y.one('#' + ID).get('pathname');
+										window.location.href = Y.one('#' + ID).get('href');
 									}
 								}
 							}, this)
