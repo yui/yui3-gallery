@@ -1,11 +1,11 @@
 {
     "name": "gallery-array-unnest",
-    "passed": 3,
+    "passed": 9,
     "failed": 0,
     "errors": 0,
     "ignored": 0,
-    "total": 3,
-    "duration": 27,
+    "total": 9,
+    "duration": 81,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 3,
-        "duration": 24,
+        "duration": 25,
         "type": "testcase",
         "test:001-apiExists": {
             "result": "pass",
@@ -38,10 +38,10 @@
             "duration": 1
         }
     },
-    "timestamp": "Wed 12 Dec 2012 03:12:57 PM CST",
+    "timestamp": "Thu May  2 15:59:47 2013",
     "coverage": {
-        "build/cdn_gallery-2012.12.12-21-11/": {
-            "path": "build/cdn_gallery-2012.12.12-21-11/",
+        "build/gallery-array-unnest/gallery-array-unnest.js": {
+            "path": "build/gallery-array-unnest/gallery-array-unnest.js",
             "s": {
                 "1": 1,
                 "2": 1,
@@ -269,46 +269,6 @@
                     ]
                 }
             },
-            "code": [
-                "(function () { YUI.add('gallery-array-unnest', function (Y, NAME) {",
-                "",
-                "/**",
-                " * Utility function that flattens nested arrays.",
-                " * @module gallery-array-unnest",
-                " */",
-                "(function (Y) {",
-                "    'use strict';",
-                "",
-                "    /**",
-                "     * Utility function that flattens nested arrays.  The original array is not",
-                "     * modified. The returned array items are a shallow copy of the original",
-                "     * array items.",
-                "     * @for Array",
-                "     * @method unnest",
-                "     * @param {Array} array",
-                "     * @param {Number} [levels=1] If defined, must be a non-negative integer.",
-                "     * @return {Array}",
-                "     * @static",
-                "     */",
-                "    var _unnest = function (array, levels) {",
-                "        var empty = [];",
-                "",
-                "        array = empty.concat.apply(empty, array);",
-                "",
-                "        if (levels && levels - 1) {",
-                "            return _unnest(array, levels - 1);",
-                "        }",
-                "",
-                "        return array;",
-                "    };",
-                "",
-                "    Y.Array.unnest = _unnest;",
-                "}(Y));",
-                "",
-                "}, '@VERSION@', {\"requires\": [\"yui-base\"]});",
-                "",
-                "}());"
-            ],
             "l": {
                 "1": 1,
                 "7": 1,
@@ -323,5 +283,6 @@
             }
         }
     },
-    "coverageType": "istanbul"
+    "coverageType": "istanbul",
+    "consoleInfo": []
 }
