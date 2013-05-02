@@ -1,11 +1,11 @@
 {
     "name": "gallery-array-iterate",
-    "passed": 7,
+    "passed": 21,
     "failed": 0,
     "errors": 0,
     "ignored": 0,
-    "total": 7,
-    "duration": 80,
+    "total": 21,
+    "duration": 213,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 7,
-        "duration": 78,
+        "duration": 69,
         "type": "testcase",
         "test:001-apiExists": {
             "result": "pass",
@@ -28,7 +28,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "test:002-simpleIteration",
-            "duration": 10
+            "duration": 1
         },
         "test:003-simpleIterationWithContextObject": {
             "result": "pass",
@@ -42,21 +42,21 @@
             "message": "Test passed",
             "type": "test",
             "name": "test:004-nthItemIteration",
-            "duration": 0
+            "duration": 1
         },
         "test:005-backwardsIteration": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test:005-backwardsIteration",
-            "duration": 1
+            "duration": 0
         },
         "test:006-nthItemBackwardsIterationWithStartIndex": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test:006-nthItemBackwardsIterationWithStartIndex",
-            "duration": 0
+            "duration": 1
         },
         "test:007-earlyTermination": {
             "result": "pass",
@@ -66,10 +66,10 @@
             "duration": 1
         }
     },
-    "timestamp": "Wed 05 Dec 2012 03:02:53 PM CST",
+    "timestamp": "Thu May  2 15:59:46 2013",
     "coverage": {
-        "build/cdn_gallery-2012.12.05-21-01/": {
-            "path": "build/cdn_gallery-2012.12.05-21-01/",
+        "build/gallery-array-iterate/gallery-array-iterate.js": {
+            "path": "build/gallery-array-iterate/gallery-array-iterate.js",
             "s": {
                 "1": 1,
                 "2": 1,
@@ -409,61 +409,6 @@
                     ]
                 }
             },
-            "code": [
-                "(function () { YUI.add('gallery-array-iterate', function (Y, NAME) {",
-                "",
-                "/**",
-                " * Iterate through an array.",
-                " * @module gallery-array-iterate",
-                " */",
-                "(function (Y) {",
-                "    'use strict';",
-                "",
-                "    /**",
-                "     * @method iterate",
-                "     * @for Array",
-                "     * @param {Array} array The array to iterate",
-                "     * @param {Number} [startIndex] The first index to iterate. If left",
-                "     * undefined, iteration will either start at the beginning of the array",
-                "     * if incrementBy is positive or at the end of the array if incrementBy",
-                "     * is negative.",
-                "     * @param {Number} incrementBy The interval by which the array will be",
-                "     * iterated. Must be a non-zero integer. Negative values cause the array",
-                "     * to be iterated backwards.",
-                "     * @param {Function} iterationFunction The function to call on each",
-                "     * iteration. This function will receive three arguments: value, index,",
-                "     * and array. If this function returns a truthy value, iteration will be",
-                "     * terminated.",
-                "     * @param {Object} [contextObject] The context that will become this in",
-                "     * the iterationFunction.",
-                "     * @return {Boolean} Will return true if iteration was terminated early,",
-                "     * otherwise it will return false.",
-                "     * @static",
-                "     */",
-                "    var iterate = function (array, startIndex, incrementBy, iterationFunction, contextObject) {",
-                "        var i = startIndex,",
-                "            length = array.length;",
-                "        ",
-                "        if (Y.Lang.isFunction(incrementBy)) {",
-                "            return iterate(array, startIndex < 0 ? length - 1 : 0, startIndex, incrementBy, iterationFunction);",
-                "        }",
-                "",
-                "        for (; i >= 0 && i < length; i += incrementBy) {",
-                "            if (i in array && iterationFunction.call(contextObject, array[i], i, array)) {",
-                "                return true;",
-                "            }",
-                "        }",
-                "",
-                "        return false;",
-                "    };",
-                "",
-                "    Y.Array.iterate = iterate;",
-                "}(Y));",
-                "",
-                "}, '@VERSION@', {\"requires\": \"yui-base\"});",
-                "",
-                "}());"
-            ],
             "l": {
                 "1": 1,
                 "7": 1,
@@ -480,5 +425,6 @@
             }
         }
     },
-    "coverageType": "istanbul"
+    "coverageType": "istanbul",
+    "consoleInfo": []
 }
