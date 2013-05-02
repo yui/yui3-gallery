@@ -1,0 +1,19 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Creates a model list that is the difference of two or more other model lists.",
+    "displayName": "Gallery: model-list-difference",
+    "examples": [],
+    "name": "gallery-model-list-difference",
+    "tags": [
+        "difference",
+        "gallery",
+        "list",
+        "model",
+        "solmsted"
+    ],
+    "use": [
+        "gallery-model-list-difference"
+    ]
+}

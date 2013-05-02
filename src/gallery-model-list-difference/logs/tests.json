@@ -1,0 +1,50 @@
+{
+    "name": "gallery-model-list-difference",
+    "passed": 3,
+    "failed": 9,
+    "errors": 0,
+    "ignored": 0,
+    "total": 12,
+    "duration": 138,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 1,
+        "failed": 3,
+        "errors": 0,
+        "ignored": 0,
+        "total": 4,
+        "duration": 43,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "fail",
+            "message": "Y.ModelList should be a function.\nUnexpected: undefined (undefined) ",
+            "type": "test",
+            "name": "test:001-apiExists",
+            "duration": 2
+        },
+        "test:002-difference": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Model()')",
+            "type": "test",
+            "name": "test:002-difference",
+            "duration": 7
+        },
+        "test:003-custom-type": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Base.create')",
+            "type": "test",
+            "name": "test:003-custom-type",
+            "duration": 1
+        },
+        "test:004-error-when-first-argument-is-not-a-model-list": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:004-error-when-first-argument-is-not-a-model-list",
+            "duration": 1
+        }
+    },
+    "timestamp": "Thu May  2 15:59:49 2013",
+    "consoleInfo": []
+}

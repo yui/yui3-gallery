@@ -1,0 +1,7 @@
+{
+    "gallery-model-list-difference": {
+        "requires": [
+            "model-list"
+        ]
+    }
+}

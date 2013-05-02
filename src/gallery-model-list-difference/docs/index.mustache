@@ -1,0 +1,107 @@
+<div class="intro">
+    <p>
+        Creates a model list that is the difference of two or more other model lists.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    Creates a model list that is the difference of two or more other model lists.  The new model list stays up to date as the source lists change.
+</p>
+
+```
+YUI().use('gallery-model-list-difference', function (Y) {
+    Y.NameModel = Y.Base.create('name-model', Y.Model, [], {}, {
+        ATTRS: {
+            name: {
+                value: ''
+            }
+        }
+    });
+ 
+    Y.NameModelList = Y.Base.create('name-model-list', Y.ModelList, [], {
+        comparator: function (model) {
+            return model.get('name');
+        },
+        model: Y.NameModel
+    });
+ 
+    var nameModel_Emily = new Y.NameModel({
+            name: 'Emily'
+        }),
+        nameModel_Eric = new Y.NameModel({
+            name: 'Eric'
+        }),
+        nameModel_George = new Y.NameModel({
+            name: 'George'
+        }),
+        nameModel_Jeffrey = new Y.NameModel({
+            name: 'Jeffrey'
+        }),
+        nameModel_Jennifer = new Y.NameModel({
+            name: 'Jennifer'
+        }),
+        nameModel_Jim = new Y.NameModel({
+            name: 'Jim'
+        }),
+        nameModel_Kara = new Y.NameModel({
+            name: 'Kara'
+        }),
+        nameModel_Luke = new Y.NameModel({
+            name: 'Luke'
+        }),
+        nameModel_Matthew = new Y.NameModel({
+            name: 'Matthew'
+        }),
+        nameModel_Raymond = new Y.NameModel({
+            name: 'Raymond'
+        }),
+        nameModel_Sarah = new Y.NameModel({
+            name: 'Sarah'
+        }),
+        nameModelList0 = new Y.NameModelList().reset([
+            nameModel_Jeffrey,
+            nameModel_Emily,
+            nameModel_Luke,
+            nameModel_Kara,
+            nameModel_Eric,
+            nameModel_George,
+            nameModel_Jim,
+            nameModel_Raymond
+        ]),
+        nameModelList1 = new Y.NameModelList().reset([
+            nameModel_Jeffrey,
+            nameModel_Emily,
+            nameModel_Eric,
+            nameModel_Jennifer
+        ]),
+        nameModelList2 = new Y.NameModelList().reset([
+            nameModel_Jeffrey,
+            nameModel_George,
+            nameModel_Jim
+        ]),
+        nameModelListDifference = Y.ModelList.difference('NameModelList', nameModelList0, nameModelList1, nameModelList2);
+     
+    alert(nameModelListDifference.get('name').join(', '));
+    // Kara, Luke, Raymond
+ 
+    nameModelList0.add(nameModel_Sarah);
+ 
+    nameModelList0.add(nameModel_Matthew);
+     
+    nameModelList1.add(nameModel_Matthew);
+ 
+    alert(nameModelListDifference.get('name').join(', '));
+    // Kara, Luke, Raymond, Sarah
+ 
+    nameModelList1.reset();
+ 
+    alert(nameModelListDifference.get('name').join(', '));
+    // Emily, Eric, Kara, Luke, Matthew, Raymond, Sarah
+});
+```
