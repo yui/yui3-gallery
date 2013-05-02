@@ -1,0 +1,7 @@
+{
+    "gallery-lazy-promise": {
+        "requires": [
+            "promise"
+        ]
+    }
+}

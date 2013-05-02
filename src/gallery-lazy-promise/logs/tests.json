@@ -1,0 +1,126 @@
+{
+    "name": "gallery-lazy-promise",
+    "passed": 0,
+    "failed": 36,
+    "errors": 0,
+    "ignored": 0,
+    "total": 36,
+    "duration": 510,
+    "type": "report",
+    "Basic promise behavior copied from the promise module.": {
+        "name": "Basic promise behavior copied from the promise module.",
+        "passed": 0,
+        "failed": 7,
+        "errors": 0,
+        "ignored": 0,
+        "total": 7,
+        "duration": 87,
+        "type": "testcase",
+        "calling Y.LazyPromise as a function should return an instance of Y.LazyPromise": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.LazyPromise(function () {})')",
+            "type": "test",
+            "name": "calling Y.LazyPromise as a function should return an instance of Y.LazyPromise",
+            "duration": 3
+        },
+        "lazyPromise.then returns a promise": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise(function (fulfill) {\n                fulfill(5);\n            })')",
+            "type": "test",
+            "name": "lazyPromise.then returns a promise",
+            "duration": 11
+        },
+        "lazyPromise state should change only once": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise')",
+            "type": "test",
+            "name": "lazyPromise state should change only once",
+            "duration": 2
+        },
+        "fulfilling more than once should not change the lazyPromise value": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise(function (fulfill) {\n                fulfill(true);\n                fulfill(5);\n            })')",
+            "type": "test",
+            "name": "fulfilling more than once should not change the lazyPromise value",
+            "duration": 2
+        },
+        "rejecting more than once should not change the rejection reason": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise')",
+            "type": "test",
+            "name": "rejecting more than once should not change the rejection reason",
+            "duration": 2
+        },
+        "correct value for \"this\" inside the lazyPromise init function": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise')",
+            "type": "test",
+            "name": "correct value for \"this\" inside the lazyPromise init function",
+            "duration": 2
+        },
+        "callbacks passed to then should be called asynchronously": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise(function (fulfill) {\n                fulfill();\n            })')",
+            "type": "test",
+            "name": "callbacks passed to then should be called asynchronously",
+            "duration": 1
+        }
+    },
+    "Behavior of the then() callbacks copied from the promise module": {
+        "name": "Behavior of the then() callbacks copied from the promise module",
+        "passed": 0,
+        "failed": 2,
+        "errors": 0,
+        "ignored": 0,
+        "total": 2,
+        "duration": 33,
+        "type": "testcase",
+        "throwing inside a callback should turn into a rejection": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise(function (fulfill) {\n                fulfill(5);\n            })')",
+            "type": "test",
+            "name": "throwing inside a callback should turn into a rejection",
+            "duration": 1
+        },
+        "returning a lazyPromise from a callback should link both promises": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise(function (fulfill) {\n                fulfill('placeholder');\n            })')",
+            "type": "test",
+            "name": "returning a lazyPromise from a callback should link both promises",
+            "duration": 2
+        }
+    },
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 3,
+        "errors": 0,
+        "ignored": 0,
+        "total": 3,
+        "duration": 45,
+        "type": "testcase",
+        "LazyPromise detection with Y.Promise.isPromise": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not an object (evaluating 'Y.Promise.isPromise')",
+            "type": "test",
+            "name": "LazyPromise detection with Y.Promise.isPromise",
+            "duration": 2
+        },
+        "fn should not be executed until then and should not be executed more than once": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise(function (fulfill) {\n                    foo += 1;\n                    fulfill();\n                })')",
+            "type": "test",
+            "name": "fn should not be executed until then and should not be executed more than once",
+            "duration": 1
+        },
+        "state should be pending even before fn is executed": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.LazyPromise(function () {})')",
+            "type": "test",
+            "name": "state should be pending even before fn is executed",
+            "duration": 2
+        }
+    },
+    "timestamp": "Thu May  2 15:59:49 2013",
+    "consoleInfo": []
+}

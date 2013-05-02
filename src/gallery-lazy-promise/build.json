@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-lazy-promise": {
+            "jsfiles": [
+                "lazy-promise.js"
+            ]
+        }
+    },
+    "name": "gallery-lazy-promise"
+}
