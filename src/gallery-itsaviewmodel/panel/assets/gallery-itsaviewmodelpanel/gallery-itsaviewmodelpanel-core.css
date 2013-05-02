@@ -1,0 +1,41 @@
+.yui3-itsaviewmodelpanel-hidden {
+    visibility: hidden;
+}
+.yui3-widget-tmp-forcesize .yui3-itsaviewmodelpanel-content {
+    overflow: hidden !important;
+}
+.yui3-itsaviewmodelpanel .yui3-widget-hd {
+    position: relative;
+}
+.yui3-itsaviewmodelpanel .yui3-widget-hd .yui3-widget-buttons {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.yui3-itsaviewmodelpanel .yui3-widget-ft .yui3-widget-buttons {
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+}
+
+.yui3-skin-sam .yui3-itsaviewmodel .yui3-widget-hd,
+.yui3-skin-sam .yui3-itsaviewmodel.itsa-modelview-styled .yui3-widget-hd {
+    padding: 10px 12px 8px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.yui3-skin-sam .yui3-itsaviewmodel .yui3-widget-ft,
+.yui3-skin-sam .yui3-itsaviewmodel.itsa-modelview-styled .yui3-widget-ft {
+    background-color: #F5F4F1;
+    border-radius: 0 0 3px 3px;
+    border-top: 1px solid #EAE6DB;
+    padding: 2px;
+}
+
+.yui3-skin-sam .yui3-itsaviewmodel.itsa-modelview-styled.yui3-itsaviewmodelpanel {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    overflow: hidden;
+}

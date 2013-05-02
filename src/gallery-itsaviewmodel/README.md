@@ -22,12 +22,13 @@ Attaching Y.Model-instances or objects?
 Both can be attached. Whenever widgetattribute change, the widget will be re-rendered is needed (template- or model-attribute). This also
 counts for attached objects. However, changes inside an object itself (updated property-value) cannot be caught by the widget, so you need
 to call syncUI() yourself after an object-change. Y.Model-instances -on the other hand- do fire a *:change-event which is caught by the widget.
-This makes the widget re-render after a Model-instance changes some of its attributes.
+This makes the widget re-render after a Model-instance changes some of its attributes. In fact, you can attach 'string'-values as well, which will
+ * lead to 'just rendering' the text without property-fields.
 
 
 Creating an editable modelview:
 By plugin Y.Plugin.ITSAEditModel and setting the attribute 'modelEditable' to true, you create an editable Model.
-[See ITSAEditModel](src/gallery-itsaeditmodel). This will also automaticly plugin [Y.Plugin.ITSATabKeyManager](src/gallery-itsatabkeymanager).
+[See ITSAEditModel](../gallery-itsaeditmodel). This will also automaticly plugin [Y.Plugin.ITSATabKeyManager](../gallery-itsatabkeymanager).
 
 
 By default, the widget comes with its own style. You can disable this by setting the attribute 'styled' to false.
@@ -106,6 +107,24 @@ YUI().use('model', 'gallery-itsaviewmodel', function(Y) {
         height:'284px',
         template: modeltemplate,
         model: model
+    });
+    viewmodel.render();
+
+});
+```
+
+<b>Using ITSAViewModel to render text instead of Models:</b>
+```js
+YUI().use('gallery-itsaviewmodel', function(Y) {
+
+    var viewmodel, message;
+    message = 'Hello world';
+
+    viewmodel = new Y.ITSAViewModel({
+        boundingBox: "#myview",
+        width:'280px',
+        height:'284px',
+        model: message
     });
     viewmodel.render();
 

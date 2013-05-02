@@ -18,11 +18,12 @@ YUI.add('gallery-itsaviewmodel', function (Y, NAME) {
  * Using this widget is great to render Model on the page, where the widget keeps synced with the model. Whenever a new Model-instance
  * is attached to the widget, or another template is used, the wodget will be re-rendered automaticly.
  *
- * Attaching Y.Model-instances or objects?
+ * Attaching 'model' with Y.Model-instances or objects?
  * Both can be attached. Whenever widgetattribute change, the widget will be re-rendered is needed (template- or model-attribute). This also
  * counts for attached objects. However, changes inside an object itself (updated property-value) cannot be caught by the widget, so you need
  * to call syncUI() yourself after an object-change. Y.Model-instances -on the other hand- do fire a *:change-event which is caught by the widget.
- * This makes the widget re-render after a Model-instance changes some of its attributes.
+ * This makes the widget re-render after a Model-instance changes some of its attributes. In fact, you can attach 'string'-values as well, which will
+ * lead to 'just rendering' the text without property-fields.
  *
  *
  * By default, the widget comes with its own style. You can disable this by setting the attribute 'styled' to false.
@@ -113,42 +114,6 @@ Y.Base.mix(Y.Node, [ITSANodeCleanup]);
 
 Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
 
-        /**
-         * Internally generated Y.View-instance that has its 'container' bound to the 'contentBox'
-         * @property view
-         * @type Y.View
-        */
-        view : null,
-
-        /**
-         * Internal flag that tells wheter a Template.Micro is being used.
-         * @property _isMicroTemplate
-         * @private
-         * @default null
-         * @type Boolean
-        */
-        _isMicroTemplate : null,
-
-        /**
-         * Internal Function that is generated to automaticly make use of the template.
-         * The function has the structure of: _modelRenderer = function(model) {return {String}};
-         * @property _modelRenderer
-         * @private
-         * @default function(model) {return ''};
-         * @type Function
-        */
-        _modelRenderer : null,
-
-        /**
-         * Internal list of all eventhandlers bound by this widget.
-         * @property _eventhandlers
-         * @private
-         * @default []
-         * @type Array
-        */
-        _eventhandlers : [],
-
-        _initialEditAttrs : null,
 
 
 
@@ -157,6 +122,62 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
          * @protected
         */
         initializer : function() {
+            var instance = this;
+            /**
+             * Internally generated Y.View-instance that has its 'container' bound to the 'contentBox'
+             * @property view
+             * @type Y.View
+            */
+            instance.view = null;
+
+            /**
+             * Internal flag that tells wheter a Template.Micro is being used.
+             * @property _isMicroTemplate
+             * @private
+             * @default null
+             * @type Boolean
+            */
+            instance._isMicroTemplate = null;
+
+            /**
+             * Internal Function that is generated to automaticly make use of the template.
+             * The function has the structure of: _modelRenderer = function(model) {return {String}};
+             * @property _modelRenderer
+             * @private
+             * @default function(model) {return ''};
+             * @type Function
+            */
+            instance._modelRenderer = null;
+
+            /**
+             * Internal list of all eventhandlers bound by this widget.
+             * @property _eventhandlers
+             * @private
+             * @default []
+             * @type Array
+            */
+            instance._eventhandlers = [];
+
+            /**
+             * Backup of the original state of the attribute-values. Needed to make reset posible in case
+             * Y.Plugin.ITSAEditModel is plugged in
+             *
+             * @property _initialEditAttrs
+             * @private
+             * @default null
+             * @type Object
+            */
+            instance._initialEditAttrs = null;
+
+            /**
+             * Internal template to be used when 'model' is no model but just clear text.
+             *
+             * @property _textTemplate
+             * @private
+             * @default null
+             * @type String
+            */
+            instance._textTemplate = null;
         },
 
        /**
@@ -170,26 +191,32 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
                 boundingBox = instance.get('boundingBox'),
                 model = instance.get('model'),
                 modelEditable = instance.get('modelEditable'),
-                itsaeditmodel = (modelEditable && model.itsaeditmodel);
+                itsaeditmodel = (modelEditable && model.itsaeditmodel),
+                panelwidgetbd = boundingBox.one('.yui3-widget-bd');
 
-            if (itsaeditmodel && !boundingBox.itsatabkeymanager) {
+            if ((itsaeditmodel || panelwidgetbd) && !boundingBox.itsatabkeymanager) {
                 Y.use('gallery-itsatabkeymanager', function(Y) {
                     boundingBox.plug(Y.Plugin.ITSATabKeyManager);
-                    instance.renderFurther(boundingBox, model, itsaeditmodel);
+                    instance._renderFurther(boundingBox, model, itsaeditmodel);
                 });
             }
             else {
-                instance.renderFurther(boundingBox, model, itsaeditmodel);
+                instance._renderFurther(boundingBox, model, itsaeditmodel);
             }
         },
 
         /**
+         * More renderer, but we are always sure itsatabkeymanager is loaded (when needed)
+         *
          * @method renderFurther
+         * @param boundingBox {Y.Node}
+         * @param model {Y.Model}
+         * @param itsaeditmodel {Y.Plugin.ITSAEditModel}
+         * @private
          * @protected
         */
-        renderFurther : function(boundingBox, model, itsaeditmodel) {
+        _renderFurther : function(boundingBox, model, itsaeditmodel) {
             var instance = this,
-                contentBox = instance.get('contentBox'),
                 events = instance.get('events'),
                 template = itsaeditmodel ? model.itsaeditmodel.get('template') : instance.get('template'),
                 styled = instance.get('styled'),
@@ -198,8 +225,9 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
             if (styled) {
                 boundingBox.addClass(MODELVIEW_STYLED).addClass(MODELVIEW_STYLED_FORM);
             }
+            instance._widgetRenderer();
             view = instance.view = new Y.View({
-                container: contentBox,
+                container: instance._getViewContainer(),
                 model: model
             });
             view.events = events;
@@ -209,8 +237,33 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
             if (model && model.addTarget) {
                 model.addTarget(view);
             }
+            view.addTarget(instance);
+            instance._bindViewUI();
+            instance.view.render();
+        },
+
+        /**
+         * returns the view-container, which equals this.get('contentBox')
+         *
+         * @method _getViewContainer
+         * @private
+        */
+        _getViewContainer : function() {
+            return this.get('contentBox');
+        },
+
+        /**
+         * Calls the original Y.Widget.renderer
+         *
+         * @method _widgetRenderer
+         * @private
+         * @protected
+        */
+        _widgetRenderer : function() {
+            var instance = this;
+
             instance.constructor.superclass.renderer.apply(instance);
-         },
+        },
 
         /**
          * Sets up DOM and CustomEvent listeners for the widget.
@@ -219,6 +272,30 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
          * @protected
          */
         bindUI: function() {
+            // Only declare listeners here that have no relationship with this.view, because this.view does not exists here.
+            var instance = this,
+                eventhandlers = instance._eventhandlers,
+                boundingBox = instance.get('boundingBox');
+
+            eventhandlers.push(
+                instance.after(
+                    'styledChange',
+                    function(e) {
+                        boundingBox.toggleClass(MODELVIEW_STYLED, e.newVal).toggleClass(MODELVIEW_STYLED_FORM, e.newVal);
+                    }
+                )
+            );
+        },
+
+        /**
+         * Sets up extra DOM and CustomEvent listeners for the widget which are bound to this.view
+         *
+         * @method _bindViewUI
+         * @private
+         * @protected
+         */
+        _bindViewUI: function() {
+            // Only declare listeners here that have relationship with this.view, because this.view only exists from this point.
             var instance = this,
                 boundingBox = instance.get('boundingBox'),
                 model = instance.get('model'),
@@ -245,12 +322,12 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
                 )
             );
             eventhandlers.push(
-                view.after(
-                    'model:templateChange',
+                instance.after(
+                    'templateChange',
                     function(e) {
                         var newTemplate = e.newVal,
                             modelEditable = instance.get('modelEditable');
-                        if (!modelEditable || !model.itsaeditmodel) {
+                        if (!modelEditable || (model && !model.itsaeditmodel)) {
                             view.template = newTemplate;
                             instance._setTemplateRenderer(newTemplate, false);
                             view.render();
@@ -264,7 +341,7 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
                     function(e) {
                         var newTemplate = e.newVal,
                             modelEditable = instance.get('modelEditable');
-                        if (modelEditable && model.itsaeditmodel) {
+                        if (modelEditable && model && model.itsaeditmodel) {
                             view.template = newTemplate;
                             instance._setTemplateRenderer(newTemplate, true);
                             view.render();
@@ -288,13 +365,24 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
                 )
             );
             eventhandlers.push(
+                view.after(
+                    'model:addclick',
+                    function(e) {
+                        var newModel = e.newModel;
+                        if (newModel) {
+                            instance.set('model', newModel);
+                        }
+                    }
+                )
+            );
+            eventhandlers.push(
                 instance.after(
                     'modelEditableChange',
                     function(e) {
                         var newEditable = e.newVal,
                             template;
                         // if model.itsaeditmodel exists, then we need to rerender
-                        if (model.itsaeditmodel) {
+                        if (model && model.itsaeditmodel) {
                             template = newEditable ? model.itsaeditmodel.get('template') : instance.get('template');
                             view.template = template;
                             instance._setTemplateRenderer(template, newEditable);
@@ -366,14 +454,6 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
                 )
             );
             eventhandlers.push(
-                instance.after(
-                    'styledChange',
-                    function(e) {
-                        boundingBox.toggleClass(MODELVIEW_STYLED, e.newVal).toggleClass(MODELVIEW_STYLED_FORM, e.newVal);
-                    }
-                )
-            );
-            eventhandlers.push(
                 view.after(
                     'model:change',
                     function() {
@@ -412,24 +492,20 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
         },
 
         /**
-         * Updates the widget-content by calling view.render();
-         *
-         * @method syncUI
-         * @protected
-         */
-        syncUI: function() {
-            this.view.render();
-        },
-
-        /**
          * Cleans up bindings
          * @method destructor
          * @protected
         */
         destructor: function() {
             var instance = this,
+                view = instance.view,
+                model = instance.get('model'),
                 boundingBox = instance.get('boundingBox');
 
+            if (model) {
+                model.removeTarget(view);
+            }
+            view.removeTarget(instance);
             instance._clearEventhandlers();
             instance.view.destroy();
             if (boundingBox.hasPlugin('itsatabkeymanager')) {
@@ -498,9 +574,9 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
                 view = instance.view,
                 container = view.get('container'),
                 model = view.get('model'),
-                editMode = model.itsaeditmodel && instance.get('modelEditable'),
+                editMode = model && model.itsaeditmodel && instance.get('modelEditable'),
                 itsaDateTimePicker = Y.Global.ItsaDateTimePicker,
-                html = clear ? '' : instance._modelRenderer(model);
+                html = (clear || !model) ? '' : instance._modelRenderer(model);
 
             // Render this view's HTML into the container element.
             // Because Y.Node.setHTML DOES NOT destroy its nodes (!) but only remove(), we destroy them ourselves first
@@ -540,6 +616,42 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
                     item.detach();
                 }
             );
+        },
+
+        /**
+         * Setter for attribute 'model'
+         *
+         * @method _setModel
+         * @private
+         * @param v {String|Object|Model}
+         * @since 0.1
+         *
+        */
+        _setModel: function(v) {
+            var instance = this,
+                view = instance.view,
+                templatechange, modelEditable, newTemplate;
+            // in case model is a string --> not a real model is set: we just need to render clear text.
+            // to achieve this, we create a new model-object with no properties and we define this._textTemplate
+            // which can be used as the template (= text without properties)
+            if (typeof v === 'string') {
+                templatechange = !instance._textTemplate;
+                instance._textTemplate = v;
+                v = {};
+            }
+            else {
+                templatechange = instance._textTemplate;
+                instance._textTemplate = null;
+            }
+            if (templatechange && view) {
+                modelEditable = instance.get('modelEditable');
+                if (!modelEditable || (v && !v.itsaeditmodel)) {
+                    newTemplate = instance.get('template');
+                    view.template = newTemplate;
+                    instance._setTemplateRenderer(newTemplate, false);
+                }
+            }
+            return v;
         }
 
     }, {
@@ -607,16 +719,18 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
 
             /**
              * The Y.Model that will be rendered in the view. May also be an Object, which is handy in case the source is an
-             * item of a Y.LazyModelList
+             * item of a Y.LazyModelList. If you pass a String-value, then the text is rendered as it is, assuming no model-instance.
              *
              * @attribute model
-             * @type {Y.Model|Object}
+             * @type {Y.Model|Object|String}
              * @default {}
              * @since 0.1
              */
             model: {
                 value: null,
-                validator: function(v){ return ((v instanceof Y.Model) || Lang.isObject(v) || (v===null)); }
+                validator: function(v){ return ((v===null) || Lang.isObject(v) || (typeof v === 'string') ||
+                                                (v.get && (typeof v.get === 'function') && v.get('clientId'))); },
+                setter: '_setModel'
             },
 
            /**
@@ -657,14 +771,18 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
          */
             template: {
                 value: '{clientId}',
-                validator: function(v){ return Lang.isString(v); }
+                validator: function(v){ return Lang.isString(v); },
+                getter: function(v) {
+                    // Because _textTemplate might exists in case of clear text instead of a model, we need to return the right template.
+                    return this._textTemplate || v;
+                }
             }
 
         }
     }
 );
 
-}, 'gallery-2013.04.24-22-00', {
+}, 'gallery-2013.05.02-22-59', {
     "requires": [
         "base-build",
         "widget",
