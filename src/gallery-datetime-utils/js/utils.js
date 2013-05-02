@@ -376,7 +376,7 @@ Y.DateTimeUtils =
 		}
 
 		var t = time.split(self.TIME_FIELD_DELIMITER);
-		if (t.length != 2 || !Y.every(t, validInteger))
+		if (t.length < 2 || 3 < t.length || !Y.every(t, validInteger))
 		{
 			throw Error('Unparseable time format.');
 		}

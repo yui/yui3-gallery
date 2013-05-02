@@ -136,6 +136,8 @@ YUI.add('gallery-datetime-utils-tests', function(Y) {
 			var result = Y.DateTimeUtils.parseTime('2:05 AM');
 			Y.Assert.areSame(2, result.hour);
 			Y.Assert.areSame(5, result.minute);
+
+			check(Y.DateTimeUtils.parseTime('2:05:15 PM'));
 		},
 
 		testParseTimeInvalidValue: function()

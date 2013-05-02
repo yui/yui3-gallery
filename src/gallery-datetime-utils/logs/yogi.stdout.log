@@ -1,21 +1,85 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.65 on node@0.8.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datetime-utils
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-datetime-utils
+   #1: Trailing whitespace.
+       * // line 11, pos 3
+   #2: Wrap the /regexp/ literal in parens to disambiguate the slash operator.
+       return /^\d+$/.test(v); // line 28, pos 12
+   #3: Trailing whitespace.
+       * // line 108, pos 7
+   #4: Trailing whitespace.
+       * // line 121, pos 7
+   #5: Trailing whitespace.
+       * // line 124, pos 7
+   #6: Too many var statements.
+       var result = Y.clone(input); // line 155, pos 13
+   #7: 'result' is already defined.
+       var result = Y.clone(input); // line 155, pos 20
+   #8: Trailing whitespace.
+       * // line 188, pos 7
+   #9: Trailing whitespace.
+       * // line 231, pos 7
+   #10: Too many var statements.
+       var result = // line 261, pos 13
+   #11: 'obj' used out of scope.
+       year:  obj.year, // line 263, pos 20
+   #12: 'obj' used out of scope.
+       month: obj.month, // line 264, pos 20
+   #13: 'obj' used out of scope.
+       day:   obj.day // line 265, pos 20
+   #14: Missing semicolon.
+       } // line 266, pos 10
+   #15: Trailing whitespace.
+       * // line 273, pos 7
+   #16: Expected '!==' and instead saw '!='.
+       if (d.length != 3 || !Y.every(d, validInteger)) // line 286, pos 22
+   #17: Missing 'new' prefix when invoking a constructor.
+       throw Error('Unparseable date format.'); // line 288, pos 19
+   #18: Trailing whitespace.
+       * // line 303, pos 7
+   #19: Expected '===' and instead saw '=='.
+       if (self.CLOCK_DISPLAY_TYPE == 12) // line 334, pos 37
+   #20: Trailing whitespace.
+       * // line 351, pos 7
+   #21: Too many var statements.
+       var t = time.split(self.TIME_FIELD_DELIMITER); // line 380, pos 13
+   #22: Missing 'new' prefix when invoking a constructor.
+       throw Error('Unparseable time format.'); // line 383, pos 19
+   #23: Too many var statements.
+       var result = // line 386, pos 13
+   #24: Missing 'new' prefix when invoking a constructor.
+       throw Error('Invalid time values: ' + result.hour + self.TIME_FIELD_DELIMITER + pad2(result.minute)); // line 395, pos 19
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-datetime-utils/gallery-datetime-utils.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-datetime-utils/gallery-datetime-utils.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-datetime-utils/gallery-datetime-utils-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.245 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5023
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5022
-Starting Grover on 1 files with PhantomJS@1.8.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.8.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-datetime-utils]: Passed: 5 Failed: 4 Total: 9 (ignored 0) (0.097 seconds) 88%
-    testNormalize
-       Unexpected error: 'undefined' is not an object (evaluating 'default_time.hour')
-    testFormatDate
-       Unexpected error: 'undefined' is not an object (evaluating 'date.year.toString')
-    testParseDate
-       Unexpected error: Unparseable date format.
-    testFormatTime
-       Unexpected error: 'undefined' is not an object (evaluating 'n.toString')
+✖ [gallery-datetime-utils]: Passed: 8 Failed: 1 Total: 9 (ignored 0) (0.103 seconds) 100%
+    testParseTime
+       Unexpected error: Unparseable time format.
 Writing files in JSON format to: /src/gallery-datetime-utils/logs/tests.json
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

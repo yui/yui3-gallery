@@ -378,7 +378,7 @@ Y.DateTimeUtils =
 		}
 
 		var t = time.split(self.TIME_FIELD_DELIMITER);
-		if (t.length != 2 || !Y.every(t, validInteger))
+		if (t.length < 2 || 3 < t.length || !Y.every(t, validInteger))
 		{
 			throw Error('Unparseable time format.');
 		}
@@ -402,4 +402,4 @@ Y.DateTimeUtils =
 var self = Y.DateTimeUtils;	// shortcut
 
 
-}, 'gallery-2013.01.16-21-05', {"requires": ["gallery-funcprog"]});
+}, 'gallery-2013.05.02-22-59', {"requires": ["gallery-funcprog"]});
