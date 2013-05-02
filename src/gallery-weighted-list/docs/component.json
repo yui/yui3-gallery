@@ -3,7 +3,7 @@
         "solmsted"
     ],
     "description": "An object to store a list of values with a weighted distribution for random selection.",
-    "displayName": "Gallery: weighted-list",
+    "displayName": "Gallery: Weighted List",
     "name": "gallery-weighted-list",
     "tags": [
         "array",
@@ -12,6 +12,7 @@
         "list",
         "random",
         "selection",
+        "solmsted",
         "weight",
         "weighted"
     ],
