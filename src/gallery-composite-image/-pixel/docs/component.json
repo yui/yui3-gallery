@@ -1,0 +1,27 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "This is an experimental array-like interface for interacting with image pixels.",
+    "displayName": "Gallery: Composite Image Pixel",
+    "name": "gallery-composite-image-pixel",
+    "tags": [
+        "array",
+        "channel",
+        "channels",
+        "color",
+        "composite",
+        "data",
+        "gallery",
+        "graphics",
+        "image",
+        "picture",
+        "pixel",
+        "pixels",
+        "proxy",
+        "solmsted"
+    ],
+    "use": [
+        "gallery-composite-image-pixel"
+    ]
+}

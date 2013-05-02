@@ -1,0 +1,34 @@
+#demo {
+    border: 1px solid #9EA8C6;
+    background: #ECEFFB;
+    border-radius: 3px;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.25);
+}
+
+.yui3-hd {
+    background-color: #B6BFDA;
+    padding:0.5em 1em;
+}
+
+.yui3-hd h3 {
+    border: 0;
+    color: #30418C;
+    margin: 0 25px 0 0;
+}
+
+.yui3-bd {
+    padding: 1em;
+}
+
+.yui3-bd fieldset {
+    border: 1px dotted #9EA8C6;
+    padding: .5em;
+}
+
+.yui3-bd fieldset legend {
+    padding: 0 .5em;
+}
+
+.intro p {
+    margin: 1em;
+}

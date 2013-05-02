@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-composite-image-canvas": {
+            "jsfiles": [
+                "js/composite-image-canvas.js"
+            ]
+        }
+    },
+    "name": "gallery-composite-image-canvas"
+}

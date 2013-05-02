@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.66 on node@0.8.18
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-composite-image
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -14,13 +14,13 @@ shifter [info] shifting into gear for gallery-composite-image
    #2: A constructor name should start with an uppercase letter.
        return new _Class({ // line 234, pos 28
    #3: Line too long.
-       return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value); // line 441, pos 157
+       return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value); // line 440, pos 157
    #4: Line too long.
-       return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian); // line 774, pos 170
+       return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian); // line 772, pos 170
    #5: Line too long.
-       me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian); // line 796, pos 164
+       me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian); // line 794, pos 164
    #6: 'Uint8ClampedArray' is not defined.
-       return Uint8ClampedArray; // line 718, pos 28
+       return Uint8ClampedArray; // line 716, pos 28
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-composite-image/gallery-composite-image.js with UglifyJS
@@ -32,18 +32,18 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-composite-image/gallery-composite-image-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.238 seconds, pretty fast huh?
+shifter [info] finished in 0.713 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5000
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
-Starting Grover on 1 files with PhantomJS@1.8.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5019
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5018
+Starting Grover on 1 files with PhantomJS@1.8.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-composite-image]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.463 seconds) 42%
+✔ [gallery-composite-image]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.534 seconds) 42%
 Writing files in JSON format to: /src/gallery-composite-image/logs/tests.json
 
 ---------------------------------+-----------+-----------+-----------+-----------+
@@ -63,6 +63,6 @@ Functions    : 40% ( 16/40 )
 Lines        : 42.86% ( 48/112 )
 ================================================================================
 ----------------------------------------------------------------
-✔ [Total]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.463 seconds)
-  [Grover Execution Timer] 1.429 seconds
+✔ [Total]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.534 seconds)
+  [Grover Execution Timer] 8.998 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

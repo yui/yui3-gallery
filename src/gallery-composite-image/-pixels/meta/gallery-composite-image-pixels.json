@@ -1,0 +1,7 @@
+{
+    "gallery-composite-image-pixels": {
+        "requires": [
+            "gallery-composite-image-pixel"
+        ]
+    }
+}
