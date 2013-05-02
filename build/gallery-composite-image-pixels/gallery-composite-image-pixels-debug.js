@@ -1,8 +1,9 @@
 YUI.add('gallery-composite-image-pixels', function (Y, NAME) {
 
 /**
- * @module gallery-composite-image-pixels
- */
+@module gallery-composite-image-pixels
+@author Steven Olmsted
+*/
 (function (Y) {
     'use strict';
 
@@ -14,32 +15,32 @@ YUI.add('gallery-composite-image-pixels', function (Y, NAME) {
         _defineProperties = Object.defineProperties,
 
         /**
-         * This is an experimental array-like interface for interacting with
-         * image pixels.  An image's pixels can be accessed by pixel index or
-         * pixel location array in the same way normal array items are accessed.
-         * Note that constructing this object is an expensive operation.
-         * @class Image.Pixels
-         * @constructor
-         * @namespace Composite
-         * @param {Composite.Image} image The image that contains the pixels.
-         */
+        This is an experimental array-like interface for interacting with image
+        pixels.  An image's pixels can be accessed by pixel index or pixel
+        location array in the same way normal array items are accessed.  Note
+        that constructing this object is an expensive operation.
+        @class Image.Pixels
+        @constructor
+        @namespace Composite
+        @param {Composite.Image} image The image that contains the pixels.
+        */
         _Class = function (image) {
             var properties = {
                     /**
-                     * The image to which these pixels belong.
-                     * @property image
-                     * @final
-                     * @type Composite.Image
-                     */
+                    The image to which these pixels belong.
+                    @property image
+                    @final
+                    @type Composite.Image
+                    */
                     image: {
                         value: image
                     },
                     /**
-                     * The number of pixels this image contains.
-                     * @property length
-                     * @final
-                     * @type Number
-                     */
+                    The number of pixels this image contains.
+                    @property length
+                    @final
+                    @type Number
+                    */
                     length: {
                         value: image.pixelCount
                     }
@@ -63,28 +64,28 @@ YUI.add('gallery-composite-image-pixels', function (Y, NAME) {
 
     _Class.prototype = {
         /**
-         * @method toJSON
-         * @return {[Composite.Image.Pixel]}
-         */
+        @method toJSON
+        @return {[Composite.Image.Pixel]}
+        */
         toJSON: function () {
             return _YArray(this);
         },
         /**
-         * @method toString
-         * @return {String}
-         */
+        @method toString
+        @return {String}
+        */
         toString: function () {
             return 'image-pixels[' + this.image + ']';
         }
     };
 
     /**
-     * @method _getPixelGetter
-     * @param {Number} pixelIndex The pixel's unique index within the image.
-     * @protected
-     * @return {Function}
-     * @static
-     */
+    @method _getPixelGetter
+    @param {Number} pixelIndex The pixel's unique index within the image.
+    @protected
+    @return {Function}
+    @static
+    */
     _Class._getPixelGetter = Y.cached(function (pixelIndex) {
         return function () {
             return this.image.getPixel(pixelIndex);
@@ -94,14 +95,14 @@ YUI.add('gallery-composite-image-pixels', function (Y, NAME) {
     _Image.Pixels = _Class;
 
     /**
-     * An experimental array-like interface for interacting with the image's
-     * pixels.  Note that constructing this object is an expensive operation.
-     * It will be created lazily the first time it is accessed.
-     * @property pixels
-     * @for Image
-     * @final
-     * @type Composite.Image.Pixels
-     */
+    An experimental array-like interface for interacting with the image's
+    pixels.  Note that constructing this object is an expensive operation.  It
+    will be created lazily the first time it is accessed.
+    @property pixels
+    @for Image
+    @final
+    @type Composite.Image.Pixels
+    */
     Object.defineProperty(_imagePrototype, 'pixels', {
         enumerable: true,
         get: function () {
@@ -110,21 +111,21 @@ YUI.add('gallery-composite-image-pixels', function (Y, NAME) {
     });
 
     /**
-     * Creates and returns a Pixels object for this image.
-     * @method _getPixels
-     * @protected
-     * @return Composite.Image.Pixels
-     */
+    Creates and returns a Pixels object for this image.
+    @method _getPixels
+    @protected
+    @return Composite.Image.Pixels
+    */
     _imagePrototype._getPixels = function () {
         var pixels = new _Class(this);
         /**
-         * @property _pixels
-         * @protected
-         * @type Composite.Image.Pixels
-         */
+        @property _pixels
+        @protected
+        @type Composite.Image.Pixels
+        */
         this._pixels = pixels;
         return pixels;
     };
 }(Y));
 
-}, 'gallery-2013.01.23-21-59', {"requires": ["gallery-composite-image-pixel"]});
+}, 'gallery-2013.05.02-22-59', {"requires": ["gallery-composite-image-pixel"]});

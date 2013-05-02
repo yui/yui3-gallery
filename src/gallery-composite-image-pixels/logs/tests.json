@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 12,
     "total": 12,
-    "duration": 111,
+    "duration": 117,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 4,
         "total": 4,
-        "duration": 34,
+        "duration": 37,
         "type": "testcase",
         "test:001-apiExists": {
             "result": "ignore",
@@ -41,5 +41,6 @@
             "name": "test:004-toString"
         }
     },
-    "timestamp": "Wed 23 Jan 2013 04:01:35 PM CST"
+    "timestamp": "Thu May  2 15:59:49 2013",
+    "consoleInfo": []
 }
