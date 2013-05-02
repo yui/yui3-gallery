@@ -1,8 +1,9 @@
 YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
 
 /**
- * @module gallery-composite-image-canvas
- */
+@module gallery-composite-image-canvas
+@author Steven Olmsted
+*/
 (function (Y) {
     'use strict';
 
@@ -50,68 +51,68 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
             dataType = me._dataType;
 
             /**
-            * Returns a value in this image's data type converted from an
-            * unsigned 8-bit integer.
-            * @method _convertFromU8
-            * @for Composite.Image
-            * @param {Number} value
-            * @param {String} [dataType] The dataType parameter is only used
-            * when this image's dataType is null.
-            * @protected
-            * @return {Number}
+            Returns a value in this image's data type converted from an unsigned
+            8-bit integer.
+            @method _convertFromU8
+            @for Composite.Image
+            @param {Number} value
+            @param {String} [dataType] The dataType parameter is only used when
+            this image's dataType is null.
+            @protected
+            @return {Number}
             */
             me._convertFromU8 = _Class._getConvertFromU8Method(dataType);
 
             /**
-            * Converts a value from this image's data type to an unsigned 8-bit
-            * integer.
-            * @method _convertToU8
-            * @param {Number} value
-            * @param {String} [dataType] The dataType parameter is only used
-            * when this image's dataType is null.
-            * @protected
-            * @return {Number}
+            Converts a value from this image's data type to an unsigned 8-bit
+            integer.
+            @method _convertToU8
+            @param {Number} value
+            @param {String} [dataType] The dataType parameter is only used when
+            this image's dataType is null.
+            @protected
+            @return {Number}
             */
             me._convertToU8 = _Class._getConvertToU8Method(dataType);
 
             /**
-            * Copy the data from an ImageData object into this image.
-            * @method _fromImageData
-            * @chainable
-            * @param {ImageData} imageData
-            * @protected
+            Copy the data from an ImageData object into this image.
+            @method _fromImageData
+            @chainable
+            @param {ImageData} imageData
+            @protected
             */
             me._fromImageData = _Class._getFromImageDataMethod(dataType);
 
             /**
-            * Copy the data from this image into the provided ImageData object.
-            * @method _toImageData
-            * @param {ImageData} imageData
-            * @protected
-            * @return {ImageData}
+            Copy the data from this image into the provided ImageData object.
+            @method _toImageData
+            @param {ImageData} imageData
+            @protected
+            @return {ImageData}
             */
             me._toImageData = _Class._getToImageDataMethod(dataType);
         }
 
         /**
-         * The Y.Composite.Image canvas interface is only supported when the
-         * image has exactly four channels and two dimensions.  This property
-         * reflects whether those conditions are met and will conveniently be
-         * left undefined when `gallery-composite-image-canvas` is not loaded.
-         * @property supportsCanvas
-         * @final
-         * @type Boolean
-         */
+        The Y.Composite.Image canvas interface is only supported when the image
+        has exactly four channels and two dimensions.  This property reflects
+        whether those conditions are met and will conveniently be left undefined
+        when `gallery-composite-image-canvas` is not loaded.
+        @property supportsCanvas
+        @final
+        @type Boolean
+        */
         me.supportsCanvas = supportsCanvas;
     };
 
     /**
-     * Copy the data from a canvas into this image.  The canvas and image
-     * dimensions have to match or else this becomes a noop.
-     * @method fromCanvas
-     * @chainable
-     * @param {HTMLElement|Node|String} canvasNode
-     */
+    Copy the data from a canvas into this image.  The canvas and image
+    dimensions have to match or else this becomes a noop.
+    @method fromCanvas
+    @chainable
+    @param {HTMLElement|Node|String} canvasNode
+    */
     _prototype.fromCanvas = function (canvasNode) {
         var me = this,
 
@@ -125,13 +126,13 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     };
 
     /**
-     * Copy the data from this image into a canvas.  The canvas and image
-     * dimensions have to match or this may yield unexpected results.
-     * @method toCanvas
-     * @param {HTMLElement|Node|String} [canvasNode] If no canvas is provided,
-     * one will be created.
-     * @return {Node}
-     */
+    Copy the data from this image into a canvas.  The canvas and image
+    dimensions have to match or this may yield unexpected results.
+    @method toCanvas
+    @param {HTMLElement|Node|String} [canvasNode] If no canvas is provided,
+    one will be created.
+    @return {Node}
+    */
     _prototype.toCanvas = function (canvasNode) {
         var context,
             dimensions = this.dimensions;
@@ -145,12 +146,12 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     };
 
     /**
-     * Create and return a new image with a copy of the data from a canvas.
-     * @method fromCanvas
-     * @param {HTMLElement|Node|String} canvasNode
-     * @return {Composite.Image}
-     * @static
-     */
+    Create and return a new image with a copy of the data from a canvas.
+    @method fromCanvas
+    @param {HTMLElement|Node|String} canvasNode
+    @return {Composite.Image}
+    @static
+    */
     _Class.fromCanvas = function (canvasNode) {
         canvasNode = _one(canvasNode);
 
@@ -174,25 +175,25 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     };
 
     /**
-     * Gets a context from a canvas node.
-     * @method _getContext
-     * @param {Node} canvasNode
-     * @protected
-     * @return {CanvasRenderingContext2D}
-     * @static
-     */
+    Gets a context from a canvas node.
+    @method _getContext
+    @param {Node} canvasNode
+    @protected
+    @return {CanvasRenderingContext2D}
+    @static
+    */
     _Class._getContext = function (canvasNode) {
         return canvasNode.getDOMNode().getContext('2d');
     };
 
     /**
-     * Returns a convertFromU8 function that works with the given data type.
-     * @method _getConvertFromU8Method
-     * @param {String} dataType
-     * @protected
-     * @return {Function}
-     * @static
-     */
+    Returns a convertFromU8 function that works with the given data type.
+    @method _getConvertFromU8Method
+    @param {String} dataType
+    @protected
+    @return {Function}
+    @static
+    */
     _Class._getConvertFromU8Method = _cached(function (dataType) {
         switch (dataType) {
             case _dataType_f32:
@@ -220,13 +221,13 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     });
 
     /**
-     * Returns a convertToU8 function that works with the given data type.
-     * @method _getConvertToU8Method
-     * @param {String} dataType
-     * @protected
-     * @return {Function}
-     * @static
-     */
+    Returns a convertToU8 function that works with the given data type.
+    @method _getConvertToU8Method
+    @param {String} dataType
+    @protected
+    @return {Function}
+    @static
+    */
     _Class._getConvertToU8Method = _cached(function (dataType) {
         switch (dataType) {
             case _dataType_f32:
@@ -260,13 +261,13 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     });
 
     /**
-     * Returns a fromImageData function that works with the given data type.
-     * @method _getFromImageDataMethod
-     * @param {String} dataType
-     * @protected
-     * @return {Function}
-     * @static
-     */
+    Returns a fromImageData function that works with the given data type.
+    @method _getFromImageDataMethod
+    @param {String} dataType
+    @protected
+    @return {Function}
+    @static
+    */
     _Class._getFromImageDataMethod = _cached(function (dataType) {
         if (dataType) {
             if (dataType === _dataType_u8) {
@@ -306,26 +307,26 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     });
 
     /**
-     * Get image data from a context.
-     * @method _getImageData
-     * @param {CanvasRenderingContext2D} context
-     * @protected
-     * @return {ImageData}
-     * @static
-     */
+    Get image data from a context.
+    @method _getImageData
+    @param {CanvasRenderingContext2D} context
+    @protected
+    @return {ImageData}
+    @static
+    */
     _Class._getImageData = function (context) {
         var canvasElement = context.canvas;
         return context.getImageData(0, 0, canvasElement.width, canvasElement.height);
     };
 
     /**
-     * Returns a toImageData function that works with the given data type.
-     * @method _getToImageDataMethod
-     * @param {String} dataType
-     * @protected
-     * @return {Function}
-     * @static
-     */
+    Returns a toImageData function that works with the given data type.
+    @method _getToImageDataMethod
+    @param {String} dataType
+    @protected
+    @return {Function}
+    @static
+    */
     _Class._getToImageDataMethod = _cached(function (dataType) {
         if (dataType) {
             if (dataType === _dataType_u8) {
@@ -366,4 +367,4 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     });
 }(Y));
 
-}, 'gallery-2013.01.23-21-59', {"requires": ["gallery-composite-image", "node-base"]});
+}, 'gallery-2013.05.02-22-59', {"requires": ["gallery-composite-image", "node-base"]});
