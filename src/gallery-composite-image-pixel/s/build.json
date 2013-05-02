@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-composite-image-pixels": {
+            "jsfiles": [
+                "js/composite-image-pixels.js"
+            ]
+        }
+    },
+    "name": "gallery-composite-image-pixels"
+}
