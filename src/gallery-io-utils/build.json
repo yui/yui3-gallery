@@ -1,0 +1,10 @@
+{
+    "name": "gallery-io-utils",
+    "builds": {
+        "gallery-io-utils": {
+            "jsfiles": [
+                "js/io-utils.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+    <title>io-utils</title>
+    <script src="http://yui.yahooapis.com/3.10.0/build/yui/yui-min.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-io-utils'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    modules: {
+        'gallery-io-utils': {
+            fullpath: '/build/gallery-io-utils/gallery-io-utils.js',
+            requires: [
+                'io-base',
+                'promise'
+            ]
+        }
+    }
+}).use('test-console', 'test', 'json', 'jsonp', 'gallery-io-utils', 'module-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-io-utils');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

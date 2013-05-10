@@ -1,0 +1,187 @@
+YUI.add('module-tests', function(Y) {
+
+    var Assert = Y.Test.Assert;
+
+    var suite = new Y.Test.Suite('io-utils');
+
+    Y.Test.Case.prototype.success = function (promise, fn) {
+        var test = this;
+
+        promise.then(function (value) {
+            test.resume(function () {
+                fn.call(this, value);
+            });
+        }, function (err) {
+            test.resume(function () {
+                throw err;
+            });
+        });
+
+        return this;
+    };
+
+    Y.Test.Case.prototype.failure = function (promise, fn) {
+        var test = this;
+
+        promise.then(function (value) {
+            test.resume(function () {
+                throw new Error('Fulfilled instead of rejecting');
+            });
+        }, function (err) {
+            test.resume(function () {
+                fn.call(this, err);
+            });
+        });
+
+        return this;
+    };
+
+    suite.add(new Y.Test.Case({
+        name: 'Y.io.xhr() tests',
+        'simple XHR request': function () {
+            var request = Y.io.xhr('echo/get?foo=bar');
+
+            Assert.isInstanceOf(Y.Promise, request, 'return value should be a promise');
+
+            this.success(request, function (xhr) {
+                Assert.areEqual('foo=bar', xhr.responseText, 'server response does not match an echo');
+            });
+
+            this.wait(1000);
+        },
+
+        'request timeout': function () {
+            this.failure(Y.io.xhr('delay/1', {timeout: 10}), function (err) {
+                Assert.isNumber(err.status, 'Error should have a status number');
+            });
+
+            this.wait(1500);
+        },
+
+        'request failure': function () {
+            this.failure(Y.io.xhr('echo/status/404'), function (err) {
+                Assert.areEqual(404, err.status, 'Error should be a 404');
+            });
+
+            this.wait(500);
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'HTTP verbs',
+
+        'GET HTTP request': function () {
+            this.success(Y.io.get('echo/get/?response=helloworld'), function (xhr) {
+                Assert.areEqual('helloworld', xhr.responseText, 'GET request failure');
+            });
+
+            this.wait(500);
+        },
+
+        'POST HTTP request': function () {
+            this.success(Y.io.post('echo/post/?response=helloworld'), function (xhr) {
+                Assert.areEqual('helloworld', xhr.responseText, 'POST request failure');
+            });
+
+            this.wait(500);
+        },
+
+        'PUT HTTP request': function () {
+            this.success(Y.io.put('echo/put/?response=helloworld'), function (xhr) {
+                Assert.areEqual('helloworld', xhr.responseText, 'PUT request failure');
+            });
+
+            this.wait(500);
+        },
+
+        'DELETE HTTP request': function () {
+            this.success(Y.io.DELETE('echo/delete/?response=helloworld'), function (xhr) {
+                Assert.areEqual('helloworld', xhr.responseText, 'DELETE request failure');
+            });
+
+            this.wait(500);
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'JSON requests',
+
+        'simple JSON request': function () {
+            this.success(Y.io.json('echo/get/?response={"foo":"bar"}'), function (data) {
+                Assert.areEqual('bar', data.foo, 'GET request failure');
+            });
+
+            this.wait(500);
+        },
+
+        'catching parse error': function () {
+            this.failure(Y.io.json('echo/get/?response=asdf'), function (err) {
+                Assert.isInstanceOf(Error, err, 'error should be a syntax error');
+            });
+
+            this.wait(500);
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'HTTP verbs with JSON',
+
+        'GET JSON request': function () {
+            this.success(Y.io.getJSON('echo/get/?response={"foo":"bar"}'), function (data) {
+                Assert.areEqual('bar', data.foo, 'GET request failure');
+            });
+
+            this.wait(500);
+        },
+
+        'POST JSON request': function () {
+            this.success(Y.io.postJSON('echo/post/?response={"foo":"bar"}'), function (data) {
+                Assert.areEqual('bar', data.foo, 'POST request failure');
+            });
+
+            this.wait(500);
+        },
+
+        'PUT JSON request': function () {
+            this.success(Y.io.putJSON('echo/put/?response={"foo":"bar"}'), function (data) {
+                Assert.areEqual('bar', data.foo, 'PUT request failure');
+            });
+
+            this.wait(500);
+        },
+
+        'DELETE JSON request': function () {
+            this.success(Y.io.deleteJSON('echo/delete/?response={"foo":"bar"}'), function (data) {
+                Assert.areEqual('bar', data.foo, 'DELETE request failure');
+            });
+
+            this.wait(500);
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'jsonp requests',
+
+        'simple jsonp request': function () {
+            var request = Y.io.jsonp('echo/get/?response={callback}({"foo":"bar"})');
+
+            this.success(request, function (data) {
+                Assert.areEqual('bar', data.foo, 'did not get the correct response from echoecho');
+            });
+
+            this.wait(500);
+        },
+
+        'jsonp request timeout': function () {
+            this.failure(Y.io.jsonp('delay/1', {timeout: 50}), function (err) {
+                Assert.isTrue(err.errors.length > 0, 'transaction should have an error');
+            });
+
+            this.wait(1500);
+        }
+    }));
+
+    Y.Test.Runner.add(suite);
+
+
+},'', { requires: [ 'test' ] });
