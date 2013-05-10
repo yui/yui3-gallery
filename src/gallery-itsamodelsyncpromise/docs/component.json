@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-itsamodelsyncpromise",
+    "displayName": "Gallery: gallery-itsamodelsyncpromise",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsamodelsyncpromise" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsamodelsyncpromise",
+    "builds": {
+        "gallery-itsamodelsyncpromise": {
+            "jsfiles": [
+                "js/gallery-itsamodelsyncpromise.js"
+            ]
+        }
+    }
+}
