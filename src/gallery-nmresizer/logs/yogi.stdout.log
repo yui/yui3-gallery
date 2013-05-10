@@ -1,0 +1,96 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-nmresizer
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [warn] no build.json file, downshifting to convert ant files
+shifter [info] looking for ant files
+shifter [info] found 1 .properties files, upshifting to convert
+shifter [info] parsing build.properties
+shifter [info] saving newly parsed build.json file for gallery-nmresizer
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-nmresizer
+   #1: Trailing whitespace.
+       Y.Nmresizer = Y.Base.create('nmresizer', Y.Widget, [], { // line 3, pos 57
+   #2: Expected '===' and instead saw '=='.
+       if (typeof config.newdiv == "undefined") { // line 10, pos 34
+   #3: Expected '===' and instead saw '=='.
+       else if (typeof config.resizediv == "undefined") { // line 14, pos 42
+   #4: Trailing whitespace.
+       config.maxHeight = String(config.maxHeight); // line 43, pos 57
+   #5: Trailing whitespace.
+       config.restrainHeight = String(config.restrainHeight); // line 48, pos 67
+   #6: Trailing whitespace.
+       if (config.restrainWidth.match(/px$/)) { config.restrainWidth = config.restrainWidth.replace(/px$/,''); } // line 54, pos 118
+   #7: Trailing whitespace.
+       config.offsetWidth = String(config.offsetWidth); // line 58, pos 61
+   #8: Trailing whitespace.
+       if (config.offsetWidth.match(/px$/)) { config.offsetWidth = config.offsetWidth.replace(/px$/,''); } // line 59, pos 112
+   #9: Trailing whitespace.
+       config.offsetHeight = String(config.offsetHeight); // line 63, pos 63
+   #10: Trailing whitespace.
+       if (config.offsetHeight.match(/px$/)) { config.offsetHeight = config.offsetHeight.replace(/px$/,''); } // line 64, pos 115
+   #11: Too many var statements.
+       var imagesloaded = 0; // line 77, pos 17
+   #12: Too many var statements.
+       var images = []; // line 78, pos 17
+   #13: Too many var statements.
+       var nmresizer = this; // line 79, pos 17
+   #14: Expected '===' and instead saw '=='.
+       if (imagesloaded == totalimages) { // line 87, pos 42
+   #15: Expected '===' and instead saw '=='.
+       if (imagesloaded == totalimages) { // line 94, pos 42
+   #16: Trailing whitespace.
+       }; // line 97, pos 23
+   #17: Trailing whitespace.
+       var offviewportwidth = this.get('restrainWidth') ? this.get('restrainWidth') + 'px' : 'auto'; // line 111, pos 102
+   #18: Too many var statements.
+       var offviewportheight = this.get('restrainHeight') ? this.get('restrainHeight') + 'px' : 'auto'; // line 112, pos 13
+   #19: Expected '===' and instead saw '=='.
+       if (typeof config.noWidthResize == "undefined" || !config.noWidthResize) { // line 124, pos 41
+   #20: Missing radix parameter.
+       config.newtabwidth = parseInt(Y.one(config.newdiv).get('offsetWidth')) + parseInt(this.get('offsetWidth')) + 'px'; // line 126, pos 82
+   #21: Missing radix parameter.
+       config.newtabwidth = parseInt(Y.one(config.newdiv).get('offsetWidth')) + parseInt(this.get('offsetWidth')) + 'px'; // line 126, pos 118
+   #22: Expected '===' and instead saw '=='.
+       if (typeof config.noHeightResize == "undefined" || !config.noHeightResize) { // line 132, pos 42
+   #23: Missing radix parameter.
+       config.newtabheight = parseInt(Y.one(config.newdiv).get('offsetHeight')) + parseInt(this.get('offsetHeight')) + 'px'; // line 134, pos 84
+   #24: Missing radix parameter.
+       config.newtabheight = parseInt(Y.one(config.newdiv).get('offsetHeight')) + parseInt(this.get('offsetHeight')) + 'px'; // line 134, pos 121
+   #25: Trailing whitespace.
+       }); // line 162, pos 16
+   #26: Expected '===' and instead saw '=='.
+       if (config.oldtabheight == config.newtabheight && config.oldtabwidth == config.newtabwidth) { // line 166, pos 33
+   #27: Expected '===' and instead saw '=='.
+       if (config.oldtabheight == config.newtabheight && config.oldtabwidth == config.newtabwidth) { // line 166, pos 78
+   #28: Too many var statements.
+       var transoptions = { // line 183, pos 17
+   #29: Trailing whitespace.
+       // now that resizediv has been measured, resize all divs assigned to // line 196, pos 85
+   #30: Trailing whitespace.
+       ATTRS : { // line 228, pos 14
+   #31: 'config' is defined but never used.
+       initializer : function( config ) { // line 4, pos 35
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-nmresizer/gallery-nmresizer.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-nmresizer/gallery-nmresizer.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-nmresizer/gallery-nmresizer-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.2 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

@@ -1,4 +1,4 @@
-YUI.add('gallery-nmresizer', function(Y) {
+YUI.add('gallery-nmresizer', function (Y, NAME) {
 
 Y.Nmresizer = Y.Base.create('nmresizer', Y.Widget, [], { 
 	initializer : function( config ) {
@@ -248,4 +248,18 @@ Y.Nmresizer = Y.Base.create('nmresizer', Y.Widget, [], {
 });
 
 
-}, 'gallery-2012.10.03-20-02' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
+}, 'gallery-2013.05.10-00-54', {
+    "supersedes": [
+        ""
+    ],
+    "requires": [
+        "base-build",
+        "widget",
+        "event-mouseenter",
+        "node",
+        "transition"
+    ],
+    "optional": [
+        ""
+    ]
+});

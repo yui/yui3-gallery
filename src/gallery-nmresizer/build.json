@@ -1,0 +1,26 @@
+{
+    "name": "gallery-nmresizer",
+    "builds": {
+        "gallery-nmresizer": {
+            "config": {
+                "supersedes": [
+                    ""
+                ],
+                "requires": [
+                    "base-build",
+                    "widget",
+                    "event-mouseenter",
+                    "node",
+                    "transition"
+                ],
+                "optional": [
+                    ""
+                ]
+            },
+            "jsfiles": [
+                "nmresizer.js"
+            ],
+            "meta": {}
+        }
+    }
+}
