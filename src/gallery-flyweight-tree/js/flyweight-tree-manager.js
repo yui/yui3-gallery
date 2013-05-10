@@ -387,7 +387,9 @@ FWMgr = Y.Base.create(
                     // I need to do this otherwise Attribute will initialize
                     // the real iNode with default values when activating a lazyAdd attribute.
                     newNode._slideTo({});
-                    YArray.each(Y.Object.keys(newNode._state.data), newNode._addLazyAttr, newNode);
+                    YArray.each(Y.Object.keys(newNode._state.data), function (attr) {
+                        newNode._addLazyAttr(attr);
+                    });
                     // newNode.getAttrs();
                     // That's it (see above)
                     newNode._root =  this;
