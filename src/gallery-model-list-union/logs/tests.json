@@ -1,0 +1,50 @@
+{
+    "name": "gallery-model-list-union",
+    "passed": 3,
+    "failed": 9,
+    "errors": 0,
+    "ignored": 0,
+    "total": 12,
+    "duration": 117,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 1,
+        "failed": 3,
+        "errors": 0,
+        "ignored": 0,
+        "total": 4,
+        "duration": 38,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "fail",
+            "message": "Y.ModelList should be a function.\nUnexpected: undefined (undefined) ",
+            "type": "test",
+            "name": "test:001-apiExists",
+            "duration": 0
+        },
+        "test:002-union": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Model()')",
+            "type": "test",
+            "name": "test:002-union",
+            "duration": 2
+        },
+        "test:003-custom-type": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Base.create')",
+            "type": "test",
+            "name": "test:003-custom-type",
+            "duration": 1
+        },
+        "test:004-error-when-first-argument-is-not-a-model-list": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test:004-error-when-first-argument-is-not-a-model-list",
+            "duration": 1
+        }
+    },
+    "timestamp": "Thu 09 May 2013 05:49:30 PM PDT",
+    "consoleInfo": []
+}

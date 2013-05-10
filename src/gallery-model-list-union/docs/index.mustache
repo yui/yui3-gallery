@@ -1,0 +1,76 @@
+<div class="intro">
+    <p>
+        Creates a model list that is the union of two or more other model lists.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    Creates a model list that is the union of two or more other model lists.  The new model list stays up to date as the source lists change.
+</p>
+
+```
+YUI().use('gallery-model-list-union', function(Y) {
+    Y.NameModel = Y.Base.create('NameModel', Y.Model, [], {}, {
+        ATTRS: {
+            name: {
+                value: ''
+            }
+        }
+    });
+        
+    Y.NameModelList = Y.Base.create('NameModelList', Y.ModelList, [], {
+        comparator: function (model) {
+            return model.get('name');
+        },
+        model: Y.NameModel
+    });
+
+    var nameModelList0 = new Y.NameModelList().reset([{
+            name: 'Jeffrey'
+        }, {
+            name: 'Emily'
+        }, {
+            name: 'Luke'
+        }]),
+        nameModelList1 = new Y.NameModelList().reset([{
+            name: 'Kara'
+        }, {
+            name: 'Eric'
+        }, {
+            name: 'George'
+        }]),
+        nameModelList2 = new Y.NameModelList().reset([{
+            name: 'Jim'
+        }, {
+            name: 'Raymond'
+        }, {
+            name: 'Jennifer'
+        }]),
+        nameModelListUnion = Y.ModelList.union('NameModelList', nameModelList0, nameModelList1, nameModelList2);
+    
+    alert(nameModelListUnion.get('name').join(', '));
+    // Emily, Eric, George, Jeffrey, Jennifer, Jim, Kara, Luke, Raymond
+    
+    nameModelList1.add({
+        name: 'Sarah'
+    });
+
+    nameModelList2.add({
+        name: 'Matthew'
+    });
+    
+    alert(nameModelListUnion.get('name').join(', '));
+    // Emily, Eric, George, Jeffrey, Jennifer, Jim, Kara, Luke, Matthew, Raymond, Sarah
+    
+    nameModelList0.reset();
+    
+    alert(nameModelListUnion.get('name').join(', '));
+    // Eric, George, Jennifer, Jim, Kara, Matthew, Raymond, Sarah
+});
+```

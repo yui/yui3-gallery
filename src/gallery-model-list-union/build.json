@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-model-list-union": {
+            "jsfiles": [
+                "model-list-union.js"
+            ]
+        }
+    },
+    "name": "gallery-model-list-union"
+}

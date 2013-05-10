@@ -1,0 +1,19 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Creates a model list that is the union of two or more other model lists.",
+    "displayName": "Gallery: model-list-union",
+    "examples": [],
+    "name": "gallery-model-list-union",
+    "tags": [
+        "gallery",
+        "list",
+        "model",
+        "solmsted",
+        "union"
+    ],
+    "use": [
+        "gallery-model-list-union"
+    ]
+}

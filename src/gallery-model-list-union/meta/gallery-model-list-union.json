@@ -1,0 +1,7 @@
+{
+    "gallery-model-list-union": {
+        "requires": [
+            "model-list"
+        ]
+    }
+}
