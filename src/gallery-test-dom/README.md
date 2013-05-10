@@ -12,8 +12,6 @@ Testing utilities for YUI Test to help with Functional Testing.
  - isCentered(node) - Asserts that node is centered in the viewport
  - isFocused(node) - Asserts that a node is focused on the page (NOTE: this may incorrectly fail if window isn't focused during test execution)
 
- ## TODO
+## Issues
 
- - Complete unit test suite for remaining assertion
- - Start documentation in 'docs' folder
- - Add more assertions (e.g. containsText, resourceExists, etc)
+https://github.com/klamping/yui3-gallery-contributions/issues

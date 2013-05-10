@@ -77,6 +77,37 @@ YUI.add('module-tests', function(Y) {
         }
     }));
 
+    suite.add(new Y.Test.Case({
+        name: 'Class Name Tests',
+        setUp: function () {
+            this.classNode = Y.Node.create("<div class='testClass'></div>");
+            // attach nodes to page
+            var body = Y.one('body');
+            body.appendChild(this.classNode);
+        },
+        tearDown: function () {
+            delete this.classNode;
+        },
+        'hasClass should pass if node has class': function () {
+            Y.Assert.hasClass(this.classNode, "testClass");
+        },
+        'hasClass should fail if node does not has class': function () {
+            var classNode = this.classNode;
+            Y.Assert.throwsError(YUITest.ComparisonFailure, function(){
+                Y.Assert.hasClass(classNode, "testClassFail");
+            });
+        },
+        'lacksClass should pass if node does not have class': function () {
+            Y.Assert.lacksClass(this.classNode, "ronBurgundy");
+        },
+        'lacksClass should fail if node has class': function () {
+            var classNode = this.classNode;
+            Y.Assert.throwsError(YUITest.ComparisonFailure, function(){
+                Y.Assert.lacksClass(classNode, "testClass");
+            });
+        }
+    }));
+
     Y.Test.Runner.add(suite);
 
 },'', { requires: [ 'test' ] });

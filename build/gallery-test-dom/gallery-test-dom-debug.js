@@ -20,7 +20,7 @@ function isElementVisible(el) {
     var node = Y.one(el),
         rect = node.get('region');
 
-    return document.elementFromPoint(rect.left,rect.top) === node.getDOMNode();
+    return Y.config.doc.elementFromPoint(rect.left,rect.top) === node.getDOMNode();
 }
 
 Y.mix(Y.Assert, {
@@ -120,8 +120,38 @@ Y.mix(Y.Assert, {
     isFocused: function (el, message) {
         message = message || "Element '" + el + "' should be focused";
 
-        Y.Assert.areSame(Y.Node.getDOMNode(el), document.activeElement, message);
+        Y.Assert.areSame(Y.Node.getDOMNode(el), Y.config.doc.activeElement, message);
+    },
+
+    /**
+     * Asserts that a given node has a class name defined
+     * @method hasClass
+     * @public
+     * @param el {Node} YUI Node to test
+     * @param class {String} class name to check for
+     * @param message {string} (optional) Message to display on test failure
+     * @throws {Error} ComparisonFailure if element does not have class
+     */
+    hasClass: function (el, classname, message) {
+        message = message || "Element '" + el + "' should have class '" + classname + "'";
+
+        Y.Assert.isTrue(el.hasClass(classname), message);
+    },
+
+    /**
+     * Asserts that a given node does not have a class name
+     * @method lacksClass
+     * @public
+     * @param el {Node} YUI Node to test
+     * @param class {String} class name to check for
+     * @param message {string} (optional) Message to display on test failure
+     * @throws {Error} ComparisonFailure if element has class
+     */
+    lacksClass: function (el, classname, message) {
+        message = message || "Element '" + el + "' should not have class '" + classname + "'";
+
+        Y.Assert.isFalse(el.hasClass(classname), message);
     }
 });
 
-}, 'gallery-2013.03.20-19-59', {"requires": ["yui-base", "test", "node", "gallery-test-extras"]});
+}, 'gallery-2013.05.10-00-54', {"requires": ["yui-base", "test", "node", "gallery-test-extras"]});

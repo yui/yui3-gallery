@@ -1,11 +1,11 @@
 {
     "name": "gallery-test-dom",
-    "passed": 12,
+    "passed": 24,
     "failed": 0,
     "errors": 0,
     "ignored": 0,
-    "total": 12,
-    "duration": 159,
+    "total": 24,
+    "duration": 276,
     "type": "report",
     "Visibility Tests": {
         "name": "Visibility Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 4,
-        "duration": 51,
+        "duration": 38,
         "type": "testcase",
         "isHidden should pass if node is hidden": {
             "result": "pass",
@@ -28,7 +28,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "isHidden should fail if node is visible",
-            "duration": 2
+            "duration": 1
         },
         "isNotHidden should pass if node is visible": {
             "result": "pass",
@@ -42,9 +42,47 @@
             "message": "Test passed",
             "type": "test",
             "name": "isNotHidden should fail if node is hidden",
-            "duration": 3
+            "duration": 1
         }
     },
-    "timestamp": "Wed 20 Mar 2013 03:01:02 PM CDT",
+    "Class Name Tests": {
+        "name": "Class Name Tests",
+        "passed": 4,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 4,
+        "duration": 53,
+        "type": "testcase",
+        "hasClass should pass if node has class": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "hasClass should pass if node has class",
+            "duration": 1
+        },
+        "hasClass should fail if node does not has class": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "hasClass should fail if node does not has class",
+            "duration": 1
+        },
+        "lacksClass should pass if node does not have class": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "lacksClass should pass if node does not have class",
+            "duration": 0
+        },
+        "lacksClass should fail if node has class": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "lacksClass should fail if node has class",
+            "duration": 1
+        }
+    },
+    "timestamp": "Thu 09 May 2013 05:49:26 PM PDT",
     "consoleInfo": []
 }
