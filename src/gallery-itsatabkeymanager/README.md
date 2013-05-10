@@ -18,10 +18,10 @@ Usage
 <b>Using TAB and Shift-TAB to jump between input-elements</b>
 ```html
 <div id='container'>
-    <input class='focusable' />
-    <input class='focusable' />
-    <input /> <!-- this element will not gain focus by pressing tab -->
-    <input id='lastinput' class='focusable' />
+    <input type='input' class='focusable' />
+    <input type='input' class='focusable' />
+    <input type='input' /> <!-- this element will not gain focus by pressing tab -->
+    <input type='input' id='lastinput' class='focusable' />
 </div>
 ```
 ```js
