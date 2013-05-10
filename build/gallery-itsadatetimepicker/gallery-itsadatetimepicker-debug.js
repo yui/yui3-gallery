@@ -297,8 +297,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                             selectedDate.setHours(0);
                             instance.hide(true, true);
                             resolve(selectedDate);
-                            // we don't want closures: 'null' the promise
-                            promise = null;
                         }
                     );
                     rejecthandler = Y.once(
@@ -309,8 +307,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                             // just for sure, also hide the calendarinstance
                             instance.calendar.hide();
                             reject(new Error('canceled'));
-                            // we don't want closures: 'null' the promise
-                            promise = null;
                         }
                     );
                 }
@@ -372,8 +368,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                             selectedDateTime.setHours(newHours);
                             instance.hide(true, true);
                             resolve(selectedDateTime);
-                            // we don't want closures: 'null' the promise
-                            promise = null;
                         }
                     );
                     rejecthandler = Y.once(
@@ -385,8 +379,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                             instance.calendar.hide();
                             instance._toggleTimePicker(false, false);
                             reject(new Error('canceled'));
-                            // we don't want closures: 'null' the promise
-                            promise = null;
                         }
                     );
                 }
@@ -435,8 +427,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                                 selectedTime = new Date(1900, 0, 1, newHours, newMinutes, 0, 0);
                             instance.hide(true, true);
                             resolve(selectedTime);
-                            // we don't want closures: 'null' the promise
-                            promise = null;
                         }
                     );
                     rejecthandler = Y.once(
@@ -447,8 +437,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                             // just for sure, also hide the calendarinstance
                             instance._toggleTimePicker(false, false);
                             reject(new Error('canceled'));
-                            // we don't want closures: 'null' the promise
-                            promise = null;
                         }
                     );
                 }
@@ -538,7 +526,7 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                     eventhandlers.push(
                         closebutton.on(
                             'click',
-                            function(e) {
+                            function() {
                                 /**
                                 * Fired when the Panel is closed without saving the values.
                                 * No need to listen to --> the promises are using this event internally.
@@ -1098,7 +1086,7 @@ if (!Y.Global.ItsaDateTimePicker) {
 
 Y.ItsaDateTimePicker = Y.Global.ItsaDateTimePicker;
 
-}, 'gallery-2013.04.24-22-00', {
+}, 'gallery-2013.05.10-00-54', {
     "requires": [
         "base",
         "node-base",
