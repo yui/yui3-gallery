@@ -1,0 +1,16 @@
+{
+    "gallery-itsaeditmodel": {
+        "requires": [
+            "yui-base",
+            "base-build",
+            "node-base",
+            "node-event-delegate",
+            "plugin",
+            "pluginhost-base",
+            "lazy-model-list",
+            "event-valuechange",
+            "gallery-itsamodelsyncpromise",
+            "gallery-itsaformelement"
+        ]
+    }
+}

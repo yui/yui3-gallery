@@ -1,0 +1,29 @@
+{
+    "name": "gallery-itsaeditmodel",
+    "passed": 0,
+    "failed": 3,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 18,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 3,
+        "type": "testcase",
+        "test is empty": {
+            "result": "fail",
+            "message": "No Tests Provided For This Module",
+            "type": "test",
+            "name": "test is empty",
+            "duration": 1
+        }
+    },
+    "timestamp": "Thu 09 May 2013 05:49:29 PM PDT",
+    "consoleInfo": []
+}
