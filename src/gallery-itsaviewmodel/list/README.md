@@ -136,7 +136,7 @@ myView.render();
 
 <b>View with a filter on the modellist</b>
 ```html
-<div id='myscrollview' class='itsa-modellistview-noinitialitems'></div>
+<div id='myview' class='itsa-modellistview-noinitialitems'></div>
 ```
 ```js
 YUI({gallery: 'gallery-2013.02.27-21-03'}).use('gallery-itsaviewmodellist', 'lazy-model-list', function(Y) {
@@ -158,8 +158,7 @@ filter = function(model) {
 };
 
 myView = new Y.ITSAViewModellist({
-    boundingBox: "#myscrollview",
-    height:'600px',
+    boundingBox: "#myview",
     width:'240px',
     modelTemplate: rendermodel,
     groupHeader1: groupheader,

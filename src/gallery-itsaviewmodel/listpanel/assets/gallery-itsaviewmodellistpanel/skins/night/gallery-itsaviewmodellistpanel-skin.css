@@ -1,9 +1,9 @@
-.yui3-skin-night .yui3-panel {
+.yui3-skin-night .yui3-itsaviewmodellistpanel {
     color: #FFFFFF;
     font-family: HelveticaNeue, arial, helvetica, clean, sans-serif;
 }
 
-.yui3-skin-night .yui3-panel-content {
+.yui3-skin-night .yui3-itsaviewmodellistpanel-content {
     background: #6D6E6E;
     -webkit-box-shadow: 0 0 20px #000;
     -moz-box-shadow: 0 0 20px #000;
@@ -13,7 +13,8 @@
     -moz-border-radius: 7px;
     border-radius: 7px;
 }
-.yui3-skin-night .yui3-panel .yui3-widget-hd {
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-hd {
+    line-height: 12px;
     padding: 11px 57px 11px 22px;   /* Room for close button. */
     min-height: 17px;               /* For the close button */
     _height: 17px;                  /* IE6 */
@@ -41,13 +42,13 @@
         to(#3E3F41)
     );
 }
-.yui3-skin-night .yui3-panel .yui3-widget-hd .yui3-widget-buttons {
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-hd .yui3-widget-buttons {
     padding: 11px;
 }
-.yui3-skin-night .yui3-panel .yui3-widget-bd {
-    padding: 11px 22px 17px;
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-bd {
+    overflow-y: auto;
 }
-.yui3-skin-night .yui3-panel .yui3-widget-ft {
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-ft {
     background-color: #575858;
     border-top: 1px solid #494A4A;
     padding: 6px 16px 8px;
@@ -59,7 +60,7 @@
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
 }
-.yui3-skin-night .yui3-panel .yui3-widget-ft .yui3-widget-buttons {
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-ft .yui3-widget-buttons {
     bottom: 0;
     position: relative;
     right: auto;
@@ -69,8 +70,19 @@
     margin-left: -5px;
     margin-right: -5px;
 }
-.yui3-skin-night .yui3-panel .yui3-widget-ft .yui3-button {
-    margin: 5px;
+
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-hd .yui3-button {
+    margin-left: 4px;
+    margin-top: -4px;
+    padding: 0.2em 0.27em;
+}
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-hd .yui3-button.yui3-button-close {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-left: 10px;
+}
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-ft .yui3-button {
+    margin-left: 8px;
 }
 
 /*
@@ -79,7 +91,7 @@ Support for icon-based [x] "close" button in the header.
 Nicolas Gallagher: "CSS image replacement with pseudo-elements (NIR)"
 http://nicolasgallagher.com/css-image-replacement-with-pseudo-elements/
 */
-.yui3-skin-night .yui3-panel .yui3-widget-hd .yui3-button-close {
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-hd .yui3-button-close {
     /* Reset base button styles */
     background: transparent;
     filter: none;
@@ -101,10 +113,10 @@ http://nicolasgallagher.com/css-image-replacement-with-pseudo-elements/
     *color: #86A5EC;
     *background: url(sprite_icons.png) no-repeat center 3px;
 }
-.yui3-skin-night .yui3-panel .yui3-widget-hd .yui3-button-close:hover {
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-hd .yui3-button-close:hover {
     background-color: #333;
 }
-.yui3-skin-night .yui3-panel .yui3-widget-hd .yui3-button-close:before {
+.yui3-skin-night .yui3-itsaviewmodellistpanel .yui3-widget-hd .yui3-button-close:before {
     /*
     Displays the [x] icon in place of the "Close" text.
     Note: The `width` of this pseudo element is the same as its "host" element.
@@ -117,7 +129,7 @@ http://nicolasgallagher.com/css-image-replacement-with-pseudo-elements/
     width: 22px;
     margin: 3px 0 0 1px;
 }
-.yui3-skin-night .yui3-panel-hidden .yui3-widget-hd .yui3-button-close {
+.yui3-skin-night .yui3-itsaviewmodellistpanel-hidden .yui3-widget-hd .yui3-button-close {
     /* Required for IE > 7 to deal with pseudo :before element */
     display: none;
 }

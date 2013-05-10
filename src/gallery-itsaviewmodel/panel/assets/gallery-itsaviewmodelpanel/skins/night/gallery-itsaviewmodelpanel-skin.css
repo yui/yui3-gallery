@@ -14,6 +14,7 @@
     border-radius: 7px;
 }
 .yui3-skin-night .yui3-itsaviewmodelpanel .yui3-widget-hd {
+    line-height: 12px;
     padding: 11px 57px 11px 22px;   /* Room for close button. */
     min-height: 17px;               /* For the close button */
     _height: 17px;                  /* IE6 */
@@ -72,6 +73,16 @@
 }
 .yui3-skin-night .yui3-itsaviewmodelpanel .yui3-widget-ft .yui3-button {
     margin: 5px;
+}
+.yui3-skin-night .yui3-itsaviewmodelpanel .yui3-widget-hd .yui3-button {
+    margin-left: 4px;
+    margin-top: -4px;
+    padding: 0.2em 0.27em;
+}
+.yui3-skin-night .yui3-itsaviewmodelpanel .yui3-widget-hd .yui3-button.yui3-button-close {
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-left: 10px;
 }
 
 /*

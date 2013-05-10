@@ -2,7 +2,7 @@ gallery-itsaviewmodel
 =====================
 
 
-<b<Widget Y.ITSAViewModel</b>
+<b>Widget Y.ITSAViewModel</b>
 
 This widget renderes Y.Model-instances -or just plain objects- inside the widgets contentBox.
 It uses Y.View under the hood, where Y.View.container is bound to the 'contentBox'. The render-method must be defined

@@ -41,6 +41,8 @@ Y.ITSAViewModellist = Y.Base.create('itsaviewmodellist', Y.Widget, [Y.ITSAModell
          *     @param {Boolean} [options.forceBottom=false] if 'true', the (first) selected item will always be positioned on bottom.
          *     @param {Boolean} [options.noFocus=false] if 'true', then the listitem won't get focussed.
          *     @param {Boolean} [options.showHeaders=false] if 'true', when the model is succeeded by headers, the headers will also get into view.
+         *     @param {Boolean} [options.editMode=false] if 'true', then Y.Plugin.ITSATabKeyManager will be used to ficus the first item.
+                                (only if noFocis=false)
          * @param {Int} [maxExpansions] Only needed when you use the plugin <b>ITSAInifiniteView</b>. Use this value to limit
          * external data-calls. It will prevent you from falling into endless expansion when the list is infinite. If not set this method will expand
          * from external data at the <b>max of 25 times by default</b> (which is quite a lot). If you are responsible for the external data and
@@ -64,6 +66,14 @@ Y.ITSAViewModellist = Y.Base.create('itsaviewmodellist', Y.Widget, [Y.ITSAModell
                 Y.log('scrollIntoView', 'info', 'Itsa-ViewModelList');
                 if (!options || !Lang.isBoolean(options.noFocus) || !options.noFocus) {
                     instance._focusModelNode(modelNode);
+                    if (Lang.isBoolean(options.editMode) && options.editMode) {
+                        Y.use('gallery-itsatabkeymanager', function(Y) {
+                            if (!modelNode.itsatabkeymanager) {
+                                modelNode.plug(Y.Plugin.ITSATabKeyManager);
+                            }
+                            modelNode.itsatabkeymanager.focusInitialItem();
+                        });
+                    }
                 }
                 if (showHeaders) {
                     prevNode = modelNode.previous();

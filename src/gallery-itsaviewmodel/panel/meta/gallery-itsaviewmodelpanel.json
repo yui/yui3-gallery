@@ -4,6 +4,7 @@
             "base-build",
             "classnamemanager",
             "pluginhost-base",
+            "model",
             "gallery-itsaviewmodel",
             "widget-autohide",
             "widget-buttons",

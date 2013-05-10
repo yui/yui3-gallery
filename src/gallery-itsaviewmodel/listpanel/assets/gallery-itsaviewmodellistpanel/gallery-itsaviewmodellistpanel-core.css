@@ -1,22 +1,78 @@
-.yui3-panel {
+.yui3-itsaviewmodellistpanel {
     position: absolute;
 }
-.yui3-panel-hidden {
+.yui3-itsaviewmodellistpanel.itsa-staticposition {
+    position: static;
+    display: inline-block;
+    *display: inline;
+}
+.yui3-itsaviewmodellistpanel-hidden {
     visibility: hidden;
 }
-.yui3-widget-tmp-forcesize .yui3-panel-content {
+.yui3-itsaviewmodellistpanel:focus {
+    outline: none;
+}
+.yui3-dd-draggable .yui3-widget-hd {
+    cursor: move;
+}
+.yui3-itsaviewmodellistpanel.itsa-modellistview-styled.itsa-modellistview-noitems td,
+.yui3-itsaviewmodellistpanel.itsa-modellistview-styled.itsa-modellistview-noitems li {
+    padding-top: 0px;
+}
+.yui3-skin-sam .yui3-itsaviewmodellistpanel.itsa-modellistview-styled.itsa-modellistview-noitems .yui3-widget-bd,
+.yui3-skin-sam .yui3-itsaviewmodellistpanel.itsa-modellistview-styled.itsa-modellistview-noinitialitems .yui3-widget-bd {
+    padding: 10px;
+}
+.yui3-dd-draggable .yui3-widget-hd .yui3-button {
+    cursor: pointer;
+}
+.yui3-widget-tmp-forcesize .yui3-itsaviewmodellistpanel-content {
     overflow: hidden !important;
 }
-.yui3-panel .yui3-widget-hd {
+.yui3-itsaviewmodellistpanel .yui3-widget-hd {
     position: relative;
 }
-.yui3-panel .yui3-widget-hd .yui3-widget-buttons {
+.yui3-itsaviewmodellistpanel .yui3-widget-hd .yui3-widget-buttons {
     position: absolute;
     top: 0;
     right: 0;
 }
-.yui3-panel .yui3-widget-ft .yui3-widget-buttons {
+.yui3-itsaviewmodellistpanel .yui3-widget-ft .yui3-widget-buttons {
     display: inline-block;
     *display: inline;
     zoom: 1;
+}
+
+.yui3-skin-sam .yui3-itsaviewmodellistpanel .yui3-widget-hd,
+.yui3-skin-sam .yui3-itsaviewmodellistpanel.itsa-modellistview-styled .yui3-widget-hd {
+    font-size: 16px;
+    line-height: 12px;
+    padding: 10px 12px 8px 8px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.yui3-skin-sam .yui3-itsaviewmodellistpanel .yui3-widget-ft,
+.yui3-skin-sam .yui3-itsaviewmodellistpanel.itsa-modellistview-styled .yui3-widget-ft {
+    background-color: #F5F4F1;
+    border-radius: 0 0 3px 3px;
+    border-top: 1px solid #EAE6DB;
+    padding: 2px;
+}
+
+.yui3-skin-sam .yui3-itsaviewmodel.yui3-itsaviewmodellistpanel,
+.yui3-skin-sam .yui3-itsaviewmodel.itsa-modellistview-styled.yui3-itsaviewmodellistpanel {
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton {
+    margin-left: 10px;
+}
+
+.yui3-itsaviewmodellistpanel td {
+    padding: 2px 6px;
+    vertical-align: top;
 }

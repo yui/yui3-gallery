@@ -40,6 +40,7 @@
 var Lang = Y.Lang,
     YArray = Y.Array,
     YTemplateMicro = Y.Template.Micro,
+    ERROR_MESSAGE_NOTEMPLATE = 'Error: template is undefined',
     MODELVIEW_STYLED = 'itsa-modelview-styled',
     MODELVIEW_STYLED_FORM = 'yui3-form',
     FORMELEMENT_CLASS = 'yui3-itsaformelement',
@@ -358,26 +359,30 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
             );
             eventhandlers.push(
                 view.after(
-                    'model:resetclick',
+                    '*:resetclick',
                     function(e) {
                         var model = e.target, // NOT e.currentTarget: that is the (scroll)View-instance (?)
                             options = {fromEditModel: true}; // set Attribute with option: '{fromEditModel: true}'
                                                              // --> now the view knows it must not re-render.
-                        model.setAttrs(instance._initialEditAttrs, options);
-                        view.render();
-                        if (itsatabkeymanager) {
-                            itsatabkeymanager.focusInitialItem();
+                        if (model instanceof Y.Model) {
+                            model.setAttrs(instance._initialEditAttrs, options);
+                            view.render();
+                            if (itsatabkeymanager) {
+                                itsatabkeymanager.focusInitialItem();
+                            }
                         }
                     }
                 )
             );
             eventhandlers.push(
                 view.after(
-                    'model:addclick',
+                    '*:addclick',
                     function(e) {
-                        var newModel = e.newModel;
-                        if (newModel) {
-                            instance.set('model', newModel);
+                        if (e.target instanceof Y.Model) {
+                            var newModel = e.newModel;
+                            if (newModel) {
+                                instance.set('model', newModel);
+                            }
                         }
                     }
                 )
@@ -464,22 +469,26 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
             );
             eventhandlers.push(
                 view.after(
-                    'model:change',
-                    function() {
-                        if (!instance.get('modelEditable') || !model.itsaeditmodel) {
-                            view.render(false);
-                        }
-                        else {
-                            view.get('container').all('.'+ITSAFORMELEMENT_CHANGED_CLASS).removeClass(ITSAFORMELEMENT_CHANGED_CLASS);
+                    '*:change',
+                    function(e) {
+                        if (e.target instanceof Y.Model) {
+                            if (!instance.get('modelEditable') || !model.itsaeditmodel) {
+                                view.render(false);
+                            }
+                            else {
+                                view.get('container').all('.'+ITSAFORMELEMENT_CHANGED_CLASS).removeClass(ITSAFORMELEMENT_CHANGED_CLASS);
+                            }
                         }
                     }
                 )
             );
             eventhandlers.push(
                 view.after(
-                    'model:destroy',
-                    function() {
-                        view.render(true);
+                    '*:destroy',
+                    function(e) {
+                        if (e.target instanceof Y.Model) {
+                            view.render(true);
+                        }
                     }
                 )
             );
@@ -784,7 +793,7 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
          * @since 0.1
          */
             template: {
-                value: '{clientId}',
+                value: ERROR_MESSAGE_NOTEMPLATE,
                 validator: function(v){ return Lang.isString(v); },
                 getter: function(v) {
                     // Because _textTemplate might exists in case of clear text instead of a model, we need to return the right template.

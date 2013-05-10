@@ -6,7 +6,8 @@
     background: white;
 }
 .yui3-skin-sam .yui3-itsaviewmodelpanel .yui3-widget-hd {
-    padding: 8px 28px 8px 8px;  /* Room for close button. */
+    line-height: 12px;
+    padding: 10px 28px 8px 8px;  /* Room for close button. */
     min-height: 13px;           /* For the close button */
     _height: 13px;              /* IE6 */
     color: white;
@@ -44,6 +45,16 @@
 }
 .yui3-skin-sam .yui3-itsaviewmodelpanel .yui3-widget-ft .yui3-button {
     margin-left: 8px;
+}
+.yui3-skin-sam .yui3-itsaviewmodelpanel .yui3-widget-hd .yui3-button {
+    margin-left: 4px;
+    margin-top: -4px;
+    padding: 0.2em 0.27em;
+}
+.yui3-skin-sam .yui3-itsaviewmodelpanel .yui3-widget-hd .yui3-button.yui3-button-close {
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-left: 10px;
 }
 
 /*
