@@ -313,7 +313,7 @@ Y.PjaxPlus = Y.Base.create('pjaxplus', Y.Widget, [], {
 
 
 
-}, 'gallery-2013.03.27-22-06', {
+}, 'gallery-2013.05.10-00-54', {
     "supersedes": [
         ""
     ],
