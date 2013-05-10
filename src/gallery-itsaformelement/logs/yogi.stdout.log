@@ -1,0 +1,107 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsaformelement
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-itsaformelement
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-itsaformelement/gallery-itsaformelement.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-itsaformelement
+shifter [info] found a subskin, shifting for gallery-itsaformelement
+shifter [queu] coverage file read, starting coverage for: gallery-itsaformelement/gallery-itsaformelement.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-itsaformelement/gallery-itsaformelement-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] Don't use adjoining classes.
+       .yui3-form .yui3-itsaformelement-date.yui3-itsaformelement-changed, // line 2, pos 12
+   #2: [warning] Don't use adjoining classes.
+       .yui3-form .yui3-itsaformelement-time.yui3-itsaformelement-changed, // line 3, pos 12
+   #3: [warning] Don't use adjoining classes.
+       .yui3-form .yui3-itsaformelement-datetime.yui3-itsaformelement-changed { // line 4, pos 12
+   #4: [warning] Don't use adjoining classes.
+       .yui3-itsaformelement-date.yui3-itsaformelement-changed, // line 8, pos 1
+   #5: [warning] Don't use adjoining classes.
+       .yui3-itsaformelement-time.yui3-itsaformelement-changed, // line 9, pos 1
+   #6: [warning] Don't use adjoining classes.
+       .yui3-itsaformelement-datetime.yui3-itsaformelement-changed { // line 10, pos 1
+   #7: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 20, pos 5
+   #8: [warning] Don't use adjoining classes.
+       .yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton { // line 41, pos 1
+   #9: [warning] Don't use adjoining classes.
+       .yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton { // line 41, pos 1
+   #10: [warning] Don't use adjoining classes.
+       .yui3-form .yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton { // line 45, pos 12
+   #11: [warning] Don't use adjoining classes.
+       .yui3-form .yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton { // line 45, pos 12
+   #12: [warning] Values of 0 shouldn't have units specified.
+       margin-left: 0px; // line 46, pos 18
+   #13: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .itsa-model-selected button:focus, // line 49, pos 1
+   #14: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .itsa-model-selected input:focus, // line 50, pos 1
+   #15: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .itsa-model-selected select:focus, // line 51, pos 1
+   #16: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .itsa-model-selected textarea.yui3-itsaformelement:focus, // line 52, pos 1
+   #17: [warning] Don't use adjoining classes.
+       .yui3-skin-sam .itsa-modellistview-styled.yui3-form .itsa-model-selected .itsa-button-datetime:focus, // line 53, pos 16
+   #18: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .itsa-model-selected button:focus, // line 54, pos 1
+   #19: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .itsa-model-selected input:focus, // line 55, pos 1
+   #20: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .itsa-model-selected select:focus, // line 56, pos 1
+   #21: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .itsa-model-selected textarea.yui3-itsaformelement:focus, // line 57, pos 1
+   #22: [warning] Don't use adjoining classes.
+       .yui3-skin-sam .itsa-modelview-styled.yui3-form .itsa-model-selected .itsa-button-datetime:focus { // line 58, pos 16
+   #23: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .yui3-button, // line 77, pos 1
+   #24: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .yui3-button { // line 78, pos 1
+   #25: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 92, pos 3
+   #26: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .yui3-widget-ft .yui3-button, // line 96, pos 1
+   #27: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .yui3-widget-ft .yui3-button { // line 97, pos 1
+   #28: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .yui3-button:focus, // line 102, pos 1
+   #29: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .yui3-button:focus { // line 103, pos 1
+   #30: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .yui3-button.disabled, // line 109, pos 1
+   #31: [warning] Don't use adjoining classes.
+       .itsa-modelview-styled.yui3-form .yui3-button.disabled, // line 109, pos 34
+   #32: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .yui3-button.disabled { // line 110, pos 1
+   #33: [warning] Don't use adjoining classes.
+       .itsa-modellistview-styled.yui3-form .yui3-button.disabled { // line 110, pos 38
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.274 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-itsaformelement]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallery-itsaformelement/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

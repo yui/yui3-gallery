@@ -1,0 +1,14 @@
+{
+    "gallery-itsaformelement": {
+        "requires": [
+            "yui-base",
+            "base",
+            "node-core",
+            "node-base",
+            "datatype-date-format",
+            "classnamemanager",
+            "cssbutton"
+        ],
+        "skinnable": true
+    }
+}

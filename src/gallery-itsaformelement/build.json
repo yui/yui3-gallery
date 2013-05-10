@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsaformelement",
+    "builds": {
+        "gallery-itsaformelement": {
+            "jsfiles": [
+                "js/gallery-itsaformelement.js"
+            ]
+        }
+    }
+}
