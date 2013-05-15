@@ -1,8 +1,0 @@
-{
-    "io-utils": {
-        "requires": [
-            "io-base",
-            "promise"
-        ]
-    }
-}
