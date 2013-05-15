@@ -1,0 +1,10 @@
+{
+	"name": "gallery-affix",
+	"builds": {
+		"gallery-affix": {
+			"jsfiles": [
+				"affix.js"
+			]
+		}
+	}
+}

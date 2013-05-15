@@ -1,0 +1,12 @@
+{
+	"gallery-affix": {
+		"requires": [
+			"node-base",
+            "node-screen",
+            "node-style",
+			"node-pluginhost",
+            "yui-throttle",
+            "oop"
+		]
+	}
+}
