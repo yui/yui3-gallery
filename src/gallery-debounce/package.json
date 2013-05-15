@@ -1,0 +1,30 @@
+{
+    "name": "gallery-debounce",
+    "version": "0.0.1",
+    "description": "YUI 3 debouncing utility",
+    "author": "Juan Ignacio Dopazo <dopazo.juan@gmail.com>",
+    "bugs": {
+        "url": "https://github.com/juandopazo/yui3-debounce/issues"
+    },
+    "engines": {
+        "node": ">=0.4.0"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "shifter": "0.3.3",
+        "grover": "0.1.14"
+    },
+    "scripts": {
+        "test": "shifter --build-dir ./build && grover --server --coverage tests/unit/*.html"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/juandopazo/yui3-debounce.git"
+    },
+    "licenses":[
+        {
+            "type" : "BSD",
+            "url" : "https://github.com/juandopazo/yui3-debounce/blob/master/LICENSE.md"
+        }
+    ]
+}

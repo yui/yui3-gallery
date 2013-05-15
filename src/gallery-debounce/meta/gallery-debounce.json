@@ -1,0 +1,7 @@
+{
+    "gallery-debounce": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}

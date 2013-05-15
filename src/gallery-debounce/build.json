@@ -1,0 +1,10 @@
+{
+    "name": "gallery-debounce",
+    "builds": {
+        "gallery-debounce": {
+            "jsfiles": [
+                "js/debounce.js"
+            ]
+        }
+    }
+}
