@@ -1,0 +1,30 @@
+{
+    "name": "gallery-io-utils",
+    "version": "0.0.1",
+    "description": "YUI 3 promise based IO utilities",
+    "author": "Juan Ignacio Dopazo <dopazo.juan@gmail.com>",
+    "bugs": {
+        "url": "https://github.com/juandopazo/yui3-io-utils/issues"
+    },
+    "engines": {
+        "node": ">=0.4.0"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "shifter": "0.3.3",
+        "grover": "0.1.14"
+    },
+    "scripts": {
+        "test": "shifter --build-dir ./build && grover --server tests/unit/index.html"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/juandopazo/yui3-io-utils.git"
+    },
+    "licenses":[
+        {
+            "type" : "BSD",
+            "url" : "https://github.com/juandopazo/yui3-io-utils/blob/master/LICENSE.md"
+        }
+    ]
+}

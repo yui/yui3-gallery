@@ -1,6 +1,8 @@
 YUI3 IO Utils
 =============
 
+![Travis Build Status](https://api.travis-ci.org/juandopazo/yui3-io-utils.png)
+
 Extra utilities for doing IO request using promises. Includes the following
 functions:
 
@@ -24,14 +26,16 @@ functions:
 * `Y.io.script`. Loads a script.
 * `Y.io.css`. Loads a CSS stylesheet.
 
-All these functions return a promise. See the API Docs for more details.
+All these functions return a promise. See [the API Docs](http://juandopazo.github.io/yui3-io-utils/api/classes/io.html) for more details.
 
 ### Example
 
 To start include the `gallery-io-utils` module.
 
 ```JavaScript
-YUI().use('gallery-io-utils', function (Y) {
+YUI({
+    gallery: 'gallery-2013.05.10-00-54'
+}).use('gallery-io-utils', function (Y) {
     
     Y.io.getJSON('/foo/bar').then(function (data) {
         console.log(data);
@@ -39,3 +43,8 @@ YUI().use('gallery-io-utils', function (Y) {
 
 });
 ```
+
+### Note to those using version 0.0.1
+
+Requirements are broken in this release. You can still use it by doing
+`YUI(...).use('io-base', 'promise', 'gallery-io-utils', ...)`.

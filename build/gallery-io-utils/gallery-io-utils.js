@@ -299,4 +299,4 @@ Y.Array.each(['get', 'post', 'put', 'delete'], function (verb) {
 });
 
 
-}, 'gallery-2013.05.10-00-54');
+}, 'gallery-2013.05.15-21-12', {"requires": ["io-base", "promise"]});

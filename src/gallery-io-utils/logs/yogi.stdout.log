@@ -9,6 +9,7 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-io-utils
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-io-utils/gallery-io-utils.js with UglifyJS
 shifter [queu] writing -min file
@@ -18,7 +19,7 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-io-utils/gallery-io-utils-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.154 seconds, pretty fast huh?
+shifter [info] finished in 0.092 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
@@ -29,14 +30,36 @@ shifter [info] finished in 0.154 seconds, pretty fast huh?
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [io-utils]: Passed: 15 Failed: 0 Total: 15 (ignored 0) (0.112 seconds)
+✖ [io-utils]: Passed: 0 Failed: 15 Total: 15 (ignored 0) (0.2 seconds)
+    simple XHR request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.xhr('echo/get?foo=bar')')
+    request timeout
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.xhr('delay/1', {timeout: 10})')
+    request failure
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.xhr('echo/status/404')')
+    GET HTTP request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.get('echo/get/?response=helloworld')')
+    POST HTTP request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.post('echo/post/?response=helloworld')')
+    PUT HTTP request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.put('echo/put/?response=helloworld')')
+    DELETE HTTP request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.DELETE('echo/delete/?response=helloworld')')
+    simple JSON request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.json('echo/get/?response={"foo":"bar"}')')
+    catching parse error
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.json('echo/get/?response=asdf')')
+    GET JSON request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.getJSON('echo/get/?response={"foo":"bar"}')')
+    POST JSON request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.postJSON('echo/post/?response={"foo":"bar"}')')
+    PUT JSON request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.putJSON('echo/put/?response={"foo":"bar"}')')
+    DELETE JSON request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.deleteJSON('echo/delete/?response={"foo":"bar"}')')
+    simple jsonp request
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.jsonp('echo/get/?response={callback}({"foo":"bar"})')')
+    jsonp request timeout
+       Unexpected error: 'undefined' is not a function (evaluating 'Y.io.jsonp('delay/1', {timeout: 50})')
 Writing files in JSON format to: /src/gallery-io-utils/logs/tests.json
-┌─────────┬─────────┬────────┬─────────────┬────────┐
-│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
-├─────────┼─────────┼────────┼─────────────┼────────┤
-│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
-└─────────┴─────────┴────────┴─────────────┴────────┘
-----------------------------------------------------------------
-✔ [Total]: Passed: 15 Failed: 0 Total: 15 (ignored 0) (0.112 seconds)
-  [Grover Execution Timer] 0.821 seconds
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

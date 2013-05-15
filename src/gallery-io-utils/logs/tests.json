@@ -1,167 +1,167 @@
 {
     "name": "io-utils",
-    "passed": 45,
-    "failed": 0,
+    "passed": 0,
+    "failed": 45,
     "errors": 0,
     "ignored": 0,
     "total": 45,
-    "duration": 336,
+    "duration": 600,
     "type": "report",
     "Y.io.xhr() tests": {
         "name": "Y.io.xhr() tests",
-        "passed": 3,
-        "failed": 0,
+        "passed": 0,
+        "failed": 3,
         "errors": 0,
         "ignored": 0,
         "total": 3,
-        "duration": 20,
+        "duration": 27,
         "type": "testcase",
         "simple XHR request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.xhr('echo/get?foo=bar')')",
             "type": "test",
             "name": "simple XHR request",
-            "duration": 7
+            "duration": 1
         },
         "request timeout": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.xhr('delay/1', {timeout: 10})')",
             "type": "test",
             "name": "request timeout",
-            "duration": 5
+            "duration": 3
         },
         "request failure": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.xhr('echo/status/404')')",
             "type": "test",
             "name": "request failure",
-            "duration": 3
+            "duration": 1
         }
     },
     "HTTP verbs": {
         "name": "HTTP verbs",
-        "passed": 4,
-        "failed": 0,
+        "passed": 0,
+        "failed": 4,
         "errors": 0,
         "ignored": 0,
         "total": 4,
-        "duration": 22,
+        "duration": 53,
         "type": "testcase",
         "GET HTTP request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.get('echo/get/?response=helloworld')')",
             "type": "test",
             "name": "GET HTTP request",
-            "duration": 4
+            "duration": 0
         },
         "POST HTTP request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.post('echo/post/?response=helloworld')')",
             "type": "test",
             "name": "POST HTTP request",
-            "duration": 5
+            "duration": 1
         },
         "PUT HTTP request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.put('echo/put/?response=helloworld')')",
             "type": "test",
             "name": "PUT HTTP request",
-            "duration": 4
+            "duration": 1
         },
         "DELETE HTTP request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.DELETE('echo/delete/?response=helloworld')')",
             "type": "test",
             "name": "DELETE HTTP request",
-            "duration": 4
+            "duration": 1
         }
     },
     "JSON requests": {
         "name": "JSON requests",
-        "passed": 2,
-        "failed": 0,
+        "passed": 0,
+        "failed": 2,
         "errors": 0,
         "ignored": 0,
         "total": 2,
-        "duration": 13,
+        "duration": 32,
         "type": "testcase",
         "simple JSON request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.json('echo/get/?response={\"foo\":\"bar\"}')')",
             "type": "test",
             "name": "simple JSON request",
-            "duration": 5
+            "duration": 1
         },
         "catching parse error": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.json('echo/get/?response=asdf')')",
             "type": "test",
             "name": "catching parse error",
-            "duration": 5
+            "duration": 1
         }
     },
     "HTTP verbs with JSON": {
         "name": "HTTP verbs with JSON",
-        "passed": 4,
-        "failed": 0,
+        "passed": 0,
+        "failed": 4,
         "errors": 0,
         "ignored": 0,
         "total": 4,
-        "duration": 34,
+        "duration": 53,
         "type": "testcase",
         "GET JSON request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.getJSON('echo/get/?response={\"foo\":\"bar\"}')')",
             "type": "test",
             "name": "GET JSON request",
-            "duration": 5
+            "duration": 1
         },
         "POST JSON request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.postJSON('echo/post/?response={\"foo\":\"bar\"}')')",
             "type": "test",
             "name": "POST JSON request",
-            "duration": 5
+            "duration": 0
         },
         "PUT JSON request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.putJSON('echo/put/?response={\"foo\":\"bar\"}')')",
             "type": "test",
             "name": "PUT JSON request",
-            "duration": 5
+            "duration": 1
         },
         "DELETE JSON request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.deleteJSON('echo/delete/?response={\"foo\":\"bar\"}')')",
             "type": "test",
             "name": "DELETE JSON request",
-            "duration": 5
+            "duration": 1
         }
     },
     "jsonp requests": {
         "name": "jsonp requests",
-        "passed": 2,
-        "failed": 0,
+        "passed": 0,
+        "failed": 2,
         "errors": 0,
         "ignored": 0,
         "total": 2,
-        "duration": 20,
+        "duration": 32,
         "type": "testcase",
         "simple jsonp request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.jsonp('echo/get/?response={callback}({\"foo\":\"bar\"})')')",
             "type": "test",
             "name": "simple jsonp request",
-            "duration": 4
+            "duration": 1
         },
         "jsonp request timeout": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.jsonp('delay/1', {timeout: 50})')",
             "type": "test",
             "name": "jsonp request timeout",
-            "duration": 4
+            "duration": 0
         }
     },
-    "timestamp": "Thu 09 May 2013 05:49:30 PM PDT",
+    "timestamp": "Wed 15 May 2013 02:22:33 PM PDT",
     "consoleInfo": []
 }
