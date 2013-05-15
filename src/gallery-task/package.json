@@ -1,0 +1,30 @@
+{
+    "name": "gallery-task",
+    "version": "0.0.1",
+    "description": "YUI 3 promise yielding generators",
+    "author": "Juan Ignacio Dopazo <dopazo.juan@gmail.com>",
+    "bugs": {
+        "url": "https://github.com/juandopazo/yui3-task/issues"
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "shifter": "0.3.3",
+        "grover": "0.1.14"
+    },
+    "scripts": {
+        "test": "shifter --build-dir ./build && grover --server tests/unit/*.html"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/juandopazo/yui3-task.git"
+    },
+    "licenses":[
+        {
+            "type" : "BSD",
+            "url" : "https://github.com/juandopazo/yui3-task/blob/master/LICENSE.md"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+{
+    "name": "gallery-task",
+    "builds": {
+        "gallery-task": {
+            "jsfiles": [
+                "js/task.js"
+            ]
+        }
+    }
+}
