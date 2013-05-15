@@ -1,0 +1,19 @@
+{
+    "name": "gallery-dd-momentum-plugin",
+    "builds": {
+        "gallery-dd-plugin-momentum": {
+            "config": {
+                "skinnable": "false",
+                "requires": [
+                    "dd",
+                    "plugin"
+                ]
+            },
+            "skinnable": "false",
+            "jsfiles": [
+                "gallery-dd-plugin-momentum.js"
+            ],
+            "meta": {}
+        }
+    }
+}

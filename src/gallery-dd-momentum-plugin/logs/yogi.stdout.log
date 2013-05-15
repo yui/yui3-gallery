@@ -1,0 +1,44 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-dd-momentum-plugin
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [warn] no build.json file, downshifting to convert ant files
+shifter [info] looking for ant files
+shifter [info] found 1 .properties files, upshifting to convert
+shifter [info] parsing build.properties
+shifter [info] saving newly parsed build.json file for gallery-dd-momentum-plugin
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-dd-plugin-momentum
+   #1: Line too long.
+       return window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) { // line 21, pos 197
+   #2: Trailing whitespace.
+       // bail if the user stopped moving the mouse more // line 147, pos 62
+   #3: 'config' is defined but never used.
+       function DDMomentumPlugin(config) { // line 7, pos 37
+   #4: 'element' is defined but never used.
+       return window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) { // line 21, pos 195
+   #5: 'startVelocity' is defined but never used.
+       var startVelocity = []; // line 137, pos 30
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-dd-plugin-momentum/gallery-dd-plugin-momentum.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-dd-plugin-momentum
+shifter [queu] coverage file read, starting coverage for: gallery-dd-plugin-momentum/gallery-dd-plugin-momentum.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-dd-plugin-momentum/gallery-dd-plugin-momentum-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.158 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)
