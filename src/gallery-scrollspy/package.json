@@ -1,0 +1,30 @@
+{
+    "name": "gallery-scrollspy",
+    "version": "0.0.1",
+    "description": "A Bootstrap-inspired ScrollSpy plugin for YUI",
+    "author": "Juan Ignacio Dopazo <dopazo.juan@gmail.com>",
+    "bugs": {
+        "url": "https://github.com/juandopazo/yui3-scrollspy/issues"
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "shifter": "0.3.3",
+        "grover": "0.1.14"
+    },
+    "scripts": {
+        "test": "shifter --build-dir ./build && grover --server tests/unit/*.html"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/juandopazo/yui3-scrollspy.git"
+    },
+    "licenses":[
+        {
+            "type" : "BSD",
+            "url" : "https://github.com/juandopazo/yui3-scrollspy/blob/master/LICENSE.md"
+        }
+    ]
+}

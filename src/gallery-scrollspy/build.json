@@ -1,0 +1,10 @@
+{
+    "name": "gallery-scrollspy",
+    "builds": {
+        "gallery-scrollspy": {
+            "jsfiles": [
+                "js/scrollspy.js"
+            ]
+        }
+    }
+}

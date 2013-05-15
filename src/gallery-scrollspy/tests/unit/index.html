@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge;">
+    <title>ScrollSpy test</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/combo?3.9.1/build/cssnormalize/cssnormalize-min.css&amp;gallery-2013.03.27-22-06/build/gallerycss-csslist/gallerycss-csslist-min.css">
+    <style>
+body {
+    margin: 0;
+    padding: 0;
+}
+.sidebar {
+    position: fixed;
+    width: 300px;
+}
+.content {
+    margin-left: 320px;
+    width: 500px;
+}
+
+.yui3-menu li a:hover {
+    background: #f5f5f5;
+    color: #777;
+}
+.yui3-menu-active a,
+.yui3-menu-active a:hover {
+    background: #46b9e3;
+    color: #fff;
+}
+
+#logger {
+    position: absolute;
+    position: fixed;
+    z-index: 2;
+    background: white;
+    right: 0;
+}
+    </style>
+    <script src="http://yui.yahooapis.com/3.10.0/build/yui/yui-min.js"></script>
+    <script src="js/tests.js"></script>
+</head>
+<body class="yui3-skin-sam">
+    <div id="logger"></div>
+    <div class="sidebar">
+        <div id="vertical-menu1" class="yui3-menu yui3-menu-open">
+            <ul>
+                <li class="yui3-menu-heading">Menu Items</li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#flickr">Flickr</a></li>
+                <li><a href="#messenger">Messenger</a></li>
+                <li><a href="#sports">Sports</a></li>
+                <li><a href="#finance">Finance</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <h2 id="home">Home</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras viverra est et urna lacinia rutrum. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean non metus nibh, rhoncus blandit massa. Morbi malesuada urna quis tellus iaculis consectetur. Nullam ac blandit est. Nullam ornare gravida varius. Etiam consequat sem purus. Cras scelerisque pharetra scelerisque. Quisque volutpat felis ac dolor convallis et tempor eros vulputate. Ut mattis interdum viverra. Fusce placerat libero sapien, at aliquet libero. Nunc vehicula sapien eu massa euismod faucibus. Mauris a ipsum metus. Donec ultrices cursus condimentum. Aliquam accumsan sagittis blandit.</p>
+
+        <p>Nulla facilisi. Nulla facilisi. Phasellus dapibus sapien eget sem convallis adipiscing. Suspendisse sit amet dolor nec augue pellentesque ultricies. Etiam non velit id nunc tincidunt vehicula. Nunc sed interdum nisl. Cras arcu enim, pharetra in sodales nec, mattis non nulla. Proin eu felis nibh. Integer lectus urna, molestie in egestas et, iaculis posuere elit. Donec libero urna, tristique in adipiscing quis, elementum ut enim.</p>
+        <h2 id="flickr">Flickr</h2>
+        <p>In pellentesque euismod nulla, eu feugiat dolor consequat quis. Quisque orci enim, iaculis id blandit quis, condimentum a sapien. Mauris eu est nibh. Donec luctus elementum diam. Duis orci ante, suscipit id venenatis non, lacinia quis velit. Nulla et purus non dui porttitor tincidunt quis quis diam. Nunc dictum semper consequat. In sodales tortor nec justo fringilla et scelerisque mauris porttitor. Aliquam id ornare mauris. Suspendisse quam orci, blandit vel placerat ac, pellentesque nec elit. Suspendisse ultrices, arcu ac blandit porttitor, mauris ipsum luctus nulla, quis ullamcorper ligula urna sed augue. Quisque molestie rhoncus turpis. Phasellus vel massa ipsum. Nulla luctus mauris eget est auctor vulputate. Fusce lacinia facilisis mauris id pulvinar.</p>
+
+        <p>Aenean sollicitudin lacinia ullamcorper. Nullam lectus ligula, elementum et semper a, porta in elit. Morbi vitae turpis diam. Aenean pretium, diam eu fermentum porttitor, urna odio pulvinar tellus, ut posuere lectus metus id tellus. Aliquam quis ante risus. Sed enim felis, lacinia in porta eget, suscipit vitae sapien. Aliquam vehicula augue id tellus semper quis ultricies elit fringilla. Nam elementum, orci at rhoncus ultricies, ipsum mi tristique nisi, sit amet pretium nisl nulla in ipsum. Proin sollicitudin, turpis sit amet tempor adipiscing, felis nunc posuere est, ut lacinia risus nunc et sem. Maecenas eu blandit sem. Aenean vitae suscipit lorem. Ut ac ultrices felis. Integer consequat tristique rhoncus.</p>
+        <h2 id="messenger">Messenger</h2>
+        <p>Ut lectus sapien, bibendum vel commodo non, iaculis et turpis. Pellentesque dignissim, lectus ut mollis laoreet, lorem ante pulvinar enim, at mattis magna ligula vel urna. Integer nunc leo, convallis eu rhoncus eget, mattis nec velit. Morbi quis metus in metus posuere vestibulum. Donec ut arcu magna. Nulla cursus faucibus nisl ut dignissim. Etiam quis faucibus est. Aenean elementum justo a neque porttitor egestas. Mauris elit tortor, elementum a vestibulum id, tempor semper ligula. Nunc vel libero facilisis risus viverra rhoncus. Mauris risus risus, pharetra vel imperdiet et, commodo et nisl. Mauris sed mattis massa. Vivamus diam lectus, venenatis posuere pretium in, tempus eget arcu. Maecenas at justo et turpis blandit molestie.</p>
+
+        <p>Sed ultrices mattis lacus, quis interdum eros sagittis at. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nam imperdiet, elit ut elementum placerat, dolor velit mattis turpis, at ornare justo justo tristique nisi. Curabitur porta egestas magna at blandit. Pellentesque eget quam nisl, ut aliquet ipsum. Integer sit amet enim metus. Sed eget nisl enim, eu blandit ligula. Cras a auctor turpis. Donec non risus urna, et ornare ligula.</p>
+        <h2 id="sports">Sports</h2>
+        <p>Quisque faucibus pretium libero, dapibus gravida metus euismod ut. Sed semper dolor eu nulla aliquet eleifend. In euismod sollicitudin turpis et vehicula. Sed ultricies, diam id fringilla laoreet, turpis urna dictum mauris, id dignissim enim augue luctus libero. Sed in nisi ac sapien luctus tincidunt id quis lectus. Sed ornare placerat malesuada. In in ullamcorper arcu. Vestibulum ligula arcu, tincidunt eget vestibulum nec, ullamcorper in nibh. Ut tristique pretium erat. Donec sit amet metus sed justo tincidunt bibendum sit amet ac turpis. Ut dictum lectus nunc, quis luctus velit. Nulla facilisi. Etiam elementum ante ac augue condimentum gravida. Fusce vitae velit luctus dui posuere iaculis. Nam eros purus, mollis varius viverra eu, accumsan sed tellus.</p>
+
+        <p>Donec laoreet tempus ligula dictum mattis. Vivamus cursus tellus vel nisl faucibus egestas. Sed justo purus, sagittis tincidunt vulputate ut, placerat eu libero. Praesent vehicula justo nulla. Integer sit amet odio nec lectus scelerisque convallis. Nunc consequat commodo velit, id gravida dolor accumsan et. Vivamus fringilla mi id dolor varius a varius lectus pretium. Phasellus volutpat erat vitae mauris volutpat consequat. Praesent vulputate suscipit sapien, et dapibus lectus commodo nec. Phasellus ipsum elit, euismod vitae iaculis id, pellentesque ut est. Integer ac eros sit amet purus rutrum posuere. Quisque purus ante, gravida at commodo eu, vestibulum id tellus. Suspendisse at nisl est.</p>
+        <h2 id="finance">Finance</h2>
+        <p>Suspendisse sed eros justo. Sed nec urna ac odio ultrices venenatis vel sagittis tellus. Ut posuere egestas vestibulum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas auctor commodo arcu, a ultricies magna tristique quis. Pellentesque libero est, accumsan ac porta vitae, scelerisque eget turpis. Curabitur fringilla ante et mauris tincidunt tempor sed non purus. Quisque sed tellus mi, id scelerisque ante. Mauris lacinia iaculis eros et ultrices. Vivamus sit amet dui eu diam suscipit dapibus non dignissim enim.</p>
+
+        <p>Nam molestie, lectus sed faucibus pulvinar, lectus risus ullamcorper arcu, eu ornare odio arcu id sapien. Suspendisse potenti. Sed vel quam justo. Etiam quam arcu, aliquet eu euismod eget, rhoncus non massa. Proin aliquet arcu non est facilisis at volutpat felis volutpat. Vestibulum pretium nibh eu ante fringilla rhoncus. Pellentesque commodo ipsum et quam accumsan in pulvinar ipsum pellentesque. Nulla eget odio ligula. Nunc lobortis, augue nec rhoncus ultrices, urna erat luctus quam, ac feugiat ligula est a nisi. Nunc egestas pulvinar nisi.</p>
+    </div>
+<script>
+YUI({
+    coverage: ['gallery-scrollspy'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    modules: {
+        'gallery-scrollspy': {
+            fullpath: '../../build/gallery-scrollspy/gallery-scrollspy-min.js',
+            requires: [
+                'node-scroll-info',
+                'classnamemanager'
+            ]
+        }
+    }
+}).use('test-console', 'test', 'gallery-scrollspy', 'scrollspy-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('scrollspy');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

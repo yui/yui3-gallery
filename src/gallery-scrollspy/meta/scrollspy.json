@@ -1,0 +1,8 @@
+{
+    "gallery-scrollspy": {
+        "requires": [
+            "node-scroll-info",
+            "classnamemanager"
+        ]
+    }
+}
