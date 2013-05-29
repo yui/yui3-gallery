@@ -7,9 +7,7 @@
             "node-base",
             "json-parse",
             "promise",
-            "model",
-            "model-list",
-            "yui-later"
+            "model"
         ]
     }
 }

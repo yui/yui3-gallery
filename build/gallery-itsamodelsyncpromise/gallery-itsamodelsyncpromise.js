@@ -86,6 +86,7 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
     };
 
     // -- Mixing extra Methods to Y.Model -----------------------------------
+
     function ITSAModelSyncPromise() {}
     Y.mix(ITSAModelSyncPromise.prototype, {
        /**
@@ -105,33 +106,33 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
          * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
         **/
         submitPromise: function(options) {
+            var instance = this;
+
             options = options || {};
-            var instance = this,
-                submitpromise = new Y.Promise(function (resolve, reject) {
-                    instance.sync('submit', options, function (err, response) {
-                        var facade = {
-                                options : options,
-                                response: response
-                            };
-                        if (err) {
-                            facade.error = err;
-                            facade.src   = 'submit';
-                            instance.fire(EVT_ERROR, facade);
-                            reject(new Error(err));
+            return new Y.Promise(function (resolve, reject) {
+                instance.sync('submit', options, function (err, response) {
+                    var facade = {
+                            options : options,
+                            response: response
+                        };
+                    if (err) {
+                        facade.error = err;
+                        facade.src   = 'submit';
+                        instance.fire(EVT_ERROR, facade);
+                        reject(new Error(err));
+                    }
+                    else {
+                        // Lazy publish.
+                        if (!instance._submitEvent) {
+                            instance._submitEvent = instance.publish(EVT_SUBMIT, {
+                                preventable: false
+                            });
                         }
-                        else {
-                            // Lazy publish.
-                            if (!instance._submitEvent) {
-                                instance._submitEvent = instance.publish(EVT_SUBMIT, {
-                                    preventable: false
-                                });
-                            }
-                            instance.fire(EVT_SUBMIT, facade);
-                            resolve(response, options);
-                        }
-                    });
+                        instance.fire(EVT_SUBMIT, facade);
+                        resolve(response, options);
+                    }
                 });
-            return submitpromise;
+            });
         },
 
 
@@ -153,37 +154,37 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
          * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
         **/
         loadPromise: function (options) {
+            var instance = this;
+
             options = options || {};
-            var instance = this,
-                loadpromise = new Y.Promise(function (resolve, reject) {
-                    instance.sync('read', options, function (err, response) {
-                        var parsed,
-                            facade = {
-                                options : options,
-                                response: response
-                            };
-                        if (err) {
-                            facade.error = err;
-                            facade.src   = 'load';
-                            instance.fire(EVT_ERROR, facade);
-                            reject(new Error(err));
+            return new Y.Promise(function (resolve, reject) {
+                instance.sync('read', options, function (err, response) {
+                    var parsed,
+                        facade = {
+                            options : options,
+                            response: response
+                        };
+                    if (err) {
+                        facade.error = err;
+                        facade.src   = 'load';
+                        instance.fire(EVT_ERROR, facade);
+                        reject(new Error(err));
+                    }
+                    else {
+                        // Lazy publish.
+                        if (!instance._loadEvent) {
+                            instance._loadEvent = instance.publish(EVT_LOAD, {
+                                preventable: false
+                            });
                         }
-                        else {
-                            // Lazy publish.
-                            if (!instance._loadEvent) {
-                                instance._loadEvent = instance.publish(EVT_LOAD, {
-                                    preventable: false
-                                });
-                            }
-                            parsed = facade.parsed = PARSED(response);
-                            instance.setAttrs(parsed, options);
-                            instance.changed = {};
-                            instance.fire(EVT_LOAD, facade);
-                            resolve(response, options);
-                        }
-                    });
+                        parsed = facade.parsed = PARSED(response);
+                        instance.setAttrs(parsed, options);
+                        instance.changed = {};
+                        instance.fire(EVT_LOAD, facade);
+                        resolve(response, options);
+                    }
                 });
-            return loadpromise;
+            });
         },
 
        /**
@@ -206,47 +207,47 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
          * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
         **/
         savePromise: function (options) {
+            var instance = this;
+
             options = options || {};
-            var instance = this,
-                savepromise = new Y.Promise(function (resolve, reject) {
-                    var facade = {
-                            options : options,
-                            src     :'save'
-                        };
-                    instance._validate(instance.toJSON(), function (validateErr) {
-                        if (validateErr) {
-                            facade.error = validateErr;
-                            instance.fire(EVT_ERROR, facade);
-                            reject(new Error(validateErr));
-                        }
-                        else {
-                            instance.sync(instance.isNew() ? 'create' : 'update', options, function (err, response) {
-                                var parsed;
-                                facade.response = response;
-                                if (err) {
-                                    facade.error = err;
-                                    facade.src   = 'save';
-                                    instance.fire(EVT_ERROR, facade);
-                                    reject(new Error(err));
+            return new Y.Promise(function (resolve, reject) {
+                var facade = {
+                        options : options,
+                        src     :'save'
+                    };
+                instance._validate(instance.toJSON(), function (validateErr) {
+                    if (validateErr) {
+                        facade.error = validateErr;
+                        instance.fire(EVT_ERROR, facade);
+                        reject(new Error(validateErr));
+                    }
+                    else {
+                        instance.sync(instance.isNew() ? 'create' : 'update', options, function (err, response) {
+                            var parsed;
+                            facade.response = response;
+                            if (err) {
+                                facade.error = err;
+                                facade.src   = 'save';
+                                instance.fire(EVT_ERROR, facade);
+                                reject(new Error(err));
+                            }
+                            else {
+                                // Lazy publish.
+                                if (!instance._saveEvent) {
+                                    instance._saveEvent = instance.publish(EVT_SAVE, {
+                                        preventable: false
+                                    });
                                 }
-                                else {
-                                    // Lazy publish.
-                                    if (!instance._saveEvent) {
-                                        instance._saveEvent = instance.publish(EVT_SAVE, {
-                                            preventable: false
-                                        });
-                                    }
-                                    parsed = facade.parsed = PARSED(response);
-                                    instance.setAttrs(parsed, options);
-                                    instance.changed = {};
-                                    instance.fire(EVT_SAVE, facade);
-                                    resolve(response, options);
-                                }
-                            });
-                        }
-                    });
+                                parsed = facade.parsed = PARSED(response);
+                                instance.setAttrs(parsed, options);
+                                instance.changed = {};
+                                instance.fire(EVT_SAVE, facade);
+                                resolve(response, options);
+                            }
+                        });
+                    }
                 });
-            return savepromise;
+            });
         },
 
       /**
@@ -267,134 +268,49 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
          * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
         **/
         destroyPromise: function (options) {
+            var instance = this;
+
             options = options || {};
-            var instance = this,
-                destroypromise = new Y.Promise(function (resolve, reject) {
-                    instance.onceAfter('destroy', function () {
-                        function finish() {
-                            YArray.each(instance.lists.concat(), function (list) {
-                                list.remove(instance, options);
-                            });
-                        }
-                        if (options.remove || options['delete']) {
-                            instance.sync('delete', options, function (err) {
-                                if (err) {
-                                    var facade = {
-                                        error   : err,
-                                        src     : 'destroy',
-                                        options : options
-                                    };
-                                    instance.fire(EVT_ERROR, facade);
-                                    reject(new Error(err));
-                                }
-                                else {
-                                    finish();
-                                    resolve(options);
-                                }
-                            });
-                        } else {
-                            finish();
-                            resolve(options);
-                        }
-                    });
+            return new Y.Promise(function (resolve, reject) {
+                instance.onceAfter('destroy', function () {
+                    function finish() {
+                        YArray.each(instance.lists.concat(), function (list) {
+                            list.remove(instance, options);
+                        });
+                    }
+                    if (options.remove || options['delete']) {
+                        instance.sync('delete', options, function (err) {
+                            if (err) {
+                                var facade = {
+                                    error   : err,
+                                    src     : 'destroy',
+                                    options : options
+                                };
+                                instance.fire(EVT_ERROR, facade);
+                                reject(new Error(err));
+                            }
+                            else {
+                                finish();
+                                resolve(options);
+                            }
+                        });
+                    } else {
+                        finish();
+                        resolve(options);
+                    }
                 });
-            Y.Model.superclass.destroy.call(instance);
-            return destroypromise;
+            }).then(
+                function() {
+                    // if succeeded, destroy the Model's instance
+                    Y.Model.superclass.destroy.call(instance);
+                }
+            );
         }
 
     }, true);
+
     Y.ITSAModelSyncPromise = ITSAModelSyncPromise;
+
     Y.Base.mix(Y.Model, [ITSAModelSyncPromise]);
 
-    //==============================================================================
-
-/**
- *
- * Extention ITSAModelSyncPromise
- *
- *
- * Extends Y.ModelList with Promised sync-methods. The synclayer can be made just as usual. But instead of calling
- * Model.loadyou can use:
- *
- * <b>Model.loadPromise</b>
- *
- * @module gallery-itsamodelsyncpromise
- * @extends ModelList
- * @class ITSAModellistSyncPromise
- * @constructor
- * @since 0.1
- *
- * <i>Copyright (c) 2013 Marco Asbreuk - http://itsasbreuk.nl</i>
- * YUI BSD License - http://developer.yahoo.com/yui/license.html
- *
-*/
-    // -- Mixing extra Methods to Y.Model -----------------------------------
-    function ITSAModellistSyncPromise() {}
-    Y.mix(ITSAModellistSyncPromise.prototype, {
-        /**
-         * Loads models from the server and adds them into the ModelList
-         *
-         * This method delegates to the `sync()` method to perform the actual load
-         * operation, which is an asynchronous action. Specify a _callback_ function to
-         * be notified of success or failure.
-         *
-         * A successful load operation will fire a `load` event, while an unsuccessful
-         * load operation will fire an `error` event with the `src` value "load".
-         *
-         * If the load operation succeeds and one or more of the loaded attributes
-         * differ from this model's current attributes, a `change` event will be fired.
-         *
-         * @method loadPromise
-         * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
-         *                 implementation to determine what options it supports or requires, if any.
-         * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
-        **/
-        loadPromise: function (options) {
-            options = options || {};
-            var instance = this,
-                loadpromise = new Y.Promise(function (resolve, reject) {
-                    instance.sync('read', options, function (err, response) {
-                        var parsed,
-                            facade = {
-                                options : options,
-                                response: response
-                            };
-                        if (err) {
-                            facade.error = err;
-                            facade.src   = 'load';
-                            instance.fire(EVT_ERROR, facade);
-                            reject(new Error(err));
-                        }
-                        else {
-                            // Lazy publish.
-                            if (!instance._loadEvent) {
-                                instance._loadEvent = instance.publish(EVT_LOAD, {
-                                    preventable: false
-                                });
-                            }
-                            parsed = facade.parsed = PARSED(response);
-                            instance.reset(parsed, options);
-                            instance.fire(EVT_LOAD, facade);
-                            resolve(response, options);
-                        }
-                    });
-                });
-            return loadpromise;
-        }
-    }, true);
-    Y.ITSAModellistSyncPromise = ITSAModellistSyncPromise;
-    Y.Base.mix(Y.ModelList, [ITSAModellistSyncPromise]);
-
-}, 'gallery-2013.05.10-00-54', {
-    "requires": [
-        "yui-base",
-        "base-base",
-        "base-build",
-        "node-base",
-        "json-parse",
-        "promise",
-        "model",
-        "model-list",
-        "yui-later"
-    ]
-});
+}, 'gallery-2013.05.29-23-38', {"requires": ["yui-base", "base-base", "base-build", "node-base", "json-parse", "promise", "model"]});

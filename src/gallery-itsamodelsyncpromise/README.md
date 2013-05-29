@@ -2,10 +2,7 @@ gallery-itsamodelsyncpromise
 ============================
 
 
-This module comes with 2 extentions:
-
-
-#### Extention Y.ITSAModelSyncPromise
+This module comes with the extention Y.ITSAModelSyncPromise
 
 Extends Y.Model with Promised sync-methods. The synclayer can be made just as usual. But instead of calling
 Model.load and Model.save and Model.destroy, you can use:
@@ -14,14 +11,6 @@ Model.load and Model.save and Model.destroy, you can use:
 * Model.<b>savePromise()</b>
 * Model.<b>submitPromise()</b>
 * Model.<b>destroyPromise()</b>
-
-
-#### Extention Y.ITSAModellistSyncPromise
-
-Extends Y.ModelList with Promised sync-methods. The synclayer can be made just as usual. But instead of calling
-ModelList.load you can use:
-
-* ModelList.<b>loadPromise()</b>
 
 
 All methods return Promises.
@@ -43,7 +32,7 @@ YUI().use('model', 'gallery-itsamodelsyncpromise', 'base-build', function(Y) {
 
     var piemodel;
     Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
-      // ... create Y.PieModel just as the example on http://yuilibrary.com/yui/docs/model/#the-sync-method specifies ...
+        // ... create Y.PieModel just as the example on http://yuilibrary.com/yui/docs/model/#the-sync-method specifies ...
     });
     piemodel = new Y.PieModel({...});
 
