@@ -171,6 +171,7 @@ YUI().use('model', 'base-build', 'gallery-itsaviewmodelpanel', 'gallery-itsaedit
         template: modeltemplate,
         model: model,
         modelEditable: true,
+        actionAfterSave: 1,  // <-- will cause the panel to close after save
         newModelClass: Y.MyModel,
         buttons: ['close', 'reset', 'add', 'save']
     });

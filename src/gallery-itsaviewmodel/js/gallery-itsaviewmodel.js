@@ -620,6 +620,13 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
             if (itsaDateTimePicker && itsaDateTimePicker.panel.get('visible')) {
                 itsaDateTimePicker.hide(true);
             }
+            /**
+            * Fired when the view is rendered
+            *
+            * @event viewrendered
+            * @since 0.2
+            */
+            instance.fire('viewrendered')
             return instance;
         },
 

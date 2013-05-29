@@ -607,6 +607,13 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
             if (itsaDateTimePicker && itsaDateTimePicker.panel.get('visible')) {
                 itsaDateTimePicker.hide(true);
             }
+            /**
+            * Fired when the view is rendered
+            *
+            * @event viewrendered
+            * @since 0.2
+            */
+            instance.fire('viewrendered')
             return instance;
         },
 
@@ -791,7 +798,7 @@ Y.ITSAViewModel = Y.Base.create('itsaviewmodel', Y.Widget, [], {
     }
 );
 
-}, 'gallery-2013.05.10-00-54', {
+}, 'gallery-2013.05.29-23-38', {
     "requires": [
         "base-build",
         "widget",
