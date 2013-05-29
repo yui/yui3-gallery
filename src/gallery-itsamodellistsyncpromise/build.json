@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsamodellistsyncpromise",
+    "builds": {
+        "gallery-itsamodellistsyncpromise": {
+            "jsfiles": [
+                "js/gallery-itsamodellistsyncpromise.js"
+            ]
+        }
+    }
+}

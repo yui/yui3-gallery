@@ -1,0 +1,15 @@
+{
+    "gallery-itsamodellistsyncpromise": {
+        "requires": [
+            "yui-base",
+            "base-base",
+            "base-build",
+            "node-base",
+            "json-parse",
+            "promise",
+            "model",
+            "model-list",
+            "gallery-itsamodelsyncpromise"
+        ]
+    }
+}
