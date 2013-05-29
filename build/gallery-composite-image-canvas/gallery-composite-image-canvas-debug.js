@@ -300,7 +300,7 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
 
             return me.eachPixelIndex(function (pixelIndex) {
                 _each(channels, function (channelDataType, channelIndex) {
-                    me.setValue(pixelIndex, channelIndex, me._convertFromU8(data[pixelIndex * channelCount + channelIndex], channelDataType));
+                    me._setValue(pixelIndex, channelIndex, me._convertFromU8(data[pixelIndex * channelCount + channelIndex], channelDataType));
                 });
             });
         };
@@ -358,7 +358,7 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
 
             me.eachPixelIndex(function (pixelIndex) {
                 _each(channels, function (channelDataType, channelIndex) {
-                    data[pixelIndex * channelCount + channelIndex] = me._convertToU8(me.getValue(pixelIndex, channelIndex), channelDataType);
+                    data[pixelIndex * channelCount + channelIndex] = me._convertToU8(me._getValue(pixelIndex, channelIndex), channelDataType);
                 });
             });
 
@@ -367,4 +367,4 @@ YUI.add('gallery-composite-image-canvas', function (Y, NAME) {
     });
 }(Y));
 
-}, 'gallery-2013.05.02-22-59', {"requires": ["gallery-composite-image", "node-base"]});
+}, 'gallery-2013.05.29-23-38', {"requires": ["gallery-composite-image", "node-base"]});

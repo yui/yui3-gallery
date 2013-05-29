@@ -298,7 +298,7 @@
 
             return me.eachPixelIndex(function (pixelIndex) {
                 _each(channels, function (channelDataType, channelIndex) {
-                    me.setValue(pixelIndex, channelIndex, me._convertFromU8(data[pixelIndex * channelCount + channelIndex], channelDataType));
+                    me._setValue(pixelIndex, channelIndex, me._convertFromU8(data[pixelIndex * channelCount + channelIndex], channelDataType));
                 });
             });
         };
@@ -356,7 +356,7 @@
 
             me.eachPixelIndex(function (pixelIndex) {
                 _each(channels, function (channelDataType, channelIndex) {
-                    data[pixelIndex * channelCount + channelIndex] = me._convertToU8(me.getValue(pixelIndex, channelIndex), channelDataType);
+                    data[pixelIndex * channelCount + channelIndex] = me._convertToU8(me._getValue(pixelIndex, channelIndex), channelDataType);
                 });
             });
 

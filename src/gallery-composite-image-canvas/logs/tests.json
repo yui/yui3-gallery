@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 24,
     "total": 24,
-    "duration": 255,
+    "duration": 231,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 8,
         "total": 8,
-        "duration": 80,
+        "duration": 75,
         "type": "testcase",
         "test:001-apiExists": {
             "result": "ignore",
@@ -65,6 +65,6 @@
             "name": "test:008-toCanvas"
         }
     },
-    "timestamp": "Thu May  2 15:59:49 2013",
+    "timestamp": "Wed 29 May 2013 04:31:21 PM PDT",
     "consoleInfo": []
 }
