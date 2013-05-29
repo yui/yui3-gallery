@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-apa": {
+            "jsfiles": [
+                "js/apa.js"
+            ]
+        }
+    },
+    "name": "gallery-apa"
+}

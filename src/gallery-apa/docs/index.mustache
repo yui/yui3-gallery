@@ -1,0 +1,61 @@
+<div class="intro">
+    <p>
+        This is an arbitrary precision arithmetic module.  It uses plain String
+        values to represent numbers and it supports these functions:
+    </p>
+    <ul>
+        <li>
+            String absoluteValue(String)
+        </li>
+        <li>
+            String add(String, String)
+        </li>
+        <li>
+            Boolean isEqualTo(String, String)
+        </li>
+        <li>
+            Boolean isGreaterThan(String, String)
+        </li>
+        <li>
+            Boolean isGreaterThanOrEqualTo(String, String)
+        </li>
+        <li>
+            Boolean isLessThan(String, String)
+        </li>
+        <li>
+            Boolean isLessThanOrEqualTo(String, String)
+        </li>
+        <li>
+            Boolean isNegative(String)
+        </li>
+        <li>
+            Boolean isPositive(String)
+        </li>
+        <li>
+            String multiply(String, String)
+        </li>
+        <li>
+            String subtract(String, String)
+        </li>
+    </ul>
+    <p>
+        and there are more to come.  This module is brand new and incomplete.
+        While there are a large number of unit tests, I would recommend
+        performing more testing before trusting this module with your important
+        calculations.  Please report any arithmetic inaccuracies in an
+        <a href="https://github.com/solmsted/yui3-gallery-2/issues">
+            issue on GitHub
+        </a>.
+    </p>
+</div>
+
+{{>getting-started}}
+
+```
+YUI().use('gallery-apa', function (Y) {
+    var apa = new Y.Apa(),
+        
+        arbitraryPrecisionResult = apa.add('.1', '.2'), // '0.3'
+        floatingPointResult = .1 + .2; // 0.30000000000000004
+});
+```

@@ -1,0 +1,134 @@
+{
+    "name": "gallery-apa",
+    "passed": 0,
+    "failed": 48,
+    "errors": 0,
+    "ignored": 0,
+    "total": 48,
+    "duration": 1485,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 16,
+        "errors": 0,
+        "ignored": 0,
+        "total": 16,
+        "duration": 493,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "fail",
+            "message": "Y.Apa should be a function.\nUnexpected: undefined (undefined) ",
+            "type": "test",
+            "name": "test:001-apiExists",
+            "duration": 3
+        },
+        "test:002-normalize": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:002-normalize",
+            "duration": 5
+        },
+        "test:003-absoluteValue": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:003-absoluteValue",
+            "duration": 4
+        },
+        "test:004-isEqualTo": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:004-isEqualTo",
+            "duration": 8
+        },
+        "test:005-isGreaterThan": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:005-isGreaterThan",
+            "duration": 4
+        },
+        "test:006-isGreaterThanOrEqualTo": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:006-isGreaterThanOrEqualTo",
+            "duration": 7
+        },
+        "test:007-isLessThan": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:007-isLessThan",
+            "duration": 8
+        },
+        "test:008-isLessThanOrEqualTo": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:008-isLessThanOrEqualTo",
+            "duration": 4
+        },
+        "test:009-isNegative": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:009-isNegative",
+            "duration": 8
+        },
+        "test:010-isPositive": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:010-isPositive",
+            "duration": 8
+        },
+        "test:011-integer-addition": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:011-integer-addition",
+            "duration": 53
+        },
+        "test:012-finite-rational-addition": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:012-finite-rational-addition",
+            "duration": 47
+        },
+        "test:013-integer-subtraction": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:013-integer-subtraction",
+            "duration": 35
+        },
+        "test:014-finite-rational-subtraction": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:014-finite-rational-subtraction",
+            "duration": 52
+        },
+        "test:015-integer-multiplication": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:015-integer-multiplication",
+            "duration": 46
+        },
+        "test:016-finite-rational-multiplication": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a constructor (evaluating 'new Y.Apa()')",
+            "type": "test",
+            "name": "test:016-finite-rational-multiplication",
+            "duration": 45
+        }
+    },
+    "timestamp": "Wed 29 May 2013 04:31:23 PM PDT",
+    "consoleInfo": []
+}

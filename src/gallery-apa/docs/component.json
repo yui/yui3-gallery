@@ -1,0 +1,25 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "This is an arbitrary precision arithmetic module.",
+    "displayName": "Gallery: Arbitrary Precision Arithmetic",
+    "examples": [],
+    "name": "gallery-apa",
+    "tags": [
+        "arbitrary",
+        "arithmetic",
+        "big",
+        "decimal",
+        "gallery",
+        "integer",
+        "math",
+        "number",
+        "precision",
+        "solmsted",
+        "string"
+    ],
+    "use": [
+        "gallery-apa"
+    ]
+}
