@@ -9,6 +9,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
 
     var _string_f32 = 'f32',
         _string_f64 = 'f64',
+        _string_number = 'number',
         _string_s16 = 's16',
         _string_s32 = 's32',
         _string_s8 = 's8',
@@ -320,7 +321,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
 
                     me.eachPixelIndex(function (pixelIndex) {
                         for (var channelIndex = 0; channelIndex < channelCount; channelIndex += 1) {
-                            dataArray.push(me.getValue(pixelIndex, channelIndex));
+                            dataArray.push(me._getValue(pixelIndex, channelIndex));
                         }
                     });
 
@@ -374,7 +375,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
             @return {Number}
             */
             getValue: function (pixelIndexOrLocation, channelIndex) {
-                return this._getValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex);
+                return this._getValue(typeof pixelIndexOrLocation === _string_number ? pixelIndexOrLocation : this.getPixelIndex(pixelIndexOrLocation), channelIndex);
             },
             /**
             Sets the image data from a regular JavaScript array.  Nothing is
@@ -392,7 +393,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
 
                 return me.eachPixelIndex(function (pixelIndex) {
                     for (var channelIndex = 0; channelIndex < channelCount; channelIndex += 1) {
-                        me.setValue(pixelIndex, channelIndex, dataArray[valueIndex]);
+                        me._setValue(pixelIndex, channelIndex, dataArray[valueIndex]);
                         valueIndex += 1;
                     }
                 });
@@ -437,7 +438,7 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
             @param {Number} value The value to set.
             */
             setValue: function (pixelIndexOrLocation, channelIndex, value) {
-                return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value);
+                return this._setValue(typeof pixelIndexOrLocation === _string_number ? pixelIndexOrLocation : this.getPixelIndex(pixelIndexOrLocation), channelIndex, value);
             },
             /**
             Returns a serializable object.  This object can be passed to the
@@ -811,4 +812,4 @@ YUI.add('gallery-composite-image', function (Y, NAME) {
     }, _true);
 }(Y));
 
-}, 'gallery-2013.05.02-22-59', {"requires": ["array-extras"]});
+}, 'gallery-2013.05.29-23-38', {"requires": ["array-extras"]});

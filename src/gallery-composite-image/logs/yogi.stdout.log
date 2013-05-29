@@ -10,17 +10,19 @@ shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-composite-image
    #1: A constructor name should start with an uppercase letter.
-       me._data = new _ArrayBuffer(me.pixelCount * me._pixelSize); // line 222, pos 32
+       me._data = new _ArrayBuffer(me.pixelCount * me._pixelSize); // line 223, pos 32
    #2: A constructor name should start with an uppercase letter.
-       return new _Class({ // line 234, pos 28
+       return new _Class({ // line 235, pos 28
    #3: Line too long.
-       return this._setValue(_isArray(pixelIndexOrLocation) ? this.getPixelIndex(pixelIndexOrLocation) : pixelIndexOrLocation, channelIndex, value); // line 440, pos 157
+       return this._getValue(typeof pixelIndexOrLocation === _string_number ? pixelIndexOrLocation : this.getPixelIndex(pixelIndexOrLocation), channelIndex); // line 378, pos 166
    #4: Line too long.
-       return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian); // line 772, pos 170
+       return this._setValue(typeof pixelIndexOrLocation === _string_number ? pixelIndexOrLocation : this.getPixelIndex(pixelIndexOrLocation), channelIndex, value); // line 441, pos 173
    #5: Line too long.
-       me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian); // line 794, pos 164
-   #6: 'Uint8ClampedArray' is not defined.
-       return Uint8ClampedArray; // line 716, pos 28
+       return this._dataView['get' + _Class._getTypeName(this.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], this.littleEndian); // line 773, pos 170
+   #6: Line too long.
+       me._dataView['set' + _Class._getTypeName(me.channels[channelIndex])](pixelIndex * pixelSize + channelOffsets[channelIndex], value, me.littleEndian); // line 795, pos 164
+   #7: 'Uint8ClampedArray' is not defined.
+       return Uint8ClampedArray; // line 717, pos 28
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-composite-image/gallery-composite-image.js with UglifyJS
@@ -32,18 +34,18 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-composite-image/gallery-composite-image-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.713 seconds, pretty fast huh?
+shifter [info] finished in 0.22 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5019
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5018
-Starting Grover on 1 files with PhantomJS@1.8.1
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-composite-image]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.534 seconds) 42%
+✔ [gallery-composite-image]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.436 seconds) 42%
 Writing files in JSON format to: /src/gallery-composite-image/logs/tests.json
 
 ---------------------------------+-----------+-----------+-----------+-----------+
@@ -63,6 +65,6 @@ Functions    : 40% ( 16/40 )
 Lines        : 42.86% ( 48/112 )
 ================================================================================
 ----------------------------------------------------------------
-✔ [Total]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.534 seconds)
-  [Grover Execution Timer] 8.998 seconds
+✔ [Total]: Passed: 8 Failed: 0 Total: 34 (ignored 26) (0.436 seconds)
+  [Grover Execution Timer] 1.04 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

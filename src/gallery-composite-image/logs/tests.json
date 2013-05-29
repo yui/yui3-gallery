@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 78,
     "total": 102,
-    "duration": 1602,
+    "duration": 1308,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 26,
         "total": 34,
-        "duration": 533,
+        "duration": 433,
         "type": "testcase",
         "test:001-apiExists": {
             "result": "ignore",
@@ -39,14 +39,14 @@
             "message": "Test passed",
             "type": "test",
             "name": "test:004-_getTypeName",
-            "duration": 2
+            "duration": 1
         },
         "test:005-constructor-channels-f32": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test:005-constructor-channels-f32",
-            "duration": 50
+            "duration": 21
         },
         "test:006-constructor-channels-f64": {
             "result": "ignore",
@@ -59,35 +59,35 @@
             "message": "Test passed",
             "type": "test",
             "name": "test:007-constructor-channels-s16",
-            "duration": 27
+            "duration": 12
         },
         "test:008-constructor-channels-s32": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test:008-constructor-channels-s32",
-            "duration": 31
+            "duration": 19
         },
         "test:009-constructor-channels-s8": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test:009-constructor-channels-s8",
-            "duration": 13
+            "duration": 9
         },
         "test:010-constructor-channels-u16": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test:010-constructor-channels-u16",
-            "duration": 29
+            "duration": 12
         },
         "test:011-constructor-channels-u32": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "test:011-constructor-channels-u32",
-            "duration": 30
+            "duration": 16
         },
         "test:012-constructor-channels-u8": {
             "result": "ignore",
@@ -100,7 +100,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "test:013-constructor-channels-mixed",
-            "duration": 7
+            "duration": 4
         },
         "test:014-constructor-dimensions-1": {
             "result": "ignore",
@@ -229,7 +229,7 @@
             "name": "test:034-validate"
         }
     },
-    "timestamp": "Thu May  2 15:59:50 2013",
+    "timestamp": "Wed 29 May 2013 04:31:21 PM PDT",
     "coverage": {
         "build/gallery-composite-image/gallery-composite-image.js": {
             "path": "build/gallery-composite-image/gallery-composite-image.js",
