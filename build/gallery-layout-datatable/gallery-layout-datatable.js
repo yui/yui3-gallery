@@ -74,7 +74,8 @@ Y.extend(PLDTModule, Y.Plugin.Base,
 					table.set('height', 'auto');
 					table.set('scrollable', 'x');
 				}
-			});
+			},
+			this);
 
 			layout.on('afterResizeModule', function(e)
 			{
@@ -84,13 +85,29 @@ Y.extend(PLDTModule, Y.Plugin.Base,
 					table.set('height', e.height+'px');
 					table.set('scrollable', true);
 
-					if (table._yScrollNode)
+					if (table._yScrollNode && !this.ignore_scroll_top)
 					{
 						table._yScrollNode.set('scrollTop', scroll_top);
 					}
+					this.ignore_scroll_top = false;
 				}
-			});
+			},
+			this);
 		});
+	},
+
+	/**
+	 * By default, the scroll position is restored after Y.PageLayout
+	 * reflows the page.  In certain cases, e.g., switching to a different
+	 * page of data, the scroll position should be reset instead.  Call
+	 * this function to request that the scroll position be reset after the
+	 * next layout reflow.
+	 * 
+	 * @method resetScroll
+	 */
+	resetScroll: function()
+	{
+		this.ignore_scroll_top = true;
 	}
 });
 
@@ -98,4 +115,4 @@ Y.namespace("Plugin");
 Y.Plugin.PageLayoutDataTableModule = PLDTModule;
 
 
-}, 'gallery-2013.04.03-19-53', {"requires": ["gallery-layout", "datatable-scroll", "plugin"]});
+}, 'gallery-2013.05.29-23-38', {"requires": ["gallery-layout", "datatable-scroll", "plugin"]});
