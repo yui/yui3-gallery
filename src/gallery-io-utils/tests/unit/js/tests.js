@@ -47,7 +47,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('foo=bar', xhr.responseText, 'server response does not match an echo');
             });
 
-            this.wait(1000);
+            this.wait();
         },
 
         'request timeout': function () {
@@ -55,7 +55,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.isNumber(err.status, 'Error should have a status number');
             });
 
-            this.wait(1500);
+            this.wait();
         },
 
         'request failure': function () {
@@ -63,7 +63,19 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual(404, err.status, 'Error should be a 404');
             });
 
-            this.wait(500);
+            this.wait();
+        },
+
+        'abort() should reject the promise': function () {
+            var request = Y.io.xhr('delay/1');
+
+            request.abort();
+
+            this.failure(request, function (err) {
+                Assert.areEqual('abort', err.statusText, 'Error should be abortion');
+            });
+
+            this.wait();
         }
     }));
 
@@ -75,7 +87,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('helloworld', xhr.responseText, 'GET request failure');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'POST HTTP request': function () {
@@ -83,7 +95,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('helloworld', xhr.responseText, 'POST request failure');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'PUT HTTP request': function () {
@@ -91,7 +103,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('helloworld', xhr.responseText, 'PUT request failure');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'DELETE HTTP request': function () {
@@ -99,7 +111,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('helloworld', xhr.responseText, 'DELETE request failure');
             });
 
-            this.wait(500);
+            this.wait();
         }
     }));
 
@@ -111,7 +123,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('bar', data.foo, 'GET request failure');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'catching parse error': function () {
@@ -119,7 +131,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.isInstanceOf(Error, err, 'error should be a syntax error');
             });
 
-            this.wait(500);
+            this.wait();
         }
     }));
 
@@ -131,7 +143,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('bar', data.foo, 'GET request failure');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'POST JSON request': function () {
@@ -139,7 +151,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('bar', data.foo, 'POST request failure');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'PUT JSON request': function () {
@@ -147,7 +159,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('bar', data.foo, 'PUT request failure');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'DELETE JSON request': function () {
@@ -155,7 +167,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('bar', data.foo, 'DELETE request failure');
             });
 
-            this.wait(500);
+            this.wait();
         }
     }));
 
@@ -169,7 +181,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.areEqual('bar', data.foo, 'did not get the correct response from echoecho');
             });
 
-            this.wait(500);
+            this.wait();
         },
 
         'jsonp request timeout': function () {
@@ -177,7 +189,7 @@ YUI.add('module-tests', function(Y) {
                 Assert.isTrue(err.errors.length > 0, 'transaction should have an error');
             });
 
-            this.wait(1500);
+            this.wait();
         }
     }));
 

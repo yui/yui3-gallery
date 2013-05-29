@@ -15,7 +15,7 @@
         "grover": "0.1.14"
     },
     "scripts": {
-        "test": "shifter --build-dir ./build && grover --server tests/unit/index.html"
+        "test": "shifter --build-dir ./build && grover --server tests/unit/*.html"
     },
     "repository": {
         "type": "git",

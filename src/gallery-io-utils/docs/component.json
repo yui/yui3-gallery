@@ -1,0 +1,15 @@
+{
+    "name"       : "yui3-io-utils",
+    "displayName": "YUI IO Utils",
+    "description": "Utilities to make IO simpler to use",
+    "author"     : [ "jdopazo" ],
+    "use"        : [ "gallery-io-utils" ],
+
+    "tags": [ "gallery", "io", "promise" ],
+
+    "bgcolor": "#333",
+    "bgimage": "http://juandopazo.github.io/yui3-io-utils/carbon_fibre_v2.png",
+    "repo": "https://github.com/juandopazo/yui3-io-utils",
+    "componentAPI": "api/classes/io.html"
+
+}

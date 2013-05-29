@@ -3,7 +3,7 @@ YUI.add('gallery-io-utils', function (Y, NAME) {
 /**
 Promise based methods for performing IO requests.
 
-@module io-extras
+@module gallery-io-utils
 **/
 
 /**
@@ -117,8 +117,16 @@ Alias for Y.io.delete()
 @method DELETE
 @for io
 @static
+@deprecated
 **/
-Y.io.DELETE = Y.io['delete'];
+/**
+Alias for Y.io.delete()
+
+@method del
+@for io
+@static
+**/
+Y.io.DELETE = Y.io.del = Y.io['delete'];
 
 /**
 Initiaites an AJAX call with the HTTP method POST and sends the data contained
@@ -254,6 +262,27 @@ JSON notation. Requires the JSON module.
     `abort()` method to cancel the request.
 **/
 /**
+Performs an AJAX request with the DELETE HTTP method and parses the response as
+JSON notation. Requires the JSON module.
+
+@method deleteJSON
+@for io
+@static
+@param {String} uri Qualified path to transaction resource.
+@param {Object} [options] Same configuration options as Y.io.xhr()
+@return {Promise} Promise for the response object. Contains an extra
+    `abort()` method to cancel the request.
+**/
+Y.Array.each(['get', 'delete'], function (verb) {
+    Y.io[verb + 'JSON'] = function (uri, config) {
+        config = config || {};
+        config.method = verb.toUpperCase();
+
+        return Y.io.json(uri, config);
+    };
+});
+
+/**
 Performs an AJAX request with the POST HTTP method and parses the response as
 JSON notation. Requires the JSON module.
 
@@ -261,6 +290,7 @@ JSON notation. Requires the JSON module.
 @for io
 @static
 @param {String} uri Qualified path to transaction resource.
+@param {Object|Promise} data Data to send encoded as JSON
 @param {Object} [options] Same configuration options as Y.io.xhr()
 @return {Promise} Promise for the response object. Contains an extra
     `abort()` method to cancel the request.
@@ -273,30 +303,22 @@ JSON notation. Requires the JSON module.
 @for io
 @static
 @param {String} uri Qualified path to transaction resource.
+@param {Object|Promise} data Data to send encoded as JSON
 @param {Object} [options] Same configuration options as Y.io.xhr()
 @return {Promise} Promise for the response object. Contains an extra
     `abort()` method to cancel the request.
 **/
-/**
-Performs an AJAX request with the DELETE HTTP method and parses the response as
-JSON notation. Requires the JSON module.
-
-@method deleteJSON
-@for io
-@static
-@param {String} uri Qualified path to transaction resource.
-@param {Object} [options] Same configuration options as Y.io.xhr()
-@return {Promise} Promise for the response object. Contains an extra
-    `abort()` method to cancel the request.
-**/
-Y.Array.each(['get', 'post', 'put', 'delete'], function (verb) {
-    Y.io[verb + 'JSON'] = function (uri, config) {
+Y.Array.each(['post', 'put'], function (verb) {
+    Y.io[verb + 'JSON'] = function (uri, data, config) {
         config = config || {};
         config.method = verb.toUpperCase();
 
-        return Y.io.json(uri, config);
+        return Y.when(data, function (obj) {
+            config.data = Y.JSON.stringify(obj);
+            return Y.io.json(uri, config);
+        });
     };
 });
 
 
-}, 'gallery-2013.05.15-21-12', {"requires": ["io-base", "promise"]});
+}, 'gallery-2013.05.29-23-38', {"requires": ["io-base", "promise"]});

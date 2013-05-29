@@ -1,0 +1,125 @@
+{{>getting-started}}
+
+<h2>Using promises for IO</h2>
+
+<p>All utility methods included in this module return a promise instead of taking callbacks or event listeners. Promises allow you to pass around a token to the future value of the response. When you are ready to use that value, call <code>then()</code> on the promise.</p>
+
+```javascript
+YUI({
+    gallery: '{{gallery-build}}'
+}).use('gallery-io-utils', function (Y) {
+
+    var template = Y.Templates.someTemplate,
+        node = Y.one('#foo');
+    
+    Y.io.getJSON('/foo').then(function (data) {
+        foo.setHTML(template(data)));
+    });
+
+});
+```
+
+<h2>List of utilities</h2>
+<table class="yui3-table">
+    <thead>
+        <tr>
+            <th>Method</th>
+            <th>Description</th>
+            <th>Requirements</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="yui3-table-odd">
+            <td>Y.io.xhr</td>
+            <td>Makes an Ajax request</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Y.io.get</td>
+            <td>Makes an Ajax request with HTTP method GET</td>
+            <td></td>
+        </tr>
+        <tr class="yui3-table-odd">
+            <td>Y.io.post</td>
+            <td>Makes an Ajax request with HTTP method POST</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Y.io.put</td>
+            <td>Makes an Ajax request with HTTP method PUT</td>
+            <td></td>
+        </tr>
+        <tr class="yui3-table-odd">
+            <td>Y.io.delete</td>
+            <td>Makes an Ajax request with HTTP method DELETE</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Y.io.DELETE</td>
+            <td>Alias for <code>Y.io.delete</code></td>
+            <td></td>
+        </tr>
+        <tr class="yui3-table-odd">
+            <td>Y.io.json</td>
+            <td>Makes an Ajax request and parses the result as JSON</td>
+            <td>The <code>json-parse</code> module</td>
+        </tr>
+        <tr>
+            <td>Y.io.getJSON</td>
+            <td>Makes an Ajax request with HTTP method GET and parses the
+        result as JSON</td>
+            <td>The <code>json-parse</code> module</td>
+        </tr>
+        <tr class="yui3-table-odd">
+            <td>Y.io.postJSON</td>
+            <td>Makes an Ajax request with HTTP method PST and parses the
+        result as JSON</td>
+            <td>The <code>json-parse</code> module</td>
+        </tr>
+        <tr>
+            <td>Y.io.putJSON</td>
+            <td>Makes an Ajax request with HTTP method PUT and parses the
+        result as JSON</td>
+            <td>The <code>json-parse</code> module</td>
+        </tr>
+        <tr class="yui3-table-odd">
+            <td>Y.io.deleteJSON</td>
+            <td>Makes an Ajax request with HTTP method DELETE and parses the
+        result as JSON</td>
+            <td>The <code>json-parse</code> module</td>
+        </tr>
+        <tr>
+            <td>Y.io.jsonp</td>
+            <td>Makes a JSONP request</td>
+            <td>The <code>jsonp</code> module</td>
+        </tr>
+        <tr class="yui3-table-odd">
+            <td>Y.io.script</td>
+            <td>Loads a script</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Y.io.css</td>
+            <td>Loads a CSS stylesheet</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Release notes</h2>
+
+<h3>Next</h3>
+<ul>
+    <li>Deprecated <code>Y.io.DELETE</code> in favor of <code>Y.io.del</code></li>
+    <li><code>Y.io.postJSON</code> and <code>Y.io.putJSON</code> now take an object as a second parameter that gets sent as JSON data to the server</li>
+</ul>
+
+<h3>gallery-2013.05.15-21-12</h3>
+<ul>
+    <li>Fixes broken requirements</li>
+</ul>
+
+<h3>gallery-2013.05.10-00-54</h3>
+<ul>
+    <li>Requirements are broken in this version</li>
+</ul>
