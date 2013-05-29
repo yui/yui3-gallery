@@ -366,17 +366,21 @@ function checkFinished()
 
 	// save results so we can refer to them later
 
-	this._records   = [];
-	this._recordMap = {};
 	var uniqueIdKey = this.get('uniqueIdKey');
 
-	Y.Array.each(response.results, function(value)
+	if (!this._callback.request.out_of_band)
 	{
-		var rec = Y.clone(value, true);
-		this._records.push(rec);
-		this._recordMap[ rec[ uniqueIdKey ] ] = rec;
-	},
-	this);
+		this._records   = [];
+		this._recordMap = {};
+
+		Y.Array.each(response.results, function(value)
+		{
+			var rec = Y.clone(value, true);
+			this._records.push(rec);
+			this._recordMap[ rec[ uniqueIdKey ] ] = rec;
+		},
+		this);
+	}
 
 	// merge in diffs
 

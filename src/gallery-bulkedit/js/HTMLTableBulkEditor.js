@@ -65,7 +65,8 @@ var cell_class        = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME
 	textarea_class       = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'textarea'),
 	select_class         = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'select'),
 	checkbox_class       = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'checkbox'),
-	cb_multiselect_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'checkbox-multiselect');
+	cb_multiselect_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'checkbox-multiselect'),
+	cb_multi_input_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'input-multiselect');
 
 /**
  * Renders an input element in the cell.
@@ -133,6 +134,19 @@ HTMLTableBulkEditor.checkboxMultiselectFormatter = function(o)
 };
 
 /**
+ * Renders a multi-value input for multiselect in the cell.
+ *
+ * @method autocompleteInputMultiselectFormatter
+ * @static
+ * @param o {Object} cell, key, value, field, column, record
+ */
+HTMLTableBulkEditor.autocompleteInputMultiselectFormatter = function(o)
+{
+	o.cell.set('innerHTML', BulkEditor.markup.autocompleteInputMultiselect.call(this, o));
+	o.cell.addClass(cb_multi_input_class);
+};
+
+/**
  * Map of field type to cell formatter.
  *
  * @property Y.HTMLTableBulkEditor.defaults
@@ -159,6 +173,11 @@ HTMLTableBulkEditor.defaults =
 	checkboxMultiselect:
 	{
 		formatter: HTMLTableBulkEditor.checkboxMultiselectFormatter
+	},
+
+	autocompleteInputMultiselect:
+	{
+		formatter: HTMLTableBulkEditor.autocompleteInputMultiselectFormatter
 	},
 
 	textarea:
@@ -220,7 +239,7 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 		var table_class = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME);
 
 		if (!this.table ||
-			container.get('firstChild').get('tagName').toLowerCase() != 'table' ||
+			container.get('firstChild').get('tagName') != 'TABLE' ||
 			!container.get('firstChild').hasClass(table_class))
 		{
 			var s = Y.Lang.sub('<table class="{t}"><thead class="{hd}"><tr>',

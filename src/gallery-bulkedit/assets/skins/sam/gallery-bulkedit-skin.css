@@ -1,1 +1,4 @@
-/* nothing to see here */
+.yui3-htmltablebulkedit .checkbox-multiselect-column
+{
+	margin-left: 10px;
+}
