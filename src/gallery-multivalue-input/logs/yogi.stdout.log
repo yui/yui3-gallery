@@ -1,0 +1,66 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-multivalue-input
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-multivalue-input
+   #1: Mixed spaces and tabs.
+       return Lang.isArray(val); // line 59, pos 2
+   #2: Too many var statements.
+       for(var i=0;i<values.length;i++){ // line 102, pos 21
+   #3: Too many var statements.
+       for(var i=0;i<size;i++){ // line 242, pos 17
+   #4: 'config' is defined but never used.
+       function MultiValueInput(config) { // line 19, pos 32
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-multivalue-input/gallery-multivalue-input.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-multivalue-input
+shifter [queu] coverage file read, starting coverage for: gallery-multivalue-input/gallery-multivalue-input.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-multivalue-input/gallery-multivalue-input-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] Using width with padding-left can sometimes make elements larger than you expect.
+       padding-left: 2px; // line 4, pos 2
+   #2: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #BDC7D8; // line 5, pos 2
+   #3: [warning] Element (ul.yui3-multivalueinput-ul) is overqualified, just use .yui3-multivalueinput-ul without element name.
+       .yui3-skin-sam  ul.yui3-multivalueinput-ul{ // line 11, pos 17
+   #4: [warning] Use of !important
+       height: auto !important; // line 12, pos 4
+   #5: [warning] Use of !important
+       margin:0 !important; // line 13, pos 4
+   #6: [warning] Values of 0 shouldn't have units specified.
+       padding: 4px 5px 0px 5px; // line 14, pos 21
+   #7: [warning] Element (li.yui3-multivalueinput-listitem) is overqualified, just use .yui3-multivalueinput-listitem without element name.
+       .yui3-skin-sam  li.yui3-multivalueinput-listitem{ // line 26, pos 17
+   #8: [warning] Missing standard property 'border-radius' to go along with '-moz-border-radius'.
+       -moz-border-radius: 6px 6px 6px 6px; // line 31, pos 4
+   #9: [warning] Missing standard property 'border-radius' to go along with '-webkit-border-radius'.
+       -webkit-border-radius: 6px 6px 6px 6px; // line 32, pos 4
+   #10: [warning] Missing standard property 'border-radius' to go along with '-o-border-radius'.
+       -o-border-radius: 6px 6px 6px 6px; // line 33, pos 4
+   #11: [warning] Element (li.yui3-multivalueinput-pendingdelete) is overqualified, just use .yui3-multivalueinput-pendingdelete without element name.
+       .yui3-skin-sam  li.yui3-multivalueinput-pendingdelete{ // line 37, pos 17
+   #12: [warning] Use of !important
+       background-color: #4173CC !important; // line 38, pos 4
+   #13: [warning] Outlines should only be modified using :focus.
+       .yui3-skin-sam input.yui3-multivalueinput-input { // line 55, pos 1
+   #14: [warning] Element (input.yui3-multivalueinput-input) is overqualified, just use .yui3-multivalueinput-input without element name.
+       .yui3-skin-sam input.yui3-multivalueinput-input { // line 55, pos 16
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.206 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

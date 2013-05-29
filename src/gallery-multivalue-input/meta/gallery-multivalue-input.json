@@ -1,0 +1,10 @@
+{
+    "gallery-multivalue-input": {
+        "skinnable": "true",
+        "requires": [
+            "plugin",
+            "substitute",
+            "node"
+        ]
+    }
+}

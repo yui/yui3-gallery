@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-multivalue-input",
+    "displayName": "Gallery: multivalue-input",
+    "description": "This is a plugin to input Node that can be plug along with AutoComplete Plugin.",
+    "author"     : [ "mzgupta" ],
+    "use"        : [ "gallery-multivalue-input" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

@@ -1,0 +1,85 @@
+<div class="intro">
+    <p>
+    This is a plugin to input Node that can be plug along with AutoComplete Plugin.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+<p>A multi value input control is nice way to select multiple value from user. Best example is Yahoo mail while composing a message user may wants to send message to multiple address. HTML has multiple select control but it's too ugly and complex. <br>
+<br>
+<br>
+<br>
+This plugin will allow user to select multiple value (coming from autocomplete plugin) and will also have nice remove icon on selected value to remove from selection list. <br>
+<br>
+<br>
+</p>
+
+```
+YUI().use("gallery-multivalue-input",'autocomplete', 'autocomplete-filters', 'autocomplete-highlighters', function (Y) {
+  var states = [
+    'Alabama',
+    'Alaska',
+    'Arizona',
+    'Arkansas',
+    'California',
+    'Colorado',
+    'Connecticut',
+    'Delaware',
+    'Florida',
+    'Georgia',
+    'Hawaii',
+    'Idaho',
+    'Illinois',
+    'Indiana',
+    'Iowa',
+    'Kansas',
+    'Kentucky',
+    'Louisiana',
+    'Maine',
+    'Maryland',
+    'Massachusetts',
+    'Michigan',
+    'Minnesota',
+    'Mississippi',
+    'Missouri',
+    'Montana',
+    'Nebraska',
+    'Nevada',
+    'New Hampshire',
+    'New Jersey',
+    'New Mexico',
+    'New York',
+    'North Dakota',
+    'North Carolina',
+    'Ohio',
+    'Oklahoma',
+    'Oregon',
+    'Pennsylvania',
+    'Rhode Island',
+    'South Carolina',
+    'South Dakota',
+    'Tennessee',
+    'Texas',
+    'Utah',
+    'Vermont',
+    'Virginia',
+    'Washington',
+    'West Virginia',
+    'Wisconsin',
+    'Wyoming'
+  ];
+
+ 
+  var node = Y.one('#mayank');
+  node.plug(Y.Plugin.AutoComplete, {
+	    resultFilters    : 'phraseMatch',
+	    resultHighlighter: 'phraseMatch',
+	    source           : states
+  })
+  node.plug(Y.MultiValueInput);
+});
+```
+
