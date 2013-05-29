@@ -3,16 +3,14 @@
  */
 
 /**********************************************************************
- * <p>Plugin for choosing from a list of values.  In the
- * <code>var_list</code> configuration, specify <code>value_list</code> as
- * a list of objects, each defining <code>value</code> and
- * <code>text</code>.</p>
+ * Plugin for choosing from a list of values.  In the `var_list`
+ * configuration, specify `value_list` as a list of objects, each defining
+ * `value` and `text`.
  * 
- * <p>There must be exactly one operator specified for this plugin.</p>
+ * There must be exactly one operator specified for this plugin.
  * 
- * <p>The <code>value</code> argument passed to
- * <code>QueryBuilder.appendNew()</code> must be a string: the value of the
- * menu item to select.</p>
+ * The `value` argument passed to `QueryBuilder.appendNew()` must be a
+ * string: the value of the menu item to select.
  * 
  * @namespace QueryBuilder
  * @class Select

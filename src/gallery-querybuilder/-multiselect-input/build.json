@@ -1,0 +1,19 @@
+{
+    "name": "gallery-querybuilder-multiselect-input",
+    "builds": {
+        "gallery-querybuilder-multiselect-input": {
+            "config": {
+                "requires": [
+                    "gallery-querybuilder",
+                    "gallery-multivalue-input",
+                    "autocomplete",
+                    "autocomplete-filters",
+                    "autocomplete-highlighters"
+                ]
+            },
+            "jsfiles": [
+                "multiselect-input.js"
+            ]
+        }
+    }
+}

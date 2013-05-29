@@ -1,0 +1,9 @@
+{
+	"name": "gallery-querybuilder-multiselect-input",
+	"displayName": "Query Builder Multiselect-Input",
+	"description": "Plugin for accepting multiple values.",
+	"author": "jafl",
+
+	"use": ["gallery-querybuilder-multiselect-input"],
+	"tags": ["jafl","filter","query","expression","sql"]
+}
