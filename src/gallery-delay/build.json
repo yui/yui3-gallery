@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-delay": {
+            "jsfiles": [
+                "delay.js"
+            ]
+        }
+    },
+    "name": "gallery-delay"
+}

@@ -1,0 +1,8 @@
+{
+    "gallery-delay": {
+        "requires": [
+            "promise",
+            "yui-later"
+        ]
+    }
+}

@@ -1,0 +1,35 @@
+<div class="intro">
+    <p>
+        Create a function that doesn't execute immediately when it is called.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    Pass in a callback function and the amount of time to delay.  Y.delay will
+    return a function that will wait an amount of time, then call your callback
+    function.  The arguments and execution context of the returned function will
+    be passed to the callback function.  The returned function returns a promise
+    for the return value of the callback function.  This promise comes with a
+    cancel method which will prevent the execution of the callback function if
+    called before the callback function is called.  If the amount of time to
+    delay is 0, the delay will be as small as possible but your callback
+    function will be guaranteed to be called in a future turn of the event loop.
+</p>
+
+```
+YUI().use('gallery-delay', function (Y) {
+    Y.delay(function (argument) {
+        Y.log('argument: ' + argument);
+        Y.log('this: ' + this);
+        return 'returnValue';
+    }, 3000).call('contextValue', 'argumentValue').then(function (value) {
+        Y.log('return: ' + value);
+    });
+});
+```

@@ -1,0 +1,85 @@
+{
+    "name": "gallery-delay",
+    "passed": 0,
+    "failed": 27,
+    "errors": 0,
+    "ignored": 0,
+    "total": 27,
+    "duration": 285,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 9,
+        "errors": 0,
+        "ignored": 0,
+        "total": 9,
+        "duration": 93,
+        "type": "testcase",
+        "test:001-apiExists": {
+            "result": "fail",
+            "message": "Y.delay should be a function.\nUnexpected: undefined (undefined) ",
+            "type": "test",
+            "name": "test:001-apiExists",
+            "duration": 1
+        },
+        "test:002-delay": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay')",
+            "type": "test",
+            "name": "test:002-delay",
+            "duration": 3
+        },
+        "test:003-delay-with-arguments-and-context": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay')",
+            "type": "test",
+            "name": "test:003-delay-with-arguments-and-context",
+            "duration": 1
+        },
+        "test:004-delay-with-return-value": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay')",
+            "type": "test",
+            "name": "test:004-delay-with-return-value",
+            "duration": 1
+        },
+        "test:005-delay-cancel": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay(function () {\n                    a = true;\n                }, 377)')",
+            "type": "test",
+            "name": "test:005-delay-cancel",
+            "duration": 1
+        },
+        "test:006-fast-delay": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay')",
+            "type": "test",
+            "name": "test:006-fast-delay",
+            "duration": 1
+        },
+        "test:007-fast-delay-with-arguments-and-context": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay')",
+            "type": "test",
+            "name": "test:007-fast-delay-with-arguments-and-context",
+            "duration": 1
+        },
+        "test:008-fast-delay-with-return-value": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay')",
+            "type": "test",
+            "name": "test:008-fast-delay-with-return-value",
+            "duration": 1
+        },
+        "test:009-fast-delay-cancel": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.delay(function () {\n                    a = true;\n                })')",
+            "type": "test",
+            "name": "test:009-fast-delay-cancel",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 29 May 2013 04:31:21 PM PDT",
+    "consoleInfo": []
+}

@@ -1,0 +1,25 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "Create a function that doesn't execute immediately when it is called.",
+    "displayName": "Gallery: delay",
+    "examples": [],
+    "name": "gallery-delay",
+    "tags": [
+        "async",
+        "asynchronous",
+        "delay",
+        "function",
+        "gallery",
+        "later",
+        "promise",
+        "solmsted",
+        "time",
+        "timer",
+        "wait"
+    ],
+    "use": [
+        "gallery-delay"
+    ]
+}

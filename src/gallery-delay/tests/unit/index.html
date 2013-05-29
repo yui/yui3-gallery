@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <script src="/build/yui/yui.js">
+        </script>
+        <script src="js/tests.js">
+        </script>
+        <title>
+            gallery-delay
+        </title>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="logger">
+        </div>
+        <script>
+            YUI({
+                coverage: [
+                    'gallery-delay'
+                ],
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+            }).use('test-console', 'test', 'module-tests', function (Y) {
+                'use strict';
+                (new Y.Test.Console()).render('#logger');
+                Y.Test.Runner.setName('gallery-delay');
+                Y.Test.Runner.run();
+            });
+        </script>
+    </body>
+</html>
