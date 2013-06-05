@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-cssmatrix2d": {
+            "jsfiles": [
+                "cssmatrix2d.js"
+            ]
+        }
+    },
+    "name": "gallery-cssmatrix2d"
+}

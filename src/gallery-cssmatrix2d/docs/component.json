@@ -1,0 +1,23 @@
+{
+    "author": [
+        "solmsted"
+    ],
+    "description": "A class representing the matrix used by 2d CSS transforms.",
+    "displayName": "Gallery: cssmatrix2d",
+    "name": "gallery-cssmatrix2d",
+    "tags": [
+        "css",
+        "gallery",
+        "inverse",
+        "matrix",
+        "rotate",
+        "scale",
+        "skew",
+        "solmsted",
+        "transform",
+        "translate"
+    ],
+    "use": [
+        "gallery-cssmatrix2d"
+    ]
+}

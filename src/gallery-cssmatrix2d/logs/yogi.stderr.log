@@ -1,0 +1,16 @@
+shifter [err] /src/gallery-cssmatrix2d/js/cssmatrix2d.js contains 7 lint errors
+
+events.js:71
+        throw arguments[1]; // Unhandled 'error' event
+                       ^
+Error: listen EADDRINUSE
+    at errnoException (net.js:770:11)
+    at Server._listen2 (net.js:910:14)
+    at listen (net.js:932:10)
+    at Server.listen (net.js:998:5)
+    at Function.app.listen (/Users/reid/Development/grifter/node_modules/yogi/node_modules/express/lib/application.js:529:24)
+    at Object.mods.startServer (/Users/reid/Development/grifter/node_modules/yogi/lib/cmds/serve.js:824:18)
+    at Object.mods.prepServer.portfinder.getPort.self.options.callback (/Users/reid/Development/grifter/node_modules/yogi/lib/cmds/test.js:499:24)
+    at Object.mods.init (/Users/reid/Development/grifter/node_modules/yogi/lib/cmds/serve.js:77:25)
+    at mods.prepServer (/Users/reid/Development/grifter/node_modules/yogi/lib/cmds/test.js:506:20)
+    at Server.onListen (/Users/reid/Development/grifter/node_modules/yogi/node_modules/portfinder/lib/portfinder.js:48:5)

@@ -1,0 +1,7 @@
+{
+    "gallery-cssmatrix2d": {
+        "requires": [
+            "yui"
+        ]
+    }
+}

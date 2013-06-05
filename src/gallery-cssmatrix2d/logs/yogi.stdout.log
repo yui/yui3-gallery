@@ -1,0 +1,42 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-cssmatrix2d
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-cssmatrix2d
+   #1: A constructor name should start with an uppercase letter.
+       inverse = new _Class(); // line 107, pos 31
+   #2: A constructor name should start with an uppercase letter.
+       product = new _Class(); // line 141, pos 31
+   #3: A constructor name should start with an uppercase letter.
+       var other = new _Class(); // line 170, pos 29
+   #4: A constructor name should start with an uppercase letter.
+       var other = new _Class(); // line 190, pos 29
+   #5: A constructor name should start with an uppercase letter.
+       var other = new _Class(); // line 245, pos 29
+   #6: A constructor name should start with an uppercase letter.
+       var other = new _Class(); // line 269, pos 29
+   #7: A constructor name should start with an uppercase letter.
+       var other = new _Class(); // line 295, pos 29
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-cssmatrix2d/gallery-cssmatrix2d.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting assets for gallery-cssmatrix2d
+shifter [queu] coverage file read, starting coverage for: gallery-cssmatrix2d/gallery-cssmatrix2d.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-cssmatrix2d/gallery-cssmatrix2d-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.275 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover

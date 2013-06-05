@@ -1,0 +1,32 @@
+<div class="intro">
+    <p>
+        A class representing the matrix used by 2d CSS transforms.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>
+    Description
+</h2>
+
+<p>
+    This represents the matrix used by 2d CSS transforms.  It helps perform all of the necessary matrix calculations.  This is sort of an implementation of the CSSMatrix object defined in this spec:
+    http://www.w3.org/TR/css3-2d-transforms/#cssmatrix-interface  The matrix defined in the spec is a 3x2 matrix.  I'm not exactly an expert at matrix math, but most of the operations required by the spec
+    only work with square matrices.  The spec doesn't explain how a 3x2 matrix is supposed to do these things.  In order to make the math work correctly, this object internally treats it as the 4x4 matrix
+    defined in the 3d CSS transforms spec here: http://www.w3.org/TR/css3-3d-transforms/#cssmatrix-interface and it converts the 3x2 matrix into a 4x4 matrix by following the examples provided in this
+    spec: http://www.w3.org/TR/2012/WD-css3-transforms-20120403/  Other implementations of these specs, like the WebKitCSSMatrix object and others that have copied it, attempt to combine both the 2d and 3d
+    versions of CSSMatrix into the same object.  This implementation only borrows ideas from the 3d version to make the math make sense, but only the 2d functionality is implemented.  Since only the 6 2d
+    matrix items out of the total 16 3d matrix items are mutable, and the remaining 3d matrix items are known to be either 0 or 1, most of the complicated 4x4 matrix math is factored down and reduced,
+    becoming much more efficient.
+</p>
+
+```
+YUI().use('gallery-cssmatrix2d', 'node', function (Y) {
+    var myNode = Y.one('#myNode'),
+        myNodeMatrix = new Y.CSSMatrix2d().setMatrixValue(myNode.getStyle('transform'));
+
+    // Rotate 60 degrees, then move 50px along the Y axis.
+    myNode.setStyle('transform', myNodeMatrix.rotate(60).translate(0, 50).toString());
+});
+```
