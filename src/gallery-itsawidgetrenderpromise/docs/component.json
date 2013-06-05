@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-itsawidgetrenderpromise",
+    "displayName": "Gallery: gallery-itsawidgetrenderpromise",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsawidgetrenderpromise" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

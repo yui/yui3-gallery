@@ -1,0 +1,9 @@
+{
+    "gallery-itsawidgetrenderpromise": {
+        "requires": [
+            "yui-base",
+            "widget",
+            "promise"
+        ]
+    }
+}

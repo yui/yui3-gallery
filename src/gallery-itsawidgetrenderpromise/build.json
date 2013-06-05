@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsawidgetrenderpromise",
+    "builds": {
+        "gallery-itsawidgetrenderpromise": {
+            "jsfiles": [
+                "js/gallery-itsawidgetrenderpromise.js"
+            ]
+        }
+    }
+}
