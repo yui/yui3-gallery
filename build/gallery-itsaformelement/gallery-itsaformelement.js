@@ -49,9 +49,9 @@ var Lang  = Y.Lang,
     ITSAFORMELEMENT_DATETIME_CLASS = 'itsa-datetimepicker-icondatetime',
 
     ELEMENT_UNDEFINED = '<span id="{id}">UNDEFINED ELEMENTTYPE</span>',
-    ELEMENT_INPUT = '<input id="{id}" type="text" name="{name}" value="{value}"{classname} />',
+    ELEMENT_INPUT = '<input id="{id}" type="text" name="{name}" value="{value}"{classname}{placeholder} />',
+    ELEMENT_PASSWORD = '<input id="{id}" type="password" name="{name}" value="{value}"{classname}{placeholder} />',
     ELEMENT_TEXTAREA = '<textarea id="{id}" name="{name}"{classname} />{value}</textarea>',
-    ELEMENT_PASSWORD = '<input id="{id}" type="password" name="{name}" value="{value}"{classname} />',
     ELEMENT_HIDDEN = '<input id="{id}" type="hidden" name="{name}" value="{value}"{classname} />',
 
     ELEMENT_BUTTON = '<button id="{id}" type="{type}" name="{name}"{classname}>{value}</button>',
@@ -100,7 +100,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
         render : function(config, nodeId) {
             var instance = this,
                 element, name, type, value, dateFormat, autoCorrection, validation, classnameAttr, classname, isDateOrTime,
-                focusable, isButton, withLifeChange, classlevel2, focusinfoOnClass, focusinfo, enterNextField;
+                focusable, isButton, withLifeChange, classlevel2, focusinfoOnClass, focusinfo, enterNextField, placeholder, placeholdervalue;
 
             if (typeof config === 'object') {
                 instance.setAttrs(config);
@@ -143,15 +143,19 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
                 if (validation) {
                     element += ELEMENT_VALIDATION;
                 }
-            }
-            else if (type==='textarea') {
-                element = ELEMENT_TEXTAREA;
-                if (validation) {
-                    element += ELEMENT_VALIDATION;
-                }
+                placeholdervalue = instance.get('placeholder');
+                placeholder = placeholdervalue ? ' placeholder="'+  placeholdervalue+'"' : '';
             }
             else if (type==='password') {
                 element = ELEMENT_PASSWORD;
+                if (validation) {
+                    element += ELEMENT_VALIDATION;
+                }
+                placeholdervalue = instance.get('placeholder');
+                placeholder = placeholdervalue ? ' placeholder="'+  placeholdervalue+'"' : '';
+            }
+            else if (type==='textarea') {
+                element = ELEMENT_TEXTAREA;
                 if (validation) {
                     element += ELEMENT_VALIDATION;
                 }
@@ -210,6 +214,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
                                 id: nodeId,
                                 name: name,
                                 value: value,
+                                placeholder: placeholder,
                                 classname: classname,
                                 classlevel2: classlevel2,
                                 type: type,
@@ -262,7 +267,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             name : {
                 value: 'undefined-name',
                 validator: function(val) {
-                    return (Lang.isString(val));
+                    return (typeof val === 'string');
                 }
             },
             /**
@@ -275,7 +280,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             focusable : {
                 value: true,
                 validator: function(val) {
-                    return (Lang.isBoolean(val));
+                    return (typeof val === 'boolean');
                 }
             },
             /**
@@ -293,7 +298,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
                     return val;
                 },
                 validator: function(val) {
-                    return (Lang.isString(val) &&
+                    return ((typeof val === 'string') &&
                             ((val==='input') ||
                              (val==='password') ||
                              (val==='textarea') ||
@@ -328,9 +333,19 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
              * @since 0.1
             */
             value : {
-                value: '',
+                value: ''
+            },
+            /**
+             * @description Placeholder for text- and password-elements
+             * @attribute placeholder
+             * @type String
+             * @default null
+             * @since 0.1
+            */
+            placeholder : {
+                value: null,
                 validator: function(val) {
-                    return (Lang.isString(val) || Lang.isBoolean(val) || Lang.isArray(val) || Lang.isDate(val));
+                    return (typeof val === 'string');
                 }
             },
             /**
@@ -346,7 +361,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             keyValidation : {
                 value: null,
                 validator: function(val) {
-                    return (Lang.isFunction(val));
+                    return (typeof val === 'function');
                 }
             },
             /**
@@ -364,7 +379,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             validation : {
                 value: null,
                 validator: function(val) {
-                    return (Lang.isFunction(val));
+                    return (typeof val === 'function');
                 }
             },
             /**
@@ -377,7 +392,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             validationMessage : {
                 value: '',
                 validator: function(val) {
-                    return (Lang.isString(val));
+                    return (typeof val === 'string');
                 }
             },
             /**
@@ -395,7 +410,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             autoCorrection : {
                 value: null,
                 validator: function(val) {
-                    return (Lang.isFunction(val));
+                    return (typeof val === 'function');
                 }
             },
             /**
@@ -409,7 +424,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             className : {
                 value: null,
                 validator: function(val) {
-                    return (Lang.isString(val) || null);
+                    return ((val === null) || (typeof val === 'string'));
                 }
             },
             /**
@@ -423,7 +438,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             dateFormat : {
                 value: null,
                 validator: function(val) {
-                    return (Lang.isString(val) || null);
+                    return ((val === null) || (typeof val === 'string'));
                 }
             },
             /**
@@ -437,7 +452,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             initialFocus : {
                 value: false,
                 validator: function(val) {
-                    return (Lang.isBoolean(val));
+                    return (typeof val === 'boolean');
                 }
             },
             /**
@@ -451,7 +466,7 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             selectOnFocus : {
                 value: false,
                 validator: function(val) {
-                    return (Lang.isBoolean(val));
+                    return (typeof val === 'boolean');
                 }
             },
             /**
@@ -464,14 +479,14 @@ Y.ITSAFormElement = Y.Base.create('itsaformelement', Y.Base, [], {
             widgetConfig : {
                 value: {},
                 validator: function(val) {
-                    return (Lang.isObject(val));
+                    return (typeof val === 'boolean');
                 }
             }
         }
     }
 );
 
-}, 'gallery-2013.05.10-00-54', {
+}, 'gallery-2013.06.05-22-14', {
     "requires": [
         "yui-base",
         "base",

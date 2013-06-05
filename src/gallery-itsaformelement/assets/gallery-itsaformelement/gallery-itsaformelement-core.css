@@ -22,6 +22,7 @@
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 3px #DDDDDD inset;
     display: inline-block;
+    *display: inline;
     font-size: 0.8em;
     padding: 0.5em 0.6em;
     transition: border 0.3s linear 0s;
@@ -43,7 +44,7 @@
 }
 
 .yui3-form .yui3-button.itsa-button-datetime.yui3-itsaformelement-inlinebutton {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .itsa-modellistview-styled.yui3-form .itsa-model-selected button:focus,
@@ -78,6 +79,7 @@
 .itsa-modellistview-styled.yui3-form .yui3-button {
   padding: 0.27em 0.31em;
   display: inline-block;
+  *display: inline;
   border: 1px solid #ccc;
   font-size: 0.8em;
   box-shadow: inset 0 1px 3px #ddd;
