@@ -51,7 +51,7 @@ Usage
 
 <b>Standard usage ITSAViewModelPanel:</b>
 ```js
-YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
     var viewmodel, model, modeltemplate;
     model = new Y.Model({
@@ -75,7 +75,7 @@ YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
 <b>ITSAViewModelPanel with extra buttons:</b>
 ```js
-YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
     var viewmodel, model, modeltemplate;
     model = new Y.Model({
@@ -126,7 +126,7 @@ YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
 <b>ITSAViewModelPanel in conjunction with ITSAEditModel:</b>
 ```js
-YUI().use('model', 'base-build', 'gallery-itsaviewmodelpanel', 'gallery-itsaeditmodel', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'base-build', 'gallery-itsaviewmodelpanel', 'gallery-itsaeditmodel', function(Y) {
 
     var viewmodel, model, modeltemplate, editmodeltemplate;
 

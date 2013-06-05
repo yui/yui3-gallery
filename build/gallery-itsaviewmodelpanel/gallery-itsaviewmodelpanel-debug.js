@@ -1,5 +1,7 @@
 YUI.add('gallery-itsaviewmodelpanel', function (Y, NAME) {
 
+'use strict';
+
 /**
  *
  * Widget ITSAViewModelPanel
@@ -663,7 +665,7 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     }
 });
 
-}, 'gallery-2013.05.10-00-54', {
+}, 'gallery-2013.06.05-22-14', {
     "requires": [
         "base-build",
         "classnamemanager",
