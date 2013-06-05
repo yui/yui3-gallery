@@ -25,45 +25,55 @@ shifter [queu] copying assets to skin for sam
        .yui3-button.yui3-button-close.itsa-datetimepicker-unclosable { // line 5, pos 1
    #2: [warning] Don't use adjoining classes.
        .yui3-button.yui3-button-close.itsa-datetimepicker-unclosable { // line 5, pos 1
-   #3: [warning] Duplicate property 'display' found.
-       display: inline-block; // line 24, pos 5
-   #4: [warning] Property with star prefix found.
+   #3: [warning] Property with star prefix found.
+       *display: inline; // line 18, pos 5
+   #4: [warning] height can't be used with display: inline.
+       height: 20px; // line 19, pos 5
+   #5: [warning] width can't be used with display: inline.
+       width: 20px; // line 20, pos 5
+   #6: [warning] Property with star prefix found.
        *background-image: url('datetime.png'); // line 26, pos 5
-   #5: [warning] Don't use adjoining classes.
-       .yui3-button.itsa-button-datetime { // line 37, pos 1
-   #6: [warning] Outlines shouldn't be hidden unless other visual changes are made.
-       .itsa-datetimepicker-panel:focus { // line 41, pos 1
    #7: [warning] Don't use adjoining classes.
+       .yui3-button.itsa-button-datetime { // line 37, pos 1
+   #8: [warning] Outlines shouldn't be hidden unless other visual changes are made.
+       .itsa-datetimepicker-panel:focus { // line 41, pos 1
+   #9: [warning] Don't use adjoining classes.
        .yui3-skin-sam .yui3-panel.itsa-datetimepicker-panel .yui3-widget-bd { // line 45, pos 16
-   #8: [warning] Don't use IDs in selectors.
-       #itsa-datetimepicker-timepicker .yui3-dial-value-string { // line 49, pos 1
-   #9: [warning] Don't use IDs in selectors.
-       #itsa-datetimepicker-timepicker .yui3-dial-label { // line 53, pos 1
    #10: [warning] Don't use IDs in selectors.
-       #itsa-datetimepicker-datepicker { // line 61, pos 1
+       #itsa-datetimepicker-timepicker .yui3-dial-value-string { // line 49, pos 1
    #11: [warning] Don't use IDs in selectors.
-       #itsa-datetimepicker-datepicker .yui3-calendar { // line 65, pos 1
+       #itsa-datetimepicker-timepicker .yui3-dial-label { // line 53, pos 1
    #12: [warning] Don't use IDs in selectors.
-       #itsa-datetimepicker-timepicker { // line 69, pos 1
-   #13: [warning] Don't use IDs in selectors.
-       #itsa-datetimepicker-timepicker .yui3-dial { // line 73, pos 1
-   #14: [warning] The box-sizing property isn't supported in IE6 and IE7.
-       box-sizing: border-box; // line 84, pos 5
+       #itsa-datetimepicker-datepicker { // line 61, pos 1
+   #13: [warning] Property with star prefix found.
+       *display: inline; // line 63, pos 5
+   #14: [warning] Don't use IDs in selectors.
+       #itsa-datetimepicker-datepicker .yui3-calendar { // line 66, pos 1
+   #15: [warning] Don't use IDs in selectors.
+       #itsa-datetimepicker-timepicker { // line 70, pos 1
+   #16: [warning] Property with star prefix found.
+       *display: inline; // line 72, pos 5
+   #17: [warning] Don't use IDs in selectors.
+       #itsa-datetimepicker-timepicker .yui3-dial { // line 75, pos 1
+   #18: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 86, pos 5
+   #19: [warning] Property with star prefix found.
+       *display: inline; // line 91, pos 5
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.613 seconds, pretty fast huh?
+shifter [info] finished in 0.807 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
-Starting Grover on 1 files with PhantomJS@1.7.0
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+Starting Grover on 1 files with PhantomJS@1.8.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsadatetimepicker]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
+✖ [gallery-itsadatetimepicker]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.008 seconds)
     test is empty
        No Tests Provided For This Module
 Writing files in JSON format to: /src/gallery-itsadatetimepicker/logs/tests.json

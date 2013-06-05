@@ -15,13 +15,13 @@
 
 .itsa-datetimepicker-icondate, .itsa-datetimepicker-icontime, .itsa-datetimepicker-icondatetime {
     display: inline-block;
+    *display: inline;
     height: 20px;
     width: 20px;
     cursor: pointer;
     background-repeat: no-repeat;
     background-position: 0 -1px;
     vertical-align: middle;
-    display: inline-block;
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAUCAMAAADImI+JAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMBQTFRFsbGx1tbWlJSUiYmJ9PT0eXl5dXV1fX190dHR4eHhxsbGrKysurq6tLS0p6en+Pj4TExMQ0NDnJycampqycnJ5ubmcHBwoaGhqampmZmZ8vLywsLCZ2dnkpKSVlZWbW1tRUVF6OjomJiYPT09YWFhwMDAvLy8gYGBtra25OTkWlpahYWF6+vr/Pz8QUFBpaWl7+/vqqqq6urqXV1d/f39vr6+pKSkr6+vj4+P7e3tzMzM4uLi+/v7QEBA////////zCR2qgAAAEB0Uk5T////////////////////////////////////////////////////////////////////////////////////AMJ7sUQAAAFtSURBVHjanJJZc4IwEIC5AkggGBTkqhde9SIIgqK0//9fNRCgPtp+M7v7kG92drLLfb8J9zcxEZOX0jEorxvNzn7FXAj5UKDUJe+0Y4E8YelNkkUv3gKRE68UWoJb1y6xBMFbCoLl8p0o6mAIDAotusg8Ai2Ki+qM7FbcGgut5CGEsRcb28bLNjBGKNf1HKHY3WRMBPDDsj7iBggaUQ0KjjMMtSyM3W431tqOXy+wjtxYD/SJUlj7aTo7JGsmKtmpJ1MaMVDX4h7PJ9YcUyrYik/TvVkmTab5ZKIWT+k7VhZDXFXnCLUzmpIkHViYbEauFqoKb/NaxDoTZYmowCCEAEIkuRHLWSNW2HFo41XQiv7lchmx8JmYoejMzP2wirwTEx1i23xq22ma2sRpFyi3Js1h9+GjOx8COGi4j7oVyhU+U3A0C7oVrvxjj7/qjuKRhziKcOp99kcBpi+A/sqygZYg7WH+63Df4EeAAQDjjY0+09WtywAAAABJRU5ErkJggg==');
     *background-image: url('datetime.png');
  }
@@ -60,6 +60,7 @@
 
 #itsa-datetimepicker-datepicker {
     display: inline-block;
+    *display: inline;
 }
 
 #itsa-datetimepicker-datepicker .yui3-calendar {
@@ -68,6 +69,7 @@
 
 #itsa-datetimepicker-timepicker {
     display: inline-block;
+    *display: inline;
 }
 
 #itsa-datetimepicker-timepicker .yui3-dial {
@@ -86,6 +88,7 @@
     border-radius: 4px 4px 4px 4px;
     box-shadow: 0 1px 3px #DDDDDD inset;
     display: inline-block;
+    *display: inline;
     font-size: 0.8em;
     padding: 0.27em 0.31em;
     transition: border 0.3s linear 0s;
