@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsaerrorreporter",
+    "builds": {
+        "gallery-itsaerrorreporter": {
+            "jsfiles": [
+                "js/gallery-itsaerrorreporter.js"
+            ]
+        }
+    }
+}

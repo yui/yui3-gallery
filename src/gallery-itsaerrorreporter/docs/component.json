@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-itsaerrorreporter",
+    "displayName": "Gallery: gallery-itsaerrorreporter",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsaerrorreporter" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

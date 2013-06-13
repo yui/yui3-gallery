@@ -1,0 +1,10 @@
+{
+    "gallery-itsaerrorreporter": {
+        "requires": [
+            "yui-base",
+            "event-base",
+            "event-custom-base",
+            "gallery-itsadialog"
+        ]
+    }
+}
