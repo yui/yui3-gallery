@@ -1,0 +1,25 @@
+{
+    "name": "gallery-layout",
+    "builds": {
+        "gallery-layout": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "base",
+                    "gallery-funcprog",
+                    "gallery-node-optimizations",
+                    "gallery-dimensions",
+                    "gallery-nodelist-extras2"
+                ],
+                "optional": [
+                    "gallery-layout-rows",
+                    "gallery-layout-cols"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "PageLayout.js"
+            ]
+        }
+    }
+}

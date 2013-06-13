@@ -1,4 +1,4 @@
-YUI.add('gallery-layout', function(Y) {
+YUI.add('gallery-layout', function (Y, NAME) {
 
 "use strict";
 
@@ -9,42 +9,41 @@ YUI.add('gallery-layout', function(Y) {
  */
 
 /**
- * <p>Manages header (layout-hd), body (layout-bd), footer (layout-ft)
- * stacked vertically to either fit inside the viewport (fit-to-viewport)
- * or adjust to the size of the body content (fit-to-content).</p>
+ * Manages header (layout-hd), body (layout-bd), footer (layout-ft) stacked
+ * vertically to either fit inside the viewport (fit-to-viewport) or adjust
+ * to the size of the body content (fit-to-content).
  * 
- * <p>The body content is sub-divided into modules, arranged either in rows
- * or columns.  The layout is automatically detected based on the marker
+ * The body content is sub-divided into modules, arranged either in rows or
+ * columns.  The layout is automatically detected based on the marker
  * classes attached to the two layers of divs inside layout-bd:  either
- * layout-module-row > layout-module or layout-module-col > layout-module</p>
+ * layout-module-row > layout-module or layout-module-col > layout-module
  * 
- * <p>Each module has an optional header (layout-m-hd), a body
- * (layout-m-bd), and an optional footer (layout-m-ft).  You can have
- * multiple layout-m-bd's, but only one can be visible at a time.  If you
- * change the DOM in any way that affects the height of any module header,
- * body, or footer, or if you switch bodies, you must call
- * <code>elementResized()</code> to reflow the layout.  (Technically, you
- * do not have to call <code>elementResized()</code> if you modify a module
- * body in fit-to-viewport mode, but if you later decide to switch to
- * fit-to-content, your optimization will cause trouble.)</p>
+ * Each module has an optional header (layout-m-hd), a body (layout-m-bd),
+ * and an optional footer (layout-m-ft).  You can have multiple
+ * layout-m-bd's, but only one can be visible at a time.  If you change the
+ * DOM in any way that affects the height of any module header, body, or
+ * footer, or if you switch bodies, you must call `elementResized()` to
+ * reflow the layout.  (Technically, you do not have to call
+ * `elementResized()` if you modify a module body in fit-to-viewport mode,
+ * but if you later decide to switch to fit-to-content, your optimization
+ * will cause trouble.)
  * 
- * <p>If you want a row, column, or module to have a fixed size, add the
- * class layout-not-managed to the layout-module-row, layout-module-column,
- * or layout-module.  Then use CSS to set the width of layout-module (for a
- * row) or layout-module-col (for a col), or the height of layout-m-bd.</p>
+ * If you want a row, column, or module to have a fixed size, add the class
+ * layout-not-managed to the layout-module-row, layout-module-column, or
+ * layout-module.  Then use CSS to set the width of layout-module (for a
+ * row) or layout-module-col (for a col), or the height of layout-m-bd.
  * 
- * <p>If the body content is a single module, it expands as the content
+ * If the body content is a single module, it expands as the content
  * expands (fit-to-content) until it would push the footer below the fold.
  * Then it switches to fit-to-viewport so the scrollbar appears on the
  * module instead of the entire viewport.  (If you do not want this
- * behavior in a particular case, add the class FORCE_FIT to
- * layout-bd.)</p>
+ * behavior in a particular case, add the class FORCE_FIT to layout-bd.)
  * 
- * <p>Note that a non-zero margin-top on the top element or a non-zero
+ * Note that a non-zero margin-top on the top element or a non-zero
  * margin-bottom on the bottom element inside any container will break the
  * layout because browsers lie about the total height of the container in
  * this case.  Use padding instead of margin on elements inside headers and
- * footers.</p>
+ * footers.
  *
  * @class PageLayout
  * @extends Base
@@ -592,7 +591,7 @@ function reparentFooter()
 	{
 		this.body_container.get('parentNode').insertBefore(this.footer_container, this.body_container.next(function(node)
 		{
-			return node.get('tagName').toLowerCase() != 'script';
+			return node.get('tagName') != 'SCRIPT';
 		}));
 	}
 	else
@@ -635,6 +634,8 @@ function resize()
 	this.viewport = viewport;
 
 	this.fire('beforeReflow');	// after confirming that viewport really has changed
+
+	saveScrollPositions.call(this);
 
 	// set width of hd,bd,ft and height of bd
 
@@ -688,7 +689,9 @@ function resize()
 
 	// resize modules
 
-	this.layout_plugin.resize(this, mode, body_width, body_height);
+	this.layout_plugin.resize.call(this, mode, body_width, body_height);
+
+	restoreScrollPositions.call(this);
 
 	// show body and footer
 
@@ -717,6 +720,48 @@ function checkViewportSize()
 	else
 	{
 		this.fire('afterReflow');
+	}
+}
+
+function saveScrollPositions()
+{
+	var outer_count = this.body_info.outers.size();
+	for (var i=0; i<outer_count; i++)
+	{
+		var modules     = this.body_info.modules[i];
+		var inner_count = modules.size();
+		for (var j=0; j<inner_count; j++)
+		{
+			var module   = modules.item(j),
+				children = this._analyzeModule(module);
+
+			module._page_layout = !children.bd ? null :
+			{
+				children:     children,
+				bdScrollTop:  children.bd.get('scrollTop'),
+				bdScrollLeft: children.bd.get('scrollLeft')
+			};
+		}
+	}
+}
+
+function restoreScrollPositions()
+{
+	var outer_count = this.body_info.outers.size();
+	for (var i=0; i<outer_count; i++)
+	{
+		var modules     = this.body_info.modules[i];
+		var inner_count = modules.size();
+		for (var j=0; j<inner_count; j++)
+		{
+			var module = modules.item(j);
+			if (module._page_layout)
+			{
+				var bd = module._page_layout.children.bd;
+				bd.set('scrollTop', module._page_layout.bdScrollTop);
+				bd.get('scrollLeft', module._page_layout.bdScrollLeft);
+			};
+		}
 	}
 }
 
@@ -1213,4 +1258,17 @@ Y.extend(PageLayout, Y.Base,
 Y.PageLayout = PageLayout;
 
 
-}, 'gallery-2012.10.03-20-02' ,{optional:['gallery-layout-rows','gallery-layout-cols'], requires:['base','gallery-funcprog','gallery-node-optimizations','gallery-dimensions','gallery-nodelist-extras2'], skinnable:true});
+}, 'gallery-2013.06.13-01-19', {
+    "skinnable": "true",
+    "requires": [
+        "base",
+        "gallery-funcprog",
+        "gallery-node-optimizations",
+        "gallery-dimensions",
+        "gallery-nodelist-extras2"
+    ],
+    "optional": [
+        "gallery-layout-rows",
+        "gallery-layout-cols"
+    ]
+});

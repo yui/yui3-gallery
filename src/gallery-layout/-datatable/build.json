@@ -1,0 +1,17 @@
+{
+    "name": "gallery-layout-datatable",
+    "builds": {
+        "gallery-layout-datatable": {
+            "config": {
+                "requires": [
+                    "gallery-layout",
+                    "datatable-scroll",
+                    "plugin"
+                ]
+            },
+            "jsfiles": [
+                "layout-datatable.js"
+            ]
+        }
+    }
+}
