@@ -86,14 +86,14 @@ http://nicolasgallagher.com/css-image-replacement-with-pseudo-elements/
     *line-height: 0;
     *letter-spacing: -1000px;
     *color: #86A5EC;
-    *background: url(http://yui.yahooapis.com/gallery-2013.06.05-22-14/gallery-itsaviewmodelpanel/assets/skins/sam/sprite_icons.png) no-repeat 1px 1px;
+    *background: url(http://yui.yahooapis.com/gallery-2013.06.13-01-19/gallery-itsaviewmodelpanel/assets/skins/sam/sprite_icons.png) no-repeat 1px 1px;
 }
 .yui3-skin-sam .yui3-itsaviewmodelpanel .yui3-widget-hd .yui3-button-close:before {
     /*
     Displays the [x] icon in place of the "Close" text.
     Note: The `width` of this pseudo element is the same as its "host" element.
     */
-    content: url(http://yui.yahooapis.com/gallery-2013.06.05-22-14/gallery-itsaviewmodelpanel/assets/skins/sam/sprite_icons.png);
+    content: url(http://yui.yahooapis.com/gallery-2013.06.13-01-19/gallery-itsaviewmodelpanel/assets/skins/sam/sprite_icons.png);
     display: inline-block;
     *display: inline;
     text-align: center;

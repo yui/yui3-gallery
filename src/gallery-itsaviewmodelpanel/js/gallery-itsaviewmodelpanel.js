@@ -245,7 +245,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     */
     _destroyModel : function(e) {
         var instance = this,
-            model = instance.get('model');
+            model = instance.get('model'),
+            syncOptions, options;
 
         Y.log('_destroyModel', 'info', 'Itsa-ViewModelPanel');
         if (model) {
@@ -268,7 +269,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     */
     _resetModel : function(e) {
         var instance = this,
-            model = instance.get('model');
+            model = instance.get('model'),
+            button;
 
         Y.log('_resetModel', 'info', 'Itsa-ViewModelPanel');
         if (model) {
@@ -292,7 +294,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     _saveModel : function(e) {
         var instance = this,
             model = instance.get('model'),
-            actionAfterSave = instance.get('actionAfterSave');
+            actionAfterSave = instance.get('actionAfterSave'),
+            button, syncOptions, options;
 
         Y.log('_saveModel', 'info', 'Itsa-ViewModelPanel');
         if (model) {
@@ -325,7 +328,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     _submitModel : function(e) {
         var instance = this,
             model = instance.get('model'),
-            actionAfterSubmit = instance.get('actionAfterSubmit');
+            actionAfterSubmit = instance.get('actionAfterSubmit'),
+            button, syncOptions, options;
 
         Y.log('_submitModel', 'info', 'Itsa-ViewModelPanel');
         if (model) {

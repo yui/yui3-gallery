@@ -243,7 +243,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     */
     _destroyModel : function(e) {
         var instance = this,
-            model = instance.get('model');
+            model = instance.get('model'),
+            syncOptions, options;
 
         if (model) {
             e.buttonNode = e.target;
@@ -265,7 +266,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     */
     _resetModel : function(e) {
         var instance = this,
-            model = instance.get('model');
+            model = instance.get('model'),
+            button;
 
         if (model) {
             button = e.target,
@@ -288,7 +290,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     _saveModel : function(e) {
         var instance = this,
             model = instance.get('model'),
-            actionAfterSave = instance.get('actionAfterSave');
+            actionAfterSave = instance.get('actionAfterSave'),
+            button, syncOptions, options;
 
         if (model) {
             button = e.target,
@@ -320,7 +323,8 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     _submitModel : function(e) {
         var instance = this,
             model = instance.get('model'),
-            actionAfterSubmit = instance.get('actionAfterSubmit');
+            actionAfterSubmit = instance.get('actionAfterSubmit'),
+            button, syncOptions, options;
 
         if (model) {
             button = e.target,
@@ -653,7 +657,7 @@ Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', Y.ITSAViewModel, [
     }
 });
 
-}, 'gallery-2013.06.05-22-14', {
+}, 'gallery-2013.06.13-01-19', {
     "requires": [
         "base-build",
         "classnamemanager",
