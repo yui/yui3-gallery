@@ -89,7 +89,7 @@
 
 .yui3-skin-sam .yui3-panel.yui3-itsadialogbox .yui3-widget-bd {
     text-align: center;
-    padding: 30px 12px 0px;
+    padding: 30px 12px 12px;
     min-height:48px;
 }
 
@@ -122,12 +122,16 @@
 
 .itsadialogbox-icon {
     position: static;
+    /* cross browser inline block */
+    display: -moz-inline-stack;
     display: inline-block;
+    *display: inline;
+
     float: left;
     width: 44px;
     height: 44px;
     background-repeat: no-repeat;
-    background-image: url('itsadialog_buttonicons.png');
+    background-image: url('../assets/itsadialog_buttonicons.png');
     background-position: -999px 0px;
 }
 
@@ -156,4 +160,13 @@
 
 .itsadialogbox-icon.icon-success {
     background-position: 0px 0px;
+}
+
+.yui3-itsadialogbox table {
+    width: 100%;
+}
+
+.itsaform-tablelabel {
+    width: 10px;
+    padding-right: 8px;
 }

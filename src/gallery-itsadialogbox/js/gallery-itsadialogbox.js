@@ -1,5 +1,3 @@
-YUI.add('gallery-itsadialogbox', function (Y, NAME) {
-
 'use strict';
 
 /**
@@ -1519,20 +1517,3 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
         }
     }
 );
-
-}, 'gallery-2013.06.13-01-19', {
-    "requires": [
-        "yui-base",
-        "base-build",
-        "panel",
-        "node-base",
-        "node-event-delegate",
-        "dd-plugin",
-        "node-focusmanager",
-        "event-valuechange",
-        "event-custom-base",
-        "node-core",
-        "oop",
-        "gallery-itsaformelement"
-    ]
-});

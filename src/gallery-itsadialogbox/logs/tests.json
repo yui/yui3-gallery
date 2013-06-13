@@ -1,0 +1,29 @@
+{
+    "name": "gallery-itsadialogbox",
+    "passed": 0,
+    "failed": 3,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 15,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 3,
+        "type": "testcase",
+        "test is empty": {
+            "result": "fail",
+            "message": "No Tests Provided For This Module",
+            "type": "test",
+            "name": "test is empty",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 12 Jun 2013 06:11:27 PM PDT",
+    "consoleInfo": []
+}
