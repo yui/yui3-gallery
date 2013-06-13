@@ -60,4 +60,4 @@ Y.Widget.prototype.renderPromise = function(timeout) {
     return instance._renderPromise;
 };
 
-}, 'gallery-2013.06.05-22-14', {"requires": ["yui-base", "widget", "promise"]});
+}, 'gallery-2013.06.13-01-19', {"requires": ["yui-base", "widget", "promise"]});

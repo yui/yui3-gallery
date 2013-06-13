@@ -38,12 +38,10 @@ Y.Widget.prototype.renderPromise = function(timeout) {
             instance.after(
                 'render',
                 function(e) {
-                    Y.log('renderPromise is resolved by the after-ready event', 'info', 'widget');
                     resolve(e);
                 }
             );
             if (instance.get('rendered')) {
-                Y.log('renderPromise is resolved by the rendered-attribute', 'info', 'widget');
                 resolve();
             }
             if (timeout !== 0) {
@@ -52,7 +50,6 @@ Y.Widget.prototype.renderPromise = function(timeout) {
                     null,
                     function() {
                         var errormessage = 'renderPromise is rejected by timeout of '+(timeout || DEFAULTTIMEOUT)+ ' ms';
-                        Y.log(errormessage, 'warn', 'widget');
                         reject(new Error(errormessage));
                     }
                 );

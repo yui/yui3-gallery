@@ -40,12 +40,10 @@ Y.Widget.prototype.renderPromise = function(timeout) {
             instance.after(
                 'render',
                 function(e) {
-                    Y.log('renderPromise is resolved by the after-ready event', 'info', 'widget');
                     resolve(e);
                 }
             );
             if (instance.get('rendered')) {
-                Y.log('renderPromise is resolved by the rendered-attribute', 'info', 'widget');
                 resolve();
             }
             if (timeout !== 0) {
@@ -54,7 +52,6 @@ Y.Widget.prototype.renderPromise = function(timeout) {
                     null,
                     function() {
                         var errormessage = 'renderPromise is rejected by timeout of '+(timeout || DEFAULTTIMEOUT)+ ' ms';
-                        Y.log(errormessage, 'warn', 'widget');
                         reject(new Error(errormessage));
                     }
                 );
@@ -64,4 +61,4 @@ Y.Widget.prototype.renderPromise = function(timeout) {
     return instance._renderPromise;
 };
 
-}, 'gallery-2013.06.05-22-14', {"requires": ["yui-base", "widget", "promise"]});
+}, 'gallery-2013.06.13-01-19', {"requires": ["yui-base", "widget", "promise"]});
