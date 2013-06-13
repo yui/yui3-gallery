@@ -1,0 +1,17 @@
+{
+    "gallery-itsaselectlist": {
+        "requires": [
+            "yui-base",
+            "base-build",
+            "node-style",
+            "base-base",
+            "widget",
+            "node-base",
+            "cssbutton",
+            "event-base",
+            "node-event-delegate",
+            "event-outside"
+        ],
+        "skinnable": true
+    }
+}

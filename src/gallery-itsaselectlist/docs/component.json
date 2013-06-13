@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-itsaselectlist",
+    "displayName": "Gallery: gallery-itsaselectlist",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsaselectlist" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

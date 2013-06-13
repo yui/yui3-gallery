@@ -1,5 +1,3 @@
-YUI.add('gallery-itsaselectlist', function (Y, NAME) {
-
 'use strict';
 
 /**
@@ -674,19 +672,3 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
 
     }
 );
-
-}, 'gallery-2013.06.13-01-19', {
-    "requires": [
-        "yui-base",
-        "base-build",
-        "node-style",
-        "base-base",
-        "widget",
-        "node-base",
-        "cssbutton",
-        "event-base",
-        "node-event-delegate",
-        "event-outside"
-    ],
-    "skinnable": true
-});
