@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-itsadialogbox",
+    "displayName": "Gallery: gallery-itsadialogbox",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsadialogbox" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

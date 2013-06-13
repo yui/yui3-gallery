@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsadialogbox",
+    "builds": {
+        "gallery-itsadialogbox": {
+            "jsfiles": [
+                "js/gallery-itsadialogbox.js"
+            ]
+        }
+    }
+}

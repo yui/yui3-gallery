@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsadialog",
+    "builds": {
+        "gallery-itsadialog": {
+            "jsfiles": [
+                "js/gallery-itsadialog.js"
+            ]
+        }
+    }
+}

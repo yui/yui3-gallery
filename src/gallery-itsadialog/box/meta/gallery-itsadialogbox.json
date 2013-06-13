@@ -1,0 +1,18 @@
+{
+    "gallery-itsadialogbox": {
+        "requires": [
+            "yui-base",
+            "base-build",
+            "panel",
+            "node-base",
+            "node-event-delegate",
+            "dd-plugin",
+            "node-focusmanager",
+            "event-valuechange",
+            "event-custom-base",
+            "node-core",
+            "oop",
+            "gallery-itsaformelement"
+        ]
+    }
+}
