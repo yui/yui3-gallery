@@ -1,0 +1,242 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-layout-cols
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-layout-cols
+   #1: Trailing whitespace.
+       * // line 11, pos 3
+   #2: Too many var statements.
+       var col_count     = this.body_info.outers.size(); // line 65, pos 9
+   #3: Too many var statements.
+       var row_heights = [], // line 71, pos 13
+   #4: Too many var statements.
+       for (var i=0; i<col_count; i++) // line 73, pos 18
+   #5: Too many var statements.
+       var heights = this.body_info.inner_sizes[i].slice(0); // line 75, pos 17
+   #6: Too many var statements.
+       var uncollapsed_count = 0, // line 79, pos 17
+   #7: Too many var statements.
+       var modules = this.body_info.modules[i]; // line 82, pos 17
+   #8: Too many var statements.
+       var count   = modules.size(); // line 83, pos 17
+   #9: Too many var statements.
+       for (var j=0; j<count; j++) // line 84, pos 22
+   #10: Too many var statements.
+       var module = modules.item(j); // line 86, pos 21
+   #11: Too many var statements.
+       for (var j=0; j<count; j++) // line 102, pos 26
+   #12: 'j' is already defined.
+       for (var j=0; j<count; j++) // line 102, pos 27
+   #13: Too many var statements.
+       var module_info = {}; // line 115, pos 9
+   #14: Too many var statements.
+       var col_widths  = this.body_info.outer_sizes.slice(0); // line 116, pos 9
+   #15: Too many var statements.
+       var uncollapsed_count = 0, // line 118, pos 9
+   #16: 'uncollapsed_count' is already defined.
+       var uncollapsed_count = 0, // line 118, pos 27
+   #17: 'sum' is already defined.
+       sum               = 0; // line 119, pos 27
+   #18: Too many var statements.
+       for (var i=0; i<col_count; i++) // line 120, pos 14
+   #19: 'i' is already defined.
+       for (var i=0; i<col_count; i++) // line 120, pos 15
+   #20: Too many var statements.
+       var col       = this.body_info.outers.item(i); // line 122, pos 13
+   #21: Too many var statements.
+       var collapsed = col.hasClass(Y.PageLayout.collapsed_horiz_class); // line 123, pos 13
+   #22: Too many var statements.
+       var modules   = this.body_info.modules[i]; // line 124, pos 13
+   #23: 'modules' is already defined.
+       var modules   = this.body_info.modules[i]; // line 124, pos 23
+   #24: Too many var statements.
+       var children = modules.item(0)._page_layout.children; // line 135, pos 21
+   #25: Too many var statements.
+       var root_w = children.bd.totalWidth() + modules.item(j).horizMarginBorderPadding(); // line 138, pos 25
+   #26: 'j' used out of scope.
+       var root_w = children.bd.totalWidth() + modules.item(j).horizMarginBorderPadding(); // line 138, pos 74
+   #27: Expected '===' and instead saw '=='.
+       if (modules.size() == 1) // line 151, pos 32
+   #28: Too many var statements.
+       for (var i=0; i<col_count; i++) // line 160, pos 18
+   #29: 'i' is already defined.
+       for (var i=0; i<col_count; i++) // line 160, pos 19
+   #30: Too many var statements.
+       var total_w  = 0, // line 168, pos 9
+   #31: Too many var statements.
+       for (var i=0; i<col_count; i++) // line 171, pos 14
+   #32: 'i' is already defined.
+       for (var i=0; i<col_count; i++) // line 171, pos 15
+   #33: Expected '===' and instead saw '=='.
+       if (col_widths[i] == 0) // line 173, pos 27
+   #34: Too many var statements.
+       var module   = this.body_info.modules[i].item(0); // line 175, pos 17
+   #35: 'module' is already defined.
+       var module   = this.body_info.modules[i].item(0); // line 175, pos 26
+   #36: Too many var statements.
+       var children = module._page_layout.children; // line 176, pos 17
+   #37: 'children' is already defined.
+       var children = module._page_layout.children; // line 176, pos 26
+   #38: Too many var statements.
+       var h = getHeight(col_heights[i], row_heights, i, 0, module, module_info); // line 179, pos 21
+   #39: 'col_heights' used out of scope.
+       var h = getHeight(col_heights[i], row_heights, i, 0, module, module_info); // line 179, pos 35
+   #40: 'row_heights' used out of scope.
+       var h = getHeight(col_heights[i], row_heights, i, 0, module, module_info); // line 179, pos 51
+   #41: Too many var statements.
+       var h1 = adjustHeight(h, children); // line 184, pos 25
+   #42: Too many var statements.
+       var w1 = children.bd.insideWidth(); // line 185, pos 25
+   #43: Too many var statements.
+       var w    = Math.max(1, Math.floor(body_width * col_widths[i] / 100.0)); // line 216, pos 13
+   #44: Expected '===' and instead saw '=='.
+       if (m == uncollapsed_count) // line 218, pos 15
+   #45: Too many var statements.
+       var modules = this.body_info.modules[i]; // line 227, pos 13
+   #46: 'modules' is already defined.
+       var modules = this.body_info.modules[i]; // line 227, pos 21
+   #47: Too many var statements.
+       var total_h    = 0; // line 232, pos 17
+   #48: Too many var statements.
+       var open_count = modules.size(); // line 233, pos 17
+   #49: Too many var statements.
+       var count      = open_count; // line 234, pos 17
+   #50: 'count' is already defined.
+       var count      = open_count; // line 234, pos 28
+   #51: Too many var statements.
+       for (var j=0; j<count; j++) // line 235, pos 22
+   #52: 'j' is already defined.
+       for (var j=0; j<count; j++) // line 235, pos 23
+   #53: Too many var statements.
+       var h = row_heights[i][j]; // line 237, pos 21
+   #54: 'h' is already defined.
+       var h = row_heights[i][j]; // line 237, pos 23
+   #55: 'row_heights' used out of scope.
+       var h = row_heights[i][j]; // line 237, pos 25
+   #56: Too many var statements.
+       var k = 0; // line 247, pos 17
+   #57: Too many var statements.
+       for (var j=0; j<count; j++) // line 248, pos 22
+   #58: 'j' is already defined.
+       for (var j=0; j<count; j++) // line 248, pos 23
+   #59: Too many var statements.
+       var module   = modules.item(j); // line 250, pos 21
+   #60: 'module' is already defined.
+       var module   = modules.item(j); // line 250, pos 30
+   #61: Too many var statements.
+       var children = module._page_layout.children; // line 251, pos 21
+   #62: 'children' is already defined.
+       var children = module._page_layout.children; // line 251, pos 30
+   #63: 'row_heights' used out of scope.
+       if (row_heights[i][j] < 0) // line 252, pos 21
+   #64: Too many var statements.
+       var h1 = children.bd.insideHeight(); // line 254, pos 25
+   #65: 'h1' is already defined.
+       var h1 = children.bd.insideHeight(); // line 254, pos 28
+   #66: Too many var statements.
+       var w1 = w - children.root.horizMarginBorderPadding() - // line 255, pos 25
+   #67: 'w1' is already defined.
+       var w1 = w - children.root.horizMarginBorderPadding() - // line 255, pos 28
+   #68: Mixed spaces and tabs.
+       children.bd.horizMarginBorderPadding(); // line 256, pos 7
+   #69: Too many var statements.
+       var h    = getHeight(col_heights[i], row_heights, i, j, module, module_info); // line 266, pos 25
+   #70: 'h' is already defined.
+       var h    = getHeight(col_heights[i], row_heights, i, j, module, module_info); // line 266, pos 30
+   #71: 'col_heights' used out of scope.
+       var h    = getHeight(col_heights[i], row_heights, i, j, module, module_info); // line 266, pos 42
+   #72: 'row_heights' used out of scope.
+       var h    = getHeight(col_heights[i], row_heights, i, j, module, module_info); // line 266, pos 58
+   #73: Too many var statements.
+       var h1   = adjustHeight(h, children); // line 267, pos 25
+   #74: 'h1' is already defined.
+       var h1   = adjustHeight(h, children); // line 267, pos 30
+   #75: Expected '===' and instead saw '=='.
+       if (k == open_count) // line 270, pos 27
+   #76: Too many var statements.
+       var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding()); // line 275, pos 25
+   #77: 'w1' is already defined.
+       var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding()); // line 275, pos 28
+   #78: Too many var statements.
+       var count = modules.size(); // line 289, pos 17
+   #79: 'count' is already defined.
+       var count = modules.size(); // line 289, pos 23
+   #80: Too many var statements.
+       for (var j=0; j<count; j++) // line 290, pos 22
+   #81: 'j' is already defined.
+       for (var j=0; j<count; j++) // line 290, pos 23
+   #82: Too many var statements.
+       var children = modules.item(j)._page_layout.children; // line 292, pos 21
+   #83: 'children' is already defined.
+       var children = modules.item(j)._page_layout.children; // line 292, pos 30
+   #84: Too many var statements.
+       var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding()); // line 295, pos 25
+   #85: 'w1' is already defined.
+       var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding()); // line 295, pos 28
+   #86: Too many var statements.
+       var h = 0; // line 323, pos 13
+   #87: 'h' is already defined.
+       var h = 0; // line 323, pos 15
+   #88: Too many var statements.
+       for (var i=0; i<col_count; i++) // line 324, pos 18
+   #89: 'i' is already defined.
+       for (var i=0; i<col_count; i++) // line 324, pos 19
+   #90: Too many var statements.
+       for (var i=0; i<col_count; i++) // line 329, pos 18
+   #91: 'i' is already defined.
+       for (var i=0; i<col_count; i++) // line 329, pos 19
+   #92: Too many var statements.
+       var modules = this.body_info.modules[i], // line 331, pos 17
+   #93: 'modules' is already defined.
+       var modules = this.body_info.modules[i], // line 331, pos 25
+   #94: 'count' is already defined.
+       count   = modules.size(), // line 332, pos 25
+   #95: 'module' is already defined.
+       module  = null, // line 333, pos 25
+   #96: 'w1' is already defined.
+       w1      = 0; // line 334, pos 25
+   #97: Too many var statements.
+       for (var j=count-1; j>=0; j--) // line 335, pos 22
+   #98: 'j' is already defined.
+       for (var j=count-1; j>=0; j--) // line 335, pos 23
+   #99: Too many var statements.
+       var module1 = modules.item(j); // line 337, pos 21
+   #100: Expected '===' and instead saw '=='.
+       if (count == 1 || // line 338, pos 27
+   #101: Mixed spaces and tabs.
+       !module1.hasClass(Y.PageLayout.collapsed_vert_class) && // line 340, pos 5
+   #102: Mixed spaces and tabs.
+       this.body_info.inner_sizes[i][j] > 0)) // line 341, pos 5
+   #103: Too many var statements.
+       var bd = ftc_size[i][j][0]; // line 348, pos 25
+   #104: Too many var statements.
+       var delta = h - this.body_info.outers.item(i).get('offsetHeight'); // line 360, pos 21
+   #105: Too many var statements.
+       var children = module._page_layout.children; // line 367, pos 25
+   #106: 'children' is already defined.
+       var children = module._page_layout.children; // line 367, pos 34
+   #107: Too many var statements.
+       var h1 = children.bd.insideHeight() + delta; // line 370, pos 29
+   #108: 'h1' is already defined.
+       var h1 = children.bd.insideHeight() + delta; // line 370, pos 32
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-layout-cols/gallery-layout-cols.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-layout-cols/gallery-layout-cols.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-layout-cols/gallery-layout-cols-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.242 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

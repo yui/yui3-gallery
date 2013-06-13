@@ -1,4 +1,4 @@
-YUI.add('gallery-layout-cols', function(Y) {
+YUI.add('gallery-layout-cols', function (Y, NAME) {
 
 "use strict";
 
@@ -57,13 +57,12 @@ function getHeight(
 }
 
 Y.PageLayoutCols.resize = function(
-	/* PageLayout */	host,
 	/* enum */			mode,
 	/* int */			body_width,
 	/* int */			body_height)
 {
-	var match_heights = host.get('matchColumnHeights');
-	var col_count     = host.body_info.outers.size();
+	var match_heights = this.get('matchColumnHeights');
+	var col_count     = this.body_info.outers.size();
 
 	// fit-to-viewport: adjust for vertically collapsed modules
 
@@ -73,14 +72,14 @@ Y.PageLayoutCols.resize = function(
 			col_heights = [];
 		for (var i=0; i<col_count; i++)
 		{
-			var heights = host.body_info.inner_sizes[i].slice(0);
+			var heights = this.body_info.inner_sizes[i].slice(0);
 			row_heights.push(heights);
 			col_heights.push(body_height);
 
 			var uncollapsed_count = 0,
 				sum               = 0;
 
-			var modules = host.body_info.modules[i];
+			var modules = this.body_info.modules[i];
 			var count   = modules.size();
 			for (var j=0; j<count; j++)
 			{
@@ -114,15 +113,15 @@ Y.PageLayoutCols.resize = function(
 	// adjust for horizontally collapsed or fixed width modules
 
 	var module_info = {};
-	var col_widths  = host.body_info.outer_sizes.slice(0);
+	var col_widths  = this.body_info.outer_sizes.slice(0);
 
 	var uncollapsed_count = 0,
 		sum               = 0;
 	for (var i=0; i<col_count; i++)
 	{
-		var col       = host.body_info.outers.item(i);
+		var col       = this.body_info.outers.item(i);
 		var collapsed = col.hasClass(Y.PageLayout.collapsed_horiz_class);
-		var modules   = host.body_info.modules[i];
+		var modules   = this.body_info.modules[i];
 		if (collapsed || col_widths[i] < 0)
 		{
 			col_widths[i] = 0;
@@ -133,7 +132,7 @@ Y.PageLayoutCols.resize = function(
 			}
 			else if (has_explosive_modules_bug)
 			{
-				var children = host._analyzeModule(modules.item(0));
+				var children = modules.item(0)._page_layout.children;
 				if (children.bd)
 				{
 					var root_w = children.bd.totalWidth() + modules.item(j).horizMarginBorderPadding();
@@ -173,8 +172,8 @@ Y.PageLayoutCols.resize = function(
 	{
 		if (col_widths[i] == 0)
 		{
-			var module   = host.body_info.modules[i].item(0);
-			var children = host._analyzeModule(module);
+			var module   = this.body_info.modules[i].item(0);
+			var children = module._page_layout.children;
 			if (mode === Y.PageLayout.FIT_TO_VIEWPORT)
 			{
 				var h = getHeight(col_heights[i], row_heights, i, 0, module, module_info);
@@ -184,14 +183,14 @@ Y.PageLayoutCols.resize = function(
 				{
 					var h1 = adjustHeight(h, children);
 					var w1 = children.bd.insideWidth();
-					host.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
 					children.bd.setStyle('height', h1+'px');
-					host.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
 				}
 			}
 			else if (children.bd)
 			{
-				host.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: 'auto' });
+				this.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: 'auto' });
 
 				children.root.setStyle('height', 'auto');
 				children.bd.setStyle('height', 'auto');
@@ -202,7 +201,7 @@ Y.PageLayoutCols.resize = function(
 				}
 				else
 				{
-					host.fire('afterResizeModule',
+					this.fire('afterResizeModule',
 					{
 						bd:     children.bd,
 						height: children.bd.insideHeight(),
@@ -221,11 +220,11 @@ Y.PageLayoutCols.resize = function(
 			w += body_width - total_w;
 		}
 
-		w = Math.max(1, w - host.body_info.outers.item(i).horizMarginBorderPadding());
-		host.body_info.outers.item(i).setStyle('width', w+'px');
-		w = Math.max(1, w - host.body_info.modules[0].item(0).horizMarginBorderPadding());
+		w = Math.max(1, w - this.body_info.outers.item(i).horizMarginBorderPadding());
+		this.body_info.outers.item(i).setStyle('width', w+'px');
+		w = Math.max(1, w - this.body_info.modules[0].item(0).horizMarginBorderPadding());
 
-		var modules = host.body_info.modules[i];
+		var modules = this.body_info.modules[i];
 		if (mode === Y.PageLayout.FIT_TO_VIEWPORT)
 		{
 			// adjust for vertically collapsed or fixed height modules
@@ -249,15 +248,15 @@ Y.PageLayoutCols.resize = function(
 			for (var j=0; j<count; j++)
 			{
 				var module   = modules.item(j);
-				var children = host._analyzeModule(module);
+				var children = module._page_layout.children;
 				if (row_heights[i][j] < 0)
 				{
 					var h1 = children.bd.insideHeight();
 					var w1 = w - children.root.horizMarginBorderPadding() -
 							 children.bd.horizMarginBorderPadding();
-					host.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
 					module.setStyle('width', w+'px');
-					host.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
 					continue;
 				}
 				k++;
@@ -274,10 +273,10 @@ Y.PageLayoutCols.resize = function(
 					}
 
 					var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding());
-					host.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
-					host._setWidth(children, w);
+					this.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this._setWidth(children, w);
 					children.bd.setStyle('height', h1+'px');
-					host.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
 				}
 			}
 		}
@@ -290,12 +289,12 @@ Y.PageLayoutCols.resize = function(
 			var count = modules.size();
 			for (var j=0; j<count; j++)
 			{
-				var children = host._analyzeModule(modules.item(j));
+				var children = modules.item(j)._page_layout.children;
 				if (children.bd)
 				{
 					var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding());
-					host.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: w1 });
-					host._setWidth(children, w);
+					this.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: w1 });
+					this._setWidth(children, w);
 					children.root.setStyle('height', 'auto');
 					children.bd.setStyle('height', 'auto');
 
@@ -305,7 +304,7 @@ Y.PageLayoutCols.resize = function(
 					}
 					else
 					{
-						host.fire('afterResizeModule',
+						this.fire('afterResizeModule',
 						{
 							bd:     children.bd,
 							height: children.bd.insideHeight(),
@@ -324,12 +323,12 @@ Y.PageLayoutCols.resize = function(
 		var h = 0;
 		for (var i=0; i<col_count; i++)
 		{
-			h = Math.max(h, host.body_info.outers.item(i).get('offsetHeight'));
+			h = Math.max(h, this.body_info.outers.item(i).get('offsetHeight'));
 		}
 
 		for (var i=0; i<col_count; i++)
 		{
-			var modules = host.body_info.modules[i],
+			var modules = this.body_info.modules[i],
 				count   = modules.size(),
 				module  = null,
 				w1      = 0;
@@ -339,7 +338,7 @@ Y.PageLayoutCols.resize = function(
 				if (count == 1 ||
 					(!module &&
 					 !module1.hasClass(Y.PageLayout.collapsed_vert_class) &&
-					 host.body_info.inner_sizes[i][j] > 0))
+					 this.body_info.inner_sizes[i][j] > 0))
 				{
 					module = module1;
 					w1     = ftc_size[i][j][1];
@@ -347,7 +346,7 @@ Y.PageLayoutCols.resize = function(
 				else
 				{
 					var bd = ftc_size[i][j][0];
-					host.fire('afterResizeModule',
+					this.fire('afterResizeModule',
 					{
 						bd:     bd,
 						height: bd.insideHeight(),
@@ -358,20 +357,20 @@ Y.PageLayoutCols.resize = function(
 
 			if (module)
 			{
-				var delta = h - host.body_info.outers.item(i).get('offsetHeight');
+				var delta = h - this.body_info.outers.item(i).get('offsetHeight');
 				if (delta > 0 && module.get('parentNode').hasClass(Y.PageLayout.collapsed_horiz_class))
 				{
 					module.setStyle('height', (module.insideHeight() + delta)+'px');
 				}
 				else	// always fire afterResizeModule
 				{
-					var children = host._analyzeModule(module);
+					var children = module._page_layout.children;
 					if (children.bd)
 					{
 						var h1 = children.bd.insideHeight() + delta;
 						module.setStyle('height', 'auto');
 						children.bd.setStyle('height', h1+'px');
-						host.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
+						this.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
 					}
 				}
 			}
@@ -380,4 +379,4 @@ Y.PageLayoutCols.resize = function(
 };
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-layout']});
+}, 'gallery-2013.06.13-01-19', {"requires": ["gallery-layout"]});
