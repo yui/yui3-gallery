@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsamodulesloadedpromise",
+    "builds": {
+        "gallery-itsamodulesloadedpromise": {
+            "jsfiles": [
+                "js/gallery-itsamodulesloadedpromise.js"
+            ]
+        }
+    }
+}

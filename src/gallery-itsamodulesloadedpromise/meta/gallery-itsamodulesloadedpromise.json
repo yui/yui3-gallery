@@ -1,0 +1,9 @@
+{
+    "gallery-itsamodulesloadedpromise": {
+        "requires": [
+            "yui-base",
+            "promise",
+            "yui-later"
+        ]
+    }
+}
