@@ -6,6 +6,8 @@ YUI.add('gallery-scrollintoview', function (Y, NAME) {
  * @module gallery-scrollintoview
  */
 
+var scrollBodyParent = (YUI.Env.UA.gecko > 0 || YUI.Env.UA.opera > 0);
+
 /**
  * Only scrolls if the object is not currently visible.
  * 
@@ -93,12 +95,16 @@ function scrollContainer(node)
 
 	if (hit_top)
 	{
-		console.log(dx +',' + dy);
 		if (dx || dy)
 		{
 			if (info.anim)
 			{
 				var body = Y.one('body');
+				if (scrollBodyParent)
+				{
+					body = body.get('parentNode');
+				}
+
 				info.anim.setAttrs(
 				{
 					node: body,
@@ -133,7 +139,6 @@ function scrollContainer(node)
 		return false;
 	}
 
-	console.log(dx +',' + dy);
 	if (dx || dy)
 	{
 		if (info.anim)
@@ -228,7 +233,6 @@ Y.Node.prototype.scrollIntoView = function(config)
 		/* int */	dx,
 		/* int */	dy)
 	{
-	console.log('move:'+dx+','+dy);
 		this.top    += dy;
 		this.bottom += dy;
 		this.left   += dx;
@@ -267,4 +271,4 @@ Y.Node.prototype.scrollIntoView = function(config)
 };
 
 
-}, 'gallery-2013.04.24-22-00', {"requires": ["gallery-dimensions", "dom-screen"]});
+}, 'gallery-2013.06.13-01-19', {"requires": ["gallery-dimensions", "dom-screen"]});

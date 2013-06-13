@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-scrollintoview
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -10,59 +10,59 @@ shifter [warn] down shifting, can't find a meta directory
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-scrollintoview
    #1: Trailing whitespace.
-       * // line 11, pos 3
+       * // line 13, pos 3
    #2: Trailing whitespace.
-       * // line 15, pos 3
+       * // line 17, pos 3
    #3: Too many var statements.
-       var hit_top = (info.a.offsetParent === null); // line 25, pos 13
+       var hit_top = (info.a.offsetParent === null); // line 27, pos 13
    #4: Too many var statements.
-       var a = Y.one(info.a), // line 27, pos 13
+       var a = Y.one(info.a), // line 29, pos 13
    #5: Too many var statements.
-       var scrollX = (hit_top ? Y.config.doc.documentElement.scrollLeft || Y.config.doc.body.scrollLeft : info.a.scrollLeft); // line 47, pos 9
+       var scrollX = (hit_top ? Y.config.doc.documentElement.scrollLeft || Y.config.doc.body.scrollLeft : info.a.scrollLeft); // line 49, pos 9
    #6: 'hit_top' used out of scope.
-       var scrollX = (hit_top ? Y.config.doc.documentElement.scrollLeft || Y.config.doc.body.scrollLeft : info.a.scrollLeft); // line 47, pos 20
+       var scrollX = (hit_top ? Y.config.doc.documentElement.scrollLeft || Y.config.doc.body.scrollLeft : info.a.scrollLeft); // line 49, pos 20
    #7: Too many var statements.
-       var scrollY = (hit_top ? Y.config.doc.documentElement.scrollTop || Y.config.doc.body.scrollTop : info.a.scrollTop); // line 48, pos 9
+       var scrollY = (hit_top ? Y.config.doc.documentElement.scrollTop || Y.config.doc.body.scrollTop : info.a.scrollTop); // line 50, pos 9
    #8: 'hit_top' used out of scope.
-       var scrollY = (hit_top ? Y.config.doc.documentElement.scrollTop || Y.config.doc.body.scrollTop : info.a.scrollTop); // line 48, pos 20
+       var scrollY = (hit_top ? Y.config.doc.documentElement.scrollTop || Y.config.doc.body.scrollTop : info.a.scrollTop); // line 50, pos 20
    #9: Too many var statements.
-       var d = // line 50, pos 9
+       var d = // line 52, pos 9
    #10: 'hit_top' used out of scope.
-       bottom: scrollY + (hit_top ? Y.DOM.winHeight() : info.a.clientHeight), // line 53, pos 28
+       bottom: scrollY + (hit_top ? Y.DOM.winHeight() : info.a.clientHeight), // line 55, pos 28
    #11: 'hit_top' used out of scope.
-       right:  scrollX + (hit_top ? Y.DOM.winWidth() : info.a.clientWidth) // line 55, pos 28
+       right:  scrollX + (hit_top ? Y.DOM.winWidth() : info.a.clientWidth) // line 57, pos 28
    #12: 'hit_top' used out of scope.
-       if (hit_top && info.margin) // line 58, pos 9
+       if (hit_top && info.margin) // line 60, pos 9
    #13: Too many var statements.
-       var dy = 0; // line 66, pos 9
+       var dy = 0; // line 68, pos 9
    #14: 'a' used out of scope.
-       if (a.getStyle('overflowY') == 'hidden') // line 67, pos 9
+       if (a.getStyle('overflowY') == 'hidden') // line 69, pos 9
    #15: Expected '===' and instead saw '=='.
-       if (a.getStyle('overflowY') == 'hidden') // line 67, pos 33
+       if (a.getStyle('overflowY') == 'hidden') // line 69, pos 33
    #16: Empty block.
-       else if (info.r.top < d.top) // line 71, pos 5
+       else if (info.r.top < d.top) // line 73, pos 5
    #17: Too many var statements.
-       var dx = 0; // line 80, pos 9
+       var dx = 0; // line 82, pos 9
    #18: 'a' used out of scope.
-       if (a.getStyle('overflowX') == 'hidden') // line 81, pos 9
+       if (a.getStyle('overflowX') == 'hidden') // line 83, pos 9
    #19: Expected '===' and instead saw '=='.
-       if (a.getStyle('overflowX') == 'hidden') // line 81, pos 33
+       if (a.getStyle('overflowX') == 'hidden') // line 83, pos 33
    #20: Empty block.
-       else if (info.r.left < d.left) // line 85, pos 5
+       else if (info.r.left < d.left) // line 87, pos 5
    #21: 'hit_top' used out of scope.
-       if (hit_top) // line 94, pos 9
+       if (hit_top) // line 96, pos 9
    #22: Too many var statements.
-       var body = Y.one('body'); // line 101, pos 21
+       var body = Y.one('body'); // line 102, pos 21
    #23: Trailing whitespace.
-       * // line 190, pos 3
+       * // line 195, pos 3
    #24: Too many var statements.
-       var r = // line 219, pos 9
+       var r = // line 224, pos 9
    #25: Missing semicolon.
-       } // line 242, pos 6
+       } // line 246, pos 6
    #26: Too many var statements.
-       var anim_config = {}; // line 249, pos 13
+       var anim_config = {}; // line 253, pos 13
    #27: Empty block.
-       } // line 264, pos 5
+       } // line 268, pos 5
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-scrollintoview/gallery-scrollintoview.js with UglifyJS
@@ -73,7 +73,7 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-scrollintoview/gallery-scrollintoview-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.249 seconds, pretty fast huh?
+shifter [info] finished in 0.216 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
@@ -95,6 +95,6 @@ Writing files in JSON format to: /src/gallery-scrollintoview/logs/tests.json
 └─────────────────────────────────────────────────────────────┴─────────┴──────┴─────────────┴───────┘
 ----------------------------------------------------------------
 ✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
-  [Grover Execution Timer] 0.795 seconds
+  [Grover Execution Timer] 1.587 seconds
 Failed to find source file: /build/gallery-scrollintoview/gallery-scrollintoview.js
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
