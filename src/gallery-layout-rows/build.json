@@ -1,0 +1,15 @@
+{
+    "name": "gallery-layout-rows",
+    "builds": {
+        "gallery-layout-rows": {
+            "config": {
+                "requires": [
+                    "gallery-layout"
+                ]
+            },
+            "jsfiles": [
+                "PageLayoutRows.js"
+            ]
+        }
+    }
+}

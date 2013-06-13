@@ -1,4 +1,4 @@
-YUI.add('gallery-layout-rows', function(Y) {
+YUI.add('gallery-layout-rows', function (Y, NAME) {
 
 "use strict";
 
@@ -70,12 +70,11 @@ function getWidth(
 }
 
 Y.PageLayoutRows.resize = function(
-	/* PageLayout */	host,
 	/* enum */			mode,
 	/* int */			body_width,
 	/* int */			body_height)
 {
-	var row_count = host.body_info.outers.size();
+	var row_count = this.body_info.outers.size();
 
 	// reset module heights
 	// adjust for horizontally collapsed or fixed width modules
@@ -84,14 +83,14 @@ Y.PageLayoutRows.resize = function(
 		row_widths = [];
 	for (var i=0; i<row_count; i++)
 	{
-		var widths = host.body_info.inner_sizes[i].slice(0);
+		var widths = this.body_info.inner_sizes[i].slice(0);
 		col_widths.push(widths);
 		row_widths.push(body_width);
 
 		var uncollapsed_count = 0,
 			sum               = 0;
 
-		var modules = host.body_info.modules[i];
+		var modules = this.body_info.modules[i];
 		var count   = modules.size();
 		for (var j=0; j<count; j++)
 		{
@@ -133,16 +132,16 @@ Y.PageLayoutRows.resize = function(
 	// smart fit:  if only one module, fit-to-content until it won't fit inside viewport
 
 	var module_info = {};
-	if (host.single_module)
+	if (this.single_module)
 	{
-		var module   = host.body_info.modules[0].item(0);
-		var children = host._analyzeModule(module);
+		var module   = this.body_info.modules[0].item(0);
+		var children = module._page_layout.children;
 		if (children.bd)
 		{
 			var w  = getWidth(row_widths[0], col_widths, 0, 0, module, module_info);
 			var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding());
-			host.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: w1 });
-			host._setWidth(children, w);
+			this.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: w1 });
+			this._setWidth(children, w);
 			children.root.setStyle('height', 'auto');
 			children.bd.setStyle('height', 'auto');
 		}
@@ -150,7 +149,7 @@ Y.PageLayoutRows.resize = function(
 		var h = module.totalHeight();
 		mode  = (h > body_height ? Y.PageLayout.FIT_TO_VIEWPORT : Y.PageLayout.FIT_TO_CONTENT);
 
-		host.body_container.removeClass('FIT_TO_[A-Z_]+');
+		this.body_container.removeClass('FIT_TO_[A-Z_]+');
 	}
 
 	// fit-to-content:  compute height of each row; requires setting module widths
@@ -161,9 +160,9 @@ Y.PageLayoutRows.resize = function(
 		var row_heights = [];
 		for (var i=0; i<row_count; i++)
 		{
-			host.body_info.outers.item(i).setStyle('height', 'auto');
+			this.body_info.outers.item(i).setStyle('height', 'auto');
 
-			var modules    = host.body_info.modules[i];
+			var modules    = this.body_info.modules[i];
 			var h          = 0;
 			var total_w    = 0;
 			var open_count = modules.size();
@@ -177,7 +176,7 @@ Y.PageLayoutRows.resize = function(
 					var total_w_hacked = false;
 					if (w == Y.PageLayout.unmanaged_size && has_explosive_modules_bug)
 					{
-						var children = host._analyzeModule(module);
+						var children = module._page_layout.children;
 						if (children.bd)
 						{
 							var bd_w = children.bd.totalWidth();
@@ -205,7 +204,7 @@ Y.PageLayoutRows.resize = function(
 				{
 					if (w == Y.PageLayout.unmanaged_size)
 					{
-						var children = host._analyzeModule(module);
+						var children = module._page_layout.children;
 						if (children.bd)
 						{
 							children.root.setStyle('height', 'auto');
@@ -218,7 +217,7 @@ Y.PageLayoutRows.resize = function(
 				}
 				k++;
 
-				var children = host._analyzeModule(module);
+				var children = module._page_layout.children;
 				if (children.bd)
 				{
 					var w    = getWidth(row_widths[i], col_widths, i, j, module, module_info);
@@ -230,8 +229,8 @@ Y.PageLayoutRows.resize = function(
 					}
 
 					var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding());
-					host.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: w1 });
-					host._setWidth(children, w);
+					this.fire('beforeResizeModule', { bd: children.bd, height: 'auto', width: w1 });
+					this._setWidth(children, w);
 					children.root.setStyle('height', 'auto');
 					children.bd.setStyle('height', 'auto');
 				}
@@ -244,13 +243,13 @@ Y.PageLayoutRows.resize = function(
 	}
 	else
 	{
-		var row_heights = host.body_info.outer_sizes.slice(0);
+		var row_heights = this.body_info.outer_sizes.slice(0);
 
 		var uncollapsed_count = 0,
 			sum               = 0;
 		for (var i=0; i<row_count; i++)
 		{
-			var row       = host.body_info.outers.item(i);
+			var row       = this.body_info.outers.item(i);
 			var collapsed = row.hasClass(Y.PageLayout.collapsed_vert_class);
 			if (collapsed || row_heights[i] < 0)
 			{
@@ -294,27 +293,27 @@ Y.PageLayoutRows.resize = function(
 		{
 			if (row_heights[i] === 0)
 			{
-				var module   = host.body_info.modules[i].item(0);
-				var children = host._analyzeModule(module);
+				var module   = this.body_info.modules[i].item(0);
+				var children = module._page_layout.children;
 				if (children.bd)
 				{
 					var h1 = children.bd.insideHeight();
 					var w  = getWidth(row_widths[i], col_widths, i, 0, module, module_info);
 					var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding());
-					host.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
-					host._setWidth(children, w);
-					host.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this._setWidth(children, w);
+					this.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
 				}
 				continue;
 			}
 
-			var h = Math.max(1, Math.floor(body_height * row_heights[i] / 100.0) - host.body_info.outers.item(i).vertMarginBorderPadding());
+			var h = Math.max(1, Math.floor(body_height * row_heights[i] / 100.0) - this.body_info.outers.item(i).vertMarginBorderPadding());
 		}
-		host.body_info.outers.item(i).setStyle('height', h+'px');
+		this.body_info.outers.item(i).setStyle('height', h+'px');
 
 		// adjust for horizontally collapsed or fixed width modules
 
-		var modules    = host.body_info.modules[i];
+		var modules    = this.body_info.modules[i];
 		var total_w    = 0;
 		var open_count = modules.size();
 		var count      = open_count;
@@ -327,12 +326,12 @@ Y.PageLayoutRows.resize = function(
 				var total_w_hacked = false;
 				if (w == Y.PageLayout.unmanaged_size)
 				{
-					var children = host._analyzeModule(module);
+					var children = module._page_layout.children;
 					if (children.bd)
 					{
 						var h1 = adjustHeight(h, children);
 						var w1 = children.bd.insideWidth();
-						host.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
+						this.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
 						children.bd.setStyle('height', h1+'px');
 
 						if (has_explosive_modules_bug)
@@ -344,7 +343,7 @@ Y.PageLayoutRows.resize = function(
 							children.root.setStyle('width', bd_w+'px');
 						}
 
-						host.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
+						this.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
 					}
 				}
 				else
@@ -372,7 +371,7 @@ Y.PageLayoutRows.resize = function(
 			k++;
 
 			var module   = modules.item(j);
-			var children = host._analyzeModule(module);
+			var children = module._page_layout.children;
 			if (children.bd)
 			{
 				var h1   = adjustHeight(h, children);
@@ -387,17 +386,17 @@ Y.PageLayoutRows.resize = function(
 				var w1 = Math.max(1, w - children.bd.horizMarginBorderPadding());
 				if (mode === Y.PageLayout.FIT_TO_VIEWPORT)
 				{
-					host.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
-					host._setWidth(children, w);
+					this.fire('beforeResizeModule', { bd: children.bd, height: h1, width: w1 });
+					this._setWidth(children, w);
 				}
 
 				children.bd.setStyle('height', h1+'px');
 
-				host.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
+				this.fire('afterResizeModule', { bd: children.bd, height: h1, width: w1 });
 			}
 		}
 	}
 };
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['gallery-layout']});
+}, 'gallery-2013.06.13-01-19', {"requires": ["gallery-layout"]});
