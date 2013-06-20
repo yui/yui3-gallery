@@ -1,0 +1,10 @@
+{
+    "name": "gallery-beacon-listener",
+    "builds": {
+        "gallery-beacon-listener": {
+            "jsfiles": [
+                "js/beacon-listener.js"
+            ]
+        }
+    }
+}

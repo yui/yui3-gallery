@@ -1,0 +1,25 @@
+
+<div id="description">
+	<p>{{description}}</p>
+</div>
+
+<style>
+	{{>example-simple-source-css}}
+</style>
+<div id="demo" class="example">
+	{{>example-simple-source-html}}
+	<script>
+		YUI({
+			modules:{
+				'gallery-beacon-listener': {
+					fullpath: '/build/gallery-beacon-listener/gallery-beacon-listener.js'
+				}
+			}
+		}).use('{{use}}', 'transition', function(Y){
+			{{>example-simple-start-js}}
+		});
+	</script>
+</div>
+```
+{{>example-simple-start-js}}
+```

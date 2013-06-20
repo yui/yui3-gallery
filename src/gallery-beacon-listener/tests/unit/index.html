@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-beacon-listener</title>
+    <script src="/build/yui/yui-min.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-beacon-listener'],
+    modules: {
+		'module-tests': {
+			fullpath: './js/tests.js',
+			requires: ['gallery-beacon-listener', 'test']
+		},
+		'gallery-beacon-listener' : {
+			fullpath: '/build/gallery-beacon-listener/gallery-beacon-listener-min.js',
+			requires: ['node',"event-custom", "event-resize", 'base-build', 'dom']
+		}
+	},
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-beacon-listener');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

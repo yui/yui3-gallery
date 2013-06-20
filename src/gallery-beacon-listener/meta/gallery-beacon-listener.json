@@ -1,0 +1,7 @@
+{
+	"gallery-beacon-listener": {
+		"requires": [
+			"node", "event-custom", "event-resize", "base-build", "dom"
+		]
+	}
+}

@@ -1,0 +1,25 @@
+
+<div id="description">
+	<p>{{description}}</p>
+</div>
+
+<style>
+	{{>example-pic-beacons-css}}
+</style>
+<div id="demo" class="example">
+	{{>example-pic-beacons-html}}
+	<script>
+		YUI({
+			modules:{
+				'gallery-beacon-listener': {
+					fullpath: '/build/gallery-beacon-listener/gallery-beacon-listener.js'
+				}
+			}
+		}).use('{{use}}', 'transition', function(Y){
+			{{>example-pic-beacons-js}}
+		});
+	</script>
+</div>
+```
+{{>example-pic-beacons-js}}
+```

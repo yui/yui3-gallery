@@ -1,0 +1,26 @@
+{
+    "name"       : "gallery-beacon-listener",
+    "displayName": "Gallery: gallery-beacon-listener",
+    "description": "Create one or more listeners to watch for nodes with specified selectors to enter either the viewport or a specified region",
+    "author"     : [ "krisheehaw" ],
+    "use"        : [ "gallery-beacon-listener" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+		{
+			"name": "example-simple",
+			"displayName": "Simple Example",
+			"description": "A simple example",
+			"modules": ["gallery-beacon-listener"],
+			"tags": ["gallery"]
+		},
+		{
+			"name": "example-pic-beacons",
+			"displayName": "Advanced: Pictures",
+			"description": "Warning! This example contains images of Bill Murray",
+			"modules": ["gallery-beacon-listener"],
+			"tags": ["gallery"]
+		}
+	]
+}

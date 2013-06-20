@@ -1,0 +1,22 @@
+
+Y.all('.beacon').setStyle('opacity', 0);
+
+var myListener = new Y.BeaconListener({
+	beacons: '.beacon'
+});
+
+Y.on('beaconlistener:found', function(e){
+	e.beacon.transition({
+		opacity:1,
+		duration: 2
+	});
+});
+
+Y.on('beaconlistener:lost', function(e){
+	e.beacon.transition({
+		opacity:0,
+		duration: 1
+	});
+});
+
+myListener.start();
