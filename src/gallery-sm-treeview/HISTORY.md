@@ -3,6 +3,29 @@ SmugMug TreeView History
 
 ## git
 
+* Nodes are no longer automatically focused when selected in single-select mode.
+
+* When the last child is removed from a parent node, the parent node's child
+  list element is now removed from the DOM.
+
+* The `gallery-sm-treeview-templates` module has been merged into
+  `gallery-sm-treeview`, since it had no benefit as a standalone module.
+
+* Added the `gallery-sm-treeview-sortable` module, which provides
+  `Y.TreeView.Sortable`, a `Y.TreeView` extension that wraps `Y.Tree.Sortable`
+  and re-renders TreeView nodes when they're re-sorted.
+
+* Fixed: Clicks and double-clicks no longer trigger actions when a button other
+  than the primary button is used (generally the left button on a mouse).
+
+* Fixed: Adding lots of children to a parent node that had already been
+  rendered resulted in the parent being re-rendered once for each added child.
+  Parent re-render operations are now batched asynchronously, so a parent won't
+  be re-rendered more than once every 15ms regardless of how many children are
+  added.
+
+## 2013-03-27
+
 * `Y.TreeView` now mixes in `Y.Tree.Labelable`, which it should have been doing
   already. Oops.
 

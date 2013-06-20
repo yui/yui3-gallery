@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.0.77 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-sm-treeview
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -9,27 +9,25 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-sm-treeview
-shifter [info] shifting into gear for gallery-sm-treeview-templates
-shifter [queu] file has changed, continuing build
+shifter [info] shifting into gear for gallery-sm-treeview-sortable
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
+shifter [queu] compressing gallery-sm-treeview-sortable/gallery-sm-treeview-sortable.js with UglifyJS
+shifter [queu] writing -min file
 shifter [queu] compressing gallery-sm-treeview/gallery-sm-treeview.js with UglifyJS
-shifter [queu] compressing gallery-sm-treeview-templates/gallery-sm-treeview-templates.js with UglifyJS
 shifter [queu] writing -min file
-shifter [queu] writing -min file
+shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting skin for gallery-sm-treeview
-shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-sm-treeview-sortable/gallery-sm-treeview-sortable.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
 shifter [queu] coverage file read, starting coverage for: gallery-sm-treeview/gallery-sm-treeview.js
-shifter [queu] coverage file read, starting coverage for: gallery-sm-treeview-templates/gallery-sm-treeview-templates.js
-shifter [info] istanbul providing coverage
-shifter [queu] instrumenting with istanbul
-shifter [info] istanbul providing coverage
-shifter [queu] instrumenting with istanbul
-shifter [queu] writing coverage file to gallery-sm-treeview/gallery-sm-treeview-coverage.js
-shifter [queu] writing coverage file to gallery-sm-treeview-templates/gallery-sm-treeview-templates-coverage.js
 shifter [queu] copying assets to skin for sam
+shifter [queu] writing coverage file to gallery-sm-treeview-sortable/gallery-sm-treeview-sortable-coverage.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
    #1: [warning] The universal selector (*) is known to be slow.
        .yui3-treeview * { // line 2, pos 16
    #2: [warning] The box-sizing property isn't supported in IE6 and IE7.
@@ -48,21 +46,22 @@ shifter [queu] copying assets to skin for sam
        _border: none; // line 99, pos 5
    #9: [warning] Property with underscore prefix found.
        _border: none; // line 99, pos 5
+shifter [queu] writing coverage file to gallery-sm-treeview/gallery-sm-treeview-coverage.js
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.825 seconds, pretty fast huh?
+shifter [info] finished in 0.567 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5008
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5007
-Starting Grover on 1 files with PhantomJS@1.8.2
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [TreeView]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.029 seconds) 51%
+✔ [TreeView]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.026 seconds) 51%
 Writing files in JSON format to: /src/gallery-sm-treeview/logs/tests.json
 
 ---------------------------------------+-----------+-----------+-----------+-----------+
@@ -84,6 +83,6 @@ Functions    : 8.7% ( 2/23 )
 Lines        : 4.72% ( 6/127 )
 ================================================================================
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.029 seconds)
-  [Grover Execution Timer] 1.076 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.026 seconds)
+  [Grover Execution Timer] 1.436 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
