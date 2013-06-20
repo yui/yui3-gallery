@@ -20,7 +20,7 @@ Extends Y.ModelList with Promised sync-methods. The ModelList's synclayer can be
 Instead of calling ModelList.load() you should use:
 
 
-<b>ModelList.loadPromise(options)</b> --> to append the read-models --> options = {append: true};
+<b>ModelList.loadPromise()</b> --> or to append the read models: ModelList.loadPromise({append: true})
 
 
 Also, there are 3 extra Promises, which -in this current version- <b>all depends</b> on the Model's synclayer, not ModelLists synclayer:
@@ -45,7 +45,7 @@ Usage
 
 <b>Loading Models with ModelList.loadPromise()</b>
 ```js
-YUI().use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
 
     var pielist;
     Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
@@ -72,9 +72,9 @@ YUI().use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build
 });
 ```
 
-<b>Appending Models with ModelList.loadPromise()</b>
+<b>Appending Models with ModelList.loadPromise({append: true})</b>
 ```js
-YUI().use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
 
     var pielist;
     Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
@@ -103,7 +103,7 @@ YUI().use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build
 
 <b>Saving Models with ModelList.savePromise()</b>
 ```js
-YUI().use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
 
     var pielist;
     Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {

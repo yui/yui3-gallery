@@ -26,7 +26,7 @@
  * <b>ModelList.submitPromise()</b>
  *
  * @module gallery-itsamodelsyncpromise
- * @class ITSAModellistSyncPromise
+ * @class Y.ModelList
  * @constructor
  * @since 0.1
  *
@@ -164,17 +164,18 @@
                 function(err) {
                     var facade = {
                         options : options,
-                        src : 'destroy',
+                        src : 'Modellist.destroyPromise()',
                         error: err
                     };
-                    instance.fire(EVT_ERROR, facade);
+                    instance._lazyFireErrorEvent(facade);
                     return err;
                 }
             );
         },
 
         /**
-         * Loads models from the server and adds them into the ModelList.
+         * Loads models from the server and adds them into the ModelList. <br />
+         * Without options, previous items will be replaced. Use loadPromise({append: true}) to append the items.<br /><br />
          *
          * This method delegates to the `sync()` method, by either using the 'read' or 'readappend' action, depending
          * on the value of parameter options.append.
@@ -211,8 +212,8 @@
                         };
                     if (err) {
                         facade.error = err;
-                        facade.src   = append ? 'loadappend' : 'load';
-                        instance.fire(EVT_ERROR, facade);
+                        facade.src   = 'Modellist.loadPromise() - load' + (append ? 'append' : '');
+                        instance._lazyFireErrorEvent(facade);
                         reject(new Error(err));
                     }
                     else {
@@ -288,10 +289,10 @@
                 function(err) {
                     var facade = {
                         options : options,
-                        src : 'save',
+                        src : 'Modellist.savePromise()',
                         error: err
                     };
-                    instance.fire(EVT_ERROR, facade);
+                    instance._lazyFireErrorEvent(facade);
                     return err;
                 }
             );
@@ -343,13 +344,34 @@
                 function(err) {
                     var facade = {
                         options : options,
-                        src : 'submit',
+                        src : 'Modellist.submitPromise()',
                         error: err
                     };
-                    instance.fire(EVT_ERROR, facade);
+                    instance._lazyFireErrorEvent(facade);
                     return err;
                 }
             );
+        },
+
+       /**
+        * Fires the 'error'-event and -if not published yet- publish it broadcasted to Y.
+        * Because the error-event is broadcasted to Y, it can be catched by gallery-itsaerrorreporter.
+        *
+        * @method _lazyFireErrorEvent
+         * @param {Object} [facade] eventfacade.
+         * @private
+        **/
+        _lazyFireErrorEvent : function(facade) {
+            var instance = this;
+
+            Y.log('_lazyFireErrorEvent', 'info', 'Itsa-ModellistSyncPromise');
+            // lazy publish
+            if (!instance._errorEvent) {
+                instance._errorEvent = instance.publish(EVT_ERROR, {
+                    broadcast: 1
+                });
+            }
+            instance.fire(EVT_ERROR, facade);
         }
 
     }, true);
