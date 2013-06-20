@@ -18,8 +18,7 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
  * <b>The sync-layer MUST call the callback-function of its related promise-method, otherwise the promises are not resolved.</b>
  *
  * @module gallery-itsamodelsyncpromise
- * @extends Model
- * @class ITSAModelSyncPromise
+ * @class Y.Model
  * @constructor
  * @since 0.1
  *
@@ -117,8 +116,8 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
                         };
                     if (err) {
                         facade.error = err;
-                        facade.src   = 'submit';
-                        instance.fire(EVT_ERROR, facade);
+                        facade.src   = 'Model.submitPromise()';
+                        instance._lazyFireErrorEvent(facade);
                         reject(new Error(err));
                     }
                     else {
@@ -166,8 +165,8 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
                         };
                     if (err) {
                         facade.error = err;
-                        facade.src   = 'load';
-                        instance.fire(EVT_ERROR, facade);
+                        facade.src   = 'Model.loadPromise()';
+                        instance._lazyFireErrorEvent(facade);
                         reject(new Error(err));
                     }
                     else {
@@ -218,7 +217,8 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
                 instance._validate(instance.toJSON(), function (validateErr) {
                     if (validateErr) {
                         facade.error = validateErr;
-                        instance.fire(EVT_ERROR, facade);
+                        facade.scr = 'Model.savePromise() - validate';
+                        instance._lazyFireErrorEvent(facade);
                         reject(new Error(validateErr));
                     }
                     else {
@@ -227,8 +227,8 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
                             facade.response = response;
                             if (err) {
                                 facade.error = err;
-                                facade.src   = 'save';
-                                instance.fire(EVT_ERROR, facade);
+                                facade.src   = 'Model.savePromise()';
+                                instance._lazyFireErrorEvent(facade);
                                 reject(new Error(err));
                             }
                             else {
@@ -283,10 +283,10 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
                             if (err) {
                                 var facade = {
                                     error   : err,
-                                    src     : 'destroy',
+                                    src     : 'Model.destroyPromise()',
                                     options : options
                                 };
-                                instance.fire(EVT_ERROR, facade);
+                                instance._lazyFireErrorEvent(facade);
                                 reject(new Error(err));
                             }
                             else {
@@ -305,6 +305,26 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
                     Y.Model.superclass.destroy.call(instance);
                 }
             );
+        },
+
+       /**
+        * Fires the 'error'-event and -if not published yet- publish it broadcasted to Y.
+        * Because the error-event is broadcasted to Y, it can be catched by gallery-itsaerrorreporter.
+        *
+        * @method _lazyFireErrorEvent
+         * @param {Object} [facade] eventfacade.
+         * @private
+        **/
+        _lazyFireErrorEvent : function(facade) {
+            var instance = this;
+
+            // lazy publish
+            if (!instance._errorEvent) {
+                instance._errorEvent = instance.publish(EVT_ERROR, {
+                    broadcast: 1
+                });
+            }
+            instance.fire(EVT_ERROR, facade);
         }
 
     }, true);
@@ -313,4 +333,4 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
 
     Y.Base.mix(Y.Model, [ITSAModelSyncPromise]);
 
-}, 'gallery-2013.05.29-23-38', {"requires": ["yui-base", "base-base", "base-build", "node-base", "json-parse", "promise", "model"]});
+}, 'gallery-2013.06.20-02-07', {"requires": ["yui-base", "base-base", "base-build", "node-base", "json-parse", "promise", "model"]});
