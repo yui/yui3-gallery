@@ -1,0 +1,10 @@
+{
+    "name": "gallery-template-factory",
+    "builds": {
+        "gallery-template-factory": {
+            "jsfiles": [
+                "js/gallery-template-factory.js"
+            ]
+        }
+    }
+}

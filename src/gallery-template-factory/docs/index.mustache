@@ -1,0 +1,24 @@
+<div class="intro">
+    <p>
+    Template factory is a simple utility to separate the html templates from the javascript code, the templates are going to be stored in differents files,
+    in that way can be handled easily, also provides a way to avoid multiple templates reads, implementing a kind of templates storage.
+    </p>
+</div>
+
+<h2>Description</h2>
+<p>To start using this template factory the only file requirement is to include yui seed source files</p>
+
+```
+<script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-min.js"></script>
+```
+<p>
+Then, create a new YUI instance for your application and populate it with the modules you need by specifying them as arguments to the YUI().use() method. YUI will automatically load any dependencies required by the modules you specify.
+</p>
+
+{{>module-inclusion}}
+
+<h2>Usage</h2>
+
+<p>Use the template factory is pretty easy:</p>
+
+{{>sample}}

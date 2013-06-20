@@ -1,0 +1,9 @@
+{
+    "gallery-template-factory": {
+        "requires": [
+            "yui-base",
+            "base-build",
+            "io-base"
+        ]
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "name"       : "gallery-template-factory",
+    "displayName": "Gallery: gallery-template-factory",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "asotog88" ],
+    "use"        : [ "gallery-template-factory" ],
+
+    "tags": [ "gallery", "template", "html", "view"],
+
+     "examples": [{
+            "name": "usage",
+            "displayName": "Simple usage of template factory",
+            "description": "Handle templates files to be used in javascript code"
+        }
+    ]
+}

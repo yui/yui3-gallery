@@ -1,0 +1,13 @@
+<pre class="prettyprint">
+var templateRequestor = Y.TemplateFactory.getRequestor({path: 'templates/'});
+var profileInfoTemplate = templateRequestor.getTemplate('profile-info');
+</pre>
+
+<p>The described use case above is looking at templates folder to retrieve the specified template, as you can see the parameter passed is the template's file name. The following file structure describes briefly the files structure:</p>
+
+<pre class="prettyprint">
+src
+    sample.js
+    templates
+        profile-info.html
+</pre>

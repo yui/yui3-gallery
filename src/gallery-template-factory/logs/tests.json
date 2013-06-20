@@ -1,0 +1,29 @@
+{
+    "name": "gallery-template-factory",
+    "passed": 0,
+    "failed": 3,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 21,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 4,
+        "type": "testcase",
+        "test is empty": {
+            "result": "fail",
+            "message": "No Tests Provided For This Module",
+            "type": "test",
+            "name": "test is empty",
+            "duration": 2
+        }
+    },
+    "timestamp": "Wed 19 Jun 2013 06:58:05 PM PDT",
+    "consoleInfo": []
+}
