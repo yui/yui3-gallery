@@ -1,0 +1,9 @@
+{
+	"name": "gallery-datetime-range",
+	"displayName": "Date/Time Range",
+	"description": "Binds two instances of Y.DateTime together so they define a valid date range.",
+	"author": "jafl",
+
+	"use": ["gallery-datetime-range"],
+	"tags": ["jafl","date","time","calendar","range"]
+}

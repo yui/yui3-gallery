@@ -1,0 +1,22 @@
+{
+    "name": "gallery-datetime",
+    "builds": {
+        "gallery-datetime": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "base",
+                    "gallery-datetime-utils",
+                    "gallery-funcprog"
+                ],
+                "optional": [
+                    "calendar",
+                    "gallery-timepicker"
+                ]
+            },
+            "jsfiles": [
+                "DateTime.js"
+            ]
+        }
+    }
+}

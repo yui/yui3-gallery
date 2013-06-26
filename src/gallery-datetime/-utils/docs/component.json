@@ -1,0 +1,9 @@
+{
+	"name": "gallery-datetime-utils",
+	"displayName": "Date/Time utilities",
+	"description": "Provides functions for parsing and formatting both dates and times.",
+	"author": "jafl",
+
+	"use": ["gallery-datetime-utils"],
+	"tags": ["jafl","date","time"]
+}

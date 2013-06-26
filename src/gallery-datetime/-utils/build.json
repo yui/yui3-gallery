@@ -1,0 +1,15 @@
+{
+    "name": "gallery-datetime-utils",
+    "builds": {
+        "gallery-datetime-utils": {
+            "config": {
+                "requires": [
+                    "gallery-funcprog"
+                ]
+            },
+            "jsfiles": [
+                "utils.js"
+            ]
+        }
+    }
+}

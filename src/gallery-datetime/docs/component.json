@@ -1,0 +1,9 @@
+{
+	"name": "gallery-datetime",
+	"displayName": "Date/Time Picker",
+	"description": "Provides a widget for selecting a date and time. Supports arbitrary blackout ranges, including partial days.",
+	"author": "jafl",
+
+	"use": ["gallery-datetime"],
+	"tags": ["jafl","date","time","calendar"]
+}

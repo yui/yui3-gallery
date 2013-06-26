@@ -1,0 +1,370 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datetime
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-datetime
+   #1: Trailing whitespace.
+       * // line 17, pos 3
+   #2: Trailing whitespace.
+       * // line 22, pos 3
+   #3: Possible strict violation.
+       return value ? Y.DateTimeUtils.normalize(value, this.get('blankTime')) : null; // line 44, pos 53
+   #4: Unnecessary semicolon.
+       }; // line 45, pos 2
+   #5: Trailing whitespace.
+       * // line 52, pos 7
+   #6: Trailing whitespace.
+       * // line 66, pos 7
+   #7: Trailing whitespace.
+       * // line 94, pos 7
+   #8: Trailing whitespace.
+       * // line 105, pos 7
+   #9: Trailing whitespace.
+       * // line 116, pos 7
+   #10: Trailing whitespace.
+       * // line 127, pos 7
+   #11: Trailing whitespace.
+       * // line 146, pos 7
+   #12: Too many var statements.
+       for (var i=0; i<ranges.length; i++) // line 163, pos 22
+   #13: Too many var statements.
+       var r   = ranges[i]; // line 165, pos 21
+   #14: Mixed spaces and tabs.
+       r.start.hour, r.start.minute, blackout_min_seconds) // line 172, pos 7
+   #15: Mixed spaces and tabs.
+       .getTime(), // line 173, pos 7
+   #16: Mixed spaces and tabs.
+       r.end.hour, r.end.minute, blackout_max_seconds) // line 175, pos 7
+   #17: Mixed spaces and tabs.
+       .getTime() // line 176, pos 7
+   #18: Too many var statements.
+       var inserted = false; // line 179, pos 21
+   #19: Too many var statements.
+       for (var j=0; j<blackouts.length; j++) // line 180, pos 26
+   #20: Too many var statements.
+       var r1 = blackouts[j]; // line 182, pos 25
+   #21: Empty block.
+       else if (j > 0 && // line 191, pos 25
+   #22: Mixed spaces and tabs.
+       r[0] - 60000 < blackouts[j-1][1] && // line 192, pos 8
+   #23: Mixed spaces and tabs.
+       r1[0] < r[1] + 60000) // line 193, pos 8
+   #24: Mixed spaces and tabs.
+       r[0] - 60000 < blackouts[j-1][1]) // line 200, pos 8
+   #25: Empty block.
+       else if (!inserted && j > 0 && // line 227, pos 17
+   #26: Mixed spaces and tabs.
+       r[0] - 60000 < blackouts[j-1][1]) // line 228, pos 6
+   #27: Expected '===' and instead saw '=='.
+       return (value == -1 || value === 0 || value == +1); // line 257, pos 27
+   #28: Expected '===' and instead saw '=='.
+       return (value == -1 || value === 0 || value == +1); // line 257, pos 57
+   #29: Trailing whitespace.
+       * // line 265, pos 7
+   #30: Trailing whitespace.
+       * // line 278, pos 7
+   #31: Possible strict violation.
+       if (!this.ignore_value_set) // line 297, pos 10
+   #32: Possible strict violation.
+       enforceDateTimeLimits.call(this, 'same-day'); // line 299, pos 36
+   #33: Possible strict violation.
+       var date = this.getDateTime(); // line 306, pos 16
+   #34: Possible strict violation.
+       if (!date && this.get('allowBlank')) // line 307, pos 18
+   #35: Too many var statements.
+       var date_len = this.get('dateInput').get('value').length; // line 309, pos 13
+   #36: Possible strict violation.
+       var date_len = this.get('dateInput').get('value').length; // line 309, pos 24
+   #37: Possible strict violation.
+       this.ignore_value_set = true; // line 312, pos 13
+   #38: Possible strict violation.
+       this.get('timeInput').set('value', ''); // line 313, pos 13
+   #39: Possible strict violation.
+       this.ignore_value_set = false; // line 314, pos 13
+   #40: Possible strict violation.
+       this.prev_date_time = null; // line 316, pos 13
+   #41: Possible strict violation.
+       else if (date_len > 0 && this.get('timeInput').get('value').length === 0) // line 319, pos 34
+   #42: Possible strict violation.
+       this.get('timeInput').set('value', Y.DateTimeUtils.formatTime(this.get('blankTime')));		// recursive // line 321, pos 13
+   #43: Possible strict violation.
+       this.get('timeInput').set('value', Y.DateTimeUtils.formatTime(this.get('blankTime')));		// recursive // line 321, pos 75
+   #44: Possible strict violation.
+       if (!date && this.prev_date_time) // line 326, pos 18
+   #45: Possible strict violation.
+       date = Y.clone(this.prev_date_time); // line 328, pos 24
+   #46: Possible strict violation.
+       this.ignore_value_set = true; // line 329, pos 9
+   #47: Possible strict violation.
+       this.get('dateInput').set('value', Y.DateTimeUtils.formatDate(date)); // line 330, pos 9
+   #48: Possible strict violation.
+       this.get('timeInput').set('value', Y.DateTimeUtils.formatTime(date)); // line 331, pos 9
+   #49: Possible strict violation.
+       this.ignore_value_set = false; // line 332, pos 9
+   #50: Too many var statements.
+       var orig_date = new Date(date.getTime()); // line 340, pos 9
+   #51: Too many var statements.
+       var blackouts = this.get('blackouts'); // line 344, pos 9
+   #52: Possible strict violation.
+       var blackouts = this.get('blackouts'); // line 344, pos 21
+   #53: Too many var statements.
+       var t      = date.getTime(), // line 347, pos 13
+   #54: Expected '===' and instead saw '=='.
+       snap   = algo == 'same-day' ? 0 : this.get('blackoutSnapDirection'); // line 349, pos 27
+   #55: Possible strict violation.
+       snap   = algo == 'same-day' ? 0 : this.get('blackoutSnapDirection'); // line 349, pos 47
+   #56: Too many var statements.
+       for (var i=0; i<blackouts.length; i++) // line 351, pos 18
+   #57: Too many var statements.
+       var blackout = blackouts[i]; // line 353, pos 17
+   #58: Expected '!==' and instead saw '!='.
+       if (t != orig_t) // line 377, pos 15
+   #59: Too many var statements.
+       var min = this.get('minDateTime'); // line 385, pos 9
+   #60: Possible strict violation.
+       var min = this.get('minDateTime'); // line 385, pos 15
+   #61: Too many var statements.
+       var t = min.date.getTime(); // line 388, pos 13
+   #62: 't' is already defined.
+       var t = min.date.getTime(); // line 388, pos 15
+   #63: Too many var statements.
+       var orig_t = t; // line 392, pos 17
+   #64: 'orig_t' is already defined.
+       var orig_t = t; // line 392, pos 24
+   #65: Too many var statements.
+       var i      = 0; // line 393, pos 17
+   #66: 'i' is already defined.
+       var i      = 0; // line 393, pos 24
+   #67: Too many var statements.
+       var max = this.get('maxDateTime'); // line 407, pos 9
+   #68: Possible strict violation.
+       var max = this.get('maxDateTime'); // line 407, pos 15
+   #69: Too many var statements.
+       var t = max.date.getTime(); // line 410, pos 13
+   #70: 't' is already defined.
+       var t = max.date.getTime(); // line 410, pos 15
+   #71: Too many var statements.
+       var orig_t = t; // line 414, pos 17
+   #72: 'orig_t' is already defined.
+       var orig_t = t; // line 414, pos 24
+   #73: Too many var statements.
+       var i      = blackouts.length - 1; // line 415, pos 17
+   #74: 'i' is already defined.
+       var i      = blackouts.length - 1; // line 415, pos 24
+   #75: Too many var statements.
+       var timer       = getEnforceTimer.call(this); // line 435, pos 13
+   #76: Possible strict violation.
+       var timer       = getEnforceTimer.call(this); // line 435, pos 48
+   #77: Mixed spaces and tabs.
+       date.getMinutes() !== orig_date.getMinutes()) // line 440, pos 3
+   #78: Too many var statements.
+       var timer       = getEnforceTimer.call(this); // line 442, pos 13
+   #79: 'timer' is already defined.
+       var timer       = getEnforceTimer.call(this); // line 442, pos 25
+   #80: Possible strict violation.
+       var timer       = getEnforceTimer.call(this); // line 442, pos 48
+   #81: Possible strict violation.
+       this.fire('limitsEnforced'); // line 447, pos 9
+   #82: Possible strict violation.
+       this.prev_date_time = dateTimeSetter.call(this, date); // line 452, pos 5
+   #83: Possible strict violation.
+       this.prev_date_time = dateTimeSetter.call(this, date); // line 452, pos 47
+   #84: Possible strict violation.
+       if (!this.enforce_timer) // line 457, pos 10
+   #85: Possible strict violation.
+       this.enforce_timer = Y.later(0, this, enforceTimerCallback); // line 459, pos 9
+   #86: Possible strict violation.
+       this.enforce_timer = Y.later(0, this, enforceTimerCallback); // line 459, pos 41
+   #87: Possible strict violation.
+       return this.enforce_timer; // line 461, pos 12
+   #88: Possible strict violation.
+       var timer          = this.enforce_timer; // line 466, pos 26
+   #89: Possible strict violation.
+       this.enforce_timer = null; // line 467, pos 5
+   #90: Too many var statements.
+       var ping_list         = []; // line 469, pos 9
+   #91: Possible strict violation.
+       this.ignore_value_set = true; // line 470, pos 5
+   #92: Possible strict violation.
+       this); // line 480, pos 5
+   #93: Possible strict violation.
+       this.ignore_value_set = false; // line 482, pos 5
+   #94: Possible strict violation.
+       ping.apply(this, ping_list); // line 483, pos 16
+   #95: Possible strict violation.
+       this.fire('limitsEnforced'); // line 485, pos 5
+   #96: Possible strict violation.
+       if (!this.calendar) // line 490, pos 10
+   #97: Expected '===' and instead saw '=='.
+       while (d.getMonth() == date.getMonth()) // line 524, pos 29
+   #98: Possible strict violation.
+       var blackouts = this.get('blackouts').slice(0), // line 531, pos 21
+   #99: Too many var statements.
+       var min = this.get('minDateTime'); // line 534, pos 9
+   #100: Possible strict violation.
+       var min = this.get('minDateTime'); // line 534, pos 15
+   #101: Too many var statements.
+       var t       = min.date.getTime(); // line 539, pos 17
+   #102: Too many var statements.
+       var changed = false; // line 540, pos 17
+   #103: Too many var statements.
+       for (var i=0; i < blackouts.length; i++) // line 541, pos 22
+   #104: Too many var statements.
+       var blackout = blackouts[i]; // line 543, pos 21
+   #105: Too many var statements.
+       var start = new Date(blackout[0]); // line 551, pos 25
+   #106: 'changed' used out of scope.
+       if (!changed && // line 562, pos 14
+   #107: Too many var statements.
+       var max = this.get('maxDateTime'); // line 571, pos 9
+   #108: Possible strict violation.
+       var max = this.get('maxDateTime'); // line 571, pos 15
+   #109: Too many var statements.
+       var t       = max.date.getTime(); // line 576, pos 17
+   #110: 't' is already defined.
+       var t       = max.date.getTime(); // line 576, pos 25
+   #111: Too many var statements.
+       var changed = false; // line 577, pos 17
+   #112: 'changed' is already defined.
+       var changed = false; // line 577, pos 25
+   #113: Too many var statements.
+       for (var i=blackouts.length-1; i>=0; i--) // line 578, pos 22
+   #114: 'i' is already defined.
+       for (var i=blackouts.length-1; i>=0; i--) // line 578, pos 23
+   #115: Too many var statements.
+       var blackout = blackouts[i]; // line 580, pos 21
+   #116: 'blackout' is already defined.
+       var blackout = blackouts[i]; // line 580, pos 30
+   #117: Too many var statements.
+       var end = new Date(blackout[1]); // line 587, pos 25
+   #118: 'changed' used out of scope.
+       if (!changed && // line 598, pos 14
+   #119: Too many var statements.
+       for (var i=0; i<blackouts.length; i++) // line 607, pos 14
+   #120: 'i' is already defined.
+       for (var i=0; i<blackouts.length; i++) // line 607, pos 15
+   #121: Too many var statements.
+       var blackout = blackouts[i]; // line 609, pos 13
+   #122: 'blackout' is already defined.
+       var blackout = blackouts[i]; // line 609, pos 22
+   #123: Too many var statements.
+       var start    = new Date(blackout[0] + blackout_max_seconds*1000); // line 610, pos 13
+   #124: 'start' is already defined.
+       var start    = new Date(blackout[0] + blackout_max_seconds*1000); // line 610, pos 22
+   #125: Too many var statements.
+       var end      = new Date(blackout[1] + blackout_min_seconds*1000); // line 611, pos 13
+   #126: 'end' is already defined.
+       var end      = new Date(blackout[1] + blackout_min_seconds*1000); // line 611, pos 22
+   #127: Possible strict violation.
+       this.calendar.set('customRenderer', // line 634, pos 5
+   #128: Possible strict violation.
+       var duration = this.get('pingDuration'); // line 655, pos 20
+   #129: Too many var statements.
+       var nodes = new Y.NodeList(Y.reduce(arguments, [], function(list, name) // line 661, pos 9
+   #130: Possible strict violation.
+       this)); // line 666, pos 5
+   #131: Too many var statements.
+       var ping_class = this.get('pingClass'); // line 668, pos 9
+   #132: Possible strict violation.
+       var ping_class = this.get('pingClass'); // line 668, pos 22
+   #133: Possible strict violation.
+       if (this.ping_task) // line 669, pos 9
+   #134: Possible strict violation.
+       this.ping_task.nodes.removeClass(ping_class); // line 671, pos 9
+   #135: Possible strict violation.
+       this.ping_task.cancel(); // line 672, pos 9
+   #136: Possible strict violation.
+       nodes = nodes.concat(this.ping_task.nodes); // line 673, pos 30
+   #137: Possible strict violation.
+       this.ping_task = Y.later(duration, this, function() // line 678, pos 5
+   #138: Possible strict violation.
+       this.ping_task = Y.later(duration, this, function() // line 678, pos 40
+   #139: Possible strict violation.
+       this.ping_task.nodes = nodes; // line 684, pos 5
+   #140: Too many var statements.
+       var created_time_input = true; // line 700, pos 17
+   #141: Too many var statements.
+       var default_date_time = this.get('defaultDateTime'); // line 703, pos 13
+   #142: 'created_time_input' used out of scope.
+       if (!created_time_input) // line 707, pos 18
+   #143: Too many var statements.
+       var t = this.get('minDateTime'); // line 724, pos 17
+   #144: Possible strict violation.
+       enforceDateTimeLimits.call(this); // line 753, pos 44
+   #145: Possible strict violation.
+       if (this.calendar) // line 754, pos 21
+   #146: Possible strict violation.
+       this.calendar.set(key, e.newVal.date); // line 756, pos 21
+   #147: Possible strict violation.
+       else if (this.calendar) // line 759, pos 22
+   #148: Possible strict violation.
+       this.calendar.set(key, null); // line 761, pos 17
+   #149: Possible strict violation.
+       updateCalendarRendering.call(this); // line 764, pos 42
+   #150: Trailing whitespace.
+       * // line 781, pos 7
+   #151: Too many var statements.
+       var time = Y.DateTimeUtils.parseTime(this.get('timeInput').get('value')); // line 802, pos 17
+   #152: Too many var statements.
+       var result      = Y.DateTimeUtils.normalize(Y.mix(date, time)); // line 813, pos 13
+   #153: 'date' used out of scope.
+       var result      = Y.DateTimeUtils.normalize(Y.mix(date, time)); // line 813, pos 59
+   #154: 'time' used out of scope.
+       var result      = Y.DateTimeUtils.normalize(Y.mix(date, time)); // line 813, pos 65
+   #155: Trailing whitespace.
+       * // line 842, pos 7
+   #156: 'Attribute' is not defined.
+       return Y.one(n) || Attribute.INVALID_VALUE; // line 39, pos 24
+   #157: 'change_after_focus' is defined but never used.
+       change_after_focus   = (0 < Y.UA.ie); // line 7, pos 23
+   #158: 'config' is defined but never used.
+       function DateTime(config) // line 30, pos 25
+   #159: 'created_time_input' is defined but never used.
+       var created_time_input = true; // line 700, pos 35
+   #160: 'config' is defined but never used.
+       /* map */			config) // line 691, pos 29
+   #161: 'container' is defined but never used.
+       /* object/string */	container, // line 690, pos 24
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-datetime/gallery-datetime.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-datetime
+shifter [queu] coverage file read, starting coverage for: gallery-datetime/gallery-datetime.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-datetime/gallery-datetime-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] Background image 'partial_day.gif' was used multiple times, first declared at line 8, col 2.
+       background-image: url("partial_day.gif"); // line 13, pos 2
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.866 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✔ [gallery-datetime]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+Writing files in JSON format to: /src/gallery-datetime/logs/tests.json
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
+----------------------------------------------------------------
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+  [Grover Execution Timer] 1.09 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
