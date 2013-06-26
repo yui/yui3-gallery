@@ -92,7 +92,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Panel
          * @since 0.1
         */
-        panel : null,
 
         /**
          * Reference to the Y.Calendar-instance
@@ -101,7 +100,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Calendar
          * @since 0.1
         */
-        calendar : null,
 
         /**
          * Reference to the Y.Dial-instance
@@ -110,7 +108,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Dial
          * @since 0.1
         */
-        timedial : null,
 
         /**
          * Internal reference to the closebutton.
@@ -120,7 +117,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Node
          * @since 0.1
         */
-        _closebutton : null,
 
         /**
          * Internal reference to the dialhandle-Node.
@@ -130,7 +126,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Node
          * @since 0.1
         */
-        _dialHandle : null,
 
         /**
          * Internal list of all eventhandlers bound by this widget.
@@ -140,7 +135,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Array
          * @since 0.1
         */
-        _eventhandlers : [],
 
         /**
          * Internal reference to the timerobject that is used to delay the rendering.
@@ -150,7 +144,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Object
          * @since 0.1
         */
-        _panelRendererDelay : null,
 
         /**
          * Internal reference to the resetnode.
@@ -160,7 +153,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Node
          * @since 0.1
         */
-        _resetNode : null,
 
         /**
          * Internal property that holds the format of how the Dial-time should be rendered in the Dial-instance.
@@ -170,7 +162,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type String
          * @since 0.1
         */
-        _timeFormat : null,
 
         /**
          * Reference to the Node inside Y.Dial-instance that draws the selected time.
@@ -180,7 +171,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Node
          * @since 0.1
         */
-        _timeNode : null,
 
         /**
          * Internal backupstate of getTime()'s config.selectOnRelease.
@@ -190,7 +180,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Node
          * @since 0.1
         */
-        _timepickerSelectOnRelease : null,
 
         /**
          * Internal state of the picker to be closable or not
@@ -200,7 +189,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Boolean
          * @since 0.1
         */
-        _unclosable : null,
 
         /**
          * Reference to Y.one('window')
@@ -210,7 +198,6 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
          * @type Y.Node
          * @since 0.1
         */
-        _window : null,
 
         /**
          * @method initializer
@@ -220,6 +207,7 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
         initializer : function() {
             var instance = this;
 
+            instance._eventhandlers = [];
             instance._window = Y.one('window');
             instance._renderUI();
             instance._bindUI();
@@ -608,7 +596,7 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                     );
                 }
             );
-            timedial.render(contentBox.one('#'+TIMEDIAL_ID));
+            timedial.render(contentBox.one('.'+TIMEDIAL_ID));
             instance._eventhandlers.push(
                 timedial.after(
                     'valueChange',
@@ -656,7 +644,7 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                     Y.rbind(instance._calendarNewDate, instance)
                 )
             );
-            instance.calendar.render(instance.panel.get('contentBox').one('#'+CALENDAR_ID));
+            instance.calendar.render(instance.panel.get('contentBox').one('.'+CALENDAR_ID));
         },
 
         /**
@@ -758,7 +746,7 @@ Y.ITSADateTimePicker = Y.Base.create('itsadatetimepicker', Y.Base, [], {
                 render  : false, // we will render after some delaytime, specified with RENDERDELAY
                 fillHeight: null,
                 hideOn: [],
-                bodyContent : '<div id="'+CALENDAR_ID+'"></div><div id="'+TIMEDIAL_ID+'"></div>'
+                bodyContent : '<div class="'+CALENDAR_ID+'"></div><div class="'+TIMEDIAL_ID+'"></div>'
             });
         },
 
@@ -1065,7 +1053,7 @@ if (!Y.Global.ItsaDateTimePicker) {
 
 Y.ItsaDateTimePicker = Y.Global.ItsaDateTimePicker;
 
-}, 'gallery-2013.06.05-22-14', {
+}, 'gallery-2013.06.26-23-09', {
     "requires": [
         "base",
         "node-base",

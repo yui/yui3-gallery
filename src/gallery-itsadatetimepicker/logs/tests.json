@@ -21,9 +21,9 @@
             "message": "No Tests Provided For This Module",
             "type": "test",
             "name": "test is empty",
-            "duration": 1
+            "duration": 2
         }
     },
-    "timestamp": "Wed Jun  5 15:15:09 2013",
+    "timestamp": "Wed 26 Jun 2013 03:59:35 PM PDT",
     "consoleInfo": []
 }
