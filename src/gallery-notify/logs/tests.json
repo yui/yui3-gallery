@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5006/tests/src/gallery-notify/tests/unit/gallery-notify.html?filter=coverage",
+    "error": "ReferenceError: Can't find variable: YUI\nhttp://127.0.0.1:5006/tests/src/gallery-notify/tests/unit/assets/gallery-notify-tests.js:1"
+}

@@ -1,0 +1,114 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-notify
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-notify
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-notify/gallery-notify.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-notify
+shifter [info] shifting 2 langs for gallery-notify
+shifter [queu] coverage file read, starting coverage for: gallery-notify/gallery-notify.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-notify/gallery-notify-coverage.js
+shifter [info] shifted lang for gallery-notify
+shifter [info] shifted lang for gallery-notify
+shifter [queu] copying assets to skin for growl
+shifter [queu] copying assets to skin for sam
+shifter [queu] copying assets to skin for amber
+shifter [queu] copying assets to skin for night
+   #1: [warning] Using height with padding can sometimes make elements larger than you expect.
+       padding: 3px; // line 69, pos 2
+   #2: [warning] Using width with padding can sometimes make elements larger than you expect.
+       padding: 3px; // line 69, pos 2
+   #3: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 2px solid rgba(255, 255, 255, .8); // line 71, pos 2
+   #4: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 2px solid rgba(255, 255, 255, .8); // line 71, pos 2
+   #1: [warning] Duplicate property '*display' found.
+       zoom: 1; *display: inline; // line 36, pos 11
+   #2: [warning] Property with star prefix found.
+       zoom: 1; *display: inline; // line 36, pos 11
+   #3: [warning] Duplicate property '*display' found.
+       zoom: 1; *display: inline; // line 64, pos 11
+   #4: [warning] Property with star prefix found.
+       zoom: 1; *display: inline; // line 64, pos 11
+   #5: [warning] The property -ms-user-select is compatible with -webkit-user-select and -moz-user-select and should be included as well.
+       -webkit-user-select: none; // line 85, pos 2
+   #6: [warning] Expected end of value but found '#999'.
+       border: inset 1px solid #999; // line 101, pos 2
+   #1: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #fbd065; // line 26, pos 2
+   #2: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-notice, // line 71, pos 31
+   #3: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-alert, // line 72, pos 31
+   #4: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-error { // line 73, pos 31
+   #5: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-notice:hover, // line 78, pos 31
+   #6: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-notice:hover, // line 78, pos 31
+   #7: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-alert:hover, // line 79, pos 31
+   #8: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-alert:hover, // line 79, pos 31
+   #9: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-error:hover { // line 80, pos 31
+   #10: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-error:hover { // line 80, pos 31
+   #11: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-notice { // line 83, pos 31
+   #12: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-alert { // line 86, pos 31
+   #13: [warning] Don't use adjoining classes.
+       .yui3-skin-amber .yui3-notify .yui3-notify-message.yui3-notify-message-error { // line 90, pos 31
+   #1: [warning] Duplicate property '*display' found.
+       zoom: 1; *display: inline; // line 37, pos 11
+   #2: [warning] Property with star prefix found.
+       zoom: 1; *display: inline; // line 37, pos 11
+   #3: [warning] Values of 0 shouldn't have units specified.
+       border: 0px; // line 43, pos 13
+   #4: [warning] Duplicate property '*display' found.
+       zoom: 1; *display: inline; // line 56, pos 11
+   #5: [warning] Property with star prefix found.
+       zoom: 1; *display: inline; // line 56, pos 11
+   #6: [warning] The property -ms-user-select is compatible with -webkit-user-select and -moz-user-select and should be included as well.
+       -webkit-user-select: none; // line 77, pos 2
+   #7: [warning] Expected end of value but found '#999'.
+       border: inset 1px solid #999; // line 93, pos 2
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.617 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [http://127.0.0.1:5006/tests/src/gallery-notify/tests/unit/gallery-notify.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       ReferenceError: Can't find variable: YUI
+       http://127.0.0.1:5006/tests/src/gallery-notify/tests/unit/assets/gallery-notify-tests.js:1
+Writing files in JSON format to: /src/gallery-notify/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

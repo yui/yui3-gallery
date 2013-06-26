@@ -1,0 +1,22 @@
+{
+    "name": "gallery-notify",
+    "displayName": "Gallery: Notify",
+    "description": "",
+
+    "author": ["apipkin"],
+
+    "use": ["gallery-notify"],
+    "tags": ["beta", "widget", "notify"],
+
+    "examples": [
+
+        {
+            "name": "basic",
+            "displayName": "Basic Notify",
+            "modules": ["gallery-notify"],
+            "description": "This example illustrates simple gallery-notify use cases.",
+            "useModules": ["gallery-notify"]
+        }
+
+    ]
+}

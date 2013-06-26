@@ -1,0 +1,10 @@
+{
+    "name": "gallery-notify",
+    "builds": {
+        "gallery-notify": {
+            "jsfiles": [
+                "notify.js"
+            ]
+        }
+    }
+}

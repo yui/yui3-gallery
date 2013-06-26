@@ -1,0 +1,18 @@
+{
+    "gallery-notify": {
+        "requires": [
+            "base",
+            "widget",
+            "widget-parent",
+            "widget-child",
+            "intl",
+            "event-mouseenter",
+            "transition",
+            "gallery-timer"
+        ],
+
+        "lang": ["en"],
+
+        "skinnable": true
+    }
+}
