@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datetime-utils
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -48,15 +48,21 @@ shifter [info] shifting into gear for gallery-datetime-utils
    #19: Expected '===' and instead saw '=='.
        if (self.CLOCK_DISPLAY_TYPE == 12) // line 334, pos 37
    #20: Trailing whitespace.
-       * // line 351, pos 7
+       * // line 364, pos 7
    #21: Too many var statements.
-       var t = time.split(self.TIME_FIELD_DELIMITER); // line 380, pos 13
-   #22: Missing 'new' prefix when invoking a constructor.
-       throw Error('Unparseable time format.'); // line 383, pos 19
-   #23: Too many var statements.
-       var result = // line 386, pos 13
-   #24: Missing 'new' prefix when invoking a constructor.
-       throw Error('Invalid time values: ' + result.hour + self.TIME_FIELD_DELIMITER + pad2(result.minute)); // line 395, pos 19
+       var t = time.split(self.TIME_FIELD_DELIMITER); // line 397, pos 13
+   #22: Expected '===' and instead saw '=='.
+       if (t.length == 1 && (am || pm)) // line 398, pos 22
+   #23: Missing 'new' prefix when invoking a constructor.
+       throw Error('Unparseable time format.'); // line 404, pos 19
+   #24: Expected '===' and instead saw '=='.
+       if (am && t[0] == '12') // line 407, pos 24
+   #25: Expected '===' and instead saw '=='.
+       else if (pm && t[0] == '12') // line 411, pos 29
+   #26: Too many var statements.
+       var result = // line 416, pos 13
+   #27: Missing 'new' prefix when invoking a constructor.
+       throw Error('Invalid time values: ' + result.hour + self.TIME_FIELD_DELIMITER + pad2(result.minute)); // line 425, pos 19
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-datetime-utils/gallery-datetime-utils.js with UglifyJS
@@ -67,7 +73,7 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-datetime-utils/gallery-datetime-utils-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.245 seconds, pretty fast huh?
+shifter [info] finished in 0.395 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
@@ -75,10 +81,14 @@ shifter [info] finished in 0.245 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
-Starting Grover on 1 files with PhantomJS@1.8.1
+Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-datetime-utils]: Passed: 8 Failed: 1 Total: 9 (ignored 0) (0.103 seconds) 100%
+✖ [gallery-datetime-utils]: Passed: 7 Failed: 2 Total: 9 (ignored 0) (0.103 seconds) 100%
+    testFormatTime
+       Values should be the same.
+       Expected: 12:00 AM (string)
+       Actual: 0:00 AM (string)
     testParseTime
        Unexpected error: Unparseable time format.
 Writing files in JSON format to: /src/gallery-datetime-utils/logs/tests.json

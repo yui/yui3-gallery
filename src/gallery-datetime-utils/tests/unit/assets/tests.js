@@ -113,6 +113,11 @@ YUI.add('gallery-datetime-utils-tests', function(Y) {
 			Y.Assert.areSame('2:05 PM', Y.DateTimeUtils.formatTime({hour:14, minute:5}));
 			Y.Assert.areSame('2:05 PM', Y.DateTimeUtils.formatTime(date));
 
+			Y.Assert.areSame('12:00 AM', Y.DateTimeUtils.formatTime({hour:0, minute:0}));
+			Y.Assert.areSame('12:02 AM', Y.DateTimeUtils.formatTime({hour:0, minute:2}));
+			Y.Assert.areSame('12:00 PM', Y.DateTimeUtils.formatTime({hour:12, minute:0}));
+			Y.Assert.areSame('12:05 PM', Y.DateTimeUtils.formatTime({hour:12, minute:5}));
+
 			Y.DateTimeUtils.CLOCK_DISPLAY_TYPE = 24;
 		},
 
@@ -131,13 +136,33 @@ YUI.add('gallery-datetime-utils-tests', function(Y) {
 
 			check(Y.DateTimeUtils.parseTime('14:05'));
 			check(Y.DateTimeUtils.parseTime('14:5'));
-			check(Y.DateTimeUtils.parseTime('2:05 PM'));
+			check(Y.DateTimeUtils.parseTime('2:05PM'));
 
 			var result = Y.DateTimeUtils.parseTime('2:05 AM');
 			Y.Assert.areSame(2, result.hour);
 			Y.Assert.areSame(5, result.minute);
 
 			check(Y.DateTimeUtils.parseTime('2:05:15 PM'));
+
+			var t = Y.DateTimeUtils.parseTime('10AM');
+			Y.Assert.areSame(10, t.hour);
+			Y.Assert.areSame(0, t.minute);
+
+			t = Y.DateTimeUtils.parseTime('12AM');
+			Y.Assert.areSame(0, t.hour);
+			Y.Assert.areSame(0, t.minute);
+
+			t = Y.DateTimeUtils.parseTime('12:05AM');
+			Y.Assert.areSame(0, t.hour);
+			Y.Assert.areSame(5, t.minute);
+
+			t = Y.DateTimeUtils.parseTime('12PM');
+			Y.Assert.areSame(12, t.hour);
+			Y.Assert.areSame(0, t.minute);
+
+			t = Y.DateTimeUtils.parseTime('12:01PM');
+			Y.Assert.areSame(12, t.hour);
+			Y.Assert.areSame(1, t.minute);
 		},
 
 		testParseTimeInvalidValue: function()

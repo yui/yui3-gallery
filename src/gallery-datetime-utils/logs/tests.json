@@ -1,7 +1,7 @@
 {
     "name": "gallery-datetime-utils",
-    "passed": 24,
-    "failed": 3,
+    "passed": 21,
+    "failed": 6,
     "errors": 0,
     "ignored": 0,
     "total": 27,
@@ -9,19 +9,19 @@
     "type": "report",
     "DateTime utilities": {
         "name": "DateTime utilities",
-        "passed": 8,
-        "failed": 1,
+        "passed": 7,
+        "failed": 2,
         "errors": 0,
         "ignored": 0,
         "total": 9,
-        "duration": 101,
+        "duration": 100,
         "type": "testcase",
         "testNormalize": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testNormalize",
-            "duration": 10
+            "duration": 4
         },
         "testFormatDate": {
             "result": "pass",
@@ -45,18 +45,18 @@
             "duration": 1
         },
         "testFormatTime": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Values should be the same.\nExpected: 12:00 AM (string)\nActual: 0:00 AM (string)",
             "type": "test",
             "name": "testFormatTime",
-            "duration": 1
+            "duration": 2
         },
         "testParseTime": {
             "result": "fail",
             "message": "Unexpected error: Unparseable time format.",
             "type": "test",
             "name": "testParseTime",
-            "duration": 2
+            "duration": 6
         },
         "testParseTimeInvalidValue": {
             "result": "pass",
@@ -70,17 +70,17 @@
             "message": "Test passed",
             "type": "test",
             "name": "testParseTimeInvalidHour",
-            "duration": 1
+            "duration": 0
         },
         "testParseTimeInvalidMinute": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testParseTimeInvalidMinute",
-            "duration": 0
+            "duration": 1
         }
     },
-    "timestamp": "Thu May  2 15:59:41 2013",
+    "timestamp": "Wed 26 Jun 2013 03:59:32 PM PDT",
     "coverage": {
         "build/gallery-datetime-utils/gallery-datetime-utils.js": {
             "path": "build/gallery-datetime-utils/gallery-datetime-utils.js",
@@ -88,10 +88,10 @@
                 "1": 1,
                 "2": 1,
                 "3": 1,
-                "4": 15,
-                "5": 15,
-                "6": 11,
-                "7": 15,
+                "4": 16,
+                "5": 16,
+                "6": 12,
+                "7": 16,
                 "8": 1,
                 "9": 42,
                 "10": 1,
@@ -141,17 +141,17 @@
                 "54": 12,
                 "55": 3,
                 "56": 9,
-                "57": 11,
+                "57": 12,
                 "58": 3,
-                "59": 8,
+                "59": 9,
                 "60": 1,
-                "61": 7,
+                "61": 8,
                 "62": 1,
-                "63": 7,
+                "63": 8,
                 "64": 3,
-                "65": 7,
-                "66": 3,
-                "67": 3,
+                "65": 8,
+                "66": 4,
+                "67": 4,
                 "68": 4,
                 "69": 13,
                 "70": 3,
@@ -174,7 +174,7 @@
             },
             "b": {
                 "1": [
-                    11,
+                    12,
                     4
                 ],
                 "2": [
@@ -248,27 +248,27 @@
                 ],
                 "19": [
                     3,
-                    8
+                    9
                 ],
                 "20": [
                     1,
-                    7
+                    8
                 ],
                 "21": [
                     1,
-                    6
+                    7
                 ],
                 "22": [
                     3,
-                    4
+                    5
                 ],
                 "23": [
-                    3,
+                    4,
                     4
                 ],
                 "24": [
                     2,
-                    1
+                    2
                 ],
                 "25": [
                     3,
@@ -307,13 +307,13 @@
             },
             "f": {
                 "1": 1,
-                "2": 15,
+                "2": 16,
                 "3": 42,
                 "4": 39,
                 "5": 7,
                 "6": 14,
                 "7": 12,
-                "8": 11,
+                "8": 12,
                 "9": 13
             },
             "fnMap": {
@@ -2174,10 +2174,10 @@
                 "1": 1,
                 "3": 1,
                 "16": 1,
-                "18": 15,
-                "19": 15,
-                "21": 11,
-                "23": 15,
+                "18": 16,
+                "19": 16,
+                "21": 12,
+                "23": 16,
                 "26": 1,
                 "28": 42,
                 "31": 1,
@@ -2227,17 +2227,17 @@
                 "286": 12,
                 "288": 3,
                 "291": 9,
-                "311": 11,
+                "311": 12,
                 "313": 3,
-                "315": 8,
+                "315": 9,
                 "317": 1,
-                "320": 7,
+                "320": 8,
                 "322": 1,
-                "325": 7,
+                "325": 8,
                 "327": 3,
-                "334": 7,
-                "336": 3,
-                "337": 3,
+                "334": 8,
+                "336": 4,
+                "337": 4,
                 "343": 4,
                 "360": 13,
                 "362": 3,
