@@ -76,23 +76,47 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
     **/
     EVT_SAVE = 'save',
 
-    PARSED = function(value) {
-        var parsed;
-        try {
-            parsed = Y.JSON.parse(value);
-        } catch (ex) {}
-        return parsed;
+    PARSED = function (response) {
+        if (typeof response === 'string') {
+            try {
+                return Y.JSON.parse(response);
+            } catch (ex) {
+                this.fire(EVT_ERROR, {
+                    error   : ex,
+                    response: response,
+                    src     : 'parse'
+                });
+                return null;
+            }
+        }
+        return response;
     };
 
     // -- Mixing extra Methods to Y.Model -----------------------------------
 
     function ITSAModelSyncPromise() {}
     Y.mix(ITSAModelSyncPromise.prototype, {
+
+       /**
+         * This method can be defined in descendend classes.<br />
+         * If syncPromise is defined, then the syncPromise() definition will be used instead of sync() definition.<br />
+         * Always reject the promise in case an invalid 'action' is defined: end the method with this code:
+         *   return new Y.Promise(function (resolve, reject) {<br />
+         *       reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+         *   });<br />
+         *
+         * @method syncPromise
+         * @param action {String} The sync-action to perform.
+         * @param [options] {Object} Sync options. The custom synclayer should pass through all options-properties to the server.
+         * @return {Y.Promise} returned response for each 'action' --> response --> resolve(dataobject) OR reject(reason).
+         * The returned 'dataobject' might be an object or a string that can be turned into a json-object
+        */
+
        /**
          * Submits this model to the server.
          *
          * This method delegates to the `sync()` method to perform the actual submit
-         * operation, which is Y.Promise. Read the Promise.then() and look for resolve(response, options) OR reject(reason).
+         * operation, which is Y.Promise. Read the Promise.then() and look for resolve(response) OR reject(reason).
          *
          * A successful submit-operation will also fire a `submit` event, while an unsuccessful
          * submit operation will fire an `error` event with the `src` value "submit".
@@ -102,35 +126,52 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
          * @method submitPromise
          * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
          *                 implementation to determine what options it supports or requires, if any.
-         * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
+         * @return {Y.Promise} promised response --> resolve(response) OR reject(reason).
         **/
         submitPromise: function(options) {
             var instance = this;
 
             options = options || {};
             return new Y.Promise(function (resolve, reject) {
-                instance.sync('submit', options, function (err, response) {
-                    var facade = {
-                            options : options,
-                            response: response
-                        };
-                    if (err) {
-                        facade.error = err;
-                        facade.src   = 'Model.submitPromise()';
-                        instance._lazyFireErrorEvent(facade);
-                        reject(new Error(err));
+                var errFunc, successFunc,
+                      facade = {
+                          options : options
+                      };
+                errFunc = function(err) {
+                    facade.error = err;
+                    facade.src   = 'Model.submitPromise()';
+                    instance._lazyFireErrorEvent(facade);
+                    reject(new Error(err));
+                };
+                successFunc = function(response) {
+                    // Lazy publish.
+                    if (!instance._submitEvent) {
+                        instance._submitEvent = instance.publish(EVT_SUBMIT, {
+                            preventable: false
+                        });
                     }
-                    else {
-                        // Lazy publish.
-                        if (!instance._submitEvent) {
-                            instance._submitEvent = instance.publish(EVT_SUBMIT, {
-                                preventable: false
-                            });
+                    facade.response = response;
+                    instance.fire(EVT_SUBMIT, facade);
+                    resolve(response);
+                };
+                if (instance.syncPromise) {
+                    // use the syncPromise-layer
+                    instance.syncPromise('submit', options).then(
+                        successFunc,
+                        errFunc
+                    );
+                }
+                else {
+                    // use the sync-layer
+                    instance.sync('submit', options, function (err, response) {
+                        if (err) {
+                            errFunc(err);
                         }
-                        instance.fire(EVT_SUBMIT, facade);
-                        resolve(response, options);
-                    }
-                });
+                        else {
+                            successFunc(response);
+                        }
+                    });
+                }
             });
         },
 
@@ -150,39 +191,55 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
          * @method loadPromise
          * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
          *                 implementation to determine what options it supports or requires, if any.
-         * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
+         * @return {Y.Promise} promised response --> resolve(response) OR reject(reason).
         **/
         loadPromise: function (options) {
             var instance = this;
 
             options = options || {};
             return new Y.Promise(function (resolve, reject) {
-                instance.sync('read', options, function (err, response) {
-                    var parsed,
-                        facade = {
-                            options : options,
-                            response: response
-                        };
-                    if (err) {
-                        facade.error = err;
-                        facade.src   = 'Model.loadPromise()';
-                        instance._lazyFireErrorEvent(facade);
-                        reject(new Error(err));
+                var errFunc, successFunc,
+                      facade = {
+                          options : options
+                      };
+                errFunc = function(err) {
+                    facade.error = err;
+                    facade.src   = 'Model.loadPromise()';
+                    instance._lazyFireErrorEvent(facade);
+                    reject(new Error(err));
+                };
+                successFunc = function(response) {
+                    var parsed;
+                    // Lazy publish.
+                    if (!instance._loadEvent) {
+                        instance._loadEvent = instance.publish(EVT_LOAD, {
+                            preventable: false
+                        });
                     }
-                    else {
-                        // Lazy publish.
-                        if (!instance._loadEvent) {
-                            instance._loadEvent = instance.publish(EVT_LOAD, {
-                                preventable: false
-                            });
+                    facade.response = response;
+                    parsed = facade.parsed = PARSED(response);
+                    instance.setAttrs(parsed, options);
+                    instance.changed = {};
+                    instance.fire(EVT_LOAD, facade);
+                    resolve(response);
+                };
+                if (instance.syncPromise) {
+                    // use the syncPromise-layer
+                    instance.syncPromise('read', options).then(
+                        successFunc,
+                        errFunc
+                    );
+                }
+                else {
+                    instance.sync('read', options, function (err, response) {
+                        if (err) {
+                            errFunc(err);
                         }
-                        parsed = facade.parsed = PARSED(response);
-                        instance.setAttrs(parsed, options);
-                        instance.changed = {};
-                        instance.fire(EVT_LOAD, facade);
-                        resolve(response, options);
-                    }
-                });
+                        else {
+                            successFunc(response);
+                        }
+                    });
+                }
             });
         },
 
@@ -203,48 +260,64 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
         * @method savePromise
          * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
          *                 implementation to determine what options it supports or requires, if any.
-         * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
+         * @return {Y.Promise} promised response --> resolve(response) OR reject(reason).
         **/
         savePromise: function (options) {
             var instance = this;
 
             options = options || {};
             return new Y.Promise(function (resolve, reject) {
-                var facade = {
-                        options : options,
-                        src     :'save'
-                    };
+                var errFunc, successFunc, usedmethod,
+                      facade = {
+                          options : options
+                      };
                 instance._validate(instance.toJSON(), function (validateErr) {
                     if (validateErr) {
                         facade.error = validateErr;
-                        facade.scr = 'Model.savePromise() - validate';
+                        facade.src = 'Model.savePromise() - validate';
                         instance._lazyFireErrorEvent(facade);
                         reject(new Error(validateErr));
                     }
                     else {
-                        instance.sync(instance.isNew() ? 'create' : 'update', options, function (err, response) {
+                        errFunc = function(err) {
+                            facade.error = err;
+                            facade.src   = 'Model.savePromise()';
+                            instance._lazyFireErrorEvent(facade);
+                            reject(new Error(err));
+                        };
+                        successFunc = function(response) {
                             var parsed;
+                            // Lazy publish.
+                            if (!instance._saveEvent) {
+                                instance._saveEvent = instance.publish(EVT_SAVE, {
+                                    preventable: false
+                                });
+                            }
                             facade.response = response;
-                            if (err) {
-                                facade.error = err;
-                                facade.src   = 'Model.savePromise()';
-                                instance._lazyFireErrorEvent(facade);
-                                reject(new Error(err));
-                            }
-                            else {
-                                // Lazy publish.
-                                if (!instance._saveEvent) {
-                                    instance._saveEvent = instance.publish(EVT_SAVE, {
-                                        preventable: false
-                                    });
+                            parsed = facade.parsed = PARSED(response);
+                            instance.setAttrs(parsed, options);
+                            instance.changed = {};
+                            instance.fire(EVT_SAVE, facade);
+                            resolve(response);
+                        };
+                        usedmethod = instance.isNew() ? 'create' : 'update';
+                        if (instance.syncPromise) {
+                            // use the syncPromise-layer
+                            instance.syncPromise(usedmethod, options).then(
+                                successFunc,
+                                errFunc
+                            );
+                        }
+                        else {
+                            instance.sync(usedmethod, options, function (err, response) {
+                                if (err) {
+                                    errFunc(err);
                                 }
-                                parsed = facade.parsed = PARSED(response);
-                                instance.setAttrs(parsed, options);
-                                instance.changed = {};
-                                instance.fire(EVT_SAVE, facade);
-                                resolve(response, options);
-                            }
-                        });
+                                else {
+                                    successFunc(response);
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -265,7 +338,7 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
          * @method destroyPromise
          * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
          *                 implementation to determine what options it supports or requires, if any.
-         * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
+         * @return {Y.Promise} promised response --> resolve(response) OR reject(reason).
         **/
         destroyPromise: function (options) {
             var instance = this;
@@ -273,30 +346,46 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
             options = options || {};
             return new Y.Promise(function (resolve, reject) {
                 instance.onceAfter('destroy', function () {
-                    function finish() {
+                    var errFunc, successFunc, finish;
+                    finish = function() {
                         YArray.each(instance.lists.concat(), function (list) {
                             list.remove(instance, options);
                         });
-                    }
+                    };
                     if (options.remove || options['delete']) {
-                        instance.sync('delete', options, function (err) {
-                            if (err) {
-                                var facade = {
-                                    error   : err,
-                                    src     : 'Model.destroyPromise()',
-                                    options : options
-                                };
-                                instance._lazyFireErrorEvent(facade);
-                                reject(new Error(err));
-                            }
-                            else {
-                                finish();
-                                resolve(options);
-                            }
-                        });
+                        errFunc = function(err) {
+                            var facade = {
+                                error   : err,
+                                src     : 'Model.destroyPromise()',
+                                options : options
+                            };
+                            instance._lazyFireErrorEvent(facade);
+                            reject(new Error(err));
+                        };
+                        successFunc = function(response) {
+                            finish();
+                            resolve(response);
+                        };
+                        if (instance.syncPromise) {
+                            // use the syncPromise-layer
+                            instance.syncPromise('delete', options).then(
+                                successFunc,
+                                errFunc
+                            );
+                        }
+                        else {
+                            instance.sync('delete', options, function (err, response) {
+                                if (err) {
+                                    errFunc(err);
+                                }
+                                else {
+                                    successFunc(response);
+                                }
+                            });
+                        }
                     } else {
                         finish();
-                        resolve(options);
+                        resolve();
                     }
                 });
             }).then(
@@ -333,4 +422,4 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
 
     Y.Base.mix(Y.Model, [ITSAModelSyncPromise]);
 
-}, 'gallery-2013.06.20-02-07', {"requires": ["yui-base", "base-base", "base-build", "node-base", "json-parse", "promise", "model"]});
+}, 'gallery-2013.06.26-23-09', {"requires": ["yui-base", "base-base", "base-build", "node-base", "json-parse", "promise", "model"]});
