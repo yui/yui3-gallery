@@ -1,0 +1,63 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-input-calendar-sync
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-input-calendar-sync
+   #1: Trailing whitespace.
+       * // line 11, pos 3
+   #2: Trailing whitespace.
+       * // line 32, pos 7
+   #3: Possible strict violation.
+       if (this.ignore_value_change) // line 61, pos 9
+   #4: Possible strict violation.
+       var host  = this.get('host'), // line 66, pos 17
+   #5: Possible strict violation.
+       cal   = this.get('calendar'), // line 67, pos 17
+   #6: Possible strict violation.
+       this.ignore_selection_change = true; // line 74, pos 13
+   #7: Too many var statements.
+       var result = Y.DateTimeUtils.normalize(Y.DateTimeUtils.parseDate(value), {hour:0, minute:0}); // line 76, pos 17
+   #8: Possible strict violation.
+       this.ignore_selection_change = false; // line 87, pos 13
+   #9: Possible strict violation.
+       privateSyncFromCalendar.call(this); // line 90, pos 38
+   #10: Possible strict violation.
+       else if (!this.get('allowBlank')) // line 92, pos 15
+   #11: Possible strict violation.
+       privateSyncFromCalendar.call(this); // line 94, pos 38
+   #12: Possible strict violation.
+       if (!this.ignore_selection_change) // line 104, pos 10
+   #13: Possible strict violation.
+       this.get('host').focus();	// make it compatible with valuechange event // line 106, pos 9
+   #14: Possible strict violation.
+       privateSyncFromCalendar.call(this); // line 107, pos 38
+   #15: Possible strict violation.
+       this.ignore_value_change = true; // line 113, pos 5
+   #16: Possible strict violation.
+       var date = this.get('calendar').get('selectedDates')[0]; // line 115, pos 16
+   #17: Possible strict violation.
+       this.get('host').set('value', Y.DateTimeUtils.formatDate(date)); // line 116, pos 5
+   #18: Possible strict violation.
+       this.ignore_value_change = false; // line 118, pos 5
+   #19: 'config' is defined but never used.
+       initializer: function(config) // line 123, pos 33
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-input-calendar-sync/gallery-input-calendar-sync.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-input-calendar-sync/gallery-input-calendar-sync.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-input-calendar-sync/gallery-input-calendar-sync-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.161 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

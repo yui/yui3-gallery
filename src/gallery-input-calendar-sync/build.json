@@ -1,0 +1,19 @@
+{
+    "name": "gallery-input-calendar-sync",
+    "builds": {
+        "gallery-input-calendar-sync": {
+            "config": {
+                "requires": [
+                    "node-pluginhost",
+                    "plugin",
+                    "gallery-datetime-utils",
+                    "calendar",
+                    "gallery-node-event-set"
+                ]
+            },
+            "jsfiles": [
+                "sync.js"
+            ]
+        }
+    }
+}
