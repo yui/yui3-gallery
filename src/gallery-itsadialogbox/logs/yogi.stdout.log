@@ -70,54 +70,56 @@ shifter [queu] copying assets to skin for sam
        width: 44px; // line 131, pos 5
    #25: [warning] height can't be used with display: inline.
        height: 44px; // line 132, pos 5
-   #26: [warning] Values of 0 shouldn't have units specified.
-       background-position: -999px 0px; // line 135, pos 33
+   #26: [warning] Property with star prefix found.
+       *background-image: url('itsadialog_buttonicons.png'); // line 135, pos 5
    #27: [warning] Values of 0 shouldn't have units specified.
-       padding: 20px 0px 0px 60px; // line 139, pos 19
+       background-position: -999px 0px; // line 136, pos 33
    #28: [warning] Values of 0 shouldn't have units specified.
-       padding: 20px 0px 0px 60px; // line 139, pos 23
-   #29: [warning] Don't use adjoining classes.
-       .itsadialogbox-icon.icon-bubble { // line 141, pos 1
-   #30: [warning] Values of 0 shouldn't have units specified.
-       background-position: 0px -200px; // line 142, pos 26
-   #31: [warning] Don't use adjoining classes.
-       .itsadialogbox-icon.icon-error { // line 145, pos 1
-   #32: [warning] Values of 0 shouldn't have units specified.
-       background-position: 0px -100px; // line 146, pos 26
-   #33: [warning] Don't use adjoining classes.
-       .itsadialogbox-icon.icon-info { // line 149, pos 1
-   #34: [warning] Values of 0 shouldn't have units specified.
-       background-position: 0px -300px; // line 150, pos 26
-   #35: [warning] Don't use adjoining classes.
-       .itsadialogbox-icon.icon-question { // line 153, pos 1
-   #36: [warning] Values of 0 shouldn't have units specified.
-       background-position: 0px -400px; // line 154, pos 26
-   #37: [warning] Don't use adjoining classes.
-       .itsadialogbox-icon.icon-warn { // line 157, pos 1
-   #38: [warning] Values of 0 shouldn't have units specified.
-       background-position: 0px -500px; // line 158, pos 26
-   #39: [warning] Don't use adjoining classes.
-       .itsadialogbox-icon.icon-success { // line 161, pos 1
-   #40: [warning] Values of 0 shouldn't have units specified.
-       background-position: 0px 0px; // line 162, pos 26
+       padding: 20px 0px 0px 60px; // line 140, pos 19
+   #29: [warning] Values of 0 shouldn't have units specified.
+       padding: 20px 0px 0px 60px; // line 140, pos 23
+   #30: [warning] Don't use adjoining classes.
+       .itsadialogbox-icon.icon-bubble { // line 142, pos 1
+   #31: [warning] Values of 0 shouldn't have units specified.
+       background-position: 0px -200px; // line 143, pos 26
+   #32: [warning] Don't use adjoining classes.
+       .itsadialogbox-icon.icon-error { // line 146, pos 1
+   #33: [warning] Values of 0 shouldn't have units specified.
+       background-position: 0px -100px; // line 147, pos 26
+   #34: [warning] Don't use adjoining classes.
+       .itsadialogbox-icon.icon-info { // line 150, pos 1
+   #35: [warning] Values of 0 shouldn't have units specified.
+       background-position: 0px -300px; // line 151, pos 26
+   #36: [warning] Don't use adjoining classes.
+       .itsadialogbox-icon.icon-question { // line 154, pos 1
+   #37: [warning] Values of 0 shouldn't have units specified.
+       background-position: 0px -400px; // line 155, pos 26
+   #38: [warning] Don't use adjoining classes.
+       .itsadialogbox-icon.icon-warn { // line 158, pos 1
+   #39: [warning] Values of 0 shouldn't have units specified.
+       background-position: 0px -500px; // line 159, pos 26
+   #40: [warning] Don't use adjoining classes.
+       .itsadialogbox-icon.icon-success { // line 162, pos 1
    #41: [warning] Values of 0 shouldn't have units specified.
-       background-position: 0px 0px; // line 162, pos 30
-   #42: [warning] Using width with padding-right can sometimes make elements larger than you expect.
-       padding-right: 8px; // line 171, pos 5
+       background-position: 0px 0px; // line 163, pos 26
+   #42: [warning] Values of 0 shouldn't have units specified.
+       background-position: 0px 0px; // line 163, pos 30
+   #43: [warning] Using width with padding-right can sometimes make elements larger than you expect.
+       padding-right: 8px; // line 172, pos 5
 shifter [queu] writing skin file with core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.618 seconds, pretty fast huh?
+shifter [info] finished in 1.256 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsadialogbox]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.004 seconds)
+✖ [gallery-itsadialogbox]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
     test is empty
        No Tests Provided For This Module
 Writing files in JSON format to: /src/gallery-itsadialogbox/logs/tests.json
