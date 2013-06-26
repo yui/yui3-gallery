@@ -204,36 +204,53 @@
             append = ((typeof optionsappend === 'boolean') && optionsappend);
             eventname = append ? EVT_LOADAPPEND : EVT_LOAD;
             return new Y.Promise(function (resolve, reject) {
-                instance.sync(append ? 'readappend' : 'read', options, function (err, response) {
-                    var parsed,
-                        facade = {
-                            options : options,
-                            response: response
-                        };
-                    if (err) {
-                        facade.error = err;
-                        facade.src   = 'Modellist.loadPromise() - load' + (append ? 'append' : '');
-                        instance._lazyFireErrorEvent(facade);
-                        reject(new Error(err));
+                var errFunc, successFunc,
+                    syncmethod = append ? 'readappend' : 'read',
+                      facade = {
+                          options : options
+                      };
+                errFunc = function(err) {
+                    facade.error = err;
+                    facade.src   = 'Modellist.loadPromise() - load' + (append ? 'append' : '');
+                    instance._lazyFireErrorEvent(facade);
+                    reject(new Error(err));
+                };
+                successFunc = function(response) {
+                    var parsed;
+                    // Lazy publish.
+                    if (!instance['_'+eventname]) {
+                        instance['_'+eventname] = instance.publish(eventname, {
+                            preventable: false
+                        });
+                    }
+                    facade.response = response;
+                    parsed = facade.parsed = PARSED(response);
+                    if (append) {
+                        instance.add(parsed, options);
                     }
                     else {
-                        // Lazy publish.
-                        if (!instance['_'+eventname]) {
-                            instance['_'+eventname] = instance.publish(eventname, {
-                                preventable: false
-                            });
-                        }
-                        parsed = facade.parsed = PARSED(response);
-                        if (append) {
-                            instance.add(parsed, options);
+                        instance.reset(parsed, options);
+                    }
+                    instance.fire(eventname, facade);
+                    resolve(response, options);
+                };
+                if (instance.syncPromise) {
+                    // use the syncPromise-layer
+                    instance.syncPromise(syncmethod, options).then(
+                        successFunc,
+                        errFunc
+                    );
+                }
+                else {
+                    instance.sync(syncmethod, options, function (err, response) {
+                        if (err) {
+                            errFunc(err);
                         }
                         else {
-                            instance.reset(parsed, options);
+                            successFunc(response);
                         }
-                        instance.fire(eventname, facade);
-                        resolve(response, options);
-                    }
-                });
+                    });
+                }
             });
         },
 

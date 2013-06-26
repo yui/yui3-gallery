@@ -72,6 +72,42 @@ YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-i
 });
 ```
 
+<b>Loading Models with ModelList.loadPromise() and the syncPromise()-layer</b>
+```js
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
+
+    var pielist;
+    Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
+        // ... you might want to set  up the sync-layer, but ModelList.loadPromise doesn't call the 'read' method of every separate Y.PieModel
+        // instead, it calls its own ModelList synclayer
+    });
+    Y.PieList = Y.Base.create('pieList', Y.ModelList, [], {
+        model: Y.PieModel,
+        syncPromise: function (action, options) {
+            if (action==='read') {
+                return Y.io.get('http://mydomain.com/getdata.php?models=group1');
+            }
+            // do not forget to reject the promise in case an invalid 'action' is defined
+            return new Y.Promise(function (resolve, reject) {
+                reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+            });
+        }
+    });
+    pielist = new Y.PieList({...});
+
+    pielist.loadPromise().then(
+        function(response, options) {
+            // we are sure now pielist is filled with all PieModels.
+            // we could read 'response' or 'options', but don't need to
+        },
+        function(reason) {
+            // 'reason' gives you the reason why loading has failed
+        }
+    );
+
+});
+```
+
 <b>Appending Models with ModelList.loadPromise({append: true})</b>
 ```js
 YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
