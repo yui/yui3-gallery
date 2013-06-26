@@ -5,7 +5,7 @@ YUI.add('gallery-itsaerrorreporter', function (Y, NAME) {
 /**
  * This module full automaticly reports error-events by poping up an error-dialog.
  *
- * By default it listens to both error-events and error-loggings. Both can be (un)set.
+ * By default it listens to window.onerror, broadcasted 'error'-events and error-loggings. All can be (un)set.
  *
  *
  * @module gallery-itsaerrorreporter
@@ -18,6 +18,7 @@ YUI.add('gallery-itsaerrorreporter', function (Y, NAME) {
 */
 
 var ERROR = 'error',
+      JS_ERROR = 'javascript '+ERROR,
       BOOLEAN = 'boolean',
       UNDEFINED_ERROR = 'undefined error',
       errorReporterInstance;
@@ -29,6 +30,21 @@ if (!Y.Global.ITSAErrorReporter) {
     Y.mix(ITSAErrorReporter.prototype, {
 
         /**
+         * Handler for window.onerror.
+         *
+         * @method _handleWindowError
+         * @param [activate] {boolean} to set or unset the reporter
+         * @since 0.2
+        */
+        _handleWindowError : function(msg, url, line) {
+            var instance = this;
+
+            if (instance._reportWindowErrors) {
+                  Y.alert(JS_ERROR, msg+'<br /><br />'+url+' (line '+line+')', {type: ERROR});
+            }
+        },
+
+        /**
          * Sets or unsets the reporter for 'error'-events.
          *
          * @method reportErrorEvents
@@ -38,9 +54,10 @@ if (!Y.Global.ITSAErrorReporter) {
         reportErrorEvents : function(activate) {
             var instance = this,
                   active = (typeof activate===BOOLEAN) ? activate : true;
+
             if (active && !instance._reportErrorEvents) {
                 instance._reportErrorEvents = Y.after(
-                    [ERROR, '*:'+ERROR],
+                    ['*:'+ERROR],
                     function(e) {
                         var err = e.err || e.error || e.msg || e.message || UNDEFINED_ERROR,
                               src = e.src || e.source;
@@ -64,6 +81,7 @@ if (!Y.Global.ITSAErrorReporter) {
         reportErrorLogs : function(activate) {
             var instance = this,
                   active = (typeof activate===BOOLEAN) ? activate : true;
+
             if (active && !instance._reportErrorLogs) {
                 instance._reportErrorLogs = Y.on(
                     'yui:log',
@@ -81,11 +99,26 @@ if (!Y.Global.ITSAErrorReporter) {
                 instance._reportErrorLogs.detach();
                 instance._reportErrorLogs = null;
             }
+        },
+
+        /**
+         * Sets or unsets the reporter for window.onerror.
+         *
+         * @method reportWindowErrors
+         * @param [activate] {boolean} to set or unset the reporter
+         * @since 0.2
+        */
+        reportWindowErrors : function(activate) {
+            var active = (typeof activate===BOOLEAN) ? activate : true;
+
+            this._reportWindowErrors = active;
         }
 
     });
 
     errorReporterInstance = Y.Global.ITSAErrorReporter = new ITSAErrorReporter();
+    window.onerror = Y.bind(errorReporterInstance._handleWindowError, errorReporterInstance);
+    errorReporterInstance.reportWindowErrors();
     errorReporterInstance.reportErrorEvents();
     errorReporterInstance.reportErrorLogs();
 
@@ -93,4 +126,4 @@ if (!Y.Global.ITSAErrorReporter) {
 
 Y.ITSAErrorReporter = Y.Global.ITSAErrorReporter;
 
-}, 'gallery-2013.06.13-01-19', {"requires": ["yui-base", "event-base", "event-custom-base", "gallery-itsadialog"]});
+}, 'gallery-2013.06.26-23-09', {"requires": ["yui-base", "event-base", "event-custom-base", "gallery-itsadialog"]});
