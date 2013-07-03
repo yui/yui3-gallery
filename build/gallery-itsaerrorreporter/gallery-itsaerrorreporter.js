@@ -61,6 +61,8 @@ if (!Y.Global.ITSAErrorReporter) {
                     function(e) {
                         var err = e.err || e.error || e.msg || e.message || UNDEFINED_ERROR,
                               src = e.src || e.source;
+                        // in case of err as an windows Error-object, we need to stransform the type to String:
+                        err = err.toString();
                         Y.alert(src, err, {type: ERROR});
                     }
                 );
@@ -126,4 +128,4 @@ if (!Y.Global.ITSAErrorReporter) {
 
 Y.ITSAErrorReporter = Y.Global.ITSAErrorReporter;
 
-}, 'gallery-2013.06.26-23-09', {"requires": ["yui-base", "event-base", "event-custom-base", "gallery-itsadialog"]});
+}, 'gallery-2013.07.03-22-52', {"requires": ["yui-base", "event-base", "event-custom-base", "gallery-itsadialog"]});
