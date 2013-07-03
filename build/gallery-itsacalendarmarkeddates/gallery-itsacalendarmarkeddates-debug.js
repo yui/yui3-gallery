@@ -62,7 +62,6 @@ Y.mix(ITSACalendarMarkedDates.prototype, {
      * @private
      * @since 3.8.1
      */
-    _markedDates : {},
 
     /**
      * Internal subscriber to Calendar.after(['dateChange', 'markChange']) events
@@ -72,7 +71,6 @@ Y.mix(ITSACalendarMarkedDates.prototype, {
      * @private
      * @since 3.8.1
      */
-    _fireMarkEvent : null,
 
     /**
      * Designated initializer
@@ -528,7 +526,7 @@ Y.mix(ITSACalendarMarkedDates.prototype, {
             prevMarked = instance._getMarkedDatesList();
 
         Y.log('_removeDatesFromMarked', 'info', 'Itsa-CalendarMarkedDates');
-        arrayEach(datesArray, instance._removeDatesFromMarked, instance);
+        arrayEach(datesArray, instance._removeDateFromMarked, instance);
         Y.log('_removeDatesFromMarked will fire a markChange event', 'info', 'Itsa-CalendarMarkedDates');
         instance._fireMarkChange(prevMarked);
     },
@@ -741,4 +739,13 @@ Y.Calendar.ITSACalendarMarkedDates = ITSACalendarMarkedDates;
 
 Y.Base.mix(Y.Calendar, [ITSACalendarMarkedDates]);
 
-}, 'gallery-2013.02.27-21-03', {"requires": ["base-build", "calendar-base", "datatype-date", "datatype-date-math"], "skinnable": true});
+}, 'gallery-2013.07.03-22-52', {
+    "requires": [
+        "base-build",
+        "node-base",
+        "calendar-base",
+        "datatype-date",
+        "datatype-date-math"
+    ],
+    "skinnable": true
+});

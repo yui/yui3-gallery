@@ -21,6 +21,7 @@ Usage
 -----
 
 ```js
+YUI({gallery: 'gallery-2013.02.27-21-03'}).use('calendar', 'gallery-itsacalendarmarkeddates', function(Y) {
 var myCalendar = new Y.Calendar({
     contentBox: "#mycalendar",
     height:'300px',
@@ -39,6 +40,7 @@ myCalendar.markDates(dateArray);
 
 // now check if date2 is marked:
 Y.log('Is date2 marked? '+myCalendar.dateIsMarked(date2));
+});
 ```
 
 <u><b>Custom styling:</b></u>

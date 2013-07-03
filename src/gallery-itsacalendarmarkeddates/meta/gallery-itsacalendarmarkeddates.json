@@ -2,6 +2,7 @@
     "gallery-itsacalendarmarkeddates": {
         "requires": [
             "base-build",
+            "node-base",
             "calendar-base",
             "datatype-date",
             "datatype-date-math"
