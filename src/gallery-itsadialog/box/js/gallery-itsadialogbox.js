@@ -1101,7 +1101,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
 
             // creating loginPanel (id=7)
             instance.definePanel({
-                iconClass: instance.ICON_QUESTION,
+                iconClass: instance.ICON_INFO,
                 form: [
                     {name:'username', label:'{username}', value:'{username}'},
                     {name:'password', label:'{password}', value:'{password}'}

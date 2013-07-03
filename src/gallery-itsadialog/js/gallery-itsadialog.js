@@ -31,7 +31,7 @@ var LOADDELAY = 5000, // lazy load 'gallery-itsadialogbox' after 5 seconds
       INPUT = 'input',
       NUMBER = 'number',
       LOGIN = 'login',
-      WARNING = 'warning',
+      WARN = 'warn',
       OBJECT = 'object',
       CONFIRMATION_BUTTONS = {
           footer: [
@@ -69,8 +69,8 @@ if (!Y.Global.ITSADialog) {
                   ItsaDialog = Y.Global.ItsaDialog;
 
             Y.log('_getFunction', 'info', 'Itsa-Dialog');
-            if (type===WARNING) {
-                useFunction = Y.bind(ItsaDialog.showWarning, ItsaDialog);
+            if (type===WARN) {
+                useFunction = Y.bind(ItsaDialog.showWARN, ItsaDialog);
             }
             else if (type===ERROR) {
                 useFunction = Y.bind(ItsaDialog.showErrorMessage, ItsaDialog);
@@ -104,7 +104,7 @@ if (!Y.Global.ITSADialog) {
          * @param [title] {String} Title on the dialogbox (header).
          * @param message {String} Message to display. (may be the first argument)
          * @param [options] {object}
-         * @param [options.type] {String} Determines which dialogbox to pop-up --> null|'message'|'warning'|'error' (null == 'message')
+         * @param [options.type] {String} Determines which dialogbox to pop-up --> null|'message'|'warn'|'error' (null == 'message')
          * @private
          * @return {Y.Promise}
          * <br />resolve() --> without parameters, no reject.
@@ -139,8 +139,12 @@ if (!Y.Global.ITSADialog) {
         },
 
         /**
-         * Pops-up an prompt-dialog --> dialog with input-fields and an 'CANCEL' + 'OK' buttons.<br />
-         * In case of 'login', only the 'OK'
+         * Pops-up an prompt-dialog --> dialog with input-fields and an 'CANCEL' + 'OK' buttons, or In case of 'login', only an 'OK'-button.
+         * <br />There are three possible dialog-types:
+         * <br /><b>'input'</b> --> one string-field
+         * <br /><b>'number'</b> --> one integer-field
+         * <br /><b>'login'</b> --> two string-fields - used for username and password (the second field is marked)
+         * <br /> which dialogtype to use can be set with 'options.type'.
          *
          * @method _prompt
          * @param [title] {String} Title on the dialogbox (header).
@@ -221,8 +225,11 @@ if (!Y.Global.ITSADialog) {
         },
 
         /**
-         * Pops-up a confirm-dialog --> dialog with no input-field confirm-buttons. There are two possible buttonsconfigurations:<br />
-         * <b>yes-no</b> and <b>abort-ignore-retry</b> --> this can be set with 'options.type'.
+         * Pops-up a confirm-dialog --> dialog with no input-field confirm-buttons.
+         * <br />There are two possible dialog-types:
+         * <br /><b>'yesno'</b> --> comes with yes-no buttons
+         * <br /><b>'retry'</b> --> comes with abort-ignore-retry buttons
+         * <br /> which dialogtype to use can be set with 'options.type'.
          *
          * @method _confirm
          * @param [title] {String} Title on the dialogbox (header).
@@ -299,7 +306,7 @@ if (!Y.Global.ITSADialog) {
         }
     });
 
-    ITSADialogInstance = Y.Global.ITSADialog = new ITSADialog();
+    Y.Global.ITSADialog = new ITSADialog();
     // now lazyload 'gallery-itsadialogbox'
     Y.later(
         LOADDELAY,
@@ -309,6 +316,8 @@ if (!Y.Global.ITSADialog) {
     );
 }
 
+ITSADialogInstance = Y.Global.ITSADialog;
+
 /**
  * Pops-up an alert-dialog --> dialog with no input-field and only an 'OK'-button.
  *
@@ -316,7 +325,7 @@ if (!Y.Global.ITSADialog) {
  * @param [title] {String} Title on the dialogbox (header).
  * @param message {String} Message to display. (may be the first argument)
  * @param [options] {object}
- * @param [options.type] {String} Determines which dialogbox to pop-up --> null|'message'|'warning'|'error' (null == 'message')
+ * @param [options.type] {String} Determines which dialogbox to pop-up --> null|'message'|'warn'|'error' (null == 'message')
  * @return {Y.Promise}
  * <br />resolve() --> without parameters, no reject.
  * @since 0.1
@@ -324,8 +333,12 @@ if (!Y.Global.ITSADialog) {
 Y.alert = Y.rbind(ITSADialogInstance._alert, ITSADialogInstance);
 
 /**
- * Pops-up an prompt-dialog --> dialog with input-fields and an 'CANCEL' + 'OK' buttons.<br />
- * In case of 'login', only the 'OK'
+ * Pops-up an prompt-dialog --> dialog with input-fields and an 'CANCEL' + 'OK' buttons, or In case of 'login', only an 'OK'-button.
+ * <br />There are three possible dialog-types:
+ * <br /><b>'input'</b> --> one string-field
+ * <br /><b>'number'</b> --> one integer-field
+ * <br /><b>'login'</b> --> two string-fields - used for username and password (the second field is marked)
+ * <br /> which dialogtype to use can be set with 'options.type'.
  *
  * @method Y.prompt
  * @param [title] {String} Title on the dialogbox (header).
@@ -347,8 +360,11 @@ Y.alert = Y.rbind(ITSADialogInstance._alert, ITSADialogInstance);
 Y.prompt = Y.rbind(ITSADialogInstance._prompt, ITSADialogInstance);
 
 /**
- * Pops-up a confirm-dialog --> dialog with no input-field confirm-buttons. There are two possible buttonsconfigurations:<br />
- * <b>yes-no</b> and <b>abort-ignore-retry</b> --> this can be set with 'options.type'.
+ * Pops-up a confirm-dialog --> dialog with no input-field confirm-buttons.
+ * <br />There are two possible dialog-types:
+ * <br /><b>'yesno'</b> --> comes with yes-no buttons
+ * <br /><b>'retry'</b> --> comes with abort-ignore-retry buttons
+ * <br /> which dialogtype to use can be set with 'options.type'.
  *
  * @method Y.confirm
  * @param [title] {String} Title on the dialogbox (header).

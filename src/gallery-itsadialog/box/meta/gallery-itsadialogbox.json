@@ -13,6 +13,7 @@
             "node-core",
             "oop",
             "gallery-itsaformelement"
-        ]
+        ],
+        "skinnable": true
     }
 }
