@@ -1,3 +1,5 @@
+YUI.add('gallery-slidecheckbox', function (Y, NAME) {
+
 	var SLIDECHECKBOX='SlideCheckbox',
 	CBX = 'contentBox',
 	WRAPPER = 'wrapper',
@@ -177,15 +179,6 @@
 				
 				this.src.set('checked',!this.src.get('checked'));
 				
-				Y.log( 
-					"checked:" + this.src.get('checked') + '<br/>' + 
-					"this.from:" + this.from + "<br/>" + 
-					"this.currentX:" + this.currentX + "<br/>" + 
-					"this.lastX:" + this.lastX + "<br/>" +
-					"this.left:" + this.left + "<br/>" +
-					"this.dd.lastXY[0]:" + this.dd.lastXY[0] + "<br/>" + 
-					"this.dd.nodeXY[0]:" + this.dd.nodeXY[0] + "<br/>********"
-					);
 				
 				if(this.anim === null){
 					this.anim = new Y.Anim({
@@ -232,3 +225,25 @@
 			}
 		}
 	);
+
+
+}, 'gallery-2013.07.03-22-52', {
+    "skinnable": "true\r",
+    "requires": [
+        "node-base",
+        "anim-base",
+        "anim-easing",
+        "base-build",
+        "event-key",
+        "event-move",
+        "event-focus",
+        "widget",
+        "node-style",
+        "gallery-makenode",
+        "dd-drag",
+        "dd-constrain"
+    ],
+    "optional": [
+        ""
+    ]
+});

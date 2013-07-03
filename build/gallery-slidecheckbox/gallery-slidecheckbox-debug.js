@@ -1,3 +1,5 @@
+YUI.add('gallery-slidecheckbox', function (Y, NAME) {
+
 	var SLIDECHECKBOX='SlideCheckbox',
 	CBX = 'contentBox',
 	WRAPPER = 'wrapper',
@@ -232,3 +234,25 @@
 			}
 		}
 	);
+
+
+}, 'gallery-2013.07.03-22-52', {
+    "skinnable": "true\r",
+    "requires": [
+        "node-base",
+        "anim-base",
+        "anim-easing",
+        "base-build",
+        "event-key",
+        "event-move",
+        "event-focus",
+        "widget",
+        "node-style",
+        "gallery-makenode",
+        "dd-drag",
+        "dd-constrain"
+    ],
+    "optional": [
+        ""
+    ]
+});

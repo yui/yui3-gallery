@@ -1,0 +1,58 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-slidecheckbox
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [warn] no build.json file, downshifting to convert ant files
+shifter [info] looking for ant files
+shifter [info] found 1 .properties files, upshifting to convert
+shifter [info] parsing build.properties
+shifter [info] saving newly parsed build.json file for gallery-slidecheckbox
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-slidecheckbox
+   #1: Unclosed string.
+       YUI.add('gallery-slidecheckbox // line 1, pos 9
+   #2: Too many var statements.
+       var onNode = this._labelOnNode, // line 34, pos 21
+   #3: Trailing whitespace.
+       rightX = offDiv.get('offsetWidth'), // line 39, pos 52
+   #4: Trailing whitespace.
+       ios5 = skin? skin.indexOf('ios5') > -1 : null; // line 43, pos 63
+   #5: Too many var statements.
+       var wrapperWidth = 2 * width; // line 54, pos 21
+   #6: Expected an assignment or function call and instead saw an expression.
+       this.anim && this.anim.stop().destroy(); // line 129, pos 55
+   #7: Expected an assignment or function call and instead saw an expression.
+       this.dd && this.dd.destroy(); // line 130, pos 44
+   #8: Trailing whitespace.
+       Y.log( // line 183, pos 23
+   #9: Trailing whitespace.
+       "checked:" + this.src.get('checked') + '<br/>' + // line 184, pos 69
+   #10: Trailing whitespace.
+       "this.from:" + this.from + "<br/>" + // line 185, pos 57
+   #11: Trailing whitespace.
+       "this.currentX:" + this.currentX + "<br/>" + // line 186, pos 65
+   #12: Trailing whitespace.
+       "this.dd.lastXY[0]:" + this.dd.lastXY[0] + "<br/>" + // line 189, pos 73
+   #13: Trailing whitespace.
+       return srcNode.getAttribute('checked'); // line 233, pos 60
+   #14: 'NAME' is defined but never used.
+       ', function (Y, NAME) { // line 2, pos 21
+   #15: 'e' is defined but never used.
+       dd.on('drag:mouseup',function(e){ // line 81, pos 48
+   #16: 'e' is defined but never used.
+       dd.on('drag:end',function(e){ // line 108, pos 44
+   #17: 'el' is defined but never used.
+       _defaultCB : function(el) { // line 170, pos 37
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-slidecheckbox/gallery-slidecheckbox.js with UglifyJS
+       Unterminated string constant // line 1, pos 9
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[31mERROR[0m[37m][0m yogi detected an error, exiting code 1

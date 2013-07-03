@@ -1,0 +1,32 @@
+{
+    "name": "gallery-slidecheckbox",
+    "builds": {
+        "gallery-slidecheckbox\r": {
+            "config": {
+                "skinnable": "true\r",
+                "requires": [
+                    "node-base",
+                    "anim-base",
+                    "anim-easing",
+                    "base-build",
+                    "event-key",
+                    "event-move",
+                    "event-focus",
+                    "widget",
+                    "node-style",
+                    "gallery-makenode",
+                    "dd-drag",
+                    "dd-constrain"
+                ],
+                "optional": [
+                    ""
+                ]
+            },
+            "skinnable": "true\r",
+            "jsfiles": [
+                "gallery-slidecheckbox.js"
+            ],
+            "meta": {}
+        }
+    }
+}
