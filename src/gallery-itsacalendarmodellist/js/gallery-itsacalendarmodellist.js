@@ -3,7 +3,7 @@
 /**
  * @module gallery-itsacalendarmarkeddates
  * @class ITSACalendarModelList
- * @since 3.8.1
+ * @since 0.3
  *
  * <i>Copyright (c) 2013 Its Asbreuk - http://itsasbreuk.nl</i>
  * YUI BSD License - http://developer.yahoo.com/yui/license.html
@@ -154,12 +154,12 @@ ITSACalendarModelList.ATTRS = {
      * @attribute modelList
      * @type {ModelList}
      * @default null
-     * @since 3.8.1
+     * @since 0.3
      */
     modelList : {
         value: null,
         lazyAdd: false,
-        validator: function(v){ return (v instanceof Y.ModelList) || (v instanceof Y.LazyModelList) || v === null; },
+        validator: function(v){ return (v === null) || (v.getByClientId); },
         setter: '_setModelList'
     },
 
@@ -176,11 +176,11 @@ ITSACalendarModelList.ATTRS = {
      * @type {Object} with fields: <b>date</b>, <b>enddate</b>, <b>count</b>, <b>intervalMinutes</b>,
      * <b>intervalHours</b>, <b>intervalDays</b> and <b>intervalMonths</b>
      * @default null
-     * @since 3.8.1
+     * @since 0.3
      */
     modelConfig: {
         value:      null,
-        validator:  function(v){ return Lang.isObject(v) || v === null; },
+        validator:  function(v){ return (v === null) || Lang.isObject(v); },
         setter: '_setModelConfig'
     }
 
@@ -194,9 +194,8 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @property _fireMarkEvent
      * @type EventHandle
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
-    _fireModelsEvent : null,
 
     /**
      * Internal subscriber to Calendar.after(['dateChange', 'markChange']) events
@@ -204,9 +203,8 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @property _fireMarkEvent
      * @type EventHandle
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
-    _afterRenderEvent : null,
 
     /**
      * Internal subscriber to Calendar.after('render') events
@@ -214,9 +212,8 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @property _syncModelListEvent
      * @type EventHandle
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
-    _syncModelListEvent : null,
 
     /**
      * Internal subscriber to modelList.after('*:change') events
@@ -224,9 +221,8 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @property _syncModelListCheckEvent
      * @type EventHandle
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
-    _syncModelListCheckEvent : null,
 
     /**
      * Internal flag that tells whether the attribute modelConfig is initiated.
@@ -234,9 +230,8 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @property _modelConfigInitiated
      * @type Boolean
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
-    _modelConfigInitiated : false,
 
     /**
      * Internal flag that tells whether the attribute modelList is initiated.
@@ -244,9 +239,8 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @property _modelListInitiated
      * @type Boolean
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
-    _modelListInitiated : false,
 
     /**
      * Internal flag that is used to check whether modelConfig is updated by an internal set('modelList').
@@ -254,10 +248,8 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @property _internalUpdate
      * @type Boolean
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
-    _internalUpdate : false,
-
 
     /**
      * Designated initializer
@@ -265,12 +257,16 @@ Y.mix(ITSACalendarModelList.prototype, {
      *
      * @method initializer
      * @protected
-     * @since 3.8.1
+     * @since 0.3
      */
     initializer : function () {
         var instance = this;
 
         Y.log('initializer', 'info', 'Itsa-CalendarModelList');
+        instance._modelConfigInitiated = false;
+        instance._modelListInitiated = false;
+        instance._internalUpdate = false;
+        instance._storedModelDates = {};
         instance._fireModelsEvent = instance.after('selectionChange', instance._fireSelectedModels);
     },
 
@@ -285,7 +281,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @param {Date} [bDate] The last Date to search within (in case of a range aDate-bDate)
      * Will only be taken if aDate is a Date-object
      * @return {Array} Array with all unique Models that fall within the searchargument
-     * @since 3.8.1
+     * @since 0.3
      */
     getModels : function (aDate, bDate) {
         var instance = this,
@@ -329,7 +325,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method dateHasModels
      * @param {Date} oDate Date to be checked
      * @return {Boolean}
-     * @since 3.8.1
+     * @since 0.3
      */
     dateHasModels : function (oDate) {
         var instance = this,
@@ -351,7 +347,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method getModelsInDate
      * @param {Date} oDate a Date-Object to search within.
      * @return {Array} Array with the Models within the specified Date
-     * @since 3.8.1
+     * @since 0.3
      */
     getModelsInDate : function (oDate) {
         var instance = this;
@@ -366,7 +362,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method getModelsInWeek
      * @param {Date} oDate a Date-Object that determines the <b>Week</b> to search within.
      * @return {Array} Array with the Models within the specified Week
-     * @since 3.8.1
+     * @since 0.3
      */
     getModelsInWeek : function (oDate) {
         var instance = this,
@@ -386,7 +382,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method getModelsInMonth
      * @param {Date} oDate a Date-Object that determines the <b>Month</b> to search within.
      * @return {Array} Array with the Models within the specified Month
-     * @since 3.8.1
+     * @since 0.3
      */
     getModelsInMonth : function (oDate) {
         var instance = this,
@@ -406,7 +402,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method getModelsInYear
      * @param {int} year The <b>Year</b> to search within.
      * @return {Array} Array with the Models within the specified Year
-     * @since 3.8.1
+     * @since 0.3
      */
     getModelsInYear : function (year) {
         var instance = this,
@@ -422,7 +418,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      *
      * @method destructor
      * @protected
-     * @since 3.8.1
+     * @since 0.3
      */
     destructor: function () {
         var instance = this;
@@ -446,7 +442,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      *
      * @method _clearSyncSubscriptionModelList
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _clearSyncSubscriptionModelList : function () {
         var instance = this;
@@ -467,7 +463,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method _setModelConfig
      * @param {Object} val the new modelConfig
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _setModelConfig : function (val) {
         var instance = this;
@@ -490,7 +486,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method _setModelList
      * @param {ModelList} val the new modelList
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _setModelList : function (val) {
         var instance = this,
@@ -549,7 +545,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method _checkSyncModelList
      * @param {EventTarget} e
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _checkSyncModelList : function (e) {
         var instance = this,
@@ -590,7 +586,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @param {EventTarget} [attrmodelconfig] for internal use: when coming from _setModelConfig
      * it holds the new value for modelConfig
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _syncModelList : function (e, attrmodellist, attrmodelconfig) {
         var instance = this;
@@ -615,7 +611,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @param {EventTarget} [attrmodelconfig] for internal use: when coming from _setModelConfig
      * it holds the new value for modelConfig
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _doSyncModelList : function (attrmodellist, attrmodelconfig) {
         var instance = this,
@@ -802,7 +798,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @param {Y.Model} model The model to store
      * @param {Date} oDate The Date that the model should mark the Calendar
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _storeModelDate : function(model, oDate) {
         var instance = this,
@@ -830,7 +826,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @method _fireSelectedModels
      * @param {eventTarget} [e] The eventTarget after a selectionChange
      * @private
-     * @since 3.8.1
+     * @since 0.3
      */
     _fireSelectedModels : function (e) {
         var instance = this;
@@ -840,10 +836,15 @@ Y.mix(ITSACalendarModelList.prototype, {
          * Is fired when the user changes the dateselection. In case multiple Dates are selected and the same Model is
          * available in more than one Date: the Model is only once in the resultarray. Meaning: only unique Models are returned.
          * @event modelSelectionChange
-         * @param {Array} newModelSelection contains [Models] with all modelList's Models who match the selected date(s)
-         * @since 3.8.1
+         * @param {Array} newModelSelection contains [Model] with all modelList's unique original Models that are selected.
+         * @param {Array} selectedDates contains [Date] with all selected Dates (passed through by the Calendar-instance)
+         * @since 0.3
         **/
-        instance.fire("modelSelectionChange", {newModelSelection: instance._getSelectedModelList(e)});
+
+        instance.fire("modelSelectionChange", {
+            newModelSelection: instance._getSelectedModelList(e),
+            selectedDates: (e && e.newSelection) || instance.get('selectedDates')
+        });
     },
 
     /**
@@ -854,7 +855,7 @@ Y.mix(ITSACalendarModelList.prototype, {
      * @private
      * @protected
      * @return {Array} Unique list of Models that are present in selectedDates
-     * @since 3.8.1
+     * @since 0.3
      */
     _getSelectedModelList : function(e) {
         var instance = this,
