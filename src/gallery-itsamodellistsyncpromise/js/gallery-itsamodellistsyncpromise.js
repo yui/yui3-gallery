@@ -106,18 +106,66 @@
     **/
     EVT_DESTROY = 'destroy',
 
-    PARSED = function(value) {
-        var parsed;
-        try {
-            parsed = Y.JSON.parse(value);
-        } catch (ex) {}
-        return parsed;
+    PARSED = function (response) {
+        if (typeof response === 'string') {
+            try {
+                return Y.JSON.parse(response);
+            } catch (ex) {
+                this.fire(EVT_ERROR, {
+                    error   : ex,
+                    response: response,
+                    src     : 'parse'
+                });
+                return null;
+            }
+        }
+        return response;
     };
 
 // -- Mixing extra Methods to Y.ModelList -----------------------------------
 
     function ITSAModellistSyncPromise() {}
     Y.mix(ITSAModellistSyncPromise.prototype, {
+
+       /**
+         * This method can be defined in descendend classes.<br />
+         * If syncPromise is defined, then the syncPromise() definition will be used instead of sync() definition.<br />
+         * In case an invalid 'action' is defined, the promise will be rejected.
+         *
+         * @method syncPromise
+         * @param action {String} The sync-action to perform.
+         * @param [options] {Object} Sync options. The custom synclayer should pass through all options-properties to the server.
+         * @return {Y.Promise} returned response for each 'action' --> response --> resolve(dataobject) OR reject(reason).
+         * The returned 'dataobject' might be an object or a string that can be turned into a json-object
+        */
+
+        /**
+         * This method is used internally and returns syncPromise() that is called with 'action'.
+         * If 'action' is not handled as a Promise -inside syncPromise- then this method will reject the promisi.
+         *
+         * @method _syncTimeoutPromise
+         * @param action {String} The sync-action to perform.
+         * @param [options] {Object} Sync options. The custom synclayer should pass through all options-properties to the server.
+         * @return {Y.Promise} returned response for each 'action' --> response --> resolve(dataobject) OR reject(reason).
+         * The returned 'dataobject' might be an object or a string that can be turned into a json-object
+         * @private
+         * @since 0.2
+        */
+        _syncTimeoutPromise : function(action, options) {
+            var instance = this,
+                  syncpromise;
+
+            Y.log('_syncTimeoutPromise', 'info', 'widget');
+            syncpromise = instance.syncPromise(action, options);
+            if (!(syncpromise instanceof Y.Promise)) {
+                syncpromise = new Y.Promise(function (resolve, reject) {
+                    var errormessage = 'syncPromise is rejected --> '+action+' not defined as a Promise inside syncPromise()';
+                    Y.log('_syncTimeoutPromise: '+errormessage, 'warn', 'widget');
+                    reject(new Error(errormessage));
+                });
+            }
+            return syncpromise;
+        },
 
        /**
         * Destroys all models within this modellist.
@@ -224,7 +272,12 @@
                         });
                     }
                     facade.response = response;
-                    parsed = facade.parsed = PARSED(response);
+                    parsed = PARSED(response);
+                    if (parsed.responseText) {
+                        // XMLHttpRequest
+                        parsed = parsed.responseText;
+                    }
+                    facade.parsed = parsed;
                     if (append) {
                         instance.add(parsed, options);
                     }
@@ -232,11 +285,11 @@
                         instance.reset(parsed, options);
                     }
                     instance.fire(eventname, facade);
-                    resolve(response, options);
+                    resolve(response);
                 };
                 if (instance.syncPromise) {
                     // use the syncPromise-layer
-                    instance.syncPromise(syncmethod, options).then(
+                    instance._syncTimeoutPromise(syncmethod, options).then(
                         successFunc,
                         errFunc
                     );
