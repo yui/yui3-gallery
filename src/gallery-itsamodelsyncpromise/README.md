@@ -24,6 +24,10 @@ syncPromise() is a method that should be set-up the same way as sync(), except i
 See the examples.
 
 
+<b>Note:</b> When saving Models, if the server returns an object, than that object is stored as the updated modeldata.
+This way you can alter the modeldata on the server, or create a new id.
+
+
 Examples
 --------
 [Online example](http://projects.itsasbreuk.nl/examples/itsamodelsyncpromise/index.html)
