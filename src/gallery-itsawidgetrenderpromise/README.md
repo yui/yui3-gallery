@@ -2,7 +2,7 @@ gallery-itsawidgetrenderpromise
 =====================
 
 
-<b>Widget.renderPromose()</b>
+<b>Widget.renderPromise()</b>
 
 
 This module adds <b>Widget.renderPromise()</b> to the Y.Widget class.
@@ -24,7 +24,7 @@ Usage
 
 <b>Using renderPromise() for one widget</b>
 ```js
-YUI({gallery: 'gallery-next'}).use('dial', 'gallery-itsawidgetrenderpromise', function(Y) {
+YUI({gallery: 'gallery-2013.06.13-01-19'}).use('dial', 'gallery-itsawidgetrenderpromise', function(Y) {
 
     var mydial = new Y.Dial().render();
     mydial.renderPromise().then(
@@ -52,7 +52,7 @@ YUI({gallery: 'gallery-next'}).use('dial', 'gallery-itsawidgetrenderpromise', fu
 ```
 
 ```js
-YUI({gallery: 'gallery-next'}).use('node-base', 'dial', 'gallery-itsawidgetrenderpromise', 'promise', function(Y) {
+YUI({gallery: 'gallery-2013.06.13-01-19'}).use('node-base', 'dial', 'gallery-itsawidgetrenderpromise', 'promise', function(Y) {
 
     var dial1, dial2, dial3;
 
