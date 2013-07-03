@@ -73,18 +73,18 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-datetime-utils/gallery-datetime-utils-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.395 seconds, pretty fast huh?
+shifter [info] finished in 0.244 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-datetime-utils]: Passed: 7 Failed: 2 Total: 9 (ignored 0) (0.103 seconds) 100%
+✖ [gallery-datetime-utils]: Passed: 7 Failed: 2 Total: 9 (ignored 0) (0.098 seconds) 100%
     testFormatTime
        Values should be the same.
        Expected: 12:00 AM (string)
