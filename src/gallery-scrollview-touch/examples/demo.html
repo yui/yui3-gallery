@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Scrollview Touch: Usage Example</title>
+    <style type="text/css">
+    #x-axis{
+        white-space:nowrap;
+        margin:0;
+        padding:0;
+    }
+    #x-axis li{
+        display:inline-block;
+        width:200px;
+        height:30px;
+        margin:0;
+        padding:0;
+    }
+    #y-axis{
+        height:30px;
+        margin:0;
+        padding:0;
+    }
+    </style>
+</head>
+<body>
+<script src="http://yui.yahooapis.com/3.11.0/build/yui/yui-min.js"></script>
+<script src="../../../build/gallery-scrollview-touch/gallery-scrollview-touch.js"></script>
+
+<h2>Scrollview on X Axis</h2>
+
+<div id="x-axis">
+    <ul>
+        <li>AAA</li>
+        <li>BBB</li>
+        <li>CCC</li>
+        <li>DDD</li>
+        <li>EEE</li>
+        <li>FFF</li>
+        <li>GGG</li>
+        <li>HHH</li>
+        <li>III</li>
+        <li>JJJ</li>
+        <li>KKK</li>
+        <li>LLL</li>
+        <li>MMM</li>
+        <li>NNN</li>
+        <li>OOO</li>
+        <li>PPP</li>
+        <li>QQQ</li>
+        <li>RRR</li>
+        <li>SSS</li>
+        <li>TTT</li>
+        <li>UUU</li>
+        <li>VVV</li>
+        <li>WWW</li>
+        <li>XXX</li>
+        <li>YYY</li>
+        <li>ZZZ</li>
+    </ul>
+</div>
+
+<h2>Scrollview on Y Axis</h2>
+
+<div id="y-axis">
+    <ul>
+        <li>AAA</li>
+        <li>BBB</li>
+        <li>CCC</li>
+        <li>DDD</li>
+        <li>EEE</li>
+        <li>FFF</li>
+        <li>GGG</li>
+        <li>HHH</li>
+        <li>III</li>
+        <li>JJJ</li>
+        <li>KKK</li>
+        <li>LLL</li>
+        <li>MMM</li>
+        <li>NNN</li>
+        <li>OOO</li>
+        <li>PPP</li>
+        <li>QQQ</li>
+        <li>RRR</li>
+        <li>SSS</li>
+        <li>TTT</li>
+        <li>UUU</li>
+        <li>VVV</li>
+        <li>WWW</li>
+        <li>XXX</li>
+        <li>YYY</li>
+        <li>ZZZ</li>
+    </ul>
+</div>
+
+<script>
+    YUI().use('gallery-scrollview-touch', function (Y)
+    {
+        var scrollview_y = new Y.ScrollViewTouch({
+            srcNode: '#y-axis',
+            height: 200
+        });
+
+        var scrollview_x = new Y.ScrollViewTouch({
+            srcNode: '#x-axis',
+            width: 500
+        });
+    });
+</script>
+</body>
+</html>

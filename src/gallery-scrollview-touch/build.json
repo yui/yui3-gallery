@@ -1,0 +1,13 @@
+{
+    "name": "gallery-scrollview-touch",
+    "builds": {
+        "gallery-scrollview-touch": {
+            "jsfiles": [
+                "./js/scrollview-touch.js"
+            ],
+           "replace": {
+                "@VERSION@": "0.0.1"
+            } 
+        }
+    }
+}

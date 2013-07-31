@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>gallery-scrollview-touch test</title>
+        <link type="text/css" href="assets/tests.css" rel="stylesheet" />
+        <script src="/build/yui/yui.js"></script>
+        <script src="js/tests.js"></script>
+        <script src="js/tests-utils.js"></script>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="logger"></div>
+        <div id="container"></div>
+        <script>
+
+            YUI({
+                coverage: ['gallery-scrollview-touch'],
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+            }).use('test-console', 'scrollview-touch-test', function (Y) {
+
+                (new Y.Test.Console()).render();
+
+                Y.Test.Runner.run();
+            });
+        </script>
+    </body>
+</html>

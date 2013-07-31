@@ -1,0 +1,23 @@
+.horizontal{
+	white-space:nowrap;
+	margin:0;
+	padding:0;
+}
+
+.horizontal li{
+	display:inline-block;
+	width:200px;
+	height:30px;
+	margin:0;
+	padding:0;
+}
+
+.vertical{
+	margin:0;
+	padding:0;
+}
+.vertical li{
+	height:30px;
+	margin:0;
+	padding:0;
+}

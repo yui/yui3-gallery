@@ -1,0 +1,12 @@
+{
+    "gallery-scrollview-touch": {
+        "requires": [
+            "base", 
+            "yui-base",
+            "node",
+            "scrollview-base",
+             "event-touch"
+        ],
+        "skinnable": false
+    }
+}
