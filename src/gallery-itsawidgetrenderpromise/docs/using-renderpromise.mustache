@@ -1,0 +1,38 @@
+<style type="text/css">
+{{>using-renderpromise-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        Y.batch is used to make the containerdiv -that holds the widgets- visible, once all widgets are rendered.<br />
+        This can be usefull when you have a form with several widgets and want to show it all together.
+    </p>
+</div>
+
+{{>using-renderpromise-html}}
+
+<h2>Complete Example Source</h2>
+```
+<style type="text/css">
+{{>using-renderpromise-css}}
+</style>
+
+<body>
+
+{{>using-renderpromise-html}}
+
+<script>
+{{>using-renderpromise-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>using-renderpromise-js}}
+</script>

@@ -1,0 +1,76 @@
+YUI(yuiconfig).use('node', 'panel', 'gallery-itsawidgetrenderpromise', 'promise', 'gallery-itsadialog', 'base-build', function(Y) {
+
+    var weatherpanel,
+        sidebox = Y.one('.sidebox');
+
+    // The <body> element of the example doesn't have 'yui3-skin-sam'
+    // --> provide this class to make the popup look right
+    Y.one('body').addClass('yui3-skin-sam');
+
+    Y.WeatherPanel = Y.Base.create('itsaweatherpanel', Y.Panel, [],
+        {
+            weatherTemplate : '<div>'+
+                                  '<b>{date}</b><br />'+
+                                  '{text}<br />'+
+                                  'temperature {low}-{high}F'+
+                              '</div>',
+
+            initializer : function() {
+                var instance = this;
+                // add the className 'extendloading' to extend invisibility even after
+                // the widget is rendered.
+                // And remove this class once the instance is 'ready'.
+                instance.get('boundingBox').addClass('extendloading');
+                instance.readyPromise(5000).then(
+                    function() {
+                        instance.get('boundingBox').removeClass('extendloading');
+                    },
+                    function(reason) {
+                        Y.alert(reason); // Y.alert() is provided by 'gallery-itsadialog'
+                    }
+                );
+            },
+            // Redefining promiseBeforeReady
+            promiseBeforeReady : function() {
+                var instance = this;
+                return new Y.Promise(function (resolve, reject) {
+                    Y.use('yql', function() {
+                        Y.YQL(
+                            'select * from weather.forecast where location='+instance.get('location'),
+                            function(r) {
+                                //r now contains the result of the YQL Query
+                                var forecast = r.query.results.channel.item.forecast,
+                                    newcontent = '';
+                                Y.Array.each(
+                                    forecast,
+                                    function(dayweather) {
+                                        newcontent += Y.Lang.sub(instance.weatherTemplate, dayweather);
+                                    }
+                                );
+                                instance.set('headerContent',
+                                             'Wheatherforecast '+ r.query.results.channel.location.city);
+                                instance.set('bodyContent', newcontent);
+                                resolve();
+                            }
+                        );
+                    });
+                });
+            }
+        },
+        {
+            ATTRS: {
+                location : {
+                    value: ''
+                },
+                buttons: {
+                    value: {} // no close-button
+                }
+            }
+        }
+    );
+
+    weatherpanel = new Y.WeatherPanel({location: '90210'}); // 90210 is the location of 'Beverly Hills'
+    weatherpanel.align(sidebox, [Y.WidgetPositionAlign.TL, Y.WidgetPositionAlign.BL]);
+    weatherpanel.render();
+
+});

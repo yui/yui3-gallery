@@ -1,0 +1,10 @@
+YUI(yuiconfig).use('node', 'gallery-itsawidgetrenderpromise', 'calendar', function(Y) {
+
+    new Y.Calendar().renderOnAvailable('#calnode');
+
+    // now insert #calnode after delay of 3 seconds
+    Y.later(3000, null, function() {
+        Y.one('.sidebar').append('<div id="calnode" class="yui3-skin-sam"></div>');
+    });
+
+});

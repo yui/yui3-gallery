@@ -7,5 +7,33 @@
 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "using-renderpromise",
+            "displayName": "Waiting for multiple widgets to be rendered",
+            "description": "This example shows how to use renderPromise() with Y.batch() in order to take action once all widgets are rendered.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsawidgetrenderpromise", "node", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsawidgetrenderpromise", "renderpromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "using-readypromise",
+            "displayName": "Create widget-extention and make use of readyPromise()",
+            "description": "This example shows how to use readyPromise() to take action once a widget is complete ready.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsawidgetrenderpromise", "node", "gallery-itsadialog", "panel", "promise", "base-build"],
+            "tags"    : ["gallery-itsawidgetrenderpromise", "readypromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "using-renderonavailablepromise",
+            "displayName": "Render a widget before scrNode is in the DOM",
+            "description": "This example shows how to use renderOnAvailablePromise() to render an Y.Calendar-instance before the scrNode is in the DOM.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsawidgetrenderpromise", "node", "calendar"],
+            "tags"    : ["gallery-itsawidgetrenderpromise", "renderonavailablepromise"],
+            "hideTableOfContents": true
+        }
+    ]
 }

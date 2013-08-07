@@ -1,14 +1,64 @@
 <div class="intro">
-    <p>
-    *Summary Goes Here*
-    </p>
+  <p>This module adds some renderPromises to the Y.Widget class.<br /><br />
+     By using <code>renderPromise()</code>, you don't need to listen for the 'render'-event,
+     neither look for the value of the attribute 'rendered'.<br />
+     By using <code>readyPromise()</code>, you get a promise that waits even longer --> until <code>promiseBeforeReady()</code> is fulfilled as well.<br />
+     By using <code>renderOnAvailable()</code> or <code>renderOnAvailablePromise()</code>, you can render the widget on a Node which has yet to be inserted in the DOM.
+</p>
 </div>
+
+{{>getting-started}}
 
 <h2>Description</h2>
 
-<p>*Module Description Goes Here*</p>
+<p>
+   <code>renderPromise()</code> is a Promise that is fulfilled once the widget is rendered: you don't need to listen for the 'render'-event,
+   neither look for the value of the attribute 'rendered'.
+   This is handy because without this method you might find yourself inspecting those two situations.<br /><br />
 
+   <code>readyPromise()</code> is a Promise that waits even longer. You can create a widget-extention that does some things after it is rendered,
+   for example load serverdata and process it. readyPromise will be resolved once all that has finished. To make that happen, it makes use of
+   <code>promiseBeforeReady</code>.<br /><br />
+
+   <code>promiseBeforeReady()</code> is a Promise which will run directly after the widget is rendered. It is up to the developer of the
+   widget-extention how to define <code>promiseBeforeReady</code>, which is a fulfilled promise by default. Once <code>promiseBeforeReady()</code>
+   is fulfilled, <code>readyPromise()</code> is fulfilled as well.<br /><br />
+
+   <code>renderOnAvailablePromise()</code> is very handy if you need to setup the rendercode while not knowing when the sourceNode will be in the DOM.
+   You can even make it re-render everytime the sourcenode is redefined in the dom with the attribute <coe>options.stayalive</code>. Situations to make
+   use of this are when pages are dynamicly reloaded.<br /><br />
+
+    <code>renderOnAvailable()</code> Does the same as <code>renderOnAvailablePromise()</code>, but doesn't return a Promise; it returns the instance.
+    Therefore it can be used just like <code>render()</code>.
+
+</p>
+
+<h3 id="renderpromise-example">Usage renderPromise()</h3>
 ```
-//Module example code
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsawidgetrenderpromise', 'calendar', function(Y) {
+
+    var cal = new Y.Calendar().render();
+
+    // as soon calendar is rendered, we want to be alerted
+    cal.renderPromise().then(
+        function() {
+            Y.alert('calendar is rendered');
+        }
+    );
+
+});
 ```
 
+<h3 id="renderOnAvailable-example">Usage renderOnAvailable()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsawidgetrenderpromise', 'calendar', function(Y) {
+
+    new Y.Calendar().renderOnAvailable('#calnode');
+
+    // #calnode will be inserted later on
+    Y.later(3000, null, function() {
+        Y.one('body').append('<div id="calnode"></div>');
+    });
+
+});
+```

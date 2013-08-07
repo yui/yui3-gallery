@@ -1,29 +1,114 @@
 {
     "name": "gallery-itsawidgetrenderpromise",
     "passed": 0,
-    "failed": 3,
+    "failed": 18,
     "errors": 0,
     "ignored": 0,
-    "total": 3,
-    "duration": 18,
+    "total": 18,
+    "duration": 426,
     "type": "report",
-    "Automated Tests": {
-        "name": "Automated Tests",
+    "test 1": {
+        "name": "test 1",
         "passed": 0,
         "failed": 1,
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 4,
+        "duration": 8,
         "type": "testcase",
-        "test is empty": {
+        "check renderPromise if widget is indeed completely rendered": {
             "result": "fail",
-            "message": "No Tests Provided For This Module",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.renderPromise(5000)')",
             "type": "test",
-            "name": "test is empty",
-            "duration": 1
+            "name": "check renderPromise if widget is indeed completely rendered",
+            "duration": 5
         }
     },
-    "timestamp": "Wed 03 Jul 2013 03:43:14 PM PDT",
+    "test 2": {
+        "name": "test 2",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 32,
+        "type": "testcase",
+        "check multiple renderPromises with Y.batch if all widgeta are completely rendered": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal1.renderPromise()')",
+            "type": "test",
+            "name": "check multiple renderPromises with Y.batch if all widgeta are completely rendered",
+            "duration": 12
+        }
+    },
+    "test 3": {
+        "name": "test 3",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 23,
+        "type": "testcase",
+        "check readyPromise if widget is indeed completely ready": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.readyPromise(5000)')",
+            "type": "test",
+            "name": "check readyPromise if widget is indeed completely ready",
+            "duration": 3
+        }
+    },
+    "test 4": {
+        "name": "test 4",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 24,
+        "type": "testcase",
+        "check renderOnAvailablePromise if a widget is rendered when Node is inserted after delay": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.renderOnAvailablePromise('#testnode4', {timeout: 2000})')",
+            "type": "test",
+            "name": "check renderOnAvailablePromise if a widget is rendered when Node is inserted after delay",
+            "duration": 3
+        }
+    },
+    "test 6": {
+        "name": "test 6",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 23,
+        "type": "testcase",
+        "check renderOnAvailablePromise if Promise get fulfilled after render": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.renderOnAvailablePromise('#testnode6', {promisetype: 'afterrender', timeout: 2000})')",
+            "type": "test",
+            "name": "check renderOnAvailablePromise if Promise get fulfilled after render",
+            "duration": 3
+        }
+    },
+    "test 7": {
+        "name": "test 7",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 23,
+        "type": "testcase",
+        "check renderOnAvailablePromise if Promise get fulfilled after ready": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.renderOnAvailablePromise('#testnode7', {promisetype: 'afterready', timeout: 2000})')",
+            "type": "test",
+            "name": "check renderOnAvailablePromise if Promise get fulfilled after ready",
+            "duration": 3
+        }
+    },
+    "timestamp": "Wed 07 Aug 2013 01:21:37 PM PDT",
     "consoleInfo": []
 }

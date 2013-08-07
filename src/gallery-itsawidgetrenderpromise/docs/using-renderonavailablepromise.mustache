@@ -1,0 +1,37 @@
+<style type="text/css">
+{{>using-renderonavailablepromise-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        The Y.Calendar instance is declared and set to render, even if the srcNode is not in the DOM yet. The srcNode could get in the DOM
+        after loading the html from the server, but in this example it is inserted with a delay.
+        <br />
+        <br />
+        Just wait 3 seconds and the srcNode will be inserted under the <code>Example-links</code> which will make the Calendar-instance to render immediatly.
+    </p>
+</div>
+
+<h2>Complete Example Source</h2>
+```
+<style type="text/css">
+{{>using-renderonavailablepromise-css}}
+</style>
+
+<body>
+
+<script>
+{{>using-renderonavailablepromise-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>using-renderonavailablepromise-js}}
+</script>

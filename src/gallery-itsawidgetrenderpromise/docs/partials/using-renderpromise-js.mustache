@@ -1,0 +1,62 @@
+YUI(yuiconfig).use('node', 'dial', 'gallery-itsawidgetrenderpromise', 'promise', 'gallery-itsadialog', function(Y) {
+
+    var dial1, dial2, dial3, render1, render2, render3;
+
+    // The <body> element of the example doesn't have 'yui3-skin-sam'
+    // --> provide this class to make the popup look right
+    Y.one('body').addClass('yui3-skin-sam');
+
+    render1 = Y.one('#render1');
+    render2 = Y.one('#render2');
+    render3 = Y.one('#render3');
+    dial1 = new Y.Dial();
+    dial2 = new Y.Dial();
+    dial3 = new Y.Dial();
+
+    Y.batch(
+        dial1.renderPromise(),
+        dial2.renderPromise(),
+        dial3.renderPromise()
+    ).then(
+        function() {
+            Y.one('#alldialinstances').removeClass('notrendered');
+        },
+        function(reason) {
+            Y.alert(reason); // Y.alert() is provided by 'gallery-itsadialog'
+        }
+    );
+
+    // manually delay rendering dial1 with 1 second
+    Y.later(1000, null, function() {
+        dial1.render('#dial1');
+    });
+
+    // manually delay rendering dial2 with 2 seconds
+    Y.later(2000, null, function() {
+        dial2.render('#dial2');
+    });
+
+    // manually delay rendering dial3 with 3 seconds
+    Y.later(3000, null, function() {
+        dial3.render('#dial3');
+    });
+
+    dial1.renderPromise().then(
+        function() {
+            render1.set('text', 'dial1 is ready!');
+        }
+    );
+
+    dial2.renderPromise().then(
+        function() {
+            render2.set('text', 'dial2 is ready!');
+        }
+    );
+
+    dial3.renderPromise().then(
+        function() {
+            render3.set('text', 'dial3 is ready!');
+        }
+    );
+
+});
