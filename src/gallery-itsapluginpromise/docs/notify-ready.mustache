@@ -1,0 +1,30 @@
+<style type="text/css">
+{{>notify-ready-css}}
+</style>
+
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+<p>
+    After 3 seconds, the plugin will finish initializing and mark the Calendar-border red. The returned promise is used to pop-up an alert.
+</p>
+
+<h2>Explanation</h2>
+    <p>
+        This example uses a plugin that takes some time to do its job. We plug it in immediately, but want a promise that informs us when
+        the plugin is ready. The moment where the plugin is defined as 'ready', should be defined with the function <code>promiseBeforeReady</code>,
+        which should be redeclared by the developer.
+    </p>
+
+<h2>Complete Example Source</h2>
+```
+{{>notify-ready-js}}
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>notify-ready-js}}
+</script>

@@ -1,0 +1,25 @@
+YUI(yuiconfig).use('gallery-itsapluginpromise', 'calendar', 'node', 'plugin', 'base-build', 'dd-plugin', function(Y) {
+
+    Y.namespace('Plugin').CustomPlugin = Y.Base.create('customplugin', Y.Plugin.Base, [], {
+        initializer : function() {
+            var headerlabel = this.get('host').get('boundingBox').one('.yui3-calendar-header-label');
+            headerlabel.setStyle('backgroundColor', '#F00');
+        }
+    }, {
+        NS : 'custplugin'
+    });
+
+    // #calnode as part of the sidebar
+    Y.one('.sidebar').append('<div id="calnode" class="yui3-skin-sam"></div>');
+
+    var cal = new Y.Calendar();
+
+    // both plugAfterRenderPromise() and plugAfterReadyPromise() can be used
+    cal.plugAfterRenderPromise(Y.Plugin.CustomPlugin);
+
+    // To show that the plugin doesn't fail, we render after 3 seconds
+    Y.later(3000, null, function() {
+        cal.render('#calnode');
+    });
+
+});

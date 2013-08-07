@@ -1,0 +1,165 @@
+{
+    "name": "gallery-itsapluginpromise",
+    "passed": 3,
+    "failed": 24,
+    "errors": 0,
+    "ignored": 0,
+    "total": 27,
+    "duration": 753,
+    "type": "report",
+    "test 1": {
+        "name": "test 1",
+        "passed": 1,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 13,
+        "type": "testcase",
+        "check widget.hasPlugin normal way": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "check widget.hasPlugin normal way",
+            "duration": 9
+        }
+    },
+    "test 2": {
+        "name": "test 2",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 25,
+        "type": "testcase",
+        "check widget.hasPlugin when pluggedin after render": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.plugAfterRenderPromise(Y.Plugin.Drag)')",
+            "type": "test",
+            "name": "check widget.hasPlugin when pluggedin after render",
+            "duration": 5
+        }
+    },
+    "test 3": {
+        "name": "test 3",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 28,
+        "type": "testcase",
+        "check widget.hasPlugin when pluggedin after render and check after render": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.plugAfterRenderPromise(Y.Plugin.Drag)')",
+            "type": "test",
+            "name": "check widget.hasPlugin when pluggedin after render and check after render",
+            "duration": 8
+        }
+    },
+    "test 4": {
+        "name": "test 4",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 31,
+        "type": "testcase",
+        "check widget.hasPluginReady when pluggedin after render": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.plugAfterRenderPromise(Y.Plugin.Drag)')",
+            "type": "test",
+            "name": "check widget.hasPluginReady when pluggedin after render",
+            "duration": 11
+        }
+    },
+    "test 5": {
+        "name": "test 5",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 23,
+        "type": "testcase",
+        "check widget.hasPluginReady when pluggedin after render and check after render": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.plugAfterRenderPromise(Y.Plugin.Drag)')",
+            "type": "test",
+            "name": "check widget.hasPluginReady when pluggedin after render and check after render",
+            "duration": 3
+        }
+    },
+    "test 6": {
+        "name": "test 6",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 26,
+        "type": "testcase",
+        "check widget.plugAfterReadyPromise": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.plugAfterReadyPromise(Y.Plugin.CustomPlugin)')",
+            "type": "test",
+            "name": "check widget.plugAfterReadyPromise",
+            "duration": 6
+        }
+    },
+    "test 7": {
+        "name": "test 7",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 23,
+        "type": "testcase",
+        "check widget.plugAfterRenderPromise": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.plugAfterRenderPromise(Y.Plugin.CustomPlugin)')",
+            "type": "test",
+            "name": "check widget.plugAfterRenderPromise",
+            "duration": 2
+        }
+    },
+    "test 8": {
+        "name": "test 8",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 40,
+        "type": "testcase",
+        "check widget.plugPromise": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.plugPromise(Y.Plugin.CustomPlugin)')",
+            "type": "test",
+            "name": "check widget.plugPromise",
+            "duration": 20
+        }
+    },
+    "test 9": {
+        "name": "test 9",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 33,
+        "type": "testcase",
+        "check plugin.readyPromise": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'cal.custplugin.readyPromise()')",
+            "type": "test",
+            "name": "check plugin.readyPromise",
+            "duration": 13
+        }
+    },
+    "timestamp": "Wed 07 Aug 2013 01:21:37 PM PDT",
+    "consoleInfo": []
+}

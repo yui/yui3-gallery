@@ -1,0 +1,204 @@
+{{>api-button}}
+
+<div class="intro">
+  <p>
+      {{description}}
+  </p>
+  <p>
+    This can be usefull, for instance, when you have a situation where a plugin can only be plugged in once a widget is rendered.
+  </p>
+  <p>
+    <b>NOTE:</b> Because this module modifies Y.Plugin.Base and Y.Plugin.Host, you <u>must</u> place this module inside Y.use()
+    <u>before</u> you reference other plugins or widgets. Best practice is to make <code>gallery-itsapluginpromise</code> to be the first refered module.
+  </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Extentions to Y.Plugin.Base</h2>
+
+<p>
+   <b>readyPromise()</b> is a Promise that is fulfilled once the Plugin is ready. To make that happen, it makes use of
+   <code>promiseBeforeReady</code>: a promise that is fulfilled by default, but can be re-defined in custom Plugins.
+   <br />
+   <br />
+   To make use of this promise, you can look at plugin.readyPromise(), or you can plug in with widget.plugPromise(). Both
+   methods return a promise that is fulfilled once plugin.readyPromise() is fulfilled.
+</p>
+
+<h3 id="readypromise-example">Using plugin.readyPromise()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsapluginpromise', 'gallery-itsadialog', 'calendar', 'your-custom-plugin', function(Y) {
+
+    // your-custom-plugin defines Y.Plugin.CustomPlugin that extends Y.Plugin.Base
+    // see the examples on the right.
+
+    var cal = new Y.Calendar();
+    cal.plug(Y.Plugin.CustomPlugin); // NS = 'custplugin'
+    cal.custplugin.readyPromise().then( // as soon customplugin is ready, we want to be alerted
+        function() {
+            Y.alert('the plugin is ready');
+        }
+    );
+    cal.render();
+
+});
+```
+
+<h3 id="readypromise-example">Using widget.plugPromise()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsapluginpromise', 'gallery-itsadialog', 'calendar', 'your-custom-plugin', function(Y) {
+
+    // your-custom-plugin defines Y.Plugin.CustomPlugin that extends Y.Plugin.Base
+    // see the examples on the right.
+
+    var cal = new Y.Calendar();
+    cal.plugPromise(Y.Plugin.CustomPlugin).then( // as soon customplugin is ready, we want to be alerted
+        function() {
+            Y.alert('the plugin is ready');
+        }
+    );
+    cal.render();
+
+});
+```
+
+<h2>Extentions to Y.Plugin.Host</h2>
+
+<p>
+   <b>plugPromise()</b> plugs-in a Plugin directly. You can use it the same as plug().
+   The returned Proimse gets fukfilled as soon as the plugin is ready, defined by <code>Y.Plugin.Base.promiseBeforeReady()</code>.<br /><br />
+
+   <b>plugAfterReadyPromise()</b> plugs-in a Plugin after its host is ready. You can use it the same as plug(),
+   only you are sure that the host is ready before plug it in.<br /><br />
+
+   <b>plugAfterRenderPromise()</b> (applyable for widgets only). Plugs-in a Plugin after the host-widget is rendered.<br />
+   Note: you could use <code>plugAfterReadyPromise()</code> as well, but that promise will be fulfilled later.<br /><br />
+
+   <b>hasPluginPromise()</b> is the same as hasPlugin(), except that it will check after its host is ready (or rendered).
+</p>
+
+<h3 id="plugAfterRenderPromise-example">Using plugAfterRenderPromise()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsapluginpromise', 'calendar', 'dd-plugin', function(Y) {
+
+    var cal = new Y.Calendar();
+    cal.plugAfterRenderPromise(Y.Plugin.Drag, {handles: ['.yui3-calendar-header']});
+    // plugAfterReadyPromise() could have been used as well
+    cal.render();
+
+});
+```
+
+<h2>Using plugins that initialize asynchroniously</h2>
+
+<p>
+   When defining <code>promiseBeforeReady</code>, you define a plugin that initializes asynchroniously. This also means
+   that special care must be taken when calling its methods. There are 3 ways to do this:
+   <br /><br />
+   * using host.plugPromise(), host.plugAfterRenderPromise() or host.plugAfterReadyPromise()<br />
+   * using host.NS.readyPromise()<br />
+   * using host.NS.someFunction(), which executes internally once host.NS.readyPromise() is fulfilled.
+   <br /><br />
+   To make sure endusers don't run into timing-issues, the last option is the prefered one.
+</p>
+
+<h3 id="using-pluginpromise-example">Using widget.plugPromise()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsapluginpromise', 'calendar', 'base-build', 'plugin', function(Y) {
+
+    Y.namespace('Plugin').CustomPlugin = Y.Base.create('customplugin', Y.Plugin.Base, [], {
+        promiseBeforeReady : function() {
+            var instance = this;
+            return new Y.Promise(function (resolve) {
+                // we simulate delay of the readypromise using Y.later
+                Y.later(3000, null, function() {
+                    resolve();
+                });
+            });
+        },
+        doSomething: function() {
+            ...
+        }
+    }, {
+        NS : 'custplugin'
+    });
+
+    var cal = new Y.Calendar().render();
+    cal.plugPromise(Y.Plugin.CustomPlugin).then(
+        function() {
+            // now you can use cal.custplugin.doSomething();
+            ...
+        }
+    );
+
+});
+```
+
+<h3 id="using-readypromise-example">Using widget.NS.readyPromise()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsapluginpromise', 'calendar', 'base-build', 'plugin', function(Y) {
+
+    Y.namespace('Plugin').CustomPlugin = Y.Base.create('customplugin', Y.Plugin.Base, [], {
+        promiseBeforeReady : function() {
+            var instance = this;
+            return new Y.Promise(function (resolve) {
+                // we simulate delay of the readypromise using Y.later
+                Y.later(3000, null, function() {
+                    resolve();
+                });
+            });
+        },
+        doSomething: function() {
+            ...
+        }
+    }, {
+        NS : 'custplugin'
+    });
+
+    var cal = new Y.Calendar().render();
+    cal.plugPromise(Y.Plugin.CustomPlugin);
+
+    cal.custplugin.readyPromise().then(
+        function() {
+            // now you can use cal.custplugin.doSomething();
+            ...
+        }
+    );
+
+});
+```
+
+<h3 id="using-promises-example">Using widget.NS.customPromise()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsapluginpromise', 'calendar', 'base-build', 'plugin', function(Y) {
+
+    Y.namespace('Plugin').CustomPlugin = Y.Base.create('customplugin', Y.Plugin.Base, [], {
+        promiseBeforeReady : function() {
+            var instance = this;
+            return new Y.Promise(function (resolve) {
+                // we simulate delay of the readypromise using Y.later
+                Y.later(3000, null, function() {
+                    resolve();
+                });
+            });
+        },
+        doSomething: function() { // take action once readyPromise() is fulfilled and return a promise.
+            var instance = this;
+            return instance.readyPromise().then(
+                function() {
+                    // do something here
+                    ...
+                }
+            );
+        }
+    }, {
+        NS : 'custplugin'
+    });
+
+    var cal = new Y.Calendar().render();
+    cal.plugPromise(Y.Plugin.CustomPlugin);
+    cal.custplugin.doSomething();
+
+});
+```

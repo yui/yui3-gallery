@@ -1,0 +1,34 @@
+YUI(yuiconfig).use('gallery-itsapluginpromise', 'calendar', 'node', 'plugin', 'base-build', 'gallery-itsadialog', function(Y) {
+
+    // first add yui3-skin-sam to 'body' for the right layout
+    Y.one('body').addClass('yui3-skin-sam');
+
+    Y.namespace('Plugin').CustomPlugin = Y.Base.create('customplugin', Y.Plugin.Base, [], {
+        promiseBeforeReady : function() {
+            var instance = this;
+            return new Y.Promise(function (resolve) {
+                // we simulate delay of the readypromise using Y.later
+                Y.later(3000, null, function() {
+                    var contentBox = instance.get('host').get('contentBox');
+                    contentBox.setStyle('borderColor', '#F00');
+                    resolve();
+                });
+            });
+        }
+    }, {
+        NS : 'custplugin'
+    });
+
+    // #calnode as part of the sidebar
+    Y.one('.sidebar').append('<div id="calnode" class="yui3-skin-sam"></div>');
+
+    var cal = new Y.Calendar().render('#calnode').plug(Y.Plugin.CustomPlugin);
+
+    // as soon customplugin is ready, we want to be alerted
+    cal.custplugin.readyPromise().then(
+        function() {
+            Y.alert('the plugin is ready');
+        }
+    );
+
+});

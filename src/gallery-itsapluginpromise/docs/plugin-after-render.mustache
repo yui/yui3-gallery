@@ -1,0 +1,33 @@
+<style type="text/css">
+{{>plugin-after-render-css}}
+</style>
+
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+<p>
+    Wait for 3 seconds: then the Calendar-instance will be rendered. However, the plugin is plugged in directly using plugAfterRenderPromise().
+</p>
+
+<h2>Explanation</h2>
+    <p>
+        This example uses a plugin that is made especially for Calendar-instances and modifies the background-color of one of the Calendar's nodes.
+        If the plugin were to be plugged in at once, using:
+        ```
+        new Y.Calendar().plug(Y.Plugin.OwnPlugin);
+        ```
+        then an error would rise, because the variable <code>headerlabel</code> would be null. We have to wait until the Calendar is rendered.
+    </p>
+
+<h2>Complete Example Source</h2>
+```
+{{>plugin-after-render-js}}
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>plugin-after-render-js}}
+</script>

@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsapluginpromise",
+    "builds": {
+        "gallery-itsapluginpromise": {
+            "jsfiles": [
+                "js/gallery-itsapluginpromise.js"
+            ]
+        }
+    }
+}

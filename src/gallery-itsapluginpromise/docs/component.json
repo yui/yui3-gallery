@@ -1,0 +1,30 @@
+{
+    "name"       : "gallery-itsapluginpromise",
+    "displayName": "Gallery: gallery-itsapluginpromise",
+    "description": "This module adds some Promises to the Y.Plugin.Base and Y.Plugin.Host that will help check and execute code at the right time.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsapluginpromise" ],
+
+    "tags": [ "gallery", "plugin", "promise" ],
+
+    "examples": [
+        {
+            "name"       : "plugin-after-render",
+            "displayName": "Plugin after widget is rendered",
+            "description": "This example shows how to use plugAfterReady() to plugin while the widget has still to be rendered.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsapluginpromise", "bas-build", "plugin", "node"],
+            "tags"    : ["gallery-itsapluginpromise", "renderPromise", "availablePromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "notify-ready",
+            "displayName": "Get notified when plugin is ready",
+            "description": "This example plugs in a custom Plugin and notifies when the plugin is ready.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsapluginpromise", "gallery-itsadialog", "plugin", "node"],
+            "tags"    : ["gallery-itsapluginpromise", "plugPromise"],
+            "hideTableOfContents": true
+        }
+    ]
+}
