@@ -1,0 +1,37 @@
+<style type="text/css">
+{{>unavailable-css}}
+</style>
+
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+{{>unavailable-html}}
+
+<p>The node that is removed after a delay of 3 seconds is:
+```
+{{>unavailable-html}}
+```
+</p>
+
+<h2>Complete Example Source</h2>
+```
+<style type="text/css">
+{{>unavailable-css}}
+</style>
+
+<body>
+
+{{>unavailable-html}}
+
+{{>unavailable-js}}
+
+</body>
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>unavailable-js}}
+</script>

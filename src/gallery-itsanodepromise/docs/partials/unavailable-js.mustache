@@ -1,0 +1,18 @@
+YUI(yuiconfig).use('node', 'gallery-itsanodepromise', 'gallery-itsadialog', function(Y) {
+
+    // --> provide this class to make the popup look right
+    Y.one('body').addClass('yui3-skin-sam');
+
+    // as soon as the node is unavailable, pop-up a message
+    Y.Node.unavailablePromise('#examplenode').then(
+        function() {
+            Y.alert('Y.Node.unavailablePromise', 'The node is removed from the DOM');
+        }
+    );
+
+    // remove the node after 3 seconds
+    Y.later(3000, null, function() {
+        Y.one('#examplenode').remove();
+    });
+
+});

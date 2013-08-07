@@ -1,0 +1,26 @@
+<style type="text/css">
+{{>node-css}}
+</style>
+
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+<p>The node that is inserted after a delay of 3 seconds looks like:
+```
+<div id='examplenode'></div>
+```
+Because the <code>Y.Node.availablePromise()</code> expects the node to be there within 2 seconds, the Promise is rejected and an error shows up.
+</p>
+
+<h2>Complete Example Source</h2>
+```
+{{>available-timedout-js}}
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>available-timedout-js}}
+</script>

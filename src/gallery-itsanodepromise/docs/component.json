@@ -1,0 +1,39 @@
+{
+    "name"       : "gallery-itsanodepromise",
+    "displayName": "Gallery: gallery-itsanodepromise",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsanodepromise" ],
+
+    "tags": [ "promise", "nodepromise", "available", "nodeavailable", "contentready", "node", "nodecontentready" ],
+
+    "examples": [
+        {
+            "name"       : "available-intime",
+            "displayName": "Styling a future Node",
+            "description": "This example shows how to style a node that will be present in the future, by coloring it red.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsanodepromise", "node"],
+            "tags"    : ["gallery-itsanodepromise", "availablePromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "available-timedout",
+            "displayName": "Node not available in time",
+            "description": "This example waits for a Node to be present within 3 seconds and will throw a timeout-error instead of coloring it red.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsanodepromise", "gallery-itsadialog", "node"],
+            "tags"    : ["gallery-itsanodepromise", "availablePromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "unavailable",
+            "displayName": "Checking Node becoming unavailable",
+            "description": "This example removes a node after 3 seconds. Using Y.Node.unavailablePromise(), we have a promise that gets fulfilled and alerts a message.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsanodepromise", "gallery-itsadialog", "node"],
+            "tags"    : ["gallery-itsanodepromise", "unavailablePromise"],
+            "hideTableOfContents": true
+        }
+    ]
+}

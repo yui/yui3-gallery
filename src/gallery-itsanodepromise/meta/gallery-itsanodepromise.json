@@ -1,0 +1,10 @@
+{
+    "gallery-itsanodepromise": {
+        "requires": [
+            "yui-base",
+            "yui-later",
+            "node-base",
+            "promise"
+        ]
+    }
+}

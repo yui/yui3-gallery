@@ -1,0 +1,17 @@
+YUI(yuiconfig).use('node', 'gallery-itsanodepromise', function(Y) {
+
+    // define the fulfilled-method
+    var styleNode = function(response) {
+        var newnode = response;
+        newnode.setStyle('backgroundColor', '#F00');
+    };
+
+    // as soon as the node is available, style it
+    Y.Node.availablePromise('#examplenode').then(styleNode);
+
+    // create the code after 3 seconds
+    Y.later(3000, null, function() {
+        Y.one('h1').insert('<div id="examplenode"></div>', 'after');
+    });
+
+});

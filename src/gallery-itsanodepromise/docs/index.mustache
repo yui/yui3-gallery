@@ -1,0 +1,48 @@
+<div class="intro">
+  <p>This module adds static methods Y.Node.availablePromise() and Y.Node.contentreadyPromise() to the Y.Node class.</p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+<p>
+   By loading this module, Y.Node extends with 3 static methods:
+   <br />
+   <br />
+   <code>Y.Node.availablePromise(nodeid, timeout)</code>
+   <br />
+   <code>Y.Node.contentreadyPromise(nodeid, timeout)</code>
+   <br />
+   <code>Y.Node.unavailabePromise(nodeid, timeout)</code>
+   <br />
+   <br />
+   Using these Promises, you don't need to listen for the Y.on('available') and Y.on('contentready') events, but can use Promises. The Promises will be resolved either if the node already is in the DOM, or when it appears later on. Also there is a promise for when a Node is <code>'unavailable'</code>. It uses the native 'DOMNodeRemoved'-event for browsers that supprt this, and timerbased Y.one() check for browsers that don't support this event (IE<9).
+   <br />
+   <br />
+   Using the optional parameter <code>timeout</code>, the promise will be rejected if the node is not in the DOM before the timeout is reached.
+   <br />
+   <br />
+   <b>Note:</b> only use these methods with Nodes that are dynamicly created. If you are sure the Nodes are already in the DOM,
+   then just refer to them by <code>Y.one()</code> (and put the YUI-instance at the bottom of the document).
+</p>
+
+<h3 id="nodeavailablepromise-example">Example Y.Node.availablePromise()</h3>
+```
+YUI({gallery: 'gallery-2013.07.03-22-52'}).use('node', 'gallery-itsanodepromise', function(Y) {
+
+    // as soon examplenode is available, it will be styled with a red bg-color
+    Y.Node.availablePromise('#examplenode').then(
+        function(response) {
+            // response is the Y.Node instance
+            response.setStyle('backgroundColor', '#F00');
+        }
+    );
+
+    // create the examplenode after 5 seconds
+    Y.later(5000, null, function() {
+        Y.one('body').append('<div id="examplenode"></div>');
+    });
+
+});
+```

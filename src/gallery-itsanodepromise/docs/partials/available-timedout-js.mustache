@@ -1,0 +1,26 @@
+YUI(yuiconfig).use('gallery-itsanodepromise', 'gallery-itsadialog', function(Y) {
+
+    var styleNode, showError;
+
+    // define the fulfilled and reject methods
+    styleNode = function(response) {
+        var newnode = response;
+        newnode.setStyle('backgroundColor', '#F00');
+    };
+    showError = function(reason) {
+        // Y.alert() is provided by gallery-itsadialog
+        // The <body> element of the example doesn't have 'yui3-skin-sam'
+        // --> provide this class to make the popup look right
+        Y.one('body').addClass('yui3-skin-sam');
+        Y.alert(reason.message, {type: 'error'});
+    };
+
+    // expect the node to be available within 2 seconds and style it, otherwise show the error
+    Y.Node.availablePromise('#examplenode', 2000).then(styleNode, showError);
+
+    // create the node after 3 seconds
+    Y.later(3000, null, function() {
+        Y.one('h1').insert('<div id="examplenode"></div>', 'after');
+    });
+
+});
