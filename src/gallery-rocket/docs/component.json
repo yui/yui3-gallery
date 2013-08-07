@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-rocket",
+    "displayName": "Gallery: gallery-rocket",
+    "description": "Make YUI App Framework swift like Rocket",
+    "author"     : [ "camsong" ],
+    "use"        : [ "gallery-rocket" ],
+
+    "tags": [ "gallery", "app framework" ],
+
+    "examples": []
+}

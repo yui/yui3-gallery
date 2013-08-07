@@ -1,0 +1,29 @@
+{
+    "name": "gallery-rocket",
+    "passed": 0,
+    "failed": 3,
+    "errors": 0,
+    "ignored": 0,
+    "total": 3,
+    "duration": 18,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 5,
+        "type": "testcase",
+        "test is empty": {
+            "result": "fail",
+            "message": "No Tests Provided For This Module",
+            "type": "test",
+            "name": "test is empty",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed 07 Aug 2013 01:21:36 PM PDT",
+    "consoleInfo": []
+}

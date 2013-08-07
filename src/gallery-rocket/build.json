@@ -1,0 +1,60 @@
+{
+  "name": "gallery-rocket",
+  "builds": {
+    "gallery-rocket": {
+      "jsfiles": [
+        "js/rocket.js"
+      ]
+    },
+    "gallery-rocket-app": {
+      "jsfiles": [
+        "js/rocket-app.js"
+      ]
+    },
+    "gallery-rocket-controller": {
+      "jsfiles": [
+        "js/rocket-controller.js"
+      ]
+    },
+    "gallery-rocket-view": {
+      "jsfiles": [
+        "js/rocket-view.js"
+      ]
+    },
+    "gallery-rocket-layout": {
+      "jsfiles": [
+        "js/rocket-layout.js"
+      ]
+    },
+    "gallery-rocket-list-view": {
+      "jsfiles": [
+        "js/rocket-list-view.js"
+      ]
+    },
+    "gallery-rocket-child-view-container": {
+      "jsfiles": [
+        "js/rocket-child-view-container.js"
+      ]
+    },
+    "gallery-rocket-region": {
+      "jsfiles": [
+        "js/rocket-region.js"
+      ]
+    },
+    "gallery-rocket-region-manager": {
+      "jsfiles": [
+        "js/rocket-region-manager.js"
+      ]
+    },
+    "gallery-rocket-event-broker": {
+      "jsfiles": [
+        "js/rocket-event-broker.js"
+      ]
+    },
+    "gallery-rocket-util": {
+      "jsfiles": [
+        "js/rocket-util.js"
+      ]
+    }
+  }
+}

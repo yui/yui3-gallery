@@ -1,0 +1,6 @@
+{
+  "replace-version": "0.1.0",
+  "lint": false,
+  "coverage": false,
+  "regex": "^.*?(?:logger|Y.log).*?(?:;|\\).*;|(?:\\r?\\n.*?)*?\\).*;).*;?.*?\\r?\\n|^.*?(?:\/\\*@DBG\\*\/).*\\r?\\n"
+}
