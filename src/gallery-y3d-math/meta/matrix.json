@@ -1,0 +1,10 @@
+{
+	"y3d-matrix": {},
+
+	"y3d-model": {
+		"requires": [
+			"base-build",
+			"y3d-matrix"
+		]
+	}
+}
