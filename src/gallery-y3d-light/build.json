@@ -1,0 +1,10 @@
+{
+	"name": "y3d-light",
+	"builds": {
+		"y3d-light": {
+			"jsfiles": [
+				"light.js"
+			]
+		}
+	}
+}
