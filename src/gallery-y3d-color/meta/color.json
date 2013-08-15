@@ -1,0 +1,7 @@
+{
+	"y3d-color": {
+		"requires": [
+			"color"
+		]
+	}
+}

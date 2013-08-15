@@ -1,0 +1,10 @@
+{
+	"name": "y3d-color",
+	"builds": {
+		"y3d-color": {
+			"jsfiles": [
+				"color.js"
+			]
+		}
+	}
+}
