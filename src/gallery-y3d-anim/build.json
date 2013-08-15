@@ -1,0 +1,10 @@
+{
+	"name": "y3d-anim",
+	"builds": {
+		"y3d-anim": {
+			"jsfiles": [
+				"anim.js"
+			]
+		}
+	}
+}
