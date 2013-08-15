@@ -1276,7 +1276,9 @@ Y.extend(BulkEditor, Y.Widget,
 				success: Y.bind(function(e)
 				{
 					this.busy.hide();
-					if (pg && pg.getStartIndex() >= ds.getRecordCount())
+
+					var count = ds.getRecordCount();
+					if (count > 0 && pg && pg.getStartIndex() >= count)
 					{
 						pg.setPage(pg.getPreviousPage());
 						return;
@@ -3023,7 +3025,7 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 Y.HTMLTableBulkEditor = HTMLTableBulkEditor;
 
 
-}, 'gallery-2013.05.29-23-38', {
+}, 'gallery-2013.08.15-00-45', {
     "skinnable": "true",
     "requires": [
         "widget",

@@ -263,7 +263,9 @@ Y.extend(BulkEditor, Y.Widget,
 				success: Y.bind(function(e)
 				{
 					this.busy.hide();
-					if (pg && pg.getStartIndex() >= ds.getRecordCount())
+
+					var count = ds.getRecordCount();
+					if (count > 0 && pg && pg.getStartIndex() >= count)
 					{
 						pg.setPage(pg.getPreviousPage());
 						return;

@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.3
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-bulkedit
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -342,307 +342,307 @@ shifter [info] shifting into gear for gallery-bulkedit
    #166: Too many var statements.
        var ds = this.get('ds'); // line 1270, pos 13
    #167: Trailing whitespace.
-       * // line 1305, pos 7
+       * // line 1307, pos 7
    #168: Too many var statements.
-       var records = ds.getCurrentRecords(); // line 1311, pos 13
+       var records = ds.getCurrentRecords(); // line 1313, pos 13
    #169: Too many var statements.
-       var id_key  = ds.get('uniqueIdKey'); // line 1312, pos 13
+       var id_key  = ds.get('uniqueIdKey'); // line 1314, pos 13
    #170: Expected '===' and instead saw '=='.
-       if (tag == 'INPUT' && node.get('type').toLowerCase() == 'checkbox') // line 1324, pos 25
+       if (tag == 'INPUT' && node.get('type').toLowerCase() == 'checkbox') // line 1326, pos 25
    #171: Expected '===' and instead saw '=='.
-       if (tag == 'INPUT' && node.get('type').toLowerCase() == 'checkbox') // line 1324, pos 70
+       if (tag == 'INPUT' && node.get('type').toLowerCase() == 'checkbox') // line 1326, pos 70
    #172: Expected '===' and instead saw '=='.
-       else if (tag == 'SELECT' && node.get('multiple')) // line 1328, pos 30
+       else if (tag == 'SELECT' && node.get('multiple')) // line 1330, pos 30
    #173: Trailing whitespace.
-       * // line 1354, pos 7
+       * // line 1356, pos 7
    #174: Trailing whitespace.
-       * // line 1386, pos 7
-   #175: Trailing whitespace.
        * // line 1388, pos 7
+   #175: Trailing whitespace.
+       * // line 1390, pos 7
    #176: Trailing whitespace.
-       * // line 1413, pos 7
-   #177: Trailing whitespace.
        * // line 1415, pos 7
+   #177: Trailing whitespace.
+       * // line 1417, pos 7
    #178: Too many var statements.
-       var m  = id_regex.exec(node.get('id')); // line 1513, pos 17
+       var m  = id_regex.exec(node.get('id')); // line 1515, pos 17
    #179: Too many var statements.
-       var id = this.getRecordContainerId(record); // line 1539, pos 17
+       var id = this.getRecordContainerId(record); // line 1541, pos 17
    #180: 'id' is already defined.
-       var id = this.getRecordContainerId(record); // line 1539, pos 20
+       var id = this.getRecordContainerId(record); // line 1541, pos 20
    #181: 'id' used out of scope.
-       return Y.one('#'+id); // line 1542, pos 26
+       return Y.one('#'+id); // line 1544, pos 26
    #182: Trailing whitespace.
-       * // line 1579, pos 7
+       * // line 1581, pos 7
    #183: Too many var statements.
-       var start = pg ? pg.getStartIndex() : 0; // line 1592, pos 13
+       var start = pg ? pg.getStartIndex() : 0; // line 1594, pos 13
    #184: Too many var statements.
-       var count = pg ? pg.getRowsPerPage() : default_page_size; // line 1593, pos 13
+       var count = pg ? pg.getRowsPerPage() : default_page_size; // line 1595, pos 13
    #185: Too many var statements.
-       var node = this.getRecordContainer(this.get('ds').getCurrentRecords()[ index - start ]); // line 1596, pos 17
+       var node = this.getRecordContainer(this.get('ds').getCurrentRecords()[ index - start ]); // line 1598, pos 17
    #186: Trailing whitespace.
-       * // line 1610, pos 7
+       * // line 1612, pos 7
    #187: Trailing whitespace.
-       * // line 1628, pos 7
+       * // line 1630, pos 7
    #188: Too many var statements.
-       var node = this.getRecordContainer(record); // line 1638, pos 17
+       var node = this.getRecordContainer(record); // line 1640, pos 17
    #189: Trailing whitespace.
-       * // line 1702, pos 7
+       * // line 1704, pos 7
    #190: Trailing whitespace.
-       * // line 1718, pos 7
+       * // line 1720, pos 7
    #191: Trailing whitespace.
-       * // line 1745, pos 7
+       * // line 1747, pos 7
    #192: Trailing whitespace.
-       * // line 1762, pos 7
+       * // line 1764, pos 7
    #193: Trailing whitespace.
-       * // line 1779, pos 7
+       * // line 1781, pos 7
    #194: Trailing whitespace.
-       * // line 1812, pos 7
+       * // line 1814, pos 7
    #195: Too many var statements.
-       var page_size = pg ? pg.getRowsPerPage() : default_page_size; // line 1864, pos 13
+       var page_size = pg ? pg.getRowsPerPage() : default_page_size; // line 1866, pos 13
    #196: Too many var statements.
-       var status    = this.page_status.slice(0); // line 1865, pos 13
+       var status    = this.page_status.slice(0); // line 1867, pos 13
    #197: Too many var statements.
-       var r = this.server_errors.records; // line 1869, pos 13
+       var r = this.server_errors.records; // line 1871, pos 13
    #198: Too many var statements.
-       for (var i=0; i<r.length; i++) // line 1870, pos 18
+       for (var i=0; i<r.length; i++) // line 1872, pos 18
    #199: Too many var statements.
-       var j     = Math.floor(i / page_size); // line 1874, pos 21
+       var j     = Math.floor(i / page_size); // line 1876, pos 21
    #200: Expected '===' and instead saw '=='.
-       if (this.first_error_page == -1) // line 1876, pos 43
+       if (this.first_error_page == -1) // line 1878, pos 43
    #201: Trailing whitespace.
-       * // line 1889, pos 7
+       * // line 1891, pos 7
    #202: Too many var statements.
-       var pg     = this.get('paginator'); // line 1901, pos 13
+       var pg     = this.get('paginator'); // line 1903, pos 13
    #203: Too many var statements.
-       var err = this.server_errors.page.slice(0); // line 1912, pos 17
+       var err = this.server_errors.page.slice(0); // line 1914, pos 17
    #204: Trailing whitespace.
-       * // line 1935, pos 7
+       * // line 1937, pos 7
    #205: Too many var statements.
-       var e1 = container.getElementsByTagName('input'); // line 1953, pos 13
+       var e1 = container.getElementsByTagName('input'); // line 1955, pos 13
    #206: Too many var statements.
-       var e2 = container.getElementsByTagName('textarea'); // line 1954, pos 13
+       var e2 = container.getElementsByTagName('textarea'); // line 1956, pos 13
    #207: Too many var statements.
-       var e3 = container.getElementsByTagName('select'); // line 1955, pos 13
+       var e3 = container.getElementsByTagName('select'); // line 1957, pos 13
    #208: Too many var statements.
-       var err = this.server_errors.record_map[id]; // line 1969, pos 17
+       var err = this.server_errors.record_map[id]; // line 1971, pos 17
    #209: Too many var statements.
-       var msg  = err; // line 1975, pos 25
+       var msg  = err; // line 1977, pos 25
    #210: Too many var statements.
-       var type = 'error'; // line 1976, pos 25
+       var type = 'error'; // line 1978, pos 25
    #211: Too many var statements.
-       var msg  = err.msg; // line 1980, pos 25
+       var msg  = err.msg; // line 1982, pos 25
    #212: 'msg' is already defined.
-       var msg  = err.msg; // line 1980, pos 30
+       var msg  = err.msg; // line 1982, pos 30
    #213: Too many var statements.
-       var type = err.type; // line 1981, pos 25
+       var type = err.type; // line 1983, pos 25
    #214: 'type' is already defined.
-       var type = err.type; // line 1981, pos 30
+       var type = err.type; // line 1983, pos 30
    #215: 'msg' used out of scope.
-       this.displayRecordMessage(id, msg, type, false); // line 1983, pos 47
+       this.displayRecordMessage(id, msg, type, false); // line 1985, pos 47
    #216: 'type' used out of scope.
-       this.displayRecordMessage(id, msg, type, false); // line 1983, pos 52
+       this.displayRecordMessage(id, msg, type, false); // line 1985, pos 52
    #217: 'type' used out of scope.
-       status = status && !(type == 'error' || type == 'warn'); // line 1984, pos 38
+       status = status && !(type == 'error' || type == 'warn'); // line 1986, pos 38
    #218: Expected '===' and instead saw '=='.
-       status = status && !(type == 'error' || type == 'warn'); // line 1984, pos 43
+       status = status && !(type == 'error' || type == 'warn'); // line 1986, pos 43
    #219: 'type' used out of scope.
-       status = status && !(type == 'error' || type == 'warn'); // line 1984, pos 57
+       status = status && !(type == 'error' || type == 'warn'); // line 1986, pos 57
    #220: Expected '===' and instead saw '=='.
-       status = status && !(type == 'error' || type == 'warn'); // line 1984, pos 62
+       status = status && !(type == 'error' || type == 'warn'); // line 1986, pos 62
    #221: Trailing whitespace.
-       * // line 1994, pos 7
+       * // line 1996, pos 7
    #222: Too many var statements.
-       var field    = this.getFieldConfig(field_info.field_key); // line 2012, pos 17
+       var field    = this.getFieldConfig(field_info.field_key); // line 2014, pos 17
    #223: Too many var statements.
-       var msg_list = field.validation && field.validation.msg; // line 2013, pos 17
+       var msg_list = field.validation && field.validation.msg; // line 2015, pos 17
    #224: Too many var statements.
-       var info = Y.FormManager.validateFromCSSData(node, msg_list); // line 2015, pos 17
+       var info = Y.FormManager.validateFromCSSData(node, msg_list); // line 2017, pos 17
    #225: Too many var statements.
-       var flags = ''; // line 2027, pos 25
+       var flags = ''; // line 2029, pos 25
    #226: Too many var statements.
-       var m     = perl_flags_regex.exec(field.validation.regex); // line 2028, pos 25
+       var m     = perl_flags_regex.exec(field.validation.regex); // line 2030, pos 25
    #227: Expected '===' and instead saw '=='.
-       if (m && m.length == 2) // line 2029, pos 39
+       if (m && m.length == 2) // line 2031, pos 39
    #228: Too many var statements.
-       var err = this.server_errors.record_map[ this.getRecordId(field_info.record) ]; // line 2055, pos 17
+       var err = this.server_errors.record_map[ this.getRecordId(field_info.record) ]; // line 2057, pos 17
    #229: Too many var statements.
-       var f = err.fieldErrors[ field_info.field_key ]; // line 2058, pos 21
+       var f = err.fieldErrors[ field_info.field_key ]; // line 2060, pos 21
    #230: Too many var statements.
-       var msg  = f; // line 2063, pos 29
+       var msg  = f; // line 2065, pos 29
    #231: Too many var statements.
-       var type = 'error'; // line 2064, pos 29
+       var type = 'error'; // line 2066, pos 29
    #232: Too many var statements.
-       var msg  = f.msg; // line 2068, pos 29
+       var msg  = f.msg; // line 2070, pos 29
    #233: 'msg' is already defined.
-       var msg  = f.msg; // line 2068, pos 34
+       var msg  = f.msg; // line 2070, pos 34
    #234: Too many var statements.
-       var type = f.type; // line 2069, pos 29
+       var type = f.type; // line 2071, pos 29
    #235: 'type' is already defined.
-       var type = f.type; // line 2069, pos 34
+       var type = f.type; // line 2071, pos 34
    #236: 'msg' used out of scope.
-       this.displayFieldMessage(node, msg, type, false); // line 2071, pos 52
+       this.displayFieldMessage(node, msg, type, false); // line 2073, pos 52
    #237: 'type' used out of scope.
-       this.displayFieldMessage(node, msg, type, false); // line 2071, pos 57
+       this.displayFieldMessage(node, msg, type, false); // line 2073, pos 57
    #238: 'type' used out of scope.
-       status = status && !(type == 'error' || type == 'warn'); // line 2072, pos 42
+       status = status && !(type == 'error' || type == 'warn'); // line 2074, pos 42
    #239: Expected '===' and instead saw '=='.
-       status = status && !(type == 'error' || type == 'warn'); // line 2072, pos 47
+       status = status && !(type == 'error' || type == 'warn'); // line 2074, pos 47
    #240: 'type' used out of scope.
-       status = status && !(type == 'error' || type == 'warn'); // line 2072, pos 61
+       status = status && !(type == 'error' || type == 'warn'); // line 2074, pos 61
    #241: Expected '===' and instead saw '=='.
-       status = status && !(type == 'error' || type == 'warn'); // line 2072, pos 66
+       status = status && !(type == 'error' || type == 'warn'); // line 2074, pos 66
    #242: Trailing whitespace.
-       * // line 2085, pos 7
+       * // line 2087, pos 7
    #243: Too many var statements.
-       var pg = this.get('paginator'); // line 2093, pos 13
+       var pg = this.get('paginator'); // line 2095, pos 13
    #244: Too many var statements.
-       var count     = ds.getRecordCount(), // line 2117, pos 13
+       var count     = ds.getRecordCount(), // line 2119, pos 13
    #245: Too many var statements.
-       for (var i=0; i<count; i++) // line 2120, pos 18
+       for (var i=0; i<count; i++) // line 2122, pos 18
    #246: Too many var statements.
-       var page_status = true; // line 2122, pos 17
+       var page_status = true; // line 2124, pos 17
    #247: Too many var statements.
-       var value = ds.getValue(i, key); // line 2126, pos 21
+       var value = ds.getValue(i, key); // line 2128, pos 21
    #248: Too many var statements.
-       var info = Y.FormManager.validateFromCSSData(this.validation_node); // line 2131, pos 21
+       var info = Y.FormManager.validateFromCSSData(this.validation_node); // line 2133, pos 21
    #249: Don't make functions within a loop.
-       }, // line 2147, pos 14
+       }, // line 2149, pos 14
    #250: Too many var statements.
-       var j = Math.floor(i / page_size); // line 2152, pos 21
+       var j = Math.floor(i / page_size); // line 2154, pos 21
    #251: Trailing whitespace.
-       * // line 2165, pos 7
+       * // line 2167, pos 7
    #252: Trailing whitespace.
-       * // line 2185, pos 7
+       * // line 2187, pos 7
    #253: Too many var statements.
-       var changed = this._updateRecordStatus(bd1, type, status_pattern, status_re, status_prefix); // line 2204, pos 13
+       var changed = this._updateRecordStatus(bd1, type, status_pattern, status_re, status_prefix); // line 2206, pos 13
    #254: Too many var statements.
-       var bd2 = e.getAncestorByClassName(BulkEditor.field_container_class); // line 2206, pos 13
+       var bd2 = e.getAncestorByClassName(BulkEditor.field_container_class); // line 2208, pos 13
    #255: Too many var statements.
-       var m = bd2.getElementsByClassName(message_container_class); // line 2211, pos 21
+       var m = bd2.getElementsByClassName(message_container_class); // line 2213, pos 21
    #256: Trailing whitespace.
-       * // line 2230, pos 7
+       * // line 2232, pos 7
    #257: Too many var statements.
-       var changed = this._updateRecordStatus(bd1, type, status_pattern, status_re, status_prefix); // line 2249, pos 13
+       var changed = this._updateRecordStatus(bd1, type, status_pattern, status_re, status_prefix); // line 2251, pos 13
    #258: Too many var statements.
-       var bd2 = bd1.getElementsByClassName(BulkEditor.record_msg_container_class).item(0); // line 2253, pos 17
+       var bd2 = bd1.getElementsByClassName(BulkEditor.record_msg_container_class).item(0); // line 2255, pos 17
    #259: Too many var statements.
-       var m = bd2.getElementsByClassName(message_container_class); // line 2256, pos 21
+       var m = bd2.getElementsByClassName(message_container_class); // line 2258, pos 21
    #260: Too many var statements.
-       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2378, pos 13
+       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2380, pos 13
    #261: Too many var statements.
-       var option = '<option value="{value}" {selected}>{text}</option>'; // line 2403, pos 13
+       var option = '<option value="{value}" {selected}>{text}</option>'; // line 2405, pos 13
    #262: Too many var statements.
-       var options = Y.Array.reduce(o.field.values, '', function(s, v) // line 2405, pos 13
+       var options = Y.Array.reduce(o.field.values, '', function(s, v) // line 2407, pos 13
    #263: Too many var statements.
-       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2415, pos 13
+       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2417, pos 13
    #264: Mixed spaces and tabs.
-       cont:  	 BulkEditor.field_container_class + ' ' + BulkEditor.field_container_class_prefix, // line 2419, pos 10
+       cont:  	 BulkEditor.field_container_class + ' ' + BulkEditor.field_container_class_prefix, // line 2421, pos 10
    #265: Too many var statements.
-       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2440, pos 13
+       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2442, pos 13
    #266: Expected '===' and instead saw '=='.
-       value: o.value == o.field.values.on ? 'checked="checked"' : '', // line 2449, pos 28
+       value: o.value == o.field.values.on ? 'checked="checked"' : '', // line 2451, pos 28
    #267: Too many var statements.
-       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2473, pos 13
+       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2475, pos 13
    #268: Too many var statements.
-       var id        = this.getFieldId(o.record, o.key), // line 2518, pos 9
+       var id        = this.getFieldId(o.record, o.key), // line 2520, pos 9
    #269: Possible strict violation.
-       var id        = this.getFieldId(o.record, o.key), // line 2518, pos 21
+       var id        = this.getFieldId(o.record, o.key), // line 2520, pos 21
    #270: Expected '===' and instead saw '=='.
-       if (type == 'autocompleteMultivalueInput') // line 2521, pos 14
+       if (type == 'autocompleteMultivalueInput') // line 2523, pos 14
    #271: Too many var statements.
-       var input_markup = Y.Lang.sub('<input type="text" id="{id}-multivalue-input" />', // line 2523, pos 13
+       var input_markup = Y.Lang.sub('<input type="text" id="{id}-multivalue-input" />', // line 2525, pos 13
    #272: Possible strict violation.
-       Y.later(0, this, function() // line 2528, pos 20
+       Y.later(0, this, function() // line 2530, pos 20
    #273: Missing semicolon.
-       }) // line 2541, pos 15
+       }) // line 2543, pos 15
    #274: Expected '===' and instead saw '=='.
-       else if (type == 'checkboxes') // line 2570, pos 19
+       else if (type == 'checkboxes') // line 2572, pos 19
    #275: Too many var statements.
-       var checkbox = // line 2572, pos 13
+       var checkbox = // line 2574, pos 13
    #276: Too many var statements.
-       var column_start = '<div class="checkbox-multiselect-column">', // line 2578, pos 13
+       var column_start = '<div class="checkbox-multiselect-column">', // line 2580, pos 13
    #277: Too many var statements.
-       var input_markup = Y.Array.reduce(o.field.values, '<div class="checkbox-multiselect-column first">', function(s, v, i) // line 2581, pos 13
+       var input_markup = Y.Array.reduce(o.field.values, '<div class="checkbox-multiselect-column first">', function(s, v, i) // line 2583, pos 13
    #278: 'input_markup' is already defined.
-       var input_markup = Y.Array.reduce(o.field.values, '<div class="checkbox-multiselect-column first">', function(s, v, i) // line 2581, pos 26
+       var input_markup = Y.Array.reduce(o.field.values, '<div class="checkbox-multiselect-column first">', function(s, v, i) // line 2583, pos 26
    #279: Too many var statements.
-       var option = '<option value="{value}" {selected}>{text}</option>'; // line 2602, pos 9
+       var option = '<option value="{value}" {selected}>{text}</option>'; // line 2604, pos 9
    #280: Too many var statements.
-       var options = Y.Array.reduce(o.field.values, '', function(s, v) // line 2604, pos 9
+       var options = Y.Array.reduce(o.field.values, '', function(s, v) // line 2606, pos 9
    #281: Too many var statements.
-       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2614, pos 9
+       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2616, pos 9
    #282: Possible strict violation.
-       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2614, pos 72
+       var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2616, pos 72
    #283: Mixed spaces and tabs.
-       cont:  	 BulkEditor.field_container_class + ' ' + BulkEditor.field_container_class_prefix, // line 2618, pos 9
+       cont:  	 BulkEditor.field_container_class + ' ' + BulkEditor.field_container_class_prefix, // line 2620, pos 9
    #284: 'input_markup' used out of scope.
-       input:   input_markup, // line 2623, pos 18
+       input:   input_markup, // line 2625, pos 18
    #285: Expected '===' and instead saw '=='.
-       if (o.value == value) // line 2638, pos 21
+       if (o.value == value) // line 2640, pos 21
    #286: Trailing whitespace.
-       * @extends BulkEditor // line 2656, pos 23
+       * @extends BulkEditor // line 2658, pos 23
    #287: Trailing whitespace.
-       * // line 2688, pos 7
+       * // line 2690, pos 7
    #288: Too many var statements.
-       var cell_class        = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'cell'), // line 2703, pos 5
+       var cell_class        = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'cell'), // line 2705, pos 5
    #289: Possible strict violation.
-       var info = this.getRecordAndFieldKey(e.target); // line 2839, pos 16
+       var info = this.getRecordAndFieldKey(e.target); // line 2841, pos 16
    #290: Too many var statements.
-       var bd = this.getRecordContainer(e.target); // line 2845, pos 9
+       var bd = this.getRecordContainer(e.target); // line 2847, pos 9
    #291: Possible strict violation.
-       var bd = this.getRecordContainer(e.target); // line 2845, pos 14
+       var bd = this.getRecordContainer(e.target); // line 2847, pos 14
    #292: Expected '===' and instead saw '=='.
-       if (bd && e.keyCode == 38) // line 2846, pos 25
+       if (bd && e.keyCode == 38) // line 2848, pos 25
    #293: Too many var statements.
-       var id = bd && this.getRecordId(bd); // line 2855, pos 9
+       var id = bd && this.getRecordId(bd); // line 2857, pos 9
    #294: Possible strict violation.
-       var id = bd && this.getRecordId(bd); // line 2855, pos 20
+       var id = bd && this.getRecordId(bd); // line 2857, pos 20
    #295: Too many var statements.
-       var field = this.getFieldElement(id, info.field_key); // line 2858, pos 13
+       var field = this.getFieldElement(id, info.field_key); // line 2860, pos 13
    #296: Possible strict violation.
-       var field = this.getFieldElement(id, info.field_key); // line 2858, pos 21
+       var field = this.getFieldElement(id, info.field_key); // line 2860, pos 21
    #297: Expected '!==' and instead saw '!='.
-       container.get('firstChild').get('tagName') != 'TABLE' || // line 2888, pos 56
+       container.get('firstChild').get('tagName') != 'TABLE' || // line 2890, pos 56
    #298: Too many var statements.
-       var s = Y.Lang.sub('<table class="{t}"><thead class="{hd}"><tr>', // line 2891, pos 17
+       var s = Y.Lang.sub('<table class="{t}"><thead class="{hd}"><tr>', // line 2893, pos 17
    #299: Too many var statements.
-       var row_markup = '<th class="{cell} {prefix}{key}">{label}</th>'; // line 2897, pos 17
+       var row_markup = '<th class="{cell} {prefix}{key}">{label}</th>'; // line 2899, pos 17
    #300: Too many var statements.
-       var msg_row = Y.Node.create('<tr></tr>'); // line 2943, pos 13
+       var msg_row = Y.Node.create('<tr></tr>'); // line 2945, pos 13
    #301: Too many var statements.
-       var msg_cell = Y.Node.create('<td></td>'); // line 2946, pos 13
+       var msg_cell = Y.Node.create('<td></td>'); // line 2948, pos 13
    #302: Too many var statements.
-       var row = Y.Node.create('<tr></tr>'); // line 2954, pos 13
+       var row = Y.Node.create('<tr></tr>'); // line 2956, pos 13
    #303: Too many var statements.
-       var field  = this.getFieldConfig(key); // line 2968, pos 17
+       var field  = this.getFieldConfig(key); // line 2970, pos 17
    #304: Too many var statements.
-       var cell = Y.Node.create('<td></td>'); // line 2972, pos 17
+       var cell = Y.Node.create('<td></td>'); // line 2974, pos 17
    #305: Too many var statements.
-       var liner = Y.Node.create('<div></div>'); // line 2977, pos 17
+       var liner = Y.Node.create('<div></div>'); // line 2979, pos 17
    #306: Too many var statements.
-       var f = null; // line 2982, pos 17
+       var f = null; // line 2984, pos 17
    #307: 'record_id' is defined but never used.
        var record_id = record[ this.get('uniqueIdKey') ]; // line 517, pos 26
    #308: 'record_id' is defined but never used.
        var record_id = this.get('ds').get('source')[ this._index[j] ][ this.get('uniqueIdKey') ].toString(); // line 644, pos 30
    #309: 'id' is defined but never used.
-       var id = this.getRecordContainerId(record); // line 1539, pos 19
+       var id = this.getRecordContainerId(record); // line 1541, pos 19
    #310: 'record' is defined but never used.
-       /* object */	record) // line 1710, pos 21
+       /* object */	record) // line 1712, pos 21
    #311: 'container' is defined but never used.
-       /* element */	container, // line 1709, pos 24
+       /* element */	container, // line 1711, pos 24
    #312: 'o' is defined but never used.
-       /* object */ o) // line 1756, pos 13
+       /* object */ o) // line 1758, pos 13
    #313: 'response' is defined but never used.
-       _updatePaginator: function(response) // line 1767, pos 40
+       _updatePaginator: function(response) // line 1769, pos 40
    #314: 'msg' is defined but never used.
-       var msg  = err.msg; // line 1980, pos 28
+       var msg  = err.msg; // line 1982, pos 28
    #315: 'type' is defined but never used.
-       var type = err.type; // line 1981, pos 29
+       var type = err.type; // line 1983, pos 29
    #316: 'msg' is defined but never used.
-       var msg  = f.msg; // line 2068, pos 32
+       var msg  = f.msg; // line 2070, pos 32
    #317: 'type' is defined but never used.
-       var type = f.type; // line 2069, pos 33
+       var type = f.type; // line 2071, pos 33
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-bulkedit/gallery-bulkedit.js with UglifyJS
@@ -659,18 +659,18 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 1.139 seconds, pretty fast huh?
+shifter [info] finished in 0.819 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds) 6%
+✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds) 6%
 Writing files in JSON format to: /src/gallery-bulkedit/logs/tests.json
 ┌─────────────────────────────────────────────────┬──────────┬──────┬─────────────┬──────┐
 │[34m  path                                           [39m│[34m   lines  [39m│[34m   %  [39m│[34m  functions  [39m│[34m   %  [39m│
@@ -680,7 +680,7 @@ Writing files in JSON format to: /src/gallery-bulkedit/logs/tests.json
 │  total                                          │  46/766  │  6%  │      1/125  │  0%  │
 └─────────────────────────────────────────────────┴──────────┴──────┴─────────────┴──────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
-  [Grover Execution Timer] 1.022 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds)
+  [Grover Execution Timer] 1.91 seconds
 Failed to find source file: /build/gallery-bulkedit/gallery-bulkedit.js
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
