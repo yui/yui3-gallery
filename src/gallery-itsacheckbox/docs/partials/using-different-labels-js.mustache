@@ -1,0 +1,36 @@
+YUI(yuiconfig).use('node-base', 'gallery-itsacheckbox', 'gallery-itsawidgetrenderpromise', function(Y) {
+    var checkboxColored, checkboxChanged;
+
+    checkboxColored = new Y.ITSACheckbox({
+        checked: true
+    }).render('#checkboxColored');
+
+    checkboxChanged = new Y.ITSACheckbox({
+        optionon: 'ON',
+        optionoff: 'OFF',
+        checked: true
+    }).render('#checkboxChanged');
+
+    checkboxOtherOptions = new Y.ITSACheckbox({
+        optionon: 'system running',
+        optionoff: 'system down',
+        checked: true
+    }).render('#checkboxOtherOptions');
+
+    Y.one('#btnLarge').on('click', function() {
+        Y.one('#container').addClass('pure-checkbox-big');
+        checkboxColored.syncUI();
+        checkboxOtherOptions.syncUI();
+    });
+
+    // make use of 'renderPromise()', which is supplied by 'gallery-itsawidgetrenderpromise'
+    Y.batch(
+        checkboxColored.renderPromise(),
+        checkboxOtherOptions.renderPromise(),
+        checkboxChanged.renderPromise()
+    ).then(
+        function() {
+            Y.one('#container').removeClass('hide');
+        }
+    );
+});

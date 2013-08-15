@@ -1,0 +1,152 @@
+{{>api-button}}
+
+<div class="intro" style="min-height:278px;">
+  <p>
+    <img src="{{componentAssets}}/screenshot.png" alt="Screenshot of multiple ITSACheckbox widgets" style="border: 1px solid #bfbfbf; float:right; height:251px; margin: 0 0 8px 8px; width:157px;">
+    {{description}}
+  </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+    <p>
+       Y.ITSACheckbox represents a html-checkbox with a layout of a slider (iOS style).
+       It can be created from script, or using progressive enhancement. Both ways will have a hidden
+       html-checkbox that can be send through a from using serialization.
+    </p>
+
+<h2>Purecss compatable</h2>
+    <p>
+       Y.ITSACheckbox is purecss compatable. It behaves responsive, just like a normal html-checkbox. It comes with its own style,
+       if you want pure-behaviour, just use purecss.
+    </p>
+
+<h2>Custom styling</h2>
+    <p>
+       The appearance of an ITSACheckbox-instance can be customized by three ways:
+       <ol>
+            <li><b>option-labels</b><br />
+                set with the attributes 'optionon' and 'optionoff'.
+            </li>
+            <li><b>size</b><br />
+                determined by the fontsize of the widget's boudingBox, preferred set by className to the boundingBox
+                or one of its ancestors.</li>
+            <li><b>color</b><br />
+                the default color is determined by these css-rules:
+                ```
+                <style type="text/css">
+                    .yui3-itsacheckbox .optionon {
+                        background-color: #6AA7F6;
+                        color: #FFF;
+                    }
+                    .yui3-itsacheckbox .optionoff {
+                        background-color: #FFF;
+                        color: #444;
+                    }
+                </style>
+                ```
+                you can overide these default colors by creating your custom css-rules and add the className to
+                an ancestor-node, or the boundingBox-node<br /><br />
+                <u>example css for an ancestor-node:</u>
+                ```
+                <style type="text/css">
+                    .custom-ancestor-classname .yui3-itsacheckbox .optionon {
+                        background-color: #D00;
+                    }
+                    .custom-ancestor-classname .yui3-itsacheckbox .optionoff {
+                        background-color: #900;
+                        color: #FFF;
+                    }
+                </style>
+                ```
+                <u>example css for a boundingBox-node:</u>
+                ```
+                <style type="text/css">
+                    .yui3-itsacheckbox.custom-boundingbox-classname .optionon {
+                        background-color: #D00;
+                    }
+                    .yui3-itsacheckbox.custom-boundingbox-classname .optionoff {
+                        background-color: #900;
+                        color: #FFF;
+                    }
+                </style>
+                ```
+            </li>
+       </ol>
+    </p>
+
+<h2>Progressive enhancement v.s. javascript</h2>
+    <p>
+       When using progressive enhancement (by sepcifying the attribute <code>scrNode</code>), you best add a classname to the html-checkbox to make it hidden before the widget is rendered. If you dont' then the widget will hide the html-element for you, but it will be seen on the screen for a short time. See the examples on how to do this.
+    </p>
+    <p>
+        When using no <code>srcNode</code>, the widget will generate an invisible html-checkbox as well. This is useful in case you have a form that submits
+        its elements. Since this is a new element, its <code>id</code> is defined as <code>boudingBox.get('id')+'_checkbox'</code>.
+    </p>
+
+<h2>Usage</h2>
+
+<h3 id="create-through-js">Create ITSACheckbox through javascript</h3>
+```
+<body>
+    <div id="somenode"></div>
+</body>
+
+<script>
+    YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsacheckbox', function(Y) {
+        var mycheckbox = new Y.ITSACheckBox({boundingBox: '#somenode'}).render();
+    });
+</script>
+```
+
+<h3 id="create-through-progressive-enhancement">Create ITSACheckbox using a html-element</h3>
+```
+<style type="text/css">
+    .yui3-js-enabled .js-nodisplay {
+        display: none;
+    }
+</style>
+
+<body>
+    <input id="htmlcheckbox" type="checkbox" class="js-nodisplay" checked="checked">
+</body>
+
+<script>
+    YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsacheckbox', function(Y) {
+        var mycheckbox = new Y.ITSACheckBox().render('#htmlcheckbox');
+    });
+</script>
+```
+
+<h3 id="purecss-compatible">Custom styling</h3>
+```
+<style type="text/css">
+    .pure-redish .yui3-itsacheckbox .optionon {
+        background-color: #D00;
+    }
+    .pure-redish .yui3-itsacheckbox .optionoff {
+        background-color: #900;
+        color: #FFF;
+    }
+    .yui3-itsacheckbox.pure-blueish .optionon {
+        background-color: #00D;
+    }
+    .yui3-itsacheckbox.pure-blueish .optionoff {
+        background-color: #009;
+        color: #FFF;
+    }
+</style>
+
+<body class="pure-redish">
+    <div id="somenode"></div>
+    <div id="anothernode" class="pure-blueish"></div>
+</body>
+
+<script>
+    YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsacheckbox', function(Y) {
+        var mycheckbox1 = new Y.ITSACheckBox({boundingBox: '#somenode'}).render();
+        var mycheckbox2 = new Y.ITSACheckBox({boundingBox: '#anothernode'}).render();
+    });
+</script>
+```

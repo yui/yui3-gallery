@@ -1,0 +1,31 @@
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+   <p>
+      When changing styles -that impact the the size- <u>after</u> the checkboxes are rendered, you need to execute yourcheckbox.syncUI().
+      <br />Also notice, we take advantage of <code>gallery-itsawidgetrenderpromise</code>, to show all checkboxes at once.
+   </p>
+</div>
+
+{{>using-different-labels-css}}
+
+{{>using-different-labels-html}}
+
+<h2>Complete Example Source</h2>
+```
+{{>using-different-labels-css}}
+
+<body>
+{{>using-different-labels-html}}
+</body>
+
+<script>
+{{>using-different-labels-js}}
+</script>
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>using-different-labels-js}}
+</script>

@@ -1,0 +1,9 @@
+YUI(yuiconfig).use('node', 'gallery-itsacheckbox', function(Y) {
+    var remember, focuscheckbox, readonlycheckbox, disabledcheckbox, checkedcheckbox;
+
+    remember = new Y.ITSACheckbox().render('#remember');
+    readonlycheckbox = new Y.ITSACheckbox({readonly: true, checked: true}).render('#readonlycheckbox');
+    disabledcheckbox = new Y.ITSACheckbox({disabled: true, checked: true}).render('#disabledcheckbox');
+    checkedcheckbox = new Y.ITSACheckbox({checked: true}).render('#checkedcheckbox');
+    focuscheckbox = new Y.ITSACheckbox().render('#focuscheckbox').focus();
+});

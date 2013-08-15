@@ -1,0 +1,49 @@
+{
+    "name"       : "gallery-itsacheckbox",
+    "displayName": "Gallery: gallery-itsacheckbox",
+    "description": "This module supplies the widget Y.ITSACheckbox: a Widget that replaces the standard html-checkbox by a iOS-stylisch checkbox-slider.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsacheckbox" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "rendering-using-html",
+            "displayName": "Rendering using html",
+            "description": "This example shows how to render ITSACheckBox using progressive enhancement",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsacheckbox", "progressive enhancement"],
+            "tags"    : ["gallery-itsacheckbox"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "rendering-from-script",
+            "displayName": "Rendering from script",
+            "description": "This example shows how to render ITSACheckBox from script",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsacheckbox", "script"],
+            "tags"    : ["gallery-itsacheckbox"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "using-different-labels",
+            "displayName": "Styling checkboxes",
+            "description": "This example shows how to style the checkboxes using css and different option-labels",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsacheckbox", "css", "purecss", "pure"],
+            "tags"    : ["gallery-itsacheckbox"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "programmatically-change-values",
+            "displayName": "Programmatically change value",
+            "description": "This example shows how change the checkbox-value programmatically",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsacheckbox"],
+            "tags"    : ["gallery-itsacheckbox"],
+            "hideTableOfContents": true
+        }
+    ]
+
+}

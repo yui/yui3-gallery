@@ -1,0 +1,31 @@
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+   <p>
+      When changing the value of a checkbox, you see it's going to be animated.
+      <br />Disable the checkbox changes its appearance.
+   </p>
+</div>
+
+{{>programmatically-change-values-css}}
+
+{{>programmatically-change-values-html}}
+
+<h2>Complete Example Source</h2>
+```
+{{>programmatically-change-values-css}}
+
+<body>
+{{>programmatically-change-values-html}}
+</body>
+
+<script>
+{{>programmatically-change-values-js}}
+</script>
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>programmatically-change-values-js}}
+</script>

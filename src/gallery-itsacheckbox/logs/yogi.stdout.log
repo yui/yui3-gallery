@@ -1,0 +1,112 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.3
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsacheckbox
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-itsacheckbox
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-itsacheckbox/gallery-itsacheckbox.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-itsacheckbox
+shifter [info] found a subskin, shifting for gallery-itsacheckbox
+shifter [queu] coverage file read, starting coverage for: gallery-itsacheckbox/gallery-itsacheckbox.js
+shifter [queu] copying assets to skin for sam
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+   #1: [warning] Property with star prefix found.
+       *display: inline; // line 3, pos 5
+   #2: [warning] Property with star prefix found.
+       *display: inline; // line 23, pos 5
+   #3: [warning] Standard property 'box-shadow' should come after vendor-prefixed property '-webkit-box-shadow'.
+       -webkit-box-shadow: inset 0 0.7em 0.2em rgba(0, 0, 0, 0.18); // line 63, pos 5
+   #4: [warning] Standard property 'box-shadow' should come after vendor-prefixed property '-moz-box-shadow'.
+       -moz-box-shadow: inset 0 0.7em 0.2em rgba(0, 0, 0, 0.18); // line 64, pos 5
+   #5: [warning] Values of 0 shouldn't have units specified.
+       padding: 2px 0.7em 0em 1.1em; // line 67, pos 24
+   #6: [warning] Values of 0 shouldn't have units specified.
+       padding: 2px 1.1em 0em 0.7em; // line 70, pos 24
+   #7: [warning] Standard property 'box-shadow' should come after vendor-prefixed property '-webkit-box-shadow'.
+       -webkit-box-shadow: inset 0 0.17em 0.5em rgba(0, 0, 0, 0.18); // line 74, pos 5
+   #8: [warning] Standard property 'box-shadow' should come after vendor-prefixed property '-moz-box-shadow'.
+       -moz-box-shadow: inset 0 0.17em 0.5em rgba(0, 0, 0, 0.18); // line 75, pos 5
+   #9: [warning] margin can't be used with display: inline.
+       margin: 0.5em 0; // line 90, pos 5
+   #10: [warning] Property with star prefix found.
+       *display: inline; // line 92, pos 5
+   #11: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 103, pos 5
+   #12: [warning] Property with star prefix found.
+       *zoom: 1; // line 112, pos 5
+   #13: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused { // line 115, pos 1
+   #14: [warning] Outlines should only be modified using :focus.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused { // line 115, pos 1
+   #15: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-disabled .optionon, // line 122, pos 1
+   #16: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-disabled .optionoff, // line 123, pos 1
+   #17: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled .optionon, // line 124, pos 1
+   #18: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled .optionon, // line 124, pos 1
+   #19: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled .optionoff { // line 125, pos 1
+   #20: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled .optionoff { // line 125, pos 1
+   #21: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-disabled, // line 130, pos 1
+   #22: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled { // line 131, pos 1
+   #23: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled { // line 131, pos 1
+   #24: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-disabled .optionbtn, // line 136, pos 1
+   #25: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled .optionbtn { // line 137, pos 1
+   #26: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-disabled .optionbtn { // line 137, pos 1
+   #27: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-readonly { // line 141, pos 1
+   #28: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-focused.yui3-itsacheckbox-readonly { // line 141, pos 1
+   #29: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-disabled .optioncontainer, // line 146, pos 1
+   #30: [warning] Don't use adjoining classes.
+       .yui3-itsacheckbox.yui3-itsacheckbox-readonly .optioncontainer { // line 147, pos 1
+shifter [queu] writing coverage file to gallery-itsacheckbox/gallery-itsacheckbox-coverage.js
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.586 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [http://127.0.0.1:5000/tests/src/gallery-itsacheckbox/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       TypeError: 'undefined' is not an object (evaluating 'new Y.Test.Suite')
+       http://127.0.0.1:5000/tests/src/gallery-itsacheckbox/tests/unit/js/tests.js:3
+       http://127.0.0.1:5000/build/yui/yui.js:775
+       http://127.0.0.1:5000/build/yui/yui.js:1112
+       http://127.0.0.1:5000/build/yui/yui.js:7708
+       http://127.0.0.1:5000/build/yui/yui.js:7799
+       http://127.0.0.1:5000/build/yui/yui.js:7999
+       http://127.0.0.1:5000/build/yui/yui.js:8066
+       http://127.0.0.1:5000/build/yui/yui.js:4619
+       http://127.0.0.1:5000/build/yui/yui.js:4819
+       http://127.0.0.1:5000/build/yui/yui.js:4927
+       http://127.0.0.1:5000/build/yui/yui.js:4711
+Writing files in JSON format to: /src/gallery-itsacheckbox/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

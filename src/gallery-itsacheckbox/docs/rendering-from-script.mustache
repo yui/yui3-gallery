@@ -1,0 +1,40 @@
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+   <p>
+      To show the widget is 'purecss-compatible', the forms from the purecss-website are used. There are several checkboxes
+      with their own configuration, which all are rendered through their div-element. All checkbox-instances will create
+      invisible html-checkboxes, so they can be send by the form using serialization.
+   </p>
+   <p>
+      There is one checkbox that has the focus. This checkbox responses to the keyboard.
+   </p>
+   <p>
+      Notice that the form is visible while the checkboxes finish rendering after each other.
+      The flicker-effect can be overcome using gallery-itsawidgetrenderpromise --> see example 'Styling checkboxes' how to do this.
+   </p>
+
+</div>
+
+{{>rendering-from-script-css}}
+
+{{>rendering-from-script-html}}
+
+<h2>Complete Example Source</h2>
+```
+{{>rendering-from-script-css}}
+
+<body>
+{{>rendering-from-script-html}}
+</body>
+
+<script>
+{{>rendering-from-script-js}}
+</script>
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>rendering-from-script-js}}
+</script>
