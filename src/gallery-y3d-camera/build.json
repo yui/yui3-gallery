@@ -1,0 +1,10 @@
+{
+	"name": "y3d-camera",
+	"builds": {
+		"y3d-camera": {
+			"jsfiles": [
+				"camera.js"
+			]
+		}
+	}
+}

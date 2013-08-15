@@ -1,0 +1,9 @@
+{
+	"y3d-camera": {
+		"requires": [
+			"event-key",
+			"event-mousewheel",
+			"y3d-model"
+		]
+	}
+}
