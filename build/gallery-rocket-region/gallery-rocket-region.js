@@ -55,4 +55,4 @@ Region = Y.extend(Region, Y.Base, {
 Y.RRegion = Region;
 
 
-}, 'gallery-2013.08.07-20-34', {"requires": ["gallery-rocket-view"]});
+}, 'gallery-2013.08.15-00-45', {"requires": ["gallery-rocket-view"]});

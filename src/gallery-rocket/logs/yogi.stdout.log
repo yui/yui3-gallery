@@ -13,8 +13,6 @@ shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-rocket
 shifter [warn] skipping jshint, you better be linting your stuff with something!
-shifter [info] shifting into gear for gallery-rocket-app
-shifter [warn] skipping jshint, you better be linting your stuff with something!
 shifter [info] shifting into gear for gallery-rocket-controller
 shifter [warn] skipping jshint, you better be linting your stuff with something!
 shifter [info] shifting into gear for gallery-rocket-view
@@ -33,6 +31,16 @@ shifter [info] shifting into gear for gallery-rocket-event-broker
 shifter [warn] skipping jshint, you better be linting your stuff with something!
 shifter [info] shifting into gear for gallery-rocket-util
 shifter [warn] skipping jshint, you better be linting your stuff with something!
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
@@ -43,16 +51,14 @@ shifter [queu] writing RAW file
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
-shifter [queu] writing RAW file
-shifter [queu] compressing gallery-rocket/gallery-rocket.js with UglifyJS
 shifter [queu] compressing gallery-rocket-controller/gallery-rocket-controller.js with UglifyJS
-shifter [queu] compressing gallery-rocket-app/gallery-rocket-app.js with UglifyJS
 shifter [queu] compressing gallery-rocket-view/gallery-rocket-view.js with UglifyJS
-shifter [queu] compressing gallery-rocket-layout/gallery-rocket-layout.js with UglifyJS
+shifter [queu] compressing gallery-rocket/gallery-rocket.js with UglifyJS
 shifter [queu] compressing gallery-rocket-list-view/gallery-rocket-list-view.js with UglifyJS
+shifter [queu] compressing gallery-rocket-region-manager/gallery-rocket-region-manager.js with UglifyJS
+shifter [queu] compressing gallery-rocket-layout/gallery-rocket-layout.js with UglifyJS
 shifter [queu] compressing gallery-rocket-child-view-container/gallery-rocket-child-view-container.js with UglifyJS
 shifter [queu] compressing gallery-rocket-region/gallery-rocket-region.js with UglifyJS
-shifter [queu] compressing gallery-rocket-region-manager/gallery-rocket-region-manager.js with UglifyJS
 shifter [queu] compressing gallery-rocket-event-broker/gallery-rocket-event-broker.js with UglifyJS
 shifter [queu] compressing gallery-rocket-util/gallery-rocket-util.js with UglifyJS
 shifter [queu] writing -min file
@@ -65,7 +71,6 @@ shifter [queu] writing -min file
 shifter [queu] writing -min file
 shifter [queu] writing -min file
 shifter [queu] writing -min file
-shifter [queu] writing -min file
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
@@ -76,18 +81,16 @@ shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
-shifter [info] shifting for coverage
-shifter [queu] coverage file read, starting coverage for: gallery-rocket/gallery-rocket.js
 shifter [queu] coverage file read, starting coverage for: gallery-rocket-controller/gallery-rocket-controller.js
-shifter [queu] coverage file read, starting coverage for: gallery-rocket-app/gallery-rocket-app.js
 shifter [queu] coverage file read, starting coverage for: gallery-rocket-view/gallery-rocket-view.js
-shifter [queu] coverage file read, starting coverage for: gallery-rocket-layout/gallery-rocket-layout.js
+shifter [queu] coverage file read, starting coverage for: gallery-rocket/gallery-rocket.js
+shifter [queu] coverage file read, starting coverage for: gallery-rocket-region-manager/gallery-rocket-region-manager.js
 shifter [queu] coverage file read, starting coverage for: gallery-rocket-list-view/gallery-rocket-list-view.js
 shifter [queu] coverage file read, starting coverage for: gallery-rocket-child-view-container/gallery-rocket-child-view-container.js
-shifter [queu] coverage file read, starting coverage for: gallery-rocket-region/gallery-rocket-region.js
-shifter [queu] coverage file read, starting coverage for: gallery-rocket-region-manager/gallery-rocket-region-manager.js
-shifter [queu] coverage file read, starting coverage for: gallery-rocket-event-broker/gallery-rocket-event-broker.js
+shifter [queu] coverage file read, starting coverage for: gallery-rocket-layout/gallery-rocket-layout.js
 shifter [queu] coverage file read, starting coverage for: gallery-rocket-util/gallery-rocket-util.js
+shifter [queu] coverage file read, starting coverage for: gallery-rocket-event-broker/gallery-rocket-event-broker.js
+shifter [queu] coverage file read, starting coverage for: gallery-rocket-region/gallery-rocket-region.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [info] istanbul providing coverage
@@ -108,21 +111,18 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
-shifter [info] istanbul providing coverage
-shifter [queu] instrumenting with istanbul
-shifter [queu] writing coverage file to gallery-rocket/gallery-rocket-coverage.js
 shifter [queu] writing coverage file to gallery-rocket-controller/gallery-rocket-controller-coverage.js
-shifter [queu] writing coverage file to gallery-rocket-app/gallery-rocket-app-coverage.js
 shifter [queu] writing coverage file to gallery-rocket-view/gallery-rocket-view-coverage.js
-shifter [queu] writing coverage file to gallery-rocket-layout/gallery-rocket-layout-coverage.js
+shifter [queu] writing coverage file to gallery-rocket/gallery-rocket-coverage.js
+shifter [queu] writing coverage file to gallery-rocket-region-manager/gallery-rocket-region-manager-coverage.js
 shifter [queu] writing coverage file to gallery-rocket-list-view/gallery-rocket-list-view-coverage.js
 shifter [queu] writing coverage file to gallery-rocket-child-view-container/gallery-rocket-child-view-container-coverage.js
-shifter [queu] writing coverage file to gallery-rocket-region/gallery-rocket-region-coverage.js
-shifter [queu] writing coverage file to gallery-rocket-region-manager/gallery-rocket-region-manager-coverage.js
-shifter [queu] writing coverage file to gallery-rocket-event-broker/gallery-rocket-event-broker-coverage.js
+shifter [queu] writing coverage file to gallery-rocket-layout/gallery-rocket-layout-coverage.js
 shifter [queu] writing coverage file to gallery-rocket-util/gallery-rocket-util-coverage.js
+shifter [queu] writing coverage file to gallery-rocket-event-broker/gallery-rocket-event-broker-coverage.js
+shifter [queu] writing coverage file to gallery-rocket-region/gallery-rocket-region-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.679 seconds, pretty fast huh?
+shifter [info] finished in 0.358 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
@@ -133,8 +133,7 @@ shifter [info] finished in 0.679 seconds, pretty fast huh?
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-rocket]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
-    test is empty
-       No Tests Provided For This Module
-Writing files in JSON format to: /src/gallery-rocket/logs/tests.json
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
+✖ [gallery-rocket]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.369 seconds)
+    all the modules exist
+       Value should not be undefined.
+       Unexpected: undefined (undefined) 

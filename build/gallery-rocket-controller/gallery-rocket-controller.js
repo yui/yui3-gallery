@@ -14,4 +14,4 @@ var Controller = Y.Base.create('rocketController', Y.Base, [Y.REventBroker], {
 Y.RController = Controller;
 
 
-}, 'gallery-2013.08.07-20-34', {"requires": ["gallery-rocket-event-broker"]});
+}, 'gallery-2013.08.15-00-45', {"requires": ["gallery-rocket-event-broker"]});

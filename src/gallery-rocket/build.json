@@ -6,11 +6,6 @@
         "js/rocket.js"
       ]
     },
-    "gallery-rocket-app": {
-      "jsfiles": [
-        "js/rocket-app.js"
-      ]
-    },
     "gallery-rocket-controller": {
       "jsfiles": [
         "js/rocket-controller.js"

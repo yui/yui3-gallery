@@ -2,10 +2,19 @@ YUI.add('gallery-rocket', function (Y, NAME) {
 
 'use strict';
 
+var getClassName = Y.ClassNameManager.getClassName;
 
-}, 'gallery-2013.08.07-20-34', {
-    "use": [
-        "gallery-rocket-app",
+Y.App.CLASS_NAMES = {
+  app  : getClassName('rocket'),
+  views: getClassName('rocket', 'views')
+};
+
+Y.Rocket = Y.App;
+
+
+}, 'gallery-2013.08.15-00-45', {
+    "requires": [
+        "app",
         "gallery-rocket-controller",
         "gallery-rocket-view",
         "gallery-rocket-layout",

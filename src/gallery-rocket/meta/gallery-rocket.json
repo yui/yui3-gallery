@@ -1,7 +1,7 @@
 {
   "gallery-rocket": {
-    "use": [
-      "gallery-rocket-app",
+    "requires": [
+      "app",
       "gallery-rocket-controller",
       "gallery-rocket-view",
       "gallery-rocket-layout",
@@ -11,39 +11,46 @@
       "gallery-rocket-region-manager",
       "gallery-rocket-event-broker",
       "gallery-rocket-util"
-    ],
-
-    "submodules": {
-      "gallery-rocket-app": {
-        "requires": ["app"]
-      },
-      "gallery-rocket-controller": {
-        "requires": ["gallery-rocket-event-broker"]
-      },
-      "gallery-rocket-view": {
-        "requires": ["view", "base", "event", "handlebars", "gallery-rocket-util", "gallery-rocket-event-broker"]
-      },
-      "gallery-rocket-layout": {
-        "requires": ["gallery-rocket-view", "gallery-rocket-region-manager"]
-      },
-      "gallery-rocket-list-view": {
-        "requires": ["gallery-rocket-view", "handlebars", "gallery-rocket-child-view-container"]
-      },
-      "gallery-rocket-child-view-container": {
-        "requires": ["yui-base"]
-      },
-      "gallery-rocket-region": {
-        "requires": ["gallery-rocket-view"]
-      },
-      "gallery-rocket-region-manager": {
-        "requires": ["gallery-rocket-region"]
-      },
-      "gallery-rocket-event-broker": {
-        "requires": ["event", "event-key"]
-      },
-      "gallery-rocket-util": {
-        "requires": ["yui-base"]
-      }
-    }
+    ]
+  },
+  "gallery-rocket-controller": {
+    "requires": ["gallery-rocket-event-broker"]
+  },
+  "gallery-rocket-view": {
+    "requires": [
+      "view",
+      "event",
+      "handlebars",
+      "gallery-rocket-util",
+      "gallery-rocket-event-broker"
+    ]
+  },
+  "gallery-rocket-layout": {
+    "requires": [
+      "gallery-rocket-view",
+      "gallery-rocket-region-manager"
+    ]
+  },
+  "gallery-rocket-list-view": {
+    "requires": [
+      "gallery-rocket-view",
+      "handlebars",
+      "gallery-rocket-child-view-container"
+    ]
+  },
+  "gallery-rocket-child-view-container": {
+    "requires": ["yui-base"]
+  },
+  "gallery-rocket-region": {
+    "requires": ["gallery-rocket-view"]
+  },
+  "gallery-rocket-region-manager": {
+    "requires": ["gallery-rocket-region"]
+  },
+  "gallery-rocket-event-broker": {
+    "requires": ["event", "event-key"]
+  },
+  "gallery-rocket-util": {
+    "requires": ["yui-base"]
   }
 }

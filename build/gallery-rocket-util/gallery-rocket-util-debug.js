@@ -2,7 +2,7 @@ YUI.add('gallery-rocket-util', function (Y, NAME) {
 
 'use strict';
 
-var Util,
+var Util = {},
     STRING_DASHERIZE_REGEXP = (/[ _]/g),
     STRING_DASHERIZE_CACHE = {},
     STRING_DECAMELIZE_REGEXP = (/([a-z])([A-Z])/g),
@@ -77,8 +77,8 @@ Y.mix(Util, {
     return str.replace(STRING_CAMELIZE_REGEXP,function (match, separator, chr) {
       return chr ? chr.toUpperCase() : '';
     }).replace(/^([A-Z])/, function (match, separator, chr) {
-        return match.toLowerCase();
-      });
+      return match.toLowerCase();
+    });
   },
 
   /**
@@ -149,4 +149,4 @@ Y.mix(Util, {
 Y.RUtil = Util;
 
 
-}, 'gallery-2013.08.07-20-34', {"requires": ["yui-base"]});
+}, 'gallery-2013.08.15-00-45', {"requires": ["yui-base"]});

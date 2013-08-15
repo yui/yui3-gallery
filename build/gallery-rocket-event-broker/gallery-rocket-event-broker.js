@@ -86,4 +86,4 @@ EventBroker.prototype = {
 Y.REventBroker = EventBroker;
 
 
-}, 'gallery-2013.08.07-20-34', {"requires": ["event", "event-key"]});
+}, 'gallery-2013.08.15-00-45', {"requires": ["event", "event-key"]});

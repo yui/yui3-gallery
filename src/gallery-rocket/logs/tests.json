@@ -5,25 +5,215 @@
     "errors": 0,
     "ignored": 0,
     "total": 3,
-    "duration": 18,
+    "duration": 1107,
     "type": "report",
-    "Automated Tests": {
-        "name": "Automated Tests",
+    "Rocket": {
+        "name": "Rocket",
         "passed": 0,
         "failed": 1,
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 5,
-        "type": "testcase",
-        "test is empty": {
-            "result": "fail",
-            "message": "No Tests Provided For This Module",
-            "type": "test",
-            "name": "test is empty",
-            "duration": 1
+        "duration": 16,
+        "type": "testsuite",
+        "General": {
+            "name": "General",
+            "passed": 0,
+            "failed": 1,
+            "errors": 0,
+            "ignored": 0,
+            "total": 1,
+            "duration": 13,
+            "type": "testcase",
+            "all the modules exist": {
+                "result": "fail",
+                "message": "Value should not be undefined.\nUnexpected: undefined (undefined) ",
+                "type": "test",
+                "name": "all the modules exist",
+                "duration": 2
+            }
         }
     },
-    "timestamp": "Wed 07 Aug 2013 01:21:36 PM PDT",
+    "View": {
+        "name": "View",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 41,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 10,
+            "type": "testcase"
+        }
+    },
+    "Layout": {
+        "name": "Layout",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 41,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 11,
+            "type": "testcase"
+        }
+    },
+    "ListView": {
+        "name": "ListView",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 41,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 10,
+            "type": "testcase"
+        }
+    },
+    "Region": {
+        "name": "Region",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 41,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 10,
+            "type": "testcase"
+        }
+    },
+    "RegionManager": {
+        "name": "RegionManager",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 41,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 11,
+            "type": "testcase"
+        }
+    },
+    "Util": {
+        "name": "Util",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 21,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 10,
+            "type": "testcase"
+        }
+    },
+    "EventBroker": {
+        "name": "EventBroker",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 41,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 10,
+            "type": "testcase"
+        }
+    },
+    "Controller": {
+        "name": "Controller",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 42,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 10,
+            "type": "testcase"
+        }
+    },
+    "ChildViewContainer": {
+        "name": "ChildViewContainer",
+        "passed": 0,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 0,
+        "duration": 41,
+        "type": "testsuite",
+        "Methods": {
+            "name": "Methods",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "ignored": 0,
+            "total": 0,
+            "duration": 10,
+            "type": "testcase"
+        }
+    },
+    "timestamp": "Wed 14 Aug 2013 05:32:01 PM PDT",
     "consoleInfo": []
 }
