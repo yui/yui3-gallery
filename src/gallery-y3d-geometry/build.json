@@ -1,0 +1,46 @@
+{
+	"name": "y3d-geometry",
+	"builds": {
+		"y3d-geometry-base": {
+			"jsfiles": [
+				"geometry-base.js"
+			]
+		},
+
+		"y3d-geometry-box": {
+			"jsfiles": [
+				"box.js"
+			]
+		},
+
+		"y3d-geometry-cylinder": {
+			"jsfiles": [
+				"cylinder.js"
+			]
+		},
+
+		"y3d-geometry-grid": {
+			"jsfiles": [
+				"grid.js"
+			]
+		},
+
+		"y3d-geometry-plane": {
+			"jsfiles": [
+				"plane.js"
+			]
+		},
+
+		"y3d-geometry-sphere": {
+			"jsfiles": [
+				"sphere.js"
+			]
+		},
+
+		"y3d-geometry-triangle": {
+			"jsfiles": [
+				"triangle.js"
+			]
+		}
+	}
+}
