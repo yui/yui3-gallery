@@ -118,10 +118,10 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
                     response: response,
                     src     : 'parse'
                 });
-                return null;
+                return {};
             }
         }
-        return response;
+        return response || {};
     };
 
 // -- Mixing extra Methods to Y.ModelList -----------------------------------
@@ -445,7 +445,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
 
     Y.Base.mix(Y.ModelList, [ITSAModellistSyncPromise]);
 
-}, 'gallery-2013.07.03-22-52', {
+}, 'gallery-2013.08.15-00-45', {
     "requires": [
         "yui-base",
         "base-base",
