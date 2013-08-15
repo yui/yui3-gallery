@@ -1,0 +1,10 @@
+{
+	"name": "y3d-scene",
+	"builds": {
+		"y3d-scene": {
+			"jsfiles": [
+				"scene.js"
+			]
+		}
+	}
+}
