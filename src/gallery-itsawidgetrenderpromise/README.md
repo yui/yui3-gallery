@@ -15,10 +15,6 @@ Landing Page
 [http://gallerydocs.itsasbreuk.nl/gallery-itsawidgetrenderpromise](http://gallerydocs.itsasbreuk.nl/gallery-itsawidgetrenderpromise/)
 
 
-API
---------------
-[http://galleryapi.itsasbreuk.nl/classes/Y.Widget.html](http://galleryapi.itsasbreuk.nl/classes/Y.Widget.html)
-
 
 License
 -------

@@ -1,39 +1,54 @@
+{{>api-button}}
+
 <div class="intro">
-  <p>This module adds some renderPromises to the Y.Widget class.<br /><br />
-     By using <code>renderPromise()</code>, you don't need to listen for the 'render'-event,
-     neither look for the value of the attribute 'rendered'.<br />
-     By using <code>readyPromise()</code>, you get a promise that waits even longer --> until <code>promiseBeforeReady()</code> is fulfilled as well.<br />
-     By using <code>renderOnAvailable()</code> or <code>renderOnAvailablePromise()</code>, you can render the widget on a Node which has yet to be inserted in the DOM.
+  <p>
+      {{description}}
+  </p>
+  <p>This module adds some renderPromises to the Y.Widget class that are useful when it comes down to timing.<br /><br />
+
+     <code>renderPromise()</code> and  <code>readyPromise()</code> return Promises which you can use to be sure the widget
+     is rendered.
+     <br /><br />
+
+     <code>renderOnAvailable()</code>, <code>renderWhenAvailable()</code>, <code>renderOnAvailablePromise()</code> and
+     <code>renderWhenAvailablePromise()</code> make it posible to automaticly render the widget even if the containerNode
+     is not part of the dom yet.
 </p>
 </div>
 
 {{>getting-started}}
 
-<h2>Description</h2>
+<h2>Desrciption</h2>
 
+<h3 id="render-ready-promises">renderPromise() and readyPromise()</h3>
 <p>
    <code>renderPromise()</code> is a Promise that is fulfilled once the widget is rendered: you don't need to listen for the 'render'-event,
    neither look for the value of the attribute 'rendered'.
    This is handy because without this method you might find yourself inspecting those two situations.<br /><br />
 
    <code>readyPromise()</code> is a Promise that waits even longer. You can create a widget-extention that does some things after it is rendered,
-   for example load serverdata and process it. readyPromise will be resolved once all that has finished. To make that happen, it makes use of
-   <code>promiseBeforeReady</code>.<br /><br />
+   for example load serverdata and process it. readyPromise will be resolved once all that has finished. To make that happen, it makes use of <code>promiseBeforeReady</code>. Typical usages are be when you create a widget where syncUI is asynchronious. Or, a composite widget that rendenderes multiple widgets with asynchronious syncUI().<br /><br />
 
    <code>promiseBeforeReady()</code> is a Promise which will run directly after the widget is rendered. It is up to the developer of the
-   widget-extention how to define <code>promiseBeforeReady</code>, which is a fulfilled promise by default. Once <code>promiseBeforeReady()</code>
-   is fulfilled, <code>readyPromise()</code> is fulfilled as well.<br /><br />
-
-   <code>renderOnAvailablePromise()</code> is very handy if you need to setup the rendercode while not knowing when the sourceNode will be in the DOM.
-   You can even make it re-render everytime the sourcenode is redefined in the dom with the attribute <coe>options.stayalive</code>. Situations to make
-   use of this are when pages are dynamicly reloaded.<br /><br />
-
-    <code>renderOnAvailable()</code> Does the same as <code>renderOnAvailablePromise()</code>, but doesn't return a Promise; it returns the instance.
-    Therefore it can be used just like <code>render()</code>.
+   widget-extention how to define <code>promiseBeforeReady</code>, which is a fulfilled promise by default. Once <code>promiseBeforeReady()</code> is fulfilled, <code>readyPromise()</code> is fulfilled as well.
 
 </p>
 
-<h3 id="renderpromise-example">Usage renderPromise()</h3>
+<h3 id="onavaiable-whenavailable">onAvailable and whenAvailable</h3>
+<p>
+   <code>renderOnAvailablePromise()</code> is very handy if you need to setup the rendercode while not knowing when the containerNode will be in the DOM.<br /><br />
+
+   <code>renderOnAvailable()</code> Does the same as <code>renderOnAvailablePromise()</code>, but doesn't return a Promise; it returns the instance. Therefore it can be called in the same way as <code>render()</code>.<br /><br />
+
+   <code>renderWhenAvailablePromise()</code> works the same as <code>renderOnAvailablePromise()</code>, but will re-render <u>everytime the containerNode</u> is redefined in the dom. Situations to make use of this might be when pages are dynamicly reloaded.<br /><br />
+
+   <code>renderWhenAvailable()</code> Does the same as <code>renderWhenAvailablePromise()</code>, but doesn't return a Promise; it returns the instance. Therefore it can be called in the same way as <code>render()</code>.<br />
+   <b>Note:</b> The widget might not work as espected when it is re-rendered. It only does work right if the widget is designed well, in a way that all nodes and events are declared inside renderUI() and syncUI(): The way widgets were ment to work.
+
+</p>
+
+<h2>Usage</h2>
+<h3 id="renderpromise-example">renderPromise()</h3>
 ```
 YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsawidgetrenderpromise', 'calendar', function(Y) {
 
@@ -49,7 +64,7 @@ YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsawidgetrenderpromise'
 });
 ```
 
-<h3 id="renderOnAvailable-example">Usage renderOnAvailable()</h3>
+<h3 id="renderOnAvailable-example">renderOnAvailable()</h3>
 ```
 YUI({gallery: 'gallery-2013.07.03-22-52'}).use('gallery-itsawidgetrenderpromise', 'calendar', function(Y) {
 

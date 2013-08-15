@@ -80,7 +80,6 @@ YUI.add('module-tests', function(Y) {
         }
     }));
 
-
     suite.add(new Y.Test.Case({
         name: 'test 4',
         'check renderOnAvailablePromise if a widget is rendered when Node is inserted after delay':  function() {
@@ -108,18 +107,18 @@ YUI.add('module-tests', function(Y) {
             );
             // now insert #testnode4 after delay
             Y.later(1000, null, function() {
-                Y.one('body').append('<div id="testnode4"></div>');
+                Y.one('body').prepend('<div id="testnode4"></div>');
             });
         }
     }));
 
     suite.add(new Y.Test.Case({
-        name: 'test 6',
+        name: 'test 5',
         'check renderOnAvailablePromise if Promise get fulfilled after render':  function() {
             var cal = new Y.Calendar();
-            cal.renderOnAvailablePromise('#testnode6', {promisetype: 'afterrender', timeout: 2000}).then(
+            cal.renderOnAvailablePromise('#testnode5', {promisetype: 'afterrender', timeout: 2000}).then(
                 function() {
-                    var nodeavailable = Y.one('#testnode6'),
+                    var nodeavailable = Y.one('#testnode5'),
                         widgetrendered = cal.get('rendered');
                     Y.Assert.isTrue(
                         (nodeavailable && widgetrendered),
@@ -132,13 +131,13 @@ YUI.add('module-tests', function(Y) {
             );
             // now insert #testnode6 after delay
             Y.later(1000, null, function() {
-                Y.one('body').append('<div id="testnode6"></div>');
+                Y.one('body').prepend('<div id="testnode5"></div>');
             });
         }
     }));
 
     suite.add(new Y.Test.Case({
-        name: 'test 7',
+        name: 'test 6',
         'check renderOnAvailablePromise if Promise get fulfilled after ready':  function() {
             var ready = false,
                 cal = new Y.Calendar();
@@ -151,9 +150,9 @@ YUI.add('module-tests', function(Y) {
                     });
                 });
             };
-            cal.renderOnAvailablePromise('#testnode7', {promisetype: 'afterready', timeout: 2000}).then(
+            cal.renderOnAvailablePromise('#testnode6', {promisetype: 'afterready', timeout: 2000}).then(
                 function() {
-                    var nodeavailable = Y.one('#testnode7');
+                    var nodeavailable = Y.one('#testnode6');
                     Y.Assert.isTrue(
                         (nodeavailable && ready),
                         'renderOnAvailablePromise is fulfilled, but '+ (!nodeavailable ? 'srcNode not in the DOM ' : '') + (!ready ? 'readyPromise is not finished yet' : '')
@@ -165,8 +164,54 @@ YUI.add('module-tests', function(Y) {
             );
             // now insert #testnode7 after delay
             Y.later(1000, null, function() {
-                Y.one('body').append('<div id="testnode7"></div>');
+                Y.one('body').prepend('<div id="testnode6"></div>');
             });
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'test 7',
+        'check renderOnAvailablePromise if the promise is rejected when the widget is destroyed before node-insert':  function() {
+            var cal = new Y.Calendar();
+            cal.renderOnAvailablePromise('#testnode7', {timeout: 2000}).then(
+                function() {
+                    Y.Assert.fail('renderOnAvailable succeeded, but the widget was destroyed.');
+                },
+                function() {
+                    Y.Assert.pass();
+                }
+            );
+            // now insert #testnode4 after delay
+            Y.later(1000, null, function() {
+                cal.destroy();
+                Y.one('body').prepend('<div id="testnode7"></div>');
+            });
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'test 8',
+        'check renderWhenAvailable if a widget is rendered multiple times':  function() {
+            var cal = new Y.Calendar(),
+                createnodetimer,
+                count = 0;
+            cal.renderWhenAvailable('#testnode8');
+            cal.after('render', function() {
+                if (cal.get('boundingBox').one('.yui3-calendar-header-label')) {
+                    count++;
+                }
+            });
+            // now insert #testnode9 after delay
+            createnodetimer = Y.later(1000, null, function() {
+                Y.one('body').prepend('<div id="testnode8"></div>');
+                Y.later(500, null, function() {
+                    Y.one('#testnode8').remove(true);
+                });
+            }, null, true);
+            this.wait(function(){
+                createnodetimer.cancel();
+                Y.Assert.areEqual(4, count, 'renderWhenAvailable did not render the widget the expected amout of times.');
+            }, 4750);
         }
     }));
 

@@ -1,0 +1,18 @@
+YUI(yuiconfig).use('node', 'gallery-itsawidgetrenderpromise', 'gallery-itsacheckbox', function(Y) {
+    var sidebarNode = Y.one('.sidebar');
+    new Y.ITSACheckbox().renderWhenAvailable('#checkboxnode');
+
+    Y.one('#insertnode').on('click', function(){
+        var checkboxnode = Y.one("#checkboxnode");
+            if (!checkboxnode) {
+            sidebarNode.append('<div id="checkboxnode" class="yui3-skin-sam"></div>');
+        }
+    });
+
+    Y.one('#removenode').on('click', function(){
+        var checkboxnode = Y.one("#checkboxnode");
+        if (checkboxnode) {
+            checkboxnode.remove(true);
+        }
+    });
+});

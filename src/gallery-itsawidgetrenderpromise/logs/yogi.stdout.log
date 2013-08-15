@@ -19,29 +19,30 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-itsawidgetrenderpromise/gallery-itsawidgetrenderpromise-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.145 seconds, pretty fast huh?
+shifter [info] finished in 0.114 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsawidgetrenderpromise]: Passed: 0 Failed: 6 Total: 6 (ignored 0) (0.142 seconds)
-    check renderPromise if widget is indeed completely rendered
-       Unexpected error: 'undefined' is not a function (evaluating 'cal.renderPromise(5000)')
-    check multiple renderPromises with Y.batch if all widgeta are completely rendered
-       Unexpected error: 'undefined' is not a function (evaluating 'cal1.renderPromise()')
-    check readyPromise if widget is indeed completely ready
-       Unexpected error: 'undefined' is not a function (evaluating 'cal.readyPromise(5000)')
-    check renderOnAvailablePromise if a widget is rendered when Node is inserted after delay
-       Unexpected error: 'undefined' is not a function (evaluating 'cal.renderOnAvailablePromise('#testnode4', {timeout: 2000})')
-    check renderOnAvailablePromise if Promise get fulfilled after render
-       Unexpected error: 'undefined' is not a function (evaluating 'cal.renderOnAvailablePromise('#testnode6', {promisetype: 'afterrender', timeout: 2000})')
-    check renderOnAvailablePromise if Promise get fulfilled after ready
-       Unexpected error: 'undefined' is not a function (evaluating 'cal.renderOnAvailablePromise('#testnode7', {promisetype: 'afterready', timeout: 2000})')
+✖ [http://127.0.0.1:5002/tests/src/gallery-itsawidgetrenderpromise/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       TypeError: 'undefined' is not an object (evaluating 'new Y.Test.Suite')
+       http://127.0.0.1:5002/tests/src/gallery-itsawidgetrenderpromise/tests/unit/js/tests.js:3
+       http://127.0.0.1:5002/build/yui/yui.js:775
+       http://127.0.0.1:5002/build/yui/yui.js:1112
+       http://127.0.0.1:5002/build/yui/yui.js:7708
+       http://127.0.0.1:5002/build/yui/yui.js:7799
+       http://127.0.0.1:5002/build/yui/yui.js:7999
+       http://127.0.0.1:5002/build/yui/yui.js:8066
+       http://127.0.0.1:5002/build/yui/yui.js:4619
+       http://127.0.0.1:5002/build/yui/yui.js:4819
+       http://127.0.0.1:5002/build/yui/yui.js:4927
+       http://127.0.0.1:5002/build/yui/yui.js:4711
 Writing files in JSON format to: /src/gallery-itsawidgetrenderpromise/logs/tests.json
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
