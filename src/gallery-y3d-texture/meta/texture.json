@@ -1,0 +1,7 @@
+{
+	"y3d-texture": {
+		"requires": [
+			"base-build"
+		]
+	}
+}

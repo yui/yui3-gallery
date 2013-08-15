@@ -1,0 +1,11 @@
+{
+	"name": "y3d-texture",
+	"builds": {
+		"y3d-texture": {
+			"jsfiles": [
+				"texture.js",
+				"texture-loader.js"
+			]
+		}
+	}
+}
