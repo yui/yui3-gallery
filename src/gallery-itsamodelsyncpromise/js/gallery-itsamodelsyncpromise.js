@@ -85,10 +85,10 @@
                     response: response,
                     src     : 'parse'
                 });
-                return null;
+                return {};
             }
         }
-        return response;
+        return response || {};
     };
 
     // -- Mixing extra Methods to Y.Model -----------------------------------
