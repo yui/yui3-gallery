@@ -16,11 +16,6 @@ Landing Page
 [http://gallerydocs.itsasbreuk.nl/gallery-itsanodepromise](http://gallerydocs.itsasbreuk.nl/gallery-itsanodepromise/)
 
 
-API
---------------
-[http://galleryapi.itsasbreuk.nl/classes/Y.Node.html](http://galleryapi.itsasbreuk.nl/classes/Y.Node.html)
-
-
 License
 -------
 

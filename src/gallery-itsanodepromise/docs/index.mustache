@@ -1,5 +1,7 @@
+{{>api-button}}
+
 <div class="intro">
-  <p>This module adds static methods Y.Node.availablePromise() and Y.Node.contentreadyPromise() to the Y.Node class.</p>
+  <p>This module adds three static Y.Node methods to the Y.Node class.</p>
 </div>
 
 {{>getting-started}}
@@ -17,7 +19,7 @@
    <code>Y.Node.unavailabePromise(nodeid, timeout)</code>
    <br />
    <br />
-   Using these Promises, you don't need to listen for the Y.on('available') and Y.on('contentready') events, but can use Promises. The Promises will be resolved either if the node already is in the DOM, or when it appears later on. Also there is a promise for when a Node is <code>'unavailable'</code>. It uses the native 'DOMNodeRemoved'-event for browsers that supprt this, and timerbased Y.one() check for browsers that don't support this event (IE<9).
+   Using these Promises, you don't need to listen for the Y.on('available') and Y.on('contentready') events, but can use Promises. The Promises will be resolved either if the node already is in the DOM, or when it appears later on. Also there is a promise for when a Node is <code>'unavailable'</code>. It uses the native 'DOMNodeRemoved'-event for browsers that support this, and timerbased Y.one() check for browsers that don't support this event (IE<9).
    <br />
    <br />
    Using the optional parameter <code>timeout</code>, the promise will be rejected if the node is not in the DOM before the timeout is reached.
@@ -34,7 +36,7 @@ YUI({gallery: 'gallery-2013.07.03-22-52'}).use('node', 'gallery-itsanodepromise'
     // as soon examplenode is available, it will be styled with a red bg-color
     Y.Node.availablePromise('#examplenode').then(
         function(response) {
-            // response is the Y.Node instance
+            // 'response' equals the Y.Node instance
             response.setStyle('backgroundColor', '#F00');
         }
     );

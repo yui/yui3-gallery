@@ -9,6 +9,7 @@ YUI.add('module-tests', function(Y) {
         NODE_SHOULD_NOT_BE_CONTENTREADY = 'Node is found, but should not be contentready yet',
         NODE_NOT_CONTENTREADY = 'Node not contentready',
         NODE_NOT_REMOVED_INTIME = 'Node not removed within timeout settings',
+        NODE_REMOVED_BUT_SHOULDNT = 'Node was marked as removed but still exists',
         bodynode = Y.one('body'),
         YNode = Y.Node;
 
@@ -197,7 +198,7 @@ YUI.add('module-tests', function(Y) {
         name: 'test 11',
         'check if removing a node fulfills the promise':  function() {
             var follownr = 11,
-                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, 2000);
+                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, {timeout: 2000});
             nodeUnavailablePromise.then(
                 function() {
                     Y.Assert.pass();
@@ -216,7 +217,7 @@ YUI.add('module-tests', function(Y) {
         name: 'test 12',
         'check if removedPromise fulfills when node is not in the DOM':  function() {
             var follownr = 12;
-                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, 2000);
+                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, {timeout: 2000});
             nodeUnavailablePromise.then(
                 function() {
                     Y.Assert.pass();
@@ -232,7 +233,7 @@ YUI.add('module-tests', function(Y) {
         name: 'test 13',
         'check if removing a node rejects the promise if it is removed after timeout':  function() {
             var follownr = 13;
-                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, 2000);
+                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, {timeout: 2000});
             nodeUnavailablePromise.then(
                 function() {
                     Y.Assert.fail(NODE_NOT_REMOVED_INTIME);
@@ -246,6 +247,46 @@ YUI.add('module-tests', function(Y) {
             });
         }
     }));
+
+    suite.add(new Y.Test.Case({
+        name: 'test 14',
+        'check if removing a parentnode fulfills the unavailablepromise':  function() {
+            var follownr = 14,
+                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, {timeout: 2000});
+            nodeUnavailablePromise.then(
+                function() {
+                    Y.Assert.pass();
+                },
+                function(reason) {
+                    Y.Assert.fail(NODE_NOT_REMOVED_INTIME);
+                }
+            );
+            Y.later(1000, null, function() {
+                Y.one(nodeId+follownr).get('parentNode').remove(true);
+            });
+        }
+    }));
+
+
+    suite.add(new Y.Test.Case({
+        name: 'test 15',
+        'check if removing a childnode does not fulfills the unavailablepromise':  function() {
+            var follownr = 15,
+                nodeUnavailablePromise = YNode.unavailablePromise(nodeId+follownr, {timeout: 2000});
+            nodeUnavailablePromise.then(
+                function() {
+                    Y.Assert.fail(NODE_REMOVED_BUT_SHOULDNT);
+                },
+                function(reason) {
+                    Y.Assert.pass();
+                }
+            );
+            Y.later(1000, null, function() {
+                Y.one(nodeId+follownr).one('.childnode').remove(true);
+            });
+        }
+    }));
+
 
     Y.Test.Runner.add(suite);
 

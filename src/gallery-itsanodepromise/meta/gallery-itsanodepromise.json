@@ -4,6 +4,7 @@
             "yui-base",
             "yui-later",
             "node-base",
+            "timers",
             "promise"
         ]
     }
