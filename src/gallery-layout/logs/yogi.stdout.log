@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.3
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-layout
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -20,331 +20,333 @@ shifter [info] shifting into gear for gallery-layout
    #5: Trailing whitespace.
        * // line 41, pos 3
    #6: Trailing whitespace.
-       * // line 99, pos 7
+       * // line 47, pos 3
    #7: Trailing whitespace.
-       * // line 117, pos 7
+       * // line 105, pos 7
    #8: Trailing whitespace.
-       * // line 165, pos 7
-   #9: Possible strict violation.
-       this.viewport = // line 441, pos 5
+       * // line 123, pos 7
+   #9: Trailing whitespace.
+       * // line 171, pos 7
    #10: Possible strict violation.
-       var page_blocks = Y.one(this.get('body')).get('children'); // line 450, pos 29
-   #11: Too many var statements.
-       var list = page_blocks.filter('.'+PageLayout.page_header_class); // line 452, pos 9
-   #12: Missing 'new' prefix when invoking a constructor.
-       throw Error('There must be at most one div with class ' + PageLayout.page_header_class); // line 455, pos 15
-   #13: Possible strict violation.
-       this.header_container = (list.isEmpty() ? null : list.item(0)); // line 457, pos 5
-   #14: Expected '!==' and instead saw '!='.
-       if (list.size() != 1) // line 460, pos 21
-   #15: Missing 'new' prefix when invoking a constructor.
-       throw Error('There must be exactly one div with class ' + PageLayout.page_body_class); // line 462, pos 15
-   #16: Possible strict violation.
-       this.body_container = list.item(0); // line 464, pos 5
+       this.viewport = // line 447, pos 5
+   #11: Possible strict violation.
+       var page_blocks = Y.one(this.get('body')).get('children'); // line 456, pos 29
+   #12: Too many var statements.
+       var list = page_blocks.filter('.'+PageLayout.page_header_class); // line 458, pos 9
+   #13: Missing 'new' prefix when invoking a constructor.
+       throw Error('There must be at most one div with class ' + PageLayout.page_header_class); // line 461, pos 15
+   #14: Possible strict violation.
+       this.header_container = (list.isEmpty() ? null : list.item(0)); // line 463, pos 5
+   #15: Expected '!==' and instead saw '!='.
+       if (list.size() != 1) // line 466, pos 21
+   #16: Missing 'new' prefix when invoking a constructor.
+       throw Error('There must be exactly one div with class ' + PageLayout.page_body_class); // line 468, pos 15
    #17: Possible strict violation.
-       this.body_horiz_mbp = this.body_container.horizMarginBorderPadding(); // line 466, pos 5
+       this.body_container = list.item(0); // line 470, pos 5
    #18: Possible strict violation.
-       this.body_horiz_mbp = this.body_container.horizMarginBorderPadding(); // line 466, pos 27
+       this.body_horiz_mbp = this.body_container.horizMarginBorderPadding(); // line 472, pos 5
    #19: Possible strict violation.
-       this.body_vert_mbp  = this.body_container.vertMarginBorderPadding(); // line 467, pos 5
+       this.body_horiz_mbp = this.body_container.horizMarginBorderPadding(); // line 472, pos 27
    #20: Possible strict violation.
-       this.body_vert_mbp  = this.body_container.vertMarginBorderPadding(); // line 467, pos 27
-   #21: Too many var statements.
-       var m = this.body_container.get('className').match(mode_regex); // line 469, pos 9
-   #22: Possible strict violation.
-       var m = this.body_container.get('className').match(mode_regex); // line 469, pos 13
+       this.body_vert_mbp  = this.body_container.vertMarginBorderPadding(); // line 473, pos 5
+   #21: Possible strict violation.
+       this.body_vert_mbp  = this.body_container.vertMarginBorderPadding(); // line 473, pos 27
+   #22: Too many var statements.
+       var m = this.body_container.get('className').match(mode_regex); // line 475, pos 9
    #23: Possible strict violation.
-       this.set('mode', PageLayout[ m[0] ]); // line 472, pos 9
-   #24: Missing 'new' prefix when invoking a constructor.
-       throw Error('There must be at most one div with class ' + PageLayout.page_footer_class); // line 478, pos 15
-   #25: Possible strict violation.
-       this.footer_container = (list.isEmpty() ? null : list.item(0)); // line 480, pos 5
+       var m = this.body_container.get('className').match(mode_regex); // line 475, pos 13
+   #24: Possible strict violation.
+       this.set('mode', PageLayout[ m[0] ]); // line 478, pos 9
+   #25: Missing 'new' prefix when invoking a constructor.
+       throw Error('There must be at most one div with class ' + PageLayout.page_footer_class); // line 484, pos 15
    #26: Possible strict violation.
-       Y.one(Y.config.win).on('resize', resize, this); // line 482, pos 46
+       this.footer_container = (list.isEmpty() ? null : list.item(0)); // line 486, pos 5
    #27: Possible strict violation.
-       updateFitClass.call(this); // line 484, pos 25
+       Y.one(Y.config.win).on('resize', resize, this); // line 488, pos 46
    #28: Possible strict violation.
-       reparentFooter.call(this); // line 485, pos 25
+       updateFitClass.call(this); // line 490, pos 25
    #29: Possible strict violation.
-       this.rescanBody(); // line 486, pos 5
+       reparentFooter.call(this); // line 491, pos 25
    #30: Possible strict violation.
-       this.after('modeChange', function() // line 490, pos 5
+       this.rescanBody(); // line 492, pos 5
    #31: Possible strict violation.
-       this.after('minWidthChange', resize); // line 503, pos 5
+       this.after('modeChange', function() // line 496, pos 5
    #32: Possible strict violation.
-       this.after('minHeightChange', resize); // line 504, pos 5
+       this.after('minWidthChange', resize); // line 509, pos 5
    #33: Possible strict violation.
-       this.after('stickyFooterChange', function() // line 506, pos 5
+       this.after('minHeightChange', resize); // line 510, pos 5
    #34: Possible strict violation.
-       this.after('matchColumnHeightsChange', resize); // line 512, pos 5
-   #35: Too many var statements.
-       var info = Y.reduce(sizes, [0,0], function(value, size) // line 537, pos 9
+       this.after('stickyFooterChange', function() // line 512, pos 5
+   #35: Possible strict violation.
+       this.after('matchColumnHeightsChange', resize); // line 518, pos 5
    #36: Too many var statements.
-       var sum = info[0], blank_count = info[1]; // line 550, pos 9
+       var info = Y.reduce(sizes, [0,0], function(value, size) // line 543, pos 9
    #37: Too many var statements.
-       var blank_size = Math.max((100 - sum) / blank_count, 10); // line 556, pos 13
-   #38: Possible strict violation.
-       this.body_container.replaceClass('FIT_TO_(VIEWPORT|CONTENT)', // line 579, pos 5
+       var sum = info[0], blank_count = info[1]; // line 556, pos 9
+   #38: Too many var statements.
+       var blank_size = Math.max((100 - sum) / blank_count, 10); // line 562, pos 13
    #39: Possible strict violation.
-       this.get('mode') === PageLayout.FIT_TO_VIEWPORT ? 'FIT_TO_VIEWPORT' : 'FIT_TO_CONTENT'); // line 580, pos 9
+       this.body_container.replaceClass('FIT_TO_(VIEWPORT|CONTENT)', // line 585, pos 5
    #40: Possible strict violation.
-       if (!this.footer_container) // line 585, pos 10
+       this.get('mode') === PageLayout.FIT_TO_VIEWPORT ? 'FIT_TO_VIEWPORT' : 'FIT_TO_CONTENT'); // line 586, pos 9
    #41: Possible strict violation.
-       if (this.get('mode') === PageLayout.FIT_TO_VIEWPORT || this.get('stickyFooter')) // line 590, pos 9
+       if (!this.footer_container) // line 591, pos 10
    #42: Possible strict violation.
-       if (this.get('mode') === PageLayout.FIT_TO_VIEWPORT || this.get('stickyFooter')) // line 590, pos 60
+       if (this.get('mode') === PageLayout.FIT_TO_VIEWPORT || this.get('stickyFooter')) // line 596, pos 9
    #43: Possible strict violation.
-       this.body_container.get('parentNode').insertBefore(this.footer_container, this.body_container.next(function(node) // line 592, pos 9
+       if (this.get('mode') === PageLayout.FIT_TO_VIEWPORT || this.get('stickyFooter')) // line 596, pos 60
    #44: Possible strict violation.
-       this.body_container.get('parentNode').insertBefore(this.footer_container, this.body_container.next(function(node) // line 592, pos 60
+       this.body_container.get('parentNode').insertBefore(this.footer_container, this.body_container.next(function(node) // line 598, pos 9
    #45: Possible strict violation.
-       this.body_container.get('parentNode').insertBefore(this.footer_container, this.body_container.next(function(node) // line 592, pos 83
-   #46: Expected '!==' and instead saw '!='.
-       return node.get('tagName') != 'SCRIPT'; // line 594, pos 40
-   #47: Possible strict violation.
-       this.body_container.appendChild(this.footer_container); // line 599, pos 9
+       this.body_container.get('parentNode').insertBefore(this.footer_container, this.body_container.next(function(node) // line 598, pos 60
+   #46: Possible strict violation.
+       this.body_container.get('parentNode').insertBefore(this.footer_container, this.body_container.next(function(node) // line 598, pos 83
+   #47: Expected '!==' and instead saw '!='.
+       return node.get('tagName') != 'SCRIPT'; // line 600, pos 40
    #48: Possible strict violation.
-       this.body_container.appendChild(this.footer_container); // line 599, pos 41
+       this.body_container.appendChild(this.footer_container); // line 605, pos 9
    #49: Possible strict violation.
-       if (!this.layout_plugin || !this.body_container) // line 605, pos 10
+       this.body_container.appendChild(this.footer_container); // line 605, pos 41
    #50: Possible strict violation.
-       if (!this.layout_plugin || !this.body_container) // line 605, pos 33
+       if (!this.layout_plugin || !this.body_container) // line 611, pos 10
    #51: Possible strict violation.
-       var mode          = this.single_module ? Y.PageLayout.FIT_TO_VIEWPORT : this.get('mode'); // line 612, pos 25
+       if (!this.layout_plugin || !this.body_container) // line 611, pos 33
    #52: Possible strict violation.
-       var mode          = this.single_module ? Y.PageLayout.FIT_TO_VIEWPORT : this.get('mode'); // line 612, pos 77
-   #53: Too many var statements.
-       var sticky_footer = this.get('stickyFooter'); // line 613, pos 9
-   #54: Possible strict violation.
-       var sticky_footer = this.get('stickyFooter'); // line 613, pos 25
+       var mode          = this.single_module ? Y.PageLayout.FIT_TO_VIEWPORT : this.get('mode'); // line 618, pos 25
+   #53: Possible strict violation.
+       var mode          = this.single_module ? Y.PageLayout.FIT_TO_VIEWPORT : this.get('mode'); // line 618, pos 77
+   #54: Too many var statements.
+       var sticky_footer = this.get('stickyFooter'); // line 619, pos 9
    #55: Possible strict violation.
-       this.body_container.setStyle('overflowX', // line 615, pos 5
+       var sticky_footer = this.get('stickyFooter'); // line 619, pos 25
    #56: Possible strict violation.
-       this.body_container.setStyle('overflowY', // line 617, pos 5
-   #57: Too many var statements.
-       var viewport = // line 620, pos 9
+       this.body_container.setStyle('overflowX', // line 621, pos 5
+   #57: Possible strict violation.
+       this.body_container.setStyle('overflowY', // line 623, pos 5
    #58: Too many var statements.
-       var resize_event = arguments[0] && arguments[0].type == 'resize';	// IE7 generates no-op's // line 626, pos 9
-   #59: Expected '===' and instead saw '=='.
-       var resize_event = arguments[0] && arguments[0].type == 'resize';	// IE7 generates no-op's // line 626, pos 58
-   #60: Possible strict violation.
-       (viewport.w === this.viewport.w && // line 628, pos 25
-   #61: Mixed spaces and tabs.
-       viewport.h === this.viewport.h)) // line 629, pos 2
-   #62: Possible strict violation.
-       viewport.h === this.viewport.h)) // line 629, pos 25
+       var viewport = // line 626, pos 9
+   #59: Too many var statements.
+       var resize_event = arguments[0] && arguments[0].type == 'resize';	// IE7 generates no-op's // line 632, pos 9
+   #60: Expected '===' and instead saw '=='.
+       var resize_event = arguments[0] && arguments[0].type == 'resize';	// IE7 generates no-op's // line 632, pos 58
+   #61: Possible strict violation.
+       (viewport.w === this.viewport.w && // line 634, pos 25
+   #62: Mixed spaces and tabs.
+       viewport.h === this.viewport.h)) // line 635, pos 2
    #63: Possible strict violation.
-       this.viewport = viewport; // line 634, pos 5
+       viewport.h === this.viewport.h)) // line 635, pos 25
    #64: Possible strict violation.
-       this.fire('beforeReflow');	// after confirming that viewport really has changed // line 636, pos 5
+       this.viewport = viewport; // line 640, pos 5
    #65: Possible strict violation.
-       saveScrollPositions.call(this); // line 638, pos 30
-   #66: Too many var statements.
-       var min_width  = Y.Node.emToPx(this.get('minWidth')); // line 642, pos 9
-   #67: Possible strict violation.
-       var min_width  = Y.Node.emToPx(this.get('minWidth')); // line 642, pos 36
-   #68: Too many var statements.
-       var body_width = Math.max(this.viewport.w, min_width); // line 643, pos 9
-   #69: Possible strict violation.
-       var body_width = Math.max(this.viewport.w, min_width); // line 643, pos 31
+       this.fire('beforeReflow');	// after confirming that viewport really has changed // line 642, pos 5
+   #66: Possible strict violation.
+       saveScrollPositions.call(this); // line 644, pos 30
+   #67: Too many var statements.
+       var min_width  = Y.Node.emToPx(this.get('minWidth')); // line 648, pos 9
+   #68: Possible strict violation.
+       var min_width  = Y.Node.emToPx(this.get('minWidth')); // line 648, pos 36
+   #69: Too many var statements.
+       var body_width = Math.max(this.viewport.w, min_width); // line 649, pos 9
    #70: Possible strict violation.
-       if (this.header_container) // line 644, pos 9
+       var body_width = Math.max(this.viewport.w, min_width); // line 649, pos 31
    #71: Possible strict violation.
-       this.header_container.setStyle('width', body_width+'px'); // line 646, pos 9
+       if (this.header_container) // line 650, pos 9
    #72: Possible strict violation.
-       this.body_container.setStyle('width', (body_width - this.body_horiz_mbp)+'px'); // line 648, pos 5
+       this.header_container.setStyle('width', body_width+'px'); // line 652, pos 9
    #73: Possible strict violation.
-       this.body_container.setStyle('width', (body_width - this.body_horiz_mbp)+'px'); // line 648, pos 57
+       this.body_container.setStyle('width', (body_width - this.body_horiz_mbp)+'px'); // line 654, pos 5
    #74: Possible strict violation.
-       if (this.footer_container) // line 649, pos 9
+       this.body_container.setStyle('width', (body_width - this.body_horiz_mbp)+'px'); // line 654, pos 57
    #75: Possible strict violation.
-       this.footer_container.setStyle('width', sticky_footer ? body_width+'px' : 'auto'); // line 651, pos 9
+       if (this.footer_container) // line 655, pos 9
    #76: Possible strict violation.
-       body_width = this.body_container.get('clientWidth') - this.body_horiz_mbp; // line 653, pos 18
+       this.footer_container.setStyle('width', sticky_footer ? body_width+'px' : 'auto'); // line 657, pos 9
    #77: Possible strict violation.
-       body_width = this.body_container.get('clientWidth') - this.body_horiz_mbp; // line 653, pos 59
+       body_width = this.body_container.get('clientWidth') - this.body_horiz_mbp; // line 659, pos 18
    #78: Possible strict violation.
-       this.viewport.bcw = this.body_container.get('clientWidth'); // line 655, pos 5
+       body_width = this.body_container.get('clientWidth') - this.body_horiz_mbp; // line 659, pos 59
    #79: Possible strict violation.
-       this.viewport.bcw = this.body_container.get('clientWidth'); // line 655, pos 25
-   #80: Too many var statements.
-       var h     = this.viewport.h; // line 657, pos 9
-   #81: Possible strict violation.
-       var h     = this.viewport.h; // line 657, pos 17
-   #82: Too many var statements.
-       var h_min = Y.Node.emToPx(this.get('minHeight')); // line 658, pos 9
-   #83: Possible strict violation.
-       var h_min = Y.Node.emToPx(this.get('minHeight')); // line 658, pos 31
+       this.viewport.bcw = this.body_container.get('clientWidth'); // line 661, pos 5
+   #80: Possible strict violation.
+       this.viewport.bcw = this.body_container.get('clientWidth'); // line 661, pos 25
+   #81: Too many var statements.
+       var h     = this.viewport.h; // line 663, pos 9
+   #82: Possible strict violation.
+       var h     = this.viewport.h; // line 663, pos 17
+   #83: Too many var statements.
+       var h_min = Y.Node.emToPx(this.get('minHeight')); // line 664, pos 9
    #84: Possible strict violation.
-       if (this.header_container) // line 669, pos 9
+       var h_min = Y.Node.emToPx(this.get('minHeight')); // line 664, pos 31
    #85: Possible strict violation.
-       h -= this.header_container.get('offsetHeight'); // line 671, pos 14
+       if (this.header_container) // line 675, pos 9
    #86: Possible strict violation.
-       if (this.footer_container && // line 673, pos 9
+       h -= this.header_container.get('offsetHeight'); // line 677, pos 14
    #87: Possible strict violation.
-       h -= this.footer_container.get('offsetHeight'); // line 676, pos 14
-   #88: Too many var statements.
-       var body_height = h - this.body_vert_mbp; // line 681, pos 13
-   #89: Possible strict violation.
-       var body_height = h - this.body_vert_mbp; // line 681, pos 31
+       if (this.footer_container && // line 679, pos 9
+   #88: Possible strict violation.
+       h -= this.footer_container.get('offsetHeight'); // line 682, pos 14
+   #89: Too many var statements.
+       var body_height = h - this.body_vert_mbp; // line 687, pos 13
    #90: Possible strict violation.
-       h = 10 + this.body_vert_mbp;	// arbitrary, positive number // line 685, pos 18
+       var body_height = h - this.body_vert_mbp; // line 687, pos 31
    #91: Possible strict violation.
-       this.body_container.setStyle('height', (h - this.body_vert_mbp)+'px'); // line 688, pos 5
+       h = 10 + this.body_vert_mbp;	// arbitrary, positive number // line 691, pos 18
    #92: Possible strict violation.
-       this.body_container.setStyle('height', (h - this.body_vert_mbp)+'px'); // line 688, pos 49
+       this.body_container.setStyle('height', (h - this.body_vert_mbp)+'px'); // line 694, pos 5
    #93: Possible strict violation.
-       this.layout_plugin.resize.call(this, mode, body_width, body_height); // line 692, pos 5
+       this.body_container.setStyle('height', (h - this.body_vert_mbp)+'px'); // line 694, pos 49
    #94: Possible strict violation.
-       this.layout_plugin.resize.call(this, mode, body_width, body_height); // line 692, pos 36
-   #95: 'body_height' used out of scope.
-       this.layout_plugin.resize.call(this, mode, body_width, body_height); // line 692, pos 60
-   #96: Possible strict violation.
-       restoreScrollPositions.call(this); // line 694, pos 33
+       this.layout_plugin.resize.call(this, mode, body_width, body_height); // line 698, pos 5
+   #95: Possible strict violation.
+       this.layout_plugin.resize.call(this, mode, body_width, body_height); // line 698, pos 36
+   #96: 'body_height' used out of scope.
+       this.layout_plugin.resize.call(this, mode, body_width, body_height); // line 698, pos 60
    #97: Possible strict violation.
-       this.body_container.setStyle('visibility', 'visible'); // line 698, pos 5
+       restoreScrollPositions.call(this); // line 700, pos 33
    #98: Possible strict violation.
-       if (this.footer_container) // line 699, pos 9
+       this.body_container.setStyle('visibility', 'visible'); // line 704, pos 5
    #99: Possible strict violation.
-       this.footer_container.setStyle('visibility', 'visible'); // line 701, pos 9
+       if (this.footer_container) // line 705, pos 9
    #100: Possible strict violation.
-       Y.later(100, this, checkViewportSize); // line 704, pos 18
+       this.footer_container.setStyle('visibility', 'visible'); // line 707, pos 9
    #101: Possible strict violation.
-       if (Y.DOM.winWidth()                       != this.viewport.w || // line 714, pos 51
-   #102: Expected '!==' and instead saw '!='.
-       if (Y.DOM.winWidth()                       != this.viewport.w || // line 714, pos 48
-   #103: Possible strict violation.
-       Y.DOM.winHeight()                      != this.viewport.h || // line 715, pos 51
-   #104: Expected '!==' and instead saw '!='.
-       Y.DOM.winHeight()                      != this.viewport.h || // line 715, pos 48
-   #105: Possible strict violation.
-       this.body_container.get('clientWidth') != this.viewport.bcw) // line 716, pos 9
+       Y.later(100, this, checkViewportSize); // line 710, pos 18
+   #102: Possible strict violation.
+       if (Y.DOM.winWidth()                       != this.viewport.w || // line 720, pos 51
+   #103: Expected '!==' and instead saw '!='.
+       if (Y.DOM.winWidth()                       != this.viewport.w || // line 720, pos 48
+   #104: Possible strict violation.
+       Y.DOM.winHeight()                      != this.viewport.h || // line 721, pos 51
+   #105: Expected '!==' and instead saw '!='.
+       Y.DOM.winHeight()                      != this.viewport.h || // line 721, pos 48
    #106: Possible strict violation.
-       this.body_container.get('clientWidth') != this.viewport.bcw) // line 716, pos 51
-   #107: Expected '!==' and instead saw '!='.
-       this.body_container.get('clientWidth') != this.viewport.bcw) // line 716, pos 48
-   #108: Possible strict violation.
-       resize.call(this); // line 718, pos 21
+       this.body_container.get('clientWidth') != this.viewport.bcw) // line 722, pos 9
+   #107: Possible strict violation.
+       this.body_container.get('clientWidth') != this.viewport.bcw) // line 722, pos 51
+   #108: Expected '!==' and instead saw '!='.
+       this.body_container.get('clientWidth') != this.viewport.bcw) // line 722, pos 48
    #109: Possible strict violation.
-       this.fire('afterReflow'); // line 722, pos 9
+       resize.call(this); // line 724, pos 21
    #110: Possible strict violation.
-       var outer_count = this.body_info.outers.size(); // line 728, pos 23
-   #111: Too many var statements.
-       for (var i=0; i<outer_count; i++) // line 729, pos 14
+       this.fire('afterReflow'); // line 728, pos 9
+   #111: Possible strict violation.
+       var outer_count = this.body_info.outers.size(); // line 734, pos 23
    #112: Too many var statements.
-       var modules     = this.body_info.modules[i]; // line 731, pos 13
-   #113: Possible strict violation.
-       var modules     = this.body_info.modules[i]; // line 731, pos 27
-   #114: Too many var statements.
-       var inner_count = modules.size(); // line 732, pos 13
+       for (var i=0; i<outer_count; i++) // line 735, pos 14
+   #113: Too many var statements.
+       var modules     = this.body_info.modules[i]; // line 737, pos 13
+   #114: Possible strict violation.
+       var modules     = this.body_info.modules[i]; // line 737, pos 27
    #115: Too many var statements.
-       for (var j=0; j<inner_count; j++) // line 733, pos 18
+       var inner_count = modules.size(); // line 738, pos 13
    #116: Too many var statements.
-       var module   = modules.item(j), // line 735, pos 17
-   #117: Possible strict violation.
-       children = this._analyzeModule(module); // line 736, pos 28
+       for (var j=0; j<inner_count; j++) // line 739, pos 18
+   #117: Too many var statements.
+       var module   = modules.item(j), // line 741, pos 17
    #118: Possible strict violation.
-       var outer_count = this.body_info.outers.size(); // line 750, pos 23
-   #119: Too many var statements.
-       for (var i=0; i<outer_count; i++) // line 751, pos 14
+       children = this._analyzeModule(module); // line 742, pos 28
+   #119: Possible strict violation.
+       var outer_count = this.body_info.outers.size(); // line 756, pos 23
    #120: Too many var statements.
-       var modules     = this.body_info.modules[i]; // line 753, pos 13
-   #121: Possible strict violation.
-       var modules     = this.body_info.modules[i]; // line 753, pos 27
-   #122: Too many var statements.
-       var inner_count = modules.size(); // line 754, pos 13
+       for (var i=0; i<outer_count; i++) // line 757, pos 14
+   #121: Too many var statements.
+       var modules     = this.body_info.modules[i]; // line 759, pos 13
+   #122: Possible strict violation.
+       var modules     = this.body_info.modules[i]; // line 759, pos 27
    #123: Too many var statements.
-       for (var j=0; j<inner_count; j++) // line 755, pos 18
+       var inner_count = modules.size(); // line 760, pos 13
    #124: Too many var statements.
-       var module = modules.item(j); // line 757, pos 17
+       for (var j=0; j<inner_count; j++) // line 761, pos 18
    #125: Too many var statements.
-       var bd = module._page_layout.children.bd; // line 760, pos 21
-   #126: Unnecessary semicolon.
-       }; // line 763, pos 14
-   #127: Possible strict violation.
-       var p = node.getAncestorByClassName(this.layout_plugin.collapse_classes[parent_class_name]); // line 780, pos 45
-   #128: Too many var statements.
-       var children = this._analyzeModule(p); // line 783, pos 17
-   #129: Possible strict violation.
-       var children = this._analyzeModule(p); // line 783, pos 28
+       var module = modules.item(j); // line 763, pos 17
+   #126: Too many var statements.
+       var bd = module._page_layout.children.bd; // line 766, pos 21
+   #127: Unnecessary semicolon.
+       }; // line 769, pos 14
+   #128: Possible strict violation.
+       var p = node.getAncestorByClassName(this.layout_plugin.collapse_classes[parent_class_name]); // line 786, pos 45
+   #129: Too many var statements.
+       var children = this._analyzeModule(p); // line 789, pos 17
    #130: Possible strict violation.
-       this.fire('beforeExpandModule', { bd: children.bd }); // line 784, pos 13
+       var children = this._analyzeModule(p); // line 789, pos 28
    #131: Possible strict violation.
-       resize.call(this); // line 787, pos 25
+       this.fire('beforeExpandModule', { bd: children.bd }); // line 790, pos 13
    #132: Possible strict violation.
-       this.fire('afterExpandModule', { bd: children.bd }); // line 789, pos 13
+       resize.call(this); // line 793, pos 25
    #133: Possible strict violation.
-       expand.call(this, 'vert_parent_class', PageLayout.collapsed_vert_class); // line 795, pos 21
+       this.fire('afterExpandModule', { bd: children.bd }); // line 795, pos 13
    #134: Possible strict violation.
-       expand.call(this, 'horiz_parent_class', PageLayout.collapsed_horiz_class); // line 799, pos 21
+       expand.call(this, 'vert_parent_class', PageLayout.collapsed_vert_class); // line 801, pos 21
    #135: Possible strict violation.
-       var p = node.getAncestorByClassName(this.layout_plugin.collapse_classes[parent_class_name]); // line 815, pos 45
-   #136: Too many var statements.
-       var children = this._analyzeModule(p); // line 818, pos 17
-   #137: Possible strict violation.
-       var children = this._analyzeModule(p); // line 818, pos 28
+       expand.call(this, 'horiz_parent_class', PageLayout.collapsed_horiz_class); // line 805, pos 21
+   #136: Possible strict violation.
+       var p = node.getAncestorByClassName(this.layout_plugin.collapse_classes[parent_class_name]); // line 821, pos 45
+   #137: Too many var statements.
+       var children = this._analyzeModule(p); // line 824, pos 17
    #138: Possible strict violation.
-       this.fire('beforeCollapseModule', { bd: children.bd }); // line 819, pos 13
+       var children = this._analyzeModule(p); // line 824, pos 28
    #139: Possible strict violation.
-       resize.call(this); // line 822, pos 25
+       this.fire('beforeCollapseModule', { bd: children.bd }); // line 825, pos 13
    #140: Possible strict violation.
-       this.fire('afterCollapseModule', { bd: children.bd }); // line 824, pos 13
+       resize.call(this); // line 828, pos 25
    #141: Possible strict violation.
-       collapse.call(this, 'vert_parent_class', PageLayout.collapsed_vert_class); // line 830, pos 23
+       this.fire('afterCollapseModule', { bd: children.bd }); // line 830, pos 13
    #142: Possible strict violation.
-       collapse.call(this, 'horiz_parent_class', PageLayout.collapsed_horiz_class); // line 834, pos 23
-   #143: Trailing whitespace.
-       * // line 847, pos 7
-   #144: Too many var statements.
-       var plugin_data = plugin_info.row; // line 863, pos 13
-   #145: Line too long.
-       throw Error('There must be at least one ' + PageLayout.module_rows_class + ' or ' + PageLayout.module_cols_class + ' inside ' + PageLayout.page_body_class + '.'); // line 871, pos 174
-   #146: Missing 'new' prefix when invoking a constructor.
-       throw Error('There must be at least one ' + PageLayout.module_rows_class + ' or ' + PageLayout.module_cols_class + ' inside ' + PageLayout.page_body_class + '.'); // line 871, pos 19
-   #147: Too many var statements.
-       var collapse_nub_pattern = // line 875, pos 13
+       collapse.call(this, 'vert_parent_class', PageLayout.collapsed_vert_class); // line 836, pos 23
+   #143: Possible strict violation.
+       collapse.call(this, 'horiz_parent_class', PageLayout.collapsed_horiz_class); // line 840, pos 23
+   #144: Trailing whitespace.
+       * // line 853, pos 7
+   #145: Too many var statements.
+       var plugin_data = plugin_info.row; // line 869, pos 13
+   #146: Line too long.
+       throw Error('There must be at least one ' + PageLayout.module_rows_class + ' or ' + PageLayout.module_cols_class + ' inside ' + PageLayout.page_body_class + '.'); // line 877, pos 174
+   #147: Missing 'new' prefix when invoking a constructor.
+       throw Error('There must be at least one ' + PageLayout.module_rows_class + ' or ' + PageLayout.module_cols_class + ' inside ' + PageLayout.page_body_class + '.'); // line 877, pos 19
    #148: Too many var statements.
-       var expand_nub_pattern = // line 882, pos 13
+       var collapse_nub_pattern = // line 881, pos 13
    #149: Too many var statements.
-       var row_count = this.body_info.outers.size(); // line 889, pos 13
+       var expand_nub_pattern = // line 888, pos 13
    #150: Too many var statements.
-       var list = row.all('div.' + PageLayout.module_class); // line 895, pos 17
-   #151: Missing 'new' prefix when invoking a constructor.
-       throw Error('There must be at least one ' + PageLayout.module_class + ' inside ' + PageLayout.module_rows_class + '.'); // line 900, pos 23
-   #152: Expected '===' and instead saw '=='.
-       if (this.body_info.outers.size() == 1 && this.body_info.modules[0].size() == 1 && // line 977, pos 42
+       var row_count = this.body_info.outers.size(); // line 895, pos 13
+   #151: Too many var statements.
+       var list = row.all('div.' + PageLayout.module_class); // line 901, pos 17
+   #152: Missing 'new' prefix when invoking a constructor.
+       throw Error('There must be at least one ' + PageLayout.module_class + ' inside ' + PageLayout.module_rows_class + '.'); // line 906, pos 23
    #153: Expected '===' and instead saw '=='.
-       if (this.body_info.outers.size() == 1 && this.body_info.modules[0].size() == 1 && // line 977, pos 83
-   #154: Too many var statements.
-       var self = this; // line 984, pos 13
-   #155: Trailing whitespace.
-       * // line 1073, pos 7
-   #156: Too many var statements.
-       var expand_horiz_nub_pattern = // line 1084, pos 17
-   #157: Trailing whitespace.
-       * // line 1101, pos 7
-   #158: Too many var statements.
-       var collapse_horiz_nub_pattern = // line 1112, pos 17
-   #159: Trailing whitespace.
-       * // line 1129, pos 7
+       if (this.body_info.outers.size() == 1 && this.body_info.modules[0].size() == 1 && // line 983, pos 42
+   #154: Expected '===' and instead saw '=='.
+       if (this.body_info.outers.size() == 1 && this.body_info.modules[0].size() == 1 && // line 983, pos 83
+   #155: Too many var statements.
+       var self = this; // line 990, pos 13
+   #156: Trailing whitespace.
+       * // line 1084, pos 7
+   #157: Too many var statements.
+       var expand_horiz_nub_pattern = // line 1095, pos 17
+   #158: Trailing whitespace.
+       * // line 1112, pos 7
+   #159: Too many var statements.
+       var collapse_horiz_nub_pattern = // line 1123, pos 17
    #160: Trailing whitespace.
-       * // line 1150, pos 7
+       * // line 1140, pos 7
    #161: Trailing whitespace.
-       * // line 1198, pos 7
-   #162: Too many var statements.
-       var bd = root.one('.'+PageLayout.module_body_class); // line 1217, pos 13
+       * // line 1161, pos 7
+   #162: Trailing whitespace.
+       * // line 1209, pos 7
    #163: Too many var statements.
-       var list = bd.siblings().filter('.'+PageLayout.module_body_class); // line 1223, pos 13
-   #164: Trailing whitespace.
-       { // line 1230, pos 10
+       var bd = root.one('.'+PageLayout.module_body_class); // line 1228, pos 13
+   #164: Too many var statements.
+       var list = bd.siblings().filter('.'+PageLayout.module_body_class); // line 1234, pos 13
    #165: Trailing whitespace.
-       * // line 1245, pos 7
-   #166: 'i' is defined but never used.
-       sum = Y.reduce(sizes, 0, function(sum, size, i) // line 563, pos 55
-   #167: 'body_height' is defined but never used.
-       var body_height = h - this.body_vert_mbp; // line 681, pos 24
-   #168: 'row_id' is defined but never used.
-       var row_id = row.generateID(); // line 892, pos 23
+       { // line 1241, pos 10
+   #166: Trailing whitespace.
+       * // line 1256, pos 7
+   #167: 'i' is defined but never used.
+       sum = Y.reduce(sizes, 0, function(sum, size, i) // line 569, pos 55
+   #168: 'body_height' is defined but never used.
+       var body_height = h - this.body_vert_mbp; // line 687, pos 24
+   #169: 'row_id' is defined but never used.
+       var row_id = row.generateID(); // line 898, pos 23
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-layout/gallery-layout.js with UglifyJS
@@ -369,18 +371,18 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.57 seconds, pretty fast huh?
+shifter [info] finished in 0.415 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
 Starting Grover on 1 files with PhantomJS@1.7.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-layout]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds) 14%
+✔ [gallery-layout]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds) 14%
 Writing files in JSON format to: /src/gallery-layout/logs/tests.json
 ┌─────────────────────────────────────────────┬──────────┬───────┬─────────────┬──────┐
 │[34m  path                                       [39m│[34m   lines  [39m│[34m    %  [39m│[34m  functions  [39m│[34m   %  [39m│
@@ -390,7 +392,7 @@ Writing files in JSON format to: /src/gallery-layout/logs/tests.json
 │  total                                      │  41/275  │  14%  │       1/44  │  2%  │
 └─────────────────────────────────────────────┴──────────┴───────┴─────────────┴──────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds)
-  [Grover Execution Timer] 2.22 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+  [Grover Execution Timer] 0.973 seconds
 Failed to find source file: /build/gallery-layout/gallery-layout.js
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

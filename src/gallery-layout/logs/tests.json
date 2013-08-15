@@ -5,9 +5,9 @@
     "errors": 0,
     "ignored": 0,
     "total": 0,
-    "duration": 3,
+    "duration": 6,
     "type": "report",
-    "timestamp": "Wed 12 Jun 2013 06:11:27 PM PDT",
+    "timestamp": "Wed 14 Aug 2013 05:31:59 PM PDT",
     "coverage": {
         "/build/gallery-layout/gallery-layout.js": {
             "lines": {

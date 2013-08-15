@@ -44,6 +44,12 @@ YUI.add('gallery-layout', function (Y, NAME) {
  * layout because browsers lie about the total height of the container in
  * this case.  Use padding instead of margin on elements inside headers and
  * footers.
+ * 
+ * If you wish to display a loading message that automatically disappears
+ * after the first time the layout is calculated, add the class
+ * `layout-loading` to the div containing the message.  (To be visible,
+ * this div must not be inside the div with class `layout-bd`, since that
+ * has `visibility:hidden`.)
  *
  * @class PageLayout
  * @extends Base
@@ -984,6 +990,11 @@ Y.extend(PageLayout, Y.Base,
 		var self = this;
 		Y.use(plugin_data.module, function(Y)
 		{
+			Y.all('div.layout-loading').each(function(n)
+			{
+				n.setStyle('display', 'none');
+			});
+
 			self.layout_plugin = Y[ plugin_data.plugin ];
 			updateFitClass.call(self);	// plugin may modify it
 			resize.call(self);
@@ -1259,7 +1270,7 @@ Y.extend(PageLayout, Y.Base,
 Y.PageLayout = PageLayout;
 
 
-}, 'gallery-2013.06.13-01-19', {
+}, 'gallery-2013.08.15-00-45', {
     "skinnable": "true",
     "requires": [
         "base",
