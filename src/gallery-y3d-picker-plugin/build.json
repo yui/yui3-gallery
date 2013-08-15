@@ -1,0 +1,10 @@
+{
+	"name": "y3d-picker-plugin",
+	"builds": {
+		"y3d-picker-plugin": {
+			"jsfiles": [
+				"picker-plugin.js"
+			]
+		}
+	}
+}

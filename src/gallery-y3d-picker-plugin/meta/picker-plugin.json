@@ -1,0 +1,7 @@
+{
+	"y3d-picker-plugin": {
+		"requires": [
+			"plugin"
+		]
+	}
+}
