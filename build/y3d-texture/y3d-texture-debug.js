@@ -84,4 +84,4 @@ Y.TextureLoader = Y.Base.create('texture-loader', Y.Base, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["base-build"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["base-build"]});
