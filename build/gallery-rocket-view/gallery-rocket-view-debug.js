@@ -23,6 +23,7 @@ View = Y.Base.create('rocketView', Y.View, [Y.REventBroker], {
   // destroyContainer=false will keep the container node
   destroy: function(destroyContainer) {
     if (this.get(DESTROYED)) { return; }
+    if (this._publishRender) { this._publishRender.detach(); }
     if (typeof destroyContainer === 'undefined') { destroyContainer = true; }
     if (destroyContainer) {
       Y.View.prototype.destroy.call(this, {remove: true});
@@ -60,6 +61,27 @@ View = Y.Base.create('rocketView', Y.View, [Y.REventBroker], {
     return container.all.apply(container, arguments);
   },
 
+  /**
+  Override `Y.View.create` function to guarantee the container is always in DOM.
+  If it's not, insert the container to body.
+  and returns a container node for this view.
+
+  By default, the container is created from the HTML template specified in the
+  `containerTemplate` property
+
+  @method create
+  @param {HTMLElement|Node|String} [container] Selector string, `Y.Node`
+      instance, or DOM element to use at the container node.
+  @return {Node} Node instance of the created container node.
+  **/
+  create: function (container) {
+    var containerNode = Y.View.prototype.create.call(this, container);
+    if  (!containerNode.inDoc()) {
+      Y.Node.one('body').insert(containerNode, 0);
+    }
+    return containerNode;
+  },
+
   generateClientId: function () {
     GlobalEnv.lastId || (GlobalEnv.lastId = 0);
     return this.constructor.NAME + '_' + (GlobalEnv.lastId += 1);
@@ -72,7 +94,7 @@ View = Y.Base.create('rocketView', Y.View, [Y.REventBroker], {
   // template can be a handlebar string, or a selector string.
   // template default to the [dasherized-view-name]-template
   getTemplateFunction: function() {
-    var template = this.get('template') || '#' + Y.ZUI.Util.dasherize(this.name) + '-template';
+    var template = this.get('template') || '#' + Y.RUtil.dasherize(this.name) + '-template';
     var templateHtml = Y.one(template) ? Y.one(template).getHTML() : template;
     return Y.Handlebars.compile(templateHtml);
   },
@@ -160,4 +182,4 @@ View = Y.Base.create('rocketView', Y.View, [Y.REventBroker], {
 Y.RView = View;
 
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["view", "event", "handlebars", "gallery-rocket-util", "gallery-rocket-event-broker"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["view", "event", "handlebars", "gallery-rocket-util", "gallery-rocket-event-broker"]});

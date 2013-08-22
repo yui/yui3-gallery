@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 3,
-    "duration": 1107,
+    "duration": 1146,
     "type": "report",
     "Rocket": {
         "name": "Rocket",
@@ -23,14 +23,14 @@
             "errors": 0,
             "ignored": 0,
             "total": 1,
-            "duration": 13,
+            "duration": 14,
             "type": "testcase",
             "all the modules exist": {
                 "result": "fail",
                 "message": "Value should not be undefined.\nUnexpected: undefined (undefined) ",
                 "type": "test",
                 "name": "all the modules exist",
-                "duration": 2
+                "duration": 1
             }
         }
     },
@@ -41,7 +41,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 41,
+        "duration": 43,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -61,7 +61,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 41,
+        "duration": 43,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -70,7 +70,7 @@
             "errors": 0,
             "ignored": 0,
             "total": 0,
-            "duration": 11,
+            "duration": 10,
             "type": "testcase"
         }
     },
@@ -81,7 +81,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 41,
+        "duration": 42,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -101,7 +101,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 41,
+        "duration": 42,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -110,7 +110,7 @@
             "errors": 0,
             "ignored": 0,
             "total": 0,
-            "duration": 10,
+            "duration": 11,
             "type": "testcase"
         }
     },
@@ -121,7 +121,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 41,
+        "duration": 42,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -130,7 +130,7 @@
             "errors": 0,
             "ignored": 0,
             "total": 0,
-            "duration": 11,
+            "duration": 10,
             "type": "testcase"
         }
     },
@@ -161,7 +161,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 41,
+        "duration": 42,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -170,7 +170,7 @@
             "errors": 0,
             "ignored": 0,
             "total": 0,
-            "duration": 10,
+            "duration": 11,
             "type": "testcase"
         }
     },
@@ -201,7 +201,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 41,
+        "duration": 43,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -214,6 +214,6 @@
             "type": "testcase"
         }
     },
-    "timestamp": "Wed 14 Aug 2013 05:32:01 PM PDT",
+    "timestamp": "Thu 22 Aug 2013 01:49:55 PM PDT",
     "consoleInfo": []
 }
