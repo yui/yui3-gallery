@@ -102,7 +102,6 @@ Y.extend(Picker, Y.Plugin.Base, {
 			context.useProgram(program);
 
 			host._setVertexAttribute(geometry.pickerColorBuffer, program.vertexColorAttribute, 4);
-			host._setVertexAttribute(geometry.normalsBuffer, program.vertexNormalAttribute, 3);
 			host._setVertexAttribute(geometry.verticesBuffer, program.vertexPositionAttribute, 3);
 
 			host._setUniforms(program, geometry, projectionMatrix);
@@ -124,4 +123,4 @@ Y.extend(Picker, Y.Plugin.Base, {
 
 Y.namespace("Plugin").Picker = Picker;
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["plugin"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["plugin"]});

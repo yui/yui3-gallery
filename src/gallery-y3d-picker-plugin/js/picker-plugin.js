@@ -100,7 +100,6 @@ Y.extend(Picker, Y.Plugin.Base, {
 			context.useProgram(program);
 
 			host._setVertexAttribute(geometry.pickerColorBuffer, program.vertexColorAttribute, 4);
-			host._setVertexAttribute(geometry.normalsBuffer, program.vertexNormalAttribute, 3);
 			host._setVertexAttribute(geometry.verticesBuffer, program.vertexPositionAttribute, 3);
 
 			host._setUniforms(program, geometry, projectionMatrix);
