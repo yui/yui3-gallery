@@ -1,0 +1,49 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.3
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-rangyinputs
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-rangyinputs
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-rangyinputs/gallery-rangyinputs.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-rangyinputs/gallery-rangyinputs.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-rangyinputs/gallery-rangyinputs-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.35 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.7.0
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [http://127.0.0.1:5000/tests/src/gallery-rangyinputs/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       TypeError: 'null' is not an object (evaluating 'input.plug')
+       http://127.0.0.1:5000/tests/src/gallery-rangyinputs/tests/unit/js/tests.js:7
+       http://127.0.0.1:5000/build/yui/yui.js:775
+       http://127.0.0.1:5000/build/yui/yui.js:1112
+       http://127.0.0.1:5000/build/yui/yui.js:7708
+       http://127.0.0.1:5000/build/yui/yui.js:7754
+       http://127.0.0.1:5000/build/yui/yui.js:7999
+       http://127.0.0.1:5000/build/yui/yui.js:8009
+       http://127.0.0.1:5000/build/yui/yui.js:7993
+       http://127.0.0.1:5000/build/yui/yui.js:8061
+       http://127.0.0.1:5000/build/yui/yui.js:4622
+       http://127.0.0.1:5000/build/yui/yui.js:4819
+       http://127.0.0.1:5000/build/yui/yui.js:4927
+       http://127.0.0.1:5000/build/yui/yui.js:4719
+Writing files in JSON format to: /src/gallery-rangyinputs/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

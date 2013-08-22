@@ -1,0 +1,34 @@
+<div class="intro">
+    <p>
+    Rangyinputs is small, cross-browser script for manipulating selections
+    within text inputs and textareas.
+
+    Rangyinputs was written by Tim Down for jQuery, this is a YUI port to
+    Y.Plugin.
+
+    See also: http://code.google.com/p/rangyinputs
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+<p>*Module Description Goes Here*</p>
+
+Given a text input or textarea such as:
+
+```
+<input type=text id=test value=foobar />
+```
+
+```
+var input = Y.one('#test');
+
+input.plug(Y.Plugin.RangyInputs);
+
+// select 'bar'
+input.rangy.setSelection(3,6);
+```
+
+See source for further documentation.

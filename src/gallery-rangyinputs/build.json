@@ -1,0 +1,10 @@
+{
+    "name": "gallery-rangyinputs",
+    "builds": {
+        "gallery-rangyinputs": {
+            "jsfiles": [
+                "js/gallery-rangyinputs.js"
+            ]
+        }
+    }
+}

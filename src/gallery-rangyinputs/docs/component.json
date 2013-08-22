@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-rangyinputs",
+    "displayName": "Gallery: gallery-rangyinputs",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "meromictic" ],
+    "use"        : [ "gallery-rangyinputs" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

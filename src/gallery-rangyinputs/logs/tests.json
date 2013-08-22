@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5000/tests/src/gallery-rangyinputs/tests/unit/index.html?filter=coverage",
+    "error": "TypeError: 'null' is not an object (evaluating 'input.plug')\nhttp://127.0.0.1:5000/tests/src/gallery-rangyinputs/tests/unit/js/tests.js:7\nhttp://127.0.0.1:5000/build/yui/yui.js:775\nhttp://127.0.0.1:5000/build/yui/yui.js:1112\nhttp://127.0.0.1:5000/build/yui/yui.js:7708\nhttp://127.0.0.1:5000/build/yui/yui.js:7754\nhttp://127.0.0.1:5000/build/yui/yui.js:7999\nhttp://127.0.0.1:5000/build/yui/yui.js:8009\nhttp://127.0.0.1:5000/build/yui/yui.js:7993\nhttp://127.0.0.1:5000/build/yui/yui.js:8061\nhttp://127.0.0.1:5000/build/yui/yui.js:4622\nhttp://127.0.0.1:5000/build/yui/yui.js:4819\nhttp://127.0.0.1:5000/build/yui/yui.js:4927\nhttp://127.0.0.1:5000/build/yui/yui.js:4719"
+}

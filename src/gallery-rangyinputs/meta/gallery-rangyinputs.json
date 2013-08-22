@@ -1,0 +1,7 @@
+{
+    "gallery-rangyinputs": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}
