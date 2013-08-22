@@ -15,4 +15,4 @@ var Color = {
 
 Y.Color = Y.mix(Color, Y.Color);
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["color"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["color"]});
