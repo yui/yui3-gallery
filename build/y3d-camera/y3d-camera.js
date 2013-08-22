@@ -78,4 +78,4 @@ Y.Camera = Y.Base.create('camera', Y.y3d.Model, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["event-key", "event-mousewheel", "y3d-model"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["event-key", "event-mousewheel", "y3d-model"]});
