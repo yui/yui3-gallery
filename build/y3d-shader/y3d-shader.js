@@ -7,7 +7,6 @@ var colorProgram = null,
 		'precision mediump float;',
 
 		'varying vec4 fragmentColor;',
-		'varying vec3 lightWeight;',
 
 		'#ifdef USE_TEXTURE',
 			'varying vec2 vertexTextureCoordinates;',
@@ -20,17 +19,12 @@ var colorProgram = null,
 			'#ifdef USE_TEXTURE',
 				'gl_FragColor = gl_FragColor * texture2D(sampler, vertexTextureCoordinates);',
 			'#endif',
-
-			'#ifdef USE_LIGHT',
-				'gl_FragColor = vec4(gl_FragColor.rgb * lightWeight, gl_FragColor.a);',
-			'#endif',
 		'}'
 	].join('\n'),
 
 	vertexShaderSource = [
 		'attribute vec3 vertexPosition;',
 		'attribute vec4 vertexColor;',
-		'attribute vec3 vertexNormal;',
 
 		'#ifdef USE_TEXTURE',
 			'attribute vec2 textureCoordinates;',
@@ -39,15 +33,8 @@ var colorProgram = null,
 
 		'uniform mat4 projectionMatrix;',
 		'uniform mat4 modelViewMatrix;',
-		'uniform mat3 normalMatrix;',
-
-		'#ifdef USE_LIGHT',
-			'uniform vec3 lightColor;',
-			'uniform vec3 lightDirection;',
-		'#endif',
 
 		'varying vec4 fragmentColor;',
-		'varying vec3 lightWeight;',
 
 		'void main(void) {',
 			'gl_Position = projectionMatrix * modelViewMatrix * vec4(vertexPosition, 1.0);',
@@ -56,18 +43,6 @@ var colorProgram = null,
 
 			'#ifdef USE_TEXTURE',
 				'vertexTextureCoordinates = textureCoordinates;',
-			'#endif',
-
-			'#ifdef USE_LIGHT',
-				'vec3 ambientLightColor = vec3(1.0, 1.0, 1.0);',
-
-				'vec3 transformedNormal = normalMatrix * vertexNormal;',
-				'float directionalLightWeight = max(dot(transformedNormal, lightDirection), 0.0);',
-
-				'lightWeight = ambientLightColor + lightColor * directionalLightWeight;',
-			'#else',
-				'lightWeight = vec3(1.0, 1.0, 1.0);',
-				'vertexNormal;',
 			'#endif',
 		'}'
 	].join('\n');
@@ -153,17 +128,11 @@ Y.Shader = {
 		program.vertexColorAttribute = context.getAttribLocation(program, "vertexColor");
 		context.enableVertexAttribArray(program.vertexColorAttribute);
 
-		program.vertexNormalAttribute = context.getAttribLocation(program, "vertexNormal");
-		context.enableVertexAttribArray(program.vertexNormalAttribute);
-
 		program.projectionMatrixUniform = context.getUniformLocation(program, "projectionMatrix");
 		program.modelViewMatrixUniform = context.getUniformLocation(program, "modelViewMatrix");
-		program.normalMatrixUniform = context.getUniformLocation(program, "normalMatrix");
-		program.lightColorUniform = context.getUniformLocation(program, "lightColor");
-		program.lightDirectionUniform = context.getUniformLocation(program, "lightDirection");
 
 		return program;
 	}
 };
 
-}, 'gallery-2013.08.15-00-45');
+}, 'gallery-2013.08.22-21-03');

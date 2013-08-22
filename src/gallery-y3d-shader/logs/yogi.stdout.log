@@ -9,6 +9,7 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for y3d-shader
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing y3d-shader/y3d-shader.js with UglifyJS
 shifter [queu] writing -min file
@@ -18,8 +19,7 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to y3d-shader/y3d-shader-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.13 seconds, pretty fast huh?
+shifter [info] finished in 0.25 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)
