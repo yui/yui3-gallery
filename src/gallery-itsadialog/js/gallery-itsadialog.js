@@ -115,7 +115,7 @@ if (!Y.Global.ITSADialog) {
 
             Y.log('alert', 'info', 'Itsa-Dialog');
             // make it possible to pass 'options' as second argument:
-            if (typeof message === OBJECT) {
+            if (!message || (typeof message === OBJECT)) {
                 options = message;
                 message = title;
                 title = '';
@@ -169,7 +169,7 @@ if (!Y.Global.ITSADialog) {
 
             Y.log('prompt', 'info', 'Itsa-Dialog');
             // make it possible to pass 'options' as second argument:
-            if (typeof message === OBJECT) {
+            if (!message || (typeof message === OBJECT)) {
                 options = message;
                 message = title;
                 title = '';
@@ -233,7 +233,7 @@ if (!Y.Global.ITSADialog) {
          *
          * @method _confirm
          * @param [title] {String} Title on the dialogbox (header).
-         * @param message {String} Message to display. (may be the first argument)
+         * @param question {String} Message to display. (may be the first argument)
          * @param [options] {object}
          * @param [options.type] {String} Determines which dialogbox to pop-up --> null|'yesno'|'retry' (null == 'yesno')
          * @param [options.defaultBtn] {String} 'yes'|'no'|'abort'|'ignore'|'retry'  (null == 'no'|'retry')
@@ -249,7 +249,7 @@ if (!Y.Global.ITSADialog) {
 
             Y.log('confirm', 'info', 'Itsa-Dialog');
             // make it possible to pass 'options' as second argument:
-            if (typeof message === OBJECT) {
+            if (!question || (typeof question === OBJECT)) {
                 options = question;
                 question = title;
                 title = '';
