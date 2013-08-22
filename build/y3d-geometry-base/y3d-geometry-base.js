@@ -81,11 +81,6 @@ Y.Geometry = Y.Base.create('geometry', Y.y3d.Model, [], {
 			validator: Lang.isArray
 		},
 
-		normals: {
-			value: [],
-			validator: Lang.isArray
-		},
-
 		texture: {
 			value: null,
 			setter: '_setTexture'
@@ -109,4 +104,4 @@ Y.Geometry = Y.Base.create('geometry', Y.y3d.Model, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["y3d-model", "y3d-texture"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["y3d-model", "y3d-texture"]});

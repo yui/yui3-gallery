@@ -47,46 +47,6 @@ Y.Box = Y.Base.create('box', Y.Geometry, [], {
 			]
 		},
 
-		normals: {
-			value: [
-				// Front face
-				0,  0,  1,
-				0,  0,  1,
-				0,  0,  1,
-				0,  0,  1,
-
-				// Back face
-				0,  0, -1,
-				0,  0, -1,
-				0,  0, -1,
-				0,  0, -1,
-
-				// Top face
-				0,  1,  0,
-				0,  1,  0,
-				0,  1,  0,
-				0,  1,  0,
-
-				// Bottom face
-				0, -1,  0,
-				0, -1,  0,
-				0, -1,  0,
-				0, -1,  0,
-
-				// Right face
-				1,  0,  0,
-				1,  0,  0,
-				1,  0,  0,
-				1,  0,  0,
-
-				// Left face
-				-1,  0,  0,
-				-1,  0,  0,
-				-1,  0,  0,
-				-1,  0,  0
-			]
-		},
-
 		textureCoordinates: {
 			value: [
 				// Front face
@@ -173,4 +133,4 @@ Y.Box = Y.Base.create('box', Y.Geometry, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["y3d-geometry-base"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["y3d-geometry-base"]});

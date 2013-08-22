@@ -45,46 +45,6 @@ Y.Box = Y.Base.create('box', Y.Geometry, [], {
 			]
 		},
 
-		normals: {
-			value: [
-				// Front face
-				0,  0,  1,
-				0,  0,  1,
-				0,  0,  1,
-				0,  0,  1,
-
-				// Back face
-				0,  0, -1,
-				0,  0, -1,
-				0,  0, -1,
-				0,  0, -1,
-
-				// Top face
-				0,  1,  0,
-				0,  1,  0,
-				0,  1,  0,
-				0,  1,  0,
-
-				// Bottom face
-				0, -1,  0,
-				0, -1,  0,
-				0, -1,  0,
-				0, -1,  0,
-
-				// Right face
-				1,  0,  0,
-				1,  0,  0,
-				1,  0,  0,
-				1,  0,  0,
-
-				// Left face
-				-1,  0,  0,
-				-1,  0,  0,
-				-1,  0,  0,
-				-1,  0,  0
-			]
-		},
-
 		textureCoordinates: {
 			value: [
 				// Front face

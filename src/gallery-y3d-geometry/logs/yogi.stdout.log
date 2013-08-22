@@ -17,6 +17,13 @@ shifter [info] shifting into gear for y3d-geometry-sphere
 shifter [info] shifting into gear for y3d-geometry-triangle
    #1: Expected '===' and instead saw '=='.
        if (val && (lines.length == 0)) { // line 44, pos 34
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
@@ -46,8 +53,8 @@ shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [info] shifting for coverage
 shifter [queu] coverage file read, starting coverage for: y3d-geometry-base/y3d-geometry-base.js
-shifter [queu] coverage file read, starting coverage for: y3d-geometry-box/y3d-geometry-box.js
 shifter [queu] coverage file read, starting coverage for: y3d-geometry-cylinder/y3d-geometry-cylinder.js
+shifter [queu] coverage file read, starting coverage for: y3d-geometry-box/y3d-geometry-box.js
 shifter [queu] coverage file read, starting coverage for: y3d-geometry-grid/y3d-geometry-grid.js
 shifter [queu] coverage file read, starting coverage for: y3d-geometry-plane/y3d-geometry-plane.js
 shifter [queu] coverage file read, starting coverage for: y3d-geometry-sphere/y3d-geometry-sphere.js
@@ -67,14 +74,14 @@ shifter [queu] instrumenting with istanbul
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to y3d-geometry-base/y3d-geometry-base-coverage.js
-shifter [queu] writing coverage file to y3d-geometry-box/y3d-geometry-box-coverage.js
 shifter [queu] writing coverage file to y3d-geometry-cylinder/y3d-geometry-cylinder-coverage.js
+shifter [queu] writing coverage file to y3d-geometry-box/y3d-geometry-box-coverage.js
 shifter [queu] writing coverage file to y3d-geometry-grid/y3d-geometry-grid-coverage.js
 shifter [queu] writing coverage file to y3d-geometry-plane/y3d-geometry-plane-coverage.js
 shifter [queu] writing coverage file to y3d-geometry-sphere/y3d-geometry-sphere-coverage.js
 shifter [queu] writing coverage file to y3d-geometry-triangle/y3d-geometry-triangle-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.323 seconds, pretty fast huh?
+shifter [info] finished in 1.045 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests

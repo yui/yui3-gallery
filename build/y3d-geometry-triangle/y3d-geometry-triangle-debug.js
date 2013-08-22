@@ -9,14 +9,6 @@ Y.Triangle = Y.Base.create('triangle', Y.Geometry, [], {
 			]
 		},
 
-		normals: {
-			value: [
-				0, 0, 1,
-				0, 0, 1,
-				0, 0, 1
-			]
-		},
-
 		textureCoordinates: {
 			value: [
 				0, 0,
@@ -35,4 +27,4 @@ Y.Triangle = Y.Base.create('triangle', Y.Geometry, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["y3d-geometry-base"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["y3d-geometry-base"]});

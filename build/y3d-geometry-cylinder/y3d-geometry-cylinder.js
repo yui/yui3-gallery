@@ -8,7 +8,6 @@ Y.Cylinder = Y.Base.create('cylinder', Y.Geometry, [], {
 			height = instance.get('height'),
 			heightBands = instance.get('heightBands'),
 			indices = instance.get('indices'),
-			normals = instance.get('normals'),
 			textureCoordinates = instance.get('textureCoordinates'),
 			radius = instance.get('radius'),
 			vertices = instance.get('vertices'),
@@ -34,10 +33,6 @@ Y.Cylinder = Y.Base.create('cylinder', Y.Geometry, [], {
 				vertices.push(radius * x);
 				vertices.push(y);
 				vertices.push(radius * z);
-
-				normals.push(x);
-				normals.push(0);
-				normals.push(z);
 
 				u = 1 - (j / widthBands);
 				v = 1 - (i / heightBands);
@@ -86,4 +81,4 @@ Y.Cylinder = Y.Base.create('cylinder', Y.Geometry, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["y3d-geometry-base"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["y3d-geometry-base"]});

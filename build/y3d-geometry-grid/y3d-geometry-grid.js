@@ -5,7 +5,6 @@ Y.Grid = Y.Base.create('grid', Y.Geometry, [], {
 		var instance = this,
 			size = instance.get('size'),
 			vertices = instance.get('vertices'),
-			normals = instance.get('normals'),
 			lines = instance.get('lines'),
 			half = size / 2,
 			x, y, z, i, index;
@@ -45,10 +44,6 @@ Y.Grid = Y.Base.create('grid', Y.Geometry, [], {
 			lines[index + 3] = index + 3;
 		}
 
-		for (i = 0; i < vertices.length/3; i++) {
-			normals.push(0, 1, 0);
-		}
-
 		instance.set('color', 'white');
 	}
 }, {
@@ -63,4 +58,4 @@ Y.Grid = Y.Base.create('grid', Y.Geometry, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["y3d-geometry-base"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["y3d-geometry-base"]});

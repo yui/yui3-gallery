@@ -79,11 +79,6 @@ Y.Geometry = Y.Base.create('geometry', Y.y3d.Model, [], {
 			validator: Lang.isArray
 		},
 
-		normals: {
-			value: [],
-			validator: Lang.isArray
-		},
-
 		texture: {
 			value: null,
 			setter: '_setTexture'
