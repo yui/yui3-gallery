@@ -18,19 +18,11 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 			geometries = instance.get('geometries');
 
 		instance._loadBufferData(geometry, context.ELEMENT_ARRAY_BUFFER, new Uint16Array(geometry.get('indices')), 'indicesBuffer');
-		instance._loadBufferData(geometry, context.ARRAY_BUFFER, new Float32Array(geometry.get('normals')), 'normalsBuffer');
 		instance._loadBufferData(geometry, context.ARRAY_BUFFER, new Float32Array(geometry.get('vertices')), 'verticesBuffer');
 
 		instance._loadTextureBufferData(geometry);
 
 		geometries[geometry.get('id')] = geometry;
-	},
-
-	addLight: function(light) {
-		var instance = this,
-			lights = instance.get('lights');
-
-		lights.push(light);
 	},
 
 	remove: function(geometry) {
@@ -57,12 +49,10 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 			instance._loadBufferData(geometry, context.ARRAY_BUFFER, new Float32Array(geometry.get('color')), 'colorBuffer');
 			instance._setVertexAttribute(geometry.colorBuffer, program.vertexColorAttribute, 4);
 
-			instance._setVertexAttribute(geometry.normalsBuffer, program.vertexNormalAttribute, 3);
 			instance._setVertexAttribute(geometry.verticesBuffer, program.vertexPositionAttribute, 3);
 			instance._setTextureAttribute(program, geometry);
 
 			instance._setUniforms(program, geometry, projectionMatrix);
-			instance._setLightUniforms(program);
 
 			if (geometry.get('wireframe')) {
 				instance._drawWireframe(geometry);
@@ -92,7 +82,7 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 
 		context.viewport(0, 0, width, height);
 
-		Y.WebGLMatrix.mat4.perspective(45, width/height, 0.1, 100.0, projectionMatrix);
+		Y.WebGLMatrix.mat4.perspective(45, width/height, 0.1, 300.0, projectionMatrix);
 
 		return projectionMatrix;
 	},
@@ -140,15 +130,10 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 	_getProgram: function(geometry) {
 		var instance = this,
 			texture = geometry.get('texture'),
-			lights = instance.get('lights'),
 			program = null,
 			options = {
 				context: instance.context
 			};
-
-		if (lights.length > 0) {
-			options.constants = ['#define USE_LIGHT'];
-		}
 
 		if (texture !== null) {
 			program = Y.Shader.getTextureProgram(options);
@@ -194,22 +179,6 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 		return value;
 	},
 
-	_setLightUniforms: function(program) {
-		var instance = this,
-			context = instance.context,
-			lights = instance.get('lights'),
-			light, color, direction;
-
-		if (lights.length > 0) {
-			light = lights[0];
-			color = light.get('color');
-			direction = light.get('direction');
-
-			context.uniform3f(program.lightColorUniform, color[0], color[1], color[2]);
-			context.uniform3f(program.lightDirectionUniform, direction[0], direction[1], direction[2]);
-		}
-	},
-
 	_setTextureAttribute: function(program, geometry) {
 		var instance = this,
 			context = instance.context,
@@ -241,15 +210,10 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 		var instance = this,
 			context = instance.context,
 			cameraMatrix = instance.get('camera').getInvertedMatrix(),
-			geometryMatrix = geometry.get('matrix'),
-			normalMatrix = Y.WebGLMatrix.mat3.create();
-
-		Y.WebGLMatrix.mat4.toInverseMat3(geometryMatrix, normalMatrix);
-		Y.WebGLMatrix.mat3.transpose(normalMatrix);
+			geometryMatrix = geometry.get('matrix');
 
 		Y.WebGLMatrix.mat4.multiply(cameraMatrix, geometryMatrix);
 
-		context.uniformMatrix3fv(program.normalMatrixUniform, false, normalMatrix);
 		context.uniformMatrix4fv(program.projectionMatrixUniform, false, projectionMatrix);
 		context.uniformMatrix4fv(program.modelViewMatrixUniform, false, cameraMatrix);
 	},
@@ -304,10 +268,6 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 			}
 		},
 
-		lights: {
-			value: []
-		},
-
 		srcNode: {
 			value: Y.Node.one('#y3d'),
 			setter: Y.Node.one,
@@ -334,7 +294,7 @@ Y.Scene = Y.Base.create('scene', Y.Base, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {
+}, 'gallery-2013.08.22-21-03', {
     "requires": [
         "base-build",
         "base-pluginhost",
