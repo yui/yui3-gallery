@@ -138,6 +138,8 @@ shifter [info] shifting into gear for y3d-model
        if (!dest) dest = vecB; // line 3281, pos 18
    #64: Expected '{' and instead saw 'dest'.
        if (!dest) dest = vecA; // line 3302, pos 18
+shifter [queu] file has changed, continuing build
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] writing RAW file
 shifter [queu] compressing y3d-model/y3d-model.js with UglifyJS
@@ -149,13 +151,13 @@ shifter [info] shifting for coverage
 shifter [queu] coverage file read, starting coverage for: y3d-model/y3d-model.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
-shifter [queu] writing coverage file to y3d-model/y3d-model-coverage.js
 shifter [queu] coverage file read, starting coverage for: y3d-matrix/y3d-matrix.js
+shifter [queu] writing coverage file to y3d-model/y3d-model-coverage.js
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to y3d-matrix/y3d-matrix-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 1.223 seconds, pretty fast huh?
+shifter [info] finished in 2.458 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests

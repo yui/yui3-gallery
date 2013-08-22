@@ -74,4 +74,4 @@ Y.namespace('y3d').Model = Y.Base.create('model', Y.Base, [], {
 	}
 });
 
-}, 'gallery-2013.08.15-00-45', {"requires": ["base-build", "y3d-matrix"]});
+}, 'gallery-2013.08.22-21-03', {"requires": ["base-build", "y3d-matrix"]});
