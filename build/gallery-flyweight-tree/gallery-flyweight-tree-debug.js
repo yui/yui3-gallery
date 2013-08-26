@@ -447,7 +447,9 @@ FWMgr = Y.Base.create(
                     // I need to do this otherwise Attribute will initialize
                     // the real iNode with default values when activating a lazyAdd attribute.
                     newNode._slideTo({});
-                    YArray.each(Y.Object.keys(newNode._state.data), newNode._addLazyAttr, newNode);
+                    YArray.each(Y.Object.keys(newNode._state.data), function (attr) {
+                        newNode._addLazyAttr(attr);
+                    });
                     // newNode.getAttrs();
                     // That's it (see above)
                     newNode._root =  this;
@@ -1314,4 +1316,4 @@ Y.FlyweightTreeNode = FWNode;
 
 
 
-}, 'gallery-2012.12.12-21-11', {"requires": ["widget", "base-build"], "skinnable": false});
+}, 'gallery-2013.05.10-00-54', {"requires": ["widget", "base-build"], "skinnable": false});

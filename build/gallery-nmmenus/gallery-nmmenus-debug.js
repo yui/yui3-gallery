@@ -1,4 +1,4 @@
-YUI.add('gallery-nmmenus', function(Y) {
+YUI.add('gallery-nmmenus', function (Y, NAME) {
 
 Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], { 
 	initializer : function( config ) {
@@ -208,8 +208,7 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 									}
 									else {
 										// no custom JS load trigger, just navigate to href
-										Y.log('load page');
-										window.location.href = Y.one('#' + ID).get('pathname');
+										window.location.href = Y.one('#' + ID).get('href');
 									}
 								}
 							}, this)
@@ -253,5 +252,18 @@ Y.NMMenus = Y.Base.create('nmmenus', Y.Widget, [], {
 	}
 });
 
-
-}, 'gallery-2012.06.27-20-10' ,{requires:['base-build','widget','event-mouseenter','node','transition']});
+}, 'gallery-2013.05.02-22-59', {
+    "supersedes": [
+        ""
+    ],
+    "requires": [
+        "base-build",
+        "widget",
+        "event-mouseenter",
+        "node",
+        "transition"
+    ],
+    "optional": [
+        ""
+    ]
+});

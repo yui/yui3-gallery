@@ -12,6 +12,11 @@
 	*display: block;
 }
 
+.yui3-htmltablebulkedit .checkbox-multiselect-column
+{
+	float: left;
+}
+
 .yui3-htmltablebulkedit .checkbox-multiselect-checkbox
 {
 	margin: 0;

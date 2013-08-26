@@ -1,21 +1,14 @@
-YUI.add('gallery-itsadialogbox', function(Y) {
+YUI.add('gallery-itsadialogbox', function (Y, NAME) {
 
 'use strict';
-
-// TO DO:
-// wait for show until the widget is rendered
-// When form is disabled, the cancelbutton doesn only close when pressed twice
 
 /**
  * The Itsa Dialogbox module.
  *
- * @module itsa-dialogbox
- */
-
-/**
- * Dialogbox with sugar messages
- * 
  *
+ * Dialogbox with sugar messages
+ *
+ * @module gallery-itsadialogbox
  * @class ITSADialogbox
  * @extends Panel
  * @constructor
@@ -29,8 +22,14 @@ YUI.add('gallery-itsadialogbox', function(Y) {
 var Lang = Y.Lang,
     ITSADIALOG_ICON_TEMPLATE = "<div class='itsadialogbox-icon {iconclass}'></div>",
     ITSADIALOG_BODY_TEMPLATE = "<div{bdclass}>{bdtext}</div>",
-    ITSADIALOG_INLINEFORM = "itsa-dialog-inlineform";
 
+    ITSAFORM_TABLETEMPLATE = '<td class="itsaform-tablelabel{classnamelabel}"{paddingstyle}>{label}</td>'+
+                            '<td class="itsaform-tableelement"{paddingstyle}>{element}'+
+                            '<div class="itsa-formelement-validationmessage itsa-formelement-hidden">{validationMessage}</div></td>',
+    ITSAFORM_INLINETEMPLATE = '<span class="itsaform-spanlabel{classnamelabel}"{marginstyle}>{label}</span>'+
+                            '{element}<div class="itsa-formelement-validationmessage itsa-formelement-hidden">{validationMessage}</div>';
+
+//======================================
 Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
 
         ICON_BUBBLE : 'icon-bubble',
@@ -43,7 +42,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         ACTION_STAYALIVE : '_actionStayAlive',
         ACTION_RESET : '_actionReset',
         ACTION_CLEAR : '_actionClear',
-        panelOptions : [], 
+        panelOptions : [],
         _activePanelOption : null,
         _validationButtons : null,
         _descendantChange : 0,
@@ -93,7 +92,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
  */
 
 /**
- * Reference to the stayalive-function that can be attached to button.action. This function just execute the callback, but the Panel stays alive. In need you just want to read the Panel-values.
+ * Reference to the stayalive-function that can be attached to button.action. This function just execute the callback, but the Panel stays alive.
+ * In need you just want to read the Panel-values.
  * @property ACTION_STAYALIVE
  * @type String
  */
@@ -120,21 +120,18 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
  * Internal reference to the active panelOptions (which is active after showPanel() is called
  * @property _activePanelOption
  * @type Object
- * @private
  */
 
 /**
  * Nodelist that contains all current (from _activePanelOption) buttons that have button.validated set to true.
  * @property _validationButtons
  * @type Y.NodeList
- * @private
  */
 
 /**
  * Internal count that keeps track of how many times a descendentChange has been taken place by the focusManager
  * @property _descendantChange
  * @type Int
- * @private
  */
 
         /**
@@ -153,21 +150,24 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * Defines a new Panel and stores it to the panelOptions-Array. Returns an panelId that can be used sot show the Panel later on using showPanel(panelId).<br>
+         * Defines a new Panel and stores it to the panelOptions-Array. Returns an panelId that can be used sot show the Panel later on using
+         * showPanel(panelId).<br>
          * PanelOptions is an object that can have the following fields:<br>
-           <ul><li>iconClass (String) className for the icon, for example Y.Global.ItsaDialog.ICON\_QUESTION</li>
+           <ul><li>iconClass (String) className for the icon, for example Y.Global.ItsaDialog.ICON_QUESTION</li>
                <li>form (Array) Array with objects that will be transformed to Y.FORMELEMENT objects (not currently available)</li>
                <li>buttons (Object) Which buttons to use. For example:
                <br>&nbsp;&nbsp;{
                     <br>&nbsp;&nbsp;&nbsp;&nbsp;footer: [
-                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'cancel', label:'Cancel', action: Y.Global.ItsaDialog.ACTION\_HIDE},
-                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'ok', label:'Ok', action: Y.Global.ItsaDialog.ACTION\_HIDE, validation: true, isDefault: true}    
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'cancel', label:'Cancel', action: Y.Global.ItsaDialog.ACTION_HIDE},
+                        <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{name:'ok', label:'Ok',
+                                action: Y.Global.ItsaDialog.ACTION_HIDE, validation: true, isDefault: true}
                     <br>&nbsp;&nbsp;&nbsp;&nbsp;]
-               <br>&nbsp;&nbsp;}
-               </li>    
-            </ul>    
+               &nbsp;&nbsp;}
+               </li>
+            </ul>
             <br><br>
-            You can use 4 actionfunctions to attach at the button: Y.Global.ItsaDialog.ACTION_HIDE, Y.Global.ItsaDialog.ACTION_STAYALIVE, Y.Global.ItsaDialog.ACTION_RESET and Y.Global.ItsaDialog.ACTION_CLEAR
+            You can use 4 actionfunctions to attach at the button: Y.Global.ItsaDialog.ACTION_HIDE, Y.Global.ItsaDialog.ACTION_STAYALIVE,
+            Y.Global.ItsaDialog.ACTION_RESET and Y.Global.ItsaDialog.ACTION_CLEAR
          * @method definePanel
          * @param {Object} panelOptions The config-object.
          * @return {Integer} unique panelId
@@ -186,7 +186,19 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * Shows the panel when you have a panelId. For usage with custom panels. The sugarmethods (showMessage() f.i.) use this method under the hood).
+         * Removes a panel by its panelId (which is generated by this.definePanel())
+         *
+         * @method removePanel
+         * @param {Int} panelId Id of the panel to be removed. Retreive this value during definePanel()
+        */
+        removePanel: function(panelId) {
+            var instance = this;
+            if ((panelId>=0) && (panelId<instance.panelOptions.length)) {instance.panelOptions.splice(panelId, 1);}
+        },
+
+        /**
+         * Shows the panel when you have a panelId. For usage with custom panels. The sugarmethods (showMessage() f.i.)
+         * use this method under the hood).
          *
          * @method showPanel
          * @param {Int} panelId Id of the panel that has to be shown. Retreive this value during definePanel()
@@ -196,7 +208,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
          * @param {Object} [context] (this) in the callback.
          * @param {String | Array} [args] Arguments for the callback.
          * @param {Object} [customButtons] In case you want custom buttons that differ from those defined during definePanel.
-         * @param {String} [customIconclass] In case you want to use an iconclass that is different from to one defined during definePanel. Example: Y.Global.ItsaDialog.ICON_WARN
+         * @param {String} [customIconclass] In case you want to use an iconclass that is different from to one defined during definePanel.
+         *                                                        Example: Y.Global.ItsaDialog.ICON_WARN
          * @param {Object} [eventArgs] do not use, only internal (temporarely)
         */
         showPanel: function(panelId, title, bodyText, callback, context, args, customButtons, customIconclass, eventArgs) {
@@ -217,7 +230,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     title = '&nbsp;'; // making the header appear
                 }
                 instance.set('headerContent', title || '&nbsp;'); // always making the header appear by display &nbsp;
-                instance.set('bodyContent', (iconClass ? Lang.sub(ITSADIALOG_ICON_TEMPLATE, {iconclass: iconClass}) : '') + Lang.sub(ITSADIALOG_BODY_TEMPLATE, {bdclass: (iconClass ? ' class="itsadialogbox-messageindent"' : ''), bdtext: bodyText}));
+                instance.set('bodyContent', (iconClass ? Lang.sub(ITSADIALOG_ICON_TEMPLATE, {iconclass: iconClass}) : '')
+                    + Lang.sub(ITSADIALOG_BODY_TEMPLATE, {bdclass: (iconClass ? ' class="itsadialogbox-messageindent"' : ''), bdtext: bodyText}));
                 instance.set('buttons', customButtons || instance._activePanelOption.buttons || {});
                 instance._activePanelOption.callback = callback;
                 instance._activePanelOption.context = context;
@@ -234,7 +248,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         //==============================================================================
-      
+
         /**
          * Shows a Panel with the buttons: <b>Abort Ignore Retry</b><br>
          * Look for <i>e.buttonName</i> to determine which button is pressed.
@@ -244,10 +258,12 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
          * @param {Function} [callback] callbackfunction to be excecuted.
          * @param {Object} [context] (this) in the callback.
          * @param {String | Array} [args] Arguments for the callback.
+         * @param {Object} [customButtons] In case you want buttons other that Cancel/Ok.
+         * @param {String} [customIconclass] In case you want an Icon other that ICON_QUESTION.
         */
-        getRetryConfirmation: function(title, question, callback, context, args) {
+        getRetryConfirmation: function(title, question, callback, context, args, customButtons, customIconclass) {
             Y.log('askQuestion', 'info', 'ITSADIALOGBOX');
-            this.showPanel(0, title, question, callback, context, args);
+            this.showPanel(0, title, question, callback, context, args, customButtons, customIconclass);
         },
 
         /**
@@ -259,10 +275,12 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
          * @param {Function} [callback] callbackfunction to be excecuted.
          * @param {Object} [context] (this) in the callback.
          * @param {String | Array} [args] Arguments for the callback.
+         * @param {Object} [customButtons] In case you want buttons other that Cancel/Ok.
+         * @param {String} [customIconclass] In case you want an Icon other that ICON_QUESTION.
         */
-        getConfirmation: function(title, question, callback, context, args) {
+        getConfirmation: function(title, question, callback, context, args, customButtons, customIconclass) {
             Y.log('getConfirmation', 'info', 'ITSADIALOGBOX');
-            this.showPanel(1, title, question, callback, context, args);
+            this.showPanel(1, title, question, callback, context, args, customButtons, customIconclass);
         },
 
         /**
@@ -282,9 +300,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         */
         getInput: function(title, message, defaultmessage, callback, context, args, customButtons, customIconclass) {
             Y.log('getInput', 'info', 'ITSADIALOGBOX');
-            var instance = this,
-                bodyMessage,
-                inputElement;
+            var instance = this;
             instance.inputElement = new Y.ITSAFORMELEMENT({
                 name: 'value',
                 type: 'input',
@@ -295,6 +311,59 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 selectOnFocus: true
             });
             instance.showPanel(2, title, message + '<br>' + instance.inputElement.render(), callback, context, args, customButtons, customIconclass);
+        },
+
+        /**
+         * Shows a login-Panel with an username/password fields and the buttons: <b>Cancel Ok</b><br>
+         * @method getLogin
+         * @param {String} title showed in the header of the Panel.
+         * @param {String} message showed inside the Panel.
+         * @param {Object} [logindata] this data will be used to present the formfields and defaultinput-values.
+         * @param {Function} [callback] callbackfunction to be excecuted.
+         * @param {Object} [context] (this) in the callback.
+         * @param {String | Array} [args] Arguments for the callback.
+         * @param {Object} [customButtons] In case you want buttons other that Cancel/Ok.
+         * @param {String} [customIconclass] In case you want an Icon other that ICON_QUESTION.
+         * @return {String} passed by the eventTarget in the callback<br>
+         * Look for <i>e.buttonName</i> to determine which button is pressed.<br>
+         * Look for <i>e.value</i> to determine the userinput.
+        */
+        getLogin: function(title, message, logindata, callback, context, args, customButtons, customIconclass) {
+            Y.log('getInput', 'info', 'ITSADIALOGBOX');
+            var instance = this,
+                  logintable, defaultlogindata;
+            defaultlogindata = {
+                labelUsername: 'username',
+                labelPassword: 'password',
+                defaultUsername: '',
+                defaultPassword: ''
+            };
+            logindata = logindata || defaultlogindata;
+            instance.inputElementUsername = new Y.ITSAFORMELEMENT({
+                label: logindata.labelUsername || defaultlogindata.labelUsername,
+                name: 'username',
+                type: 'input',
+                value: logindata.defaultUsername || '',
+                classNameValue: 'yui3-itsadialogbox-stringinput itsa-formelement-firstelement',
+                marginTop: 24,
+                initialFocus: true,
+                selectOnFocus: true
+            });
+            instance.inputElementPassword = new Y.ITSAFORMELEMENT({
+                label: logindata.labelPassword || defaultlogindata.labelPassword,
+                name: 'password',
+                type: 'password',
+                value: logindata.defaultPassword || '',
+                classNameValue: 'yui3-itsadialogbox-stringinput itsa-formelement-lastelement',
+                marginTop: 7,
+                initialFocus: false,
+                selectOnFocus: true
+            });
+            logintable = '<table><tbody>';
+            logintable += '<tr>'+instance.inputElementUsername.render(true)+'</tr>';
+            logintable += '<tr>'+instance.inputElementPassword.render(true)+'</tr>';
+            logintable += '</tbody></table>';
+            instance.showPanel(7, title, message + '<br>' + logintable, callback, context, args, customButtons, customIconclass);
         },
 
         /**
@@ -319,10 +388,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         getNumber: function(title, message, defaultvalue, minvalue, maxvalue, callback, context, args, customButtons, customIconclass) {
             Y.log('getNumber', 'info', 'ITSADIALOGBOX');
             var instance = this,
-                bodyMessage,
                 withMinValue = Lang.isNumber(minvalue),
                 withMaxValue = Lang.isNumber(maxvalue),
-                inputElement,
                 validationMessage = '',
                 eventArguments = {};
             if (withMinValue && withMaxValue) {
@@ -342,7 +409,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 value: defaultvalue ? defaultvalue.toString() : '',
                 label: message,
                 keyValidation: function(e) {
-                    Y.log('keyValidation keyCode: ' +e.keyCode + ', charCode: ' + e.charCode + ', character: '+String.fromCharCode(e.keyCode), 'info', 'ITSADIALOGBOX');
+                    Y.log('keyValidation keyCode: ' +e.keyCode + ', charCode: ' + e.charCode + ', character: '+String.fromCharCode(e.keyCode),
+                             'info', 'ITSADIALOGBOX');
                     var keycode = e.keyCode,
                         node = e.target,
                         reactivation = true,
@@ -362,8 +430,10 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                         e.halt(true);
                         return false;
                     }
-                    if (((e.shiftKey) && (keycode!==9) && (keycode!==37) && (keycode!==38) && (keycode!==39) && (keycode!==40)) || (e.ctrlKey) || (e.altKey) || (e.metaKey)) {
-                        Y.log('keyValidation failed: zero is not allowed because of metakey other than shift-tab or shift-cursor', 'info', 'ITSADIALOGBOX');
+                    if (((e.shiftKey) && (keycode!==9) && (keycode!==37) && (keycode!==38) && (keycode!==39) &&
+                                                                                     (keycode!==40)) || (e.ctrlKey) || (e.altKey) || (e.metaKey)) {
+                        Y.log('keyValidation failed: zero is not allowed because of metakey other than shift-tab or shift-cursor',
+                                 'info', 'ITSADIALOGBOX');
                         e.halt(true);
                         return false;
                     }
@@ -392,16 +462,21 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                         return false;
                     }
                     // not valid when number will become lower than minimum, only check if field is modified
-                    if ((Lang.isNumber(minValue) || Lang.isNumber(maxValue)) && ((Y.Array.indexOf(digits, keycode) !== -1) || (keycode===8) || (keycode===46))) {
-                        // transform e.keyCode to a keyCode that can be translated to chareacter --> numerical keyboard will be transformed to normal keyboard
+                    if ((Lang.isNumber(minValue) || Lang.isNumber(maxValue)) &&
+                        ((Y.Array.indexOf(digits, keycode) !== -1) || (keycode===8) || (keycode===46))) {
+                        // transform e.keyCode to a keyCode that can be translated to chareacter --> numerical
+                        // keyboard will be transformed to normal keyboard
                         if (keycode===8) {
-                            nextValue = parseInt(previousStringValue.substring(0, (cursor===cursorEnd) ? cursor-1 : cursor) + previousStringValue.substring(cursorEnd), 10);
+                            nextValue = parseInt(previousStringValue.substring(0, (cursor===cursorEnd) ? cursor-1 : cursor) +
+                                                previousStringValue.substring(cursorEnd), 10);
                         }
                         else if (keycode===46) {
-                            nextValue = parseInt(previousStringValue.substring(0, cursor) + previousStringValue.substring((cursor===cursorEnd) ? cursorEnd+1 : cursorEnd), 10);
+                            nextValue = parseInt(previousStringValue.substring(0, cursor) +
+                                                previousStringValue.substring((cursor===cursorEnd) ? cursorEnd+1 : cursorEnd), 10);
                         }
                         else {
-                            nextValue = parseInt(previousStringValue.substring(0, cursor) + safeNumericalKeyCodeToString + previousStringValue.substring(cursorEnd), 10);
+                            nextValue = parseInt(previousStringValue.substring(0, cursor) + safeNumericalKeyCodeToString +
+                                                previousStringValue.substring(cursorEnd), 10);
                         }
                         Y.log('Precheck if next value ' + nextValue + ' is within range', 'info', 'ITSADIALOGBOX');
                         if (!Lang.isNumber(nextValue)) {
@@ -446,12 +521,6 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     Y.log('autoCorrection previous: '+previousValue+', final: '+newValue, 'info', 'ITSADIALOGBOX');
                     formelement.set('value', newValue.toString());
                     if ((Lang.isNumber(minvalue) && (newValue<minvalue)) || (Lang.isNumber(maxvalue) && (newValue>maxvalue))) {
-                        if (newValue<minvalue) {
-                            Y.log('autoCorrections validation failed: newValue<minvalue ('+newValue+'<'+minvalue+')', 'info', 'ITSADIALOGBOX');
-                        }
-                        if (newValue>maxvalue) {
-                            Y.log('autoCorrections validation failed: newValue<minvalue ('+newValue+'<'+maxvalue+')', 'info', 'ITSADIALOGBOX');
-                        }
                         if (e.showValidation) {e.showValidation();}
                         if (e.activatePanel) {e.activatePanel();}
                         return false;
@@ -538,11 +607,11 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             e.preventDefault();
             if (!button.hasClass('yui3-button-disabled')) {
                 ev.buttonName = e.target.getData('name');
-                instance.hide();       
+                instance.hide();
                 if (Y.Lang.isFunction(instance._activePanelOption.callback)) {
                     Y.rbind(instance._activePanelOption.callback, instance._activePanelOption.context, ev, instance._activePanelOption.args)();
                 }
-            } 
+            }
         },
 
         /**
@@ -564,7 +633,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 if (Y.Lang.isFunction(instance._activePanelOption.callback)) {
                     Y.rbind(instance._activePanelOption.callback, instance._activePanelOption.context, ev, instance._activePanelOption.args)();
                 }
-            } 
+            }
         },
 
         /**
@@ -602,7 +671,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * overrules Y.panel.focus, by focussing on the panel furst, and then using the focusmanager to focus on the right element.
+         * overrules Y.panel.focus, by focussing on the panel first, and then using the focusmanager to focus on the right element.
          * @method focus
         */
         focus: function(){
@@ -610,7 +679,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             var instance = this,
                 contentBox = instance.get('contentBox'),
                 focusManager = contentBox.focusManager;
-            instance.constructor.superclass.focus.apply(instance, arguments);
+            // apply returns something, call just runs. First argument is 'this' in the function, next arguments are the arguments in targetfunction
+            instance.constructor.superclass.focus.call(instance);
             if (focusManager) {
                 focusManager.focus();
             }
@@ -626,7 +696,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 contentBox = instance.get('contentBox'),
                 focusManager = contentBox.focusManager;
             instance._panelListener = contentBox.on(
-                'keydown', 
+                'keydown',
                 function (e) {
                     if (e.keyCode === 9) { // tab
                         Y.log('tabkey pressed', 'info', 'ITSADIALOGBOX');
@@ -641,15 +711,15 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 instance._setValidationButtons,
                 instance
             );
-            instance._descendantListener = contentBox.focusManager.on(
+            instance._descendantListener = focusManager.on(
                 'activeDescendantChange',
-                function (e, contentBox) {
+                function (e) {
                     var instance = this,
                         previousDescendant = e.prevVal,
                         nextDescendant = e.newVal,
                         defaultButton,
                         isButton,
-                        allDescendants = contentBox.focusManager.get('descendants'),
+                        allDescendants = focusManager.get('descendants'),
                         sameDescendant;
                     instance._descendantChange++;
                     if (Lang.isNumber(previousDescendant) && (previousDescendant>=0)) {previousDescendant = allDescendants.item(e.prevVal);}
@@ -666,7 +736,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     if (isButton) {
                         nextDescendant.addClass('mousepressfocus');
                     }
-                    // now: by first time showing the Panel, the focusManager activeDescendent will be called three times, before steady state in case of an element that gets focused.
+                    // now: by first time showing the Panel, the focusManager activeDescendent will be called three times, before steady state
+                    // in case of an element that gets focused.
                     // To make the content be selected again (if requested) look at the value of instance._descendant
                     if ((!sameDescendant || (instance._descendantChange<4)) && nextDescendant.hasClass('itsa-formelement-selectall')) {
                         Y.log('new element full selected', 'info', 'ITSADIALOGBOX');
@@ -679,7 +750,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 instance,
                 contentBox
             );
-            // because the header might not exists yet (at rendering it doesn't), we have to delegate next events instead of binding it to the headernode
+            // because the header might not exists yet (at rendering it doesn't), we have to delegate next events
+            // instead of binding it to the headernode
             instance._headerMousedownListener = contentBox.delegate(
                 'mousedown',
                 function(e) {e.target.addClass('cursormove');},
@@ -736,7 +808,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     if (Lang.isBoolean(backward) && backward) {
                         activeDescendant--;
                         focusManager.focus((activeDescendant<0) ? numberDescendants-1 : activeDescendant);
-                    } 
+                    }
                     else {
                         activeDescendant++;
                         focusManager.focus((activeDescendant>=numberDescendants) ? 0 : activeDescendant);
@@ -770,7 +842,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
          * If the element has keyvalidation, then its keyvalidation-function is called, which could prevent the keyinput.<br>
          * If Enter is pressed, the focus is set on the next element <b>or</b> if it's the last element the ACTION_HIDE is called<br>
          * If the element has autocorrection, autocorrect-function is called.<br>
-         * If this returns false, then all buttons with button.validation=true get disabled and  ACTION_HIDE is prevented, if returns true, all these buttons get enabled.
+         * If this returns false, then all buttons with button.validation=true get disabled and  ACTION_HIDE is prevented, if returns true,
+         * all these buttons get enabled.
          * @method _checkInput
          * @param {eventTarget} e
          * @private
@@ -819,7 +892,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
 
         /**
          * Internal function that is called when an descendant changes. To validate inputelements (if present)<br>
-         * If the element has autocorrection, autocorrect-function is called.<br>If this returns false, then all buttons with button.validation=true get disabled, if returns true, all these buttons get enabled.
+         * If the element has autocorrection, autocorrect-function is called.<br>If this returns false, then all buttons with button.validation=true
+         * get disabled, if returns true, all these buttons get enabled.
          * @method _validate
          * @private
         */
@@ -848,7 +922,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * Enables the Panel in such a way that Buttons with validation are functional
+         * Enables all buttons with button.validation=true
          * @method activatePanel
         */
         activatePanel: function() {
@@ -857,7 +931,7 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         },
 
         /**
-         * Deactivates the Panel in such a way that it only responses to Buttons with no validation
+         * Disnables all buttons with button.validation=true
          * @method deactivatePanel
         */
         deactivatePanel: function() {
@@ -874,13 +948,14 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             Y.log('destructor', 'info', 'ITSADIALOGBOX');
             var instance = this;
             if (instance.keyDownHandle) {instance.keyDownHandle.detach();}
-            if (instance._panelListener) {instance._panelListener.detach();} 
+            if (instance._panelListener) {instance._panelListener.detach();}
             if (instance._descendantListener) {instance._descendantListener.detach();}
             if (instance._headerMousedownListener) {instance._headerMousedownListener.detach();}
             if (instance._headerMouseupListener) {instance._headerMouseupListener.detach();}
             if (instance._inputListener) {instance._inputListener.detach();}
             if (instance._checkBoxListener) {instance._checkBoxListener.detach();}
             if (instance._buttonsListener) {instance._buttonsListener.detach();}
+            instance.panelOptions.length = 0;
         },
 
         //==============================================================================
@@ -889,10 +964,9 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
          * Internal method that looks for all buttons with button.validation=true and markes them with a validated-class<br>
          * Will be executed when the buttons are changed.
          * @method _setValidationButtons
-         * @param {eventTarget} e
          * @private
         */
-        _setValidationButtons : function(e) {
+        _setValidationButtons : function() {
             Y.log('_setValidationButtons', 'info', 'ITSADIALOGBOX');
             var instance = this,
                 buttonsObject = instance._activePanelOption.buttons,
@@ -927,12 +1001,10 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
         /**
          * Internal method that markes a button with a validated-class if it has button.validation=true<br>
          * @method _markButtonValidated
-         * @param {Object} buttonObject 
-         * @param {Int} index
-         * @param {Array} array 
+         * @param {Object} buttonObject
          * @private
         */
-        _markButtonValidated : function(buttonObject, index, array) {
+        _markButtonValidated : function(buttonObject) {
             Y.log('_markButtonValidated '+buttonObject.name, 'info', 'ITSADIALOGBOX');
             var instance = this,
                 name = buttonObject.name,
@@ -962,19 +1034,19 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                     footer: [
                         {name:'abort', label:'Abort', action:instance.ACTION_HIDE},
                         {name:'ignore', label:'Ignore', action:instance.ACTION_HIDE},
-                        {name:'retry', label:'Retry', action:instance.ACTION_HIDE, isDefault: true}    
+                        {name:'retry', label:'Retry', action:instance.ACTION_HIDE, isDefault: true}
                     ]
-                }    
+                }
             });
             // creating getConfirmation
             instance.definePanel({
                 iconClass: instance.ICON_INFO,
                 buttons: {
                     footer: [
-                        {name:'no', label:'No', action:instance.ACTION_HIDE},
-                        {name:'yes', label:'Yes', action:instance.ACTION_HIDE, isDefault: true}    
+                        {name:'no', label:'No', action:instance.ACTION_HIDE, isDefault: true},
+                        {name:'yes', label:'Yes', action:instance.ACTION_HIDE}
                     ]
-                }    
+                }
             });
             // creating getInput
             instance.definePanel({
@@ -985,9 +1057,9 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 buttons: {
                     footer: [
                         {name:'cancel', label:'Cancel', action:instance.ACTION_HIDE},
-                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, validation: true, isDefault: true}    
+                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, validation: true, isDefault: true}
                     ]
-                }    
+                }
             });
             // creating getNumber
             instance.definePanel({
@@ -998,35 +1070,49 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
                 buttons: {
                     footer: [
                         {name:'cancel', label:'Cancel', action:instance.ACTION_HIDE},
-                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, validation: true, isDefault: true}    
+                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, validation: true, isDefault: true}
                     ]
-                }    
+                }
             });
             // creating showErrorMessage
             instance.definePanel({
                 iconClass: instance.ICON_ERROR,
                 buttons: {
                     footer: [
-                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, isDefault: true}    
+                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, isDefault: true}
                     ]
-                }    
+                }
             });
             // creating showMessage
             instance.definePanel({
                 buttons: {
                     footer: [
-                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, isDefault: true}    
+                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, isDefault: true}
                     ]
-                }    
+                }
             });
             // creating showWarning
             instance.definePanel({
                 iconClass: instance.ICON_WARN,
                 buttons: {
                     footer: [
-                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, isDefault: true}    
+                        {name:'ok', label:'Ok', action:instance.ACTION_HIDE, isDefault: true}
                     ]
-                }    
+                }
+            });
+
+            // creating loginPanel (id=7)
+            instance.definePanel({
+                iconClass: instance.ICON_INFO,
+                form: [
+                    {name:'username', label:'{username}', value:'{username}'},
+                    {name:'password', label:'{password}', value:'{password}'}
+                ],
+                buttons: {
+                    footer: [
+                        {name:'login', label:'Login', action:instance.ACTION_HIDE, isDefault: true}
+                    ]
+                }
             });
         },
 
@@ -1042,7 +1128,8 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             var instance = this,
                 contentBox = instance.get('contentBox'),
                 focusnode;
-            focusnode = contentBox.one('.itsa-formelement-firstfocus') || contentBox.one('.itsa-firstformelement') || instance._getDefaultButtonNode();
+            focusnode = contentBox.one('.itsa-formelement-firstfocus') || contentBox.one('.itsa-firstformelement') ||
+                                                                                                                instance._getDefaultButtonNode();
             Y.log('_getFirstFocusNode: '+focusnode, 'info', 'ITSADIALOGBOX');
             return focusnode;
         },
@@ -1070,17 +1157,16 @@ Y.ITSADIALOGBOX = Y.Base.create('itsadialogbox', Y.Panel, [], {
             // At this moment only text-inputs are allowed.
             // at later stage, handle this by Y.ITSAFORM with a true serialize function
             Y.log('_serializeForm', 'info', 'ITSADIALOGBOX');
-            var instance = this,
-                formelements = masterNode.all('.itsa-formelement'),
-                value,
-                intValue,
-                serialdata = {};
+            var formelements = masterNode.all('.itsa-formelement'),
+                  value,
+                  intValue,
+                  serialdata = {};
             formelements.each(
-                function(formelementNode, index, nodeList) {
+                function(formelementNode) {
                     value = formelementNode.get('value');
                     intValue = parseInt(value, 10);
                     // now check with DOUBLE == (not threedouble) to see if value == intValue --> in that case we have an integer
-                    serialdata[formelementNode.get('name')] = (value==intValue) ? intValue : value;
+                    serialdata[formelementNode.get('name')] = (value===intValue.toString()) ? intValue : value;
                 }
             );
             return serialdata;
@@ -1110,20 +1196,16 @@ if (!Y.Global.ItsaDialog) {
     Y.Global.ItsaDialog.dd.addHandle('.yui3-widget-hd');
 }
 
+Y.ItsaDialogBox = Y.Global.ItsaDialog;
+
 //=================================================================================
 
 // Y.ITSAFORMELEMENT should get an own module. For the short time being, we will keep it inside itsa-dialog
 
 /**
- * The Itsa Dialogbox module.
+ * Y.ITSAFORMELEMENT
  *
- * @module itsa-dialogbox
- */
-
-/**
- * Dialogbox with sugar messages
- * 
- *
+ * @module gallery-itsadialogbox
  * @class ITSAFormelement
  * @extends Panel
  * @constructor
@@ -1132,11 +1214,6 @@ if (!Y.Global.ItsaDialog) {
  * YUI BSD License - http://developer.yahoo.com/yui/license.html
  *
 */
-
-var ITSAFORM_TABLETEMPLATE = '<td class="itsaform-tablelabel{classnamelabel}"{marginstyle}>{label}</td>'
-                            +'<td class="itsaform-tableelement">{element}<div class="itsa-formelement-validationmessage itsa-formelement-hidden">{validationMessage}</div></td>',
-    ITSAFORM_INLINETEMPLATE = '<span class="itsaform-spanlabel{classnamelabel}"{marginstyle}>{label}</span>'
-                            +'{element}<div class="itsa-formelement-validationmessage itsa-formelement-hidden">{validationMessage}</div>';
 
 Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
 
@@ -1163,7 +1240,8 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
         render : function(tableform) {
             var instance = this,
                 marginTop = instance.get('marginTop'),
-                marginStyle = marginTop ? ' style="margin-top:' + marginTop + 'px"' : '',
+                marginStyle = (marginTop && !tableform) ? ' style="margin-top:' + marginTop + 'px"' : '',
+                paddingStyle = marginTop ? ' style="padding-top:' + marginTop + 'px"' : '',
                 type = instance.get('type'),
                 classNameLabel = instance.get('classNameLabel'),
                 classNameValue = instance.get('classNameValue'),
@@ -1177,13 +1255,18 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
                 keyValidationClass = keyValidation ? ' itsa-formelement-keyvalidation' : '',
                 validationClass = validation ? ' itsa-formelement-validation' : '',
                 autoCorrectionClass = autoCorrection ? ' itsa-formelement-autocorrect' : '',
-                elementClass = ' class="itsa-formelement ' + classNameValue + initialFocusClass + selectOnFocusClass + keyValidationClass + validationClass + autoCorrectionClass+'"',
+                elementClass = ' class="itsa-formelement ' + classNameValue + initialFocusClass + selectOnFocusClass + keyValidationClass +
+                                          validationClass + autoCorrectionClass+'"',
                 element = '';
-            if (type==='input') {element = '<input id="' + instance.id + '" type="text" name="' + instance.get('name') + '" value="' + instance.get('value') + '"' + elementClass + marginStyle + ' />';}
+            if (type==='input') {element = '<input id="' + instance.id + '" type="text" name="' + instance.get('name') + '" value="' +
+                                                            instance.get('value') + '"' + elementClass + marginStyle + ' />';}
+            if (type==='password') {element = '<input id="' + instance.id + '" type="password" name="' + instance.get('name') + '" value="' +
+                                                                   instance.get('value') + '"' + elementClass + marginStyle + ' />';}
             return  Lang.sub(
                         tableform ? ITSAFORM_TABLETEMPLATE : ITSAFORM_INLINETEMPLATE,
                         {
                             marginstyle: marginStyle,
+                            paddingstyle: paddingStyle,
                             label: instance.get('label'),
                             element: element,
                             classnamelabel: classNameLabel,
@@ -1260,14 +1343,14 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
                     return val;
                 },
                 validator: function(val) {
-                    return (Lang.isString(val) && 
-                            ((val==='input') || 
-                             (val==='password') || 
-                             (val==='textarea') || 
-                             (val==='checkbox') || 
-                             (val==='radiogroup') || 
-                             (val==='selectbox') || 
-                             (val==='button') || 
+                    return (Lang.isString(val) &&
+                            ((val==='input') ||
+                             (val==='password') ||
+                             (val==='textarea') ||
+                             (val==='checkbox') ||
+                             (val==='radiogroup') ||
+                             (val==='selectbox') ||
+                             (val==='button') ||
                              (val==='hidden')
                             )
                     );
@@ -1301,7 +1384,8 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
             },
             /**
              * @description Validation during every keypress. The function that is passed will receive the keyevent, that can thus be prevented.<br>
-             * Only has effect if the masterform knows how to use it through delegation: therefore it adds the className 'itsa-formelement-keyvalidation'.
+             * Only has effect if the masterform knows how to use it through delegation: therefore it adds
+             * the className 'itsa-formelement-keyvalidation'.
              * The function MUST return true or false.
              * @attribute [keyValidation]
              * @type Function
@@ -1313,8 +1397,10 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
                 }
             },
             /**
-             * @description Validation after changing the value (onblur). The function should return true or false. In case of false, the validationerror is thrown.<br>
-             * Only has effect if the masterform knows how to use it through delegation: therefore it adds the className 'itsa-formelement-validation'.
+             * @description Validation after changing the value (onblur). The function should return true or false. In case of false,
+             * the validationerror is thrown.<br>
+             * Only has effect if the masterform knows how to use it through delegation:
+             * therefore it adds the className 'itsa-formelement-validation'.
              * The function MUST return true or false.
              * Either use validation, or autocorrection.
              * @attribute [validation]
@@ -1340,7 +1426,8 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
             },
             /**
              * @description If set, value will be replaces by the returnvalue of this function. <br>
-             * Only has effect if the masterform knows how to use it through delegation: therefore it adds the className 'itsa-formelement-autocorrect'.
+             * Only has effect if the masterform knows how to use it through delegation: therefore
+             * it adds the className 'itsa-formelement-autocorrect'.
              * The function MUST return true or false: defining whether the input is accepted.
              * Either use validation, or autocorrection.
              * @attribute [autocorrection]
@@ -1415,7 +1502,8 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
             },
             /**
              * @description DOM-node where the elementNode is bound to.<br>
-             * Be carefull: it will only return a Node when you have manually inserted the result of this.render() into the DOM. Otherwise returns null.
+             * Be carefull: it will only return a Node when you have manually inserted the result of this.render() into the DOM.
+             * Otherwise returns null.
              * Readonly
              * @attribute [elementNode]
              * @type Y.Node
@@ -1432,5 +1520,20 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
     }
 );
 
-
-}, 'gallery-2012.11.07-21-32' ,{requires:['base-build', 'panel', 'node-base', 'dd-plugin', 'node-focusmanager', 'event-valuechange'], skinnable:true});
+}, 'gallery-2013.06.26-23-09', {
+    "requires": [
+        "yui-base",
+        "base-build",
+        "panel",
+        "node-base",
+        "node-event-delegate",
+        "dd-plugin",
+        "node-focusmanager",
+        "event-valuechange",
+        "event-custom-base",
+        "node-core",
+        "oop",
+        "gallery-itsaformelement"
+    ],
+    "skinnable": true
+});

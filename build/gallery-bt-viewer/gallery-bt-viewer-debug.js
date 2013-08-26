@@ -35,7 +35,10 @@ var PREFIX = 'bvi_',
     },
 
 /**
- * is a Widget provides a HTML Viewer interface. When contents or images are wider then device, Viewer can be scroll horizontally. And, from beginning, all images in Viewer are scaled down to fit the device width, and a 'expand' button will be provided for each scaled images.
+ * Viewer is a Widget provides a HTML Viewer interface. When contents or images
+   are wider then device, Viewer can be scroll horizontally. And, from beginning,
+   all images in Viewer are scaled down to fit the device width, and a 'expand'
+   button will be provided for each scaled images.
  *
  * @class Viewer
  * @constructor
@@ -158,7 +161,7 @@ Viewer = Y.Base.create('btviewer', Y.ScrollView, [Y.Bottle.SyncScroll, Y.zui.Att
 Y.namespace('Bottle').Viewer = Viewer;
 
 
-}, 'gallery-2012.12.19-21-23', {
+}, 'gallery-2013.04.10-22-48', {
     "requires": [
         "gallery-bt-syncscroll",
         "gallery-zui-rascroll",

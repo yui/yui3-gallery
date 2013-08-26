@@ -17,7 +17,8 @@ var COLUMN_CHANGE = 'columnWidthChange',
     CLASSES = {
         COLUMN: PREFIX + 'column',
         MODULE: PREFIX + 'module',
-        HIDDEN: PREFIX + 'hidden'
+        RENDER: PREFIX + 'render',
+        ERROR: PREFIX + 'error'
     },
 
     HTMLS = {
@@ -180,7 +181,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
      * @protected
      */
     _minColumn: function () {
-        var minI = 9999,
+        var minI = Number.MAX_VALUE,
             minO;
 
         this.get('contentBox').all('> div').each(function (O) {
@@ -209,10 +210,15 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
             return;
         }
 
+        if (start) {
+            this.get('contentBox').addClass(CLASSES.RENDER);
+        }
+
         this._bpgRendering = true;
 
         if (this._bpgImages.length <= this._bpgRendered) {
             this._bpgRendering = false;
+            this.get('contentBox').removeClass(CLASSES.RENDER);
             this.syncScroll();
             this.fire(RENDER_FINISHED);
             return;
@@ -223,6 +229,7 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
         if (img.width || img.error) {
             if (img.error) {
                 img.load.setAttribute('src', this.get('errorImage'));
+                img.module.addClass(CLASSES.ERROR);
             }
             this._minColumn().append(img.module);
             this._bpgRendered += 1;
@@ -309,7 +316,8 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
         },
 
         /**
-         * Default column width. Column number will be decided by Math.round(parentWidth / columnWidth), and then all these columns will be fitted equally.
+         * Default column width. Column number will be decided by
+           Math.round(parentWidth / columnWidth), and then all these columns will be fitted equally.
          *
          * @attribute columnWidth
          * @type Number
@@ -394,4 +402,4 @@ PhotoGrid = Y.Base.create('btphotogrid', Y.Widget, [Y.Bottle.SyncScroll], {
 Y.namespace('Bottle').PhotoGrid = PhotoGrid;
 
 
-}, 'gallery-2012.12.19-21-23', {"requires": ["gallery-bt-syncscroll"]});
+}, 'gallery-2013.04.10-22-48', {"requires": ["gallery-bt-syncscroll"]});

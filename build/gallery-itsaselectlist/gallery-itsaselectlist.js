@@ -5,7 +5,7 @@ YUI.add('gallery-itsaselectlist', function (Y, NAME) {
 /**
  * The Itsa Selectlist module.
  *
- * @module itsa-selectlist
+ * @module gallery-itsaselectlist
  */
 
 
@@ -22,15 +22,16 @@ YUI.add('gallery-itsaselectlist', function (Y, NAME) {
 
 // Local constants
 var Lang = Y.Lang,
-    Node = Y.Node,
     IE = Y.UA.ie,
     ITSA_CLASSHIDDEN = 'itsa-hidden',
     ITSA_SHIM_TEMPLATE_TITLE = "Selectlist Shim",
-    ITSA_SHIM_TEMPLATE = '<iframe frameborder="0" tabindex="-1" class="itsa-shim" title="' + ITSA_SHIM_TEMPLATE_TITLE + '" src="javascript:false;"></iframe>',
+    ITSA_SHIM_TEMPLATE = '<iframe frameborder="0" tabindex="-1" class="itsa-shim" title="' + ITSA_SHIM_TEMPLATE_TITLE +
+                                           '" src="javascript:false;"></iframe>',
     ITSA_SELECTEDMAIN_TEMPLATE = "<span class='itsa-selectlist-selectedmain' unselectable='on'></span>",
     ITSA_BUTTON_TEMPLATE = "<button class='yui3-button'></button>",
     ITSA_DOWNBUTTON_TEMPLATE = "<span class='itsa-button-icon itsa-icon-selectdown'></span>",
-    ITSA_SELECTBOX_TEMPLATE = "<div class='itsa-selectlist-basediv " + ITSA_CLASSHIDDEN + "'><div class='itsa-selectlist-scrolldiv'><ul class='itsa-selectlist-ullist'></ul></div></div>";
+    ITSA_SELECTBOX_TEMPLATE = "<div class='itsa-selectlist-basediv " + ITSA_CLASSHIDDEN + "'><div class='itsa-selectlist-scrolldiv'>"+
+                                                     "<ul class='itsa-selectlist-ullist'></ul></div></div>";
 
 Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
 
@@ -102,7 +103,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          * @param {Object} config The config-object.
          * @protected
         */
-        initializer : function(config) {
+        initializer : function() {
             var instance = this;
             instance._selectedItemClass = instance.get('hideSelected') ? ITSA_CLASSHIDDEN : 'itsa-selectlist-selected';
 
@@ -111,7 +112,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         /**
          * Widget's renderUI-method. Creates the Selectlist in the DOM.
          *
-         * @method renderUI 
+         * @method renderUI
         */
         renderUI : function() {
             var instance = this,
@@ -120,16 +121,15 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 iconClassName = instance.get('iconClassName'),
                 buttonWidth = instance.get('buttonWidth'),
                 listWidth = instance.get('listWidth'),
-                btnSize = instance.get('btnSize'),
-                items;
-            if ((IE>0) && (IE<7)) {boundingBox.append(instance.SHIM_TEMPLATE);}
+                btnSize = instance.get('btnSize');
+            if ((IE>0) && (IE<7)) {boundingBox.append(ITSA_SHIM_TEMPLATE);}
             instance.buttonNode = Y.Node.create(ITSA_BUTTON_TEMPLATE);
             boundingBox.append(instance.buttonNode);
             instance.buttonNode.setHTML(ITSA_DOWNBUTTON_TEMPLATE);
             instance._selectedMainItemNode = Y.Node.create(ITSA_SELECTEDMAIN_TEMPLATE);
             instance.buttonNode.append(instance._selectedMainItemNode);
             instance._itemsContainerNode = Y.Node.create(ITSA_SELECTBOX_TEMPLATE);
-            instance.get('listAlignLeft') ? boundingBox.addClass('itsa-leftalign') : boundingBox.addClass('itsa-rightalign');
+            boundingBox.addClass('itsa-' + (instance.get('listAlignLeft') ? 'left' : 'right') + 'align');
             if (className) {boundingBox.addClass(className);}
             if (iconClassName) {
                 instance._selectedMainItemNode.addClass('itsa-button-icon');
@@ -146,7 +146,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         /**
          * Widget's bindUI-method. Binds onclick and clickoutside-events
          *
-         * @method bindUI 
+         * @method bindUI
         */
         bindUI : function() {
             var instance = this,
@@ -175,7 +175,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 items = instance.get('items'),
                 defaultItem = instance.get('defaultItem'),
                 ullist = instance._itemsContainerNode.one('.itsa-selectlist-ullist'),
-                i, 
+                i,
                 item,
                 itemText,
                 isDefaultItem,
@@ -188,11 +188,12 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     itemText = Lang.isString(item) ? item : (item.text || '');
                     isDefaultItem = (itemText===defaultItem);
                     if (isDefaultItem) {defaultItemFound = true;}
-                    newNode = Y.Node.create('<li' + ((isDefaultItem) ? ' class="' + instance._selectedItemClass + '"' : '') + '>' + itemText +'</li>');
+                    newNode = Y.Node.create('<li' + (isDefaultItem ? ' class="' + instance._selectedItemClass + '"' : '') + '>' + itemText +'</li>');
                     if (item.returnValue) {newNode.setData('returnValue', item.returnValue);}
                     ullist.append(newNode);
                 }
-                instance._selectedMainItemNode.setHTML((instance.get('selectionOnButton') && defaultItemFound) ? defaultItem : instance.get('defaultButtonText'));
+                instance._selectedMainItemNode.setHTML(
+                    (instance.get('selectionOnButton') && defaultItemFound) ? defaultItem : instance.get('defaultButtonText'));
             }
             instance._syncWithinSetterItems = true;
         },
@@ -207,7 +208,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          * <i>- e.currentTarget: the selected li-Node<br>
          * <i>- e.value: returnvalue of the selected item<br>
          * <i>- e.index: index of the selected item</i>
-         * 
+         *
         */
         _itemClick : function(e) {
             this._selectItem(e.currentTarget, true);
@@ -221,12 +222,13 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          * @method selectItem
          * @param {Int} index index to be selected
          * @param {Boolean} [softMatch] Optional. When set to true will always make a selectchange, even when the index is out of bound
-         * @param {String} [softButtonText] Optional. Text to be appeared on the button in case softMatch is true and there is no match. When not specified, the attribute <i>defaultButtonText</i> will be used
+         * @param {String} [softButtonText] Optional. Text to be appeared on the button in case softMatch is true and there is no match.
+         * When not specified, the attribute <i>defaultButtonText</i> will be used
          * @return {eventFacade} Fires a valueChange, NO selectChange event, because there is no userinteraction.<br>
          * <i>- e.currentTarget: the selected li-Node<br>
          * <i>- e.value: returnvalue of the selected item<br>
          * <i>- e.index: index of the selected item</i>
-         * 
+         *
         */
         selectItem : function(index, softMatch, softButtonText) {
             var instance = this,
@@ -237,7 +239,9 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     // no hit: return to default without selection in case of softMatch
                     if (softMatch) {
                         nodelist.removeClass(instance._selectedItemClass);
-                        if (instance.get('selectionOnButton')) {instance._selectedMainItemNode.setHTML(softButtonText || instance.get('defaultButtonText'));}
+                        if (instance.get('selectionOnButton')) {
+                            instance._selectedMainItemNode.setHTML(softButtonText || instance.get('defaultButtonText'));
+                        }
                     }
                 }
             }
@@ -251,7 +255,8 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          * @method selectItemByValue
          * @param {String} itemText listitem to be selected
          * @param {Boolean} [softMatch] Optional. When set to true will always make a selectchange, even when the listitem is not available
-         * @param {Boolean} [defaultButtonText] Optional. Whether to use the attribute <i>defaultButtonText</i> in case softMatch is true and there is no match. When set to false, <i>itemText</i> will be used when there is no match.
+         * @param {Boolean} [defaultButtonText] Optional. Whether to use the attribute <i>defaultButtonText</i> in case softMatch is true
+         * and there is no match. When set to false, <i>itemText</i> will be used when there is no match.
          * @return {eventFacade} Fires a valueChange, NO selectChange event, because there is no userinteraction.<br>
          * <i>- e.currentTarget: the selected li-Node<br>
          * <i>- e.value: returnvalue of the selected item<br>
@@ -259,7 +264,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          *
         */
         selectItemByValue : function(itemText, softMatch, defaultButtonText) {
-            // by returnvalue 
+            // by returnvalue
             var instance = this,
                 index = Y.Array.indexOf(instance._itemValues, itemText.toString().toLowerCase());
             instance.selectItem(index, softMatch, defaultButtonText ? instance.get('defaultButtonText') : itemText);
@@ -268,7 +273,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         /**
          * Does the final itemselection based on the listnode.<br>
          * Will always fire a <b>valueChange event</b>.<br>
-         * Will fire a <b>selectChange event</b> only when <i>userInteraction</i> is set to true. 
+         * Will fire a <b>selectChange event</b> only when <i>userInteraction</i> is set to true.
          *
          * @method _selectItem
          * @private
@@ -284,32 +289,39 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         _selectItem : function(node, userInteraction) {
             var instance = this,
                 previousNode = instance._itemsContainerNode.one('li.'+instance._selectedItemClass),
+                selectionOnButton = instance.get('selectionOnButton'),
                 nodeHTML;
-            if (!instance.get('disabled') && node && (node !== previousNode)) {
-                if (previousNode) {previousNode.removeClass(instance._selectedItemClass);}
-                node.addClass(instance._selectedItemClass);
+            if (!instance.get('disabled') && node && ((node !== previousNode) || !selectionOnButton)) {
+                if (previousNode) {
+                    previousNode.removeClass(instance._selectedItemClass);
+                }
                 nodeHTML = node.getHTML();
-                if (instance.get('selectionOnButton')) {instance._selectedMainItemNode.setHTML(nodeHTML);}
+                if (selectionOnButton) {
+                    node.addClass(instance._selectedItemClass);
+                    instance._selectedMainItemNode.setHTML(nodeHTML);
+                }
                 /**
-                 * In case of a valuechange, valueChange will be fired. 
+                 * In case of a valuechange, valueChange will be fired.
                  * No matter whether the change is done by userinteraction, or by a functioncall like selectItem()
                  * @event valueChange
                  * @param {EventFacade} e Event object<br>
                  * <i>- e.element: the selected li-Node<br>
                  * <i>- e.value: returnvalue of the selected item<br>
                  * <i>- e.index: index of the selected item</i>
-                */                
+                */
                 instance.fire('valueChange', {element: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});
                 /**
-                 * In case of a valuechange <u>triggered by userinteraction</u>, selectChange will be fired. 
-                 * This way you can use functioncalls like selectItem() and prevent double programmaction (which might occur when you listen to the valueChange event)
+                 * In case of a valuechange <u>triggered by userinteraction</u>, selectChange will be fired.
+                 * This way you can use functioncalls like selectItem() and prevent double programmaction
+                 * (which might occur when you listen to the valueChange event)
                  * @event selectChange
                  * @param {EventFacade} e Event object<br>
                  * <i>- e.element: the selected li-Node<br>
                  * <i>- e.value: returnvalue of the selected item<br>
                  * <i>- e.index: index of the selected item</i>
-                */                
-                if (userInteraction) {instance.fire('selectChange', {element: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
+                */
+                if (userInteraction) {instance.fire('selectChange',
+                                                {element: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
             }
         },
 
@@ -323,10 +335,10 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             var instance = this;
             if (!instance.get('disabled')) {
                 /**
-                 * In case the listbox is opened, hide-event will be fired. 
+                 * In case the listbox is opened, hide-event will be fired.
                  * @event hide
                  * @param {EventFacade} e Event object<br>
-                */                
+                */
                 instance.fire('hide');
                 instance._itemsContainerNode.toggleClass(ITSA_CLASSHIDDEN, true);
             }
@@ -342,10 +354,10 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             var instance = this;
             if (!instance.get('disabled')) {
                 /**
-                 * In case the listbox is opened, show-event will be fired. 
+                 * In case the listbox is opened, show-event will be fired.
                  * @event show
                  * @param {EventFacade} e Event object<br>
-                */                
+                */
                 instance.fire('show');
                 instance._itemsContainerNode.toggleClass(ITSA_CLASSHIDDEN, false);
             }
@@ -398,7 +410,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             var nodelist = this._itemsContainerNode.one('.itsa-selectlist-ullist').all('li');
             return nodelist.indexOf(node);
         },
-        
+
         /**
          * Is called after a disabledchange. Does dis/enable the inner-button element<br>
          *
@@ -424,9 +436,9 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             var instance = this;
             Y.Array.each(
                 instance._eventhandlers,
-                function(item, index, array){
+                function(item){
                     item.detach();
-                }    
+                }
             );
         },
 
@@ -552,7 +564,8 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     instance._itemValues = [];
                     for (i=0; i<val.length; i++) {
                         item = val[i];
-                        // Make sure to fill the array with Strings. User might supply other types like numbers: you don't want to miss the hit when you search the array by value.
+                        // Make sure to fill the array with Strings. User might supply other types like numbers:
+                        // you don't want to miss the hit when you search the array by value.
                         instance._itemValues.push(item.returnValue ? item.returnValue.toString().toLowerCase() : item.toString().toLowerCase());
                     }
                     // only call syncUI when items are change after rendering
@@ -576,7 +589,8 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
 
             /**
              * @description Whether the selection should be displayed on the button.<br>
-             * This is normal behaviour. Although in some cases you might not want this. For example when simulating a menubutton with static text and a dropdown with subbuttons<br>
+             * This is normal behaviour. Although in some cases you might not want this. For example when simulating a menubutton with
+             * static text and a dropdown with subbuttons<br>
              * Default = true<br>
              * When set to false, the buttontext will always remains the Attribute: <b>defaultButtonText</b>
              * @attribute selectionOnButton
@@ -590,7 +604,8 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             },
 
             /**
-             * @description Determines whether to show the selected item in the selectlist, or if it should disappear from the selectlist when selected.<br>
+             * @description Determines whether to show the selected item in the selectlist,
+             * or if it should disappear from the selectlist when selected.<br>
              * Default = false.
              * @attribute hideSelected
              * @type Boolean
@@ -614,20 +629,20 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 var options = srcNode.all('option'),
                     selected = null;
                 options.each(
-                    function(node, index, nodelist) {
+                    function(node) {
                         if (!selected && (node.getAttribute('selected')==='selected')) {
                             selected = node.getHTML();
                         }
                     }
                 );
-                return selected; 
+                return selected;
             },
 
             items: function(srcNode) {
                 var options = srcNode.all('option'),
                     allItems = [];
                 options.each(
-                    function(node, index, nodelist) {
+                    function(node) {
                         allItems.push(
                             {
                                 text: node.getHTML(),
@@ -643,13 +658,12 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
     }
 );
 
-}, 'gallery-2012.12.05-21-01', {
-    "supersedes": [
-        ""
-    ],
-    "skinnable": "true",
+}, 'gallery-2013.06.13-01-19', {
     "requires": [
+        "yui-base",
         "base-build",
+        "node-style",
+        "base-base",
         "widget",
         "node-base",
         "cssbutton",
@@ -657,7 +671,5 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
         "node-event-delegate",
         "event-outside"
     ],
-    "optional": [
-        ""
-    ]
+    "skinnable": true
 });

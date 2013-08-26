@@ -334,9 +334,22 @@ Y.DateTimeUtils =
 		if (self.CLOCK_DISPLAY_TYPE == 12)
 		{
 			var s = self.TIME_FIELD_DELIMITER + pad2(time.minute) + ' ';
-			return (time.hour > 12 ?
-					(time.hour - 12) + s + self.PM_STRING :
-					time.hour + s + self.AM_STRING);
+			if (time.hour === 0)
+			{
+				return '12' + s + self.AM_STRING;
+			}
+			else if (time.hour === 12)
+			{
+				return '12' + s + self.PM_STRING;
+			}
+			else if (time.hour > 12)
+			{
+				return (time.hour - 12) + s + self.PM_STRING;
+			}
+			else
+			{
+				return time.hour + s + self.AM_STRING;
+			}
 		}
 		else
 		{
@@ -366,21 +379,38 @@ Y.DateTimeUtils =
 			return time;
 		}
 
-		var offset = 0;
+		var offset = 0,
+			am     = false,
+			pm     = false;
 		if (time.indexOf(self.AM_STRING) > 0)
 		{
+			am   = true;
 			time = Y.Lang.trim(time.replace(self.AM_STRING, ''));
 		}
 		else if (time.indexOf(self.PM_STRING) > 0)
 		{
+			pm     = true;
 			time   = Y.Lang.trim(time.replace(self.PM_STRING, ''));
 			offset = 12;
 		}
 
 		var t = time.split(self.TIME_FIELD_DELIMITER);
-		if (t.length != 2 || !Y.every(t, validInteger))
+		if (t.length == 1 && (am || pm))
+		{
+			t[1] = 0;
+		}
+		else if (t.length < 2 || 3 < t.length || !Y.every(t, validInteger))
 		{
 			throw Error('Unparseable time format.');
+		}
+
+		if (am && t[0] == '12')
+		{
+			t[0] = 0;
+		}
+		else if (pm && t[0] == '12')
+		{
+			offset = 0;
 		}
 
 		var result =
@@ -402,4 +432,4 @@ Y.DateTimeUtils =
 var self = Y.DateTimeUtils;	// shortcut
 
 
-}, 'gallery-2013.01.16-21-05', {"requires": ["gallery-funcprog"]});
+}, 'gallery-2013.07.03-22-52', {"requires": ["gallery-funcprog"]});

@@ -1,38 +1,38 @@
 YUI.add('gallery-alea', function (Y, NAME) {
 
 /*!
- * based on Alea.js and Mash.js.
- * Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+based on Alea.js and Mash.js.
+Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
 
 /**
- * Y.Alea is a better pseudorandom number generator than Math.random.
- *
- * based on Alea.js and Mash.js.
- * Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
- *
- * <http://baagoe.org/en/w/index.php/Better_random_numbers_for_javascript>
- *
- * @module gallery-alea
- */
+Y.Alea is a better pseudorandom number generator than Math.random.
+
+based on Alea.js and Mash.js.
+Copyright (C) 2010 by Johannes Baagøe <baagoe@baagoe.org>
+
+<http://baagoe.org>
+
+@module gallery-alea
+@author Steven Olmsted
+*/
 (function (Y) {
     'use strict';
     /*jshint bitwise:false*/
@@ -48,13 +48,13 @@ YUI.add('gallery-alea', function (Y, NAME) {
         _now = Y.Lang.now,
 
         /**
-         * @class Alea
-         * @constructor
-         * @param {Number|String|[Number|String]} [seedValues=Y.Lang.now()]* Any
-         * number of seed values can be passed as individual arguments or an
-         * array of seed values can be passed as a single argument.  If left
-         * undefined, Y.Lang.now() is used as a seed.
-         */
+        @class Alea
+        @constructor
+        @param {Number|String|[Number|String]} [seedValues=Y.Lang.now()]* Any
+        number of seed values can be passed as individual arguments or an array
+        of seed values can be passed as a single argument.  If left undefined,
+        Y.Lang.now() is used as a seed.
+        */
         _Class = function (args) {
             var c = 1,
                 mash = _Class._mash(),
@@ -89,11 +89,11 @@ YUI.add('gallery-alea', function (Y, NAME) {
             });
 
             /**
-             * Generates a random number that is greater than or equal to zero
-             * and less than one.  The number will be a 32-bit fraction.
-             * @method random
-             * @return {Number}
-             */
+            Generates a random number that is greater than or equal to zero and
+            less than one.  The number will be a 32-bit fraction.
+            @method random
+            @return {Number}
+            */
             this.random = function () {
                 var t = 2091639 * s0 + c * _number_2_pow_negative_32;
 
@@ -108,19 +108,19 @@ YUI.add('gallery-alea', function (Y, NAME) {
 
     _Class.prototype = {
         /**
-        * Generates a random number that is greater than or equal to zero
-        * and less than one.  The number will be a 53-bit fraction.
-        * @method fract53
-        * @return {Number}
+        Generates a random number that is greater than or equal to zero and less
+        than one.  The number will be a 53-bit fraction.
+        @method fract53
+        @return {Number}
         */
         fract53: function () {
             var random = this.random;
             return random() + (random() * 2097152 | 0) * 1.1102230246251565e-16; // 2^-53
         },
         /**
-        * Generates a random 32-bit unsigned integer.
-        * @method uint32
-        * @return {Number}
+        Generates a random 32-bit unsigned integer.
+        @method uint32
+        @return {Number}
         */
         uint32: function () {
             return this.random() * _number_2_pow_32;
@@ -128,14 +128,14 @@ YUI.add('gallery-alea', function (Y, NAME) {
     };
 
     /**
-     * This method returns a string hashing function which is initialized with
-     * an internal state.
-     * @method _mash
-     * @protected
-     * @return {Function} A string hashing function which accepts a single
-     * argument and returns a number.
-     * @static
-     */
+    This method returns a string hashing function which is initialized with an
+    internal state.
+    @method _mash
+    @protected
+    @return {Function} A string hashing function which accepts a single argument
+    and returns a number.
+    @static
+    */
     _Class._mash = function () {
         var n = 4022871197;
 
@@ -164,4 +164,4 @@ YUI.add('gallery-alea', function (Y, NAME) {
     Y.Alea = _Class;
 }(Y));
 
-}, 'gallery-2012.12.12-21-11');
+}, 'gallery-2013.05.02-22-59');

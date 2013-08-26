@@ -1,5 +1,0 @@
-shifter [err] /assets/skins/sam/gallery-contextmenu-view-skin.css contains 2 lint errors
-   #1: [warning] Using width with border can sometimes make elements larger than you expect.
-       border:1px solid #aaa; // line 3, pos 5
-   #2: [warning] Using width with padding can sometimes make elements larger than you expect.
-       padding:4px; // line 6, pos 5

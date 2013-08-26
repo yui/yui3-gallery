@@ -13,7 +13,6 @@ var body = Y.one('body'),
     VISIBLE_CHANGE = 'visibleChange',
 
     hasTouch = Y.Bottle.Device.getTouchSupport(),
-    scrollBase = hasTouch ? body : Y.one('html'),
 
     instances = [],
     current,
@@ -34,14 +33,12 @@ var body = Y.one('body'),
      * @param [config] {Object} Object literal with initial attribute values
      * @extends Widget
      * @uses WidgetParent
-     * @uses WidgetPosition
      * @uses WidgetStack
-     * @uses WidgetPositionAlign
      * @uses Bottle.PushPop
      * @constructor
      * @namespace Bottle
      */
-    Overlay = Y.Base.create('btoverlay', Y.Widget, [Y.WidgetParent, Y.WidgetPosition, Y.WidgetStack, Y.Bottle.PushPop], {
+    Overlay = Y.Base.create('btoverlay', Y.Widget, [Y.WidgetParent, Y.WidgetStack, Y.Bottle.PushPop], {
         initializer: function (cfg) {
             var msk = this.get('contentBox').getData('mask');
 
@@ -107,7 +104,9 @@ var body = Y.one('body'),
         _updateFullSize: function () {
             if (this.get('fullPage')) {
                 this.set('width', Y.Bottle.Device.getBrowserWidth(), {noAlign: true});
-                this.set('height', Y.Bottle.Device.getBrowserHeight(), {noAlign: true});
+                if (!this.get('nativeScroll')) {
+                    this.set('height', Y.Bottle.Device.getBrowserHeight(), {noAlign: true});
+                }
             }
         },
 
@@ -189,6 +188,12 @@ var body = Y.one('body'),
             var show = this.get('visible'),
                 mask = this.get('mask');
 
+            if (show && this.get('nativeScroll')) {
+                Y.Bottle.Page.getCurrent().resetScroll(this.get('boundingBox'));
+                XY = this.getShowHideXY(true);
+                this.absMove(XY[0], XY[1]);
+            }
+
             if (mask) {
                 this._displayMask(show);
             }
@@ -207,12 +212,14 @@ var body = Y.one('body'),
         getShowHideXY: function (show) {
             var selfDir = show ? 0 : 1,
                 posData = POSITIONS[this.get('showFrom')],
+                NS = this.get('nativeScroll'),
                 W = Y.Bottle.Device.getBrowserWidth(),
                 H = Y.Bottle.Device.getBrowserHeight();
 
             return [
                 selfDir * W * posData[0] + Math.floor((W - this.get('width')) / 2),
-                selfDir * H * posData[1] + Math.floor((H - this.get('height')) / 2) + (Y.Bottle.get('positionFixed') ? 0 : scrollBase.get('scrollTop'))
+                selfDir * H * posData[1] + (NS ? 0 : Math.floor((H - this.get('height')) / 2))
+                + (Y.Bottle.get('positionFixed') ? 0 : Y.Bottle.Device.getScrollY())
             ];
         },
 
@@ -224,17 +231,25 @@ var body = Y.one('body'),
          */
         _doShowHide: function (E) {
             var show = E.newVal,
-                runthese = (show && this.enable() && this._updateFullSize()),
-                finalPos = this.getShowHideXY(show),
+                finalPos,
                 node = this.get('boundingBox');
+
+            if (show && this.enable()) {
+                this._updateFullSize();
+            }
 
             if (show) {
                 this._updatePositionHide({visible: false});
                 current = this;
             } else {
+                if (this.get('nativeScroll')) {
+                    Y.Bottle.Page.getCurrent().resetScroll();
+                }
                 this._updatePositionShow({visible: true});
                 current = undefined;
             }
+
+            finalPos = this.getShowHideXY(show);
 
             this._doTransition(node, finalPos[0], finalPos[1], this._doneShowHide);
         }
@@ -390,4 +405,4 @@ Mask.on('gesturemovestart', function (E) {
 });
 
 
-}, 'gallery-2012.12.19-21-23', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});
+}, 'gallery-2013.04.10-22-48', {"requires": ["widget-position", "widget-stack", "gallery-bt-pushpop"]});

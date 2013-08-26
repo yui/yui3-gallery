@@ -18,12 +18,15 @@ var BOTTLE_INIT = 'btInit',
     BOTTLE_NATIVE = 'btNative',
     BOTTLE_FIXED = 'btFixed',
     BOTTLE_FOCUS = 'btFocus',
+    BOTTLE_SWITCHER = 'btSwitcher',
+    BOTTLE_SWITCHER_ACTIVE = 'btActive',
 
     MATCH_HTML_COMMENT = /^<!--([\s\S]+)-->$/,
 
     SYNC_SCREEN = 'btSyncScreen',
+    SYNC_CONTENT = 'btSyncContent',
     htmlbody = Y.all('html, body'),
-    body = Y.one('body'),
+    body = htmlbody.item(1),
     btRoot = Y.one('.btRoot') || body.appendChild(Y.Node.create('<div class="btRoot"></div>')),
     inited = body.hasClass(BOTTLE_INIT),
     hideURL = false,
@@ -34,24 +37,40 @@ var BOTTLE_INIT = 'btInit',
             overflowX: 'hidden'
         }
     },
+
+    nativeScrollPositions = [
+    ],
+
     flags = {
         nativeScroll: true,
         positionFixed: false
     },
 
     resetBodySize = function (resize) {
+        var I = nativeScrollPositions.length - 1,
+            S, H;
+
         if (hideURL && !resize) {
             window.scrollTo(0, 1);
         }
 
-        if (flags.nativeScroll) {
-            return;
+        if (I >= 0) {
+            S = nativeScrollPositions[I];
         }
 
-        body.setStyles({
-            width: Y.Bottle.Device.getBrowserWidth(),
-            height: Y.Bottle.Device.getBrowserHeight()
-        });
+        H = {
+            width: Y.Bottle.Device.getBrowserWidth()
+        };
+
+        if (flags.nativeScroll) {
+            if (S) {
+                H.height = Math.max(S.node ? S.node.get('offsetHeight') : S.height, Y.Bottle.Device.getBrowserHeight());
+            }
+        } else {
+            H.height = Y.Bottle.Device.getBrowserHeight();
+        }
+
+        body.setStyles(H);
     },
 
     handleResize = function (force) {
@@ -75,20 +94,41 @@ var BOTTLE_INIT = 'btInit',
         }
     },
 
-    initWidgets = function(css, Cls, Root) {
+    initWidgets = function(css, Cls, Root, param) {
         Root.all(css).each(function (srcNode) {
-            new Cls({
+            new Cls(Y.merge({
                 srcNode: srcNode,
                 render: true
-            });
+            }, param));
         });
+    },
+    
+    switcher = function(e) {
+        var t = e.currentTarget,
+            ani = (t.getAttribute('data-auto') === "false") ? false : true;
+            act = true;
+
+        if (t.hasClass(BOTTLE_SWITCHER_ACTIVE)) {
+            if (ani) {
+                t.removeClass(BOTTLE_SWITCHER_ACTIVE);
+            }
+            act = false;
+        } else {
+            if (ani) {
+                t.addClass(BOTTLE_SWITCHER_ACTIVE);
+            }
+        }
+        Y.publish(BOTTLE_SWITCHER);
+        Y.fire(BOTTLE_SWITCHER, {event: e, action: act});
     },
 
     /**
      * Initialize bottle UI library , create instances with supported data-roles.
      *
      * @method init
-     * @param hideURL {Boolean|Node} auto hide URL Bar when bottle inited or orientation changed. If a Node is provided, try to initialize Bottle widgets for this Node.
+     * @param hideURL {Boolean|Node} auto hide URL Bar when bottle inited or
+              orientation changed. If a Node is provided, try to initialize
+              Bottle widgets for this Node.
      */
     init = function (initCfg) {
         var pageNode = Y.one('[data-role=page]'),
@@ -111,9 +151,9 @@ var BOTTLE_INIT = 'btInit',
             inited = true;
         }
 
-        initWidgets('[data-role=viewer]', Y.Bottle.Viewer, initRoot);
+        initWidgets('[data-role=viewer]', Y.Bottle.Viewer, initRoot, {axis: 'x'});
         initWidgets('[data-role=photogrid]', Y.Bottle.PhotoGrid, initRoot);
-        initWidgets('[data-role=carousel]', Y.Bottle.Carousel, initRoot);
+        initWidgets('[data-role=carousel]', Y.Bottle.Carousel, initRoot, {axis: 'x'});
         initWidgets('[data-role=slidetab]', Y.Bottle.SlideTab, initRoot);
         initWidgets('[data-role=loader]', Y.Bottle.Loader, initRoot);
 
@@ -128,17 +168,15 @@ var BOTTLE_INIT = 'btInit',
                     flags.positionFixed = true;
                     body.addClass(BOTTLE_FIXED);
                 }
+                if (Y.UA.ie > 9) {
+                    styles.scroll.overflowX = '';
+                    styles.scroll.height = 'auto';
+                }
                 htmlbody.setStyles(styles.scroll);
                 body.addClass(BOTTLE_NATIVE);
-                pageWidget.item(0).get('scrollView').disable();
                 Y.publish(BOTTLE_NATIVE, {fireOnce: true});
                 Y.fire(BOTTLE_NATIVE);
                 Y.publish(SYNC_SCREEN);
-
-                // disable scroll on shortcut and overlay
-                btRoot.on('gesturemove', function (E) {
-                    E.preventDefault();
-                }, {standAlone:true, root: btRoot});
             } else {
                 flags.nativeScroll = false;
                 resetBodySize();
@@ -168,6 +206,7 @@ var BOTTLE_INIT = 'btInit',
         }
 
         Y.on((Y.UA.mobile === 'Apple') ? 'orientationchange' : 'resize', handleResize, window);
+        Y.on(SYNC_CONTENT, handleResize);
 
         body.delegate('focus', function () {
             body.addClass(BOTTLE_FOCUS);
@@ -179,8 +218,11 @@ var BOTTLE_INIT = 'btInit',
             handleResize(true);
         }, 'input, select, textarea');
 
+        body.delegate('click', switcher, '.btSwitcher');
+
         body.addClass(BOTTLE_READY).removeClass('btHideSCO').removeClass('btInPlace').removeClass('btHideAll');
         Y.publish(BOTTLE_READY, {fireOnce: true});
+        Y.publish(SYNC_CONTENT);
         Y.fire(BOTTLE_READY);
     },
 
@@ -211,9 +253,10 @@ var BOTTLE_INIT = 'btInit',
 Y.namespace('Bottle').init = init;
 Y.namespace('Bottle').get = get;
 Y.namespace('Bottle').lazyLoad = lazyLoad;
+Y.namespace('Bottle').nativeScrollPositions = nativeScrollPositions;
 
 
-}, 'gallery-2012.12.19-21-23', {
+}, 'gallery-2013.04.10-22-48', {
     "skinnable": "true",
     "requires": [
         "gallery-bt-shortcut",
