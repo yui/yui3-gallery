@@ -1,3 +1,5 @@
+/*csslint adjoining-classes: false, star-property-hack: false */
+
 .yui3-js-enabled .itsa-datetimepicker-loading .itsa-button-datetime {
     display: none;
 }
@@ -44,6 +46,12 @@
 
 .yui3-skin-sam .yui3-panel.itsa-datetimepicker-panel .yui3-widget-bd {
     padding: 10px 5px 10px 15px;
+}
+
+.yui3-skin-sam .itsa-datetimepicker-panel .yui3-calendar-weekdayrow th {
+    padding: 5px;
+    background: none;
+    text-align: center;
 }
 
 .itsa-datetimepicker-timepicker .yui3-dial-value-string {
