@@ -11,6 +11,11 @@
         "js/rocket-controller.js"
       ]
     },
+    "gallery-rocket-model": {
+      "jsfiles": [
+        "js/rocket-model.js"
+      ]
+    },
     "gallery-rocket-view": {
       "jsfiles": [
         "js/rocket-view.js"

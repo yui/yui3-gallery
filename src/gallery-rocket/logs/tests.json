@@ -1,11 +1,11 @@
 {
     "name": "gallery-rocket",
     "passed": 0,
-    "failed": 3,
+    "failed": 2,
     "errors": 0,
     "ignored": 0,
-    "total": 3,
-    "duration": 1146,
+    "total": 2,
+    "duration": 736,
     "type": "report",
     "Rocket": {
         "name": "Rocket",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 16,
+        "duration": 14,
         "type": "testsuite",
         "General": {
             "name": "General",
@@ -23,7 +23,7 @@
             "errors": 0,
             "ignored": 0,
             "total": 1,
-            "duration": 14,
+            "duration": 13,
             "type": "testcase",
             "all the modules exist": {
                 "result": "fail",
@@ -41,7 +41,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 43,
+        "duration": 41,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -61,7 +61,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 43,
+        "duration": 41,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -81,7 +81,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 42,
+        "duration": 41,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -110,7 +110,7 @@
             "errors": 0,
             "ignored": 0,
             "total": 0,
-            "duration": 11,
+            "duration": 10,
             "type": "testcase"
         }
     },
@@ -121,7 +121,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 42,
+        "duration": 41,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -161,7 +161,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 42,
+        "duration": 41,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -170,7 +170,7 @@
             "errors": 0,
             "ignored": 0,
             "total": 0,
-            "duration": 11,
+            "duration": 10,
             "type": "testcase"
         }
     },
@@ -181,7 +181,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 42,
+        "duration": 41,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -201,7 +201,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 0,
-        "duration": 43,
+        "duration": 41,
         "type": "testsuite",
         "Methods": {
             "name": "Methods",
@@ -214,6 +214,6 @@
             "type": "testcase"
         }
     },
-    "timestamp": "Thu 22 Aug 2013 01:49:55 PM PDT",
+    "timestamp": "Wed Sep  4 14:57:14 2013",
     "consoleInfo": []
 }

@@ -182,4 +182,4 @@ View = Y.Base.create('rocketView', Y.View, [Y.REventBroker], {
 Y.RView = View;
 
 
-}, 'gallery-2013.08.22-21-03', {"requires": ["view", "event", "handlebars", "gallery-rocket-util", "gallery-rocket-event-broker"]});
+}, 'gallery-2013.09.04-21-56', {"requires": ["view", "event", "handlebars", "gallery-rocket-util", "gallery-rocket-event-broker"]});
