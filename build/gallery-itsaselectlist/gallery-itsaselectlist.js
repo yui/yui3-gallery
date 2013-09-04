@@ -177,6 +177,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 ullist = instance._itemsContainerNode.one('.itsa-selectlist-ullist'),
                 i,
                 item,
+                startindex = instance.get('index'),
                 itemText,
                 isDefaultItem,
                 defaultItemFound,
@@ -187,7 +188,13 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     item = items[i];
                     itemText = Lang.isString(item) ? item : (item.text || '');
                     isDefaultItem = (itemText===defaultItem);
-                    if (isDefaultItem) {defaultItemFound = true;}
+                    if (isDefaultItem || (startindex===i)) {
+                        defaultItemFound = true;
+                        if (startindex===i) {
+                            defaultItem = itemText;
+                        }
+                        instance.set('index', i, {silent: true});
+                    }
                     newNode = Y.Node.create('<li' + (isDefaultItem ? ' class="' + instance._selectedItemClass + '"' : '') + '>' + itemText +'</li>');
                     if (item.returnValue) {newNode.setData('returnValue', item.returnValue);}
                     ullist.append(newNode);
@@ -290,7 +297,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             var instance = this,
                 previousNode = instance._itemsContainerNode.one('li.'+instance._selectedItemClass),
                 selectionOnButton = instance.get('selectionOnButton'),
-                nodeHTML;
+                nodeHTML, index;
             if (!instance.get('disabled') && node && ((node !== previousNode) || !selectionOnButton)) {
                 if (previousNode) {
                     previousNode.removeClass(instance._selectedItemClass);
@@ -300,6 +307,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     node.addClass(instance._selectedItemClass);
                     instance._selectedMainItemNode.setHTML(nodeHTML);
                 }
+                index = instance._indexOf(node);
                 /**
                  * In case of a valuechange, valueChange will be fired.
                  * No matter whether the change is done by userinteraction, or by a functioncall like selectItem()
@@ -322,6 +330,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 */
                 if (userInteraction) {instance.fire('selectChange',
                                                 {element: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
+                instance.set('index', index, {silent: true});
             }
         },
 
@@ -394,7 +403,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          *
         */
         currentIndex : function() {
-            return this._indexOf(this.currentSelected());
+            return this.get('index');
         },
 
         /**
@@ -588,6 +597,23 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
             },
 
             /**
+             * @description The index of the selected item<br>
+             * Default = null
+             * @attribute index
+             * @type Int
+            */
+            index : {
+                value: null,
+                validator: function(val) {
+                    return (typeof val === 'number');
+                },
+                setter: function(val) {
+                    this.selectItem(val);
+                    return val;
+                }
+            },
+
+            /**
              * @description Whether the selection should be displayed on the button.<br>
              * This is normal behaviour. Although in some cases you might not want this. For example when simulating a menubutton with
              * static text and a dropdown with subbuttons<br>
@@ -658,7 +684,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
     }
 );
 
-}, 'gallery-2013.06.13-01-19', {
+}, 'gallery-2013.09.04-21-56', {
     "requires": [
         "yui-base",
         "base-build",

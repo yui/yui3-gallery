@@ -1,3 +1,4 @@
+/*csslint adjoining-classes: false, star-property-hack: false */
 .yui3-js-enabled .yui3-itsaselectlist-loading {
     display: none;
 }
