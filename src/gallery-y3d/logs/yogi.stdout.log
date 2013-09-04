@@ -1,0 +1,183 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-y3d
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-y3d
+   #1: Too many var statements.
+       var glMath = {}; // line 45, pos 9
+   #2: Expected '!==' and instead saw '!='.
+       if (typeof(Float32Array) != 'undefined') { // line 47, pos 34
+   #3: Too many var statements.
+       var i = new Int32Array(y.buffer); // line 49, pos 17
+   #4: Too many var statements.
+       var threehalfs = 1.5; // line 64, pos 19
+   #5: Unexpected use of '>>'.
+       i[0] = 0x5f3759df - (i[0] >> 1); // line 66, pos 41
+   #6: Too many var statements.
+       var number2 = y[0]; // line 68, pos 19
+   #7: Too many var statements.
+       var MatrixArray = null; // line 81, pos 9
+   #8: Too many var statements.
+       var vec3 = {}; // line 102, pos 9
+   #9: Too many var statements.
+       var unprojectMat = null; // line 446, pos 9
+   #10: Too many var statements.
+       var unprojectVec = new MatrixArray(4); // line 447, pos 9
+   #11: Line too long.
+       * Based on the <a href="http://webcvs.freedesktop.org/mesa/Mesa/src/glu/mesa/project.c?revision=1.4&view=markup">Mesa gluUnProject implementation</a> // line 450, pos 154
+   #12: Too many var statements.
+       var v = unprojectVec; // line 468, pos 13
+   #13: Too many var statements.
+       var xUnitVec3 = vec3.createFrom(1,0,0); // line 488, pos 9
+   #14: Too many var statements.
+       var yUnitVec3 = vec3.createFrom(0,1,0); // line 489, pos 9
+   #15: Too many var statements.
+       var zUnitVec3 = vec3.createFrom(0,0,1); // line 490, pos 9
+   #16: Too many var statements.
+       var tmpvec3 = vec3.create(); // line 492, pos 9
+   #17: Too many var statements.
+       var axis = tmpvec3; // line 506, pos 13
+   #18: Expected '{' and instead saw 'vec3'.
+       vec3.cross(yUnitVec3, a, axis); // line 512, pos 17
+   #19: Expected '{' and instead saw 'vec3'.
+       vec3.cross(zUnitVec3, a, axis); // line 514, pos 17
+   #20: Too many var statements.
+       var s = Math.sqrt((1.0 + d) * 2.0); // line 518, pos 17
+   #21: Too many var statements.
+       var sInv = 1.0 / s; // line 519, pos 17
+   #22: Expected '{' and instead saw 'dest'.
+       if (dest[3] > 1.0) dest[3] = 1.0; // line 527, pos 28
+   #23: Expected '{' and instead saw 'dest'.
+       else if (dest[3] < -1.0) dest[3] = -1.0; // line 528, pos 34
+   #24: Too many var statements.
+       var mat3 = {}; // line 547, pos 9
+   #25: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vec; // line 711, pos 18
+   #26: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vec; // line 728, pos 18
+   #27: Too many var statements.
+       var mat4 = {}; // line 888, pos 9
+   #28: Too many var statements.
+       var a10 = mat[ 4], a11 = mat[ 5], a12 = mat[ 6], a13 = mat[7]; // line 1291, pos 13
+   #29: Too many var statements.
+       var a20 = mat[ 8], a21 = mat[ 9], a22 = mat[10], a23 = mat[11]; // line 1292, pos 13
+   #30: Too many var statements.
+       var a30 = mat[12], a31 = mat[13], a32 = mat[14], a33 = mat[15]; // line 1293, pos 13
+   #31: Trailing whitespace.
+       var b0  = mat2[0], b1 = mat2[1], b2 = mat2[2], b3 = mat2[3]; // line 1296, pos 69
+   #32: Too many var statements.
+       var b0  = mat2[0], b1 = mat2[1], b2 = mat2[2], b3 = mat2[3]; // line 1296, pos 13
+   #33: Too many var statements.
+       var quat4 = {}; // line 1932, pos 9
+   #34: Too many var statements.
+       var identityQuat4 = quat4.identity(); // line 2028, pos 9
+   #35: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = quat4.create(); // line 2414, pos 20
+   #36: Too many var statements.
+       var fRoot; // line 2420, pos 13
+   #37: Too many var statements.
+       var s_iNext = quat4.fromRotationMatrix.s_iNext = quat4.fromRotationMatrix.s_iNext || [1,2,0]; // line 2432, pos 17
+   #38: Too many var statements.
+       var i = 0; // line 2433, pos 17
+   #39: Expected '{' and instead saw 'i'.
+       i = 1; // line 2435, pos 15
+   #40: Expected '{' and instead saw 'i'.
+       i = 2; // line 2437, pos 15
+   #41: Too many var statements.
+       var j = s_iNext[i]; // line 2438, pos 17
+   #42: Too many var statements.
+       var k = s_iNext[j]; // line 2439, pos 17
+   #43: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = quat4.create(); // line 2505, pos 20
+   #44: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = quat4.create(); // line 2526, pos 20
+   #45: Too many var statements.
+       var s = Math.sin(half); // line 2529, pos 13
+   #46: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = src; // line 2551, pos 20
+   #47: Too many var statements.
+       var invlen = glMath.invsqrt(sqrlen); // line 2559, pos 17
+   #48: Too many var statements.
+       var vec2 = {}; // line 2589, pos 9
+   #49: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 2638, pos 20
+   #50: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 2654, pos 20
+   #51: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 2670, pos 20
+   #52: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 2686, pos 20
+   #53: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecA; // line 2705, pos 20
+   #54: Expected '{' and instead saw 'return'.
+       if (!dest) return z; // line 2815, pos 20
+   #55: Too many var statements.
+       var mat2 = {}; // line 2918, pos 9
+   #56: Too many var statements.
+       var det = a0 * a3 - a2 * a1; // line 3057, pos 13
+   #57: Expected '{' and instead saw 'return'.
+       if (!det) return null; // line 3058, pos 19
+   #58: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vec; // line 3124, pos 18
+   #59: Too many var statements.
+       var vec4 = {}; // line 3170, pos 9
+   #60: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 3227, pos 18
+   #61: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 3245, pos 18
+   #62: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 3263, pos 18
+   #63: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecB; // line 3281, pos 18
+   #64: Expected '{' and instead saw 'dest'.
+       if (!dest) dest = vecA; // line 3302, pos 18
+   #65: Too many var statements.
+       });var Lang = Y.Lang; // line 3538, pos 8
+   #66: 'Lang' is already defined.
+       });var Lang = Y.Lang; // line 3538, pos 13
+   #67: Expected '===' and instead saw '=='.
+       if (val && (lines.length == 0)) { // line 3579, pos 34
+   #68: Too many var statements.
+       });var lastTime = 0, // line 3640, pos 8
+   #69: Too many var statements.
+       });var Color = { // line 3776, pos 8
+   #70: Too many var statements.
+       });var Lang = Y.Lang; // line 3920, pos 8
+   #71: 'Lang' is already defined.
+       });var Lang = Y.Lang; // line 3920, pos 13
+   #72: Too many var statements.
+       });var Lang = Y.Lang; // line 4083, pos 8
+   #73: 'Lang' is already defined.
+       });var Lang = Y.Lang; // line 4083, pos 13
+   #74: Too many var statements.
+       });var Lang = Y.Lang; // line 4179, pos 8
+   #75: 'Lang' is already defined.
+       });var Lang = Y.Lang; // line 4179, pos 13
+   #76: Too many var statements.
+       Y.namespace("Plugin").Picker = Picker;var colorProgram = null, // line 4372, pos 43
+   #77: Too many var statements.
+       };var Lang = Y.Lang; // line 4505, pos 7
+   #78: 'Lang' is already defined.
+       };var Lang = Y.Lang; // line 4505, pos 12
+   #79: Unexpected use of '|'.
+       context.clear(context.COLOR_BUFFER_BIT | context.DEPTH_BUFFER_BIT); // line 4629, pos 48
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-y3d/gallery-y3d.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-y3d/gallery-y3d.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-y3d/gallery-y3d-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 2.278 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

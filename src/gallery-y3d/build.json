@@ -1,0 +1,27 @@
+{
+    "name": "gallery-y3d",
+    "builds": {
+        "gallery-y3d": {
+            "jsfiles": [
+                "matrix.js",
+            	"model.js",
+                "texture.js",
+                "geometry-base.js",
+                "anim.js",
+                "camera.js",
+                "color.js",
+                "box.js",
+                "cylinder.js",
+                "grid.js",
+                "plane.js",
+                "sphere.js",
+                "triangle.js",
+                "obj-loader.js",
+                "picker-plugin.js",
+                "shader.js",
+                "scene.js",
+                "texture-loader.js"
+            ]
+        }
+    }
+}
