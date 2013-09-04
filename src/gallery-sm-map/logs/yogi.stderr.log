@@ -1,0 +1,16 @@
+shifter [err] /src/gallery-sm-map/js/map.js contains 188 lint errors
+
+events.js:72
+        throw er; // Unhandled 'error' event
+              ^
+Error: listen EADDRINUSE
+    at errnoException (net.js:901:11)
+    at Server._listen2 (net.js:1039:14)
+    at listen (net.js:1061:10)
+    at Server.listen (net.js:1127:5)
+    at Function.app.listen (/Users/clarle/yahoo/grifter/node_modules/yogi/node_modules/express/lib/application.js:529:24)
+    at Object.mods.startServer (/Users/clarle/yahoo/grifter/node_modules/yogi/lib/cmds/serve.js:824:18)
+    at Object.self.options.callback (/Users/clarle/yahoo/grifter/node_modules/yogi/lib/cmds/test.js:499:24)
+    at Object.mods.init (/Users/clarle/yahoo/grifter/node_modules/yogi/lib/cmds/serve.js:77:25)
+    at /Users/clarle/yahoo/grifter/node_modules/yogi/lib/cmds/test.js:506:20
+    at Server.onListen (/Users/clarle/yahoo/grifter/node_modules/yogi/node_modules/portfinder/lib/portfinder.js:48:5)

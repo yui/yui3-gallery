@@ -1,0 +1,11 @@
+{
+    "name": "gallery-sm-map",
+
+    "builds": {
+        "gallery-sm-map": {
+            "jsfiles": [
+                "js/map.js"
+            ]
+        }
+    }
+}

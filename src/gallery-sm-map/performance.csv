@@ -1,0 +1,44 @@
+name,date,error,count,cycles,hz
+"Create an instance","Fri Aug 30 2013 16:50:32 GMT-0700 (PDT)",,126960,7,2447416.58752672
+"Set an entry with a string key","Fri Aug 30 2013 16:50:38 GMT-0700 (PDT)",,182793,4,3503395.924802145
+"Set an entry with an object key","Fri Aug 30 2013 16:50:43 GMT-0700 (PDT)",,296671,4,5633390.204243049
+"Get a string key from a 500-entry map","Fri Aug 30 2013 16:50:49 GMT-0700 (PDT)",,339525,6,6474410.692735327
+"Get an object key from a 500-entry map (best-case)","Fri Aug 30 2013 16:50:54 GMT-0700 (PDT)",,311297,4,6021922.005371526
+"Get an object key from a 500-entry map (worst-case)","Fri Aug 30 2013 16:51:00 GMT-0700 (PDT)",,10728,4,212292.2490422226
+"Create an instance","Mon Sep 02 2013 16:30:29 GMT-0700 (PDT)",,125524,7,2467962.6694558775
+"Set an entry with a string key","Mon Sep 02 2013 16:30:35 GMT-0700 (PDT)",,239932,3,4655026.141856797
+"Set an entry with an object key","Mon Sep 02 2013 16:30:40 GMT-0700 (PDT)",,133902,6,2602037.960163011
+"Get a string key from a 500-entry map","Mon Sep 02 2013 16:30:46 GMT-0700 (PDT)",,537243,6,10163894.048278121
+"Get an object key from a 500-entry map (best-case)","Mon Sep 02 2013 16:30:51 GMT-0700 (PDT)",,270415,3,5289058.7310816115
+"Get an object key from a 500-entry map (worst-case)","Mon Sep 02 2013 16:30:56 GMT-0700 (PDT)",,38104,7,752042.4654807517
+"Get an object key from a 500-entry map (autoStamp enabled)","Mon Sep 02 2013 16:31:02 GMT-0700 (PDT)",,405697,5,7678059.428404572
+"Create an instance","Mon Sep 02 2013 16:32:28 GMT-0700 (PDT)",,124810,7,2426295.798603675
+"Set an entry with a string key","Mon Sep 02 2013 16:32:33 GMT-0700 (PDT)",,235742,5,4397643.8616119
+"Set an entry with an object key","Mon Sep 02 2013 16:32:39 GMT-0700 (PDT)",,10495,3,81323.23273812498
+"Set an entry with an object key (autoStamp enabled)","Mon Sep 02 2013 16:32:44 GMT-0700 (PDT)",,5525,3,50848.75261642923
+"Create an instance","Mon Sep 02 2013 16:33:19 GMT-0700 (PDT)",,126323,9,2483317.8559666444
+"Set an entry with a string key","Mon Sep 02 2013 16:33:24 GMT-0700 (PDT)",,243901,3,4651423.301469958
+"Create an instance","Mon Sep 02 2013 16:34:58 GMT-0700 (PDT)",,125365,9,2439367.019469454
+"Set an entry with a string key","Mon Sep 02 2013 16:35:03 GMT-0700 (PDT)",,243694,3,4742130.327974274
+"Set an entry with an object key","Mon Sep 02 2013 16:35:09 GMT-0700 (PDT)",,131863,3,2576656.8910402064
+"Set an entry with an object key (autoStamp enabled)","Mon Sep 02 2013 16:35:14 GMT-0700 (PDT)",,168353,3,3238695.4693725514
+"Get a string key from a 500-entry map","Mon Sep 02 2013 16:35:20 GMT-0700 (PDT)",,535836,3,9724082.421706412
+"Get an object key from a 500-entry map (best-case)","Mon Sep 02 2013 16:35:25 GMT-0700 (PDT)",,263877,4,5071467.527351038
+"Get an object key from a 500-entry map (worst-case)","Mon Sep 02 2013 16:35:30 GMT-0700 (PDT)",,37942,3,726410.8490034399
+"Get an object key from a 500-entry map (autoStamp enabled)","Mon Sep 02 2013 16:35:36 GMT-0700 (PDT)",,384328,6,7356592.27915195
+"Create an instance","Mon Sep 02 2013 16:38:18 GMT-0700 (PDT)",,125613,6,2470874.9212708715
+"Set an entry with a string key","Mon Sep 02 2013 16:38:23 GMT-0700 (PDT)",,69606,3,880910.7596512447
+"Set an entry with an object key","Mon Sep 02 2013 16:38:29 GMT-0700 (PDT)",,7748,3,109208.03554191395
+"Set an entry with an object key (autoStamp enabled)","Mon Sep 02 2013 16:38:34 GMT-0700 (PDT)",,5323,3,52094.58637068764
+"Get a string key from a 500-entry map","Mon Sep 02 2013 16:38:40 GMT-0700 (PDT)",,530122,7,10102165.640930086
+"Get an object key from a 500-entry map (best-case)","Mon Sep 02 2013 16:38:45 GMT-0700 (PDT)",,265534,3,5009511.599503371
+"Get an object key from a 500-entry map (worst-case)","Mon Sep 02 2013 16:38:51 GMT-0700 (PDT)",,14220,3,281077.78046030557
+"Get an object key from a 500-entry map (autoStamp enabled)","Mon Sep 02 2013 16:38:56 GMT-0700 (PDT)",,406131,5,7786027.013073764
+"Create an instance","Mon Sep 02 2013 16:39:19 GMT-0700 (PDT)",,126522,9,2470798.967458216
+"Set an entry with a string key","Mon Sep 02 2013 16:39:24 GMT-0700 (PDT)",,72156,3,905676.2705153504
+"Set an entry with an object key","Mon Sep 02 2013 16:39:30 GMT-0700 (PDT)",,12415,3,68818.15143987049
+"Set an entry with an object key (autoStamp enabled)","Mon Sep 02 2013 16:39:36 GMT-0700 (PDT)",,6073,3,47044.83142325909
+"Get a string key from a 500-entry map","Mon Sep 02 2013 16:39:41 GMT-0700 (PDT)",,533430,4,10137075.890473666
+"Get an object key from a 500-entry map (best-case)","Mon Sep 02 2013 16:39:46 GMT-0700 (PDT)",,263567,3,4980815.804640541
+"Get an object key from a 500-entry map (worst-case)","Mon Sep 02 2013 16:39:52 GMT-0700 (PDT)",,14225,4,281836.77598540694
+"Get an object key from a 500-entry map (worst-case, autoStamp enabled)","Mon Sep 02 2013 16:39:57 GMT-0700 (PDT)",,407436,4,7353305.6593364095

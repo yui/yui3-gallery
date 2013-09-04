@@ -1,0 +1,401 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-sm-map
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-sm-map
+   #1: Bad option: 'es3'.
+       /*jshint es3: true, globalstrict: true, indent: 4 */ // line 3, pos 10
+   #2: Expected 'use strict' to have an indentation at 5 instead at 1.
+       "use strict"; // line 38, pos 1
+   #3: Expected 'var' to have an indentation at 5 instead at 1.
+       var emptyObject        = {}, // line 40, pos 1
+   #4: Expected 'function' to have an indentation at 5 instead at 1.
+       function YMap(entries, options) { // line 46, pos 1
+   #5: Expected 'if' to have an indentation at 9 instead at 5.
+       if (arguments.length === 1 && !('length' in entries) // line 48, pos 5
+   #6: Expected 'options' to have an indentation at 13 instead at 9.
+       options = entries; // line 51, pos 9
+   #7: Expected 'entries' to have an indentation at 13 instead at 9.
+       entries = null; // line 52, pos 9
+   #8: Expected '}' to have an indentation at 9 instead at 5.
+       } // line 53, pos 5
+   #9: Expected 'if' to have an indentation at 9 instead at 5.
+       if (options) { // line 55, pos 5
+   #10: Expected 'this' to have an indentation at 13 instead at 9.
+       this._mapOptions = Y.merge(YMap.prototype._mapOptions, options); // line 56, pos 9
+   #11: Expected '}' to have an indentation at 9 instead at 5.
+       } // line 57, pos 5
+   #12: Expected 'this' to have an indentation at 9 instead at 5.
+       this.clear(); // line 59, pos 5
+   #13: Expected 'if' to have an indentation at 9 instead at 5.
+       if (entries) { // line 61, pos 5
+   #14: Expected 'if' to have an indentation at 13 instead at 9.
+       if (!Y.Lang.isArray(entries)) { // line 62, pos 9
+   #15: Expected 'if' to have an indentation at 17 instead at 13.
+       if (typeof entries.entries === 'function') { // line 63, pos 13
+   #16: Expected 'entries' to have an indentation at 21 instead at 17.
+       entries = entries.entries(); // line 65, pos 17
+   #17: Expected '}' to have an indentation at 17 instead at 13.
+       } else { // line 66, pos 13
+   #18: Expected 'entries' to have an indentation at 21 instead at 17.
+       entries = protoSlice.call(entries); // line 68, pos 17
+   #19: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 69, pos 13
+   #20: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 70, pos 9
+   #21: Expected 'var' to have an indentation at 13 instead at 9.
+       var entry; // line 72, pos 9
+   #22: Expected 'for' to have an indentation at 13 instead at 9.
+       for (var i = 0, len = entries.length; i < len; ++i) { // line 74, pos 9
+   #23: Too many var statements.
+       for (var i = 0, len = entries.length; i < len; ++i) { // line 74, pos 18
+   #24: Expected 'entry' to have an indentation at 17 instead at 13.
+       entry = entries[i]; // line 75, pos 13
+   #25: Expected 'this' to have an indentation at 17 instead at 13.
+       this.set(entry[0], entry[1]); // line 76, pos 13
+   #26: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 77, pos 9
+   #27: Expected '}' to have an indentation at 9 instead at 5.
+       } // line 78, pos 5
+   #28: Expected '}' to have an indentation at 5 instead at 1.
+       } // line 79, pos 1
+   #29: Expected 'if' to have an indentation at 5 instead at 1.
+       if (sizeIsGetter) { // line 84, pos 1
+   #30: Expected 'Object' to have an indentation at 9 instead at 5.
+       Object.defineProperty(YMap.prototype, 'size', { // line 85, pos 5
+   #31: Expected 'configurable' to have an indentation at 13 instead at 9.
+       configurable: true, // line 86, pos 9
+   #32: Expected 'get' to have an indentation at 13 instead at 9.
+       get: function () { // line 88, pos 9
+   #33: Expected 'return' to have an indentation at 17 instead at 13.
+       return this._mapKeys.length; // line 89, pos 13
+   #34: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 90, pos 9
+   #35: Expected '}' to have an indentation at 9 instead at 5.
+       }); // line 91, pos 5
+   #36: Expected '}' to have an indentation at 5 instead at 1.
+       } // line 92, pos 1
+   #37: Expected 'Y' to have an indentation at 5 instead at 1.
+       Y.mix(YMap.prototype, { // line 94, pos 1
+   #38: Expected '_mapOptions' to have an indentation at 9 instead at 5.
+       _mapOptions: { // line 150, pos 5
+   #39: Expected 'objectIdName' to have an indentation at 13 instead at 9.
+       objectIdName: '_yuid' // line 151, pos 9
+   #40: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 152, pos 5
+   #41: Expected 'clear' to have an indentation at 9 instead at 5.
+       clear: function () { // line 169, pos 5
+   #42: Expected 'this' to have an indentation at 13 instead at 9.
+       this._mapKeys   = []; // line 170, pos 9
+   #43: Expected 'this' to have an indentation at 13 instead at 9.
+       this._mapValues = []; // line 171, pos 9
+   #44: Expected 'this' to have an indentation at 13 instead at 9.
+       this._reindexMap(); // line 173, pos 9
+   #45: Expected 'this' to have an indentation at 13 instead at 9.
+       this._updateMapSize(); // line 174, pos 9
+   #46: Expected 'return' to have an indentation at 13 instead at 9.
+       return this; // line 176, pos 9
+   #47: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 177, pos 5
+   #48: Expected 'each' to have an indentation at 9 instead at 5.
+       each: function (callback, thisObj) { // line 193, pos 5
+   #49: Expected 'var' to have an indentation at 13 instead at 9.
+       var entries = this.entries(), // line 194, pos 9
+   #50: Expected 'for' to have an indentation at 13 instead at 9.
+       for (var i = 0, len = entries.length; i < len; ++i) { // line 197, pos 9
+   #51: Too many var statements.
+       for (var i = 0, len = entries.length; i < len; ++i) { // line 197, pos 18
+   #52: Expected 'entry' to have an indentation at 17 instead at 13.
+       entry = entries[i]; // line 198, pos 13
+   #53: Expected 'if' to have an indentation at 17 instead at 13.
+       if (callback.call(thisObj, entry[1], entry[0], this) === false) { // line 200, pos 13
+   #54: Expected 'break' to have an indentation at 21 instead at 17.
+       break; // line 201, pos 17
+   #55: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 202, pos 13
+   #56: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 203, pos 9
+   #57: Expected 'return' to have an indentation at 13 instead at 9.
+       return this; // line 205, pos 9
+   #58: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 206, pos 5
+   #59: Expected 'entries' to have an indentation at 9 instead at 5.
+       entries: function () { // line 216, pos 5
+   #60: Expected 'var' to have an indentation at 13 instead at 9.
+       var entries   = [], // line 217, pos 9
+   #61: Expected 'for' to have an indentation at 13 instead at 9.
+       for (var i = 0, len = mapKeys.length; i < len; ++i) { // line 221, pos 9
+   #62: Too many var statements.
+       for (var i = 0, len = mapKeys.length; i < len; ++i) { // line 221, pos 18
+   #63: Expected 'entries' to have an indentation at 17 instead at 13.
+       entries.push([mapKeys[i], mapValues[i]]); // line 222, pos 13
+   #64: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 223, pos 9
+   #65: Expected 'return' to have an indentation at 13 instead at 9.
+       return entries; // line 225, pos 9
+   #66: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 226, pos 5
+   #67: Expected 'get' to have an indentation at 9 instead at 5.
+       get: function (key, defaultValue) { // line 238, pos 5
+   #68: Expected 'var' to have an indentation at 13 instead at 9.
+       var i = this._indexOfKey(key); // line 239, pos 9
+   #69: Expected 'return' to have an indentation at 13 instead at 9.
+       return i < 0 ? defaultValue : this._mapValues[i]; // line 240, pos 9
+   #70: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 241, pos 5
+   #71: Expected 'has' to have an indentation at 9 instead at 5.
+       has: function (key) { // line 250, pos 5
+   #72: Expected 'return' to have an indentation at 13 instead at 9.
+       return this._indexOfKey(key) >= 0; // line 251, pos 9
+   #73: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 252, pos 5
+   #74: Expected 'keys' to have an indentation at 9 instead at 5.
+       keys: function () { // line 260, pos 5
+   #75: Expected 'return' to have an indentation at 13 instead at 9.
+       return protoSlice.call(this._mapKeys); // line 261, pos 9
+   #76: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 262, pos 5
+   #77: Expected 'merge' to have an indentation at 9 instead at 5.
+       merge: function () { // line 283, pos 5
+   #78: Expected 'var' to have an indentation at 13 instead at 9.
+       var maps = protoSlice.call(arguments), // line 284, pos 9
+   #79: Expected 'while' to have an indentation at 13 instead at 9.
+       while ((map = maps.shift())) { // line 292, pos 9
+   #80: Expected 'entries' to have an indentation at 17 instead at 13.
+       entries = typeof map.entries === 'function' ? map.entries() : map; // line 293, pos 13
+   #81: Expected 'for' to have an indentation at 17 instead at 13.
+       for (i = 0, len = entries.length; i < len; ++i) { // line 295, pos 13
+   #82: Expected 'entry' to have an indentation at 21 instead at 17.
+       entry = entries[i]; // line 296, pos 17
+   #83: Expected 'this' to have an indentation at 21 instead at 17.
+       this.set(entry[0], entry[1]); // line 297, pos 17
+   #84: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 298, pos 13
+   #85: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 299, pos 9
+   #86: Expected 'return' to have an indentation at 13 instead at 9.
+       return this; // line 301, pos 9
+   #87: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 302, pos 5
+   #88: Expected 'remove' to have an indentation at 9 instead at 5.
+       remove: function (key) { // line 312, pos 5
+   #89: Expected 'var' to have an indentation at 13 instead at 9.
+       var i = this._indexOfKey(key); // line 313, pos 9
+   #90: Expected 'if' to have an indentation at 13 instead at 9.
+       if (i < 0) { // line 315, pos 9
+   #91: Expected 'return' to have an indentation at 17 instead at 13.
+       return false; // line 316, pos 13
+   #92: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 317, pos 9
+   #93: Expected 'this' to have an indentation at 13 instead at 9.
+       this._removeMapEntry(i); // line 319, pos 9
+   #94: Expected 'this' to have an indentation at 13 instead at 9.
+       this._updateMapSize(); // line 320, pos 9
+   #95: Expected 'return' to have an indentation at 13 instead at 9.
+       return true; // line 322, pos 9
+   #96: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 323, pos 5
+   #97: Expected 'set' to have an indentation at 9 instead at 5.
+       set: function (key, value) { // line 338, pos 5
+   #98: Expected 'var' to have an indentation at 13 instead at 9.
+       var i = this._indexOfKey(key); // line 339, pos 9
+   #99: Expected 'if' to have an indentation at 13 instead at 9.
+       if (i < 0) { // line 341, pos 9
+   #100: Expected 'i' to have an indentation at 17 instead at 13.
+       i = this._mapKeys.length; // line 342, pos 13
+   #101: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 343, pos 9
+   #102: Expected 'this' to have an indentation at 13 instead at 9.
+       this._mapKeys[i]   = key; // line 345, pos 9
+   #103: Expected 'this' to have an indentation at 13 instead at 9.
+       this._mapValues[i] = value; // line 346, pos 9
+   #104: Expected 'this' to have an indentation at 13 instead at 9.
+       this._indexMapKey(i, key); // line 348, pos 9
+   #105: Expected 'this' to have an indentation at 13 instead at 9.
+       this._updateMapSize(); // line 349, pos 9
+   #106: Expected 'return' to have an indentation at 13 instead at 9.
+       return this; // line 351, pos 9
+   #107: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 352, pos 5
+   #108: Expected 'values' to have an indentation at 9 instead at 5.
+       values: function () { // line 360, pos 5
+   #109: Expected 'return' to have an indentation at 13 instead at 9.
+       return protoSlice.call(this._mapValues); // line 361, pos 9
+   #110: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 362, pos 5
+   #111: Expected '_indexMapKey' to have an indentation at 9 instead at 5.
+       _indexMapKey: function (index, key) { // line 375, pos 5
+   #112: Expected 'var' to have an indentation at 13 instead at 9.
+       var objectIdName = this._mapOptions.objectIdName; // line 376, pos 9
+   #113: Expected 'if' to have an indentation at 13 instead at 9.
+       if (typeof key === 'string') { // line 378, pos 9
+   #114: Expected 'if' to have an indentation at 17 instead at 13.
+       if (nativeObjectCreate || this._isSafeKey(key)) { // line 379, pos 13
+   #115: Expected 'this' to have an indentation at 21 instead at 17.
+       this._mapKeyIndices[key] = index; // line 380, pos 17
+   #116: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 381, pos 13
+   #117: Expected '}' to have an indentation at 13 instead at 9.
+       } else if (objectIdName && key && typeof key === 'object') { // line 382, pos 9
+   #118: Expected 'if' to have an indentation at 17 instead at 13.
+       if (!key[objectIdName] && this._mapOptions.autoStamp) { // line 383, pos 13
+   #119: Expected 'try' to have an indentation at 21 instead at 17.
+       try { // line 384, pos 17
+   #120: Expected 'key' to have an indentation at 25 instead at 21.
+       key[objectIdName] = Y.guid(); // line 385, pos 21
+   #121: Expected '}' to have an indentation at 21 instead at 17.
+       } catch (ex) {} // line 386, pos 17
+   #122: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 387, pos 13
+   #123: Expected 'if' to have an indentation at 17 instead at 13.
+       if (key[objectIdName] // line 389, pos 13
+   #124: Expected 'this' to have an indentation at 21 instead at 17.
+       this._mapObjectIndices[key[objectIdName]] = index; // line 392, pos 17
+   #125: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 393, pos 13
+   #126: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 394, pos 9
+   #127: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 395, pos 5
+   #128: Expected '_indexOfKey' to have an indentation at 9 instead at 5.
+       _indexOfKey: function (key) { // line 410, pos 5
+   #129: Expected 'var' to have an indentation at 13 instead at 9.
+       var objectIdName = this._mapOptions.objectIdName, // line 411, pos 9
+   #130: Expected 'if' to have an indentation at 13 instead at 9.
+       if (this._isIndexStale) { // line 415, pos 9
+   #131: Expected 'this' to have an indentation at 17 instead at 13.
+       this._reindexMap(); // line 416, pos 13
+   #132: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 417, pos 9
+   #133: Expected 'if' to have an indentation at 13 instead at 9.
+       if (typeof key === 'string') { // line 420, pos 9
+   #134: Expected 'if' to have an indentation at 17 instead at 13.
+       if (nativeObjectCreate || this._isSafeKey(key)) { // line 421, pos 13
+   #135: Expected 'i' to have an indentation at 21 instead at 17.
+       i = this._mapKeyIndices[key]; // line 422, pos 17
+   #136: Expected 'return' to have an indentation at 21 instead at 17.
+       return i >= 0 ? i : -1; // line 423, pos 17
+   #137: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 424, pos 13
+   #138: Expected '}' to have an indentation at 13 instead at 9.
+       } else if (objectIdName && key !== null && key[objectIdName]) { // line 428, pos 9
+   #139: Expected 'if' to have an indentation at 17 instead at 13.
+       if (nativeObjectCreate || this._isSafeKey(key[objectIdName])) { // line 429, pos 13
+   #140: Expected 'i' to have an indentation at 21 instead at 17.
+       i = this._mapObjectIndices[key[objectIdName]]; // line 430, pos 17
+   #141: Expected 'if' to have an indentation at 21 instead at 17.
+       if (i >= 0) { // line 435, pos 17
+   #142: Expected 'return' to have an indentation at 25 instead at 21.
+       return i; // line 436, pos 21
+   #143: Expected '}' to have an indentation at 21 instead at 17.
+       } // line 437, pos 17
+   #144: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 438, pos 13
+   #145: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 439, pos 9
+   #146: Expected 'var' to have an indentation at 13 instead at 9.
+       var keys = this._mapKeys, // line 442, pos 9
+   #147: Too many var statements.
+       var keys = this._mapKeys, // line 442, pos 13
+   #148: Expected 'for' to have an indentation at 13 instead at 9.
+       for (i = 0, len = keys.length; i < len; ++i) { // line 446, pos 9
+   #149: Expected 'if' to have an indentation at 17 instead at 13.
+       if (same(keys[i], key)) { // line 447, pos 13
+   #150: Expected 'return' to have an indentation at 21 instead at 17.
+       return i; // line 448, pos 17
+   #151: Expected '}' to have an indentation at 17 instead at 13.
+       } // line 449, pos 13
+   #152: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 450, pos 9
+   #153: Expected 'return' to have an indentation at 13 instead at 9.
+       return -1; // line 452, pos 9
+   #154: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 453, pos 5
+   #155: Expected '_isSafeKey' to have an indentation at 9 instead at 5.
+       _isSafeKey: function (key) { // line 464, pos 5
+   #156: Expected 'return' to have an indentation at 13 instead at 9.
+       return !(key === 'prototype' || key in emptyObject); // line 465, pos 9
+   #157: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 466, pos 5
+   #158: Expected '_reindexMap' to have an indentation at 9 instead at 5.
+       _reindexMap: function () { // line 474, pos 5
+   #159: Expected 'var' to have an indentation at 13 instead at 9.
+       var mapKeys = this._mapKeys; // line 475, pos 9
+   #160: Expected 'this' to have an indentation at 13 instead at 9.
+       this._mapKeyIndices    = nativeObjectCreate ? Object.create(null) : {}; // line 477, pos 9
+   #161: Expected 'this' to have an indentation at 13 instead at 9.
+       this._mapObjectIndices = nativeObjectCreate ? Object.create(null) : {}; // line 478, pos 9
+   #162: Expected 'for' to have an indentation at 13 instead at 9.
+       for (var i = 0, len = mapKeys.length; i < len; ++i) { // line 480, pos 9
+   #163: Too many var statements.
+       for (var i = 0, len = mapKeys.length; i < len; ++i) { // line 480, pos 18
+   #164: Expected 'this' to have an indentation at 17 instead at 13.
+       this._indexMapKey(i, mapKeys[i]); // line 481, pos 13
+   #165: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 482, pos 9
+   #166: Expected 'this' to have an indentation at 13 instead at 9.
+       this._isIndexStale = false; // line 484, pos 9
+   #167: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 485, pos 5
+   #168: Expected '_removeMapEntry' to have an indentation at 9 instead at 5.
+       _removeMapEntry: function (index) { // line 496, pos 5
+   #169: Expected 'if' to have an indentation at 13 instead at 9.
+       if (index === this._mapKeys.length - 1) { // line 497, pos 9
+   #170: Expected 'this' to have an indentation at 17 instead at 13.
+       this._mapKeys.pop(); // line 498, pos 13
+   #171: Expected 'this' to have an indentation at 17 instead at 13.
+       this._mapValues.pop(); // line 499, pos 13
+   #172: Expected '}' to have an indentation at 13 instead at 9.
+       } else { // line 500, pos 9
+   #173: Expected 'this' to have an indentation at 17 instead at 13.
+       this._mapKeys.splice(index, 1); // line 501, pos 13
+   #174: Expected 'this' to have an indentation at 17 instead at 13.
+       this._mapValues.splice(index, 1); // line 502, pos 13
+   #175: Expected 'this' to have an indentation at 17 instead at 13.
+       this._isIndexStale = true; // line 504, pos 13
+   #176: Expected '}' to have an indentation at 13 instead at 9.
+       } // line 505, pos 9
+   #177: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 506, pos 5
+   #178: Expected '_sameValueZero' to have an indentation at 9 instead at 5.
+       _sameValueZero: function (a, b) { // line 527, pos 5
+   #179: Expected 'return' to have an indentation at 13 instead at 9.
+       return a === b || (a !== a && b !== b); // line 528, pos 9
+   #180: Expected '}' to have an indentation at 9 instead at 5.
+       }, // line 529, pos 5
+   #181: Expected '_updateMapSize' to have an indentation at 9 instead at 5.
+       _updateMapSize: sizeIsGetter ? function () {} : function () { // line 538, pos 5
+   #182: Expected 'this' to have an indentation at 13 instead at 9.
+       this.size = this._mapKeys.length; // line 539, pos 9
+   #183: Expected '}' to have an indentation at 9 instead at 5.
+       } // line 540, pos 5
+   #184: Expected '}' to have an indentation at 5 instead at 1.
+       }, true); // line 541, pos 1
+   #185: Expected 'YMap' to have an indentation at 5 instead at 1.
+       YMap.prototype['delete'] = YMap.prototype.remove; // line 549, pos 1
+   #186: Expected 'YMap' to have an indentation at 5 instead at 1.
+       YMap.prototype.forEach = YMap.prototype.each; // line 557, pos 1
+   #187: Expected 'YMap' to have an indentation at 5 instead at 1.
+       YMap.prototype.toJSON = YMap.prototype.entries; // line 568, pos 1
+   #188: Expected 'Y' to have an indentation at 5 instead at 1.
+       Y.Map = YMap; // line 570, pos 1
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-sm-map/gallery-sm-map.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-sm-map/gallery-sm-map.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-sm-map/gallery-sm-map-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.217 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route

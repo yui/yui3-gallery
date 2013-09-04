@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>sm-map Test Page</title>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="log"></div>
+
+<script src="http://yui.yahooapis.com/3.12.0/build/yui/yui-min.js"></script>
+<script>
+var Y = YUI({
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+
+    coverage: ['gallery-sm-map'],
+
+    modules: {
+        'gallery-sm-map': {
+            fullpath: '../../../../../build/gallery-sm-map/gallery-sm-map.js'
+        },
+
+        'gallery-sm-map-test': {
+            fullpath: 'assets/sm-map-test.js',
+            requires: ['gallery-sm-map', 'test']
+        }
+    },
+    useBrowserConsole: false
+}).use('gallery-sm-map-test', 'test-console', function (Y) {
+    new Y.Test.Console().render('#log');
+    Y.Test.Runner.add(Y.MapTestSuite);
+    Y.Test.Runner.run();
+});
+</script>
+
+</body>
+</html>
