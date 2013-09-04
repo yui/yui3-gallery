@@ -1,0 +1,27 @@
+<div class="intro">
+    <p>
+    *Tis' but a demo page*
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>{{>module-description-html}}</p>
+
+<div id="demo" class="example yui3-skin-sam">
+	<script>
+		YUI({
+			modules:{
+				'gallery-fast-ui': {
+					fullpath: '/build/gallery-fast-ui/gallery-fast-ui.js'
+				}
+			}
+	    }).use('{{use}}', 'button', 'tabview', 'panel', function(Y){
+            {{>complex-demo-js}}
+		});
+	</script>
+</div>
+
+```
+{{>complex-demo-js}}
+```

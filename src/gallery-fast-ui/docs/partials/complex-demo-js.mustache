@@ -1,0 +1,57 @@
+// the HTML code that we want to build
+var htmlCode = '' +
+    '<Y:Panel ui:field="dialog" ui:srcNode="div" xmlns:Y="Y" xmlns:ui="fastui" headerContent="awesome title">' +
+    '    <ui:config name="width">400</ui:config>' +
+    '    <ui:config name="centered">true</ui:config>' +
+    '    <ui:config name="modal">false</ui:config>' +
+    '    <ui:config name="visible">false</ui:config>' +
+    '' +
+    '    <ui:config name="bodyContent" type="ui">' +
+    '        <Y:TabView ui:srcNode="div">' +
+    '            <ul>' +
+    '                <li><a href="tab1">{HOME}</a></li>' +
+    '                <li><a href="tab2">{OTHER}</a></li>' +
+    '            </ul>' +
+    '            <div>' +
+    '                <div id="tab1">' +
+    '                    <div>{SOME_MESSAGE}</div>' +
+    '                    <Y:Button ui:srcNode="span" ui:field="okButton" label="{OK}"/>' +
+    '                    <Y:Button ui:srcNode="span" ui:field="cancelButton" label="{CANCEL}"/>' +
+    '                </div>' +
+    '                <div id="tab2">' +
+    '                    <Y:Button ui:srcNode="span" ui:field="otherButton" label="{OTHER_BUTTON}"/>' +
+    '                </div>' +
+    '            </div>' +
+    '        </Y:TabView>' +
+    '    </ui:config>' +
+    '</Y:Panel>';
+
+// the I18N object should actually be obtained from Y.Intl
+var msg = {
+    HOME : "Home",
+    OK : "Ok",
+    CANCEL : "Cancel",
+    SOME_MESSAGE : "Some message",
+    OTHER : "Other",
+    OTHER_BUTTON : "Other Button"
+};
+
+// we render it in the "#demo" div just for the skin.
+var ui = Y.fastUi("#demo", htmlCode, msg);
+
+ui.okButton.on("click", function() {
+    alert('ok button was clicked');
+});
+ui.cancelButton.on("click", function() {
+    ui.dialog.hide();
+});
+
+var showDialogButton = new Y.Button({
+	label : "Show dialog"
+});
+
+showDialogButton.render("#demo");
+
+showDialogButton.on("click", function() {
+    ui.dialog.show();
+});

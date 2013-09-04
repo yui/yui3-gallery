@@ -1,0 +1,34 @@
+Y.use("gallery-fast-ui", function(Y) {
+    var htmlCode = '' +
+        '<div xmlns:ui="fastui" xmlns:Y="Y">' +
+        '    <div>' +
+        '        <label>{VALUE}</label>' +
+        '        <input type="text" ui:field="textInput"/>' +
+        '    </div>' +
+        '    <div>' +
+        '        <label>{ENTERED_VALUE}</label>' +
+        '        <span ui:field="outputSpan"/>' +
+        '    </div>' +
+        '    <div  style="border-top : black solid 1px">' +
+        '        <label>{OK_BUTTON}: </label>' +
+        '        <Y:Button ui:field="okButton" label="{OK}" ui:srcNode="span"/>' +
+        '    </div>' +
+        '</div>';
+
+    var msg = {
+        VALUE : "Value: ",
+        OK_BUTTON : "Ok Button",
+        OK : "Ok",
+        ENTERED_VALUE : "Entered Value: "
+    }
+
+    ui = Y.fastUi("#demo", htmlCode, msg);
+
+    ui.textInput.on("change", function() {
+        ui.outputSpan.set("innerText", ui.textInput.get("value"));
+    });
+
+    ui.okButton.on("click", function() {
+        alert('ok clicked');
+    });
+});

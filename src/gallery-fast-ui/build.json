@@ -1,0 +1,19 @@
+{
+    "name": "gallery-fast-ui",
+    "builds": {
+        "gallery-fast-ui": {
+            "jsfiles": [
+                "widget-config-property.js",
+                "widget-definition.js",
+                "widget-config.js",
+                "parser-result.js",
+                "template-parser.js",
+                "fast-ui-builder.js",
+                "fast-ui.js"
+            ],
+            "config" : {
+                "requires" : ["datatype-xml", "node", "widget", "yui-base"]
+            }
+        }
+    }
+}

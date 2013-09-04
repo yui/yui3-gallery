@@ -1,0 +1,17 @@
+{
+    "name"       : "gallery-fast-ui",
+    "displayName": "Gallery: gallery-fast-ui",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "bogdan_mustiata" ],
+    "use"        : [ "gallery-fast-ui" ],
+
+    "tags": [ "gallery", "fast-ui", "gallery-fast-ui" ],
+
+    "examples": [ {
+        "name": "full-demo",
+        "displayName": "Full demo",
+        "description": "A full demo on how to use fastUi.",
+        "modules": ["gallery-fast-ui"],
+        "tags": ["gallery"]
+    } ]
+}
