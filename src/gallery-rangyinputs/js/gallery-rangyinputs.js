@@ -379,6 +379,4 @@ if (Y.config.doc.selection && !Y.config.win.getSelection) {
     RangyInputs = Y.augment(RangyInputs, RangyInputsIE, true);
 }
 
-
-Y.namespace('RangyInputs');
-Y.RangyInputs = RangyInputs;
+Y.namespace('Plugin').RangyInputs = RangyInputs;

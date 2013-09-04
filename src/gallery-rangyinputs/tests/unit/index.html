@@ -2,18 +2,24 @@
 <html>
 <head>
     <title>gallery-rangyinputs</title>
-    <script src="/build/yui/yui.js"></script>
+    <script src="http://yui.yahooapis.com/3.11.0/build/yui/yui-min.js"></script>
     <script src="js/tests.js"></script>
     <meta charset="utf-8" />
 </head>
 <body class="yui3-skin-sam">
 <div id="logger"></div>
 
+<input id="test" />
 <script>
 YUI({
     coverage: ['gallery-rangyinputs'],
-    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-}).use('test-console', 'test', 'module-tests', function(Y) {
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    modules: {
+      'gallery-rangyinputs': {
+        fullpath: '../../../../build/gallery-rangyinputs/gallery-rangyinputs.js'
+      }
+    }
+}).use('test-console', 'test', 'gallery-rangyinputs', 'rangyinputs-tests', function(Y) {
     
     (new Y.Test.Console()).render('#logger');
 

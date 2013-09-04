@@ -4,7 +4,13 @@
         "gallery-rangyinputs": {
             "jsfiles": [
                 "js/gallery-rangyinputs.js"
-            ]
+            ],
+            "config": {
+                "use": [
+                    "node-base",
+                    "node-pluginhost"
+                ]
+            }
         }
     }
 }

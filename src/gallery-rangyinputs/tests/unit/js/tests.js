@@ -1,10 +1,10 @@
-YUI.add('module-tests', function(Y) {
+YUI.add('rangyinputs-tests', function(Y) {
 
     var suite = new Y.Test.Suite('gallery-rangyinputs'),
     Assert = Y.Assert,
     input = Y.one('#test');
 
-    input.plug(Y.u1.RangyInputs);
+    input.plug(Y.Plugin.RangyInputs);
     suite.add(new Y.Test.Case({
 
         name: 'Method Tests',

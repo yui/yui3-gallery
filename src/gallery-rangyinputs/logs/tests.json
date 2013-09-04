@@ -1,8 +1,106 @@
 {
-    "passed": 0,
-    "failed": 3,
-    "total": 3,
+    "name": "gallery-rangyinputs",
+    "passed": 24,
+    "failed": 0,
+    "errors": 0,
     "ignored": 0,
-    "name": "http://127.0.0.1:5000/tests/src/gallery-rangyinputs/tests/unit/index.html?filter=coverage",
-    "error": "TypeError: 'null' is not an object (evaluating 'input.plug')\nhttp://127.0.0.1:5000/tests/src/gallery-rangyinputs/tests/unit/js/tests.js:7\nhttp://127.0.0.1:5000/build/yui/yui.js:775\nhttp://127.0.0.1:5000/build/yui/yui.js:1112\nhttp://127.0.0.1:5000/build/yui/yui.js:7708\nhttp://127.0.0.1:5000/build/yui/yui.js:7754\nhttp://127.0.0.1:5000/build/yui/yui.js:7999\nhttp://127.0.0.1:5000/build/yui/yui.js:8009\nhttp://127.0.0.1:5000/build/yui/yui.js:7993\nhttp://127.0.0.1:5000/build/yui/yui.js:8061\nhttp://127.0.0.1:5000/build/yui/yui.js:4622\nhttp://127.0.0.1:5000/build/yui/yui.js:4819\nhttp://127.0.0.1:5000/build/yui/yui.js:4927\nhttp://127.0.0.1:5000/build/yui/yui.js:4719"
+    "total": 24,
+    "duration": 258,
+    "type": "report",
+    "Method Tests": {
+        "name": "Method Tests",
+        "passed": 12,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 12,
+        "duration": 126,
+        "type": "testcase",
+        "testGetSelection": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testGetSelection",
+            "duration": 1
+        },
+        "testSetSelection": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testSetSelection",
+            "duration": 1
+        },
+        "testCollapseSelection": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testCollapseSelection",
+            "duration": 1
+        },
+        "testDeleteText": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testDeleteText",
+            "duration": 1
+        },
+        "testDeleteSelectedText": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testDeleteSelectedText",
+            "duration": 1
+        },
+        "testExtractSelectedText": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testExtractSelectedText",
+            "duration": 1
+        },
+        "testInsertText": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testInsertText",
+            "duration": 1
+        },
+        "testInsertTextCollapseToStart": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testInsertTextCollapseToStart",
+            "duration": 0
+        },
+        "testInsertTextCollapseToEnd": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testInsertTextCollapseToEnd",
+            "duration": 0
+        },
+        "testInsertTextSelect": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testInsertTextSelect",
+            "duration": 1
+        },
+        "testReplaceSelectedText": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testReplaceSelectedText",
+            "duration": 1
+        },
+        "testSurroundSelectedText": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testSurroundSelectedText",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed Sep  4 14:57:09 2013",
+    "consoleInfo": []
 }
