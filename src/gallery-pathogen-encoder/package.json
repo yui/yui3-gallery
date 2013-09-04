@@ -1,0 +1,49 @@
+{
+    "name": "pathogen-encoder",
+    "description": "Enables pathogen encoding in YUI Loader",
+    "version": "0.0.1",
+    "author": "Eugene Kashida",
+    "contributors": [
+        "Caridy Patiño"
+    ],
+    "dependencies": {},
+    "locator": {
+        "ruleset": "main",
+        "location": "./src/pathogen-encoder/js"
+    },
+    "keywords": [
+        "yui",
+        "loader",
+        "pathogen",
+        "combo"
+    ],
+    "directories": {
+        "lib": "./lib",
+        "example": "./example",
+        "src": "./src"
+    },
+    "engines": {
+        "node": ">=0.8.x",
+        "npm" : ">=1.2.10"
+    },
+    "devDependencies": {
+        "yui": "~3.11.0",
+        "yogi": "*",
+        "jshint": "~1.1.0",
+        "yui-lint": "~0.1.3",
+        "mocha": "*"
+    },
+    "scripts": {
+        "postinstall": "cd ./src; ../node_modules/yogi/bin/yogi.js build; cd -",
+        "lint": "node node_modules/.bin/jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js ./src/pathogen-encoder/js/*.js",
+        "test": "node node_modules/.bin/_mocha tests/lib/*.js --reporter spec"
+    },
+    "repository": {
+        "type": "git",
+        "url" : "TBD"
+    },
+    "bugs": {
+        "url": "TBD"
+    },
+    "license": "BSD"
+}

@@ -1,0 +1,35 @@
+<html>
+
+<head>
+
+<title>Pathogen Encoder Automated Tests</title>
+
+<script src="../../node_modules/yui/yui/yui.js"></script>
+<script src="../../src/pathogen-encoder/js/pathogen-encoder.js"></script>
+
+</head>
+
+<body class="yui3-skin-sam">
+
+<div id="log"></div>
+
+<script>
+YUI.Env.core.push('gallery-pathogen-encoder');
+YUI({
+    combine: true,
+    gallery: 'gallery-2013.08.07-20-34',
+    modules: {
+        'pathogen-encoder-tests': {
+            fullpath: './assets/pathogen-encoder-tests.js',
+            requires: ['test']
+        }
+    }
+}).use('pathogen-encoder-tests', 'test-console', 'test', function (Y) {
+    new Y.Test.Console().render('#log');
+    Y.Test.Runner.run();
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+    "name": "pathogen-encoder-demo",
+    "description": "How to use the pathogen encoder with YUI Loader",
+    "version": "0.0.1",
+    "private": true,
+    "main": "app.js",
+    "devDependencies": {
+        "express": "*",
+        "express-yui": "~0.6.0",
+        "locator": "*",
+        "locator-handlebars": "*",
+        "yui": "~3.11.0"
+    }
+}
