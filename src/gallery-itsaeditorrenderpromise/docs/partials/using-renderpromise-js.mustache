@@ -1,0 +1,76 @@
+YUI(yuiconfig).use('node', 'editor', 'gallery-itsaeditorrenderpromise', 'promise', 'gallery-itsadialog', function(Y) {
+
+    var editor1, editor2, editor3, editor4, render1, render2, render3, render4;
+
+    // The <body> element of the example doesn't have 'yui3-skin-sam'
+    // --> provide this class to make the popup of gallery-itsadialog look right
+    Y.one('body').addClass('yui3-skin-sam');
+
+    render1 = Y.one('#render1');
+    render2 = Y.one('#render2');
+    render3 = Y.one('#render3');
+    render4 = Y.one('#render4');
+    editor1 = new Y.EditorBase({content: 'This is the <strong>first</strong> editor'});
+    editor2 = new Y.EditorBase({content: 'This is the <strong>second</strong> editor'});
+    editor3 = new Y.EditorBase({content: 'This is the <strong>third</strong> editor'});
+    editor4 = new Y.EditorBase({content: 'This is the <strong>fourth</strong> editor'});
+
+    Y.batch(
+        editor1.renderPromise(),
+        editor2.renderPromise(),
+        editor3.renderPromise(),
+        editor4.renderPromise()
+    ).then(
+        function() {
+            Y.one('#alleditorinstances').removeClass('notrendered');
+        },
+        function(reason) {
+            Y.alert(reason); // Y.alert() is provided by 'gallery-itsadialog'
+        }
+    );
+
+    // manually delay rendering editor1 with 1 second
+    Y.later(1000, null, function() {
+        editor1.render('#editor1');
+    });
+
+    // manually delay rendering editor2 with 2 seconds
+    Y.later(2000, null, function() {
+        editor2.render('#editor2');
+    });
+
+    // manually delay rendering editor3 with 3 seconds
+    Y.later(3000, null, function() {
+        editor3.render('#editor3');
+    });
+
+    // manually delay rendering editor4 with 4 seconds
+    Y.later(4000, null, function() {
+        editor4.render('#editor4');
+    });
+
+    editor1.renderPromise().then(
+        function() {
+            render1.set('text', 'editor1 is ready!');
+        }
+    );
+
+    editor2.renderPromise().then(
+        function() {
+            render2.set('text', 'editor2 is ready!');
+        }
+    );
+
+    editor3.renderPromise().then(
+        function() {
+            render3.set('text', 'editor3 is ready!');
+        }
+    );
+
+    editor4.renderPromise().then(
+        function() {
+            render4.set('text', 'editor4 is ready!');
+        }
+    );
+
+});

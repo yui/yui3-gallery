@@ -1,0 +1,10 @@
+YUI(yuiconfig).use('node', 'gallery-itsaeditorrenderpromise', 'editor', function(Y) {
+
+    new Y.EditorBase({content: 'Here is <strong>some</strong> content'}).renderOnAvailable('#editornode');
+
+    // now insert #editornode after delay of 3 seconds
+    Y.later(3000, null, function() {
+        Y.one('.sidebar').append('<div id="editornode" class="yui3-skin-sam"></div>');
+    });
+
+});

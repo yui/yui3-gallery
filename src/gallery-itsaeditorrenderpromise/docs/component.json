@@ -1,0 +1,39 @@
+{
+    "name"       : "gallery-itsaeditorrenderpromise",
+    "displayName": "Gallery: gallery-itsaeditorrenderpromise",
+    "description": "This module adds some renderPromises to the Y.EditorBase class.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsaeditorrenderpromise" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "using-renderpromise",
+            "displayName": "Waiting for multiple editors to be rendered",
+            "description": "This example shows how to use renderPromise() with Y.batch() in order to take action once all editors are rendered.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaeditorrenderpromise", "node", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsaeditorrenderpromise", "renderpromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "using-renderonavailablepromise",
+            "displayName": "Render a editor before scrNode is in the DOM",
+            "description": "This example shows how to use renderOnAvailable() to render an Y.Calendar-instance before the scrNode is in the DOM.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaeditorrenderpromise", "node", "calendar"],
+            "tags"    : ["gallery-itsaeditorrenderpromise", "renderonavailable", "renderonavailablepromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "using-renderwhenavailable",
+            "displayName": "Making a editor re-render multiple times",
+            "description": "This example shows how to re-render a editor by the appearance and removal of the containerNode.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaeditorrenderpromise", "node", "calendar"],
+            "tags"    : ["gallery-itsaeditorrenderpromise", "renderwhenavailable", "renderwhenavailablepromise", "re-render"],
+            "hideTableOfContents": true
+        }
+    ]
+}

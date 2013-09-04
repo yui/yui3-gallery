@@ -1,0 +1,77 @@
+{{>api-button}}
+
+<div class="intro">
+  <p>
+      {{description}}
+  </p>
+  <p>This module adds some renderPromises to the Y.EditorBase class that are useful when it comes down to timing.<br /><br />
+
+     <code>renderPromise()</code> and  <code>readyPromise()</code> return Promises which you can use to be sure the editor
+     is rendered.
+     <br /><br />
+
+     <code>renderOnAvailable()</code>, <code>renderWhenAvailable()</code>, <code>renderOnAvailablePromise()</code> and
+     <code>renderWhenAvailablePromise()</code> make it posible to automaticly render the editor even if the containerNode
+     is not part of the dom yet.
+</p>
+</div>
+
+{{>getting-started}}
+
+<h2>Desrciption</h2>
+
+<h3 id="render-ready-promises">renderPromise() and readyPromise()</h3>
+<p>
+   <code>renderPromise()</code> is a Promise that is fulfilled once the editor is rendered: you don't need to listen for the 'ready'-event,
+   neither look for instance.frame._rendered.
+   This is handy because without this method you might find yourself inspecting those two situations.<br /><br />
+
+   <code>readyPromise()</code> is a Promise that waits even longer. You can make this promise fulfilled after some plugins are ready.<br /><br />
+
+   <code>promiseBeforeReady()</code> is a Promise which will run directly after the editor is rendered. It is up to the developer
+   how to define <code>promiseBeforeReady</code>, which is a fulfilled promise by default. Once <code>promiseBeforeReady()</code> is fulfilled, <code>readyPromise()</code> is fulfilled as well.
+
+</p>
+
+<h3 id="onavaiable-whenavailable">onAvailable and whenAvailable</h3>
+<p>
+   <code>renderOnAvailablePromise()</code> is very handy if you need to setup the rendercode while not knowing when the containerNode will be in the DOM.<br /><br />
+
+   <code>renderOnAvailable()</code> Does the same as <code>renderOnAvailablePromise()</code>, but doesn't return a Promise; it returns the instance. Therefore it can be called in the same way as <code>render()</code>.<br /><br />
+
+   <code>renderWhenAvailablePromise()</code> works the same as <code>renderOnAvailablePromise()</code>, but will re-render <u>everytime the containerNode</u> is redefined in the dom. Situations to make use of this might be when pages are dynamicly reloaded.<br /><br />
+
+   <code>renderWhenAvailable()</code> Does the same as <code>renderWhenAvailablePromise()</code>, but doesn't return a Promise; it returns the instance. Therefore it can be called in the same way as <code>render()</code>.<br />
+
+</p>
+
+<h2>Usage</h2>
+<h3 id="renderpromise-example">renderPromise()</h3>
+```
+YUI({gallery: 'gallery-xxxxx'}).use('gallery-itsaeditorrenderpromise', 'editor', 'gallery-itsadialog', function(Y) {
+
+    var editor = new Y.EditorBase({content: 'some content'}).render();
+
+    // as soon editor is rendered, we want to be alerted
+    editor.renderPromise().then(
+        function() {
+            Y.alert('the editor is rendered');
+        }
+    );
+
+});
+```
+
+<h3 id="renderOnAvailable-example">renderOnAvailable()</h3>
+```
+YUI({gallery: 'gallery-xxxxx'}).use('gallery-itsaeditorrenderpromise', 'editor', 'gallery-itsadialog', function(Y) {
+
+    new Y.EditorBase({content: 'some content'}).renderOnAvailable('#editornode');
+
+    // #editornode will be inserted later on
+    Y.later(3000, null, function() {
+        Y.one('body').append('<div id="editornode"></div>');
+    });
+
+});
+```

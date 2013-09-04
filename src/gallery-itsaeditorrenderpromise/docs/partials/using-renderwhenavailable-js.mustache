@@ -1,0 +1,22 @@
+YUI(yuiconfig).use('node', 'gallery-itsaeditorrenderpromise', 'editor', function(Y) {
+    var sidebarNode = Y.one('.sidebar');
+
+    new Y.EditorBase({
+        content: 'Here is <strong>some</strong> content'
+    }).renderWhenAvailable('#editornode');
+
+    Y.one('#insertnode').on('click', function(){
+        var editornode = Y.one("#editornnode");
+            if (!editornode) {
+            sidebarNode.append('<div id="editornode" class="yui3-skin-sam"></div>');
+        }
+    });
+
+    Y.one('#removenode').on('click', function(){
+        var editornode = Y.one("#editornode");
+        if (editornode) {
+            editornode.remove(true);
+        }
+    });
+
+});

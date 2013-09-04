@@ -1,0 +1,10 @@
+{
+    "gallery-itsaeditorrenderpromise": {
+        "requires": [
+            "yui-base",
+            "yui-later",
+            "editor-base",
+            "promise"
+        ]
+    }
+}

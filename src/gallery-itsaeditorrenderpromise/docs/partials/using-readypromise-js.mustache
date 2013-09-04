@@ -1,0 +1,29 @@
+//YUI(yuiconfig).use('gallery-itsapluginpromise', 'node', 'editor', 'gallery-itsaeditorrenderpromise', 'gallery-itsatoolbar', function(Y) {
+YUI(yuiconfig).use('editor-base', 'gallery-itsatoolbar', function(Y) {
+
+    var editor, sidebox = Y.one('.sidebox');
+
+    // The <body> element of the example doesn't have 'yui3-skin-sam'
+    // --> provide this class to make the popup look right
+    Y.one('body').addClass('yui3-skin-sam');
+    Y.one('.sidebar').append('<div id="editornode" class="yui3-skin-sam"></div>');
+
+    editor = new Y.EditorBase({content: 'here is <strong>some</strong> content'});
+/*
+    editor.promiseBeforeReady = function() {
+        return editor.itsatoolbar.readyPromise();
+    };
+*/
+    editor.render('#editornode');
+/*
+    editor.readyPromise().then(
+        function() {
+            Y.alert('The editor if completely ready with a toolbar');
+        }
+    );
+*/
+
+Y.later(2000, null, function(){
+    editor.plug(Y.Plugin.ITSAToolbar);
+})
+});

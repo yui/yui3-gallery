@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>using-readypromise-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        A new class is defined: Y.WeatherPanel which extends Y.Panel. Y.WeatherPanel will load weatherdata using QYL
+        which is inserted inside the panel. We will use weatherpanel.readyPromise() to show the widget only when
+        all the weatherdata is inserted.
+    </p>
+</div>
+
+<h2>Explaination</h2>
+<p>
+    The widget sets a class <code>.yui3-itsaweatherpanel-loading</code> to the boundingBox by default when created.
+    Y.Widget is responsible for this. This class will  be removed once the widget is rendered. However, the YQL-data has still to be laoded,
+    so this behaviour will show an empty panel on the screen. The panel gets filled later on when YQL returns its data.
+    <br />
+    <br />
+    To prevent this flickr-behaviour, Y.WeatherPanel adds the class <code>.extendloading</code> to the boundingBox at initialization, which will
+    keep the panel hidden. As soon as all the data is inserted (readyPromise), this class is removed and the weatherpanel shows up.
+</p>
+
+<h2>Complete Example Source</h2>
+```
+<style type="text/css">
+{{>using-readypromise-css}}
+</style>
+
+<body>
+
+<script>
+{{>using-readypromise-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>using-readypromise-js}}
+</script>

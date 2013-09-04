@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsaeditorrenderpromise",
+    "builds": {
+        "gallery-itsaeditorrenderpromise": {
+            "jsfiles": [
+                "js/gallery-itsaeditorrenderpromise.js"
+            ]
+        }
+    }
+}
