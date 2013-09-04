@@ -34,6 +34,15 @@
             "modules"    : ["gallery-itsanodepromise", "gallery-itsadialog", "node"],
             "tags"    : ["gallery-itsanodepromise", "unavailablePromise"],
             "hideTableOfContents": true
+        },
+        {
+            "name"       : "fireavailabilities",
+            "displayName": "Listening for Nodes becoming available multiple times",
+            "description": "This example shows how we can make use of the availableagain- and unavailableagain-events. When the node gets inserted or removed, the events are fired.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsanodepromise", "gallery-itsadialog", "node"],
+            "tags"    : ["gallery-itsanodepromise", "unavailableagain", "fireAvailabilities", "availableagain"],
+            "hideTableOfContents": true
         }
     ]
 }

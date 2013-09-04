@@ -1,0 +1,30 @@
+YUI(yuiconfig).use('node', 'gallery-itsanodepromise', 'gallery-itsadialog', function(Y) {
+    var sidebarNode = Y.one('.sidebar'),
+        container = Y.one('#container'),
+        somenode;
+
+    Y.one('#insertnode').on('click', function(){
+        var somenode = Y.one("#somenode");
+            if (!somenode) {
+            sidebarNode.append('<div id="somenode"></div>');
+        }
+    });
+
+    Y.one('#removenode').on('click', function(){
+        var somenode = Y.one("#somenode");
+        if (somenode) {
+            somenode.remove(true);
+        }
+    });
+
+    Y.Node.fireAvailabilities('#somenode');
+
+    Y.on('availableagain', function() {
+        container.append('Node is available again<br />');
+    }, '#somenode');
+
+    Y.on('unavailableagain', function() {
+        container.append('Node is unavailable again<br />');
+    }, '#somenode');
+
+});
