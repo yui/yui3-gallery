@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-editoradvanced",
+    "builds": {
+        "gallerycss-itsa-editoradvanced": {
+            "cssfiles": [
+                "css/editor-ie7.css",
+                "css/editor.css"
+            ]
+        }
+    }
+}

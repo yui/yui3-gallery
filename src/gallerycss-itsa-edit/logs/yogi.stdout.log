@@ -1,0 +1,75 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-itsa-edit
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-itsa-edit
+   #1: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-edit-cut { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); } // line 1, pos 23
+   #2: [error] Expected RBRACE at line 1, col 46.
+       i.itsaicon-edit-cut { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); } // line 1, pos 46
+   #3: [warning] Property with star prefix found.
+       i.itsaicon-edit-cut { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); } // line 1, pos 23
+   #4: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-edit-edit { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 2, pos 24
+   #5: [warning] Property with star prefix found.
+       i.itsaicon-edit-edit { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 2, pos 24
+   #6: [error] Expected RBRACE at line 2, col 47.
+       i.itsaicon-edit-edit { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 2, pos 47
+   #7: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-edit-remove { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); } // line 3, pos 26
+   #8: [warning] Property with star prefix found.
+       i.itsaicon-edit-remove { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); } // line 3, pos 26
+   #9: [error] Expected RBRACE at line 3, col 49.
+       i.itsaicon-edit-remove { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); } // line 3, pos 49
+   #10: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-edit-duplicate { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); } // line 4, pos 29
+   #11: [warning] Property with star prefix found.
+       i.itsaicon-edit-duplicate { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); } // line 4, pos 29
+   #12: [error] Expected RBRACE at line 4, col 52.
+       i.itsaicon-edit-duplicate { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); } // line 4, pos 52
+   #13: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-edit-copy { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 5, pos 24
+   #14: [error] Expected RBRACE at line 5, col 47.
+       i.itsaicon-edit-copy { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 5, pos 47
+   #15: [warning] Property with star prefix found.
+       i.itsaicon-edit-copy { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 5, pos 24
+   #16: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-edit-paste { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); } // line 6, pos 25
+   #17: [warning] Property with star prefix found.
+       i.itsaicon-edit-paste { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); } // line 6, pos 25
+   #18: [error] Expected RBRACE at line 6, col 48.
+       i.itsaicon-edit-paste { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); } // line 6, pos 48
+   #19: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-edit-save { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); }@font-face { // line 7, pos 24
+   #20: [warning] Property with star prefix found.
+       i.itsaicon-edit-save { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); }@font-face { // line 7, pos 24
+   #21: [error] Expected RBRACE at line 7, col 47.
+       i.itsaicon-edit-save { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); }@font-face { // line 7, pos 47
+   #22: [warning] Attribute selectors with ^= are slow!
+       i[class^="itsaicon-edit-"]:before, // line 31, pos 2
+   #23: [warning] Attribute selectors with *= are slow!
+       i[class*=" itsaicon-edit-"]:before { // line 32, pos 2
+shifter [info] shifting assets for gallerycss-itsa-edit
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.101 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5010
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5009
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.9.1
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallerycss-itsa-edit]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.007 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallerycss-itsa-edit/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
