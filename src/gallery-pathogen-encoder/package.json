@@ -9,7 +9,7 @@
     "dependencies": {},
     "locator": {
         "ruleset": "main",
-        "location": "./src/pathogen-encoder/js"
+        "location": "./js"
     },
     "keywords": [
         "yui",
@@ -20,7 +20,7 @@
     "directories": {
         "lib": "./lib",
         "example": "./example",
-        "src": "./src"
+        "js": "./js"
     },
     "engines": {
         "node": ">=0.8.x",
@@ -34,9 +34,9 @@
         "mocha": "*"
     },
     "scripts": {
-        "postinstall": "cd ./src; ../node_modules/yogi/bin/yogi.js build; cd -",
-        "lint": "node node_modules/.bin/jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js ./src/pathogen-encoder/js/*.js",
-        "test": "node node_modules/.bin/_mocha tests/lib/*.js --reporter spec"
+        "postinstall": "./node_modules/yogi/bin/yogi.js build",
+        "lint": "node ./node_modules/.bin/jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js ./js/*.js",
+        "test": "node ./node_modules/.bin/_mocha tests/lib/*.js --reporter spec"
     },
     "repository": {
         "type": "git",

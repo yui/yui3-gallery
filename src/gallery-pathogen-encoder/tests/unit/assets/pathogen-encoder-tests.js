@@ -321,7 +321,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
             resolved = loader.resolve(true);
             Assert.isTrue(loader.pathogenSeen.oop, 'Pathogen should have seen the oop module');
             Assert.isTrue(loader.pathogenSeen['yui-base'], 'Pathogen should have seen the yui-base module');
-            Assert.areEqual('http://combo.yuilibrary.com/p/core+3.11.0+yui-base,oop.js', resolved.js[0], 'Unexpected combo url');
+            Assert.areEqual('http://combo.yuilibrary.com/p/core+3.11.0+oop,yui-base.js', resolved.js[0], 'Unexpected combo url');
 
             resolved = loader.resolve(true);
             Assert.areEqual(

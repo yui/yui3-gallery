@@ -20,43 +20,43 @@ var resolve = Y.Loader.prototype.resolve,
 Build each combo url from the bottom up. There's probably room for optimization
 here, but let's keep it simple for now.
 @method buildCombo
-@param {Object} source Grouped module meta.
+@param {Array} groups Grouped module meta.
 @param {String} comboBase The base of the combo url.
 @param {String} comboTail The tail of the combo url (e.g. .debug.js).
 @return {String} A combo url.
 */
-Y.Loader.prototype.buildCombo = function (source, comboBase, comboTail) {
+Y.Loader.prototype.buildCombo = function (groups, comboBase, comboTail) {
     var comboUrl = comboBase,
         currLen  = comboBase.length + comboTail.length,
         currDelim,
         currKey,
         prepend,
         modules,
-        key;
+        token,
+        group,
+        len,
+        i;
 
-    for (key in source) {
-        if (source.hasOwnProperty(key)) {
-            currDelim   = comboUrl === comboBase ? '' : GROUP_DELIM;
-            currKey     = key;
-            modules     = source[key];
+    for (i = 0, len = groups.length; i < len; i += 1) {
+        group       = groups[i];
+        currDelim   = comboUrl === comboBase ? '' : GROUP_DELIM;
+        currKey     = group.key;
+        modules     = group.modules;
 
-            while (modules.length) {
-                prepend = currDelim + currKey;
-                prepend = prepend ? prepend + SUB_GROUP_DELIM : MODULE_DELIM;
-                token   = prepend + modules[0];
+        while (modules.length) {
+            prepend = currDelim + currKey;
+            prepend = prepend ? prepend + SUB_GROUP_DELIM : MODULE_DELIM;
+            token   = prepend + modules[0];
 
-                if (currLen + token.length < maxURLLength) {
-                    comboUrl += token;
-                    currLen  += token.length;
-                    modules.shift();
-                } else {
-                    return comboUrl + comboTail;
-                }
-
-                currDelim = currKey = '';
+            if (currLen + token.length < maxURLLength) {
+                comboUrl += token;
+                currLen  += token.length;
+                modules.shift();
+            } else {
+                return comboUrl + comboTail;
             }
 
-            delete source[key];
+            currDelim = currKey = '';
         }
     }
 
@@ -96,8 +96,8 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
         group   = mod.group;
         name    = mod.name;
 
-        // Skip modules that should be loaded singly. This is confusing because
-        // it exactly mimics the original source:
+        // Skip modules that should be loaded singly. This is kind of confusing
+        // because it mimics the behavior of the loader (also confusing):
         // https://github.com/ekashida/yui3/blob/632167a36d57da7a884aacf0f4488dd5b8619c7c/src/loader/js/loader.js#L2563
         meta = this.groups && this.groups[group];
         if (meta) {
@@ -173,6 +173,42 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
 };
 
 /**
+Sort the aggregated groups, and the modules within them. Minimizes cache misses
+in Yahoo's infrastructure by encoding predictable combo urls across browsers
+since iterating over an object does not guarantee order.
+@method sortAggregatedGroups
+@param {Object} groups Aggregated groups.
+@return {Array} Sorted groups.
+**/
+Y.Loader.prototype.sortAggregatedGroups = function (groups) {
+    var sorted = [],
+        key,
+        len,
+        i;
+
+    for (key in groups) {
+        if (groups.hasOwnProperty(key)) {
+            sorted.push({
+                key: key,
+                modules: groups[key]
+            });
+        }
+    }
+
+    // Sort the groups.
+    sorted.sort(function (a, b) {
+        return a.key > b.key;
+    });
+
+    // Sort the modules.
+    for (i = 0, len = sorted.length; i < len; i += 1) {
+        sorted[i].modules.sort();
+    }
+
+    return sorted;
+};
+
+/**
 Build each combo url from the bottom up. There's probably room for optimization
 here, but let's keep it simple for now.
 @method customResolve
@@ -182,6 +218,7 @@ here, but let's keep it simple for now.
 */
 Y.Loader.prototype.customResolve = function (modules, type) {
     var source      = this.aggregateGroups(modules),
+        groups      = this.sortAggregatedGroups(source),
         comboUrls   = [],
         comboTail,
         filter,
@@ -198,15 +235,22 @@ Y.Loader.prototype.customResolve = function (modules, type) {
         comboTail = comboTail + '.' + type;
     }
 
-    url = this.buildCombo(source, customComboBase, comboTail);
+    url = this.buildCombo(groups, customComboBase, comboTail);
     while (url) {
         comboUrls.push(url);
-        url = this.buildCombo(source, customComboBase, comboTail);
+        url = this.buildCombo(groups, customComboBase, comboTail);
     }
 
     return comboUrls;
 };
 
+/**
+Determines whether or not we should fallback to default combo urls by checking
+to see if Loader re-requests any module that we've already seen.
+@method shouldFallback
+@param {Object} resolved Resolved module metadata by original `resolve`.
+@return {Boolean} Whether or not to fallback.
+**/
 Y.Loader.prototype.shouldFallback = function (resolved) {
     var modules,
         name,
@@ -232,6 +276,12 @@ Y.Loader.prototype.shouldFallback = function (resolved) {
     }
 };
 
+/**
+Wraps Loader's `resolve` method and uses the module metadata returned by it to
+encode pathogen urls. Note that we will incur the cost of encoding default
+combo urls until we replace the encoding logic in core.
+@method resolve
+**/
 Y.Loader.prototype.resolve = function () {
     var resolved = resolve.apply(this, arguments),
         combine  = this.combine,
