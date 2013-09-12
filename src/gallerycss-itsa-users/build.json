@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-users",
+    "builds": {
+        "gallerycss-itsa-users": {
+            "cssfiles": [
+                "css/users-ie7.css",
+                "css/users.css"
+            ]
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "name"       : "gallerycss-itsa-users",
+    "displayName": "Gallery: gallerycss-itsa-users",
+    "description": "This module supplies beautiful stylable iconfonts from the category 'users', which can be used by classname.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallerycss-itsa-base", "gallerycss-itsa-users" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "simple-usage",
+            "displayName": "Creating imagebuttons",
+            "description": "This is a summary of all available icon-fonts this module offers, applied to purecss-buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-users"],
+            "tags"       : ["gallerycss-itsa-users", "iconfonts", "icons", "users"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-style",
+            "displayName": "Custom styling",
+            "description": "This example shows how to customize an icon.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-users"],
+            "tags"       : ["gallerycss-itsa-users", "iconfonts", "icons", "users", "customize", "styling"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "animation",
+            "displayName": "Adding animation",
+            "description": "This example shows how to spin an iconfont by using both 'gallerycss-itsa-users' and 'gallerycss-itsa-animatespin'.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-form", "gallerycss-itsa-animatespin"],
+            "tags"       : ["gallerycss-itsa-form", "iconfonts", "icons", "form", "customize", "animated", "animation"],
+            "hideTableOfContents": true
+        }
+    ]
+}
