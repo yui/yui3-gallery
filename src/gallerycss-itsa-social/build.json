@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-social",
+    "builds": {
+        "gallerycss-itsa-social": {
+            "cssfiles": [
+                "css/social-ie7.css",
+                "css/social.css"
+            ]
+        }
+    }
+}

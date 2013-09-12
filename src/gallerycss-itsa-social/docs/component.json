@@ -1,0 +1,30 @@
+{
+    "name"       : "gallerycss-itsa-social",
+    "displayName": "Gallery: gallerycss-itsa-social",
+    "description": "This module supplies beautiful stylable iconfonts from the category 'social', which can be used by classname.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallerycss-itsa-base", "gallerycss-itsa-social" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "simple-usage",
+            "displayName": "Creating imagebuttons",
+            "description": "This is a summary of all available icon-fonts this module offers, applied to purecss-buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-social"],
+            "tags"       : ["gallerycss-itsa-social", "iconfonts", "icons", "social"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-style",
+            "displayName": "Custom styling",
+            "description": "This example shows how to customize an icon.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-social"],
+            "tags"       : ["gallerycss-itsa-social", "iconfonts", "icons", "social", "customize", "styling"],
+            "hideTableOfContents": true
+        }
+    ]
+}
