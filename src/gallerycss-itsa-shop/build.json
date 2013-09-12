@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-shop",
+    "builds": {
+        "gallerycss-itsa-shop": {
+            "cssfiles": [
+                "css/shop-ie7.css",
+                "css/shop.css"
+            ]
+        }
+    }
+}
