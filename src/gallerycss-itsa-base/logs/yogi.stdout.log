@@ -1,0 +1,120 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-itsa-base
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-itsa-base
+   #1: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-bordered { // line 4, pos 1
+   #2: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-rounded { // line 9, pos 1
+   #3: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-heavyrounded { // line 14, pos 1
+   #4: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-oval { // line 19, pos 1
+   #5: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-halfoval { // line 24, pos 1
+   #6: [warning] Attribute selectors with ^= are slow!
+       i[class^="itsaicon-"]:before, i[class*=" itsaicon-"]:before { // line 30, pos 2
+   #7: [warning] Attribute selectors with *= are slow!
+       i[class^="itsaicon-"]:before, i[class*=" itsaicon-"]:before { // line 30, pos 32
+   #8: [warning] Attribute selectors with ^= are slow!
+       button i[class^="itsaicon-"]:before, // line 61, pos 9
+   #9: [warning] Attribute selectors with *= are slow!
+       button i[class*=" itsaicon-"]:before, // line 62, pos 9
+   #10: [warning] Attribute selectors with ^= are slow!
+       button i[class^="itsaicon-"]:before, // line 63, pos 9
+   #11: [warning] Attribute selectors with *= are slow!
+       button i[class*=" itsaicon-"]:before { // line 64, pos 9
+   #12: [warning] Attribute selectors with ^= are slow!
+       button.itsabutton-iconleft i[class^="itsaicon-"]:before, // line 68, pos 29
+   #13: [warning] Attribute selectors with *= are slow!
+       button.itsabutton-iconleft i[class*=" itsaicon-"]:before, // line 69, pos 29
+   #14: [warning] Attribute selectors with ^= are slow!
+       button.itsabutton-iconright i[class^="itsaicon-"]:before, // line 70, pos 30
+   #15: [warning] Attribute selectors with *= are slow!
+       button.itsabutton-iconright i[class*=" itsaicon-"]:before { // line 71, pos 30
+   #16: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-onlyicon { // line 76, pos 1
+   #17: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconleft) { // line 81, pos 1
+   #18: [error] Expected LBRACE at line 81, col 33.
+       .pure-button.itsabutton-iconleft) { // line 81, pos 33
+   #19: [error] Unexpected token ')' at line 81, col 33.
+       .pure-button.itsabutton-iconleft) { // line 81, pos 33
+   #20: [error] Unexpected token '{' at line 81, col 35.
+       .pure-button.itsabutton-iconleft) { // line 81, pos 35
+   #21: [error] Expected LBRACE at line 82, col 14.
+       padding: 0.5em 1.5em 0.5em 1.2em; // line 82, pos 14
+   #22: [error] Unexpected token '0.5em' at line 82, col 14.
+       padding: 0.5em 1.5em 0.5em 1.2em; // line 82, pos 14
+   #23: [error] Unexpected token '1.5em' at line 82, col 20.
+       padding: 0.5em 1.5em 0.5em 1.2em; // line 82, pos 20
+   #24: [error] Unexpected token '0.5em' at line 82, col 26.
+       padding: 0.5em 1.5em 0.5em 1.2em; // line 82, pos 26
+   #25: [error] Unexpected token '1.2em' at line 82, col 32.
+       padding: 0.5em 1.5em 0.5em 1.2em; // line 82, pos 32
+   #26: [error] Unexpected token ';' at line 82, col 37.
+       padding: 0.5em 1.5em 0.5em 1.2em; // line 82, pos 37
+   #27: [error] Unexpected token '}' at line 83, col 1.
+       } // line 83, pos 1
+   #28: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconright { // line 86, pos 1
+   #29: [warning] Attribute selectors with ^= are slow!
+       button.itsabutton-iconleft i[class^="itsaicon-"], // line 90, pos 29
+   #30: [warning] Attribute selectors with *= are slow!
+       button.itsabutton-iconleft i[class*=" itsaicon-"], // line 91, pos 29
+   #31: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconleft i[class^="itsaicon-"], // line 92, pos 1
+   #32: [warning] Attribute selectors with ^= are slow!
+       .pure-button.itsabutton-iconleft i[class^="itsaicon-"], // line 92, pos 35
+   #33: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconleft i[class*=" itsaicon-"] { // line 93, pos 1
+   #34: [warning] Attribute selectors with *= are slow!
+       .pure-button.itsabutton-iconleft i[class*=" itsaicon-"] { // line 93, pos 35
+   #35: [warning] Attribute selectors with ^= are slow!
+       button.itsabutton-iconright i[class^="itsaicon-"], // line 98, pos 30
+   #36: [warning] Attribute selectors with *= are slow!
+       button.itsabutton-iconright i[class*=" itsaicon-"], // line 99, pos 30
+   #37: [warning] Unqualified attribute selectors are known to be slow.
+       .pure-button.itsabutton-iconright [class^="itsaicon-"], // line 100, pos 35
+   #38: [warning] Attribute selectors with ^= are slow!
+       .pure-button.itsabutton-iconright [class^="itsaicon-"], // line 100, pos 35
+   #39: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconright [class^="itsaicon-"], // line 100, pos 1
+   #40: [warning] Attribute selectors with *= are slow!
+       .pure-button.itsabutton-iconright [class*=" itsaicon-"] { // line 101, pos 35
+   #41: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconright [class*=" itsaicon-"] { // line 101, pos 1
+   #42: [warning] Unqualified attribute selectors are known to be slow.
+       .pure-button.itsabutton-iconright [class*=" itsaicon-"] { // line 101, pos 35
+   #43: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconleft i.itsa-busy, // line 108, pos 1
+   #44: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconleft i.animate-spin { // line 109, pos 1
+   #45: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconright i.itsa-busy, // line 117, pos 1
+   #46: [warning] Don't use adjoining classes.
+       .pure-button.itsabutton-iconright i.animate-spin { // line 118, pos 1
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.063 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5008
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.9.1
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallerycss-itsa-base]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.007 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallerycss-itsa-base/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

@@ -1,0 +1,10 @@
+{
+    "name": "gallerycss-itsa-base",
+    "builds": {
+        "gallerycss-itsa-base": {
+            "cssfiles": [
+                "css/base.css"
+            ]
+        }
+    }
+}

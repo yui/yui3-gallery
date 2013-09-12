@@ -1,0 +1,39 @@
+{
+    "name"       : "gallerycss-itsa-base",
+    "displayName": "Gallery: gallerycss-itsa-base",
+    "description": "This module is the base-css module that is needed for every 'gallerycss-itsa-*' module.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallerycss-itsa-base" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "round-buttons",
+            "displayName": "Creating rounded buttons",
+            "description": "This example shows how to create rounded buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-form"],
+            "tags"       : ["gallerycss-itsa-form", "iconfonts", "icons", "border", "bordered", "rounded", "styling"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "image-buttons",
+            "displayName": "Creating image-buttons",
+            "description": "This example shows how to create image-buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-form"],
+            "tags"       : ["gallerycss-itsa-form", "iconfonts", "icons", "imagebutton", "customize", "styling", "border", "bordered"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "circle-buttons",
+            "displayName": "Creating round-buttons",
+            "description": "This example shows how to create a circle-button. Actually it is an oval but becomes a circle when there is a single image inside.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-form", "gallerycss-itsa-animatespin"],
+            "tags"       : ["gallerycss-itsa-form", "iconfonts", "icons", "customize", "circle", "oval", "styling", "border", "bordered", "rounded"],
+            "hideTableOfContents": true
+        }
+    ]
+}

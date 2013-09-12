@@ -1,0 +1,56 @@
+<style type="text/css">
+{{>index-css}}
+</style>
+
+<div class="intro">
+    <p>
+    {{description}}
+    </p>
+   <p>Special thanks to <a href='http://fontello.com' target='_blank'>http://fontello.com</a> by which means this gallerymodule is created</p>
+
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+    <p>This module delivers kind of basecss:
+    </p>
+    <ul>
+        <li>When you load one of the <code>gallerycss-itsa-*</code>-modules, you always need to load this basemodule as well. It has base-css that is needed in all other gallerycss-itsa mudules.
+        </li>
+        <li>This module adds several css-classes that can be used to fintune buttons-styling.
+        </li>
+    </ul>
+
+<h2>Available iconclasses for buttonstyling</h2>
+    <p>When used, the classes mentioned below should be added to a button-element.</p>
+    <ul>
+        <li><code>itsabutton-bordered</code> adds a thin buttonborder, handy when used together with the 'pure-button'-class.</li>
+        <li><code>itsabutton-rounded</code> rounds the buttonedges.</li>
+        <li><code>itsabutton-heavyrounded</code> heavily rounds the buttonedges.</li>
+        <li><code>itsabutton-oval</code> creates oval buttons.</li>
+        <li><code>itsabutton-halfoval</code> creates half-oval buttons.</li>
+        <li><code>itsabutton-onlyicon</code> you should add this class when the button holds only an icon without buttontext: this will make the padding right.</li>
+        <li><code>itsabutton-iconleft</code> you should add this class when the button holds an icon left to the buttontext: this will make the padding right.</li>
+        <li><code>itsabutton-iconright</code> you should add this class when the button holds an icon right to the buttontext: this will make the padding right.</li>
+    </ul>
+
+<h2>Usage</h2>
+```html
+<button class="pure-button itsabutton-bordered itsabutton-iconleft">
+    <i class="itsaicon-form-save"></i>Save
+</button>
+```
+
+```js
+YUI(yuiconfig).use('yui-base', function(Y) {
+    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-form'); // now the iconfonts will load asynchroniously
+
+    // code can be executed
+    ...
+
+});
+```
+<h2>Licence</h2>
+Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>
