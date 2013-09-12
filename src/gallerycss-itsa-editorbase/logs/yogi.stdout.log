@@ -1,0 +1,105 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-itsa-editorbase
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-itsa-editorbase
+   #1: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-bold { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 1, pos 26
+   #2: [warning] Property with star prefix found.
+       i.itsaicon-editor-bold { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 1, pos 26
+   #3: [error] Expected RBRACE at line 1, col 49.
+       i.itsaicon-editor-bold { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 1, pos 49
+   #4: [warning] Property with star prefix found.
+       i.itsaicon-editor-italic { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); } // line 2, pos 28
+   #5: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-italic { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); } // line 2, pos 28
+   #6: [error] Expected RBRACE at line 2, col 51.
+       i.itsaicon-editor-italic { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); } // line 2, pos 51
+   #7: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-align-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); } // line 3, pos 32
+   #8: [warning] Property with star prefix found.
+       i.itsaicon-editor-align-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); } // line 3, pos 32
+   #9: [error] Expected RBRACE at line 3, col 55.
+       i.itsaicon-editor-align-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); } // line 3, pos 55
+   #10: [warning] Property with star prefix found.
+       i.itsaicon-editor-align-center { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); } // line 4, pos 34
+   #11: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-align-center { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); } // line 4, pos 34
+   #12: [error] Expected RBRACE at line 4, col 57.
+       i.itsaicon-editor-align-center { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); } // line 4, pos 57
+   #13: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-align-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); } // line 5, pos 33
+   #14: [warning] Property with star prefix found.
+       i.itsaicon-editor-align-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); } // line 5, pos 33
+   #15: [error] Expected RBRACE at line 5, col 56.
+       i.itsaicon-editor-align-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); } // line 5, pos 56
+   #16: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-align-justify { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe807;&nbsp;'); } // line 6, pos 35
+   #17: [warning] Property with star prefix found.
+       i.itsaicon-editor-align-justify { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe807;&nbsp;'); } // line 6, pos 35
+   #18: [error] Expected RBRACE at line 6, col 58.
+       i.itsaicon-editor-align-justify { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe807;&nbsp;'); } // line 6, pos 58
+   #19: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-indent-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80a;&nbsp;'); } // line 7, pos 33
+   #20: [warning] Property with star prefix found.
+       i.itsaicon-editor-indent-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80a;&nbsp;'); } // line 7, pos 33
+   #21: [error] Expected RBRACE at line 7, col 56.
+       i.itsaicon-editor-indent-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80a;&nbsp;'); } // line 7, pos 56
+   #22: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-indent-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80b;&nbsp;'); } // line 8, pos 34
+   #23: [error] Expected RBRACE at line 8, col 57.
+       i.itsaicon-editor-indent-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80b;&nbsp;'); } // line 8, pos 57
+   #24: [warning] Property with star prefix found.
+       i.itsaicon-editor-indent-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80b;&nbsp;'); } // line 8, pos 34
+   #25: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-color { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 9, pos 27
+   #26: [warning] Property with star prefix found.
+       i.itsaicon-editor-color { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 9, pos 27
+   #27: [error] Expected RBRACE at line 9, col 50.
+       i.itsaicon-editor-color { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 9, pos 50
+   #28: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-list-bullet { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe808;&nbsp;'); } // line 10, pos 33
+   #29: [warning] Property with star prefix found.
+       i.itsaicon-editor-list-bullet { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe808;&nbsp;'); } // line 10, pos 33
+   #30: [error] Expected RBRACE at line 10, col 56.
+       i.itsaicon-editor-list-bullet { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe808;&nbsp;'); } // line 10, pos 56
+   #31: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-list-numbered { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe809;&nbsp;'); } // line 11, pos 35
+   #32: [warning] Property with star prefix found.
+       i.itsaicon-editor-list-numbered { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe809;&nbsp;'); } // line 11, pos 35
+   #33: [error] Expected RBRACE at line 11, col 58.
+       i.itsaicon-editor-list-numbered { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe809;&nbsp;'); } // line 11, pos 58
+   #34: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-editor-underline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); }@font-face { // line 12, pos 31
+   #35: [warning] Property with star prefix found.
+       i.itsaicon-editor-underline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); }@font-face { // line 12, pos 31
+   #36: [error] Expected RBRACE at line 12, col 54.
+       i.itsaicon-editor-underline { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); }@font-face { // line 12, pos 54
+   #37: [warning] Attribute selectors with ^= are slow!
+       i[class^="itsaicon-editor-"]:before, i[class*=" itsaicon-editor-"]:before { // line 36, pos 2
+   #38: [warning] Attribute selectors with *= are slow!
+       i[class^="itsaicon-editor-"]:before, i[class*=" itsaicon-editor-"]:before { // line 36, pos 39
+shifter [info] shifting assets for gallerycss-itsa-editorbase
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.091 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.9.1
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallerycss-itsa-editorbase]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.007 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallerycss-itsa-editorbase/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
