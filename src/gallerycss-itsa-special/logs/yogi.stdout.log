@@ -1,0 +1,257 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-itsa-special
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-itsa-special
+   #1: [error] Expected RBRACE at line 3, col 52.
+       i.itsaicon-special-minus2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe847;&nbsp;'); } // line 3, pos 52
+   #2: [error] Expected RBRACE at line 4, col 54.
+       i.itsaicon-special-keyboard { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe843;&nbsp;'); } // line 4, pos 54
+   #3: [error] Expected RBRACE at line 5, col 51.
+       i.itsaicon-special-cloud { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe838;&nbsp;'); } // line 5, pos 51
+   #4: [error] Expected RBRACE at line 6, col 51.
+       i.itsaicon-special-menu2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80e;&nbsp;'); } // line 6, pos 51
+   #5: [error] Expected RBRACE at line 7, col 51.
+       i.itsaicon-special-flag3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); } // line 7, pos 51
+   #6: [error] Expected RBRACE at line 8, col 50.
+       i.itsaicon-special-flag { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); } // line 8, pos 50
+   #7: [error] Expected RBRACE at line 9, col 53.
+       i.itsaicon-special-thunder { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe83d;&nbsp;'); } // line 9, pos 53
+   #8: [error] Expected RBRACE at line 10, col 51.
+       i.itsaicon-special-check { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe845;&nbsp;'); } // line 10, pos 51
+   #9: [error] Expected RBRACE at line 11, col 54.
+       i.itsaicon-special-ok-round { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81f;&nbsp;'); } // line 11, pos 54
+   #10: [error] Expected RBRACE at line 12, col 52.
+       i.itsaicon-special-cancel { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe846;&nbsp;'); } // line 12, pos 52
+   #11: [error] Expected RBRACE at line 13, col 58.
+       i.itsaicon-special-cancel-round { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe820;&nbsp;'); } // line 13, pos 58
+   #12: [error] Expected RBRACE at line 14, col 56.
+       i.itsaicon-special-plus-round { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe821;&nbsp;'); } // line 14, pos 56
+   #13: [error] Expected RBRACE at line 15, col 57.
+       i.itsaicon-special-minus-round { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe822;&nbsp;'); } // line 15, pos 57
+   #14: [error] Expected RBRACE at line 16, col 53.
+       i.itsaicon-special-forward { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe83c;&nbsp;'); } // line 16, pos 53
+   #15: [error] Expected RBRACE at line 17, col 53.
+       i.itsaicon-special-listadd { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80f;&nbsp;'); } // line 17, pos 53
+   #16: [error] Expected RBRACE at line 18, col 59.
+       i.itsaicon-special-accessibility { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe810;&nbsp;'); } // line 18, pos 59
+   #17: [error] Expected RBRACE at line 19, col 61.
+       i.itsaicon-special-battery-charge2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe829;&nbsp;'); } // line 19, pos 61
+   #18: [error] Expected RBRACE at line 20, col 56.
+       i.itsaicon-special-battery100 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe82a;&nbsp;'); } // line 20, pos 56
+   #19: [error] Expected RBRACE at line 21, col 55.
+       i.itsaicon-special-battery75 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe82b;&nbsp;'); } // line 21, pos 55
+   #20: [error] Expected RBRACE at line 22, col 55.
+       i.itsaicon-special-battery25 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe82d;&nbsp;'); } // line 22, pos 55
+   #21: [error] Expected RBRACE at line 23, col 55.
+       i.itsaicon-special-battery50 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe82c;&nbsp;'); } // line 23, pos 55
+   #22: [error] Expected RBRACE at line 24, col 51.
+       i.itsaicon-special-male2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe811;&nbsp;'); } // line 24, pos 51
+   #23: [error] Expected RBRACE at line 25, col 53.
+       i.itsaicon-special-female2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe812;&nbsp;'); } // line 25, pos 53
+   #24: [error] Expected RBRACE at line 26, col 62.
+       i.itsaicon-special-pin2-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe818;&nbsp;'); } // line 26, pos 62
+   #25: [error] Expected RBRACE at line 27, col 50.
+       i.itsaicon-special-pin2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe817;&nbsp;'); } // line 27, pos 50
+   #26: [error] Expected RBRACE at line 28, col 51.
+       i.itsaicon-special-flag2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); } // line 28, pos 51
+   #27: [error] Expected RBRACE at line 29, col 72.
+       i.itsaicon-special-bookmark-small-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe808;&nbsp;'); } // line 29, pos 72
+   #28: [error] Expected RBRACE at line 30, col 60.
+       i.itsaicon-special-bookmark-small { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe807;&nbsp;'); } // line 30, pos 60
+   #29: [error] Expected RBRACE at line 31, col 51.
+       i.itsaicon-special-flag4 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 31, pos 51
+   #30: [error] Expected RBRACE at line 32, col 49.
+       i.itsaicon-special-tag { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe809;&nbsp;'); } // line 32, pos 49
+   #31: [error] Expected RBRACE at line 33, col 50.
+       i.itsaicon-special-tag2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80b;&nbsp;'); } // line 33, pos 50
+   #32: [error] Expected RBRACE at line 34, col 50.
+       i.itsaicon-special-tag3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80c;&nbsp;'); } // line 34, pos 50
+   #33: [error] Expected RBRACE at line 35, col 50.
+       i.itsaicon-special-tags { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80a;&nbsp;'); } // line 35, pos 50
+   #34: [error] Expected RBRACE at line 36, col 53.
+       i.itsaicon-special-comment { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe835;&nbsp;'); } // line 36, pos 53
+   #35: [error] Expected RBRACE at line 37, col 50.
+       i.itsaicon-special-chat { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe836;&nbsp;'); } // line 37, pos 50
+   #36: [error] Expected RBRACE at line 38, col 51.
+       i.itsaicon-special-vcard { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 38, pos 51
+   #37: [error] Expected RBRACE at line 39, col 50.
+       i.itsaicon-special-pin3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe815;&nbsp;'); } // line 39, pos 50
+   #38: [error] Expected RBRACE at line 40, col 52.
+       i.itsaicon-special-logout { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe819;&nbsp;'); } // line 40, pos 52
+   #39: [error] Expected RBRACE at line 41, col 53.
+       i.itsaicon-special-logout3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81a;&nbsp;'); } // line 41, pos 53
+   #40: [error] Expected RBRACE at line 42, col 53.
+       i.itsaicon-special-logout2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81b;&nbsp;'); } // line 42, pos 53
+   #41: [error] Expected RBRACE at line 43, col 59.
+       i.itsaicon-special-battery-empty { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe82e;&nbsp;'); } // line 43, pos 59
+   #42: [error] Expected RBRACE at line 44, col 58.
+       i.itsaicon-special-battery-half { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe82f;&nbsp;'); } // line 44, pos 58
+   #43: [error] Expected RBRACE at line 45, col 58.
+       i.itsaicon-special-battery-full { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe830;&nbsp;'); } // line 45, pos 58
+   #44: [error] Expected RBRACE at line 46, col 60.
+       i.itsaicon-special-battery-charge { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe831;&nbsp;'); } // line 46, pos 60
+   #45: [error] Expected RBRACE at line 47, col 56.
+       i.itsaicon-special-layers-alt { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe84a;&nbsp;'); } // line 47, pos 56
+   #46: [error] Expected RBRACE at line 48, col 66.
+       i.itsaicon-special-bookmark-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); } // line 48, pos 66
+   #47: [error] Expected RBRACE at line 49, col 61.
+       i.itsaicon-special-rss-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe827;&nbsp;'); } // line 49, pos 61
+   #48: [error] Expected RBRACE at line 50, col 50.
+       i.itsaicon-special-menu { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe80d;&nbsp;'); } // line 50, pos 50
+   #49: [error] Expected RBRACE at line 51, col 51.
+       i.itsaicon-special-magic { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe840;&nbsp;'); } // line 51, pos 51
+   #50: [error] Expected RBRACE at line 52, col 51.
+       i.itsaicon-special-gauge { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe841;&nbsp;'); } // line 52, pos 51
+   #51: [error] Expected RBRACE at line 53, col 65.
+       i.itsaicon-special-comment-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe834;&nbsp;'); } // line 53, pos 65
+   #52: [error] Expected RBRACE at line 54, col 62.
+       i.itsaicon-special-chat-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe837;&nbsp;'); } // line 54, pos 62
+   #53: [error] Expected RBRACE at line 55, col 56.
+       i.itsaicon-special-organogram { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe842;&nbsp;'); } // line 55, pos 56
+   #54: [error] Expected RBRACE at line 56, col 50.
+       i.itsaicon-special-bell { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe832;&nbsp;'); } // line 56, pos 50
+   #55: [error] Expected RBRACE at line 57, col 50.
+       i.itsaicon-special-plus { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe823;&nbsp;'); } // line 57, pos 50
+   #56: [error] Expected RBRACE at line 58, col 51.
+       i.itsaicon-special-reply { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe83a;&nbsp;'); } // line 58, pos 51
+   #57: [error] Expected RBRACE at line 59, col 62.
+       i.itsaicon-special-plus-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe825;&nbsp;'); } // line 59, pos 62
+   #58: [error] Expected RBRACE at line 60, col 63.
+       i.itsaicon-special-minus-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe826;&nbsp;'); } // line 60, pos 63
+   #59: [error] Expected RBRACE at line 61, col 55.
+       i.itsaicon-special-reply-all { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe83b;&nbsp;'); } // line 61, pos 55
+   #60: [error] Expected RBRACE at line 62, col 50.
+       i.itsaicon-special-note { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe839;&nbsp;'); } // line 62, pos 50
+   #61: [error] Expected RBRACE at line 63, col 49.
+       i.itsaicon-special-rss { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe828;&nbsp;'); } // line 63, pos 49
+   #62: [error] Expected RBRACE at line 64, col 51.
+       i.itsaicon-special-minus { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe824;&nbsp;'); } // line 64, pos 51
+   #63: [error] Expected RBRACE at line 65, col 52.
+       i.itsaicon-special-female { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe814;&nbsp;'); } // line 65, pos 52
+   #64: [error] Expected RBRACE at line 66, col 50.
+       i.itsaicon-special-male { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe813;&nbsp;'); } // line 66, pos 50
+   #65: [error] Expected RBRACE at line 67, col 50.
+       i.itsaicon-special-moon { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe83e;&nbsp;'); } // line 67, pos 50
+   #66: [error] Expected RBRACE at line 68, col 51.
+       i.itsaicon-special-award { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe849;&nbsp;'); } // line 68, pos 51
+   #67: [error] Expected RBRACE at line 69, col 51.
+       i.itsaicon-special-chart { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe83f;&nbsp;'); } // line 69, pos 51
+   #68: [error] Expected RBRACE at line 70, col 49.
+       i.itsaicon-special-pin { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe816;&nbsp;'); } // line 70, pos 49
+   #69: [error] Expected RBRACE at line 71, col 52.
+       i.itsaicon-special-signal { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe848;&nbsp;'); } // line 71, pos 52
+   #70: [error] Expected RBRACE at line 72, col 49.
+       i.itsaicon-special-key { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe844;&nbsp;'); } // line 72, pos 49
+   #71: [error] Expected RBRACE at line 73, col 62.
+       i.itsaicon-special-bell-transparent { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe833;&nbsp;'); } // line 73, pos 62
+   #72: [error] Expected RBRACE at line 74, col 54.
+       i.itsaicon-special-bookmark { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); } // line 74, pos 54
+   #73: [error] Expected RBRACE at line 75, col 56.
+       i.itsaicon-special-star-empty { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81d;&nbsp;'); } // line 75, pos 56
+   #74: [error] Expected RBRACE at line 76, col 55.
+       i.itsaicon-special-star-half { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81e;&nbsp;'); } // line 76, pos 55
+   #75: [error] Expected RBRACE at line 77, col 50.
+       i.itsaicon-special-star { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;'); } // line 77, pos 50
+   #76: [error] Expected RBRACE at line 78, col 60.
+       i.itsaicon-special-starrating-0-3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 78, pos 60
+   #77: [error] Expected RBRACE at line 79, col 63.
+       i.itsaicon-special-starrating-half-3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 79, pos 63
+   #78: [error] Expected RBRACE at line 80, col 60.
+       i.itsaicon-special-starrating-1-3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;'); } // line 80, pos 60
+   #79: [error] Expected RBRACE at line 81, col 64.
+       i.itsaicon-special-starrating-1half-3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;'); } // line 81, pos 64
+   #80: [error] Expected RBRACE at line 82, col 60.
+       i.itsaicon-special-starrating-2-3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;'); } // line 82, pos 60
+   #81: [error] Expected RBRACE at line 83, col 64.
+       i.itsaicon-special-starrating-2half-3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;'); } // line 83, pos 64
+   #82: [error] Expected RBRACE at line 84, col 60.
+       i.itsaicon-special-starrating-3-3 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;'); } // line 84, pos 60
+   #83: [error] Expected RBRACE at line 85, col 60.
+       i.itsaicon-special-starrating-0-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 85, pos 60
+   #84: [error] Expected RBRACE at line 86, col 63.
+       i.itsaicon-special-starrating-half-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 86, pos 63
+   #85: [error] Expected RBRACE at line 87, col 60.
+       i.itsaicon-special-starrating-1-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 87, pos 60
+   #86: [error] Expected RBRACE at line 88, col 64.
+       i.itsaicon-special-starrating-1half-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 88, pos 64
+   #87: [error] Expected RBRACE at line 89, col 60.
+       i.itsaicon-special-starrating-2-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 89, pos 60
+   #88: [error] Expected RBRACE at line 90, col 64.
+       i.itsaicon-special-starrating-2half-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 90, pos 64
+   #89: [error] Expected RBRACE at line 91, col 60.
+       i.itsaicon-special-starrating-3-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 91, pos 60
+   #90: [error] Expected RBRACE at line 92, col 64.
+       i.itsaicon-special-starrating-3half-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;'); } // line 92, pos 64
+   #91: [error] Expected RBRACE at line 93, col 60.
+       i.itsaicon-special-starrating-4-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;'); } // line 93, pos 60
+   #92: [error] Expected RBRACE at line 94, col 64.
+       i.itsaicon-special-starrating-4half-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;'); } // line 94, pos 64
+   #93: [error] Expected RBRACE at line 95, col 60.
+       i.itsaicon-special-starrating-5-5 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;'); } // line 95, pos 60
+   #94: [error] Expected RBRACE at line 96, col 61.
+       i.itsaicon-special-starrating-0-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 96, pos 61
+   #95: [error] Expected RBRACE at line 97, col 64.
+       i.itsaicon-special-starrating-half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 97, pos 64
+   #96: [error] Expected RBRACE at line 98, col 61.
+       i.itsaicon-special-starrating-1-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 98, pos 61
+   #97: [error] Expected RBRACE at line 99, col 65.
+       i.itsaicon-special-starrating-1half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 99, pos 65
+   #98: [error] Expected RBRACE at line 100, col 61.
+       i.itsaicon-special-starrating-2-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 100, pos 61
+   #99: [error] Expected RBRACE at line 101, col 65.
+       i.itsaicon-special-starrating-2half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 101, pos 65
+   #100: [error] Expected RBRACE at line 102, col 61.
+       i.itsaicon-special-starrating-3-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 102, pos 61
+   #101: [error] Expected RBRACE at line 103, col 65.
+       i.itsaicon-special-starrating-3half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 103, pos 65
+   #102: [error] Expected RBRACE at line 104, col 61.
+       i.itsaicon-special-starrating-4-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 104, pos 61
+   #103: [error] Expected RBRACE at line 105, col 65.
+       i.itsaicon-special-starrating-4half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 105, pos 65
+   #104: [error] Expected RBRACE at line 106, col 61.
+       i.itsaicon-special-starrating-5-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 106, pos 61
+   #105: [error] Expected RBRACE at line 107, col 65.
+       i.itsaicon-special-starrating-5half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 107, pos 65
+   #106: [error] Expected RBRACE at line 108, col 61.
+       i.itsaicon-special-starrating-6-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 108, pos 61
+   #107: [error] Expected RBRACE at line 109, col 65.
+       i.itsaicon-special-starrating-6half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 109, pos 65
+   #108: [error] Expected RBRACE at line 110, col 61.
+       i.itsaicon-special-starrating-7-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 110, pos 61
+   #109: [error] Expected RBRACE at line 111, col 65.
+       i.itsaicon-special-starrating-7half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 111, pos 65
+   #110: [error] Expected RBRACE at line 112, col 61.
+       i.itsaicon-special-starrating-8-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;&#xe81d;&nbsp;'); } // line 112, pos 61
+   #111: [error] Expected RBRACE at line 113, col 65.
+       i.itsaicon-special-starrating-8half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;&#xe81d;&nbsp;'); } // line 113, pos 65
+   #112: [error] Expected RBRACE at line 114, col 61.
+       i.itsaicon-special-starrating-9-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81d;&nbsp;'); } // line 114, pos 61
+   #113: [error] Expected RBRACE at line 115, col 65.
+       i.itsaicon-special-starrating-9half-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81e;&nbsp;'); } // line 115, pos 65
+   #114: [error] Expected RBRACE at line 116, col 62.
+       i.itsaicon-special-starrating-10-10 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;&#xe81c;&nbsp;'); }@font-face { // line 116, pos 62
+shifter [info] shifting assets for gallerycss-itsa-special
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.257 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5012
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5011
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.9.1
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallerycss-itsa-special]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.007 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallerycss-itsa-special/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

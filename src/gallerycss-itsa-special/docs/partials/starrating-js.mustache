@@ -1,0 +1,18 @@
+YUI(yuiconfig).use('node-base', 'node-event-delegate', function(Y) {
+    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-special');
+
+    var votebuttons = Y.one('#votebuttons'),
+        votes = Y.one('#votes'),
+        currentvote = 0;
+
+    Y.one('#votebuttons').delegate(
+        'click',
+        function(e) {
+            var button = e.target;
+            votes.removeClass('itsaicon-special-starrating-'+currentvote+'-5');
+            currentvote = button.get('id').substr(4,1);
+            votes.addClass('itsaicon-special-starrating-'+currentvote+'-5');
+        },
+        'button'
+    );
+});

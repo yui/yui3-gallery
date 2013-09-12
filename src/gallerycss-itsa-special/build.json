@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-special",
+    "builds": {
+        "gallerycss-itsa-special": {
+            "cssfiles": [
+                "css/special-ie7.css",
+                "css/special.css"
+            ]
+        }
+    }
+}

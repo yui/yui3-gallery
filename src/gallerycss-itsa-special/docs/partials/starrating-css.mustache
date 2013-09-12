@@ -1,0 +1,19 @@
+#votebuttons {
+    margin-bottom: 30px;
+}
+i[class^="itsaicon-special-starrating-"]:before {
+    font-size: 500%;
+    color: #1e5799; /* non-webkit browsers */
+    /*
+        use textgradients as explained here: http://www.paulund.co.uk/how-to-add-text-gradients-with-css
+        Note: this only works with webkit-browers like safari and chrome
+    */
+    background-image: -webkit-gradient(
+        linear,
+        left top, left bottom,
+        from(#0f2a49),
+        to(#6d9ace)
+        );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

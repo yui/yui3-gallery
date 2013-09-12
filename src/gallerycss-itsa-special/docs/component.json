@@ -1,0 +1,39 @@
+{
+    "name"       : "gallerycss-itsa-special",
+    "displayName": "Gallery: gallerycss-itsa-special",
+    "description": "This module supplies beautiful stylable iconfonts from the category 'special', which can be used by classname.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallerycss-itsa-base", "gallerycss-itsa-special" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "simple-usage",
+            "displayName": "Creating imagebuttons",
+            "description": "This is a summary of all available icon-fonts this module offers, applied to purecss-buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-special"],
+            "tags"       : ["gallerycss-itsa-special", "iconfonts", "icons", "special"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-style",
+            "displayName": "Custom styling",
+            "description": "This example shows how to customize an icon.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-special"],
+            "tags"       : ["gallerycss-itsa-special", "iconfonts", "icons", "special", "customize", "styling"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "starrating",
+            "displayName": "Star rating",
+            "description": "This example shows to create a customized star-rating utility. Press the buttons to vote.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-special"],
+            "tags"       : ["gallerycss-itsa-special", "iconfonts", "icons", "special", "customize", "starrating", "stars", "rating"],
+            "hideTableOfContents": true
+        }
+    ]
+}
