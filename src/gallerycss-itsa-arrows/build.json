@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-arrows",
+    "builds": {
+        "gallerycss-itsa-arrows": {
+            "cssfiles": [
+                "css/arrows-ie7.css",
+                "css/arrows.css"
+            ]
+        }
+    }
+}

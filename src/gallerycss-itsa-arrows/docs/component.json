@@ -1,0 +1,30 @@
+{
+    "name"       : "gallerycss-itsa-arrows",
+    "displayName": "Gallery: gallerycss-itsa-arrows",
+    "description": "This module supplies beautiful stylable iconfonts from the category 'arrows', which can be used by classname.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallerycss-itsa-base", "gallerycss-itsa-arrows" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "simple-usage",
+            "displayName": "Creating imagebuttons",
+            "description": "This is a summary of all available icon-fonts this module offers, applied to purecss-buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-arrows"],
+            "tags"       : ["gallerycss-itsa-arrows", "iconfonts", "icons", "arrows"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-style",
+            "displayName": "Custom styling",
+            "description": "This example shows how to customize an icon.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-arrows"],
+            "tags"       : ["gallerycss-itsa-arrows", "iconfonts", "icons", "arrows", "customize", "styling"],
+            "hideTableOfContents": true
+        }
+    ]
+}

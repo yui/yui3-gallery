@@ -1,0 +1,29 @@
+{
+    "name": "gallerycss-itsa-arrows",
+    "passed": 0,
+    "failed": 2,
+    "errors": 0,
+    "ignored": 0,
+    "total": 2,
+    "duration": 10,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 0,
+        "failed": 1,
+        "errors": 0,
+        "ignored": 0,
+        "total": 1,
+        "duration": 3,
+        "type": "testcase",
+        "test is empty": {
+            "result": "fail",
+            "message": "No Tests Provided For This Module",
+            "type": "test",
+            "name": "test is empty",
+            "duration": 1
+        }
+    },
+    "timestamp": "Thu Sep 12 17:30:15 2013",
+    "consoleInfo": []
+}
