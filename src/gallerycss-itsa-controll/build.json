@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-controll",
+    "builds": {
+        "gallerycss-itsa-controll": {
+            "cssfiles": [
+                "css/controll-ie7.css",
+                "css/controll.css"
+            ]
+        }
+    }
+}

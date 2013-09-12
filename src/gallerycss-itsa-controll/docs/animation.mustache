@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+</div>
+
+{{>animation-html}}
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<body>
+
+{{>animation-html}}
+
+<script>
+{{>animation-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>animation-js}}
+</script>
