@@ -1,0 +1,11 @@
+YUI(yuiconfig).use('node', function(Y) {
+    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-animatespin', 'gallerycss-itsa-form');
+    // now the iconfonts will load asynchroniously
+
+    var buttonnode = Y.one('#spinbutton'),
+        loadnode = Y.one('#loadicon');
+
+    buttonnode.on('click', function() {
+        loadnode.toggleClass('itsa-busy');
+    });
+});

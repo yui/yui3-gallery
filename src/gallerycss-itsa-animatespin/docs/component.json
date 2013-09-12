@@ -1,0 +1,30 @@
+{
+    "name"       : "gallerycss-itsa-animatespin",
+    "displayName": "Gallery: gallerycss-itsa-animatespin",
+    "description": "This module supplies animation-functionality to the 'gallerycss-itsa-*' modules.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallerycss-itsa-animatespin" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "animation",
+            "displayName": "Adding animation",
+            "description": "This example shows how to spin an iconfont by using both 'gallerycss-itsa-form' and 'gallerycss-itsa-animatespin'.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-form", "gallerycss-itsa-animatespin"],
+            "tags"       : ["gallerycss-itsa-form", "iconfonts", "icons", "form", "customize", "animated", "animation"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "toggle-animation",
+            "displayName": "Toggle animation",
+            "description": "This example shows how to toggle spin. Click on the button to toggle spin-behaviour.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-form", "gallerycss-itsa-animatespin"],
+            "tags"       : ["gallerycss-itsa-form", "iconfonts", "icons", "form", "customize", "animated", "animation", "toggle"],
+            "hideTableOfContents": true
+        }
+    ]
+}

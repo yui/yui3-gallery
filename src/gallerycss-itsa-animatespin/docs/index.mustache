@@ -1,0 +1,44 @@
+<style type="text/css">
+{{>index-css}}
+</style>
+
+<div class="intro">
+    <p>
+    {{description}}
+    </p>
+   <p>Special thanks to <a href='http://fontello.com' target='_blank'>http://fontello.com</a> by which means this gallerymodule is created</p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+<p>By adding this module, you have 2 classnames at your proposal, that can make icons (supplied by <code>gallerycss-itsa-*</code>-modules) to spin. The classname should be added to the <u>i-element</u> that represents the icon. Both classes are equivallent:
+</p>
+    <ul>
+        <li><code>itsa-busy</code></li>
+        <li><code>animate-spin</code></li>
+    </ul>
+<p>
+    This module is always loaded together with <code>gallerycss-itsa-base</code> and some <code>gallerycss-itsa-*</code> module. See the examples.
+</p>
+
+<h2>Usage</h2>
+```html
+<button class="itsabutton-iconleft">
+    <i class="itsaicon-form-load itsa-busy"></i><code>Load
+</button>
+```
+
+```js
+YUI(yuiconfig).use('yui-base', function(Y) {
+    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-form'); // now the iconfonts will load asynchroniously
+
+    // code can be executed
+    ...
+
+});
+```
+
+<h2>Licence</h2>
+Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>
