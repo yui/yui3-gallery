@@ -1,0 +1,8 @@
+{
+    "gallerycss-itsa-datetime": {
+        "type": "css",
+        "requires": [
+            "gallerycss-itsa-base"
+        ]
+    }
+}

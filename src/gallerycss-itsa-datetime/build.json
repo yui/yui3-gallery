@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-datetime",
+    "builds": {
+        "gallerycss-itsa-datetime": {
+            "cssfiles": [
+                "css/datetime-ie7.css",
+                "css/datetime.css"
+            ]
+        }
+    }
+}

@@ -1,0 +1,51 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallerycss-itsa-datetime
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-itsa-datetime
+   #1: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-datetime-date { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 1, pos 28
+   #2: [error] Expected RBRACE at line 1, col 51.
+       i.itsaicon-datetime-date { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 1, pos 51
+   #3: [warning] Property with star prefix found.
+       i.itsaicon-datetime-date { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); } // line 1, pos 28
+   #4: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-datetime-time { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 2, pos 28
+   #5: [warning] Property with star prefix found.
+       i.itsaicon-datetime-time { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 2, pos 28
+   #6: [error] Expected RBRACE at line 2, col 51.
+       i.itsaicon-datetime-time { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); } // line 2, pos 51
+   #7: [warning] Expected (<number> | <percentage> | normal) but found 'expression(this)'.
+       i.itsaicon-datetime-datetime { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;&#xe801;&nbsp;'); }@font-face { // line 3, pos 32
+   #8: [warning] Property with star prefix found.
+       i.itsaicon-datetime-datetime { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;&#xe801;&nbsp;'); }@font-face { // line 3, pos 32
+   #9: [error] Expected RBRACE at line 3, col 55.
+       i.itsaicon-datetime-datetime { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;&#xe801;&nbsp;'); }@font-face { // line 3, pos 55
+   #10: [warning] Attribute selectors with ^= are slow!
+       i[class^="itsaicon-datetime-"]:before, // line 27, pos 2
+   #11: [warning] Attribute selectors with *= are slow!
+       i[class*=" itsaicon-datetime-"]:before { // line 28, pos 2
+shifter [info] shifting assets for gallerycss-itsa-datetime
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.086 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5026
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5025
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.9.1
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallerycss-itsa-datetime]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallerycss-itsa-datetime/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
