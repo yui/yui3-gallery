@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-music",
+    "builds": {
+        "gallerycss-itsa-music": {
+            "cssfiles": [
+                "css/music-ie7.css",
+                "css/music.css"
+            ]
+        }
+    }
+}
