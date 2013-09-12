@@ -1,0 +1,21 @@
+Font license info
+
+
+## Entypo
+
+   Copyright (C) 2012 by Daniel Bruce
+
+   Author:    Daniel Bruce
+   License:   CC BY-SA (http://creativecommons.org/licenses/by-sa/2.0/)
+   Homepage:  http://www.entypo.com
+
+
+## Modern Pictograms
+
+   Copyright (c) 2012 by John Caserta. All rights reserved.
+
+   Author:    John Caserta
+   License:   SIL (http://scripts.sil.org/OFL)
+   Homepage:  http://thedesignoffice.org/project/modern-pictograms/
+
+

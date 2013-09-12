@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-form",
+    "builds": {
+        "gallerycss-itsa-form": {
+            "cssfiles": [
+                "css/form-ie7.css",
+                "css/form.css"
+            ]
+        }
+    }
+}
