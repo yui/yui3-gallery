@@ -88,6 +88,18 @@ Paginator.ATTRS.pageLabelBuilder =
 };
 
 /**
+ * Templates for generating page links.
+ * @property templates
+ * @static
+ */
+Paginator.ui.PageLinks.templates =
+{
+    currentPageLink:  '<span class="{currentPageClass} {pageLinkClass}">{label}</span>',
+    pageLink:         '<a href="#" class="{pageLinkClass}" page="{page}">{label}</a>',
+    disabledPageLink: '<span class="{pageLinkClass} disabled" page="{page}">{label}</span>'
+}
+
+/**
  * Calculates start and end page numbers given a current page, attempting
  * to keep the current page in the middle
  * @static
@@ -199,31 +211,50 @@ Paginator.ui.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
+                totalPages   = p.getTotalPages(),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,
-                                p.getTotalPages(),
+                                totalPages,
                                 p.get('pageLinks')),
                 start        = range[0],
                 end          = range[1],
                 content      = '',
-                disabled     = p.get('disabled'),
-                i;
+                showLast     = false,
+                i,
+                params = {
+                    currentPageClass: p.get('currentPageClass'),
+                    pageLinkClass:    p.get('pageLinkClass')
+                },
+                pageLink = p.get('disabled') ?
+                    Paginator.ui.PageLinks.templates.disabledPageLink :
+                    Paginator.ui.PageLinks.templates.pageLink;
+
+            if (start > 1) {
+                start++;
+                params.page  = 1;
+                params.label = labelBuilder(1,p);
+                content     += Y.Lang.sub(pageLink, params);
+                content     += '&hellip;';
+            }
+
+            if (end < totalPages) {
+                end--;
+                showLast = true;
+            }
 
             for (i = start; i <= end; ++i) {
-                if (i === currentPage) {
-                    content +=
-                        '<span class="' + p.get('currentPageClass') + ' ' +
-                                          p.get('pageLinkClass') + '">' +
-                        labelBuilder(i,p) + '</span>';
-                } else if (disabled) {
-                    content +=
-                        '<span class="' + p.get('pageLinkClass') +
-                           ' disabled" page="' + i + '">' + labelBuilder(i,p) + '</span>';
-                } else {
-                    content +=
-                        '<a href="#" class="' + p.get('pageLinkClass') +
-                           '" page="' + i + '">' + labelBuilder(i,p) + '</a>';
-                }
+                params.page  = i;
+                params.label = labelBuilder(i,p);
+                content += Y.Lang.sub(i === currentPage ?
+                    Paginator.ui.PageLinks.templates.currentPageLink : pageLink,
+                    params);
+            }
+
+            if (showLast) {
+                params.page  = totalPages;
+                params.label = labelBuilder(totalPages,p);
+                content     += '&hellip;';
+                content     += Y.Lang.sub(pageLink, params);
             }
 
             this.container.set('className', p.get('pageLinksContainerClass'));

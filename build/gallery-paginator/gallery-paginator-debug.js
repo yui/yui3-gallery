@@ -1,4 +1,4 @@
-YUI.add('gallery-paginator', function(Y) {
+YUI.add('gallery-paginator', function (Y, NAME) {
 
 "use strict";
 /*
@@ -796,14 +796,14 @@ Y.extend(Paginator, Y.Widget,
      * @protected
      */
     _syncRecordOffset : function (e) {
-        var v = e.newValue,rpp,state;
-        if (e.prevValue !== v) {
+        var v = e.newVal,rpp,state;
+        if (e.prevVal !== v) {
             if (v !== Paginator.VALUE_UNLIMITED) {
                 rpp = this.get('rowsPerPage');
 
                 if (rpp && this.get('recordOffset') >= v) {
                     state = this.getState({
-                        totalRecords : e.prevValue,
+                        totalRecords : e.prevVal,
                         recordOffset : this.get('recordOffset')
                     });
 
@@ -822,11 +822,11 @@ Y.extend(Paginator, Y.Widget,
      * @protected
      */
     _handleStateChange : function (e) {
-        if (e.prevValue !== e.newValue) {
+        if (e.prevVal !== e.newVal) {
             var change = this._state || {},
                 state;
 
-            change[e.type.replace(/Change$/,'')] = e.prevValue;
+            change[e.type.replace(/^.+?:/,'').replace(/Change$/,'')] = e.prevVal;
             state = this.getState(change);
 
             if (state.page !== state.before.page) {
@@ -852,8 +852,8 @@ Y.extend(Paginator, Y.Widget,
             delete state.before;
             this.fire('pageChange',{
                 type      : 'pageChange',
-                prevValue : state.page,
-                newValue  : current.page,
+                prevVal   : state.page,
+                newVal    : current.page,
                 prevState : state,
                 newState  : current
             });
@@ -1966,6 +1966,18 @@ Paginator.ATTRS.pageLabelBuilder =
 };
 
 /**
+ * Templates for generating page links.
+ * @property templates
+ * @static
+ */
+Paginator.ui.PageLinks.templates =
+{
+    currentPageLink:  '<span class="{currentPageClass} {pageLinkClass}">{label}</span>',
+    pageLink:         '<a href="#" class="{pageLinkClass}" page="{page}">{label}</a>',
+    disabledPageLink: '<span class="{pageLinkClass} disabled" page="{page}">{label}</span>'
+}
+
+/**
  * Calculates start and end page numbers given a current page, attempting
  * to keep the current page in the middle
  * @static
@@ -2077,31 +2089,50 @@ Paginator.ui.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || !currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
+                totalPages   = p.getTotalPages(),
                 range        = Paginator.ui.PageLinks.calculateRange(
                                 currentPage,
-                                p.getTotalPages(),
+                                totalPages,
                                 p.get('pageLinks')),
                 start        = range[0],
                 end          = range[1],
                 content      = '',
-                disabled     = p.get('disabled'),
-                i;
+                showLast     = false,
+                i,
+                params = {
+                    currentPageClass: p.get('currentPageClass'),
+                    pageLinkClass:    p.get('pageLinkClass')
+                },
+                pageLink = p.get('disabled') ?
+                    Paginator.ui.PageLinks.templates.disabledPageLink :
+                    Paginator.ui.PageLinks.templates.pageLink;
+
+            if (start > 1) {
+                start++;
+                params.page  = 1;
+                params.label = labelBuilder(1,p);
+                content     += Y.Lang.sub(pageLink, params);
+                content     += '&hellip;';
+            }
+
+            if (end < totalPages) {
+                end--;
+                showLast = true;
+            }
 
             for (i = start; i <= end; ++i) {
-                if (i === currentPage) {
-                    content +=
-                        '<span class="' + p.get('currentPageClass') + ' ' +
-                                          p.get('pageLinkClass') + '">' +
-                        labelBuilder(i,p) + '</span>';
-                } else if (disabled) {
-                    content +=
-                        '<span class="' + p.get('pageLinkClass') +
-                           ' disabled" page="' + i + '">' + labelBuilder(i,p) + '</span>';
-                } else {
-                    content +=
-                        '<a href="#" class="' + p.get('pageLinkClass') +
-                           '" page="' + i + '">' + labelBuilder(i,p) + '</a>';
-                }
+                params.page  = i;
+                params.label = labelBuilder(i,p);
+                content += Y.Lang.sub(i === currentPage ?
+                    Paginator.ui.PageLinks.templates.currentPageLink : pageLink,
+                    params);
+            }
+
+            if (showLast) {
+                params.page  = totalPages;
+                params.label = labelBuilder(totalPages,p);
+                content     += '&hellip;';
+                content     += Y.Lang.sub(pageLink, params);
             }
 
             this.container.set('className', p.get('pageLinksContainerClass'));
@@ -2533,6 +2564,18 @@ Paginator.ATTRS.pageStatus =
 	validator: Y.Lang.isArray
 };
 
+/**
+ * Templates for generating page links.
+ * @property templates
+ * @static
+ */
+Paginator.ui.ValidationPageLinks.templates =
+{
+    currentPageLink:  '<span class="{link} {curr} {status}">{label}</span>',
+    pageLink:         '<a href="#" class="{link} {status}" page="{page}">{label}</a>',
+    disabledPageLink: '<span class="{link} disabled {status}" page="{page}">{label}</span>'
+};
+
 Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 {
 	update: function(e)
@@ -2544,31 +2587,61 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 
 		var currentPage	= this.paginator.getCurrentPage();
 
-		var curr_markup = '<span class="{link} {curr} {status}">{label}</span>';
-		var link_markup = '<a href="#" class="{link} {status}" page="{page}">{label}</a>';
-		var dis_markup  = '<span class="{link} disabled {status}" page="{page}">{label}</span>';
-
 		if (this.current !== currentPage || !currentPage || e.rebuild)
 		{
 			var linkClass    = this.paginator.get('pageLinkClass'),
 				status       = this.paginator.get('pageStatus'),
 				labelBuilder = this.paginator.get('pageLabelBuilder'),
-				disabled     = this.paginator.get('disabled');
+				totalPages   = this.paginator.getTotalPages(),
+				linkMarkup   = this.paginator.get('disabled') ?
+					Paginator.ui.ValidationPageLinks.templates.disabledPageLink :
+					Paginator.ui.ValidationPageLinks.templates.pageLink;
 
 			var range =
 				Paginator.ui.PageLinks.calculateRange(
-					currentPage, this.paginator.getTotalPages(), this.paginator.get('pageLinks'));
+					currentPage, totalPages, this.paginator.get('pageLinks'));
 
 			var content = '';
+
+			if (range[0] > 1) {
+				range[0]++;
+				content += Y.Lang.sub(linkMarkup,
+				{
+					link:   linkClass,
+					curr:   '',
+					status: status[0] ? vpl_status_prefix + status[0] : '',
+					page:   1,
+					label:  labelBuilder(1, this.paginator)
+				});
+				content += '&hellip;'
+			}
+
+			if (range[1] < totalPages) {
+				range[1]--;
+				var showLast = true;
+			}
+
 			for (var i=range[0]; i<=range[1]; i++)
 			{
-				content += Y.Lang.sub(i === currentPage ? curr_markup : disabled ? dis_markup : link_markup,
+				content += Y.Lang.sub(i === currentPage ? Paginator.ui.ValidationPageLinks.templates.currentPageLink : linkMarkup,
 				{
 					link:   linkClass,
 					curr:   (i === currentPage ? this.paginator.get('currentPageClass') : ''),
 					status: status[i-1] ? vpl_status_prefix + status[i-1] : '',
 					page:   i,
 					label:  labelBuilder(i, this.paginator)
+				});
+			}
+
+			if (showLast) {
+				content += '&hellip;';
+				content += Y.Lang.sub(linkMarkup,
+				{
+					link:   linkClass,
+					curr:   '',
+					status: status[totalPages-1] ? vpl_status_prefix + status[totalPages-1] : '',
+					page:   totalPages,
+					label:  labelBuilder(totalPages, this.paginator)
 				});
 			}
 
@@ -2579,4 +2652,4 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 });
 
 
-}, 'gallery-2012.09.26-20-36' ,{skinnable:true, requires:['widget','event-key','substitute']});
+}, 'gallery-2013.09.12-21-28', {"skinnable": "true", "requires": ["widget", "event-key", "substitute"]});

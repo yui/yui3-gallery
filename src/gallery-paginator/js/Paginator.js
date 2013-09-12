@@ -794,14 +794,14 @@ Y.extend(Paginator, Y.Widget,
      * @protected
      */
     _syncRecordOffset : function (e) {
-        var v = e.newValue,rpp,state;
-        if (e.prevValue !== v) {
+        var v = e.newVal,rpp,state;
+        if (e.prevVal !== v) {
             if (v !== Paginator.VALUE_UNLIMITED) {
                 rpp = this.get('rowsPerPage');
 
                 if (rpp && this.get('recordOffset') >= v) {
                     state = this.getState({
-                        totalRecords : e.prevValue,
+                        totalRecords : e.prevVal,
                         recordOffset : this.get('recordOffset')
                     });
 
@@ -820,11 +820,11 @@ Y.extend(Paginator, Y.Widget,
      * @protected
      */
     _handleStateChange : function (e) {
-        if (e.prevValue !== e.newValue) {
+        if (e.prevVal !== e.newVal) {
             var change = this._state || {},
                 state;
 
-            change[e.type.replace(/Change$/,'')] = e.prevValue;
+            change[e.type.replace(/^.+?:/,'').replace(/Change$/,'')] = e.prevVal;
             state = this.getState(change);
 
             if (state.page !== state.before.page) {
@@ -850,8 +850,8 @@ Y.extend(Paginator, Y.Widget,
             delete state.before;
             this.fire('pageChange',{
                 type      : 'pageChange',
-                prevValue : state.page,
-                newValue  : current.page,
+                prevVal   : state.page,
+                newVal    : current.page,
                 prevState : state,
                 newState  : current
             });

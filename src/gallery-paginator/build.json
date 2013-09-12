@@ -1,0 +1,29 @@
+{
+    "name": "gallery-paginator",
+    "builds": {
+        "gallery-paginator": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "widget",
+                    "event-key",
+                    "substitute"
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "Paginator.js",
+                "CurrentPageInput.js",
+                "CurrentPageReport.js",
+                "FirstPageLink.js",
+                "ItemRangeDropdown.js",
+                "LastPageLink.js",
+                "NextPageLink.js",
+                "PageLinks.js",
+                "PreviousPageLink.js",
+                "RowsPerPageDropdown.js",
+                "ValidationPageLinks.js"
+            ]
+        }
+    }
+}
