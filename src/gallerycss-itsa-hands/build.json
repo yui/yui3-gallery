@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-hands",
+    "builds": {
+        "gallerycss-itsa-hands": {
+            "cssfiles": [
+                "css/hands-ie7.css",
+                "css/hands.css"
+            ]
+        }
+    }
+}

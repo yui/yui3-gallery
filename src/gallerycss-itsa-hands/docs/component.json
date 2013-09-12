@@ -1,0 +1,30 @@
+{
+    "name"       : "gallerycss-itsa-hands",
+    "displayName": "Gallery: gallerycss-itsa-hands",
+    "description": "This module supplies beautiful stylable iconfonts from the category 'hands', which can be used by classname.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallerycss-itsa-base", "gallerycss-itsa-hands" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "simple-usage",
+            "displayName": "Creating imagebuttons",
+            "description": "This is a summary of all available icon-fonts this module offers, applied to purecss-buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-hands"],
+            "tags"       : ["gallerycss-itsa-hands", "iconfonts", "icons", "hands"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-style",
+            "displayName": "Custom styling",
+            "description": "This example shows how to customize an icon.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallerycss-itsa-hands"],
+            "tags"       : ["gallerycss-itsa-hands", "iconfonts", "icons", "hands", "customize", "styling"],
+            "hideTableOfContents": true
+        }
+    ]
+}

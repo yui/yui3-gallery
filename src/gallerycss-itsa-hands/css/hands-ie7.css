@@ -1,0 +1,10 @@
+i.itsaicon-hands-left { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe801;&nbsp;'); }
+i.itsaicon-hands-up { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe802;&nbsp;'); }
+i.itsaicon-hands-right { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe800;&nbsp;'); }
+i.itsaicon-hands-down { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe803;&nbsp;'); }
+i.itsaicon-hands-down-mirror { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe805;&nbsp;'); }
+i.itsaicon-hands-up-mirror { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe804;&nbsp;'); }
+i.itsaicon-hands-thumbs-up2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe806;&nbsp;'); }
+i.itsaicon-hands-thumbs-down2 { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe807;&nbsp;'); }
+i.itsaicon-hands-thumbs-up { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe808;&nbsp;'); }
+i.itsaicon-hands-thumbs-down { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe809;&nbsp;'); }
