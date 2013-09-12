@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-grid",
+    "builds": {
+        "gallerycss-itsa-grid": {
+            "cssfiles": [
+                "css/grid-ie7.css",
+                "css/grid.css"
+            ]
+        }
+    }
+}

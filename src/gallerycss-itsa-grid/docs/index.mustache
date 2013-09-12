@@ -1,0 +1,138 @@
+<style type="text/css">
+{{>index-css}}
+</style>
+
+<div class="intro">
+    <p>
+    {{description}}
+    </p>
+    <p>
+       <b>Notes:</b>
+       <ul>
+           <li>You need to load this module <u>together with 'gallerycss-itsa-base'</u> in order to work.</li>
+           <li>These fonticons always need to be declared inside a <u>i-element</u>, see the examples.</li>
+           <li>Special thanks to <a href='http://fontello.com' target='_blank'>http://fontello.com</a> by which means this gallerymodule is created</li>
+       </ul>
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+<p>By adding this module, you have some classnames at your proposal, which can be used to create icons. The css only works if you define an empty <code>i-element</code> and add the right class to it. Typically the icons are inside a <code>button-element</code> but this is not required.
+</p>
+<p>
+    Be aware of the load-delay. Iconfonts-modules have are relative big-sized. To speed up initial loading, it is advizable to load the css-modules in a second separate Y.use() statement without a callback.
+</p>
+
+<h2>Available iconclasses</h2>
+    <ul>
+        <li><i class="itsaicon-grid-sort-down"></i> <code>itsaicon-grid-sort-down</code></li>
+        <li><i class="itsaicon-grid-sort-up"></i> <code>itsaicon-grid-sort-up</code></li>
+        <li><i class="itsaicon-grid-detail"></i> <code>itsaicon-grid-detail</code></li>
+        <li><i class="itsaicon-grid-large"></i> <code>itsaicon-grid-large</code></li>
+        <li><i class="itsaicon-grid-list"></i> <code>itsaicon-grid-list</code></li>
+        <li><i class="itsaicon-grid-small"></i> <code>itsaicon-grid-small</code></li>
+    </ul>
+
+<h2>Usage</h2>
+```html
+<button class="itsabutton-iconleft"><i class="itsaicon-grid-sort-down"></i>Sort down</button>
+```
+
+```js
+YUI(yuiconfig).use('yui-base', function(Y) {
+    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-grid'); // now the iconfonts will load asynchroniously
+
+    // code can be executed
+    ...
+
+});
+```
+<h3>Changing size</h3>
+<p>Iconfonts are handled as regular characters. The font size is detemined by the calculated font-size value of the element. To change the icon-size, you need to change the font-size.
+</p>
+<p>
+The iconfont has its definition inside <code>.itsaicon-iconname:before</code>. You can set a fontsize here, or at a ancestor-node, depending what needs to be set.
+</p>
+```css
+button {
+    font-size: 120%;
+}
+.itsaicon-grid-sort-down:before {
+    font-size: 150%;
+}
+```
+
+<h3>Changing color</h3>
+<p>Iconfonts are handled as regular characters. The iconcolor is detemined by the calculated color-value of the element. To change the icon-color, you need to change the color of the icon.
+</p>
+<p>
+The icon-color has its definition inside <code>.itsaicon-iconname:before</code>. You can set a color here, or at a ancestor-node, depending what needs to be set.
+</p>
+```css
+button {
+    color: #F00;
+}
+.itsaicon-grid-sort-down:before {
+    color: #0F0;
+}
+```
+<h2>Creating imagebuttons (purecss compatible)</h2>
+    <p>
+        Imagebuttons can be created by creating a button and add an empty <code>i-element</code> inside. To be sure the space arround the iconfont gets right, you need to add the right classname to the button as well.
+    </p>
+    <p>
+        These iconfonts work perfectly well with pure-css. So you can add the class <code>pure-button</code> to the button-element. But you don't need to.
+    </p>
+
+<h3>Iconbuttons without text</h3>
+```html
+<button<i class="itsaicon-grid-sort-down"></i></button>
+```
+
+<h3>Textbuttons with a left-icon</h3>
+```html
+<button class="itsabutton-iconleft"><i class="itsaicon-grid-sort-down"></i>Sort down</button>
+```
+
+<h3>Textbuttons with a right-icon</h3>
+```html
+<button class="itsabutton-iconright">Sort down<i class="itsaicon-grid-sort-down"></i></button>
+```
+
+<h3>Rounded buttons with a border</h3>
+    <p>
+        Bordered and rounded buttons can be made by using special button-classes supllied by <a href='http://gallerydocs.itsasbreuk.nl/gallerycss-itsa-base/index.html' target='_blank>'>gallerycss-itsa-base</a>.
+    </p>
+```html
+<button class="pure-button itsabutton-bordered itsabutton-rounded"><i class="itsaicon-grid-sort-down"></i></button>
+```
+<h2>Licences</h2>
+    Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+    Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>
+<h3>Font licence info</h3>
+<ul class='disc'>
+   <li>Elusive<br />
+           Copyright (C) 2013 by Aristeides Stathopoulos<br />
+           Author:    Aristeides Stathopoulos<br />
+           License:   SIL (<a href='http://scripts.sil.org/OFL' target='_blank'>http://scripts.sil.org/OFL</a>)<br />
+           Homepage:  /<a href='http://aristeides.com' target='_blank'>http://aristeides.com</a></li>
+   <li>MFG Labs<br />
+           Copyright (C) 2012 by Daniel Bruce<br />
+           Author:    MFG Labs<br />
+           License:   SIL (<a href='http://scripts.sil.org/OFL' target='_blank'>http://scripts.sil.org/OFL</a>)<br />
+           Homepage:  <a href='http://www.mfglabs.com/' target='_blank'>http://www.mfglabs.com/</a></li>
+   <li>Font Awesome<br />
+           Copyright (C) 2012 by Dave Gandy<br />
+           Author:    Dave Gandy<br />
+           License:   SIL ()<br />
+           Homepage:  <a href='http://fortawesome.github.com/Font-Awesome/' target='_blank'>http://fortawesome.github.com/Font-Awesome/</a>
+   </li>
+</ul>
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>index-js}}
+</script>
