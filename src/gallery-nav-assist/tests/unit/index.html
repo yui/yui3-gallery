@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+    <head>
+        <title>gallery-nav-assist</title>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="logger"></div>
+
+        <!-- [START] gallery-nav-assist test fixture -->
+        <div id="gallery-nav-assist-test-fixture">
+            <div id="tabs">
+                <ul>
+                    <li><input type="text" id="testinputbox"/></li>
+                    <li><a href="#Tab1" id="tab1">Lorem Ipsum</a></li>
+                </ul>
+            </div>
+            <div id="header">
+                <h2>Lorem Ipsum</h2>
+            </div>
+            <div id="sidebar">
+                <h2>Lorem Ipsum</h2>
+            </div>
+            <div id="eastrail">
+                <h2 id="bleh"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
+            </div>
+            <div id="main">
+                <div class="bright"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p></div>
+            </div>
+            <ul id="links">
+                <li>Lorem Ipsum</li>
+            </ul>
+        </div>
+        <!-- [END] gallery-nav-assist test fixture -->
+
+        <script src="http://yui.yahooapis.com/3.12.0/build/yui/yui-debug.js"></script>
+        <script src="../../../../build/gallery-nav-assist/gallery-nav-assist-debug.js"></script>
+        <script src="js/tests.js"></script>
+        <script>
+
+YUI({
+    coverage: ['gallery-nav-assist'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'gallery-nav-assist-tests', function(Y) {
+
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-nav-assist');
+    Y.Test.Runner.run();
+});
+
+        </script>
+    </body>
+</html>

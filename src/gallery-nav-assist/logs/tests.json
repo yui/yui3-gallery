@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 2,
+    "total": 2,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5000/tests/src/gallery-nav-assist/tests/unit/index.html?filter=coverage",
+    "error": "SyntaxError: Parse error"
+}

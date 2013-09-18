@@ -1,0 +1,13 @@
+{
+    "name": "gallery-nav-assist",
+    "builds": {
+        "gallery-nav-assist": {
+            "jsfiles": [
+                "js/gallery-nav-assist.js"
+            ],
+            "cssfiles": [
+                "css/gallery-nav-assist-core.css"
+            ]
+        }
+    }
+}

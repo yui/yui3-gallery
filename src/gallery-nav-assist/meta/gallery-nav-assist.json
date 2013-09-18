@@ -1,0 +1,15 @@
+{
+    "gallery-nav-assist": {
+        "requires": [
+            "node",
+            "event",
+            "event-key",
+            "gallery-event-nav-keys",
+            "base",
+            "anim"
+        ],
+        "supersedes": [],
+        "optional": [],
+        "skinnable": false
+    }
+}

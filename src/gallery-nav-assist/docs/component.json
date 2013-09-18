@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-nav-assist",
+    "displayName": "Gallery: gallery-nav-assist",
+    "description": "Facilitates keyboard navigation",
+    "author"     : [ "jlecomte" ],
+    "use"        : [ "gallery-nav-assist" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
