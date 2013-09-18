@@ -19,6 +19,14 @@
         <li><code>animate-spin</code></li>
     </ul>
 <p>
+    Also there is a separate classname that you should use when you use an animated fonticon as 'standalone' that is, not inside a button. You need this to keep  the spinning icon steady:
+    <ul>
+        <li><code>itsa-iconstandalone</code></li>
+    </ul>
+</p>
+
+<h2>Dependencies</h2>
+<p>
     This module is always loaded together with <code>gallerycss-itsa-base</code> and some <code>gallerycss-itsa-*</code> module. See the examples.
 </p>
 
@@ -27,6 +35,9 @@
 <button class="itsabutton-iconleft">
     <i class="itsaicon-form-load itsa-busy"></i><code>Load
 </button>
+
+<-- or as standalone: -->
+<i class="itsaicon-form-load itsa-iconstandalone itsa-busy"></i><code>Load
 ```
 
 ```js

@@ -1,13 +1,18 @@
 /*
    Animation example, for spinners.
 */
-.itsa-busy:before,
-.animate-spin:before {
+i.itsa-busy.itsa-iconstandalone:before,
+i.animate-spin.itsa-iconstandalone:before {
+  margin-top: .3em;
+  margin-bottom: .3em;
+}
+i.itsa-busy:before,
+i.animate-spin:before {
   margin-right: .3em;
   margin-left: .3em;
 }
-.itsa-busy,
-.animate-spin {
+i.itsa-busy,
+i.animate-spin {
   -moz-animation: spin 2s infinite linear;
   -o-animation: spin 2s infinite linear;
   -webkit-animation: spin 2s infinite linear;
