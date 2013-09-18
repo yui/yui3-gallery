@@ -1,8 +1,19 @@
 /* first we set some custom extentions to pure-css styles */
 
 .itsabutton-bordered,
-.pure-button.itsabutton-bordered {
+.pure-button.itsabutton-bordered,
+.itsabutton-bordered[disabled],
+.pure-button.itsabutton-bordered[disabled] {
     box-shadow: 0 0 0 1px rgba(0,0,0, 0.15) inset;
+}
+
+/* restore pure-button:active */
+.itsabutton-bordered.pure-button:active,
+.itsabutton-bordered.pure-button.pure-button-active,
+.pure-button.itsabutton-bordered.pure-button:active,
+.pure-button.itsabutton-bordered.pure-button.pure-button-active,
+.pure-button.pure-button-active:focus {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 0 6px rgba(0, 0, 0, 0.2) inset;
 }
 
 .itsabutton-rounded,
