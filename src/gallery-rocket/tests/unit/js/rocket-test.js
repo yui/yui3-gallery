@@ -7,6 +7,7 @@ YUI.add('rocket-test', function(Y) {
     'all the modules exist': function() {
       Y.Assert.isNotUndefined(Y.Rocket);
       Y.Assert.isNotUndefined(Y.RController);
+      Y.Assert.isNotUndefined(Y.RModel);
       Y.Assert.isNotUndefined(Y.RView);
       Y.Assert.isNotUndefined(Y.RLayout);
       Y.Assert.isNotUndefined(Y.RListView);

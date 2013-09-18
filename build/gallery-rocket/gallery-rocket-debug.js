@@ -12,7 +12,7 @@ Y.App.CLASS_NAMES = {
 Y.Rocket = Y.App;
 
 
-}, 'gallery-2013.09.04-21-56', {
+}, 'gallery-2013.09.18-18-49', {
     "requires": [
         "app",
         "gallery-rocket-controller",

@@ -106,4 +106,4 @@ RegionManager = Y.extend(RegionManager, Y.Base, {
 Y.RRegionManager = RegionManager;
 
 
-}, 'gallery-2013.09.04-21-56', {"requires": ["gallery-rocket-region"]});
+}, 'gallery-2013.09.18-18-49', {"requires": ["gallery-rocket-region"]});

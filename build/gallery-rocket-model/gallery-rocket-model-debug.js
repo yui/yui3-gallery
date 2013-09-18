@@ -20,4 +20,4 @@ Model = Y.Base.create('rocketModel', Y.Model, [Y.REventBroker], {
 Y.RModel = Model;
 
 
-}, 'gallery-2013.09.04-21-56', {"requires": ["model", "gallery-rocket-event-broker"]});
+}, 'gallery-2013.09.18-18-49', {"requires": ["model", "gallery-rocket-event-broker"]});

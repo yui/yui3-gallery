@@ -93,8 +93,12 @@ View = Y.Base.create('rocketView', Y.View, [Y.REventBroker], {
   // template default to the [dasherized-view-name]-template
   getTemplateFunction: function() {
     var template = this.get('template') || '#' + Y.RUtil.dasherize(this.name) + '-template';
-    var templateHtml = Y.one(template) ? Y.one(template).getHTML() : template;
-    return Y.Handlebars.compile(templateHtml);
+    if (!this.get('template') && !Y.one(template)) {
+      throw new Error('template not found, you must specify template with a string or create a script with id = \'' + template + '\'');
+    } else {
+      var templateHtml = Y.one(template) ? Y.one(template).getHTML() : template;
+      return Y.Handlebars.compile(templateHtml);
+    }
   },
 
   // Get the view, model, modelList data for the templating function
@@ -122,8 +126,26 @@ View = Y.Base.create('rocketView', Y.View, [Y.REventBroker], {
   afterRender: EMPTY_FN,
 
   // bind events to the UI, called after view is rendered.
-  // noop function, override this.
-  bindUI: EMPTY_FN,
+  // default to rerender the view when model changes
+  bindUI: function() {
+    var model = this.get('model'),
+        modelList = this.get('modelList');
+    // If this view has a model/modelList, bubble model/modelList events to the view.
+    model && model.addTarget(this);
+    modelList && modelList.addTarget(this);
+
+    // If the model/modelList gets swapped out, reset targets accordingly.
+    this.after('modelChange', function (ev) {
+      ev.prevVal && ev.prevVal.removeTarget(this);
+      ev.newVal && ev.newVal.addTarget(this);
+    });
+    this.after('modelListChange', function (ev) {
+      ev.prevVal && ev.prevVal.removeTarget(this);
+      ev.newVal && ev.newVal.addTarget(this);
+    });
+
+    this.listenTo(this, '*:change', this.render); //re-render when changes
+  },
 
   // Main render function.
   render: function() {
