@@ -25,17 +25,17 @@
 i[class^="itsaicon-editor-"]:before, i[class*=" itsaicon-editor-"]:before {
   font-family: "itsaeditoradvanced";
 }
-i.itsaicon-editor-attachment:before { content: '\e806'; } /* Web Symbols '' */
-i.itsaicon-editor-clearcode:before { content: '\e80a'; } /* Font Awesome '' */
+i.itsaicon-editor-attachment:before { content: '\e806'; margin-left: -0.05em; width: 1.05em; margin-top: -0.05em; } /* Web Symbols '' */
+i.itsaicon-editor-clearcode:before { content: '\e80a'; margin-left: -0.03em; width: 1.03em; margin-top: -0.05em; } /* Font Awesome '' */
 i.itsaicon-editor-bgcolor:before { content: '\e807'; } /* MFG Labs '' */
 i.itsaicon-editor-colorstrike:before { content: '\e808'; } /* Font Awesome '' */
-i.itsaicon-editor-image:before { content: '\e809'; } /* Font Awesome '' */
+i.itsaicon-editor-image:before { content: '\e809'; margin-left: -0.1em; width: 1.1em; } /* Font Awesome '' */
 i.itsaicon-editor-link:before { content: '\e80d'; } /* Font Awesome '' */
-i.itsaicon-editor-mail:before { content: '\e80b'; } /* Font Awesome '' */
-i.itsaicon-editor-redo:before { content: '\e802'; } /* Font Awesome '' */
-i.itsaicon-editor-strike:before { content: '\e800'; } /* Font Awesome '' */
-i.itsaicon-editor-sub:before { content: '\e805'; } /* Font Awesome '' */
-i.itsaicon-editor-super:before { content: '\e804'; } /* Font Awesome '' */
-i.itsaicon-editor-undo:before { content: '\e803'; } /* Font Awesome '' */
-i.itsaicon-editor-unlink:before { content: '\e80e'; } /* Font Awesome '' */
-i.itsaicon-editor-video:before { content: '\e801'; } /* Font Awesome '' */
+i.itsaicon-editor-mail:before { content: '\e80b'; margin-top: -0.15em; } /* Font Awesome '' */
+i.itsaicon-editor-redo:before { content: '\e802'; margin-top: -0.03em; } /* Font Awesome '' */
+i.itsaicon-editor-strike:before { content: '\e800'; margin-top: -0.02em; } /* Font Awesome '' */
+i.itsaicon-editor-sub:before { content: '\e805'; margin-left: 0.1em; width: 0.9em; margin-top: -0.15em; } /* Font Awesome '' */
+i.itsaicon-editor-super:before { content: '\e804'; margin-left: 0.1em; width: 0.9em; margin-top: -0.15em; } /* Font Awesome '' */
+i.itsaicon-editor-undo:before { content: '\e803'; margin-top: -0.03em; } /* Font Awesome '' */
+i.itsaicon-editor-unlink:before { content: '\e80e'; margin-left: -0.05em; width: 1.05em; } /* Font Awesome '' */
+i.itsaicon-editor-video:before { content: '\e801'; margin-left: -0.05em; width: 1.05em; margin-top: -0.05em; } /* Font Awesome '' */

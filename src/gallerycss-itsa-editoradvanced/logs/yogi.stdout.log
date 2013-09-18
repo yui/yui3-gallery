@@ -97,20 +97,21 @@ shifter [info] shifting into gear for gallerycss-itsa-editoradvanced
        i[class^="itsaicon-editor-"]:before, i[class*=" itsaicon-editor-"]:before { // line 38, pos 2
    #44: [warning] Attribute selectors with *= are slow!
        i[class^="itsaicon-editor-"]:before, i[class*=" itsaicon-editor-"]:before { // line 38, pos 39
+shifter [queu] file has changed, continuing build
 shifter [info] shifting assets for gallerycss-itsa-editoradvanced
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.129 seconds, pretty fast huh?
+shifter [info] finished in 0.095 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5024
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5023
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.9.1
+Starting Grover on 1 files with PhantomJS@1.9.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallerycss-itsa-editoradvanced]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
+✖ [gallerycss-itsa-editoradvanced]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.007 seconds)
     test is empty
        No Tests Provided For This Module
 Writing files in JSON format to: /src/gallerycss-itsa-editoradvanced/logs/tests.json

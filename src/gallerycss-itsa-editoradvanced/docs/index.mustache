@@ -10,6 +10,7 @@
        <b>Notes:</b>
        <ul>
            <li>You need to load this module <u>together with 'gallerycss-itsa-base'</u> in order to work.</li>
+           <li>Iconfonts modules are heavyweight: it is advisable to load them asynchroniously in a separate Y.use() statement to prevent delay in the YUI-callback. See the examples.</li>
            <li>These fonticons always need to be declared inside a <u>i-element</u>, see the examples.</li>
            <li>Special thanks to <a href='http://fontello.com' target='_blank'>http://fontello.com</a> by which means this gallerymodule is created</li>
        </ul>
@@ -45,7 +46,7 @@
 
 <h2>Usage</h2>
 ```html
-<button><i class="itsaicon-editor-attachment"></i></button>
+<button class="itsabutton-onlyicon"><i class="itsaicon-editor-attachment"></i></button>
 ```
 
 ```js
@@ -96,17 +97,23 @@ button {
 
 <h3>Iconbuttons without text</h3>
 ```html
-<button<i class="itsaicon-editor-attachment"></i></button>
+<button class="itsabutton-onlyicon">
+  <i class="itsaicon-editor-attachment"></i>
+</button>
 ```
 
 <h3>Textbuttons with a left-icon</h3>
 ```html
-<button class="itsabutton-iconleft"><i class="itsaicon-editor-attachment"></i>Attachment</button>
+<button class="itsabutton-iconleft">
+  <i class="itsaicon-editor-attachment"></i>Attachment
+</button>
 ```
 
 <h3>Textbuttons with a right-icon</h3>
 ```html
-<button class="itsabutton-iconright">Attachment<i class="itsaicon-editor-attachment"></i></button>
+<button class="itsabutton-iconright">
+  Attachment<i class="itsaicon-editor-attachment"></i>
+</button>
 ```
 
 <h3>Rounded buttons with a border</h3>
@@ -114,7 +121,9 @@ button {
         Bordered and rounded buttons can be made by using special button-classes supllied by <a href='http://gallerydocs.itsasbreuk.nl/gallerycss-itsa-base/index.html' target='_blank>'>gallerycss-itsa-base</a>.
     </p>
 ```html
-<button class="pure-button itsabutton-bordered itsabutton-rounded"><i class="itsaicon-editor-attachement"></i></button>
+<button class="pure-button itsabutton-bordered itsabutton-rounded">
+  <i class="itsaicon-editor-attachement"></i>
+</button>
 ```
 <h2>Licences</h2>
     Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
