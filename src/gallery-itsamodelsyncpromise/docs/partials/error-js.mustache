@@ -1,0 +1,55 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodelsyncpromise', 'model', function(Y) {
+
+   var countrymodel,
+        loadbutton = Y.one('#loaddata'),
+        container = Y.one('#resultcontainer');
+
+    Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+              case 'read':
+                Y.later(1500, null, function() {
+                    callback('Server time-out (simulated)');
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
+    countrymodel = new Y.CountryModel();
+
+    countrymodel.on('load', function(){
+        container.append('Start loading<br />');
+    });
+    countrymodel.after('load', function(){
+        container.append('Model is loaded succesfully (this message should NOT appear in this example)<br />');
+    });
+    countrymodel.on('error', function(e){
+        container.append('Error event occurred by model: '+e.error+'<br />');
+    });
+
+    loadbutton.on(
+        'click',
+        function(e) {
+            var button = e.currentTarget;
+            button.setHTML('busy loading...');
+            countrymodel.loadPromise().then(
+                function(response, options) {
+                    container.append('Loadpromise resolved: Model is loaded (this message should not appear in this example).<br />');
+                },
+                function(reason) {
+                    container.append('Loadpromise rejected: '+reason.message+'.<br />');
+                }
+            ).then(function() {
+                button.setHTML('load modeldata');
+            });
+        }
+    );
+
+    loadbutton.removeClass('pure-button-disabled');
+
+});

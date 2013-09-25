@@ -1,11 +1,57 @@
 {
     "name"       : "gallery-itsamodelsyncpromise",
     "displayName": "Gallery: gallery-itsamodelsyncpromise",
-    "description": "*Summary Goes Here*",
+    "description": "This module extends Y.Model by introducing Promised sync-methods. It also transforms Y.Model's sync-events into true events with a defaultFunc which can be prevented.",
     "author"     : [ "itsasbreuk" ],
     "use"        : [ "gallery-itsamodelsyncpromise" ],
 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "load-model",
+            "displayName": "Examine events when loading model",
+            "description": "Load the model by clicking the button. The on- and after-event will appear at the start of loading and at the end.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodelsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodelsyncpromise", "load", "event"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "loadpromise-model",
+            "displayName": "Loading model using loadPromise()",
+            "description": "Load the model by clicking the button. The promise will inform when things get ready.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodelsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodelsyncpromise", "load", "promise", "loadPromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "preventload-model",
+            "displayName": "Prevent-default loading model",
+            "description": "Load the model by clicking the button. The defaultaction (load) will not execute.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodelsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodelsyncpromise", "load", "preventDefault"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "on-promise",
+            "displayName": "On-listener with e.promise",
+            "description": "Listening to the on-load event and use e.promise for further action.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodelsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodelsyncpromise", "load", "promise", "loadPromise", "event"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "error",
+            "displayName": "Errors during loading",
+            "description": "Load the model by clicking the button. A servererror is simulated which will be shown both in the promiseresult as by an throwing error-event.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodelsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodelsyncpromise", "error", "event"],
+            "hideTableOfContents": true
+        }
+    ]
 }

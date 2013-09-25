@@ -9,12 +9,20 @@
 <body class="yui3-skin-sam">
 <div id="logger"></div>
 
+
+<!-- ******************************** -->
+<!--  START DEFINING THE COMBOLOADER  -->
+<!-- ******************************** -->
+<script src="js/init-loaderconfig.js"></script>
+<script src="js/loaderconfig.js"></script>
+<!-- ******************************** -->
+<!--  END DEFINING THE COMBOLOADER  -->
+<!-- ******************************** -->
+
 <script>
-YUI({
-    coverage: ['gallery-itsamodelsyncpromise'],
-    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-}).use('test-console', 'test', 'module-tests', function(Y) {
-    
+// yuiconfig is defined inside loaderconfig.js
+YUI(yuiconfig).use('test-console', 'test', 'module-tests', function(Y) {
+
     (new Y.Test.Console()).render('#logger');
 
     Y.Test.Runner.setName('gallery-itsamodelsyncpromise');

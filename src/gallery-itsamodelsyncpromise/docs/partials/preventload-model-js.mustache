@@ -1,0 +1,61 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodelsyncpromise', 'model', function(Y) {
+
+   var countrymodel,
+        loadbutton = Y.one('#loaddata'),
+        container = Y.one('#resultcontainer');
+
+    Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        syncPromise: function(action, options) {
+            if (action==='read') {
+                // simulating loaddelay through Y.later:
+                return new Y.Promise(function (resolve, reject) {
+                    Y.later(
+                        2000,
+                        null,
+                        function() {
+                            resolve({Country: "Netherlands"});
+                        }
+                    );
+                });
+            }
+            // do not forget to reject the promise in case an invalid 'action' is defined
+            return new Y.Promise(function (resolve, reject) {
+                reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+            });
+        }
+    });
+
+    countrymodel = new Y.CountryModel();
+
+    countrymodel.on('load', function(e) {
+        container.append('Prevent loading<br />');
+        e.preventDefault();
+    });
+    countrymodel.after('load', function(){
+        container.append('Model is loaded --> this message should never appear in this example!<br />');
+    });
+    countrymodel.after('error', function(e){
+        container.append('Error event occurred by model: '+e.error+' --> this message should never appear in this example!<br />');
+    });
+
+    loadbutton.on(
+        'click',
+        function(e) {
+            var button = e.currentTarget;
+            button.setHTML('busy loading...');
+            countrymodel.loadPromise().then(
+                function(response, options) {
+                    container.append('Loadpromise resolved: Model is loaded --> this message should never appear in this example!<br />');
+                },
+                function(reason) {
+                    container.append('Loadpromise rejected: '+reason.message+' <br />');
+                }
+            ).then(function() {
+                button.setHTML('load modeldata');
+            });
+        }
+    );
+
+    loadbutton.removeClass('pure-button-disabled');
+
+});

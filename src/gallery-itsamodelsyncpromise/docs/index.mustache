@@ -1,14 +1,109 @@
+{{>api-button}}
+
 <div class="intro">
     <p>
-    *Summary Goes Here*
+    {{description}} This means the 'on'-events will be fired before syncing and the 'after'-events after syncing.
     </p>
 </div>
 
 <h2>Description</h2>
+    <p>
+        After including this module, nothing extra needs to be done. Using the synclayer can be done just as usual. However, there are three awesome expansions made which you can use:
+    </p>
 
-<p>*Module Description Goes Here*</p>
+<h3>Sync events by using defaultFn</h3>
+    <p>
+        All sync-events will use a <code>defaultFn</code> for their operation. This module takes care of it, even if you don't use the promise-methods or syncPromise-layer. This means the <code>'on'-event</code> is fired before the synclayer is called and the <code>'after'-event</code> afterwards, which can be prevented. The next Model's events are preventable:
+        <ul>
+            <li><code>load</code></li>
+            <li><code>save</code></li>
+            <li><code>destroy</code></li>
+        </ul>
+        These events now have <code>e.promise</code> which could be used to get informed instead of listening to both the 'after'- and 'error'-events.
+    </p>
 
+<h3>Promise methods</h3>
+    <p>
+        <code>load()</code>, <code>save()</code> and <code>destroy()</code>, are also available as a Promise, by using these methods:
+        <ul>
+            <li><code>loadPromise()</code></li>
+            <li><code>savePromise()</code></li>
+            <li><code>destroyPromise()</code></li>
+        </ul>
+        All these methods return Promises.
+    </p>
+
+<h3>Promised synclayer</h3>
+    <p>
+        The module also introduces <code>syncPromise()</code> which could be used instead of <code>sync()</code>. As a developer you can define syncPromise(). Once done, all sync-methods will sync through syncPromise() instead of sync(). The method syncPromise() is a method that should be set-up the same way as sync(), except its actions should return promises. gallery-io-utils is the perfect module that returns Promises that can be used in conjunction with this module. See the examples how to setup syncPromise().
+    </p>
+    <p>
+        <b>Note 1:</b> When saving Models, if the server returns an object, than that object is stored as the updated modeldata. This way you can alter the modeldata on the server, or create a new <code>id</code>.<br />
+        <b>Note 2:</b> If you want to use <code>Y.ModelSync.REST</code>, then don't define syncPromise(). If you do, syncPromise() will be used instead of Y.ModelSync.REST's sync().
+    </p>
+
+<h2>Usages</h2>
+<h3>Loading Model-data with Model.loadPromise</h3>
+```js
+YUI(yuiconfig).use('model', 'gallery-itsamodelsyncpromise', 'base-build', function(Y) {
+
+    var piemodel;
+    Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+                case 'read':
+                    // Look for an item in localStorage with this model's id.
+                    data = localStorage.getItem(this.get('id'));
+                    if (data) {
+                        callback(null, data);
+                    } else {
+                        callback('Model not found.');
+                    }
+                    return;
+                default:
+                    callback('Invalid action');
+            }
+        }
+    });
+    piemodel = new Y.PieModel({...});
+
+    piemodel.loadPromise().then(
+        function(response) {
+            // we are sure now that the Model has its attributes read.
+            // we could read 'response', but don't need to:
+            // the model has the new data now.
+        },
+        function(reason) {
+            // 'reason' gives you the reason why loading has failed
+        }
+    );
+
+});
 ```
-//Module example code
-```
+<h3>Loading Model-data with using the syncPromise-layer</h3>
+    <p>
+        To show you can use syncPromise() even with the 'non-promise' methods, the next example uses load() instead of loadPromise(). Of coarse it works with loadPromise() as well.
+    </p>
+```js
+YUI(yuiconfig).use('model', 'gallery-itsamodelsyncpromise', 'gallery-io-utils', 'base-build', function(Y) {
 
+    var piemodel;
+    Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
+        syncPromise: function (action) {
+            if (action==='read') {
+                return Y.io.get('http://mydomain.com/getdata.php?modelid='+this.get('id'));
+            }
+            // do not forget to reject the promise in case an invalid 'action' is defined
+            return new Y.Promise(function (resolve, reject) {
+                reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+            });
+        }
+    });
+    piemodel = new Y.PieModel({...});
+
+    piemodel.load();
+
+});
+```

@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.3
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsamodelsyncpromise
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -9,6 +9,12 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-itsamodelsyncpromise
+   #1: Line too long.
+       * @param e.promise {Promise} The promise that is automaticly created during the event. You could examine this instead of listening to both the `after`- and `error`-event. // line 55, pos 171
+   #2: Line too long.
+       * @param e.promise {Promise} The promise that is automaticly created during the event. You could examine this instead of listening to both the `after`- and `error`-event. // line 64, pos 171
+   #3: Line too long.
+       * @param e.promise {Promise} The promise that is automaticly created during the event. You could examine this instead of listening to both the `after`- and `error`-event. // line 75, pos 171
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-itsamodelsyncpromise/gallery-itsamodelsyncpromise.js with UglifyJS
@@ -19,19 +25,30 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-itsamodelsyncpromise/gallery-itsamodelsyncpromise-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.253 seconds, pretty fast huh?
+shifter [info] finished in 0.297 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
-Starting Grover on 1 files with PhantomJS@1.7.0
+Starting Grover on 1 files with PhantomJS@1.9.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsamodelsyncpromise]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)
-    test is empty
-       No Tests Provided For This Module
+✖ [http://127.0.0.1:5000/tests/src/gallery-itsamodelsyncpromise/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       TypeError: 'undefined' is not an object (evaluating 'new Y.Test.Suite')
+       http://127.0.0.1:5000/tests/src/gallery-itsamodelsyncpromise/tests/unit/js/tests.js:3
+       http://127.0.0.1:5000/build/yui/yui.js:775
+       http://127.0.0.1:5000/build/yui/yui.js:1112
+       http://127.0.0.1:5000/build/yui/yui.js:7708
+       http://127.0.0.1:5000/build/yui/yui.js:7799
+       http://127.0.0.1:5000/build/yui/yui.js:7999
+       http://127.0.0.1:5000/build/yui/yui.js:8066
+       http://127.0.0.1:5000/build/yui/yui.js:4619
+       http://127.0.0.1:5000/build/yui/yui.js:4819
+       http://127.0.0.1:5000/build/yui/yui.js:4927
+       http://127.0.0.1:5000/build/yui/yui.js:4711
 Writing files in JSON format to: /src/gallery-itsamodelsyncpromise/logs/tests.json
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

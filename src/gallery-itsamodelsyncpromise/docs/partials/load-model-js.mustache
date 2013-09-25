@@ -1,0 +1,47 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodelsyncpromise', 'model', 'json-stringify', function(Y) {
+
+   var countrymodel,
+        loadbutton = Y.one('#loaddata'),
+        container = Y.one('#resultcontainer');
+    Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+              case 'read':
+                Y.later(1500, null, function() {
+                    data = {Country: "The Netherlands"};
+                    callback(null, Y.JSON.stringify(data));
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
+    countrymodel = new Y.CountryModel();
+
+    countrymodel.on('load', function(){
+        container.append('Start loading<br />');
+    });
+    countrymodel.after('load', function(e){
+        container.append('Model is loaded: Country='+countrymodel.get('Country')+'<br />');
+    });
+
+    loadbutton.on(
+        'click',
+        function(e) {
+            var button = e.currentTarget;
+            button.setHTML('busy loading...');
+            countrymodel.loadPromise().then(
+                function(response, options) {
+                    button.setHTML('load modeldata');
+                }
+            );
+        }
+    );
+
+    loadbutton.removeClass('pure-button-disabled');
+
+});
