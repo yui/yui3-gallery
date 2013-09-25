@@ -1,14 +1,181 @@
+{{>api-button}}
+
 <div class="intro">
+  <p>{{description}}</p>
+  <p>
+      This module is used for creating stringified form-elements using Y.Lang.sub() and templates for all form-elements.
+      Using this module makes it easy to generate the right element based on a configobject. Labels can be rendered as well.
+  </p>
+  <p>
+      The rendered strings are used by <code>gallery-itsaeditmodel</code>. It is preferable that you use that module
+      to create editable html-elements, because that way thay are related to a Modelinstance.
+  </p>
     <p>
-    *Summary Goes Here*
-    </p>
+         <b>Note:</b> This module uses javascript to render the formelements, so <u>it is not suitable for progressive enhancement</u>.
+   </p>
 </div>
 
+{{>getting-started}}
+
 <h2>Description</h2>
+<p>
+    The class is used to render the stringified form-elements, based on the attributes that are added. Because the node
+    isn't in the dom yet, the idea is to add the <code>nodeid</code> to the rendermethod, along with the config. If you don't pass
+    nodeid, then Y.guid() will create a random one.
+</p>
+<p>
+    Y.ITSAFormElement.getElement() returns the element. This is an object that has 3 properties:<br />
+    <ul>
+      <li>object.html: the stringified element that can be inserted in the dom.</li>
+      <li>object.nodeid: the node-id (passed through or generated)</li>
+      <li>object.widget: in case of widgets, this is the reference to the widget-instance.</li>
+    </ul>
+</p>
+<h3>cursorposition on selecting inputelements</h3>
+  <p>
+      Under the hood, some delegated events are watching and controlling how input and textarea's should be selected. This advances userbehaviour in a way that these elements can be clicked on a cursorposition without select all the text. And if a user tabs accross the formelements, the cursor will always be at the end of the element, or when 'fullselect' is set, all the text is selected.
+  </p>
+<h3>initial focussed element</h3>
+  <p>
+      You can make use of the config.property: <code>initialfocus</code>. This does nothing more than add a Node data attribute: <code>data-initialfocus="true"</code>. This module does not controll inititial behaviour: this should be done by a view which makes use of it, or by using <code>gallery-itsatabkeymanager</code> which handles this attribute.
+  </p>
 
-<p>*Module Description Goes Here*</p>
+<h2>Using widgets</h2>
+    <p>
+        Some elements render the simple form-elements, while other are just empty <code>div's</code> that is used
+        to render a widget upon. The rendering is done <u>automaticly</u> every time the node gets in the dom.
+    </p>
 
+<h3>How to define a widget</h3>
+    <p>
+        Instead of passing a string to 'type'-argument, you can pass the Class (not an instance!). The instance will be created and rendered
+        full automaticly, passing through 'config'. Just be sure the module that serves the widget is loaded.
+    </p>
+
+<h2>Summary of available types</h2>
+<h3>Types that return simple elements</h3>
+    <ul>
+      <li>button</li>
+      <li>checkbox</li>
+      <li>date</li>
+      <li>datetime</li>
+      <li>email</li>
+      <li>number</li>
+      <li>password</li>
+      <li>radio</li>
+      <li>submit</li>
+      <li>reset</li>
+      <li>text</li>
+      <li>textarea</li>
+      <li>time</li>
+      <li>url</li>
+    </ul>
+
+<h3>Types that return widgets</h3>
+    <ul>
+      <li>Y.Dial</li>
+      <li>Y.EditorBase</li>
+      <li>Y.ITSACheckbox</li>
+      <li>Y.ITSASelectlist</li>
+      <li>Y.Slider</li>
+      <li>Y.ToggleButton</li>
+    </ul>
+
+<h2>Usage</h2>
+<h3>Simple form-elements</h3>
 ```
-//Module example code
+YUI({gallery: '...'}).use('node-base', 'gallery-itsaformelement', function(Y) {
+    var type, config, formElement;
+    type = 'input';
+    config = {
+        value: 'default value'
+    };
+    formElement = Y.ITSAFormElement.getElement(type, config);
+    Y.one('#myform').append(formElement.html);
+});
 ```
 
+<h3>Widget-elements</h3>
+```
+YUI({gallery: '...'}).use('node-base', 'gallery-itsaformelement', 'itsacheckbox', function(Y) {
+    var type, config, formElement;
+    type = 'input';
+    config = {
+        checked: true
+    };
+    formElement = Y.ITSAFormElement.getElement(Y.ITSACheckbox, config);
+    Y.one('#myform').append(formElement.html);
+    // formElement.widget holds the handle to the widgetinstance
+});
+```
+<h2>The config argument</h2>
+  <p>
+      Widgets pass through the config-argument to the instacne during initialization. Simple for-elements will use the config-properties to stringify the html-element. Depending of its type, some objectproperties are valid while others are ignored.
+  </p>
+<h3>Available extra objectproperties for widgets</h3>
+    <ul>
+      <li><code>focusable</code> {Boolean}</li>
+      <li><code>label</code> {String}</li>
+      <li><code>labelClassname</code> {String}</li>
+      <li><code>tooltip</code> {String}</li>
+      <li><code>tooltipinvalid</code> {String} External routine should set this data (available as 'data-contentinvalid') into 'data-content' once invalid and replace it with 'data-contentvalid' once valid again.</li>
+    </ul>
+  <h3>Available objectproperties for simple form-elements</h3>
+    <ul>
+      <li><code>labelHTML</code> {String} --> only valid for non 'datetime'-buttons</li>
+      <li><code>checked</code> {Boolean} (defaults false) --> only valid for checkboxes and radiobuttons</li>
+      <li><code>classname</code> {String}</li>
+      <li><code>data</code> {String} --> for extra data-attributes, f.i. data: 'data-someinfo="somedata" data-moreinfo="moredata"'</li>
+      <li><code>digits</code> {Boolean} (defaults false) --> for floating numbers: only valid for numbers</li>
+      <li><code>disabled</code> {Boolean} (defaults false)</li>
+      <li><code>focusable</code> {Boolean} (defaults true)</li>
+      <li><code>format</code> {String} --> only valid for date/time</li>
+      <li><code>fullselect</code> {Boolean} selects all text when focussed --> only valid for input-elements and textarea</li>
+      <li><code>hidden</code> {Boolean} (defaults false)</li>
+      <li><code>hotkey</code> {String|Object} --> character that act as a hotkey: 'alt+char' will focus the element and -in case of a button- click the button.
+                                          The hotkey-character will be marked with the css-class 'itsa-hotkey' (span-element), which underscores by default, but can be overruled.
+                                          If you want to Internationize, the you need to supply an object where the properties are the language-tag and the values a string
+                                          (character). F.i. {us: 'a', nl: 'o'}. When Internationize, there will be no hotkey when the used language is not found in the hotkey-object.</li>
+      <li><code>initialfocus</code> {Boolean} makes this the first item that gets focus when the container gets focus.</li>
+      <li><code>label</code> {String} --> used for all elements (including date-time), except buttons</li>
+      <li><code>labelClassname</code> {String} --> used for all elements (including date-time), except buttons</li>
+      <li><code>name</code> {String}</li>
+      <li><code>nossl</code> {Boolean} (defaults false) --> only applyable for type==='url'</li>
+      <li><code>onlyssl</code> {Boolean} (defaults false) --> only applyable for type==='url'</li>
+      <li><code>pattern</code> {String} --> only valid for type==='text' or 'password'</li>
+      <li><code>placeholder</code> {String} --> only valid for input-elements and textarea</li>
+      <li><code>primary</code> {Boolean} (defaults false) --> only valid for buttons</li>
+      <li><code>readonly</code> {Boolean} (defaults false) --> not applyable for buttons</li>
+      <li><code>required</code> {Boolean} (defaults true for 'password', otherwise false)--> only valid for input-elements, textarea and date/time. defaults true when type===password</li>
+      <li><code>spinbusy</code> {Boolean} (defaults false) making a buttonicon to spin if busy. (Actually only adds the data-attribute: data-spinbusy="true" --> which should be used by other js to make it spin). Only applyable for buttons.</li>
+      <li><code>submitonenter</code> {Boolean} (defaults false) in case of text-fields: on enter-press submit. Will just add the data-attribute data-submitonenter="true" --> it is up to other modules to handle the submission.</li>
+      <li><code>switchlabel</code> {Boolean} (defaults false) --> switch the label behind the element</li>
+      <li><code>switchdatetime</code> {Boolean} (defaults false) --> switch the datetime-value behind the element: only valid for date/time</li>
+      <li><code>tooltip</code> {String}</li>
+      <li><code>tooltipinvalid</code> {String} External routine should set this data (available as 'data-contentinvalid') into 'data-content' once invalid and replace it with 'data-contentvalid' once valid again.</li>
+      <li><code>value</code> {String}</li>
+    </ul>
+<h2>Different behaviour reset and submit</h2>
+  <p>
+     The reset- and submit-button are rendered as normal buttons. This means, the will not interact with the form natively. Instead, you should listen for the special intoduced events: <code>resetclick</code> and <code>submitclick</code>.
+  </p>
+<h2>Events</h2>
+  <p>
+     This module introduces 5 synthetic-events that can be subscribed to:
+  </p>
+    <ul>
+      <li><code>datepickerclick</code> --> fired when a datepicker-button is clicked.</li>
+      <li><code>datetimepickerclick</code> --> fired when a datetimepicker-button is clicked.</li>
+      <li><code>resetclick</code> --> fired when a resetbutton is clicked. This is <u>not the same</u> as the 'reset'-event which gets fired on a form-reset.</li>
+      <li><code>submitclick</code> --> fired when a submitbutton is clicked. This is <u>not the same</u> as the 'submit'-event which gets fired on a form-submit.</li>
+      <li><code>timepickerclick</code> --> fired when a timepicker-button is clicked.</li>
+    </ul>
+<h2>Purecss compatible</h2>
+  <p>
+      All elements are rendered with full purecss-compatability!
+  </p>
+
+<h2>licence</h2>
+
+Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>

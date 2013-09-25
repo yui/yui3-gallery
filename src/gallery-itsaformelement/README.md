@@ -1,27 +1,13 @@
 gallery-itsaformelement
-=======================
+========
 
 
-Basic Class that should not be used of its own: purely made for [Y.ITSAEditModel](../gallery-itsaeditmodel) to use.
+This module is used for creating stringified form-elements using Y.Lang.sub() and templates for all form-elements.
 
 
-This Class can render several elements into Strings which can be inserted into the DOM.
-
-At the moment the following elements can be rendered (more to come):
-* input
-* password
-* textarea
-* date      (=textbox with iconbutton)
-* time      (=textbox with iconbutton)
-* datetime  (=textbox with iconbutton)
-* button    (=button)
-* reset     (=button)
-* submit    (=button)
-* save      (=button)
-* add       (=button)
-* destroy   (=button)
-* stopedit  (=button)
-* hidden
+Landing Page
+--------------
+[http://gallerydocs.itsasbreuk.nl/gallery-itsaformelement](http://gallerydocs.itsasbreuk.nl/gallery-itsaformelement/)
 
 
 License

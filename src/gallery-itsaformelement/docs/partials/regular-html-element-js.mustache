@@ -1,0 +1,4 @@
+YUI(yuiconfig).use('node-base', 'gallery-itsaformelement', function(Y) {
+    var formElement = Y.ITSAFormElement.getElement('text', {value: 'default name'});
+    Y.one('#myform').append(formElement.html);
+});

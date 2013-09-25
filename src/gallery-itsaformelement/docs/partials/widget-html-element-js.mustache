@@ -1,0 +1,4 @@
+YUI(yuiconfig).use('node-base', 'gallery-itsaformelement', 'gallery-itsacheckbox', function(Y) {
+    var formElement = Y.ITSAFormElement.getElement(Y.ITSACheckbox, {checked: true});
+    Y.one('#myform').append(formElement.html);
+});

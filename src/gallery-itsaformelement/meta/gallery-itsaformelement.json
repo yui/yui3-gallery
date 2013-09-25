@@ -2,12 +2,20 @@
     "gallery-itsaformelement": {
         "requires": [
             "yui-base",
-            "base",
             "node-core",
-            "node-base",
+            "node-event-delegate",
             "datatype-date-format",
-            "classnamemanager",
-            "cssbutton"
+            "event-base",
+            "event-synthetic",
+            "yui-later",
+            "promise",
+            "event-tap",
+            "event-custom",
+            "escape",
+            "intl",
+            "gallerycss-itsa-base",
+            "gallery-tipsy",
+            "gallery-itsawidgetrenderpromise"
         ],
         "skinnable": true
     }

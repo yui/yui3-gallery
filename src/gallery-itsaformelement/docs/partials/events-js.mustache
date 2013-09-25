@@ -1,0 +1,36 @@
+YUI(yuiconfig).use('node-base', 'gallery-itsaformelement', 'gallery-itsadialog', function(Y) {
+    var container = Y.one('#myform');
+
+    Y.one('body').addClass('yui3-skin-sam'); // --> making Y.alert() with the right skin
+    container.append(Y.ITSAFormElement.getElement('submit').html);
+    container.append('&nbsp;'+Y.ITSAFormElement.getElement('reset').html);
+    container.append('&nbsp;'+Y.ITSAFormElement.getElement('date').html);
+    container.append('&nbsp;'+Y.ITSAFormElement.getElement('time').html);
+    container.append('&nbsp;'+Y.ITSAFormElement.getElement('datetime').html);
+
+
+    container.on('click', function(e) {
+        e.preventDefault();
+    });
+
+    // The node-events bubble up, so we can listen on 'container'
+    container.on('submit:click', function() {
+        Y.alert('Clicked on the submit-button'); // Y.alert is provided by gallery-itsadialog
+    });
+
+    container.on('reset:click', function() {
+        Y.alert('Clicked on the reset-button'); // Y.alert is provided by gallery-itsadialog
+    });
+
+    container.on('datepickerclick', function() {
+        Y.alert('Clicked on the datepicker-button'); // Y.alert is provided by gallery-itsadialog
+    });
+
+    container.on('timepickerclick', function() {
+        Y.alert('Clicked on the timepicker-button'); // Y.alert is provided by gallery-itsadialog
+    });
+
+    container.on('datetimepickerclick', function() {
+        Y.alert('Clicked on the datetimepicker-button'); // Y.alert is provided by gallery-itsadialog
+    });
+});

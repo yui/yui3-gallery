@@ -1,11 +1,57 @@
 {
     "name"       : "gallery-itsaformelement",
     "displayName": "Gallery: gallery-itsaformelement",
-    "description": "*Summary Goes Here*",
+    "description": "This module defines the class Y.ITSAFormElement",
     "author"     : [ "itsasbreuk" ],
     "use"        : [ "gallery-itsaformelement" ],
 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "regular-html-element",
+            "displayName": "Creating a regular form-element",
+            "description": "This example shows how use Y.ITSAFormElement to render a form-element.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaformelement"],
+            "tags"       : ["gallery-itsaformelement", "form-element"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "widget-html-element",
+            "displayName": "Creating a widget form-element",
+            "description": "This example shows how use Y.ITSAFormElement to render a widget form-element.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaformelement", "gallery-itsacheckbox"],
+            "tags"       : ["gallery-itsaformelement", "form-element", "widget"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "events",
+            "displayName": "Listening for events",
+            "description": "This example shows how to listen to the events: submitclick, resetclick, datepickerclick, timepickerclick and datetimepickerclick.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaformelement"],
+            "tags"       : ["gallery-itsaformelement", "form-element", "events"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "popover",
+            "displayName": "Using tooltips",
+            "description": "This example shows how to use Y.ITSAFormElement with tooltips (using gallery-tipsy). Just set focus on the text-element.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaformelement"],
+            "tags"       : ["gallery-itsaformelement", "form-element", "gallery-tipsy", "tipsy"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "stringified-results",
+            "displayName": "Summary of all rendered form-elements",
+            "description": "Below is a summary of all stringified results",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node-base", "escape", "escape", "gallery-itsaformelement", "gallery-itsacheckbox"],
+            "tags"       : ["gallery-itsaformelement", "form-element", "summary"],
+            "hideTableOfContents": true
+        }
+    ]
 }

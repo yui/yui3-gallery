@@ -1,0 +1,400 @@
+YUI(yuiconfig).use('node-base', 'escape', 'gallery-itsaformelement', 'gallery-itsacheckbox', function(Y) {
+    var type, emptyconfig, fullconfig, appendElement,
+        container = Y.one('#myform'),
+        NOCONFIG = 'no config',
+        FULLCONFIG = 'full config',
+        FULLCONFIGWITHLABEL = 'full config with label',
+        FULLCONFIGWITHLABELSWITCHED = 'full config with label after element',
+        FULLCONFIGWITHDATESWITCHED = 'full config with date-value after element',
+        FULLCONFIGWITHLABELSWITCHEDANDDATESWITCHED = 'full config with label after element and date-value after elelemt';
+
+Y.one('body').addClass('yui3-skin-sam');
+
+    appendElement = function(type, config, desc) {
+        var element = Y.ITSAFormElement.getElement(type, config).html;
+        if (desc===NOCONFIG) {
+            iswidget = ((typeof type === 'function') && type.prototype.BOUNDING_TEMPLATE);
+            container.append('<div class="typeheader"><b>type: '+(iswidget ? type.NAME : type)+'</b></div>');
+        }
+        container.append('<div class="codedesc">'+desc+'</div>');
+        container.append('<div class="code">'+Y.Escape.html(element)+'</div>');
+        container.append('<div>'+element+'</div>');
+    };
+
+    //-------------------------------------------
+    type = Y.ITSACheckbox;
+    emptyconfig = {};
+    fullconfig = {
+        initialfocus: true,
+        optionon: 'power on',
+        optionoff: 'power off',
+        tooltip: 'here is some tooltipinfo',
+        focusable: false,
+        hidden: true
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label for a disabled checkbox';
+    fullconfig.disabled = true;
+    fullconfig.readonly = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'text';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: true,
+        disabled: true,
+        hidden: false,
+        fullselect: true,
+        initialfocus: true,
+        pattern: '[A-Za-z]{3}',
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'number';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: true,
+        disabled: true,
+        hidden: false,
+        fullselect: true,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        digits: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'password';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: false,
+        disabled: true,
+        hidden: false,
+        fullselect: true,
+        initialfocus: true,
+        pattern: '[A-Za-z]{3}',
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'email';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: true,
+        disabled: true,
+        hidden: false,
+        fullselect: true,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'url';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: true,
+        disabled: true,
+        hidden: false,
+        fullselect: true,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        nossl: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    fullconfig.nossl = false;
+    fullconfig.onlyssl = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'textarea';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: true,
+        disabled: true,
+        hidden: false,
+        fullselect: true,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'checkbox';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: true,
+        disabled: true,
+        hidden: false,
+        initialfocus: true,
+        checked: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'radio';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        placeholder: 'placeholderText',
+        required: true,
+        disabled: true,
+        hidden: false,
+        initialfocus: true,
+        checked: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switchlabel
+    //-------------------------------------------
+    type = 'date';
+    emptyconfig = {
+        value: new Date()
+    };
+    fullconfig = {
+        value: new Date(),
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        required: true,
+        disabled: true,
+        hidden: false,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        primary: true,
+        format: '%Y-%m-%d',
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switched
+    fullconfig.switchlabel = false;
+    fullconfig.switchvalue = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHDATESWITCHED); // with date-value switched
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHEDANDDATESWITCHED); // with label and date-value switched
+    //-------------------------------------------
+    type = 'time';
+    emptyconfig = {
+        value: new Date()
+    };
+    fullconfig = {
+        value: new Date(),
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        required: true,
+        disabled: true,
+        hidden: false,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        primary: true,
+        format: '%H:%M:%S',
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switched
+    fullconfig.switchlabel = false;
+    fullconfig.switchvalue = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHDATESWITCHED); // with date-value switched
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHEDANDDATESWITCHED); // with label and date-value switched
+    //-------------------------------------------
+    type = 'datetime';
+    emptyconfig = {
+        value: new Date()
+    };
+    fullconfig = {
+        value: new Date(),
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        required: true,
+        disabled: true,
+        hidden: false,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        labelClassname: 'yui3-label-class',
+        focusable: false,
+        readonly: true,
+        primary: true,
+        format: '%Y-%m-%d %H:HM:%S',
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    fullconfig.label = 'this is the label';
+    appendElement(type, fullconfig, FULLCONFIGWITHLABEL); // with label
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHED); // with label switched
+    fullconfig.switchlabel = false;
+    fullconfig.switchvalue = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHDATESWITCHED); // with date-value switched
+    fullconfig.switchlabel = true;
+    appendElement(type, fullconfig, FULLCONFIGWITHLABELSWITCHEDANDDATESWITCHED); // with label and date-value switched
+    //-------------------------------------------
+    type = 'reset';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        disabled: true,
+        hidden: false,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        focusable: false,
+        buttonTekst: 'press on this button',
+        primary: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    //-------------------------------------------
+    type = 'submit';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        disabled: true,
+        hidden: false,
+        spinbusy: true,
+        initialfocus: true,
+        focusable: false,
+        labelHTML: 'press on this button',
+        primary: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    //-------------------------------------------
+    type = 'button';
+    emptyconfig = {};
+    fullconfig = {
+        value: 'current value',
+        name: 'propertyname',
+        data: 'data-someinfo="somedata"',
+        disabled: true,
+        hidden: false,
+        initialfocus: true,
+        classname: 'yui3-element-class',
+        focusable: false,
+        labelHTML: 'press on this button',
+        primary: true,
+        tooltip: 'here is some tooltipinfo'
+    };
+    appendElement(type, emptyconfig, NOCONFIG);
+    appendElement(type, fullconfig, FULLCONFIG); // without label
+    //-------------------------------------------
+});

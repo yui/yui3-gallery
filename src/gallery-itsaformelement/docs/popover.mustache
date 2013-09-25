@@ -1,0 +1,24 @@
+
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+<p>
+{{>popover-html}}
+</p>
+
+<h2>Complete Example Source</h2>
+```
+<body>
+{{>popover-html}}
+</body>
+
+{{>popover-js}}
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>popover-js}}
+</script>

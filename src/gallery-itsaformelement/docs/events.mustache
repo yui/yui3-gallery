@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+<p>
+{{>events-html}}
+</p>
+
+<h2>Complete Example Source</h2>
+```
+<body>
+{{>events-html}}
+</body>
+
+{{>events-js}}
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>events-js}}
+</script>

@@ -1,0 +1,23 @@
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+<p>
+{{>widget-html-element-html}}
+</p>
+
+<h2>Complete Example Source</h2>
+```
+<body>
+{{>widget-html-element-html}}
+</body>
+
+{{>widget-html-element-js}}
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>widget-html-element-js}}
+</script>

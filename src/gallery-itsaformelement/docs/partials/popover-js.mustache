@@ -1,0 +1,7 @@
+YUI(yuiconfig).use('node-base', 'gallery-itsaformelement', function(Y) {
+    var formElement = Y.ITSAFormElement.getElement('text', {
+            tooltip: 'Enter here your name'
+        });
+
+    Y.one('#myform').append(formElement.html);
+});

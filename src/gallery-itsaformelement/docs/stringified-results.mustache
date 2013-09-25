@@ -1,0 +1,29 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+</div>
+
+<style type="text/css">
+{{>stringified-results-css}}
+</style>
+
+<p>
+{{>stringified-results-html}}
+</p>
+
+<h2>Complete Example Source</h2>
+```
+<body>
+{{>stringified-results-html}}
+</body>
+
+{{>stringified-results-js}}
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>stringified-results-js}}
+</script>
