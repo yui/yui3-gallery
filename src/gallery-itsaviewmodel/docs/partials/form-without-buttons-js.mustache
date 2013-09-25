@@ -1,0 +1,80 @@
+YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', 'json-stringify', 'gallery-itsadialog', function(Y) {
+    var view, user, template;
+
+    // loading asynchroniously the animated fonticon:
+    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-animatespin', 'gallerycss-itsa-controll');
+
+    // create MyFormModelClass
+    Y.LoginModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
+        sync: function (action, options, callback) {
+            switch (action) {
+              case 'submit':
+                Y.later(1500, null, function() {
+                    callback();
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    }, {
+        ATTRS: {
+            username: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Username',
+                    placeholder: 'username',
+                    required: true,
+                    initialfocus: true
+                },
+                validator: function(v) {
+                    return v && (typeof v==='string') && (v.length>=3) && (v.indexOf(' ')===-1);
+                },
+                validationerror: 'Enter at least 3 characters without a whitespace'
+            },
+            password: {
+                formtype: 'password',
+                formconfig: {
+                    label: 'Password',
+                    placeholder: 'password',
+                    required: true,
+                    fullselect: true,
+                    submitonenter: true
+                },
+                validator: function(v) {
+                    return v && (typeof v==='string') && (v.length>=5) && (v.indexOf(' ')===-1);
+                },
+                validationerror: 'Enter at least 5 characters without a whitespace'
+            }
+        }
+    });
+
+    user = new Y.LoginModel();
+
+    template = '<div id="spinner" class="hiddenicon"><i class="itsaicon-controll-spin7 animate-spin itsa-iconstandalone"></i></div>'+
+                '<fieldset>'+
+                    '<legend>Login</legend>'+
+                    '<div class="pure-control-group">{username}</div>'+
+                    '<div class="pure-control-group">{password}</div>'+
+                '</fieldset>';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: user,
+        template: template,
+        editable: true
+    });
+
+    view.render();
+
+    view.after('modelsubmit:auto', function(e) {
+        Y.one('#spinner').removeClass('hiddenicon');
+    });
+
+    view.after('modelsubmit', function(e) {
+        view.set('model', '<div class="loggedin">Succesfully logged in</div>');
+    });
+
+    view.focus();
+
+});

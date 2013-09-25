@@ -1,0 +1,38 @@
+YUI(yuiconfig).use('gallery-itsaviewmodel', function(Y) {
+    var view, firstobject, secondobject, artisttemplate;
+
+    firstobject = {
+        name: 'U2',
+        country: 'Ireland',
+        firstalbum: 'Boy',
+        release: 1980
+    };
+
+    secondobject = {
+        name: 'Marillion',
+        country: 'UK',
+        firstalbum: 'Script For A Jester\'s Tear',
+        release: 1983
+    };
+
+    artisttemplate = 'Artist: {name}<br />'+
+                     'Country: {country}<br />'+
+                     'First album: {firstalbum}<br />'+
+                     'Releaseyear: {release}';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: firstobject,
+        template: artisttemplate
+    });
+
+    view.render();
+
+    Y.one('#firstobj').on('click', function(){
+        view.set('model', firstobject);
+    });
+
+    Y.one('#secondobj').on('click', function(){
+        view.set('model', secondobject);
+    });
+});

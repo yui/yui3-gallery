@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>update-modelattributes-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+</div>
+
+{{>update-modelattributes-html}}
+
+<h2>Code</h2>
+```
+{{>update-modelattributes-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>update-modelattributes-css}}
+</style>
+
+<body>
+
+{{>update-modelattributes-html}}
+
+<script>
+{{>update-modelattributes-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>update-modelattributes-js}}
+</script>

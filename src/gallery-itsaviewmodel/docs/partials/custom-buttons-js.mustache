@@ -1,0 +1,109 @@
+YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', 'json-stringify', 'gallery-itsadialog', function(Y) {
+    var view, artist, template;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    // asynchroniously loading the 'gallerycss-itsa-special' css fonticons
+    // which supplies the 'itsaicon-special-bell'-icon
+    Y.use('gallerycss-itsa-special');
+
+    // create MyFormModelClass
+    Y.ArtistModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
+        sync: function (action, options, callback) {
+            switch (action) {
+              case 'submit':
+                Y.later(1500, null, function() {
+                    callback();
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    }, {
+        ATTRS: {
+            name: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Artist',
+                    placeholder: 'artist',
+                    required: true
+                }
+            },
+            country: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Country',
+                    placeholder: 'country',
+                    required: true,
+                    initialfocus: true
+                }
+            },
+            firstalbum: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'First album',
+                    placeholder: 'first album',
+                    required: true
+                }
+            },
+            release: {
+                formtype: Y.Slider,
+                formconfig: {
+                    label: 'Releaseyear',
+                    widgetconfig: {
+                        min: 1950,
+                        max: 2010
+                    }
+                }
+            }
+        }
+    });
+
+    artist = new Y.ArtistModel({
+        name: 'U2',
+        country: 'Ireland',
+        firstalbum: 'Boy',
+        release: 1980
+    });
+    artist.setLifeUpdate(true);
+
+    template = '<fieldset>'+
+                    '<legend>Editable template</legend>'+
+                    '<div class="pure-control-group">{name}</div>'+
+                    '<div class="pure-control-group">{country}</div>'+
+                    '<div class="pure-control-group">{firstalbum}</div>'+
+                    '<div class="pure-control-group">{release}</div>'+
+                    '<div class="pure-controls">{buttonAlert}</div>'+
+                    // {buttonAlert} will be defined with view.addCustomBtn() later on
+                    '<div class="pure-controls">{btn_reset} {spinbtn_submit}</div>'+
+                '</fieldset>';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: artist,
+        template: template,
+        editable: true
+    });
+
+    // Now define 'buttonAlert' --> this will be available in the template with {buttonAlert}
+    // itsaicon-special-bell is loaded asynchroniously at the start of this code
+    view.addCustomBtn('buttonAlert', '<i class="itsaicon-special-bell"></i>ALERT', {
+        value: 'alertme',
+        classname: 'itsabutton-iconleft itsabutton-oval bell'
+    });
+
+    view.render();
+
+    view.on('buttonclick', function(e) {
+        if (e.value==='alertme') {
+            Y.alert('Button is clicked with value: '+e.value);
+        }
+    });
+
+    view.on('validationerror', function(e) {
+        Y.alert('error', 'validation error');
+    });
+
+});

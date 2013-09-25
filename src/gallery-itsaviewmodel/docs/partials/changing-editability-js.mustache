@@ -1,0 +1,106 @@
+YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', function(Y) {
+    var view, artist, artisttemplate, artisttemplateedit;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    // create MyFormModelClass
+    Y.ArtistModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {}, {
+        ATTRS: {
+            name: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Artist',
+                    placeholder: 'artist',
+                    required: true
+                }
+            },
+            country: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Country',
+                    placeholder: 'country',
+                    required: true
+                }
+            },
+            firstalbum: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'First album',
+                    placeholder: 'first album',
+                    required: true
+                }
+            },
+            release: {
+                formtype: Y.Slider,
+                formconfig: {
+                    label: 'Releaseyear',
+                    widgetconfig: {
+                        min: 1950,
+                        max: 2010
+                    }
+                }
+            }
+        }
+    });
+
+    artist = new Y.ArtistModel({
+        name: 'U2',
+        country: 'Ireland',
+        firstalbum: 'Boy',
+        release: 1980
+    });
+    artist.setLifeUpdate(true);
+
+
+    artisttemplate = '<fieldset>'+
+                        '<legend>Non-editable template</legend>'+
+                        '<table class="pure-table pure-table-horizontal">'+
+                            '<tbody>'+
+                                '<tr>'+
+                                    '<td class="smallcol">Artist</td>'+
+                                    '<td>{name}</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="smallcol">Country</td>'+
+                                    '<td>{country}</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="smallcol">First album</td>'+
+                                    '<td>{firstalbum}</td>'+
+                                '</tr>'+
+                                '<tr>'+
+                                    '<td class="smallcol">Releaseyear</td>'+
+                                    '<td>{release}</td>'+
+                                '</tr>'+
+                            '</tbody>'+
+                        '</table>'+
+                    '</fieldset>';
+
+    artisttemplateedit = '<fieldset>'+
+                             '<legend>Editable template</legend>'+
+                             '<div class="pure-control-group">{name}</div>'+
+                             '<div class="pure-control-group">{country}</div>'+
+                             '<div class="pure-control-group">{firstalbum}</div>'+
+                             '<div class="pure-control-group">{release}</div>'+
+                         '</fieldset>';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: artist,
+        template: artisttemplate
+    });
+
+    view.render();
+
+    Y.one('#modelnonedit').on('click', function(){
+        view.set('template', artisttemplate, {silent: true});
+        view.set('editable', false);
+    });
+
+    Y.one('#modeledit').on('click', function(){
+        view.set('template', artisttemplateedit, {silent: true});
+        view.set('editable', true);
+    });
+
+});

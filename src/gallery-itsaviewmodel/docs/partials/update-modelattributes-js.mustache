@@ -1,0 +1,27 @@
+YUI(yuiconfig).use('model', 'gallery-itsaviewmodel', function(Y) {
+    var view, artistobject, artisttemplate;
+
+    artistobject = new Y.Model({
+        artist: 'U2',
+        country: 'Ireland',
+        firstrelease: 1980
+    });
+
+    artisttemplate = 'name: {artist}<br />'+
+                     'country: {country}<br />'+
+                     'firstrelease: {firstrelease}';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: artistobject,
+        template: artisttemplate
+    });
+
+    view.render();
+
+    Y.one('#change').on('click', function(){
+        var newyear = artistobject.get('firstrelease')+5;
+        artistobject.set('firstrelease', newyear);
+    });
+
+});

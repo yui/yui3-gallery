@@ -1,11 +1,57 @@
 {
     "name"       : "gallery-itsaviewmodelpanel",
     "displayName": "Gallery: gallery-itsaviewmodelpanel",
-    "description": "*Summary Goes Here*",
+    "description": "ITSAViewModelPanel is a extention of Y.Panel and made to render Y.Model instances through templates inside the panel.",
     "author"     : [ "itsasbreuk" ],
     "use"        : [ "gallery-itsaviewmodelpanel" ],
 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "simple-view",
+            "displayName": "Panel with a simple view",
+            "description": "This example shows how use ITSAViewModelPanel to render a model using a template.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewmodelpanel"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "forms",
+            "displayName": "Panel with a simple form",
+            "description": "This example shows how to create a form by using Y.ITSAFormModel as the 'model' and 'editable'=true.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "slider", "gallerycss-itsa-base", "gallerycss-itsa-form"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "hotkeys",
+            "displayName": "Forms with hotkeys",
+            "description": "This example shows how the use hotkeys when creating a form.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "slider", "gallerycss-itsa-base", "gallerycss-itsa-form"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel", "hotkeys", "altkeys"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "form-without-buttons",
+            "displayName": "Autosubmit a form when inputready",
+            "description": "This example shows how to submit a form without buttons when the input is ready. Just enter the username and password and press 'enter' when finished the password-entry.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodelpanel"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "advanced-form",
+            "displayName": "Panel with an advanced form",
+            "description": "This example shows how to create an advanced form by using Y.ITSAFormModel as the 'model' and 'editable'=true.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "gallery-itsacheckbox", "transition"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel"],
+            "hideTableOfContents": true
+        }
+    ]
 }

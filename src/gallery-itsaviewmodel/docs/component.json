@@ -1,11 +1,120 @@
 {
     "name"       : "gallery-itsaviewmodel",
     "displayName": "Gallery: gallery-itsaviewmodel",
-    "description": "*Summary Goes Here*",
+    "description": "ITSAViewModel is a extention of Y.View and renderes Y.Model-instances -or just plain objects- full automaticly, based on templates.",
     "author"     : [ "itsasbreuk" ],
     "use"        : [ "gallery-itsaviewmodel" ],
 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "simple-view",
+            "displayName": "Creating a simple view",
+            "description": "This example shows how use ITSAViewModel to render a model using a template.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "update-modelattributes",
+            "displayName": "Update modelattributes",
+            "description": "This example shows a view is updated automaticly, when a model changes its attributes.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "changing-models",
+            "displayName": "Replacing models",
+            "description": "This example shows a view is updated automaticly, when the view is bound to another model.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "changing-template",
+            "displayName": "Switching templates - using micro-template",
+            "description": "This example shows a view is updated automaticly, when the view gets another template.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "using-itsaformmodel",
+            "displayName": "Templating with UI-elements",
+            "description": "This example shows how to create an editable form by using Y.ITSAFormModel.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "changing-editability",
+            "displayName": "Switching between attributes and UI-elements",
+            "description": "This example shows how one view can change its 'editable-state' when using Y.ITSAFormModel.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "forms",
+            "displayName": "Creating a form",
+            "description": "This example shows how to create a form by using Y.ITSAFormModel as the 'model' and 'editable'=true.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "buttons",
+            "displayName": "Form with different buttonlabels",
+            "description": "This example shows how change the buttonlabels on a form.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-buttons",
+            "displayName": "Form with custom and styled buttons",
+            "description": "This example shows how restyle the standard buttons and how to add a custombutton.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "hotkeys",
+            "displayName": "Using hotkeys",
+            "description": "This example shows how the use hotkeys when creating a form.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "form-without-buttons",
+            "displayName": "Autosubmit a form when inputready",
+            "description": "This example shows how to submit a form without buttons when the input is ready.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "promised-syncing",
+            "displayName": "Formsyncing through Promise-layer",
+            "description": "This example shows how to set up a view that syncs through a Promise-synclayer.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodel", "gallery-itsaslider", "gallery-itsadialog", "gallery-io-utils"],
+            "tags"    : ["gallery-itsaviewmodelp", "model", "formelement", "form", "template", "itsaformmodel", "io-utils", "promise", "sync"],
+            "hideTableOfContents": true
+        }
+    ]
 }

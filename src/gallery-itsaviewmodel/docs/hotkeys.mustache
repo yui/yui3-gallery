@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>hotkeys-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        The hotkeys will focus the formelement and -in case of a button- fire the right event that belongs to the button. You can activate with the ALT-keys.
+    </p>
+</div>
+
+{{>hotkeys-html}}
+
+<h2>Code</h2>
+```
+{{>hotkeys-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>hotkeys-css}}
+</style>
+
+<body>
+
+{{>hotkeys-html}}
+
+<script>
+{{>hotkeys-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>hotkeys-js}}
+</script>

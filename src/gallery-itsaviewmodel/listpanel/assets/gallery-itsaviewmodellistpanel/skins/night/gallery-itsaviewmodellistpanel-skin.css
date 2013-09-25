@@ -123,6 +123,7 @@ http://nicolasgallagher.com/css-image-replacement-with-pseudo-elements/
     */
     content: url(sprite_icons.png);
     display: inline-block;
+    *display: inline;
     text-align: center;
     font-size: 0;
     line-height: 0;

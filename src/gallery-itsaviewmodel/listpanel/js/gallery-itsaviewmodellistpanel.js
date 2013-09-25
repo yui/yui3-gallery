@@ -72,18 +72,6 @@ Y.ITSAViewModellistPanel = Y.Base.create('itsaviewmodellistpanel', Y.ITSAViewMod
     },
 
    /**
-     * Overruled renderer-method, to make sure rendering is done after asynchronious initialisation.
-     *
-     * @method renderer
-     * @protected
-    */
-    renderer : function() {
-        var instance = this;
-        instance.constructor.superclass.constructor.superclass.renderer.apply(instance);
-        instance._render();
-    },
-
-   /**
      * Overruling _extraBindUI
      *
      * @method renderer

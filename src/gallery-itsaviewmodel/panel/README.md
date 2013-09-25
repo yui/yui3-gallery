@@ -51,7 +51,7 @@ Usage
 
 <b>Standard usage ITSAViewModelPanel:</b>
 ```js
-YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
     var viewmodel, model, modeltemplate;
     model = new Y.Model({
@@ -75,7 +75,7 @@ YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
 <b>ITSAViewModelPanel with extra buttons:</b>
 ```js
-YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
     var viewmodel, model, modeltemplate;
     model = new Y.Model({
@@ -126,7 +126,7 @@ YUI().use('model', 'gallery-itsaviewmodelpanel', function(Y) {
 
 <b>ITSAViewModelPanel in conjunction with ITSAEditModel:</b>
 ```js
-YUI().use('model', 'base-build', 'gallery-itsaviewmodelpanel', 'gallery-itsaeditmodel', function(Y) {
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'base-build', 'gallery-itsaviewmodelpanel', 'gallery-itsaeditmodel', function(Y) {
 
     var viewmodel, model, modeltemplate, editmodeltemplate;
 
@@ -156,12 +156,12 @@ YUI().use('model', 'base-build', 'gallery-itsaviewmodelpanel', 'gallery-itsaedit
                         '<tr><td><label>artist:</label></td><td>{artist}</td></tr>'+
                         '<tr><td><label>country:</label></td><td>{country}</td></tr>'+
                         '</tbody></table>';
-    editmodelConfigAttrs = {
+    config = {
         artist: {type: 'input'},
         country: {type: 'input'}
     };
 
-    model.plug(Y.Plugin.ITSAEditModel, {template: editmodeltemplate, editmodelConfigAttrs: editmodelConfigAttrs});
+    model.plug(Y.Plugin.ITSAEditModel, {template: editmodeltemplate, config: config});
 
     viewmodel = new Y.ITSAViewModelPanel({
         width:'280px',

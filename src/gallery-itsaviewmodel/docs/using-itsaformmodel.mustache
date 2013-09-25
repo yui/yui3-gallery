@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>using-itsaformmodel-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        In this example, 2 views are rendered which are bound to the same modelinstance. The first is rendered with UI-elements, the seconds show how it gets updated automaticly.
+    </p>
+</div>
+
+{{>using-itsaformmodel-html}}
+
+<h2>Code</h2>
+```
+{{>using-itsaformmodel-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>using-itsaformmodel-css}}
+</style>
+
+<body>
+
+{{>using-itsaformmodel-html}}
+
+<script>
+{{>using-itsaformmodel-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>using-itsaformmodel-js}}
+</script>

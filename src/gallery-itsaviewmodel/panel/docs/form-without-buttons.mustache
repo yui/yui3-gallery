@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>form-without-buttons-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        You can experiment with entering falsy input. Only if the input is correct, the login-panel will disappear.
+    </p>
+</div>
+
+<h2>Code</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>form-without-buttons-css}}
+</style>
+
+<script>
+{{>form-without-buttons-js}}
+</script>
+
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>form-without-buttons-js}}
+</script>

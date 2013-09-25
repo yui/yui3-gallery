@@ -68,8 +68,13 @@ Usage
 -----
 
 <b>View rendered as unsorted list</b>
+```css
+.itsa-modellistview-noinitialitems {
+    visibility: hidden;
+}
+```
 ```html
-<div id='myscrollview' class='itsa-modellistview-noinitialitems'></div>
+<div id='myscrollview'></div>
 ```
 ```js
 YUI({gallery: 'gallery-2013.02.27-21-03'}).use('gallery-itsaviewmodellist', 'lazy-model-list', function(Y) {
@@ -101,8 +106,13 @@ myView.render();
 ```
 
 <b>View rendered as table</b>
+```css
+.itsa-modellistview-noinitialitems {
+    visibility: hidden;
+}
+```
 ```html
-<div id='myscrollview' class='itsa-modellistview-noinitialitems'></div>
+<div id='myscrollview'></div>
 ```
 ```js
 YUI({gallery: 'gallery-2013.02.27-21-03'}).use('gallery-itsaviewmodellist', 'lazy-model-list', function(Y) {
@@ -135,8 +145,13 @@ myView.render();
 ```
 
 <b>View with a filter on the modellist</b>
+```css
+.itsa-modellistview-noinitialitems {
+    visibility: hidden;
+}
+```
 ```html
-<div id='myview' class='itsa-modellistview-noinitialitems'></div>
+<div id='myview'></div>
 ```
 ```js
 YUI({gallery: 'gallery-2013.02.27-21-03'}).use('gallery-itsaviewmodellist', 'lazy-model-list', function(Y) {

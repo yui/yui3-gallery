@@ -1,14 +1,253 @@
+{{>api-button}}
+
 <div class="intro">
     <p>
-    *Summary Goes Here*
+        {{description}} The View-instance is also capable of handling Y.ITSAFormModel-instances, in a way that you can create html-form elements.
     </p>
 </div>
 
+{{>getting-started}}
+
 <h2>Description</h2>
+    <p>
+        Using Y.ITSAViewModel is great to render Models on the page, where the view keeps synced with the model. Whenever a new Model-instance is attached, or the template changes, the view will re-render automaticly. To make use of the view, at least three attributes need to be set:
+        <ul>
+            <li><code>container</code> html-node in which the content will be rendered. This can be a css-selector, or a Y.Node instance (present, or new created by Y.Node.create().</li>
+            <li><code>model</code> the model or object that holds the data.</li>
+            <li><code>template</code> the template which determines how the data will be rendered, either as a Y.Lang,sub - or Y.Template.Micro</li>
+        </ul>
+    </p>
 
-<p>*Module Description Goes Here*</p>
-
+<h2>Using the model-attribute</h2>
+<p>Here is a small example of how the code can be used:
+</p>
 ```
-//Module example code
-```
+YUI().use('gallery-itsaviewmodel', function(Y) {
+    var view, artistobject, artisttemplate;
 
+    artistobject = {
+        artist: 'U2',
+        country: 'Ireland'
+    };
+
+    artisttemplate = 'name: {artist}<br />'+
+                     'country: {country}';
+
+    view = new Y.ITSAViewModel({
+        container: Y.Node.create('<div/>'),
+        model: artistobject,
+        template: artisttemplate
+    });
+
+    view.render();
+});
+```
+    <p>The model-attribute is responsible for the content that will be rendered inside the view's container. There are several ways to use this attribute:
+    </p>
+<h3>Attaching models v.s. objects</h3>
+    <p>
+        Both can be attached. The view is allmost fully responsive in both cases, which might be a reason to prefer plain objects (for performance reasons). However, there are some issues to keep in mind when using objects:
+        <ul>
+            <li>Changes to objectproperties will not make the view to be updated. You need to call the <code>render()</code> manually in order to do so.</li>
+            <li>Objects cannot create form-elements: you need <code>Y.ITSAFormModel</code> to do so.</li>
+        </ul>
+    </p>
+
+<h3>Attaching Y.ITSAFormModel</h3>
+    <p>
+        When a Y.ITSAFormModel-instance is attached to the model-attribute, you can make advantage of the UI-elements defined by Y.ITSAFormModel. Whether the view renders the UI-elements or not, depends on the attribute <code>editable</code>.
+    </p>
+
+<h3>Attaching plain text</h3>
+    <p>
+        Y.ITSAViewModel makes it is posible to add plain text (string) to the model-attribute. This leads to 'just' rendering the text inside the view-container ignoring the template.
+    </p>
+<h2>Creating forms</h2>
+    <p>
+        Forms can be created by using a Y.ITSAFormModel-instance as 'model' and setting 'editable' true. By doing this, you create UI-elements for all the models attributes, just by reffering to the attribute in the template.
+    </p>
+    <p>
+         The formelements have the focusmanager active out of the box which makes <code>tabbing</code> inside the container posible as soon the container has focus. The UI-elements even can get focus using hotkeys, when specified (see the examples). When creating a template with formelements, then the view-container ought to be a <code>form-tag</code>, no need to define this inside the template. If neither the container, nor the template has a form-tag, then Y.ITSAViewModel will create a formtag automaticly inside the container.
+    </p>
+<h3>Standard available formbuttons</h3>
+    <p>Because the model exists of its attributes (no buttons), this module comes with several button-definition 'out of the box'. These can be reffered to by templating, just as all attributes. All buttons have their own defaultfunction, so they work right away. Below is the list of all buttons that are available:
+    </p>
+    <ul>
+       <li>btn_abort</li>
+       <li>btn_cancel</li>
+       <li>btn_close --> no defaultfunc: up to the developer to take appropriate action</li>
+       <li>btn_destroy</li>
+       <li>btn_ignore</li>
+       <li>btn_load</li>
+       <li>btn_no</li>
+       <li>btn_ok</li>
+       <li>btn_remove</li>
+       <li>btn_reset</li>
+       <li>btn_retry</li>
+       <li>btn_save</li>
+       <li>btn_submit</li>
+       <li>btn_yes</li>
+       <li>imgbtn_abort</li>
+       <li>imgbtn_cancel</li>
+       <li>imgbtn_close --> no defaultfunc: up to the developer to take appropriate action</li>
+       <li>imgbtn_destroy</li>
+       <li>imgbtn_ignore</li>
+       <li>imgbtn_load</li>
+       <li>imgbtn_no</li>
+       <li>imgbtn_ok</li>
+       <li>imgbtn_remove</li>
+       <li>imgbtn_reset</li>
+       <li>imgbtn_retry</li>
+       <li>imgbtn_save</li>
+       <li>imgbtn_submit</li>
+       <li>imgbtn_yes</li>
+       <li>spinbtn_load</li>
+       <li>spinbtn_remove</li>
+       <li>spinbtn_save</li>
+       <li>spinbtn_submit</li>
+    </ul>
+    <p>
+        The buttons that start with <code>imgbtn</code> have an imageicon. The buttons that start with <code>spinbtn</code> have an imageicon that starts spinning during its defaultfunction. There are 4 buttons that have this fascility, because these are calling an asynchronious function through the model's synclayer. Here is a small example of how the code can be used:
+    </p>
+    ```
+    YUI().use('gallery-itsaviewmodel', 'gallery-itsaformmodel', function(Y) {
+        var view, artistobject, artisttemplate;
+
+        Y.ArtistModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
+            sync: function (action, options, callback) {
+                switch (action) {
+                  case 'save':
+                    ...
+                    return;
+                  default:
+                    callback('Invalid action');
+                }
+            }
+        }, {
+            ATTRS: {
+                name: {
+                    formtype: 'text',
+                    formconfig: {
+                        label: 'Artist',
+                        placeholder: 'artist',
+                        required: true
+                    }
+                },
+                country: {
+                    country: 'text',
+                    formconfig: {
+                        label: 'Country',
+                        placeholder: 'country',
+                        required: true,
+                        initialfocus: true
+                    }
+                }
+            }
+        });
+
+        artist = new Y.ArtistModel({
+            name: 'U2',
+            country: 'Ireland'
+        });
+
+        artisttemplate = 'name: {artist}<br />'+
+                         'country: {country}<br />'+
+                         '{spinbtn_save}';
+
+        view = new Y.ITSAViewModel({
+            container: Y.Node.create('<div/>'),
+            model: artist,
+            template: artisttemplate
+        });
+
+        view.render();
+    });
+    ```
+
+<h3>Custom formbuttons</h3>
+    <p>
+        In case you need normal buttons that are not in the list -and which need to have their own subscribers- you can define them with <code>addCustomBtn()</code>. The first param will define the property-name, f.i. 'btn_alert' will generate a button which the template can access with {btn_allert}. See the examples.
+    </p>
+
+<h3>Changing standard formbuttons</h3>
+    <p>
+        While custombuttons can be defined exactly to your whishes, the standardbuttons are already predefined. However, you can change the <code>label</code> and <code>hotkey</code> of these buttons by using:
+        <ul>
+            <li><code>setButtonLabel()</code></li>
+            <li><code>setHotKey()</code></li>
+        </ul>
+        See the examples.
+    </p>
+
+<h3>Internationalized buttonlabels</h3>
+    <p>
+        The standardbuttons have Internationalised labels. While this is great, you must also be aware of:
+    </p>
+        <ul>
+            <li>When redefine the labels, the Internationalization is gone. If you want to keep the labels Internationalized, you should apply an Internationlized label yourself.</li>
+            <li>When defining hotkeys, the labels will differ for several languages. This means you might want to set the <code>s</code>-character as the hotkey for saving, while other languages have a different name. <code>Save</code> will appear as <code>Opslaan</code> in The Netherlands. To handle this issue, you can choose to supply an object as argument to the <code>setHotKey()</code> method instead of a character-hotkey. See the API.</li>
+        </ul>
+    <p>At this moment the following languages are supported:</p>
+    <ul>
+        <li><code>ar</code> (Arabic)</li>
+        <li><code>bg</code> (Bulgarian)</li>
+        <li><code>bs</code> (Bosnian)</li>
+        <li><code>cs</code> (Czech)</li>
+        <li><code>da</code> (Danish)</li>
+        <li><code>de</code> (German)</li>
+        <li><code>en</code> (English)</li>
+        <li><code>es</code> (Spanish)</li>
+        <li><code>fa</code> (Perian)</li>
+        <li><code>fi</code> (Finnish)</li>
+        <li><code>fr</code> (French)</li>
+        <li><code>he</code> (Hebrew)</li>
+        <li><code>hi</code> (Hindi)</li>
+        <li><code>hr</code> (Croatian)</li>
+        <li><code>hu</code> (Hungarian)</li>
+        <li><code>it</code> (Italian)</li>
+        <li><code>ja</code> (Japanese)</li>
+        <li><code>nb</code> (Norwegian)</li>
+        <li><code>nl</code> (Dutch)</li>
+        <li><code>pl</code> (Polish)</li>
+        <li><code>pt</code> (Portugese)</li>
+        <li><code>ru</code> (Russian)</li>
+        <li><code>sk</code> (Slovak)</li>
+        <li><code>sr</code> (Serbian)</li>
+        <li><code>sv</code> (Swedish)</li>
+        <li><code>uk</code> (Ukrainian)</li>
+        <li><code>zh</code> (Chinese)</li>
+    </ul>
+
+<h3>Validation</h3>
+    <p>
+        Validation is done through <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaformmodel/">Y.ITSAFormModel</a>, which supplies very nice and easy validationmethods. When validation fails, Y.ITSAViewModel will take care of refocussing to the first item whose validation failed.
+    </p>
+<h2>About templating</h2>
+    <p>
+        When using Y.ITSAFormModel as 'model' and 'editable' is set true, be aware that all property-values are <u>html-strings</u>. Should you templating with micro-templates, to render the UI-elements you need to use
+        ```html
+        <%== data.someattribute %>
+        ```
+        instead of
+        ```html
+        <%= data.someattribute %>
+        ```
+        If you need to access the original attribute-value, use the underscore-reference:
+        ```html
+        '<% if (data._activated===false) { %>system down<% } else { %>system running<% } %>'+
+        ```
+    </p>
+
+<h2>Styling</h2>
+    <p>
+        By default, the Y.ITSAViewModel comes with its own style. You can disable this by setting the attribute 'styled' to false, or better, overrule the css-class <code>.itsaviewmodel-styled</code>. To prevent flicker-effects, it is recomended to add the class <code>itsaviewmodel-styled</code> to the container manually.
+    </p>
+
+<h2>Memory management</h2>
+    <p>
+        When re-render a view that holds UI-elements, widgets might be re-rendered. Y.ITSAViewModel automaticly takes care of destroying the widgets that are no longer needed, or refreshed.
+    </p>
+
+<h2>Licence</h2>
+    Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+    Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>

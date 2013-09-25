@@ -1,0 +1,101 @@
+YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', 'json-stringify', 'gallery-itsadialog', function(Y) {
+    var view, artist, template;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    // asynchroniously loading the 'gallerycss-itsa-special' css fonticons
+    // which supplies the 'itsaicon-special-bell'-icon
+    Y.use('gallerycss-itsa-special');
+
+    // create MyFormModelClass
+    Y.ArtistModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
+        sync: function (action, options, callback) {
+            switch (action) {
+              case 'submit':
+                Y.later(1500, null, function() {
+                    callback();
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    }, {
+        ATTRS: {
+            name: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Artist',
+                    placeholder: 'artist',
+                    hotkey: 'a',
+                    required: true
+                }
+            },
+            country: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Country',
+                    placeholder: 'country',
+                    hotkey: 'c',
+                    required: true,
+                    initialfocus: true
+                }
+            },
+            firstalbum: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'First album',
+                    placeholder: 'first album',
+                    hotkey: 'f',
+                    required: true
+                }
+            },
+            release: {
+                formtype: Y.Slider,
+                formconfig: {
+                    label: 'Releaseyear',
+                    hotkey: 'y',
+                    widgetconfig: {
+                        min: 1950,
+                        max: 2010
+                    }
+                }
+            }
+        }
+    });
+
+    artist = new Y.ArtistModel({
+        name: 'U2',
+        country: 'Ireland',
+        firstalbum: 'Boy',
+        release: 1980
+    });
+    artist.setLifeUpdate(true);
+
+    template = '<fieldset>'+
+                    '<legend>Formelements accessable with ALT+key</legend>'+
+                    '<div class="pure-control-group">{name}</div>'+
+                    '<div class="pure-control-group">{country}</div>'+
+                    '<div class="pure-control-group">{firstalbum}</div>'+
+                    '<div class="pure-control-group">{release}</div>'+
+                    '<div class="pure-controls">{btn_reset} {spinbtn_submit}</div>'+
+                '</fieldset>';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: artist,
+        template: template,
+        editable: true
+    });
+
+    view.setHotKey('spinbtn_submit', 's');
+    view.setHotKey('btn_reset', 'r');
+
+    view.render();
+
+    view.on('validationerror', function(e) {
+        Y.alert('error', 'validation error');
+    });
+
+});

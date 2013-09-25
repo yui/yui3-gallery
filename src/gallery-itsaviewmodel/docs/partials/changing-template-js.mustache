@@ -1,0 +1,50 @@
+YUI(yuiconfig).use('gallery-itsaviewmodel', function(Y) {
+    var view, artistobject, template, templateMicro;
+
+    artistobject = {
+        artist: 'Marillion',
+        country: 'UK',
+        firstAlbum: 'Script For A Jester\'s Tear',
+        firstAlbumRelease: 1983,
+        firstAlbumTracks: [
+            'Script for a Jester\'s tear',
+            'He knows you know',
+            'The web',
+            'Garden party',
+            'Chelsea Monday',
+            'Forgotten sons'
+        ]
+    };
+
+    template = '<b>Artist:</b> {artist}<br />'+
+               '<b>Country:</b> {country}<br />'+
+               '<b>First album:</b> {firstAlbum}<br />'+
+               '<b>Released:</b> {firstAlbumRelease}';
+
+    templateMicro = '<b>Artist:</b> <%= data.artist %><br />'+
+                    '<b>First album:</b> <%= data.firstAlbum %><br />'+
+                    '<b>tracknumbers:</b> '+
+                    '<ul class="tracks">'+
+                    '<% Y.Array.each(data.firstAlbumTracks, function (track, i) { %>'+
+                        '<li class="<%= i % 2 ? \'odd\' : \'even\' %>">'+
+                            '<%= track %>'+
+                        '</li>'+
+                    '<% }); %>'+
+                    '</ul>';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: artistobject,
+        template: template
+    });
+
+    view.render();
+
+    Y.one('#firsttemplate').on('click', function(){
+        view.set('template', template);
+    });
+
+    Y.one('#secondtemplate').on('click', function(){
+        view.set('template', templateMicro);
+    });
+});

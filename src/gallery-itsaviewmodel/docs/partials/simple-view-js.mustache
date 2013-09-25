@@ -1,0 +1,19 @@
+YUI(yuiconfig).use('gallery-itsaviewmodel', function(Y) {
+    var view, artistobject, artisttemplate;
+
+    artistobject = {
+        artist: 'U2',
+        country: 'Ireland'
+    };
+
+    artisttemplate = 'name: {artist}<br />'+
+                     'country: {country}';
+
+    view = new Y.ITSAViewModel({
+        container: '#viewcont',
+        model: artistobject,
+        template: artisttemplate
+    });
+
+    view.render();
+});

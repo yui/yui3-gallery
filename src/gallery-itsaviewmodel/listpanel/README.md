@@ -25,7 +25,7 @@ These buttons are available by the module and will call corresponding methods:
 <b>Caution:</b>If you use the 'add'-button, then -in order to work properly- you need to take care of (see examples):
 * define the property 'modellist.model' (extention of Y.Model)
 * define a sync-layer at the class-level of 'modellist.model'-class
-* plugin Y.Plugin.ITSAChangeModelTemplate and declare at least 'editTemplate' and 'editmodelConfigAttrs', see: [Y.ITSAChangeModelTemplate](../gallery-itsachangemodeltemplate)
+* plugin Y.Plugin.ITSAChangeModelTemplate and declare at least 'editTemplate' and 'config', see: [Y.ITSAChangeModelTemplate](../gallery-itsachangemodeltemplate)
 
 All other functionality is inherited from [Y.ITSAViewModellist](../gallery-itsaviewmodellist).
 
@@ -73,8 +73,13 @@ myView.render();
 ```
 
 <b>Centered Panel with add-button</b>
+```css
+.itsa-modellistview-noinitialitems {
+    visibility: hidden;
+}
+```
 ```html
-<div id='myscrollview' class='itsa-modellistview-noinitialitems'></div>
+<div id='myscrollview'></div>
 ```
 ```js
 YUI({gallery: 'gallery-2013.04.10-22-48'}).use('node', 'base-build', 'gallerycss-cssform', 'lazy-model-list', 'gallery-itsaviewmodellistpanel', 'gallery-itsachangemodeltemplate', 'gallery-itsaeditmodel', function(Y) {
@@ -126,7 +131,7 @@ YUI({gallery: 'gallery-2013.04.10-22-48'}).use('node', 'base-build', 'gallerycss
               buttons: ['add', 'close']
     });
 
-    var editmodelConfigAttrs = {
+    var config = {
         Continental: {type: 'input'},
         Country: {type: 'textarea'},
         Close: {type: 'stopedit', buttonText: 'close'},
@@ -134,7 +139,7 @@ YUI({gallery: 'gallery-2013.04.10-22-48'}).use('node', 'base-build', 'gallerycss
     };
 
     modellistPanel.model = Y.MyModel;
-    modellistPanel.plug(Y.Plugin.ITSAChangeModelTemplate, {newModelMode: 3,  editTemplate: editTemplate, editmodelConfigAttrs: editmodelConfigAttrs});
+    modellistPanel.plug(Y.Plugin.ITSAChangeModelTemplate, {newModelMode: 3,  editTemplate: editTemplate, config: config});
 
     modellistPanel.render();
 
