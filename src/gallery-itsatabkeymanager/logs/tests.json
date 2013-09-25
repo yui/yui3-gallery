@@ -1,11 +1,11 @@
 {
     "name": "gallery-itsatabkeymanager",
     "passed": 0,
-    "failed": 3,
+    "failed": 2,
     "errors": 0,
     "ignored": 0,
-    "total": 3,
-    "duration": 21,
+    "total": 2,
+    "duration": 10,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,16 +14,16 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 5,
+        "duration": 3,
         "type": "testcase",
         "test is empty": {
             "result": "fail",
             "message": "No Tests Provided For This Module",
             "type": "test",
             "name": "test is empty",
-            "duration": 2
+            "duration": 1
         }
     },
-    "timestamp": "Thu 09 May 2013 05:49:28 PM PDT",
+    "timestamp": "Wed Sep 25 14:29:08 2013",
     "consoleInfo": []
 }
