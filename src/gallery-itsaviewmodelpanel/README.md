@@ -156,12 +156,12 @@ YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'base-build', 'gallery-i
                         '<tr><td><label>artist:</label></td><td>{artist}</td></tr>'+
                         '<tr><td><label>country:</label></td><td>{country}</td></tr>'+
                         '</tbody></table>';
-    editmodelConfigAttrs = {
+    config = {
         artist: {type: 'input'},
         country: {type: 'input'}
     };
 
-    model.plug(Y.Plugin.ITSAEditModel, {template: editmodeltemplate, editmodelConfigAttrs: editmodelConfigAttrs});
+    model.plug(Y.Plugin.ITSAEditModel, {template: editmodeltemplate, config: config});
 
     viewmodel = new Y.ITSAViewModelPanel({
         width:'280px',

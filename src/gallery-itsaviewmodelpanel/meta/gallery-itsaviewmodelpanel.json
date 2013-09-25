@@ -1,20 +1,13 @@
 {
     "gallery-itsaviewmodelpanel": {
         "requires": [
+            "node-pluginhost",
             "base-build",
-            "classnamemanager",
-            "pluginhost-base",
+            "base-base",
+            "event-outside",
             "model",
-            "gallery-itsaviewmodel",
-            "widget-autohide",
-            "widget-buttons",
-            "widget-modality",
-            "widget-position",
-            "widget-position-align",
-            "widget-position-constrain",
-            "widget-stack",
-            "widget-stdmod"
-        ],
-        "skinnable": true
+            "gallery-itsapanel",
+            "gallery-itsaviewmodel"
+        ]
     }
 }
