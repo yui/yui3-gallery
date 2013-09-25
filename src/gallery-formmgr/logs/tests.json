@@ -1,11 +1,11 @@
 {
     "name": "gallery-formmgr",
-    "passed": 3,
+    "passed": 2,
     "failed": 0,
     "errors": 0,
     "ignored": 0,
-    "total": 3,
-    "duration": 45,
+    "total": 2,
+    "duration": 40,
     "type": "report",
     "Form Manager": {
         "name": "Form Manager",
@@ -14,17 +14,17 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 14,
+        "duration": 19,
         "type": "testcase",
         "testPopulate": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testPopulate",
-            "duration": 11
+            "duration": 16
         }
     },
-    "timestamp": "Wed 03 Apr 2013 02:55:31 PM CDT",
+    "timestamp": "Wed Sep 25 14:29:08 2013",
     "coverage": {
         "/build/gallery-formmgr/gallery-formmgr.js": {
             "lines": {

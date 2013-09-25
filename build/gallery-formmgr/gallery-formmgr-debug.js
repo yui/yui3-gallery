@@ -142,7 +142,7 @@ function FormManager(
 
 	// default values for form elements
 
-	this.default_value_map = config.default_value_map;
+	this.default_value_map = config.default_value_map || {};
 
 	// pre-validation methods
 
@@ -308,10 +308,10 @@ function _populateForm()
 	{
 		var e = this.form.elements[i];
 
-		var name = e.tagName.toLowerCase();
+		var name = e.tagName;
 		var type = (e.type ? e.type.toLowerCase() : null);
 		if (collect_buttons &&
-			(type == 'submit' || type == 'reset' || name == 'button'))
+			(type == 'submit' || type == 'reset' || name == 'BUTTON'))
 		{
 			this.button_list.push(e);
 		}
@@ -322,7 +322,7 @@ function _populateForm()
 		}
 
 		var v = this.default_value_map[ e.name ];
-		if (name == 'input' && type == 'file')
+		if (name == 'INPUT' && type == 'file')
 		{
 			e.value = '';
 		}
@@ -330,16 +330,16 @@ function _populateForm()
 		{
 			// save value for next time
 
-			if (name == 'input' &&
+			if (name == 'INPUT' &&
 				(type == 'password' || type == 'text'))
 			{
 				this.default_value_map[ e.name ] = e.value;
 			}
-			else if (name == 'input' && type == 'checkbox')
+			else if (name == 'INPUT' && type == 'checkbox')
 			{
 				this.default_value_map[ e.name ] = (e.checked ? e.value : '');
 			}
-			else if (name == 'input' && type == 'radio')
+			else if (name == 'INPUT' && type == 'radio')
 			{
 				var rb = this.form[ e.name ];	// null if dynamically generated in IE
 				if (rb && !rb.length)
@@ -360,23 +360,23 @@ function _populateForm()
 					}
 				}
 			}
-			else if ((name == 'select' && type == 'select-one') ||
-					 name == 'textarea')
+			else if ((name == 'SELECT' && type == 'select-one') ||
+					 name == 'TEXTAREA')
 			{
 				this.default_value_map[ e.name ] = e.value;
 			}
 		}
-		else if (name == 'input' &&
+		else if (name == 'INPUT' &&
 				 (type == 'password' || type == 'text'))
 		{
 			e.value = v;
 		}
-		else if (name == 'input' &&
+		else if (name == 'INPUT' &&
 				 (type == 'checkbox' || type == 'radio'))
 		{
 			e.checked = (e.value == v);
 		}
-		else if (name == 'select' && type == 'select-one')
+		else if (name == 'SELECT' && type == 'select-one')
 		{
 			e.value = v;
 			if (e.selectedIndex >= 0 &&
@@ -385,7 +385,7 @@ function _populateForm()
 				e.selectedIndex = -1;
 			}
 		}
-		else if (name == 'textarea')
+		else if (name == 'TEXTAREA')
 		{
 			e.value = v;
 		}
@@ -401,21 +401,21 @@ function _isChanged(i)
 	}
 
 	var type = (e.type ? e.type.toLowerCase() : null);
-	var name = e.tagName.toLowerCase();
+	var name = e.tagName;
 	var v    = this.default_value_map[ e.name ];
 	if (v === null || typeof v === 'undefined')
 	{
 		v = '';
 	}
 
-	if (name == 'input' && type == 'file')
+	if (name == 'INPUT' && type == 'file')
 	{
 		if (e.value)
 		{
 			return true;
 		}
 	}
-	else if (name == 'input' &&
+	else if (name == 'INPUT' &&
 			 (type == 'password' || type == 'text' || type == 'file'))
 	{
 		if (e.value != v)
@@ -423,7 +423,7 @@ function _isChanged(i)
 			return true;
 		}
 	}
-	else if (name == 'input' &&
+	else if (name == 'INPUT' &&
 			 (type == 'checkbox' || type == 'radio'))
 	{
 		var checked = (e.value == v);
@@ -432,8 +432,8 @@ function _isChanged(i)
 			return true;
 		}
 	}
-	else if ((name == 'select' && type == 'select-one') ||
-			 name == 'textarea')
+	else if ((name == 'SELECT' && type == 'select-one') ||
+			 name == 'TEXTAREA')
 	{
 		if (e.value != v)
 		{
@@ -756,11 +756,6 @@ Y.extend(FormManager, Y.Plugin.Host,
 	 */
 	populateForm: function()
 	{
-		if (!this.default_value_map)
-		{
-			this.default_value_map = {};
-		}
-
 		this.clearMessages();
 
 		_populateForm.call(this);
@@ -880,12 +875,12 @@ Y.extend(FormManager, Y.Plugin.Host,
 				continue;
 			}
 
-			var name = e.tagName.toLowerCase();
+			var name = e.tagName;
 			var type = (e.type ? e.type.toLowerCase() : null);
 
-			if ((name == 'input' &&
+			if ((name == 'INPUT' &&
 				 (type == 'file' || type == 'password' || type == 'text')) ||
-				name == 'textarea')
+				name == 'TEXTAREA')
 			{
 				try
 				{
@@ -1121,9 +1116,8 @@ Y.extend(FormManager, Y.Plugin.Host,
 
 		Y.Array.each(this.form.elements, function(e)
 		{
-			var name = e.tagName.toLowerCase();
 			var type = (e.type ? e.type.toLowerCase() : null);
-			if (name != 'button' && type != 'submit' && type != 'reset')
+			if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset')
 			{
 				FormManager.clearMessage(e);
 			}
@@ -1225,7 +1219,7 @@ Y.aggregate(FormManager, Y.FormManager);
 Y.FormManager = FormManager;
 
 
-}, 'gallery-2013.04.03-19-53', {
+}, 'gallery-2013.09.25-18-27', {
     "requires": [
         "pluginhost-base",
         "gallery-node-optimizations",

@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.3 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-formmgr
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -60,15 +60,15 @@ shifter [info] shifting into gear for gallery-formmgr
    #25: Possible strict violation.
        var e = this.form.elements[i]; // line 309, pos 17
    #26: Too many var statements.
-       var name = e.tagName.toLowerCase(); // line 311, pos 13
+       var name = e.tagName; // line 311, pos 13
    #27: Too many var statements.
        var type = (e.type ? e.type.toLowerCase() : null); // line 312, pos 13
    #28: Expected '===' and instead saw '=='.
-       (type == 'submit' || type == 'reset' || name == 'button')) // line 314, pos 19
+       (type == 'submit' || type == 'reset' || name == 'BUTTON')) // line 314, pos 19
    #29: Expected '===' and instead saw '=='.
-       (type == 'submit' || type == 'reset' || name == 'button')) // line 314, pos 39
+       (type == 'submit' || type == 'reset' || name == 'BUTTON')) // line 314, pos 39
    #30: Expected '===' and instead saw '=='.
-       (type == 'submit' || type == 'reset' || name == 'button')) // line 314, pos 58
+       (type == 'submit' || type == 'reset' || name == 'BUTTON')) // line 314, pos 58
    #31: Possible strict violation.
        this.button_list.push(e); // line 316, pos 13
    #32: Too many var statements.
@@ -76,11 +76,11 @@ shifter [info] shifting into gear for gallery-formmgr
    #33: Possible strict violation.
        var v = this.default_value_map[ e.name ]; // line 324, pos 17
    #34: Expected '===' and instead saw '=='.
-       if (name == 'input' && type == 'file') // line 325, pos 18
+       if (name == 'INPUT' && type == 'file') // line 325, pos 18
    #35: Expected '===' and instead saw '=='.
-       if (name == 'input' && type == 'file') // line 325, pos 37
+       if (name == 'INPUT' && type == 'file') // line 325, pos 37
    #36: Expected '===' and instead saw '=='.
-       if (name == 'input' && // line 333, pos 22
+       if (name == 'INPUT' && // line 333, pos 22
    #37: Expected '===' and instead saw '=='.
        (type == 'password' || type == 'text')) // line 334, pos 23
    #38: Expected '===' and instead saw '=='.
@@ -88,15 +88,15 @@ shifter [info] shifting into gear for gallery-formmgr
    #39: Possible strict violation.
        this.default_value_map[ e.name ] = e.value; // line 336, pos 17
    #40: Expected '===' and instead saw '=='.
-       else if (name == 'input' && type == 'checkbox') // line 338, pos 27
+       else if (name == 'INPUT' && type == 'checkbox') // line 338, pos 27
    #41: Expected '===' and instead saw '=='.
-       else if (name == 'input' && type == 'checkbox') // line 338, pos 46
+       else if (name == 'INPUT' && type == 'checkbox') // line 338, pos 46
    #42: Possible strict violation.
        this.default_value_map[ e.name ] = (e.checked ? e.value : ''); // line 340, pos 17
    #43: Expected '===' and instead saw '=='.
-       else if (name == 'input' && type == 'radio') // line 342, pos 27
+       else if (name == 'INPUT' && type == 'radio') // line 342, pos 27
    #44: Expected '===' and instead saw '=='.
-       else if (name == 'input' && type == 'radio') // line 342, pos 46
+       else if (name == 'INPUT' && type == 'radio') // line 342, pos 46
    #45: Too many var statements.
        var rb = this.form[ e.name ];	// null if dynamically generated in IE // line 344, pos 21
    #46: Possible strict violation.
@@ -110,17 +110,17 @@ shifter [info] shifting into gear for gallery-formmgr
    #50: Possible strict violation.
        this.default_value_map[ e.name ] = rb[j].value; // line 357, pos 29
    #51: Expected '===' and instead saw '=='.
-       else if ((name == 'select' && type == 'select-one') || // line 363, pos 28
+       else if ((name == 'SELECT' && type == 'select-one') || // line 363, pos 28
    #52: Expected '===' and instead saw '=='.
-       else if ((name == 'select' && type == 'select-one') || // line 363, pos 48
+       else if ((name == 'SELECT' && type == 'select-one') || // line 363, pos 48
    #53: Mixed spaces and tabs.
-       name == 'textarea') // line 364, pos 5
+       name == 'TEXTAREA') // line 364, pos 5
    #54: Expected '===' and instead saw '=='.
-       name == 'textarea') // line 364, pos 27
+       name == 'TEXTAREA') // line 364, pos 27
    #55: Possible strict violation.
        this.default_value_map[ e.name ] = e.value; // line 366, pos 17
    #56: Expected '===' and instead saw '=='.
-       else if (name == 'input' && // line 369, pos 23
+       else if (name == 'INPUT' && // line 369, pos 23
    #57: Mixed spaces and tabs.
        (type == 'password' || type == 'text')) // line 370, pos 4
    #58: Expected '===' and instead saw '=='.
@@ -128,7 +128,7 @@ shifter [info] shifting into gear for gallery-formmgr
    #59: Expected '===' and instead saw '=='.
        (type == 'password' || type == 'text')) // line 370, pos 46
    #60: Expected '===' and instead saw '=='.
-       else if (name == 'input' && // line 374, pos 23
+       else if (name == 'INPUT' && // line 374, pos 23
    #61: Mixed spaces and tabs.
        (type == 'checkbox' || type == 'radio')) // line 375, pos 4
    #62: Expected '===' and instead saw '=='.
@@ -138,27 +138,27 @@ shifter [info] shifting into gear for gallery-formmgr
    #64: Expected '===' and instead saw '=='.
        e.checked = (e.value == v); // line 377, pos 34
    #65: Expected '===' and instead saw '=='.
-       else if (name == 'select' && type == 'select-one') // line 379, pos 23
+       else if (name == 'SELECT' && type == 'select-one') // line 379, pos 23
    #66: Expected '===' and instead saw '=='.
-       else if (name == 'select' && type == 'select-one') // line 379, pos 43
+       else if (name == 'SELECT' && type == 'select-one') // line 379, pos 43
    #67: Expected '===' and instead saw '=='.
-       else if (name == 'textarea') // line 388, pos 23
+       else if (name == 'TEXTAREA') // line 388, pos 23
    #68: Possible strict violation.
        var e = this.form.elements[i]; // line 397, pos 13
    #69: Too many var statements.
        var type = (e.type ? e.type.toLowerCase() : null); // line 403, pos 9
    #70: Too many var statements.
-       var name = e.tagName.toLowerCase(); // line 404, pos 9
+       var name = e.tagName; // line 404, pos 9
    #71: Too many var statements.
        var v    = this.default_value_map[ e.name ]; // line 405, pos 9
    #72: Possible strict violation.
        var v    = this.default_value_map[ e.name ]; // line 405, pos 16
    #73: Expected '===' and instead saw '=='.
-       if (name == 'input' && type == 'file') // line 411, pos 14
+       if (name == 'INPUT' && type == 'file') // line 411, pos 14
    #74: Expected '===' and instead saw '=='.
-       if (name == 'input' && type == 'file') // line 411, pos 33
+       if (name == 'INPUT' && type == 'file') // line 411, pos 33
    #75: Expected '===' and instead saw '=='.
-       else if (name == 'input' && // line 418, pos 19
+       else if (name == 'INPUT' && // line 418, pos 19
    #76: Mixed spaces and tabs.
        (type == 'password' || type == 'text' || type == 'file')) // line 419, pos 3
    #77: Expected '===' and instead saw '=='.
@@ -170,7 +170,7 @@ shifter [info] shifting into gear for gallery-formmgr
    #80: Expected '!==' and instead saw '!='.
        if (e.value != v) // line 421, pos 21
    #81: Expected '===' and instead saw '=='.
-       else if (name == 'input' && // line 426, pos 19
+       else if (name == 'INPUT' && // line 426, pos 19
    #82: Mixed spaces and tabs.
        (type == 'checkbox' || type == 'radio')) // line 427, pos 3
    #83: Expected '===' and instead saw '=='.
@@ -182,13 +182,13 @@ shifter [info] shifting into gear for gallery-formmgr
    #86: Expected '===' and instead saw '=='.
        var checked = (e.value == v); // line 429, pos 32
    #87: Expected '===' and instead saw '=='.
-       else if ((name == 'select' && type == 'select-one') || // line 435, pos 20
+       else if ((name == 'SELECT' && type == 'select-one') || // line 435, pos 20
    #88: Expected '===' and instead saw '=='.
-       else if ((name == 'select' && type == 'select-one') || // line 435, pos 40
+       else if ((name == 'SELECT' && type == 'select-one') || // line 435, pos 40
    #89: Mixed spaces and tabs.
-       name == 'textarea') // line 436, pos 3
+       name == 'TEXTAREA') // line 436, pos 3
    #90: Expected '===' and instead saw '=='.
-       name == 'textarea') // line 436, pos 19
+       name == 'TEXTAREA') // line 436, pos 19
    #91: Expected '!==' and instead saw '!='.
        if (e.value != v) // line 438, pos 21
    #92: Trailing whitespace.
@@ -228,95 +228,93 @@ shifter [info] shifting into gear for gallery-formmgr
    #109: Trailing whitespace.
        * // line 754, pos 7
    #110: Trailing whitespace.
-       * // line 776, pos 7
+       * // line 771, pos 7
    #111: Trailing whitespace.
-       * // line 785, pos 7
+       * // line 780, pos 7
    #112: Trailing whitespace.
-       * // line 804, pos 7
+       * // line 799, pos 7
    #113: Too many var statements.
-       for (var i=0; i<this.form.elements.length; i++) // line 811, pos 18
+       for (var i=0; i<this.form.elements.length; i++) // line 806, pos 18
    #114: Too many var statements.
-       var e            = this.form.elements[i]; // line 815, pos 21
+       var e            = this.form.elements[i]; // line 810, pos 21
    #115: Trailing whitespace.
-       * // line 825, pos 7
+       * // line 820, pos 7
    #116: Trailing whitespace.
-       * // line 847, pos 7
+       * // line 842, pos 7
    #117: Trailing whitespace.
-       * // line 858, pos 7
+       * // line 853, pos 7
    #118: Trailing whitespace.
-       * // line 870, pos 7
+       * // line 865, pos 7
    #119: Too many var statements.
-       var e = this.form.elements[i]; // line 877, pos 17
+       var e = this.form.elements[i]; // line 872, pos 17
    #120: Too many var statements.
-       var name = e.tagName.toLowerCase(); // line 883, pos 17
+       var name = e.tagName; // line 878, pos 17
    #121: Too many var statements.
-       var type = (e.type ? e.type.toLowerCase() : null); // line 884, pos 17
+       var type = (e.type ? e.type.toLowerCase() : null); // line 879, pos 17
    #122: Expected '===' and instead saw '=='.
-       if ((name == 'input' && // line 886, pos 23
+       if ((name == 'INPUT' && // line 881, pos 23
    #123: Mixed spaces and tabs.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 887, pos 4
+       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 4
    #124: Expected '===' and instead saw '=='.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 887, pos 24
+       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 24
    #125: Expected '===' and instead saw '=='.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 887, pos 42
+       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 42
    #126: Expected '===' and instead saw '=='.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 887, pos 64
+       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 64
    #127: Expected '===' and instead saw '=='.
-       name == 'textarea') // line 888, pos 22
+       name == 'TEXTAREA') // line 883, pos 22
    #128: Too many var statements.
-       var e                = this.form.elements; // line 913, pos 13
+       var e                = this.form.elements; // line 908, pos 13
    #129: Too many var statements.
-       for (var i=0; i<e.length; i++) // line 916, pos 18
+       for (var i=0; i<e.length; i++) // line 911, pos 18
    #130: Too many var statements.
-       var e_id     = e[i].id; // line 918, pos 17
+       var e_id     = e[i].id; // line 913, pos 17
    #131: Too many var statements.
-       var msg_list = this.validation_msgs[e_id]; // line 919, pos 17
+       var msg_list = this.validation_msgs[e_id]; // line 914, pos 17
    #132: Too many var statements.
-       var info = FormManager.validateFromCSSData(e[i], msg_list); // line 921, pos 17
+       var info = FormManager.validateFromCSSData(e[i], msg_list); // line 916, pos 17
    #133: Too many var statements.
-       var f     = this.validation.fn[e_id]; // line 940, pos 17
+       var f     = this.validation.fn[e_id]; // line 935, pos 17
    #134: Too many var statements.
-       var scope = this; // line 941, pos 17
+       var scope = this; // line 936, pos 17
    #135: Empty block.
-       else if (Y.Lang.isString(f)) // line 946, pos 13
+       else if (Y.Lang.isString(f)) // line 941, pos 13
    #136: Trailing whitespace.
-       * // line 983, pos 7
+       * // line 978, pos 7
    #137: Trailing whitespace.
-       * // line 1002, pos 7
+       * // line 997, pos 7
    #138: Trailing whitespace.
-       * // line 1028, pos 7
+       * // line 1023, pos 7
    #139: Trailing whitespace.
-       * // line 1038, pos 7
+       * // line 1033, pos 7
    #140: Trailing whitespace.
-       * // line 1048, pos 7
+       * // line 1043, pos 7
    #141: Too many var statements.
-       for (var i=0; i<this.button_list.length; i++) // line 1058, pos 18
+       for (var i=0; i<this.button_list.length; i++) // line 1053, pos 18
    #142: Too many var statements.
-       var info = this.user_button_list[i]; // line 1065, pos 17
+       var info = this.user_button_list[i]; // line 1060, pos 17
    #143: Trailing whitespace.
-       * // line 1094, pos 7
+       * // line 1089, pos 7
    #144: Trailing whitespace.
-       * // line 1108, pos 7
-   #145: Too many var statements.
-       var type = (e.type ? e.type.toLowerCase() : null); // line 1125, pos 17
+       * // line 1103, pos 7
+   #145: Expected '!==' and instead saw '!='.
+       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1120, pos 27
    #146: Expected '!==' and instead saw '!='.
-       if (name != 'button' && type != 'submit' && type != 'reset') // line 1126, pos 22
+       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1120, pos 47
    #147: Expected '!==' and instead saw '!='.
-       if (name != 'button' && type != 'submit' && type != 'reset') // line 1126, pos 42
-   #148: Expected '!==' and instead saw '!='.
-       if (name != 'button' && type != 'submit' && type != 'reset') // line 1126, pos 62
-   #149: Trailing whitespace.
-       * // line 1139, pos 7
-   #150: Expected '===' and instead saw '=='.
-       if (type == 'error') // line 1156, pos 22
+       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1120, pos 67
+   #148: Trailing whitespace.
+       * // line 1133, pos 7
+   #149: Expected '===' and instead saw '=='.
+       if (type == 'error') // line 1150, pos 22
+   #150: Trailing whitespace.
+       * // line 1167, pos 7
    #151: Trailing whitespace.
-       * // line 1173, pos 7
-   #152: Trailing whitespace.
-       * // line 1183, pos 7
-   #153: Mixed spaces and tabs.
-       FormManager.status_success_class)); // line 1206, pos 7
-   #154: 'form' is defined but never used.
-       /* DOM element */	form) // line 988, pos 19
+       * // line 1177, pos 7
+   #152: Mixed spaces and tabs.
+       FormManager.status_success_class)); // line 1200, pos 7
+   #153: 'form' is defined but never used.
+       /* DOM element */	form) // line 983, pos 19
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-formmgr/gallery-formmgr.js with UglifyJS
@@ -327,18 +325,18 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-formmgr/gallery-formmgr-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.479 seconds, pretty fast huh?
+shifter [info] finished in 0.583 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
-Starting Grover on 1 files with PhantomJS@1.9.0
+Starting Grover on 1 files with PhantomJS@1.9.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-formmgr]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.015 seconds) 54%
+✔ [gallery-formmgr]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.02 seconds) 54%
 Writing files in JSON format to: /src/gallery-formmgr/logs/tests.json
 ┌───────────────────────────────────────────────┬───────────┬───────┬─────────────┬───────┐
 │[34m  path                                         [39m│[34m    lines  [39m│[34m    %  [39m│[34m  functions  [39m│[34m    %  [39m│
@@ -348,7 +346,7 @@ Writing files in JSON format to: /src/gallery-formmgr/logs/tests.json
 │  total                                        │  149/272  │  54%  │      21/42  │  50%  │
 └───────────────────────────────────────────────┴───────────┴───────┴─────────────┴───────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.015 seconds)
-  [Grover Execution Timer] 1.215 seconds
+✔ [Total]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.02 seconds)
+  [Grover Execution Timer] 3.093 seconds
 Failed to find source file: /build/gallery-formmgr/gallery-formmgr.js
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

@@ -68,17 +68,17 @@ Y.FormManager.decimal_value_re = /^[-+]?(?:[0-9]+\.?|[0-9]*\.[0-9]+)$/;
  * 
  * <dl>
  * <dt>validation_error</dt>
- * <dd>Displayed in <code>status_node</code> by <code>notifyErrors()</code> when pre-validation fails.</dd>
+ * <dd>Displayed in `status_node` by `notifyErrors()` when pre-validation fails.</dd>
  * <dt>required_string</dt>
- * <dd>Displayed when <code>yiv-required</code> fails on an input field.</dd>
+ * <dd>Displayed when `yiv-required` fails on an input field.</dd>
  * <dt>required_menu</dt>
- * <dd>Displayed when <code>yiv-required</code> fails on a select element.</dd>
+ * <dd>Displayed when `yiv-required` fails on a select element.</dd>
  * <dt>length_too_short, length_too_long, length_out_of_range</dt>
- * <dd>Displayed when <code>yiv-length</code> fails on an input field.</dd>
+ * <dd>Displayed when `yiv-length` fails on an input field.</dd>
  * <dt>integer, integer_too_small, integer_too_large, integer_out_of_range</dt>
- * <dd>Displayed when <code>yiv-integer</code> fails on an input field.</dd>
+ * <dd>Displayed when `yiv-integer` fails on an input field.</dd>
  * <dt>decimal, decimal_too_small, decimal_too_large, decimal_out_of_range</dt>
- * <dd>Displayed when <code>yiv-decimal</code> fails on an input field.</dd>
+ * <dd>Displayed when `yiv-decimal` fails on an input field.</dd>
  * </dl>
  * 
  * @property Strings
@@ -147,7 +147,7 @@ Y.FormManager.validateFromCSSData = function(
 		{
 			msg = msg_list.required;
 		}
-		else if (e.tagName.toLowerCase() == 'select')
+		else if (e.tagName == 'SELECT')
 		{
 			msg = Strings.required_menu;
 		}
