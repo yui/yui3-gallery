@@ -1,0 +1,16 @@
+{
+    "gallery-model-sync-socket": {
+        "supersedes": [
+            ""
+        ],
+        "skinnable": "false",
+        "requires": [
+            "model",
+            "model-list",
+            "json-stringify"
+        ],
+        "optional": [
+            ""
+        ]
+    }
+}

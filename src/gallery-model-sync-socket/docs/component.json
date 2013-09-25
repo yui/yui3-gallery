@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-model-sync-socket",
+    "displayName": "Gallery: model-sync-socket",
+    "description": "An extension which provides a sync implementation using Socket.IO as the\\ntransport method, which can be mixed into a Model or ModelList subclass.",
+    "author"     : [ "clarle" ],
+    "use"        : [ "gallery-model-sync-socket" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

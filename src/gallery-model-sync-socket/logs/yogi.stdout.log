@@ -1,0 +1,59 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-model-sync-socket
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-model-sync-socket
+   #1: Trailing whitespace.
+       A String which represents the root or collection part of the Socket.IO // line 69, pos 75
+   #2: Trailing whitespace.
+       ModelSync.Socket, these properties for ModelSync.Socket can have beginning // line 76, pos 79
+   #3: Expected an assignment or function call and instead saw an expression.
+       config || (config = {}); // line 140, pos 31
+   #4: Expected an assignment or function call and instead saw an expression.
+       isValue(config.url) && (this.url = config.url); // line 141, pos 54
+   #5: Too many var statements.
+       var event = { // line 176, pos 13
+   #6: Too many var statements.
+       var events = ioEvents[type]; // line 216, pos 13
+   #7: Too many var statements.
+       for (var i = 0, len = events.length; i < len; i++) { // line 219, pos 26
+   #8: Expected '===' and instead saw '=='.
+       if (callback == events[i].localCallback) { // line 220, pos 34
+   #9: Too many var statements.
+       for (var socket in ioEvents) { // line 250, pos 18
+   #10: The body of a for in should be wrapped in an if statement to filter unwanted properties from the prototype.
+       for (var socket in ioEvents) { // line 250, pos 9
+   #11: Trailing whitespace.
+       @options {Object} [options] Optional data to be mixed in with params // line 270, pos 73
+   #12: Trailing whitespace.
+       **/ // line 279, pos 8
+   #13: Too many var statements.
+       var params = Y.mix(options, { // line 289, pos 13
+   #14: Too many var statements.
+       var io = window.socket || Y.Socket; // line 297, pos 13
+   #15: Trailing whitespace.
+       } // line 344, pos 10
+   #16: 'self' is defined but never used.
+       self = this; // line 209, pos 17
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-model-sync-socket/gallery-model-sync-socket.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-model-sync-socket
+shifter [queu] coverage file read, starting coverage for: gallery-model-sync-socket/gallery-model-sync-socket.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-model-sync-socket/gallery-model-sync-socket-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.156 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

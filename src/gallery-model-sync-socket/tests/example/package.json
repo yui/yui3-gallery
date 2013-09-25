@@ -10,7 +10,7 @@
     },
 
     "dependencies": {
-        "combohandler": "~0.1",
+        "combohandler": "0.3.4",
         "connect"     : ">=1.8.0 <2.0.0",
         "express"     : "3.0.0beta4",
         "uglify-js"   : ">=1.2.0 <2.0.0",

@@ -1,0 +1,109 @@
+<div class="intro">
+    <p>
+    An extension which provides a sync implementation using Socket.IO as the
+transport method, which can be mixed into a Model or ModelList subclass.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+<p>An extension which provides a sync implementation using Socket.IO as the<br>
+<br>
+transport method, which can be mixed into a Model or ModelList subclass.<br>
+<br>
+<br>
+<br>
+This makes it trivial for your Model or ModelList subclasses to communicate<br>
+<br>
+and transmit JSON data via WebSockets, falling back to Flash sockets, long<br>
+<br>
+polling, or other available real-time transport methods if not supported.<br>
+<br>
+<br>
+<br>
+Currently based on Jake Luer's (@logicalparadox/jakeluer) backbone.iobind though<br>
+<br>
+this will likely change in the future to take better advantage of YUI's custom<br>
+<br>
+event system.<br>
+<br>
+<br>
+</p>
+
+```
+/* Client-side code for a chat application */
+
+// Connect to socket.io
+        
+window.socket = io.connect('http://localhost');
+
+// Set-up code in a Model
+
+PostModel = Y.PostModel = Y.Base.create('postModel', Y.Model, [Y.ModelSync.Socket], {
+        root: '/posts'
+    }, {
+        ATTRS: {
+            id: '',
+            author: '',
+            email: '',
+            message: ''
+        }
+    });
+
+// Set-up code in a View
+
+PostView = Y.PostView = Y.Base.create('postView', Y.View, [], {
+        containerTemplate: '<li class="post-item" />',
+        
+        template: Y.one('#blog-post-template').getContent(),
+        
+        initializer: function () {
+            var model = this.get('model'),
+                self = this;
+
+            model.onSocket('delete', function (e) {
+                self.constructor.superclass.remove.call(self);
+            });
+
+            model.onSocket('update', function (e) {
+                this.setAttrs(e.data);
+            });
+
+            model.after('change', this.render, this);
+        }
+        // And so on
+});
+
+/* Server-side code for a chat application */
+
+var server = app.listen(3000),
+    io = require('socket.io').listen(server),
+    db = new Collection();
+
+io.sockets.on('connection', function (socket) {
+    socket.on('posts:update', function (data, callback) {
+        db.update(data);
+        socket.emit('posts/' + data.id + ':update', {data: data});
+        socket.broadcast.emit('posts/' + data.id + ':update', {data: data});
+    });
+
+    socket.on('posts:read', function (data, callback) {
+        socket.emit('posts:read', {data: db.toJSON()});
+    });
+
+    socket.on('posts:construct', function (data, callback) {
+        data = db.add(data);
+        socket.emit('posts:construct', {data: data});
+        socket.broadcast.emit('posts:construct', {data: data});
+    });
+
+    socket.on('posts:delete', function (data, callback) {
+        db.remove(data);
+        socket.emit('posts/' + data.id + ':delete');
+        socket.broadcast.emit('posts/' + data.id + ':delete');
+    });
+});
+```
+

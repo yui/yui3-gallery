@@ -1,0 +1,11 @@
+{
+    "name": "gallery-model-sync-socket",
+    "builds": {
+        "gallery-model-sync-socket": {
+            "skinnable": "false",
+            "jsfiles": [
+                "model-sync-socket.js"
+            ]
+        }
+    }
+}

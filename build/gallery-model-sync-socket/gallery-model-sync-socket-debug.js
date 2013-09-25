@@ -1,4 +1,4 @@
-YUI.add('gallery-model-sync-socket', function(Y) {
+YUI.add('gallery-model-sync-socket', function (Y, NAME) {
 
 /**
 An extension which provides a sync implementation using Socket.IO as the
@@ -294,7 +294,7 @@ SocketSync.prototype = {
             params.data = this.toJSON() || {};
         }
 
-        var io = window.socket || Y.socket;
+        var io = window.socket || Y.Socket;
 
         io.emit(namespace + ':' + action, params.data, function (err, data) {
             if (err) {
@@ -390,4 +390,17 @@ SocketSync.prototype = {
 Y.namespace('ModelSync').Socket = SocketSync;
 
 
-}, 'gallery-2012.07.11-21-38' ,{requires:['model', 'model-list', 'json-stringify'], skinnable:false});
+}, 'gallery-2013.09.25-18-27', {
+    "supersedes": [
+        ""
+    ],
+    "skinnable": "false",
+    "requires": [
+        "model",
+        "model-list",
+        "json-stringify"
+    ],
+    "optional": [
+        ""
+    ]
+});

@@ -292,7 +292,7 @@ SocketSync.prototype = {
             params.data = this.toJSON() || {};
         }
 
-        var io = window.socket || Y.socket;
+        var io = window.socket || Y.Socket;
 
         io.emit(namespace + ':' + action, params.data, function (err, data) {
             if (err) {
