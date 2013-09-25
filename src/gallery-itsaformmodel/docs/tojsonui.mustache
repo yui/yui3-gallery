@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>tojsonui-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        One template can be used to render multiple modelinstances. You <u>cannot cache toJSONUI()</u> in order to use it multiple times, but call toJSONUI() every time it needs to get into the dom. In order to prettify things, the containers are made invisible until the widgets are rendered. The code uses 'gallery-itsawidgetrenderpromise' to controll this.
+    </p>
+</div>
+
+{{>tojsonui-html}}
+
+<h2>Code</h2>
+```
+{{>tojsonui-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>tojsonui-css}}
+</style>
+
+<body>
+
+{{>tojsonui-html}}
+
+<script>
+{{>tojsonui-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>tojsonui-js}}
+</script>

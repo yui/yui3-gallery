@@ -1,0 +1,1 @@
+YUI.add("lang/gallery-itsaformmodel_nb",function(e){e.Intl.add("gallery-itsaformmodel","nb",{inputrequired:"Input er n\u00f8dvendig",notification:"Varsling",datachanged:"Data er blitt forandret utenfor skjemaet",wantreload:"Legger det inn i skjemaet",noreloadmsg:"hvis ikke, s\u00e5 dataene vil bli nullstilt til de n\u00e5v\u00e6rende form-verdier"})},"gallery-2013.09.25-18-27");

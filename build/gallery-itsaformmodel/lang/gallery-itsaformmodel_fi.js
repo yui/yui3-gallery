@@ -1,0 +1,1 @@
+YUI.add("lang/gallery-itsaformmodel_fi",function(e){e.Intl.add("gallery-itsaformmodel","fi",{inputrequired:"Sy\u00f6tett\u00e4v\u00e4",notification:"Ilmoitus",datachanged:"Tietoja on muutettu ulkopuolella muodossa",wantreload:"Lataa se muotoon",noreloadmsg:"jos ei, niin tiedot tulee palauttaa nykymuodossaan-arvot"})},"gallery-2013.09.25-18-27");

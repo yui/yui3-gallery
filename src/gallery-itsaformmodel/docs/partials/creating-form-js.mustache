@@ -1,0 +1,217 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', 'gallery-itsacheckbox', 'slider', 'editor', 'gallery-itsaselectlist', 'gallery-itsadialog', 'button', 'dial', 'json-stringify', function(Y) {
+    var model, container, containercontent, datenow;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    Y.MyFormModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {}, {
+        ATTRS: {
+            text: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'This is a "text"-formtype',
+                    placeholder: 'enter text',
+                    tooltip: 'enter "here" your text'
+                }
+            },
+            number: {
+                formtype: 'number',
+                formconfig: {
+                    label: 'This is a "number"-formtype',
+                    tooltip: 'enter a number between 0-100'
+                }
+            },
+            floatednumber: {
+                formtype: 'number',
+                formconfig: {
+                    fullselect: true,
+                    digits: true,
+                    label: 'This is a floated "number"-formtype',
+                    tooltip: 'enter here your number'
+                }
+            },
+            password: {
+                formtype: 'password',
+                formconfig: {
+                    placeholder: 'enter password',
+                    label: 'This is a "password"-formtype',
+                    tooltip: 'enter here your password'
+                }
+            },
+            passwordcheck: {
+                formtype: 'password',
+                formconfig: {
+                    placeholder: 're-enter password',
+                    label: 'This is a "password"-formtype',
+                    tooltip: 'check your password'
+                }
+            },
+            textarea: {
+                formtype: 'textarea',
+                formconfig: {
+                    label: 'This is a "textarea"-formtype',
+                    tooltip: 'enter here the textarea input'
+                }
+            },
+            plain: {
+                value: 'Hey all, here is an attribute that can be shown, but not edited',
+                formtype: 'plain',
+                formconfig: {
+                    label: 'This is a "plain"-formtype',
+                    placeholder: 'enter text',
+                    tooltip: 'enter "here" your text'
+                }
+            },
+            checkbox: {
+                formtype: 'checkbox',
+                formconfig: {
+                    label: 'This is a "checkbox"-formtype',
+                    tooltip: 'enter here the checkbox value'
+                }
+            },
+            date: {
+                formtype: 'date',
+                formconfig: {
+                    label: 'This is a "date"-formtype',
+                    tooltip: 'enter here your date',
+                    format: '%Y-%m-%d'
+                }
+            },
+            time: {
+                formtype: 'time',
+                formconfig: {
+                    label: 'This is a "time"-formtype',
+                    tooltip: 'enter here your time',
+                    format: '%H:%M:%S'
+                }
+            },
+            datetime: {
+                formtype: 'datetime',
+                formconfig: {
+                    label: 'This is a "datetime"-formtype',
+                    tooltip: 'enter here your date and time',
+                    format: '%Y-%m-%d %H:%M:%S'
+                }
+            },
+            email: {
+                formtype: 'email',
+                formconfig: {
+                    label: 'This is a "email"-formtype',
+                    tooltip: 'enter here your emailadress'
+                }
+            },
+            url: {
+                formtype: 'url',
+                formconfig: {
+                    label: 'This is a "url"-formtype',
+                    tooltip: 'enter here your url'
+                }
+            },
+            slider: {
+                value: 5,
+                formtype: Y.Slider,
+                formconfig: {
+                    label: 'This is a Y.Slider-formtype',
+                    tooltip: 'slide to set value',
+                    widgetconfig: {
+                        min: 5,
+                        max: 20
+                    }
+                }
+            },
+            itsacheckbox: {
+                value: true,
+                formtype: Y.ITSACheckbox,
+                formconfig: {
+                    label: 'This is a Y.ITSACheckbox-formtype',
+                    tooltip: 'click to set value'
+                }
+            },
+            itsaselectlist: {
+                value: 2,
+                formtype: Y.ITSASelectList,
+                formconfig: {
+                    label: 'This is a Y.ITSASelectList-formtype',
+                    tooltip: 'select the Month',
+                    widgetconfig: {
+                        items: ['Januar', 'Februar', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        buttonWidth: 200
+                    }
+                }
+            },
+            togglebutton: {
+                value: true,
+                formtype: Y.ToggleButton,
+                formconfig: {
+                    label: 'This is a Y.ToggleButton-formtype',
+                    tooltip: 'click to toggle',
+                    widgetconfig: {
+                        label: 'I can toggle'
+                    }
+                }
+            },
+            dial: {
+                value: 20,
+                formtype: Y.Dial,
+                formconfig: {
+                    label: 'This is a Y.Dial-formtype',
+                    tooltip: 'rotate to change value',
+                    widgetconfig: {
+                        min: 0,
+                        max: 60,
+                        stepsPerRevolution: 60
+                    }
+                }
+            },
+            editor: {
+                value: '<strong>This is <em>a test</em></strong> This is <em>a test</em>',
+                formtype: Y.EditorBase,
+                formconfig: {
+                    label: 'This is a Y.EditorBase-formtype',
+                    tooltip: 'enter here the textarea input',
+                    tooltipPlacement: 'right',
+                    classname: 'editorclass'
+                }
+            }
+        }
+    });
+
+    datenow = new Date();
+    model = new Y.MyFormModel({
+        date: datenow,
+        time: datenow,
+        datetime: datenow
+    });
+
+    container = Y.one('#container');
+    containercontent = '<div class="pure-control-group">'+model.renderFormElement('text')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('number')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('floatednumber')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('password')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('passwordcheck')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('textarea')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('plain')+'</div>'+
+                       '<div class="pure-controls">'+model.renderFormElement('checkbox')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('date')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('time')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('datetime')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('email')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('url')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('slider')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('itsacheckbox')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('itsaselectlist')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('togglebutton')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('dial')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('editor')+'</div>'+
+                       '<div class="pure-controls">'+model.renderSaveBtn('save values')+'</div>';
+    container.append(containercontent);
+
+    model.on('save', function() {
+        Y.alert('Values are saved', 'Here are all the attribute-values: '+Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
+    });
+
+    model.on('validationerror', function() {
+        Y.alert('validation error');
+    });
+
+});

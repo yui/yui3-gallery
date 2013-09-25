@@ -1,0 +1,126 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', 'gallery-itsadialog', 'json-stringify', function(Y) {
+    var model, container, containercontent;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    Y.MyFormModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
+        crossValidation: function() {
+            var instance = this,
+                errorattrs = [];
+            if (instance.getUI('password') !== instance.getUI('passwordcheck')) {
+                errorattrs.push({
+                    attribute: 'password',
+                    validationerror: 'password and password-chack are not the same'
+                });
+                errorattrs.push({
+                    attribute: 'passwordcheck',
+                    validationerror: 'password and password-chack are not the same'
+                });
+            }
+            return errorattrs;
+        }
+    }, {
+        ATTRS: {
+            username: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Username',
+                    placeholder: 'enter username'
+                },
+                validator: function(v) {
+                    return (typeof v==='string') && (v.length>=5);
+                },
+                validationerror: 'Username should be at least 5 characters'
+            },
+            password: {
+                formtype: 'password',
+                formconfig: {
+                    label: 'Password',
+                    placeholder: 'enter password'
+                },
+                validator: function(v) {
+                    return (typeof v==='string') && (v.length>=5) && (v.indexOf(' ')===-1);
+                },
+                validationerror: 'Password should be at least 5 characters'+
+                                 ' where whitespaces are not allowed'
+            },
+            passwordcheck: {
+                formtype: 'password',
+                formconfig: {
+                    label: 'Verify password',
+                    placeholder: 're-enter password'
+                },
+                validator: function(v) {
+                    return (typeof v==='string') && (v.length>=5) && (v.indexOf(' ')===-1);
+                },
+                validationerror: 'Password should be at least 5 characters'+
+                                 ' where whitespaces are not allowed'
+            },
+            age: {
+                formtype: 'number',
+                formconfig: {
+                    label: 'Age',
+                    placeholder: '0-100'
+                },
+                // formtype==='number' has its own emailvalidator privided by ITSAFormElement
+                // which checks for the right pattern. Together with the validatorfunction
+                // of this class, they determine validation
+                validator: function(v) {
+                    return ((typeof v==='number') && (v>=0) && (v<=100));
+                },
+                validationerror: 'You should enter a number between 0-100'
+            },
+            email: {
+                formtype: 'email',
+                formconfig: {
+                    label: 'Emailaddress',
+                    placeholder: 'emailaddress',
+                    required: true
+                },
+                // formtype==='email' has its own emailvalidator privided by ITSAFormElement
+                // which checks for the right pattern. Together with the validatorfunction
+                // of this class, they determine validation
+                validator: function(v) {return (typeof v==='string');},
+                validationerror: 'You should enter a valid emailaddress'
+            },
+            ssn: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Social Security number',
+                    placeholder: 'AAA-GG-SSSS'
+                },
+                validator: function(v) {
+                    var regexpssn = /^(?!000|666)(?:[0-6][0-9]{2}|7(?:[0-6][0-9]|7[0-2]))-(?!00)[0-9]{2}-(?!0000)[0-9]{4}$/;
+                    return (typeof v==='string') && regexpssn.test(v);
+                },
+                validationerror: 'Use the format "AAA-GG-SSS" where<br />'+
+                                 'AAA<=772 an not 000 or 666<br />'+
+                                 'GG in range 01-99<br />'+
+                                 'SSSS in range 0001-9999'
+            }
+        }
+    });
+
+    model = new Y.MyFormModel();
+
+    container = Y.one('#container');
+    containercontent = '<div class="pure-control-group">'+model.renderFormElement('username')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('password')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('passwordcheck')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('age')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('email')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('ssn')+'</div>'+
+                       '<div class="pure-controls">'+model.renderSubmitBtn('submit values')+'</div>';
+    container.append(containercontent);
+
+    model.on('save', function() {
+        Y.alert('Model is submitted', 'Here are all the attribute-values: '+
+                 Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
+    });
+
+    model.on('validationerror', function() {
+        Y.alert('error', 'validation error');
+    });
+
+});

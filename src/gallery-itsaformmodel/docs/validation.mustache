@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>validation-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        During input a red border slightly makes notice of invalid input. When submitted, all formelements are checked and marked invalid if needed. Even if every single formelement is OK, still 'password' and 'password-verification' need to match. If they don't then submit will fail and mark these formelements. Once re-focussed a tooltip will show what went wrong.
+    </p>
+    <p>
+        By adding the classes <code>pure-form-showinvalid</code> and <code>pure-form-showvalid</code> to the container, we manage to get a 'ok' and 'error' icon on the right of the formelements.
+    </p>
+</div>
+
+{{>validation-html}}
+
+<h2>Code</h2>
+```
+{{>validation-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>validation-css}}
+</style>
+
+<body>
+
+{{>validation-html}}
+
+<script>
+{{>validation-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>validation-js}}
+</script>

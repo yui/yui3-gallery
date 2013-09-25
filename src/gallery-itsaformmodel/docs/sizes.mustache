@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>sizes-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        There are two ways to style a formelement:
+        <ol>
+            <li>by adding a class to an formelement using formoptions.<code>classname</code></li>
+            <li>by refering to the <code>name</code>-attribute.</li>
+        </ol>
+        Second, you need to create appropriate css-rules. If you use referring to the name-attribute, then best specify a css-rule with its container. Tha's because 'unqualified attribute selectors' are known to be slow.
+    </p>
+</div>
+
+{{>sizes-html}}
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>sizes-css}}
+</style>
+
+<body>
+
+{{>sizes-html}}
+
+<script>
+{{>sizes-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>sizes-js}}
+</script>

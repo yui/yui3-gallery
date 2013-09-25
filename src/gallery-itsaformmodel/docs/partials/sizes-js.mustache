@@ -1,0 +1,51 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', function(Y) {
+    var model, container, containercontent;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    Y.MyFormModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {}, {
+        ATTRS: {
+            firstname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Firstname',
+                    placeholder: 'firstname'
+                }
+            },
+            lastname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Lastname',
+                    placeholder: 'lastname'
+                }
+            },
+            email: {
+                formtype: 'email',
+                formconfig: {
+                    label: 'Emailaddress',
+                    placeholder: 'emailaddress',
+                    classname: 'widetext'
+                }
+            },
+            website: {
+                formtype: 'url',
+                formconfig: {
+                    label: 'Website',
+                    placeholder: 'http://',
+                    classname: 'widetext'
+                }
+            }
+        }
+    });
+
+    model = new Y.MyFormModel();
+    container = Y.one('#container');
+    containercontent = '<div class="pure-control-group">'+model.renderFormElement('firstname')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('lastname')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('email')+'</div>'+
+                       '<div class="pure-control-group">'+model.renderFormElement('website')+'</div>';
+
+    container.append(containercontent);
+
+});

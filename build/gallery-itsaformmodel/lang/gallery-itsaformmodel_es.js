@@ -1,0 +1,1 @@
+YUI.add("lang/gallery-itsaformmodel_es",function(e){e.Intl.add("gallery-itsaformmodel","es",{inputrequired:"Se requiere entrada",notification:"Notificaci\u00f3n",datachanged:"Los datos han sido cambiado fuera de la forma",wantreload:"Coloque la pila en la forma",noreloadmsg:"si no, entonces los datos se inicializan a los valores actuales de forma"})},"gallery-2013.09.25-18-27");

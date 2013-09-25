@@ -1,0 +1,89 @@
+YUI(yuiconfig).use('node', 'base-build', 'promise', 'gallery-itsaformmodel', 'gallery-itsacheckbox', 'gallery-itsawidgetrenderpromise', 'gallery-itsadialog', 'json-stringify', function(Y) {
+    var template, model, container, checkboxModel, savebuttonObject;
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    // create MyFormModelClass
+    Y.MyFormModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {}, {
+        ATTRS: {
+            firstname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Firstname',
+                    placeholder: 'firstname'
+                }
+            },
+            lastname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Lastname',
+                    placeholder: 'lastname'
+                }
+            },
+            email: {
+                formtype: 'email',
+                formconfig: {
+                    label: 'Emailaddress',
+                    placeholder: 'emailaddress'
+                }
+            },
+            website: {
+                formtype: 'url',
+                formconfig: {
+                    label: 'Website',
+                    placeholder: 'http://'
+                }
+            },
+            active: {
+                formtype: Y.ITSACheckbox,
+                formconfig: {
+                    label: 'Still singing'
+                }
+            }
+        }
+    });
+
+    // defining template
+    template = '<div class="pure-control-group">{firstname}</div>'+
+               '<div class="pure-control-group">{lastname}</div>'+
+               '<div class="pure-control-group">{email}</div>'+
+               '<div class="pure-control-group">{website}</div>'+
+               '<div class="pure-control-group">{active}</div>'+
+               '<div class="pure-controls">{submit}</div>';
+
+    // creating models
+    model = new Y.MyFormModel({
+        firstname: 'Joe',
+        lastname: 'Cocker',
+        active: true
+    });
+    // insert UI-formelements using template
+    container = Y.one('#container');
+    savebuttonObject = { // define object to make it render a savebutton
+        propertykey: 'submit',
+        type: 'submit',
+        labelHTML: 'store',
+        config: {
+            primary: true
+        }
+    };
+    Y.one('#container').append(Y.Lang.sub(template, model.toJSONUI(savebuttonObject)));
+
+    // making the container visible once rendered
+    checkboxModel = model.getCurrentFormElements('active')[0].widget;
+    checkboxModel.renderPromise().then(
+        function() {
+            container.removeClass('hiddencontainer');
+        }
+    );
+
+    // showing the values when send
+    model.after('submit', function() {
+        Y.alert('Model is submitted', 'Here are all the attribute-values: '+Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
+    });
+
+    Y.later(3000, null, function() {
+        model.set('firstname', 'Karin');
+    });
+
+});

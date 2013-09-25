@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>doublefields-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        This example is the same as <a href="tojsonui.html">Templating with toJSONUI()</a>, with the exception that the template is used to render the same modelinstance multiple times. By editing one value, related UI's get updated. If you want to use this technique, then be sure to render new UI-elements for every single dom-insertion. In this example done by calling model.toJSONUI() twice.
+    </p>
+</div>
+
+{{>doublefields-html}}
+
+<h2>Code</h2>
+```
+{{>doublefields-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>doublefields-css}}
+</style>
+
+<body>
+
+{{>doublefields-html}}
+
+<script>
+{{>doublefields-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>doublefields-js}}
+</script>

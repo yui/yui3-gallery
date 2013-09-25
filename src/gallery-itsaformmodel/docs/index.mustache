@@ -1,0 +1,453 @@
+{{>api-button}}
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+         Y.ITSAFormModel provides the ability to transform a property into a form-element. This way the Model's properties can be controlled using UI. The Class can also generate form-buttons which take the right actions when clicked.
+     </p>
+    <p>
+         <b>Note1:</b> This module uses javascript to render the formelements. No html needs/should be used.<br />
+         <b>Note2:</b> For performancereason, the rendered elements needs to be inserted in the dom within 10 seconds after creation.
+     </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+    <p>
+        Y.ITSAFormModel can be used just like Y.Model with the extra formelement-methods. The UI-elements <u>should be string-renderered with renderFormElement() or toJSONUI() and inserted in the DOM manually.</u> The instance can render Strings of all its attributes and all major form-buttons. It is up to the developer to insert the Strings in the dom. However, you might want to take advantage of <a href='#views'>views</a> who do this automaticly. Once inserted in the dom, they are form-elements that represent the model-data, also called <b>UI-elements</b>.<br />
+         <b>Note:</b> For performancereason, the rendered elements needs to be inserted in the dom within 10 seconds after creation. This way we clean-up 'on-available'-events which might not being used and decrease performance.
+    </p>
+    <p>
+        Every attribute needs a definition of its form-element (UI-element). Therefore, three extra attribute-properties are introduced:
+        <ul>
+            <li><code>formtype</code> either specified as a regular-formelement by defining it as a <code>String</code>, or a Widget by defining a <code>Widget-Class</code>.</li>
+            <li><code>formconfig</code> which is used as configuration of the formtype.</li>
+            <li><code>validationerror</code> the errormessage that is shown on validationerrors using <a href="http://tilomitra.github.io/tipsy/" target="_blank">gallery-tipsy</a></li>
+        </ul>
+    </p>
+    <h3>syncing UI to the model</h3>
+    <p>
+        Once the rendered strings are inserted in the dom, they are UI-elements that controll the Model's data. The UI <u>does not by default</u> reflect its data to the Model-attributes. This can be done by three ways:
+        <ol>
+            <li>
+                Using <code>savebutton</code> or <code>submitbutton</code> (inserted in the dom and pressed by the user).
+            </li>
+            <li>
+                By setting life-update <code>model.setLifeUpdate(true)</code> which will store every single change directly (even every keypress).
+            </li>
+            <li>
+                By calling <code>model.UIToModel()</code> which will store a single, or all UI-values to the modelinstance.
+            </li>
+        </ol>
+        In the rare case there are multiple UI-elements of the same attribute in the dom, they will always be synced agains each other.
+    </p>
+
+<h2>Usage</h2>
+<p>
+    You need to create your own class using <code>Y.Base.create()</code> and define how the attributes look like:
+    ```js
+    Y.MyFormModel = Y.Base.create('formModel', Y.ITSAFormModel, [], {}, {
+    ATTRS: {
+            someAttribute: {
+                value: ...
+                formtype: 'textarea'
+                formconfig: {
+                    label: 'Description',
+                    required: true
+                },
+                validator: ...,
+                validationerror: 'you entered a wrong input',
+                ...
+            }
+            someWidgetAttribute: {
+                value: ...
+                formtype: Y.Slider
+                formconfig: {
+                    label: 'age',
+                    widgetconfig: {
+                        min: 0,
+                        max: 100
+                    },
+                },
+                // validator not needed: Y.Slider always returns a valid number
+                ...
+            }
+        }
+    });
+
+    var formmodel = new Y.MyFormModel();
+    formmodel.setLifeUpdate(true);
+
+    Y.one('body').append(formmodel.renderFormElement('someAttribute'));
+    ```
+</p>
+
+<h2>Rendering form-elements</h2>
+    <p>
+        Rendering the formelement is done by <code>yourformmodel.renderFormElement('someAttribute')</code>. After that, the string needs to be inserted in the dom, which is typically done by a <a href='#views'>View-instance</a>, but also can be done by the developer. When rendering buttons, you should use one of the renderBtn functions.
+    </p>
+
+<h3>standard form-elements</h3>
+    <p>
+        Standard form-elements should be specified by giving the formtype-property one of the next String-values, which all have their own formconfig.<br /><br />
+        <u>formtype:</u>
+        <ul>
+          <li><code>'text'</code></li>
+          <li><code>'number'</code></li>
+          <li><code>'password'</code></li>
+          <li><code>'textarea'</code></li>
+          <li><code>'checkbox'</code></li>
+          <li><code>'date'</code></li>
+          <li><code>'time'</code></li>
+          <li><code>'datetime'</code></li>
+          <li><code>'email'</code></li>
+          <li><code>'url'</code></li>
+          <li><code>'plain'</code> --> plain text, no UI</li>
+        </ul>
+        <u>formconfig:</u>
+        <ul>
+            <li><code>checked=false</code> {Boolean} only valid for checkboxes and radiobuttons.</li>
+            <li><code>classname</code> {String} additional classname for the html-element.</li>
+            <li><code>data</code> {String} for extra data-attributes, f.i. data: 'data-someinfo="somedata" data-moreinfo="moredata"'.</li>
+            <li><code>digits=false</code> {Boolean} for floating numbers: only valid for type==='number'.</li>
+            <li><code>disabled=false</code> {Boolean}</li>
+            <li><code>focusable=true</code> {Boolean} node-attribute 'focusable' which can be used as a selector by a FocusManager.</li>
+            <li><code>format</code> {String} Date-format: only valid for type==='date', 'time' or 'datetime'</li>
+            <li><code>fullselect</code> {Boolean} selects all text when focussed --> only valid for input-elements and textarea</li>
+            <li><code>hidden=false</code> {Boolean}</li>
+            <li><code>hotkey</code> {String|Object} character that act as a hotkey: 'alt+char' will focus the element and -in case of a button- click the button.
+                                          The hotkey-character will be marked with the css-class 'itsa-hotkey' (span-element), which underscores by default, but can be overruled.
+                                          If you want to Internationize, the you need to supply an object where the properties are the language-tag and the values a string
+                                          (character). F.i. {us: 'a', nl: 'o'}. When Internationize, there will be no hotkey when the used language is not found in the hotkey-object.</li>
+            <li><code>initialfocus</code> {Boolean} makes this the first item that gets focus when the container gets focus.</li>
+            <li><code>label</code> {String} The label belonging to the formelement.</li>
+            <li><code>labelClassname</code> {String} additional classname for the label.</li>
+            <li><code>nossl=false</code> {Boolean} making url's to validate only on non-ssl url's. Only applyable for type==='url'.</li>
+            <li><code>onlyssl=false</code> {Boolean} making url's to validate only on ssl url's. Only applyable for type==='url'</li>
+            <li><code>placeholder</code> {String} only applyable for input-elements and textarea.</li>
+            <li><code>required=false</code> {Boolean} (defaults true for 'type===password'). Only applyable for input-elements, textarea and date/time.</li>
+            <li><code>readonly=false</code> {Boolean} not applyable for buttons.</li>
+            <li><code>submitonenter</code> {Boolean} (defaults false) in case of text-fields: on enter-press submits the modelinstance.</li>
+            <li><code>switchvalue=false</code> {Boolean} make the value go behind the element. Only applyable for type=='date', 'time' or 'datetime'.</li>
+            <li><code>switchlabel=false</code> {Boolean} make the label go behind the element.</li>
+            <li><code>tooltip</code> {String} marks the data-attribute used by an internal Y.Tipsy instance.</li>
+        </ul>
+    </p>
+
+<h3>widget form-elements</h3>
+    <p>
+        Widget form-elements should be specified by giving the formtype-property a valid <b>WidgetClass</b> (no String). There are some widgets that can be used straight ahead (mentioned below). If you have another widget, then it can be used without further action <u>only if its value is represented in the 'value'-attribute</u>. If not, then you need to declare which attribute your widget uses as its value-attribute by using yourformmodel.<code>setWidgetValueField();</code>. Don't forget to load the widgets-dependencies.
+    </p>
+    <p>
+        <code>formconfig.widgetconfig</code> is passed through to the widget-config. Here, you can set any widget-config-property you like.<br /><br />
+        <u>possible formtypes:</u>
+        <ul>
+          <li><code>Y.EditorBase</code> --> even not a Widget, the Y.EditorBase can be used.</li>
+          <li><code>Y.Slider</code></li>
+          <li><code>Y.Dial</code></li>
+          <li><code>Y.ToggleButton</code></li>
+          <li><code>Y.ITSACheckbox</code></li>
+          <li><code>Y.ITSASelectList</code></li>
+          <li><code>...</code></li>
+        </ul>
+
+        <u>formconfig:</u>
+        <ul>
+            <li><code>classname</code> {String} additional classname set on widget's container (parentNode).</li>
+            <li><code>data</code> {String} for extra data-attributes set on widget's container.</li>
+            <li><code>focusable=true</code> {Boolean} node-attribute 'focusable' which can be used as a selector by a FocusManager.</li>
+            <li><code>hotkey</code> {String|Object} --> character that act as a hotkey: 'alt+char' will focus the element and -in case of a button- click the button.
+                                          The hotkey-character will be marked with the css-class 'itsa-hotkey' (span-element), which underscores by default, but can be overruled.
+                                          If you want to Internationize, the you need to supply an object where the properties are the language-tag and the values a string
+                                          (character). F.i. {us: 'a', nl: 'o'}. When Internationize, there will be no hotkey when the used language is not found in the hotkey-object.</li>
+            <li><code>initialfocus</code> {Boolean} makes this the first item that gets focus when the container gets focus.</li>
+            <li><code>label</code> {String} The label next to the widget's container.</li>
+            <li><code>labelClassname</code> {String} additional classname for the label.</li>
+            <li><code>switchvalue=false</code> {Boolean} make the value go behind the element. Only applyable for type=='Y.Slider'</li>
+            <li><code>switchlabel=false</code> {Boolean} make the label go behind the element.</li>
+            <li><code>tooltip</code> {String} marks the data-attribute used by an internal Y.Tipsy instance.</li>
+            <li><code>widgetconfig</code> {Object} passing through to the Widget during its initialization.</li>
+        </ul>
+    </p>
+
+<h3>form-buttons</h3>
+    <p>
+        Formbuttons can be rendered which are related to the ITSAFormModel-instance. It is <u>highly advizable</u> that you make use of the class <code>pure-form-showinvalid</code> to notice when submit or save should fail (see <a href='#validation'>Validation</a>). Form-buttons should be rendered by one of the following functions:<br />
+        <u>possible formbuttons:</u>
+        <ul>
+          <li><code>yourformmodel.renderBtn()</code></li>
+          <li><code>yourformmodel.renderCancelBtn()</code></li>
+          <li><code>yourformmodel.renderDestroyBtn()</code></li>
+          <li><code>yourformmodel.renderRemoveBtn()</code></li>
+          <li><code>yourformmodel.renderResetBtn()</code></li>
+          <li><code>yourformmodel.renderSaveBtn()</code></li>
+          <li><code>yourformmodel.renderSubmitBtn()</code></li>
+        </ul>
+
+        <u>buttonconfig:</u>
+        <ul>
+            <li><code>classname</code> {String} additional classname for the button-node.</li>
+            <li><code>data</code> {String} for extra data-attributes, f.i. data: 'data-someinfo="somedata" data-moreinfo="moredata"'.</li>
+            <li><code>disabled=false</code> {Boolean}</li>
+            <li><code>focusable=true</code> {Boolean} node-attribute 'focusable' which can be used as a selector by a FocusManager.</li>
+            <li><code>hidden=false</code> {Boolean}</li>
+            <li><code>hotkey</code> {String|Object} --> character that act as a hotkey: 'alt+char' will focus the element and -in case of a button- click the button.
+                                          The hotkey-character will be marked with the css-class 'itsa-hotkey' (span-element), which underscores by default, but can be overruled.
+                                          If you want to Internationize, the you need to supply an object where the properties are the language-tag and the values a string
+                                          (character). F.i. {us: 'a', nl: 'o'}. When Internationize, there will be no hotkey when the used language is not found in the hotkey-object.</li>
+            <li><code>initialfocus</code> {Boolean} makes this the first item that gets focus when the container gets focus.</li>
+            <li><code>primary=false</code> {Boolean} making a button the primary button. Only applyable for buttons.</li>
+            <li><code>spinbusy=false</code> {Boolean} making a buttonicon to spin if busy.</li>
+            <li><code>tooltip</code> {String} marks the data-attribute used by Y.Tipsy and Y.Tooltip.</li>
+            <li><code>tooltipHeader</code> {String} marks the data-attribute used by Y.Tipsy and Y.Tooltip.</li>
+            <li><code>tooltipFooter</code> {String} marks the data-attribute used by Y.Tipsy and Y.Tooltip.</li>
+            <li><code>value</code> {String} returnvalue which is available inside the eventlistener through e.value</li>
+        </ul>
+    </p>
+
+<h3>Using toJSONUI()</h3>
+    <p>
+        When using <code>toJSON()</code> all attributes are string-rendered in their UI-element and available as a property. However, there might be situations where you also need the original attribute-value (f.i. when micro-templating). Therefore, all original attribute-values are available with underscore-properties <code>_attributename</code>. If you want any buttons avalaible in the generated object, then use the first parameter.
+    </p>
+    <h4>Micro-templating</h4>
+    <p>Be aware that all property-values are <u>html-strings</u>: when templating with micro-templates. To render the UI-elements, you need to use
+        ```html
+        <%== data.someattribute %>
+        ```
+        instead of
+        ```html
+        <%= data.someattribute %>
+        ```
+        If you need to access the original attribute-value, use the underscore-reference:
+        ```html
+        '<% if (data._activated===false) { %>system down<% } else { %>system running<% } %>'+
+        ```
+    </p>
+
+<h2>Important designrules</h2>
+<h3>Best way to use Y.ITSAFormModel</h3>
+    <p>
+        Y.ITSAFormModel renderes strings which should be inserted it into the dom. You can do this yourself, or -as said before- you can use modules that do this automaticly (see <a href='#views'>Views</a>). If you choose to do this yourself, you should be aware of:
+    <ul>
+        <li>
+            For performancereason, the rendered elements needs to be inserted in the dom within 10 seconds after creation. This way we clean-up 'on-available'-events which might not being used and decrease performance. If the element is not inserted within this timespan, then it will be inserted but remains hidden.
+        </li>
+        <li>
+            <code>Widget-formelements</code> will render automaticly once the render-string gets into the dom.
+        </li>
+        <li>
+            Every rendered formelement (attribute or button) <b>should be inserted in the dom only once</b>. Once it gets out of the dom again, it is freed from internal lists and reinsertion doesn't work as expected. If you need to re-insert multiple times, then render the formelements over and over again.
+        </li>
+        <li>
+            Every rendered formelement (attribute or button) can be rendered into a string more than once. Every time it is rendered, a new node-id is generated, and therefore these elements can reside in the dom at the same time.
+        </li>
+    </ul>
+    </p>
+    <p>
+        For normal use with a view-module, you only should be aware of declaring a new Class with the right attributes, described in 'Usage'.
+    </p>
+
+<h3>Using the reset- and cancel-button</h3>
+    <p>
+        The reset- and cancel-button will restore <code>backuped attributes</code> to the model's attributes. The backuped attributes are generated at initialization of the model. If you need a new 'state' then you can call <code>yourformmodel.setResetAttrs()</code> which stores the current model-attributes into the backuped-attributes. There is a difference between the reset- and cancel-button:
+        <ul>
+            <li>
+                The <code>reset-button</code> fires 'resetclick' and resets model's attributes. The resetted attributes are passed through to all model's UI-elements, just as you expect from a reset-call.
+            </li>
+            <li>
+                The <code>cancel-button</code> fires 'cancelclick' and resets model's attributes. It does <u>nothing more</u>. It is up to the developer to take further action by listening to this event. Typically a FormView could be closed.
+            </li>
+        </ul>
+    </p>
+
+<h3>Difference between save- and submit-button</h3>
+    <ul>
+        <li>
+            The <code>save-button</code> calls savePromise(). What that does, depends on the synclayer. However: <u>action is only taken place is the model-instance is modified</u>
+        </li>
+        <li>
+            The <code>submit-button</code> calls submitPromise(). What that does, depends on the synclayer as well. This method always gets executed, even if the model-instance in unmodified.
+        </li>
+    </ul>
+    <p>
+        Both save- and submit-button will store the UI-elements-data into the modelinstance <u>before the synclayer is called</u>.
+    </p>
+
+<h3>Difference between destroy- and remove-button</h3>
+    <ul>
+        <li>
+            The <code>destroy-button</code> destroys the model, but does not invoke the synclayer: it calls destroyPromise(). Should the model exist in a datasource than it resides there.
+        </li>
+        <li>
+            The <code>remove-button</code> destroys the model, and also invokes the synclayer: it calls destroyPromise({remove: true}). Should the model exist in a datasource than it will be removed.
+        </li>
+    </ul>
+
+<h2>Validation</h2>
+    <h3>validation of the formelements</h3>
+    <p>
+        Each attribute is validated throught its <code>attribute.validation</code> method: there are no formconfig-properties 'required' or 'pattern'. Attributevalidation gives more control than the regexp 'pattern' that can be used on input-elements. Some formtypes have their own <code>pattern</code> defined by ITSAFormElement: <code>number</code>, <code>email</code> and <code>url</code>. When using these types, the attributes are validated through both the formelement-pattern as well as the attribute-validation. If not validated, a node-attribute is added: <code>data-validated="false"</code>, which is used for styling and could be used by formvalidation.
+    </p>
+
+    <h3>cross-validation</h3>
+    <p>
+        Cross-validation is validation of attribute-values among each other. Each separate attribute might validate true, while a combination might fail. Typically this is the case when you have a password-field and a confirm-password field. Both should match.
+    </p>
+    <p>
+        To deal with this, you should override the function <code>crossValidation()</code>, which is empty by default. Inside this function UI-element-values could be compared and marked as 'not-valid'. Make the function return an Array with objects, where each object has two fields: o.attribute and o.validationerror. The latter is the tooltip-description that will be set on the UI-element.
+        <br />
+        <b>Importante note:</b> be sure you check the UI-values instead of the attributes by using <code>formmodel.getUI()</code> and not formmodel.get().
+        ```js
+        Y.MyFormModel = Y.Base.create('formModel', Y.ITSAFormModel, [], {}, {
+            crossValidation: function() {
+                var instance = this,
+                    errorattrs = [];
+                if (instance.getUI('password') !== instance.getUI('passwordcheck')) {
+                    errorattrs.push({
+                        attribute: 'password',
+                        validationerror: 'password and password-chack are not the same'
+                    });
+                    errorattrs.push({
+                        attribute: 'passwordcheck',
+                        validationerror: 'password and password-chack are not the same'
+                    });
+                }
+                return errorattrs;
+            }
+        }
+        ATTRS: {
+                ...
+            }
+        });
+        ```
+    </p>
+
+    <h3>formvalidation</h3>
+    <p>
+        Even if this module supplies a Model and not a View, there is a validation of all the models UI-elements. That is when the save- or submitbutton are pressed. They only proceed if there is no unvalidated formelement, otherwise the <code>validationerror</code>-event is fired.
+    </p>
+
+    <h3>additional css</h3>
+    <p>
+        By adding the classname <code>pure-form-showinvalid</code> and/or <code>pure-form-showvalid</code> to the same container as were <code>pure-form</code> resides, you get css 'ok' and 'error' images inside the input and texarea elements. The style of the images and tooltip can be changed by override these css:
+        ```css
+            .pure-form input:focus[data-valid="false"],
+            .pure-form textarea:focus[data-valid="false"] {
+                color: #b94a48;
+                border: 1px solid #ee5f5b;
+            }
+
+            .pure-form input:focus[data-valid="false"]:focus,
+            .pure-form textarea:focus[data-valid="false"]:focus {
+                border-color: #e9322d;
+            }
+
+            .pure-form.pure-form-showinvalid input[data-valid="false"],
+            .pure-form.pure-form-showinvalid textarea[data-valid="false"] {
+                /* with markup false */
+                background-repeat: no-repeat;
+                background-position: right 3px center;
+                background-image: url(invalid.png);
+            }
+
+            .pure-form.pure-form-showinvalid input[data-valid="false"]:focus,
+            .pure-form.pure-form-showinvalid textarea[data-valid="false"]:focus {
+                /* no markup */
+                background-image: none;
+            }
+
+            .pure-form.pure-form-showvalid input[data-valid="true"],
+            .pure-form.pure-form-showvalid textarea[data-valid="true"] {
+                /* with markup true */
+                background-repeat: no-repeat;
+                background-position: right 3px center;
+                background-image: url(valid.png);
+            }
+
+            .pure-form.pure-form-showinvalid input:focus:invalid[data-valid="true"],
+            .pure-form.pure-form-showinvalid textarea:focus:invalid[data-valid="true"],
+            .pure-form.pure-form-showinvalid input:focus:invalid:focus[data-valid="true"],
+            .pure-form.pure-form-showinvalid textarea:focus:invalid:focus[data-valid="true"] {
+                color: #000;
+                border-color: #129FEA;
+            }
+
+            /* overrule pure-css its valid marking, because pattern validation sucks: better be done by [data-valid]; */
+            .pure-form input:focus[data-valid="false"],
+            .pure-form textarea:focus[data-valid="false"] {
+                color: #b94a48;
+                border: 1px solid #ee5f5b;
+            }
+
+            .pure-form input:focus[data-valid="false"]:focus,
+            .pure-form textarea:focus[data-valid="false"]:focus {
+                border-color: #e9322d;
+            }
+
+            .yui3-tipsy.tipsy-formelement {
+                background-color: #30418C;
+                color: #F0F1F8;
+            }
+
+            .yui3-tipsy.tipsy-formelement .yui3-widget-pointer-left {
+                border-right-color: #30418C;
+            }
+
+            .yui3-tipsy.tipsy-formelement-invalid {
+                background-color: #F00;
+                color: #F0F1F8;
+            }
+
+            .yui3-tipsy.tipsy-formelement-invalid .yui3-widget-pointer-left {
+                border-right-color: #F00;
+            }
+        ```
+    </p>
+<h2>Events fired by Y.ITSAFormModel</h2>
+    <p>
+        <ul>
+            <li><code>xxxxxclick-event</code>, fired by all Y.ITSAFormModel-buttons when clicked (f.i. 'cancelclick').</li>
+            <li><code>focusnext</code>, fired when a UI-element would like to re-focus the next UI-element (in practice when a 'enterkey' is pressed on a 'input'-element). Its up to a focusmanager to handle the behaviour.</li>
+            <li><code>reset</code>, fired when the formmodel gets resetted, either by pressing 'reset'-button, 'cancel'-button or by formmodel.reset().</li>
+            <li><code>uichanged-event</code>, fired by all UI-formelements when their UI-value changes by userinteraction (not from changes done by the modelinstance).</li>
+            <li><code>validationerror</code>, fired when the user pressed <code>submit-button</code> or <code>save-button</code> but the UI-elements were wrong validated.</li>
+        </ul>
+        All these events are fired by the modelinstance. The action related to those events can be prevented - except the events: <code>buttonclick</code> and <code>validationerror</code>. See the <a href="http://galleryapi.itsasbreuk.nl/modules/gallery-itsaformmodel.html">API Docs</a> for all events.
+    </p>
+
+<h2>Tooltips</h2>
+    <p>
+        All formelements can show a tooltip using <a href="http://tilomitra.github.io/tipsy/" target="_blank">gallery-tipsy</a>. There are 2 different tooltips working with both different style:
+        <ul>
+            <li><code>formconfig.tooltip</code> tooltip that shows when an element gets focus.</li>
+            <li><code>validationerror-tooltip</code> tooltip that shows when an element is falsy validated. This overrules the formconfig.tootltip until validation succeeds.</li>
+        </ul>
+        The validation-error tooltip is generated automaticly, based on the values of ATTRS.validator and ATTRS.validationerror of each attribute. The tooltips are rendered asynchroniously by Y.ITSAFormElement. If you want to focus an UI-element using JS, be sure the tooltip is rendered by using <a href="http://galleryapi.itsasbreuk.nl/classes/ITSAFormElement.html#method_tooltipReadyPromise" target="_blank">Y.ITSAFormElement.tooltipReadyPromise()</a>.
+    </p>
+
+<h2 id='views'>Views which can make use of ITSAFormModel</h2>
+
+    <p>
+        Mostly you won't add the rendered strings in the dom yourself, but find yourself making use of modules that create Views:
+        <ul>
+            <li>
+                <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaviewmodel/">gallery-itsaviewmodel</a>
+            </li>
+            <li>
+                <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaviewmodelpanel/">gallery-itsaviewmodelpanel</a>
+            </li>
+        </ul>
+    </p>
+
+<h2>Purecss compatible</h2>
+  <p>
+      All elements are rendered with full <a href="http://purecss.io/">Purecss</a>-compatability!
+  </p>
+
+<h2>licence</h2>
+
+Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>

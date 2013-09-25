@@ -1,0 +1,63 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', 'gallery-itsaselectlist', 'gallery-itsacheckbox', 'gallery-itsadialog', 'json-stringify', function(Y) {
+    var model, container, containercontent;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    Y.MyFormModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {}, {
+        ATTRS: {
+            email: {
+                formtype: 'email',
+                formconfig: {
+                    label: 'Email',
+                    placeholder: 'Email',
+                }
+            },
+            password: {
+                formtype: 'password',
+                formconfig: {
+                    label: 'Password',
+                    placeholder: 'Password'
+                }
+            },
+            state: {
+                value: 0,
+                formtype: Y.ITSASelectList,
+                formconfig: {
+                    label: 'State',
+                    classname: 'fixmargin',
+                    widgetconfig: {
+                        items: ['AL', 'CA', 'IL'],
+                        buttonWidth: 70
+                    }
+                }
+            },
+            rememberme: {
+                value: false,
+                formtype: Y.ITSACheckbox,
+                formconfig: {
+                    label: 'Remember me'
+                }
+            }
+        }
+    });
+
+    model = new Y.MyFormModel();
+    container = Y.one('#container');
+    containercontent = model.renderFormElement('email')+
+                       model.renderFormElement('password')+
+                       model.renderFormElement('state')+
+                       model.renderFormElement('rememberme')+
+                       model.renderSubmitBtn('Sign in', {primary: true});
+    container.append(containercontent);
+
+    model.on('submit', function() {
+        Y.alert('Signed in', 'Here are all the attribute-values: '+
+                 Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
+    });
+
+    model.on('validationerror', function() {
+        Y.alert('validation error');
+    });
+
+});

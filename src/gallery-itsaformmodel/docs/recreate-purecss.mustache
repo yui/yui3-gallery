@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+<style type="text/css">
+{{>recreate-purecss-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+</div>
+
+{{>recreate-purecss-html}}
+
+<h2>Code</h2>
+```
+{{>recreate-purecss-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>recreate-purecss-css}}
+</style>
+
+<body>
+
+{{>recreate-purecss-html}}
+
+<script>
+{{>recreate-purecss-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>recreate-purecss-js}}
+</script>
