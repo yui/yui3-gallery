@@ -1,0 +1,19 @@
+{
+    "name": "gallery-checkboxgroups",
+    "builds": {
+        "gallery-checkboxgroups": {
+            "config": {
+                "requires": [
+                    "node-base"
+                ]
+            },
+            "jsfiles": [
+                "CheckboxGroup.js",
+                "AtLeastOneCheckboxGroup.js",
+                "AtMostOneCheckboxGroup.js",
+                "SelectAllCheckboxGroup.js",
+                "EnableIfAnyCheckboxGroup.js"
+            ]
+        }
+    }
+}

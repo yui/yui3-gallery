@@ -1,4 +1,4 @@
-YUI.add('gallery-checkboxgroups', function(Y) {
+YUI.add('gallery-checkboxgroups', function (Y, NAME) {
 
 "use strict";
 
@@ -394,7 +394,7 @@ Y.extend(SelectAllCheckboxGroup, CheckboxGroup,
 	 */
 	toggleSelectAll: function()
 	{
-		this.select_call_cb.set('checked', !this.select_all_cb.get('checked'));
+		this.select_all_cb.set('checked', !this.select_all_cb.get('checked'));
 		updateSelectAll.call(this);
 	},
 
@@ -457,4 +457,4 @@ Y.extend(EnableIfAnyCheckboxGroup, CheckboxGroup,
 Y.EnableIfAnyCheckboxGroup = EnableIfAnyCheckboxGroup;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['node-base']});
+}, 'gallery-2013.09.25-18-27', {"requires": ["node-base"]});
