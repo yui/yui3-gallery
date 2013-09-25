@@ -1,0 +1,34 @@
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+</div>
+
+<style type="text/css">
+{{>inline-panel-css}}
+</style>
+
+{{>inline-panel-html}}
+
+<h2>Complete Example Source</h2>
+```
+<style type="text/css">
+{{>inline-panel-css}}
+</style>
+
+<body>
+
+{{>inline-panel-html}}
+
+<script>
+{{>inline-panel-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>inline-panel-js}}
+</script>

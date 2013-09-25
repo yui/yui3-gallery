@@ -1,0 +1,57 @@
+{
+    "name"       : "gallery-itsapanel",
+    "displayName": "Gallery: gallery-itsapanel",
+    "description": "Y.ITSAPanel is very much like Y.Panel. Major difference is that you can attach both View's and Strings, but there are more...",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsapanel" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "simple-panel",
+            "displayName": "Creating a simple panel",
+            "description": "This example shows how use ITSAPanel to render a panel.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "itsapanel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "view-panel",
+            "displayName": "Panel with Y.View-content",
+            "description": "This example shows how ITSAPanel can show a Y.View-instance.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel", "view"],
+            "tags"    : ["gallery-itsapanel", "panel", "view", "itsapanel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-buttons",
+            "displayName": "Panel with custom buttons",
+            "description": "This example shows how to create custom buttons.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel", "gallerycss-itsa-base", "gallerycss-itsa-form"],
+            "tags"    : ["gallery-itsapanel", "panel", "buttons", "itsapanel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "inline-panel",
+            "displayName": "Inline panel",
+            "description": "This example shows ITSAPanel-instances can be used inline with the document.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "inline", "itsapanel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "custom-css",
+            "displayName": "Customize style",
+            "description": "This example shows how to create your own stylescheme for ITSAPanel-instances.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "style", "css", "stylescheme", "itsapanel"],
+            "hideTableOfContents": true
+        }
+    ]
+}

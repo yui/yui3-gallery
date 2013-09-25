@@ -1,0 +1,151 @@
+{{>api-button}}
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        <b>Note:</b> when setting content to the sections, this is passed into the doc <u>unescaped</u>. Be carefull not to make a user pass html-content.
+    </p>
+</div>
+
+<h2>Description</h2>
+    <p>
+        Y.ITSAPanel is a widget extention that creates panels, just as Y.Panel does. However, there are some differences:
+    </p>
+<h3>Differences with Y.Panel</h3>
+    <ul>
+        <li>Both String as View-instances can be set to the three sections</li>
+        <li>Dragable by attribute 'draggable'</li>
+        <li>Resizable by attribute 'resizable'</li>
+        <li>Not using WidgetStdMod</li>
+        <li>Height is filled by css, not by widget-stdmod's fillHeight()</li>
+        <li>Width and Height need to be numbers: due to its construction no percented sizes are allowed.</li>
+        <li>Not using WidgetButtons</li>
+        <li>Buttons can be set directly into the title-, body-, footer-attribute or through a View's render()-method using HTML</li>
+        <li>No hideOn and focusOn attributes</li>
+        <li>Focussing is done automaticly using 'focusOnShow', or by calling Panel.focus()/blur()</li>
+        <li>Panels can be made non-floating by attribute 'floated'</li>
+    </ul>
+
+<h2>Section templates</h2>
+    <p>
+        Y.ITSAPanel easily creates a Panel that can show text or any View-instance. The panel exists of 3 area's: <i>Header</i>, <i>Body</i> and <i>Footer</i>. All these area's have a default template, but this can be overridden by setting the attributes <code>headerView</code>, <code>bodyView</code> <code>footerView</code>. These three attributes can both be a <b>String</b> as well as an <b>Y.View-instance</b>.
+    </p>
+    <ul>
+        <li>Default headerView:
+            ```html
+            <div>{title}</div><div class="itsa-rightalign">{titleRight}</div>
+            ```
+        </li>
+        <li>Default bodyView:
+            ```html
+            {body}
+            ```
+        </li>
+        <li>Default footerView:
+            ```html
+            <div>{footer}</div><div class="itsa-rightalign">{footerRight}</div>
+            ```
+        </li>
+    </ul>
+
+<h3>Using the default templates</h3>
+    <p>
+        By default the section-templates are String-templates which will render the attribute-properties <code>title</code>, <code>titleRight</code>, <code>body</code>, <code>footer</code> and <code>footerRight</code> using Y.Lang.sub under the hood. This means, you can create a Y.ITSAPanel right out of the box like this:
+        ```js
+        YUI(yuiconfig).use('gallery-itsapanel', function(Y) {
+            var panel = new Y.ITSAPanel({
+                title: 'Information',
+                // we leave 'titleRight' empty: this will render the close-button by default
+                footer: 'ready',
+                footerRight: 'ok',
+                body: 'We can set some message here',
+            }).render();
+            panel.show();
+        });
+        ```
+        <b>Note:</b> when the attribute <code>titleRight</code> is left undefined, the close-button will be rendered in that area. To remove the buttonclose, you can simple pass it an empty string.<br />
+    </p>
+<h3>Using custom templates</h3>
+    <p>
+        Custom templates can be set through the attributes <code>headerView</code>, <code>bodyView</code> <code>footerView</code>, in case you define them as a <b>String-type</b>. Once set, these will overrule the default templates. Inside the custom templates, You can make a reference to to properties: {title}, {titleRight}, {body}, {footer} and {footerRight} which will be exchanged (under the hood) by their attibute-values through Y.Lang.sub:
+        ```css
+        <style type="text/css">
+            .centertitle {
+                width: 100%;
+                text-align: center;
+            }
+        </style>
+        ```
+        ```js
+        YUI(yuiconfig).use('gallery-itsapanel', function(Y) {
+            var panel = new Y.ITSAPanel({
+                headerView: '<div class="centertitle">{title}</div>',
+                title: 'Information',
+                footer: 'ready',
+                body: 'We can set some message here',
+            }).render();
+            panel.show();
+        });
+        ```
+        <b>Note:</b> the attribute <code>titleRight</code> is unusable now, because it is not part of the header-template.
+    </p>
+
+<h3>Using View-instances</h3>
+    <p>
+        The attributes <code>headerView</code>, <code>bodyView</code> <code>footerView</code> can also be set by a <b>Y.View</b>-instance. Once set, these will overrule the default templates. The View's <code>container</code> will be bound to the corresponding section-div automaticly and the View's render() method will be executed to fill the section with content. If the View is designed well, the panel-content will automaticly be updated when needed.
+        ```js
+        YUI(yuiconfig).use('gallery-itsapanel', 'view', function(Y) {
+            var panel, myview;
+
+            myview = new Y.View();
+            myview.render = function() {
+                var container = this.get('container');
+                container.setHTML('You are seeing <b>Y.ITSAPanel</b> with its content generated by a Y.View instance.');
+            };
+            panel = new Y.ITSAPanel({
+                title: 'Information',
+                bodyView: myview
+            }).render();
+            panel.show();
+        });
+        ```
+        <b>Note:</b> when a Y.View-instance is used, that particular section does not use Y.Lang.sub for templaterendering. Thus, the corresponding properties <i>{title}</i>, <i>{titleRight}</i>, <i>{body}</i>, <i>{footer}</i> and/or <i>{footerRight}</i> are of no use in that section. This means that the attributes <i>title</i>, <i>titleRight</i>, <i>body</i>, <i>footer</i> and/or <i>footerRight</i> are ignored for that section.
+    </p>
+
+<h2>Customizing style</h2>
+    <p>The Panels are styled by default using Y.ITSAPanels default scheme. You can set styling of by setting the attribute <code>styled</code> to false, or by override the default css-classes:
+    </p>
+    ```css
+    .itsa-panel.itsa-styledpanel .itsa-panelclosebtn.pure-button {
+        color: #FFF;
+    }
+    .itsa-panel.itsa-styledpanel {
+        background-color: #FFF;
+        color: #333;
+    }
+    .itsa-panel.itsa-styledpanel .itsa-panelfooter {
+        background-color: #FFF;
+        border-top: 1px solid #EAE6DB;
+    }
+    .itsa-panel.itsa-styledpanel .itsa-panelheader {
+        color: #FFF;
+        border-bottom: 1px solid #2647A0;
+        /* browserwide background gradients are nice made using http://www.colorzilla.com/gradient-editor/ */
+        /* CAUTION: you need to add a '\9' add the end of the 'filter-property' yourself to make sure this rule does not target IE9 and above */
+        background: #2647a0; /* Old browsers */
+        background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzI2NDdhMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjclIiBzdG9wLWNvbG9yPSIjMjY0N2EwIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSIjM2Q2N2NlIiBzdG9wLW9wYWNpdHk9IjEiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzQyNmZkOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+        background: -moz-linear-gradient(top,  #2647a0 0%, #2647a0 7%, #3d67ce 50%, #426fd9 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2647a0), color-stop(7%,#2647a0), color-stop(50%,#3d67ce), color-stop(100%,#426fd9)); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  #2647a0 0%,#2647a0 7%,#3d67ce 50%,#426fd9 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  #2647a0 0%,#2647a0 7%,#3d67ce 50%,#426fd9 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  #2647a0 0%,#2647a0 7%,#3d67ce 50%,#426fd9 100%); /* IE10+ */
+        background: linear-gradient(to bottom,  #2647a0 0%,#2647a0 7%,#3d67ce 50%,#426fd9 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2647a0', endColorstr='#426fd9',GradientType=0 )\9; /* IE6-8 */
+    }
+    ```
+
+<h2>Licences</h2>
+Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>

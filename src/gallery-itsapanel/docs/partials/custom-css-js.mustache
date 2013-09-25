@@ -1,0 +1,17 @@
+YUI(yuiconfig).use('gallery-itsapanel', function(Y) {
+    var panel, message;
+
+    Y.one('body').addClass('red-style');
+
+    message = 'You are seeing a simple <b>Y.ITSAPanel</b>-instance.';
+    panel = new Y.ITSAPanel({
+        centered: true,
+        modal: true,
+        title: 'Information',
+        footer: 'Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a>.',
+        body: message,
+        dragable: true
+    }).render();
+
+    panel.show();
+});
