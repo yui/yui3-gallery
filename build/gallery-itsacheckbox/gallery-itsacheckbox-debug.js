@@ -23,7 +23,7 @@ var LANG = Y.Lang,
     WIDGET_CLASS = 'yui3-itsacheckbox',
     READONLY = 'readonly',
     READONLY_CLASS = WIDGET_CLASS + '-' + READONLY,
-    PARENT_CLASS = WIDGET_CLASS + '-parent',
+    PARENT_CLASS = 'itsa-widget-parent',
     LOADING_CLASS = WIDGET_CLASS + '-loading',
     RERENDER_CLASS = WIDGET_CLASS + '-rerender',
     HIDDEN_CLASS = WIDGET_CLASS + '-hidden',
@@ -818,7 +818,7 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
     }
 );
 
-}, 'gallery-2013.08.15-00-45', {
+}, 'gallery-2013.10.02-20-26', {
     "requires": [
         "yui-base",
         "node-base",
