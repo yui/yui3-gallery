@@ -44,7 +44,7 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodelsyncpromise', 'model'
             var button = e.currentTarget;
             button.setHTML('busy loading...');
             countrymodel.loadPromise().then(
-                function(response, options) {
+                function(response) {
                     container.append('Loadpromise resolved: Model is loaded --> this message should never appear in this example!<br />');
                 },
                 function(reason) {

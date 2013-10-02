@@ -26,19 +26,19 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodelsyncpromise', 'model'
         container.append('Start loading<br />');
     });
     countrymodel.after('load', function(e){
-        container.append('Model is loaded: Country='+countrymodel.get('Country')+'<br />');
+        container.append('Model is loaded --> response: '+e.response+'<br />');
+        loadbutton.setHTML('load modeldata');
+    });
+    countrymodel.after('error', function(e){
+        container.append('ERROR occured'+e.error+'<br />');
+        loadbutton.setHTML('load models');
     });
 
     loadbutton.on(
         'click',
-        function(e) {
-            var button = e.currentTarget;
-            button.setHTML('busy loading...');
-            countrymodel.loadPromise().then(
-                function(response, options) {
-                    button.setHTML('load modeldata');
-                }
-            );
+        function() {
+            loadbutton.setHTML('busy loading...');
+            countrymodel.load();
         }
     );
 

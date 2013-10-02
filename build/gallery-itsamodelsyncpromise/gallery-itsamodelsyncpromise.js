@@ -2,7 +2,7 @@ YUI.add('gallery-itsamodelsyncpromise', function (Y, NAME) {
 
 'use strict';
 
-/*jshint maxlen:170 */
+/*jshint maxlen:175 */
 
 /**
  *
@@ -30,6 +30,7 @@ var YModel = Y.Model,
     READ = 'read',
     DESTROYED = DESTROY+'ed',
     PUBLISHED = '_published',
+    PROMISE = 'Promise',
 /**
  * Fired when an error occurs, such as when an attribute (or property) doesn't validate or when
  * the sync layer submit-function returns an error.
@@ -49,7 +50,7 @@ var YModel = Y.Model,
 **/
 
 /**
- * Fired when model is destroyed. In case {remove: true} is udes, the after-event occurs after the synlayer is finished.
+ * Fired when model is destroyed. In case {remove: true} is used, the after-event occurs after the synlayer is finished.
  * @event destroy
  * @param e {EventFacade} Event Facade including:
  * @param e.promise {Promise} The promise that is automaticly created during the event. You could examine this instead of listening to both the `after`- and `error`-event.
@@ -118,23 +119,6 @@ PARSED = function (response) {
   *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method, which is expected to parse it and return an attribute hash.
   * @chainable
 */
-YModel.prototype.destroy = function(options, callback) {
-    var instance = this,
-        promise;
-
-    // by overwriting the default 'save'-method we manage to fire 'destroystart'-event.
-/*jshint expr:true */
-    (promise=instance.destroyPromise(options)) && callback && promise.then(
-        function(response) {
-            callback(null, response);
-        },
-        function(err) {
-            callback(err);
-        }
-    );
-/*jshint expr:false */
-    return instance;
-};
 
 /**
  * Destroys this model instance and removes it from its containing lists, if any.
@@ -152,9 +136,6 @@ YModel.prototype.destroy = function(options, callback) {
  *                 implementation to determine what options it supports or requires, if any.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
 **/
-YModel.prototype.destroyPromise = function (options) {
-    return this._createPromise(DESTROY, options);
-};
 
 /**
   * Loads this model from the server.<br />
@@ -180,23 +161,6 @@ YModel.prototype.destroyPromise = function (options) {
   *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method, which is expected to parse it and return an attribute hash.
   * @chainable
  */
-YModel.prototype.load = function(options, callback) {
-    var instance = this,
-        promise;
-
-    // by overwriting the default 'save'-method we manage to fire 'loadstart'-event.
-/*jshint expr:true */
-    (promise=instance.loadPromise(options)) && callback && promise.then(
-        function(response) {
-            callback(null, response);
-        },
-        function(err) {
-            callback(err);
-        }
-    );
-/*jshint expr:false */
-    return instance;
-};
 
 /**
  * Loads this model from the server.
@@ -216,10 +180,373 @@ YModel.prototype.load = function(options, callback) {
  *                 implementation to determine what options it supports or requires, if any.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason) (examine reason.message).
 **/
-YModel.prototype.loadPromise = function (options) {
-    return this._createPromise(LOAD, options);
+
+/**
+ * Saves this model to the server.
+ *
+ * This method delegates to the `sync()` method to perform the actual save operation, which is an asynchronous action.
+ * Specify a 'callback' function to be notified of success or failure, or better: use savePromise().
+ * <br /><br />
+ * An unsuccessful save operation will fire an `error` event with the `src` value "save".
+ * <br /><br />
+ * If the save operation succeeds and one or more of the attributes returned in the server's response differ from this model's current attributes,
+ * a `change` event will be fired.
+ * <br /><br />
+ * If the operation succeeds, but you let the server return an <b>id=-1</b> then the model is assumed to be destroyed. This will lead to fireing the `destroy` event.
+ * <br /><br />
+ * To keep track of the process, it is preferable to use <b>savePromise()</b>.<br />
+ * This method will fire 2 events: 'savestart' before syncing and 'save' or ERROR after syncing.
+ * <br /><br />
+ * <b>CAUTION</b> The sync-method with action 'save' <b>must call its callback-function</b> in order to work as espected!
+ *
+ * @method save
+ * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting synced attributes.
+ *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
+ * @param {Function} [callback] Called when the sync operation finishes.
+ *   @param {Error|null} callback.err If an error occurred or validation failed, this parameter will contain the error.
+ *                                    If the sync operation succeeded, 'err' will be null.
+ *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method,
+ *                                  which is expected to parse it and return an attribute hash.
+ * @chainable
+*/
+
+/**
+ * Saves this model to the server.
+ * <br /><br />
+ * This method delegates to the `sync()` method to perform the actual save
+ * operation, which is an asynchronous action.
+ * <br /><br />
+ * An unsuccessful save operation will fire an `error` event with the `src` value "save".
+ * <br /><br />
+ * If the save operation succeeds and one or more of the attributes returned in
+ * the server's response differ from this model's current attributes, a
+ * `change` event will be fired.
+ * <br /><br />
+ * If the operation succeeds, but you let the server return an <b>id=-1</b> then the model is assumed to be destroyed. This will lead to fireing the `destroy` event.
+ * <br /><br />
+ * <b>CAUTION</b> The sync-method with action 'save' <b>must call its callback-function</b> in order to work as espected!
+ *
+ * @method savePromise
+ * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
+ *                 implementation to determine what options it supports or requires, if any.
+ * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
+**/
+
+YArray.each(
+    [LOAD, DESTROY, SAVE],
+    function(Fn) {
+        YModel.prototype[Fn] = function(options, callback) {
+            var instance = this,
+                promise;
+
+            // by overwriting the default 'save'-method we manage to fire 'destroystart'-event.
+        /*jshint expr:true */
+            (promise=instance[Fn+PROMISE](options)) && callback && promise.then(
+                function(response) {
+                    callback(null, response);
+                },
+                function(err) {
+                    callback(err);
+                }
+            );
+        /*jshint expr:false */
+            return instance;
+        };
+        YModel.prototype[Fn+PROMISE] = function (options) {
+            return this._createPromise(Fn, options);
+        };
+    }
+);
+
+//===============================================================================================
+/**
+ * This method can be defined in descendend classes.<br />
+ * If syncPromise is defined, then the syncPromise() definition will be used instead of sync() definition.<br />
+ * In case an invalid 'action' is defined, the promise will be rejected.
+ *
+ * @method syncPromise
+ * @param action {String} The sync-action to perform.
+ * @param [options] {Object} Sync options. The custom synclayer should pass through all options-properties to the server.
+ * @return {Y.Promise} returned response for each 'action' --> response --> resolve(dataobject) OR reject(reason).
+ * The returned 'dataobject' might be an object or a string that can be turned into a json-object
+*/
+//===============================================================================================
+
+/**
+ * Private function that creates the promises for all promise-events
+ *
+ * @method _createPromise
+ * @param type {String} Method to create a promise for
+ * @param options {Object} options to be send with the event
+ * @private
+ * @since 0.3
+*/
+YModel.prototype._createPromise = function(type, options) {
+    var instance = this,
+        promise, promiseResolve, promiseReject, extraOptions;
+
+    promise = new Y.Promise(function (resolve, reject) {
+        promiseResolve = resolve;
+        promiseReject = reject;
+    });
+    // we pass the promise, together with the resolve and reject handlers as an option to the event.
+    // this way we can fullfill the promise in the defaultFn or prevDefaultFn.
+    extraOptions = {
+        promise: promise,
+        promiseResolve: promiseResolve,
+        promiseReject: promiseReject,
+        response: '', // making available at the after listener
+        parsed: {}, // making available at the after listener
+        options: Y.merge(options) // making passing only optins to other events possible
+    };
+/*jshint expr:true */
+    (typeof options==='object') && YObject.each(
+        options,
+        function(value, key) {
+            extraOptions[key] = value;
+        }
+    );
+    // lazy publish the event
+    instance[PUBLISHED+type] || (instance[PUBLISHED+type]=instance._publishAsync(type,
+                                                                                {
+                                                                                  defaultTargetOnly: true,
+                                                                                  emitFacade: true,
+                                                                                  defaultFn: instance['_defFn_'+type],
+                                                                                  preventedFn: instance._prevDefFn
+                                                                                }
+                                                                               ));
+/*jshint expr:false */
+    instance.fire(type, extraOptions);
+    return promise;
 };
 
+/**
+ * DefaultFn for the 'destroy'-event
+ *
+ * @method _defFn_destroy
+ * @param e {EventTarget}
+ * @param e.promise {Y.Promise} promise passed by with the eventobject
+ * @param e.promiseReject {Function} handle to the reject-method
+ * @param e.promiseResolve {Function} handle to the resolve-method
+ * @private
+ * @since 0.3
+*/
+YModel.prototype._defFn_destroy = function(e) {
+    var instance = this,
+        promiseResolve = e.promiseResolve,
+        promiseReject = e.promiseReject,
+        options = e.options,
+        remove = options.remove || options[DELETE],
+        errFunc, successFunc, finish;
+
+    if (instance.get(DESTROYED)) {
+        promiseReject(new Error('Model is already destroyed'));
+    }
+    else {
+        finish = function() {
+            // first the destruction through Base needs to be done
+            instance._baseDestroy();
+            YArray.each(instance.lists.concat(), function (list) {
+                list.remove(instance, options);
+            });
+        };
+        // next the typical Model-destroy-code:
+        if (remove) {
+            errFunc = function(err) {
+                var facade = {
+                    error   : err,
+                    src     : DESTROY,
+                    options : options
+                };
+                instance._lazyFireErrorEvent(facade);
+                promiseReject(new Error(err));
+            };
+            successFunc = function(response) {
+                finish();
+                promiseResolve(response);
+            };
+            if (instance.syncPromise) {
+                // use the syncPromise-layer
+                instance._syncTimeoutPromise(DELETE, options).then(
+                    successFunc,
+                    errFunc
+                );
+            }
+            else {
+                instance.sync(DELETE, options, function (err, response) {
+                    if (err) {
+                        errFunc(err);
+                    }
+                    else {
+                        successFunc(response);
+                    }
+                });
+            }
+        } else {
+            finish();
+            promiseResolve();
+        }
+    }
+    return e.promise;
+};
+
+/**
+ * DefaultFn for the 'load'-event
+ *
+ * @method _defFn_load
+ * @param e {EventTarget}
+ * @param e.promise {Y.Promise} promise passed by with the eventobject
+ * @param e.promiseReject {Function} handle to the reject-method
+ * @param e.promiseResolve {Function} handle to the resolve-method
+ * @private
+ * @since 0.3
+*/
+YModel.prototype._defFn_load = function(e) {
+    var instance = this,
+        options = e.options,
+        errFunc, successFunc;
+
+    errFunc = function(err) {
+        var facade = {
+            options: options,
+            error: err,
+            src: LOAD
+        };
+        instance._lazyFireErrorEvent(facade);
+        e.promiseReject(new Error(err));
+    };
+    successFunc = function(response) {
+        var parsed;
+        e.response = response;
+        parsed = PARSED(response);
+        if (parsed.responseText) {
+            // XMLHttpRequest
+            parsed = parsed.responseText;
+        }
+        e.parsed = parsed;
+        instance.setAttrs(parsed, options);
+        instance.changed = {};
+        e.promiseResolve(response);
+    };
+    if (instance.syncPromise) {
+        // use the syncPromise-layer
+        instance._syncTimeoutPromise(READ, options).then(
+            successFunc,
+            errFunc
+        );
+    }
+    else {
+        instance.sync(READ, options, function (err, response) {
+            if (err) {
+                errFunc(err);
+            }
+            else {
+                successFunc(response);
+            }
+        });
+    }
+    return e.promise;
+};
+
+/**
+ * DefaultFn for the 'save'-event
+ *
+ * @method _defFn_save
+ * @param e {EventTarget}
+ * @param e.promise {Y.Promise} promise passed by with the eventobject
+ * @param e.promiseReject {Function} handle to the reject-method
+ * @param e.promiseResolve {Function} handle to the resolve-method
+ * @private
+ * @since 0.3
+*/
+YModel.prototype._defFn_save = function(e) {
+    var instance = this,
+        usedmethod = instance.isNew() ? 'create' : 'update',
+        options = e.options,
+        promiseReject = e.promiseReject,
+        errFunc, successFunc, unvalidNodes,
+        facade = {
+            options : options,
+            method: usedmethod
+        };
+
+        instance._validate(instance.toJSON(), function (validateErr) {
+            if (validateErr) {
+                facade.error = validateErr;
+                facade.src = SAVE;
+                instance._lazyFireErrorEvent(facade);
+                promiseReject(new Error(validateErr));
+            }
+            else {
+                errFunc = function(err) {
+                    facade.error = err;
+                    facade.src   = SAVE;
+                    instance._lazyFireErrorEvent(facade);
+                    promiseReject(new Error(err));
+                };
+                successFunc = function(response) {
+                    var parsed;
+                    e.response = response;
+                    parsed = PARSED(response);
+                    if (parsed.responseText) {
+                        // XMLHttpRequest
+                        parsed = parsed.responseText;
+                    }
+                    if (YObject.keys(parsed).length>0) {
+                        e.parsed = parsed;
+                        // if removed then fire destroy-event (not through synclayer), else update data
+/*jshint expr:true */
+                        // fromInternal is used to suppress Y.ITSAFormModel to notificate changes
+                        (parsed.id===-1) ? instance.destroy() : instance.setAttrs(parsed, (options.fromInternal=true) && options);
+/*jshint expr:false */
+                    }
+                    instance.changed = {};
+                    e.promiseResolve(response);
+                };
+                // in case of Y.ITSAFormModel, we first check whether all fields are validated
+                if (!instance.toJSONUI || ((unvalidNodes=instance.getUnvalidatedUI()) && unvalidNodes.isEmpty())) {
+                    if (instance.syncPromise) {
+                        // use the syncPromise-layer
+                        instance._syncTimeoutPromise(usedmethod, options).then(
+                            successFunc,
+                            errFunc
+                        );
+                    }
+                    else {
+                        instance.sync(usedmethod, options, function (err, response) {
+                            if (err) {
+                                errFunc(err);
+                            }
+                            else {
+                                successFunc(response);
+                            }
+                        });
+                    }
+                }
+                else {
+                    // because we have an Y.ITSAFormModel instance, ._intl.unvalidated is available
+                    errFunc(instance._intl.unvalidated);
+                    instance.fire('validationerror', {target: instance, nodelist: unvalidNodes, src: SAVE});
+                }
+            }
+        });
+    return e.promise;
+};
+
+/**
+ * Prevented defaultFn as a Promise. Makes internal e.promise to be rejected.
+ *
+ * @method _prevDefFn
+ * @param e {EventTarget}
+ * @param e.promise {Y.Promise} promise passed by with the eventobject
+ * @param e.promiseReject {Function} handle to the reject-method
+ * @param e.promiseResolve {Function} handle to the resolve-method
+ * @private
+ * @since 0.3
+*/
+YModel.prototype._prevDefFn = function(e) {
+    e.promiseReject(new Error('preventDefaulted'));
+};
 
  /**
    * Hack with the help of Luke Smith: https://gist.github.com/lsmith/6664382/d688740bb91f9ecfc3c89456a82f30d35c5095cb
@@ -229,7 +556,7 @@ YModel.prototype.loadPromise = function (options) {
    * by that name already exists, it will not be re-created.  In either
    * case the custom event is returned.
    *
-   * @method publishAsync
+   * @method _publishAsync
    *
    * @param type {String} the type, or name of the event
    * @param opts {object} optional config params.  Valid properties are:
@@ -288,36 +615,55 @@ YModel.prototype.loadPromise = function (options) {
    *  </ul>
    *
    *  @return {CustomEvent} the custom event
+   *  @private
    *
   **/
-YModel.prototype.publishAsync = function(type, opts) {
+YModel.prototype._publishAsync = function(type, opts) {
     var instance = this,
         asyncEvent = this.publish(type, opts);
 
     asyncEvent._firing = new Y.Promise(function (resolve) { resolve(); });
 
     asyncEvent.fire = function (data) {
-        var args  = Y.Array(arguments, 0, true);
+        var args  = Y.Array(arguments, 0, true),
+            stack = {
+                id: asyncEvent.id,
+                next: asyncEvent,
+                silent: asyncEvent.silent,
+                stopped: 0,
+                prevented: 0,
+                bubbling: null,
+                type: asyncEvent.type,
+                defaultTargetOnly: asyncEvent.defaultTargetOnly
+            }, next;
 
         asyncEvent._firing = asyncEvent._firing.then(function () {
             asyncEvent.details = args;
             // Execute on() subscribers
             var subs = asyncEvent._subscribers,
                 args2 = [],
-                e,
-                i, len;
+                e, i, len;
 
                 args2.push.apply(args2, data);
                 e = asyncEvent._createFacade(args2);
 
+            e.target = e.target || instance;
             if (subs) {
                 for (i = 0, len = subs.length; i < len; ++i) {
-                    // TODO: try/catch?
-                    subs[i].fn.call(subs[i].context, e);
+                    try {
+                        subs[i].fn.call(subs[i].context, e);
+                    }
+                    catch (catchErr) {
+                    }
                 }
             }
-            // Doesn't support preventedFn
-            // Resolve the _firing promise with either false if it was prevented, or with a promise for
+            // Execute on() subscribers for each bubble target and their respective targets:
+            if (asyncEvent.bubbles && !asyncEvent.stopped) {
+                instance.bubble(asyncEvent, args, null, stack);
+                e.prevented = Math.max(e.prevented, stack.prevented);
+            }
+
+            // Resolve the _firing promise with either prefentedFn promise if it was prevented, or with a promise for
             // the result of the defaultFn followed by the execution of the after subs.
             return e.prevented ?
                 asyncEvent.preventedFn.call(instance, e).then(null, function (reason) {
@@ -326,10 +672,24 @@ YModel.prototype.publishAsync = function(type, opts) {
                 asyncEvent.defaultFn.call(instance, e).then(function () {
                     // no need to handle 'response' it is merged into 'e' within the defaultfunction
                     // Execute after() subscribers
+
                     subs = asyncEvent._afters;
-                    for (i = 0, len = subs.length; i < len; ++i) {
-                        subs[i].fn.call(subs[i].context, e);
+                    if (subs) {
+                        for (i = 0, len = subs.length; i < len; ++i) {
+                            try {
+                                subs[i].fn.call(subs[i].context, e);
+                            }
+                            catch (catchErr) {
+                            }
+                        }
                     }
+                    // Execute after() subscribers for each bubble target and their respective targets:
+                    if (stack.afterQueue) {
+                        while ((next = stack.afterQueue.last())) {
+                            next();
+                        }
+                    }
+
                 // Catch errors/preventions and reset the promise state to fulfilled for
                 // the next call to fire();
                 }).then(null, function (reason) {
@@ -338,8 +698,8 @@ YModel.prototype.publishAsync = function(type, opts) {
         },
         function(reason) {
             var facade = {
-                error   : reason,
-                src     : 'Model.publishAsync()'
+                error   : (reason && (reason.message || reason)),
+                src     : 'Model._publishAsync()'
             };
             instance._lazyFireErrorEvent(facade);
         });
@@ -348,359 +708,6 @@ YModel.prototype.publishAsync = function(type, opts) {
     asyncEvent._fire = function (args) {
         return asyncEvent.fire(args[0]);
     };
-};
-
-/**
- * Saves this model to the server.
- *
- * This method delegates to the `sync()` method to perform the actual save operation, which is an asynchronous action.
- * Specify a 'callback' function to be notified of success or failure, or better: use savePromise().
- * <br /><br />
- * An unsuccessful save operation will fire an `error` event with the `src` value "save".
- * <br /><br />
- * If the save operation succeeds and one or more of the attributes returned in the server's response differ from this model's current attributes,
- * a `change` event will be fired.
- * <br /><br />
- * If the operation succeeds, but you let the server return an <b>id=-1</b> then the model is assumed to be destroyed. This will lead to fireing the `destroy` event.
- * <br /><br />
- * To keep track of the process, it is preferable to use <b>savePromise()</b>.<br />
- * This method will fire 2 events: 'savestart' before syncing and 'save' or ERROR after syncing.
- * <br /><br />
- * <b>CAUTION</b> The sync-method with action 'save' <b>must call its callback-function</b> in order to work as espected!
- *
- * @method save
- * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting synced attributes.
- *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
- * @param {Function} [callback] Called when the sync operation finishes.
- *   @param {Error|null} callback.err If an error occurred or validation failed, this parameter will contain the error.
- *                                    If the sync operation succeeded, 'err' will be null.
- *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method,
- *                                  which is expected to parse it and return an attribute hash.
- * @chainable
-*/
-YModel.prototype.save = function(options, callback) {
-    var instance = this,
-        promise;
-
-    // by overwriting the default 'save'-method we manage to fire 'savestart'-event.
-/*jshint expr:true */
-    (promise=instance.savePromise(options)) && callback && promise.then(
-        function(response) {
-            callback(null, response);
-        },
-        function(err) {
-            callback(err);
-        }
-    );
-/*jshint expr:false */
-    return instance;
-};
-
-/**
- * Saves this model to the server.
- * <br /><br />
- * This method delegates to the `sync()` method to perform the actual save
- * operation, which is an asynchronous action.
- * <br /><br />
- * An unsuccessful save operation will fire an `error` event with the `src` value "save".
- * <br /><br />
- * If the save operation succeeds and one or more of the attributes returned in
- * the server's response differ from this model's current attributes, a
- * `change` event will be fired.
- * <br /><br />
- * If the operation succeeds, but you let the server return an <b>id=-1</b> then the model is assumed to be destroyed. This will lead to fireing the `destroy` event.
- * <br /><br />
- * <b>CAUTION</b> The sync-method with action 'save' <b>must call its callback-function</b> in order to work as espected!
- *
- * @method savePromise
- * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
- *                 implementation to determine what options it supports or requires, if any.
- * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
-**/
-YModel.prototype.savePromise = function (options) {
-    return this._createPromise(SAVE, options);
-};
-
-//===============================================================================================
-/**
- * This method can be defined in descendend classes.<br />
- * If syncPromise is defined, then the syncPromise() definition will be used instead of sync() definition.<br />
- * In case an invalid 'action' is defined, the promise will be rejected.
- *
- * @method syncPromise
- * @param action {String} The sync-action to perform.
- * @param [options] {Object} Sync options. The custom synclayer should pass through all options-properties to the server.
- * @return {Y.Promise} returned response for each 'action' --> response --> resolve(dataobject) OR reject(reason).
- * The returned 'dataobject' might be an object or a string that can be turned into a json-object
-*/
-//===============================================================================================
-
-/**
- * DefaultFn for the 'save'-event
- *
- * @method _createPromise
- * @param e {EventTarget}
- * @param e.promise {Y.Promise} promise passed by with the eventobject
- * @param e.promiseReject {Function} handle to the reject-method
- * @param e.promiseResolve {Function} handle to the resolve-method
- * @private
- * @since 0.3
-*/
-YModel.prototype._createPromise = function(type, options) {
-    var instance = this,
-        promise, promiseResolve, promiseReject, extraOptions;
-
-    promise = new Y.Promise(function (resolve, reject) {
-        promiseResolve = resolve;
-        promiseReject = reject;
-    });
-    // we pass the promise, together with the resolve and reject handlers as an option to the event.
-    // this way we can fullfill the promise in the defaultFn or prevDefaultFn.
-    extraOptions = {
-        promise: promise,
-        promiseResolve: promiseResolve,
-        promiseReject: promiseReject,
-        response: '', // making available at the after listener
-        parsed: {} // making available at the after listener
-    };
-/*jshint expr:true */
-    (typeof options==='object') && YObject.each(
-        options,
-        function(value, key) {
-            extraOptions[key] = value;
-        }
-    );
-    // lazy publish the event
-    instance[PUBLISHED+type] || (instance[PUBLISHED+type]=instance.publishAsync(type,
-                                                                                {
-                                                                                  defaultTargetOnly: true,
-                                                                                  emitFacade: true,
-                                                                                  defaultFn: instance['_defFn_'+type],
-                                                                                  preventedFn: instance._prevDefFn
-                                                                                }
-                                                                               ));
-/*jshint expr:false */
-    instance.fire(type, extraOptions);
-    return promise;
-};
-
-/**
- * DefaultFn for the 'save'-event
- *
- * @method _defFn_destroy
- * @param e {EventTarget}
- * @param e.promise {Y.Promise} promise passed by with the eventobject
- * @param e.promiseReject {Function} handle to the reject-method
- * @param e.promiseResolve {Function} handle to the resolve-method
- * @private
- * @since 0.3
-*/
-YModel.prototype._defFn_destroy = function(e) {
-    var instance = this,
-        promiseResolve = e.promiseResolve,
-        promiseReject = e.promiseReject,
-        options = e.options,
-        remove = e.remove || e[DELETE],
-        errFunc, successFunc, finish;
-
-    if (instance.get(DESTROYED)) {
-        promiseReject(new Error('Model is already destroyed'));
-    }
-    else {
-        finish = function() {
-            // first the destruction through Base needs to be done
-            instance._baseDestroy();
-            YArray.each(instance.lists.concat(), function (list) {
-                list.remove(instance, options);
-            });
-        };
-        // next the typical Model-destroy-code:
-        if (remove) {
-            errFunc = function(err) {
-                var facade = {
-                    error   : err,
-                    src     : 'Model.destroyPromise()',
-                    options : options
-                };
-                instance._lazyFireErrorEvent(facade);
-                promiseReject(new Error(err));
-            };
-            successFunc = function(response) {
-                finish();
-                promiseResolve(response);
-            };
-            if (instance.syncPromise) {
-                // use the syncPromise-layer
-                instance._syncTimeoutPromise(DELETE, options).then(
-                    successFunc,
-                    errFunc
-                );
-            }
-            else {
-                instance.sync(DELETE, options, function (err, response) {
-                    if (err) {
-                        errFunc(err);
-                    }
-                    else {
-                        successFunc(response);
-                    }
-                });
-            }
-        } else {
-            finish();
-            promiseResolve();
-        }
-    }
-    return e.promise;
-};
-
-/**
- * DefaultFn for the 'save'-event
- *
- * @method _defFn_load
- * @param e {EventTarget}
- * @param e.promise {Y.Promise} promise passed by with the eventobject
- * @param e.promiseReject {Function} handle to the reject-method
- * @param e.promiseResolve {Function} handle to the resolve-method
- * @private
- * @since 0.3
-*/
-YModel.prototype._defFn_load = function(e) {
-    var instance = this,
-        options = e.options,
-        errFunc, successFunc,
-        facade = {
-            options : options
-        };
-
-    errFunc = function(err) {
-        facade.error = err;
-        facade.src   = 'Model.loadPromise()';
-        instance._lazyFireErrorEvent(facade);
-        e.promiseReject(new Error(err));
-    };
-    successFunc = function(response) {
-        var parsed;
-        e.response = response;
-        parsed = PARSED(response);
-        if (parsed.responseText) {
-            // XMLHttpRequest
-            parsed = parsed.responseText;
-        }
-        e.parsed = parsed;
-        instance.setAttrs(parsed, options);
-        instance.changed = {};
-        e.promiseResolve(response);
-    };
-    if (instance.syncPromise) {
-        // use the syncPromise-layer
-        instance._syncTimeoutPromise(READ, options).then(
-            successFunc,
-            errFunc
-        );
-    }
-    else {
-        instance.sync(READ, options, function (err, response) {
-            if (err) {
-                errFunc(err);
-            }
-            else {
-                successFunc(response);
-            }
-        });
-    }
-    return e.promise;
-};
-
-/**
- * DefaultFn for the 'save'-event
- *
- * @method _defFn_save
- * @param e {EventTarget}
- * @param e.promise {Y.Promise} promise passed by with the eventobject
- * @param e.promiseReject {Function} handle to the reject-method
- * @param e.promiseResolve {Function} handle to the resolve-method
- * @private
- * @since 0.3
-*/
-YModel.prototype._defFn_save = function(e) {
-    var instance = this,
-        usedmethod = instance.isNew() ? 'create' : 'update',
-        options = e.options,
-        promiseReject = e.promiseReject,
-        errFunc, successFunc,
-        facade = {
-            options : options,
-            method: usedmethod
-        };
-
-        instance._validate(instance.toJSON(), function (validateErr) {
-            if (validateErr) {
-                facade.error = validateErr;
-                facade.src = 'Model.savePromise() - validate';
-                instance._lazyFireErrorEvent(facade);
-                promiseReject(new Error(validateErr));
-            }
-            else {
-                errFunc = function(err) {
-                    facade.error = err;
-                    facade.src   = 'Model.savePromise()';
-                    instance._lazyFireErrorEvent(facade);
-                    promiseReject(new Error(err));
-                };
-                successFunc = function(response) {
-                    var parsed;
-                    e.response = response;
-                    parsed = PARSED(response);
-                    if (parsed.responseText) {
-                        // XMLHttpRequest
-                        parsed = parsed.responseText;
-                    }
-                    if (YObject.keys(parsed).length>0) {
-                        e.parsed = parsed;
-                        // if removed then fire destroy-event (not through synclayer), else update data
-/*jshint expr:true */
-                        (parsed.id===-1) ? instance.destroy() : instance.setAttrs(parsed, options);
-/*jshint expr:false */
-                    }
-                    instance.changed = {};
-                    e.promiseResolve(response);
-                };
-                if (instance.syncPromise) {
-                    // use the syncPromise-layer
-                    instance._syncTimeoutPromise(usedmethod, options).then(
-                        successFunc,
-                        errFunc
-                    );
-                }
-                else {
-                    instance.sync(usedmethod, options, function (err, response) {
-                        if (err) {
-                            errFunc(err);
-                        }
-                        else {
-                            successFunc(response);
-                        }
-                    });
-                }
-            }
-        });
-    return e.promise;
-};
-
-/**
- * Prevented defaultFn as a Promise. Makes internal e.promise to be rejected.
- *
- * @method _prevDefFn
- * @param e {EventTarget}
- * @param e.promise {Y.Promise} promise passed by with the eventobject
- * @param e.promiseReject {Function} handle to the reject-method
- * @param e.promiseResolve {Function} handle to the resolve-method
- * @private
- * @since 0.3
-*/
-YModel.prototype._prevDefFn = function(e) {
-    e.promiseReject(new Error('preventDefaulted'));
 };
 
 /**
@@ -749,4 +756,4 @@ YModel.prototype._syncTimeoutPromise = function(action, options) {
     return syncpromise;
 };
 
-}, 'gallery-2013.09.25-18-27', {"requires": ["yui-base", "base-base", "base-build", "node-base", "json-parse", "promise", "model"]});
+}, 'gallery-2013.10.02-20-26', {"requires": ["yui-base", "base-base", "base-build", "node-base", "json-parse", "promise", "model"]});

@@ -24,15 +24,14 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodelsyncpromise', 'model'
 
     countrymodel.on('load', function(e){
         var promise = e.promise;
-        container.append('Start loading<br />');
+        container.setHTML('Start loading<br />');
         promise.then(
-            null,
-            function() {
-                return true; // making resolved
-            }
-        ).then(
             function(response) {
                 container.append('Model is loaded.<br />Promise-response: '+response+'<br />model.get("Country")='+countrymodel.get('Country')+'<br />');
+                loadbutton.setHTML('Load model');
+            },
+            function(reason) {
+                container.append('Error loading model.<br />Promise-response: '+reason+'<br />');
                 loadbutton.setHTML('Load model');
             }
         );
