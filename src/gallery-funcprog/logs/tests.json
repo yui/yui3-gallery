@@ -1,0 +1,85 @@
+{
+    "name": "gallery-funcprog",
+    "passed": 0,
+    "failed": 18,
+    "errors": 0,
+    "ignored": 0,
+    "total": 18,
+    "duration": 250,
+    "type": "report",
+    "Functional programming": {
+        "name": "Functional programming",
+        "passed": 0,
+        "failed": 9,
+        "errors": 0,
+        "ignored": 0,
+        "total": 9,
+        "duration": 123,
+        "type": "testcase",
+        "testEvery": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.every([1,2], function(v, i)\n\t\t\t{\n\t\t\t\tcount++;\n\t\t\t\treturn true;\n\t\t\t})')",
+            "type": "test",
+            "name": "testEvery",
+            "duration": 2
+        },
+        "testFilter": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.filter([1,2,3,4], function(v,i)\n\t\t\t{\n\t\t\t\treturn v >= 3 || i === 0;\n\t\t\t})')",
+            "type": "test",
+            "name": "testFilter",
+            "duration": 23
+        },
+        "testFind": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.find([1,2,3,4], function(v,i)\n\t\t\t\t{\n\t\t\t\t\treturn i == 2;\n\t\t\t\t})')",
+            "type": "test",
+            "name": "testFind",
+            "duration": 2
+        },
+        "testMap": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.map([1,2,3,4], function(v,i)\n\t\t\t\t{\n\t\t\t\t\treturn v*v;\n\t\t\t\t})')",
+            "type": "test",
+            "name": "testMap",
+            "duration": 2
+        },
+        "testMapToObject": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.Array.mapToObject([1,2,3,4], function(v,i)\n\t\t\t{\n\t\t\t\treturn [ i, v*v ];\n\t\t\t})')",
+            "type": "test",
+            "name": "testMapToObject",
+            "duration": 2
+        },
+        "testPartition": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.partition([1,2,3,4], function(v,i)\n\t\t\t{\n\t\t\t\treturn v >= 3 || i === 0;\n\t\t\t})')",
+            "type": "test",
+            "name": "testPartition",
+            "duration": 2
+        },
+        "testReduce": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.reduce([1,2,3,4], 0, function(s,v)\n\t\t\t{\n\t\t\t\treturn s+v;\n\t\t\t})')",
+            "type": "test",
+            "name": "testReduce",
+            "duration": 1
+        },
+        "testReduceRight": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.reduceRight([1,2,3,4], 0, function(s,v)\n\t\t\t{\n\t\t\t\treturn s+v;\n\t\t\t})')",
+            "type": "test",
+            "name": "testReduceRight",
+            "duration": 1
+        },
+        "testReject": {
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.reject([1,2,3,4], function(v,i)\n\t\t\t{\n\t\t\t\treturn v >= 3 || i === 0;\n\t\t\t})')",
+            "type": "test",
+            "name": "testReject",
+            "duration": 4
+        }
+    },
+    "timestamp": "Wed Oct  2 13:27:08 2013",
+    "consoleInfo": []
+}

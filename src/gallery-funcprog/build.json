@@ -1,0 +1,21 @@
+{
+    "name": "gallery-funcprog",
+    "builds": {
+        "gallery-funcprog": {
+            "config": {
+                "requires": [
+                    "oop",
+                    "array-extras",
+                    "gallery-object-extras"
+                ],
+                "optional": [
+                    "gallery-nodelist-extras2"
+                ]
+            },
+            "jsfiles": [
+                "yui-extras.js",
+                "array-extras.js"
+            ]
+        }
+    }
+}

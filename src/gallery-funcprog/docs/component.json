@@ -1,0 +1,9 @@
+{
+	"name": "gallery-funcprog",
+	"displayName": "Functional Programming",
+	"description": "Adds most of the higher-order functions from array-extras to the YUI Global Object, so you can use them for arrays, objects, and NodeLists.",
+	"author": "jafl",
+
+	"use": ["gallery-funcprog"],
+	"tags": ["jafl","functional","nodelist","node","object","array"]
+}
