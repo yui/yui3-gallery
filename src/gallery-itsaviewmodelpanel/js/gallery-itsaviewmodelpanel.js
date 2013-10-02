@@ -20,6 +20,7 @@
  * submit
  *
  *
+ * @module gallery-itsaviewmodelpanel
  * @class ITSAViewModelPanel
  * @constructor
  * @extends ITSAPanel
@@ -27,7 +28,9 @@
  */
 
 var ITSAViewModelPanel,
+    ITSAFORMELEMENT = Y.ITSAFormElement,
     Lang = Y.Lang,
+    ID = 'id',
     DESTROYED = 'destroyed',
     CONTENTBOX = 'contentBox',
     RENDERED = 'rendered',
@@ -52,12 +55,18 @@ var ITSAViewModelPanel,
     BOOLEAN = 'boolean',
     STRING = 'string',
     LOAD = 'load',
+    SUBMIT = 'submit',
+    DELETE = 'delete',
+    SAVE = 'save',
+    DESTROY = 'destroy',
     VALUE = 'value',
     RESET = 'reset',
     FOCUSMANAGED = 'focusManaged',
     ITSATABKEYMANAGER = 'itsatabkeymanager',
     NO_HIDE_ON_LOAD = 'noHideOnLoad',
     NO_HIDE_ON_RESET = 'noHideOnReset',
+    DISABLED = 'disabled',
+    PURE_BUTTON_DISABLED = 'pure-'+BUTTON+'-'+DISABLED,
     /**
       * Fired when a UI-elemnt needs to focus to the next element (in case of editable view).
       * The defaultFunc will refocus to the next field (when the Panel has focus).
@@ -270,6 +279,32 @@ ITSAViewModelPanel.prototype.initializer = function() {
         model = instance.get(MODEL),
         footertemplate = instance.get(FOOTERTEMPLATE);
 
+    Y.log('initializer', 'info', 'ITSA-ViewModelPanel');
+
+    /**
+     * Internal flag to state whether a datetimepicker is poped-up by this instance.
+     * @property _pickerVis
+     * @private
+     * @default null
+     * @type Boolean
+    */
+
+    /**
+     * Internal flag that indicates wheter the panel is set locked just before another lockPanel command is about to execute
+     * @property _lockedBefore
+     * @private
+     * @default null
+     * @type Boolean
+    */
+
+    /**
+     * Internal flag that indicates wheter the panel is set locked
+     * @property _locked
+     * @private
+     * @default null
+     * @type Boolean
+    */
+
     /**
      * Internal list of all eventhandlers bound by this widget.
      * @property _eventhandlers
@@ -284,7 +319,8 @@ ITSAViewModelPanel.prototype.initializer = function() {
         template: instance.get(TEMPLATE),
         editable: instance.get(EDITABLE),
         styled: false,
-        focusManaged: false // will be done at the Panel-level
+        focusManaged: false, // will be done at the Panel-level
+        partOfMultiView: true
     }));
 
 /*jshint expr:true */
@@ -293,7 +329,8 @@ ITSAViewModelPanel.prototype.initializer = function() {
         template: footertemplate,
         editable: false,
         styled: false,
-        focusManaged: false // will be done at the Panel-level
+        focusManaged: false, // will be done at the Panel-level
+        partOfMultiView: true
     }));
 /*jshint expr:false */
 
@@ -340,6 +377,7 @@ ITSAViewModelPanel.prototype.addCustomBtn = function(buttonId, labelHTML, config
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('addCustomBtn', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.addCustomBtn(buttonId, labelHTML, config);
 /*jshint expr:true */
@@ -357,17 +395,20 @@ ITSAViewModelPanel.prototype.bindUI = function() {
     var instance = this,
         contentBox = instance.get(CONTENTBOX),
         eventhandlers, bodyView, footerView;
-
-    instance.constructor.superclass.bindUI.apply(instance);
+    ITSAViewModelPanel.superclass.bindUI.apply(instance);
+    Y.log('bindUI', 'info', 'ITSA-ViewModelPanel');
 
     eventhandlers = instance._eventhandlers;
     bodyView = instance.get(BODYVIEW);
     footerView = instance.get(FOOTERVIEW);
 
+    bodyView.addTarget(instance);
+
     instance._setFocusManager(instance.get(FOCUSMANAGED));
 
     eventhandlers.push(
         instance.after(EDITABLE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             bodyView.set(EDITABLE, e.newVal);
 /*jshint expr:true */
             instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, (e.newVal && instance.get(VISIBLE))); // to make tabkeymanager work
@@ -377,20 +418,33 @@ ITSAViewModelPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(VISIBLE+CHANGE, function(e) {
+            var visible = e.newVal,
+                model;
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
 /*jshint expr:true */
-            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, (e.newVal && instance.get(EDITABLE))); // to make tabkeymanager work
+            if (!visible) {
+                instance._pickerVis && Y.ItsaDateTimePicker.hide(true);
+                model = instance.get(MODEL);
+                if (model.toJSONUI) {
+                    ITSAFORMELEMENT.tipsyOK._lastnode && model._FORM_elements[ITSAFORMELEMENT.tipsyOK._lastnode.get(ID)] && ITSAFORMELEMENT.tipsyOK.hideTooltip();
+                    ITSAFORMELEMENT.tipsyInvalid._lastnode && model._FORM_elements[ITSAFORMELEMENT.tipsyInvalid._lastnode.get(ID)] && ITSAFORMELEMENT.tipsyInvalid.hideTooltip();
+                }
+            }
+            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, (visible && instance.get(EDITABLE))); // to make tabkeymanager work
 /*jshint expr:false */
         })
     );
 
     eventhandlers.push(
         instance.after(FOOTERTEMPLATE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             footerView.set(TEMPLATE, e.newVal);
         })
     );
 
     eventhandlers.push(
         instance.after(MODEL+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             bodyView.set(MODEL, e.newVal);
             footerView.set(MODEL, e.newVal);
         })
@@ -398,6 +452,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(TEMPLATE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             bodyView.set(TEMPLATE, e.newVal);
         })
     );
@@ -408,13 +463,13 @@ ITSAViewModelPanel.prototype.bindUI = function() {
             function() {
                 // BECAUSE we do not have a promise yet that tells when all formelements are definitely rendered on the screen,
                 // we need to timeout
+                Y.log('aftersubscriptor *:viewrendered', 'info', 'ITSA-ViewModelPanel');
                 Y.later(250, null, function() {
                 var itsatabkeymanager = contentBox.itsatabkeymanager;
                 if (itsatabkeymanager) {
                     itsatabkeymanager.refresh(contentBox);
-                    if (instance.get(VISIBLE)) {
+                    if (instance.get(VISIBLE) && !instance._locked) {
                         // first enable the UI againbecause we need enabled element to set the focus
-                        instance.unlockPanel();
                         itsatabkeymanager.focusInitialItem();
                     }
                 }
@@ -427,6 +482,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
         instance.after(
             FOCUSMANAGED+CHANGE,
             function(e) {
+                Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
                 instance._setFocusManager(e.newVal);
             }
         )
@@ -436,6 +492,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
         bodyView.on(
             FOCUS_NEXT,
             function(e) {
+                Y.log('onsubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
                 if (e.target!==instance) {
                     var newevent = FOCUS_NEXT,
                         payload = {
@@ -454,6 +511,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
         instance.after(
             ['*:'+CLOSE_CLICK, '*:'+BUTTON+CLOSE],
             function(e) {
+                Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
                 instance.fire(BUTTON_HIDE_EVENT, {buttonNode: e.target});
             }
         )
@@ -461,6 +519,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(FOCUSED+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             var itsatabkeymanager = contentBox.itsatabkeymanager,
                 focusclassed = e.newVal && instance.get(VISIBLE) && instance.get(EDITABLE);
             instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, focusclassed);
@@ -472,13 +531,15 @@ ITSAViewModelPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(
-            ['*:modelload', '*:modelreset'],
+            ['*:'+LOAD, '*:'+RESET],
             function(e) {
-            var itsatabkeymanager = contentBox.itsatabkeymanager;
-                if (itsatabkeymanager && instance.get(VISIBLE)) {
+                Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
+                var itsatabkeymanager = contentBox.itsatabkeymanager,
+                model = e.target;
+                if ((model instanceof Y.Model) && itsatabkeymanager && instance.get(VISIBLE)) {
                     // first enable the UI again, this is done within the submit-defaultfunc of the model as well, but that code comes LATER.
                     // and we need enabled element to set the focus
-                    e.model.enableUI();
+                    model.enableUI();
                     itsatabkeymanager.focusInitialItem();
                 }
             }
@@ -487,6 +548,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(FOOTERTEMPLATE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
         /*jshint expr:true */
             var newTemplate = e.newVal,
                 prevTemplate = e.prevVal;
@@ -495,7 +557,8 @@ ITSAViewModelPanel.prototype.bindUI = function() {
                 template: newTemplate,
                 editable: false,
                 styled: false,
-                focusManaged: false // will be done at the Panel-level
+                focusManaged: false, // will be done at the Panel-level
+                partOfMultiView: true
             }));
             prevTemplate && !newTemplate && prevTemplate.destroy() && instance._set(FOOTERVIEW, null);
         /*jshint expr:false */
@@ -506,6 +569,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
         instance.after(
             ['*:'+CLICK],
             function(e) {
+                Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
                 var node = e.buttonNode,
                     value = node && node.get(VALUE);
 /*jshint expr:true */
@@ -520,6 +584,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
         instance._header.delegate(
             CLICK,
             function(e) {
+                Y.log('delegatesubscriptor '+e.type+' delegated to panelheader.BUTTON', 'info', 'ITSA-ViewModelPanel');
                 var node = e.target,
                     value = node.get(VALUE);
 /*jshint expr:true */
@@ -533,6 +598,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.on(BUTTON_HIDE_EVENT, function(e) {
+            Y.log('onsubscriptor '+BUTTON_HIDE_EVENT, 'info', 'ITSA-ViewModelPanel');
             // in case of an ITSAFormElement that has editable fields --> you might need to preventDefault (=hide) when not validated
             var model = instance.get(MODEL),
                 editable = instance.get(EDITABLE),
@@ -542,6 +608,64 @@ ITSAViewModelPanel.prototype.bindUI = function() {
             VALIDATED_BTN_TYPES[buttonValue] && editable && model && model.toJSONUI && !model.validated() && e.preventDefault();
 /*jshint expr:false */
         })
+    );
+
+    eventhandlers.push(
+        instance.on(
+            ['*:'+SUBMIT, '*:'+SAVE, '*:'+LOAD, '*:'+DESTROY],
+            function(e) {
+                var promise = e.promise,
+                    model = e.target,
+                    eventType = e.type.split(':')[1],
+                    options = e.options,
+                    destroyWithoutRemove = ((eventType===DESTROY) && (options.remove || options[DELETE])),
+                    prevAttrs;
+                if (!destroyWithoutRemove && (model instanceof Y.Model)) {
+                    if ((eventType===SUBMIT) || (eventType===SAVE)) {
+                        prevAttrs = model.getAttrs();
+                        model.UIToModel();
+                    }
+                    // Caution: need to lockPanel AFTER UIToModel, because the changeevent would unlock again
+                    instance._lockedBefore = instance._locked;
+                    instance.lockPanel(true);
+                    instance._setSpin(eventType, true);
+    /*jshint expr:true */
+                    (eventType===DESTROY) || promise.then(
+                        function() {
+                            ((eventType===LOAD) || (eventType===SUBMIT) || (eventType===SAVE)) && model.setResetAttrs();
+                        },
+                        function() {
+                            ((eventType===SUBMIT) || (eventType===SAVE)) && model.setAttrs(prevAttrs, {fromInternal: true});
+                            return true; // make promise fulfilled
+                        }
+                    ).then(
+                        function() {
+                            var itsatabkeymanager = contentBox.itsatabkeymanager;
+                            instance._setSpin(eventType, false);
+        /*jshint expr:true */
+                            instance._lockedBefore || instance.unlockPanel();
+                            itsatabkeymanager && itsatabkeymanager.focusInitialItem();
+        /*jshint expr:false */
+                        }
+                    );
+    /*jshint expr:false */
+                }
+            }
+        )
+    );
+
+    eventhandlers.push(
+        instance.on(
+            '*:datepickerclick',
+            function() {
+                instance.lockPanel();
+                instance._pickerVis = true;
+                instance.once('*:'+FOCUS_NEXT, function() {
+                    instance._pickerVis = false;
+                    instance.unlockPanel();
+                });
+            }
+        )
     );
 
 };
@@ -557,10 +681,12 @@ ITSAViewModelPanel.prototype.lockPanel = function() {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('lockPanel', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.lockView();
 /*jshint expr:true */
-    footerview && footerview.lockView();
+    footerview ? footerview.lockView() : instance._footercont.all('button').addClass(PURE_BUTTON_DISABLED);
+    arguments[0] || (instance._locked=true);
 /*jshint expr:false */
 };
 
@@ -576,11 +702,13 @@ ITSAViewModelPanel.prototype.unlockPanel = function() {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('unlockPanel', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.unlockView();
 /*jshint expr:true */
-    footerview && footerview.unlockView();
+    footerview ? footerview.unlockView() : instance._footercont.all('button').removeClass(PURE_BUTTON_DISABLED);
 /*jshint expr:false */
+    instance._locked = false;
 };
 
 /**
@@ -632,6 +760,7 @@ ITSAViewModelPanel.prototype.removeButtonLabel = function(buttonType) {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('removeButtonLabel', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.removeButtonLabel(buttonType);
 /*jshint expr:true */
@@ -653,6 +782,7 @@ ITSAViewModelPanel.prototype.removeCustomBtn = function(buttonId) {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('removeCustomBtn', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.removeCustomBtn(buttonId);
 /*jshint expr:true */
@@ -709,6 +839,7 @@ ITSAViewModelPanel.prototype.removeHotKey = function(buttonType) {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('removeHotKey', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.removeHotKey(buttonType);
 /*jshint expr:true */
@@ -767,6 +898,7 @@ ITSAViewModelPanel.prototype.setButtonLabel = function(buttonType, labelHTML) {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('setButtonLabel', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.setButtonLabel(buttonType, labelHTML);
 /*jshint expr:true */
@@ -827,6 +959,7 @@ ITSAViewModelPanel.prototype.setHotKey = function(buttonType, hotkey) {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('setHotKey', 'info', 'ITSA-ViewModelPanel');
     // bodyview always exists, footerview, we need to check first:
     bodyview.setHotKey(buttonType, hotkey);
 /*jshint expr:true */
@@ -846,6 +979,7 @@ ITSAViewModelPanel.prototype.syncUI = function() {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
+    Y.log('syncUI', 'info', 'ITSA-ViewModelPanel');
     // no need to sync when not rendered: first time will be done internally
     if (instance.get(RENDERED)) {
         bodyview.render();
@@ -882,6 +1016,7 @@ ITSAViewModelPanel.prototype.syncUI = function() {
   * @since 0.3
  **/
 ITSAViewModelPanel.prototype.translate = function(text) {
+    Y.log('translate', 'info', 'ITSA-ViewModelPanel');
     return this.get(BODYVIEW).translate(text);
 };
 
@@ -897,8 +1032,9 @@ ITSAViewModelPanel.prototype.destructor = function() {
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
-    Y.log('destructor', 'info', 'ITSA-ViewModel');
+    Y.log('destructor', 'info', 'ITSA-ViewModelPanel');
     instance._clearEventhandlers();
+    bodyview.removeTarget(instance);
 /*jshint expr:true */
     contentBox.hasPlugin(ITSATABKEYMANAGER) && contentBox.unplug(ITSATABKEYMANAGER);
     bodyview && bodyview.destroy();
@@ -918,13 +1054,13 @@ ITSAViewModelPanel.prototype._defFn_focusnext = function() {
     var instance = this,
         itsatabkeymanager = instance.get(CONTENTBOX).itsatabkeymanager;
 
-    Y.log('defaultFn of focusnext', 'info', 'ITSA-ViewModel');
+    Y.log('_defFn_focusnext', 'info', 'ITSA-ViewModelPanel');
     if (itsatabkeymanager) {
-        Y.log('focus to next field', 'info', 'ITSA-ViewModel');
+        Y.log('focus to next field', 'info', 'ITSA-ViewModelPanel');
         itsatabkeymanager.next();
     }
     else {
-        Y.log('No focus to next field: Y.Plugin.ITSATabKeyManager not plugged in', 'info', 'ITSA-ViewModel');
+        Y.log('No focus to next field: Y.Plugin.ITSATabKeyManager not plugged in', 'info', 'ITSA-ViewModelPanel');
     }
 };
 
@@ -941,7 +1077,7 @@ ITSAViewModelPanel.prototype._setFocusManager = function(activate) {
         contentBox = instance.get(CONTENTBOX),
         itsatabkeymanager = contentBox.itsatabkeymanager;
 
-    Y.log('_setFocusManager to '+activate, 'info', 'ITSA-ViewModel');
+    Y.log('_setFocusManager to '+activate, 'info', 'ITSA-ViewModelPanel');
     if (activate) {
         // If Y.Plugin.ITSATabKeyManager is plugged in, then refocus to the first item
         Y.use(GALLERY+ITSATABKEYMANAGER, function() {
@@ -964,4 +1100,22 @@ ITSAViewModelPanel.prototype._setFocusManager = function(activate) {
         itsatabkeymanager && contentBox.unplug(ITSATABKEYMANAGER);
 /*jshint expr:false */
     }
+};
+
+/**
+ * Transforms the buttonicon into a 'spinner'-icon or reset to original icon.
+ * In case there are multiple of the same buttontypes rendered, all are affected.
+ *
+ * @method _setSpin
+ * @private
+ * @param buttonType {String} buttontype which is to be affected.
+ * @param spin {Boolean} whether to spin or not (=return to default).
+ * @since 0.3
+ *
+*/
+ITSAViewModelPanel.prototype._setSpin = function(buttonType, spin) {
+    var instance = this,
+        buttonicons = instance.get(CONTENTBOX).all('[data-buttonsubtype="'+buttonType+'"] i');
+    buttonicons.toggleClass('itsaicon-form-loading', spin);
+    buttonicons.toggleClass('itsa-busy', spin);
 };

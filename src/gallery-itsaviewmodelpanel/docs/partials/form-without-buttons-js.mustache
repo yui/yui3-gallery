@@ -1,8 +1,5 @@
 YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', function(Y) {
-    var panel, user, template, spinnericon, firsterror = true;
-
-    // loading asynchroniously the animated fonticon:
-    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-animatespin', 'gallerycss-itsa-controll');
+    var panel, user, template, footertemplate;
 
     // create MyFormModelClass
     Y.LoginModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
@@ -10,7 +7,7 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
             var instance = this;
             switch (action) {
               case 'submit':
-                Y.later(1500, null, function() {
+                Y.later(5000, null, function() {
                     // normally you need to invest the response on the server,
                     // but now we do this here:
                     var loginok = ((instance.get('username')==='marco') &&
@@ -35,10 +32,11 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
                     label: 'Username',
                     placeholder: 'username',
                     required: true,
+                    fullselect: true,
                     initialfocus: true
                 },
                 validator: function(v) {
-                    return v && (typeof v==='string') && (v.length>=3) && (v.indexOf(' ')===-1);
+                    return (typeof v==='string') && (v.length>=3) && (v.indexOf(' ')===-1);
                 },
                 validationerror: 'Enter at least 3 characters without a whitespace'
             },
@@ -52,7 +50,7 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
                     submitonenter: true
                 },
                 validator: function(v) {
-                    return v && (typeof v==='string') && (v.length>=5) && (v.indexOf(' ')===-1);
+                    return (typeof v==='string') && (v.length>=5) && (v.indexOf(' ')===-1);
                 },
                 validationerror: 'Enter at least 5 characters without a whitespace'
             }
@@ -61,26 +59,18 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
 
     user = new Y.LoginModel();
 
-    template = '<div id="spinner" class="hiddenicon">'+
-                   '<i class="itsaicon-controll-spin7 animate-spin itsa-iconstandalone"></i>'+
-               '</div>'+
-               '<fieldset>'+
-                   '<div class="pure-control-group">{username}</div>'+
-                   '<div class="pure-control-group">{password}</div>'+
-               '</fieldset>';
-
-    templateretry = '<div id="spinner" class="hiddenicon">'+
-                        '<i class="itsaicon-controll-spin7 animate-spin itsa-iconstandalone"></i>'+
-                    '</div>'+
-                    '<legend id="retrylegend">{response}</legend>'+
+    template = '<legend id="retrylegend">Please login:</legend>'+
                     '<fieldset>'+
                         '<div class="pure-control-group">{username}</div>'+
                         '<div class="pure-control-group">{password}</div>'+
                     '</fieldset>';
 
+    footertemplate = '{spinbtn_submit}';
+
     panel = new Y.ITSAViewModelPanel({
         model: user,
         template: template,
+        footerTemplate: footertemplate,
         title: 'Login with username=\'marco\', password=\'asbreuk\'',
         titleRight: '', // <-- hide closebutton
         hideOnBtn: false, // <-- make not to close when submitted ('submitonenter' acts like a button)
@@ -92,27 +82,18 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
         width: 320
     }).render();
 
-    spinnericon = Y.one('#spinner');
-
-    panel.after('modelsubmit:auto', function(e) {
-        spinnericon.removeClass('hiddenicon');
-    });
-
-    user.after('submit', function(e) {
-        panel.hide();
-    });
-
-    user.after('error', function(e) {
-        user.reset();
-        if (firsterror) {
-            panel.set('template', Y.Lang.sub(templateretry, {response: e.error}));
-            firsterror = false;
-        }
-        else {
-            panel.get('contentBox').one('#retrylegend').set('text', e.error);
-            panel.unlockPanel();
-        }
-        spinnericon.addClass('hiddenicon');
+    retrylegend = Y.one('#retrylegend');
+    user.on('submit', function(e) {
+        var submitpromise = e.promise;
+        submitpromise.then(
+            function() {
+                panel.hide();
+            },
+            function(reason) {
+                user.reset();
+                retrylegend.set('text', reason.message);
+            }
+        );
     });
 
 });

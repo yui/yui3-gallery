@@ -79,7 +79,7 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
                     '<div class="pure-control-group">{name}</div>'+
                     '<div class="pure-control-group">{country}</div>'+
                     '<div class="pure-control-group">{firstalbum}</div>'+
-                    '<div class="pure-control-group">{release}</div>';
+                    '<div class="pure-control-group">{release}</div>'+
                 '</fieldset>';
 
     footertemplate = '{btn_reset}{spinbtn_load}{spinbtn_submit}';
@@ -95,13 +95,13 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
         editable: true,
         width: 420
     });
-    panel.render();
 
     panel.setButtonLabel('spinbtn_load', '<i class="itsaicon-form-load"></i>'+panel.translate('reload'));
     panel.setHotKey('spinbtn_submit', 's');
     panel.setHotKey('spinbtn_load', 'l');
     panel.setHotKey('btn_reset', 'r');
 
+    panel.render();
     panel.show();
 
 });

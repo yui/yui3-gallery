@@ -1,7 +1,7 @@
 {
     "name"       : "gallery-itsaviewmodelpanel",
     "displayName": "Gallery: gallery-itsaviewmodelpanel",
-    "description": "ITSAViewModelPanel is a extention of Y.Panel and made to render Y.Model instances through templates inside the panel.",
+    "description": "ITSAViewModelPanel is a extention of Y.ITSAPanel and made to render Y.Model instances through templates inside the panel.",
     "author"     : [ "itsasbreuk" ],
     "use"        : [ "gallery-itsaviewmodelpanel" ],
 

@@ -10,7 +10,7 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
             var instance = this;
             switch (action) {
               case 'submit':
-                Y.later(1500, null, function() {
+                Y.later(300000, null, function() {
                     // normally you need to invest the response on the server, but now we do this here:
                     var loginok = ((instance.get('username')==='marco') && (instance.get('password')==='panel'));
                     if (loginok) {
@@ -32,7 +32,8 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
                 formconfig: {
                     label: 'Firstname',
                     placeholder: 'firstname',
-                    required: true
+                    required: true,
+                    tooltip: 'say something'
                 },
                 validator: function(v) {
                     return (typeof v==='string') && (v.length>0);
@@ -85,7 +86,6 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
                 formtype: 'date',
                 formconfig: {
                     label: 'Weddingdate',
-                    tooltip: 'enter here your date',
                     format: '%Y-%m-%d'
                 }
             }
