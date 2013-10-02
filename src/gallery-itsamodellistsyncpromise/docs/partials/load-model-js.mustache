@@ -1,0 +1,61 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodellistsyncpromise', 'model', 'model-list', 'json-stringify', function(Y) {
+
+   var countrymodel, countries,
+       loadbutton = Y.one('#loaddata'),
+       container = Y.one('#resultcontainer');
+    Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        // model.sync() will NOT be used when loading a modellist
+    });
+
+    Y.Countries = Y.Base.create('countries', Y.ModelList, [], {
+        model: Y.CountryModel,
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+              case 'read':
+                Y.later(1500, null, function() {
+                    data = [
+                        {Country: "The Netherlands"},
+                        {Country: "USA"},
+                        {Country: "United Kingdom"}
+                    ]
+                    callback(null, Y.JSON.stringify(data));
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
+    countries = new Y.Countries();
+
+    countries.on('load', function(){
+        container.setHTML('Start loading<br />');
+    });
+    countries.after('load', function(e){
+        container.append('ModelList after load:<br />');
+        countries.each(
+            function(oneCountry) {
+                container.append('Country='+oneCountry.get('Country')+'<br />');
+            }
+        );
+        loadbutton.setHTML('load models');
+    });
+    countries.after('error', function(e){
+        container.append('ERROR occured'+e.error+'<br />');
+        loadbutton.setHTML('load models');
+    });
+
+    loadbutton.on(
+        'click',
+        function() {
+            loadbutton.setHTML('busy loading...');
+            countries.load();
+        }
+    );
+
+    loadbutton.removeClass('pure-button-disabled');
+
+});

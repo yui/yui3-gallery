@@ -1,0 +1,60 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodellistsyncpromise', 'model', 'model-list', function(Y) {
+
+   var countrymodel, countries,
+       loadbutton = Y.one('#loaddata'),
+       container = Y.one('#resultcontainer');
+    Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        // model.sync() will NOT be used when loading a modellist
+    });
+
+    Y.Countries = Y.Base.create('countries', Y.ModelList, [], {
+        model: Y.CountryModel,
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+              case 'read':
+                Y.later(1500, null, function() {
+                     callback('Server time-out (simulated)');
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
+    countries = new Y.Countries();
+
+    countries.on('load', function(){
+        container.setHTML('Start loading<br />');
+    });
+    countries.after('load', function(e){
+        container.append('Models are loaded succesfully (this message should NOT appear in this example)<br />');
+    });
+    countries.after('error', function(e){
+        container.append('Error event occurred by modellist: '+e.error+'<br />');
+    });
+
+
+
+    loadbutton.on(
+        'click',
+        function() {
+            loadbutton.setHTML('busy loading...');
+            countries.loadPromise().then(
+                function(response) {
+                    container.append('Loadpromise resolved: Models are loaded (this message should not appear in this example).<br />');
+                },
+                function(reason) {
+                    container.append('Loadpromise rejected: '+reason.message+'.<br />');
+                }
+            ).then(function() {
+                loadbutton.setHTML('load modeldata');
+            });
+        }
+    );
+
+    loadbutton.removeClass('pure-button-disabled');
+
+});

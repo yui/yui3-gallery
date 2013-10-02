@@ -1,14 +1,139 @@
+{{>api-button}}
+
 <div class="intro">
     <p>
-    *Summary Goes Here*
+    {{description}} This means the 'on'-events will be fired before syncing and the 'after'-events after syncing.
     </p>
+    <p>
+        <b>Note:</b> this module pathes the events for Y.ModelList. Unit-tests all succeed, but it is advisable to check yourself if any ModelList-event work as espected (also in the bubble-chain).
+    <p/>
 </div>
 
 <h2>Description</h2>
+    <p>
+        After including this module, nothing extra needs to be done. Using the synclayer can be done just as usual. However, there are three awesome expansions made which you can use:
+    </p>
 
-<p>*Module Description Goes Here*</p>
+<h3>Sync events by using defaultFn</h3>
+    <p>
+        All sync-events will use a <code>defaultFn</code> for their operation. This module takes care of it, even if you don't use the promise-methods or syncPromise-layer. This means the <code>'on'-event</code> is fired before the synclayer is called and the <code>'after'-event</code> afterwards, which can be prevented. The next Model's events are preventable:
+        <ul>
+            <li><code>destroymodels</code></li>
+            <li><code>load</code> (replaces previous models by the loaded models)</li>
+            <li><code>loadappend</code> (appends the loaded models)</li>
+            <li><code>save</code></li>
+            <li><code>submit</code> (only with Y.ITSAFormModel instances)</li>
+        </ul>
+        These events now have <code>e.promise</code> which could be used to get informed instead of listening to both the 'after'- and 'error'-events.
+    </p>
 
+<h3>Promise methods</h3>
+    <p>
+        <code>load()</code>, <code>loadappend()</code>, <code>save()</code>, <code>submit()</code> and <code>destroymodels()</code>, are also available as a Promise, by using these methods:
+        <ul>
+            <li><code>destroymodelsPromise()</code></li>
+            <li><code>loadPromise()</code></li>
+            <li><code>loadappendPromise()</code></li>
+            <li><code>savePromise()</code></li>
+            <li><code>submitPromise()</code> (only with Y.ITSAFormModel instances)</li>
+        </ul>
+        All these methods return Promises.<br>
+        <b>Note:</b> Be aware that -if one or more models fail- the promise will be rejected. It only will be fulfilled if <u>all</u> models succeed syncing.
+    </p>
+
+<h3>Promised synclayer</h3>
+    <p>
+        The module also introduces <code>syncPromise()</code> which could be used instead of <code>sync()</code>. As a developer you can define syncPromise(). Once done, all sync-methods will sync through syncPromise() instead of sync(). The method syncPromise() is a method that should be set-up the same way as sync(), except its actions should return promises. <a href="https://github.com/juandopazo/yui3-io-utils">gallery-io-utils</a> is the perfect module that returns Promises that can be used in conjunction with this module. See the examples how to setup syncPromise().
+    </p>
+    <p>
+        <b>Note:</b> You can only setup a sunclayer for the 'read' and 'readappend' actions. All other synmethods are done through the Model's synclayer. See below.
+    </p>
+
+<h2>How ModelList synclayers works</h2>
+    <p>
+        At this moment, only <code>load</code> and <code>loadappend</code> wil go through the synclayer of the ModelList (with the actions <code>read</code> and <code>readappend</code>). All other methods go through the synclayer of Model. This also means multiple requests. Yo need to set up Model's synclayer if you want the corresponding methods to be executed.
+    </p>
+    <p>
+        So, you need to setup the synclayer for both Model and ModelList. Whether you use sync() or syncPromise() as the synclayer, is up to the developer. However syncPromise() is far more easier.
+    </p>
+
+<h2>Be aware of usage error-event</h2>
+    <p>Only <code>load</code> and </code>loadappend</code> use the ModelList's synclayer. The other methods are batching Model's sync methods. Therefore, ModelList will only fire the <code>error</code>-event itself when an error occurs during these syncmethods. This means, you need to listen for errors in this way:
+        <ul>
+            <li><code>load</code> --> listen to modellist.on('error')</li>
+            <li><code>loadappend</code> --> listen to modellist.on('error')</li>
+            <li><code>destroy</code> --> listen to modellist.on('*:error')</li>
+            <li><code>save</code> --> listen to modellist.on('*:error')</li>
+            <li><code>submit</code> --> listen to modellist.on('*:error')</li>
+        </ul>
+    </p>
+    <p>
+        Or, you could use the Promise-handle to be rejected. This is the prefered way and works for all the syncmethods. In case multiple Models fail syncing, you won't find yourself catching multiple errors, but can handle them all in the promise-reject handler.
+    </p>
+
+<h2>Usages</h2>
+<h3>Loading Model-data with ModelList.load()</h3>
+```js
+YUI(yuiconfig).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
+
+    var pielist;
+    Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
+        // ... you might want to set  up the sync-layer, but ModelList.loadPromise doesn't call the 'read' method of every separate Y.PieModel
+        // instead, it calls its own ModelList synclayer
+    });
+    Y.PieList = Y.Base.create('pieList', Y.ModelList, [], {
+        model: Y.PieModel,
+        syncPromise: function (action, options) {
+            if (action==='read') {
+                return Y.io.get('http://mydomain.com/getdata.php?models=group1');
+            }
+            // do not forget to reject the promise in case an invalid 'action' is defined
+            return new Y.Promise(function (resolve, reject) {
+                reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+            });
+        }
+    });
+    pielist = new Y.PieList({...});
+
+    pielist.load();
+
+});```
+<h3>Loading Model-data with ModelList.loadPromise()</h3>
+```js
+YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {
+
+    var pielist;
+    Y.PieModel = Y.Base.create('pieModel', Y.Model, [], {
+        // ... you might want to set  up the sync-layer, but ModelList.loadPromise doesn't call the 'read' method of every separate Y.PieModel
+        // instead, it calls its own ModelList synclayer
+    });
+    Y.PieList = Y.Base.create('pieList', Y.ModelList, [], {
+        model: Y.PieModel,
+        syncPromise: function (action, options) {
+            if (action==='read') {
+                return Y.io.get('http://mydomain.com/getdata.php?models=group1');
+            }
+            // do not forget to reject the promise in case an invalid 'action' is defined
+            return new Y.Promise(function (resolve, reject) {
+                reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+            });
+        }
+    });
+    pielist = new Y.PieList({...});
+
+    pielist.loadPromise().then(
+        function(response) {
+            // we are sure now pielist is filled with all PieModels.
+            // we could read 'response' or 'options', but don't need to
+        },
+        function(reason) {
+            // 'reason' gives you the reason why loading has failed
+        }
+    );
+
+});});
 ```
-//Module example code
-```
 
+<h2>Licence</h2>
+    Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+    Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>

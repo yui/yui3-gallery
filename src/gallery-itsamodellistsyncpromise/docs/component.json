@@ -1,11 +1,66 @@
 {
     "name"       : "gallery-itsamodellistsyncpromise",
     "displayName": "Gallery: gallery-itsamodellistsyncpromise",
-    "description": "*Summary Goes Here*",
+    "description": "This module extends Y.ModelList by introducing Promised sync-methods. It also transforms Y.ModelList's sync-events into true events with a defaultFunc which can be prevented.",
     "author"     : [ "itsasbreuk" ],
     "use"        : [ "gallery-itsamodellistsyncpromise" ],
 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "load-model",
+            "displayName": "Examine events when loading a modellist",
+            "description": "Load the modellist by clicking the button. The on- and after-event will appear at the start of loading and at the end.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodellistsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodellistsyncpromise", "load", "event"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "loadappend-model",
+            "displayName": "Append models to a modelllist using loadappend",
+            "description": "Loadappend the modellist by clicking the button. The on- and after-event will appear at the start of loading and at the end.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodellistsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodellistsyncpromise", "load", "event"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "loadpromise-model",
+            "displayName": "Loading modellist using loadPromise()",
+            "description": "Load the model by clicking the button. The promise will inform when things get ready.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodellistsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodellistsyncpromise", "load", "promise", "loadPromise"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "preventload-model",
+            "displayName": "Prevent-default loading modellist",
+            "description": "Load the model by clicking the button. The defaultaction (load) will not execute.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodellistsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodellistsyncpromise", "load", "preventDefault"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "on-promise",
+            "displayName": "On-listener with e.promise",
+            "description": "Listening to the on-load event and use e.promise for further action.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodellistsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodellistsyncpromise", "load", "promise", "loadPromise", "event"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "error",
+            "displayName": "Errors during loading",
+            "description": "Load the model by clicking the button. A servererror is simulated which will be shown both in the promiseresult as by an throwing error-event.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsamodellistsyncpromise", "node", "base-build", "model"],
+            "tags"    : ["gallery-itsamodellistsyncpromise", "error", "event"],
+            "hideTableOfContents": true
+        }
+    ]
 }

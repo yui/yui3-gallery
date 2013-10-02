@@ -1,0 +1,64 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodellistsyncpromise', 'model', 'model-list', 'json-stringify', function(Y) {
+
+   var countrymodel, countries,
+       loadbutton = Y.one('#loaddata'),
+       container = Y.one('#resultcontainer');
+    Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        // model.sync() will NOT be used when loading a modellist
+    });
+
+    Y.Countries = Y.Base.create('countries', Y.ModelList, [], {
+        model: Y.CountryModel,
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+              case 'read':
+                Y.later(1500, null, function() {
+                    data = [
+                        {Country: "The Netherlands"},
+                        {Country: "USA"},
+                        {Country: "United Kingdom"}
+                    ]
+                    callback(null, Y.JSON.stringify(data));
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
+    countries = new Y.Countries();
+
+    countries.on('load', function(e) {
+        var promise = e.promise;
+        container.append('Start loading<br />');
+        promise.then(
+            null,
+            function() {
+                return true; // making resolved
+            }
+        ).then(
+            function(response) {
+                container.append('Models are loaded.<br />Promise-response: '+response+'<br />#items: '+countries.size()+'<br />');
+                loadbutton.setHTML('Load modeldata');
+            },
+            function(reason) {
+                container.append('Error loading modellist.<br />Promise-response: '+reason+'<br />');
+                loadbutton.setHTML('Load modeldata');
+            }
+        );
+    });
+
+    loadbutton.on(
+        'click',
+        function() {
+            loadbutton.setHTML('busy loading...');
+            countries.load();
+        }
+    );
+
+    loadbutton.removeClass('pure-button-disabled');
+
+});

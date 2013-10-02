@@ -1,0 +1,55 @@
+YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodellistsyncpromise', 'model', 'model-list', 'json-stringify', function(Y) {
+
+   var countrymodel, countries,
+       loadbutton = Y.one('#loaddata'),
+       container = Y.one('#resultcontainer');
+    Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        // model.sync() will NOT be used when loading a modellist
+    });
+
+    Y.Countries = Y.Base.create('countries', Y.ModelList, [], {
+        model: Y.CountryModel,
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+              case 'read':
+                Y.later(1500, null, function() {
+                    data = [
+                        {Country: "The Netherlands"},
+                        {Country: "USA"},
+                        {Country: "United Kingdom"}
+                    ]
+                    callback(null, Y.JSON.stringify(data));
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
+    countries = new Y.Countries();
+
+    loadbutton.on(
+        'click',
+        function(e) {
+            var button = e.currentTarget;
+            button.setHTML('busy loading...');
+            container.setHTML('Start loading<br />');
+            countries.loadPromise().then(
+                function(response, options) {
+                    container.append('Loadpromise resolved: Models are loaded. --> #items'+countries.size()+'<br />');
+                },
+                function(reason) {
+                    container.append('Loadpromise rejected: '+reason.message+' (this message should not appear in this example).<br />');
+                }
+            ).then(function() {
+                button.setHTML('load models');
+            });
+        }
+    );
+
+    loadbutton.removeClass('pure-button-disabled');
+
+});
