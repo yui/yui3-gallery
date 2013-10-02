@@ -1,11 +1,11 @@
 {
     "name": "gallery-itsadialogbox",
     "passed": 0,
-    "failed": 3,
+    "failed": 2,
     "errors": 0,
     "ignored": 0,
-    "total": 3,
-    "duration": 18,
+    "total": 2,
+    "duration": 16,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 4,
+        "duration": 6,
         "type": "testcase",
         "test is empty": {
             "result": "fail",
@@ -24,6 +24,6 @@
             "duration": 1
         }
     },
-    "timestamp": "Wed 26 Jun 2013 03:59:38 PM PDT",
+    "timestamp": "Wed Oct  2 13:27:09 2013",
     "consoleInfo": []
 }

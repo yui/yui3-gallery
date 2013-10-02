@@ -1520,7 +1520,7 @@ Y.ITSAFORMELEMENT = Y.Base.create('itsaformelement', Y.Base, [], {
     }
 );
 
-}, 'gallery-2013.06.26-23-09', {
+}, 'gallery-2013.10.02-20-26', {
     "requires": [
         "yui-base",
         "base-build",
