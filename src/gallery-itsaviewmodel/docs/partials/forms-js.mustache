@@ -83,16 +83,12 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', '
 
     view.render();
 
-    view.on('buttonclick', function(e) {
-        console.log('buttonclick');
-    });
-
-
-    view.after('modelsubmit', function(e) {
-     //   Y.alert('Values are submitted', 'Here are all the attribute-values: '+Y.JSON.stringify(e.target.toJSON()).replace(/\,/g, '</br>'));
+    artist.after('submit', function(e) {
+        Y.alert('Values are submitted', 'Here are all the attribute-values: '+Y.JSON.stringify(e.target.toJSON()).replace(/\,/g, '</br>'));
     });
 
     view.on('validationerror', function(e) {
         Y.alert('error', 'validation error');
     });
+
 });

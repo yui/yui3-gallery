@@ -1,8 +1,13 @@
 {{>api-button}}
 
+<style type="text/css">
+{{>index-css}}
+</style>
+
 <div class="intro">
     <p>
         {{description}} The Panel-instance is also capable of handling Y.ITSAFormModel-instances, which gives you a great way to define html-forms.
+        <img src="{{componentAssets}}/screenshot.png" alt="Screenshot of ITSAViewModelPanel">
     </p>
 </div>
 
@@ -241,6 +246,22 @@
 <h3>Validation</h3>
     <p>
         Validation is done through <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaformmodel/">Y.ITSAFormModel</a>, which supplies very nice and easy validationmethods. When validation fails, Y.ITSAViewModel will take care of refocussing to the first item whose validation failed.
+    </p>
+
+<h2>About templating</h2>
+    <p>
+        When using Y.ITSAFormModel as 'model' and 'editable' is set true, be aware that all property-values are <u>html-strings</u>. Should you templating with micro-templates, to render the UI-elements you need to use
+        ```html
+        <%== data.someattribute %>
+        ```
+        instead of
+        ```html
+        <%= data.someattribute %>
+        ```
+        If you need to access the original attribute-value, use the underscore-reference:
+        ```html
+        '<% if (data._activated===false) { %>system down<% } else { %>system running<% } %>'+
+        ```
     </p>
 
 <h2>Styling</h2>

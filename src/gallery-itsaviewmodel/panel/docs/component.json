@@ -1,7 +1,7 @@
 {
     "name"       : "gallery-itsaviewmodelpanel",
     "displayName": "Gallery: gallery-itsaviewmodelpanel",
-    "description": "ITSAViewModelPanel is a extention of Y.Panel and made to render Y.Model instances through templates inside the panel.",
+    "description": "ITSAViewModelPanel is a extention of Y.ITSAPanel and made to render Y.Model instances through templates inside the panel.",
     "author"     : [ "itsasbreuk" ],
     "use"        : [ "gallery-itsaviewmodelpanel" ],
 
@@ -51,6 +51,15 @@
             "author"     : [ "itsasbreuk" ],
             "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "gallery-itsacheckbox", "transition"],
             "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "promised-syncing",
+            "displayName": "Formsyncing through Promise-layer",
+            "description": "This example shows how to set up a form that syncs through a Promise-synclayer.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "gallery-itsaslider", "gallery-itsadialog", "gallery-io-utils"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel", "io-utils", "promise", "sync"],
             "hideTableOfContents": true
         }
     ]

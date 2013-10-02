@@ -1,4 +1,5 @@
-YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slider', 'gallerycss-itsa-base', 'gallerycss-itsa-form', function(Y) {
+YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slider', 'gallerycss-itsa-base',
+'gallerycss-itsa-form', 'json-stringify', 'gallery-io-utils', 'gallery-itsadialog', function(Y) {
     var panel, artist, template, footertemplate;
 
     // adding skin sam to body for getting the right skin for the widgets
@@ -6,24 +7,16 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
 
     // create MyFormModelClass
     Y.ArtistModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
-        sync: function (action, options, callback) {
-            var instance = this;
-            switch (action) {
-              case 'read':
-                Y.later(1500, null, function() {
-                    // in this example just reset the data after 1,5 seconds
-                    instance.reset();
-                    callback();
-                });
-                return;
-              case 'submit':
-                Y.later(1500, null, function() {
-                    callback();
-                });
-                return;
-              default:
-                callback('Invalid action');
+        // define 'syncPromise' instead of 'sync'.
+        // when 'syncPromise' is defined, Y.ITSAFormModel will use this method instead of 'sync'
+        syncPromise: function (action, options) {
+            if (action==='submit') {
+                return Y.io.post('http://mydomain.com/senddata.php?model='+Y.JSON.stringify(this.toJSON()));
             }
+            // do not forget to reject the promise in case an invalid 'action' is defined
+            return new Y.Promise(function (resolve, reject) {
+                reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+            });
         }
     }, {
         ATTRS: {
@@ -32,7 +25,6 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
                 formconfig: {
                     label: 'Artist',
                     placeholder: 'artist',
-                    hotkey: 'a',
                     required: true
                 }
             },
@@ -41,7 +33,6 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
                 formconfig: {
                     label: 'Country',
                     placeholder: 'country',
-                    hotkey: 'c',
                     required: true
                 }
             },
@@ -50,7 +41,6 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
                 formconfig: {
                     label: 'First album',
                     placeholder: 'first album',
-                    hotkey: 'f',
                     required: true
                 }
             },
@@ -58,7 +48,6 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
                 formtype: Y.Slider,
                 formconfig: {
                     label: 'Releaseyear',
-                    hotkey: 'y',
                     widgetconfig: {
                         min: 1950,
                         max: 2010
@@ -74,15 +63,16 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
         firstalbum: 'Boy',
         release: 1980
     });
+
     template = '<fieldset>'+
                     '<legend>Musician</legend>'+
                     '<div class="pure-control-group">{name}</div>'+
                     '<div class="pure-control-group">{country}</div>'+
                     '<div class="pure-control-group">{firstalbum}</div>'+
-                    '<div class="pure-control-group">{release}</div>'+
+                    '<div class="pure-control-group">{release}</div>';
                 '</fieldset>';
 
-    footertemplate = '{btn_reset}{spinbtn_load}{spinbtn_submit}';
+    footertemplate = '{btn_close}{spinbtn_submit}';
 
     panel = new Y.ITSAViewModelPanel({
         title: 'Enter data',
@@ -93,15 +83,19 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
         centered: true,
         dragable: true,
         editable: true,
+        visible: true,
         width: 420
+    }).render();
+
+    artist.after('submit', function() {
+        Y.alert('succesfully submitted');
     });
 
-    panel.setButtonLabel('spinbtn_load', '<i class="itsaicon-form-load"></i>'+panel.translate('reload'));
-    panel.setHotKey('spinbtn_submit', 's');
-    panel.setHotKey('spinbtn_load', 'l');
-    panel.setHotKey('btn_reset', 'r');
-
-    panel.render();
-    panel.show();
+    artist.after('error', function(e) {
+        var errorsource = e.src;
+        if (errorsource==='Model.submitPromise()') {
+            Y.alert('Simulated error submitting', e.src+' failed --> '+e.error, {type: 'error'});
+        }
+    });
 
 });
