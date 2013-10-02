@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsadatetimepicker
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -22,28 +22,28 @@ shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-itsadatetimepicker/gallery-itsadatetimepicker-coverage.js
 shifter [queu] copying assets to skin for sam
    #1: [warning] height can't be used with display: inline.
-       height: 20px; // line 21, pos 5
+       height: 20px; // line 22, pos 5
    #2: [warning] width can't be used with display: inline.
-       width: 20px; // line 22, pos 5
+       width: 20px; // line 23, pos 5
    #3: [warning] Outlines shouldn't be hidden unless other visual changes are made.
-       .itsa-datetimepicker-panel:focus { // line 43, pos 1
+       .itsa-datetimepicker-panel:focus { // line 44, pos 1
    #4: [warning] The box-sizing property isn't supported in IE6 and IE7.
-       box-sizing: border-box; // line 94, pos 5
+       box-sizing: border-box; // line 97, pos 5
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.567 seconds, pretty fast huh?
+shifter [info] finished in 1.253 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5000
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5010
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5015
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5014
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.9.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsadatetimepicker]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
+✖ [gallery-itsadatetimepicker]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.008 seconds)
     test is empty
        No Tests Provided For This Module
 Writing files in JSON format to: /src/gallery-itsadatetimepicker/logs/tests.json

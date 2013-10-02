@@ -18,6 +18,7 @@
 .itsa-datetimepicker-icondate, .itsa-datetimepicker-icontime, .itsa-datetimepicker-icondatetime {
     display: inline-block;
     *display: inline;
+    *zoom: 1;
     height: 20px;
     width: 20px;
     cursor: pointer;
@@ -69,6 +70,7 @@
 .itsa-datetimepicker-datepicker {
     display: inline-block;
     *display: inline;
+    *zoom: 1;
 }
 
 .itsa-datetimepicker-datepicker .yui3-calendar {
@@ -78,6 +80,7 @@
 .itsa-datetimepicker-timepicker {
     display: inline-block;
     *display: inline;
+    *zoom: 1;
 }
 
 .itsa-datetimepicker-timepicker .yui3-dial {
@@ -97,6 +100,7 @@
     box-shadow: 0 1px 3px #DDD inset;
     display: inline-block;
     *display: inline;
+    *zoom: 1;
     font-size: 0.8em;
     padding: 0.27em 0.31em;
     transition: border 0.3s linear 0s;
