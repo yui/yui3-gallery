@@ -1,9 +1,0 @@
-{
-    "name"       : "gallerycss-cssforms",
-    "displayName": "Gallery: gallerycss-cssforms",
-    "description": "Simple CSS for HTML Form Elements",
-    "author"     : [ "tilomitra" ],
-
-    "tags": [ "gallery" ]
-
-}
