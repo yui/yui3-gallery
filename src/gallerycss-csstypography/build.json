@@ -3,9 +3,7 @@
     "builds": {
         "gallerycss-csstypography": {
             "cssfiles": [
-                "css/typography-core.css",
-                "css/typography.css",
-                "css/typography-responsive.css"
+                "css/pure-typography.css"
             ]
         }
     }

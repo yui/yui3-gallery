@@ -1,0 +1,16 @@
+{
+  "name": "Pure Typography",
+  "version": "0.2.0",
+  "main": "css/pure-typography.css",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt",
+    "meta/",
+    "tests/",
+    "build.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "pure": "0.3.0"
+  }
+}

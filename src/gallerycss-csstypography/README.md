@@ -1,15 +1,20 @@
-gallerycss-csstypography
-=========================
+Pure Typography
+===============
 
-Simple CSS for beautiful text on the web.
+Simple CSS for nicer type on the web. Depends on [Pure](http://purecss.io) CSS Framework. Think of headings, basic list elements, basic notifications.
 
-What is it?
------------
+## [Check out the demo](http://tilomitra.github.io/csstypography/)
 
-`gallerycss-csstypography` is a [YUI Gallery](http://yuilibrary.com/gallery/) module that makes it easy to style typography on your web page. Think of headings, basic list elements, basic notifications, etc. 
 
-Links
------
+Install and use
+---------------
 
-[View the source](https://github.com/tilomitra/csstypography/) on Github.
+You can pull in Pure Typography through [Bower](http://bower.io):
+
+```
+bower install pure-typography
+```
+
+You can also pull it in through the [YUI Gallery](http://yuilibrary.com/gallery/). Its module name is `gallerycss-csstypography`.
+
 

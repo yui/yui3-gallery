@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Pure Typography</title>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <meta name="description" content="Simple styling for web typography">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+    <!-- Some custom styles to make things pretty. -->
+    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/tilomitra/prettypages/gh-pages/ui.css">
+    <link rel="stylesheet" type="text/css" href="../css/pure-typography.css">
+
+    <!-- RainbowJS Syntax Highlighting - Github Theme.
+         For more themes, go to https://github.com/ccampbell/rainbow/tree/master/themes -->
+    <link rel="stylesheet" type="text/css" href="https://rawgithub.com/ccampbell/rainbow/master/themes/github.css">
+
+    <!-- Modify header colors here to customize the look and feel of the site-->
+    <style>
+
+        h1, h2, h3, h4, h5, h6  {
+          font-weight: bold;
+        }
+
+        h4 {
+          text-transform: none;
+        }
+
+        .color {
+          color: red;
+        }
+
+        .pure-splash-custom {
+          color: white;
+          text-align: center;
+          background: url(http://farm1.staticflickr.com/49/143032778_00ccbb3659_o_d.jpg) no-repeat;
+          background-size: cover;
+          padding: 6em 0;
+        }
+        .bordered {
+          border: 1px solid #ccc;
+        }
+    </style>
+
+</head>
+
+<body class='pure-skin-sam'>
+
+    <div class="header">
+
+        <h1>Pure Typography</h1>
+        <h2>CSS Styles for nicer web type. Depends on Pure.</h2>
+
+    </div>
+    <div class="content pure-type">
+        <h2>Install using <a href="http://bower.io">Bower</a></h2>
+        <p>Pure Typography can be used through <a href="http://bower.io">Bower</a>. It has a dependency on Pure, so you'll want to pull that in as well.</p>
+
+        <p>It's a total of 1kb minified + gzipped.</p>
+
+<pre><code data-language="html">bower install pure-typography</code></pre>
+
+        <p>You can fork it from Github too.</p>
+
+        <a class="pure-button primary-button" href="http://github.com/tilomitra/csstypography">Fork from Github</a>
+
+    </div>
+        <div class="pure-splash">
+          <h1 class="pure-splash-head">A Splash Header</h1>
+          <h2 class="pure-splash-subhead">
+            Here's a little subtitle.
+          </h2>
+
+          <a class="pure-button pure-splash-button">A Splash Button</a>
+        </div>
+
+
+        <div class="pure-splash pure-splash-dark pure-g-r">
+          <div class="pure-u-1-2">
+            <img src="http://placehold.it/350x350">
+          </div>
+          <div class="pure-u-1-2">
+            <h1 class="pure-splash-head">A really really really *really* long Splash heading.</h1>
+            <h2 class="pure-splash-subhead">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</h2>
+          </div>
+
+        </div>
+
+        <div class="pure-splash pure-splash-custom pure-g-r">
+          <div class="pure-u-1">
+            <h1 class="pure-splash-head">A custom Splash Header</h1>
+          </div>
+        </div>
+        <p class="text-right">
+          <small class="muted">
+          Photo Credit: <a href="http://www.flickr.com/photos/74519001@N00/143032778/">Pierre Lesage</a> // <a href="http://creativecommons.org/licenses/by-nc-nd/2.0/">cc</a>.
+        </small>
+        </p>
+
+
+        <div class="content pure-type">
+
+          <h2>Getting Started: Using the <code>pure-type</code> class</h2>
+          <p>
+            All styles should be used inside an element with a class name of <code>pure-type</code>. This way, you can use the Pure-Typography module with with other CSS on your page. Only elements within a parent element with the <code>pure-type</code> class name will be styled with this module.
+          </p>
+          <p>
+            Sometimes, you want a title and a lighter subtitle, like the one above this paragraph. You can do this by adding a <code>title</code> class to a heading, and a <code>subtitle</code> class to a sub-heading. This will adjust the margins to group the title and subtitle together without much spacing between them.
+          </p>
+
+          <h2>Headings</h3>
+
+          You can create a grouped pair of a title and subtitle by using the <code>title</code> and <code>subtitle</code> classes respectively. See the example below:
+
+          <h3 class="title">Here's an example title.</h2>
+          <h4 class="subtitle">It has a corresponding subtitle. This is pretty useful.</h4>
+
+          <p>Here are the standard headings:</p>
+          <h1>Here's an H1</h1>
+          <h2>Here's an H2</h2>
+          <h3>Here's an H3</h3>
+          <h4>Here's an H4</h4>
+          <h5>Here's an H5</h5>
+          <h6>Here's an H6</h6>
+
+          <p>You can add the <code>subhead</code> class to a header element to achieve this effect:</p>
+          <h4 class="subhead">Content Subhead Heading</h4>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </p>
+
+          <h3>Blockquotes and Cites</h3>
+
+          <blockquote>
+            Typography is the craft of endowing human language with a durable visual form.
+            <cite title="citation">Anonymous</cite>
+          </blockquote>
+
+
+          <h3>Code</h3>
+          <p>
+            <code>&lt;code&gt;</code> elements are styled like this.
+          </p>
+
+          <h3>Pre</h3>
+
+          <pre>
+        &lt;link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css"&gt;
+          </pre>
+
+          <h3>Small</h3>
+          <small>Here is some small text.</small>
+
+          <h3>Strong</h3>
+          <p>Here is some <strong>strong</strong> text.</p>
+
+          <h3>Emphasis</h3>
+          <p>Here is <em>some text that we want to emphasize.</em></p>
+
+          <h3>Text Alignment</h3>
+          <p>
+            You can align text through the <code>text-left</code>, <code>text-center</code>, and <code>text-right</code> class names.
+          </p>
+
+          <div class="bordered">
+            <p class="text-left">Text aligned to the left.</p>
+            <p class="text-center">Text aligned to the center.</p>
+            <p class="text-right">Text aligned to the right.</p>
+          </div>
+
+          <h3>Muted Colors</h3>
+          <p>
+            Add the <code>muted</code> class name to an element <span class="muted">to add a muted color to the text within. See how this text has less contrast?</span>
+          </p>
+
+          <p class="color">You can even have the muted effect on <span class="muted">colored text</span>.
+
+          <h3>Ribbons</h3>
+          <p>
+            Add the <code>pure-ribbon</code> class name to an element to add a ribbon effect. Ribbons come in various styles.</span>
+          </p>
+
+
+          <div class="pure-g">
+            <div class="pure-u-1">
+
+              <p class="pure-ribbon">
+                This is a default ribbon. Just add the <code>pure-ribbon</code> classname.
+              </p>
+
+              <p class="pure-ribbon pure-ribbon-success">
+                This is a success ribbon. Add the <code>pure-ribbon pure-ribbon-success</code> classes.
+              </p>
+            </div>
+            <div class="pure-u-1">
+              <p class="pure-ribbon pure-ribbon-error">
+                To show an error, use this ribbon. Add the <code>pure-ribbon pure-ribbon-error</code> classes.
+              </p>
+            </div>
+
+            <div class="pure-u-1">
+              <p class="pure-ribbon pure-ribbon-warn">
+                To show an warning, use this warning ribbon. Add the <code>pure-ribbon pure-ribbon-warn</code> classes.
+              </p>
+            </div>
+          </div>
+
+        <h3>Definition Lists</h3>
+
+        <dl>
+          <dt>Definition lists</dt>
+          <dd>A description list is perfect for defining terms.</dd>
+          <dt>Euismod</dt>
+          <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
+          <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+          <dt>Malesuada porta</dt>
+          <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+          <dt>Felis euismod semper eget lacinia</dt>
+          <dd>Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
+        </dl>
+
+        <h3 class="title">List Elements</h3>
+        <h4 class="subtitle">Add a <code>list</code> class to style ordered and unordered lists. Add the <code>plain</code> class to remove the default browser styles.</h4>
+
+        <div class="pure-g-r">
+          <div class="pure-u-1-2">
+
+            <h4 class="title"><code>ul</code> Default Styling</h4>
+
+            <p>Add the <code>list</code> classes to an unordered list element to apply these styles.</p>
+
+            <ul class="list">
+              <li>Lorem ipsum dolor sit amet</li>
+              <li>Consectetur adipiscing elit</li>
+              <li>Integer molestie lorem at massa</li>
+              <li>Facilisis in pretium nisl aliquet</li>
+              <li>Nulla volutpat aliquam velit
+                <ul class="list">
+                  <li>Phasellus iaculis neque</li>
+                  <li>Purus sodales ultricies</li>
+                  <li>Vestibulum laoreet porttitor sem</li>
+                  <li>Ac tristique libero volutpat at</li>
+                </ul>
+              </li>
+              <li>Faucibus porta lacus fringilla vel</li>
+              <li>Aenean sit amet erat nunc</li>
+              <li>Eget porttitor lorem</li>
+            </ul>
+          </div>
+          <div class="pure-u-1-2">
+
+            <h4><code>ul</code> Plain Styling</h4>
+
+            <p>Add the <code>list</code> classes to an unordered list element to apply these styles.</p>
+
+            <ul class="list plain">
+              <li>Lorem ipsum dolor sit amet</li>
+              <li>Consectetur adipiscing elit</li>
+              <li>Integer molestie lorem at massa</li>
+              <li>Facilisis in pretium nisl aliquet</li>
+              <li>Nulla volutpat aliquam velit
+                <ul class="list plain">
+                  <li>Phasellus iaculis neque</li>
+                  <li>Purus sodales ultricies</li>
+                  <li>Vestibulum laoreet porttitor sem</li>
+                  <li>Ac tristique libero volutpat at</li>
+                </ul>
+              </li>
+              <li>Faucibus porta lacus fringilla vel</li>
+              <li>Aenean sit amet erat nunc</li>
+              <li>Eget porttitor lorem</li>
+            </ul>
+          </div>
+
+
+          <div class="pure-u-1-2">
+
+            <h4><code>ol</code> Default Styling</h4>
+
+            <p>Add the <code>list</code> classes to an ordered list element to apply these styles.</p>
+
+            <ol class="list">
+              <li>Lorem ipsum dolor sit amet</li>
+              <li>Consectetur adipiscing elit</li>
+              <li>Integer molestie lorem at massa</li>
+              <li>Facilisis in pretium nisl aliquet</li>
+              <li>Nulla volutpat aliquam velit
+                <ol class="list">
+                  <li>Phasellus iaculis neque</li>
+                  <li>Purus sodales ultricies</li>
+                  <li>Vestibulum laoreet porttitor sem</li>
+                  <li>Ac tristique libero volutpat at</li>
+                </ol>
+              </li>
+              <li>Faucibus porta lacus fringilla vel</li>
+              <li>Aenean sit amet erat nunc</li>
+              <li>Eget porttitor lorem</li>
+            </ul>
+          </div>
+          <div class="pure-u-1-2">
+
+            <h4><code>ol</code> Plain Styling</h4>
+
+            <p>Add the <code>list plain</code> classes to an ordered list element to apply these styles.</p>
+
+            <ol class="list plain">
+              <li>Lorem ipsum dolor sit amet</li>
+              <li>Consectetur adipiscing elit</li>
+              <li>Integer molestie lorem at massa</li>
+              <li>Facilisis in pretium nisl aliquet</li>
+              <li>Nulla volutpat aliquam velit
+                <ol class="list plain">
+                  <li>Phasellus iaculis neque</li>
+                  <li>Purus sodales ultricies</li>
+                  <li>Vestibulum laoreet porttitor sem</li>
+                  <li>Ac tristique libero volutpat at</li>
+                </ol>
+              </li>
+              <li>Faucibus porta lacus fringilla vel</li>
+              <li>Aenean sit amet erat nunc</li>
+              <li>Eget porttitor lorem</li>
+            </ul>
+          </div>
+        </div>
+
+
+        <!-- TYPEKIT -->
+        <script type="text/javascript" src="//use.typekit.net/ajf8ggy.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+        <script src="https://rawgithub.com/ccampbell/rainbow/master/js/rainbow.min.js"></script>
+        <script src="https://rawgithub.com/ccampbell/rainbow/master/js/language/generic.js"></script>
+    </div>
+</body>
+</html>
