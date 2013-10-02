@@ -1,0 +1,16 @@
+{
+    "gallery-itsatoolbar": {
+        "requires": [
+            "plugin",
+            "base-build",
+            "node-base",
+            "editor",
+            "event-delegate",
+            "event-custom",
+            "cssbutton",
+            "gallery-itsaselectlist",
+            "gallery-itsadialogbox"
+        ],
+        "skinnable": true
+    }
+}

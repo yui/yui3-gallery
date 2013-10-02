@@ -1,0 +1,338 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsatoolbar
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-itsatoolbar
+   #1: Line too long.
+       ITSA_IFRAMEBLOCKER_CSS = '.itsa-iframeblocker {position: relative; z-index: 1; background-color:#FFF; opacity:0; filter:alpha(opacity=0;} .itsa-iframeblocker:hover {opacity:0.4; filter:alpha(opacity=40;}', // line 56, pos 209
+   #2: Line too long.
+       ITSA_IFRAMEBLOCKER_TEMPLATE = '<span style="padding-left:{width}px; margin-right:-{width}px; padding-top:{height}px; " class="'+ITSA_IFRAMEBLOCKER+' {node}"></span>'; // line 57, pos 170
+   #3: Expected an assignment or function call and instead saw an expression.
+       instance.get('paraSupport') ? instance.editor.plug(Y.Plugin.EditorPara) : instance.editor.plug(Y.Plugin.EditorBR); // line 413, pos 129
+   #4: Line too long.
+       * In case of selection, there will always be made a tmp-node as placeholder. But in that case, the tmp-node will be just before the returned node. // line 432, pos 155
+   #5: Line too long.
+       * @param {Boolean} [selectionIfAvailable] do return the selectionnode if a selection is made. If set to false, then always just the cursornode will be returned. // line 435, pos 169
+   #6: Line too long.
+       * @param {EventFacade} [e] will be passed when the editor fires a nodeChange-event, but if called manually, leave e undefined. Then the function will search for the current cursorposition. // line 659, pos 197
+   #7: Line too long.
+       * <i>- [customFunc]</i> (Function): reference to custom function: typicaly, this function will call editorinstance.itstoolbar.execCommand() by itsself // line 683, pos 159
+   #8: Line too long.
+       * A syncButton is just like a normal toolbarButton, with the exception that the editor can sync it's status, which cannot be done with a normal button. // line 721, pos 160
+   #9: Line too long.
+       * Typically used in situations like a hyperlinkbutton: it never stays pressed, but when the cursos is on a hyperlink, he buttons look will change. // line 722, pos 155
+   #10: Line too long.
+       * @param {Function} syncFunc callback-function that will be called after a statusChange, when the users manupilates the text, or the cursor is moved. // line 729, pos 158
+   #11: Line too long.
+       * This callbackfunction will receive the nodeChane-event, described in <a href='http://yuilibrary.com/yui/docs/editor/#nodechange' target='_blank'>http://yuilibrary.com/yui/docs/editor/#nodechange</a>. // line 730, pos 210
+   #12: Line too long.
+       * @param {Function} syncFunc callback-function that will be called after a statusChange, when the users manupilates the text, or the cursor is moved. // line 761, pos 158
+   #13: Line too long.
+       * This callbackfunction will receive the nodeChane-event, described in <a href='http://yuilibrary.com/yui/docs/editor/#nodechange' target='_blank'>http://yuilibrary.com/yui/docs/editor/#nodechange</a>. // line 762, pos 210
+   #14: Line too long.
+       * Creates a group of toggleButtons on the Toolbar which are related to each-other. For instance when you might need 3 related buttons: leftalign, center, rightalign. // line 778, pos 174
+   #15: Line too long.
+       * <i>- syncFunc</i> (Function): callback-function that will be called after a statusChange, when the users manupilates the text, or the cursor is moved (for more info on the sync-function, see addToggleButton) // line 785, pos 218
+   #16: Line too long.
+       instance.editor.on('ready', function(e, buttons, indent, position){instance._addButtongroup(buttons, indent, position);}, instance, buttons, indent, position); // line 797, pos 175
+   #17: Line too long.
+       * <i>- syncFunc</i> (Function): callback-function that will be called after a statusChange, when the users manupilates the text, or the cursor is moved (for more info on the sync-function, see addToggleButton).<br> // line 810, pos 223
+   #18: Line too long.
+       if (Lang.isFunction(button.syncFunc)) {buttonNode.on('itsatoolbar:statusChange', Y.bind(button.syncFunc, button.context || instance));} // line 834, pos 155
+   #19: Line too long.
+       * CAUTION: when using a selectlist, you <u>cannot</u> use standard execCommands. That will not work in most browsers, because the focus will be lost. <br> // line 845, pos 163
+   #20: Line too long.
+       * Instead, create your customexecCommand and use cursorrefference <i>_getBackupCursorRef()</i>: see example <i>_defineExecCommandFontFamily()</i> // line 846, pos 154
+   #21: Line too long.
+       * @param {Array} items contains all the items. Should be either a list of (String), or a list of (Objects). In case of an Object-list, the objects should contain two fields:<br> // line 848, pos 186
+   #22: Line too long.
+       * @param {String | Object} execCommand ExecCommand that will be executed after a selectChange-event is fired. e.value will be placed as the second argument in editor.execCommand().<br> // line 853, pos 193
+   #23: Line too long.
+       * You could provide a second 'restoreCommand', in case you need a different execCommand to erase some format. In that case you must supply an object with three fields:<br> // line 854, pos 180
+   #24: Line too long.
+       * @param {Function} syncFunc callback-function that will be called after a statusChange, when the users manupilates the text, or the cursor is moved. // line 860, pos 158
+   #25: Line too long.
+       * Creates the toolbar in the DOM. Toolbar will appear just above the editor, or -when scrNode is defined-  it will be prepended within srcNode // line 967, pos 151
+   #26: Line too long.
+       Y.Global.ItsaDialog.showPanel(instance._dialogPanelId, title, message + '<br>' + inputElement.render(), callback, context, args, customButtons, customIconclass); // line 1110, pos 173
+   #27: Line too long.
+       execCommand = (restoreCommand && (e.value===selectButtonNode.getData('restoreValue'))) ? restoreCommand : selectButtonNode.getData('execCommand'); // line 1178, pos 158
+   #28: Line too long.
+       * Executes this.editor.exec.command with the execCommand and value that is bound to the node through Node.setData('execCommand') and Node.setData('execValue'). <br> // line 1183, pos 173
+   #29: Line too long.
+       * @param {Y.Node} cursornode Active node where the cursor resides, or the selection. Can be supplied by e.changedNode, or left empty to make this function determine itself. // line 1281, pos 181
+   #30: Line too long.
+       if ((activeFamily.substring(0,1)==="'") || (activeFamily.substring(0,1)==='"')) {activeFamily = activeFamily.substring(1, activeFamily.length-1);} // line 1365, pos 166
+   #31: Line too long.
+       e.currentTarget.toggleClass(ITSA_BTNPRESSED, (Lang.isNumber(parseInt(fontWeight, 10)) ? (fontWeight>=600) : ((fontWeight==='bold') || (fontWeight==='bolder')))); // line 1409, pos 181
+   #32: Line too long.
+       e.currentTarget.toggleClass(ITSA_BTNPRESSED, ((e.changedNode.getStyle('textAlign')==='left') || (e.changedNode.getStyle('textAlign')==='start'))); // line 1438, pos 185
+   #33: Expected '===' and instead saw '=='.
+       isEmailLink = (node.get('href').match('^mailto:', 'i')=='mailto:'); // line 1554, pos 79
+   #34: Expected '!==' and instead saw '!='.
+       isHyperLink = href.match('^mailto:', 'i')!='mailto:'; // line 1580, pos 70
+   #35: Line too long.
+       instance.execCommand('itsacreatehyperlink', 'http://files.brongegevens.nl/' + Y.config.cmas2plusdomain + '/' + response.file.filename); // line 1657, pos 175
+   #36: Expected '!==' and instead saw '!='.
+       isHyperLink = href.match('^mailto:', 'i')!='mailto:'; // line 1681, pos 70
+   #37: Expected '!==' and instead saw '!='.
+       if (css.toLowerCase().indexOf('rgb') != -1) { // line 1714, pos 50
+   #38: Line too long.
+       // now, mark this node, so we know it is made by itsafontsize. This way, we can cleanup when fontsize is generated multiple times (prevent creating span within span) // line 1807, pos 193
+   #39: Line too long.
+       // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element // line 1814, pos 220
+   #40: Line too long.
+       noderef.replace("<span class='" + ITSA_FONTFAMILYNODE + "' style='font-family:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>"); // line 1815, pos 172
+   #41: Line too long.
+       // now, mark this node, so we know it is made by itsafontsize. This way, we can cleanup when fontsize is generated multiple times (prevent creating span within span) // line 1858, pos 193
+   #42: Line too long.
+       // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element // line 1865, pos 220
+   #43: Line too long.
+       noderef.replace("<span class='" + ITSA_FONTSIZENODE + "' style='font-size:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>"); // line 1866, pos 168
+   #44: Line too long.
+       // now, mark this node, so we know it is made by itsafontsize. This way, we can cleanup when fontsize is generated multiple times (prevent creating span within span) // line 1905, pos 193
+   #45: Line too long.
+       // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element // line 1912, pos 220
+   #46: Line too long.
+       noderef.replace("<span class='" + ITSA_FONTCOLORNODE + "' style='color:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>"); // line 1913, pos 165
+   #47: Line too long.
+       // now, mark this node, so we know it is made by itsafontsize. This way, we can cleanup when fontsize is generated multiple times (prevent creating span within span) // line 1952, pos 193
+   #48: Line too long.
+       // Don't forget to place a ITSA_REFEMPTYCONTENT before ITSA_REFNODE --> IE cannot focus cursor inside an empty <span>-element and would otherwise focus just before the outerside <span>-element // line 1960, pos 220
+   #49: Line too long.
+       noderef.replace("<span class='" + ITSA_MARKCOLORNODE + "' style='background-color:" + val + "'>" + ITSA_REFEMPTYCONTENT + ITSA_REFNODE + "</span>"); // line 1961, pos 176
+   #50: Line too long.
+       callFunc = currentAnchorNode ? Y.bind(itsatoolbar.getUrl, itsatoolbar) : Y.bind(Y.Global.ItsaDialog.getInput, Y.Global.ItsaDialog); // line 2091, pos 159
+   #51: Line too long.
+       // even if there was no selection, we pretent if so AND change the id: we DON'T want the noderef have the id // line 2105, pos 152
+   #52: Line too long.
+       callFunc = currentAnchorNode ? Y.bind(itsatoolbar.getUrl, itsatoolbar) : Y.bind(Y.Global.ItsaDialog.getInput, Y.Global.ItsaDialog); // line 2242, pos 159
+   #53: Line too long.
+       // even if there was no selection, we pretent if so AND change the id: we DON'T want the noderef have the id // line 2258, pos 152
+   #54: Line too long.
+       //                            callFunc = currentImageNode ? Y.bind(itsatoolbar.getUrl, itsatoolbar) : Y.bind(Y.Global.ItsaDialog.getInput, Y.Global.ItsaDialog); // line 2341, pos 160
+   #55: Line too long.
+       // even if there was no selection, we pretent if so AND change the id: we DON'T want the noderef have the id // line 2355, pos 152
+   #56: Line too long.
+       regExp1 = /^http:\/\/www\.youtube\.com\/watch?v=(\w+)/, // search for strings like http://www.youtube.com/watch?v=PHIaeHAcE_A&whatever // line 2398, pos 162
+   #57: Line too long.
+       regExp3 = /^http:\/\/www\.youtube\.com\/embed\/(\w+)/, // search for strings like http://www.youtube.com/embed/PHIaeHAcE_A&whatever // line 2400, pos 159
+   #58: Line too long.
+       // BE CAREFULL: when manipulating: the selection surrounds the blockerdiv and the cursor is inbetween the blocker-div and the iframe!!! // line 2405, pos 159
+   #59: Line too long.
+       if (regExp1.test(currentYouTubeLink) || regExp2.test(currentYouTubeLink) || regExp3.test(currentYouTubeLink) || regExp4.test(currentYouTubeLink) || regExp5.test(currentYouTubeLink)) { // line 2421, pos 215
+   #60: Line too long.
+       callFunc = currentYouTubeNode ? Y.bind(itsatoolbar.getUrl, itsatoolbar) : Y.bind(Y.Global.ItsaDialog.getInput, Y.Global.ItsaDialog); // line 2427, pos 156
+   #61: Line too long.
+       noderef.setHTML('<span style="padding-left:'+width+'px; margin-right:-'+width+'px; padding-top:'+height+'px; " class="'+ITSA_IFRAMEBLOCKER+' '+ITSA_YOUTUBENODE+'"></span><iframe width="'+width+'" height="'+height+'" src="http://www.youtube.com/embed/' + videoitem + '" frameborder="0" allowfullscreen></iframe>'); // line 2449, pos 357
+   #62: Line too long.
+       // even if there was no selection, we pretent if so AND change the id: we DON'T want the noderef have the id // line 2450, pos 152
+   #63: Line too long.
+       callFunc = currentIframeNode ? Y.bind(itsatoolbar.getUrl, itsatoolbar) : Y.bind(Y.Global.ItsaDialog.getInput, Y.Global.ItsaDialog); // line 2517, pos 155
+   #64: Line too long.
+       noderef.setHTML('<span style="padding-left:'+width+'px; margin-right:-'+width+'px; padding-top:'+height+'px; " class="'+ITSA_IFRAMEBLOCKER+' '+ITSA_IFRAMENODE+'"></span><iframe width="'+width+'" height="'+height+'" src="' + src + '" frameborder="0"></iframe>'); // line 2533, pos 301
+   #65: 'ITSA_SELECTCONTNODE' is defined but never used.
+       ITSA_SELECTCONTNODE = '<div></div>', // line 42, pos 24
+   #66: 'config' is defined but never used.
+       initializer : function(config) { // line 384, pos 38
+   #67: 'tmpnode' is defined but never used.
+       tmpnode, // line 443, pos 24
+   #68: 'position' is defined but never used.
+       addButton : function(iconClass, execCommand, indent, position) { // line 689, pos 70
+   #69: 'position' is defined but never used.
+       addSelectlist : function(items, execCommand, syncFunc, context, indent, config, position) { // line 869, pos 97
+   #70: 'srcNode' is defined but never used.
+       srcNode = instance.get('srcNode'); // line 948, pos 24
+   #71: 'bodyMessage' is defined but never used.
+       bodyMessage, // line 1099, pos 28
+   #72: 'r' is defined but never used.
+       i, r, g, b, // line 1343, pos 21
+   #73: 'g' is defined but never used.
+       i, r, g, b, // line 1343, pos 24
+   #74: 'b' is defined but never used.
+       i, r, g, b, // line 1343, pos 27
+   #75: 'docFontSize' is defined but never used.
+       docFontSize, // line 1347, pos 28
+   #76: 'nodePosition' is defined but never used.
+       nodePosition, // line 1546, pos 37
+   #77: 'nodePosition' is defined but never used.
+       nodePosition, // line 1567, pos 37
+   #78: 'e' is defined but never used.
+       function(e) { // line 1654, pos 39
+   #79: 'nodePosition' is defined but never used.
+       nodePosition, // line 1668, pos 41
+   #80: 'disableSelectbutton' is defined but never used.
+       disableSelectbutton = false, // line 1751, pos 48
+   #81: 'editorY' is defined but never used.
+       editorY = editor.getInstance(), // line 1792, pos 36
+   #82: 'browserNeedsContent' is defined but never used.
+       browserNeedsContent, // line 1795, pos 48
+   #83: 'editorY' is defined but never used.
+       editorY = editor.getInstance(), // line 1837, pos 36
+   #84: 'browserNeedsContent' is defined but never used.
+       browserNeedsContent, // line 1841, pos 48
+   #85: 'editorY' is defined but never used.
+       editorY = editor.getInstance(), // line 1889, pos 36
+   #86: 'browserNeedsContent' is defined but never used.
+       browserNeedsContent, // line 1892, pos 48
+   #87: 'editorY' is defined but never used.
+       editorY = editor.getInstance(), // line 1936, pos 36
+   #88: 'browserNeedsContent' is defined but never used.
+       browserNeedsContent, // line 1939, pos 48
+   #89: 'editorY' is defined but never used.
+       editorY = editor.getInstance(), // line 1983, pos 36
+   #90: 'val' is defined but never used.
+       itsasavecontent: function(cmd, val) { // line 1980, pos 55
+   #91: 'cmd' is defined but never used.
+       itsasavecontent: function(cmd, val) { // line 1980, pos 50
+   #92: 'editorY' is defined but never used.
+       editorY = editor.getInstance(), // line 2011, pos 36
+   #93: 'val' is defined but never used.
+       itsaremovehyperlink: function(cmd, val) { // line 2146, pos 59
+   #94: 'cmd' is defined but never used.
+       itsaremovehyperlink: function(cmd, val) { // line 2146, pos 54
+   #95: 'selection' is defined but never used.
+       selection; // line 2250, pos 50
+   #96: 'val' is defined but never used.
+       itsacreateyoutube: function(cmd, val) { // line 2389, pos 57
+   #97: 'cmd' is defined but never used.
+       itsacreateyoutube: function(cmd, val) { // line 2389, pos 52
+   #98: 'val' is defined but never used.
+       itsacreateiframe: function(cmd, val) { // line 2489, pos 56
+   #99: 'cmd' is defined but never used.
+       itsacreateiframe: function(cmd, val) { // line 2489, pos 51
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-itsatoolbar/gallery-itsatoolbar.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-itsatoolbar
+shifter [info] found a subskin, shifting for gallery-itsatoolbar
+shifter [queu] coverage file read, starting coverage for: gallery-itsatoolbar/gallery-itsatoolbar.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-itsatoolbar/gallery-itsatoolbar-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] Don't use IDs in selectors.
+       #itsatoolbar-ref { // line 1, pos 1
+   #2: [warning] Don't use IDs in selectors.
+       #itsatoolbar-tmpref { // line 4, pos 1
+   #3: [warning] Don't use IDs in selectors.
+       #itsatoolbar-tmpempty { // line 7, pos 1
+   #4: [warning] Don't use adjoining classes.
+       .yui3-button.itsa-button-active { // line 10, pos 1
+   #5: [warning] Property with star prefix found.
+       *display: inline; // line 18, pos 5
+   #6: [warning] Property with star prefix found.
+       *zoom: 1; // line 19, pos 5
+   #7: [warning] height can't be used with display: inline.
+       height: 19px; // line 20, pos 5
+   #8: [warning] width can't be used with display: inline.
+       width: 20px; // line 22, pos 5
+   #9: [warning] Expected end of value but found '\9'.
+       background-image: url('itsa-buttonicons-2013-01-07.png') \9; // line 26, pos 5
+   #10: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsatoolbar-editorpart { // line 29, pos 1
+   #11: [warning] Values of 0 shouldn't have units specified.
+       padding: 4px 0px; // line 30, pos 18
+   #12: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-medium.itsatoolbar-editorpart { // line 33, pos 1
+   #13: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-medium.itsatoolbar-editorpart { // line 33, pos 1
+   #14: [warning] Values of 0 shouldn't have units specified.
+       padding: 4px 0px 3px; // line 34, pos 18
+   #15: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-leftalign.itsatoolbar-colors li { // line 46, pos 1
+   #16: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-leftalign.itsatoolbar-colors li { // line 46, pos 1
+   #17: [warning] Property with star prefix found.
+       *display: inline; // line 50, pos 5
+   #18: [warning] Property with star prefix found.
+       *zoom: 1; // line 51, pos 5
+   #19: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-leftalign.itsatoolbar-colors li.itsa-selectlist-selected { // line 55, pos 1
+   #20: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-leftalign.itsatoolbar-colors li.itsa-selectlist-selected { // line 55, pos 1
+   #21: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-rightalign.itsatoolbar-fontsize li { // line 59, pos 1
+   #22: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-rightalign.itsatoolbar-fontsize li { // line 59, pos 1
+   #23: [warning] Values of 0 shouldn't have units specified.
+       margin: 0px 2px; // line 61, pos 13
+   #24: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-rightalign.itsatoolbar-fontsize li.itsa-selectlist-selected { // line 64, pos 1
+   #25: [warning] Don't use adjoining classes.
+       .yui3-itsaselectlist.itsa-rightalign.itsatoolbar-fontsize li.itsa-selectlist-selected { // line 64, pos 1
+   #26: [warning] The properties padding-top, padding-bottom, padding-left, padding-right can be replaced by padding.
+       .itsatoolbar .yui3-button { // line 68, pos 1
+   #27: [warning] Values of 0 shouldn't have units specified.
+       margin:0px; // line 71, pos 12
+   #28: [warning] Using height with padding-top can sometimes make elements larger than you expect.
+       padding-top:3px; // line 75, pos 5
+   #29: [warning] Using height with padding-bottom can sometimes make elements larger than you expect.
+       padding-bottom:4px; // line 76, pos 5
+   #30: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small .yui3-button { // line 78, pos 1
+   #31: [warning] Using height with padding can sometimes make elements larger than you expect.
+       padding: 3px; // line 79, pos 5
+   #32: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-medium .yui3-button { // line 82, pos 1
+   #33: [warning] Using height with padding can sometimes make elements larger than you expect.
+       padding: 5px; // line 83, pos 5
+   #34: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small .itsa-selectlist-selectedmain { // line 86, pos 1
+   #35: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-medium .itsa-selectlist-selectedmain { // line 90, pos 1
+   #36: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small .itsa-icon-selectdown { // line 100, pos 1
+   #37: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-medium .itsa-icon-selectdown { // line 103, pos 1
+   #38: [warning] Don't use adjoining classes.
+       .itsatoolbar .yui3-button.itsa-button-indent { // line 107, pos 14
+   #39: [warning] Values of 0 shouldn't have units specified.
+       padding: 4px 3px 0px; // line 113, pos 22
+   #40: [warning] Don't use adjoining classes.
+       .itsatoolbar .yui3-itsaselectlist.itsa-button-indent { // line 116, pos 14
+   #41: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-medium .itsa-button-icon { // line 129, pos 1
+   #42: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small { // line 133, pos 1
+   #43: [warning] Values of 0 shouldn't have units specified.
+       padding: 4px 0px 0px; // line 134, pos 18
+   #44: [warning] Values of 0 shouldn't have units specified.
+       padding: 4px 0px 0px; // line 134, pos 22
+   #45: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small .yui3-itsaselectlist.itsa-leftalign .itsa-selectlist-basediv { // line 137, pos 1
+   #46: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small .yui3-itsaselectlist.itsa-leftalign .itsa-selectlist-basediv { // line 137, pos 36
+   #47: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small .yui3-itsaselectlist.itsa-rightalign .itsa-selectlist-basediv { // line 140, pos 1
+   #48: [warning] Don't use adjoining classes.
+       .itsatoolbar.itsa-buttonsize-small .yui3-itsaselectlist.itsa-rightalign .itsa-selectlist-basediv { // line 140, pos 36
+   #49: [warning] width can't be used with display: inline.
+       width: 100%; // line 145, pos 5
+   #50: [warning] Values of 0 shouldn't have units specified.
+       padding: 4px 4px 4px 0px; // line 146, pos 26
+   #51: [warning] Using width with padding can sometimes make elements larger than you expect.
+       padding: 4px 4px 4px 0px; // line 146, pos 5
+   #52: [warning] Property with star prefix found.
+       *display: inline; // line 151, pos 5
+   #53: [warning] Property with star prefix found.
+       *zoom: 1; // line 152, pos 5
+   #54: [warning] Don't use adjoining classes.
+       .yui3-button.itsa-button-indent { // line 179, pos 1
+   #55: [warning] Values of 0 shouldn't have units specified.
+       background-position: 1px 0px; // line 200, pos 30
+shifter [queu] writing skin file with core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 1.53 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route

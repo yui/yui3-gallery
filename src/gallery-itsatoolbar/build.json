@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsatoolbar",
+    "builds": {
+        "gallery-itsatoolbar": {
+            "jsfiles": [
+                "js/gallery-itsatoolbar.js"
+            ]
+        }
+    }
+}
