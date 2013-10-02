@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.17
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsaselectlist
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -30,23 +30,28 @@ shifter [queu] copying assets to skin for sam
    #4: [warning] display:inline has no effect on floated elements (but may be used to fix the IE6 double-margin bug).
        float:left; // line 68, pos 5
    #5: [warning] height can't be used with display: inline.
-       height: 20px; // line 155, pos 5
+       height: 20px; // line 154, pos 5
    #6: [warning] width can't be used with display: inline.
-       width: 20px; // line 157, pos 5
+       width: 20px; // line 156, pos 5
+   #7: [warning] Expected end of value but found '\9'.
+       background-image: url('itsa-icons-2012-08-15.gif')\9; // line 168, pos 5
+   #8: [warning] Expected end of value but found '\9'.
+       background-image: url('itsa-buttonicons-2013-01-07.png')\9; // line 174, pos 5
 shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.44 seconds, pretty fast huh?
+shifter [info] finished in 0.478 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5011
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.9.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsaselectlist]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.005 seconds)
+✖ [gallery-itsaselectlist]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.007 seconds)
     test is empty
        No Tests Provided For This Module
 Writing files in JSON format to: /src/gallery-itsaselectlist/logs/tests.json

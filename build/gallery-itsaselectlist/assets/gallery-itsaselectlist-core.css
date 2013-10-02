@@ -138,7 +138,6 @@
 }
 
 .itsa-selectlist-selected {
-    background-image: url('itsa-icons-2012-08-15.gif');
     background-repeat: no-repeat;
 }
 
@@ -151,12 +150,11 @@
     display: -moz-inline-stack;
     display: inline-block;
     *display: inline;
-
+    *zoom: 1;
     height: 20px;
     vertical-align: middle;
     width: 20px;
     background-repeat: no-repeat;
-    background-image: url('itsa-buttonicons-2013-01-07.png');
 }
 
 .itsa-icon-selectdown {
