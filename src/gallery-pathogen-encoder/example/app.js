@@ -2,10 +2,10 @@ var express     = require('express'),
     expyui      = require('express-yui'),
     Locator     = require('locator'),
     LocatorHbs  = require('locator-handlebars'),
-    encoder     = require('pathogen-encoder'),
+    encoder     = require('yui-pathogen-encoder'),
     app         = express();
 
-expyui.extend(app); // this should become .extend() soon
+expyui.extend(app);
 
 // enabling combo encoder for app
 encoder.enable(app);

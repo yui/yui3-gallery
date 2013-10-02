@@ -91,7 +91,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
             Assert.isTrue(modules.length === 2, 'Missing modules in the gallery-only combo url');
         },
 
-        'test basic formatting for application modules only': function () {
+        'test basic formatting for application modules that follow yui build conventions': function () {
             var loader = new Y.Loader({
                     combine: true,
                     require: ['af-poll', 'af-dom', 'af-pageviz'],
@@ -147,6 +147,53 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
             modules = subgroups.pop().split(MODULE_DELIM);
             Assert.isTrue(modules.length === 3, 'Missing modules in the application-only combo url');
+        },
+
+        'test basic formatting for application modules that do not follow yui build conventions': function () {
+            var loader = new Y.Loader({
+                    combine: true,
+                    require: ['mod-a', 'mod-b', 'mod-c'],
+
+                    groups: {
+                        'awesome-group-name': {
+                            comboBase: 'http://l.yimg.com/zz/combo?',
+                            root: '/',
+                            combine: true
+                        }
+                    },
+
+                    modules: {
+                        'mod-a': {
+                            group: 'awesome-group-name',
+                            path: 'path/to/file/mod-a-min.js',
+                            requires: [
+                                'mod-b'
+                            ]
+                        },
+                        'mod-b': {
+                            group: 'awesome-group-name',
+                            path: 'path/to/file/1234567.js'
+                        },
+                        'mod-c': {
+                            group: 'awesome-group-name',
+                            path: 'path/to/file/mod-c.js'
+                        }
+                    }
+                }),
+                resolved = loader.resolve(true),
+
+                urls,
+                groups;
+
+            urls = resolved.js;
+            Assert.areEqual(1, urls.length, 'There should only be one combo url');
+
+            path   = urls[0].split(customComboBase).pop();
+            groups = path.split(GROUP_DELIM);
+            Assert.areEqual(3, groups.length, 'There should only be three groups of application modules');
+
+            Assert.isTrue(path.indexOf(SUB_GROUP_DELIM) === -1, 'There should be no subgroup delimiters');
+            Assert.isTrue(path.indexOf(MODULE_DELIM) === -1, 'There should be no module delimiters');
         }
     }));
 
@@ -158,7 +205,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
             customComboBase = Y.config.customComboBase + NAMESPACE;
         },
 
-        'test formatting for core + gallery + application': function () {
+        'test formatting for core + gallery + standard application modules + non-standard application modules': function () {
             var loader = new Y.Loader({
                     combine: true,
                     ignoreRegistered: true,
@@ -169,13 +216,21 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                         'gallery-bitly',
                         'af-poll',
                         'af-dom',
-                        'af-pageviz'
+                        'af-pageviz',
+                        'kamen',
+                        'rider',
+                        'wizard'
                     ],
 
                     groups: {
                         'ape-af': {
                             comboBase: 'http://l.yimg.com/zz/combo?',
                             root: 'os/mit/td/ape-af-0.0.38/',
+                            combine: true
+                        },
+                        'shabadoobie-touch-henshin': {
+                            comboBase: 'http://l.yimg.com/zz/combo?',
+                            root: '/',
                             combine: true
                         }
                     },
@@ -206,6 +261,18 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                                 'event-custom-base',
                                 'event-custom-complex'
                             ]
+                        },
+                        kamen: {
+                            group: 'shabadoobie-touch-henshin',
+                            path: 'a/b/c.js'
+                        },
+                        rider: {
+                            group: 'shabadoobie-touch-henshin',
+                            path: 'aa/bb/cc.js'
+                        },
+                        wizard: {
+                            group: 'shabadoobie-touch-henshin',
+                            path: 'aaa/bbb/ccc.js'
                         }
                     }
                 }),
@@ -221,7 +288,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(3, groups.length, 'There should be three groups of js modules');
+            Assert.areEqual(6, groups.length, 'Unexpected number of module groups');
 
             subgroups = groups[0].split(SUB_GROUP_DELIM);
             Assert.areEqual(3, subgroups.length, 'There should only be three core subgroups');
@@ -245,6 +312,10 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
             modules = subgroups.pop().split(MODULE_DELIM);
             Assert.isTrue(modules.length > 0, 'Missing app modules in the js combo url');
+
+            Assert.isTrue(/a+\/b+\/c+/.test(groups[3]), 'Unexpected non-standard app module');
+            Assert.isTrue(/a+\/b+\/c+/.test(groups[4]), 'Unexpected non-standard app module');
+            Assert.isTrue(/a+\/b+\/c+/.test(groups[5]), 'Unexpected non-standard app module');
         }
     }));
 

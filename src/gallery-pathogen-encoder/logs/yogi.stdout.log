@@ -20,20 +20,20 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-pathogen-encoder/gallery-pathogen-encoder-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.2 seconds, pretty fast huh?
+shifter [info] finished in 0.62 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5017
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5016
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.9.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [http://127.0.0.1:5000/tests/src/gallery-pathogen-encoder/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+✖ [http://127.0.0.1:5016/tests/src/gallery-pathogen-encoder/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
     Javascript Error
        ReferenceError: Can't find variable: YUI
-       http://127.0.0.1:5000/tests/src/gallery-pathogen-encoder/js/pathogen-encoder.js:1
+       http://127.0.0.1:5016/tests/src/gallery-pathogen-encoder/js/pathogen-encoder.js:1
 Writing files in JSON format to: /src/gallery-pathogen-encoder/logs/tests.json
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

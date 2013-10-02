@@ -46,7 +46,16 @@ Y.Loader.prototype.buildCombo = function (groups, comboBase, comboTail) {
         while (modules.length) {
             prepend = currDelim + currKey;
             prepend = prepend ? prepend + SUB_GROUP_DELIM : MODULE_DELIM;
-            token   = prepend + modules[0];
+
+            // Since modules with custom paths are treated as their own
+            // segment, we override the prepend value so that it is only ever
+            // set to the group delimiter. TODO: refactor this while loop into
+            // one with multiple if-statements to make it easier to read.
+            if (group.key.indexOf('path') === 0) {
+                prepend = currDelim;
+            }
+
+            token = prepend + modules[0];
 
             if (currLen + token.length < maxURLLength) {
                 comboUrl += token;
@@ -80,9 +89,6 @@ core and gallery groups, and just "$root" for all other groups.
 Y.Loader.prototype.aggregateGroups = function (modules) {
     var source = {},
         galleryMatch,
-        comboBase,
-        version,
-        group,
         meta,
         name,
         mod,
@@ -90,16 +96,15 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
         len,
         i;
 
-    // Group all the modules for efficient combo encoding.
+    // Segment the modules for efficient combo encoding.
     for (i = 0, len = modules.length; i < len; i += 1) {
         mod     = modules[i];
-        group   = mod.group;
         name    = mod.name;
 
         // Skip modules that should be loaded singly. This is kind of confusing
         // because it mimics the behavior of the loader (also confusing):
         // https://github.com/ekashida/yui3/blob/632167a36d57da7a884aacf0f4488dd5b8619c7c/src/loader/js/loader.js#L2563
-        meta = this.groups && this.groups[group];
+        meta = this.groups && this.groups[mod.group];
         if (meta) {
             if (!meta.combine || mod.fullpath) {
                 continue;
@@ -111,58 +116,47 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             continue;
         }
 
-        // YUI core module group. Assumption: core modules are the only ones
-        // that don't declare its group name.
-        if (!group) {
-            version = YUI.version;
-            group   = 'core';
+        // YUI core modules
+        if (!mod.group) {
+            key = 'core' + SUB_GROUP_DELIM + YUI.version;
         }
-        // YUI gallery module group.
-        else if (group === 'gallery') {
+        // YUI gallery modules
+        else if (mod.group === 'gallery') {
             if (!galleryVersion) {
                 galleryMatch   = GALLERY_RE.exec(this.groups.gallery.root);
                 galleryVersion = galleryMatch && galleryMatch[1];
             }
-            version = galleryVersion;
             name    = name.split('gallery-').pop(); // remove prefix
+            key     = 'gallery' + SUB_GROUP_DELIM + galleryVersion;
         }
-        // All other YUI module groups.
+        // YUI application modules
         else {
-            comboBase = meta.comboBase;
-
-            // Combo base is not set or the combo base is unrecognized.
-            if (
-                !comboBase ||
-                comboBase.indexOf('.yimg.com/zz/combo?') === -1
-            ) {
-                continue;
+            // If the path does not follow the YUI build convention, then we
+            // assume that the application is passing the full cdn path.
+            if (mod.path.indexOf(name + '/' + name) !== 0) {
+                key     = 'path' + SUB_GROUP_DELIM + name;
+                name    = mod.path.split(EXTENSION_RE).shift(); // remove ext
             }
+            // If the module was built the YUI way, then we segment modules
+            // from this group under the `root`.
+            else {
+                key = meta.root;
 
-            version = meta.root;
-            group   = '';
-            name    = name.split(EXTENSION_RE).shift(); // remove extension
-
-            // Trim '/' from both ends of the version (root).
-            if (version[version.length - 1] === '/') {
-                version = version.slice(0, -1);
-            }
-            if (version[0] === '/') {
-                version = version.slice(1);
+                // Trim '/' from both ends.
+                if (key[0] === '/') {
+                    key = key.slice(1);
+                }
+                if (key[key.length - 1] === '/') {
+                    key = key.slice(0, -1);
+                }
             }
         }
 
-        // Segment core/gallery modules by group and version, and all other
-        // modules by root:
-        // YUI core:    `core+3.12.0`
-        // YUI gallery: `gallery+2013.06.20-02-07`
-        // YUI etc:     `os/mit/td/td-applet-weather-0.0.86`
-        key = group ? group + SUB_GROUP_DELIM + version : version;
         source[key] = source[key] || [];
-
         source[key].push(name);
 
         if (Y.config.customComboFallback) {
-            if (group === 'gallery') {
+            if (mod.group === 'gallery') {
                 name = 'gallery-' + name;
             }
             this.pathogenSeen[name] = true;

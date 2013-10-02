@@ -1,5 +1,5 @@
 module.exports = {
     enable: function (app) {
-        app.yui.addModuleToSeed('gallery-pathogen-encoder', 'pathogen-encoder');
+        app.yui.addModuleToSeed('gallery-pathogen-encoder', 'yui-pathogen-encoder');
     }
 };
