@@ -10,6 +10,7 @@
  * Y.ITSAPanel is very much like Y.Panel. Major difference is that you can attach both View's and Strings, but there are more differences. See the docs.
  *
  *
+ * @module gallery-itsapanel
  * @class ITSAPanel
  * @constructor
  * @extends Widget
@@ -511,17 +512,34 @@ ITSAPanel.prototype.bindUI = function() {
     (footerView instanceof Y.View) && footerView.addTarget(instance);
 
     instance.get(DRAGABLE) && instance.get(FLOATED) && Y.use(DD+PLUGIN, function() {
-            // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
+        // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
         instance.get(DESTROYED) || (boundingBox.plug(Y.Plugin.Drag).dd.addHandle('.'+PANELHEADERCLASS) && boundingBox.dd.addTarget(instance));
     });
     instance.get(RESIZABLE) && Y.use(RESIZE+PLUGIN, function() {
-            // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
+        // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
         instance.get(DESTROYED) || contentBox.plug(Y.Plugin.Resize, {handles: ['r', 'b', 'br']}).resize.addTarget(instance);
     });
 /*jshint expr:false */
 
     eventhandlers.push(
+        instance.after(VISIBLE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+VISIBLE+CHANGE, 'info', 'ITSAPanel');
+            var visible = e.newVal;
+            boundingBox.toggleClass(HIDDENPANELCLASS, !visible);
+            if (visible) {
+/*jshint expr:true */
+                (instance.get(MODAL) || instance.get('focusOnShow')) && instance.focus();
+/*jshint expr:true */
+            }
+            else {
+                instance.blur();
+            }
+        })
+    );
+
+    eventhandlers.push(
         instance.after(FLOATED+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+FLOATED+CHANGE, 'info', 'ITSAPanel');
             boundingBox.toggleClass(INLINECLASS, !e.newVal);
             if (instance.get(DRAGABLE)) {
 /*jshint expr:true */
@@ -537,6 +555,7 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(DRAGABLE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+DRAGABLE+CHANGE, 'info', 'ITSAPanel');
 /*jshint expr:true */
             // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
             e.newVal && instance.get(FLOATED) && !boundingBox.dd && Y.use(DD+PLUGIN, function() {
@@ -549,6 +568,7 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(RESIZABLE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+RESIZABLE+CHANGE, 'info', 'ITSAPanel');
 /*jshint expr:true */
             // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
             e.newVal && !contentBox[RESIZE] && Y.use(RESIZE+PLUGIN, function() {
@@ -561,6 +581,7 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after([DRAG+':'+DRAG, DRAG+':end'], function() {
+            Y.log('aftersubscriptor '+arguments[0].type, 'info', 'ITSAPanel');
             var itsaformelement = Y.ITSAFormElement,
                 tipsyValid = itsaformelement && itsaformelement.tipsyValid,
                 tipsyInvalid = itsaformelement && itsaformelement.tipsyInvalid;
@@ -575,6 +596,7 @@ ITSAPanel.prototype.bindUI = function() {
         instance.after(
             [RESIZE+':end', HEIGHT+CHANGE, WIDTH+CHANGE, 'minHeight'+CHANGE, 'minWidth'+CHANGE],
             function() {
+            Y.log('aftersubscriptor '+arguments[0].type, 'info', 'ITSAPanel');
 /*jshint expr:true */
                 instance.get(CENTERED) && instance.centered();
 /*jshint expr:false */
@@ -582,26 +604,12 @@ ITSAPanel.prototype.bindUI = function() {
         )
     );
 
-    eventhandlers.push(
-        instance.after(VISIBLE+CHANGE, function(e) {
-            var visible = e.newVal;
-            boundingBox.toggleClass(HIDDENPANELCLASS, !visible);
-            if (visible) {
-/*jshint expr:true */
-                (instance.get(MODAL) || instance.get('focusOnShow')) && instance.focus();
-/*jshint expr:true */
-            }
-            else {
-                instance.blur();
-            }
-        })
-    );
-
     // If the model gets swapped out, reset targets accordingly.
     eventhandlers.push(
         instance.after(
             [HEADERVIEW+CHANGE, BODYVIEW+CHANGE, FOOTERVIEW+CHANGE],
             function (ev) {
+            Y.log('aftersubscriptor '+ev.type, 'info', 'ITSAPanel');
     /*jshint expr:true */
                 (ev.prevVal instanceof Y.View) && ev.prevVal.removeTarget(instance);
                 (ev.newVal instanceof Y.View) && ev.newVal.addTarget(instance);
@@ -614,6 +622,7 @@ ITSAPanel.prototype.bindUI = function() {
         instance.after(
             STYLED+CHANGE,
             function(e) {
+                Y.log('aftersubscriptor '+e.type, 'info', 'ITSAPanel');
                 boundingBox.toggleClass(STYLEDPANELCLASS, e.newVal);
             }
         )
@@ -623,6 +632,7 @@ ITSAPanel.prototype.bindUI = function() {
         instance.after(
             CLASSNAME+CHANGE,
             function(e) {
+                Y.log('aftersubscriptor '+e.type, 'info', 'ITSAPanel');
 /*jshint expr:true */
                 e.prevVal && boundingBox.removeClass(e.prevVal);
                 e.newVal && boundingBox.addClass(e.newVal);
@@ -635,6 +645,7 @@ ITSAPanel.prototype.bindUI = function() {
         instance.on(
             MODAL+CHANGE,
             function(e) {
+                Y.log('onsubscriptor '+e.type, 'info', 'ITSAPanel');
 /*jshint expr:true */
                 !instance.get(FLOATED) && e.preventDefault();
 /*jshint expr:false */
@@ -645,21 +656,21 @@ ITSAPanel.prototype.bindUI = function() {
     eventhandlers.push(
         instance.on(
             BODYVIEW+CHANGE,
-            Y.bind(instance._renderBody(), instance)
+            Y.bind(instance._renderBody, instance)
         )
     );
 
     eventhandlers.push(
         instance.on(
             HEADERVIEW+CHANGE,
-            Y.bind(instance._renderHeader(), instance)
+            Y.bind(instance._renderHeader, instance)
         )
     );
 
     eventhandlers.push(
         instance.on(
             FOOTERVIEW+CHANGE,
-            Y.bind(instance._renderFooter(), instance)
+            Y.bind(instance._renderFooter, instance)
         )
     );
 
@@ -667,6 +678,7 @@ ITSAPanel.prototype.bindUI = function() {
         instance._header.delegate(
             CLICK,
             function(e) {
+                Y.log('delegatesubscriptor panelheader delegated to itsaclosebtn', 'info', 'ITSAPanel');
                 instance.fire(BUTTON_HIDE_EVENT, {buttonNode: e.target});
             },
             '.'+ITSA_PANELCLOSEBTN
@@ -677,6 +689,7 @@ ITSAPanel.prototype.bindUI = function() {
         boundingBox.delegate(
             CLICK,
             function(e) {
+                Y.log('delegatesubscriptor boundingBox.click delegated to BUTTON', 'info', 'ITSAPanel');
                 var buttonNode = e.currentTarget,
                     payload;
                 payload = {
@@ -693,24 +706,28 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         boundingBox.on(CLICK, function() {
+            Y.log('onsubscriptor boundingBox.click', 'info', 'ITSAPanel');
             instance.focus();
         })
     );
 
     eventhandlers.push(
         boundingBox.on(CLICK_OUTSIDE, function() {
+            Y.log('onsubscriptor '+CLICK_OUTSIDE, 'info', 'ITSAPanel');
             instance.blur();
         })
     );
 
     eventhandlers.push(
         instance.after(FOCUSED+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSAPanel');
             boundingBox.toggleClass(FOCUSED_CLASS, e.newVal);
         })
     );
 
     eventhandlers.push(
         instance.after('*:viewrendered', function() {
+            Y.log('aftersubscriptor *:viewrendered', 'info', 'ITSAPanel');
             instance._adjustPaddingTop();
             instance._adjustPaddingBottom();
         })

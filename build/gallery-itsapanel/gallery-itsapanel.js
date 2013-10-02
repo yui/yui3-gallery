@@ -12,6 +12,7 @@ YUI.add('gallery-itsapanel', function (Y, NAME) {
  * Y.ITSAPanel is very much like Y.Panel. Major difference is that you can attach both View's and Strings, but there are more differences. See the docs.
  *
  *
+ * @module gallery-itsapanel
  * @class ITSAPanel
  * @constructor
  * @extends Widget
@@ -511,14 +512,29 @@ ITSAPanel.prototype.bindUI = function() {
     (footerView instanceof Y.View) && footerView.addTarget(instance);
 
     instance.get(DRAGABLE) && instance.get(FLOATED) && Y.use(DD+PLUGIN, function() {
-            // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
+        // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
         instance.get(DESTROYED) || (boundingBox.plug(Y.Plugin.Drag).dd.addHandle('.'+PANELHEADERCLASS) && boundingBox.dd.addTarget(instance));
     });
     instance.get(RESIZABLE) && Y.use(RESIZE+PLUGIN, function() {
-            // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
+        // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
         instance.get(DESTROYED) || contentBox.plug(Y.Plugin.Resize, {handles: ['r', 'b', 'br']}).resize.addTarget(instance);
     });
 /*jshint expr:false */
+
+    eventhandlers.push(
+        instance.after(VISIBLE+CHANGE, function(e) {
+            var visible = e.newVal;
+            boundingBox.toggleClass(HIDDENPANELCLASS, !visible);
+            if (visible) {
+/*jshint expr:true */
+                (instance.get(MODAL) || instance.get('focusOnShow')) && instance.focus();
+/*jshint expr:true */
+            }
+            else {
+                instance.blur();
+            }
+        })
+    );
 
     eventhandlers.push(
         instance.after(FLOATED+CHANGE, function(e) {
@@ -582,21 +598,6 @@ ITSAPanel.prototype.bindUI = function() {
         )
     );
 
-    eventhandlers.push(
-        instance.after(VISIBLE+CHANGE, function(e) {
-            var visible = e.newVal;
-            boundingBox.toggleClass(HIDDENPANELCLASS, !visible);
-            if (visible) {
-/*jshint expr:true */
-                (instance.get(MODAL) || instance.get('focusOnShow')) && instance.focus();
-/*jshint expr:true */
-            }
-            else {
-                instance.blur();
-            }
-        })
-    );
-
     // If the model gets swapped out, reset targets accordingly.
     eventhandlers.push(
         instance.after(
@@ -645,21 +646,21 @@ ITSAPanel.prototype.bindUI = function() {
     eventhandlers.push(
         instance.on(
             BODYVIEW+CHANGE,
-            Y.bind(instance._renderBody(), instance)
+            Y.bind(instance._renderBody, instance)
         )
     );
 
     eventhandlers.push(
         instance.on(
             HEADERVIEW+CHANGE,
-            Y.bind(instance._renderHeader(), instance)
+            Y.bind(instance._renderHeader, instance)
         )
     );
 
     eventhandlers.push(
         instance.on(
             FOOTERVIEW+CHANGE,
-            Y.bind(instance._renderFooter(), instance)
+            Y.bind(instance._renderFooter, instance)
         )
     );
 
@@ -985,7 +986,7 @@ ITSAPanel.prototype._setWidth = function(val) {
     instance.get(CONTENTBOX).setStyle(WIDTH, (val ? (val+PX) : ''));
 };
 
-}, 'gallery-2013.09.25-18-27', {
+}, 'gallery-2013.10.02-20-26', {
     "requires": [
         "node-pluginhost",
         "dd-ddm",

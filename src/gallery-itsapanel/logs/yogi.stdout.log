@@ -9,6 +9,7 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-itsapanel
+shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-itsapanel/gallery-itsapanel.js with UglifyJS
 shifter [queu] writing -min file
@@ -23,18 +24,18 @@ shifter [queu] copying assets to skin for sam
 shifter [info] css lint passed for /assets/gallery-itsapanel/skins/sam/gallery-itsapanel-skin.css
 shifter [queu] writing skin file with core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.431 seconds, pretty fast huh?
+shifter [info] finished in 1.033 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5021
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5020
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.9.2
+Starting Grover on 1 files with PhantomJS@1.9.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [gallery-itsapanel]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
+✖ [gallery-itsapanel]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.007 seconds)
     test is empty
        No Tests Provided For This Module
 Writing files in JSON format to: /src/gallery-itsapanel/logs/tests.json
