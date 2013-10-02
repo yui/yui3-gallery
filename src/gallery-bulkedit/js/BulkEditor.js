@@ -1564,10 +1564,10 @@ function multiselectMarkup(type, o)
 				'<label for="{id}-{value}">{label}</label>' +
 			'</p>';
 
-		var column_start = '<div class="checkbox-multiselect-column">',
-			column_end   = '</div>';
+		var column_start = '<td class="checkbox-multiselect-column">',
+			column_end   = '</td>';
 
-		var input_markup = Y.Array.reduce(o.field.values, '<div class="checkbox-multiselect-column first">', function(s, v, i)
+		var input_markup = Y.Array.reduce(o.field.values, '', function(s, v, i)
 		{
 			var m = Y.Lang.sub(checkbox,
 			{
@@ -1585,7 +1585,10 @@ function multiselectMarkup(type, o)
 			return s + m;
 		});
 
-		input_markup += column_end;
+		input_markup =
+			'<table class="checkbox-multiselect-container"><tr>' +
+			column_start + input_markup + column_end +
+			'</tr></table>';
 	}
 
 	var option = '<option value="{value}" {selected}>{text}</option>';

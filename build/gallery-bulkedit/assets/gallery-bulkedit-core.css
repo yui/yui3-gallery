@@ -14,7 +14,9 @@
 
 .yui3-htmltablebulkedit .checkbox-multiselect-column
 {
-	float: left;
+	border: 0;
+	padding: 0;
+	vertical-align: top;
 }
 
 .yui3-htmltablebulkedit .checkbox-multiselect-checkbox
