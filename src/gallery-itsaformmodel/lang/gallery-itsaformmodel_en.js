@@ -1,5 +1,6 @@
 {
     inputrequired : 'Input is required',
+    unvalidated: 'The data is incorrectly',
     notification : 'Notification',
     datachanged : 'Data has been changed outside the form',
     wantreload : 'Load it into the form',

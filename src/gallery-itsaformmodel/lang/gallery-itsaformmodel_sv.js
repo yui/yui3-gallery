@@ -1,5 +1,6 @@
 {
     inputrequired : 'Inmatning erfordras',
+    unvalidated: 'Uppgifterna är felaktigt',
     notification : 'Underrättelse',
     datachanged : 'Uppgifter har ändrats utanför formen',
     wantreload : 'Ladda in den i formuläret',

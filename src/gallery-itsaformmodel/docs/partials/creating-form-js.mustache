@@ -206,11 +206,11 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', 'gallery-itsac
                        '<div class="pure-controls">'+model.renderSaveBtn('save values')+'</div>';
     container.append(containercontent);
 
-    model.on('save', function() {
+    model.after('save', function() {
         Y.alert('Values are saved', 'Here are all the attribute-values: '+Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
     });
 
-    model.on('validationerror', function() {
+    model.after('validationerror', function() {
         Y.alert('validation error');
     });
 

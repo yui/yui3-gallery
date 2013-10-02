@@ -1,5 +1,6 @@
 {
     inputrequired : '需要輸入',
+    unvalidated: '該數據是不正確的',
     notification : '通知',
     datachanged : '數據以外的形式已經改變',
     wantreload : '它加載到形式',

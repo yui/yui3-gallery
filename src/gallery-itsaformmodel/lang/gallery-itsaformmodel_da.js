@@ -1,5 +1,6 @@
 {
     inputrequired : 'Input er påkrævet',
+    unvalidated: 'Dataene er forkert',
     notification : 'Underretning',
     datachanged : 'Data er blevet ændret uden skemaet',
     wantreload : 'Indlæse den i formularen',

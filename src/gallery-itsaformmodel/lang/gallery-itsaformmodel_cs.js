@@ -1,5 +1,6 @@
 {
     inputrequired : 'Je nutno zadat',
+    unvalidated: 'Údaje jsou nesprávně',
     notification : 'Oznámení',
     datachanged : 'Údaje byla změněna mimo formulář',
     wantreload : 'Vložte ji do formuláře',

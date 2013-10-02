@@ -53,6 +53,38 @@ YUI.add('module-tests', function(Y) {
     model3 = new Y.MyFormModel();
     model.setLifeUpdate(true);
 
+    Y.CountryModel = Y.Base.create('countryModel', Y.ITSAFormModel, [], {
+        sync: function (action, options, callback) {
+            var data;
+            switch (action) {
+              case 'submit':
+                Y.later(600, null, function() {
+                    data = {Country: "The Netherlands", extrafield: "Its Asbreuk"};
+                    callback(null, Y.JSON.stringify(data));
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
+    Y.CountryModelError = Y.Base.create('countryModel', Y.ITSAFormModel, [], {
+        sync: function (action, options, callback) {
+            var instance = this,
+                data;
+            switch (action) {
+              case 'submit':
+                Y.later(600, null, function() {
+                    callback('Error during submit');
+                });
+                return;
+              default:
+                callback('Invalid action');
+            }
+        }
+    });
+
     suite.add(new Y.Test.Case({
         name: 'Attributes to UI',
         setUp : function () {
@@ -418,6 +450,222 @@ YUI.add('module-tests', function(Y) {
         'checkLabel test 2': function() {
             var btn = Y.one('#buttoncheck button');
             Y.Assert.areEqual('<i>mylabel</i>', btn && btn.getHTML(), 'button\'s value is not set right when used customized value');
+        }
+    }));
+
+    //=== testing submit NEW model
+    suite.add(new Y.Test.Case({
+        name: 'Check submit new model when sync goes well',
+        setUp : function () {
+            this.mycountrymodel = new Y.CountryModel({Country: 'The Netherlands'});
+        },
+        tearDown : function () {
+            this.mycountrymodel.destroy({remove: false});
+        },
+        '29. On-event in time': function() {
+            var test = this;
+            test.mycountrymodel.on('submit', function() {
+                test.resume(function(){
+                    Y.Assert.pass();
+                });
+            });
+            test.mycountrymodel.submit();
+            this.wait(200);
+        },
+        '30. After-event not too early': function() {
+            var test = this,
+                delayed = false;
+            Y.later(400, null, function() {
+                delayed = true;
+            });
+            test.mycountrymodel.after('submit', function() {
+                test.resume(function(){
+                    Y.Assert.isTrue(delayed, 'Model\'s after-submit is executed before the synclayer started');
+                });
+            });
+            test.mycountrymodel.submit();
+            this.wait(800);
+        },
+        '31. value after submit': function() {
+            var test = this;
+            test.mycountrymodel.after('submit', function() {
+                test.resume(function(){
+                    Y.Assert.areSame('Its Asbreuk', test.mycountrymodel.get('extrafield'), 'Model submitd wrong value');
+                });
+            });
+            test.mycountrymodel.submit();
+            this.wait(800);
+        },
+        '32. DefaultFn not executed when prevented': function() {
+            var test = this;
+            test.mycountrymodel.on('submit', function(e) {
+                e.preventDefault();
+            });
+            test.mycountrymodel.submit();
+            this.wait(function(){
+                Y.Assert.areNotSame('Its Asbreuk', test.mycountrymodel.get('extrafield'), 'Model submitd but shouldn\'t have');
+            }, 800);
+        },
+        '33. After-event not executed when prevented': function() {
+            var test = this,
+                afterevent = false;
+            test.mycountrymodel.on('submit', function(e) {
+                e.preventDefault();
+            });
+            test.mycountrymodel.after('submit', function() {
+                afterevent = true;
+            });
+            test.mycountrymodel.submit();
+            this.wait(function(){
+                Y.Assert.isFalse(afterevent, 'Model\'s after-submit is executed even if event was prevented');
+            }, 800);
+        },
+        '34. check promise': function() {
+            var startdelayed = false,
+                test = this;
+            Y.later(400, null, function() {
+                startdelayed = true;
+            });
+            test.mycountrymodel.submitPromise().then(
+                function() {
+                    test.resume(function(){
+                        Y.Assert.isTrue(startdelayed, 'submitPromise is fulfilled before the synclayer is finished');
+                    });
+                },
+                function() {
+                    test.resume(function(){
+                        Y.Assert.fail('submitPromise is rejected while it should have been fulfilled');
+                    });
+                }
+            );
+            this.wait(800);
+        },
+        '35. check error-event': function() {
+            var test = this,
+                errorevent = false;
+            test.mycountrymodel.on('error', function() {
+                errorevent = true;
+            });
+            test.mycountrymodel.submit();
+            this.wait(function(){
+                Y.Assert.isFalse(errorevent, 'error event occured while the sync should be ok');
+            }, 800);
+        },
+        '36. check non destruction with positive id': function() {
+            var test = this;
+            test.mycountrymodel.after('submit', function() {
+                test.resume(function(){
+                    Y.Assert.isFalse(test.mycountrymodel.get('destroyed'), 'model gets destroyed even with positive id');
+                });
+            });
+            test.mycountrymodel.submit();
+            this.wait(800);
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'Check submit new model when sync has error',
+        setUp : function () {
+            this.mycountrymodel = new Y.CountryModelError({Country: 'The Netherlands'});
+        },
+        tearDown : function () {
+            this.mycountrymodel.destroy();
+        },
+        '38. On-event in time': function() {
+            var test = this;
+            test.mycountrymodel.on('submit', function() {
+                test.resume(function(){
+                    Y.Assert.pass();
+                });
+            });
+            test.mycountrymodel.submit();
+            this.wait(200);
+        },
+        '39. After-event not too early': function() {
+            var test = this,
+                delayed = false;
+            Y.later(400, null, function() {
+                delayed = true;
+            });
+            test.mycountrymodel.after('error', function() {
+                test.resume(function(){
+                    Y.Assert.isTrue(delayed, 'Model\'s after-submit is executed before the synclayer started');
+                });
+            });
+            test.mycountrymodel.submit();
+            this.wait(800);
+        },
+        '40. After syncing with failure instance should not get value': function() {
+            var test = this;
+            test.mycountrymodel.after('error', function() {
+                test.resume(function(){
+                    Y.Assert.areNotSame('Its Asbreuk', test.mycountrymodel.get('extrafield'), 'Model submitd wrong value');
+                });
+            });
+            test.mycountrymodel.submit();
+            this.wait(800);
+        },
+        '41. DefaultFn not executed when prevented': function() {
+            var test = this;
+            test.mycountrymodel.on('submit', function(e) {
+                e.preventDefault();
+            });
+            test.mycountrymodel.submit();
+            this.wait(function(){
+                Y.Assert.areNotSame('Its Asbreuk', test.mycountrymodel.get('extrafield'), 'Model submitd wrong value');
+            }, 800);
+        },
+        '42. After-event not executed when prevented': function() {
+            var test = this,
+                afterevent = false;
+            test.mycountrymodel.on('submit', function(e) {
+                e.preventDefault();
+            });
+            test.mycountrymodel.after('error', function() {
+                afterevent = true;
+            });
+            test.mycountrymodel.submit();
+            this.wait(function(){
+                Y.Assert.isFalse(afterevent, 'Model\'s after-submit is executed even if event was prevented');
+            }, 800);
+        },
+        '43. check promise': function() {
+            var startdelayed = false,
+                test = this;
+            Y.later(400, null, function() {
+                startdelayed = true;
+            });
+            test.mycountrymodel.submitPromise().then(
+                function() {
+                    if (startdelayed) {
+                        test.resume(function(){
+                            Y.Assert.fail('syncing with error: submitPromise is fulfilled even if syncing gave an error');
+                       });
+                    }
+                    else {
+                        test.resume(function(){
+                            Y.Assert.fail('syncing with error: submitPromise is fulfilled even if syncing gave an error');
+                        });
+                    }
+                },
+                function(reason) {
+                    test.resume(function(){
+                       Y.Assert.areSame('Error during submit', reason.message, 'syncing with error: submitPromise is rejected as should be, but the error is different');
+                    });
+                }
+            );
+            this.wait(800);
+        },
+        '44. check error-event': function() {
+            var test = this,
+                errorevent = false;
+            test.mycountrymodel.on('error', function() {
+                errorevent = true;
+            });
+            test.mycountrymodel.submit();
+            this.wait(function(){
+                Y.Assert.isTrue(errorevent, 'error event did not occur while the sync returned an error');
+            }, 800);
         }
     }));
 

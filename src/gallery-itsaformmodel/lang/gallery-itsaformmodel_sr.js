@@ -1,5 +1,6 @@
 {
     inputrequired : 'Улаз је потребно',
+    unvalidated: 'Подаци су неправилно',
     notification : 'обавештење',
     datachanged : 'Подаци су се променили ван форме',
     wantreload : 'Убаците га у форми',

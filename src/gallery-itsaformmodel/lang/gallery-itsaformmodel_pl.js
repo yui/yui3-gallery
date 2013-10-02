@@ -1,5 +1,6 @@
 {
     inputrequired : 'Wejście jest wymagane',
+    unvalidated: 'Danych jest błędnie',
     notification : 'zgłoszenie',
     datachanged : 'Dane zostały zmienione poza formie',
     wantreload : 'Włóż go w formie',

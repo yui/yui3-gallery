@@ -11,11 +11,11 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', 'gallery-itsad
             if (instance.getUI('password') !== instance.getUI('passwordcheck')) {
                 errorattrs.push({
                     attribute: 'password',
-                    validationerror: 'password and password-chack are not the same'
+                    validationerror: 'password and password-check are not the same'
                 });
                 errorattrs.push({
                     attribute: 'passwordcheck',
-                    validationerror: 'password and password-chack are not the same'
+                    validationerror: 'password and password-check are not the same'
                 });
             }
             return errorattrs;
@@ -114,12 +114,12 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', 'gallery-itsad
                        '<div class="pure-controls">'+model.renderSubmitBtn('submit values')+'</div>';
     container.append(containercontent);
 
-    model.on('save', function() {
+    model.after('submit', function() {
         Y.alert('Model is submitted', 'Here are all the attribute-values: '+
                  Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
     });
 
-    model.on('validationerror', function() {
+    model.after('validationerror', function() {
         Y.alert('error', 'validation error');
     });
 

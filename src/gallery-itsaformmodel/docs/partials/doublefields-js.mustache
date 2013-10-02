@@ -90,7 +90,7 @@ YUI(yuiconfig).use('node', 'base-build', 'promise', 'gallery-itsaformmodel', 'ga
     );
 
     // showing the values when send
-    model.on('reset', function() {
+    model.after('reset', function() {
         Y.alert('Form reset',' Here are all the attribute-values: '+Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
     });
 

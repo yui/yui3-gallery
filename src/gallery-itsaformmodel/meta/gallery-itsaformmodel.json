@@ -19,6 +19,7 @@
             "event-synthetic",
             "event-base",
             "event-custom",
+            "json-parse",
             "gallery-itsanodepromise",
             "gallery-itsadatetimepicker",
             "gallery-itsamodelsyncpromise",

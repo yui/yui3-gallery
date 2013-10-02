@@ -1,5 +1,6 @@
 {
     inputrequired : 'Ulaz je potrebno',
+    unvalidated: 'Podaci su pogrešno',
     notification : 'Obavijest',
     datachanged : 'Podaci su se promjenili izvan forme',
     wantreload : 'Stavite ga u obliku',

@@ -51,12 +51,12 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsaformmodel', 'gallery-itsas
                        model.renderSubmitBtn('Sign in', {primary: true});
     container.append(containercontent);
 
-    model.on('submit', function() {
+    model.after('submit', function() {
         Y.alert('Signed in', 'Here are all the attribute-values: '+
                  Y.JSON.stringify(model.toJSON()).replace(/\,/g, '</br>'));
     });
 
-    model.on('validationerror', function() {
+    model.after('validationerror', function() {
         Y.alert('validation error');
     });
 

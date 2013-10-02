@@ -1,5 +1,6 @@
 {
     inputrequired : 'Входно се изисква',
+    unvalidated: 'Данните са неправилно',
     notification : 'нотификация',
     datachanged : 'Данните е било променено извън формата',
     wantreload : 'Поставете го във форма',

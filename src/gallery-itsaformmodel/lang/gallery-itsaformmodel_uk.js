@@ -1,5 +1,6 @@
 {
     inputrequired : 'Потрібне введення',
+    unvalidated: 'Дані неправильно',
     notification : 'повідомлення',
     datachanged : 'Дані були змінені поза формою',
     wantreload : 'Завантажити його у вигляді',
