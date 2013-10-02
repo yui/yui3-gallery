@@ -1,0 +1,16 @@
+{
+  "name": "Pure Extras",
+  "version": "0.3.0",
+  "main": "css/pure-extras.css",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt",
+    "meta/",
+    "tests/",
+    "build.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "pure": "0.3.0"
+  }
+}
