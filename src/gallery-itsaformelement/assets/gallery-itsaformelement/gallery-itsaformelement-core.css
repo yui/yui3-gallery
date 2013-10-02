@@ -3,6 +3,7 @@
 .itsa-widget-parent {
     display: inline-block;
     *display: inline;
+    *zoom: 1;
     padding: 0;
     vertical-align: middle;
 }
@@ -125,6 +126,7 @@ span.formatvalue[disabled] {
     margin: 0.15em 0;
     display: inline-block;
     *display: inline;
+    *zoom: 1;
 }
 
 

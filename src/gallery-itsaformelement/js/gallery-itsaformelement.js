@@ -392,13 +392,14 @@ ITSAFormElement.getElement = function(type, config, nodeid) {
 ITSAFormElement._renderedElement = function(type, config, nodeid, iswidget) {
     Y.log('_renderedElement '+type, 'info', 'ITSAFormElement');
     var subtituteConfig = Y.merge(config),
+        isdatetime = DATETIME_TYPES[type],
         switchlabel = (typeof subtituteConfig[SWITCHLABEL]===BOOLEAN) ? subtituteConfig[SWITCHLABEL] : false,
         focusable = (typeof subtituteConfig[FOCUSABLE]===BOOLEAN) ? subtituteConfig[FOCUSABLE] : true,
         fullselect = (typeof subtituteConfig[FULLSELECT]===BOOLEAN) ? subtituteConfig[FULLSELECT] : false,
         submitonenter = (typeof subtituteConfig[SUBMITONENTER]===BOOLEAN) ? subtituteConfig[SUBMITONENTER] : false,
         hideatstartup = (typeof subtituteConfig[HIDEATSTARTUP]===BOOLEAN) ? subtituteConfig[HIDEATSTARTUP] : false,
-        tooltip = config.tooltip,
-        tooltipinvalid = config.tooltipinvalid,
+        tooltip = !isdatetime && config.tooltip,
+        tooltipinvalid = !isdatetime && config.tooltipinvalid,
         nossl = config.nossl,
         onlyssl = config.onlyssl,
         digits = config.digits,
@@ -407,7 +408,6 @@ ITSAFormElement._renderedElement = function(type, config, nodeid, iswidget) {
         switchvalue = config[SWITCHVALUE],
         configdata = config[DATA],
         data = DATA_FORM_ELEMENT, // always initialize
-        isdatetime = DATETIME_TYPES[type],
         posiblehotkey = config[HOTKEY],
         labelclass, disabledbutton, primarybutton, template, surroundlabelclass, hidden, disabled, required,
         checked, purebutton, readonly, extralabel, hotkeyRegExp, hotkey, currentlang, bestlanguage, bestlanguageLength, availableLanguages, currentlanguageLength;
@@ -702,7 +702,7 @@ ITSAFormElement.tooltipReadyPromise = function() {
             }).render();
             tipsyOK.get(BOUNDINGBOX).addClass();
             tipsyInvalid.get(BOUNDINGBOX).addClass(TIPSY_FORMELEMENT+'-invalid');
-            // now we modify _alignTooltip, because we need to keep reference of the aligned noe, in case we want to re-align
+            // now we modify _alignTooltip, because we need to keep reference of the aligned node, in case we want to re-align
             tipsyOK._alignTooltip = function(node) {
                 var instance = this;
                 Y.Tipsy.prototype._alignTooltip.apply(instance, arguments);
