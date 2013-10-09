@@ -659,18 +659,18 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 2.693 seconds, pretty fast huh?
+shifter [info] finished in 0.898 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5025
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5024
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.9.1
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds) 6%
+✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.006 seconds) 6%
 Writing files in JSON format to: /src/gallery-bulkedit/logs/tests.json
 ┌─────────────────────────────────────────────────┬──────────┬──────┬─────────────┬──────┐
 │[34m  path                                           [39m│[34m   lines  [39m│[34m   %  [39m│[34m  functions  [39m│[34m   %  [39m│
@@ -680,7 +680,7 @@ Writing files in JSON format to: /src/gallery-bulkedit/logs/tests.json
 │  total                                          │  46/766  │  6%  │      1/125  │  0%  │
 └─────────────────────────────────────────────────┴──────────┴──────┴─────────────┴──────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
-  [Grover Execution Timer] 5.476 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.006 seconds)
+  [Grover Execution Timer] 1.992 seconds
 Failed to find source file: /build/gallery-bulkedit/gallery-bulkedit.js
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

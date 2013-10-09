@@ -2433,7 +2433,7 @@ BulkEditor.markup =
 		var checkbox =
 			'<div class="{cont}{key}">' +
 				'<input type="checkbox" id="{id}" {value} class="{field}{key}" /> ' +
-				'<label for="{id}">{label}</label>' +
+				'{label}' +
 				'{msg}' +
 			'</div>';
 
@@ -3025,7 +3025,7 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 Y.HTMLTableBulkEditor = HTMLTableBulkEditor;
 
 
-}, 'gallery-2013.10.02-20-26', {
+}, 'gallery-2013.10.09-22-56', {
     "skinnable": "true",
     "requires": [
         "widget",
