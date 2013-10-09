@@ -21,16 +21,19 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-itsapanel/gallery-itsapanel-coverage.js
 shifter [queu] copying assets to skin for sam
-shifter [info] css lint passed for /assets/gallery-itsapanel/skins/sam/gallery-itsapanel-skin.css
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 19, pos 5
+   #2: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 92, pos 5
 shifter [queu] writing skin file with core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 1.033 seconds, pretty fast huh?
+shifter [info] finished in 0.56 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5021
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5020
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.9.1
   Running 15 concurrent tests at a time.

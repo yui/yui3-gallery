@@ -16,6 +16,11 @@
     text-align: left;
     width: auto !important;
     height: auto !important;
+    box-sizing: border-box;
+}
+.itsa-inlinefooter {
+    position: static !important;
+    visibility: hidden !important;
 }
 .itsa-panel.itsa-styledpanel {
     -webkit-box-shadow: 5px 5px 6px rgba(50, 50, 50, 0.45);
@@ -84,6 +89,7 @@
 }
 .itsa-panel .itsa-panelinnerheader >div,
 .itsa-panel .itsa-panelinnerfooter >div {
+    box-sizing: border-box;
     vertical-align: middle;
     display: inline-block;
     *display: inline;

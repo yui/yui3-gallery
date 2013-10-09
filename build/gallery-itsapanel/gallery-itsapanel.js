@@ -60,6 +60,7 @@ var ITSAPanel,
     PX = 'px',
     TITLE = 'title',
     RIGHT = 'Right',
+    TITLERIGHT = TITLE+RIGHT,
     CENTERED = 'centered',
     DRAG = 'drag',
     DRAGABLE = DRAG+'able',
@@ -634,6 +635,34 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.on(
+            TITLE+CHANGE,
+            function(e) {
+                var title = e.newVal,
+                    titleRight = instance.get(TITLERIGHT),
+                    headerView = instance.get(HEADERVIEW);
+                if (!headerView || (typeof headerView===STRING)) {
+                    instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? CLOSE_BUTTON : titleRight)}));
+                }
+            }
+        )
+    );
+
+    eventhandlers.push(
+        instance.on(
+            TITLERIGHT+CHANGE,
+            function(e) {
+                var titleRight = e.newVal,
+                    title = instance.get(TITLE),
+                    headerView = instance.get(HEADERVIEW);
+                if (!headerView || (typeof headerView===STRING)) {
+                    instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? CLOSE_BUTTON : titleRight)}));
+                }
+            }
+        )
+    );
+
+    eventhandlers.push(
+        instance.on(
             MODAL+CHANGE,
             function(e) {
 /*jshint expr:true */
@@ -843,7 +872,7 @@ ITSAPanel.prototype._getWidth = function() {
 ITSAPanel.prototype._renderHeader = function() {
     var instance = this,
         title = instance.get(TITLE),
-        titleRight = instance.get(TITLE+RIGHT),
+        titleRight = instance.get(TITLERIGHT),
         headerView = instance.get(HEADERVIEW);
 
     if (!headerView || (typeof headerView===STRING)) {
@@ -986,7 +1015,7 @@ ITSAPanel.prototype._setWidth = function(val) {
     instance.get(CONTENTBOX).setStyle(WIDTH, (val ? (val+PX) : ''));
 };
 
-}, 'gallery-2013.10.02-20-26', {
+}, 'gallery-2013.10.09-22-56', {
     "requires": [
         "node-pluginhost",
         "dd-ddm",
