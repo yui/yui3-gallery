@@ -181,6 +181,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 itemText,
                 isDefaultItem,
                 defaultItemFound,
+                nodeclass,
                 newNode;
             ullist.setHTML(''); // clear content
             if (items.length>0) {
@@ -195,7 +196,9 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                         }
                         instance.set('index', i, {silent: true});
                     }
-                    newNode = Y.Node.create('<li' + (isDefaultItem ? ' class="' + instance._selectedItemClass + '"' : '') + '>' + itemText +'</li>');
+                    nodeclass = item.className || '';
+                    newNode = Y.Node.create('<li' + (isDefaultItem ? ' class="'+instance._selectedItemClass+' '+nodeclass+'"' :
+                                            ((nodeclass!=='') ? ' class="'+nodeclass+'"' : ''))+'>' + itemText +'</li>');
                     if (item.returnValue) {newNode.setData('returnValue', item.returnValue);}
                     ullist.append(newNode);
                 }
@@ -237,11 +240,11 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          * <i>- e.index: index of the selected item</i>
          *
         */
-        selectItem : function(index, softMatch, softButtonText) {
+        selectItem : function(index, softMatch, softButtonText, fromSetter) {
             var instance = this,
                 nodelist = instance._itemsContainerNode.all('li');
             if (!instance.get('disabled')) {
-                if ((index>=0) && (index<nodelist.size())) {instance._selectItem(nodelist.item(index));}
+                if ((index>=0) && (index<nodelist.size())) {instance._selectItem(nodelist.item(index), null, fromSetter);}
                 else {
                     // no hit: return to default without selection in case of softMatch
                     if (softMatch) {
@@ -293,7 +296,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
          * <i>- e.index: index of the selected item</i>
          *
         */
-        _selectItem : function(node, userInteraction) {
+        _selectItem : function(node, userInteraction, fromSetter) {
             var instance = this,
                 previousNode = instance._itemsContainerNode.one('li.'+instance._selectedItemClass),
                 selectionOnButton = instance.get('selectionOnButton'),
@@ -330,7 +333,9 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                 */
                 if (userInteraction) {instance.fire('selectChange',
                                                 {element: node, value: node.getData('returnValue') || nodeHTML, index: instance._indexOf(node)});}
-                instance.set('index', index, {silent: true});
+/*jshint expr:true */
+                fromSetter || !selectionOnButton || instance.set('index', index, {silent: true});
+/*jshint expr:false */
             }
         },
 
@@ -608,7 +613,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                     return (typeof val === 'number');
                 },
                 setter: function(val) {
-                    this.selectItem(val);
+                    this.selectItem(val, null, null, true);
                     return val;
                 }
             },
@@ -672,6 +677,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
                         allItems.push(
                             {
                                 text: node.getHTML(),
+                                className: node.getAttribute('class'),
                                 returnValue: node.getAttribute('value') || node.getHTML()
                             }
                         );
@@ -684,7 +690,7 @@ Y.ITSASelectList = Y.Base.create('itsaselectlist', Y.Widget, [], {
     }
 );
 
-}, 'gallery-2013.10.02-20-26', {
+}, 'gallery-2013.10.09-22-56', {
     "requires": [
         "yui-base",
         "base-build",
