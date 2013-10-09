@@ -1,0 +1,72 @@
+<div class="intro">
+    <p>
+    View mix-in that allows for one-way and two-way data-binding.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+<p>Build your YAF application using a data-binding style similar to Backbone.stickit.</p>
+
+```js
+YUI().use("app", "gallery-view-bind-datastick", function (Y) {
+  
+  /**
+   * Create a Model representing a Book.
+   *
+   */
+  Y.BookModel = Y.Base.create('bookModel', Y.Model, [], {
+  }, {
+    ATTRS: {
+      title: '',
+      authorName: ''
+    }
+  });
+  
+  /**
+   * Create a View representing a Book, but mixing in the Y.DataBind.Stick extension.
+   * Set a `bindings` object linking together a selector and a particular attribute 
+   * of the model.
+   *
+   * Form elements are automatically bound via two-way binding, and all other elements 
+   * are bound via one-way binding (model -> view).
+   *
+   */
+
+  Y.BookView = Y.Base.create('bookView', Y.View, [Y.DataBind.Stick], {
+    
+    bindings: {
+      '#title': 'title',
+      '#author': 'authorName',
+      '#header': {
+        observe: ['title', 'authorName'],
+        onGet: function (values) {
+          return values[0] + ', written by ' + values[1];
+        }
+      }
+    },
+
+    render: function () {
+      this.bindAttrs();
+    }
+  }, {
+    ATTRS: {
+      container: {
+        valueFn: function () {
+          return Y.one("#container");
+        }
+      }
+    }
+  });
+
+  var Book = new Y.BookModel({ title: 'The Sun Also Rises', authorName:"Ernest Hemingway"}),
+    BookView = new Y.BookView({
+      model: Book
+    });
+
+  BookView.render();
+});
+```
+

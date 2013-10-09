@@ -1,0 +1,10 @@
+{
+    "name": "gallery-view-bind-datastick",
+    "builds": {
+        "gallery-view-bind-datastick": {
+            "jsfiles": [
+                "js/gallery-view-bind-datastick.js"
+            ]
+        }
+    }
+}

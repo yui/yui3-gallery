@@ -1,0 +1,118 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-view-bind-datastick
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-view-bind-datastick
+   #1: Too many var statements.
+       var namespace = 'stick:' + model.get('clientId'), // line 43, pos 13
+   #2: Expected '!==' and instead saw '!='.
+       if (selector != 'container') { // line 57, pos 26
+   #3: Missing semicolon.
+       self.get('container').delegate(event, method, selector) // line 95, pos 80
+   #4: Trailing whitespace.
+       observeModelEvent(model, self, attr + 'Change', // line 100, pos 68
+   #5: Expected '!==' and instead saw '!='.
+       if (e.bindKey != bindKey) { // line 102, pos 43
+   #6: Missing semicolon.
+       } // line 123, pos 10
+   #7: Too many var statements.
+       var result = Y.Array.reduce(parts, obj, function(memo, i) {return memo[i]; }); // line 131, pos 9
+   #8: Expected '===' and instead saw '=='.
+       return result == null ? obj : result; // line 132, pos 19
+   #9: Too many var statements.
+       var applyViewFn = function(view, fn) { // line 135, pos 5
+   #10: Too many var statements.
+       var getSelectedOption = function($select) { // line 141, pos 5
+   #11: Too many var statements.
+       var evaluateBoolean = function(view, reference) { // line 147, pos 5
+   #12: Too many var statements.
+       var observeModelEvent = function(model, view, event, fn) { // line 157, pos 5
+   #13: Missing semicolon.
+       } // line 164, pos 2
+   #14: Too many var statements.
+       var setAttr = function(model, attr, val, options, context, config) { // line 166, pos 5
+   #15: Too many var statements.
+       var getAttr = function(model, attr, config, context, event) { // line 173, pos 5
+   #16: Trailing whitespace.
+       var val, // line 174, pos 13
+   #17: Too many var statements.
+       var getConfiguration = function($el, binding) { // line 191, pos 5
+   #18: Too many var statements.
+       var config = Y.Array.reduce(handlers, {}, function(prev, curr) { // line 208, pos 9
+   #19: Missing semicolon.
+       } // line 214, pos 2
+   #20: Too many var statements.
+       var initializeAttributes = function(view, $el, config, model, modelAttr) { // line 216, pos 5
+   #21: Trailing whitespace.
+       $el[updateType](attrConfig.name, val); // line 233, pos 59
+   #22: Missing semicolon.
+       } // line 242, pos 2
+   #23: Too many var statements.
+       var initializeVisible = function(view, $el, config, model, modelAttr) { // line 244, pos 5
+   #24: Expected '===' and instead saw '=='.
+       if (config.visible == null) { // line 245, pos 24
+   #25: Too many var statements.
+       var updateViewBindEl = function(view, $el, config, val, model, isInitializing) { // line 276, pos 5
+   #26: Expected '===' and instead saw '=='.
+       return val == null ? val : Number(val); // line 299, pos 24
+   #27: Expected '===' and instead saw '=='.
+       $el.item(0).set('checked', val == $el.item(0).get('value')); // line 331, pos 52
+   #28: Trailing whitespace.
+       var node = $el.item(0), // line 345, pos 40
+   #29: Too many var statements.
+       var node = $el.item(0), // line 345, pos 21
+   #30: Expected '!==' and instead saw '!='.
+       if (boxval != 'on' && boxval != null) { // line 351, pos 28
+   #31: Expected '!==' and instead saw '!='.
+       if (boxval != 'on' && boxval != null) { // line 351, pos 46
+   #32: 'evaluatePath' is defined but never used.
+       var evaluatePath = function(obj, path) { // line 129, pos 17
+   #33: 'getSelectedOption' is defined but never used.
+       var getSelectedOption = function($select) { // line 141, pos 22
+   #34: 'setAttr' is defined but never used.
+       var setAttr = function(model, attr, val, options, context, config) { // line 166, pos 12
+   #35: 'getConfiguration' is defined but never used.
+       var getConfiguration = function($el, binding) { // line 191, pos 21
+   #36: 'initializeAttributes' is defined but never used.
+       var initializeAttributes = function(view, $el, config, model, modelAttr) { // line 216, pos 25
+   #37: 'initializeVisible' is defined but never used.
+       var initializeVisible = function(view, $el, config, model, modelAttr) { // line 244, pos 22
+   #38: 'updateViewBindEl' is defined but never used.
+       var updateViewBindEl = function(view, $el, config, val, model, isInitializing) { // line 276, pos 21
+   #39: 'namespace' is defined but never used.
+       var namespace = 'stick:' + model.get('clientId'), // line 43, pos 22
+   #40: 'options' is defined but never used.
+       update: function($el, val, model, options) { // line 318, pos 50
+   #41: 'model' is defined but never used.
+       update: function($el, val, model, options) { // line 318, pos 41
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-view-bind-datastick/gallery-view-bind-datastick.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-view-bind-datastick/gallery-view-bind-datastick.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-view-bind-datastick/gallery-view-bind-datastick-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.238 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.9.1
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [gallery-view-bind-datastick]: Passed: 0 Failed: 1 Total: 1 (ignored 0) (0.006 seconds)
+    test is empty
+       No Tests Provided For This Module
+Writing files in JSON format to: /src/gallery-view-bind-datastick/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

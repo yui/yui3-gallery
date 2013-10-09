@@ -1,0 +1,7 @@
+{
+    "gallery-view-bind-datastick": {
+        "requires": [
+            "view"
+        ]
+    }
+}
