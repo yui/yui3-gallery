@@ -1,7 +1,10 @@
 var itsagallerydir = (itsagalleryversion ? itsagalleryversion+'/' : ''),
     filter = (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
     yuiconfig = {
-        combine  : combine || true,
+        base     : loaderdomain+'/combo?yui3/'+yui3version+'/build/',
+        comboBase: loaderdomain+'/combo?',
+        root     : 'yui3/'+yui3version+'/build/',
+        combine  : combine,
         filter   : filter,
         coverage : coverage,
         groups   : {

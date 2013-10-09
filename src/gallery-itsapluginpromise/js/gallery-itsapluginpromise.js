@@ -162,6 +162,45 @@ Y.mix(ITSAPluginPromise.prototype, {
     },
 
     /**
+      * Retruns a Promise that a plugin is usable. This is handy when other code plugs the plugin, but at some other
+      * stage you need to access the plugin, but it might not be ready. This way, you wait for the promise to be resolved
+      * and you can use the plugin in the fulfilled function.
+      *
+      * @method pluginReady
+      * @param {String} ns The plugin's namespace
+      * @param [timeout] {int} Timeout in ms, after which the promise will be rejected. Set to 0 to de-activate.<br />
+      *                        If omitted, a timeout of 20 seconds (20000ms) will be used.<br />
+      * @return {Promise} --> resolve(plugin-instance) or reject(reason) can only be rejected when a plugin didn't get plugged in within timeout.
+      * @since 0.2
+    */
+    pluginReady : function(ns, timeout) {
+        // store 'arguments' inside 'args' --> because new Promise() has other arguments
+        var host = this;
+
+        Y.log('Y.Plugin.Host.pluginReady', 'info', 'plugin.host');
+        return new Y.Promise(function (resolve, reject) {
+            var checkloop;
+            if (host[ns]) {
+                resolve(host[ns]);
+            }
+            else {
+                checkloop = Y.later(50, null, function() {
+                    if (host[ns]) {
+                        resolve(host[ns]);
+                        checkloop.cancel();
+                    }
+                }, null, true);
+/*jshint expr:true */
+                (timeout===0) || Y.later(timeout || DEFAULTTIMEOUT, null, function() {
+                                      var errormessage = 'pluginReady is rejected by timeout of '+(timeout || DEFAULTTIMEOUT)+ ' ms';
+                                      reject(new Error(errormessage));
+                                  });
+/*jshint expr:false */
+            }
+        });
+    },
+
+    /**
       * Adds a plugin to the host object, just as 'plug()' would do --> the plugin happens directly.
       * The returned promise fulfills when the plugin is 'ready' (using Y.Plugin.Base.readyPromise).
       *
