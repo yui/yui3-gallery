@@ -29,7 +29,9 @@
 
 var ITSAViewModelPanel,
     ITSAFORMELEMENT = Y.ITSAFormElement,
+    YArray = Y.Array,
     Lang = Y.Lang,
+    PLUGIN_TIMEOUT = 4000, // timeout within the plugin of itsatabkeymanager should be loaded
     ID = 'id',
     DESTROYED = 'destroyed',
     CONTENTBOX = 'contentBox',
@@ -343,7 +345,7 @@ ITSAViewModelPanel.prototype.initializer = function() {
         }
     );
 /*jshint expr:true */
-    instance.get(VISIBLE) && instance.get(EDITABLE) && instance.get(CONTENTBOX).addClass(FOCUSED_CLASS); // to make tabkeymanager work
+    instance.get(VISIBLE) && instance.get(CONTENTBOX).addClass(FOCUSED_CLASS); // to make tabkeymanager work
 /*jshint expr:false */
 };
 
@@ -400,9 +402,12 @@ ITSAViewModelPanel.prototype.bindUI = function() {
 
     eventhandlers = instance._eventhandlers;
     bodyView = instance.get(BODYVIEW);
-    footerView = instance.get(FOOTERVIEW);
-
     bodyView.addTarget(instance);
+
+    footerView = instance.get(FOOTERVIEW);
+/*jshint expr:true */
+    footerView && footerView.addTarget(instance);
+/*jshint expr:false */
 
     instance._setFocusManager(instance.get(FOCUSMANAGED));
 
@@ -410,9 +415,6 @@ ITSAViewModelPanel.prototype.bindUI = function() {
         instance.after(EDITABLE+CHANGE, function(e) {
             Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             bodyView.set(EDITABLE, e.newVal);
-/*jshint expr:true */
-            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, (e.newVal && instance.get(VISIBLE))); // to make tabkeymanager work
-/*jshint expr:false */
         })
     );
 
@@ -430,23 +432,19 @@ ITSAViewModelPanel.prototype.bindUI = function() {
                     ITSAFORMELEMENT.tipsyInvalid._lastnode && model._FORM_elements[ITSAFORMELEMENT.tipsyInvalid._lastnode.get(ID)] && ITSAFORMELEMENT.tipsyInvalid.hideTooltip();
                 }
             }
-            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, (visible && instance.get(EDITABLE))); // to make tabkeymanager work
 /*jshint expr:false */
-        })
-    );
-
-    eventhandlers.push(
-        instance.after(FOOTERTEMPLATE+CHANGE, function(e) {
-            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
-            footerView.set(TEMPLATE, e.newVal);
+            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, visible); // to make tabkeymanager work
         })
     );
 
     eventhandlers.push(
         instance.after(MODEL+CHANGE, function(e) {
+            var footerView = instance.get(FOOTERVIEW);
             Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             bodyView.set(MODEL, e.newVal);
-            footerView.set(MODEL, e.newVal);
+/*jshint expr:true */
+            footerView && footerView.set(MODEL, e.newVal);
+/*jshint expr:false */
         })
     );
 
@@ -454,25 +452,41 @@ ITSAViewModelPanel.prototype.bindUI = function() {
         instance.after(TEMPLATE+CHANGE, function(e) {
             Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
             bodyView.set(TEMPLATE, e.newVal);
+            contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                function(itsatabkeymanager) {
+                    itsatabkeymanager.refresh(contentBox);
+                    if (contentBox.hasClass(FOCUSED_CLASS)) {
+                        itsatabkeymanager.focusInitialItem();
+                    }
+                }
+            );
         })
     );
 
     eventhandlers.push(
         instance.after(
             '*:viewrendered',
-            function() {
+            function(e) {
+                var viewinstance = e.target,
+                    isFooterView = (viewinstance===instance.get(FOOTERVIEW));
                 // BECAUSE we do not have a promise yet that tells when all formelements are definitely rendered on the screen,
                 // we need to timeout
                 Y.log('aftersubscriptor *:viewrendered', 'info', 'ITSA-ViewModelPanel');
-                Y.later(250, null, function() {
-                var itsatabkeymanager = contentBox.itsatabkeymanager;
-                if (itsatabkeymanager) {
-                    itsatabkeymanager.refresh(contentBox);
-                    if (instance.get(VISIBLE) && !instance._locked) {
-                        // first enable the UI againbecause we need enabled element to set the focus
-                        itsatabkeymanager.focusInitialItem();
-                    }
+                if (isFooterView) {
+                    instance._footercont.toggleClass('itsa-inlinefooter', true);
+                    viewinstance.get('container').get('parentNode').setStyle('overflow', 'visible');
+                    instance._body.setStyle('minWidth', instance._footer.get('offsetWidth')+'px');
+                    instance._footercont.toggleClass('itsa-inlinefooter', false);
                 }
+                Y.later(250, null, function() {
+                    contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                        function(itsatabkeymanager) {
+                            itsatabkeymanager.refresh(contentBox);
+                            if (contentBox.hasClass(FOCUSED_CLASS) && instance.get(VISIBLE) && !instance._locked) {
+                                itsatabkeymanager.focusInitialItem();
+                            }
+                        }
+                    );
                 });
             }
         )
@@ -520,11 +534,14 @@ ITSAViewModelPanel.prototype.bindUI = function() {
     eventhandlers.push(
         instance.after(FOCUSED+CHANGE, function(e) {
             Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
-            var itsatabkeymanager = contentBox.itsatabkeymanager,
-                focusclassed = e.newVal && instance.get(VISIBLE) && instance.get(EDITABLE);
+            var focusclassed = e.newVal && instance.get(VISIBLE);
             instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, focusclassed);
         /*jshint expr:true */
-            focusclassed && itsatabkeymanager && itsatabkeymanager._retreiveFocus();
+            focusclassed && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                function(itsatabkeymanager) {
+                    itsatabkeymanager._retreiveFocus();
+                }
+            );
         /*jshint expr:false */
         })
     );
@@ -534,33 +551,52 @@ ITSAViewModelPanel.prototype.bindUI = function() {
             ['*:'+LOAD, '*:'+RESET],
             function(e) {
                 Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
-                var itsatabkeymanager = contentBox.itsatabkeymanager,
-                model = e.target;
-                if ((model instanceof Y.Model) && itsatabkeymanager && instance.get(VISIBLE)) {
-                    // first enable the UI again, this is done within the submit-defaultfunc of the model as well, but that code comes LATER.
-                    // and we need enabled element to set the focus
-                    model.enableUI();
-                    itsatabkeymanager.focusInitialItem();
-                }
+                var model = e.target;
+        /*jshint expr:true */
+                (model instanceof Y.Model) && instance.get(VISIBLE) && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                    function(itsatabkeymanager) {
+                        // first enable the UI again, this is done within the submit-defaultfunc of the model as well, but that code comes LATER.
+                        // and we need enabled element to set the focus
+                        model.enableUI();
+                        if (contentBox.hasClass(FOCUSED_CLASS)) {
+                            itsatabkeymanager.focusInitialItem();
+                        }
+                    }
+                );
+        /*jshint expr:false */
             }
         )
     );
 
     eventhandlers.push(
-        instance.after(FOOTERTEMPLATE+CHANGE, function(e) {
+        instance.on(FOOTERTEMPLATE+CHANGE, function(e) {
             Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
         /*jshint expr:true */
             var newTemplate = e.newVal,
-                prevTemplate = e.prevVal;
-            newTemplate && !prevTemplate && instance._set(FOOTERVIEW, new Y.ITSAViewModel({
-                model: instance.get(MODEL),
-                template: newTemplate,
-                editable: false,
-                styled: false,
-                focusManaged: false, // will be done at the Panel-level
-                partOfMultiView: true
-            }));
+                prevTemplate = e.prevVal,
+                newFooterView;
+            if (newTemplate && !prevTemplate) {
+                newFooterView = new Y.ITSAViewModel({
+                    model: instance.get(MODEL),
+                    template: newTemplate,
+                    editable: false,
+                    styled: false,
+                    focusManaged: false, // will be done at the Panel-level
+                    partOfMultiView: true
+                });
+                instance._set(FOOTERVIEW, newFooterView);
+                newFooterView.addTarget(instance);
+                instance._renderFooter();
+            }
             prevTemplate && !newTemplate && prevTemplate.destroy() && instance._set(FOOTERVIEW, null);
+            contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                function(itsatabkeymanager) {
+                    itsatabkeymanager.refresh(contentBox);
+                    if (contentBox.hasClass(FOCUSED_CLASS)) {
+                        itsatabkeymanager.focusInitialItem();
+                    }
+                }
+            );
         /*jshint expr:false */
         })
     );
@@ -640,11 +676,14 @@ ITSAViewModelPanel.prototype.bindUI = function() {
                         }
                     ).then(
                         function() {
-                            var itsatabkeymanager = contentBox.itsatabkeymanager;
                             instance._setSpin(eventType, false);
         /*jshint expr:true */
                             instance._lockedBefore || instance.unlockPanel();
-                            itsatabkeymanager && itsatabkeymanager.focusInitialItem();
+                            contentBox.hasClass(FOCUSED_CLASS) && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                                function(itsatabkeymanager) {
+                                    itsatabkeymanager.focusInitialItem();
+                                }
+                            );
         /*jshint expr:false */
                         }
                     );
@@ -1043,6 +1082,26 @@ ITSAViewModelPanel.prototype.destructor = function() {
 };
 
 /**
+ * Cleaning up all eventlisteners
+ *
+ * @method _clearEventhandlers
+ * @private
+ * @since 0.4
+ *
+*/
+ITSAViewModelPanel.prototype._clearEventhandlers = function() {
+    Y.log('_clearEventhandlers', 'info', 'ITSA-ViewModelPanel');
+
+    var instance = this;
+    YArray.each(
+        instance._eventhandlers,
+        function(item){
+            item.detach();
+        }
+    );
+};
+
+/**
  * default function of focusnext-event.
  * Will refocus to the next focusable UI-element.
  *
@@ -1052,16 +1111,20 @@ ITSAViewModelPanel.prototype.destructor = function() {
 */
 ITSAViewModelPanel.prototype._defFn_focusnext = function() {
     var instance = this,
-        itsatabkeymanager = instance.get(CONTENTBOX).itsatabkeymanager;
+        contentBox = instance.get(CONTENTBOX);
 
     Y.log('_defFn_focusnext', 'info', 'ITSA-ViewModelPanel');
-    if (itsatabkeymanager) {
-        Y.log('focus to next field', 'info', 'ITSA-ViewModelPanel');
-        itsatabkeymanager.next();
-    }
-    else {
-        Y.log('No focus to next field: Y.Plugin.ITSATabKeyManager not plugged in', 'info', 'ITSA-ViewModelPanel');
-    }
+/*jshint expr:true */
+    contentBox.hasClass(FOCUSED_CLASS) && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+        function(itsatabkeymanager) {
+            Y.log('focus to next field', 'info', 'ITSA-ViewModelPanel');
+            itsatabkeymanager.next();
+        },
+        function() {
+            Y.log('No focus to next field: Y.Plugin.ITSATabKeyManager not plugged in', 'info', 'ITSA-ViewModelPanel');
+        }
+    );
+/*jshint expr:false */
 };
 
 /**

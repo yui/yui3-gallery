@@ -7,7 +7,7 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
             var instance = this;
             switch (action) {
               case 'submit':
-                Y.later(5000, null, function() {
+                Y.later(1500, null, function() {
                     // normally you need to invest the response on the server,
                     // but now we do this here:
                     var loginok = ((instance.get('username')==='marco') &&

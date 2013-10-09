@@ -19,13 +19,13 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-itsaviewmodelpanel/gallery-itsaviewmodelpanel-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.407 seconds, pretty fast huh?
+shifter [info] finished in 0.423 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 Starting Grover on 1 files with PhantomJS@1.9.1
   Running 15 concurrent tests at a time.
