@@ -42,6 +42,7 @@ YUI.add('gallery-itsaviewmodel', function (Y, NAME) {
 */
 
 var ITSAViewModel,
+    PLUGIN_TIMEOUT = 4000, // timeout within the plugin of itsatabkeymanager should be loaded
     Lang = Y.Lang,
     YArray = Y.Array,
     YObject = Y.Object,
@@ -807,13 +808,14 @@ ITSAViewModel.prototype.blur = function() {
 */
 ITSAViewModel.prototype.focus = function() {
 
-    var container = this.get('container'),
-        itsatabkeymanager = container.itsatabkeymanager;
+    var container = this.get('container');
 
     container.addClass(FOCUSED_CLASS);
-/*jshint expr:true */
-    itsatabkeymanager && itsatabkeymanager._retreiveFocus();
-/*jshint expr:false */
+    container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+        function(itsatabkeymanager) {
+            itsatabkeymanager._retreiveFocus();
+        }
+    );
 };
 
 /**
@@ -1118,6 +1120,62 @@ ITSAViewModel.prototype.setHotKey = function(buttonType, hotkey) {
 };
 
 /**
+ * Sets the primarybutton of one of the next buttontypes:
+ * <ul>
+ *   <li>btn_abort</li>
+ *   <li>btn_cancel</li>
+ *   <li>btn_close</li>
+ *   <li>btn_destroy</li>
+ *   <li>btn_ignore</li>
+ *   <li>btn_load</li>
+ *   <li>btn_no</li>
+ *   <li>btn_ok</li>
+ *   <li>btn_remove</li>
+ *   <li>btn_reset</li>
+ *   <li>btn_retry</li>
+ *   <li>btn_save</li>
+ *   <li>btn_submit</li>
+ *   <li>btn_yes</li>
+ *   <li>imgbtn_abort</li>
+ *   <li>imgbtn_cancel</li>
+ *   <li>imgbtn_close</li>
+ *   <li>imgbtn_destroy</li>
+ *   <li>imgbtn_ignore</li>
+ *   <li>imgbtn_load</li>
+ *   <li>imgbtn_no</li>
+ *   <li>imgbtn_ok</li>
+ *   <li>imgbtn_remove</li>
+ *   <li>imgbtn_reset</li>
+ *   <li>imgbtn_retry</li>
+ *   <li>imgbtn_save</li>
+ *   <li>imgbtn_submit</li>
+ *   <li>imgbtn_yes</li>
+ *   <li>spinbtn_load</li>
+ *   <li>spinbtn_remove</li>
+ *   <li>spinbtn_save</li>
+ *   <li>spinbtn_submit</li>
+ * </ul>
+ *
+ * @method setPrimaryButton
+ * @param buttonType {String} the buttontype which receives the hotkey, which should be one of the types mentioned above.
+ * @since 0.4
+**/
+ITSAViewModel.prototype.setPrimaryButton = function(buttonType) {
+    var instance = this,
+        buttons = instance._buttons;
+    if (PROTECTED_BUTTON_TYPES[buttonType]) {
+        YArray.each(
+            buttons,
+            function(button) {
+                button.config.primary = (button.propertykey===buttonType);
+            }
+        );
+    }
+    else {
+    }
+};
+
+/**
   * Returns the view's model-attributes by calling its model.toJSON(). If model is an object
   * then the object will return as it is.
   * @method toJSON
@@ -1249,16 +1307,16 @@ ITSAViewModel.prototype._bindUI = function() {
         instance.after(
             RESET,
             function() {
-                var itsatabkeymanager;
                 if (instance._isMicroTemplate) {
                     // need to re-render because the code might have made items visible/invisible based on their value
                     instance.render();
                 }
                 else {
-                    itsatabkeymanager = container.itsatabkeymanager;
-/*jshint expr:true */
-                    itsatabkeymanager && itsatabkeymanager.focusInitialItem();
-/*jshint expr:false */
+                    container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                        function(itsatabkeymanager) {
+                            itsatabkeymanager.focusInitialItem();
+                        }
+                    );
                 }
             }
         )
@@ -1329,10 +1387,13 @@ ITSAViewModel.prototype._bindUI = function() {
                         }
                     ).then(
                         function() {
-                            var itsatabkeymanager = container.itsatabkeymanager;
                             instance._setSpin(eventType, false);
                             instance._lockedBefore || instance.unlockView();
-                            itsatabkeymanager && itsatabkeymanager.focusInitialItem();
+                            container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                                function(itsatabkeymanager) {
+                                    itsatabkeymanager.focusInitialItem();
+                                }
+                            );
                         }
                     );
                 }
@@ -1831,13 +1892,17 @@ ITSAViewModel.prototype._createButtons = function() {
 */
 ITSAViewModel.prototype[DEF_FN+FOCUS_NEXT] = function() {
     var instance = this,
-        container = instance.get(CONTAINER),
-        itsatabkeymanager = container && container.itsatabkeymanager;
-    if (itsatabkeymanager) {
-        itsatabkeymanager.next();
-    }
-    else {
-    }
+        container = instance.get(CONTAINER);
+
+/*jshint expr:true */
+    container.hasClass(FOCUSED_CLASS) && container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+        function(itsatabkeymanager) {
+            itsatabkeymanager.next();
+        },
+        function() {
+        }
+    );
+/*jshint expr:false */
 };
 
 ITSAViewModel.prototype[DEF_PREV_FN+VALIDATION_ERROR] = function(e) {
@@ -2019,7 +2084,7 @@ ITSAViewModel.prototype._setTemplateRenderer = function(editTemplate) {
     instance._viewNeedsForm = !instance._contIsForm && !(/<form([^>]*)>/.test(template));
 };
 
-}, 'gallery-2013.10.02-20-26', {
+}, 'gallery-2013.10.09-22-56', {
     "requires": [
         "intl",
         "base-build",

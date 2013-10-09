@@ -1,13 +1,15 @@
 {
     "gallery-itsaviewmodelpanel": {
         "requires": [
+            "gallery-itsapluginpromise",
             "node-pluginhost",
             "base-build",
             "base-base",
             "event-outside",
             "model",
             "gallery-itsapanel",
-            "gallery-itsaviewmodel"
+            "gallery-itsaviewmodel",
+            "gallery-itsaformelement"
         ]
     }
 }
