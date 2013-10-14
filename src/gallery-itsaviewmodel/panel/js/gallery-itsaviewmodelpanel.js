@@ -475,6 +475,9 @@ ITSAViewModelPanel.prototype.bindUI = function() {
                 if (isFooterView) {
                     instance._footercont.toggleClass('itsa-inlinefooter', true);
                     viewinstance.get('container').get('parentNode').setStyle('overflow', 'visible');
+                    // reset previous width, otherwise the width keeps expanding
+                    instance._body.setStyle('minWidth', '');
+                    // now we can calculate instance._footer.get('offsetWidth')
                     instance._body.setStyle('minWidth', instance._footer.get('offsetWidth')+'px');
                     instance._footercont.toggleClass('itsa-inlinefooter', false);
                 }
@@ -575,18 +578,23 @@ ITSAViewModelPanel.prototype.bindUI = function() {
             var newTemplate = e.newVal,
                 prevTemplate = e.prevVal,
                 newFooterView;
-            if (newTemplate && !prevTemplate) {
-                newFooterView = new Y.ITSAViewModel({
-                    model: instance.get(MODEL),
-                    template: newTemplate,
-                    editable: false,
-                    styled: false,
-                    focusManaged: false, // will be done at the Panel-level
-                    partOfMultiView: true
-                });
-                instance._set(FOOTERVIEW, newFooterView);
-                newFooterView.addTarget(instance);
-                instance._renderFooter();
+            if (newTemplate) {
+                if (!prevTemplate) {
+                    newFooterView = new Y.ITSAViewModel({
+                        model: instance.get(MODEL),
+                        template: newTemplate,
+                        editable: false,
+                        styled: false,
+                        focusManaged: false, // will be done at the Panel-level
+                        partOfMultiView: true
+                    });
+                    instance._set(FOOTERVIEW, newFooterView);
+                    newFooterView.addTarget(instance);
+                    instance._renderFooter();
+                }
+                else {
+                    instance.get(FOOTERVIEW).set('template', newTemplate);
+                }
             }
             prevTemplate && !newTemplate && prevTemplate.destroy() && instance._set(FOOTERVIEW, null);
             contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(

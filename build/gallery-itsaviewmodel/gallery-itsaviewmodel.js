@@ -955,6 +955,24 @@ ITSAViewModel.prototype.removeHotKey = function(buttonType) {
 };
 
 /**
+ * Removes the primarybutton (if set).
+ *
+ * @method removePrimaryButton
+ * @since 0.5
+**/
+ITSAViewModel.prototype.removePrimaryButton = function() {
+    var instance = this,
+        buttons = instance._buttons;
+
+    YArray.each(
+        buttons,
+        function(button) {
+            button.config.primary = false;
+        }
+    );
+};
+
+/**
  * Method that is responsible for rendering the Model into the view.
  *
  * @method render
@@ -1910,7 +1928,7 @@ ITSAViewModel.prototype[DEF_PREV_FN+VALIDATION_ERROR] = function(e) {
 };
 
 /**
- * default function of focusnext-event.
+ * default function of validation-error.
  * Will refocus to the next focusable UI-element.
  *
  * @method _defFn_validationerror
@@ -2084,8 +2102,9 @@ ITSAViewModel.prototype._setTemplateRenderer = function(editTemplate) {
     instance._viewNeedsForm = !instance._contIsForm && !(/<form([^>]*)>/.test(template));
 };
 
-}, 'gallery-2013.10.09-22-56', {
+}, 'gallery-2013.10.14-07-00', {
     "requires": [
+        "gallery-itsapluginpromise",
         "intl",
         "base-build",
         "view",

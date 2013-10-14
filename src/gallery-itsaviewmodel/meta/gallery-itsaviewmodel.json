@@ -1,6 +1,7 @@
 {
     "gallery-itsaviewmodel": {
         "requires": [
+            "gallery-itsapluginpromise",
             "intl",
             "base-build",
             "view",
