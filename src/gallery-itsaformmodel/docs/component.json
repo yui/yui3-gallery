@@ -49,7 +49,7 @@
             "displayName": "Handling concurrency",
             "description": "This example shows how attribute's value-changes reflect the UI.",
             "author"     : [ "itsasbreuk" ],
-            "modules"    : ["node", "base-build", "gallery-itsaformmodel", "gallery-itsacheckbox", "gallery-itsawidgetrenderpromise", "promimse"],
+            "modules"    : ["node", "base-build", "gallery-itsaformmodel", "gallery-itsacheckbox", "gallery-itsawidgetrenderpromise", "promise"],
             "tags"    : ["gallery-itsaformmodel", "model", "formelement", "form", "template", "tojson", "tojsonui", "templating"],
             "hideTableOfContents": true
         },
@@ -58,7 +58,7 @@
             "displayName": "Templating with toJSONUI()",
             "description": "This example how to use of formmodel.toJSONUI() with templates.",
             "author"     : [ "itsasbreuk" ],
-            "modules"    : ["node", "base-build", "gallery-itsaformmodel", "gallery-itsacheckbox", "gallery-itsawidgetrenderpromise", "promimse"],
+            "modules"    : ["node", "base-build", "gallery-itsaformmodel", "gallery-itsacheckbox", "gallery-itsawidgetrenderpromise", "promise"],
             "tags"    : ["gallery-itsaformmodel", "model", "formelement", "form", "template", "tojson", "tojsonui", "templating"],
             "hideTableOfContents": true
         },
@@ -67,7 +67,7 @@
             "displayName": "Using the same UI more than once",
             "description": "This example how to use of formmodel.toJSONUI() with templates.",
             "author"     : [ "itsasbreuk" ],
-            "modules"    : ["node", "base-build", "gallery-itsaformmodel", "gallery-itsacheckbox", "gallery-itsawidgetrenderpromise", "promimse"],
+            "modules"    : ["node", "base-build", "gallery-itsaformmodel", "gallery-itsacheckbox", "gallery-itsawidgetrenderpromise", "promise"],
             "tags"    : ["gallery-itsaformmodel", "model", "formelement", "form", "template", "tojson", "tojsonui", "templating"],
             "hideTableOfContents": true
         }

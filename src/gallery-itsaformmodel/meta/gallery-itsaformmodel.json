@@ -15,6 +15,7 @@
             "oop",
             "yui-later",
             "node-event-delegate",
+            "node-event-simulate",
             "event-valuechange",
             "event-synthetic",
             "event-base",

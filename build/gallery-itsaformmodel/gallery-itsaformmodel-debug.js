@@ -104,7 +104,6 @@ var YArray = Y.Array,
         text: true,
         number: true,
         password: true,
-        textarea: true,
         email: true,
         url: true
     },
@@ -1707,9 +1706,13 @@ ITSAFormModel.prototype._bindUI = function() {
                 // It depends on the value of 'data-submitonenter'
                 var node = e.target,
                     submitonenter = (node.getAttribute('data-submitonenter')==='true'),
-                    type, payload;
+                    primarybtnonenter = (node.getAttribute('data-primarybtnonenter')==='true'),
+                    type, payload, primarybtnNode;
                 if (submitonenter) {
                     instance.submit({fromInternal: true});
+                }
+                else if (primarybtnonenter && (primarybtnNode=instance._findPrimaryBtnNode())) {
+                    primarybtnNode.simulate(CLICK);
                 }
                 else {
                     type = FOCUS_NEXT;
@@ -1871,6 +1874,7 @@ ITSAFormModel.prototype._defFn_changedate = function(e) {
  * @param e.promiseReject {Function} handle to the reject-method
  * @param e.promiseResolve {Function} handle to the resolve-method
  * @private
+ * @return {Y.Promise} do not handle yourself: is handled by internal eventsystem.
  * @since 0.1
 */
 ITSAFormModel.prototype['_defFn_'+SUBMIT] = function(e) {
@@ -1993,6 +1997,29 @@ ITSAFormModel.prototype._defFn_uichanged = function(e) {
             instance.UIToModel(node.get(ID));
         }
     }
+};
+
+/**
+ * Search for the primary buttonnode - if defined. Only returns the node if it is found in the DOM.
+ *
+ * @method _findPrimaryBtnNode
+ * @private
+ * @return {Y.Node} the button's Node
+ * @since 0.2
+ */
+ITSAFormModel.prototype._findPrimaryBtnNode = function() {
+    var formelements = this._FORM_elements,
+        foundNode;
+    YObject.some(
+        formelements,
+        function(formelement, nodeid) {
+            var primary = formelement.config.primary,
+                primaryBtn = (typeof primary === BOOLEAN) && primary;
+            foundNode = primaryBtn && Y.one('#'+nodeid);
+            return foundNode;
+        }
+    );
+    return foundNode;
 };
 
 /**
@@ -2511,7 +2538,7 @@ YArray.each(
     }
 );
 
-}, 'gallery-2013.10.02-20-26', {
+}, 'gallery-2013.10.14-07-00', {
     "requires": [
         "yui-base",
         "intl",
@@ -2527,6 +2554,7 @@ YArray.each(
         "oop",
         "yui-later",
         "node-event-delegate",
+        "node-event-simulate",
         "event-valuechange",
         "event-synthetic",
         "event-base",
