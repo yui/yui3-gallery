@@ -1,7 +1,7 @@
 {
     "name": "yui-pathogen-encoder",
     "description": "Enables pathogen encoding in YUI Loader",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "author": "Eugene Kashida",
     "contributors": [
         "Caridy Patiño"
@@ -35,7 +35,6 @@
         "mocha": "*"
     },
     "scripts": {
-        "postinstall": "./node_modules/yogi/bin/yogi.js build",
         "lint": "node ./node_modules/.bin/jshint --config ./node_modules/yui-lint/jshint.json ./lib/*.js ./js/*.js",
         "test": "node ./node_modules/.bin/_mocha tests/lib/*.js --reporter spec"
     },

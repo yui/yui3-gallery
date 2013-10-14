@@ -89,6 +89,8 @@ core and gallery groups, and just "$root" for all other groups.
 Y.Loader.prototype.aggregateGroups = function (modules) {
     var source = {},
         galleryMatch,
+        compressed,
+        prefixTree,
         meta,
         name,
         mod,
@@ -116,45 +118,47 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             continue;
         }
 
-        // YUI core modules
+        // YUI core modules => core group
         if (!mod.group) {
-            key = 'core' + SUB_GROUP_DELIM + YUI.version;
+            key = 'c' + SUB_GROUP_DELIM + YUI.version;
         }
-        // YUI gallery modules
+        // YUI gallery modules => gallery group
         else if (mod.group === 'gallery') {
             if (!galleryVersion) {
                 galleryMatch   = GALLERY_RE.exec(this.groups.gallery.root);
                 galleryVersion = galleryMatch && galleryMatch[1];
             }
-            name    = name.split('gallery-').pop(); // remove prefix
-            key     = 'gallery' + SUB_GROUP_DELIM + galleryVersion;
+            name = name.split('gallery-').pop(); // remove prefix
+            key  = 'g' + SUB_GROUP_DELIM + galleryVersion;
         }
-        // YUI application modules
-        else {
-            // If the path does not follow the YUI build convention, then we
-            // assume that the application is passing the full cdn path.
-            if (mod.path.indexOf(name + '/' + name) !== 0) {
-                key     = 'path' + SUB_GROUP_DELIM + name;
-                name    = mod.path.split(EXTENSION_RE).shift(); // remove ext
-            }
-            // If the module was built the YUI way, then we segment modules
-            // from this group under the `root`.
-            else {
-                key = meta.root;
+        // If the module was built the YUI way, then we segment these modules
+        // into the `root` group.
+        else if (mod.path.indexOf(name + '/' + name) === 0) {
+            key = meta.root;
 
-                // Trim '/' from both ends.
-                if (key[0] === '/') {
-                    key = key.slice(1);
-                }
-                if (key[key.length - 1] === '/') {
-                    key = key.slice(0, -1);
-                }
+            // Trim '/' from both ends.
+            if (key[0] === '/') {
+                key = key.slice(1);
             }
+            if (key[key.length - 1] === '/') {
+                key = key.slice(0, -1);
+            }
+
+            key = 'r' + SUB_GROUP_DELIM + key;
+        }
+        // If the path does not follow the YUI build convention, then we
+        // add them to the prefix tree and subsequently segment these modules
+        // into the `path` group.
+        else {
+            prefixTree = prefixTree || new PrefixTree();
+            prefixTree.add(mod.path.split(EXTENSION_RE).shift());
+            continue;
         }
 
         source[key] = source[key] || [];
         source[key].push(name);
 
+        // Record the full module name as seen
         if (Y.config.customComboFallback) {
             if (mod.group === 'gallery') {
                 name = 'gallery-' + name;
@@ -163,7 +167,194 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
         }
     }
 
+    if (prefixTree) {
+        compressed = prefixTree.compress();
+        for (i = 0, len = compressed.length; i < len; i += 1) {
+            key = 'p' + SUB_GROUP_DELIM + compressed[i].root;
+            source[key] = source[key] || [];
+            source[key].push(compressed[i].name);
+        }
+
+        // clean up
+        prefixTree.destroy();
+        prefixTree = null;
+    }
+
     return source;
+};
+
+function PrefixTree () {
+    this.tree = {
+        weight: Number.MAX_VALUE,
+        path: '/',
+        children: {}
+    };
+}
+
+PrefixTree.prototype = {
+
+    add: function (fullpath) {
+        var currentNode = this.tree,
+            remaining   = fullpath.split('/'),
+            traversed   = [],
+            remainingPath,
+            traversedPath,
+            child,
+            part;
+
+        while (remaining.length) {
+            part  = remaining.shift();
+            child = currentNode.children[part];
+
+            traversed.push(part);
+            remainingPath = remaining.join('/');
+
+            if (!child) {
+                traversedPath = traversed.join('/');
+
+                child = currentNode.children[part] = {
+                    path: traversedPath,
+                    weight: 0
+                };
+
+                // If not leaf node
+                if (remainingPath) {
+                    // Account for the length of the subgroup delimiter (1)
+                    child.weight += traversedPath.length + 1 + remainingPath.length;
+                    child.children = {};
+                } else {
+                    // Leaf nodes should never be roots
+                    child.weight = Number.MAX_VALUE;
+                }
+            } else {
+                // Account for the length of the module delimiter (1)
+                child.weight += 1 + remainingPath.length;
+            }
+
+            // bubble down
+            currentNode = child;
+        }
+
+        Y.log('Added ' + currentNode.path, 'debug', 'PrefixTree');
+    },
+
+    compress: function () {
+        var process     = [],
+            compressed  = [],
+            children,
+            root_re,
+            leaves,
+            weight,
+            total,
+            child,
+            node,
+            key,
+            i;
+
+        // Start with the root node's children
+        for (key in this.tree.children) {
+            if (this.tree.children.hasOwnProperty(key)) {
+                process.push(this.tree.children[key]);
+            }
+        }
+
+        Y.log(this.stringify(), 'debug', 'PrefixTree');
+
+        while (process.length) {
+            total    = 0;
+            children = [];
+
+            node = process.pop();
+
+            // Account for the length of the initial 'p+'
+            weight = 2 + node.weight;
+
+            // Find the total resulting weight if we use the children of this
+            // node as roots
+            for (key in node.children) {
+                if (node.children.hasOwnProperty(key)) {
+                    child = node.children[key];
+
+                    // Account for the length of the initial (p+) and
+                    // subsequent (;p+) group delimiters for every additional
+                    // root that we add
+                    total += children.length ? 3 : 2;
+                    total += child.weight;
+
+                    children.push(child);
+                }
+            }
+
+            Y.log('Weight of the current root "' + node.path + '": ' + weight, 'debug', 'PrefixTree');
+            Y.log('Combined weight of child roots: ' + total, 'debug', 'PrefixTree');
+
+            if (weight <= total) {
+                // If the weigth of this node is less than or equal to the
+                // total weight of its child nodes combined, it means that
+                // we'll get better compression by using this node as a root
+                Y.log('Established root: "' + node.path + '"', 'debug', 'PrefixTree');
+
+                root_re = new RegExp('^' + node.path + '/');
+
+                // Now that we've decided to use this node as a root, we can
+                // determine what the module names should be
+                leaves = this.getLeafNodes(node);
+                for (i = 0; i < leaves.length; i += 1) {
+                    compressed.push({
+                        // module name = full path - root
+                        name: leaves[i].path.replace(root_re, ''),
+                        root: node.path
+                    });
+                }
+            } else {
+                // If the weight of this node is greater than the total weight
+                // of its child nodes combined, it means that we'll get better
+                // compression by using each child node as an individual root.
+                Y.log('Scheduling ' + children.length + ' child(ren) of "' + node.path + '" for further processing...', 'debug', 'PrefixTree');
+
+                process = process.concat(children);
+            }
+        }
+
+        if (JSON) {
+            Y.log(JSON.stringify(compressed, null, 4), 'debug');
+        }
+
+        return compressed;
+    },
+
+    getLeafNodes: function (tree) {
+        var leaves = [],
+            child,
+            key;
+
+        // base case
+        if (!tree.children) {
+            leaves.push(tree);
+            return leaves;
+        }
+
+        for (key in tree.children) {
+            if (tree.children.hasOwnProperty(key)) {
+                child = tree.children[key];
+                leaves = leaves.concat(
+                    this.getLeafNodes(child)
+                );
+            }
+        }
+
+        return leaves;
+    },
+
+    destroy: function () {
+        this.tree = null;
+    },
+
+    // For debugging
+    stringify: function () {
+        return JSON && JSON.stringify(this.tree, null, 4);
+    }
+
 };
 
 /**

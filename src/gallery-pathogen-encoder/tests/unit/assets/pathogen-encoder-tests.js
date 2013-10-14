@@ -46,7 +46,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
                 subgroups = groups[0].split(SUB_GROUP_DELIM);
                 Assert.areEqual(3, subgroups.length, 'There should only be three subgroups');
-                Assert.areEqual('core', subgroups[0], 'Unexpected core identifier');
+                Assert.areEqual('c', subgroups[0], 'Unexpected core identifier');
                 Assert.isTrue(/^\d+\.\d+\.\d+/.test(subgroups[1]), 'Unexpected core version');
 
                 modules = subgroups.pop().split(MODULE_DELIM);
@@ -84,14 +84,187 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
             subgroups = groups[0].split(SUB_GROUP_DELIM);
             Assert.areEqual(3, subgroups.length, 'There should only be three subgroups');
-            Assert.areEqual('gallery', subgroups[0], 'Unexpected gallery identifier');
+            Assert.areEqual('g', subgroups[0], 'Unexpected gallery identifier');
             Assert.areEqual('2013.08.07-20-34', subgroups[1], 'Unexpected gallery version');
 
             modules = subgroups.pop().split(MODULE_DELIM);
             Assert.isTrue(modules.length === 2, 'Missing modules in the gallery-only combo url');
         },
 
-        'test basic formatting for application modules that follow yui build conventions': function () {
+        'test prefix tree compression': function () {
+            var paths = [
+                'os/mit/media/p/content/interest-manager-min-1351823.js',
+                'os/mit/media/m/content_social/content-social-base-min-1496800.js',
+                'os/mit/media/m/content_social/content-share-buttons-int-min-1544525.js',
+                'os/mit/media/p/content/ad-controller-min-1545585.js',
+                'os/mit/media/m/content_photo/carousel-min-1458021.js',
+                'os/mit/media/m/comments/content-comments-min-1546415.js',
+                'os/mit/media/p/content/content-manager-min-1544454.js',
+                'os/mit/media/p/content/content-discoverer-min-1446986.js',
+                'os/mit/media/m/content_photo/content-ss-base-min-1545584.js',
+                'os/mit/media/p/content/request-manager-min-1544454.js',
+                'os/mit/media/p/content/perf-timeable-min-1191658.js',
+                'os/mit/media/p/content/instrumentation-min-1214752.js',
+                'os/mit/media/p/content/pane-manager-min-1544454.js',
+                'os/mit/media/p/content/next-scroll-min-1304262.js',
+                'os/mit/media/m/content_photo/content-ss-no-sv-min-1545584.js',
+                'os/mit/media/p/content/precog-manager-min-1483059.js',
+                'ss/strip_3.2.js',
+                'os/mit/media/m/sports/super-hero-min-1490675.js',
+                'os/mit/media/p/content/tag-manager-min-1294559.js',
+                'os/mit/td/mjata-0.4.3/mjata-lazy-modellist/mjata-lazy-modellist-min.js',
+                'os/mit/td/ape-location-0.0.5/af-locations/af-locations-min.js',
+                'os/mit/td/ape-location-0.0.5/ape-location-templates-location-list/ape-location-templates-location-list-min.js',
+                'os/mit/td/ape-location-0.0.5/ape-location-templates-location-panel/ape-location-templates-location-panel-min.js',
+                'os/mit/td/ape-location-0.0.5/af-location-panel/af-location-panel-min.js',
+                'os/mit/td/ape-af-0.0.95/af-pageviz/af-pageviz-min.js',
+                'os/mit/td/ape-af-0.0.95/af-poll/af-poll-min.js',
+                'os/mit/td/stencil-0.1.156/stencil-bquery/stencil-bquery-min.js',
+                'os/mit/td/stencil-0.1.156/stencil-swiper/stencil-swiper-min.js',
+                'os/mit/td/stencil-0.1.156/stencil-carousel/stencil-carousel-min.js',
+                'os/mit/td/stencil-0.1.156/stencil-fx/stencil-fx-min.js',
+                'os/mit/td/stencil-0.1.156/stencil-fx-collapse/stencil-fx-collapse-min.js',
+                'kx/yucs/uh3s/uh/28/js/uh-min.js',
+                'kx/yucs/uh3s/uh/27/js/menu_handler-min.js',
+                'kx/yucs/uh3s/uh/8/js/gallery-jsonp-min.js',
+                'kx/yucs/uh3s/uh/26/js/logo_debug-min.js',
+                'kx/yucs/uh3s/uh/26/js/timestamp_library-min.js',
+                'kx/yucs/uh3s/top_bar/js/5/top_bar-min.js',
+                'kx/yucs/uh3s/search/js/16/search-min.js',
+                'kx/yucs/uh3s/help/js/6/help_menu_v3-min.js',
+                'kx/yucs/uh3/location/js/7/uh_locdrop-min.js'
+            ],
+            modules = {},
+            subgroups,
+            resolved,
+            loader,
+            groups,
+            urls;
+
+            paths.forEach(function (path) {
+                modules[path] = {
+                    group: 'foo',
+                    path: path
+                };
+            });
+
+            loader = new Y.Loader({
+                combine: true,
+                require: paths,
+                groups: {
+                    'foo': {
+                        comboBase: 'http://l.yimg.com/zz/combo?',
+                        root: '/',
+                        combine: true
+                    }
+                },
+                modules: modules
+            });
+
+            resolved = loader.resolve(true);
+
+            urls = resolved.js;
+            Assert.areEqual(2, urls.length);
+
+            path   = urls[0].split(customComboBase).pop();
+            groups = path.split(GROUP_DELIM);
+            Assert.areEqual(5, groups.length);
+
+            path   = urls[1].split(customComboBase).pop();
+            groups = path.split(GROUP_DELIM);
+            Assert.areEqual(4, groups.length);
+        },
+
+        'test prefix tree compression efficiency (1)': function () {
+            var modules = {},
+                twoGroups,
+                oneGroup,
+                resolved,
+                loader;
+
+            // oneGroup is shorter here
+            oneGroup  = 'http://combo.yuilibrary.com/p/p+foobar+a/maru,a/tora,a/yui,b/maru,b/tora,b/yui.js',
+            twoGroups = 'http://combo.yuilibrary.com/p/p+foobar/a+maru,tora,yui;p+foobar/b+maru,tora,yui.js',
+
+            paths = [
+                'foobar/a/tora.js',
+                'foobar/a/maru.js',
+                'foobar/a/yui.js',
+                'foobar/b/tora.js',
+                'foobar/b/maru.js',
+                'foobar/b/yui.js'
+            ];
+
+            paths.forEach(function (path) {
+                modules[path] = {
+                    group: 'foobar',
+                    path: path
+                };
+            });
+
+            loader = new Y.Loader({
+                combine: true,
+                require: paths,
+                groups: {
+                    'foobar': {
+                        comboBase: 'http://l.yimg.com/zz/combo?',
+                        root: '/',
+                        combine: true
+                    }
+                },
+                modules: modules
+            });
+
+            resolved = loader.resolve(true);
+            Assert.areEqual(oneGroup, resolved.js[0]);
+        },
+
+        'test prefix tree compression efficiency (2)': function () {
+            var modules = {},
+                twoGroups,
+                oneGroup,
+                resolved,
+                loader,
+                paths;
+
+            paths = [
+                'foob/a/tora.js',
+                'foob/a/maru.js',
+                'foob/a/yui.js',
+                'foob/b/tora.js',
+                'foob/b/maru.js',
+                'foob/b/yui.js'
+            ];
+
+            // twoGroups is shorter here
+            oneGroup  = 'http://combo.yuilibrary.com/p/p+foob+a/maru,a/tora,a/yui,b/maru,b/tora,b/yui.js',
+            twoGroups = 'http://combo.yuilibrary.com/p/p+foob/a+maru,tora,yui;p+foob/b+maru,tora,yui.js',
+
+            paths.forEach(function (path) {
+                modules[path] = {
+                    group: 'foob',
+                    path: path
+                };
+            });
+
+            loader = new Y.Loader({
+                combine: true,
+                require: paths,
+                groups: {
+                    'foob': {
+                        comboBase: 'http://l.yimg.com/zz/combo?',
+                        root: '/',
+                        combine: true
+                    }
+                },
+                modules: modules
+            });
+
+            resolved = loader.resolve(true);
+            Assert.areEqual(twoGroups, resolved.js[0]);
+        },
+
+        'test basic formatting for root groups': function () {
             var loader = new Y.Loader({
                     combine: true,
                     require: ['af-poll', 'af-dom', 'af-pageviz'],
@@ -135,21 +308,22 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 modules;
 
             urls = resolved.js;
-            Assert.areEqual(1, urls.length, 'There should only be one combo url');
+            Assert.areEqual(1, urls.length, 'Expected one url');
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(1, groups.length, 'There should only be one group of application modules');
+            Assert.areEqual(1, groups.length, 'Expected one group');
 
             subgroups = groups[0].split(SUB_GROUP_DELIM);
-            Assert.areEqual(2, subgroups.length, 'There should only be three subgroups');
-            Assert.areEqual(loader.groups['ape-af'].root.slice(0, -1), subgroups[0], 'Unexpected version');
+            Assert.areEqual(3, subgroups.length, 'Expected three subgroups');
+            Assert.areEqual('r', subgroups[0], 'Unexpected group id');
+            Assert.areEqual('os/mit/td/ape-af-0.0.38', subgroups[1], 'Unexpected root');
 
             modules = subgroups.pop().split(MODULE_DELIM);
-            Assert.isTrue(modules.length === 3, 'Missing modules in the application-only combo url');
+            Assert.areEqual(3, modules.length, 'Expected three modules');
         },
 
-        'test basic formatting for application modules that do not follow yui build conventions': function () {
+        'test basic formatting for path groups': function () {
             var loader = new Y.Loader({
                     combine: true,
                     require: ['mod-a', 'mod-b', 'mod-c'],
@@ -165,10 +339,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                     modules: {
                         'mod-a': {
                             group: 'awesome-group-name',
-                            path: 'path/to/file/mod-a-min.js',
-                            requires: [
-                                'mod-b'
-                            ]
+                            path: 'path/to/file/mod-a-min.js'
                         },
                         'mod-b': {
                             group: 'awesome-group-name',
@@ -183,17 +354,24 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 resolved = loader.resolve(true),
 
                 urls,
+                modules,
+                subgroups,
                 groups;
 
             urls = resolved.js;
-            Assert.areEqual(1, urls.length, 'There should only be one combo url');
+            Assert.areEqual(1, urls.length, 'Expected one url');
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(3, groups.length, 'There should only be three groups of application modules');
+            Assert.areEqual(1, groups.length, 'Expected one group');
 
-            Assert.isTrue(path.indexOf(SUB_GROUP_DELIM) === -1, 'There should be no subgroup delimiters');
-            Assert.isTrue(path.indexOf(MODULE_DELIM) === -1, 'There should be no module delimiters');
+            subgroups = groups[0].split(SUB_GROUP_DELIM);
+            Assert.areEqual(3, subgroups.length, 'Expected three subgroups');
+            Assert.areEqual('p', subgroups[0], 'Unexpected group id');
+            Assert.areEqual('path/to/file', subgroups[1], 'Unexpected root');
+
+            modules = subgroups.pop().split(MODULE_DELIM);
+            Assert.areEqual(3, modules.length, 'Expected three modules');
         }
     }));
 
@@ -205,15 +383,14 @@ YUI.add('pathogen-encoder-tests', function (Y) {
             customComboBase = Y.config.customComboBase + NAMESPACE;
         },
 
-        'test formatting for core + gallery + standard application modules + non-standard application modules': function () {
+        'test formatting for groups: core + gallery + root + path': function () {
             var loader = new Y.Loader({
                     combine: true,
                     ignoreRegistered: true,
 
                     require: [
-                        'datatable',
+                        'yui-base',
                         'gallery-pathogen-encoder',
-                        'gallery-bitly',
                         'af-poll',
                         'af-dom',
                         'af-pageviz',
@@ -284,38 +461,34 @@ YUI.add('pathogen-encoder-tests', function (Y) {
                 modules;
 
             urls = resolved.js;
-            Assert.areEqual(1, urls.length, 'There should only be one js combo url');
+            Assert.areEqual(1, urls.length, 'Unexpected number of urls');
 
             path   = urls[0].split(customComboBase).pop();
             groups = path.split(GROUP_DELIM);
-            Assert.areEqual(6, groups.length, 'Unexpected number of module groups');
+            Assert.areEqual(6, groups.length, 'Unexpected number of groups');
 
             subgroups = groups[0].split(SUB_GROUP_DELIM);
-            Assert.areEqual(3, subgroups.length, 'There should only be three core subgroups');
-            Assert.areEqual('core', subgroups[0], 'Unexpected core identifier');
+            Assert.areEqual(3, subgroups.length, 'Unexpected number of subgroups');
+            Assert.areEqual('c', subgroups[0], 'Unexpected group id');
             Assert.isTrue(/^\d+\.\d+\.\d+/.test(subgroups[1]), 'Unexpected core version');
 
             modules = subgroups.pop().split(MODULE_DELIM);
-            Assert.isTrue(modules.length > 0, 'Missing core modules in the js combo url');
+            Assert.isTrue(modules.length > 0, 'Unexpected number of modules');
 
             subgroups = groups[1].split(SUB_GROUP_DELIM);
-            Assert.areEqual(3, subgroups.length, 'There should only be three gallery subgroups');
-            Assert.areEqual('gallery', subgroups[0], 'Unexpected gallery identifier');
+            Assert.areEqual(3, subgroups.length, 'Unexpected number of subgroups');
+            Assert.areEqual('g', subgroups[0], 'Unexpected group id');
             Assert.areEqual('2013.08.07-20-34', subgroups[1], 'Unexpected gallery version');
 
             modules = subgroups.pop().split(MODULE_DELIM);
-            Assert.isTrue(modules.length > 0, 'Missing gallery modules in the js combo url');
+            Assert.isTrue(modules.length > 0, 'Unexpected number of modules');
 
             subgroups = groups[2].split(SUB_GROUP_DELIM);
-            Assert.areEqual(2, subgroups.length, 'There should only be two app subgroups');
-            Assert.areEqual(loader.groups['ape-af'].root.slice(0, -1), subgroups[0], 'Unexpected app version');
+            Assert.areEqual(3, subgroups.length, 'Unexpected number of subgroups');
+            Assert.areEqual('p', subgroups[0], 'Unexpected group id');
 
             modules = subgroups.pop().split(MODULE_DELIM);
-            Assert.isTrue(modules.length > 0, 'Missing app modules in the js combo url');
-
-            Assert.isTrue(/a+\/b+\/c+/.test(groups[3]), 'Unexpected non-standard app module');
-            Assert.isTrue(/a+\/b+\/c+/.test(groups[4]), 'Unexpected non-standard app module');
-            Assert.isTrue(/a+\/b+\/c+/.test(groups[5]), 'Unexpected non-standard app module');
+            Assert.isTrue(modules.length > 0, 'Unexpected number of modules');
         }
     }));
 
@@ -340,11 +513,11 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
             resolved = loader.resolve(true);
             Assert.isUndefined(loader.pathogenSeen, 'Pathogen should not keep track of seen modules');
-            Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'Unexpected combo url');
+            Assert.areEqual('http://combo.yuilibrary.com/p/g+2013.08.07-20-34+bitly.js', resolved.js[0], 'Unexpected combo url');
 
             resolved = loader.resolve(true);
             Assert.isUndefined(loader.pathogenSeen, 'Pathogen should not keep track of seen modules');
-            Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'hello');
+            Assert.areEqual('http://combo.yuilibrary.com/p/g+2013.08.07-20-34+bitly.js', resolved.js[0], 'hello');
         },
 
         'test fallback mode for gallery': function () {
@@ -366,7 +539,7 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
             resolved = loader.resolve(true);
             Assert.isTrue(loader.pathogenSeen['gallery-bitly'], 'Pathogen should be keeping track of seen modules');
-            Assert.areEqual('http://combo.yuilibrary.com/p/gallery+2013.08.07-20-34+bitly.js', resolved.js[0], 'Unexpected combo url');
+            Assert.areEqual('http://combo.yuilibrary.com/p/g+2013.08.07-20-34+bitly.js', resolved.js[0], 'Unexpected combo url');
 
             resolved = loader.resolve(true);
             Assert.areEqual(
@@ -392,18 +565,16 @@ YUI.add('pathogen-encoder-tests', function (Y) {
             resolved = loader.resolve(true);
             Assert.isTrue(loader.pathogenSeen.oop, 'Pathogen should have seen the oop module');
             Assert.isTrue(loader.pathogenSeen['yui-base'], 'Pathogen should have seen the yui-base module');
-            Assert.areEqual('http://combo.yuilibrary.com/p/core+3.11.0+oop,yui-base.js', resolved.js[0], 'Unexpected combo url');
+            Assert.areEqual('http://combo.yuilibrary.com/p/c+' + Y.version + '+oop,yui-base.js', resolved.js[0], 'Unexpected combo url');
 
             resolved = loader.resolve(true);
             Assert.areEqual(
-                'http://yui.yahooapis.com/combo?3.11.0/yui-base/yui-base-min.js&3.11.0/oop/oop-min.js',
+                'http://yui.yahooapis.com/combo?' + Y.version + '/yui-base/yui-base-min.js&' + Y.version + '/oop/oop-min.js',
                 resolved.js[0],
                 'Should have fallen back to default combo url'
             );
         }
     }));
-
-//Assert.isUndefined(JSON.stringify(loader.pathogenSeen, null, 4));
 
     Y.Test.Runner.add(suite);
 });

@@ -9,6 +9,7 @@
         }
     },
     "shifter": {
-        "jsstamp": false
+        "jsstamp": false,
+        "coverage": false
     }
 }
