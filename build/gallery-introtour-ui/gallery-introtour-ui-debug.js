@@ -207,4 +207,4 @@ YUI.add('gallery-introtour-ui', function(Y) {
 }, '0.1.1',{requires: ['node','event']});
 
 
-}, 'gallery-2013.03.06-21-07', {"use": ["yui-base", "yui3", "node", "event"], "requires": ["yui-base"]});
+}, 'gallery-2013.10.14-07-00', {"use": ["yui-base", "yui3", "node", "event"], "requires": ["yui-base"]});

@@ -25,6 +25,10 @@
 	float:right;
 	cursor:pointer;
 	color:#CCC;
+	text-decoration:none;
+}
+.yui-galleryintrotourui-card-closebutton:visited{
+	color:#CCC;
 }
 .yui-galleryintrotourui-card-closebutton:hover{
 	color:#444;
