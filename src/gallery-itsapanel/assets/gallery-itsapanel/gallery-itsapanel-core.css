@@ -16,6 +16,13 @@
     text-align: left;
     width: auto !important;
     height: auto !important;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.itsa-panel div {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
 .itsa-inlinefooter {
@@ -89,7 +96,6 @@
 }
 .itsa-panel .itsa-panelinnerheader >div,
 .itsa-panel .itsa-panelinnerfooter >div {
-    box-sizing: border-box;
     vertical-align: middle;
     display: inline-block;
     *display: inline;

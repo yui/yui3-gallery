@@ -2,7 +2,7 @@ YUI.add('gallery-itsapanel', function (Y, NAME) {
 
 'use strict';
 
-/*jshint maxlen:200 */
+/*jshint maxlen:215 */
 
 /**
  *
@@ -586,10 +586,10 @@ ITSAPanel.prototype.bindUI = function() {
         instance.after([DRAG+':'+DRAG, DRAG+':end'], function() {
             Y.log('aftersubscriptor '+arguments[0].type, 'info', 'ITSAPanel');
             var itsaformelement = Y.ITSAFormElement,
-                tipsyValid = itsaformelement && itsaformelement.tipsyValid,
+                tipsyOK = itsaformelement && itsaformelement.tipsyOK,
                 tipsyInvalid = itsaformelement && itsaformelement.tipsyInvalid;
 /*jshint expr:true */
-            tipsyValid && tipsyValid.get(VISIBLE) && tipsyValid._lastnode && tipsyValid._alignTooltip(tipsyValid._lastnode);
+            tipsyOK && tipsyOK.get(VISIBLE) && tipsyOK._lastnode && tipsyOK._alignTooltip(tipsyOK._lastnode);
             tipsyInvalid && tipsyInvalid.get(VISIBLE) && tipsyInvalid._lastnode && tipsyInvalid._alignTooltip(tipsyInvalid._lastnode);
 /*jshint expr:false */
         })
@@ -618,6 +618,13 @@ ITSAPanel.prototype.bindUI = function() {
                 (ev.newVal instanceof Y.View) && ev.newVal.addTarget(instance);
     /*jshint expr:false */
             }
+        )
+    );
+
+    eventhandlers.push(
+        instance.after(
+            [FOOTER+CHANGE, FOOTER+RIGHT+CHANGE],
+            Y.bind(instance._renderFooter, instance)
         )
     );
 
@@ -1049,7 +1056,7 @@ ITSAPanel.prototype._setWidth = function(val) {
     instance.get(CONTENTBOX).setStyle(WIDTH, (val ? (val+PX) : ''));
 };
 
-}, 'gallery-2013.10.09-22-56', {
+}, 'gallery-2013.10.14-07-00', {
     "requires": [
         "node-pluginhost",
         "dd-ddm",
