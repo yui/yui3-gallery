@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.8.16
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsapluginpromise
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -19,30 +19,30 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-itsapluginpromise/gallery-itsapluginpromise-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.189 seconds, pretty fast huh?
+shifter [info] finished in 0.275 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5005
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5004
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.9.1
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+Starting Grover on 1 files with PhantomJS@1.9.0
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✖ [http://127.0.0.1:5004/tests/src/gallery-itsapluginpromise/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+✖ [http://127.0.0.1:5000/tests/src/gallery-itsapluginpromise/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
     Javascript Error
        TypeError: 'undefined' is not an object (evaluating 'new Y.Test.Suite')
-       http://127.0.0.1:5004/tests/src/gallery-itsapluginpromise/tests/unit/js/tests.js:3
-       http://127.0.0.1:5004/build/yui/yui.js:775
-       http://127.0.0.1:5004/build/yui/yui.js:1112
-       http://127.0.0.1:5004/build/yui/yui.js:7708
-       http://127.0.0.1:5004/build/yui/yui.js:7799
-       http://127.0.0.1:5004/build/yui/yui.js:7999
-       http://127.0.0.1:5004/build/yui/yui.js:8066
-       http://127.0.0.1:5004/build/yui/yui.js:4619
-       http://127.0.0.1:5004/build/yui/yui.js:4819
-       http://127.0.0.1:5004/build/yui/yui.js:4927
-       http://127.0.0.1:5004/build/yui/yui.js:4711
+       http://127.0.0.1:5000/tests/src/gallery-itsapluginpromise/tests/unit/js/tests.js:3
+       http://127.0.0.1:5000/build/yui/yui.js:775
+       http://127.0.0.1:5000/build/yui/yui.js:1112
+       http://127.0.0.1:5000/build/yui/yui.js:7708
+       http://127.0.0.1:5000/build/yui/yui.js:7799
+       http://127.0.0.1:5000/build/yui/yui.js:7999
+       http://127.0.0.1:5000/build/yui/yui.js:8066
+       http://127.0.0.1:5000/build/yui/yui.js:4619
+       http://127.0.0.1:5000/build/yui/yui.js:4819
+       http://127.0.0.1:5000/build/yui/yui.js:4927
+       http://127.0.0.1:5000/build/yui/yui.js:4711
 Writing files in JSON format to: /src/gallery-itsapluginpromise/logs/tests.json
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

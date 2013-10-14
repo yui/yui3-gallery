@@ -350,6 +350,7 @@ Y.mix(ITSAPluginPromise.prototype, {
 // mix it in Y.Plugin.Host:
 Y.Plugin.Host.ITSAPluginPromise = ITSAPluginPromise;
 Y.Base.mix(Y.Plugin.Host, [ITSAPluginPromise]);
+Y.Base.mix(Y.Node, [ITSAPluginPromise]);
 
 
 /**

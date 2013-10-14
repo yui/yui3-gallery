@@ -346,6 +346,7 @@ Y.mix(ITSAPluginPromise.prototype, {
 // mix it in Y.Plugin.Host:
 Y.Plugin.Host.ITSAPluginPromise = ITSAPluginPromise;
 Y.Base.mix(Y.Plugin.Host, [ITSAPluginPromise]);
+Y.Base.mix(Y.Node, [ITSAPluginPromise]);
 
 
 /**
@@ -418,7 +419,7 @@ Y.Plugin.Base.prototype.readyPromise = function(timeout) {
     return instance._readypromise;
 };
 
-}, 'gallery-2013.10.09-22-56', {
+}, 'gallery-2013.10.14-07-00', {
     "requires": [
         "yui-base",
         "base-base",
