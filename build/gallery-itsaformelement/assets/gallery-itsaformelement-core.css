@@ -118,6 +118,8 @@ span.formatvalue[disabled] {
 
 .pure-form span.formatvalue {
     font-size: 0.8em;
+    text-align: center;
+    min-width: 5em;
 }
 
 .pure-form span[data-formelement="true"] {

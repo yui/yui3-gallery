@@ -145,6 +145,7 @@ YUI({gallery: '...'}).use('node-base', 'gallery-itsaformelement', 'itsacheckbox'
       <li><code>pattern</code> {String} --> only valid for type==='text' or 'password'</li>
       <li><code>placeholder</code> {String} --> only valid for input-elements and textarea</li>
       <li><code>primary</code> {Boolean} (defaults false) --> only valid for buttons</li>
+      <li><code>primarybtnonenter</code> {Boolean} (defaults false) in case of text-fields: on enter-press click on primary button. Will just add the data-attribute data-primarybtnonenter="true" --> it is up to other modules to handle the buttonclick.</li>
       <li><code>readonly</code> {Boolean} (defaults false) --> not applyable for buttons</li>
       <li><code>required</code> {Boolean} (defaults true for 'password', otherwise false)--> only valid for input-elements, textarea and date/time. defaults true when type===password</li>
       <li><code>spinbusy</code> {Boolean} (defaults false) making a buttonicon to spin if busy. (Actually only adds the data-attribute: data-spinbusy="true" --> which should be used by other js to make it spin). Only applyable for buttons.</li>
