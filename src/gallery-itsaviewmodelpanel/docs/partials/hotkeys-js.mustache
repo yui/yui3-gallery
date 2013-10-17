@@ -86,7 +86,7 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
 
     panel = new Y.ITSAViewModelPanel({
         title: 'Enter data',
-        titleRight: '', // <-- suppress default button close
+        closeButton: false,
         model: artist,
         template: template,
         footerTemplate: footertemplate,

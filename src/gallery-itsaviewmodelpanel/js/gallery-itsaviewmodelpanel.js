@@ -32,11 +32,10 @@ var ITSAViewModelPanel,
     YArray = Y.Array,
     Lang = Y.Lang,
     PLUGIN_TIMEOUT = 4000, // timeout within the plugin of itsatabkeymanager should be loaded
+    FOCUS_NEXT = 'focusnext',
     ID = 'id',
-    DESTROYED = 'destroyed',
     CONTENTBOX = 'contentBox',
     RENDERED = 'rendered',
-    GALLERY = 'gallery-',
     VIEW = 'View',
     BODYVIEW = 'body'+VIEW,
     FOOTER = 'footer',
@@ -46,7 +45,6 @@ var ITSAViewModelPanel,
     FOCUSED_CLASS = 'itsa-focused',
     EDITABLE = 'editable',
     MODEL = 'model',
-    FOCUSED = 'focused',
     VISIBLE = 'visible',
     CHANGE = 'Change',
     CLOSE = 'close',
@@ -63,26 +61,13 @@ var ITSAViewModelPanel,
     DESTROY = 'destroy',
     VALUE = 'value',
     RESET = 'reset',
-    FOCUSMANAGED = 'focusManaged',
     ITSATABKEYMANAGER = 'itsatabkeymanager',
     NO_HIDE_ON_LOAD = 'noHideOnLoad',
     NO_HIDE_ON_RESET = 'noHideOnReset',
     DISABLED = 'disabled',
     PURE_BUTTON_DISABLED = 'pure-'+BUTTON+'-'+DISABLED,
     VALIDATION_ERROR = 'validationerror',
-    /**
-      * Fired when a UI-elemnt needs to focus to the next element (in case of editable view).
-      * The defaultFunc will refocus to the next field (when the Panel has focus).
-      * Convenience-event which takes place together with the underlying models-event.
-      *
-      * @event focusnext
-      * @param e {EventFacade} Event Facade including:
-      * @param e.target {Y.Node} The node that fired the event.
-      * @param e.model {Y.Model} modelinstance bound to the view
-      * @param e.modelEventFacade {EventFacade} eventfacade that was passed through by the model that activated this event
-      * @since 0.1
-    **/
-    FOCUS_NEXT = 'focusnext',
+    ITSA_PANELCLOSEBTN = 'itsa-panelclosebtn',
     VALIDATED_BTN_TYPES = {
         ok: true,
         retry: true,
@@ -109,6 +94,20 @@ ITSAViewModelPanel = Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', 
             writeOnce: true
         },
         /**
+         * Boolean indicating whether or not the Panel can be closed by pressing the escape-key.<br>
+         * Overruled from Y.ITSAPanel by setting default value false.
+         *
+         * @attribute closableByEscape
+         * @default false
+         * @type boolean
+         */
+        closableByEscape: {
+            value: false,
+            validator: function(val) {
+                return (typeof val===BOOLEAN);
+            }
+        },
+        /**
          * Makes the View to render the editable-version of the Model. Only when the Model has <b>Y.Plugin.ITSAEditModel</b> plugged in.
          *
          * @attribute editable
@@ -118,20 +117,6 @@ ITSAViewModelPanel = Y.ITSAViewModelPanel = Y.Base.create('itsaviewmodelpanel', 
          */
         editable: {
             value: false,
-            validator: function(v){
-                return (typeof v === BOOLEAN);
-            }
-        },
-        /**
-         * Determines whether tabbing through the elements is managed by gallery-itsatabkeymanager.
-         *
-         * @attribute focusManaged
-         * @type {Boolean}
-         * @default true
-         * @since 0.3
-         */
-        focusManaged: {
-            value: true,
             validator: function(v){
                 return (typeof v === BOOLEAN);
             }
@@ -317,6 +302,10 @@ ITSAViewModelPanel.prototype.initializer = function() {
     */
     instance._eventhandlers = [];
 
+    // now set a flag so that ITSAPanel does not target all the views, but only the bodyview
+    // we need this, because all sources are the same and we do not want multiple the same events caught
+    instance._partOfMultiView = true;
+
     instance._set(BODYVIEW, new Y.ITSAViewModel({
         model: model,
         template: instance.get(TEMPLATE),
@@ -335,18 +324,7 @@ ITSAViewModelPanel.prototype.initializer = function() {
         focusManaged: false, // will be done at the Panel-level
         partOfMultiView: true
     }));
-/*jshint expr:false */
 
-    // publishing event 'focusnext'
-    instance.publish(
-        FOCUS_NEXT,
-        {
-            defaultFn: Y.bind(instance._defFn_focusnext, instance),
-            emitFacade: true
-        }
-    );
-/*jshint expr:true */
-    instance.get(VISIBLE) && instance.get(CONTENTBOX).addClass(FOCUSED_CLASS); // to make tabkeymanager work
 /*jshint expr:false */
 };
 
@@ -397,20 +375,13 @@ ITSAViewModelPanel.prototype.addCustomBtn = function(buttonId, labelHTML, config
 ITSAViewModelPanel.prototype.bindUI = function() {
     var instance = this,
         contentBox = instance.get(CONTENTBOX),
-        eventhandlers, bodyView, footerView;
+        eventhandlers, bodyView;
     ITSAViewModelPanel.superclass.bindUI.apply(instance);
     Y.log('bindUI', 'info', 'ITSA-ViewModelPanel');
 
     eventhandlers = instance._eventhandlers;
     bodyView = instance.get(BODYVIEW);
     bodyView.addTarget(instance);
-
-    footerView = instance.get(FOOTERVIEW);
-/*jshint expr:true */
-    footerView && footerView.addTarget(instance);
-/*jshint expr:false */
-
-    instance._setFocusManager(instance.get(FOCUSMANAGED));
 
     eventhandlers.push(
         instance.after(EDITABLE+CHANGE, function(e) {
@@ -434,7 +405,6 @@ ITSAViewModelPanel.prototype.bindUI = function() {
                 }
             }
 /*jshint expr:false */
-            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, visible); // to make tabkeymanager work
         })
     );
 
@@ -465,48 +435,6 @@ ITSAViewModelPanel.prototype.bindUI = function() {
     );
 
     eventhandlers.push(
-        instance.after(
-            '*:viewrendered',
-            function(e) {
-                var viewinstance = e.target,
-                    isFooterView = (viewinstance===instance.get(FOOTERVIEW));
-                // BECAUSE we do not have a promise yet that tells when all formelements are definitely rendered on the screen,
-                // we need to timeout
-                Y.log('aftersubscriptor *:viewrendered', 'info', 'ITSA-ViewModelPanel');
-                if (isFooterView) {
-                    instance._footercont.toggleClass('itsa-inlinefooter', true);
-                    viewinstance.get('container').get('parentNode').setStyle('overflow', 'visible');
-                    // reset previous width, otherwise the width keeps expanding
-                    instance._body.setStyle('minWidth', '');
-                    // now we can calculate instance._footer.get('offsetWidth')
-                    instance._body.setStyle('minWidth', instance._footer.get('offsetWidth')+'px');
-                    instance._footercont.toggleClass('itsa-inlinefooter', false);
-                }
-                Y.later(250, null, function() {
-                    contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
-                        function(itsatabkeymanager) {
-                            itsatabkeymanager.refresh(contentBox);
-                            if (contentBox.hasClass(FOCUSED_CLASS) && instance.get(VISIBLE) && !instance._locked) {
-                                itsatabkeymanager.focusInitialItem();
-                            }
-                        }
-                    );
-                });
-            }
-        )
-    );
-
-    eventhandlers.push(
-        instance.after(
-            FOCUSMANAGED+CHANGE,
-            function(e) {
-                Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
-                instance._setFocusManager(e.newVal);
-            }
-        )
-    );
-
-    eventhandlers.push(
         bodyView.on(
             FOCUS_NEXT,
             function(e) {
@@ -533,21 +461,6 @@ ITSAViewModelPanel.prototype.bindUI = function() {
                 instance.fire(BUTTON_HIDE_EVENT, {buttonNode: e.target});
             }
         )
-    );
-
-    eventhandlers.push(
-        instance.after(FOCUSED+CHANGE, function(e) {
-            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
-            var focusclassed = e.newVal && instance.get(VISIBLE);
-            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, focusclassed);
-        /*jshint expr:true */
-            focusclassed && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
-                function(itsatabkeymanager) {
-                    itsatabkeymanager._retreiveFocus();
-                }
-            );
-        /*jshint expr:false */
-        })
     );
 
     eventhandlers.push(
@@ -590,7 +503,7 @@ ITSAViewModelPanel.prototype.bindUI = function() {
                         partOfMultiView: true
                     });
                     instance._set(FOOTERVIEW, newFooterView);
-                    newFooterView.addTarget(instance);
+                    // DO NOT TARGET!!! bodyview is already targeted
                     instance._renderFooter();
                 }
                 else {
@@ -631,10 +544,12 @@ ITSAViewModelPanel.prototype.bindUI = function() {
             function(e) {
                 Y.log('delegatesubscriptor '+e.type+' delegated to panelheader.BUTTON', 'info', 'ITSA-ViewModelPanel');
                 var node = e.target,
-                    value = node.get(VALUE);
+                    value = node.get(VALUE),
+                    panelCloseButton = node.hasClass(ITSA_PANELCLOSEBTN); // this node must not fire the event, because it already is done by ITSAPanel
 /*jshint expr:true */
                 // value===CLOSE will be handled by the '*:'+CLOSE_CLICK eventlistener
-                instance.get('hideOnBtn') && (value!==CLOSE) && (!instance.get(NO_HIDE_ON_RESET) || (value!==RESET)) && (!instance.get(NO_HIDE_ON_LOAD) || (value!==LOAD)) && instance.fire(BUTTON_HIDE_EVENT, {buttonNode: node});
+                !panelCloseButton && instance.get('hideOnBtn') && (value!==CLOSE) && (!instance.get(NO_HIDE_ON_RESET) || (value!==RESET)) &&
+                (!instance.get(NO_HIDE_ON_LOAD) || (value!==LOAD)) && instance.fire(BUTTON_HIDE_EVENT, {buttonNode: node});
 /*jshint expr:false */
             },
             BUTTON
@@ -1045,7 +960,6 @@ ITSAViewModelPanel.prototype.syncUI = function() {
 };
 
 /**
-  * Passes through to the underlying bodyView and footerView.<br />
   * Translates the given 'text; through Y.Int of this module. Possible text's that can be translated are:
   * <ul>
   *   <li>abort</li>
@@ -1072,8 +986,40 @@ ITSAViewModelPanel.prototype.syncUI = function() {
  **/
 ITSAViewModelPanel.prototype.translate = function(text) {
     Y.log('translate', 'info', 'ITSA-ViewModelPanel');
-    return this.get(BODYVIEW).translate(text);
+    return Y.ITSAViewModel.translate(text);
 };
+
+/**
+  * Translates the given 'text; through Y.Int of this module. Possible text's that can be translated are:
+  * <ul>
+  *   <li>abort</li>
+  *   <li>cancel</li>
+  *   <li>close</li>
+  *   <li>destroy</li>
+  *   <li>ignore</li>
+  *   <li>load</li>
+  *   <li>reload</li>
+  *   <li>no</li>
+  *   <li>ok</li>
+  *   <li>remove</li>
+  *   <li>reset</li>
+  *   <li>retry</li>
+  *   <li>save</li>
+  *   <li>submit</li>
+  *   <li>yes</li>
+  * </ul>
+  *
+  * @method translatePromise
+  * @static
+  * @param text {String} the text to be translated
+  * @return {String} Translated text or the original text (if no translattion was posible)
+  * @since 0.3
+ **/
+ITSAViewModelPanel.translatePromise = function(text) {
+    Y.log('translatePromise', 'info', 'ITSA-ViewModelPanel');
+    return Y.ITSAViewModel.translatePromise(text);
+};
+ITSAViewModelPanel.prototype.translatePromise = ITSAViewModelPanel.translatePromise;
 
 /**
  * Cleans up bindings
@@ -1083,7 +1029,6 @@ ITSAViewModelPanel.prototype.translate = function(text) {
 */
 ITSAViewModelPanel.prototype.destructor = function() {
     var instance = this,
-        contentBox = instance.get(CONTENTBOX),
         bodyview = instance.get(BODYVIEW),
         footerview = instance.get(FOOTERVIEW);
 
@@ -1091,7 +1036,6 @@ ITSAViewModelPanel.prototype.destructor = function() {
     instance._clearEventhandlers();
     bodyview.removeTarget(instance);
 /*jshint expr:true */
-    contentBox.hasPlugin(ITSATABKEYMANAGER) && contentBox.unplug(ITSATABKEYMANAGER);
     bodyview && bodyview.destroy();
     footerview && footerview.destroy();
 /*jshint expr:false */
@@ -1115,70 +1059,6 @@ ITSAViewModelPanel.prototype._clearEventhandlers = function() {
             item.detach();
         }
     );
-};
-
-/**
- * default function of focusnext-event.
- * Will refocus to the next focusable UI-element.
- *
- * @method _defFn_focusnext
- * @private
-  * @since 0.3
-*/
-ITSAViewModelPanel.prototype._defFn_focusnext = function() {
-    var instance = this,
-        contentBox = instance.get(CONTENTBOX);
-
-    Y.log('_defFn_focusnext', 'info', 'ITSA-ViewModelPanel');
-/*jshint expr:true */
-    contentBox.hasClass(FOCUSED_CLASS) && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
-        function(itsatabkeymanager) {
-            Y.log('focus to next field', 'info', 'ITSA-ViewModelPanel');
-            itsatabkeymanager.next();
-        },
-        function() {
-            Y.log('No focus to next field: Y.Plugin.ITSATabKeyManager not plugged in', 'info', 'ITSA-ViewModelPanel');
-        }
-    );
-/*jshint expr:false */
-};
-
-/**
- * Sets or unsets the focusManager (provided by gallery-itsatabkeymanager)
- *
- * @method _setFocusManager
- * @private
- * @param activate {Boolean}
- * @since 0.3
-*/
-ITSAViewModelPanel.prototype._setFocusManager = function(activate) {
-    var instance = this,
-        contentBox = instance.get(CONTENTBOX),
-        itsatabkeymanager = contentBox.itsatabkeymanager;
-
-    Y.log('_setFocusManager to '+activate, 'info', 'ITSA-ViewModelPanel');
-    if (activate) {
-        // If Y.Plugin.ITSATabKeyManager is plugged in, then refocus to the first item
-        Y.use(GALLERY+ITSATABKEYMANAGER, function() {
-            if (!instance.get(DESTROYED)) {
-                if (itsatabkeymanager) {
-                    itsatabkeymanager.refresh(contentBox);
-                }
-                else {
-                    contentBox.plug(Y.Plugin.ITSATabKeyManager);
-                    itsatabkeymanager = contentBox.itsatabkeymanager;
-                }
-                if (contentBox.hasClass(FOCUSED_CLASS)) {
-                    itsatabkeymanager.focusInitialItem();
-                }
-            }
-        });
-    }
-    else {
-/*jshint expr:true */
-        itsatabkeymanager && contentBox.unplug(ITSATABKEYMANAGER);
-/*jshint expr:false */
-    }
 };
 
 /**
