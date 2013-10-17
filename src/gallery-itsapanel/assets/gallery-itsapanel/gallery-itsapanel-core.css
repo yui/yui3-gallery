@@ -20,6 +20,12 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+.itsa-panel:focus,
+.itsa-panel:-moz-focusring,
+.itsa-panel button:focus,
+.itsa-panel button:-moz-focusring {
+    outline: none;
+}
 .itsa-panel div {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -114,14 +120,12 @@
     min-height: 75px;
     position: relative;
 }
-.itsa-panel:focus {
-    outline: none;
-}
 .itsa-panel .itsa-panelclosebtn {
     cursor: pointer;
     position: absolute;
     right: 0.15em;
     top: 0.05em;
+    outline: none;
     opacity: 0.5;
     filter: alpha(opacity=50);
 }

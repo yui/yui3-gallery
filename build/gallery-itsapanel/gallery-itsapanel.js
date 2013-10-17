@@ -16,7 +16,6 @@ YUI.add('gallery-itsapanel', function (Y, NAME) {
  * @class ITSAPanel
  * @constructor
  * @extends Widget
- * @uses WidgetAutohide
  * @uses WidgetModality
  * @uses WidgetPosition
  * @uses WidgetPositionAlign
@@ -28,11 +27,16 @@ YUI.add('gallery-itsapanel', function (Y, NAME) {
 var ITSAPanel,
     YArray = Y.Array,
     Lang = Y.Lang,
-    GALLERYCSS_ITSA = 'gallerycss-itsa-',
+    GALLERY = 'gallery',
+    ITSA = 'itsa-',
+    GALLERYCSS_ITSA = GALLERY + 'css-' + ITSA,
+    PLUGIN_TIMEOUT = 4000, // timeout within the plugin of itsatabkeymanager should be loaded
     DESTROYED = 'destroyed',
     STRING = 'string',
     BOOLEAN = 'boolean',
     VISIBLE = 'visible',
+    CLOSEBUTTON = 'closeButton',
+    CLOSABLEBYESCAPE = 'closableByEscape',
     WIDTH = 'width',
     HEIGHT = 'height',
     BOUNDINGBOX = 'boundingBox',
@@ -40,9 +44,9 @@ var ITSAPanel,
     PADDINGTOP = 'paddingTop',
     PADDINGBOTTOM = 'paddingBottom',
     BUTTON = 'button',
-    ITSA = 'itsa-',
     FOCUSED = 'focused',
     FOCUSED_CLASS = ITSA+FOCUSED,
+    KEYDOWN = 'keydown',
     HIDDEN = 'hidden',
     VIEW = 'View',
     PANEL = 'panel',
@@ -69,6 +73,7 @@ var ITSAPanel,
     DD = 'dd',
     PLUGIN = '-plugin',
     STYLED = 'styled',
+    ITSATABKEYMANAGER = 'itsatabkeymanager',
     PANELCLASS = ITSA+PANEL,
     STYLEDPANELCLASS = ITSA+STYLED+PANEL,
     HIDDENPANELCLASS = ITSA+HIDDEN+PANEL,
@@ -93,6 +98,19 @@ var ITSAPanel,
     CLICK_OUTSIDE = CLICK+'outside',
     VALUE = 'value',
     /**
+      * Fired when a UI-elemnt needs to focus to the next element (in case of editable view).
+      * The defaultFunc will refocus to the next field (when the Panel has focus).
+      * Convenience-event which takes place together with the underlying models-event.
+      *
+      * @event focusnext
+      * @param e {EventFacade} Event Facade including:
+      * @param e.target {Y.Node} The node that fired the event.
+      * @param e.model {Y.Model} modelinstance bound to the view
+      * @param e.modelEventFacade {EventFacade} eventfacade that was passed through by the model that activated this event
+      * @since 0.1
+    **/
+    FOCUS_NEXT = 'focusnext',
+    /**
       * Fired when a button inside the panel is pressed.
       * Convenience-event, cannot be prevented or halted --> use the button-node's click to do that.
       *
@@ -112,18 +130,25 @@ var ITSAPanel,
       *
       * @event button:hide
       * @param e {EventFacade} Event Facade including:
-      * @param e.buttonNode {Y.Node} reference to the buttonnode
+      * @param [e.buttonNode] {Y.Node} reference to the buttonnode
       *
     **/
-    BUTTON_HIDE_EVENT = BUTTON+':hide';
+    BUTTON_HIDE_EVENT = BUTTON+':hide',
+
+    /**
+      * Fired when a escape-press asks for the panel to hide.
+      * The defaultFunction will call Panel-instance.hide(), but only if the attribute 'closableByEscape' is set true
+      *
+      * @event escape:hide
+      *
+    **/
+    ESCAPE_HIDE_EVENT = 'escape:hide';
 
 
 ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
     // Som other Widget extensions depend on Y.WidgetPosition, so set this one first.
     Y.WidgetPosition,
 
-//    Y.WidgetStdMod,
-    Y.WidgetAutohide,
     Y.WidgetModality,
     Y.WidgetPositionAlign,
     Y.WidgetPositionConstrain,
@@ -172,6 +197,33 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             value: null,
             validator: function(val) {
                 return (val===null) || (typeof val===STRING);
+            }
+        },
+        /**
+         * Boolean indicating whether or not the Panel can be closed by pressing the escape-key.
+         *
+         * @attribute closableByEscape
+         * @default true
+         * @type boolean
+         */
+        closableByEscape: {
+            value: true,
+            validator: function(val) {
+                return (typeof val===BOOLEAN);
+            }
+        },
+        /**
+         * Boolean indicating whether or not the Panel has a closeButton-button.<br>
+         * <b>Note:</b> If the attribute 'titleRight' is changed, then there will be <u>nu closebutton</u>, for the closebutton is defined in the default 'titleRight'.
+         *
+         * @attribute closeButton
+         * @default true
+         * @type boolean
+         */
+        closeButton: {
+            value: true,
+            validator: function(val) {
+                return (typeof val===BOOLEAN);
             }
         },
         /**
@@ -458,9 +510,18 @@ ITSAPanel.prototype.initializer = function() {
     // asynchroniously loading fonticons:
     Y.use(GALLERYCSS_ITSA+'base', GALLERYCSS_ITSA+'form');
 
-    // publishing event 'focusnext'
+    // publishing event 'button:hide'
     instance.publish(
         BUTTON_HIDE_EVENT,
+        {
+            defaultFn: Y.bind(instance.hide, instance),
+            emitFacade: true
+        }
+    );
+
+    // publishing event 'escape:hide'
+    instance.publish(
+        ESCAPE_HIDE_EVENT,
         {
             defaultFn: Y.bind(instance.hide, instance),
             emitFacade: true
@@ -476,13 +537,32 @@ ITSAPanel.prototype.initializer = function() {
     */
     instance._eventhandlers = [];
 
+    /**
+     * Internal flag that tells whether the instance is build up by multiview (only Y.ITSAViewModelPanel does)
+     * When set, only the bodyview will target events to the instance. Otherwise all views do.
+     * @property _partOfMultiView
+     * @private
+     * @default false
+     * @type Boolean
+    */
+    instance._partOfMultiView = false;
+
     boundingBox.addClass(PANELCLASS);
     boundingBox.toggleClass(INLINECLASS, !instance.get(FLOATED));
     boundingBox.toggleClass(STYLEDPANELCLASS, instance.get(STYLED));
     boundingBox.toggleClass(FOCUSED_CLASS, instance.get(FOCUSED));
     // hide boundingBox by default and maybe inhide when rendered --> otherwise there might be a flicker effect when resetting its height
     boundingBox.addClass(HIDDENPANELCLASS);
+    // publishing event 'focusnext'
+    instance.publish(
+        FOCUS_NEXT,
+        {
+            defaultFn: Y.bind(instance._defFn_focusnext, instance),
+            emitFacade: true
+        }
+    );
 /*jshint expr:true */
+    instance.get(VISIBLE) && instance.get(CONTENTBOX).addClass(FOCUSED_CLASS); // to make tabkeymanager work
     className && boundingBox.addClass(className);
     instance.renderPromise().then(
         function() {
@@ -508,9 +588,9 @@ ITSAPanel.prototype.bindUI = function() {
         footerView = instance.get(FOOTERVIEW);
 
 /*jshint expr:true */
-    (headerView instanceof Y.View) && headerView.addTarget(instance);
+    (headerView instanceof Y.View) && !instance._partOfMultiView && headerView.addTarget(instance);
     (bodyView instanceof Y.View) && bodyView.addTarget(instance);
-    (footerView instanceof Y.View) && footerView.addTarget(instance);
+    (footerView instanceof Y.View) && !instance._partOfMultiView && footerView.addTarget(instance);
 
     instance.get(DRAGABLE) && instance.get(FLOATED) && Y.use(DD+PLUGIN, function() {
         // NOTE: node-pluginhist and dd-ddm MUST be loaded first, otherwise you can get errors !!!
@@ -522,10 +602,34 @@ ITSAPanel.prototype.bindUI = function() {
     });
 /*jshint expr:false */
 
+    instance._setFocusManager();
+
+
+/*jshint expr:true */
+    instance.get(CLOSABLEBYESCAPE) && (instance._escapeHandler=Y.on(
+                                                KEYDOWN,
+                                                Y.rbind(instance._handleEscapeKey, instance)
+                                            )
+                                        );
+/*jshint expr:false */
+
+    eventhandlers.push(
+        instance.after(CLOSABLEBYESCAPE+CHANGE, function(e) {
+/*jshint expr:true */
+                 e.newVal ? (instance._escapeHandler=Y.on(
+                                                              KEYDOWN,
+                                                              Y.rbind(instance._handleEscapeKey, instance)
+                                                          )
+                                                      ) : (instance._escapeHandler && instance._escapeHandler.detach());
+/*jshint expr:false */
+        })
+    );
+
     eventhandlers.push(
         instance.after(VISIBLE+CHANGE, function(e) {
             var visible = e.newVal;
             boundingBox.toggleClass(HIDDENPANELCLASS, !visible);
+            contentBox.toggleClass(FOCUSED_CLASS, visible); // to make tabkeymanager work
             if (visible) {
 /*jshint expr:true */
                 (instance.get(MODAL) || instance.get('focusOnShow')) && instance.focus();
@@ -606,7 +710,7 @@ ITSAPanel.prototype.bindUI = function() {
             function (ev) {
     /*jshint expr:true */
                 (ev.prevVal instanceof Y.View) && ev.prevVal.removeTarget(instance);
-                (ev.newVal instanceof Y.View) && ev.newVal.addTarget(instance);
+                (ev.newVal instanceof Y.View) && (!instance._partOfMultiView || (ev.type===BODYVIEW+CHANGE)) && ev.newVal.addTarget(instance);
     /*jshint expr:false */
             }
         )
@@ -614,7 +718,51 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(
+            '*:viewrendered',
+            function() {
+                var footerView = instance.get(FOOTERVIEW),
+                    container, footercont;
+                // BECAUSE we do not have a promise yet that tells when all formelements are definitely rendered on the screen,
+                // we need to timeout
+                if (footerView) {
+                    footercont = instance._footercont;
+                    container = footerView.get('container');
+                    footercont.toggleClass('itsa-inlinefooter', true);
+                    container = footerView.get('container');
+                    container.setStyle('paddingLeft', '1.2em');
+                    footercont.setStyle('overflow', 'visible');
+                    // reset previous width, otherwise the width keeps expanding
+                    instance._body.setStyle('minWidth', '');
+                    // now we can calculate instance._footer.get('offsetWidth')
+                    instance._body.setStyle('minWidth', instance._footer.get('offsetWidth')+'px');
+                    footercont.toggleClass('itsa-inlinefooter', false);
+                    footercont.setStyle('overflow', '');
+                    container.setStyle('paddingLeft', '');
+                }
+                Y.later(250, null, function() {
+                    contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                        function(itsatabkeymanager) {
+                            itsatabkeymanager.refresh(contentBox);
+                            if (contentBox.hasClass(FOCUSED_CLASS) && instance.get(VISIBLE) && !instance._locked) {
+                                itsatabkeymanager.focusInitialItem();
+                            }
+                        }
+                    );
+                });
+            }
+        )
+    );
+
+    eventhandlers.push(
+        instance.after(
             [FOOTER+CHANGE, FOOTER+RIGHT+CHANGE],
+            Y.bind(instance._renderFooter, instance)
+        )
+    );
+
+    eventhandlers.push(
+        instance.after(
+            [TITLE+CHANGE, FOOTER+RIGHT+CHANGE],
             Y.bind(instance._renderFooter, instance)
         )
     );
@@ -642,27 +790,17 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.on(
-            TITLE+CHANGE,
+            [TITLE+CHANGE, TITLERIGHT+CHANGE, CLOSEBUTTON+CHANGE],
             function(e) {
-                var title = e.newVal,
-                    titleRight = instance.get(TITLERIGHT),
+                var value = e.newVal,
+                    types = e.type.split(':'),
+                    type = types[types.length-1],
+                    title = (type===TITLE+CHANGE) ? value : instance.get(TITLE),
+                    titleRight = (type===TITLERIGHT+CHANGE) ? value : instance.get(TITLERIGHT),
+                    closeButton = (type===CLOSEBUTTON+CHANGE) ? value : instance.get(CLOSEBUTTON),
                     headerView = instance.get(HEADERVIEW);
                 if (!headerView || (typeof headerView===STRING)) {
-                    instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? CLOSE_BUTTON : titleRight)}));
-                }
-            }
-        )
-    );
-
-    eventhandlers.push(
-        instance.on(
-            TITLERIGHT+CHANGE,
-            function(e) {
-                var titleRight = e.newVal,
-                    title = instance.get(TITLE),
-                    headerView = instance.get(HEADERVIEW);
-                if (!headerView || (typeof headerView===STRING)) {
-                    instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? CLOSE_BUTTON : titleRight)}));
+                    instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? (closeButton ? CLOSE_BUTTON : '') : titleRight)}));
                 }
             }
         )
@@ -742,7 +880,15 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(FOCUSED+CHANGE, function(e) {
-            boundingBox.toggleClass(FOCUSED_CLASS, e.newVal);
+            var focusclassed = e.newVal && instance.get(VISIBLE);
+            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, focusclassed);
+        /*jshint expr:true */
+            focusclassed && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                function(itsatabkeymanager) {
+                    itsatabkeymanager._retreiveFocus();
+                }
+            );
+        /*jshint expr:false */
         })
     );
 
@@ -794,6 +940,8 @@ ITSAPanel.prototype.destructor = function() {
     (footerView instanceof Y.View) && footerView.removeTarget(instance);
     boundingBox.hasPlugin(DD) && boundingBox.dd.removeTarget(instance) && boundingBox.unplug(DD);
     contentBox.hasPlugin[RESIZE] && contentBox[RESIZE].removeTarget(instance) && contentBox.unplug(RESIZE);
+    contentBox.hasPlugin(ITSATABKEYMANAGER) && contentBox.unplug(ITSATABKEYMANAGER);
+    (instance._escapeHandler && instance._escapeHandler.detach());
 /*jshint expr:false */
     instance._clearEventhandlers();
 };
@@ -846,6 +994,45 @@ ITSAPanel.prototype._clearEventhandlers = function() {
 };
 
 /**
+ * Function that handles the escape-key by fireing a 'escape:hide'-event if the panel has focus.
+ *
+ * @method _handleEscapeKey
+ * @private
+ * @protected
+ * @since 0.1
+*/
+ITSAPanel.prototype._handleEscapeKey = function(e) {
+    // close panel on escape-key
+    var instance = this;
+/*jshint expr:true */
+    (e.keyCode === 27) && instance.get(FOCUSED) && instance.fire(ESCAPE_HIDE_EVENT);
+/*jshint expr:false */
+};
+
+/**
+ * default function of focusnext-event.
+ * Will refocus to the next focusable UI-element.
+ *
+ * @method _defFn_focusnext
+ * @private
+  * @since 0.3
+*/
+ITSAPanel.prototype._defFn_focusnext = function() {
+    var instance = this,
+        contentBox = instance.get(CONTENTBOX);
+
+/*jshint expr:true */
+    contentBox.hasClass(FOCUSED_CLASS) && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+        function(itsatabkeymanager) {
+            itsatabkeymanager.next();
+        },
+        function() {
+        }
+    );
+/*jshint expr:false */
+};
+
+/**
  * Getter of the 'height'-attribute
  *
  * @method _getHeight
@@ -880,10 +1067,11 @@ ITSAPanel.prototype._renderHeader = function() {
     var instance = this,
         title = instance.get(TITLE),
         titleRight = instance.get(TITLERIGHT),
+        closeButton = instance.get(CLOSEBUTTON),
         headerView = instance.get(HEADERVIEW);
 
     if (!headerView || (typeof headerView===STRING)) {
-        instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? CLOSE_BUTTON : titleRight)}));
+        instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? (closeButton ? CLOSE_BUTTON : '') : titleRight)}));
     }
     else if (headerView instanceof Y.View) {
         headerView._set('container', instance._header);
@@ -945,6 +1133,35 @@ ITSAPanel.prototype._renderFooter = function() {
     }
     instance._footercont.toggleClass(HIDDENSECTIONCLASS, hideFooter);
     instance._adjustPaddingBottom();
+};
+
+/**
+ * Sets or unsets the focusManager (provided by gallery-itsatabkeymanager)
+ *
+ * @method _setFocusManager
+ * @private
+ * @since 0.3
+*/
+ITSAPanel.prototype._setFocusManager = function() {
+    var instance = this,
+        contentBox = instance.get(CONTENTBOX),
+        itsatabkeymanager = contentBox.itsatabkeymanager;
+
+    // If Y.Plugin.ITSATabKeyManager is plugged in, then refocus to the first item
+    Y.use(GALLERY+'-'+ITSATABKEYMANAGER, function() {
+        if (!instance.get(DESTROYED)) {
+            if (itsatabkeymanager) {
+                itsatabkeymanager.refresh(contentBox);
+            }
+            else {
+                contentBox.plug(Y.Plugin.ITSATabKeyManager);
+                itsatabkeymanager = contentBox.itsatabkeymanager;
+            }
+            if (contentBox.hasClass(FOCUSED_CLASS)) {
+                itsatabkeymanager.focusInitialItem();
+            }
+        }
+    });
 };
 
 /**
@@ -1022,13 +1239,13 @@ ITSAPanel.prototype._setWidth = function(val) {
     instance.get(CONTENTBOX).setStyle(WIDTH, (val ? (val+PX) : ''));
 };
 
-}, 'gallery-2013.10.14-07-00', {
+}, 'gallery-2013.10.17-22-20', {
     "requires": [
         "node-pluginhost",
+        "gallery-itsapluginpromise",
         "dd-ddm",
         "node-event-delegate",
         "base-build",
-        "widget-autohide",
         "widget-modality",
         "widget-position",
         "widget-position-align",

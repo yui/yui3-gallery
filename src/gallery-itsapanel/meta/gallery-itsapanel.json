@@ -2,10 +2,10 @@
     "gallery-itsapanel": {
         "requires": [
             "node-pluginhost",
+            "gallery-itsapluginpromise",
             "dd-ddm",
             "node-event-delegate",
             "base-build",
-            "widget-autohide",
             "widget-modality",
             "widget-position",
             "widget-position-align",

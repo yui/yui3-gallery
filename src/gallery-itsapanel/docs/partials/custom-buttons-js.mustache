@@ -4,12 +4,11 @@ YUI(yuiconfig).use('gallery-itsapanel', function(Y) {
     // now the iconfonts will load asynchroniously
 
     title = 'Information';
-    customHeader = '{title}'; // suppress the default close-button
     message = 'You are seeing a <b>Y.ITSAPanel</b>-instance.<br />The default close-button '+
               'is suppressed by redefining the \'customHeader\'-attribute '+
               'and a new close-button is defined through the attribute \'footerRight\'.';
     footer = 'Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a>.';
-    footerRight = '<button type="button" class="pure-button itsabutton-bordered itsabutton-iconleft" value="myclose">'+
+    footerRight = '<button type="button" class="pure-button itsabutton-bordered itsabutton-iconleft" value="myclose" data-focusable="true">'+
                       '<i class="itsaicon-form-cancel"></i>close'+
                   '</button>';
 
@@ -19,8 +18,8 @@ YUI(yuiconfig).use('gallery-itsapanel', function(Y) {
         title: title,
         footer: footer,
         footerRight: footerRight,
-        headerView: customHeader,
         bodyView: message,
+       // closeButton: false,
         width: 350,
         dragable: true
     }).render();
