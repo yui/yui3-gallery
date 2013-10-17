@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'skriv inn riktig format',
+    entervalidnumber : 'skriv inn et gyldig nummer',
     inputrequired : 'Input er nødvendig',
     unvalidated: 'Dataene er feil',
     notification : 'Varsling',

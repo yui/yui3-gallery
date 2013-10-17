@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'אנא הכנס את הפורמט הנכון',
+    entervalidnumber : 'אנא הכנס מספר חוקי',
     inputrequired : 'נדרש קלט',
     unvalidated: 'הנתונים הוא באופן שגוי',
     notification : 'הודעה',

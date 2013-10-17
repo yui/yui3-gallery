@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'bitte geben Sie das richtige Format',
+    entervalidnumber : 'bitte geben Sie eine gültige Zahl',
     inputrequired : 'Eingabe ist erforderlich',
     unvalidated: 'Die Daten sind falsch',
     notification : 'Benachrichtigung',

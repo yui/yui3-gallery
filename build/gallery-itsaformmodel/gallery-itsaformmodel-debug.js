@@ -1531,6 +1531,63 @@ ITSAFormModel.prototype.UIToModel = function(nodeid) {
         );
     }
 };
+
+/**
+  * Translates the given 'text; through Y.Int of this module. Possible text's that can be translated are:
+  * <ul>
+  *   <li>datachanged</li>
+  *   <li>entervalidnumber</li>
+  *   <li>enterrightformat</li>
+  *   <li>inputrequired</li>
+  *   <li>noreloadmsg</li>
+  *   <li>notification</li>
+  *   <li>unvalidated</li>
+  *   <li>wantreload</li>
+  * </ul>
+  *
+  * @method translate
+  * @param text {String} the text to be translated
+  * @return {Y.Promise} resolve(translated) --> Translated text or the original text (if no translattion was possible)
+  * @since 0.4
+**/
+ITSAFormModel.prototype.translate = function(text) {
+    Y.log('translate', 'info', 'ITSA-ViewModel');
+    return this._intl[text] || text;
+};
+
+/**
+  * Translates the given 'text; through Y.Int of this module. Possible text's that can be translated are:
+  * <ul>
+  *   <li>datachanged</li>
+  *   <li>entervalidnumber</li>
+  *   <li>enterrightformat</li>
+  *   <li>inputrequired</li>
+  *   <li>noreloadmsg</li>
+  *   <li>notification</li>
+  *   <li>unvalidated</li>
+  *   <li>wantreload</li>
+  * </ul>
+  *
+  * @method translatePromise
+  * @static
+  * @param text {String} the text to be translated
+  * @return {Y.Promise} resolve(translated) --> Translated text or the original text (if no translattion was possible)
+  * @since 0.4
+**/
+ITSAFormModel.translatePromise = function(text) {
+    Y.log('translatePromise', 'info', 'ITSA-ViewModel');
+    return Y.usePromise('intl').then(
+        function() {
+            var intl = YIntl.get(GALLERYITSAFORMMODEL);
+            return intl[text] || text;
+        },
+        function() {
+            return text;
+        }
+    );
+};
+ITSAFormModel.prototype.translatePromise = ITSAFormModel.translatePromise;
+
 /**
  * Returns wheter all visible UI-elements are right validated.
  *
@@ -2538,7 +2595,7 @@ YArray.each(
     }
 );
 
-}, 'gallery-2013.10.14-07-00', {
+}, 'gallery-2013.10.17-22-20', {
     "requires": [
         "yui-base",
         "intl",
@@ -2561,6 +2618,7 @@ YArray.each(
         "event-custom",
         "json-parse",
         "gallery-itsanodepromise",
+        "gallery-itsamodulesloadedpromise",
         "gallery-itsadatetimepicker",
         "gallery-itsamodelsyncpromise",
         "gallery-itsaformelement"

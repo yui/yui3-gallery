@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'kirjoita oikeassa muodossa',
+    entervalidnumber : 'kirjoita kelvollinen numero',
     inputrequired : 'Syötettävä',
     unvalidated: 'Tiedot on väärin',
     notification : 'Ilmoitus',

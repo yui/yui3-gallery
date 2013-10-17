@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'geef de juiste opmaak',
+    entervalidnumber : 'geef aan geldig nummer',
     inputrequired : 'Invoer is verplicht',
     unvalidated: 'De invoer is niet juist',
     notification : 'Notificatie',

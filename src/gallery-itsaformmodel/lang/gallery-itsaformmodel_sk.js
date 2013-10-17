@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'zadajte správny formát',
+    entervalidnumber : 'zadajte platné číslo',
     inputrequired : 'Je nutné zadať',
     unvalidated: 'Dáta sú nesprávne',
     notification : 'Oznámenie',

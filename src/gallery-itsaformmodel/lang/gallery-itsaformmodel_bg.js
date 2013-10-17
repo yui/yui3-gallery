@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'моля, въведете в правилния формат',
+    entervalidnumber : 'mоля да въведете валиден номер',
     inputrequired : 'Входно се изисква',
     unvalidated: 'Данните са неправилно',
     notification : 'нотификация',

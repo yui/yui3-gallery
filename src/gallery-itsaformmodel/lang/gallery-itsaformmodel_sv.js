@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'ange rätt format',
+    entervalidnumber : 'ange ett giltigt nummer',
     inputrequired : 'Inmatning erfordras',
     unvalidated: 'Uppgifterna är felaktigt',
     notification : 'Underrättelse',

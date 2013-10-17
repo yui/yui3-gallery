@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'please enter the right format',
+    entervalidnumber : 'please enter a valid number',
     inputrequired : 'Input is required',
     unvalidated: 'The data is incorrectly',
     notification : 'Notification',

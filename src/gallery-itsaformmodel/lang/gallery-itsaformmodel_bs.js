@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'unesite pravo formatu',
+    entervalidnumber : 'unesite važeći broj',
     inputrequired : 'Ulaz je potrebno',
     unvalidated: 'Podaci su pogrešno',
     notification : 'Obavijest',

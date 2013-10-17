@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'введіть потрібний формат',
+    entervalidnumber : 'введіть правильний номер',
     inputrequired : 'Потрібне введення',
     unvalidated: 'Дані неправильно',
     notification : 'повідомлення',

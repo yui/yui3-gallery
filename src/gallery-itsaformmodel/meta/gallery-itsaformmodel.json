@@ -22,6 +22,7 @@
             "event-custom",
             "json-parse",
             "gallery-itsanodepromise",
+            "gallery-itsamodulesloadedpromise",
             "gallery-itsadatetimepicker",
             "gallery-itsamodelsyncpromise",
             "gallery-itsaformelement"

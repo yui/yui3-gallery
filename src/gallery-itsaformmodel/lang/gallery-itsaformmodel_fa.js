@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'لطفا فرمت مناسب وارد کنید',
+    entervalidnumber : 'لطفا یک شماره تلفن معتبر وارد کنید',
     inputrequired : 'ورودی مورد نیاز است',
     unvalidated: 'داده ها نادرست است',
     notification : 'اخطار',

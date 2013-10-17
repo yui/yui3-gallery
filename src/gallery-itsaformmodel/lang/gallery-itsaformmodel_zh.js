@@ -1,4 +1,6 @@
 {
+    enterrightformat : '輸入正確的格式',
+    entervalidnumber : '輸入一個有效的數字',
     inputrequired : '需要輸入',
     unvalidated: '該數據是不正確的',
     notification : '通知',

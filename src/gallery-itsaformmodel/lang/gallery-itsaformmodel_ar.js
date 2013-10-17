@@ -1,4 +1,6 @@
 {
+    enterrightformat : 'من فضلك ادخل الشكل الصحيح',
+    entervalidnumber : 'الرجاء إدخال رقم صالح',
     inputrequired : 'مطلوب مدخلات',
     unvalidated: 'كانت البيانات بشكل غير صحيح',
     notification : 'إعلام',
