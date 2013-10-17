@@ -79,11 +79,12 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
                     '<div class="pure-control-group">{release}</div>';
                 '</fieldset>';
 
-    footertemplate = '{btn_reset}{spinbtn_load}{spinbtn_submit}';
+//    footertemplate = '{btn_reset}{spinbtn_load}{spinbtn_submit}';
+    footertemplate = '{btn_close}{spinbtn_load}{spinbtn_submit}';
 
     panel = new Y.ITSAViewModelPanel({
         title: 'Enter data',
-        titleRight: '', // <-- suppress default button close
+        closeButton: false,
         model: artist,
         template: template,
         footerTemplate: footertemplate,

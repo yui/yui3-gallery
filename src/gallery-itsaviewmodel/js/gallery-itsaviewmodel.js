@@ -1244,13 +1244,53 @@ ITSAViewModel.prototype.toJSON = function() {
   *
   * @method translate
   * @param text {String} the text to be translated
-  * @return {String} Translated text or the original text (if no translattion was posible)
+  * @return {Y.Promise} resolve(translated) --> Translated text or the original text (if no translattion was possible)
   * @since 0.3
 **/
 ITSAViewModel.prototype.translate = function(text) {
     Y.log('translate', 'info', 'ITSA-ViewModel');
     return this._intl[text] || text;
 };
+
+/**
+  * Translates the given 'text; through Y.Int of this module. Possible text's that can be translated are:
+  * <ul>
+  *   <li>abort</li>
+  *   <li>cancel</li>
+  *   <li>close</li>
+  *   <li>destroy</li>
+  *   <li>ignore</li>
+  *   <li>load</li>
+  *   <li>reload</li>
+  *   <li>no</li>
+  *   <li>ok</li>
+  *   <li>remove</li>
+  *   <li>reset</li>
+  *   <li>retry</li>
+  *   <li>save</li>
+  *   <li>submit</li>
+  *   <li>yes</li>
+  * </ul>
+  *
+  * @method translatePromise
+  * @static
+  * @param text {String} the text to be translated
+  * @return {Y.Promise} resolve(translated) --> Translated text or the original text (if no translattion was possible)
+  * @since 0.3
+**/
+ITSAViewModel.translatePromise = function(text) {
+    Y.log('translatePromise', 'info', 'ITSA-ViewModel');
+    return Y.usePromise('intl').then(
+        function() {
+            var intl = YIntl.get(GALLERY+ITSAVIEWMODEL);
+            return intl[text] || text;
+        },
+        function() {
+            return text;
+        }
+    );
+};
+ITSAViewModel.prototype.translatePromise = ITSAViewModel.translatePromise;
 
 /**
  * Unlocks the view (all UI-elements of the form-model) in case model is Y.ITSAFormModel and the view is editable.

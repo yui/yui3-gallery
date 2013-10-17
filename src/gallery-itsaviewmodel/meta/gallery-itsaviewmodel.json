@@ -10,6 +10,7 @@
             "event-custom",
             "event-outside",
             "pluginhost-base",
+            "gallery-itsamodulesloadedpromise",
             "gallerycss-itsa-base"
         ],
         "lang" : [

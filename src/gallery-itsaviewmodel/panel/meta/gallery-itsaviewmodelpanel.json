@@ -1,7 +1,6 @@
 {
     "gallery-itsaviewmodelpanel": {
         "requires": [
-            "gallery-itsapluginpromise",
             "node-pluginhost",
             "base-build",
             "base-base",
