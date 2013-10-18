@@ -1,9 +1,9 @@
 {
     "name": "gallery-slidecheckbox",
     "builds": {
-        "gallery-slidecheckbox\r": {
+        "gallery-slidecheckbox": {
             "config": {
-                "skinnable": "true\r",
+                "skinnable": "true",
                 "requires": [
                     "node-base",
                     "anim-base",
@@ -22,7 +22,7 @@
                     ""
                 ]
             },
-            "skinnable": "true\r",
+            "skinnable": "true",
             "jsfiles": [
                 "gallery-slidecheckbox.js"
             ],
