@@ -1,1 +1,2 @@
 shifter [err] /src/gallery-datetime-utils/js/utils.js contains 27 lint errors
+Please install the phantomjs binary in your path!

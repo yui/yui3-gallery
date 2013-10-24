@@ -285,7 +285,7 @@ Y.DateTimeUtils =
 		var d = date.split(delimiter);
 		if (d.length != 3 || !Y.every(d, validInteger))
 		{
-			throw Error('Unparseable date format.');
+			throw Error('Unparseable date format: ' + date);
 		}
 
 		return self.normalize(
@@ -401,7 +401,7 @@ Y.DateTimeUtils =
 		}
 		else if (t.length < 2 || 3 < t.length || !Y.every(t, validInteger))
 		{
-			throw Error('Unparseable time format.');
+			throw Error('Unparseable time format: ' + time);
 		}
 
 		if (am && t[0] == '12')
@@ -432,4 +432,4 @@ Y.DateTimeUtils =
 var self = Y.DateTimeUtils;	// shortcut
 
 
-}, 'gallery-2013.07.03-22-52', {"requires": ["gallery-funcprog"]});
+}, 'gallery-2013.10.24-18-05', {"requires": ["gallery-funcprog"]});

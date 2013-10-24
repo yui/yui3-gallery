@@ -53,8 +53,6 @@ YUI.add('gallery-datetime-utils-tests', function(Y) {
 			Y.Assert.areSame('2012-6-11', Y.DateTimeUtils.formatDate('2012-6-11'));
 			Y.Assert.areSame('2012-06-11', Y.DateTimeUtils.formatDate(date));
 			Y.Assert.areSame('2012-06-11', Y.DateTimeUtils.formatDate({year:2012, month:6, day:11}));
-
-			Y.Assert.areSame('275760-09-12', Y.DateTimeUtils.formatDate(8640000000000000));
 		},
 
 		testParseDate: function()
@@ -105,7 +103,6 @@ YUI.add('gallery-datetime-utils-tests', function(Y) {
 			Y.Assert.areSame('14:05', Y.DateTimeUtils.formatTime({hour:14, minute:5}));
 			Y.Assert.areSame('2:05', Y.DateTimeUtils.formatTime({hour:2, minute:5}));
 			Y.Assert.areSame('14:05', Y.DateTimeUtils.formatTime(date));
-			Y.Assert.areSame('17:00', Y.DateTimeUtils.formatTime(8640000000000000));
 
 			Y.DateTimeUtils.CLOCK_DISPLAY_TYPE = 12;
 

@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.21
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-datetime-utils
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -42,7 +42,7 @@ shifter [info] shifting into gear for gallery-datetime-utils
    #16: Expected '!==' and instead saw '!='.
        if (d.length != 3 || !Y.every(d, validInteger)) // line 286, pos 22
    #17: Missing 'new' prefix when invoking a constructor.
-       throw Error('Unparseable date format.'); // line 288, pos 19
+       throw Error('Unparseable date format: ' + date); // line 288, pos 19
    #18: Trailing whitespace.
        * // line 303, pos 7
    #19: Expected '===' and instead saw '=='.
@@ -54,7 +54,7 @@ shifter [info] shifting into gear for gallery-datetime-utils
    #22: Expected '===' and instead saw '=='.
        if (t.length == 1 && (am || pm)) // line 398, pos 22
    #23: Missing 'new' prefix when invoking a constructor.
-       throw Error('Unparseable time format.'); // line 404, pos 19
+       throw Error('Unparseable time format: ' + time); // line 404, pos 19
    #24: Expected '===' and instead saw '=='.
        if (am && t[0] == '12') // line 407, pos 24
    #25: Expected '===' and instead saw '=='.
@@ -73,23 +73,12 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-datetime-utils/gallery-datetime-utils-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.244 seconds, pretty fast huh?
+shifter [info] finished in 0.197 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
-Starting Grover on 1 files with PhantomJS@1.7.0
-  Running 15 concurrent tests at a time.
-  Using a 120 second timeout per test.
-✖ [gallery-datetime-utils]: Passed: 7 Failed: 2 Total: 9 (ignored 0) (0.098 seconds) 100%
-    testFormatTime
-       Values should be the same.
-       Expected: 12:00 AM (string)
-       Actual: 0:00 AM (string)
-    testParseTime
-       Unexpected error: Unparseable time format.
-Writing files in JSON format to: /src/gallery-datetime-utils/logs/tests.json
 [35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
