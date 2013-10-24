@@ -1,0 +1,15 @@
+{
+    "name": "gallery-datasource-async-function",
+    "builds": {
+        "gallery-datasource-async-function": {
+            "config": {
+                "requires": [
+                    "datasource-local"
+                ]
+            },
+            "jsfiles": [
+                "AsyncFunctionDataSource.js"
+            ]
+        }
+    }
+}

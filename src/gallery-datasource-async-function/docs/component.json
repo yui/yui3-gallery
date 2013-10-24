@@ -1,0 +1,9 @@
+{
+	"name": "gallery-datasource-async-function",
+	"displayName": "DataSource (AsyncFunction)",
+	"description": "Provides a DataSource which calls a function that is expected to return a result by invoking a callback.",
+	"author": "jafl",
+
+	"use": ["gallery-datasource-async-function"],
+	"tags": ["jafl","datasource","async","mojito"]
+}

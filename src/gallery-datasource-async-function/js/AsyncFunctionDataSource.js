@@ -45,18 +45,13 @@ Y.extend(AsyncFunctionDataSource, Y.DataSource.Local,
 	 * response is received asynchronously.
 	 *
 	 * @method _defRequestFn
-	 * @param e {Event.Facade} Event Facade with the following properties:
-	 * <dl>
-	 * <dt>tId (Number)</dt> <dd>Unique transaction ID.</dd>
-	 * <dt>request (Object)</dt> <dd>The request.</dd>
-	 * <dt>callback (Object)</dt> <dd>The callback object with the following properties:
-	 *     <dl>
-	 *         <dt>success (Function)</dt> <dd>Success handler.</dd>
-	 *         <dt>failure (Function)</dt> <dd>Failure handler.</dd>
-	 *     </dl>
-	 * </dd>
-	 * <dt>cfg (Object)</dt> <dd>Configuration object.</dd>
-	 * </dl>
+	 * @param e {Event.Facade} Event Facade
+	 * @param e.tId {Number} Unique transaction ID
+	 * @param e.request {Object} The request
+	 * @param e.callback {Object} The callback object
+	 * @param e.callback.success {Function} Success handler
+	 * @param e.callback.failure {Function} Failure handler
+	 * @param e.cfg {Object} Configuration object
 	 * @protected
 	 */
 	_defRequestFn: function(e)
@@ -87,7 +82,7 @@ Y.extend(AsyncFunctionDataSource, Y.DataSource.Local,
 		{
 			try
 			{
-				fn(Y.bind(callback, this), e.request, this, e);
+				fn.call(this, Y.bind(callback, this), e.request, this, e);
 			}
 			catch (ex)
 			{

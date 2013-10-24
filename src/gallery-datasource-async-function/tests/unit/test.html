@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="/build/yui/yui-min.js"></script>
+<script type="text/javascript" src="assets/tests.js"></script>
+</head>
+
+<body class="yui3-skin-sam">
+<div id="log"></div>
+
+<script type="text/javascript">
+YUI({
+    coverage:["gallery-datasource-async-function"],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use("test-console", "gallery-datasource-async-function-tests", function(Y) {
+
+    (new Y.Test.Console()).render('#log');
+
+    Y.Test.Runner.setName('gallery-datasource-async-function');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>
