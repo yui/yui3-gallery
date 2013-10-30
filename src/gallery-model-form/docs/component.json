@@ -1,0 +1,15 @@
+{
+    "name"       : "gallery-model-form",
+    "displayName": "Gallery: gallery-model-form",
+    "description": "Combine a model and a form to create something useful.",
+    "author"     : [ "dfederighi" ],
+    "use"        : [ "gallery-model-form" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [{
+        "name": "model-form-simple",
+        "displayName": "Simple Model Form Example",
+        "modules": ["model-form"]
+    }]
+}

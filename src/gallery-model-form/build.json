@@ -1,0 +1,10 @@
+{
+    "name": "gallery-model-form",
+    "builds": {
+        "gallery-model-form": {
+            "jsfiles": [
+                "js/gallery-model-form.js"
+            ]
+        }
+    }
+}

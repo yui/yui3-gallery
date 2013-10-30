@@ -1,0 +1,99 @@
+<div class="intro">
+    <p>
+    Ever wish your form was a bit smarter? Have the need to attach a Y.Model instance to it? Do you think it would be nice to leverage 
+    the change events that Y.Model provides? This module was created because I wanted to have a form and a data structure that supported 
+    2-way communication, and when I wanted, I can just get form data as an object, and use it to set/sync another model or do whatever I 
+    wish with it.
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>The Basics</h2>
+
+<h3>Create a form</h3>
+
+<h4>Sample markup</h4>
+```
+<div id="form">
+    <form>
+        <input type="text" name="testInput" id="testInput" />
+        <input type="submit" name="submit" value="test" />
+    </form>
+</div>
+```
+
+<h4>Create an instance</h4>
+```
+
+var modelForm = new Y.ModelForm({
+    boundingBox: Y.one('#form')
+}).render();
+
+```
+
+<p>Or, you can pass in some html using the <i>markup</i> attribute<p>
+
+```
+
+var formMarkup = '<form>' + 
+                    '<input type="text" name="testInput">' +
+                    '<input type="submit" name="submit">' +
+                 '</form>';
+
+var modelForm = new Y.ModelForm({
+    boundingBox: Y.one('#form'),
+    markup: formMarkup
+}).render();
+
+```
+
+<h3>Listen for events</h3>
+
+```
+
+var formModel = modelForm.get('model');
+
+// You can pass in multiple events as a list 
+// ['elementOneChange','elementTwoChange',...]
+formModel.after('testInputChange', function(e) {
+    // As you type into 'testInput', the 'testInputChange' event 
+    // is fired, and e.newVal will contain the current field value
+});
+
+```
+
+<h3>Pass in some values for the form field(s)</h3>
+
+```
+
+var modelForm = new Y.ModelForm({
+    boundingBox: Y.one('#form'),
+    values: { testInput: 'some value ...' }
+});
+
+```
+
+<p>Or you can setAttrs() on the Model instance</p>
+
+```
+
+modelForm.get('model').setAttrs({testInput: 'some value ...'});
+
+```
+
+<h2>Other things you can do</h2>
+
+```
+
+// Get the form node
+var form = modelForm.getForm();
+
+// A bit more control with a form 'clear'
+// This resets the form to the default values passed in
+modelForm.reset();
+
+// Or do a hard reset and empty everything
+modelForm.reset(true);
+
+```

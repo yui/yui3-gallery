@@ -1,0 +1,21 @@
+<div class="intro">
+    <p>{{description}}</p>
+</div>
+
+<div id="demo" class="example">
+    <b>Type something and watch the Y.Model instance on the form is updated</b><br/>
+    <div id="form-example"></div>
+    <script src="../../build/gallery-model-form/gallery-model-form-debug.js"></script>
+    <script>
+    YUI().use('{{use}}', function(Y) {
+        {{>model-form-simple-code}} 
+    });
+    </script>
+</div>
+
+<h2 id="source">Full Source</h2>
+```
+YUI().use('gallery-model-form', function(Y) {
+    {{>model-form-simple-code}}  
+}); 
+```

@@ -1,0 +1,43 @@
+{
+    "name": "gallery-model-form",
+    "passed": 6,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 6,
+    "duration": 66,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 3,
+        "duration": 32,
+        "type": "testcase",
+        "Form Object Test": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Form Object Test",
+            "duration": 8
+        },
+        "Form ID Test": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Form ID Test",
+            "duration": 0
+        },
+        "Model check": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Model check",
+            "duration": 1
+        }
+    },
+    "timestamp": "Wed Oct 30 15:13:54 2013",
+    "consoleInfo": []
+}

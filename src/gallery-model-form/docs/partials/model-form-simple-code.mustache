@@ -1,0 +1,13 @@
+    var form = '<form id="test-form">' +
+                '<input type="text" name="test-name" id="test-name" value="test value" />' +
+               '</form>',
+        modelForm;
+
+    modelForm = new Y.ModelForm({
+        boundingBox: Y.one('#form-example'),
+        markup: form
+    }).render();
+
+    modelForm.get('model').on('test-nameChange', function(e) {
+        modelForm.get('boundingBox').append('<div><b>test-name</b> form input is now = ' + e.newVal + '</div>');
+    });
