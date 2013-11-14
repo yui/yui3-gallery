@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-web-notifications",
+    "displayName": "Gallery: gallery-web-notifications",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "g13n" ],
+    "use"        : [ "gallery-web-notifications" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

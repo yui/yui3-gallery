@@ -1,0 +1,7 @@
+{
+    "gallery-web-notifications": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}

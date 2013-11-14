@@ -1,0 +1,27 @@
+<div class="intro">
+    <p>This module provides web notifications API, an end-user notification outside the context of a web page.</p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+<p>
+    This module provides web notifications API, an end-user notification outside the context of a web page.
+    This module normalizes the APIs across Firefox, Chrome and Safari and provides a consistent API for
+    applications.
+</p>
+<p>
+    This module has been tested on Firefox 24, Chrome 30 and Safari 7.
+    Check <a href="http://caniuse.com/#search=notifications">caniuse.com</a> for browser support.
+</p>
+
+```
+YUI().use('gallery-web-notifications', function (Y) {
+    try {
+        var notification = new Y.WebNotifications();
+        notification.show('title', 'message');
+    } catch (e) {}
+});
+```
+

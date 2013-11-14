@@ -1,0 +1,10 @@
+{
+    "name": "gallery-web-notifications",
+    "builds": {
+        "gallery-web-notifications": {
+            "jsfiles": [
+                "js/gallery-web-notifications.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-web-notifications</title>
+    <script src="http://yui.yahooapis.com/3.13.0/build/yui/yui-min.js"></script>
+    <script type="text/javascript" src="../../../../build/gallery-web-notifications/gallery-web-notifications.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-web-notifications'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'gallery-web-notifications', 'gallery-web-notifications-tests', function(Y) {
+
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-web-notifications');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

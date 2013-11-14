@@ -1,0 +1,77 @@
+{
+    "name": "gallery-web-notifications",
+    "passed": 14,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 2,
+    "total": 16,
+    "duration": 160,
+    "type": "report",
+    "Gallery Web Notifications Test": {
+        "name": "Gallery Web Notifications Test",
+        "passed": 7,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 1,
+        "total": 8,
+        "duration": 78,
+        "type": "testcase",
+        "test close method": {
+            "result": "ignore",
+            "message": "Test ignored",
+            "type": "test",
+            "name": "test close method"
+        },
+        "test permission method": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test permission method",
+            "duration": 1
+        },
+        "test permission method for default case": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test permission method for default case",
+            "duration": 0
+        },
+        "test request method for permission denied case": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test request method for permission denied case",
+            "duration": 1
+        },
+        "test request method for permission default case": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test request method for permission default case",
+            "duration": 0
+        },
+        "test show method for denied case": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test show method for denied case",
+            "duration": 1
+        },
+        "test show method for default case": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test show method for default case",
+            "duration": 0
+        },
+        "test show method for granted case": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test show method for granted case",
+            "duration": 0
+        }
+    },
+    "timestamp": "Wed Nov 13 17:09:01 2013",
+    "consoleInfo": []
+}
