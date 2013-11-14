@@ -1,11 +1,11 @@
 {
     "name": "gallery-array-iterate",
-    "passed": 21,
+    "passed": 14,
     "failed": 0,
     "errors": 0,
     "ignored": 0,
-    "total": 21,
-    "duration": 213,
+    "total": 14,
+    "duration": 138,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 7,
-        "duration": 69,
+        "duration": 68,
         "type": "testcase",
         "test:001-apiExists": {
             "result": "pass",
@@ -28,7 +28,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "test:002-simpleIteration",
-            "duration": 1
+            "duration": 0
         },
         "test:003-simpleIterationWithContextObject": {
             "result": "pass",
@@ -42,7 +42,7 @@
             "message": "Test passed",
             "type": "test",
             "name": "test:004-nthItemIteration",
-            "duration": 1
+            "duration": 0
         },
         "test:005-backwardsIteration": {
             "result": "pass",
@@ -66,7 +66,7 @@
             "duration": 1
         }
     },
-    "timestamp": "Thu May  2 15:59:46 2013",
+    "timestamp": "Wed Nov 13 17:08:56 2013",
     "coverage": {
         "build/gallery-array-iterate/gallery-array-iterate.js": {
             "path": "build/gallery-array-iterate/gallery-array-iterate.js",
