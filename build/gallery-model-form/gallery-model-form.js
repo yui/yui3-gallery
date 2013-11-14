@@ -329,4 +329,4 @@ Y.ModelForm = Y.Base.create('model-form', Y.Widget, [], {
 });
 
 
-}, 'gallery-2013.10.30-22-13', {"requires": ["yui-base", "node", "event", "model", "widget"]});
+}, 'gallery-2013.11.14-01-08', {"requires": ["yui-base", "node", "event", "model", "widget"]});
