@@ -1,5 +1,0 @@
-shifter [err] /assets/gallery-itsaviewmodel/skins/sam/gallery-itsaviewmodel-skin.css contains 2 lint errors
-   #1: [warning] Unqualified attribute selectors are known to be slow.
-       .itsaviewmodel[data-itsastatusbar="true"] { // line 80, pos 1
-   #2: [warning] Unqualified attribute selectors are known to be slow.
-       .itsaviewmodel.itsaviewmodel-styled[data-itsastatusbar="true"] { // line 84, pos 1

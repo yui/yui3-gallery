@@ -1,5 +1,0 @@
-shifter [err] /assets/gallery-itsaformelement/skins/sam/gallery-itsaformelement-skin.css contains 2 lint errors
-   #1: [warning] Outlines should only be modified using :focus.
-       form [data-focusable="true"] { // line 19, pos 1
-   #2: [warning] The box-sizing property isn't supported in IE6 and IE7.
-       box-sizing: border-box; /* 4 */ // line 94, pos 5

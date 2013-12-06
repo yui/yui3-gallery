@@ -1,5 +1,0 @@
-shifter [err] /assets/gallery-itsapanel/skins/sam/gallery-itsapanel-skin.css contains 2 lint errors
-   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
-       box-sizing: border-box; // line 22, pos 5
-   #2: [warning] The box-sizing property isn't supported in IE6 and IE7.
-       box-sizing: border-box; // line 49, pos 5
