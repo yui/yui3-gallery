@@ -27,9 +27,13 @@ YUI.add('module-tests', function(Y) {
             this.labelnode = Y.one('label[for="'+this.formElement.nodeid+'"]');
         },
         tearDown : function () {
+            var widgetInstance = this.formElement.widget;
+            if (widgetInstance) {
+                widgetInstance.destroy();
+            }
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'ITSACheckbox - formelement not created');
@@ -110,8 +114,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'text - formelement not created');
@@ -208,8 +212,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'number- formelement not created');
@@ -288,8 +292,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'check pattern': function() {
             Y.Assert.areEqual('^[-]?(([1-9][0-9]*)|0)(\\.[0-9]+)?$', this.node.getAttribute('pattern'), 'number with digits - Wrong value for pattern created');
@@ -324,8 +328,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'password - formelement not created');
@@ -420,8 +424,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'email - formelement not created');
@@ -433,7 +437,7 @@ YUI.add('module-tests', function(Y) {
             Y.Assert.areEqual('INPUT', this.node.get('tagName'), 'email - Wrong tag created');
         },
         'check type': function() {
-            Y.Assert.areEqual('email', this.node.getAttribute('type'), 'email - Wrong type created');
+            Y.Assert.areEqual('text', this.node.getAttribute('type'), 'email - Wrong type created');
         },
         'check value': function() {
             Y.Assert.areEqual('current value', this.node.getAttribute('value'), 'email - Wrong value created');
@@ -516,8 +520,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'url - formelement not created');
@@ -529,7 +533,7 @@ YUI.add('module-tests', function(Y) {
             Y.Assert.areEqual('INPUT', this.node.get('tagName'), 'url - Wrong tag created');
         },
         'check type': function() {
-            Y.Assert.areEqual('url', this.node.getAttribute('type'), 'url - Wrong type created');
+            Y.Assert.areEqual('text', this.node.getAttribute('type'), 'url - Wrong type created');
         },
         'check value': function() {
             Y.Assert.areEqual('current value', this.node.getAttribute('value'), 'url - Wrong value created');
@@ -596,11 +600,11 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'check pattern': function() {
-            Y.Assert.areEqual('^(https://)?[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+(/[\\w-]+)*', this.node.getAttribute('pattern'), 'url with onlyssl - Wrong value for pattern created');
+            Y.Assert.areEqual('^https://[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+(/[\\w-]+)*', this.node.getAttribute('pattern'), 'url with onlyssl - Wrong value for pattern created');
         }
     }));
 
@@ -616,8 +620,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'check pattern': function() {
             Y.Assert.areEqual('^(http://)?[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+(/[\\w-]+)*', this.node.getAttribute('pattern'), 'url with nossl - Wrong value for pattern created');
@@ -652,8 +656,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'textarea - formelement not created');
@@ -748,8 +752,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'checkbox - formelement not created');
@@ -844,8 +848,8 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'radio - formelement not created');
@@ -943,8 +947,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
             delete this.timenode;
         },
         'availablility node': function() {
@@ -1010,9 +1015,6 @@ YUI.add('module-tests', function(Y) {
         'check focusable': function() {
             Y.Assert.areEqual('true', this.node.getAttribute('data-focusable'), 'date - Wrong value for focusable created');
         },
-        'check tooltip': function() {
-            Y.Assert.areEqual('here is some tooltipinfo', this.node.getAttribute('data-content'), 'date - Wrong value for tooltip created');
-        },
         'check labelcontent': function() {
             Y.Assert.areEqual('this is the label', this.labelnode.get('text'), 'date - Wrong labelvalue created');
         },
@@ -1058,8 +1060,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
             delete this.timenode;
         },
         'availablility node': function() {
@@ -1125,9 +1128,6 @@ YUI.add('module-tests', function(Y) {
         'check focusable': function() {
             Y.Assert.areEqual('true', this.node.getAttribute('data-focusable'), 'time - Wrong value for focusable created');
         },
-        'check tooltip': function() {
-            Y.Assert.areEqual('here is some tooltipinfo', this.node.getAttribute('data-content'), 'time - Wrong value for tooltip created');
-        },
         'check labelcontent': function() {
             Y.Assert.areEqual('this is the label', this.labelnode.get('text'), 'time - Wrong labelvalue created');
         },
@@ -1173,8 +1173,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
             delete this.timenode;
         },
         'availablility node': function() {
@@ -1240,9 +1241,6 @@ YUI.add('module-tests', function(Y) {
         'check focusable': function() {
             Y.Assert.areEqual('true', this.node.getAttribute('data-focusable'), 'datetime - Wrong value for focusable created');
         },
-        'check tooltip': function() {
-            Y.Assert.areEqual('here is some tooltipinfo', this.node.getAttribute('data-content'), 'datetime - Wrong value for tooltip created');
-        },
         'check labelcontent': function() {
             Y.Assert.areEqual('this is the label', this.labelnode.get('text'), 'datetime - Wrong labelvalue created');
         },
@@ -1289,8 +1287,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'submit - formelement not created');
@@ -1391,8 +1390,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'button - formelement not created');
@@ -1494,8 +1494,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
         },
         'availablility node': function() {
             Y.Assert.isNotNull(this.node, 'reset - formelement not created');
@@ -1577,8 +1578,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
         },
         'check pattern': function() {
             Y.Assert.areEqual(this.node.previous(), this.labelnode, 'Labelnode not found on the left side of the element');
@@ -1598,8 +1600,9 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
         },
         'check pattern': function() {
             Y.Assert.areEqual(this.node.next(), this.labelnode, 'Labelnode not found on the left side of the element');
@@ -1620,9 +1623,10 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
-            delete this.timenode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
+            this.timenode.remove(true);
         },
         'check pattern': function() {
             Y.Assert.areEqual(this.node.previous(), this.timenode, 'Timenode not found on the left side of the dateelement');
@@ -1644,9 +1648,10 @@ YUI.add('module-tests', function(Y) {
         },
         tearDown : function () {
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
-            delete this.timenode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
+            Y.all('.formatvalue').remove(true);
+            this.timenode.remove(true);
         },
         'check pattern': function() {
             Y.Assert.areEqual(this.node.next(), this.timenode, 'Timenode not found on the left side of the dateelement');
@@ -1667,9 +1672,13 @@ YUI.add('module-tests', function(Y) {
             this.formElement.widget.set('checked', false);
         },
         tearDown : function () {
+            var widgetInstance = this.formElement.widget;
+            if (widgetInstance) {
+                widgetInstance.destroy();
+            }
             delete this.formElement;
-            delete this.node;
-            delete this.labelnode;
+            this.node.remove(true);
+            this.labelnode && this.labelnode.remove(true);
         },
         'check value': function() {
             Y.Assert.isFalse(this.formElement.widget.get('checked'), 'ITSACheckbox - didn\'t get a falsy checked state when changed by JS');

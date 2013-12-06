@@ -55,11 +55,29 @@
         },
         {
             "name"       : "promised-syncing",
-            "displayName": "Formsyncing through Promise-layer",
+            "displayName": "Formsyncing through a Promise-synclayer",
             "description": "This example shows how to set up a form that syncs through a Promise-synclayer.",
             "author"     : [ "itsasbreuk" ],
             "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "gallery-itsaslider", "gallery-itsadialog", "gallery-io-utils"],
             "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel", "io-utils", "promise", "sync"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "sync-statusbar",
+            "displayName": "Formsyncing with a statusbar",
+            "description": "This example shows how to set up a form that syncs through a Promise-synclayer.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "gallery-itsaslider"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel", "promise", "sync"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "sync-statusbar-custom",
+            "displayName": "Formsyncing with custom statusbar-messages",
+            "description": "This example shows how to set up a form that syncs through a Promise-synclayer.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node-base", "gallery-itsaformmodel", "gallery-itsaviewmodelpanel", "gallery-itsaslider"],
+            "tags"    : ["gallery-itsaviewmodelpanel", "model", "formelement", "form", "template", "itsaformmodel", "promise", "sync", "custom"],
             "hideTableOfContents": true
         }
     ]

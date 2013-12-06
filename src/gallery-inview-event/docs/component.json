@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-inview-event",
+    "displayName": "Gallery: gallery-inview-event",
+    "description": "This gallery module adds synthetic event \"inview\" for each node. This event is fired when the node is scrolled into view for the first time. This can be used to lazy load section of your page when section comes in the view.",
+    "author"     : [ "markandey" ],
+    "use"        : [ "gallery-inview-event" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

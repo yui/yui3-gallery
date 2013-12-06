@@ -1,0 +1,10 @@
+{
+    "builds": {
+        "gallery-soon": {
+            "jsfiles": [
+                "soon.js"
+            ]
+        }
+    },
+    "name": "gallery-soon"
+}

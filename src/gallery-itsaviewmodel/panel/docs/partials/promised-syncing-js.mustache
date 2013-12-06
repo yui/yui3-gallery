@@ -94,7 +94,7 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slide
     artist.after('error', function(e) {
         var errorsource = e.src;
         if (errorsource==='submit') {
-            Y.alert('Simulated error submitting', e.src+' failed --> '+e.error, {type: 'error'});
+            Y.showError('Simulated error submitting', e.src+' failed --> '+e.error);
         }
     });
 

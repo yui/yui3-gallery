@@ -1,20 +1,20 @@
 YUI.add('gallery-nav-assist', function (Y, NAME) {
 
-/*global Y */
 /*jslint nomen:true, indent: 4, regexp: true, white: true, sloppy: true */
 
     /**
-     * Provides easy and custom navigation across various dom elements using keyboard.
+     * @module gallery-nav-assist
+     * @main gallery-nav-assist
+     * @requires node, event, event-key, gallery-event-nav-keys, base, anim
+     * @description Provides easy and custom navigation across various dom elements using keyboard.
      * shift + d : disables navigation assist
      * shift + e : enables navigation assist
      * shift + arrow: moves across different containers registered (nodes in the registry)
      * arrow down, arrow up, arrow right, arrow left:  moves across different elements within a container
-     *
-     * @module gallery-navigate
      */
 
-    /*CONSTANTS*/
-    var NAVASSIST = Y.namespace('Navigation-Assist'),
+    //-- CONSTANTS ------------------------------------------------------------
+    var NAVASSIST = Y.namespace('Navigation-Assistant'),
 
         SHIFT_RIGHT_ARROW = 'down:39+shift',
 
@@ -25,6 +25,22 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         KEY_TO_ENABLE_NAVIGATION = 'down:69+shift',
 
         KEYCODE_FOR_ESC = 'down:27',
+
+        KEYCODE_FOR_SHIFT = 16,
+
+        KEYCODE_FOR_SPECIAL_KEY = KEYCODE_FOR_SHIFT,
+
+        KEYCODE_FOR_ARROW_RIGHT = 39,
+
+        KEYCODE_FOR_ARROW_LEFT = 37,
+
+        KEYCODE_FOR_ARROW_UP = 38,
+
+        KEYCODE_FOR_ARROW_DOWN = 40,
+
+        NEXT_CHILD_PARAM = 'next',
+
+        BASE_KEY_EVENT = 'keydown',
 
         _NEXT = true,
 
@@ -40,11 +56,15 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
 
         DEFAULT_SMOOTH_SCROLL = false,
 
+        DEFAULT_NAV_POINTER = false,
+
+        DEFAULT_STYLE_CONTAINER = false,
+
         DURATION_OF_SMOOTHSCROLL = 0.3,
 
         ANIMTYPE_FOR_SMOOTHSCROLL = Y.Easing.easeIn;
 
-    NAVASSIST = function (config) {
+    NAVASSIST = function () {
         NAVASSIST.superclass.constructor.apply(this, arguments);
     };
 
@@ -53,46 +73,107 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
      * @type String
      * @default Navigation Assistant
      */
-    NAVASSIST.NAME = "Navigation Assistant";
+    NAVASSIST.NAME = 'Navigation Assistant';
 
     /**
-     * "Associative Array", used to define the set of attributes
+     * @property ATTRS
+     * @type {Object}
+     * Defines the set of attributes
      * added by this class. The name of the attribute is the key,
      * and the object literal value acts as the configuration
      * object passed to addAttrs
      */
     NAVASSIST.ATTRS = {
 
+        /**
+         * Holds the index value of the container currently active in registry
+         * @attribute activeRegistryIndex
+         * @type integer
+         * @default null
+         */
         activeRegistryIndex: {
             value: null
         },
 
-        registry: [],
+        /**
+         * Holds an array of objects, which holds information about a container eg: {node:String, isHorizontal: Boolean, rank: Integer}
+         * @attribute registry
+         * @type Array
+         * @default []
+         */
+        registry: {
+            value: []
+        },
 
+        /**
+         * when set to true in the config will splash information about which container is active
+         * @attribute debug
+         * @optional
+         * @type Boolean
+         * @default null
+         */
         debug: {
             value: null
         },
 
+        /**
+         * when set to true in the config will style the container with a default style (when the container gets selected)
+         * @attribute styleContainer
+         * @type Boolean
+         * @default false
+         */
         styleContainer: {
-            value: false
+            value: DEFAULT_STYLE_CONTAINER
         },
 
+        /**
+         * when set to true in the config will scroll to the container which is selected in a smooth scroll animation
+         * @attribute scrollAnim
+         * @type Boolean
+         * @default false
+         */
         scrollAnim: {
             value: DEFAULT_SMOOTH_SCROLL
         },
 
-        setNavPointer: {
-            value: true
+        /**
+         * when set to true in the config will add a marker ¶ to child element recognize that focus is on a certain child element
+         * @attribute navPointer
+         * @type Boolean
+         * @default false
+         */
+        navPointer: {
+            value: DEFAULT_NAV_POINTER
         },
 
+        /**
+         * Array containing a string of selectors indicating the dom elements if are selected by nav assist
+         * have to disable nav-assist events for eg: ignore: ['#inputsearchbox'], will disable arrow-right event when this is selected
+         * @attribute ignore
+         * @type Array
+         * @default null
+         */
         ignore: {
-            value: false
+            value: null
         }
     };
-
+    /**
+     * @class NAVASSIST
+     * @extends Base
+     */
     Y.NAVASSIST = Y.extend(NAVASSIST, Y.Base, {
-
         /**
+         * @property container
+         * @type {Object}
+         * @default "{
+            node: null,
+            containerId: null,
+            children: [],
+            childIndexInFocus: -1,
+            activeLink: null,
+            isHorizontal: false,
+            pullToTop: false
+         }"
          * centralized approach where this container object is the source of truth and is the only thing that is activated.
          * Container Object with:
          * - navigable container id: string
@@ -119,16 +200,19 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
             isHorizontal: false,
             /*mode of alignment of the children: horizontal , or by default it is vertical*/
 
-            pullToTop: false /*meant for slideshow kind of containers where you want child elements to scroll to top than being centered*/
+            pullToTop: false
+            /*meant for slideshow kind of containers where you want child elements to scroll to top than being centered*/
         },
 
         /**
-         * Tasks MyClass needs to perform during
+         * @private
+         * @method initializer
+         * @description Tasks MyClass needs to perform during
          * the init() lifecycle phase
-         * Function for initialization, it defaults registers the node provided
-         *      in the constructor, during object creation.
+         * Function for initialization, it default registers the node provided
+         * in the constructor, during object creation.
          */
-        initializer: function (cfg) {
+        initializer: function () {
             var self = this,
                 i = 0,
                 igNode,
@@ -137,20 +221,20 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
             this.reorderRegistryByRank();
             this.activateContainerNavigation();
 
-            Y.one('body').on("key", function (e) {
+            Y.one('body').on('key', function () {
                 self.disableAllNavigation();
             }, KEY_TO_DISABLE_NAVIGATION);
 
-            Y.one('body').on("key", function (e) {
+            Y.one('body').on('key', function () {
                 self.enableAllNavigation();
             }, KEY_TO_ENABLE_NAVIGATION);
 
-            Y.one('body').on("key", function (e) {
+            Y.one('body').on('key', function () {
                 //remove focus and give back native behaviour on pressing esc
                 self.deactivateRegisteredContainer();
             }, KEYCODE_FOR_ESC);
 
-            /*Deactivate navigation for all the nodes under ignore*/
+            // Deactivate navigation for all the nodes under ignore
 
             function deact() {
                 self.deactivateRegisteredContainer();
@@ -170,24 +254,19 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         },
 
         /**
-         * Function that enables all navigation on the page using keyboard
+         * @Description Function that enables all navigation on the page using keyboard
          * @method enableAllNavigation
          * @protected
-         * @param : object :config{node:string,rank:integer,isHorizontal:boolean}
-         *
          */
         enableAllNavigation: function () {
-            if (this.activateContainerNavigation()) {
-                this.makeNextContainerNavigable(_NEXT);
-            }
+            this.activateContainerNavigation();
+            this.makeNextContainerNavigable(_NEXT);
         },
 
         /**
-         * Function that disables all navigation on the page using keyboard
+         * @Description Function that disables all navigation on the page using keyboard
          * @method disableAllNavigation
          * @protected
-         * @param
-         *
          */
         disableAllNavigation: function () {
             this.deactivateRegisteredContainer(); //will also disable child events
@@ -195,11 +274,15 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         },
 
         /**
-         * Function that will register a new container-node to the registry
+         * @Description Function that will register a new container-node to the registry
          * @method register
-         * @protected
-         * @param : object :config{node:string,rank:integer,isHorizontal:boolean}
-         *
+         * @chainable
+         * @public
+         * @return {Self}
+         * @param {Object} [config] config for node being registered eg:{node:string,rank:integer,isHorizontal:boolean}
+              @param {String} [config.node] The selector string (can be an id) to find the node on the dom
+              @param {Integer} [config.rank] The Rank that specifies the order of container selection
+              @param {Boolean} [config.isHorizontal] that specifies if the container has child elements horizontally aligned
          */
         register: function (config) {
 
@@ -211,14 +294,17 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                 registry[registry.length] = regEntry;
                 this.reorderRegistryByRank();
             }
+            return this;
         },
 
         /**
          * Function that will remove an entry from the registry containing registered containers for navigation
          * @method deRegister
-         * @protected
-         * @param object config{node:string}
-         *
+         * @chainable
+         * @public
+         * @param {Object} [config] config contains the object with node and the {node: '#id'}  '#id' can also be a css selector
+         *      @param {String} [config.node] The selector string (can be an id) to find the node on the dom
+         * @return {Self}
          */
         deRegister: function (config) {
 
@@ -230,20 +316,21 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
 
             if (node) {
                 index = this.isNodeInRegistry(nodeId);
+                //index can be 0 so don make a boolean check
                 if (index !== null) {
                     registry.splice(index, 1);
                     this.reorderRegistryByRank();
                 }
             }
+            return this;
         },
 
         /**
          * Function that will return the index of the registry item if the nodeId exists in the registry
          * @method isNodeInRegistry
          * @protected
-         * @param : object :config{node:string}
-         * @return : index if nodeId exists inside registry else returns null if not found in registry
-         *
+         * @param {String} Selector String that was used to register a container node
+         * @return {String} index of the node id in the registry if nodeId exists inside registry else returns null if not found in registry
          */
         isNodeInRegistry: function (nodeId) {
             var i = 0,
@@ -255,7 +342,6 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                     return i;
                 }
             }
-
             return null;
         },
 
@@ -263,8 +349,6 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * Function that will reorder  and updates the registry by Rank provided with the node
          * @method reorderRegistryByRank
          * @protected
-         * @param
-         *
          */
         reorderRegistryByRank: function () {
 
@@ -314,8 +398,6 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * Function that enables navigation on certain key-combination press
          * @method activateContainerNavigation
          * @protected
-         * @param
-         * @return true of activation was successful else returns false.
          */
         activateContainerNavigation: function () {
 
@@ -323,29 +405,39 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                 parent = Y.one('body');
 
             if (Y.ContainerSubscr) {
-                return false;
+                this.deactivateContainerNavigation();
             }
 
             Y.ContainerSubscr = {};
 
-            Y.ContainerSubscr.next = parent.on("key", function (e) {
+            // Register Shift + right arrow key navigation
+            Y.ContainerSubscr.next = parent.on('key', function () {
                 self.makeNextContainerNavigable(_NEXT);
-
             }, SHIFT_RIGHT_ARROW);
 
-            Y.ContainerSubscr.prev = parent.on("key", function (e) {
+            // Register Shift + left arrow key navigation
+            Y.ContainerSubscr.prev = parent.on('key', function () {
                 self.makeNextContainerNavigable(_PREV);
             }, SHIFT_LEFT_ARROW);
 
-            return true;
+            // Update special key strokes on down and up
+            parent.on('keyup', function (e) {
+                if (e.charCode === KEYCODE_FOR_SPECIAL_KEY) {
+                   self._specialKeyDown = false;
+                }
+            });
+
+            parent.on('keydown', function (e) {
+                if (e.charCode === KEYCODE_FOR_SPECIAL_KEY) {
+                   self._specialKeyDown = true;
+                }
+            });
         },
 
         /**
          * Function that detaches all subscriptions for moving across containers
          * @method deactivateContainerNavigation
          * @protected
-         * @param
-         *
          */
         deactivateContainerNavigation: function () {
             var subscription,
@@ -367,26 +459,41 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * Function that chooses the next registered container makes it navigable
          * @method makeNextContainerNavigable
          * @protected
-         * @param : {boolean} shiftRight (true: get next container, false: get previous container)
-         * @return {Mixed} The sanitized transition.
+         * @param {Boolean} shiftRight (true: get next container, false: get previous container)
          * Note: this is a single function used to navigate left and right depending on the boolean @param 1
          */
         makeNextContainerNavigable: function (shiftRight) {
             var registry = this.get('registry'),
                 index,
                 node,
+                containerClass,
+                elementClass,
                 isHorizontal = false,
                 pullToTop = false;
 
             if (registry.length > 0) {
                 index = this.getNextRegistryIndex(shiftRight);
+
                 if (index !== null && registry[index]) {
                     node = Y.one(registry[index].node);
+
                     if (node) {
                         isHorizontal = registry[index].isHorizontal || false;
                         pullToTop = registry[index].pullToTop || false;
+                        containerClass = CLASS_DEFAULT_CONTAINER_HIGHLIGHT;
+                        elementClass = CLASS_DEFAULT_CHILD_HIGHLIGHT;
+
+                        if (registry[index].containerStyle) {
+                            containerClass = registry[index].containerStyle.className || CLASS_DEFAULT_CONTAINER_HIGHLIGHT;
+                        }
+
+                        if (registry[index].elemStyle) {
+                            elementClass = registry[index].elemStyle.className || CLASS_DEFAULT_CHILD_HIGHLIGHT;
+                        }
+
                         this.deactivateRegisteredContainer();
-                        this.registerContainer(node, (index + 1), isHorizontal, pullToTop); //+1 , since rank starts from 1 to length of registry
+                        this.registerContainer(node, (index + 1), isHorizontal, pullToTop, containerClass, elementClass);
+                        //+1 , since rank starts from 1 to length of registry
                         this.initiateNavigation();
                     } else {
                         this.deactivateRegisteredContainer();
@@ -399,7 +506,7 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * Function that chooses the next or previous registered container index to be made navigable from registry
          * @method getNextRegistryIndex
          * @protected
-         * @param : {boolean} isRightKeyPressed (true: get next container index, false: get previous container index)
+         * @param {Boolean} isRightKeyPressed (true: get next container index, false: get previous container index)
          * @return {integer} valid registered container index
          */
         getNextRegistryIndex: function (isRightKeyPressed) {
@@ -408,18 +515,20 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                 regIndex = null,
                 i = 0;
 
-            if (registry && registry.length > 0) { //if no registry exists then nothing was registered
+            if (registry && registry.length > 0) { // if no registry exists then nothing was registered
                 for (i = 0; i < registry.length; i += 1) {
                     regLen = registry.length;
                     regIndex = this.get('activeRegistryIndex');
 
-                    if (regIndex === null) { //case when we start first time
+                    if (regIndex === null) { // case when we start first time
                         regIndex = 0;
                     } else {
                         regIndex = isRightKeyPressed ? (regIndex + 1) : (regIndex - 1);
+
                         if (regIndex >= regLen) {
                             regIndex = 0;
                         }
+
                         if (regIndex < 0) {
                             regIndex = regLen - 1;
                         }
@@ -431,8 +540,10 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                         return regIndex;
                     }
                 }
+
                 return regIndex;
             }
+
             return null;
         },
 
@@ -440,36 +551,40 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * Function to update the Class's container object with the children of current container/node being registered.
          * @method registerContainer
          * @protected
-         * @param : {Node} node (Container to be scanned for its children )
-         * @param2 {Rank} integer [1-maxlenofregistry]
-         * @param3 {isHorizontal} Boolean : if true then container is rendered horizontally else otherwise
-         * param4 {pullToTop} Boolean: if true then the child will not be centered instead pulled to the top of the page.
+         * @param {Object} node (Container to be scanned for its children )
+         * @param {Integer} rank [1 -  maxlenofregistry] signifies priority for containers to be selected
+         * @param {Boolean} isHorizontal : if true then container is rendered horizontally else otherwise
+         * @param {Boolean} pullToTop: if true then the child will not be centered instead pulled to the top of the page.
+         * @param {String} containerStyle custom class name for styling the container on being selected
+         * @param {String} elemStyle custom class name for styling the child element of the container on being selected
          */
-        registerContainer: function (node, rank, isHorizontal, pullToTop) {
+        registerContainer: function (node, rank, isHorizontal, pullToTop, containerStyle, elemStyle) {
             if (node) {
-                this.updateChildren(node, rank, isHorizontal, pullToTop); //will update node-container.children as array
+                this.updateChildren(node, rank, isHorizontal, pullToTop, containerStyle, elemStyle);
+                //will update node-container.children as array
             }
         },
 
         /**
         * @method updateChildren
         * @protected
-        * @param1 {Node} node  String representing the navigable containers id.
-        * @param2 {Rank} integer [1-maxlenofregistry]
-        * @param3 {isHorizontal} Boolean : if true then container is rendered horizontally else otherwise
-        * @param4 {pullToTop} Boolean: if true then the child will not be centered instead pulled to the top of the page.
-
+        * @param {Object} node  String representing the navigable containers id.
+        * @param {integer} rank [1-maxlenofregistry] signifies priority for containers to be selected
+        * @param {Boolean}  isHorizontal: if true then container is rendered horizontally else otherwise
+        * @param {Boolean} pullToTop if true then the child will not be centered instead pulled to the top of the page.
+        * @param {String} containerStyle custom class name for styling the container on being selected
+        * @param {String} elemStyle custom class name for styling the child element of the container on being selected
         * register the container that needs navigation
         * updates the container-object:
         *   - gets all the children of the @param node, and puts them in an array.
         *   - updates the container id if it has one else generates a dummy one.
         */
-        updateChildren: function (node, rank, isHorizontal, pullToTop) {
+        updateChildren: function (node, rank, isHorizontal, pullToTop, containerStyle, elemStyle) {
             var childrenObj = node.all('> *'),
                 children = [],
                 container = this.container;
 
-            childrenObj.each(function (child, i, parent) {
+            childrenObj.each(function (child, i) {
                 children[i] = child;
             });
 
@@ -479,15 +594,15 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
             container.node = node;
             container.children = children;
             container.containerId = node.generateID(); //generateID() returns existing node id or creates one if it doesnt exist
+            container.containerClass = containerStyle;
+            container.childClass = elemStyle;
 
         },
 
         /**
          * @method initiateNavigation
          * @protected
-         * make the children of the navigable container 'navigable'
-         * @param
-         *
+         * initiates navigation by activating registered container
          */
         initiateNavigation: function () {
             this.activateRegisteredContainer();
@@ -496,9 +611,7 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         /**
          * @method deactivateRegisteredContainer
          * @protected
-         * remove all subscriptions,css on the current navigable container and its children, reset Container object
-         * @param
-         *
+         * @Description Remove all subscriptions,css on the current navigable container and its children, reset Container object
          */
         deactivateRegisteredContainer: function () {
             this.killAllChildNavigationSubscription();
@@ -516,14 +629,14 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * @method removeHighlightonContainer
          * @protected
          * remove any CSS highlight on the current navigable container
-         * @param
-         *
          */
         removeHighlightonContainer: function () {
-            var container = this.container;
+            var container = this.container,
+                highlightClass;
 
             if (container && container.node) {
-                container.node.removeClass(CLASS_DEFAULT_CONTAINER_HIGHLIGHT);
+                highlightClass = this.container.containerClass || CLASS_DEFAULT_CONTAINER_HIGHLIGHT;
+                container.node.removeClass(highlightClass);
             }
         },
 
@@ -531,14 +644,14 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * @method highlightContainer
          * @protected
          * ADD CSS highlight on the current navigable container
-         * @param
-         *
          */
         highlightContainer: function () {
-            var container = this.container;
+            var container = this.container,
+                highlightClass;
 
             if (container && container.node) {
-                container.node.addClass(CLASS_DEFAULT_CONTAINER_HIGHLIGHT);
+                highlightClass = this.container.containerClass || CLASS_DEFAULT_CONTAINER_HIGHLIGHT;
+                container.node.addClass(highlightClass);
             }
         },
 
@@ -546,24 +659,21 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * @method removeHighlightonCurrentChild
          * @protected
          * remove any CSS highlight on the current container's children
-         * @param
-         *
          */
         removeHighlightonCurrentChild: function () {
             var container = this.container,
-                index = container.childIndexInFocus;
+                index = container.childIndexInFocus,
+                highlightClass = container.childClass || CLASS_DEFAULT_CHILD_HIGHLIGHT;
 
             if (index !== null && index !== -1) {
-                container.children[index].removeClass(CLASS_DEFAULT_CHILD_HIGHLIGHT);
+                container.children[index].removeClass(highlightClass);
             }
         },
 
         /**
          * @method resetRegistryIndex
          * @protected
-         * set the Attr:activeRegistryIndex to null
-         * @param
-         *
+         * set the Attribute activeRegistryIndex to null
          */
         resetRegistryIndex: function () {
             this.set('activeRegistryIndex', null);
@@ -573,8 +683,6 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * @method resetContainer
          * @protected
          * Reset the contents of the container object
-         * @param
-         *
          */
         resetContainer: function () {
             this.container = {
@@ -596,11 +704,9 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         },
 
         /**
+         * @description Detach all the subscriptions to the body
          * @method killAllChildNavigationSubscription
          * @protected
-         * Detach all the subscriptions to the body
-         * @param
-         *
          */
         killAllChildNavigationSubscription: function () {
             if (Y.BodySubscr) {
@@ -611,8 +717,10 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         /**
          * @method splash
          * @protected
-         * Splash a message onto the container: specifically its rank
-         *
+         * Splash a message onto the container: specifically its rank, mostly
+         * meant for debugging purpose and is shown only when debug flag is on
+         * @param {String} msg message to be splashed on screen
+         * @param {Array} pos [x,y] denotes the coordinate on the screen where the message has to be splashed
          */
         splash: function (msg, pos) {
             var ele = '<h1 style="font-size:3em;color:#444;position:fixed;-webkit-transform: rotate(-10deg);" id="_splash">' + msg + '</h1>',
@@ -620,7 +728,6 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                 body,
                 splash,
                 position = pos || [0, 0];
-
 
             splashnode = Y.one('#_splash');
             body = Y.one('body');
@@ -638,8 +745,6 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
          * @method activateRegisteredContainer
          * @protected
          * Add CSS highlight to new container, attach key event subscriptions for the container and simulate arrow-key-down
-         * @param
-         *
          */
         activateRegisteredContainer: function () {
             var container = this.container,
@@ -650,39 +755,146 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                 if (this.get('styleContainer')) {
                     this.highlightContainer();
                 }
-                /*splash coordinates*/
+                // splash coordinates
                 if (this.get('debug')) {
                     xy = [200, 200];
                     this.splash('Container now navigable:' + container.node.generateID(), xy);
                 }
             }
 
-            /** on KeyDown **/
             Y.BodySubscr = {};
+            Y.BodySubscr.keydown = Y.one('body').on(BASE_KEY_EVENT, Y.bind(this.navigateToNextChild, this));
+            Y.BodySubscr.keyup = Y.one('body').on(BASE_KEY_EVENT, Y.bind(this.navigateToPrevChild, this));
+            self.navigateToNextChild(NEXT_CHILD_PARAM);
+        },
 
-            if (container.isHorizontal) {
-                Y.BodySubscr.keyright = Y.one('body').on('right', Y.bind(this.onMyKeyDown, this));
-                /** ON KeyRight **/
-                Y.BodySubscr.keyleft = Y.one('body').on('left', Y.bind(this.onMyKeyUp, this));
+        /**
+         * @method isKeyChildNavigator
+         * @protected
+         * @param {Object} e eventFacade generated when a key is pressed
+         * @return {Boolean} returns true if the keypressed is either of arrow up, arrow right, arrow left or arrow down
+         * Function that checks the type of keyPress and returns true if its any of the
+         * child navigation keys for eg: arrow up, down right left
+         */
+        isKeyChildNavigator: function (e) {
+            if (e && (e.charCode === KEYCODE_FOR_ARROW_UP
+                || e.charCode === KEYCODE_FOR_ARROW_LEFT
+                || e.charCode === KEYCODE_FOR_ARROW_DOWN
+                || e.charCode === KEYCODE_FOR_ARROW_RIGHT)) {
+                return true;
+            }
 
-                self.onMyKeyDown();
-            } else {
-                Y.BodySubscr.keydown = Y.one('body').on('down', Y.bind(this.onMyKeyDown, this));
-                /** ON KeyUp **/
-                Y.BodySubscr.keyup = Y.one('body').on('up', Y.bind(this.onMyKeyUp, this));
+            return false;
+        },
 
-                // first time on selecting a container the first element should be selected
-                self.onMyKeyDown();
+        /**
+         * @method navigateToNextChild
+         * @protected
+         * @param {Object} e eventFacade generated when a key is pressed
+         * Function which on keyboard down key press, will focus/navigate to next child of the container registered
+         */
+        navigateToNextChild: function (e) {
+            var container = this.container,
+                childIndexInFocus,
+                newindex;
+
+            // Ignore any combination of navigation key with special keys
+            if (this.isKeyChildNavigator(e) && this._specialKeyDown) {
+                return;
+            }
+
+            // Make sure that, for horizontal containers, arrowkeyDOWN doesn't do anything
+            if (container) {
+                if (container.isHorizontal) {
+                    if (e.charCode === KEYCODE_FOR_ARROW_DOWN) {
+                        return;
+                    }
+                } else {
+                    if (e.charCode === KEYCODE_FOR_ARROW_RIGHT) {
+                        return;
+                    }
+                }
+            }
+
+            if (e === NEXT_CHILD_PARAM ||
+                    e.charCode === KEYCODE_FOR_ARROW_DOWN ||
+                    e.charCode === KEYCODE_FOR_ARROW_RIGHT) {
+
+                // To handle some edge case where we navigate back to 1st child on down key.
+                this.wasLastChild = false;
+
+                if (container) {
+                    if (Y.Lang.isObject(e)) {
+                        e.preventDefault();
+                    }
+
+                    childIndexInFocus = container.childIndexInFocus;
+                    newindex = this.getNextIndex(childIndexInFocus);
+                    container.childIndexInFocus = newindex;
+                    this.bringChildtoFocus(container.children[newindex]);
+
+                    if (this.get('navPointer')) {
+                        this.setNavPointer();
+                    }
+                }
+            }
+        },
+
+        /**
+         * @method navigateToPrevChild
+         * @protected
+         * @param {Object} e eventFacade generated when a key is pressed
+         * on keyboard up key press, will focus/navigate to previous child of the container registered
+         */
+        navigateToPrevChild: function (e) {
+            var container = this.container,
+                childIndexInFocus,
+                newindex;
+
+            // Ignore any combination of navigation key with special keys
+            if (this.isKeyChildNavigator(e) && this._specialKeyDown) {
+                return;
+            }
+
+            // Make sure that, for horizontal containers, arrowkeyup doesn't do
+            // anything, and non-horizontal containers arrow left doesn't do
+            // anything either...
+            if (container) {
+                if (container.isHorizontal) {
+                    if (e.charCode === KEYCODE_FOR_ARROW_UP) {
+                        return;
+                    }
+                } else {
+                    if (e.charCode === KEYCODE_FOR_ARROW_LEFT) {
+                        return;
+                    }
+                }
+            }
+
+            if (e === NEXT_CHILD_PARAM ||
+                    e.charCode === KEYCODE_FOR_ARROW_UP ||
+                    e.charCode === KEYCODE_FOR_ARROW_LEFT) {
+                if (container) {
+                    if (Y.Lang.isObject(e)) {
+                        e.preventDefault();
+                    }
+
+                    childIndexInFocus = container.childIndexInFocus;
+                    newindex = this.getPreviousIndex(childIndexInFocus);
+                    this.bringChildtoFocus(container.children[newindex]);
+                    container.childIndexInFocus = newindex;
+
+                    if (this.get('navPointer')) {
+                        this.setNavPointer();
+                    }
+                }
             }
         },
 
         /**
          * @method detachAllChildSubscriptions
          * @protected
-         * Function to detach navigation and all events needed to navigate within a container through the children
-         *
-         * @param none
-         *
+         * @Description Function to detach navigation and all events needed to navigate within a container through the children
          */
         detachAllChildSubscriptions: function () {
             var BodySubscr = Y.BodySubscr,
@@ -698,16 +910,32 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
             }
         },
 
+        /**
+         * @method removeNavPointer
+         * @protected
+         * Function to remove navpointer to the selected child element (navpointer
+         * is a marker that visually shows what child element is selected)
+         */
         removeNavPointer: function () {
             var class_navptr = '.' + CLASS_NAV_POINTER,
                 node = Y.one(class_navptr);
+
             if (node) {
                 node.remove();
             }
         },
 
+        /**
+         * @method setNavPointer
+         * @protected
+         * Function to set navpointer to the selected child element (navpointer is a marker that
+         * visually shows what child element is selected)
+         */
         setNavPointer: function () {
-            var n = Y.one('.' + CLASS_DEFAULT_CHILD_HIGHLIGHT);
+            var container = this.container,
+                highlightClass =  container.childClass || CLASS_DEFAULT_CHILD_HIGHLIGHT,
+                n = Y.one('.' + highlightClass);
+
             this.removeNavPointer();
 
             if (n) {
@@ -716,77 +944,30 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         },
 
         /**
-         * @method onMyKeyDown
+         * @destructor
          * @protected
-         * on keyboard down key press, will focus/navigate to next child of the container registered
-         */
-        onMyKeyDown: function (e) {
-            var container = this.container,
-                childIndexInFocus,
-                newindex;
-
-            this.wasLastChild = false; //for handling some edge case where on down key we navigate back to 1st child.
-
-            if (container) {
-                if (e) {
-                    e.preventDefault();
-                }
-                childIndexInFocus = container.childIndexInFocus;
-                newindex = this.getNextIndex(childIndexInFocus);
-                container.childIndexInFocus = newindex;
-                this.bringChildtoFocus(container.children[newindex]);
-                if (this.get('setNavPointer')) {
-                    this.setNavPointer();
-                }
-            }
-        },
-
-        /**
-         * @method onMyKeyUp
-         * @protected
-         * on keyboard up key press, will focus/navigate to next child of the container registered
-         */
-        onMyKeyUp: function (e) {
-            var container = this.container,
-                childIndexInFocus,
-                newindex;
-
-            if (container) {
-                if (e) {
-                    e.preventDefault();
-                }
-                childIndexInFocus = container.childIndexInFocus;
-                newindex = this.getPreviousIndex(childIndexInFocus);
-                this.bringChildtoFocus(container.children[newindex]);
-                container.childIndexInFocus = newindex;
-                if (this.get('setNavPointer')) {
-                    this.setNavPointer();
-                }
-            }
-        },
-
-        /**
-         * Tasks MyClass needs to perform during
-         *
-         * the destroy() lifecycle phase
+         * Function to destroy any object creations and event registerations
          */
         destructor: function () {
             if (this.anim) {
                 delete this.anim;
             }
+            this.disableAllNavigation();
+
         },
 
         /**
          * Function to get the next child index on key down event.
-         * @param :integer, previous child index (for eg: 0 means 1st child)
-         * @return: integer, the new child index to be navigated to or focused to.
+         * @param {Integer} childIndexInFocus previous child index (for eg: 0 means 1st child)
+         * @return {Integer} the new child index to be navigated to or focused to.
          */
         getNextIndex: function (childIndexInFocus) {
             var container = this.container,
-                numofChildren = container.children.length;
+                numofChildren = container.children.length,
+                highlightClass =  container.childClass || CLASS_DEFAULT_CHILD_HIGHLIGHT;
 
             if (childIndexInFocus !== -1) {
-                container.children[childIndexInFocus].removeClass(CLASS_DEFAULT_CHILD_HIGHLIGHT);
+                container.children[childIndexInFocus].removeClass(highlightClass);
             }
 
             if (childIndexInFocus === numofChildren - 1) {
@@ -803,15 +984,16 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
 
         /**
          * Function to retrieve the child-index previous to the @param1  on key up event.
-         * @param :integer, current child index in focus (for eg: 0 means 1st child)
-         * @return: integer, the new child index to be navigated to or focused to.
+         * @param {Integer} current child index in focus (for eg: 0 means 1st child)
+         * @return {Integer} the new child index to be navigated to or focused to.
          */
         getPreviousIndex: function (childIndexInFocus) {
             var container = this.container,
-                numofChildren = container.children.length;
+                numofChildren = container.children.length,
+                highlightClass = container.childClass || CLASS_DEFAULT_CHILD_HIGHLIGHT;
 
             if (childIndexInFocus >= 0 && container.children[childIndexInFocus]) {
-                container.children[childIndexInFocus].removeClass(CLASS_DEFAULT_CHILD_HIGHLIGHT);
+                container.children[childIndexInFocus].removeClass(highlightClass);
             }
 
             if (childIndexInFocus === 0) {
@@ -828,17 +1010,15 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
         },
 
         /**
+         * @method _scroll
+         * @private
          * Function to scroll the window by a certain y value
          * @param: y - integer, that represents the calculated height by which scroll should happen on Y axis on window object
-         *
          */
         _scroll: function (y) {
             if (!this.get('scrollAnim')) {
-
                 Y.config.win.scroll(0, y);
-
             } else {
-
                 if (this.anim) {
                     delete this.anim;
                 }
@@ -859,8 +1039,10 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
 
         /**
          * Function to adjust scrolling  child element which is in focus
-         * @param Node: DOM element(child node in focus of the navigable container)
-         * @return : Integer:amount to scroll to get the elem under focus to the center or to the top
+         * @method scrollTo
+         * @protected
+         * @param {Object} DOM element(child node in focus of the navigable container)
+         * @return {Integer} amount to scroll to get the elem under focus to the center or to the top
          */
         scrollTo: function (Node) {
             var childsY = Node.getY(),
@@ -890,17 +1072,22 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
             if (Y.DOM.inViewportRegion(Y.Node.getDOMNode(Node), true, null)) {
                 return null;
             }
+
             return amounttoScroll;
         },
 
         /**
-         * Function to get the new child into focus and right scroll
-         * @param: Node, representing the child that should gain focus.
+         * Function to get the new child into focus and scroll to the child
+         * @method bringChildtoFocus
+         * @protected
+         * @param {Object} Node representing the child that should gain focus.
          */
         bringChildtoFocus: function (childInFocus) {
             // Related to getting the first link on reaching a child node
             var link = childInFocus,
                 linkArr = [],
+                container = this.container,
+                highlightClass = container.childClass || CLASS_DEFAULT_CHILD_HIGHLIGHT,
                 amounttoScroll;
 
             if (childInFocus) {
@@ -909,8 +1096,7 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                 return;
             }
 
-            childInFocus.addClass(CLASS_DEFAULT_CHILD_HIGHLIGHT).focus();
-
+            childInFocus.addClass(highlightClass).focus();
             if (this.anim && this.anim.get('running')) {
                 this.anim.pause();
             }
@@ -924,7 +1110,7 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
                 this.activeLink.blur();
             }
 
-            link.each(function (child, i, parent) {
+            link.each(function (child, i) {
                 linkArr[i] = child;
             });
 
@@ -936,16 +1122,4 @@ YUI.add('gallery-nav-assist', function (Y, NAME) {
     });
 
 
-}, 'gallery-2013.09.18-18-49', {
-    "requires": [
-        "node",
-        "event",
-        "event-key",
-        "gallery-event-nav-keys",
-        "base",
-        "anim"
-    ],
-    "supersedes": [],
-    "optional": [],
-    "skinnable": false
-});
+}, '@VERSION@', {"requires": ["node", "event", "event-key", "gallery-event-nav-keys", "base", "anim"], "skinnable": false});

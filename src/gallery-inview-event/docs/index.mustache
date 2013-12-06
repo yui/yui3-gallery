@@ -1,0 +1,24 @@
+<div class="intro">
+    <p>
+    {{description}}
+    </p>
+</div>
+
+<h2>Description</h2>
+
+<p>{{description}}</p>
+
+<p>Using this event is simple, just add event handler for 'inview' for your node. and module will fire when node is in view. </p>
+<p>
+<strong>Note:</strong> To keep the module simple, this triggers only with vertical scrolling of page. horizontal scroll is not taken into account. All the node which appear without any scroll (scrollTop = 0 ) will be triggered immediately. 
+</p>
+
+```
+YUI().use('gallery-inview-event',function (Y) {                
+        Y.one('#mynode').on('inview',function(){
+        	Y.one('#mynode').setContent('this node is now in view');
+        });
+});
+```
+
+

@@ -1,0 +1,11 @@
+{
+    "name": "gallerycss-itsa-dialog",
+    "builds": {
+        "gallerycss-itsa-dialog": {
+            "cssfiles": [
+                "css/dialog-ie7.css",
+                "css/dialog.css"
+            ]
+        }
+    }
+}

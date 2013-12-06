@@ -1,4 +1,5 @@
 {
+    ready: 'спреман',
     enterrightformat : 'унесите прави формат',
     entervalidnumber : 'унесете важећи број',
     inputrequired : 'Улаз је потребно',

@@ -16,6 +16,9 @@
     text-decoration: underline;
 }
 
+form [data-focusable="true"] {
+    outline: none;
+}
 /**
  * Address styling not present in IE 7/8/9, Firefox 3, and Safari 4.
  * Modern browser will hide even without this css
@@ -145,7 +148,17 @@ span.formatlabel + input[type="checkbox"][data-formelement="true"] {
     margin-left: 0.5em;
 }
 
-.pure-form-aligned label[data-widgetlabel="true"] + div.itsa-widget-parent {
+.pure-form label.switchedlabel,
+.pure-form .pure-controls label.switchedlabel,
+.pure-form .pure-control-group label.switchedlabel,
+.pure-form-stacked .pure-controls label.switchedlabel,
+.pure-form-stacked .pure-control-group label.switchedlabel,
+.pure-form-aligned .pure-controls label.switchedlabel,
+.pure-form-aligned .pure-control-group label.switchedlabel {
+    text-align: left;
+}
+
+.pure-form-aligned .pure-control-group label[data-widgetlabel="true"] + div.itsa-widget-parent {
     margin-left: 0;
 }
 
@@ -232,4 +245,37 @@ span.formatlabel + input[type="checkbox"][data-formelement="true"] {
 .pure-form input:focus[data-valid="false"]:focus,
 .pure-form textarea:focus[data-valid="false"]:focus {
     border-color: #e9322d;
+}
+
+/* overrule pure-css its button:focus weight and set it darkener*/
+.pure-form .pure-button-hover,
+.pure-form .pure-button:hover,
+.pure-form .pure-button:focus {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#33000000',GradientType=0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0.05)), to(rgba(0,0,0, 0.20)));
+    background-image: -webkit-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.20));
+    background-image: -moz-linear-gradient(top, rgba(0,0,0, 0.05) 0%, rgba(0,0,0, 0.20));
+    background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.20));
+    background-image: linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.20));
+}
+
+.itsabutton-bordered.pure-button:active,
+.itsabutton-bordered.pure-button.pure-button-active,
+.pure-button.itsabutton-bordered.pure-button:active,
+.pure-button.itsabutton-bordered.pure-button.pure-button-active,
+.pure-button.pure-button-active:focus,
+.pure-button-hover:focus,
+.pure-button:hover:focus,
+.pure-button-active:focus,
+.pure-button:active:focus,
+.pure-button-active:hover:focus,
+.pure-button-hover:active:focus,
+.pure-button:active:hover:focus,
+.pure-button-hover.pure-button-active:focus {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#4d000000',GradientType=0);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(transparent), color-stop(40%, rgba(0,0,0, 0.05)), to(rgba(0,0,0, 0.30)));
+    background-image: -webkit-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.30));
+    background-image: -moz-linear-gradient(top, rgba(0,0,0, 0.05) 0%, rgba(0,0,0, 0.30));
+    background-image: -o-linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.30));
+    background-image: linear-gradient(transparent, rgba(0,0,0, 0.05) 40%, rgba(0,0,0, 0.30));
 }

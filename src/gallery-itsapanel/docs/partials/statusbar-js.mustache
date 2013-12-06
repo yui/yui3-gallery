@@ -1,0 +1,23 @@
+YUI(yuiconfig).use('gallery-itsapanel', 'gallerycss-itsa-base', 'gallerycss-itsa-edit', function(Y) {
+    var panel, message;
+
+    message = 'You are seeing a simple <b>Y.ITSAPanel</b>-instance with a statusbar and the footer'+
+              ' placed on top.<br>The buttons aren\'t made active.';
+    panel = new Y.ITSAPanel({
+        centered: true,
+        title: 'Information',
+        footer: '<button class="pure-button itsabutton-onlyicon itsabutton-bordered">'+
+                        '<i class="itsaicon-edit-copy"></i></button>'+
+                '<button class="pure-button itsabutton-onlyicon itsabutton-bordered">'+
+                        '<i class="itsaicon-edit-cut"></i></button>'+
+                '<button class="pure-button itsabutton-onlyicon itsabutton-bordered">'+
+                        '<i class="itsaicon-edit-paste"></i></button>',
+        footerOnTop: true,
+        statusBar: true,
+        body: message,
+        dragable: true
+    }).render();
+
+    panel.show();
+
+});

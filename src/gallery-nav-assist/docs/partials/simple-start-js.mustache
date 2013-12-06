@@ -1,0 +1,28 @@
+    var nav = new Y.NAVASSIST({
+            styleContainer: true,
+            debug: true,
+            registry: [
+            {
+                node: '#eastrail',
+                rank: 2
+            },
+            {
+                node: '#header',
+                rank: 1
+            },
+            {
+                node: '#sidebar',
+                rank: 3
+            },
+            {
+                node: '#navtabs',
+                rank: 4,
+                isHorizontal: true
+            },
+            {
+                node: '#tabs',
+                rank: 5
+            }
+            ],
+            ignore: ['#testinputbox']
+        });

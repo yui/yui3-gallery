@@ -1,7 +1,7 @@
 {
     "name": "yui-pathogen-encoder",
     "description": "Enables pathogen encoding in YUI Loader",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "author": "Eugene Kashida",
     "contributors": [
         "Caridy Patiño"

@@ -1,4 +1,5 @@
 {
+    ready: 'Fertig',
     enterrightformat : 'bitte geben Sie das richtige Format',
     entervalidnumber : 'bitte geben Sie eine gültige Zahl',
     inputrequired : 'Eingabe ist erforderlich',

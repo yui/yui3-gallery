@@ -446,6 +446,9 @@
       All elements are rendered with full <a href="http://purecss.io/">Purecss</a>-compatability!
   </p>
 
+<h2>Know issues</h2>
+When subscribing to the after-event in the bubble chain - f.i. view.after('*:submit', function(e){}) - the event-object has no response-values. This only happens up the bubblechain. However, you <u>can use e.promise.then</b> and get your response in the fulfilled callback.
+
 <h2>licence</h2>
 
 Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />

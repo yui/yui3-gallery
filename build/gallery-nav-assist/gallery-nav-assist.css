@@ -14,18 +14,21 @@
 }
 
 .default-child-highlight .nav-pointer {
-    color: #666 !important;
-    display: inline !important;
-    font: 20px arial, sans-serif !important;
-    left: -25px !important;
-    position: absolute !important;
-    top: 2px !important;
-    z-index: 2 !important;
+    color: #666;
+    display: inline;
+    font: 20px arial, sans-serif;
+    left: -25px;
+    position: absolute;
+    top: 2px;
+    z-index: 2;
 }
 
 .cramDownOpacity{
     opacity:0;
     -webkit-transition:opacity 5.7s ease-out;
+    -o-transition:opacity 5.7s ease-out;
+    -moz-transition:opacity 5.7s ease-out;
+    transition:opacity 5.7s ease-out;
     z-index:1000;
     background:#ccc;
     border-radius:10px;

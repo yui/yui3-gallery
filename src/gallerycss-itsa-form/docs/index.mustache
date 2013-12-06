@@ -10,6 +10,7 @@
        <b>Notes:</b>
        <ul>
            <li>You need to load this module <u>together with 'gallerycss-itsa-base'</u> in order to work.</li>
+           <li>Iconfonts modules are heavyweight: it is advisable to load them asynchroniously in a separate Y.use() statement to prevent delay in the YUI-callback. See the examples.</li>
            <li>These fonticons always need to be declared inside a <u>i-element</u>, see the examples.</li>
            <li>Special thanks to <a href='http://fontello.com' target='_blank'>http://fontello.com</a> by which means this gallerymodule is created</li>
        </ul>
@@ -32,6 +33,7 @@
         <li><i class="itsaicon-form-destroy"></i><code>itsaicon-form-destroy</code></li>
         <li><i class="itsaicon-form-ignore"></i><code>itsaicon-form-ignore</code></li>
         <li><i class="itsaicon-form-load"></i><code>itsaicon-form-load</code></li>
+        <li><i class="itsaicon-form-loading"></i><code>itsaicon-form-loading</code></li>
         <li><i class="itsaicon-form-no"></i><code>itsaicon-form-no</code></li>
         <li><i class="itsaicon-form-ok"></i><code>itsaicon-form-ok</code></li>
         <li><i class="itsaicon-form-remove"></i><code>itsaicon-form-remove</code></li>
@@ -41,6 +43,10 @@
         <li><i class="itsaicon-form-submit"></i><code>itsaicon-form-submit</code></li>
         <li><i class="itsaicon-form-yes"></i><code>itsaicon-form-yes</code></li>
     </ul>
+    <p>
+      <b>Note1 :</b><code>itsaicon-form-load</code> is the same icon as <code>itsaicon-form-loading</code>, with the exeption that <code>itsaicon-form-loading</code> has <i>!important</i> active. This way you can use <code>itsaicon-form-loading</code> to force this icon to be present.<br />
+      <b>Note2 :</b><code>itsaicon-form-loading</code> does not work in IE7.
+    </p>
 
 <h2>Usage</h2>
 ```html
@@ -48,10 +54,11 @@
 ```
 
 ```js
-YUI(yuiconfig).use('gallerycss-itsa-form', function(Y) {
-    // by loading the module, the css will be available
-    // be aware of the load-delay: if you use progressive enhancement, you might want
-    // the nodes to be invisible until loading has finished.
+YUI(yuiconfig).use('yui-base', function(Y) {
+    Y.use('gallerycss-itsa-base', 'gallerycss-itsa-form'); // now the iconfonts will load asynchroniously
+
+    // code can be executed
+    ...
 
 });
 ```
@@ -94,17 +101,23 @@ button {
 
 <h3>Iconbuttons without text</h3>
 ```html
-<button class="itsabutton-onlyicon"><i class="itsaicon-form-ok"></i></button>
+<button class="itsabutton-onlyicon">
+  <i class="itsaicon-form-ok"></i>
+</button>
 ```
 
 <h3>Textbuttons with a left-icon</h3>
 ```html
-<button class="itsabutton-iconleft"><i class="itsaicon-form-ok"></i>Ok</button>
+<button class="itsabutton-iconleft">
+  <i class="itsaicon-form-ok"></i>Ok
+</button>
 ```
 
 <h3>Textbuttons with a right-icon</h3>
 ```html
-<button class="itsabutton-iconright">Ok<i class="itsaicon-form-ok"></i></button>
+<button class="itsabutton-iconright">
+  Ok<i class="itsaicon-form-ok"></i>
+</button>
 ```
 
 <h3>Rounded buttons with a border</h3>
@@ -112,7 +125,9 @@ button {
         Bordered and rounded buttons can be made by using special button-classes supllied by <a href='http://gallerydocs.itsasbreuk.nl/gallerycss-itsa-base/index.html' target='_blank>'>gallerycss-itsa-base</a>.
     </p>
 ```html
-<button class="pure-button itsabutton-bordered itsabutton-rounded"><i class="itsaicon-form-ok"></i></button>
+<button class="pure-button itsabutton-bordered itsabutton-rounded">
+  <i class="itsaicon-form-ok"></i>
+</button>
 ```
 <h2>Licences</h2>
     Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />

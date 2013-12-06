@@ -222,6 +222,12 @@ YUI().use('gallery-itsaviewmodel', function(Y) {
     <p>
         Validation is done through <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaformmodel/">Y.ITSAFormModel</a>, which supplies very nice and easy validationmethods. When validation fails, Y.ITSAViewModel will take care of refocussing to the first item whose validation failed.
     </p>
+
+<h2>Adding statusbar</h2>
+    <p>
+        By setting the attribute <code>statusBar</code> true, you create a statusbar inside the view. See <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsastatusbar/">Y.ITSAStatusbar</a>. The statusbar is targeted by the bounded model automaticly. You can also target specific messages to this statusbar by using targeting the messages to the view-instance, f.e.: <code>Y.alert('oops, something went wrong', {target: yourViewModel});</code>.
+    </p>
+
 <h2>About templating</h2>
     <p>
         When using Y.ITSAFormModel as 'model' and 'editable' is set true, be aware that all property-values are <u>html-strings</u>. Should you templating with micro-templates, to render the UI-elements you need to use

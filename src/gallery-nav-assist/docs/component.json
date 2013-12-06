@@ -1,11 +1,19 @@
 {
     "name"       : "gallery-nav-assist",
     "displayName": "Gallery: gallery-nav-assist",
-    "description": "Facilitates keyboard navigation",
-    "author"     : [ "jlecomte" ],
+    "description": "Facilitates navigation between different components (dom elements) of an html page via keyboard arrow keys",
+    "author"     : [ "jlecomte", "chetanankola" ],
     "use"        : [ "gallery-nav-assist" ],
 
-    "tags": [ "gallery" ],
+    "tags": [ "gallery", "accessibility", "keyboard", "navigation", "widget" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "nav-assist-simple",
+            "displayName": "A Simple Example",
+            "description": "Demonstrates the use of nav-assist on a page with simple set of DOM containers",
+            "modules"    : [ "nav-assist" ],
+            "tags"       : [ "navigation", "simple" ]
+        }
+    ]
 }

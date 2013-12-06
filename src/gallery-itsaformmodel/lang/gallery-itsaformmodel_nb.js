@@ -1,4 +1,5 @@
 {
+    ready: 'Klar',
     enterrightformat : 'skriv inn riktig format',
     entervalidnumber : 'skriv inn et gyldig nummer',
     inputrequired : 'Input er nødvendig',

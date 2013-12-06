@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
+<style type="text/css">
+{{>forms-statusbar-css}}
+</style>
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+</div>
+
+{{>forms-statusbar-html}}
+
+<h2>Code</h2>
+```
+{{>forms-statusbar-js}}
+```
+
+<h2>Complete Example Source</h2>
+```
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<style type="text/css">
+{{>forms-statusbar-css}}
+</style>
+
+<body>
+
+{{>forms-statusbar-html}}
+
+<script>
+{{>forms-statusbar-js}}
+</script>
+
+</body>
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>forms-statusbar-js}}
+</script>

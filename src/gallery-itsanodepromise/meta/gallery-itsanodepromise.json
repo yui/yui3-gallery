@@ -3,9 +3,13 @@
         "requires": [
             "yui-base",
             "yui-later",
+            "event-base",
+            "event-custom",
             "node-base",
+            "node-style",
             "timers",
-            "promise"
+            "promise",
+            "gallery-itsamodulesloadedpromise"
         ]
     }
 }

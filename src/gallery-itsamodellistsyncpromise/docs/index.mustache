@@ -58,7 +58,7 @@
     </p>
 
 <h2>Be aware of usage error-event</h2>
-    <p>Only <code>load</code> and </code>loadappend</code> use the ModelList's synclayer. The other methods are batching Model's sync methods. Therefore, ModelList will only fire the <code>error</code>-event itself when an error occurs during these syncmethods. This means, you need to listen for errors in this way:
+    <p>Only <code>load</code> and <code>loadappend</code> use the ModelList's synclayer. The other methods are batching Model's sync methods. Therefore, ModelList will only fire the <code>error</code>-event itself when an error occurs during these syncmethods. This means, you need to listen for errors in this way:
         <ul>
             <li><code>load</code> --> listen to modellist.on('error')</li>
             <li><code>loadappend</code> --> listen to modellist.on('error')</li>
@@ -97,7 +97,8 @@ YUI(yuiconfig).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'b
 
     pielist.load();
 
-});```
+});
+```
 <h3>Loading Model-data with ModelList.loadPromise()</h3>
 ```js
 YUI({gallery: 'gallery-2013.05.29-23-38'}).use('model', 'model-list', 'gallery-itsamodellistsyncpromise', 'base-build', function(Y) {

@@ -31,7 +31,10 @@ var ITSAPanel,
     ITSA = 'itsa-',
     GALLERYCSS_ITSA = GALLERY + 'css-' + ITSA,
     PLUGIN_TIMEOUT = 4000, // timeout within the plugin of itsatabkeymanager should be loaded
+    ERROR = 'error',
+    WARN = 'warn',
     DESTROYED = 'destroyed',
+    CONTAINER = 'container',
     STRING = 'string',
     BOOLEAN = 'boolean',
     VISIBLE = 'visible',
@@ -53,19 +56,35 @@ var ITSAPanel,
     CHANGE = 'Change',
     FLOATED = 'floated',
     BODY = 'body',
-    HEADERVIEW = 'header'+VIEW,
-    BODYVIEW = BODY+VIEW,
+    HEADER = 'header',
     FOOTER = 'footer',
+    HEADERVIEW = HEADER+VIEW,
+    BODYVIEW = BODY+VIEW,
     FOOTERVIEW = FOOTER+VIEW,
     NUMBER = 'number',
     OFFSETHEIGHT = 'offsetHeight',
     OFFSETWIDTH = 'offsetWidth',
+    ITSALABEL = ITSA+'label-',
+    ITSABUTTON = ITSA+BUTTON+'-',
+    UPPERCASE = 'uppercase',
+    LOWERCASE = 'lowercase',
+    CAPITALIZE = 'capitalize',
+    ITSALABEL_UPPERCASE = ITSALABEL+UPPERCASE,
+    ITSALABEL_LOWERCASE = ITSALABEL+LOWERCASE,
+    ITSALABEL_CAPITALIZE = ITSALABEL+CAPITALIZE,
+    ITSABUTTON_UPPERCASE = ITSABUTTON+UPPERCASE,
+    ITSABUTTON_LOWERCASE = ITSABUTTON+LOWERCASE,
+    ITSABUTTON_CAPITALIZE = ITSABUTTON+CAPITALIZE,
+    TRANSFORM = 'Transform',
+    BUTTONTRANSFORM = BUTTON+TRANSFORM,
+    LABELTRANSFORM = 'label'+TRANSFORM,
     MODAL = 'modal',
     PX = 'px',
     TITLE = 'title',
     RIGHT = 'Right',
     TITLERIGHT = TITLE+RIGHT,
     CENTERED = 'centered',
+    READYTEXT = 'readyText',
     DRAG = 'drag',
     DRAGABLE = DRAG+'able',
     RESIZE = 'resize',
@@ -80,22 +99,38 @@ var ITSAPanel,
     HIDDENSECTIONCLASS = ITSA+HIDDEN+'section',
     INLINECLASS = ITSA+'inline'+PANEL,
     CLASSNAME = 'className',
-    PANELHEADERCLASS = ITSA+'panelheader',
-    PANELBODYCLASS = ITSA+'panelbody',
-    PANELFOOTERCLASS = ITSA+'panelfooter',
-    PANELHEADERINNERCLASS = ITSA+'panelinnerheader',
-    PANELBODYINNERCLASS = ITSA+'panelinnerbody',
-    PANELFOOTERINNERCLASS = ITSA+'panelinnerfooter',
+    PANELHEADERCLASS = ITSA+PANEL+HEADER,
+    PANELBODYCLASS = ITSA+PANEL+BODY,
+    PANELFOOTERCLASS = ITSA+PANEL+FOOTER,
+    PANELSTATUSBARCLASS = ITSA+PANEL+'statusbar',
+    INNER = 'inner',
+    PANELHEADERINNERCLASS = ITSA+PANEL+INNER+HEADER,
+    PANELBODYINNERCLASS = ITSA+PANEL+INNER+BODY,
+    PANELFOOTERINNERCLASS = ITSA+PANEL+INNER+FOOTER,
     ITSA_PANELCLOSEBTN = ITSA+PANEL+'closebtn',
+    PURE_BUTTON_DISABLED = 'pure-'+BUTTON+'-disabled',
     HEADERTEMPLATE = '<div class="'+PANELHEADERCLASS+'"><div class="'+PANELHEADERINNERCLASS+'"></div></div>',
     BODYTEMPLATE = '<div class="'+PANELBODYCLASS+'"><div class="'+PANELBODYINNERCLASS+'"></div></div>',
     FOOTERTEMPLATE = '<div class="'+PANELFOOTERCLASS+'"><div class="'+PANELFOOTERINNERCLASS+'"></div></div>',
+    STATUSBARTEMPLATE = '<div class="'+PANELSTATUSBARCLASS+'"></div>',
     CLOSE_BUTTON = '<'+BUTTON+' class="pure-'+BUTTON+' itsa'+BUTTON+'-onlyicon '+ITSA_PANELCLOSEBTN+'" data-focusable="true"><i class="itsaicon-form-abort"></i></'+BUTTON+'>',
     DEFAULT_HEADERVIEW = '<div>{title}</div><div class="itsa-rightalign">{titleRight}</div>',
     DEFAULT_BODYVIEW = '{body}',
-    DEFAULT_FOOTERVIEW = '<div>{footer}</div><div class="itsa-rightalign">{footerRight}</div>',
+    DEFAULT_FOOTERVIEW = '<div>{'+FOOTER+'}</div><div class="itsa-rightalign">{footerRight}</div>',
     CLICK = 'click',
     CLICK_OUTSIDE = CLICK+'outside',
+    FOOTERONTOP = FOOTER+'OnTop',
+    STATUSBAR = 'statusBar',
+    STATUSBARTRANSFORM = STATUSBAR+TRANSFORM,
+    CLASS_FOOTERONTOP = ITSA+PANEL+FOOTER+'-top',
+    SIZE_SMALL = 'small',
+    SIZE_MEDIUM = 'medium',
+    SIZE_LARGE = 'large',
+    FOOTERSIZE = 'footerSize',
+    SIZE = 'size',
+    FOOTERSIZE_SMALL_CLASS = ITSA+PANEL+FOOTER+SIZE_SMALL+SIZE,
+    FOOTERSIZE_MEDIUM_CLASS = ITSA+PANEL+FOOTER+SIZE_MEDIUM+SIZE,
+    FOOTERSIZE_LARGE_CLASS = ITSA+PANEL+FOOTER+SIZE_LARGE+SIZE,
     VALUE = 'value',
     /**
       * Fired when a UI-elemnt needs to focus to the next element (in case of editable view).
@@ -172,7 +207,7 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
         /**
          * Template of the bodysection. Can be either a Y.Lang.sub-template or a Y.View.<br />
          * When a String-template is set, the template can make use of {body}, which will automaticly be replaced by the body-attribute under the hood.<br />
-         * When an Y.View instance is set, the View's 'container' will be bound to the bodysection-div automaticly and the View's render() method
+         * When an Y.View instance is set, the View's CONTAINER will be bound to the bodysection-div automaticly and the View's render() method
          * will be executed to fill the section with content. If the View is designed well, the panel-content will automaticly be updated when needed.
          *
          * @attribute bodyView
@@ -184,6 +219,25 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             value: null,
             validator: function(val) {
                 return (val===null) || (typeof val===STRING) || (val instanceof Y.View);
+            }
+        },
+        /**
+         * CSS text-transform of all buttons. Should be:
+         * <ul>
+         *   <li>null --> leave as it is</li>
+         *   <li>uppercase</li>
+         *   <li>lowercase</li>
+         *   <li>capitalize --> First character uppercase, the rest lowercase</li>
+         * </ul>
+         *
+         * @attribute buttonTransform
+         * @default null
+         * @type {String}
+         */
+        buttonTransform: {
+            value: null,
+            validator: function(val) {
+                return (val===null) || (val===UPPERCASE) || (val===LOWERCASE) || (val===CAPITALIZE);
             }
         },
         /**
@@ -254,6 +308,20 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             }
         },
         /**
+         * Whether to place the footer above the body-section. This is handy if you want to use the footar as a buttonbar which should be placed on top.
+         *
+         * @attribute footerOnTop
+         * @type Boolean
+         * @default false
+         * @since 0.3
+        */
+        footerOnTop : {
+            value: false,
+            validator: function(val) {
+                return (typeof val===BOOLEAN);
+            }
+        },
+        /**
          * Right side of the footer of the view. Is only used when 'footerView' is not set: if so then footerView takes care of the footersection-content.
          *
          * @attribute footerRight
@@ -268,9 +336,23 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             }
         },
         /**
+         * The size (height) of the footersection and its buttons.
+         *
+         * @attribute footerSize
+         * @type {String} 'small' || 'medium' || 'large'
+         * @default medium
+         * @since 0.2
+        */
+        footerSize : {
+            value: SIZE_MEDIUM,
+            validator: function(val) {
+                return (val===SIZE_SMALL) || (val===SIZE_MEDIUM) || (val===SIZE_LARGE);
+            }
+        },
+        /**
          * Template of the footersection. Can be either a Y.Lang.sub-template or a Y.View.<br />
          * When a String-template is set, the template can make use of {footer} and {footerRight}, which will automaticly be replaced by the footer and footerRight-attributes under the hood.<br />
-         * When an Y.View instance is set, the View's 'container' will be bound to the footersection-div automaticly and the View's render() method
+         * When an Y.View instance is set, the View's CONTAINER will be bound to the footersection-div automaticly and the View's render() method
          * will be executed to fill the section with content. If the View is designed well, the panel-content will automaticly be updated when needed.
          *
          * @attribute footerView
@@ -315,7 +397,7 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
          * Template of the headersection. Can be either a Y.Lang.sub-template or a Y.View.<br />
          * When a String-template is set, the template can make use of {title} and {titleRight}, which will automaticly be replaced by the title and titleRight-attributes
          * under the hood. You need {titleRight} if you want the 'close-button' to render when the attribute 'titleRight' keeps undefined.<br />
-         * When an Y.View instance is set, the View's 'container' will be bound to the headersection-div automaticly and the View's render() method
+         * When an Y.View instance is set, the View's CONTAINER will be bound to the headersection-div automaticly and the View's render() method
          * will be executed to fill the section with content. If the View is designed well, the panel-content will automaticly be updated when needed.
          *
          * @attribute headerView
@@ -344,6 +426,25 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             },
             getter: '_getHeight',
             setter: '_setHeight'
+        },
+        /**
+         * CSS text-transform of all label-elements. Should be:
+         * <ul>
+         *   <li>null --> leave as it is</li>
+         *   <li>uppercase</li>
+         *   <li>lowercase</li>
+         *   <li>capitalize --> First character uppercase, the rest lowercase</li>
+         * </ul>
+         *
+         * @attribute labelTransform
+         * @default null
+         * @type {String}
+         */
+        labelTransform: {
+            value: null,
+            validator: function(val) {
+                return (val===null) || (val===UPPERCASE) || (val===LOWERCASE) || (val===CAPITALIZE);
+            }
         },
         /**
          * Maximum height of the Panel: need to be numbers: due to its construction no percented sizes are allowed.
@@ -408,6 +509,19 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             setter: '_setMinWidth'
         },
         /**
+         * Passes through to the statusbar (if available).
+         *
+         * @attribute readyText
+         * @type {String|null}
+         * @default null
+         */
+        readyText : {
+            value: null,
+            validator: function(val) {
+                return (val===null) || (typeof val===STRING);
+            }
+        },
+        /**
          * @attribute resizable
          * @description Boolean indicating whether or not the Panel is resizable.
          * This will be constrained between minWidth/minHeight and maxWidth/MaxHeight (if set).
@@ -418,6 +532,39 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             value: false,
             validator: function(val) {
                 return (typeof val===BOOLEAN);
+            }
+        },
+        /**
+         * Whether the panel should have a statusbar (Y.ITSAStatusbar). Targeting should be done directly at the panel-instance. See gallery-itsastatusbar.
+         *
+         * @attribute statusBar
+         * @type Boolean
+         * @default false
+         * @since 0.3
+        */
+        statusBar : {
+            value: false,
+            validator: function(val) {
+                return (typeof val===BOOLEAN);
+            }
+        },
+        /**
+         * CSS text-transform of the statusbar. Passes through to the statisbar (if available):
+         * <ul>
+         *   <li>null --> leave as it is</li>
+         *   <li>uppercase</li>
+         *   <li>lowercase</li>
+         *   <li>capitalize --> First character uppercase, the rest lowercase</li>
+         * </ul>
+         *
+         * @attribute statusBarTransform
+         * @default lowercase
+         * @type {String}
+         */
+        statusBarTransform: {
+            value: LOWERCASE,
+            validator: function(val) {
+                return (val===null) || (val===UPPERCASE) || (val===LOWERCASE) || (val===CAPITALIZE);
             }
         },
         /**
@@ -433,6 +580,35 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             value: true,
             validator: function(v){
                 return (typeof v === BOOLEAN);
+            }
+        },
+        /**
+         * Title of the view (headercontent). Is only used when 'headerView' is not set: if so then headerView takes care of the headersection-content.
+         *
+         * @attribute title
+         * @type String
+         * @default null
+         * @since 0.1
+        */
+        title : {
+            value: null,
+            validator: function(val) {
+                return (val===null) || (typeof val===STRING);
+            }
+        },
+        /**
+         * Right side of the title of the view (headercontent). Is only used when 'headerView' is not set: if so then headerView takes care of the headersection-content.
+         * When not set, then Y.ITSAPanel will render a 'closebutton' in this area.
+         *
+         * @attribute titleRight
+         * @type String
+         * @default null
+         * @since 0.1
+        */
+        titleRight : {
+            value: null,
+            validator: function(val) {
+                return (val===null) || (typeof val===STRING);
             }
         },
         /**
@@ -464,38 +640,19 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
             },
             getter: '_getWidth',
             setter: '_setWidth'
-        },
-        /**
-         * Title of the view (headercontent). Is only used when 'headerView' is not set: if so then headerView takes care of the headersection-content.
-         *
-         * @attribute title
-         * @type String
-         * @default null
-         * @since 0.1
-        */
-        title : {
-            value: null,
-            validator: function(val) {
-                return (val===null) || (typeof val===STRING);
-            }
-        },
-        /**
-         * Right side of the title of the view (headercontent). Is only used when 'headerView' is not set: if so then headerView takes care of the headersection-content.
-         * When not set, then Y.ITSAPanel will render a 'closebutton' in this area.
-         *
-         * @attribute titleRight
-         * @type String
-         * @default null
-         * @since 0.1
-        */
-        titleRight : {
-            value: null,
-            validator: function(val) {
-                return (val===null) || (typeof val===STRING);
-            }
         }
     }
 });
+
+/**
+ * Backup to the previous focussed node, before modal panels instances are shown
+ * @property _prevFocussed
+ * @protected
+ * @private
+ * @type {Y.Node}
+ * @since 0.1
+*/
+ITSAPanel.prototype._prevFocussed = null;
 
 /**
  * @method initializer
@@ -504,12 +661,18 @@ ITSAPanel = Y.ITSAPanel = Y.Base.create('itsapanel', Y.Widget, [
 */
 ITSAPanel.prototype.initializer = function() {
     var instance = this,
+        visible = instance.get(VISIBLE),
         boundingBox = instance.get(BOUNDINGBOX),
+        footerOnTop = instance.get(FOOTERONTOP),
+        footerSize = instance.get(FOOTERSIZE),
         className = instance.get(CLASSNAME);
 
     Y.log('initializer ', 'info', 'ITSAPanel');
     // asynchroniously loading fonticons:
     Y.use(GALLERYCSS_ITSA+'base', GALLERYCSS_ITSA+'form');
+
+    // make it posible to start with transistions
+    instance._showTransition = new Y.Promise(function (resolve) { resolve(); });
 
     // publishing event 'button:hide'
     instance.publish(
@@ -526,6 +689,24 @@ ITSAPanel.prototype.initializer = function() {
         {
             defaultFn: Y.bind(instance.hide, instance),
             emitFacade: true
+        }
+    );
+
+    // publishing event 'error'
+    instance.publish(
+        ERROR,
+        {
+            emitFacade: true,
+            broadcast: 1
+        }
+    );
+
+    // publishing event 'error'
+    instance.publish(
+        WARN,
+        {
+            emitFacade: true,
+            broadcast: 1
         }
     );
 
@@ -552,8 +733,15 @@ ITSAPanel.prototype.initializer = function() {
     boundingBox.toggleClass(INLINECLASS, !instance.get(FLOATED));
     boundingBox.toggleClass(STYLEDPANELCLASS, instance.get(STYLED));
     boundingBox.toggleClass(FOCUSED_CLASS, instance.get(FOCUSED));
+/*jshint expr:true */
+    (footerSize===SIZE_SMALL) && boundingBox.addClass(FOOTERSIZE_SMALL_CLASS);
+    (footerSize===SIZE_MEDIUM) && boundingBox.addClass(FOOTERSIZE_MEDIUM_CLASS);
+    (footerSize===SIZE_LARGE) && boundingBox.addClass(FOOTERSIZE_LARGE_CLASS);
+/*jshint expr:false */
     // hide boundingBox by default and maybe inhide when rendered --> otherwise there might be a flicker effect when resetting its height
     boundingBox.addClass(HIDDENPANELCLASS);
+    instance._setButtonTransform(instance.get(BUTTONTRANSFORM));
+    instance._setLabelTransform(instance.get(LABELTRANSFORM));
     // publishing event 'focusnext'
     instance.publish(
         FOCUS_NEXT,
@@ -563,11 +751,23 @@ ITSAPanel.prototype.initializer = function() {
         }
     );
 /*jshint expr:true */
-    instance.get(VISIBLE) && instance.get(CONTENTBOX).addClass(FOCUSED_CLASS); // to make tabkeymanager work
+    visible && instance.get(CONTENTBOX).addClass(FOCUSED_CLASS); // to make tabkeymanager work
     className && boundingBox.addClass(className);
-    instance.renderPromise().then(
+    footerOnTop && boundingBox.addClass(CLASS_FOOTERONTOP);
+    instance._statusbarReady = new Y.Promise(function (resolve) {
+        instance._resolveStatusbarReady = resolve; // so we can resolve it from the outside
+    });
+
+    instance.readyPromise().then(
         function() {
-            instance.get(VISIBLE) && boundingBox.removeClass(HIDDENPANELCLASS);
+            boundingBox.setStyle('opacity', visible ? 1 : 0); // to make transition work right away
+            if (visible) {
+                boundingBox.removeClass(HIDDENPANELCLASS);
+                if (instance.get(MODAL)) {
+                    instance._getTabkeyManagerNode();
+                    instance.focus();
+                }
+            }
         }
     );
 /*jshint expr:false */
@@ -606,7 +806,6 @@ ITSAPanel.prototype.bindUI = function() {
 
     instance._setFocusManager();
 
-
 /*jshint expr:true */
     instance.get(CLOSABLEBYESCAPE) && (instance._escapeHandler=Y.on(
                                                 KEYDOWN,
@@ -631,17 +830,100 @@ ITSAPanel.prototype.bindUI = function() {
     eventhandlers.push(
         instance.after(VISIBLE+CHANGE, function(e) {
             Y.log('aftersubscriptor '+VISIBLE+CHANGE, 'info', 'ITSAPanel');
-            var visible = e.newVal;
-            boundingBox.toggleClass(HIDDENPANELCLASS, !visible);
+            var visible = e.newVal,
+                modal = instance.get(MODAL),
+                transname = e.transname,
+                transconfig = e.transconfig,
+                prevFocussed;
+            instance.readyPromise().then( // not too soon, the statusbar might not be rendered
+                function() {
+                    if (transconfig) {
+                        if (visible) {
+                            // be sure you don't transition while previous is busy
+                            instance._showTransition.then(
+                                function() {
+                                    boundingBox.toggleClass(HIDDENPANELCLASS, false);
+                                    instance._showTransition = boundingBox.showPromise(transname, transconfig);
+                                }
+                            );
+                        }
+                        else {
+                            instance._showTransition.then(
+                                function() {
+                                    instance._showTransition = boundingBox.hidePromise(transname, transconfig).then(
+                                        function() {
+                                            boundingBox.toggleClass(HIDDENPANELCLASS, true);
+                                        }
+                                    );
+                                }
+                            );
+                        }
+                    }
+                    else {
+                        instance._showTransition.then(
+                            function() {
+                                boundingBox.setStyle('opacity', visible ? 1 : 0); // for future transitions
+                                boundingBox.toggleClass(HIDDENPANELCLASS, !visible);
+                            }
+                        );
+                    }
+                }
+            );
             contentBox.toggleClass(FOCUSED_CLASS, visible); // to make tabkeymanager work
             if (visible) {
 /*jshint expr:true */
-                (instance.get(MODAL) || instance.get('focusOnShow')) && instance.focus();
+                instance._prevFocussed || (modal && instance._getTabkeyManagerNode());
+                // Cautious: also need to blur first, or you might miss the focusChange-event !
+                if (modal || instance.get('focusOnShow')) {
+                    // must make it asynchronous, because otherwise the eventqueue regains focus to the panel
+
+                    Y.soon(function() {
+                        instance.blur();
+                        instance.focus();
+                    });
+                }
 /*jshint expr:true */
             }
             else {
                 instance.blur();
+                if (modal && (prevFocussed=instance._prevFocussed)) {
+                    // must make it asynchronous, because otherwise the eventqueue regains focus to the panel
+                    Y.soon(function() {
+                        prevFocussed.addClass(FOCUSED_CLASS);
+/*jshint expr:true */
+                        prevFocussed.itsatabkeymanager._retrieveFocus();
+/*jshint expr:false */
+                        instance._prevFocussed = null;
+                    });
+                }
             }
+        })
+    );
+
+    eventhandlers.push(
+        instance.after(LABELTRANSFORM+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+LABELTRANSFORM+CHANGE, 'info', 'ITSAPanel');
+            instance._setLabelTransform(e.newVal);
+        })
+    );
+
+    eventhandlers.push(
+        instance.after(BUTTONTRANSFORM+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+BUTTONTRANSFORM+CHANGE, 'info', 'ITSAPanel');
+            instance._setButtonTransform(e.newVal);
+        })
+    );
+
+    eventhandlers.push(
+        instance.after(FOOTERSIZE+CHANGE, function(e) {
+            Y.log('aftersubscriptor '+FOOTERSIZE+CHANGE, 'info', 'ITSAPanel');
+            var footerSize = e.newVal;
+            boundingBox.addClass(FOOTERSIZE_SMALL_CLASS, (footerSize===SIZE_SMALL));
+            boundingBox.addClass(FOOTERSIZE_MEDIUM_CLASS, (footerSize===SIZE_MEDIUM));
+            boundingBox.addClass(FOOTERSIZE_LARGE_CLASS, (footerSize===SIZE_LARGE));
+/*jshint expr:true */
+            instance.get(FOOTERONTOP) ? instance._adjustPaddingTop() : instance._adjustPaddingBottom();
+/*jshint expr:false */
         })
     );
 
@@ -706,7 +988,7 @@ ITSAPanel.prototype.bindUI = function() {
             function() {
             Y.log('aftersubscriptor '+arguments[0].type, 'info', 'ITSAPanel');
 /*jshint expr:true */
-                instance.get(CENTERED) && instance.centered();
+                instance.get(CENTERED) && instance[CENTERED]();
 /*jshint expr:false */
             }
         )
@@ -718,9 +1000,19 @@ ITSAPanel.prototype.bindUI = function() {
             [HEADERVIEW+CHANGE, BODYVIEW+CHANGE, FOOTERVIEW+CHANGE],
             function (ev) {
             Y.log('aftersubscriptor '+ev.type, 'info', 'ITSAPanel');
+                var type = ev.type,
+                    newVal = ev.newVal,
+                    prevVal = ev.prevVal,
+                    split = type.split(':'),
+                    subtype = split[1] || split[0],
+                    hideFooter;
+                if (subtype===FOOTERVIEW+CHANGE) {
+                    hideFooter = !newVal && !instance.get(FOOTER) && !instance.get(FOOTER+RIGHT);
+                    instance._footercont.toggleClass(HIDDENSECTIONCLASS, hideFooter);
+                }
     /*jshint expr:true */
-                (ev.prevVal instanceof Y.View) && ev.prevVal.removeTarget(instance);
-                (ev.newVal instanceof Y.View) && (!instance._partOfMultiView || (ev.type===BODYVIEW+CHANGE)) && ev.newVal.addTarget(instance);
+                (prevVal instanceof Y.View) && prevVal.removeTarget(instance);
+                (newVal instanceof Y.View) && (!instance._partOfMultiView || (subtype===BODYVIEW+CHANGE)) && newVal.addTarget(instance);
     /*jshint expr:false */
             }
         )
@@ -734,12 +1026,12 @@ ITSAPanel.prototype.bindUI = function() {
                     container, footercont;
                 // BECAUSE we do not have a promise yet that tells when all formelements are definitely rendered on the screen,
                 // we need to timeout
-                Y.log('aftersubscriptor *:viewrendered', 'info', 'ITSA-ViewModelPanel');
+                Y.log('aftersubscriptor *:viewrendered', 'info', 'ITSAPanel');
                 if (footerView) {
                     footercont = instance._footercont;
-                    container = footerView.get('container');
+                    container = footerView.get(CONTAINER);
                     footercont.toggleClass('itsa-inlinefooter', true);
-                    container = footerView.get('container');
+                    container = footerView.get(CONTAINER);
                     container.setStyle('paddingLeft', '1.2em');
                     footercont.setStyle('overflow', 'visible');
                     // reset previous width, otherwise the width keeps expanding
@@ -750,6 +1042,8 @@ ITSAPanel.prototype.bindUI = function() {
                     footercont.setStyle('overflow', '');
                     container.setStyle('paddingLeft', '');
                 }
+                instance._adjustPaddingTop();
+                instance._adjustPaddingBottom();
                 Y.later(250, null, function() {
                     contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
                         function(itsatabkeymanager) {
@@ -773,8 +1067,8 @@ ITSAPanel.prototype.bindUI = function() {
 
     eventhandlers.push(
         instance.after(
-            [TITLE+CHANGE, FOOTER+RIGHT+CHANGE],
-            Y.bind(instance._renderFooter, instance)
+            [TITLE+CHANGE, TITLE+RIGHT+CHANGE],
+            Y.bind(instance._renderHeader, instance)
         )
     );
 
@@ -802,9 +1096,57 @@ ITSAPanel.prototype.bindUI = function() {
     );
 
     eventhandlers.push(
+        instance.after(
+            FOOTERONTOP+CHANGE,
+            function(e) {
+                Y.log('aftersubscriptor '+e.type, 'info', 'ITSAPanel');
+                var onTop = e.newVal;
+                boundingBox.toggleClass(CLASS_FOOTERONTOP, onTop);
+/*jshint expr:true */
+                instance._itsastatusbar && instance._footercont.setStyle('bottom', onTop ? '' : (instance._statusbar.get(OFFSETHEIGHT)+'px'));
+/*jshint expr:false */
+                instance._adjustPaddingTop();
+                instance._adjustPaddingBottom();
+            }
+        )
+    );
+
+    eventhandlers.push(
+        instance.on(
+            STATUSBAR+CHANGE,
+            Y.bind(instance._renderStatusBar, instance)
+        )
+    );
+
+    eventhandlers.push(
+        instance.on(
+            READYTEXT+CHANGE,
+            function(e) {
+                Y.log('onsubscriptor '+e.type, 'info', 'ITSAPanel');
+/*jshint expr:true */
+                instance._itsastatusbar && instance._itsastatusbar.set(READYTEXT, e.newVal);
+/*jshint expr:false */
+            }
+        )
+    );
+
+    eventhandlers.push(
+        instance.on(
+            STATUSBARTRANSFORM+CHANGE,
+            function(e) {
+                Y.log('onsubscriptor '+e.type, 'info', 'ITSAPanel');
+/*jshint expr:true */
+                instance._itsastatusbar && instance._itsastatusbar.set('text'+TRANSFORM, e.newVal);
+/*jshint expr:false */
+            }
+        )
+    );
+
+    eventhandlers.push(
         instance.on(
             [TITLE+CHANGE, TITLERIGHT+CHANGE, CLOSEBUTTON+CHANGE],
             function(e) {
+                Y.log('onsubscriptor '+e.type, 'info', 'ITSAPanel');
                 var value = e.newVal,
                     types = e.type.split(':'),
                     type = types[types.length-1],
@@ -813,6 +1155,7 @@ ITSAPanel.prototype.bindUI = function() {
                     closeButton = (type===CLOSEBUTTON+CHANGE) ? value : instance.get(CLOSEBUTTON),
                     headerView = instance.get(HEADERVIEW);
                 if (!headerView || (typeof headerView===STRING)) {
+//                    instance._header.empty();
                     instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? (closeButton ? CLOSE_BUTTON : '') : titleRight)}));
                 }
             }
@@ -856,8 +1199,12 @@ ITSAPanel.prototype.bindUI = function() {
         instance._header.delegate(
             CLICK,
             function(e) {
-                Y.log('delegatesubscriptor panelheader delegated to itsaclosebtn', 'info', 'ITSAPanel');
-                instance.fire(BUTTON_HIDE_EVENT, {buttonNode: e.target});
+                Y.log('header onsubscriptor '+e.type, 'info', 'ITSAPanel');
+                var button = e.target;
+                if (!button.hasClass(PURE_BUTTON_DISABLED)) {
+                    Y.log('delegatesubscriptor panelheader delegated to itsaclosebtn', 'info', 'ITSAPanel');
+                    instance.fire(BUTTON_HIDE_EVENT, {buttonNode: e.target});
+                }
             },
             '.'+ITSA_PANELCLOSEBTN
         )
@@ -883,41 +1230,93 @@ ITSAPanel.prototype.bindUI = function() {
     );
 
     eventhandlers.push(
-        boundingBox.on(CLICK, function() {
+        boundingBox.after(CLICK, function() {
             Y.log('onsubscriptor boundingBox.click', 'info', 'ITSAPanel');
-            instance.focus();
+            // NEED to check visibility! the panel might have been hidden by now
+            // always blur --> when 'just' do focus, then there is no focusChange-event
+        /*jshint expr:true */
+            if (instance.get(VISIBLE)) {
+                // must make it asynchronous, because otherwise the eventqueue regains focus to the panel
+                Y.soon(function() {
+                    instance.blur();
+                    instance.focus();
+                });
+            }
+        /*jshint expr:false */
         })
     );
 
     eventhandlers.push(
-        boundingBox.on(CLICK_OUTSIDE, function() {
+        boundingBox.after(CLICK_OUTSIDE, function() {
             Y.log('onsubscriptor '+CLICK_OUTSIDE, 'info', 'ITSAPanel');
-            instance.blur();
+            // must make it asynchronous, because otherwise the eventqueue regains focus to the panel
+            Y.soon(function() {
+                // always blur --> when 'just' do focus, then there is no focusChange-event
+                instance.blur();
+/*jshint expr:true */
+                // NEED to check visibility! the panel might have been hidden by now
+                instance.get(VISIBLE) && instance.get(MODAL) && instance.focus();
+/*jshint expr:false */
+            });
         })
     );
 
     eventhandlers.push(
         instance.after(FOCUSED+CHANGE, function(e) {
-            Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModelPanel');
+            Y.log('aftersubscriptor '+e.type, 'info', 'ITSAPanel');
             var focusclassed = e.newVal && instance.get(VISIBLE);
-            instance.get(CONTENTBOX).toggleClass(FOCUSED_CLASS, focusclassed);
+            contentBox.toggleClass(FOCUSED_CLASS, focusclassed);
         /*jshint expr:true */
             focusclassed && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
                 function(itsatabkeymanager) {
-                    itsatabkeymanager._retreiveFocus();
+                    // NEED to check visibility! the panel might have been hidden by now
+                    instance.get(VISIBLE) && itsatabkeymanager._retrieveFocus();
                 }
             );
         /*jshint expr:false */
         })
     );
 
-    eventhandlers.push(
-        instance.after('*:viewrendered', function() {
-            Y.log('aftersubscriptor *:viewrendered', 'info', 'ITSAPanel');
-            instance._adjustPaddingTop();
-            instance._adjustPaddingBottom();
-        })
-    );
+};
+
+/**
+ * Hides the Widget by setting the "visible" attribute to "false".<br>
+ * Optional hides the node using a transition.
+ * Animates the hiding of the node using either the default
+ * transition effect ('fadeOut'), or the given named effect.
+ * @method hide
+ * @param {String} name A named Transition effect to use as the show effect.
+ * @param {Object} config Options to use with the transition.
+ * @chainable
+ */
+ITSAPanel.prototype.hide = function(name, config) {
+/*jshint expr:true */
+    Lang.isObject(name) && (config=name) && (name=null);
+    config && (!config.duration || (config.duration===0)) && (config=null);
+/*jshint expr:false */
+    return this.set(VISIBLE, false, {transname: name, transconfig: config});
+},
+
+/**
+ * Shows the Widget by setting the "visible" attribute to "true".<br>
+ * Optional shows the node using a transition.
+ * Animates the showing of the node using either the default
+ * transition effect ('fadeIn'), or the given named effect.
+ * @method show
+ * @param {String} name A named Transition effect to use as the show effect.
+ * @param {Object} config Options to use with the transition.
+ * @chainable
+ */
+ITSAPanel.prototype.show = function(name, config) {
+/*jshint expr:true */
+    Lang.isObject(name) && (config=name) && (name=null);
+    config && (!config.duration || (config.duration===0)) && (config=null);
+/*jshint expr:false */
+    return this.set(VISIBLE, true, {transname: name, transconfig: config});
+},
+
+ITSAPanel.prototype.promiseBeforeReady = function() {
+    return this._statusbarReady;
 };
 
 /**
@@ -931,14 +1330,16 @@ ITSAPanel.prototype.renderUI = function() {
         contentBox = instance.get(CONTENTBOX);
 
     Y.log('renderUI ', 'info', 'ITSAPanel');
-    contentBox.setHTML(HEADERTEMPLATE+BODYTEMPLATE+FOOTERTEMPLATE);
+    contentBox.setHTML(HEADERTEMPLATE+BODYTEMPLATE+FOOTERTEMPLATE+STATUSBARTEMPLATE);
     instance._header = contentBox.one('.'+PANELHEADERINNERCLASS);
     instance._body = contentBox.one('.'+PANELBODYINNERCLASS);
     instance._footer = contentBox.one('.'+PANELFOOTERINNERCLASS);
     instance._footercont = contentBox.one('.'+PANELFOOTERCLASS);
+    instance._statusbar = contentBox.one('.'+PANELSTATUSBARCLASS);
     instance._renderHeader();
     instance._renderBody();
     instance._renderFooter();
+    instance._renderStatusBar();
 };
 
 /**
@@ -953,9 +1354,18 @@ ITSAPanel.prototype.destructor = function() {
         contentBox = instance.get(CONTENTBOX),
         headerView = instance.get(HEADERVIEW),
         bodyView = instance.get(BODYVIEW),
-        footerView = instance.get(FOOTERVIEW);
+        footerView = instance.get(FOOTERVIEW),
+        prevFocussed = instance._prevFocussed;
 
     Y.log('destructor ', 'info', 'ITSAPanel');
+    instance._destroyAllNodes = true; // making always destroy nodes,
+                                      // independent whether developer calls destroy(true) or destroy(false)
+    instance._clearEventhandlers();
+    instance.blur();
+    if (prevFocussed) {
+        prevFocussed.addClass(FOCUSED_CLASS);
+        prevFocussed.itsatabkeymanager._retrieveFocus();
+    }
 /*jshint expr:true */
     (headerView instanceof Y.View) && headerView.removeTarget(instance);
     (bodyView instanceof Y.View) && bodyView.removeTarget(instance);
@@ -965,7 +1375,6 @@ ITSAPanel.prototype.destructor = function() {
     contentBox.hasPlugin(ITSATABKEYMANAGER) && contentBox.unplug(ITSATABKEYMANAGER);
     (instance._escapeHandler && instance._escapeHandler.detach());
 /*jshint expr:false */
-    instance._clearEventhandlers();
 };
 
 /**
@@ -978,10 +1387,15 @@ ITSAPanel.prototype.destructor = function() {
  * @since 0.1
 */
 ITSAPanel.prototype._adjustPaddingBottom = function() {
-    var instance = this;
-
+    var instance = this,
+        newValue = 0;
     Y.log('_adjustPaddingBottom ', 'info', 'ITSAPanel');
-    instance.get(CONTENTBOX).setStyle(PADDINGBOTTOM, instance._footer.get(OFFSETHEIGHT)+PX);
+
+/*jshint expr:true */
+    instance.get(FOOTERONTOP) || (newValue+=instance._footercont.get(OFFSETHEIGHT));
+    instance.get(STATUSBAR) && (newValue+=instance._statusbar.get(OFFSETHEIGHT));
+/*jshint expr:false */
+    instance.get(CONTENTBOX).setStyle(PADDINGBOTTOM, newValue+PX);
 };
 
 /**
@@ -994,10 +1408,16 @@ ITSAPanel.prototype._adjustPaddingBottom = function() {
  * @since 0.1
 */
 ITSAPanel.prototype._adjustPaddingTop = function() {
-    var instance = this;
-
+    var instance = this,
+        footer = instance._footercont,
+        newHeight = instance._header.get(OFFSETHEIGHT),
+        footerontop = instance.get(FOOTERONTOP);
     Y.log('_adjustPaddingTop ', 'info', 'ITSAPanel');
-    instance.get(CONTENTBOX).setStyle(PADDINGTOP, instance._header.get(OFFSETHEIGHT)+PX);
+    footer.setStyle('top', footerontop ? newHeight : '');
+/*jshint expr:true */
+    footerontop && (newHeight+=footer.get(OFFSETHEIGHT));
+/*jshint expr:false */
+    instance.get(CONTENTBOX).setStyle(PADDINGTOP, newHeight+PX);
 };
 
 /**
@@ -1046,15 +1466,15 @@ ITSAPanel.prototype._defFn_focusnext = function() {
     var instance = this,
         contentBox = instance.get(CONTENTBOX);
 
-    Y.log('_defFn_focusnext', 'info', 'ITSA-ViewModelPanel');
+    Y.log('_defFn_focusnext', 'info', 'ITSAPanel');
 /*jshint expr:true */
     contentBox.hasClass(FOCUSED_CLASS) && contentBox.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
         function(itsatabkeymanager) {
-            Y.log('focus to next field', 'info', 'ITSA-ViewModelPanel');
+            Y.log('focus to next field', 'info', 'ITSAPanel');
             itsatabkeymanager.next();
         },
         function() {
-            Y.log('No focus to next field: Y.Plugin.ITSATabKeyManager not plugged in', 'info', 'ITSA-ViewModelPanel');
+            Y.log('No focus to next field: Y.Plugin.ITSATabKeyManager not plugged in', 'info', 'ITSAPanel');
         }
     );
 /*jshint expr:false */
@@ -1074,6 +1494,31 @@ ITSAPanel.prototype._getHeight = function() {
 };
 
 /**
+ * Makes a backup of the container-node -if any- that holds the tabkeymanager of the currently focussed node.
+ * Is stored locally inside this._prevFocussed
+ *
+ * @method _getTabkeyManagerNode
+ * @private
+ * @since 0.1
+*/
+ITSAPanel.prototype._getTabkeyManagerNode = function() {
+    Y.log('_getTabkeyManagerNode ', 'info', 'ITSAPanel');
+    var instance = this,
+        node = Y.one(Y.config.doc.activeElement);
+
+    instance._prevFocussed = null;
+/*jshint expr:true */
+    node && node.itsatabkeymanager && (instance._prevFocussed=node);
+/*jshint expr:true */
+    while (!instance._prevFocussed && node) {
+        node = node.get('parentNode');
+/*jshint expr:true */
+        node && node.itsatabkeymanager && (instance._prevFocussed=node);
+/*jshint expr:false */
+    }
+};
+
+/**
  * Getter of the 'width'-attribute
  *
  * @method _getWidth
@@ -1087,33 +1532,6 @@ ITSAPanel.prototype._getWidth = function() {
 };
 
 /**
- * Renderes the header-content. Either by templating (if 'headerView' is a String), or by calling headerView.render() in case headerView is a Y.View-instance.
- *
- * @method _renderHeader
- * @private
- * @since 0.1
-*/
-ITSAPanel.prototype._renderHeader = function() {
-    var instance = this,
-        title = instance.get(TITLE),
-        titleRight = instance.get(TITLERIGHT),
-        closeButton = instance.get(CLOSEBUTTON),
-        headerView = instance.get(HEADERVIEW);
-
-    Y.log('_renderHeader ', 'info', 'ITSAPanel');
-    if (!headerView || (typeof headerView===STRING)) {
-        instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? (closeButton ? CLOSE_BUTTON : '') : titleRight)}));
-    }
-    else if (headerView instanceof Y.View) {
-        headerView._set('container', instance._header);
-/*jshint expr:true */
-        headerView.render && headerView.render();
-/*jshint expr:false */
-    }
-    instance._adjustPaddingTop();
-};
-
-/**
  * Renderes the BODY-content. Either by templating (if 'BODYView' is a String), or by calling BODYView.render() in case BODYView is a Y.View-instance.
  *
  * @method _renderBody
@@ -1123,14 +1541,22 @@ ITSAPanel.prototype._renderHeader = function() {
 ITSAPanel.prototype._renderBody = function() {
     var instance = this,
         body = instance.get(BODY),
-        bodyView = instance.get(BODYVIEW);
+        bodyView = instance.get(BODYVIEW),
+        oldContainer;
 
     Y.log('_renderBody ', 'info', 'ITSAPanel');
     if (!bodyView || (typeof bodyView===STRING)) {
+        instance._body.empty();
         instance._body.setHTML(Lang.sub((bodyView || DEFAULT_BODYVIEW), {body: (body || '')}));
     }
     else if (bodyView instanceof Y.View) {
-        bodyView._set('container', instance._body);
+        oldContainer = bodyView.get(CONTAINER);
+        bodyView._set(CONTAINER, instance._body);
+        if (!oldContainer.inDoc()) {
+            // cleanup
+            oldContainer.empty();
+            oldContainer.destroy(true);
+        }
 /*jshint expr:true */
         bodyView.render && bodyView.render();
 /*jshint expr:false */
@@ -1150,22 +1576,140 @@ ITSAPanel.prototype._renderFooter = function() {
         footerRight = instance.get(FOOTER+RIGHT),
         footerView = instance.get(FOOTERVIEW),
         instanceFooter = instance._footer,
-        hideFooter = !footerView && !footer && !footerRight;
+        hideFooter = !footerView && !footer && !footerRight,
+        oldContainer;
 
     Y.log('_renderFooter ', 'info', 'ITSAPanel');
     if (!hideFooter) {
         if (!footerView || (typeof footerView===STRING)) {
+            instanceFooter.empty();
             instanceFooter.setHTML(Lang.sub((footerView || DEFAULT_FOOTERVIEW), {footer: (footer || ''), footerRight: (footerRight || '')}));
         }
         else if (footerView instanceof Y.View) {
-            footerView._set('container', instance._footer);
+            oldContainer = footerView.get(CONTAINER);
+            footerView._set(CONTAINER, instance._footer);
+            if (!oldContainer.inDoc()) {
+                // cleanup
+                oldContainer.empty();
+                oldContainer.destroy(true);
+            }
 /*jshint expr:true */
             footerView.render && footerView.render();
 /*jshint expr:false */
         }
     }
     instance._footercont.toggleClass(HIDDENSECTIONCLASS, hideFooter);
-    instance._adjustPaddingBottom();
+/*jshint expr:true */
+    instance.get(FOOTERONTOP) ? instance._adjustPaddingTop() : instance._adjustPaddingBottom();
+/*jshint expr:false */
+};
+
+/**
+ * Renderes the header-content. Either by templating (if 'headerView' is a String), or by calling headerView.render() in case headerView is a Y.View-instance.
+ *
+ * @method _renderHeader
+ * @private
+ * @since 0.1
+*/
+ITSAPanel.prototype._renderHeader = function() {
+    var instance = this,
+        title = instance.get(TITLE),
+        titleRight = instance.get(TITLERIGHT),
+        closeButton = instance.get(CLOSEBUTTON),
+        headerView = instance.get(HEADERVIEW),
+        oldContainer;
+
+    Y.log('_renderHeader ', 'info', 'ITSAPanel');
+    if (!headerView || (typeof headerView===STRING)) {
+        instance._header.empty();
+        instance._header.setHTML(Lang.sub((headerView || DEFAULT_HEADERVIEW), {title: (title || ''), titleRight: ((titleRight===null) ? (closeButton ? CLOSE_BUTTON : '') : titleRight)}));
+    }
+    else if (headerView instanceof Y.View) {
+        oldContainer = headerView.get(CONTAINER);
+        headerView._set(CONTAINER, instance._header);
+        if (!oldContainer.inDoc()) {
+            // cleanup
+            oldContainer.empty();
+            oldContainer.destroy(true);
+        }
+/*jshint expr:true */
+        headerView.render && headerView.render();
+/*jshint expr:false */
+    }
+    instance._adjustPaddingTop();
+};
+
+/**
+ * Renderes the statusbar. See gallery-itsastatusbar.
+ *
+ * @method _renderStatusBar
+ * @private
+ * @since 0.1
+*/
+ITSAPanel.prototype._renderStatusBar = function() {
+    var instance = this,
+        statusbar = instance._statusbar,
+        footer = instance._footercont,
+        footerOnTop = instance.get(FOOTERONTOP),
+        itsastatusbar = instance._itsastatusbar,
+        hideStatusbar = !instance.get(STATUSBAR);
+    Y.log('_renderStatusBar ', 'info', 'ITSAPanel');
+    statusbar.toggleClass(HIDDENSECTIONCLASS, hideStatusbar);
+    if (hideStatusbar) {
+        instance._viewName = null;
+        instance._resolveStatusbarReady();
+        if (itsastatusbar) {
+            itsastatusbar.destroy();
+/*jshint expr:true */
+            footerOnTop || footer.setStyle('bottom', '');
+/*jshint expr:false */
+            instance._adjustPaddingBottom();
+        }
+    }
+    else if (!itsastatusbar) {
+        Y.use('gallery-itsastatusbar', function() {
+            itsastatusbar = instance._itsastatusbar = new Y.ITSAStatusbar({
+                                parentNode: statusbar,
+                                readyText: instance.get(READYTEXT),
+                                textTransform: instance.get(STATUSBARTRANSFORM)
+                            });
+            // to make targeting Y.ITSAMessages to this instance posible:
+            instance._viewName = itsastatusbar._viewName;
+            itsastatusbar.isReady().then(
+                function() {
+/*jshint expr:true */
+                    footerOnTop || footer.setStyle('bottom', instance._statusbar.get(OFFSETHEIGHT)+'px');
+/*jshint expr:false */
+                    instance._adjustPaddingBottom();
+                    instance._resolveStatusbarReady();
+                }
+            );
+        });
+    }
+};
+
+/**
+ * Sets the right className to the boundingBox for making text-transForm of buttons. Configured by attribute 'buttonTransform'.<br />
+ * Either one of these values:
+ * <ul>
+ *   <li>null --> leave as it is</li>
+ *   <li>uppercase</li>
+ *   <li>lowercase</li>
+ *   <li>capitalize --> First character uppercase, the rest lowercase</li>
+ * </ul>
+ *
+ * @method _setButtonTransform
+ * @param type {String} new text-transform value
+ * @private
+ * @since 0.2
+*/
+ITSAPanel.prototype._setButtonTransform = function(type) {
+    var boundingBox = this.get(BOUNDINGBOX);
+
+    Y.log('_setButtonTransform ', 'info', 'ITSAPanel');
+    boundingBox.toggleClass(ITSABUTTON_UPPERCASE, (type===UPPERCASE));
+    boundingBox.toggleClass(ITSABUTTON_LOWERCASE, (type===LOWERCASE));
+    boundingBox.toggleClass(ITSABUTTON_CAPITALIZE, (type===CAPITALIZE));
 };
 
 /**
@@ -1180,7 +1724,7 @@ ITSAPanel.prototype._setFocusManager = function() {
         contentBox = instance.get(CONTENTBOX),
         itsatabkeymanager = contentBox.itsatabkeymanager;
 
-    Y.log('_setFocusManager', 'info', 'ITSA-ViewModelPanel');
+    Y.log('_setFocusManager', 'info', 'ITSAPanel');
     // If Y.Plugin.ITSATabKeyManager is plugged in, then refocus to the first item
     Y.use(GALLERY+'-'+ITSATABKEYMANAGER, function() {
         if (!instance.get(DESTROYED)) {
@@ -1190,6 +1734,7 @@ ITSAPanel.prototype._setFocusManager = function() {
             else {
                 contentBox.plug(Y.Plugin.ITSATabKeyManager);
                 itsatabkeymanager = contentBox.itsatabkeymanager;
+                instance.addTarget(itsatabkeymanager);
             }
             if (contentBox.hasClass(FOCUSED_CLASS)) {
                 itsatabkeymanager.focusInitialItem();
@@ -1210,6 +1755,30 @@ ITSAPanel.prototype._setHeight = function(val) {
     var instance = this;
     Y.log('_setHeight ', 'info', 'ITSAPanel');
     instance.get(CONTENTBOX).setStyle(HEIGHT, (val ? (val+PX) : ''));
+};
+
+/**
+ * Sets the right className to the boundingBox for making text-transForm of label-elements. Configured by attribute 'labelTransform'.<br />
+ * Either one of these values:
+ * <ul>
+ *   <li>null --> leave as it is</li>
+ *   <li>uppercase</li>
+ *   <li>lowercase</li>
+ *   <li>capitalize --> First character uppercase, the rest lowercase</li>
+ * </ul>
+ *
+ * @method _setLabelTransform
+ * @param type {String} new text-transform value
+ * @private
+ * @since 0.2
+*/
+ITSAPanel.prototype._setLabelTransform = function(type) {
+    var boundingBox = this.get(BOUNDINGBOX);
+
+    Y.log('_setLabelTransform ', 'info', 'ITSAPanel');
+    boundingBox.toggleClass(ITSALABEL_UPPERCASE, (type===UPPERCASE));
+    boundingBox.toggleClass(ITSALABEL_LOWERCASE, (type===LOWERCASE));
+    boundingBox.toggleClass(ITSALABEL_CAPITALIZE, (type===CAPITALIZE));
 };
 
 /**
@@ -1279,12 +1848,15 @@ ITSAPanel.prototype._setWidth = function(val) {
     instance.get(CONTENTBOX).setStyle(WIDTH, (val ? (val+PX) : ''));
 };
 
-}, 'gallery-2013.10.17-22-20', {
+}, '@VERSION@', {
     "requires": [
+        "yui-base",
         "node-pluginhost",
         "gallery-itsapluginpromise",
         "dd-ddm",
         "node-event-delegate",
+        "node-style",
+        "base-base",
         "base-build",
         "widget-modality",
         "widget-position",
@@ -1292,8 +1864,14 @@ ITSAPanel.prototype._setWidth = function(val) {
         "widget-position-constrain",
         "widget-stack",
         "view",
+        "promise",
+        "oop",
         "widget",
-        "gallery-itsawidgetrenderpromise"
+        "timers",
+        "event-custom-base",
+        "yui-later",
+        "gallery-itsawidgetrenderpromise",
+        "gallery-itsanodepromise"
     ],
     "skinnable": true
 });

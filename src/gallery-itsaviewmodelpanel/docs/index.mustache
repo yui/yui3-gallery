@@ -264,6 +264,11 @@
         ```
     </p>
 
+<h2>Adding statusbar</h2>
+    <p>
+        By setting the attribute <code>statusBar</code> true, you create a statusbar inside the ViewModelPanel. See <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsastatusbar/">Y.ITSAStatusbar</a>. The statusbar is targeted by the bounded model automaticly. You can also target specific messages to this statusbar by using targeting the messages to the instance, f.e.: <code>Y.alert('oops, something went wrong', {target: yourViewModelPanel});</code>.
+    </p>
+
 <h2>Styling</h2>
     <p>
         By default, the Y.ITSAViewModelPanel comes with its own style supplied by <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsapanel/">Y.ITSAPanel</a>: see that module how to customize the style of the panel. When you need to style form-elements, then it is higly recommended to include <a href="http://purecss.io/">Purecss</a>.
@@ -277,6 +282,30 @@
     <p>
         When re-render a view that holds UI-elements, widgets might be re-rendered. Y.ITSAViewModelPanel uses <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaviewmodel/">Y.ITSAViewModel</a> under the hood, which automaticly takes care of destroying the widgets that are no longer needed, or refreshed.
     </p>
+
+<h2>Y.ITSAViewModelPanel v.s. Y.ITSADialog</h2>
+    <p>
+        Y.ITSAViewModelPanel looks quite the same as <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsadialog/">Y.ITSADialog</a>. Actually, Y.ITSADialog uses Y.ITSAViewModelPanel under the hood. So when to choose one above the other:
+    </p>
+
+    <h3>Advantages Y.ITSADialog</h3>
+        <ul>
+            <li>Messages are queued. So the user will see only 1 message at the time. And when there appears an warn- or error-message during your custom message, your messaga will be temporarely replaced</li>
+            <li>You always get the userinteraction in return (the Promise-value)</li>
+        </ul>
+
+    <h3>Advantages Y.ITSAViewModelPanel</h3>
+        <ul>
+            <li>Easier to setup, you just attach a model</li>
+            <li>Can handle Y.ITSAFormModel-types, you don't need to create an Y.ITSAMessage</li>
+            <li>The model-instance remains, while Y.ITSAMessages are cleaned up by Y.ITSADialog</li>
+            <li>You could setup multiple panels at the same time</li>
+        </ul>
+
+    <h3>General best practice</h3>
+        <p>
+            In general, when you want <code>one time modal user-interaction</code> (that is: an 'editable' panel were the model isn't needed for something else), you better create an Y.ITSAMessage and use Y.ITSADialog. In all other situations, use Y.ITSAViewModelPanel.
+        </p>
 
 <h2>Licence</h2>
     Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />

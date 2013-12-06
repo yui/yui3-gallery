@@ -45,12 +45,48 @@
             "hideTableOfContents": true
         },
         {
+            "name"       : "resizable-panel",
+            "displayName": "Creating a resizable panel",
+            "description": "This example shows how to create a resizable panel.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "itsapanel", "resizable", "resize"],
+            "hideTableOfContents": true
+        },
+        {
             "name"       : "custom-css",
             "displayName": "Customize style",
             "description": "This example shows how to create your own stylescheme for ITSAPanel-instances.",
             "author"     : [ "itsasbreuk" ],
             "modules"    : [ "gallery-itsapanel"],
             "tags"    : ["gallery-itsapanel", "panel", "style", "css", "stylescheme", "itsapanel"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "transition",
+            "displayName": "Showing a panel using transition",
+            "description": "This example shows how to show a panel using a fade-in of 2 seconds.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "itsapanel", "fade", "transition"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "footertop",
+            "displayName": "Panel with footer on top as a buttonbar",
+            "description": "This example shows how to create a panel with the footer on top (above the body-section). The buttons are passive.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "itsapanel", "footerontop"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "statusbar",
+            "displayName": "Panel with a statusbar and buttons on top",
+            "description": "This example shows how to create a panel with a statusbar. The footer is set on top as well.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "itsapanel", "footerontop"],
             "hideTableOfContents": true
         }
     ]

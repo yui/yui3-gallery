@@ -40,9 +40,9 @@ Paginator.ATTRS.pageStatus =
  */
 Paginator.ui.ValidationPageLinks.templates =
 {
-    currentPageLink:  '<span class="{link} {curr} {status}">{label}</span>',
-    pageLink:         '<a href="#" class="{link} {status}" page="{page}">{label}</a>',
-    disabledPageLink: '<span class="{link} disabled {status}" page="{page}">{label}</span>'
+	currentPageLink:  '<span class="{link} {curr} {status}">{label}</span>',
+	pageLink:         '<a href="#" class="{link} {status}" page="{page}">{label}</a>',
+	disabledPageLink: '<span class="{link} disabled {status}" page="{page}">{label}</span>'
 };
 
 Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
@@ -72,46 +72,52 @@ Y.extend(Paginator.ui.ValidationPageLinks, Paginator.ui.PageLinks,
 
 			var content = '';
 
-			if (range[0] > 1) {
-				range[0]++;
-				content += Y.Lang.sub(linkMarkup,
-				{
-					link:   linkClass,
-					curr:   '',
-					status: status[0] ? vpl_status_prefix + status[0] : '',
-					page:   1,
-					label:  labelBuilder(1, this.paginator)
-				});
-				content += '&hellip;'
-			}
-
-			if (range[1] < totalPages) {
-				range[1]--;
-				var showLast = true;
-			}
-
-			for (var i=range[0]; i<=range[1]; i++)
+			if (0 < range[0] && range[0] <= range[1])
 			{
-				content += Y.Lang.sub(i === currentPage ? Paginator.ui.ValidationPageLinks.templates.currentPageLink : linkMarkup,
+				if (range[0] > 1)
 				{
-					link:   linkClass,
-					curr:   (i === currentPage ? this.paginator.get('currentPageClass') : ''),
-					status: status[i-1] ? vpl_status_prefix + status[i-1] : '',
-					page:   i,
-					label:  labelBuilder(i, this.paginator)
-				});
-			}
+					range[0]++;
+					content += Y.Lang.sub(linkMarkup,
+					{
+						link:   linkClass,
+						curr:   '',
+						status: status[0] ? vpl_status_prefix + status[0] : '',
+						page:   1,
+						label:  labelBuilder(1, this.paginator)
+					});
+					content += '&hellip;'
+				}
 
-			if (showLast) {
-				content += '&hellip;';
-				content += Y.Lang.sub(linkMarkup,
+				if (range[1] < totalPages)
 				{
-					link:   linkClass,
-					curr:   '',
-					status: status[totalPages-1] ? vpl_status_prefix + status[totalPages-1] : '',
-					page:   totalPages,
-					label:  labelBuilder(totalPages, this.paginator)
-				});
+					range[1]--;
+					var showLast = true;
+				}
+
+				for (var i=range[0]; i<=range[1]; i++)
+				{
+					content += Y.Lang.sub(i === currentPage ? Paginator.ui.ValidationPageLinks.templates.currentPageLink : linkMarkup,
+					{
+						link:   linkClass,
+						curr:   (i === currentPage ? this.paginator.get('currentPageClass') : ''),
+						status: status[i-1] ? vpl_status_prefix + status[i-1] : '',
+						page:   i,
+						label:  labelBuilder(i, this.paginator)
+					});
+				}
+
+				if (showLast)
+				{
+					content += '&hellip;';
+					content += Y.Lang.sub(linkMarkup,
+					{
+						link:   linkClass,
+						curr:   '',
+						status: status[totalPages-1] ? vpl_status_prefix + status[totalPages-1] : '',
+						page:   totalPages,
+						label:  labelBuilder(totalPages, this.paginator)
+					});
+				}
 			}
 
 			this.container.set('innerHTML', content);

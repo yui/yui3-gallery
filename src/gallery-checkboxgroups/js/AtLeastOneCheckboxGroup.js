@@ -19,6 +19,11 @@ function AtLeastOneCheckboxGroup(
 {
 	this.direction = AtLeastOneDirection.SLIDE_UP;
 	AtLeastOneCheckboxGroup.superclass.constructor.call(this, cb_list);
+
+	if (this.allUnchecked())
+	{
+		this.cb_list.item(0).set('checked', true);
+	}
 }
 
 var AtLeastOneDirection =

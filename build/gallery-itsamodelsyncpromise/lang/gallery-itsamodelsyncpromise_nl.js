@@ -1,0 +1,1 @@
+YUI.add("lang/gallery-itsamodelsyncpromise_nl",function(e){e.Intl.add("gallery-itsamodelsyncpromise","nl",{load:"Laden gegevens ...",submit:"Versturen gegevens ...",save:"Bijwerken gegevens ...",destroy:"Bijwerken gegevens ..."})},"@VERSION@");

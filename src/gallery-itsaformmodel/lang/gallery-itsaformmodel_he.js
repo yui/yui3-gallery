@@ -1,4 +1,5 @@
 {
+    ready: 'מוכן',
     enterrightformat : 'אנא הכנס את הפורמט הנכון',
     entervalidnumber : 'אנא הכנס מספר חוקי',
     inputrequired : 'נדרש קלט',

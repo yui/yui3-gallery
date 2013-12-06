@@ -2,7 +2,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
 
 'use strict';
 
-/*jshint maxlen:175 */
+/*jshint maxlen:205 */
 
 /**
  *
@@ -19,12 +19,23 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  *
 */
    var YModelList = Y.ModelList,
+       Lang = Y.Lang,
        YArray = Y.Array,
        YObject = Y.Object,
-       PUBLISHED = '_published',
+       PUBLISHED = '_pub_',
        READ = 'read',
        APPEND = 'append',
+       DELETE = 'delete',
        READAPPEND = READ+APPEND,
+       MODELSYNC = 'modelsync',
+       GALLERY_ITSA = 'gallery-itsa',
+       GALLERYITSAMODELSYNCPROMISE = GALLERY_ITSA+MODELSYNC+'promise',
+       AVAILABLESYNCMESSAGES = {
+           load: true,
+           save: true,
+           submit: true,
+           destroy: true
+       },
        DEFFN = '_defFn_',
    /**
      * Fired when an error occurs, such as when an attribute (or property) doesn't validate or when
@@ -119,6 +130,69 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
     };
 
 /**
+ * Makes sync-messages to target the specified messageViewer. You can only target to 1 MessageViewer at the same time.<br>
+ * See gallery-itsamessageviewer for more info.
+ *
+ * @method addMessageTarget
+ * @param itsamessageviewer {Y.ITSAMessageViewer|Y.ITSAPanel}
+ * @since 0.4
+*/
+YModelList.prototype.addMessageTarget = function(itsamessageviewer) {
+    var instance = this;
+    Y.usePromise(GALLERY_ITSA+'messagecontroller', GALLERY_ITSA+'messageviewer', GALLERY_ITSA+'panel', GALLERY_ITSA+'viewmodel').then(
+        function() {
+            return Y.ITSAMessageController.isReady();
+        }
+    ).then(
+        function() {
+/*jshint expr:true */
+            (itsamessageviewer instanceof Y.ITSAPanel) && (itsamessageviewer=itsamessageviewer._itsastatusbar);
+            itsamessageviewer || ((itsamessageviewer instanceof Y.ITSAViewModel) && (itsamessageviewer=itsamessageviewer._itsastatusbar));
+/*jshint expr:false */
+            if (itsamessageviewer instanceof Y.ITSAMessageViewer) {
+/*jshint expr:true */
+                instance._itsamessageListener && instance.removeMessageTarget();
+/*jshint expr:false */
+                instance._itsamessageListener = instance.on(
+                    [LOAD, SUBMIT, SAVE, DESTROY],
+                    function(e) {
+                        var options = e.options,
+                            remove = options.remove || options[DELETE],
+                            type = e.type,
+                            typesplit = type.split(':'),
+                            subtype = typesplit[1] || typesplit[0],
+                            statushandle, syncMessages;
+                        if ((subtype!==DESTROY) || remove) {
+                            syncMessages = instance._defSyncMessages;
+                            statushandle = itsamessageviewer.showStatus(
+                                              e.syncmessage || (syncMessages && syncMessages[subtype]) || Y.Intl.get(GALLERYITSAMODELSYNCPROMISE)[subtype],
+                                              {source: MODELSYNC, busy: true}
+                                           );
+                            e.promise.then(
+                                function() {
+                                    itsamessageviewer.removeStatus(statushandle);
+                                },
+                                function() {
+                                    itsamessageviewer.removeStatus(statushandle);
+                                }
+                            );
+                        }
+                    }
+                );
+                instance._itsamessagedestroylistener1 = instance.onceAfter(DESTROY, function() {
+                    instance._itsamessageListener.detach();
+                });
+                instance._itsamessagedestroylistener2 = itsamessageviewer.once(DESTROY, function() {
+                    instance._itsamessageListener.detach();
+                });
+            }
+            else {
+            }
+        }
+    );
+};
+
+/**
   * Destroys this model instance and removes it from its containing lists, if any. The 'callback', if one is provided,
   * will be called after the model is destroyed.<br /><br />
   * If `options.remove` is `true`, then this method delegates to the `sync()` method to delete the model from the persistence layer, which is an
@@ -132,6 +206,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
   * @method destroymodels
   * @param {Object} [options] Sync options. It's up to the custom sync implementation to determine what options it supports or requires, if any.
   *   @param {Boolean} [options.remove=false] If `true`, the model will be deleted via the sync layer in addition to the instance being destroyed.
+  *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious destruction. Will overrule the default message. See gallery-itsamessageviewer.
   * @param {callback} [callback] Called after the model has been destroyed (and deleted via the sync layer if `options.remove` is `true`).
   *   @param {Error|null} callback.err If an error occurred, this parameter will contain the error. Otherwise 'err' will be null.
   *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method, which is expected to parse it and return an attribute hash.
@@ -152,6 +227,8 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  * @method destroymodelsPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
  *                 implementation to determine what options it supports or requires, if any.
+ *   @param {Boolean} [options.remove=false] If `true`, the model will be deleted via the sync layer in addition to the instance being destroyed.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious destruction. Will overrule the default message. See gallery-itsamessageviewer.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
 **/
 
@@ -190,6 +267,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
   * @method load
   * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting the loaded attributes.
   *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
+  *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious loading. Will overrule the default message. See gallery-itsamessageviewer.
   * @param {callback} [callback] Called when the sync operation finishes.
   *   @param {Error|null} callback.err If an error occurred, this parameter will contain the error. If the sync operation succeeded, 'err' will be null.
   *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method, which is expected to parse it and return an attribute hash.
@@ -212,6 +290,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  * @method loadPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
  *                 implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious loading. Will overrule the default message. See gallery-itsamessageviewer.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason) (examine reason.message).
 **/
 
@@ -234,6 +313,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
   * @method loadappend
   * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting the loaded attributes.
   *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
+  *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious loading. Will overrule the default message. See gallery-itsamessageviewer.
   * @param {callback} [callback] Called when the sync operation finishes.
   *   @param {Error|null} callback.err If an error occurred, this parameter will contain the error. If the sync operation succeeded, 'err' will be null.
   *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method, which is expected to parse it and return an attribute hash.
@@ -256,6 +336,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  * @method loadappendPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
  *                 implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious loading. Will overrule the default message. See gallery-itsamessageviewer.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason) (examine reason.message).
 **/
 
@@ -280,6 +361,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  * @method save
  * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting synced attributes.
  *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during saving destruction. Will overrule the default message. See gallery-itsamessageviewer.
  * @param {Function} [callback] Called when the sync operation finishes.
  *   @param {Error|null} callback.err If an error occurred or validation failed, this parameter will contain the error.
  *                                    If the sync operation succeeded, 'err' will be null.
@@ -307,11 +389,12 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  * @method savePromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
  *                 implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious saving. Will overrule the default message. See gallery-itsamessageviewer.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
 **/
 
 /**
- * Saves this model to the server.
+ * Submits this model to the server.
  *
  * This method delegates to the `sync()` method to perform the actual save operation, which is an asynchronous action.
  * Specify a 'callback' function to be notified of success or failure.
@@ -331,6 +414,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  * @method submit
  * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting synced attributes.
  *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronous submission. Will overrule the default message. See gallery-itsamessageviewer.
  * @param {Function} [callback] Called when the sync operation finishes.
  *   @param {Error|null} callback.err If an error occurred or validation failed, this parameter will contain the error.
  *                                    If the sync operation succeeded, 'err' will be null.
@@ -340,7 +424,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
 */
 
 /**
- * Saves this model to the server.
+ * Submits this model to the server.
  * <br /><br />
  * This method delegates to the `sync()` method to perform the actual save
  * operation, which is an asynchronous action.
@@ -358,6 +442,7 @@ YUI.add('gallery-itsamodellistsyncpromise', function (Y, NAME) {
  * @method submitPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
  *                 implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronous submission. Will overrule the default message. See gallery-itsamessageviewer.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
 **/
 
@@ -388,6 +473,42 @@ YArray.each(
 );
 
 /**
+ * Removes the messageViewer-target that was set up by addMessageTarget().
+ *
+ * @method removeMessageTarget
+ * @since 0.1
+*/
+YModelList.prototype.removeMessageTarget = function() {
+    var instance = this;
+/*jshint expr:true */
+    instance._itsamessageListener && instance._itsamessageListener.detach();
+    instance._itsamessagedestroylistener1 && instance._itsamessagedestroylistener1.detach();
+    instance._itsamessagedestroylistener2 && instance._itsamessagedestroylistener2.detach();
+/*jshint expr:false */
+    instance._itsamessageListener = null;
+};
+
+/**
+ * Defines the syncmessage to be used when calling the synclayer. When not defined (and not declared during calling the syncmethod by 'options.syncmessage'),
+ * a default i18n-message will be used.
+ * See gallery-itsamessageviewer for more info about syncmessages.
+ *
+ * @method setSyncMessage
+ * @param type {String} the syncaction = 'load'|'save'|destroy'|'submit'
+ * @param message {String} the syncmessage that should be viewed by a Y.ITSAMessageViewer
+ * @chainable
+ * @since 0.4
+*/
+YModelList.prototype.setSyncMessage = function(type, message) {
+    var instance = this;
+/*jshint expr:true */
+    instance._defSyncMessages || (instance._defSyncMessages={});
+    AVAILABLESYNCMESSAGES[type] && (instance._defSyncMessages[type]=message);
+/*jshint expr:false */
+    return instance;
+};
+
+/**
  * Private function that creates the promises for all promise-events
  *
  * @method _createPromise
@@ -415,7 +536,7 @@ YModelList.prototype._createPromise = function(type, options) {
         options: Y.merge(options) // making passing only optins to other events possible
     };
 /*jshint expr:true */
-    (typeof options==='object') && YObject.each(
+    Lang.isObject(options) && YObject.each(
         options,
         function(value, key) {
             extraOptions[key] = value;
@@ -426,6 +547,7 @@ YModelList.prototype._createPromise = function(type, options) {
                                                                                 {
                                                                                   defaultTargetOnly: true,
                                                                                   emitFacade: true,
+                                                                                  broadcast: 1,
                                                                                   defaultFn: instance[DEFFN+type],
                                                                                   preventedFn: instance._prevDefFn
                                                                                 }
@@ -748,12 +870,19 @@ YModelList.prototype._lazyFireErrorEvent = function(facade) {
   **/
 YModelList.prototype._publishAsync = function(type, opts) {
     var instance = this,
-        asyncEvent = this.publish(type, opts);
+        asyncEvent = instance.publish(type, opts);
 
+/*jshint expr:true */
+    opts && (opts.broadcast===1) && instance.addTarget(Y);
+    opts && (opts.broadcast===2) && instance.addTarget(YUI);
+/*jshint expr:false */
     asyncEvent._firing = new Y.Promise(function (resolve) { resolve(); });
 
     asyncEvent.fire = function (data) {
         var args  = Y.Array(arguments, 0, true),
+            stack, next;
+
+        asyncEvent._firing = asyncEvent._firing.then(function () {
             stack = {
                 id: asyncEvent.id,
                 next: asyncEvent,
@@ -763,9 +892,7 @@ YModelList.prototype._publishAsync = function(type, opts) {
                 bubbling: null,
                 type: asyncEvent.type,
                 defaultTargetOnly: asyncEvent.defaultTargetOnly
-            }, next;
-
-        asyncEvent._firing = asyncEvent._firing.then(function () {
+            };
             asyncEvent.details = args;
             // Execute on() subscribers
             var subs = asyncEvent._subscribers,
@@ -836,6 +963,7 @@ YModelList.prototype._publishAsync = function(type, opts) {
     asyncEvent._fire = function (args) {
         return asyncEvent.fire(args[0]);
     };
+    return asyncEvent;
 };
 
 /**
@@ -882,7 +1010,7 @@ YModelList.prototype._syncTimeoutPromise = function(action, options) {
 // for backwards compatibility:
 YModelList.prototype.destroyPromise = YModelList.prototype.destroyModelPromise;
 
-}, 'gallery-2013.10.02-20-26', {
+}, '@VERSION@', {
     "requires": [
         "yui-base",
         "base-base",
@@ -892,6 +1020,7 @@ YModelList.prototype.destroyPromise = YModelList.prototype.destroyModelPromise;
         "promise",
         "model",
         "model-list",
-        "gallery-itsamodelsyncpromise"
+        "gallery-itsamodelsyncpromise",
+        "gallery-itsamodulesloadedpromise"
     ]
 });

@@ -72,6 +72,15 @@
             "hideTableOfContents": true
         },
         {
+            "name"       : "forms-statusbar",
+            "displayName": "Creating a form with statusbar",
+            "description": "This example shows how to create a form with a statusbar.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["node", "gallery-itsaformmodel", "gallery-itsaselectlist", "gallery-itsadialog", "gallery-itsacheckbox", "json-stringify"],
+            "tags"    : ["gallery-itsaviewmodel", "model", "formelement", "form", "template", "statusbar"],
+            "hideTableOfContents": true
+        },
+        {
             "name"       : "buttons",
             "displayName": "Form with different buttonlabels",
             "description": "This example shows how change the buttonlabels on a form.",

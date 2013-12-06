@@ -1,0 +1,8 @@
+{
+    "gallery-inview-event": {
+        "requires": [
+            "node",
+            "event"
+        ]
+    }
+}

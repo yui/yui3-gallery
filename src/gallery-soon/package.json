@@ -1,0 +1,34 @@
+{
+    "name": "gallery-soon",
+    "version": "0.2.0",
+    "description": "YUI 3 asynchronous task scheduler",
+    "author": "Steven Olmsted",
+    "maintainers": [
+        "Steven Olmsted",
+        "Juan Ignacio Dopazo <dopazo.juan@gmail.com>"
+    ],
+    "bugs": {
+        "url": "https://github.com/solmsted/gallery-soon/issues"
+    },
+    "engines": {
+        "node": ">=0.10.0"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "shifter": "0.4.3",
+        "grover": "0.1.17"
+    },
+    "scripts": {
+        "test": "shifter --build-dir ./build && grover --server --coverage tests/unit/*.html"
+    },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/solmsted/gallery-soon.git"
+    },
+    "licenses": [
+        {
+            "type": "BSD",
+            "url": "https://github.com/solmsted/gallery-soon/blob/master/LICENSE.md"
+        }
+    ]
+}

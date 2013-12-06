@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+    <head>
+        <title>gallery-nav-assist</title>
+        <link href='../../../../build/gallery-nav-assist/gallery-nav-assist.css' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+        #navtabs div {display: inline-block; margin-left:20px; padding:10px; border:1px solid #efefef;}
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+        <div id="logger"></div>
+
+        <!-- [START] gallery-nav-assist test fixture -->
+        <div id="gallery-nav-assist-test-fixture">
+            <div id="header">
+                <h2>Lorem Ipsum</h2>
+                <h2>Lorem Ipsum</h2>
+            </div>
+            <hr>
+            <div id="tabs">
+                <div><a href="#Tab1" id="tab1">Lorem Ipsum</a></div>
+                <input type="text" id="testinputbox"/>
+            </div>
+            <hr>
+            <div id="sidebar">
+                <h2>Lorem Ipsum</h2>
+                <h2>Lorem Ipsum</h2>
+            </div>
+            <hr>
+            <div id="eastrail">
+                <h2 id="elem1"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
+                <h2 id="elem2"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
+            </div>
+            <hr>
+            <div id="main">
+                <div class="bright"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p></div>
+                <div class="dark"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p></div>
+            </div>
+            <hr>
+            <div id="navtabs">
+                <div>tab1</div>
+                <div>tab2</div>
+            </div>
+            <hr>
+            <ul id="links">
+                <li>Lorem Ipsum</li>
+            </ul>
+            <hr>
+        </div>
+        <!-- [END] gallery-nav-assist test fixture -->
+
+        <script src="http://yui.yahooapis.com/3.12.0/build/yui/yui-debug.js"></script>
+        <script src="../../../../build/gallery-nav-assist/gallery-nav-assist-debug.js"></script>
+        <script>
+            YUI().use('gallery-nav-assist', 'node-event-simulate', function(Y) {
+                var nav = new Y.NAVASSIST({
+                    styleContainer: true,
+                    debug: true,
+                    ignore: ['#testinputbox'],
+                    scrollAnim: true,
+                });
+                    nav.register({
+                        node: '#header',
+                        rank: 3
+                    });
+                    //chainable
+                    nav.register({
+                        node: '#sidebar',
+                        rank: 2
+                    }).register({
+                        node: '#tabs',
+                        rank: 1
+                    });
+
+                    nav.register({
+                        node: '#navtabs',
+                        rank: 4,
+                        isHorizontal: true,
+                        containerStyle: {
+                            className: 'custom-highlight'
+                        }
+                    });
+            });
+
+        </script>
+    </body>
+</html>

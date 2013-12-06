@@ -1,0 +1,96 @@
+YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'slider', 'gallerycss-itsa-base', 'gallerycss-itsa-form', function(Y) {
+    var panel, artist, template, footertemplate;
+
+    // adding skin sam to body for getting the right skin for the widgets
+    Y.one('body').addClass('yui3-skin-sam');
+
+    // create MyFormModelClass
+    Y.ArtistModel = Y.Base.create('formmodel', Y.ITSAFormModel, [], {
+        // define 'syncPromise' instead of 'sync'.
+        // when 'syncPromise' is defined, Y.ITSAFormModel will use this method instead of 'sync'
+        syncPromise: function (action, options) {
+            if ((action==='create') || (action==='update')) {
+                return new Y.Promise(function (resolve) {
+                    Y.later(3000, null, resolve);
+                });
+            }
+            // do not forget to reject the promise in case an invalid 'action' is defined
+            return new Y.Promise(function (resolve, reject) {
+                reject(new Error('The syncPromise()-method was is called with undefined action: '+action));
+            });
+        }
+    }, {
+        ATTRS: {
+            name: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Artist',
+                    placeholder: 'artist',
+                    required: true
+                }
+            },
+            country: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'Country',
+                    placeholder: 'country',
+                    required: true
+                }
+            },
+            firstalbum: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'First album',
+                    placeholder: 'first album',
+                    required: true
+                }
+            },
+            release: {
+                formtype: Y.Slider,
+                formconfig: {
+                    label: 'Releaseyear',
+                    widgetconfig: {
+                        min: 1950,
+                        max: 2010
+                    }
+                }
+            }
+        }
+    });
+
+    artist = new Y.ArtistModel({
+        name: 'U2',
+        country: 'Ireland',
+        firstalbum: 'Boy',
+        release: 1980
+    });
+
+    template = '<fieldset>'+
+                    '<legend>Musician</legend>'+
+                    '<div class="pure-control-group">{name}</div>'+
+                    '<div class="pure-control-group">{country}</div>'+
+                    '<div class="pure-control-group">{firstalbum}</div>'+
+                    '<div class="pure-control-group">{release}</div>';
+                '</fieldset>';
+
+    footertemplate = '{btn_close}{spinbtn_save}';
+
+    panel = new Y.ITSAViewModelPanel({
+        title: 'Enter data',
+        readyText: 'ready when you are',
+        statusBar: true,
+        closeButton: false,
+        noHideOnSave: true,
+        model: artist,
+        template: template,
+        footerTemplate: footertemplate,
+        centered: true,
+        dragable: true,
+        editable: true,
+        visible: true,
+        width: 420
+    }).render();
+
+    artist.setSyncMessage('save', 'very busy saving now...');
+
+});

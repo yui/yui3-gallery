@@ -14,6 +14,8 @@
 */
 
 var YNode = Y.Node,
+    Lang = Y.Lang,
+    YArray = Y.Array,
     // To check DOMNodeRemoved-event, the browser must support 'mutation events'. To check this:
     supportsMutationEvents = document.implementation.hasFeature("MutationEvents", "2.0"),
     NODECHECK_TIMER = 250, // ms to repeately check for the node's existance. Only for browsers without supportsMutationEvents
@@ -114,33 +116,31 @@ YNode.fireAvailabilities = function(nodeid) {
  *
  * @method availablePromise
  * @static
- * @param nodeid {String} Node-selector by id. You must include the #
+ * @param selector {String} Node-selector
  * @param [timeout] {int} Timeout in ms, after which the promise will be rejected.
  *         If omitted, the Promise will never be rejected and can only be fulfilled once the node is available.
  * @return {Y.Promise} promised response --> resolve(Y.Node) OR reject(reason).
  * @since 0.1
 */
-YNode.availablePromise = function(nodeid, timeout) {
+YNode.availablePromise = function (selector, timeout) {
     Y.log('availablePromise', 'info', 'node');
-    var promise =  new Y.Promise(function (resolve, reject) {
-        var evt = Y.once(
-            'available',
-            function() {
-                resolve(Y.one(nodeid));
-            },
-            nodeid
-        );
-        if (timeout) {
-            Y.later(timeout, null, function() {
-                var errormessage = 'node ' + nodeid + ' was not available within ' + timeout + ' ms';
-                reject(new Error(errormessage));
+    var instance = this;
+    return new Y.Promise(function (resolve, reject) {
+        var resolved = false,
+            subscription = Y.once('available', function () {
+                resolve(Y.one(selector));
+                resolved = true;
 /*jshint expr:true */
-                (promise.getStatus()==='pending') && evt.detach();
+                timer && timer.cancel();
 /*jshint expr:false */
+            }, selector),
+            timer = timeout && Y.later(timeout, null, function () {
+                if (!resolved) {
+                    reject(new Error(selector + ' was not available within ' + timeout + ' ms'));
+                    subscription.detach.call(instance);
+                }
             });
-        }
     });
-    return promise;
 };
 
 /**
@@ -149,34 +149,79 @@ YNode.availablePromise = function(nodeid, timeout) {
  *
  * @method contentreadyPromise
  * @static
- * @param nodeid {String} Node-selector by id. You must include the #
+ * @param selector {String} Node-selector.
  * @param [timeout] {int} Timeout in ms, after which the promise will be rejected.
  *         If omitted, the Promise will never be rejected and can only be fulfilled once the node's content is ready.
  * @return {Y.Promise} promised response --> resolve(Y.Node) OR reject(reason).
  * @since 0.1
 */
-YNode.contentreadyPromise = function(nodeid, timeout) {
+YNode.contentreadyPromise = function(selector, timeout) {
     Y.log('contentreadyPromise', 'info', 'node');
-    var promise = new Y.Promise(function (resolve, reject) {
-        var evt = Y.once(
-            'contentready',
-            function() {
-                resolve(Y.one(nodeid));
-            },
-            nodeid
-        );
-        if (timeout) {
-            Y.later(timeout, null, function() {
-                var errormessage = 'the content of node ' + nodeid + ' was not ready within ' + timeout + ' ms';
-                reject(new Error(errormessage));
+    var instance = this;
+    return new Y.Promise(function (resolve, reject) {
+        var resolved = false,
+            subscription = Y.once('available', function () {
+                resolve(Y.one(selector));
+                resolved = true;
 /*jshint expr:true */
-                (promise.getStatus()==='pending') && evt.detach();
+                timer && timer.cancel();
 /*jshint expr:false */
+            }, selector),
+            timer = timeout && Y.later(timeout, null, function () {
+                if (!resolved) {
+                    reject(new Error(selector + ' was not ready within ' + timeout + ' ms'));
+                    subscription.detach.call(instance);
+                }
             });
-        }
     });
-    return promise;
 };
+
+/**
+ * Hides the node using a transition.
+ * Animates the hiding of the node using either the default
+ * transition effect ('fadeOut'), or the given named effect.
+ * @method hidePromise
+ * @param {String} name A named Transition effect to use as the show effect.
+ * @param {Object} config Options to use with the transition.
+ * @return {Y.Promise} resolved promise when ready hiding, returning the Node-instance in the promise-callback --> resolve(node)
+ */
+/**
+ * Shows the node using a transition.
+ * Animates the showing of the node using either the default
+ * transition effect ('fadeIn'), or the given named effect.
+ * @method hidePromise
+ * @param {String} name A named Transition effect to use as the show effect.
+ * @param {Object} config Options to use with the transition.
+ * @return {Y.Promise} resolved promise when ready showing, returning the Node-instance in the promise-callback --> resolve(node)
+ */
+YArray.each(
+    ['show', 'hide'],
+    function(type) {
+        YNode.prototype[type+'Promise'] = function (name, config) {
+            Y.log(type, 'info', 'node');
+            var instance = this;
+/*jshint expr:true */
+            Lang.isObject(name) && (config=name) && (name=null) && console.log('reshift name to config');
+            config && (!config.duration || (config.duration===0)) && (config=null) && console.log('making config null');
+/*jshint expr:false */
+            return Y.usePromise('transition').then(
+                function() {
+                    return new Y.Promise(function (resolve) {
+                        instance[type](name || true, config, function() {
+                            instance.setStyle('opacity', (type==='hide') ? 0 : 1);
+                            resolve(instance);
+                        });
+                    });
+                },
+                function(err) {
+                    Y.soon(function () {
+                        throw err;
+                    });
+                }
+            );
+        };
+    }
+);
 
 /**
  * Promise that will be resolved once a node is NOT in the DOM.

@@ -2,33 +2,52 @@
 <html>
     <head>
         <title>gallery-nav-assist</title>
+        <link href='../../../../build/gallery-nav-assist/gallery-nav-assist.css' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+        #navtabs div {display: inline-block; margin-left:20px; padding:10px; border:1px solid #efefef;}
+        </style>
     </head>
     <body class="yui3-skin-sam">
         <div id="logger"></div>
 
         <!-- [START] gallery-nav-assist test fixture -->
         <div id="gallery-nav-assist-test-fixture">
-            <div id="tabs">
-                <ul>
-                    <li><input type="text" id="testinputbox"/></li>
-                    <li><a href="#Tab1" id="tab1">Lorem Ipsum</a></li>
-                </ul>
-            </div>
+            <hr>
             <div id="header">
-                <h2>Lorem Ipsum</h2>
+                <h2>header: Lorem Ipsum</h2>
+                <h2>header: Lorem Ipsum</h2>
             </div>
+            <hr>
+            <div id="tabs">
+                <div id="beforebox"><a href="#Tab1" id="tab1">Lorem Ipsum</a></div>
+                <input type="text" id="testinputbox"/>
+            </div>
+            <hr>
             <div id="sidebar">
                 <h2>Lorem Ipsum</h2>
+                <h2>Lorem Ipsum</h2>
             </div>
+            <hr>
             <div id="eastrail">
-                <h2 id="bleh"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
+                <h2 id="elem1"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
+                <h2 id="elem2"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
             </div>
+            <hr>
             <div id="main">
                 <div class="bright"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p></div>
+                <div class="dark"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p></div>
             </div>
+
+            <div id="navtabs">
+                <div id="tab1" class="tab1">tab1</div>
+                <div id="tab2" class="tab2">tab2</div>
+            </div>
+
+            <hr>
             <ul id="links">
                 <li>Lorem Ipsum</li>
             </ul>
+            <hr>
         </div>
         <!-- [END] gallery-nav-assist test fixture -->
 
@@ -36,13 +55,18 @@
         <script src="../../../../build/gallery-nav-assist/gallery-nav-assist-debug.js"></script>
         <script src="js/tests.js"></script>
         <script>
-
 YUI({
     coverage: ['gallery-nav-assist'],
     filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
 }).use('test-console', 'test', 'gallery-nav-assist-tests', function(Y) {
 
-    (new Y.Test.Console()).render('#logger');
+    (new Y.Test.Console({
+        filters: {
+            pass: true
+            // debug: true,
+            // status: true
+        }
+    })).render('#logger');
 
     Y.Test.Runner.setName('gallery-nav-assist');
     Y.Test.Runner.run();

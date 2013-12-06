@@ -168,7 +168,7 @@ var args = process.argv.slice(2),
                         options.agent = false;
 
                         lib.http.get(options, function (res) {
-                            if (res.statusCode === 200 && res.headers.expires && res.headers['cache-control']) {
+                            if (res.statusCode === 200 && res.headers['cache-control']) {
                                 console.log('✔', combo);
                                 successes.push(combo);
                                 return callback();

@@ -6,29 +6,8 @@ YUI.add('gallery-itsaviewmodel', function (Y, NAME) {
 
 /**
  *
- * Widget ITSAViewModel
+ * View ITSAViewModel
  *
- *
- * This widget renderes Y.Model-instances -or just plain objects- inside the widgets contentBox.
- * It uses Y.View under the hood, where Y.View.container is bound to the 'contentBox'. The render-method must be defined
- * by the widget's attribute 'template'. The Model (or object) must be set through the attribute MODEL.
- *
- * Events can be set through the attribute 'events' and follow the same pattern as Y.View does. As a matter of fact, all attributes
- * (template, model, events) are passed through to the widgets Y.View instance (which has the property 'view').
- *
- *
- * Using this widget is great to render Model on the page, where the widget keeps synced with the model. Whenever a new Model-instance
- * is attached to the widget, or another template is used, the wodget will be re-rendered automaticly
- *
- * Attaching MODEL with Y.Model-instances or objects?
- * Both can be attached. Whenever widgetattribute change, the widget will be re-rendered is needed (template- or model-attribute). This also
- * counts for attached objects. However, changes inside an object itself (updated property-value) cannot be caught by the widget, so you need
- * to call syncUI() yourself after an object-change. Y.Model-instances -on the other hand- do fire a *:change-event which is caught by the widget.
- * This makes the widget re-render after a Model-instance changes some of its attributes. In fact, you can attach STRING-values as well, which will
- * lead to 'just rendering' the text without property-fields.
- *
- *
- * By default, the widget comes with its own style. You can disable this by setting the attribute 'styled' to false.
  *
  * @module gallery-itsaviewmodel
  * @extends View
@@ -47,17 +26,20 @@ var ITSAViewModel,
     YArray = Y.Array,
     YObject = Y.Object,
     YIntl = Y.Intl,
+    ITSA = 'itsa',
+    ITSA_ = ITSA+'-',
     PURE_FORM = 'pure-form',
     DEF_FORM_CLASS = PURE_FORM+' '+PURE_FORM+'-aligned',
-    BUTTON_ICON_LEFT = 'itsabutton-iconleft',
+    BUTTON_ICON_LEFT = ITSA+'button-iconleft',
     IMAGE_BUTTON_TEMPLATE = '<i class="itsaicon-form-{type}"></i>',
     YTemplateMicro = Y.Template.Micro,
     FORM_CAPITALIZED = 'FORM',
+    TEMPLATE = 'template',
     CHANGE = 'Change',
     TAGNAME = 'tagName',
     GALLERY = 'gallery-',
-    ITSAVIEWMODEL = 'itsaviewmodel',
-    FOCUSED_CLASS = 'itsa-focused',
+    ITSAVIEWMODEL = ITSA+'viewmodel',
+    FOCUSED_CLASS = ITSA_+'focused',
     STYLED = 'styled',
     BUTTON = 'button',
     MODEL = 'model',
@@ -70,14 +52,19 @@ var ITSAViewModel,
     DESTROYED = 'destroyed',
     DELETE = 'delete',
     DEF_FN = '_defFn_',
+    STATUS = 'status',
+    STATUSBAR = STATUS+'bar',
+    CAP_STATUSBAR = STATUS+'Bar',
     BOOLEAN = 'boolean',
     STRING = 'string',
     EDITABLE = 'editable',
     CONTAINER = 'container',
+    VIEWRENDERED = 'viewrendered',
     DEF_PREV_FN = '_defPrevFn_',
-    ITSATABKEYMANAGER = 'itsatabkeymanager',
+    ITSATABKEYMANAGER = ITSA+'tabkeymanager',
     FOCUSMANAGED = 'focusManaged',
     DISABLED = 'disabled',
+    DATA_ITSASTATUSBAR = 'data-itsa'+STATUSBAR,
     PURE_BUTTON_DISABLED = 'pure-'+BUTTON+'-'+DISABLED,
     VALID_BUTTON_TYPES = {
         button: true,
@@ -175,7 +162,21 @@ var ITSAViewModel,
     SPINBTN_REMOVE = SPIN+BTN_REMOVE,
     SPINBTN_SAVE = SPIN+BTN_SAVE,
     SPINBTN_SUBMIT = SPIN+BTN_SUBMIT,
-
+    UPPERCASE = 'uppercase',
+    LOWERCASE = 'lowercase',
+    CAPITALIZE = 'capitalize',
+    ITSA_BUTTON = ITSA_+BUTTON+'-',
+    ITSABUTTON_UPPERCASE = ITSA_BUTTON+UPPERCASE,
+    ITSABUTTON_LOWERCASE = ITSA_BUTTON+LOWERCASE,
+    ITSABUTTON_CAPITALIZE = ITSA_BUTTON+CAPITALIZE,
+    BUTTONTRANSFORM = BUTTON+'Transform',
+    GALLERY_ITSASTATUSBAR = GALLERY+ITSA+STATUSBAR,
+    GALLERY_ITSAMODELSYNCPROMISE = GALLERY+ITSA+MODEL+'syncpromise',
+    ITSAVIEW_ = 'itsaview-',
+    STATUSBAR_CLASS = ITSAVIEW_+STATUSBAR,
+    ENDDIV = '</div>',
+    STATUSBAR_TEMPLATE = '<div class="'+STATUSBAR_CLASS+'">'+ENDDIV,
+    WRAPPERDIV = '<div class="'+ITSAVIEW_+'wrapper">',
     /**
       * Fired when a UI-element needs to focus to the next element (in case of editable view).
       * The defaultFunc will refocus to the next field (when the view has focus).
@@ -394,11 +395,14 @@ Y.mix(ITSANodeCleanup.prototype, {
     // @since 0.3
     //
     //
-    cleanup: function() {
+    cleanup: function(widgets) {
         var node = this;
 
-        node.cleanupWidgets(true);
-        node.empty();
+/*jshint expr:true */
+        widgets && node.cleanupWidgets(true);
+/*jshint expr:false */
+        // NOT node.empty, for that will remove each and separate node from the dom which make it flickr!
+        node.get('childNodes').destroy(true);
     }
 
 }, true);
@@ -416,6 +420,25 @@ Y.Base.mix(Y.Node, [ITSANodeCleanup]);
 ITSAViewModel = Y.ITSAViewModel = Y.Base.create(ITSAVIEWMODEL, Y.View, [], {},
     {
         ATTRS : {
+            /**
+             * CSS text-transform of all buttons. Should be:
+             * <ul>
+             *   <li>null --> leave as it is</li>
+             *   <li>uppercase</li>
+             *   <li>lowercase</li>
+             *   <li>capitalize --> First character uppercase, the rest lowercase</li>
+             * </ul>
+             *
+             * @attribute buttonTransform
+             * @default null
+             * @type {String}
+             */
+            buttonTransform: {
+                value: null,
+                validator: function(val) {
+                    return (val===null) || (val===UPPERCASE) || (val===LOWERCASE) || (val===CAPITALIZE);
+                }
+            },
             /**
              * Makes the View to render the editable-version of the Model. Only when the Model has <b>Y.Plugin.ITSAEditModel</b> plugged in.
              *
@@ -481,6 +504,21 @@ ITSAViewModel = Y.ITSAViewModel = Y.Base.create(ITSAVIEWMODEL, Y.View, [], {},
             },
 
             /**
+             * Whether the view should have a statusbar (Y.ITSAStatusbar). Targeting should be done directly at the view-instance. See gallery-itsastatusbar.
+             *
+             * @attribute statusBar
+             * @type Boolean
+             * @default false
+             * @since 0.3
+            */
+            statusBar : {
+                value: false,
+                validator: function(val) {
+                    return (typeof val===BOOLEAN);
+                }
+            },
+
+            /**
              * Styles the view by adding the className 'itsaviewmodel-styled' to the container.
              *
              * @attribute styled
@@ -532,8 +570,13 @@ ITSAViewModel.prototype._formcss_loaded = false;
 */
 ITSAViewModel.prototype.initializer = function() {
     var instance = this,
-        model = instance.get(MODEL);
+        model = instance.get(MODEL),
+        renderpromise;
 
+
+    renderpromise = instance._renderPromise = new Y.Promise(function (resolve) {
+        instance._renderPromiseResolve = resolve;
+    });
 
     /**
      * Internal objects with internationalized buttonlabels
@@ -723,9 +766,9 @@ ITSAViewModel.prototype.initializer = function() {
 
     instance._contIsForm = (instance.get(CONTAINER).get(TAGNAME)===FORM_CAPITALIZED);
 
-    instance._setTemplateRenderer(instance.get(EDITABLE));
 /*jshint expr:true */
     model && model.addTarget && model.addTarget(instance);
+    model && instance.get(TEMPLATE) && instance._setTemplateRenderer();
 /*jshint expr:false */
 
     /**
@@ -789,6 +832,42 @@ ITSAViewModel.prototype.addCustomBtn = function(buttonId, labelHTML, config) {
 };
 
 /**
+ * Creates custom buttons for multiple buttons. Passes through to addCustomBtn (see that method for possible buttonvalues).
+ *
+ * @method addCustomBtns
+ * @param buttons {Array} Array of objects with properties buttons.buttonId, buttons.labelHTML and optionally buttonConfig.config
+ * @since 0.4
+ *
+*/
+ITSAViewModel.prototype.addCustomBtns = function(buttons) {
+    var instance = this;
+/*jshint expr:true */
+    Lang.isArray(buttons) && (YArray.each(
+        buttons,
+        function(buttonConfig) {
+            buttonConfig.buttonId && buttonConfig.labelHTML && instance.addCustomBtn(buttonConfig.buttonId, buttonConfig.labelHTML, buttonConfig.config);
+        }
+    ));
+/*jshint expr:false */
+};
+
+/**
+ * Makes sync-messages to target the specified messageViewer. Passes through to the underlying model-instance (if available).
+ * You can only target to 1 MessageViewer at the same time.<br>
+ * See gallery-itsamessageviewer for more info.
+ *
+ * @method addMessageTarget
+ * @param itsamessageviewer {Y.ITSAMessageViewer|Y.ITSAPanel}
+ * @since 0.1
+*/
+ITSAViewModel.prototype.addMessageTarget = function(itsamessageviewer) {
+    var model = this.get(MODEL);
+/*jshint expr:true */
+    model && model.addMessageTarget && model.addMessageTarget(itsamessageviewer);
+/*jshint expr:false */
+};
+
+/**
  * Blur the focus of the view's container-node by removing the 'itsa-focused' class.
  *
  * @method blur
@@ -796,7 +875,7 @@ ITSAViewModel.prototype.addCustomBtn = function(buttonId, labelHTML, config) {
  *
 */
 ITSAViewModel.prototype.blur = function() {
-    this.get('container').removeClass(FOCUSED_CLASS);
+    this.get(CONTAINER).removeClass(FOCUSED_CLASS);
 };
 
 /**
@@ -808,26 +887,51 @@ ITSAViewModel.prototype.blur = function() {
 */
 ITSAViewModel.prototype.focus = function() {
 
-    var container = this.get('container');
+    var instance = this,
+        container = instance.get(CONTAINER);
 
-    container.addClass(FOCUSED_CLASS);
-    container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
-        function(itsatabkeymanager) {
-            itsatabkeymanager._retreiveFocus();
+    instance.isRendered().then(
+        function() {
+            container.addClass(FOCUSED_CLASS);
+            container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+                function(itsatabkeymanager) {
+                    itsatabkeymanager._retrieveFocus();
+                }
+            );
         }
     );
 };
 
 /**
- * Use toJSON() instead
+ * Sets focus to the initial item.
  *
- * @method getModelToJSON
- * @deprecated
- * @param {Y.Model|Object} model
- * @return {Object} Object or model.toJSON()
- * @since 0.1
- *
+ * @method focusInitialItem
+ * @since 0.4
+ * return {Y.Promise} when item gets focussed
 */
+ITSAViewModel.prototype.focusInitialItem = function() {
+    var instance = this,
+        container = instance.get(CONTAINER);
+
+    return container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
+        function(itsatabkeymanager) {
+            container.addClass(FOCUSED_CLASS);
+            itsatabkeymanager.focusInitialItem();
+        }
+    );
+};
+
+/**
+ * Promise that will be resolved once the view is rendered.
+ * This is asynchronious, because it also takes into account asynchronous loading of the tabkeymanager.
+ *
+ * @method isRendered
+ * @return {Y.Promise} promised response --> resolve() OR reject(reason).
+ * @since 0.2
+*/
+ITSAViewModel.prototype.isRendered = function() {
+    return this._renderPromise;
+};
 
 /**
  * Locks the view (all UI-elements of the form-model) in case model is Y.ITSAFormModel and the view is editable.
@@ -836,12 +940,14 @@ ITSAViewModel.prototype.focus = function() {
 ITSAViewModel.prototype.lockView = function() {
     var instance = this,
         model = instance.get(MODEL),
+        // hidden parameter: 'nolock'
+        nolock = arguments[0],
         canDisableModel = (instance.get(EDITABLE) && model && model.toJSONUI);
 
 /*jshint expr:true */
-    canDisableModel ? model.disableUI() : instance.get('container').all('button').addClass(PURE_BUTTON_DISABLED);
+    canDisableModel ? model.disableUI() : instance.get(CONTAINER).all('button').addClass(PURE_BUTTON_DISABLED);
+    nolock || (instance._locked=true);
 /*jshint expr:false */
-    instance._locked = true;
 };
 
 /**
@@ -883,24 +989,31 @@ ITSAViewModel.prototype.lockView = function() {
  * </ul>
  *
  * @method removeButtonLabel
- * @param buttonType {String} the buttontype which text was replaced, one of those mentioned above.
+ * @param [buttonType] {String} the buttontype which text was replaced, one of those mentioned above. If none specified, all custom labels are removed.
  * @since 0.3
  *
 */
 ITSAViewModel.prototype.removeButtonLabel = function(buttonType) {
-    delete this._customBtnLabels[buttonType];
+    var instance = this;
+/*jshint expr:true */
+    buttonType ? (delete instance._customBtnLabels[buttonType]) : (instance._customBtnLabels = {});
+/*jshint expr:false */
 };
 
 /**
  * Removes custom buttons defined with addCustomBtn().
  *
  * @method removeCustomBtn
- * @param buttonId {String} unique id that will be used as the reference-property during templating. F.i. {btn_button_1}
+ * @param [buttonId] {String} unique id that was used as the reference-property during templating. F.i. {btn_button_1}. if none specified, all custom buttons are removed.
  * @since 0.3
  *
 */
 ITSAViewModel.prototype.removeCustomBtn = function(buttonId) {
+    var instance = this;
     delete this._customBtns[buttonId];
+/*jshint expr:true */
+    buttonId ? (delete instance._customBtns[buttonId]) : (instance._customBtns = {});
+/*jshint expr:false */
 };
 
 /**
@@ -942,7 +1055,7 @@ ITSAViewModel.prototype.removeCustomBtn = function(buttonId) {
  * </ul>
  *
  * @method removeHotKey
- * @param buttonType {String} the buttontype whose hotkey should be removed --> should be one of the types mentioned above.
+ * @param [buttonType] {String} the buttontype whose hotkey should be removed --> should be one of the types mentioned above. If none specified, all hotkeys are removed.
  * @since 0.3
  *
 */
@@ -950,7 +1063,21 @@ ITSAViewModel.prototype.removeHotKey = function(buttonType) {
 
     var instance = this;
 /*jshint expr:true */
-    instance._hotkeys[buttonType] && (delete instance._hotkeys[buttonType]) && instance._createButtons();
+    buttonType ? (delete instance._hotkeys[buttonType]) : (instance._hotkeys = {});
+/*jshint expr:false */
+    instance._createButtons();
+};
+
+/**
+ * Removes the messageViewer-target that was set up by addMessageTarget().
+ *
+ * @method removeMessageTarget
+ * @since 0.1
+*/
+ITSAViewModel.prototype.removeMessageTarget = function() {
+    var model = this.get(MODEL);
+/*jshint expr:true */
+    model && model.removeMessageTarget && model.removeMessageTarget();
 /*jshint expr:false */
 };
 
@@ -988,44 +1115,89 @@ ITSAViewModel.prototype.render = function (clear) {
         container = instance.get(CONTAINER),
         model = instance.get(MODEL),
         editMode = instance.get(EDITABLE),
+        statusbar = instance.get(CAP_STATUSBAR),
+        statusbarinstance = instance._itsastatusbar,
         itsaDateTimePicker = Y.Global.ItsaDateTimePicker,
-        html = (clear || !model) ? '' : instance._modelRenderer(model);
-
+        html = (clear || !model) ? '' : instance._modelRenderer(model),
+        withfocusmanager;
     // Render this view's HTML into the container element.
     // Because Y.Node.setHTML DOES NOT destroy its nodes (!) but only remove(), we destroy them ourselves first
     if (editMode || instance._isMicroTemplate) {
         if (editMode) {
             instance._initialEditAttrs = model.getAttrs();
         }
-        container.cleanupWidgets(true);
+        container.cleanup(instance._rendered);
+    }
+    else {
+        container.cleanup(false);
     }
     // Append the container element to the DOM if it's not on the page already.
     if (!instance._rendered) {
 /*jshint expr:true */
-        container.inDoc() || Y.one('body').append(container);
+        container.inDoc() || ((instance._newContainer=true) && Y.one('body').append(container));
 /*jshint expr:false */
         container.addClass(ITSAVIEWMODEL);
         container.toggleClass(ITSAVIEWMODEL+'-'+STYLED, instance.get(STYLED));
+        instance._setButtonTransform(instance.get(BUTTONTRANSFORM));
         instance._bindUI();
     }
     instance._rendered = true;
 /*jshint expr:true */
-    (html.length>0) && editMode && instance._viewNeedsForm && (html='<form class="'+DEF_FORM_CLASS+'">'+html+'</form>');
+    (html.length>0) && editMode && instance._viewNeedsForm && (html=(statusbar ? WRAPPERDIV : '')+'<form class="'+DEF_FORM_CLASS+'">'+html+'</form>'+(statusbar ? ENDDIV : ''));
 /*jshint expr:false */
+
+/*jshint expr:true */
+    statusbar && (statusbarinstance || (html+=STATUSBAR_TEMPLATE));
+/*jshint expr:false */
+
     container.setHTML(html);
-    instance._setFocusManager(editMode && instance.get(FOCUSMANAGED));
+    if (statusbar) {
+        container.setAttribute(DATA_ITSASTATUSBAR, 'true');
+        if (statusbarinstance) {
+            container.append(statusbarinstance.get('parentNode'));
+        }
+        else {
+            Y.usePromise(GALLERY_ITSASTATUSBAR).then(
+                function() {
+                    var node = container.one('.'+STATUSBAR_CLASS);
+                    statusbarinstance = instance._itsastatusbar = new Y.ITSAStatusbar({parentNode: node});
+                    // to make targeting Y.ITSAMessages to this instance posible:
+                    instance._viewName = statusbarinstance._viewName;
+                    if (model) {
+                        Y.batch(Y.usePromise(GALLERY_ITSAMODELSYNCPROMISE), statusbarinstance.isReady()).then(
+                            function() {
+                                model.addMessageTarget(instance._itsastatusbar);
+                            }
+                        );
+                    }
+                    instance._repositionStatusbar();
+                }
+            );
+        }
+    }
+    else {
+        container.removeAttribute(DATA_ITSASTATUSBAR);
+        instance._viewName = null;
+    }
+
+    withfocusmanager = editMode && instance.get(FOCUSMANAGED);
+    instance._setFocusManager(withfocusmanager);
+    if (withfocusmanager) {
+        Y.usePromise(GALLERY+ITSATABKEYMANAGER).then(
+            function() {
+                instance._renderPromiseResolve();
+                instance.fire(VIEWRENDERED, {target: instance});
+            }
+        );
+    }
+    else {
+        instance._renderPromiseResolve();
+        instance.fire(VIEWRENDERED, {target: instance});
+    }
+
     if (itsaDateTimePicker && itsaDateTimePicker.panel.get('visible')) {
         itsaDateTimePicker.hide(true);
     }
-    /**
-    * Fired when the view is rendered
-    *
-    * @event viewrendered
-    * @param e {EventFacade} Event Facade including:
-    * @param e.target {Y.ITSAViewModel} This instance.
-    * @since 0.3
-    */
-    instance.fire('viewrendered', {target: instance});
     return instance;
 };
 
@@ -1083,6 +1255,26 @@ ITSAViewModel.prototype.setButtonLabel = function(buttonType, labelHTML) {
 };
 
 /**
+ * Creates custom labels for multiple buttons. Passes through to setButtonLabel (see that method for possible buttonvalues).
+ *
+ * @method setButtonLabels
+ * @param buttons {Array} Array of objects with properties buttons.buttonType and buttonConfig.labelHTML
+ * @since 0.4
+ *
+*/
+ITSAViewModel.prototype.setButtonLabels = function(buttons) {
+    var instance = this;
+/*jshint expr:true */
+    Lang.isArray(buttons) && (YArray.each(
+        buttons,
+        function(buttonConfig) {
+            buttonConfig.buttonType && buttonConfig.labelHTML && instance.setButtonLabel(buttonConfig.buttonType, buttonConfig.labelHTML);
+        }
+    ));
+/*jshint expr:false */
+};
+
+/**
  * Creates a listener to the specific hotkey (character). The hotkey will be bound to the specified buttonType, that should be one of types mentioned below.
  * The hotkey-character will be marked with the css-class 'itsa-hotkey' (span-element), which underscores by default, but can be overruled.
  * <ul>
@@ -1134,6 +1326,26 @@ ITSAViewModel.prototype.setHotKey = function(buttonType, hotkey) {
 
 /*jshint expr:true */
     PROTECTED_BUTTON_TYPES[buttonType] && ((typeof hotkey === STRING) || Lang.isObject(hotkey)) && (instance._hotkeys[buttonType]=hotkey) && instance._createButtons();
+/*jshint expr:false */
+};
+
+/**
+ * Creates hotkeys for multiple buttons. Passes through to setHotKey (see that method for possible buttonvalues).
+ *
+ * @method setHotKeys
+ * @param buttons {Array} Array of objects with properties buttons.buttonType and buttonConfig.hotkey
+ * @since 0.4
+ *
+*/
+ITSAViewModel.prototype.setHotKeys = function(buttons) {
+    var instance = this;
+/*jshint expr:true */
+    Lang.isArray(buttons) && (YArray.each(
+        buttons,
+        function(buttonConfig) {
+            buttonConfig.buttonType && buttonConfig.hotkey && instance.setHotKey(buttonConfig.buttonType, buttonConfig.hotkey);
+        }
+    ));
 /*jshint expr:false */
 };
 
@@ -1286,7 +1498,7 @@ ITSAViewModel.prototype.unlockView = function() {
         canEnableModel = (instance.get(EDITABLE) && model && model.toJSONUI);
 
 /*jshint expr:true */
-    canEnableModel ? model.enableUI() : instance.get('container').all('button').removeClass(PURE_BUTTON_DISABLED);
+    canEnableModel ? model.enableUI() : instance.get(CONTAINER).all('button').removeClass(PURE_BUTTON_DISABLED);
 /*jshint expr:false */
     instance._locked = false;
 };
@@ -1300,20 +1512,35 @@ ITSAViewModel.prototype.unlockView = function() {
 ITSAViewModel.prototype.destructor = function() {
     var instance = this,
         model = instance.get(MODEL),
+        statusbarinstance = instance._itsastatusbar,
         container = instance.get(CONTAINER);
 
 /*jshint expr:true */
     model && model.removeTarget && model.removeTarget(instance);
 /*jshint expr:false */
+    instance._itsastatusbar = null;
+
+    if (statusbarinstance) {
+/*jshint expr:true */
+        model && model.removeMessageTarget(statusbarinstance);
+/*jshint expr:false */
+        statusbarinstance.destroy();
+    }
+
     instance._clearEventhandlers();
     instance._customBtns = {};
     instance._customBtnLabels = {};
     instance._hotkeys = {};
 
-/*jshint expr:true */
-    container.hasPlugin(ITSATABKEYMANAGER) && container.unplug(ITSATABKEYMANAGER);
-/*jshint expr:false */
-};
+    container.empty();
+    if (instance._newContainer) {
+        container.remove(true);
+    }
+    else {
+        container.removeClass(ITSAVIEWMODEL+'-'+STYLED);
+        container.destroy(true);
+    }
+  };
 
 //===============================================================================================
 // private methods
@@ -1331,21 +1558,32 @@ ITSAViewModel.prototype._bindUI = function() {
     var instance = this,
         container = instance.get(CONTAINER),
         eventhandlers = instance._eventhandlers;
-
     eventhandlers.push(
         instance.after(
-            'model'+CHANGE,
+            MODEL+CHANGE,
             function(e) {
                 var prevVal = e.prevVal,
                     newVal = e.newVal,
                     prevFormModel = prevVal && prevVal.toJSONUI,
-                    newFormModel = newVal && newVal.toJSONUI;
+                    newFormModel = newVal && newVal.toJSONUI,
+                    statusbar = instance.get(CAP_STATUSBAR);
                 if (prevVal) {
 /*jshint expr:true */
                     prevVal.removeTarget && prevVal.removeTarget(instance);
+                    statusbar && prevVal.removeMessageTarget(instance._itsastatusbar);
                 }
-                newVal && newVal.addTarget && newVal.addTarget(instance);
-                (prevFormModel !== newFormModel) && instance._setTemplateRenderer(newFormModel && instance.get(EDITABLE));
+                if (newVal) {
+                    newVal.addTarget && newVal.addTarget(instance);
+                    if (statusbar) {
+                        Y.usePromise(GALLERY_ITSAMODELSYNCPROMISE).then(
+                            function() {
+                                newVal.addMessageTarget(instance._itsastatusbar);
+                            }
+                        );
+                    }
+                }
+
+                (prevFormModel !== newFormModel) && newFormModel && instance.get(TEMPLATE) && instance._setTemplateRenderer();
 /*jshint expr:false */
                 instance.render();
             }
@@ -1353,11 +1591,19 @@ ITSAViewModel.prototype._bindUI = function() {
     );
     eventhandlers.push(
         instance.after(
-            'template'+CHANGE,
+            TEMPLATE+CHANGE,
             function() {
-                instance._setTemplateRenderer(instance.get(EDITABLE));
-                instance.render();
+                if (instance.get(MODEL)) {
+                    instance._setTemplateRenderer();
+                    instance.render();
+                }
             }
+        )
+    );
+    eventhandlers.push(
+        instance.after(
+            CAP_STATUSBAR+CHANGE,
+            Y.bind(instance.render, instance)
         )
     );
     eventhandlers.push(
@@ -1380,13 +1626,12 @@ ITSAViewModel.prototype._bindUI = function() {
     );
     eventhandlers.push(
         instance.after(
-            'editable'+CHANGE,
-            function(e) {
-                var newEditable = e.newVal,
-                    model = instance.get(MODEL);
+            EDITABLE+CHANGE,
+            function() {
+                var model = instance.get(MODEL);
                 // if model.toJSONUI exists, then we need to rerender
-                if (model && model.toJSONUI) {
-                    instance._setTemplateRenderer(newEditable);
+                if (instance.get(TEMPLATE) && model && model.toJSONUI) {
+                    instance._setTemplateRenderer();
                     instance.render();
                 }
             }
@@ -1424,16 +1669,18 @@ ITSAViewModel.prototype._bindUI = function() {
                     model = e.target,
                     eventType = e.type.split(':')[1],
                     options = e.options,
-                    destroyWithoutRemove = ((eventType===DESTROY) && (options.remove || options[DELETE])),
+                    messageController = Y.ITSAMessageController,
+                    statusbar = model._itsamessageListener || (messageController && messageController._targets[MODEL+'sync']),
+                    destroyWithoutRemove = ((eventType===DESTROY) && options && (options.remove || options[DELETE])),
                     prevAttrs;
                 if (!destroyWithoutRemove && (model instanceof Y.Model)) {
                     instance._lockedBefore = instance._locked;
-                    instance.lockView();
+                    instance.lockView(true);
                     if ((eventType===SUBMIT) || (eventType===SAVE)) {
                         prevAttrs = model.getAttrs();
                         model.UIToModel();
                     }
-                    instance._setSpin(eventType, true);
+                    statusbar || instance._setSpin(eventType, true);
                     (eventType===DESTROY) || promise.then(
                         function() {
                             ((eventType===LOAD) || (eventType===SUBMIT) || (eventType===SAVE)) && model.setResetAttrs();
@@ -1444,7 +1691,7 @@ ITSAViewModel.prototype._bindUI = function() {
                         }
                     ).then(
                         function() {
-                            instance._setSpin(eventType, false);
+                            statusbar || instance._setSpin(eventType, false);
                             instance._lockedBefore || instance.unlockView();
                             container.pluginReady(ITSATABKEYMANAGER, PLUGIN_TIMEOUT).then(
                                 function(itsatabkeymanager) {
@@ -1463,7 +1710,7 @@ ITSAViewModel.prototype._bindUI = function() {
         instance.after(
             '*:destroy',
             function(e) {
-                if (e.target!==instance) {
+                if (e.target instanceof Y.Model) {
                     instance.render(true);
                 }
             }
@@ -1494,7 +1741,7 @@ ITSAViewModel.prototype._bindUI = function() {
         )
     );
     eventhandlers.push(
-        Y.Intl.after(
+        Y.Intl.after( // subscribe to the after event, so the formmodel gets updated sooner: that one is subscribing the on-event
             'intl:lang'+CHANGE,
             function() {
                 instance._intl = Y.Intl.get(GALLERY+ITSAVIEWMODEL);
@@ -1519,6 +1766,14 @@ ITSAViewModel.prototype._bindUI = function() {
         )
     );
 
+    eventhandlers.push(
+        instance.after(
+            BUTTONTRANSFORM+CHANGE,
+            function(e) {
+                instance._setButtonTransform(e.newVal);
+            }
+        )
+    );
     YArray.each(
         [CLICK, VALIDATION_ERROR, UI_CHANGED, FOCUS_NEXT],
         function(event) {
@@ -1529,9 +1784,9 @@ ITSAViewModel.prototype._bindUI = function() {
                         var validEvent = true,
                             newevent = event,
                             payload, button;
-                        // check if e.target===instance, because it checks by *: and will recurse
-
-                        if (e.target!==instance) {
+                        // check if e.target!==instance, because it checks by *: and will recurse
+                        // also check if e.currentTarget===instance, because you might get double events after itsamodelsyncpromise did _asyncPublishing
+                        if ((e.target!==instance) && (e.currentTarget===instance)) {
                             if (event===CLICK) {
                                 button = e.type.split(':')[0];
                                 if (VALID_BUTTON_TYPES[button]) {
@@ -1974,7 +2229,7 @@ ITSAViewModel.prototype[DEF_PREV_FN+VALIDATION_ERROR] = function(e) {
  * @private
 */
 ITSAViewModel.prototype[DEF_FN+VALIDATION_ERROR] = function(e) {
-    var node = e.nodelist.item(0);
+    var node = e.nodelist && e.nodelist.item(0);
 
     //focus first item that misses validation
     if (node) {
@@ -1986,6 +2241,29 @@ ITSAViewModel.prototype[DEF_FN+VALIDATION_ERROR] = function(e) {
 /*jshint expr:false */
         node.scrollIntoView();
     }
+};
+
+/**
+ * Sets the right className to the container for making text-transForm of buttons. Configured by attribute 'buttonTransform'.<br />
+ * Either one of these values:
+ * <ul>
+ *   <li>null --> leave as it is</li>
+ *   <li>uppercase</li>
+ *   <li>lowercase</li>
+ *   <li>capitalize --> First character uppercase, the rest lowercase</li>
+ * </ul>
+ *
+ * @method _setButtonTransform
+ * @param type {String} new text-transform value
+ * @private
+ * @since 0.2
+*/
+ITSAViewModel.prototype._setButtonTransform = function(type) {
+    var container = this.get(CONTAINER);
+
+    container.toggleClass(ITSABUTTON_UPPERCASE, (type===UPPERCASE));
+    container.toggleClass(ITSABUTTON_LOWERCASE, (type===LOWERCASE));
+    container.toggleClass(ITSABUTTON_CAPITALIZE, (type===CAPITALIZE));
 };
 
 /**
@@ -2001,7 +2279,6 @@ ITSAViewModel.prototype._setFocusManager = function(activate) {
     var instance = this,
         container = instance.get(CONTAINER),
         itsatabkeymanager = container.itsatabkeymanager;
-
     if (activate) {
         // If Y.Plugin.ITSATabKeyManager is plugged in, then refocus to the first item
         Y.use(GALLERY+ITSATABKEYMANAGER, function() {
@@ -2012,16 +2289,17 @@ ITSAViewModel.prototype._setFocusManager = function(activate) {
                 else {
                     container.plug(Y.Plugin.ITSATabKeyManager);
                     itsatabkeymanager = container.itsatabkeymanager;
+                    instance.addTarget(itsatabkeymanager);
                 }
                 if (container.hasClass(FOCUSED_CLASS)) {
-                    itsatabkeymanager.focusInitialItem();
+                    container.itsatabkeymanager.focusInitialItem();
                 }
             }
         });
     }
     else {
 /*jshint expr:true */
-        itsatabkeymanager && container.unplug(ITSATABKEYMANAGER);
+        itsatabkeymanager && instance.removeTarget(itsatabkeymanager) && container.unplug(ITSATABKEYMANAGER);
 /*jshint expr:false */
     }
 };
@@ -2067,7 +2345,7 @@ ITSAViewModel.prototype._setModel = function(v) {
 */
 ITSAViewModel.prototype._setSpin = function(buttonType, spin) {
     var instance = this,
-        buttonicons = instance.get('container').all('[data-buttonsubtype="'+buttonType+'"] i');
+        buttonicons = instance.get(CONTAINER).all('[data-buttonsubtype="'+buttonType+'"] i');
     buttonicons.toggleClass('itsaicon-form-loading', spin);
     buttonicons.toggleClass('itsa-busy', spin);
 };
@@ -2085,33 +2363,40 @@ ITSAViewModel.prototype._setSpin = function(buttonType, spin) {
  * @since 0.3
  *
 */
-ITSAViewModel.prototype._setTemplateRenderer = function(editTemplate) {
+ITSAViewModel.prototype._setTemplateRenderer = function() {
     var instance = this,
-        template = instance.get('template'),
+        template = instance.get(TEMPLATE),
+        editTemplate = instance.get(EDITABLE),
         isMicroTemplate, ismicrotemplate, compiledModelEngine, buttonsToJSON;
     isMicroTemplate = function() {
         var microTemplateRegExp = /<%(.+)%>/;
         return microTemplateRegExp.test(template);
     };
     buttonsToJSON = function(jsondata, model) {
-        var propertykey, type, labelHTML, config;
+        var propertykey, type, labelHTML, config, propertyEmbraced;
         YArray.each(
             instance._buttons,
             function(buttonobject) {
                 propertykey = buttonobject.propertykey;
-                type = buttonobject.type;
-                labelHTML = buttonobject.labelHTML(); // is a function!
-                config = buttonobject.config;
-                jsondata[propertykey] = model._renderBtnFns[type].call(model, labelHTML, config);
+                propertyEmbraced = new RegExp('{'+propertykey+'}');
+                if (propertyEmbraced.test(template)) {
+                    type = buttonobject.type;
+                    labelHTML = buttonobject.labelHTML(); // is a function!
+                    config = buttonobject.config;
+                    jsondata[propertykey] = model._renderBtnFns[type] && model._renderBtnFns[type].call(model, labelHTML, config);
+                }
             }
         );
         // now add the custom buttons
         YObject.each(
             instance._customBtns,
             function(buttonobject, propertykey) {
-                labelHTML = buttonobject.labelHTML; // is a property
-                config = buttonobject.config;
-                jsondata[propertykey] = model._renderBtnFns[BUTTON].call(model, labelHTML, config);
+                propertyEmbraced = new RegExp('{'+propertykey+'}');
+                if (propertyEmbraced.test(template)) {
+                    labelHTML = buttonobject.labelHTML; // is a property
+                    config = buttonobject.config;
+                    jsondata[propertykey] = model._renderBtnFns[BUTTON] && model._renderBtnFns[BUTTON].call(model, labelHTML, config);
+                }
             }
         );
     };
@@ -2119,7 +2404,7 @@ ITSAViewModel.prototype._setTemplateRenderer = function(editTemplate) {
     if (ismicrotemplate) {
         compiledModelEngine = YTemplateMicro.compile(template);
         instance._modelRenderer = function(model) {
-            var jsondata = editTemplate ? model.toJSONUI() : instance.toJSON();
+            var jsondata = editTemplate ? model.toJSONUI(null, template) : instance.toJSON();
             // if model is instance of Y.ITSAFormModel, then add the btn_buttontype-properties:
 /*jshint expr:true */
             model.toJSONUI && buttonsToJSON(jsondata, model);
@@ -2129,7 +2414,7 @@ ITSAViewModel.prototype._setTemplateRenderer = function(editTemplate) {
     }
     else {
         instance._modelRenderer = function(model) {
-            var jsondata = editTemplate ? model.toJSONUI() : instance.toJSON();
+            var jsondata = editTemplate ? model.toJSONUI(null, template) : instance.toJSON();
 /*jshint expr:true */
             model.toJSONUI && buttonsToJSON(jsondata, model);
 /*jshint expr:false */
@@ -2141,16 +2426,24 @@ ITSAViewModel.prototype._setTemplateRenderer = function(editTemplate) {
     instance._viewNeedsForm = !instance._contIsForm && !(/<form([^>]*)>/.test(template));
 };
 
-}, 'gallery-2013.10.17-22-20', {
+}, '@VERSION@', {
     "requires": [
+        "yui-base",
         "gallery-itsapluginpromise",
         "intl",
+        "base-base",
         "base-build",
         "view",
+        "widget-base",
+        "template-base",
         "template-micro",
         "model",
+        "node-style",
         "event-custom",
         "event-outside",
+        "event-custom-base",
+        "oop",
+        "promise",
         "pluginhost-base",
         "gallery-itsamodulesloadedpromise",
         "gallerycss-itsa-base"

@@ -1,6 +1,6 @@
 
-.yui3-widget-pointer-up, 
-.yui3-widget-pointer-down, 
+.yui3-widget-pointer-up,
+.yui3-widget-pointer-down,
 .yui3-widget-pointer-right,
 .yui3-widget-pointer-left {
     width: 0;
@@ -38,7 +38,7 @@
 
 .yui3-widget-pointer-left {
     border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent; 
+    border-bottom: 5px solid transparent;
     border-right:5px solid black;
     right: 0;
     top: 50%;
