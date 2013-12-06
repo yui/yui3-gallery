@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-soon</title>
+    <script src="http://yui.yahooapis.com/3.13.0/build/yui/yui-min.js"></script>
+    <script src="js/gallery-soon-tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-soon'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    modules: {
+    	'gallery-soon': {
+    		fullpath: '../../build/gallery-soon/gallery-soon-min.js',
+    		requires: [
+    			'node-base',
+    			'timers'
+    		]
+    	}
+    }
+}).use('test-console', 'test', 'gallery-soon', 'gallery-soon-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-soon');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

@@ -159,6 +159,14 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             // remove file extension
             name = mod.path.split(EXTENSION_RE).shift();
 
+            if (meta && meta.root) {
+                name = meta.root + name;
+            }
+
+            if (name[0] === '/') {
+                name = name.slice(1);
+            }
+
             // If fullpath compression is enabled, add this module's fullpath
             // to the prefix tree for later compression
             if (Y.config.fullpathCompression) {

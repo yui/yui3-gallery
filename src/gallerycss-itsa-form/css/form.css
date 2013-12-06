@@ -23,7 +23,7 @@
 */
 
 i[class^="itsaicon-form-"]:before, i[class*=" itsaicon-form-"]:before {
-  font-family: "itsaform";
+  font-family: "itsaform" !important;
 }
 
 i.itsaicon-form-yes:before, i.itsaicon-form-ok:before { content: '\e805'; } /* Web Symbols '' */

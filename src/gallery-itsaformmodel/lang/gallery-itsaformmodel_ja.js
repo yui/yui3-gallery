@@ -1,4 +1,5 @@
 {
+    ready: 'レディ',
     enterrightformat : '適切なフォーマットを入力してください',
     entervalidnumber : '有効な番号を入力してください',
     inputrequired : '入力が必要です',

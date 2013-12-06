@@ -1,0 +1,10 @@
+{
+    "name": "gallery-inview-event",
+    "builds": {
+        "gallery-inview-event": {
+            "jsfiles": [
+                "js/gallery-inview-event.js"
+            ]
+        }
+    }
+}

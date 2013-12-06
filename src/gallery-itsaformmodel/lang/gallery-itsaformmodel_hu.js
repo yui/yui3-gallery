@@ -1,4 +1,5 @@
 {
+    ready: 'Kész',
     enterrightformat : 'kérjük, adja meg a megfelelő formátumban',
     entervalidnumber : 'kérjük, adjon meg egy érvényes számot',
     inputrequired : 'Input szükséges',

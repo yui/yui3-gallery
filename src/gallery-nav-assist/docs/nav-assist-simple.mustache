@@ -1,0 +1,40 @@
+<div class="intro">
+    <p>{{description}}</p>
+    <h3> Keyboard shortcuts</h3>
+    <p>shift + RightArrow: To move to next registered Container</p>
+    <p>shift + LeftArrow: To move to previous registered Container :</p>
+    <p>upArrow: To move to next child element within an active Container </p>
+    <p>downArrow: To move to previous child element within an active Container :</p>
+    <p>rightArrow: To move to next child element within an active Horizontal Container </p>
+    <p>leftArrow: To move to previous child element within an active HorizontalContainer </p>
+    <p>shift + 'e': Enable Navigation </p>
+    <p>shift + 'd': disable Navigation</p>
+    <p>Escape key: exit navigation</p>
+</div>
+
+<div id="demo" class="example">
+    <style>
+    {{>simple-source-css}}
+    </style>
+
+    {{>simple-source-html}}
+
+    <script>
+    YUI().use('gallery-nav-assist', function(Y){
+        {{>simple-start-js}}
+    });
+    </script>
+</div>
+
+
+<h2 id="source">Full Source</h2>
+<p>Instantiating the Widget.</p>
+```
+YUI().use('gallery-nav-assist', function(Y){
+{{>simple-start-js}}}
+});
+```
+<p>demo page css</p>
+```
+{{>simple-source-css}}
+```

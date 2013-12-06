@@ -229,32 +229,34 @@ Paginator.ui.PageLinks.prototype = {
                     Paginator.ui.PageLinks.templates.disabledPageLink :
                     Paginator.ui.PageLinks.templates.pageLink;
 
-            if (start > 1) {
-                start++;
-                params.page  = 1;
-                params.label = labelBuilder(1,p);
-                content     += Y.Lang.sub(pageLink, params);
-                content     += '&hellip;';
-            }
+            if (0 < start && start <= end) {
+                if (start > 1) {
+                    start++;
+                    params.page  = 1;
+                    params.label = labelBuilder(1,p);
+                    content     += Y.Lang.sub(pageLink, params);
+                    content     += '&hellip;';
+                }
 
-            if (end < totalPages) {
-                end--;
-                showLast = true;
-            }
+                if (end < totalPages) {
+                    end--;
+                    showLast = true;
+                }
 
-            for (i = start; i <= end; ++i) {
-                params.page  = i;
-                params.label = labelBuilder(i,p);
-                content += Y.Lang.sub(i === currentPage ?
-                    Paginator.ui.PageLinks.templates.currentPageLink : pageLink,
-                    params);
-            }
+                for (i = start; i <= end; ++i) {
+                    params.page  = i;
+                    params.label = labelBuilder(i,p);
+                    content += Y.Lang.sub(i === currentPage ?
+                        Paginator.ui.PageLinks.templates.currentPageLink : pageLink,
+                        params);
+                }
 
-            if (showLast) {
-                params.page  = totalPages;
-                params.label = labelBuilder(totalPages,p);
-                content     += '&hellip;';
-                content     += Y.Lang.sub(pageLink, params);
+                if (showLast) {
+                    params.page  = totalPages;
+                    params.label = labelBuilder(totalPages,p);
+                    content     += '&hellip;';
+                    content     += Y.Lang.sub(pageLink, params);
+                }
             }
 
             this.container.set('className', p.get('pageLinksContainerClass'));

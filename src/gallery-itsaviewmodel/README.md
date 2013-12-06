@@ -2,7 +2,7 @@ gallery-itsaviewmodel
 ========
 
 
-This widget renderes Y.Model-instances -or just plain objects- inside the widgets contentBox. See the docs.
+This View renderes automaticly Y.Model-instances -or just plain objects- inside the view's container. See the docs.
 
 
 Landing Page

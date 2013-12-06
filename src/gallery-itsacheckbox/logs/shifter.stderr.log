@@ -1,0 +1,20 @@
+shifter [err] /src/gallery-itsacheckbox/js/gallery-itsacheckbox.js contains 7 lint errors
+   #1: 'wrapperLeftPos' is not defined.
+       wrapperLeftPos = radiusleft-optionWidth; // line 679, pos 13
+   #2: 'wrapperLeftPos' is not defined.
+       wrapperNode.setStyle(LEFT, wrapperLeftPos+PX); // line 680, pos 40
+   #3: 'wrapperLeftPos' is not defined.
+       instance._changePosition = Math.round(-wrapperLeftPos/2); // line 682, pos 52
+   #4: 'parentNode' is not defined.
+       parentNode = copyNode || boundingBox; // line 750, pos 13
+   #5: 'parentNode' is not defined.
+       parentNode.setAttribute(DATA_FOCUSNEXTONENTER, STRINGTRUE); // line 751, pos 13
+   #6: 'parentNode' is not defined.
+       instance.get(SUBMITONENTER) && parentNode.setAttribute(DATA_SUBMITONENTER, STRINGTRUE); // line 753, pos 44
+   #7: 'parentNode' is not defined.
+       instance.get(PRIMARYBTNONENTER) && parentNode.setAttribute(DATA_PRIMARYBTNONENTER, STRINGTRUE); // line 754, pos 48
+shifter [err] /assets/gallery-itsacheckbox/skins/sam/gallery-itsacheckbox-skin.css contains 2 lint errors
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 104, pos 5
+   #2: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: content-box; // line 111, pos 5

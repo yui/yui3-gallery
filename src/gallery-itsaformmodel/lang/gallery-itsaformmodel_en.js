@@ -1,4 +1,5 @@
 {
+    ready: 'Ready',
     enterrightformat : 'please enter the right format',
     entervalidnumber : 'please enter a valid number',
     inputrequired : 'Input is required',

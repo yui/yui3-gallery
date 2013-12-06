@@ -1,0 +1,16 @@
+YUI(yuiconfig).use('gallery-itsapanel', function(Y) {
+    var panel, message;
+
+    message = 'You are seeing a simple <b>Y.ITSAPanel</b>-instance.';
+    panel = new Y.ITSAPanel({
+        title: 'Information',
+        footer: 'Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a>.',
+        body: message,
+        dragable: true,
+        resizable: true
+    }).render();
+
+    panel.centered();
+    panel.show();
+
+});

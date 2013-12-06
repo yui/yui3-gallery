@@ -90,7 +90,7 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', '
 
     artist.after('error', function(e) {
         var errorsource = e.src;
-        if (errorsource==='Model.submitPromise()') {
+        if (errorsource==='submit') {
             Y.alert('Error submitting', e.src+' failed --> '+e.error, {type: 'error'});
         }
     });

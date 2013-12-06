@@ -2,12 +2,43 @@
     "gallery-itsamodelsyncpromise": {
         "requires": [
             "yui-base",
+            "intl",
             "base-base",
             "base-build",
             "node-base",
             "json-parse",
             "promise",
-            "model"
+            "model",
+            "gallery-itsamodulesloadedpromise"
+        ],
+        "lang" : [
+            "ar",
+            "bg",
+            "bs",
+            "cs",
+            "da",
+            "de",
+            "en",
+            "es",
+            "fa",
+            "fi",
+            "fr",
+            "he",
+            "hi",
+            "hr",
+            "hu",
+            "it",
+            "ja",
+            "nb",
+            "nl",
+            "pl",
+            "pt",
+            "ru",
+            "sk",
+            "sr",
+            "sv",
+            "uk",
+            "zh"
         ]
     }
 }

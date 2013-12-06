@@ -23,12 +23,17 @@
 <!-- ******************************** -->
 
 <script>
-YUI(yuiconfig).use('test-console', 'test', 'module-tests', function(Y) {
+YUI(yuiconfig).use('base-core', 'test', 'itsa-leakutils', function(Y) {
 
-    (new Y.Test.Console()).render('#logger');
+    Y.Test.Runner.setDOMIgnore('#logger', '#checkboxtest2', '#checkboxtest3', '#checkboxtest4', 'script', '.yui3-dd-shim', 'document');
+    Y.Test.Runner.enableLeakDetector();
 
-    Y.Test.Runner.setName('gallery-itsacheckbox');
-    Y.Test.Runner.run();
+    Y.use('test-console', 'module-tests', function (Y) {
+        (new Y.Test.Console()).render('#logger');
+        Y.Test.Runner.setName('gallery-itsacheckbox');
+        Y.Test.Runner.run();
+    });
+
 });
 </script>
 </body>

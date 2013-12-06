@@ -46,6 +46,11 @@
                 background: white;
                 opacity: 0.7;
             }
+
+            .yui3-customoverlay {
+                background: #000;
+                position: absolute;
+            }
         </style>
     </head>
     
@@ -136,11 +141,12 @@
                     srcNode:"#myContent",
                     // Also set some of the attributes inherited from
                     // the base Widget class.
-                    visible:true,
+                    visible: true,
                     modal: true,
-                    placement: "right",
+                    pointerAlign: "right",
                     centered: true,
-                    width: '50%',
+                    width: 400,
+                    height: 200,
                     render: true
                 });
 
@@ -149,12 +155,12 @@
                 
                 window.setInterval(function () {
                     console.log("changing placement...");
-                    overlay.set('placement', points[i]);
+                    overlay.set('pointerAlign', points[i]);
                     i++;
                     if (i > 3) {
                         i = 0;
                     }
-                }, 300);
+                }, 1000);
                 
             });
         </script>

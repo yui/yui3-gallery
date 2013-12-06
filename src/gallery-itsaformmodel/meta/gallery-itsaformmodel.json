@@ -2,6 +2,7 @@
     "gallery-itsaformmodel": {
         "requires": [
             "yui-base",
+            "event-valuechange",
             "intl",
             "base-base",
             "attribute-base",
@@ -16,9 +17,9 @@
             "yui-later",
             "node-event-delegate",
             "node-event-simulate",
-            "event-valuechange",
             "event-synthetic",
             "event-base",
+            "event-custom-base",
             "event-custom",
             "json-parse",
             "gallery-itsanodepromise",

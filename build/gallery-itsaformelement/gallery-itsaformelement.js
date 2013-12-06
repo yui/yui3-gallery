@@ -25,6 +25,7 @@ var ITSAFormElement,
     INTL = Y.Intl,
     ZINDEX_TIPSY = 5,
     BODY = Y.one('body'),
+    MS_TIME_TO_INSERT = 5000, // time to render the inserted widgets, we set this time to avoid unnecessary onavailable listeners.
     ACTION_FROMTAB = ACTION_FROMTAB,
     DATA        = 'data',
     HOTKEY = 'hotkey',
@@ -365,12 +366,12 @@ ITSAFormElement.getElement = function(type, config, nodeid) {
             // when it is inserted in the dom: render it
             if (type.NAME===EDITOR+'Base') {
                 Y.use(GALLERY+ITSA+EDITOR+RENDERPROMISE, function() {
-                    widget.renderOnAvailable('#'+nodeid);
+                    widget.renderOnAvailable('#'+nodeid, MS_TIME_TO_INSERT);
                 });
             }
             else {
                 Y.use(GALLERY+ITSA+WIDGET+RENDERPROMISE, function() {
-                    widget.renderOnAvailable('#'+nodeid);
+                    widget.renderOnAvailable('#'+nodeid, MS_TIME_TO_INSERT);
                 });
             }
         }
@@ -633,13 +634,16 @@ ITSAFormElement._renderedElement = function(type, config, nodeid, iswidget) {
             ITSAFormElement._HKList || ITSAFormElement._actHKList();
 /*jshint expr:false */
         }
+/*jshint expr:true */
+        switchlabel && (subtituteConfig[LABELCLASSNAME]+=' switched'+LABEL);
+/*jshint expr:false */
         if (surroundlabelclass) {
             subtituteConfig[LABEL] = '<span class="formatlabel">' + subtituteConfig[LABEL] + ENDSPAN;
-            labelclass = ' class="'+surroundlabelclass+(config[LABELCLASSNAME] ? (' '+config[LABELCLASSNAME]) : '') + '"';
+            labelclass = ' class="'+surroundlabelclass+(subtituteConfig[LABELCLASSNAME] ? (' '+subtituteConfig[LABELCLASSNAME]) : '') + '"';
             template = LABEL_FOR_IS+'{id}"'+HIDDEN_SUB+LABELDATA_SUB+labelclass+'>'+(switchlabel ? (template+'{label}') : ('{label}'+template))+ENDLABEL_EL;
         }
         else {
-            labelclass = config[LABELCLASSNAME] ? (' class="'+config[LABELCLASSNAME] + '"') : '';
+            labelclass = subtituteConfig[LABELCLASSNAME] ? (' class="'+subtituteConfig[LABELCLASSNAME] + '"') : '';
             extralabel = (isdatetime ? ('<'+LABEL) : (LABEL_FOR_IS+'{id}"'))+HIDDEN_SUB+LABELDATA_SUB+labelclass+'>{label}'+ENDLABEL_EL;
             if (switchlabel) {
                 template += extralabel;
@@ -707,7 +711,7 @@ ITSAFormElement.tooltipReadyPromise = function() {
                 hideOn: [TOUCHEND, BLUR, KEYPRESS],
                 zIndex: ZINDEX_TIPSY
             }).render();
-            tipsyOK.get(BOUNDINGBOX).addClass();
+            tipsyOK.get(BOUNDINGBOX).addClass(TIPSY_FORMELEMENT+'-ok');
             tipsyInvalid.get(BOUNDINGBOX).addClass(TIPSY_FORMELEMENT+'-invalid');
             // now we modify _alignTooltip, because we need to keep reference of the aligned node, in case we want to re-align
             tipsyOK._alignTooltip = function(node) {
@@ -972,7 +976,7 @@ YArray.each(
 );
 
 
-}, 'gallery-2013.10.17-22-20', {
+}, '@VERSION@', {
     "requires": [
         "yui-base",
         "node-core",
@@ -984,7 +988,9 @@ YArray.each(
         "promise",
         "event-tap",
         "event-custom",
+        "node-style",
         "escape",
+        "yui-later",
         "intl",
         "gallerycss-itsa-base",
         "gallery-tipsy",

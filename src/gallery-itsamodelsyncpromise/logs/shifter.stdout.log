@@ -1,0 +1,47 @@
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-itsamodelsyncpromise
+shifter [info] deleting build dir: /build/gallery-itsamodelsyncpromise
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-itsamodelsyncpromise/gallery-itsamodelsyncpromise.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting 28 langs for gallery-itsamodelsyncpromise
+shifter [queu] coverage file read, starting coverage for: gallery-itsamodelsyncpromise/gallery-itsamodelsyncpromise.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-itsamodelsyncpromise/gallery-itsamodelsyncpromise-coverage.js
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] shifted lang for gallery-itsamodelsyncpromise
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.334 seconds, pretty fast huh?

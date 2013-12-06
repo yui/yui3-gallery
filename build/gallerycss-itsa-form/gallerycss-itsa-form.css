@@ -10,9 +10,9 @@ i.itsaicon-form-save { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.
 i.itsaicon-form-ignore { *zoom: expression( this.runtimeStyle['zoom'] = '1', this.innerHTML = '&nbsp;&#xe807;&nbsp;'); }
 /* NO i.itsaicon-form-loading because we cannot revert previous content */@font-face {
   font-family: 'itsaform';
-  src: url('http://yui.yahooapis.com/gallery-2013.09.12-21-28/gallerycss-itsa-form/assets/font/itsaform.eot?76603106');
-  src: url('http://yui.yahooapis.com/gallery-2013.09.12-21-28/gallerycss-itsa-form/assets/font/itsaform.eot?76603106#iefix') format('embedded-opentype'),
-       url('http://yui.yahooapis.com/gallery-2013.09.12-21-28/gallerycss-itsa-form/assets/font/itsaform.svg?76603106#form') format('svg');
+  src: url('assets/font/itsaform.eot?76603106');
+  src: url('assets/font/itsaform.eot?76603106#iefix') format('embedded-opentype'),
+       url('assets/font/itsaform.svg?76603106#form') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -27,13 +27,13 @@ i.itsaicon-form-ignore { *zoom: expression( this.runtimeStyle['zoom'] = '1', thi
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'itsaform';
-    src: url('http://yui.yahooapis.com/gallery-2013.09.12-21-28/gallerycss-itsa-form/assets/font/form.svg?76603106#form') format('svg');
+    src: url('assets/font/form.svg?76603106#form') format('svg');
   }
 }
 */
 
 i[class^="itsaicon-form-"]:before, i[class*=" itsaicon-form-"]:before {
-  font-family: "itsaform";
+  font-family: "itsaform" !important;
 }
 
 i.itsaicon-form-yes:before, i.itsaicon-form-ok:before { content: '\e805'; } /* Web Symbols '' */

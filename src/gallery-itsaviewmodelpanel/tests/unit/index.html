@@ -7,18 +7,30 @@
     <meta charset="utf-8" />
 </head>
 <body class="yui3-skin-sam">
+<div id="viewcont"></div>
 <div id="logger"></div>
 
-<script>
-YUI({
-    coverage: ['gallery-itsaviewmodelpanel'],
-    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
-}).use('test-console', 'test', 'module-tests', function(Y) {
-    
-    (new Y.Test.Console()).render('#logger');
+<!-- ******************************** -->
+<!--  START DEFINING THE COMBOLOADER  -->
+<!-- ******************************** -->
+<script src="js/init-loaderconfig.js"></script>
+<script src="js/loaderconfig.js"></script>
+<!-- ******************************** -->
+<!--  END DEFINING THE COMBOLOADER  -->
+<!-- ******************************** -->
 
-    Y.Test.Runner.setName('gallery-itsaviewmodelpanel');
-    Y.Test.Runner.run();
+<script>
+YUI(yuiconfig).use('base-core', 'test', 'itsa-leakutils', function(Y) {
+
+    Y.Test.Runner.setDOMIgnore('#logger', 'script', '.yui3-tipsy', '.itsa-datetimepicker-panel', '#viewcont');
+    Y.Test.Runner.enableLeakDetector();
+
+    Y.use('test-console', 'module-tests', function (Y) {
+        (new Y.Test.Console()).render('#logger');
+        Y.Test.Runner.setName('gallery-itsaviewmodelpanel');
+        Y.Test.Runner.run();
+    });
+
 });
 </script>
 </body>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Popover-like test</title>
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.9.0pr3/build/cssnormalize/cssnormalize-min.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/gallery-widget-pointer-core.css">
+    <style>
+a {
+    color: #fff;
+    display: inline-block;
+    padding: 20px;
+    background: gray;
+    margin: 200px;
+}
+.yui3-popover {
+    background: black;
+    position: absolute;
+}
+.yui3-popover-hidden {
+    display: none;
+}
+.beacon {
+    position: absolute;
+    background: red;
+    opacity: 0.5;
+}
+    </style>
+</head>
+<body>
+    <a href="#" data-placement="right">foo</a>
+    <a href="#" data-placement="left">foo</a>
+    <a href="#" data-placement="above">foo</a>
+    <a href="#" data-placement="below">foo</a>
+<script src="http://yui.yahooapis.com/3.9.0/build/yui/yui-debug.js"></script>
+<script>
+    YUI({
+        modules:  {
+            "gallery-widget-pointer": {
+                fullpath: '../../../../build/gallery-widget-pointer/gallery-widget-pointer.js',
+                requires: [
+                    "widget", 
+                    "base-build", 
+                    "align-plugin", 
+                    "classnamemanager"
+                ]
+            }
+        },
+        
+        filter: 'raw',
+    
+    }).use("gallery-widget-pointer", 'base-build',
+        'widget',
+        'widget-position',
+        'widget-position-align',
+        'widget-position-constrain',
+        'widget-stack',
+        'widget-stdmod',
+        'widget-autohide', function(Y) {
+
+        var EXTS = [
+            Y.WidgetPosition,
+            Y.WidgetStdMod,
+            Y.WidgetAutohide,
+            Y.WidgetPositionAlign,
+            Y.WidgetPositionConstrain,
+            Y.WidgetStack,
+            Y.WidgetPointer
+        ];
+    
+        var Popover = Y.Base.create('popover', Y.Widget, EXTS, {
+            bindUI: function () {
+                Y.one('body').delegate('click', this._onDelegateClick, this.get('selector'), this);
+            },
+            _onDelegateClick: function (e) {
+                var points,
+                    node = e.target,
+                    placement = node.getData('placement');
+
+                e.halt();
+
+                switch (placement) {
+                    case 'above':
+                        points = ['bl', 'tl'];
+                        break;
+                    case 'below':
+                        points = ['tl', 'bl'];
+                        break;
+                    case 'left':
+                        points = ['tr', 'tl'];
+                        break;
+                    case 'right':
+                        points = ['tl', 'tr'];
+                        break;
+                }
+                this.show().align(node, points).alignPointer(node, placement);
+            }
+        }, {
+            ATTRS: {
+                selector: {
+                    value: 'a'
+                }
+            }
+        });
+
+        var popover = new Popover({
+            width: 200,
+            height: 100,
+            visible: false,
+            render: true
+        });
+    });
+</script>
+</body>
+</html>

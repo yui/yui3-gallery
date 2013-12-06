@@ -1,16 +1,144 @@
 <div class="intro">
-    <p>
-    *Summary Goes Here*
-    </p>
+<p> The {{displayName}} demonstrates how keyboard can be used for navigating across different parts of a page with registered containers </p>
 </div>
 
 {{>getting-started}}
 
-<h2>Description</h2>
-
-<p>*Module Description Goes Here*</p>
+<h2 id="config">Configuration</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Attribute</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>registry</td>
+            <td>Array</td>
+            <td>`[]`
+            </td>
+            <td>registry of all containers with information about node: array of objects eg: [{node:'#body', isHorizontal: true}, {node: '#header'}]</td>
+        </tr>
+        <tr>
+            <td>styleContainer</td>
+            <td>Boolean</td>
+            <td>`false`</td>
+            <td>Boolean that decides if containers should have a default style on focus or on being selected</td>
+        </tr>
+        <tr>
+            <td>scrollAnim</td>
+            <td>Boolean</td>
+            <td>`false`</td>
+            <td>When true, scrolls to the container (DOM element) that is not in the viewport in a smooth scroll animation</td>
+        </tr>
+        <tr>
+            <td>navPointer</td>
+            <td>Boolean</td>
+            <td>`false`</td>
+            <td>when true, sets a navigation pointer to the selected (in focus) container's child element</td>
+        </tr>
+        <tr>
+            <td>ignore</td>
+            <td>Array</td>
+            <td>`[]`</td>
+            <td>array of strings, which are CSS-selectors for DOM nodes which will deactivate the container they they receive focus for eg: if searchbox is part of the container and is also part of the ignore list, then on focus the registered container is deactivated Its basically for all those nodes which might have events similar to nav-assist</td>
+        </tr>
+    </tbody>
+</table>
 
 ```
-//Module example code
+Example markup and js
+
+<!doctype html>
+<html>
+    <head>
+        <title>gallery-nav-assist</title>
+        <link href='../../../../build/gallery-nav-assist/gallery-nav-assist.css' rel='stylesheet' type='text/css'>
+        <style type="text/css">
+        #navtabs div {display: inline-block; margin-left:20px; padding:10px; border:1px solid #efefef;}
+        </style>
+    </head>
+    <body class="yui3-skin-sam">
+
+        <div id="demo-page">
+            <div id="tabs">
+                <input type="text" id="testinputbox"/>
+                <div><a href="#Tab1" id="tab1">Lorem Ipsum</a></div>
+            </div>
+            <hr>
+            <div id="header">
+                <h2>Lorem Ipsum</h2>
+                <h2>Lorem Ipsum</h2>
+            </div>
+            <hr>
+            <div id="sidebar">
+                <h2>Lorem Ipsum</h2>
+                <h2>Lorem Ipsum</h2>
+            </div>
+            <hr>
+            <div id="eastrail">
+                <h2 id="elem1"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
+                <h2 id="elem2"><a style="display:block;" href="http://www.yahoo.com/">Lorem Ipsum</a></h2>
+            </div>
+            <hr>
+            <div id="main">
+                <div class="bright"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p></div>
+                <div class="dark"><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...</p></div>
+            </div>
+            <hr>
+            <div id="navtabs">
+                <div>tab1</div>
+                <div>tab2</div>
+            </div>
+            <hr>
+            <ul id="links">
+                <li>Lorem Ipsum</li>
+            </ul>
+            <hr>
+        </div>
+
+        <script src="http://yui.yahooapis.com/3.12.0/build/yui/yui-debug.js"></script>
+        <script src="../../../../build/gallery-nav-assist/gallery-nav-assist-debug.js"></script>
+        <script src="js/tests.js"></script>
+        <script>
+
+YUI().use('gallery-nav-assist', function(Y) {
+            var nav = new Y.NAVASSIST({
+                registry: [{
+                    node: '#main',
+                    pullToTop: true,
+                }, {
+                    node: '#eastrail',
+                    rank: 3
+                }, {
+                    node: '#links',
+                    rank: 4
+                }, {
+                    node: '#sidebar',
+                    rank: 1
+                }, {
+                    node: '#tabs ul',
+                    isHorizontal: true
+                }, {
+                    node: '#NodeThatDoesntExist'
+                }],
+                debug: true,
+                styleContainer: true,
+                ignore: ['#testinputbox']//ignores events when on input box
+            });
+            //manual registeration
+            nav.register({
+                node: '#navtabs',
+                isHorizontal: true
+            });
+});
+
+        </script>
+    </body>
+</html>
+
 ```
 

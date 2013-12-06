@@ -1,0 +1,1 @@
+YUI.add("lang/gallery-itsamodelsyncpromise",function(e){e.Intl.add("gallery-itsamodelsyncpromise","",{load:"Loading data ...",submit:"Submitting data ...",save:"Updating data ...",destroy:"Updating data ..."})},"@VERSION@");

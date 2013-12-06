@@ -1,2 +1,0 @@
-gallery-nav-assist
-========

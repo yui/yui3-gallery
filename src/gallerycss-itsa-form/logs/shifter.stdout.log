@@ -1,0 +1,11 @@
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallerycss-itsa-form
+shifter [info] deleting build dir: /build/gallerycss-itsa-form
+shifter [info] shifting assets for gallerycss-itsa-form
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.06 seconds, pretty fast huh?

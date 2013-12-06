@@ -1,4 +1,5 @@
 {
+    ready: 'готовий',
     enterrightformat : 'введіть потрібний формат',
     entervalidnumber : 'введіть правильний номер',
     inputrequired : 'Потрібне введення',

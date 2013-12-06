@@ -2,13 +2,15 @@
     "gallery-itsaviewmodelpanel": {
         "requires": [
             "node-pluginhost",
+            "yui-base",
             "base-build",
             "base-base",
             "event-outside",
             "model",
             "gallery-itsapanel",
             "gallery-itsaviewmodel",
-            "gallery-itsaformelement"
+            "gallery-itsaformelement",
+            "gallery-itsamodulesloadedpromise"
         ]
     }
 }

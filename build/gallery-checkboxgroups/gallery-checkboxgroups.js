@@ -211,6 +211,11 @@ function AtLeastOneCheckboxGroup(
 {
 	this.direction = AtLeastOneDirection.SLIDE_UP;
 	AtLeastOneCheckboxGroup.superclass.constructor.call(this, cb_list);
+
+	if (this.allUnchecked())
+	{
+		this.cb_list.item(0).set('checked', true);
+	}
 }
 
 var AtLeastOneDirection =
@@ -360,6 +365,7 @@ function SelectAllCheckboxGroup(
 	this.select_all_cb.on('click', updateSelectAll, this);
 
 	SelectAllCheckboxGroup.superclass.constructor.call(this, cb_list);
+	this.enforceConstraints(this.cb_list, 0);
 }
 
 function updateSelectAll()
@@ -457,4 +463,4 @@ Y.extend(EnableIfAnyCheckboxGroup, CheckboxGroup,
 Y.EnableIfAnyCheckboxGroup = EnableIfAnyCheckboxGroup;
 
 
-}, 'gallery-2013.09.25-18-27', {"requires": ["node-base"]});
+}, '@VERSION@', {"requires": ["node-base"]});

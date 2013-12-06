@@ -54,7 +54,8 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodellistsyncpromise', 'mo
             loadbutton.setHTML('busy loading...');
             countries.loadPromise().then(
                 function(response) {
-                    container.append('Loadpromise resolved: Models are loaded --> this message should never appear in this example!<br />');
+                    container.append('Loadpromise resolved: Models are loaded'+
+                                     ' --> this message should never appear in this example!<br />');
                 },
                 function(reason) {
                     container.append('Loadpromise rejected: '+reason.message+' <br />');

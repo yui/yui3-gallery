@@ -372,7 +372,33 @@ YUI.add('pathogen-encoder-tests', function (Y) {
 
             modules = subgroups.pop().split(MODULE_DELIM);
             Assert.areEqual(3, modules.length, 'Unexpected number of modules');
+        },
+
+        'test root configuration support for path groups': function () {
+            var loader = new Y.Loader({
+                    combine: true,
+                    require: ['kamen'],
+
+                    groups: {
+                        'gaim': {
+                            comboBase: 'http://yui.yahooapis.com/combo?',
+                            root: 'budo/',
+                            combine: true
+                        }
+                    },
+
+                    modules: {
+                        kamen: {
+                            group: 'gaim',
+                            path: 'why/not/grape.js'
+                        }
+                    }
+                }),
+                resolved = loader.resolve(true);
+
+            Assert.areEqual('http://combo.yuilibrary.com/p/p+budo+why/not/grape.js', resolved.js[0], 'Unexpected combo url');
         }
+
     }));
 
     suite.add(new Y.Test.Case({

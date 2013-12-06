@@ -2,6 +2,7 @@
     "gallery-itsacheckbox": {
         "requires": [
             "yui-base",
+            "dd-ddm",
             "node-base",
             "dom-screen",
             "widget",

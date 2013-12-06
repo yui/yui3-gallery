@@ -225,7 +225,7 @@ Y.extend(FocusManager, Y.Plugin.Base, {
             host.on('keydown', this._onKeyDown, this),
             host.after('blur', this._afterBlur, this),
             host.after('focus', this._afterFocus, this),
-
+            this.after('*:focusedChange', this._afterFocusedChange),
             this.after({
                 activeItemChange: this._afterActiveItemChange
             })
@@ -289,15 +289,13 @@ Y.extend(FocusManager, Y.Plugin.Base, {
         var newVal  = e.newVal,
             prevVal = e.prevVal;
 
-        if (prevVal) {
+        if (Y.one(prevVal)) {
             prevVal.set('tabIndex', -1);
         }
-
         if (newVal) {
             newVal.set('tabIndex', 0);
-
             if (this.get('focused')) {
-                newVal.focus();
+                newVal.focus(); // this will lead to come inside the aftersetter one more time unfortunatly
             }
         }
     },
@@ -307,10 +305,22 @@ Y.extend(FocusManager, Y.Plugin.Base, {
     },
 
     _afterFocus: function (e) {
-        var target = e.target;
         this._set('focused', true);
-        if (target !== this._host && target.test(this.get('itemSelector'))) {
-            this.set('activeItem', target, {src: 'focus'});
+        this._tryFocusNode(e.target);
+    },
+
+    _afterFocusedChange: function (e) {
+        var target = e.target,
+            iswidget = (typeof target.BOUNDING_TEMPLATE === 'string'), // don't want to check instanceof Y.Widget for would need to load widgetmodule
+            node;
+/*jshint expr:true */
+        e.newVal && iswidget && (node=(target._parentNode || target.get('boundingBox'))) && this._tryFocusNode(node);
+/*jshint expr:false */
+    },
+
+    _tryFocusNode: function (node) {
+        if (node !== this._host && node.test(this.get('itemSelector'))) {
+            this.set('activeItem', node, {src: 'focus'});
         }
     },
 
@@ -505,11 +515,13 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
                 i                = 0,
                 allItems;
 
+
             Y.log('first', 'info', 'Itsa-TabKeyManager');
             while (item && ((disabledSelector && item.test(disabledSelector)) || (item.getStyle('visibility')==='hidden') || !item.displayInDoc())) {
                 allItems = allItems || (container && container.all(itemSelector));
-                item = (++i<allItems.size()) ? allItems.item(i) : null;
+                item = allItems && ((++i<allItems.size()) ? allItems.item(i) : null);
             }
+
             if (!options.silent) {
                 instance.set('activeItem', item, {src: 'first'});
             }
@@ -525,20 +537,23 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
          *
         */
         focusInitialItem : function() {
+//alert(1);
             var instance = this,
+                host = instance.host,
                 focusitem, panelheader, panelbody, panelfooter;
 
-            Y.log('focusInitialItem', 'info', 'Itsa-TabKeyManager');
-            if (instance.host.hasClass(FOCUSED_CLASS)) {
-                focusitem = instance.first({selector: '['+ITSAFORMELEMENT_FIRSTFOCUS+']'}) ||
-                            ((panelbody=instance.host.one('.itsa-panelbody')) ? instance.first({container: panelbody}) : null) ||
-                            instance.first({selector: '.'+PRIMARYBUTTON_CLASS}) ||
-                            ((panelfooter=instance.host.one('.itsa-panelfooter')) ? instance.last({container: panelfooter}) : null) ||
-                            ((panelheader=instance.host.one('.itsa-panelheader')) ? instance.first({container: panelheader}) : null) ||
-                            instance.first();
-                if (focusitem) {
-                    focusitem.focus();
-                }
+            Y.log('Start focusInitialItem', 'info', 'Itsa-TabKeyManager');
+            if (host.hasClass(FOCUSED_CLASS)) {
+                focusitem = instance.first({silent: true, selector: '['+ITSAFORMELEMENT_FIRSTFOCUS+']'}) ||
+                            ((panelbody=host.one('.itsa-panelbody')) ? instance.first({silent: true, container: panelbody}) : null) ||
+                            instance.first({silent: true, selector: '.'+PRIMARYBUTTON_CLASS}) ||
+                            ((panelfooter=host.one('.itsa-panelfooter')) ? instance.last({silent: true, container: panelfooter}) : null) ||
+                            ((panelheader=host.one('.itsa-panelheader')) ? instance.first({silent: true, container: panelheader}) : null) ||
+                            instance.first({silent: true});
+    /*jshint expr:true */
+        // focussing will set the value of attribute 'activeItem'
+                focusitem && focusitem.focus();
+    /*jshint expr:false */
             }
         },
 
@@ -559,12 +574,17 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
                 disabledSelector = instance.get('disabledSelector'),
                 allItems         = container && container.all(instance.get('itemSelector')),
                 i                = allItems ? (allItems.size() - 1) : 0,
-                item             = allItems.pop();
+                item             = allItems && allItems.pop();
 
             Y.log('last', 'info', 'Itsa-TabKeyManager');
             options = options || {};
-            while (item && ((disabledSelector && item.test(disabledSelector)) || (item.getStyle('visibility')==='hidden') || !item.displayInDoc())) {
-                item = (--i>=0) ? allItems.item(i) : null;
+            try {
+                while (item && ((disabledSelector && item.test(disabledSelector)) || (item.getStyle('visibility')==='hidden') || !item.displayInDoc())) {
+                    item = (--i>=0) ? allItems.item(i) : null;
+                }
+            }
+            catch (err) {
+                item = null;
             }
 
             if (!options.silent) {
@@ -600,12 +620,17 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
             disabledSelector = instance.get('disabledSelector');
             allItems = container && container.all(instance.get('itemSelector'));
             itemSize = allItems ? allItems.size() : 0;
-            index = allItems.indexOf(activeItem);
-            nextItem = (++index<itemSize) ? allItems.item(index) : null;
+            index = allItems && allItems.indexOf(activeItem);
+            nextItem = allItems && ((++index<itemSize) ? allItems.item(index) : null);
             // Get the next item that matches the itemSelector and isn't
             // disabled.
-            while (nextItem && ((disabledSelector && nextItem.test(disabledSelector)) || (nextItem.getStyle('visibility')==='hidden') || !nextItem.displayInDoc())) {
-                nextItem = (++index<itemSize) ? allItems.item(index) : null;
+            try {
+                while (nextItem && ((disabledSelector && nextItem.test(disabledSelector)) || (nextItem.getStyle('visibility')==='hidden') || !nextItem.displayInDoc())) {
+                    nextItem = (++index<itemSize) ? allItems.item(index) : null;
+                }
+            }
+            catch (err) {
+                nextItem = null;
             }
             if (nextItem) {
                 if (!options.silent) {
@@ -651,8 +676,13 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
             prevItem = (--index>=0) ? allItems.item(index) : null;
             // Get the next item that matches the itemSelector and isn't
             // disabled.
-            while (prevItem && ((disabledSelector && prevItem.test(disabledSelector)) || (prevItem.getStyle('visibility')==='hidden') || !prevItem.displayInDoc())) {
-                prevItem = (--index>=0) ? allItems.item(index) : null;
+            try {
+                while (prevItem && ((disabledSelector && prevItem.test(disabledSelector)) || (prevItem.getStyle('visibility')==='hidden') || !prevItem.displayInDoc())) {
+                    prevItem = (--index>=0) ? allItems.item(index) : null;
+                }
+            }
+            catch (err) {
+                prevItem = null;
             }
             if (prevItem) {
                 if (!options.silent) {
@@ -731,13 +761,14 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
                 host.after(
                     'click',
                     function(e) {
+                        Y.log('onsubscriptor '+e.type, 'info', 'Itsa-TabKeyManager');
                         var node = e.target;
                         if (host.hasClass(FOCUSED_CLASS)) {
                             if ((node.get('tagName')==='BUTTON') && instance._nodeIsFocusable(node)) {
                                 node.focus();
                             }
                             else {
-                                instance._retreiveFocus();
+                                instance._retrieveFocus();
                             }
                         }
                     }
@@ -789,15 +820,20 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
          * Retreive the focus again on the 'activeItem', or -when none- on the initial Item.
          * Is called when the host-node gets focus.
          *
-         * @method _retreiveFocus
+         * @method _retrieveFocus
          * @private
          * @since 0.1
         */
-        _retreiveFocus : function() {
+        _retrieveFocus : function() {
             var instance   = this,
                 activeItem = instance.get('activeItem');
             if (instance.host.hasClass(FOCUSED_CLASS)) {
-                Y.log('_retreiveFocus', 'info', 'Itsa-TabKeyManager');
+                Y.log('_retrieveFocus', 'info', 'Itsa-TabKeyManager');
+                // first check if active item is still in the dom!
+                if (!Y.one(activeItem)) {
+                    instance.set('activeItem', null);
+                    activeItem = null;
+                }
                 if (activeItem) {
                     activeItem.focus();
                 }
@@ -828,7 +864,7 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
 );
 
 
-}, 'gallery-2013.09.25-18-27', {
+}, '@VERSION@', {
     "requires": [
         "yui-base",
         "oop",

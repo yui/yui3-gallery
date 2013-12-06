@@ -36,7 +36,7 @@ var YArray = Y.Array,
     INPUT_REQUIRED = 'inputrequired',
     INVISIBLE_CLASS = 'itsa-invisible',
     DUPLICATE_NODE = '<span style="background-color:F00; color:#FFF">DUPLICATED FORMELEMENT is not allowed</span>',
-    MS_TIME_TO_INSERT = 10000, // time to insert the nodes, we set this time to avoid unnecessary onavailable listeners.
+    MS_TIME_TO_INSERT = 5000, // time to insert the nodes, we set this time to avoid unnecessary onavailable listeners.
     MS_MIN_TIME_FORMELEMENTS_INDOM_BEFORE_REMOVE = 172800000, // for GC --> 2 days in ms
     MS_BEFORE_CLEANUP = 86400000, // for GC: timer that periodic runs _garbageCollect
     TRUE = 'true',
@@ -53,6 +53,13 @@ var YArray = Y.Array,
     SPAN_DATA_FOR_IS = 'span[data-for="',
     YUI3_SLIDER = 'yui3-slider',
     ASK_TO_CLICK_EVENT = 'itsabutton-asktoclick',
+    ONENTER = 'onenter',
+    SUBMITONENTER = 'submit'+ONENTER,
+    PRIMARYBTNONENTER = 'primarybtn'+ONENTER,
+    DATA_ = 'data-',
+    DATA_SUBMITONENTER = DATA_+SUBMITONENTER,
+    DATA_PRIMARYBTNONENTER = DATA_+PRIMARYBTNONENTER,
+    DATA_FOCUSNEXTONENTER = DATA_+'focusnext'+ONENTER,
     VALID_BUTTON_TYPES = {
         button: true,
         destroy: true,
@@ -835,7 +842,7 @@ ITSAFormModel.prototype.getUnvalidatedUI  = function() {
 
 /**
  * Removes the UI by firing the 'remove'-event. ALSO invokes the synclayer --> use 'destroy' or 'destroyPromise' if you don'nt want to invoke the synclayer.
- * model-promisses are provided by the module 'gallrey-itsamodelsyncpromise' which is loaded by this module.
+ * model-promisses are provided by the module 'gallery-itsamodelsyncpromise' which is loaded by this module.
  *
  * @method remove
  * @since 0.1
@@ -1121,6 +1128,7 @@ ITSAFormModel.prototype.renderFormElement = function(attribute) {
         // if widget, then we need to add an eventlistener for valuechanges:
         widget = formelement.widget;
         if (widget) {
+            widget.addTarget(instance); // making widgets-events shown at formmodelinstance
             //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // The last thing we need to do is, set some action when the node gets into the dom: We need to
             // make sure the UI-element gets synced with the current attribute-value once it gets into the dom
@@ -1338,6 +1346,7 @@ ITSAFormModel.prototype.setWidgetValueField = ITSAFormModel.setWidgetValueField;
  * @method submit
  * @param {Object} [options] Options to be passed to `sync()`.
  *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.statusmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronous submission. Will overrule the default message. See gallery-itsamessageviewer.
  * @param {Function} [callback] Called when the sync operation finishes.
  *   @param {Error|null} callback.err If an error occurred or validation failed, this parameter will contain the error.
  *                                    If the sync operation succeeded, 'err' will be null.
@@ -1375,6 +1384,7 @@ ITSAFormModel.prototype[SUBMIT] = function(options, callback) {
  * @method submitPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
  *                 implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.statusmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronous submission. Will overrule the default message. See gallery-itsamessageviewer.
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
 **/
 ITSAFormModel.prototype[SUBMIT+PROMISE] = function(options) {
@@ -1400,22 +1410,23 @@ ITSAFormModel.prototype[SUBMIT+PROMISE] = function(options) {
  * The buttons-object is used to call the related 'renderBtn' method.
  *
  * @method toJSONUI
- * @param buttons {Array|Object} button object, or array of buttonobjects. The objects whould consist of this structure:<br />
+ * @param [buttons] {Array|Object} button object, or array of buttonobjects. The objects whould consist of this structure:<br />
  * <ul>
  * <li>propertykey --> reference-key which will be part (a property) of the result</li>
  * <li>type --> 'button', 'destroy', 'remove', 'reset', 'save', 'load' or 'submit'</li>
  * <li>labelHTML --> text rendered on the button</li>
  * <li>config --> config-object that is passed through the renderBtn-function</li>
  * </ul>
+ * @param [template] {String} template in which it will render: if you know the template on forehand, you better pass it through: this makes the method cpu-efficitient.
  * @return {Object} Copy of this model's attributes.
  * @since 0.1
  */
-ITSAFormModel.prototype.toJSONUI = function(buttons) {
+ITSAFormModel.prototype.toJSONUI = function(buttons, template) {
     var instance = this,
         UIattrs = {},
         allAttrs = instance.getAttrs(),
         renderBtnFns = instance._renderBtnFns,
-        propertykey, type, labelHTML, config, originalJSON;
+        propertykey, type, labelHTML, config, originalJSON, propertyEmbraced, needProccess;
 
     delete allAttrs.clientId;
     delete allAttrs.destroyed;
@@ -1426,7 +1437,14 @@ ITSAFormModel.prototype.toJSONUI = function(buttons) {
     YObject.each(
         allAttrs,
         function(value, key) {
-            UIattrs[key] = instance.renderFormElement(key);
+            if (template) {
+                // renderFormElement is heavy: we don't want to call it for attributes that will not be rendered
+                propertyEmbraced = new RegExp('{'+key+'}');
+                needProccess = propertyEmbraced.test(template);
+            }
+/*jshint expr:true */
+            (!template || needProccess) && (UIattrs[key]=instance.renderFormElement(key));
+/*jshint expr:false */
         }
     );
     if (Lang.isObject(buttons)) {
@@ -1470,12 +1488,12 @@ ITSAFormModel.prototype.toJSONUI = function(buttons) {
  * @method UIToModel
  * @param [nodeid] {String} nodeid of the formelement (without '#'), when left empty, all formelement-properties are set.
  * @since 0.1
+ * @chainable
  *
 */
 ITSAFormModel.prototype.UIToModel = function(nodeid) {
     var instance = this,
         formElement, formElements, options, node, value, attribute, widget, type;
-
     formElements = instance._FORM_elements;
     formElement = nodeid && formElements[nodeid];
     if (formElement && (node=Y.one('#'+nodeid)) && node.getAttribute(DATA_MODELATTRIBUTE)) {
@@ -1495,12 +1513,18 @@ ITSAFormModel.prototype.UIToModel = function(nodeid) {
     else if (!nodeid) {
         // save all attributes
         YObject.each(
-            instance._FORM_elements,
-            function(formelement, nodeid) {
-                instance.UIToModel(nodeid);
+            instance._ATTRS_nodes,
+            function(attributenodes) {
+                YArray.each(
+                    attributenodes,
+                    function(nodeid) {
+                        instance.UIToModel(nodeid);
+                    }
+                );
             }
         );
     }
+    return instance;
 };
 
 /**
@@ -1518,7 +1542,7 @@ ITSAFormModel.prototype.UIToModel = function(nodeid) {
   *
   * @method translate
   * @param text {String} the text to be translated
-  * @return {Y.Promise} resolve(translated) --> Translated text or the original text (if no translattion was possible)
+  * @return {String} --> Translated text or the original text (if no translattion was possible)
   * @since 0.4
 **/
 ITSAFormModel.prototype.translate = function(text) {
@@ -1590,6 +1614,18 @@ ITSAFormModel.prototype.destructor = function() {
 // private methods
 //===============================================================================================
 
+Y.Node.prototype.displayInDoc = function() {
+    var node = this,
+        displayed = node.inDoc();
+    while (node && displayed) {
+        displayed = (node.getStyle('display')!=='none');
+/*jshint expr:true */
+        displayed && (node = node.get('parentNode'));
+/*jshint expr:false */
+    }
+    return displayed;
+};
+
 /**
  * Setting up eventlisteners
  *
@@ -1603,17 +1639,19 @@ ITSAFormModel.prototype._bindUI = function() {
         eventhandlers = instance._eventhandlers,
         body = Y.one('body');
 
-
     // listening for a click on any 'datetimepicker'-button or a click on any 'form-element'-button in the dom
+    // CAUTIOUS: DO NOT try to create the first argument (selector), for that failed!, we check for 'formelement'
+    // inside the subscriber
     eventhandlers.push(
-        body.on(
+        body.delegate(
             [DATEPICKER_CLICK, TIMEPICKER_CLICK, DATETIMEPICKER_CLICK, BUTTON_CLICK, LOAD_CLICK,
              SAVE_CLICK, DESTROY_CLICK, REMOVE_CLICK, SUBMIT_CLICK, RESET_CLICK],
             function(e) {
                var type = e.type,
                    node = e.target,
+                   formelement = instance._FORM_elements[node.get(ID)],
                    payload, value, datevalue;
-               if (instance._FORM_elements[node.get(ID)]) {
+                if (formelement) {
                     e.preventDefault(); // prevent the form to be submitted
                     value = node.getAttribute(VALUE);
                     if (instance._datePickerClicks[type]) {
@@ -1631,7 +1669,7 @@ ITSAFormModel.prototype._bindUI = function() {
                     // refireing, but now by the instance:
                     instance.fire(type, payload);
                 }
-            }
+            }
         )
     );
 
@@ -1665,10 +1703,10 @@ ITSAFormModel.prototype._bindUI = function() {
                 // refireing, but now by the instance:
                 instance.fire(type, payload);
             },
-            function(delegatedNode, e){ // node === e.target
+            function(delegatedNode, e){ // node === e.target
                 // only process if node's id is part of this ITSAFormModel-instance:
-                return e && e.target && instance._FORM_elements[e.target.get(ID)];
-            }
+                return e && e.target && instance._FORM_elements[e.target.get(ID)];
+            }
         )
     );
 
@@ -1718,20 +1756,20 @@ ITSAFormModel.prototype._bindUI = function() {
     // listening life for valuechanges
     eventhandlers.push(
         body.delegate(
-            'keypress',
+            'keydown',
             function(e) {
                 e.halt(); // need to do so, otherwise there will be multiple events for every node up the tree until body
                 // now it depends: there will be a focus-next OR the model will submit.
-                // It depends on the value of 'data-submitonenter'
+                // It depends on the value of DATA_SUBMITONENTER
                 var node = e.target,
-                    submitonenter = (node.getAttribute('data-submitonenter')==='true'),
-                    primarybtnonenter = (node.getAttribute('data-primarybtnonenter')==='true'),
+                    submitonenter = (node.getAttribute(DATA_SUBMITONENTER)==='true'),
+                    primarybtnonenter = (node.getAttribute(DATA_PRIMARYBTNONENTER)==='true'),
                     type, payload, primarybtnNode;
-                if (submitonenter) {
-                    instance.submit({fromInternal: true});
-                }
-                else if (primarybtnonenter && (primarybtnNode=instance._findPrimaryBtnNode())) {
+                if (primarybtnonenter && (primarybtnNode=instance._findPrimaryBtnNode())) {
                     primarybtnNode.simulate(CLICK);
+                }
+                else if (submitonenter) {
+                    instance.submit({fromInternal: true});
                 }
                 else {
                     type = FOCUS_NEXT;
@@ -1745,8 +1783,11 @@ ITSAFormModel.prototype._bindUI = function() {
             },
             function(delegatedNode, e){ // node === e.target
                 // only process if node's id is part of this ITSAFormModel-instance and if enterkey is pressed
-                var formelement = instance._FORM_elements[e.target.get(ID)];
-                return (formelement && (e.keyCode===13) && FOCUS_NEXT_ELEMENTS[formelement.type]);
+                var node = e.target,
+                    formelement = instance._FORM_elements[node.get(ID)];
+                return (formelement && (e.keyCode===13) &&
+                        (FOCUS_NEXT_ELEMENTS[formelement.type] || (node.getAttribute(DATA_SUBMITONENTER)==='true') ||
+                         (node.getAttribute(DATA_PRIMARYBTNONENTER)==='true') || (node.getAttribute(DATA_FOCUSNEXTONENTER)==='true')));
             }
         )
     );
@@ -1768,7 +1809,7 @@ ITSAFormModel.prototype._bindUI = function() {
     );
 
     eventhandlers.push(
-        Y.Intl.after(
+        Y.Intl.on( // subscribe to the on-event, so the model updates before the views, which are subscribed to the after-event
             'intl:langChange',
             function() {
                 instance._intl = Y.Intl.get(GALLERYITSAFORMMODEL);
@@ -2261,7 +2302,7 @@ ITSAFormModel.prototype._renderBtn = function(labelHTML, config, buttontype) {
     formelements[nodeid] = formbutton;
     // make sure elements gets removed from instance._FORM_elements
     // when the element is inserted in the dom and gets removed from the dom again
-    YNode.availablePromise('#'+nodeid).then(
+    YNode.availablePromise('#'+nodeid, MS_TIME_TO_INSERT).then(
         function(node) {
             if (knownNodeIds[nodeid]) {
                 // was rendered before --> we need to replace it by an errornode
@@ -2534,9 +2575,10 @@ YArray.each(
     }
 );
 
-}, 'gallery-2013.10.17-22-20', {
+}, '@VERSION@', {
     "requires": [
         "yui-base",
+        "event-valuechange",
         "intl",
         "base-base",
         "attribute-base",
@@ -2551,9 +2593,9 @@ YArray.each(
         "yui-later",
         "node-event-delegate",
         "node-event-simulate",
-        "event-valuechange",
         "event-synthetic",
         "event-base",
+        "event-custom-base",
         "event-custom",
         "json-parse",
         "gallery-itsanodepromise",

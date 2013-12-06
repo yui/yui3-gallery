@@ -93,6 +93,11 @@ Y.extend(PLDTModule, Y.Plugin.Base,
 				}
 			},
 			this);
+
+			table.on('dataChange', function()
+			{
+				layout.elementResized(table.get('contentBox'));
+			});
 		});
 	},
 
@@ -115,4 +120,4 @@ Y.namespace("Plugin");
 Y.Plugin.PageLayoutDataTableModule = PLDTModule;
 
 
-}, 'gallery-2013.05.29-23-38', {"requires": ["gallery-layout", "datatable-scroll", "plugin"]});
+}, '@VERSION@', {"requires": ["gallery-layout", "datatable-scroll", "plugin"]});

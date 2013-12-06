@@ -91,6 +91,11 @@ Y.extend(PLDTModule, Y.Plugin.Base,
 				}
 			},
 			this);
+
+			table.on('dataChange', function()
+			{
+				layout.elementResized(table.get('contentBox'));
+			});
 		});
 	},
 
