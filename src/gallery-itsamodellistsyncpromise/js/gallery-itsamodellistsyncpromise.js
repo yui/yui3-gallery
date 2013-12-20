@@ -114,7 +114,7 @@
     PARSED = function (response) {
         if (typeof response === 'string') {
             try {
-                return Y.JSON.parse(response);
+                return Y.JSON.fullparse(response);
             } catch (ex) {
                 this.fire(ERROR, {
                     error   : ex,
@@ -126,6 +126,16 @@
         }
         return response || {};
     };
+
+/**
+ * Define this property if you want default 'options' to be applied when syncing.
+ * This object is passed through to the synclayer, merged with the options-object passed throug the syncmethod.
+ *
+ * @method defSyncOptions
+ * @property defSyncOptions
+ * @type Object
+ * @default null
+**/
 
 /**
  * Makes sync-messages to target the specified messageViewer. You can only target to 1 MessageViewer at the same time.<br>
@@ -190,6 +200,20 @@ YModelList.prototype.addMessageTarget = function(itsamessageviewer) {
             }
         }
     );
+};
+
+/**
+ * Promise that returns the default-options (object) that will be passed through the synclayer.
+ * Is used as the syncoptions, along with manual syncoptions that could be supplied. Both objects are merged (actually cloned).
+ *
+ * @method defSyncOptions
+ * @return {Y.Promise} --> resolve(defaultOptionsObject) NEVER reject
+**/
+YModelList.prototype.defSyncOptions = function() {
+    Y.log('defSyncOptions', 'info', 'ITSA-ModellistSyncPromise');
+    return new Y.Promise(function (resolve) {
+        resolve({});
+    });
 };
 
 /**
@@ -665,7 +689,10 @@ YArray.each(
                 parsed = PARSED(response);
                 if (parsed.responseText) {
                     // XMLHttpRequest
-                    parsed = parsed.responseText;
+                    if (parsed.responseText) {
+                        // XMLHttpRequest
+                        parsed = PARSED(parsed.responseText);
+                    }
                 }
                 e.parsed = parsed;
                 //options.append is for compatiblility with previous versions
@@ -1011,19 +1038,22 @@ YModelList.prototype._prevDefFn = function(e) {
  * @since 0.2
 */
 YModelList.prototype._syncTimeoutPromise = function(action, options) {
-    var instance = this,
-          syncpromise;
+    var instance = this;
 
-    Y.log('_syncTimeoutPromise', 'info', 'widget');
-    syncpromise = instance.syncPromise(action, options);
-    if (!(syncpromise instanceof Y.Promise)) {
-        syncpromise = new Y.Promise(function (resolve, reject) {
-            var errormessage = 'syncPromise is rejected --> '+action+' not defined as a Promise inside syncPromise()';
-            Y.log('_syncTimeoutPromise: '+errormessage, 'warn', 'widget');
-            reject(new Error(errormessage));
-        });
-    }
-    return syncpromise;
+    Y.log('_syncTimeoutPromise', 'info', 'ITSA-ModellistSyncPromise');
+    return instance.defSyncOptions().then(
+        function(defoptions) {
+            var syncpromise = instance.syncPromise(action, Y.merge(defoptions, options));
+            if (!(syncpromise instanceof Y.Promise)) {
+                return new Y.Promise(function (resolve, reject) {
+                    var errormessage = 'syncPromise is rejected --> '+action+' not defined as a Promise inside syncPromise()';
+                    Y.log('_syncTimeoutPromise: '+errormessage, 'warn', 'ITSA-ModellistSyncPromise');
+                    reject(new Error(errormessage));
+                });
+            }
+            return syncpromise;
+        }
+    );
 };
 
 // for backwards compatibility:

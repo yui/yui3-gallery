@@ -10,7 +10,8 @@
             "model",
             "model-list",
             "gallery-itsamodelsyncpromise",
-            "gallery-itsamodulesloadedpromise"
+            "gallery-itsamodulesloadedpromise",
+            "gallery-itsautils"
         ]
     }
 }
