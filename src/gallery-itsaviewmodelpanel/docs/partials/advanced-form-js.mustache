@@ -1,4 +1,5 @@
-YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelpanel', 'gallery-itsacheckbox', 'transition', function(Y) {
+YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelpanel',
+                   'gallery-itsacheckbox', 'editor', 'transition', function(Y) {
     var panel, user, template, spinnericon, firsterror = true;
 
     // adding skin sam to body for getting the right skin for the widgets
@@ -12,7 +13,8 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
               case 'submit':
                 Y.later(300000, null, function() {
                     // normally you need to invest the response on the server, but now we do this here:
-                    var loginok = ((instance.get('username')==='marco') && (instance.get('password')==='panel'));
+                    var loginok = ((instance.get('username')==='marco') &&
+                                   (instance.get('password')==='panel'));
                     if (loginok) {
                         callback();
                     }
@@ -51,6 +53,12 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
                     return (typeof v==='string') && (v.length>0);
                 },
                 validationerror: 'Enter a valid name'
+            },
+            notes: {
+                formtype: Y.EditorBase,
+                formconfig: {
+                    label: 'Notes'
+                }
             },
             maried: {
                 value: false,
@@ -98,20 +106,22 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
     // We also could left this false and listen to panel.after('*:uichanged')
     user.setLifeUpdate(true);
 
-    template =  '<legend>User</legend>'+
-                    '<fieldset>'+
-                        '<div class="pure-control-group"><%== data.firstname %></div>'+
-                        '<div class="pure-control-group"><%== data.lastname %></div>'+
-                        '<div class="pure-control-group"><%== data.maried %></div>'+
-                    '</fieldset>'+
-                '<div id="partnerdata"<% if (data._maried===false) { %>style="display: none; height: 0;"<% } %>>'+
-                    '<legend>Partner</legend>'+
-                        '<fieldset>'+
-                            '<div class="pure-control-group"><%== data.firstnamePartner %></div>'+
-                            '<div class="pure-control-group"><%== data.lastnamePartner %></div>'+
-                            '<div class="pure-control-group"><%== data.weddingdate %></div>'+
-                        '</fieldset>'+
-                '</div>';
+    template =
+        '<legend>User</legend>'+
+            '<fieldset>'+
+                '<div class="pure-control-group"><%== data.firstname %></div>'+
+                '<div class="pure-control-group"><%== data.lastname %></div>'+
+                '<div class="pure-control-group"><%== data.notes %></div>'+
+                '<div class="pure-control-group"><%== data.maried %></div>'+
+            '</fieldset>'+
+        '<div id="partnerdata"<% if (data._maried===false) { %>style="display: none; height: 0;"<% } %>>'+
+            '<legend>Partner</legend>'+
+                '<fieldset>'+
+                    '<div class="pure-control-group"><%== data.firstnamePartner %></div>'+
+                    '<div class="pure-control-group"><%== data.lastnamePartner %></div>'+
+                    '<div class="pure-control-group"><%== data.weddingdate %></div>'+
+                '</fieldset>'+
+        '</div>';
 
     panel = new Y.ITSAViewModelPanel({
         model: user,
@@ -126,7 +136,8 @@ YUI(yuiconfig).use('node-base', 'gallery-itsaformmodel', 'gallery-itsaviewmodelp
 
     user.after('mariedChange', function(e) {
         var partnerdata = panel.get('contentBox').one('#partnerdata');
-        e.newVal ? partnerdata.show('ease-in', {height: '145px', duration: 0.5}) : partnerdata.hide('ease-out', {height: 0, duration: 0.5});
+        e.newVal ? partnerdata.show('ease-in', {height: '145px', duration: 0.5}) :
+                   partnerdata.hide('ease-out', {height: 0, duration: 0.5});
     });
 
 });
