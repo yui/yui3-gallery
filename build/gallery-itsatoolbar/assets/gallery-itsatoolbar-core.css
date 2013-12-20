@@ -1,3 +1,5 @@
+/*csslint adjoining-classes: false, star-property-hack: false */
+
 #itsatoolbar-ref {
     display: none;
 }
@@ -77,7 +79,8 @@
 }
 .itsatoolbar.itsa-buttonsize-small .yui3-button {
     padding: 3px;
-    height:26px;
+    height:25px;
+    margin-bottom: 3px;
 }
 .itsatoolbar.itsa-buttonsize-medium .yui3-button {
     padding: 5px;

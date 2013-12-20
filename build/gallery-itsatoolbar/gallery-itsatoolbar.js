@@ -1,5 +1,7 @@
 YUI.add('gallery-itsatoolbar', function (Y, NAME) {
 
+/*jshint maxlen:225 */
+
 'use strict';
 
 /**
@@ -23,9 +25,9 @@ YUI.add('gallery-itsatoolbar', function (Y, NAME) {
 
 // Local constants
 var Lang = Y.Lang,
-    Node = Y.Node,
+    NODE = Y.Node,
 
-    ITSA_BTNNODE = "<button class='yui3-button'></button>",
+    ITSA_BTNNODE = "<button type='button' class='yui3-button'></button>",
     ITSA_BTNINNERNODE = "<span class='itsa-button-icon'></span>",
     ITSA_BTNPRESSED = 'yui3-button-active',
     ITSA_BTNACTIVE = 'itsa-button-active',
@@ -39,7 +41,6 @@ var Lang = Y.Lang,
     ITSA_TOOLBAR_SMALL = 'itsa-buttonsize-small',
     ITSA_TOOLBAR_MEDIUM = 'itsa-buttonsize-medium',
     ITSA_CLASSEDITORPART = 'itsatoolbar-editorpart',
-    ITSA_SELECTCONTNODE = '<div></div>',
     ITSA_TMPREFNODE = "<img id='itsatoolbar-tmpref' />",
     // the src of ITSA_REFEMPTYCONTENT is a 1pixel transparent png in base64-code
     ITSA_REFEMPTYCONTENT = "<img class='itsatoolbar-tmpempty' src='data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAGXRFWHRTb2Z0d2F"
@@ -381,7 +382,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * @param {Object} config The config-object.
          * @protected
         */
-        initializer : function(config) {
+        initializer : function() {
             var instance = this;
             instance.editor = instance.get('host');
             // need to make sure we can use execCommand, so do not render before the frame exists.
@@ -408,7 +409,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 instance.containerNode = instance.editorNode.get('parentNode');
                 instance._clearAllTempReferences();
                 instance.initialContent = instance.editor.get('content');
+/*jshint expr:true */
                 instance.get('paraSupport') ? instance.editor.plug(Y.Plugin.EditorPara) : instance.editor.plug(Y.Plugin.EditorBR);
+/*jshint expr:false */
                 // make the iframeblocker work through css:
                 instance._extracssBKP = instance.editor.get('extracss');
                 instance.editor.set('extracss', instance._extracssBKP + ITSA_IFRAMEBLOCKER_CSS);
@@ -420,7 +423,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 instance._bindUI();
                 // first time: fire a statusChange with a e.changedNode to sync the toolbox with the editors-event object
                 // be sure the editor has focus already focus, otherwise safari cannot inserthtml at cursorposition!
-                instance.editor.frame.focus(Y.bind(instance.sync, instance));
+                if (instance.get('initialFocus')) {
+                    instance.editor.frame.focus(Y.bind(instance.sync, instance));
+                }
             }
         },
 
@@ -437,7 +442,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         _getCursorRef : function(selectionIfAvailable) {
             var instance = this,
                 node,
-                tmpnode,
                 sel,
                 out;
             // insert cursor and use that node as the selected node
@@ -662,7 +666,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 else {e.changedNode = cursorRef;}
                 Y.later(250, instance, instance._removeCursorRef);
             }
-            if (instance.toolbarNode) {instance.toolbarNode.fire('itsatoolbar:statusChange', e);}
+//            if (instance.toolbarNode) {instance.toolbarNode.fire('itsatoolbar:statusChange', e);}
+            instance.fire('statusChange', e);
         },
 
         /**
@@ -676,14 +681,13 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * <i>- [customFunc]</i> (Function): reference to custom function: typicaly, this function will call editorinstance.itstoolbar.execCommand() by itsself
          * <i>- [context]]</i> (instance): the context for customFunc
          * @param {Boolean} [indent] To indent the button thus creating a whitespace between the previous button. Default=false.
-         * @param {Number} [position] Index where to insert the button. Default=null, which means added as the last button.
          * @return {Y.Node} reference to the created buttonnode
         */
-        addButton : function(iconClass, execCommand, indent, position) {
+        addButton : function(iconClass, execCommand, indent) {
             var instance = this,
                 buttonNode,
                 buttonInnerNode;
-            buttonNode = Node.create(ITSA_BTNNODE);
+            buttonNode = NODE.create(ITSA_BTNNODE);
             buttonNode.addClass(ITSA_BUTTON);
             if (Lang.isString(execCommand)) {buttonNode.setData('execCommand', execCommand);}
             else if (Lang.isObject(execCommand)) {
@@ -695,7 +699,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 }
             }
             if (Lang.isBoolean(indent) && indent) {buttonNode.addClass(ITSA_BTNINDENT);}
-            buttonInnerNode = Node.create(ITSA_BTNINNERNODE);
+            buttonInnerNode = NODE.create(ITSA_BTNINNERNODE);
             buttonInnerNode.addClass(iconClass);
             buttonNode.append(buttonInnerNode);
             // be aware of that addButton might get called when the editor isn't rendered yet. In that case instance.toolbarNode does not exist
@@ -730,14 +734,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             var instance = this,
                 buttonNode = instance.addButton(iconClass, execCommand, indent, position);
             if (!isToggleButton) {buttonNode.addClass(ITSA_BTNSYNC);}
-            // be aware of that addButton might get called when the editor isn't rendered yet. In that case instance.toolbarNode does not exist
-            if (instance.toolbarNode) {instance.toolbarNode.addTarget(buttonNode);}
-            else {
-                // do not subscribe to the frame:ready, but to the ready-event
-                // Iliyan Peychev made an editor that doesn't use Frame, so this way it works on all editors
-                instance.editor.on('ready', function(e, buttonNode){instance.toolbarNode.addTarget(buttonNode);}, instance, buttonNode);
-            }
-            if (Lang.isFunction(syncFunc)) {buttonNode.on('itsatoolbar:statusChange', Y.bind(syncFunc, context || instance));}
+            instance.addTarget(buttonNode);
+            if (Lang.isFunction(syncFunc)) {buttonNode.on('*:statusChange', Y.bind(syncFunc, context || instance));}
             return buttonNode;
         },
 
@@ -818,8 +816,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     buttonNode.addClass(ITSA_BTNGROUP);
                     buttonNode.addClass(ITSA_BTNGROUP+'-'+buttonGroup);
                     buttonNode.setData('buttongroup', buttonGroup);
-                    instance.toolbarNode.addTarget(buttonNode);
-                    if (Lang.isFunction(button.syncFunc)) {buttonNode.on('itsatoolbar:statusChange', Y.bind(button.syncFunc, button.context || instance));}
+                    instance.addTarget(buttonNode);
+                    if (Lang.isFunction(button.syncFunc)) {buttonNode.on('*:statusChange', Y.bind(button.syncFunc, button.context || instance));}
                     if (!returnNode) {returnNode = buttonNode;}
                 }
             }
@@ -851,10 +849,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * @param {Object} [config] Object that will be passed into the selectinstance. Has with the following fields:<br>
          * <i>- listAlignRight</i> (Boolean): whether to rightalign the listitems. Default=false<br>
          * <i>- hideSelected</i> (Boolean): whether the selected item is hidden from the list. Default=false
-         * @param {Number} [position] Index where to insert the button. Default=null, which means added as the last button.
          * @return {Y.ITSASelectlist} reference to the created object
         */
-        addSelectlist : function(items, execCommand, syncFunc, context, indent, config, position) {
+        addSelectlist : function(items, execCommand, syncFunc, context, indent, config) {
             var instance = this,
                 selectlist;
             config = Y.merge(config, {items: items, defaultButtonText: ''});
@@ -871,10 +868,12 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 }
                 if (indent) {selectlist.get('boundingBox').addClass('itsa-button-indent');}
                 // instance.toolbarNode should always exist here
-                instance.toolbarNode.addTarget(buttonNode);
+                instance.addTarget(selectlist);
                 selectlist.on('show', instance._createBackupCursorRef, instance);
                 selectlist.on('selectChange', instance._handleSelectChange, instance);
-                if (Lang.isFunction(syncFunc)) {buttonNode.on('itsatoolbar:statusChange', Y.rbind(syncFunc, context || instance));}
+                if (Lang.isFunction(syncFunc)) {
+                    selectlist.on('*:statusChange', Y.rbind(syncFunc, context || instance));
+                }
                 instance.editor.on('nodeChange', selectlist.hideListbox, selectlist);
             }, instance, execCommand, syncFunc, context, indent);
             // be aware of that addButton might get called when the editor isn't rendered yet. In that case instance.toolbarNode does not exist
@@ -929,8 +928,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
          * @protected
         */
         destructor : function() {
-            var instance = this,
-                srcNode = instance.get('srcNode');
+            var instance = this;
              // first, set _notDestroyed to false --> this will prevent rendering if editor.frame:ready fires after toolbars destruction
             instance._destroyed = true;
             if (instance._timerClearEmptyFontRef) {instance._timerClearEmptyFontRef.cancel();}
@@ -960,7 +958,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 srcNode = instance.get('srcNode'),
                 btnSize = instance.get('btnSize');
             // be sure that its.yui3-widget-loading, because display:none will make it impossible to calculate size of nodes during rendering
-            instance.toolbarNode = Node.create(ITSA_TOOLBAR_TEMPLATE);
+            instance.toolbarNode = NODE.create(ITSA_TOOLBAR_TEMPLATE);
             if (btnSize===1) {instance.toolbarNode.addClass(ITSA_TOOLBAR_SMALL);}
             else {if (btnSize===2) {instance.toolbarNode.addClass(ITSA_TOOLBAR_MEDIUM);}}
             if (srcNode) {
@@ -1003,6 +1001,11 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             );
             eventhandlers.push(
                 instance.toolbarNode.delegate('click', instance._handleBtnClick, 'button', instance)
+            );
+            eventhandlers.push(
+                instance.toolbarNode.on('click', function(e) {
+                    e.stopPropagation();
+                })
             );
             // TODO: shortcutfunctions
             //instance.editorY.on('keydown', Y.bind(instance._handleShortcutFn, instance));
@@ -1077,7 +1080,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         */
         getUrl: function(title, message, defaultmessage, callback, context, args, customButtons, customIconclass) {
             var instance = this,
-                bodyMessage,
                 inputElement;
             inputElement = new Y.ITSAFORMELEMENT({
                 name: 'value',
@@ -1296,7 +1298,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                         }
                     }
                     if (nodeFound) {
-                        checkNode = Node.create(nodeFound);
+                        checkNode = NODE.create(nodeFound);
                         returnNode = instance.editorY.one('#' + checkNode.get('id'));
                     }
                 }
@@ -1312,11 +1314,10 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         */
         _initializeButtons : function() {
             var instance = this,
-                i, r, g, b,
+                i,
                 item,
                 items,
                 bgcolor,
-                docFontSize,
                 bgcolors,
                 buttons;
 
@@ -1501,7 +1502,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 instance.addSyncButton(instance.ICON_EMAIL, 'itsacreatemaillink', function(e) {
                     var instance = this,
                         node = e.changedNode,
-                        nodePosition,
                         isLink,
                         isEmailLink;
                     isLink =  instance._checkInbetweenSelector('a', node);
@@ -1521,7 +1521,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     var instance = this,
                         posibleFiles = '.doc.docx.xls.xlsx.pdf.txt.zip.rar.',
                         node = e.changedNode,
-                        nodePosition,
                         isLink,
                         isFileLink = false,
                         href,
@@ -1593,18 +1592,15 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 instance.addButton(instance.ICON_CANCEL, {command: 'mysetcontent', value: instance.initialContent}, true);
             }
 
-//************************************************
-// just for temporary local use ITS Asbreuk
-// should NOT be part of the gallery
-            if (true) {
+            if (instance.get('btnFileSelect') && Y.ItsaFilePicker) {
 //                instance.addButton(instance.ICON_EURO, {command: 'inserthtml', value: '&#8364;'}, true);
                 instance.addSyncButton(
                     instance.ICON_FILE,
                     {   customFunc: Y.bind(
-                            function(e) {
+                            function() {
                                 Y.ItsaFilePicker.getFile().then(
                                     function(response) {
-                                        instance.execCommand('itsacreatehyperlink', 'http://files.brongegevens.nl/' + Y.config.cmas2plusdomain + '/' + response.file.filename);
+                                        instance.execCommand('itsacreatehyperlink', instance.get('baseFileDir') + response.file.filename);
                                     }
                                 );
                             },
@@ -1615,7 +1611,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                         var instance = this,
                             posibleFiles = '.doc.docx.xls.xlsx.pdf.txt.zip.rar.',
                             node = e.changedNode,
-                            nodePosition,
                             isFileLink = false,
                             isLink,
                             href,
@@ -1641,7 +1636,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     }
                 );
             }
-//************************************************
 
             if (instance.get('grpUndoredo')) {
                 instance.addButton(instance.ICON_UNDO, 'undo', true);
@@ -1659,7 +1653,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         * @return String
         */
         _filter_rgb: function(css) {
-            if (css.toLowerCase().indexOf('rgb') != -1) {
+            if (css.toLowerCase().indexOf('rgb') !== -1) {
                 var exp = new RegExp("(.*?)rgb\\s*?\\(\\s*?([0-9]+).*?,\\s*?([0-9]+).*?,\\s*?([0-9]+).*?\\)(.*?)", "gi"),
                     rgb = css.replace(exp, "$1,$2,$3,$4,$5").split(','),
                     r, g, b;
@@ -1694,7 +1688,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                             noderef = itsatoolbar._getBackupCursorRef(),
                             activeHeader = itsatoolbar._getActiveHeader(noderef),
                             headingNumber = 0,
-                            disableSelectbutton = false,
                             node;
                         if (val==='none') {
                             // want to clear heading
@@ -1732,10 +1725,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
                     itsafontfamily: function(cmd, val) {
                         var editor = this.get('host'),
-                            editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
                             noderef,
-                            browserNeedsContent,
                             selection;
                         if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
                         itsatoolbar._clearEmptyFontRef();
@@ -1774,11 +1765,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
                     itsafontsize: function(cmd, val) {
                         var editor = this.get('host'),
-                            editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
                             noderef,
                             parentnode,
-                            browserNeedsContent,
                             selection;
                         if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
                         itsatoolbar._clearEmptyFontRef();
@@ -1823,10 +1812,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
                     itsafontcolor: function(cmd, val) {
                         var editor = this.get('host'),
-                            editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
                             noderef,
-                            browserNeedsContent,
                             selection;
                         if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
                         itsatoolbar._clearEmptyFontRef();
@@ -1867,10 +1854,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
                     itsamarkcolor: function(cmd, val) {
                         var editor = this.get('host'),
-                            editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
                             noderef,
-                            browserNeedsContent,
                             selection;
                         if (itsatoolbar._timerClearEmptyFontRef) {itsatoolbar._timerClearEmptyFontRef.cancel();}
                         itsatoolbar._clearEmptyFontRef();
@@ -1909,9 +1894,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         _defineExecSaveContent : function() {
             if (!Y.Plugin.ExecCommand.COMMANDS.itsamarkcolor) {
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
-                    itsasavecontent: function(cmd, val) {
+                    itsasavecontent: function() {
                         var editor = this.get('host'),
-                            editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
                             noderef;
                         noderef = itsatoolbar._getBackupCursorRef();
@@ -1936,7 +1920,6 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
                     itsasetcontent: function(cmd, val) {
                         var editor = this.get('host'),
-                            editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
                             noderef;
                         noderef = itsatoolbar._getBackupCursorRef();
@@ -2066,7 +2049,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
                     // val can be:
                     // 'img', 'url', 'video', 'email'
-                    itsaremovehyperlink: function(cmd, val) {
+                    itsaremovehyperlink: function() {
                         var editor = this.get('host'),
                             editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
@@ -2165,8 +2148,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                                 currentHyperlink || defaultHyperlink || '',
                                 function(e) {
                                     var itsatoolbar = this,
-                                        href,
-                                        selection;
+                                        href;
                                     if (e.buttonName==='ok') {
                                         href = 'mailto:' + e.value.replace(/"/g, '').replace(/'/g, ''); //Remove single & double quotes
                                         if (currentAnchorNode) {
@@ -2300,7 +2282,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         _defineExecCommandYouTube : function() {
             if (!Y.Plugin.ExecCommand.COMMANDS.itsacreateyoutube) {
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
-                    itsacreateyoutube: function(cmd, val) {
+                    itsacreateyoutube: function() {
                         var editor = this.get('host'),
                             editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
@@ -2359,7 +2341,9 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                                             currentYouTubeNode.set('src', 'http://www.youtube.com/embed/' + videoitem);
                                         }
                                         else {
-                                            noderef.setHTML('<span style="padding-left:'+width+'px; margin-right:-'+width+'px; padding-top:'+height+'px; " class="'+ITSA_IFRAMEBLOCKER+' '+ITSA_YOUTUBENODE+'"></span><iframe width="'+width+'" height="'+height+'" src="http://www.youtube.com/embed/' + videoitem + '" frameborder="0" allowfullscreen></iframe>');
+                                            noderef.setHTML('<span style="padding-left:'+width+'px; margin-right:-'+width+'px; padding-top:'+height+'px; " class="'+ITSA_IFRAMEBLOCKER+' '+
+                                                            ITSA_YOUTUBENODE+'"></span><iframe width="'+width+'" height="'+height+'" src="http://www.youtube.com/embed/' +
+                                                            videoitem + '" frameborder="0" allowfullscreen></iframe>');
                                             // even if there was no selection, we pretent if so AND change the id: we DON'T want the noderef have the id
                                             // of ITSA_REF_NODE. Because we need to keep the innercontent
                                             noderef.set('id', ITSA_REFSELECTION);
@@ -2397,7 +2381,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
         _defineExecCommandIframe : function() {
             if (!Y.Plugin.ExecCommand.COMMANDS.itsacreateiframe) {
                 Y.mix(Y.Plugin.ExecCommand.COMMANDS, {
-                    itsacreateiframe: function(cmd, val) {
+                    itsacreateiframe: function() {
                         var editor = this.get('host'),
                             editorY = editor.getInstance(),
                             itsatoolbar = editor.itsatoolbar,
@@ -2440,7 +2424,8 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                                         currentIframeNode.set('src', src);
                                     }
                                     else {
-                                        noderef.setHTML('<span style="padding-left:'+width+'px; margin-right:-'+width+'px; padding-top:'+height+'px; " class="'+ITSA_IFRAMEBLOCKER+' '+ITSA_IFRAMENODE+'"></span><iframe width="'+width+'" height="'+height+'" src="' + src + '" frameborder="0"></iframe>');
+                                        noderef.setHTML('<span style="padding-left:'+width+'px; margin-right:-'+width+'px; padding-top:'+height+'px; " class="'+ITSA_IFRAMEBLOCKER+' '+
+                                                        ITSA_IFRAMENODE+'"></span><iframe width="'+width+'" height="'+height+'" src="' + src + '" frameborder="0"></iframe>');
                                         // even if there was no selection, we pretent if so AND change the id: we DON'T want the noderef have the id
                                         // of ITSA_REF_NODE. Because we need to keep the innercontent
                                         noderef.set('id', ITSA_REFSELECTION);
@@ -2852,6 +2837,30 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             },
 
             /**
+             * @description Whether the button 'filebrowser' is available<br>
+             * Only visible if gallery-itsafilepicker is included.
+             * Default = false
+             * @attribute btnFileSelect
+             * @type Boolean
+            */
+            btnFileSelect : {
+                value: false,
+                validator: function(val) {
+                    return Lang.isBoolean(val);
+                }
+            },
+
+            baseFileDir : {
+                value : '',
+                validator: function(val) {
+                    return typeof val==='string';
+                },
+                getter: function(v) {
+                    return (/\/$/).test(v) ? v : (v + '/');
+                }
+            },
+
+            /**
              * @description Whether the button cancel is available<br>
              * Will restore the initial content and fire a 'cancel'-event, the user can take the approperiate action himself.<br>
              * If the attribute 'confirmCancel' is set: then a confirmationmessage will appear before.
@@ -2916,6 +2925,19 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
              * @type Boolean
             */
             confirmClear : {
+                value: true,
+                validator: function(val) {
+                    return Lang.isBoolean(val);
+                }
+            },
+
+            /**
+             * @description Whether to set the focus on the editor once plugged in.
+             * Default = true
+             * @attribute initialFocus
+             * @type Boolean
+            */
+            initialFocus : {
                 value: true,
                 validator: function(val) {
                     return Lang.isBoolean(val);
@@ -3083,7 +3105,7 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
     }
 );
 
-}, 'gallery-2013.10.02-20-26', {
+}, 'gallery-2013.12.20-18-06', {
     "requires": [
         "plugin",
         "base-build",
