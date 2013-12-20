@@ -84,10 +84,17 @@
     width: 100%;
     min-height: 24px;
 }
-.itsa-panel .itsa-panelheader,
+.itsa-panel .itsa-panelheader {
+    position: relative;
+}
+
 .itsa-panel .itsa-panelstatusbar,
 .itsa-panel .itsa-panelfooter {
     position: absolute;
+}
+.itsa-panel .itsa-panelheader,
+.itsa-panel .itsa-panelstatusbar,
+.itsa-panel .itsa-panelfooter {
     line-height: 1em;
     white-space: nowrap;
     vertical-align: middle;
@@ -117,7 +124,7 @@
     bottom: 0;
 }
 .itsa-panel .itsa-panelinnerheader {
-    padding: 0.7em;
+    padding: 0.7em 2em 0.7em 0.7em;
 }
 .itsa-panel .itsa-panelinnerfooter {
     padding: 0.55em 1.2em 0.55em 0.7em;

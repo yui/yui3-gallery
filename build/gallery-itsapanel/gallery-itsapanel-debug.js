@@ -1332,6 +1332,7 @@ ITSAPanel.prototype.renderUI = function() {
     Y.log('renderUI ', 'info', 'ITSAPanel');
     contentBox.setHTML(HEADERTEMPLATE+BODYTEMPLATE+FOOTERTEMPLATE+STATUSBARTEMPLATE);
     instance._header = contentBox.one('.'+PANELHEADERINNERCLASS);
+    instance._headercont = contentBox.one('.'+PANELHEADERCLASS);
     instance._body = contentBox.one('.'+PANELBODYINNERCLASS);
     instance._footer = contentBox.one('.'+PANELFOOTERINNERCLASS);
     instance._footercont = contentBox.one('.'+PANELFOOTERCLASS);
@@ -1410,10 +1411,11 @@ ITSAPanel.prototype._adjustPaddingBottom = function() {
 ITSAPanel.prototype._adjustPaddingTop = function() {
     var instance = this,
         footer = instance._footercont,
-        newHeight = instance._header.get(OFFSETHEIGHT),
+        newHeight = 0,
         footerontop = instance.get(FOOTERONTOP);
     Y.log('_adjustPaddingTop ', 'info', 'ITSAPanel');
-    footer.setStyle('top', footerontop ? newHeight : '');
+    instance._headercont.setStyle('top', footerontop ? -instance._footercont.get(OFFSETHEIGHT) : '');
+    footer.setStyle('top', footerontop ? instance._headercont.get(OFFSETHEIGHT) : '');
 /*jshint expr:true */
     footerontop && (newHeight+=footer.get(OFFSETHEIGHT));
 /*jshint expr:false */
@@ -1848,7 +1850,7 @@ ITSAPanel.prototype._setWidth = function(val) {
     instance.get(CONTENTBOX).setStyle(WIDTH, (val ? (val+PX) : ''));
 };
 
-}, '@VERSION@', {
+}, 'gallery-2013.12.20-18-06', {
     "requires": [
         "yui-base",
         "node-pluginhost",
