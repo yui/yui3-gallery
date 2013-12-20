@@ -205,6 +205,10 @@ Y.extend(FocusManager, Y.Plugin.Base, {
             disabledSelector = this.get('disabledSelector'),
             itemSelector     = this.get(container ? 'anchoredItemSelector' : 'itemSelector');
 
+        if (!Y.one(activeItem)) {
+            this.set('activeItem', null);
+            activeItem = null;
+        }
         (container || this._host).all(itemSelector).each(function (node) {
             if (disabledSelector && node.test(disabledSelector)) {
                 node.removeAttribute('tabIndex');
@@ -287,13 +291,19 @@ Y.extend(FocusManager, Y.Plugin.Base, {
         var newVal  = e.newVal,
             prevVal = e.prevVal;
 
-        if (Y.one(prevVal)) {
-            prevVal.set('tabIndex', -1);
+        if (prevVal) {
+            try {
+                prevVal.set('tabIndex', -1);
+            }
+            catch (err) {}
         }
         if (newVal) {
             newVal.set('tabIndex', 0);
             if (this.get('focused')) {
-                newVal.focus(); // this will lead to come inside the aftersetter one more time unfortunatly
+                try {
+                    newVal.focus(); // this will lead to come inside the aftersetter one more time unfortunatly
+                }
+                catch (err) {}
             }
         }
     },
@@ -548,10 +558,13 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
                             ((panelfooter=host.one('.itsa-panelfooter')) ? instance.last({silent: true, container: panelfooter}) : null) ||
                             ((panelheader=host.one('.itsa-panelheader')) ? instance.first({silent: true, container: panelheader}) : null) ||
                             instance.first({silent: true});
-    /*jshint expr:true */
         // focussing will set the value of attribute 'activeItem'
-                focusitem && focusitem.focus();
-    /*jshint expr:false */
+                if (focusitem) {
+                    try {
+                        focusitem.focus();
+                    }
+                    catch (err) {}
+                }
             }
         },
 
@@ -763,7 +776,10 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
                         var node = e.target;
                         if (host.hasClass(FOCUSED_CLASS)) {
                             if ((node.get('tagName')==='BUTTON') && instance._nodeIsFocusable(node)) {
-                                node.focus();
+                                try {
+                                    node.focus();
+                                }
+                                catch (err) {}
                             }
                             else {
                                 instance._retrieveFocus();
@@ -833,7 +849,10 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
                     activeItem = null;
                 }
                 if (activeItem) {
-                    activeItem.focus();
+                    try {
+                        activeItem.focus();
+                    }
+                    catch (err) {}
                 }
                 else {
                     instance.focusInitialItem();
