@@ -9,7 +9,8 @@
             "json-parse",
             "promise",
             "model",
-            "gallery-itsamodulesloadedpromise"
+            "gallery-itsamodulesloadedpromise",
+            "gallery-itsautils"
         ],
         "lang" : [
             "ar",

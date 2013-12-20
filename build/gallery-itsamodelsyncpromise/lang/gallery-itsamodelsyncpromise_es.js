@@ -1,1 +1,1 @@
-YUI.add("lang/gallery-itsamodelsyncpromise_es",function(e){e.Intl.add("gallery-itsamodelsyncpromise","es",{load:"Cargando datos ...",submit:"Presentaci\u00f3n de los datos ...",save:"Actualizaci\u00f3n de datos ...",destroy:"Actualizaci\u00f3n de datos ..."})},"@VERSION@");
+YUI.add("lang/gallery-itsamodelsyncpromise_es",function(e){e.Intl.add("gallery-itsamodelsyncpromise","es",{load:"Cargando datos ...",submit:"Presentaci\u00f3n de los datos ...",save:"Actualizaci\u00f3n de datos ...",destroy:"Actualizaci\u00f3n de datos ..."})},"gallery-2013.12.20-18-06");

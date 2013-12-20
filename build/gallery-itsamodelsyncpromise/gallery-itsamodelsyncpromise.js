@@ -98,7 +98,7 @@ statusmessage
 PARSED = function (response) {
     if (typeof response === 'string') {
         try {
-            return Y.JSON.parse(response);
+            return Y.JSON.fullparse(response);
         } catch (ex) {
             this.fire(ERROR, {
                 error   : ex,
@@ -174,6 +174,19 @@ YModel.prototype.addMessageTarget = function(itsamessageviewer) {
             }
         }
     );
+};
+
+/**
+ * Promise that returns the default-options (object) that will be passed through the synclayer.
+ * Is used as the syncoptions, along with manual syncoptions that could be supplied. Both objects are merged (actually cloned).
+ *
+ * @method defSyncOptions
+ * @return {Y.Promise} --> resolve(defaultOptionsObject) NEVER reject
+**/
+YModel.prototype.defSyncOptions = function() {
+    return new Y.Promise(function (resolve) {
+        resolve({});
+    });
 };
 
 /**
@@ -259,7 +272,7 @@ YModel.prototype.addMessageTarget = function(itsamessageviewer) {
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
  *                 implementation to determine what options it supports or requires, if any.
  *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious loading. Will overrule the default message. See gallery-itsamessageviewer.
- * @return {Y.Promise} promised response --> resolve(response) OR reject(reason) (examine reason.message).
+ * @return {Y.Promise} promised response --> resolve(response) where response is an object with all model-attributes as properties OR reject(reason) (examine reason.message).
 **/
 
 /**
@@ -543,7 +556,10 @@ YModel.prototype._defFn_load = function(e) {
         parsed = PARSED(response);
         if (parsed.responseText) {
             // XMLHttpRequest
-            parsed = parsed.responseText;
+            if (parsed.responseText) {
+                // XMLHttpRequest
+                parsed = PARSED(parsed.responseText);
+            }
         }
         e.parsed = parsed;
         instance.setAttrs(parsed, options);
@@ -593,6 +609,10 @@ YModel.prototype._defFn_save = function(e) {
             method: usedmethod
         };
 
+    if (!instance.isModified()) {
+        promiseReject(new Error('Model will not be saved: not modified'));
+    }
+    else {
         instance._validate(instance.toJSON(), function (validateErr) {
             if (validateErr) {
                 facade.error = validateErr;
@@ -613,9 +633,11 @@ YModel.prototype._defFn_save = function(e) {
                     parsed = PARSED(response);
                     if (parsed.responseText) {
                         // XMLHttpRequest
-                        parsed = parsed.responseText;
+                        parsed = PARSED(parsed.responseText);
                     }
                     if (YObject.keys(parsed).length>0) {
+
+
                         e.parsed = parsed;
                         // if removed then fire destroy-event (not through synclayer), else update data
 /*jshint expr:true */
@@ -653,6 +675,7 @@ YModel.prototype._defFn_save = function(e) {
                 }
             }
         });
+    }
     return e.promise;
 };
 
@@ -839,10 +862,10 @@ YModel.prototype._publishAsync = function(type, opts) {
 };
 
 /**
-* Fires the ERROR-event and -if not published yet- publish it broadcasted to Y.
-* Because the error-event is broadcasted to Y, it can be catched by gallery-itsaerrorreporter.
-*
-* @method _lazyFireErrorEvent
+ * Fires the ERROR-event and -if not published yet- publish it broadcasted to Y.
+ * Because the error-event is broadcasted to Y, it can be catched by gallery-itsaerrorreporter.
+ *
+ * @method _lazyFireErrorEvent
  * @param {Object} [facade] eventfacade.
  * @private
 **/
@@ -871,20 +894,23 @@ YModel.prototype._lazyFireErrorEvent = function(facade) {
  * @since 0.2
 */
 YModel.prototype._syncTimeoutPromise = function(action, options) {
-    var instance = this,
-          syncpromise;
+    var instance = this;
 
-    syncpromise = instance.syncPromise(action, options);
-    if (!(syncpromise instanceof Y.Promise)) {
-        syncpromise = new Y.Promise(function (resolve, reject) {
-            var errormessage = 'syncPromise is rejected --> '+action+' not defined as a Promise inside syncPromise()';
-            reject(new Error(errormessage));
-        });
-    }
-    return syncpromise;
+    return instance.defSyncOptions().then(
+        function(defoptions) {
+            var syncpromise = instance.syncPromise(action, Y.merge(defoptions, options));
+            if (!(syncpromise instanceof Y.Promise)) {
+                return new Y.Promise(function (resolve, reject) {
+                    var errormessage = 'syncPromise is rejected --> '+action+' not defined as a Promise inside syncPromise()';
+                    reject(new Error(errormessage));
+                });
+            }
+            return syncpromise;
+        }
+    );
 };
 
-}, '@VERSION@', {
+}, 'gallery-2013.12.20-18-06', {
     "requires": [
         "yui-base",
         "intl",
@@ -894,7 +920,8 @@ YModel.prototype._syncTimeoutPromise = function(action, options) {
         "json-parse",
         "promise",
         "model",
-        "gallery-itsamodulesloadedpromise"
+        "gallery-itsamodulesloadedpromise",
+        "gallery-itsautils"
     ],
     "lang": [
         "ar",

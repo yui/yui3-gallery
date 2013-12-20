@@ -1,1 +1,1 @@
-YUI.add("lang/gallery-itsamodelsyncpromise_pl",function(e){e.Intl.add("gallery-itsamodelsyncpromise","pl",{load:"\u0141adowanie danych ...",submit:"Przesy\u0142anie danych ...",save:"Aktualizacja danych ...",destroy:"Aktualizacja danych ..."})},"@VERSION@");
+YUI.add("lang/gallery-itsamodelsyncpromise_pl",function(e){e.Intl.add("gallery-itsamodelsyncpromise","pl",{load:"\u0141adowanie danych ...",submit:"Przesy\u0142anie danych ...",save:"Aktualizacja danych ...",destroy:"Aktualizacja danych ..."})},"gallery-2013.12.20-18-06");

@@ -5,6 +5,7 @@ YUI(yuiconfig).use('node', 'base-build', 'gallery-itsamodelsyncpromise', 'model'
         container = Y.one('#resultcontainer');
 
     Y.CountryModel = Y.Base.create('countryModel', Y.Model, [], {
+        dummy: 10,
         syncPromise: function(action, options) {
             if (action==='read') {
                 // simulating loaddelay through Y.later:
