@@ -1,0 +1,13 @@
+{
+    "gallery-charts-stockindicators": {
+        "requires": [
+            "graphics-group",
+            "axis-numeric",
+            "axis-category",
+            "series-line",
+            "series-marker",
+            "series-column",
+            "series-candlestick"
+        ]
+    }
+}
