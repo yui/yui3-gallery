@@ -1,0 +1,23 @@
+YUI(yuiconfig).use('gallery-itsautils', 'json-stringify', 'json', function(Y) {
+    var myobject, newobject, stringified;
+    myobject = {
+        a: new Date(),
+        b: 20,
+        c: true,
+        d: 'hello'
+    };
+    stringified = Y.JSON.stringify(myobject);
+    console.log('stringified: '+stringified);
+    try {
+
+        newobject = Y.JSON.fullparse(stringified);
+        console.log('typeof a: '+ Y.Lang.isDate(newobject.a));
+        console.log('typeof b: '+ newobject.b);
+        console.log('typeof c: '+ newobject.c);
+        console.log('typeof d: '+ newobject.d);
+    }
+    catch (err) {
+        console.log(err);
+    }
+
+});

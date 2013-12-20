@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsautils",
+    "builds": {
+        "gallery-itsautils": {
+            "jsfiles": [
+                "js/gallery-itsautils.js"
+            ]
+        }
+    }
+}

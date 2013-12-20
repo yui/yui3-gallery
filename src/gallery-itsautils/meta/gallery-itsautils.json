@@ -1,0 +1,10 @@
+{
+    "gallery-itsautils": {
+        "requires": [
+            "yui-base",
+            "json",
+            "jsonp",
+            "gallery-io-utils"
+        ]
+    }
+}

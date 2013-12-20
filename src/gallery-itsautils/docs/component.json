@@ -1,0 +1,21 @@
+{
+    "name"       : "gallery-itsautils",
+    "displayName": "Gallery: gallery-itsautils",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsautils" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "dateobject",
+            "displayName": "parsing an object with a Date-property",
+            "description": "This example shows a stringified object -with a Date-property- gets parsed while retaining its Date",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsautils"],
+            "tags"    : ["gallery-itsautils"],
+            "hideTableOfContents": true
+        }
+    ]
+}
