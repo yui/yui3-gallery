@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsaviewlogin",
+    "builds": {
+        "gallery-itsaviewlogin": {
+            "jsfiles": [
+                "js/gallery-itsaviewlogin.js"
+            ]
+        }
+    }
+}

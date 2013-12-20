@@ -1,0 +1,93 @@
+{
+    "name"       : "gallery-itsaviewlogin",
+    "displayName": "Gallery: gallery-itsaviewlogin",
+    "description": "supplies Y.getLogin() through the Y.ITSAMessageController. You get a promise that holds a username and password, which are retrieved through a synclayer.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsaviewlogin" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "standard",
+            "displayName": "standard login-view",
+            "description": "This example shows how to create a standard login-view.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "compressed",
+            "displayName": "simplified login-view",
+            "description": "This example shows how to create a simplified login by setting the attribute 'simplified' to true.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "compressed", "simplified"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "retrieve",
+            "displayName": "retrieve username or password",
+            "description": "This example shows how setup the login-view with retrieval of the username or password.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "forgot", "retrieve"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "usernameisemail",
+            "displayName": "login with emailaddress as username",
+            "description": "This example shows how setup the login-view with an emailaddress as username.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "emailaddres", "username"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "resetpassword",
+            "displayName": "force password-reset",
+            "description": "This example shows how setup the login-view to force a passwordreset once loggedin.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "force", "reset", "passwordreset"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "newaccount",
+            "displayName": "login with create new account",
+            "description": "This example shows how setup the login-view with the posibility of creating a new account.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise", "gallery-itsamessagecontroller", "gallery-itsalogin"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "newaccount", "account"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "customize",
+            "displayName": "customize internationalized messages",
+            "description": "This example shows how to customize internationalized messages.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "customize", "internationalized", "i18n"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "statusbar",
+            "displayName": "create viewlogin that messages a statusbar",
+            "description": "This example shows how to use the main statusbar for viewing messages.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise", "gallery-itsastatusbar"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "statusbar"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "own-statusbar",
+            "displayName": "create viewlogin with own statusbar",
+            "description": "This example shows how create a view with its won statusbar.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsaviewlogin", "promise", "gallery-itsamessageviewer"],
+            "tags"    : ["gallery-itsaviewlogin", "view", "login", "statusbar"],
+            "hideTableOfContents": true
+        }
+    ]
+}
