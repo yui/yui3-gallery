@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+        Valid username/password combination is: username=<b>marco</b> password=<b>test</b>
+    </p>
+</div>
+
+
+
+<h2>Code</h2>
+```
+{{>newaccount-js}}
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>newaccount-js}}
+</script>

@@ -1,0 +1,342 @@
+{{>api-button}}
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+         This module has no class itself, but adds Y.getLogin() as a method that can be view through Y.ITSADialog - which is loaded automaticly.
+         Y.getLogin() also has several config-options that are useful when retrieving login-data, like retrieving forgotten logindata or creating new accounts.
+     </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+    <p>
+        This module comes with only one method: Y.getLogin(), which is automaticly created at the YUI-instance. Once called, a modal panel rises that will retrieve the logindata from the user. To get that done, you need to setup the synclayer and make the server response the right way.
+    </p>
+
+<h2>Usage</h2>
+<p>
+    Y.login should be used like: Y.getLogin([title], [message], [config], sync), where only sync is a required parameter. sync calls a synclayer and <u>should return a Promise</u>. This is best be done by using gallery-io-utils.
+    ```js
+    YUI(yuiconfig).use('gallery-itsalogin', 'gallery-io-utils', 'json', function(Y) {
+
+        var syncFn = function(action) {
+            // Y.io.postJSON requires the 'json' module
+            return Y.io.postJSON('http://mydomain.com/submitdata.php'+this.toJSON());
+        };
+
+        var logindata = Y.getLogin('Login', 'Please enter login', {
+            imageButtons: true,
+            showStayLoggedin: true
+        }, syncFn);
+
+        logindata.then(
+            function(result) {
+                /*
+                 * result.username <-- has the username
+                 * result.password <-- has the password
+                 * result.remember <-- whether the login should be remembered
+                 * result.userdata <-- all the userattributes
+                 */
+            }
+        );
+
+    });
+    ```
+</p>
+<p>
+    Once resolved, this means the user loggedin successfully. A resolved promise calls back with an object with at least four parameters (which should be send by the server):
+    <ul>
+        <li><code>username</code></li>
+        <li><code>password</code></li>
+        <li><code>remember</code></li>
+        <li><code>userdata</code></li>
+    </ul>
+    It is up to the developer to take further action. Typically by adding the username and password to the headers of future ssl-requests.
+</p>
+
+<h2>Available sub-panels</h2>
+    <p>Besides the original login-panel, multiple subpanels can show up, based on the config:
+        <ul>
+            <li><code>changepassword-panel</code> will show up when the server responses to button==='getlogin' with {status: 'CHANGEPASSWORD'}</li>
+            <li><code>forgot-username-or-password-panel</code> is available when config.regain==='usernameorpassword'</li>
+            <li><code>forgotusername-panel</code> is available when config.regain==='usernameorpassword' || 'username'</li>
+            <li><code>forgotpassword-panel</code> is available when config.regain==='usernameorpassword' || 'password'</li>
+            <li><code>createaccount-panel</code> needs to be set-up by the developer, using config.createAccount: createAccountPromise --> see examples</li>
+        </ul>
+    </p>
+
+<h2>The sync-Promise</h2>
+    <p>The only required parameter Y.getLogin() has, is <code>sync</code>. This should be a function that does the syncing and returns a Promise. Setting up this function is really easy if you consider these rules:
+        <ul>
+            <li>Set the sync-Promise up by using gallery-io-utils. See the example above. gallery-io-utils has multiple transfermethods to use, they all return a Promise.</li>
+            <li>The context inside sync-Promise is a ITSAMessage-instance that is created under the hood by Y.login</li>
+            <li>The properties of the ITSAMessage-instance need to be transfered to the server. These can be accessed by this.toJSON(), which reflects the actual formvalues of the UI.</li>
+        </ul>
+    </p>
+
+<h2>Setting up the server</h2>
+    <p>
+        In order to work right, the server needs to setup to make responses. Because there are mor subforms that can submit, the server needs to inspect the value of <code>button</code> which tells what panel made the submission
+    </p>
+<h3>response to the login-panel</h3>
+    <p>
+    ```js
+    request = {
+        button   : 'getlogin',
+        username : {String}, // any user-input
+        password : {String}, // any user-input
+        remember : {boolean}, // any user-input
+    }
+    server-response = {
+        status     : 'OK' || 'ERROR' || 'RETRY' || 'NOACCESS' || 'CHANGEPASSWORD',
+        title      : {String} (optional), // appears in the response-dialog
+        message    : {String} (optional), // appears in the response-dialog
+        userdata   : {Object} (optional), // set this so that Y.ITSACurrentUser is loaded with the right data. See <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsacurrentuser/">gallery-itsacurrentuser</a>.
+        displayname: {String} (optional), // to let any other modules know what the displayname should be. Could be used with template <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsa-i18n-login/">gallery-itsa-i18n-login</a> --> fields <code>loggedinas</code> or <code>youareloggedinas</code>.
+        messageLoggedin: {String} (optional) override for the default 'messageLoggedin' the is generated by <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaviewlogin/">Y.ITSAViewLogin</a>-instances.
+        ....       : // any other response that the developer can read with the resolved Promise, or by the 'loggedin'-event, which fires when status==='OK'.
+    }
+    ```
+    <ul>
+        <li><code>OK</code> resolves the promise, using username/password/remember that was filled in (doesn't need to be returned by the server)</li>
+        <li><code>ERROR</code> rejects the promise, showing an error-dialog</li>
+        <li><code>RETRY</code> reactivates the login-panel, making another entry possible</li>
+        <li><code>NOACCESS</code> rejects the promise, showing an 'no-access' message</li>
+        <li><code>CHANGEPASSWORD</code> <u>only return when login is ok</u> will not fulfill the promise, but prompt the changepassword-panel. The result of this panel will determine whether the login-panel resolves or rejects.</li>
+    </ul>
+    </p>
+    <h4>dedicated messages after succesfully login</h4>
+    <p>
+        If you response with status: 'OK' <u>and define</u> the response <code>message</code> then an extra message is shown after login, using Y.showMessage(response.title, response.message). This way you can make the server return user-dedicated messages. This is s;ightly diifferent from <code>messageLoggedin</code> --> the latter is to be used by <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaviewlogin/">Y.ITSAViewLogin</a> to generate a display-status (continiously) after someone loggs in.
+    </p>
+
+<h3>response to the changepassword-panel</h3>
+    ```js
+    request = {
+        button   : 'changepassword',
+        password : {String} // any user-input
+    }
+    server-response = {
+        status  : 'OK' || 'ERROR' || 'RETRY',
+        status     : 'OK' || 'ERROR' || 'RETRY' || 'NOACCESS' || 'CHANGEPASSWORD',
+        title      : {String} (optional), // appears in the response-dialog
+        message    : {String} (optional), // appears in the response-dialog
+        userdata   : {Object} (optional), // set this so that Y.ITSACurrentUser is loaded with the right data. See <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsacurrentuser/">gallery-itsacurrentuser</a>.
+        displayname: {String} (optional), // to let any other modules know what the displayname should be. Could be used with template <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsa-i18n-login/">gallery-itsa-i18n-login</a> --> fields <code>loggedinas</code> or <code>youareloggedinas</code>.
+        messageLoggedin: {String} (optional) override for the default 'messageLoggedin' the is generated by <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaviewlogin/">Y.ITSAViewLogin</a>-instances.
+        ....       : // any other response that the developer can read with the resolved Promise, or by the 'loggedin'-event, which fires when status==='OK'.
+    }
+    ```
+    <ul>
+        <li><code>OK</code> resolves the promise of the login-panel, using username/password (changed)/remember that was filled in (doesn't need to be returned by the server)</li>
+        <li><code>ERROR</code> rejects the promise of the login-panel, showing an error-dialog</li>
+        <li><code>RETRY</code> reactivates the changepassword-panel, making another entry possible</li>
+    </ul>
+
+<h3>response to the forgotusername-panel</h3>
+    ```js
+    request = {
+        button   : 'forgotusername',
+        emailaddress : {String} // any user-input
+    }
+    server-response = {
+        status  : 'OK' || 'ERROR' || 'RETRY',
+        title   : {String} (optional), // appears in the response-dialog
+        message : {String} (optional), // appears in the response-dialog
+    }
+    ```
+    <ul>
+        <li><code>OK</code> showing a message and reactivates the login-panel, making another entry possible</li>
+        <li><code>ERROR</code> showing an error-dialog and reactivates the login-panel, making another entry possible</li>
+        <li><code>RETRY</code> reactivates the forgotusername-panel, making another entry possible</li>
+    </ul>
+
+<h3>response to the forgotpassword-panel</h3>
+    ```js
+    request = {
+        button   : 'forgotpassword',
+        username : {String} // any user-input
+    }
+    server-response = {
+        status  : 'OK' || 'ERROR' || 'RETRY',
+        title   : {String} (optional), // appears in the response-dialog
+        message : {String} (optional), // appears in the response-dialog
+    }
+    ```
+    <ul>
+        <li><code>OK</code> showing a message and reactivates the login-panel, making another entry possible</li>
+        <li><code>ERROR</code> showing an error-dialog and reactivates the login-panel, making another entry possible</li>
+        <li><code>RETRY</code> reactivates the forgotpassword-panel, making another entry possible</li>
+    </ul>
+
+<h3>response to the createaccount-panel</h3>
+    ```js
+    request = {
+        button   : 'createaccount',
+        ....     : // any other informations that was created on the 'createaccount'-form
+    }
+    server-response = {
+        status     : 'OK' || 'ERROR' || 'RETRY' || 'LOGIN'
+        title      : {String} (optional), // appears in the response-dialog
+        message    : {String} (optional), // appears in the response-dialog
+        userdata   : {Object} (optional), // set this so that Y.ITSACurrentUser is loaded with the right data. See <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsacurrentuser/">gallery-itsacurrentuser</a>.
+        displayname: {String} (optional), // to let any other modules know what the displayname should be. Could be used with template <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsa-i18n-login/">gallery-itsa-i18n-login</a> --> fields <code>loggedinas</code> or <code>youareloggedinas</code>.
+        messageLoggedin: {String} (optional) override for the default 'messageLoggedin' the is generated by <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsaviewlogin/">Y.ITSAViewLogin</a>-instances.
+        ....       : // any other response that the developer can read with the resolved Promise, or by the 'loggedin'-event, which fires when status==='OK'.
+    }
+    ```
+    <ul>
+        <li><code>OK</code> using username/password/remember that was filled in are stored (doesn't need to be returned by the server), the 'createaccount'dialog resolved (=closed), <u>but the user does not get logged in</u> --> the logindialog arises again. Mostly tou need to return a message that sais something like: 'verify your mail'.</li>
+        <li><code>ERROR</code> rejects the promise, showing an error-dialog</li>
+        <li><code>RETRY</code> keeps the 'createaccount'-dialog on the screen making the user to retry userinput. You should return a message why the account didn't get created.</li>
+        <li><code>LOGIN</code> using username/password/remember that was filled in are stored (doesn't need to be returned by the server), both the 'createaccount'- and 'login'dialog resolve (=closed), <u>and the user is logged in</u></li>
+    </ul>
+
+<h2>Using config to setup different functionalities</h2>
+    <p>There are many options posible, see the API. However, special notice should be taken to the config-properties that make the Y.getLogin() behave differently:
+    </p>
+    <ul>
+        <li><code>config.required</code> when true, there is no closebutton, so the enduser need to enter a valid login. Be aware though, that returning a serverresponse with status==='ERROR' or status='NOACCESS' <u>do close the login-panel</u> by making it rejected (and showing an errorMessage).</li>
+        <li><code>config.showStayLoggedin</code> when true, an iOS-stylisch checkbox-slider appears by which the login can be remembered. Its value is available in the resolved promise by result.remember (which is 'false' when the checkbox wasn't showed)</li>
+        <li><code>config.regain</code> when set, it can be either 'username', 'password' or 'usernameorpassword'. Once set, a button appeasr on the login-panel by which the enduser can tereive his login-data.</li>
+        <li><code>config.usernameIsEmail</code> when true, the login-pattern for the username is set to an email-pattern. And regain='usernameorpassword' will automaticly turned into regain='password'. <b>Note:</b> the request-properties and the resolved-result-properties still use <u>username</u> as property-name.</li>
+        <li><code>config.createAccount</code> when set a 'Create account' button is generated, which will call the createAccount-promise. The createAccount-panel is then responsible for fulfilling the original login-panel. This means, you need to create at least the UI-fields 'username' and 'password'.<b>Note:</b> config.createAccount needs to be a function that returns a new created Promise.</li>
+    </ul>
+
+<h2>Internationalization</h2>
+    <p>
+        All messages are Internationalised by including <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsa-i18n-login/">gallery-itsa-i18n-login</a>. If you do not set any response-message (or title) from the server, a default internationalized message wil appear. If you want custom internationalized messages, then you have 2 options:
+        <ol>
+            <li>Create your own internationalized message.</li>
+            <li>Make use of <code>Y.ITSADialog.translate()</code> which has several pre-defined messages available. See below.</li>
+        </ol>
+    </p>
+    <p>At this moment the following languages are supported:</p>
+    <ul>
+        <li><code>ar</code> (Arabic)</li>
+        <li><code>bg</code> (Bulgarian)</li>
+        <li><code>bs</code> (Bosnian)</li>
+        <li><code>cs</code> (Czech)</li>
+        <li><code>da</code> (Danish)</li>
+        <li><code>de</code> (German)</li>
+        <li><code>en</code> (English)</li>
+        <li><code>es</code> (Spanish)</li>
+        <li><code>fa</code> (Perian)</li>
+        <li><code>fi</code> (Finnish)</li>
+        <li><code>fr</code> (French)</li>
+        <li><code>he</code> (Hebrew)</li>
+        <li><code>hi</code> (Hindi)</li>
+        <li><code>hr</code> (Croatian)</li>
+        <li><code>hu</code> (Hungarian)</li>
+        <li><code>it</code> (Italian)</li>
+        <li><code>ja</code> (Japanese)</li>
+        <li><code>nb</code> (Norwegian)</li>
+        <li><code>nl</code> (Dutch)</li>
+        <li><code>pl</code> (Polish)</li>
+        <li><code>pt</code> (Portugese)</li>
+        <li><code>ru</code> (Russian)</li>
+        <li><code>sk</code> (Slovak)</li>
+        <li><code>sr</code> (Serbian)</li>
+        <li><code>sv</code> (Swedish)</li>
+        <li><code>uk</code> (Ukrainian)</li>
+        <li><code>zh</code> (Chinese)</li>
+    </ul>
+
+    <h3>available internationalized sentences</h3>
+    <p>Using <code>Y.ITSADialog.translate()</code> you can make use of predefined translations. You just take use the property as first (String) parameter of Y.ITSADialog.translate(). F.i. by calling Y.ITSADialog.translate('checkspambox') leads to "If you don't find any mail from us, check your spambox" in the used language.
+    </p>
+    <p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th><th>Internationalized sentence</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>attemplogin</td><td>Attempt to login</td></tr>
+                <tr><td>changepassword</td><td>Change password</td></tr>
+                <tr><td>changeyourpassword</td><td>Change your password</td></tr>
+                <tr><td>checkmail</td><td>Check your mail</td></tr>
+                <tr><td>checkspambox</td><td>If you don't find any mail from us, check your spambox</td></tr>
+                <tr><td>confirmpassword</td><td>Confirm password</td></tr>
+                <tr><td>createaccount</td><td>Create account</td></tr>
+                <tr><td>createnewaccount</td><td>Create new account</td></tr>
+                <tr><td>email</td><td>Email</td></tr>
+                <tr><td>emailaddress</td><td>Emailaddress</td></tr>
+                <tr><td>emailalreadytaken</td><td>Emailaddress has already been taken, choose another emailaddress</td></tr>
+                <tr><td>enterlogin</td><td>Enter login</td></tr>
+                <tr><td>entersignupaddress</td><td>Enter the emailaddress you used to sign up</td></tr>
+                <tr><td>error</td><td>Error</td></tr>
+                <tr><td>failed</td><td>Failed</td></tr>
+                <tr><td>failedcreateaccount</td><td>Failed to create account, try again</td></tr>
+                <tr><td>forgot</td><td>Forgot</td></tr>
+                <tr><td>forgotlogin</td><td>Forgot login</td></tr>
+                <tr><td>forgotpassword</td><td>Forgot my password</td></tr>
+                <tr><td>forgotusername</td><td>Forgot my username</td></tr>
+                <tr><td>forgotusernameorpassword</td><td>Forgot username or password</td></tr>
+                <tr><td>forgotwhat</td><td>What did you forget?</td></tr>
+                <tr><td>iforgotpassword</td><td>I forgot my password</td></tr>
+                <tr><td>iforgotusername</td><td>I forgot my username</td></tr>
+                <tr><td>loggedin</td><td>Logged in</td></tr>
+                <tr><td>loggedinas</td><td>Logged in as {user}</td></tr>
+                <tr><td>loggedout</td><td>Logged out</td></tr>
+                <tr><td>loggingout</td><td>Logging out</td></tr>
+                <tr><td>login</td><td>Login</td></tr>
+                <tr><td>loginblocked</td><td>Login is blocked</td></tr>
+                <tr><td>loginrightlevel</td><td>You don't have the rights to see this page, please login with the right loginlevel</td></tr>
+                <tr><td>logout</td><td>Logout</td></tr>
+                <tr><td>needchangepassword</td><td>You need to change your password</td></tr>
+                <tr><td>noaccess</td><td>No access</td></tr>
+                <tr><td>password</td><td>Password</td></tr>
+                <tr><td>passwordchange</td><td>Password change</td></tr>
+                <tr><td>passwordchanged</td><td>Your password changed successfully</td></tr>
+                <tr><td>passwordnotaccepted</td><td>Your password is not accepted, please try again</td></tr>
+                <tr><td>passwordnotchanged</td><td>Your password has not been changed</td></tr>
+                <tr><td>passwordwassend</td><td>Your password was sent to your emailaddress</td></tr>
+                <tr><td>pleaseenterlogin</td><td>Please enter login</td></tr>
+                <tr><td>remember</td><td>Remember</td></tr>
+                <tr><td>rememberme</td><td>Remember me</td></tr>
+                <tr><td>resetpassword</td><td>Reset password</td></tr>
+                <tr><td>receivedmail</td><td>You recieved an email with further instructions</td></tr>
+                <tr><td>receivedmailwithinstructions</td><td>You recieved an email with further instructions how to login</td></tr>
+                <tr><td>retrievedirectpasswordinstructions</td><td>Enter username and you will get an email with your password</td></tr>
+                <tr><td>retrievepasswordinstructions</td><td>Enter username and you will get an email with instructions how to reset your password</td></tr>
+                <tr><td>retrievedirectpasswordinstructionsmaillogin</td><td>Enter the emailaddress you used to sign up and you will get an email with your password</td></tr>
+                <tr><td>retrievepasswordinstructionsmaillogin</td><td>Enter the emailaddress you used to sign up and you will get an email with instructions how to reset your password</td></tr>
+                <tr><td>sendusername</td><td>Send username</td></tr>
+                <tr><td>show</td><td>Show</td></tr>
+                <tr><td>showinput</td><td>Show input</td></tr>
+                <tr><td>showpassword</td><td>Show password</td></tr>
+                <tr><td>signup</td><td>Sign up</td></tr>
+                <tr><td>stayloggedin</td><td>Stay logged in</td></tr>
+                <tr><td>successfully</td><td>Successfully</td></tr>
+                <tr><td>successlogin</td><td>You logged in successfully</td></tr>
+                <tr><td>toomanyattempts</td><td>Too many attempts</td></tr>
+                <tr><td>unknownemail</td><td>The emailaddress you entered is unknown, try again</td></tr>
+                <tr><td>unknownlogin</td><td>The login you entered is unkown, try again</td></tr>
+                <tr><td>unknownusername</td><td>The username you entered is unknown, try again</td></tr>
+                <tr><td>unspecifiederror</td><td>The server responsed with an unspecified error</td></tr>
+                <tr><td>username</td><td>Username</td></tr>
+                <tr><td>usernamealreadytaken</td><td>Username has already been taken, choose another username</td></tr>
+                <tr><td>usernamewassend</td><td>Your username was sent to your emailaddress</td></tr>
+                <tr><td>verificationerror</td><td>Passwordverification failed</td></tr>
+                <tr><td>verify</td><td>Verify</td></tr>
+                <tr><td>verifypassword</td><td>Verify password</td></tr>
+                <tr><td>wrongemailorpassword</td><td>You entered the wrong emailaddress or password</td></tr>
+                <tr><td>wrongpassword</td><td>You entered the wrong password</td></tr>
+                <tr><td>wrongusernameorpassword</td><td>You entered the wrong username or password</td></tr>
+                <tr><td>youareloggedin</td><td>You are logged in</td></tr>
+                <tr><td>youareloggedinas</td><td>You are logged in as {user}</td></tr>
+            </tbody>
+        </table>
+    </p>
+
+<h2>licence</h2>
+<p class= 'copyright'>
+Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>
+</p>

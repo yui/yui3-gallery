@@ -1,0 +1,23 @@
+{
+    "gallery-itsalogin": {
+        "requires": [
+            "yui-base",
+            "intl",
+            "base-build",
+            "base-base",
+            "promise",
+            "json-parse",
+            "oop",
+            "gallery-itsa-i18n-login",
+            "gallery-itsamessagecontroller",
+            "gallery-itsacheckbox",
+            "gallery-itsadialog",
+            "gallery-itsamessage",
+            "gallery-itsaviewmodelpanel",
+            "gallerycss-itsa-base",
+            "gallerycss-itsa-animatespin",
+            "gallerycss-itsa-dialog"
+        ],
+        "skinnable": true
+    }
+}

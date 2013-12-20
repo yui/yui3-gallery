@@ -1,0 +1,84 @@
+{
+    "name"       : "gallery-itsalogin",
+    "displayName": "Gallery: gallery-itsalogin",
+    "description": "supplies Y.getLogin() through the Y.ITSAMessageController. You get a promise that holds a username and password, which are retrieved through a synclayer.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsalogin" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "standard",
+            "displayName": "standard login",
+            "description": "This example shows how to create a standard Y.getLogin() promise",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsalogin", "itsamessage"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "nonrejectable",
+            "displayName": "non-rejectable login",
+            "description": "This example shows how to create a Y.getLogin() promise that can be closed (thus rejected).",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsalogin", "itsamessage", "rejectable"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "retrieve",
+            "displayName": "retrieve username or password",
+            "description": "This example shows how setup the Y.getLogin()-promise with retrieval of the username or password.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsalogin", "itsamessage", "forgot", "retrieve"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "usernameisemail",
+            "displayName": "login with emailaddress as username",
+            "description": "This example shows how setup the Y.getLogin()-promise with an emailaddress as username.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsalogin", "itsamessage", "emailaddres", "username"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "resetpassword",
+            "displayName": "force password-reset",
+            "description": "This example shows how setup the Y.getLogin()-promise to force a passwordreset once loggedin.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsalogin", "itsamessage", "force", "reset", "passwordreset"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "newaccount",
+            "displayName": "login with create new account",
+            "description": "This example shows how setup the Y.getLogin()-promise with the posibility of creating a new account.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog", "gallery-lazy-promise"],
+            "tags"    : ["gallery-itsalogin", "itsamessage", "newaccount", "account"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "newaccountbutton",
+            "displayName": "just a button for new account",
+            "description": "This example shows how to create a new account without Y.ITSALogin, but just a button.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog", "gallery-lazy-promise"],
+            "tags"    : ["gallery-itsalogin", "itsamessage", "newaccount", "account", "button"],
+            "hideTableOfContents": true
+        },
+        {
+            "name"       : "customize",
+            "displayName": "customize internationalized messages",
+            "description": "This example shows how to customize internationalized messages.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsalogin", "promise", "gallery-itsadialog"],
+            "tags"    : ["gallery-itsalogin", "itsamessage", "customize", "internationalized", "i18n"],
+            "hideTableOfContents": true
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+YUI(yuiconfig).use('gallery-itsalogin', 'promise', 'gallery-itsadialog', function(Y) {
+    var syncFn = function(action) {
+        /*
+         * typically you would use gallery-io-utils and create a promise like this:
+         *
+         * return Y.io.get('http://mydomain.com/submitdata.php?modelid='+this.toJSON());
+         *
+         * however, this example simulates the serverresponse by resolving with a timeout
+         */
+        var logininstance = this;
+        return new Y.Promise(function (resolve, reject) {
+            Y.later(
+                1000,
+                null,
+                function() {
+                    var button  = logininstance.get('button'),
+                        status, valid, emailaddress, username, password, message;
+                    if (button==='forgotusername') {
+                        // IN THIS EXAMPLE, ONLY someone@somedomain.com IS A KNOWN EMAILADDRESS
+                        emailaddress  = logininstance.get('emailaddress').toLowerCase();
+                        valid = (emailaddress==='someone@somedomain.com');
+                        status = valid ? 'OK' : 'RETRY';
+                    }
+                    else if (button==='forgotpassword') {
+                        // IN THIS EXAMPLE, ONLY marco IS A KNOWN USERNAME
+                        username  = logininstance.get('username').toLowerCase();
+                        valid = (username==='marco');
+                        status = valid ? 'OK' : 'RETRY';
+                    }
+                    else if (button==='getlogin') {
+                        username = logininstance.get('username').toLowerCase();
+                        password = logininstance.get('password');
+                        valid = (username==='marco') && (password==='test');
+                        status = valid ? 'OK' : 'RETRY';
+                    }
+                    else {
+                        status = 'ERROR';
+                        message = 'wrong button-value in the request';
+                    }
+                    resolve({
+                        status: status,
+                        message: message
+                    });
+                }
+            );
+        });
+    };
+
+    Y.getLogin('Login', 'Please enter login', {
+        imageButtons: true,
+        showStayLoggedin: true,
+        regain: 'usernameorpassword'
+    }, syncFn).then(
+        function(result) {
+            Y.showMessage('Resolved:', 'succesfully logged in with username='+result.username+
+                ' | password='+result.password+' | stayloggedin: '+result.remember+
+                ' | button='+result.button);
+        },
+        function(reason) {
+            Y.showMessage('Rejected:', reason);
+        }
+    );
+
+});

@@ -1,0 +1,171 @@
+YUI(yuiconfig).use('base-build', 'gallery-itsalogin', 'promise', 'gallery-itsadialog', function(Y) {
+
+    var syncFn, createAccountPromise, getAccountMessage, newAccountButton;
+
+    getAccountMessage = function(syncPromise) {
+        var AccountMessage, newAccountMessage, message;
+        AccountMessage = Y.Base.create('accountmessage', Y.ITSAMessage, [], {
+            crossValidation: function() {
+                var instance = this,
+                    errorattrs = [];
+                if ((instance.get('password') !== instance.get('verifypassword'))) {
+                    errorattrs.push({
+                        attribute: 'password',
+                        validationerror: Y.ITSADialog.translate('verificationerror')
+                    });
+                    errorattrs.push({
+                        attribute: 'verifypassword',
+                        validationerror: Y.ITSADialog.translate('verificationerror')
+                    });
+                }
+                return errorattrs;
+            }
+        }, {
+            ATTRS: {
+                username: {
+                    formtype: 'text',
+                    formconfig: {
+                        label: Y.ITSADialog.translate('username'),
+                        fullselect: true
+                    },
+                    validator:  function(val) {
+                        return (typeof val === 'string') && (val.length>=5);
+                    },
+                    validationerror: 'Username should be at least 5 characters'
+                },
+                password: {
+                    formtype: 'password',
+                    formconfig: {
+                        label: Y.ITSADialog.translate('password'),
+                        fullselect: true
+                    },
+                    validator:  function(val) {
+                        return (typeof val === 'string') && (val.length>=5) && (val.indexOf(' ')===-1);
+                    },
+                    validationerror: 'Username should be at least 5 characters without whitespaces'
+                },
+                verifypassword: {
+                    formtype: 'password',
+                    formconfig: {
+                        label: Y.ITSADialog.translate('verifypassword'),
+                        fullselect: true,
+                        primarybtnonenter: true
+                    },
+                    validator:  function(val) {
+                        return (typeof val === 'string') && (val.length>=5) && (val.indexOf(' ')===-1);
+                    },
+                    validationerror: 'Username should be at least 5 characters without whitespaces'
+                }
+            }
+        });
+        message = '<div style="min-width: 300px">'+
+                       Y.ITSADialog.translate('createaccount')+
+                      '<fieldset>'+
+                           '<div class="pure-control-group">'+'{username}</div>'+
+                           '<div class="pure-control-group">'+'{password}</div>'+
+                           '<div class="pure-control-group">'+'{verifypassword}</div>'+
+                      '</fieldset>'+
+                  '</div>';
+        // set the attribute 'button' to 'createaccount' --> now we can read it in the syncFn
+        newAccountMessage = new AccountMessage({button: 'createaccount'});
+        newAccountMessage.syncPromise = Y.bind(syncPromise, newAccountMessage);
+        newAccountMessage.icon = 'itsaicon-dialog-info';
+        newAccountMessage.messageType = 'createaccount';
+        newAccountMessage.message = message;
+        newAccountMessage.footer = '{imgbtn_submit}';
+        newAccountMessage.primaryButton = 'imgbtn_submit';
+        newAccountMessage.closeButton = true;
+        newAccountMessage.buttonLabels = [
+            {
+                buttonType: 'imgbtn_submit',
+                labelHTML: '<i class="itsaicon-dialog-user"></i>'+Y.ITSADialog.translate('create')
+            }
+        ];
+        // in order to make crossvalidation work, we set crossvalidation true
+        newAccountMessage.setLifeUpdate(true);
+        // To make sure this dialog comes right after the logindialog
+        // - in case there be any more messages in the queue -
+        // we set priority = true
+        newAccountMessage.priority = true;
+        return newAccountMessage;
+    };
+
+    syncFn = function(action) {
+        /*
+         * typically you would use gallery-io-utils and create a promise like this:
+         *
+         * return Y.io.get('http://mydomain.com/submitdata.php?modelid='+this.toJSON());
+         *
+         * however, this example simulates the serverresponse by resolving with a timeout
+         */
+        var logininstance = this;
+        return new Y.Promise(function (resolve, reject) {
+            Y.later(
+                1000,
+                null,
+                function() {
+                    var button = logininstance.get('button'),
+                        status, username, password, verified, message;
+                    if (button==='createaccount') {
+                        username = logininstance.get('username').toLowerCase();
+                        password = logininstance.get('password');
+                        status = 'LOGIN';
+                        message = 'Welcome '+username;
+                    }
+                    else {
+                        status = 'ERROR';
+                        message = 'wrong button-value in the request: '+button;
+                    }
+                    resolve({
+                        status: status,
+                        message: message
+                    });
+                }
+            );
+        });
+    };
+
+    createAccountPromise = function (sync) {
+        return Y.ITSAMessageController.queueMessage(getAccountMessage(sync))
+                .then(
+                    function(response) {
+                        var returnValue;
+                        (response.message) && Y.showMessage(response.title, response.message, {priority: true});
+                        (response.status==='RETRY') && (returnValue=createAccountPromise(syncFn));
+                        (response.status==='LOGIN') && (returnValue=response);
+                        return returnValue || new Error('wrong response.status');
+                    },
+                    function(reason) {
+                        return new Error(reason);
+                    }
+                );
+    };
+
+    newAccountButton = Y.one('#newaccount');
+
+    newAccountButton.on('click', function() {
+        createAccountPromise(syncFn).then(
+            function(response) {
+                var facade, message;
+                if (response.status==='LOGIN') {
+                    facade = response;
+                    Y.fire('loggedin', facade);
+                }
+                else if (response.status==='ERROR') {
+                    message = response.message || loginintl.unspecifiederror;
+                    Y.showError(response.title || loginintl[ERROR], message);
+                }
+                else if (response.status!=='OK') {
+                    // program-errors will be shown by fireing events. They can be seen by using Y.ITSAErrorReporter
+                    message = 'Wrong response.status found: '+response.status;
+                    facade = {src: 'My custom createaccount', msg: message};
+                    instance.fire('warn', facade);
+                }
+            },
+            function(reason) {
+                (reason instanceof Error) && Y.showError(reason.message);
+            }
+        );
+    });
+
+});
