@@ -51,7 +51,8 @@ var YArray = Y.Array,
     PURE_BUTTON_DISABLED = 'pure-'+BUTTON+'-'+DISABLED,
     DISABLED_BEFORE = '-before',
     SPAN_DATA_FOR_IS = 'span[data-for="',
-    YUI3_SLIDER = 'yui3-slider',
+    SLIDER = 'slider',
+    EDITORBASE = 'editorBase',
     ASK_TO_CLICK_EVENT = 'itsabutton-asktoclick',
     ONENTER = 'onenter',
     SUBMITONENTER = 'submit'+ONENTER,
@@ -320,6 +321,17 @@ var YArray = Y.Array,
         return response || {};
     },
 
+    BROADCAST = "broadcast",
+    PUBLISHED = "published",
+    MODIFIABLE_NEWDEF = {
+        readOnly:1,
+        writeOnce:1,
+        getter:1,
+        broadcast:1,
+        formtype:1,
+        formconfig:1
+    },
+
 ITSAFormModel = Y.ITSAFormModel = Y.Base.create('itsaformmodel', Y.Model, [], {}, {
     _ATTR_CFG: ['formtype', 'formconfig', 'validationerror']
 });
@@ -579,9 +591,15 @@ ITSAFormModel.prototype.disableUI = function() {
                 if (widget) {
                     wasDisabled = widget.get(DISABLED) && !node.getData(DISABLED_CHECK);
                     if (!wasDisabled) {
-                        widget.disable();
+        /*jshint expr:true */
+                        try {
+                            (formelement.type.NAME===EDITORBASE) ? widget.hide() : widget.disable();
+                        }
+                        catch (err) {
+                        }
+        /*jshint expr:false */
                         // if the widget is slider, then also disable the valuespan
-                        if (widget.getClassName()===YUI3_SLIDER) {
+                        if (formelement.type.NAME===SLIDER) {
                             labelnode = Y.one(SPAN_DATA_FOR_IS+nodeid+'"]');
         /*jshint expr:true */
                             labelnode && labelnode.setAttribute(DISABLED, DISABLED);
@@ -618,6 +636,21 @@ ITSAFormModel.prototype.disableUI = function() {
 };
 
 /**
+ * Cleans up internal references of everything the formmodel has inserted in the dom.
+ * Only to be used when destroyed - or when a containernode gets empty.
+ *
+ * @method cleanup
+ * @protected
+ * @since 0.1
+*/
+ITSAFormModel.prototype.cleanup = function() {
+    var instance = this;
+    instance._FORM_elements = {};
+    instance._ATTRS_nodes = {};
+    instance._knownNodeIds = {};
+};
+
+/**
  * Enables all UI-elements so that there is userinteraction possible again. For usage in conjunction with disableUI().
  *
  * @method enableUI
@@ -643,9 +676,11 @@ ITSAFormModel.prototype.enableUI = function() {
                 }
                 else {
                     if (widget) {
-                        widget.enable();
+        /*jshint expr:true */
+                        (formelement.type.NAME===EDITORBASE) ? widget.show() : widget.enable();
+        /*jshint expr:false */
                         // if the widget is slider, then also disable the valuespan
-                        if (widget.getClassName()===YUI3_SLIDER) {
+                            if (formelement.type.NAME===SLIDER) {
                             labelnode = Y.one(SPAN_DATA_FOR_IS+nodeid+'"]');
         /*jshint expr:true */
                             labelnode && labelnode.removeAttribute(DISABLED);
@@ -847,6 +882,46 @@ ITSAFormModel.prototype.getUnvalidatedUI  = function() {
     }
     Y.log('getUnvalidatedUI found '+unvalidNodes.length+' wrong validated formelement', 'info', 'ITSAFormModel');
     return new Y.NodeList(unvalidNodes);
+};
+
+/**
+ * Updates the configuration of an attribute which has already been added.
+ * rewritten because we need to be able to change formtype and formconfig.
+ * <p>
+ * The properties which can be modified through this interface are limited
+ * to the following subset of attributes, which can be safely modified
+ * after a value has already been set on the attribute: readOnly, writeOnce,
+ * broadcast and getter.
+ * </p>
+ * @method modifyAttr
+ * @param {String} name The name of the attribute whose configuration is to be updated.
+ * @param {Object} config An object with configuration property/value pairs, specifying the configuration properties to modify.
+ */
+ITSAFormModel.prototype.modifyAttr = function(name, config) {
+    var host = this, // help compression
+        prop, state;
+
+    if (host.attrAdded(name)) {
+
+        if (host._isLazyAttr(name)) {
+            host._addLazyAttr(name);
+        }
+
+        state = host._state;
+        for (prop in config) {
+            if (MODIFIABLE_NEWDEF[prop] && config.hasOwnProperty(prop)) {
+                state.add(name, prop, config[prop]);
+
+                // If we reconfigured broadcast, need to republish
+                if (prop === BROADCAST) {
+                    state.remove(name, PUBLISHED);
+                }
+            }
+        }
+    }
+    /*jshint maxlen:200*/
+    if (!host.attrAdded(name)) {Y.log('Attribute modifyAttr:' + name + ' has not been added. Use addAttr to add the attribute', 'warn', 'ITSAFormModel');}
+    /*jshint maxlen:150 */
 };
 
 /**
@@ -1151,11 +1226,12 @@ ITSAFormModel.prototype.renderFormElement = function(attribute) {
             // The last thing we need to do is, set some action when the node gets into the dom: We need to
             // make sure the UI-element gets synced with the current attribute-value once it gets into the dom
             // and after that we make it visible and store it internally, so we know the node has been inserted
-            iseditorbase = (formtype.NAME==='editorBase');
+            iseditorbase = (formtype.NAME===EDITORBASE);
             Y.use(iseditorbase ? GALLERY_ITSA+'editor'+RENDERPROMISE : GALLERY_ITSA+'widget'+RENDERPROMISE, function() {
                 widget.renderPromise().then(
                     function() {
                         var node = Y.one('#'+nodeid);
+                        widget.addTarget(instance);
                         if (knownNodeIds[nodeid]) {
                             // was rendered before --> we need to replace it by an errornode
                             Y.log('renderFormElement --> nodeid '+nodeid+' for attribute '+attribute+' was already inserted in the dom: won\'t be rendered again', 'warn', 'ITSAFormModel');
@@ -1186,6 +1262,8 @@ ITSAFormModel.prototype.renderFormElement = function(attribute) {
                                 field+'Change',
                                 function(e) {
                                     var type = UI_CHANGED,
+                                        payload;
+                                    if (!e.fromInternal) {
                                         payload = {
                                             target: instance,
                                             value: e.newVal,
@@ -1194,8 +1272,9 @@ ITSAFormModel.prototype.renderFormElement = function(attribute) {
                                             nodeid: nodeid,
                                             type: type
                                         };
-                                    // refireing, but now by the instance:
-                                    instance.fire(type, payload);
+                                        // refireing, but now by the instance:
+                                        instance.fire(type, payload);
+                                    }
                                 }
                             )
                         );
@@ -1208,6 +1287,8 @@ ITSAFormModel.prototype.renderFormElement = function(attribute) {
                         valuefield+'Change',
                         function(e) {
                             var type = UI_CHANGED,
+                                payload;
+                            if (!e.fromInternal) {
                                 payload = {
                                     target: instance,
                                     value: e.newVal,
@@ -1216,8 +1297,9 @@ ITSAFormModel.prototype.renderFormElement = function(attribute) {
                                     nodeid: nodeid,
                                     type: type
                                 };
-                            // refireing, but now by the instance:
-                            instance.fire(type, payload);
+                                // refireing, but now by the instance:
+                                instance.fire(type, payload);
+                            }
                         }
                     )
                 );
@@ -1318,7 +1400,6 @@ ITSAFormModel.prototype.setLifeUpdate = function(value) {
 ITSAFormModel.prototype.setResetAttrs = function() {
     var instance = this,
         allAttrs = instance.getAttrs();
-
     Y.log('setResetAttrs', 'info', 'ITSAFormModel');
     delete allAttrs.clientId;
     delete allAttrs.destroyed;
@@ -1349,7 +1430,7 @@ ITSAFormModel.prototype.setResetAttrs = function() {
  * @since 0.1
  */
 ITSAFormModel.setWidgetValueField = function(widgetClassname, valueField) {
-    Y.log('_getWidgetValueField', 'info', 'ITSAFormModel');
+    Y.log('setWidgetValueField', 'info', 'ITSAFormModel');
     this._widgetValueFields[widgetClassname] = valueField;
 };
 
@@ -1453,7 +1534,7 @@ ITSAFormModel.prototype.toJSONUI = function(buttons, template) {
         UIattrs = {},
         allAttrs = instance.getAttrs(),
         renderBtnFns = instance._renderBtnFns,
-        propertykey, type, labelHTML, config, originalJSON, propertyEmbraced, needProccess;
+        propertykey, type, labelHTML, config, originalJSON, propertyEmbraced, propertyEmbracedMicro, needProccess;
 
     Y.log('toJSONUI', 'info', 'ITSAFormModel');
     delete allAttrs.clientId;
@@ -1468,7 +1549,8 @@ ITSAFormModel.prototype.toJSONUI = function(buttons, template) {
             if (template) {
                 // renderFormElement is heavy: we don't want to call it for attributes that will not be rendered
                 propertyEmbraced = new RegExp('{'+key+'}');
-                needProccess = propertyEmbraced.test(template);
+                propertyEmbracedMicro = new RegExp('<%==? (data|this).'+key+' %>');
+                needProccess = propertyEmbraced.test(template) || propertyEmbracedMicro.test(template);
             }
 /*jshint expr:true */
             (!template || needProccess) && (UIattrs[key]=instance.renderFormElement(key));
@@ -1636,10 +1718,8 @@ ITSAFormModel.prototype.destructor = function() {
     Y.log('destructor', 'info', 'ITSAFormModel');
     instance._clearEventhandlers();
     instance._removeTargets();
-    instance._FORM_elements = {};
-    instance._ATTRS_nodes = {};
+    instance.cleanup();
     instance._widgetValueFields = {};
-    instance._knownNodeIds = {};
     instance._gcTimer.cancel();
 };
 
@@ -1769,14 +1849,14 @@ ITSAFormModel.prototype._bindUI = function() {
                         var intl = instance._intl;
                         if (instance._lifeUpdate) {
                             // the first parameter in the response needs to be 'null' and not the promise result
-                            Y.confirm(intl[NOTIFICATION], intl[DATACHANGED]+'<br />'+intl[WANTRELOAD]+'? ('+intl[NORELOADMSG]+').').then(
+                            Y.confirm(intl[NOTIFICATION], intl[DATACHANGED]+'.<br />'+intl[WANTRELOAD]+'? ('+intl[NORELOADMSG]+').').then(
                                 Y.bind(instance._modelToUI, instance, null),
                                 Y.bind(instance.UIToModel, instance, null)
                             );
                         }
                         else {
                             // the first parameter in the response needs to be 'null' and not the promise result
-                            Y.confirm(intl[NOTIFICATION], intl[DATACHANGED]+'<br />'+intl[WANTRELOAD]+'?').then(
+                            Y.confirm(intl[NOTIFICATION], intl[DATACHANGED]+'.<br />'+intl[WANTRELOAD]+'?').then(
                                 Y.bind(instance._modelToUI, instance, null)
                             );
                         }
@@ -1835,7 +1915,8 @@ ITSAFormModel.prototype._bindUI = function() {
             [SAVE_CLICK, SUBMIT_CLICK],
             function(e) {
                 Y.log('onsubscriptor '+SUBMIT_CLICK, 'info', 'ITSAFormModel');
-                var unvalidNodes = instance.getUnvalidatedUI();
+                var unvalidNodes;
+                unvalidNodes = instance.getUnvalidatedUI();
                 if (!unvalidNodes.isEmpty()) {
                     e.preventDefault();
                     instance.fire(VALIDATION_ERROR, {target: instance, nodelist: unvalidNodes, src: e.type});
@@ -2190,6 +2271,9 @@ ITSAFormModel.prototype._garbageCollect = function() {
  */
 ITSAFormModel.prototype._getWidgetValue = function(widget, type) {
     Y.log('_getWidgetValue', 'info', 'ITSAFormModel');
+    if (widget && (type.NAME===EDITORBASE) && widget.itsatoolbar) {
+        return widget.itsatoolbar.getContent(); // better cleanedup content
+    }
     var field = this._getWidgetValueField(type);
     // In case of multiple fields, they all should be thes same, so we can take the first item of the array.
     return (widget && widget.get((typeof field === STRING) ? field : field[0]));
@@ -2225,8 +2309,7 @@ ITSAFormModel.prototype._getWidgetValueField = function(type) {
 ITSAFormModel.prototype._modelToUI = function(nodeid) {
     var instance = this,
         formElement, formElements, node, value, attribute, widget, type, dateformat, field;
-
-    Y.log('UItoModel', 'info', 'ITSAFormModel');
+    Y.log('_modelToUI', 'info', 'ITSAFormModel');
     formElements = instance._FORM_elements;
     formElement = nodeid && formElements[nodeid];
     if (formElement && (node=Y.one('#'+nodeid)) && node.getAttribute(DATA_MODELATTRIBUTE)) {
@@ -2235,7 +2318,7 @@ ITSAFormModel.prototype._modelToUI = function(nodeid) {
         value = instance.get(attribute, value) || '';
         if (widget) {
             field = this._getWidgetValueField(formElement.type);
-            widget.set(((typeof field === STRING) ? field : field[0]), value);
+            widget.set(((typeof field === STRING) ? field : field[0]), value, {fromInternal: true});
         }
         else {
             type = formElement.type;
@@ -2507,7 +2590,7 @@ ITSAFormModel.prototype._updateSimularWidgetUI = function(changedNodeId, attribu
 /*jshint expr:false */
                 }
                 // in case of slider: update valueattribute --> do this for ALL sliders
-                if (widget && (widget.getClassName()===YUI3_SLIDER)) {
+                if (widget && (formelement.type.NAME===SLIDER)) {
                     var labelnode = Y.one('span[data-for="'+nodeid+'"]');
 /*jshint expr:true */
                     labelnode && labelnode.set('text', value);
@@ -2565,6 +2648,7 @@ ITSAFormModel.prototype._validValue = function(node, formelement, attribute, val
 };
 
 ITSAFormModel.prototype._widgetValueFields.itsacheckbox = 'checked';
+ITSAFormModel.prototype._widgetValueFields.itsacheckboxgroup = 'checked';
 ITSAFormModel.prototype._widgetValueFields.itsaselectlist = 'index';
 ITSAFormModel.prototype._widgetValueFields.toggleButton = ['checked','pressed'];
 ITSAFormModel.prototype._widgetValueFields.editorBase = 'content';
@@ -2636,13 +2720,14 @@ YArray.each(
     }
 );
 
-}, '@VERSION@', {
+}, 'gallery-2014.01.03-22-50', {
     "requires": [
         "yui-base",
         "event-valuechange",
         "intl",
         "base-base",
         "attribute-base",
+        "attribute-extras",
         "base-build",
         "selector-css2",
         "model",

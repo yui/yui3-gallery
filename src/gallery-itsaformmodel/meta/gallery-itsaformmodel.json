@@ -6,6 +6,7 @@
             "intl",
             "base-base",
             "attribute-base",
+            "attribute-extras",
             "base-build",
             "selector-css2",
             "model",

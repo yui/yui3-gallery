@@ -146,7 +146,7 @@
         <code>formconfig.widgetconfig</code> is passed through to the widget-config. Here, you can set any widget-config-property you like.<br /><br />
         <u>possible formtypes:</u>
         <ul>
-          <li><code>Y.EditorBase</code> --> even not a Widget, the Y.EditorBase can be used.</li>
+          <li><code>Y.EditorBase</code> --> even not a Widget, the Y.EditorBase can be used. Use formconfig.toolbarconfig to setup Y.ITSAToolbar.</li>
           <li><code>Y.Slider</code></li>
           <li><code>Y.Dial</code></li>
           <li><code>Y.ToggleButton</code></li>
@@ -169,6 +169,7 @@
             <li><code>labelClassname</code> {String} additional classname for the label.</li>
             <li><code>switchvalue=false</code> {Boolean} make the value go behind the element. Only applyable for type=='Y.Slider'</li>
             <li><code>switchlabel=false</code> {Boolean} make the label go behind the element.</li>
+            <li><code>toolbarconfig</code> {Object} passing through to T.ITSAToolbar when using Y.EditorBase as a formtype.</li>
             <li><code>tooltip</code> {String} marks the data-attribute used by an internal Y.Tipsy instance.</li>
             <li><code>widgetconfig</code> {Object} passing through to the Widget during its initialization.</li>
         </ul>
