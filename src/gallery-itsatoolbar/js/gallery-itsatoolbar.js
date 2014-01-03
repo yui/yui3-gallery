@@ -887,6 +887,12 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
                     selectlist.on('*:statusChange', Y.rbind(syncFunc, context || instance));
                 }
                 instance.editor.on('nodeChange', selectlist.hideListbox, selectlist);
+                instance.after('toolbarClick', function(e) {
+                    var node = e.node;
+                    if (node !== selectlist.buttonNode) {
+                        selectlist.hideListbox();
+                    }
+                });
             }, instance, execCommand, syncFunc, context, indent);
             // be aware of that addButton might get called when the editor isn't rendered yet. In that case instance.toolbarNode does not exist
             if (instance.toolbarNode) {selectlist.render(instance.toolbarNode);}
@@ -1019,7 +1025,15 @@ Y.namespace('Plugin').ITSAToolbar = Y.Base.create('itsatoolbar', Y.Plugin.Base, 
             );
             eventhandlers.push(
                 instance.toolbarNode.on('click', function(e) {
+                    var node = e.target;
                     e.stopPropagation();
+                    if (node.hasClass('itsa-icon-selectdown') || node.hasClass('itsa-selectlist-selectedmain')) {
+                        node = node.get('parentNode');
+                    }
+                    else if (node.get('parentNode').hasClass('itsa-selectlist-selectedmain')) {
+                        node = node.get('parentNode').get('parentNode');
+                    }
+                    instance.fire('toolbarClick', {node: node}); // still need to close selectlists
                 })
             );
             // TODO: shortcutfunctions
