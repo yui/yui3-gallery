@@ -11,7 +11,14 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', '
         // when 'syncPromise' is defined, Y.ITSAFormModel will use this method instead of 'sync'
         syncPromise: function (action, options) {
             if (action==='submit') {
-                return Y.io.post('http://mydomain.com/senddata.php?model='+Y.JSON.stringify(this.toJSON()));
+// The code should look like this:
+//
+// return Y.io.post('http://mydomain.com/senddata.php', {data: this.toJSON()});
+//
+// But now we simulate through a timeout:
+                return new Y.Promise(function (resolve, reject) {
+                    Y.later(1000, null, resolve);
+                });
             }
             // do not forget to reject the promise in case an invalid 'action' is defined
             return new Y.Promise(function (resolve, reject) {

@@ -1,4 +1,4 @@
-YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', 'json-stringify', 'gallery-itsadialog', function(Y) {
+YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', 'json-stringify', 'gallery-itsadialog', 'editor-base', function(Y) {
     var view, artist, template;
 
     // adding skin sam to body for getting the right skin for the widgets
@@ -28,12 +28,15 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', '
                 }
             },
             country: {
-                formtype: 'text',
+                formtype: Y.EditorBase,
                 formconfig: {
                     label: 'Country',
                     placeholder: 'country',
                     required: true,
-                    initialfocus: true
+                    initialfocus: true,
+                    widgetconfig: {
+                        toolbar: true
+                    }
                 }
             },
             firstalbum: {
@@ -59,7 +62,7 @@ YUI(yuiconfig).use('gallery-itsaformmodel', 'gallery-itsaviewmodel', 'slider', '
 
     artist = new Y.ArtistModel({
         name: 'U2',
-        country: 'Ireland',
+        country: 'Ir<b>el</b>and',
         firstalbum: 'Boy',
         release: 1980
     });

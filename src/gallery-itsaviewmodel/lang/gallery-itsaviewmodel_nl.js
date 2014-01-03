@@ -11,7 +11,7 @@
     reload: 'Herladen',
     ignore: 'Negeer',
     retry: 'Opnieuw',
-    ok: 'Bevestig',
+    ok: 'Ok',
     yes: 'Ja',
     no: 'Nee',
     undefined_template: 'Template is ongedefinieerd'

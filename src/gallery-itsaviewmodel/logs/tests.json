@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 2,
+    "total": 2,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5000/tests/src/gallery-itsaviewmodel/tests/unit/index.html?filter=coverage",
+    "error": "TypeError: 'undefined' is not an object (evaluating 'Y.Test.Runner')\nhttp://127.0.0.1:5000/tests/src/gallery-itsaviewmodel/tests/unit/index.html?filter=coverage:24\nhttp://127.0.0.1:5000/build/yui/yui.js:970\nhttp://127.0.0.1:5000/build/yui/yui.js:945\nhttp://127.0.0.1:5000/build/yui/yui.js:970\nhttp://127.0.0.1:5000/build/yui/yui.js:1115\nhttp://127.0.0.1:5000/build/yui/yui.js:7708\nhttp://127.0.0.1:5000/build/yui/yui.js:7799\nhttp://127.0.0.1:5000/build/yui/yui.js:7999\nhttp://127.0.0.1:5000/build/yui/yui.js:8066\nhttp://127.0.0.1:5000/build/yui/yui.js:4619\nhttp://127.0.0.1:5000/build/yui/yui.js:4819\nhttp://127.0.0.1:5000/build/yui/yui.js:4927\nhttp://127.0.0.1:5000/build/yui/yui.js:4711"
+}

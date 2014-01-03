@@ -47,6 +47,35 @@
     transition: 0.05s linear box-shadow;
 }
 
+.itsaviewmodel .pure-form div[data-type="editorBase"] {
+    display: inline-block;
+    height: 10em;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 3px #ddd;
+    border-radius: 4px;
+    -webkit-transition: 0.3s linear border;
+    -moz-transition: 0.3s linear border;
+    -ms-transition: 0.3s linear border;
+    -o-transition: 0.3s linear border;
+    transition: 0.3s linear border;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.itsaviewmodel .pure-form div[data-type="editorBase"].itsa-focused {
+    outline: 0;
+    outline: thin dotted \9; /* IE6-9 */
+    border-color: #129FEA;
+}
+
+.itsaviewmodel .pure-form-aligned div[data-type="editorBase"] {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    width: 14em;
+}
+
 /* speed-up Transitions-time pure-inputs from 0.3s to 0.1s */
 .itsaviewmodel .pure-form input[type="text"],
 .itsaviewmodel .pure-form input[type="password"],
