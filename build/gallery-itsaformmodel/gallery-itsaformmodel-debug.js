@@ -644,6 +644,7 @@ ITSAFormModel.prototype.disableUI = function() {
  * @since 0.1
 */
 ITSAFormModel.prototype.cleanup = function() {
+    // TODO: also destroy the widgets in case their nodeid's are in the dom
     var instance = this;
     instance._FORM_elements = {};
     instance._ATTRS_nodes = {};
@@ -2649,7 +2650,6 @@ ITSAFormModel.prototype._validValue = function(node, formelement, attribute, val
 
 ITSAFormModel.prototype._widgetValueFields.itsacheckbox = 'checked';
 ITSAFormModel.prototype._widgetValueFields.itsacheckboxgroup = 'checked';
-ITSAFormModel.prototype._widgetValueFields.itsaselectlist = 'index';
 ITSAFormModel.prototype._widgetValueFields.toggleButton = ['checked','pressed'];
 ITSAFormModel.prototype._widgetValueFields.editorBase = 'content';
 
@@ -2720,7 +2720,7 @@ YArray.each(
     }
 );
 
-}, 'gallery-2014.01.03-22-50', {
+}, 'gallery-2014.01.10-22-44', {
     "requires": [
         "yui-base",
         "event-valuechange",
