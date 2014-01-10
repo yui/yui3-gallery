@@ -1,0 +1,78 @@
+YUI(yuiconfig).use('base-build', 'gallery-itsadialog', 'gallery-itsacheckbox', 'gallery-itsamessage', function(Y) {
+
+    var myMessage, MyMessageClass, queuedMessage;
+    Y.one('body').addClass('yui3-skin-sam');
+
+    MyMessageClass = Y.Base.create('mymessage', Y.ITSAMessage, [], null, {
+        ATTRS: {
+            firstname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'firstname',
+                    fullselect: true
+                },
+                validator:  function(val) {
+                    return (typeof val === 'string') && (val.length>=2);
+                },
+                validationerror: 'Firstname should be at least 2 characters'
+            },
+            lastname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'lastname',
+                    fullselect: true
+                },
+                validator:  function(val) {
+                    return (typeof val === 'string') && (val.length>=2);
+                },
+                validationerror: 'Lastname should be at least 2 characters'
+            },
+            birthdate: {
+                value: new Date(),
+                formtype: 'date',
+                formconfig: {
+                    label: 'date of birth'
+                },
+            },
+            married: {
+                formtype: Y.ITSACheckbox,
+                formconfig: {
+                    label: 'maried'
+                },
+            }
+        }
+    });
+    message = '<fieldset>'+
+                   '<div class="pure-control-group">'+'{firstname}</div>'+
+                   '<div class="pure-control-group">'+'{lastname}</div>'+
+                   '<div class="pure-control-group">'+'{birthdate}</div>'+
+                   '<div class="pure-control-group">'+'{married}</div>'+
+              '</fieldset>';
+
+    myMessage = new MyMessageClass({button: 'createaccount'});
+    myMessage.icon = 'itsaicon-dialog-info';
+    myMessage.title = 'Personal data';
+    myMessage.message = message;
+    myMessage.footer = '{imgbtn_ok}';
+    myMessage.primaryButton = 'imgbtn_ok';
+    myMessage.closeButton = true;
+
+    queuedMessage = Y.ITSAMessageController.queueMessage(myMessage);
+
+    queuedMessage.then(
+        function(result) {
+            var firstname = result.firstname,
+                lastname = result.lastname,
+                birthdate = result.birthdate,
+                married = result.married;
+            Y.showMessage('Userinput:', 'firstname: '+firstname+'<br>'+
+                                        'lastname: '+lastname+'<br>'+
+                                        'birthdate: '+birthdate+'<br>'+
+                                        'married: '+married);
+        },
+        function() {
+            Y.showMessage('dialog was closed by closebutton');
+        }
+    );
+
+});

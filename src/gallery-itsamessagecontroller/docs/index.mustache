@@ -1,0 +1,138 @@
+{{>api-button}}
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+    <p>
+         Y.ITSAMessageController is the Controller of the <b>ITSA-MVC-message system</b>. By including this module, one Y.ITSAMessageController-instance is created that can be used accross the whole webapp, even with multiple YUI-instances.
+     </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+    <p>
+        Y.ITSAMessageController is the Controller of the <b>ITSA-MVC-message system</b> where messages of the type Y.ITSAMessage can be added and viewed by a subClass of Y.ITSAMessageViewer
+    </p>
+
+    <h3>the Controller</h3>
+    <p>
+        Y.ITSAMessageController takes care of the messages by an internal queue. All messages that are added, should be of the (sub)Class <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsamessage/">Y.ITSAMessage</a>. Adding a message to the queue is done by calling Y.ITSAMessageController.queueMessage(yourMessage).
+    </p>
+    <p>
+        Behind the scenes, the controller has 3 queues at different levels: <code>info</code>, <code>warn</code> and <code>error</code>. In what queue the message resides, is determined by the property: <code>Y.ITSAMessage.level</code>. The different levels are important for the usage of the <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsamessageviewer/">View</a>.
+    </p>
+
+    <h3>the Models</h3>
+    <p>
+        The Models that are added to the queue should be of the type <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsamessage/">Y.ITSAMessage</a> or a subClass. See its documentation.
+    </p>
+
+    <h3>the View</h3>
+    <p>
+        The View should be done by a subClass of <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsamessageviewer/">Y.ITSAMessageViewer</a>. Currently, there are 2 different Views available: <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsadialog/">Y.ITSADialog</a> and <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsastatusbar/">Y.ITSAStatusbar</a>.
+    </p>
+    <p>
+        The Views will handle the messages from the queue, one by one. If there gets a message in the queue that has a higher <code>Y.ITSAMessage.level</code> (warn>info, error>warn), then previous 'lower-level' messages get suspended and the higher message shows up. The lower-message will resurrect once the higher-message disapears. Inside the same level, messages can be given a priority by setting ITSAMessage.priority=true. This wil not result into suspension, but makes the message being placed in its own queue (info, warn or error) just above the last 'non-priority'-message.
+    </p>
+    <p>
+        <b>Note 1:</b> Views should be set up to target 'untargeted' messages of each separate level, or the messages should target the specific View. By default, Y.ITSAMessageController targets all levels of 'untargeted'-messages to Y.ITSADialog. More info about targeting: <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsamessageviewer/">Y.ITSAMessageViewer</a>
+        <b>Note 2:</b> there is also the module <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsamessage/">gallery-itsalogin</a>, which is not a messageviewer, but just introduces Y.getLogin() which can be viewed through Y.ITSADialog.
+    </p>
+
+<h2>Automatic destruction</h2>
+    <p>
+        The Y.ITSAMessage-instances need to be created by the developer, but are destroyed automaticly by <a href="http://gallerydocs.itsasbreuk.nl/gallery-itsamessagecontroller/">Y.ITSAMessageController</a> when they get out of the queue. So you just can add them to the queue and you're done. Just before they get destroyed, their attributes are passed through to the Y.ITSAMessageViewer-Promise, so you can use its Promise-callback safely.
+    </p>
+<h2>Usage</h2>
+
+```js
+YUI(yuiconfig).use('base-build', 'gallery-itsacheckbox', 'gallery-itsamessagecontroller', 'gallery-itsamessage', function(Y) {
+
+    var myMessage, MyMessageClass, queuedMessage;
+    Y.one('body').addClass('yui3-skin-sam');
+
+    MyMessageClass = Y.Base.create('mymessage', Y.ITSAMessage, [], null, {
+        ATTRS: {
+            firstname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'firstname',
+                    fullselect: true
+                },
+                validator:  function(val) {
+                    return (typeof val === 'string') && (val.length>=2);
+                },
+                validationerror: 'Firstname should be at least 2 characters'
+            },
+            lastname: {
+                formtype: 'text',
+                formconfig: {
+                    label: 'lastname',
+                    fullselect: true
+                },
+                validator:  function(val) {
+                    return (typeof val === 'string') && (val.length>=2);
+                },
+                validationerror: 'Lastname should be at least 2 characters'
+            },
+            birthdate: {
+                value: new Date(),
+                formtype: 'date',
+                formconfig: {
+                    label: 'date of birth'
+                },
+            },
+            married: {
+                formtype: Y.ITSACheckbox,
+                formconfig: {
+                    label: 'maried'
+                },
+            }
+        }
+    });
+    message = '<fieldset>'+
+                   '<div class="pure-control-group">'+'{firstname}</div>'+
+                   '<div class="pure-control-group">'+'{lastname}</div>'+
+                   '<div class="pure-control-group">'+'{birthdate}</div>'+
+                   '<div class="pure-control-group">'+'{married}</div>'+
+              '</fieldset>';
+
+    myMessage = new MyMessageClass({button: 'createaccount'});
+    myMessage.icon = 'itsaicon-dialog-info';
+    myMessage.title = 'Personal data';
+    myMessage.message = message;
+    myMessage.footer = '{imgbtn_ok}';
+    myMessage.primaryButton = 'imgbtn_ok';
+    myMessage.closeButton = true;
+
+    queuedMessage = Y.ITSAMessageController.queueMessage(myMessage);
+
+    queuedMessage.then(
+        function(result) {
+            var firstname = result.firstname,
+                lastname = result.lastname,
+                birthdate = result.birthdate,
+                married = result.married,
+                button = result.button;
+            console.log('Userinput: firstname: '+firstname+'<br>'+
+                                    'lastname: '+lastname+'<br>'+
+                                    'birthdate: '+birthdate+'<br>'+
+                                    'married: '+married+'<br>'+
+                                    'button: '+button);
+        },
+        function() {
+            console.log('dialog was closed by closebutton');
+        }
+    );
+
+});
+
+```
+
+<h2>licence</h2>
+<p class= 'copyright'>
+Copyright (c) 2013 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2013 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>
+</p>

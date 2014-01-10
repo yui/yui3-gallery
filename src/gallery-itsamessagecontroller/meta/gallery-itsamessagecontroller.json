@@ -1,0 +1,15 @@
+{
+    "gallery-itsamessagecontroller": {
+        "requires": [
+            "yui-base",
+            "oop",
+            "base-base",
+            "base-build",
+            "event-custom-complex",
+            "promise",
+            "event-custom-base",
+            "yui-later",
+            "gallery-itsamodulesloadedpromise"
+        ]
+    }
+}

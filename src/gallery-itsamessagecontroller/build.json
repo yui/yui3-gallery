@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsamessagecontroller",
+    "builds": {
+        "gallery-itsamessagecontroller": {
+            "jsfiles": [
+                "js/gallery-itsamessagecontroller.js"
+            ]
+        }
+    }
+}

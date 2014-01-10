@@ -1,0 +1,21 @@
+{
+    "name"       : "gallery-itsamessagecontroller",
+    "displayName": "Gallery: gallery-itsamessagecontroller",
+    "description": "Controller of the ITSA-MVC-message system.",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsamessagecontroller" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "dialog",
+            "displayName": "Add a message to the queue",
+            "description": "This example shows how to create an Y.ITSAMessage-instance and add it to the queue. It will be handled by Y.ITSADialog.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["base-buils", "gallery-itsamessagecontroller", "gallery-itsadialog", "gallery-itsadialog", "gallery-itsacheckbox", "gallery-itsamessage"],
+            "tags"    : ["gallery-itsamessagecontroller", "gallery-itsamessage"],
+            "hideTableOfContents": true
+        }
+    ]
+}
