@@ -1,0 +1,23 @@
+YUI(yuiconfig).use('gallery-itsaselectlist', function(Y) {
+    var sellist,
+        items = [{text:'eerste', returnValue: 0}, {text:'tweede', returnValue:200}, {text: 'derde', returnValue: 300}];
+//        items = ['eerste', 'tweede', 'derde'];
+
+    sellist = new Y.ITSASelectList({
+        boundingBox: Y.one('#sellist'),
+        items: items,
+        value: 300
+    }).render();
+
+    sellist.after('selectChange', function(){
+        var val = sellist.get('value');
+        console.log(val);
+        console.log(typeof val);
+    });
+
+Y.later(3000, null, function(){
+    sellist.set('value', 0);
+    console.log(sellist.get('value'));
+});
+
+});

@@ -112,6 +112,13 @@
     background-color: #B3D4FF;
 }
 
+.itsa-selectlist-basediv ul li:before,
+.itsa-selectlist-basediv ul li:after {
+    content: '';
+    padding: 0;
+    margin: 0;
+}
+
 .itsa-selectlist-basediv li {
     white-space:nowrap;
     list-style: none;

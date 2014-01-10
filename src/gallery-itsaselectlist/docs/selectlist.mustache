@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
+<div class="intro">
+    <p>
+        {{description}}
+    </p>
+</div>
+
+{{>selectlist-html}}
+
+<h2>Code</h2>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+
+```
+{{>selectlist-js}}
+```
+
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>selectlist-js}}
+</script>

@@ -7,5 +7,15 @@
 
     "tags": [ "gallery" ],
 
-    "examples": []
+    "examples": [
+        {
+            "name"       : "selectlist",
+            "displayName": "Creating a selectlist",
+            "description": "This example shows how use ITSAPanel to render a panel.",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : [ "gallery-itsapanel"],
+            "tags"    : ["gallery-itsapanel", "panel", "itsapanel"],
+            "hideTableOfContents": true
+        }
+    ]
 }

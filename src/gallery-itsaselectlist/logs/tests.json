@@ -14,7 +14,7 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 4,
+        "duration": 5,
         "type": "testcase",
         "test is empty": {
             "result": "fail",
@@ -24,6 +24,6 @@
             "duration": 1
         }
     },
-    "timestamp": "Wed Oct  9 15:57:02 2013",
+    "timestamp": "Fri Jan 10 14:45:28 2014",
     "consoleInfo": []
 }
