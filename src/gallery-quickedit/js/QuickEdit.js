@@ -633,13 +633,11 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 			var change  = {},
 				changed = false;
 
-			var field_count = list.size();
-			for (var j=0; j<field_count; j++)
+			list.each(function(field)
 			{
-				var field = list.item(j);
-				var key   = this._getColumnKey(field);
-				var qe    = this.column_map[key].quickEdit;
-				var prev  = rec.get(key);
+				var key  = this._getColumnKey(field);
+				var qe   = this.column_map[key].quickEdit;
+				var prev = rec.get(key);
 
 				var val = Y.Lang.trim(field.get('value'));
 				if (qe.changed ? qe.changed(prev, val) :
@@ -648,7 +646,8 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 					change[key] = val;
 					changed     = true;
 				}
-			}
+			},
+			this);
 
 			if (changed || include_all)
 			{
