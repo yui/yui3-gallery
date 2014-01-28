@@ -1,0 +1,10 @@
+{
+    "name": "gallery-graphics-patch-1534",
+    "builds": {
+        "gallery-graphics-patch-1534": {
+            "jsfiles": [
+                "Graphics-Patch-1534.js"
+            ]
+        }
+    }
+}
