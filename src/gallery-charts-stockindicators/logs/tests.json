@@ -1,0 +1,43 @@
+{
+    "name": "Charts: StockIndicators",
+    "passed": 9,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 9,
+    "duration": 102,
+    "type": "report",
+    "StockIndicatorCharts Tests": {
+        "name": "StockIndicatorCharts Tests",
+        "passed": 3,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 3,
+        "duration": 33,
+        "type": "testcase",
+        "test: initChart": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test: initChart",
+            "duration": 8
+        },
+        "test: _getGraph": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "test: _getGraph",
+            "duration": 1
+        },
+        "testStockIndicatorCharts": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "testStockIndicatorCharts",
+            "duration": 1
+        }
+    },
+    "timestamp": "Mon 27 Jan 2014 04:38:24 PM PST",
+    "consoleInfo": []
+}

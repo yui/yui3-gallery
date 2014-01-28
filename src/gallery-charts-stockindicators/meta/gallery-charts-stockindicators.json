@@ -1,13 +1,15 @@
 {
     "gallery-charts-stockindicators": {
         "requires": [
+            "escape",
             "graphics-group",
             "axis-numeric",
             "axis-category",
             "series-line",
             "series-marker",
             "series-column",
-            "series-candlestick"
+            "series-candlestick",
+            "series-area"
         ]
     }
 }

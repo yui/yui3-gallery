@@ -6,125 +6,31 @@ YUI.add('gallery-charts-stockindicators', function (Y, NAME) {
  *
  * @module gallery-charts-stockindicators
  */
-var defaultAxisLabelFormat = {
-    value: null
-};
-
-Y.CategoryAxisBase.ATTRS.labelFormat = defaultAxisLabelFormat;
-Y.CategoryAxis.ATTRS.labelFormat = defaultAxisLabelFormat;
-//patch CartesianSeries destructor bug
-Y.CartesianSeries.prototype.destructor = function() {
-    if(this.get("rendered"))
-    {
-        if(this._xDataReadyHandle)
-        {
-            this._xDataReadyHandle.detach();
-        }
-        if(this._xDataUpdateHandle)
-        {
-            this._xDataUpdateHandle.detach();
-        }
-        if(this._yDataReadyHandle)
-        {
-            this._yDataReadyHandle.detach();
-        }
-        if(this._yDataUpdateHandle)
-        {
-            this._yDataUpdateHandle.detach();
-        }
-        if(this._xAxisChangeHandle)
-        {
-            this._xAxisChangeHandle.detach();
-        }
-        if(this._yAxisChangeHandle)
-        {
-            this._yAxisChangeHandle.detach();
-        }
-    }
-};
-
-if(Y.VMLShape) {
-    Y.VMLShape.ATTRS.stroke.setter = function(val) {
-        var i,
-            stroke,
-            wt,
-            tmpl = this.get("stroke") || this._getDefaultStroke();
-        if(val)
-        {
-            if(val.hasOwnProperty("weight"))
-            {
-                wt = parseInt(val.weight, 10);
-                if(!isNaN(wt))
-                {
-                    val.weight = wt;
-                }
-            }
-            for(i in val)
-            {
-                if(val.hasOwnProperty(i))
-                {
-                    tmpl[i] = val[i];
-                }
-            }
-        }
-        if(tmpl.color && tmpl.color.toLowerCase().indexOf("rgba") > -1)
-        {
-           tmpl.opacity = Y.Color._getAlpha(tmpl.color);
-           tmpl.color =  Y.Color.toHex(tmpl.color);
-        }
-        stroke = tmpl;
-        this._strokeFlag = true;
-        return stroke;
-    };
-    Y.VMLShape.ATTRS.fill.setter = function(val) {
-        var i,
-            fill,
-            tmpl = this.get("fill") || this._getDefaultFill();
-
-        if(val)
-        {
-            //ensure, fill type is solid if color is explicitly passed.
-            if(val.hasOwnProperty("color"))
-            {
-                val.type = "solid";
-            }
-            for(i in val)
-            {
-                if(val.hasOwnProperty(i))
-                {
-                    tmpl[i] = val[i];
-                }
-            }
-        }
-        fill = tmpl;
-        if(fill && fill.color)
-        {
-            if(fill.color === undefined || fill.color === "none")
-            {
-                fill.color = null;
-            }
-            else
-            {
-                if(fill.color.toLowerCase().indexOf("rgba") > -1)
-                {
-                    fill.opacity = Y.Color._getAlpha(fill.color);
-                    fill.color =  Y.Color.toHex(fill.color);
-                }
-            }
-        }
-        this._fillFlag = true;
-        return fill;
-    };
-}
+/**
+ * Provides functionality for a crosshair.
+ *
+ * @module gallery-charts-stockindicators
+ */
 
 /**
  * Creates an updatable crosshair on the Graph which can be controlled
  * by mouse and touch events.
  *
- * @module gallery-charts-stockindicators
  * @class Crosshair
  * @constructor
  * @param {Object} config Configuration parameters.
+ *  <dl>
+ *      <dt>dotdiameter</dt><dd>The diameter of the circle or dot.</dd>
+ *      <dt>drawHorizontal</dt><dd>Indicates whether to draw the horizontal line. The default
+ *      value is `false`.</dd>
+ *      <dt>drawVertical</dt><dd>Indicates whether to draw the verical line. The default
+ *      value is `true`.</dd>
+ *      <dt>lineColor</dt><dd>The color to use for lines.</dd>
+ *      <dt>lineWidth</dt><dd>The weight of the lines.</dd>
+ *      <dt>useCircle</dt><dd>Determines whether to use an empty circle. The default value is
+ *      `false`.</dd>
+ *      <dt>useDot</dt><dd>Determines whether to use a dot. The default value is `true`.</dd>
+ *  </dl>
  */
 Y.Crosshair = function() {
     this.initializer.apply(this, arguments);
@@ -192,7 +98,7 @@ Y.Crosshair.prototype = {
      * @method setTarget
      * @param {Number} pageX The x-coordinate to map in which to map the crosshair.
      */
-    setTarget: function(pageX) {
+    setTarget: function(pageX, redraw) {
         var xy = this._xy,
             x = pageX - xy[0],
             y,
@@ -214,7 +120,22 @@ Y.Crosshair.prototype = {
                 }
             }
         }
-        this.graphic._redraw();
+        this.updateFlag = true;
+        if(redraw) {
+            this.graphic._redraw();
+        }
+    },
+
+    /**
+     * Updates the crosshair items.
+     *
+     * @method redraw
+     */
+    redraw: function() {
+        if(this.updateFlag) {
+            this.graphic._redraw();
+            this.updateFlag = false;
+        }
     },
 
     /**
@@ -567,12 +488,52 @@ Y.Gridlines = Y.Base.create("gridlines", Y.Base, [Y.Renderer], {
     }
 });
 /**
+ * Provides functionality for a legend.
+ *
+ * @module gallery-charts-stockindicators
+ */
+/**
  * Displays a legend when the user interacts with the corresponding chart
  * application.
  *
- * @module gallery-charts-stockindicators
  * @class StockIndicatorsLegend
  * @constructor
+ * @param {Object} config Configuration parameters.
+ *  <dl>
+ *      <dt>dataProvider</dt><dd>Reference to the application's `dataProvider` attribute.</dd>
+ *      <dt>dateColor</dt><dd>The color to be used for the date text in the legend.</dd>
+ *      <dt>delim</dt><dd>String value prefixing the display name of each legend item.</dd>
+ *      <dt>dateLabelFunction</dt><dd>The function used for formatting the date label.</dd>
+ *      <dt>dateLabelFormat</dt><dd>The strf format used to format the date label.</dd>
+ *      <dt>dateLabelScope</dt><dd>The scope for the dateLabelFunction</dd>
+ *      <dt>displayKeys</dt><dd>An array of displayKeys to be used in the legend. Each display key
+ *      is the text to be displayed in the legend for the corresponding value key.</dd>
+ *      <dt>displayName</dt><dd>Indicates whether to display the display name. The default
+ *      value is `true`.</dd>
+ *      <dt>displayValue</dt><dd>Indicates whether to display the value. The default value
+ *      is `true`.</dd>
+ *      <dt>drawSwatch</dt><dd>Indicates whether or no to draw a colored swatch by the display
+ *      name. The default value is `true`.</dd>
+ *      <dt>font</dt><dd>The font to use for all text in the legend.</dd>
+ *      <dt>fontSize</dt><dd>The font size to use for all text in the legend.</dd>
+ *      <dt>height</dt><dd>The height of the legend.</dd>
+ *      <dt>priceDownColor</dt><dd>The color to be used for the value text when the value is negative.</dd>
+ *      <dt>priceUpColor</dt><dd>The color to be used for value text when the value is positive.</dd>
+ *      <dt>swatchWidth</dt><dd>The width of the swatch for each legend item.</dd>
+ *      <dt>valueKeys</dt><dd>The value keys, in order, to be used in the legend.</dd>
+ *      <dt>valueLabelFormat</dt><dd>Object literal indicating how to format the legend values.
+ *          <dl>
+ *              <dt>prefix</dt><dd>The prefix.</dd>
+ *              <dt>suffix</dt><dd>The suffix.</dd>
+ *              <dt>thousandsSeparator</dt><dd>The thousands separator.</dd>
+ *              <dt>decimalPlaces</dt><dd>The number of decimals to display.</dd>
+ *              <dt>decimalsSeparator</dt><dd>The decimal separator.</dd>
+ *          </dl>
+ *      </dd>
+ *      <dt>width</dt><dd>The width of the legend.</dd>
+ *      <dt>x</dt><dd>The x-coordinate for the legend</dd>
+ *      <dt>y</dt><dd>The y-coordinate for the legend</dd>
+ *  </dl>
  */
 function StockIndicatorsLegend() {
     this.init.apply(this, arguments);
@@ -655,7 +616,7 @@ StockIndicatorsLegend.prototype = {
             this.formatDate = cfg.formatDate;
             this._xy = Y.DOM.getXY(this.contentDiv);
     },
-    
+   
     /**
      * Removes all elements of the legend.
      *
@@ -689,7 +650,7 @@ StockIndicatorsLegend.prototype = {
             }
         }
     },
-    
+   
     /**
      * Updates the legend.
      *
@@ -697,12 +658,24 @@ StockIndicatorsLegend.prototype = {
      * @param {Number} pageX
      * @param {Array} dataProvider
      */
-    update: function(pageX, dataProvider) {
+    update: function(pageX, dataProvider, redraw) {
         var xy = this._xy,
             x = pageX - xy[0],
-            index = Math.floor(x / this.width * dataProvider.length),
-            dataItem = dataProvider[index],
-            queue = this.seriesQueue,
+            index = Math.floor(x / this.width * dataProvider.length);
+        this._dataItem = dataProvider[index];
+        if(redraw) {
+            this.redraw();
+        }
+    },
+
+  
+    /**
+     * Draws the legend.
+     *
+     * @method redraw
+     */
+    redraw: function() {
+        var queue = this.seriesQueue,
             key,
             len = queue.length,
             item,
@@ -712,38 +685,48 @@ StockIndicatorsLegend.prototype = {
             dateLabelFunction = this.dateLabelFunction,
             dateLabelScope = this.dateLabelScope,
             dateLabelFormat = this.dateLabelFormat,
-            dateLabelArgs;
-        val = dataItem.Date || dataItem.Timestamp;
-        if(dateLabelFunction) {
-            dateLabelArgs = [val];
-            if(dateLabelFormat) {
-                dateLabelArgs.push(dateLabelFormat);
+            dateLabelArgs,
+            dataItem = this._dataItem;
+        if(dataItem) {
+            val = dataItem.Date || dataItem.Timestamp;
+            if(dateLabelFunction) {
+                dateLabelArgs = [val];
+                if(dateLabelFormat) {
+                    dateLabelArgs.push(dateLabelFormat);
+                }
+                val = dateLabelFunction.apply(dateLabelScope, dateLabelArgs);
             }
-            val = dateLabelFunction.apply(dateLabelScope, dateLabelArgs);
-        }
-        this.dateItem.value.innerHTML = Y.Escape.html(val);
-        for(i = 0; i < len; i = i + 1) {
-            key = queue[i];
-            item = items[key];
-            if(dataItem.hasOwnProperty(key)) {
-                item.li.style.display = "inline-block";
-                val = dataItem[key];
-                item.value.innerHTML = Y.Number.format(parseFloat(val), this.valueLabelFormat);
-                Y.DOM.setStyle(item.value, "color", val > 0 ? this.priceUpColor : this.priceDownColor);
-            } else {
-                item.li.style.display = "none";
+            this.dateItem.value.innerHTML = Y.Escape.html(val);
+            for(i = 0; i < len; i = i + 1) {
+                key = queue[i];
+                item = items[key];
+                if(dataItem.hasOwnProperty(key)) {
+                    item.li.style.display = "inline-block";
+                    val = dataItem[key];
+                    item.value.innerHTML = Y.Number.format(parseFloat(val), this.valueLabelFormat);
+                    Y.DOM.setStyle(item.value, "color", val > 0 ? this.priceUpColor : this.priceDownColor);
+                } else {
+                    item.li.style.display = "none";
+                }
             }
+            dataItem = this._dataItem = null;
         }
     }
 };
 Y.StockIndicatorsLegend = StockIndicatorsLegend;
 /**
+ * Provides functionality for a chart.
+ *
+ * @module gallery-charts-stockindicators
+ */
+
+/**
  * StockIndicatorsChart is an application that generates a chart or charts based on a key indexed array of data and an
  * array of charts configuration data.
  *
- * @module gallery-charts-stockindicators
  * @class StockIndicatorsChart
  * @constructor
+ * @param {Object} config An object literal contain properties defined in the <a href="#attr_charts">charts</a> attribute.
  */
 function StockIndicatorsChart() {
     StockIndicatorsChart.superclass.constructor.apply(this, arguments);
@@ -758,8 +741,12 @@ StockIndicatorsChart.ATTRS = {
      *          An object literal representing the `axes` for the chart. Each `axes` object contains a `date`
      *          and a `numeric` axis.
      *          <dl>
-     *              <dt>date</dt>The date axis is a `CategoryAxis` instance.
-     *              <dt>numeric</dt> The numeric axis is a `NumericAxis` instance.
+     *              <dt>date</dt><dd>A <a href="http://yuilibrary.com/yui/docs/api/classes/CategoryAxis.html">CategoryAxis</a>
+     *              instance. Possible attributes are listed
+     *              <a href="http://yuilibrary.com/yui/docs/api/classes/CategoryAxis.html#attr_appendLabelFunction">here</a>.</dd>
+     *              <dt>numeric</dt><dd>A <a href="http://yuilibrary.com/yui/docs/api/classes/NumericAxis.html">NumericAxis</a>
+     *              instance. Possible attributes are listed
+     *              <a href="http://yuilibrary.com/yui/docs/api/classes/NumericAxis.html#attr_alwaysShowZero">here</a>.</dd>
      *          </dl>
      *      </dd>
      *      <dt>categoryKey</dt><dd>A reference to the key in the `dataProvider` that represents the values
@@ -767,24 +754,11 @@ StockIndicatorsChart.ATTRS = {
      *      <dt>colors</dt><dd>An object containing key values pairs in which the key is a reference to the values
      *      of the `dataProvider` and the value is the color associated with each key. This data is used to determine
      *      the colors for the corresponding graphs, legends and crosshair markers.</dd>
-     *      <dt>crosshair</dt><dd>Configuration properties for the crosshair display that shows when
+     *      <dt>crosshair</dt><dd>Configuration properties for the <a href="Crosshair.html">Crosshair</a>  display that shows when
      *      interacting with a chart. It consists of `marker` shapes that correspond with each series of the
      *      chart, and optional horizontal and vertical lines. By default, the vertical line is displayed and
      *      the horizontal line is not. The colors of each `marker` is determined by its corresponding series
-     *      color. The crosshairConfig object has the following configurable properties:
-     *          <dl>
-     *              <dt>dotdiameter</dt><dd>The diameter of the circle or dot.</dd>
-     *              <dt>drawHorizontal</dt><dd>Indicates whether to draw the horizontal line. The default
-     *              value is `false`.</dd>
-     *              <dt>drawVertical</dt><dd>Indicates whether to draw the verical line. The default
-     *              value is `true`.</dd>
-     *              <dt>lineColor</dt><dd>The color to use for lines.</dd>
-     *              <dt>lineWidth</dt><dd>The weight of the lines.</dd>
-     *              <dt>useCircle</dt><dd>Determines whether to use an empty circle. The default value is
-     *              `false`.</dd>
-     *              <dt>useDot</dt><dd>Determines whether to use a dot. The default value is `true`.</dd>
-     *          </dl>
-     *      </dd>
+     *      color. Possible configuration values are documented <a href="Crosshair.html">here</a>.</dd>
      *      <dt>dotdiameter</dt><dd>The diameter to be used for marker graphs in the chart.</dd>
      *      <dt>gridcolor</dt><dd>The color to be used for the background grid of the chart.</dd>
      *      <dt>height</dt><dd>The height of the chart including the legend, graph and date axis.</dd>
@@ -796,9 +770,11 @@ StockIndicatorsChart.ATTRS = {
      *              <dt>currency</dt><dd>Reference to the currency used to measure the data.</dd>
      *              <dt>displayKey</dt><dd>A key or array of keys, depending on the indicator mapped to a valueKey
      *              from the `dataProvider` that will be displayed in the corresponding legend.</dd>
+     *              <dt>groupMarkers</dt><dd>Indicates whether to draw all markers as a single dom element.</dd>
      *              <dt>indicator</dt><dd>Represents the type of indicator data that will be displayed. (e.g. `quote`,
      *              `bollinger`, `psar`)</dd>
      *              <dt>iscomp</dt><dd>Indicates whether the indicator is a comparison indicator.</dd>
+     *              <dt>labels</dt><dd>An array of of values used to create labels on the x-axis.</dd>
      *              <dt>ticker</dt><dd>Indicates the stock ticker of the indicator. (e.g. `yhoo`)</dd>
      *              <dt>type</dt><dd>Indicates the type of financial graph used to display the indicator data.
      *              (e.g. `candlestick`, `line`)
@@ -806,38 +782,9 @@ StockIndicatorsChart.ATTRS = {
      *              values from the `dataProvider`.</dd>
      *          </dl>
      *      </dd>
-     *      <dt>legend</dt><dd>
-     *          <dl>
-     *              <dt>currency</dt><dd>The prefix to be used for the values in each legend item.</dd>
-     *              <dt>dataProvider</dt><dd>Reference to the application's `dataProvider` attribute.</dd>
-     *              <dt>dateColor</dt><dd>The color to be used for the date text in the legend.</dd>
-     *              <dt>delim</dt><dd>String value prefixing the display name of each legend item.</dd>
-     *              <dt>displayKeys</dt><dd>An array of displayKeys to be used in the legend. Each display key
-     *              is the text to be displayed in the legend for the corresponding value key.</dd>
-     *              <dt>dislayName</dt><dd>Indicates whether to display the display name. The default
-     *              value is `true`.</dd>
-     *              <dt>displayValue</dt><dd>Indicates whether to display the value. The default value
-     *              is `true`.</dd>
-     *              <dt>drawSwatch</dt><dd>Indicates whether or no to draw a colored swatch by the display
-     *              name. The default value is `true`.</dd>
-     *              <dt>font</dt><dd>The font to use for all text in the legend.</dd>
-     *              <dt>fontSize</dt><dd>The font size to use for all text in the legend.</dd>
-     *              <dt>height</dt><dd>The height of the legend.</dd>
-     *              <dt>priceDownColor</dt><dd>The color to be used for the value text when the value is negative.</dd>
-     *              <dt>priceUpColor</dt><dd>The color to be used for value text when the value is positive.</dd>
-     *              <dt>swatchWidth</dt><dd>The width of the swatch for each legend item.</dd>
-     *              <dt>valueKeys</dt><dd>The value keys, in order, to be used in the legend.</dd>
-     *              <dt>valueLabelFormat</dt><dd>Object literal indicating how to format the legend values.
-     *                  <dl>
-     *                      <dt>prefix</dt><dd>The prefix.</dd>
-     *                      <dt>suffix</dt><dd>The suffix.</dd>
-     *                      <dt>thousandsSeparator</dt><dd>The thousands separator.</dd>
-     *                      <dt>decimalPlaces</dt><dd>The number of decimals to display.</dd>
-     *                      <dt>decimalsSeparator</dt><dd>The decimal separator.</dd>
-     *                  </dl>
-     *              </dd>
-     *          </dl>
-     *      </dd>
+     *      <dt>legend</dt><dd>Configuration properties used to construct the <a href="StockIndicatorsLegend.html">StockIndicatorsLegend</a>.
+     *      Possible configuration values are documented <a href="StockIndicatorsLegend.html">here</a>. The x and y properties are not
+     *      configurable through this object as they are determined by the layout of the charts in this application. </dd>
      *      <dt>lineWidth</dt><dd>The weight to be used for line graphs in the chart.</dd>
      *      <dt>numBar</dt><dd>The value used to calculate the width of the columns in a graph when the `rangeType` is
      *      `daily`. By default, the column width is determined from number of data values across the x axis and the
@@ -852,7 +799,7 @@ StockIndicatorsChart.ATTRS = {
      *      <dt>y</dt><dd>The y coordinate for the chart in relation to the application.</dd>
      *  </dl>
      *
-     *  @attribute chartsData
+     *  @attribute charts
      *  @type: Array
      */
     charts: {},
@@ -903,6 +850,7 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
      * @param {Object} e Event payload
      */
     updatesLegendsCrosshair: function(e) {
+        e.preventDefault();
         var crosshair,
             crosshairs = this._crosshairs,
             legends = this._legends,
@@ -920,14 +868,71 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
                 xy = chart.xy,
                 x = pageX - xy[0];
                 crosshair = this._crosshairs[i];
-                crosshair.setTarget(pageX);
+                crosshair.setTarget(pageX, this._autoDraw);
             }
             len = legends.length;
             for(i = 0; i < len; i = i + 1) {
-                legends[i].update(pageX, this._dataProvider);
+                legends[i].update(pageX, this._dataProvider, this._autoDraw);
             }
         }
         this.curX = pageX;
+    },
+
+    /**
+     * Starts a timeline used to manage redraws based on requestAnimationFrame.
+     *
+     * @method startTimeline
+     */
+    startTimeline: function() {
+        if(!this._runTimeline) {
+            this._runTimeline = true;
+            this._timelineStart = (new Date()).valueOf() - 17;
+            this.redraw();
+        }
+    },
+
+    /**
+     * Ends a timeline.
+     *
+     * @method stopTimeline
+     */
+    stopTimeline: function() {
+        var args,
+            timelineId = this._timelineId;
+        this._runTimeline = false;
+        if(timelineId) {
+            args = [timelineId];
+            this._timelineId = null;
+        }
+    },
+
+    /**
+     * Draws chart elements based on the timeline.
+     *
+     * @method redraw
+     */
+    redraw: function() {
+        var scope = this,
+            crosshairs = this._crosshairs,
+            legends = this._legends,
+            i,
+            len = crosshairs.length,
+            endTime = (new Date()).valueOf();
+        if(endTime >= this._timelineStart + 17) {
+            for(i = 0; i < len; i = i + 1) {
+                crosshairs[i].redraw();
+            }
+            len = legends.length;
+            for(i = 0; i < len; i = i + 1) {
+                legends[i].redraw();
+            }
+            this._timelineStart = (new Date()).valueOf();
+        }
+        if(this._runTimeline && !this._autoDraw) {
+            this._timelineId = this._onEnterFrame.apply(window, [function() {
+                scope.redraw();
+            }]);
+        }
     },
 
     /**
@@ -942,6 +947,12 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
         this._crosshairs = [];
         this._hotspots = [];
         this._legends = [];
+        this._runTimeline = false;
+        this._onEnterFrame = window.requestAnimationFrame ||
+                            window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame ||
+                            window.msRequestAnimationFrame;
+        this._autoDraw = this._onEnterFrame ? false : true;
         StockIndicatorsChart.superclass.initializer.apply(this, arguments);
     },
 
@@ -990,12 +1001,18 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
             indLen = indicators.length,
             valueIter,
             valueLen,
-            valueKey;
+            valueKey,
+            groupMarkers;
         for(indIter = 0; indIter < indLen; indIter = indIter + 1) {
             indicator = indicators[indIter];
             valueKey = indicator.valueKey;
-            if(indicator.type === "candlestick" || typeof valueKey === "string") {
+            indicatorType = indicator.type;
+            if(indicatorType === "candlestick" || typeof valueKey === "string") {
+                groupMarkers = indicatorType !== "candlestick" &&
+                                indicatorType !== "line" &&
+                                indicator.groupMarkers;
                 seriesCollection.push({
+                    groupMarkers: groupMarkers,
                     type: indicator.type,
                     xKey: config.categoryKey,
                     yKey: indicator.valueKey
@@ -1004,7 +1021,9 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
                valueLen = valueKey.length;
                for(valueIter = 0; valueIter < valueLen; valueIter = valueIter + 1) {
                     indicatorType = indicator.type;
+                    groupMarkers = indicatorType !== "line" && indicator.groupMarkers;
                     seriesCollection.push({
+                        groupMarkers: groupMarkers,
                         type: typeof indicatorType === "string" ? indicatorType : indicatorType[valueIter],
                         xKey: config.categoryKey,
                         yKey: indicator.valueKey[valueIter]
@@ -1183,6 +1202,20 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
         };
     },
 
+   /**
+    * Maps axis class to key.
+    *
+    * @property _axesClassMap
+    * @type AxisBase
+    * @private
+    */
+    _axesClassMap: {
+        numeric: Y.NumericAxis,
+        numericbase: Y.NumericAxisBase,
+        category: Y.CategoryAxis,
+        categorybase: Y.CategoryAxisBase
+    },
+
     /**
      * Add the axes to the chart and returns an object literal with references to the
      * `date` and `numeric` axes.
@@ -1199,7 +1232,9 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
             numericConfig = config.axes.numeric,
             dateConfig = config.axes.date,
             numericAxis,
-            dateAxis;
+            dateAxis,
+            NumericClass = this._axesClassMap[numericConfig.type],
+            DateClass = this._axesClassMap[dateConfig.type];
         numericConfig.render = cb;
         numericConfig.y = config.y + config.legend.height;
         numericConfig.x = config.width - numericConfig.width;
@@ -1207,8 +1242,8 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
         dateConfig.render = cb;
         dateConfig.y = config.y + config.height - dateConfig.height;
         dateConfig.width = config.width;
-        numericAxis = new Y.NumericAxis(numericConfig);
-        dateAxis = new Y.CategoryAxis(dateConfig);
+        numericAxis = new NumericClass(numericConfig);
+        dateAxis = new DateClass(dateConfig);
         bb = dateAxis.get("boundingBox");
         bb.setStyle("left", 0 + "px");
         bb.setStyle("top", (config.y + config.height - dateConfig.height) + "px");
@@ -1479,16 +1514,165 @@ Y.extend(StockIndicatorsChart, Y.Widget, {
     }
 });
 Y.StockIndicatorsChart = StockIndicatorsChart;
+/**
+ * Creates a spark graph.
+ *
+ * @module gallery-charts-stockindicators
+ * @class StockIndicatorsSpark
+ * @constructor
+ */
+Y.StockIndicatorsSpark = function() {
+    this._init.apply(this, arguments);
+    return this;
+};
+
+Y.StockIndicatorsSpark.prototype = {
+    /**
+     * Maps keys to corresponding class.
+     *
+     * @property _graphMap
+     * @type Object
+     * @private
+     */
+    _graphMap:  {
+        line: Y.LineSeries,
+        marker: Y.MarkerSeries,
+        column: Y.ColumnSeries,
+        area: Y.AreaSeries
+    },
+
+    /**
+     * Maps keys to the property of a style attribute
+     * of the corresponding `SeriesBase` instance.
+     *
+     * @property _styleMap
+     * @type Object
+     * @private
+     */
+    _styleMap: {
+        line: "line",
+        marker: "marker",
+        column: "marker",
+        area: "area"
+    },
+
+    /**
+     *  Sets properties for the graph.
+     *
+     *  @method _init
+     *  @param {Object} config Properties for the graph.
+     *  @private
+     */
+    _init: function(config) {
+        var styles = config.styles,
+            bb = document.createElement('div'),
+            cb = document.createElement('div'),
+            render = config.render,
+            type = config.type || "line",
+            style = type === "column" ? "marker" : type,
+            SparkClass = this._graphMap[type];
+        this.dataProvider = config.dataProvider;
+        this.xKey = config.xKey;
+        this.yKey = config.yKey;
+        if(!styles) {
+            styles = {};
+            if(config[style]) {
+                styles[style] = config[style];
+            } else {
+                styles[style] = {};
+                if(config.color) {
+                    styles.line.color = config.color;
+                }
+                if(config.alpha) {
+                    styles.line.alpha = config.alpha;
+                }
+                if(type === "line") {
+                    styles.line.weight = isNaN(config.weight) ? 1 : config.weight;
+                }
+            }
+        }
+        this.xAxis = new Y.CategoryAxisBase({
+            dataProvider: this.dataProvider,
+            keys: [this.xKey]
+        });
+        this.yAxis = new Y.NumericAxisBase({
+            dataProvider: this.dataProvider,
+            keys: [this.yKey],
+            alwaysShowZero: false
+        });
+        bb.style.position = "absolute";
+        Y.DOM.setStyle(bb, "inlineBlock");
+        cb.style.position = "relative";
+        render = document.getElementById(render);
+        render.appendChild(bb);
+        bb.appendChild(cb);
+        cb.style.width = Y.DOM.getComputedStyle(render, "width");
+        cb.style.height = Y.DOM.getComputedStyle(render, "height");
+        this.graphic = new Y.Graphic({
+            render: cb,
+            autoDraw: false
+        });
+        this.graph = new SparkClass({
+            rendered: true,
+            dataProvider: config.dataProvider,
+            graphic: this.graphic,
+            styles: styles,
+            xAxis: this.xAxis,
+            yAxis: this.yAxis,
+            xKey: this.xKey,
+            yKey: this.yKey
+        });
+        this.contentBox = cb;
+        this.boundingBox = bb;
+        this.graph.validate();
+        this.graphic._redraw();
+    },
+
+    /**
+     * Removes all elements of the spark.
+     *
+     * @method destroy
+     */
+    destroy: function() {
+        var parentNode;
+        if(this.xAxis) {
+            this.xAxis.destroy(true);
+        }
+        if(this.yAxis) {
+            this.yAxis.destroy(true);
+        }
+        if(this.graph) {
+            this.graph.destroy();
+        }
+        if(this.graphic) {
+            this.graphic.destroy();
+        }
+        if(this.contentBox) {
+            parentNode = this.contentBox.parentNode;
+            if(parentNode) {
+                parentNode.removeChild(this.contentBox);
+            }
+        }
+        if(this.boundingBox) {
+            parentNode = this.boundingBox.parentNode;
+            if(parentNode) {
+                parentNode.removeChild(this.boundingBox);
+            }
+        }
+    }
+};
 
 
-}, 'gallery-2013.12.20-18-06', {
+}, 'gallery-2014.01.28-00-45', {
     "requires": [
+        "escape",
         "graphics-group",
         "axis-numeric",
         "axis-category",
         "series-line",
         "series-marker",
         "series-column",
-        "series-candlestick"
+        "series-candlestick",
+        "series-area"
     ]
 });

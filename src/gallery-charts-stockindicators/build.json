@@ -6,7 +6,8 @@
                 "Crosshair.js",
                 "Gridlines.js",
                 "StockIndicatorsLegend.js",
-                "StockIndicatorsChart.js"
+                "StockIndicatorsChart.js",
+                "StockIndicatorsSpark.js"
             ]
         }
     }
