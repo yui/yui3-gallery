@@ -10,7 +10,7 @@
  * @module gallery-itsamodellistsyncpromise
  * @class Y.ModelList
  * @constructor
- * @since 0.1
+ * @since 0.5
  *
  * <i>Copyright (c) 2013 Marco Asbreuk - http://itsasbreuk.nl</i>
  * YUI BSD License - http://developer.yahoo.com/yui/license.html
@@ -27,9 +27,12 @@
        READAPPEND = READ+APPEND,
        MODELSYNC = 'modelsync',
        GALLERY_ITSA = 'gallery-itsa',
-       GALLERYITSAMODELSYNCPROMISE = GALLERY_ITSA+MODELSYNC+'promise',
+       LOW_PROMISE = 'promise',
+       GALLERYITSAMODELSYNCPROMISE = GALLERY_ITSA+MODELSYNC+LOW_PROMISE,
+       REMOVABLE_BY_SYNCPROMISE = '_removableby'+LOW_PROMISE,
        AVAILABLESYNCMESSAGES = {
            load: true,
+           reload: true,
            save: true,
            submit: true,
            destroy: true
@@ -86,6 +89,17 @@
      * @since 0.1
     **/
     LOAD = 'load',
+
+   /**
+     * Fired when models are reloaded from the ModelList-sync layer.
+     * @event reload
+     * @param e {EventFacade} Event Facade including:
+     * @param e.promise {Y.Promise} promise passed by with the eventobject
+     * @param e.promiseReject {Function} handle to the reject-method
+     * @param e.promiseResolve {Function} handle to the resolve-method
+     * @since 0.5
+    **/
+    RELOAD = 'reload',
 
    /**
      * Fired when models are appended to the ModelList by the ModelList-sync layer.
@@ -286,7 +300,7 @@ YModelList.prototype.defSyncOptions = function() {
   * To keep track of the proccess, it is preferable to use <b>loadPromise()</b>.<br />
   * This method will fire 2 events: 'loadstart' before syncing and 'load' or ERROR after syncing.
   * <br /><br />
-  * <b>CAUTION</b> The sync-method with action 'load' <b>must call its callback-function</b> in order to work as espected!
+  * <b>CAUTION</b> The sync-method with action 'read' <b>must call its callback-function</b> in order to work as espected!
   *
   * @method load
   * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting the loaded attributes.
@@ -309,7 +323,7 @@ YModelList.prototype.defSyncOptions = function() {
  * If the load operation succeeds and one or more of the loaded attributes
  * differ from this model's current attributes, a `change` event will be fired.
  * <br /><br />
- * <b>CAUTION</b> The sync-method with action 'load' <b>must call its callback-function</b> in order to work as espected!
+ * <b>CAUTION</b> The sync-method with action 'read' <b>must call its callback-function</b> in order to work as espected!
  *
  * @method loadPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
@@ -332,7 +346,7 @@ YModelList.prototype.defSyncOptions = function() {
   * To keep track of the proccess, it is preferable to use <b>loadPromise()</b>.<br />
   * This method will fire 2 events: 'loadstart' before syncing and 'load' or ERROR after syncing.
   * <br /><br />
-  * <b>CAUTION</b> The sync-method with action 'load' <b>must call its callback-function</b> in order to work as espected!
+  * <b>CAUTION</b> The sync-method with action 'readappend' <b>must call its callback-function</b> in order to work as espected!
   *
   * @method loadappend
   * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting the loaded attributes.
@@ -355,7 +369,7 @@ YModelList.prototype.defSyncOptions = function() {
  * If the load operation succeeds and one or more of the loaded attributes
  * differ from this model's current attributes, a `change` event will be fired.
  * <br /><br />
- * <b>CAUTION</b> The sync-method with action 'load' <b>must call its callback-function</b> in order to work as espected!
+ * <b>CAUTION</b> The sync-method with action 'readappend' <b>must call its callback-function</b> in order to work as espected!
  *
  * @method loadappendPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
@@ -470,8 +484,55 @@ YModelList.prototype.defSyncOptions = function() {
  * @return {Y.Promise} promised response --> resolve(response) OR reject(reason). (examine reason.message).
 **/
 
+/**
+  * Loads models from the server, but does not add the new models through 'reset'. Instead, all individual models are updated/removed/added.<br />
+  * This is useful in situations where you have the modellist bound to a view and you don't want a complete re-render of the view, but only of the changed models.
+  * This method delegates to the `sync()` method to perform the actual read-operation, which is an asynchronous action. Specify a 'callback' function to
+  * be notified of success or failure.
+  * <br /><br />
+  * An unsuccessful reload operation will fire an `error` event with the `src` value "reload".
+  * <br /><br />
+  * If the reload operation succeeds and one or more of the loaded attributes
+  * differ from this model's current attributes, a `change` event will be fired.
+  * <br /><br />
+  * To keep track of the proccess, it is preferable to use <b>reloadPromise()</b>.<br />
+  * This method will fire the events: 'reload' or ERROR after syncing.
+  * <br /><br />
+  * <b>CAUTION</b> The sync-method with action 'read' <b>must call its callback-function</b> in order to work as espected!
+  *
+  * @method reload
+  * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting the loaded attributes.
+  *                           It's up to the custom sync implementation to determine what options it supports or requires, if any.
+  *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious loading. Will overrule the default message. See gallery-itsamessageviewer.
+  * @param {callback} [callback] Called when the sync operation finishes.
+  *   @param {Error|null} callback.err If an error occurred, this parameter will contain the error. If the sync operation succeeded, 'err' will be null.
+  *   @param {Any} callback.response The server's response. This value will be passed to the `parse()` method, which is expected to parse it and return an attribute hash.
+  * @chainable
+  * @since 0.5
+ */
+
+/**
+ * Loads models from the server, but does not add the new models through 'reset'. Instead, all individual models are updated/removed/added.<br />
+ * This is useful in situations where you have the modellist bound to a view and you don't want a complete re-render of the view, but only of the changed models.
+ * <br /><br />
+ * This method delegates to the `sync()` method to perform the actual reload-operation, which is an asynchronous action.
+ * <br /><br />
+ * An unsuccessful reload operation will fire an `error` event with the `src` value "reload".
+ * <br /><br />
+ * If the reload operation succeeds and one or more of the loaded attributes differ from this model's current attributes, a `change` event will be fired.
+ * <br /><br />
+ * <b>CAUTION</b> The sync-method with action 'read' <b>must call its callback-function</b> in order to work as espected!
+ *
+ * @method reloadPromise
+ * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
+ *                 implementation to determine what options it supports or requires, if any.
+ *   @param {String} [options.syncmessage] Message that should appear on a Y.ITSAMessageViewer during asynchronious loading. Will overrule the default message. See gallery-itsamessageviewer.
+ * @return {Y.Promise} promised response --> resolve(response) OR reject(reason) (examine reason.message).
+ * @since 0.5
+**/
+
 YArray.each(
-    [LOAD, LOADAPPEND, SAVE, SUBMIT, DESTROYMODELS],
+    [LOAD, LOADAPPEND, RELOAD, SAVE, SUBMIT, DESTROYMODELS],
     function(Fn) {
         YModelList.prototype[Fn] = function(options, callback) {
             var instance = this,
@@ -664,13 +725,36 @@ YModelList.prototype[DEFFN+DESTROYMODELS] = function(e) {
  * @private
  * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
 **/
+
+/**
+ * Loads models from the server and updates the ModelList.<br />
+ * New models are added, existing models updated and non-existing models removed from the list<br /><br />
+ *
+ * This method delegates to the `sync()` method, by using the 'read' action.
+ * This is an asynchronous action. You <b>must</b> specify a _callback_ function to
+ * make the promise work.
+ *
+ * An unsuccessful load operation will fire an `error` event with the `src` value "reload".
+ *
+ * If the load operation succeeds and one or more of the loaded attributes
+ * differ from this model's current attributes, a `change` event will be fired for every Model.
+ *
+ * @method _defFn_reload
+ * @param {Object} [options] Options to be passed to `sync()`. The custom sync
+ *                 implementation can determine what options it supports or requires, if any.
+ * @private
+ * @return {Y.Promise} promised response --> resolve(response, options) OR reject(reason).
+ * @since 0.5
+**/
 YArray.each(
-    [LOAD, LOADAPPEND],
+    [LOAD, LOADAPPEND, RELOAD],
     function(eventType) {
         YModelList.prototype[DEFFN+eventType] = function (e) {
             var instance = this,
-                readsync = (eventType===LOADAPPEND) ? READAPPEND : READ,
-                options = e.options,
+                options = e.options || {},
+                //options.append is for compatiblility with previous versions
+                // where you could call: loadPromise({append: true});
+                readsync = ((eventType===LOADAPPEND) || options.append) ? READAPPEND : READ,
                 errFunc, successFunc;
 
             Y.log(DEFFN+eventType, 'info', 'ITSA-ModelListSyncPromise');
@@ -684,7 +768,7 @@ YArray.each(
                 e.promiseReject(new Error(err));
             };
             successFunc = function(response) {
-                var parsed;
+                var parsed, idAttribute;
                 e.response = response;
                 parsed = PARSED(response);
                 if (parsed.responseText) {
@@ -700,8 +784,46 @@ YArray.each(
                 if ((eventType===LOADAPPEND) || options.append) {
                     instance.add(parsed, options);
                 }
-                else {
+                else if (eventType===LOAD) {
                     instance.reset(parsed, options);
+                }
+                else { // (eventType===RELOAD)
+                    // process the whole modellist: update/delete/add
+                    // first: mark all current models so that they can be removed when no longer needed
+                    instance.each(
+                        function(model) {
+                            model[REMOVABLE_BY_SYNCPROMISE] = true;
+                        }
+                    );
+                    // next: process the serverresponse and either update or add the model
+                    idAttribute = (instance.model && instance.model.prototype.idAttribute) || 'id';
+                    YArray.each(
+                        parsed,
+                        function(modelobj) {
+                            var key = modelobj[idAttribute],
+                                availableModelOrObject, availableModel;
+                            availableModelOrObject = availableModel = key && instance.getById(key);
+                            // in case of LML --> revive the object into a model to activate model's change-event
+                            if (availableModel) {
+/*jshint expr:true */
+                                instance.revive && (availableModel=instance.revive(availableModel));
+/*jshint expr:false */
+                                availableModel.setAttrs(modelobj, options);
+                                delete availableModelOrObject[REMOVABLE_BY_SYNCPROMISE];
+                            }
+                            else {
+                                instance.add(modelobj, options);
+                            }
+                        }
+                    );
+                    // last step: remove all items in the list that are still marked for removal
+                    instance.each(
+                        function(model) {
+/*jshint expr:true */
+                            model[REMOVABLE_BY_SYNCPROMISE] && instance.remove(model);
+/*jshint expr:false */
+                        }
+                    );
                 }
                 e.promiseResolve(response);
             };
