@@ -246,7 +246,7 @@ YModel.prototype.defSyncOptions = function() {
   * To keep track of the proccess, it is preferable to use <b>loadPromise()</b>.<br />
   * This method will fire 2 events: 'loadstart' before syncing and 'load' or ERROR after syncing.
   * <br /><br />
-  * <b>CAUTION</b> The sync-method with action 'load' <b>must call its callback-function</b> in order to work as espected!
+  * <b>CAUTION</b> The sync-method with action 'read' <b>must call its callback-function</b> in order to work as espected!
   *
   * @method load
   * @param {Object} [options] Options to be passed to `sync()` and to `set()` when setting the loaded attributes.
@@ -269,7 +269,7 @@ YModel.prototype.defSyncOptions = function() {
  * If the load operation succeeds and one or more of the loaded attributes
  * differ from this model's current attributes, a `change` event will be fired.
  * <br /><br />
- * <b>CAUTION</b> The sync-method with action 'load' <b>must call its callback-function</b> in order to work as espected!
+ * <b>CAUTION</b> The sync-method with action 'read' <b>must call its callback-function</b> in order to work as espected!
  *
  * @method loadPromise
  * @param {Object} [options] Options to be passed to `sync()`. It's up to the custom sync
@@ -647,8 +647,6 @@ YModel.prototype._defFn_save = function(e) {
                         parsed = PARSED(parsed.responseText);
                     }
                     if (YObject.keys(parsed).length>0) {
-
-
                         e.parsed = parsed;
                         // if removed then fire destroy-event (not through synclayer), else update data
 /*jshint expr:true */
@@ -931,7 +929,7 @@ YModel.prototype._syncTimeoutPromise = function(action, options) {
     );
 };
 
-}, 'gallery-2013.12.20-18-06', {
+}, 'gallery-2014.01.28-00-45', {
     "requires": [
         "yui-base",
         "intl",

@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 3,
+    "total": 3,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5000/tests/src/gallery-itsamodelsyncpromise/tests/unit/index.html?filter=coverage",
+    "error": "TypeError: 'undefined' is not an object (evaluating 'new Y.Test.Suite')\nhttp://127.0.0.1:5000/tests/src/gallery-itsamodelsyncpromise/tests/unit/js/tests.js:3\nhttp://127.0.0.1:5000/build/yui/yui.js:775\nhttp://127.0.0.1:5000/build/yui/yui.js:1112\nhttp://127.0.0.1:5000/build/yui/yui.js:7708\nhttp://127.0.0.1:5000/build/yui/yui.js:7799\nhttp://127.0.0.1:5000/build/yui/yui.js:7999\nhttp://127.0.0.1:5000/build/yui/yui.js:8066\nhttp://127.0.0.1:5000/build/yui/yui.js:4619\nhttp://127.0.0.1:5000/build/yui/yui.js:4819\nhttp://127.0.0.1:5000/build/yui/yui.js:4927\nhttp://127.0.0.1:5000/build/yui/yui.js:4711"
+}
