@@ -78,7 +78,7 @@
 
 <h2>Progressive enhancement v.s. javascript</h2>
     <p>
-       When using progressive enhancement (by sepcifying the attribute <code>scrNode</code>), you best add a classname to the html-checkbox to make it hidden before the widget is rendered. If you dont' then the widget will hide the html-element for you, but it will be seen on the screen for a short time. See the examples on how to do this.
+       When using progressive enhancement (by sepcifying the attribute <code>scrNode</code>), you best add a classname to the html-checkbox to make it hidden before the widget is rendered. If you don't then the widget will hide the html-element for you, but it will be seen on the screen for a short time. See the examples on how to do this.
     </p>
     <p>
         When using no <code>srcNode</code>, the widget will generate an invisible html-checkbox as well. This is useful in case you have a form that submits
@@ -150,3 +150,31 @@
     });
 </script>
 ```
+
+<h2>Notes</h2>
+<p><u>Never</u> wrap the checkbox by a <code>label</code>-element! ITSACheckBox renderes a widget and it is invalid HTML to have nodes -other than a <code>input-element</code> inside a <code>label</code>-element. It also will lead to unexpected behaviour when clicking on the widget.
+</p>
+<p>In case you use progressive enhancement (rendering using <code>srcNode</code>), the widget will take care of being rendered outside any <code>label</code>-element by itself.
+</p>
+
+<h2>Known issues</h2>
+<p class= 'intro'>
+    You cannot render the widget when it lies inside a container-node that has the css <code>display: none;</code>. This is because the widget renderes by calculating sizes. Never hide a containernode using <code>display: none;</code>, but by setting it out of the view:
+</p>
+```css
+    .container.hidden {
+        position: absolute !important;
+        visibility: hidden !important;
+        left: -9999px !important;
+        top: -9999px !important;
+    }
+```
+<p class= 'intro'>
+    Should you change the font-size, then the widget needs to be re-rendered to fit its sizes. The best way to do this is by fireing the event: <code>Y.fire('rerenderCheckbox')</code>, because all ITSACheckbox instances are listening to this event and will rerender when this event occurs.
+</p>
+
+<h2>licence</h2>
+<p class= 'copyright'>
+Copyright (c) 2014 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2014 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>
+</p>

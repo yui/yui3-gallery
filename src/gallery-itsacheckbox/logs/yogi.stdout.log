@@ -1,0 +1,81 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.25
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsacheckbox
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [info] munging in loader meta data into build.json
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-itsacheckbox
+   #1: 'clonedNode' is not defined.
+       clonedNode = Node.create(BOUNDINGBOX_TEMPLATE_NEWVERSION); // line 223, pos 21
+   #2: 'clonedNode' is not defined.
+       src.insert(clonedNode, 'after'); // line 225, pos 36
+   #3: 'clonedNode' is not defined.
+       srcParentNode.insert(clonedNode, checkBoxBeforeText ? 'before' : 'after'); // line 229, pos 46
+   #4: 'clonedNode' is not defined.
+       instance._set(BOUNDINGBOX, clonedNode); // redefine the boudingbox --> it has to be a node separate from srcNode // line 233, pos 48
+   #5: 'wrapperLeftPos' is not defined.
+       wrapperLeftPos = radiusleft-optionWidth; // line 763, pos 13
+   #6: 'wrapperLeftPos' is not defined.
+       wrapperNode.setStyle(LEFT, wrapperLeftPos+PX); // line 764, pos 40
+   #7: 'wrapperLeftPos' is not defined.
+       instance._changePosition = Math.round(-wrapperLeftPos/2); // line 766, pos 52
+   #8: 'parentNode' is not defined.
+       parentNode = copyNode || boundingBox; // line 834, pos 13
+   #9: 'parentNode' is not defined.
+       parentNode.setAttribute(DATA_FOCUSNEXTONENTER, STRINGTRUE); // line 835, pos 13
+   #10: 'parentNode' is not defined.
+       instance.get(SUBMITONENTER) && parentNode.setAttribute(DATA_SUBMITONENTER, STRINGTRUE); // line 837, pos 44
+   #11: 'parentNode' is not defined.
+       instance.get(PRIMARYBTNONENTER) && parentNode.setAttribute(DATA_PRIMARYBTNONENTER, STRINGTRUE); // line 838, pos 48
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-itsacheckbox/gallery-itsacheckbox.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-itsacheckbox
+shifter [info] found a subskin, shifting for gallery-itsacheckbox
+shifter [queu] coverage file read, starting coverage for: gallery-itsacheckbox/gallery-itsacheckbox.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-itsacheckbox/gallery-itsacheckbox-coverage.js
+shifter [queu] copying assets to skin for sam
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 103, pos 5
+   #2: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: content-box; // line 110, pos 5
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.409 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+Starting Grover on 1 files with PhantomJS@1.9.7
+  Running 15 concurrent tests at a time.
+  Using a 120 second timeout per test.
+✖ [http://127.0.0.1:5000/tests/src/gallery-itsacheckbox/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)
+    Javascript Error
+       TypeError: 'undefined' is not an object (evaluating 'Y.Test.Runner')
+       http://127.0.0.1:5000/tests/src/gallery-itsacheckbox/tests/unit/index.html?filter=coverage:28
+       http://127.0.0.1:5000/build/yui/yui.js:970
+       http://127.0.0.1:5000/build/yui/yui.js:945
+       http://127.0.0.1:5000/build/yui/yui.js:970
+       http://127.0.0.1:5000/build/yui/yui.js:1115
+       http://127.0.0.1:5000/build/yui/yui.js:7708
+       http://127.0.0.1:5000/build/yui/yui.js:7799
+       http://127.0.0.1:5000/build/yui/yui.js:7999
+       http://127.0.0.1:5000/build/yui/yui.js:8066
+       http://127.0.0.1:5000/build/yui/yui.js:4619
+       http://127.0.0.1:5000/build/yui/yui.js:4819
+       http://127.0.0.1:5000/build/yui/yui.js:4927
+       http://127.0.0.1:5000/build/yui/yui.js:4711
+Writing files in JSON format to: /src/gallery-itsacheckbox/logs/tests.json
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

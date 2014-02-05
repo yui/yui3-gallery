@@ -1,0 +1,21 @@
+{
+    "name"       : "gallery-itsacheckboxgroup",
+    "displayName": "Gallery: gallery-itsacheckboxgroup",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsacheckboxgroup" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "using-itsacheckboxgroup",
+            "displayName": "Rendering using html",
+            "description": "This example shows how to render ITSACheckBox using progressive enhancement",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsacheckbox", "progressive enhancement"],
+            "tags"    : ["gallery-itsacheckbox"],
+            "hideTableOfContents": true
+        }
+    ]
+}

@@ -20,7 +20,9 @@ YUI.add('gallery-itsacheckbox', function (Y, NAME) {
 
 var LANG = Y.Lang,
     YARRAY = Y.Array,
-    WIDGET_CLASS = 'yui3-itsacheckbox',
+    Node = Y.Node,
+    YUI3_ = 'yui3-',
+    WIDGET_CLASS = YUI3_+'itsacheckbox',
     READONLY = 'readonly',
     READONLY_CLASS = WIDGET_CLASS + '-' + READONLY,
     PARENT_CLASS = 'itsa-widget-parent',
@@ -66,6 +68,7 @@ var LANG = Y.Lang,
     DATA_SUBMITONENTER = DATA_+SUBMITONENTER,
     DATA_PRIMARYBTNONENTER = DATA_+PRIMARYBTNONENTER,
     DATA_FOCUSNEXTONENTER = DATA_+'focusnext'+ONENTER,
+    BOUNDINGBOX_TEMPLATE_NEWVERSION = DIVCLASS+YUI3_+'widget '+WIDGET_CLASS+' '+WIDGET_CLASS+'-content">'+ENDDIV,
     HTML_CHECKBOX_TEMPLATE = '<input id="{id}" type="checkbox" class="'+CREATED_CHECKBOX+'"{'+READONLY+'}{'+CHECKED+'}{'+DISABLED+'}>',
     TEMPLATE = '{htmlcheckbox}'+
                DIVCLASS+OPTION_WRAPPER+'">'+
@@ -155,6 +158,29 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
          * @private
          */
 
+
+
+        /**
+         * Reference to the parentnode of srcNode (input-element). Is used to check if a label-element is wrapping the html-checkbox
+         * @property _srcParentNode
+         * @type Y.Node
+         * @private
+         */
+
+        /**
+         * Flag to indicate if the original html-checkbox comes in front of the text: ONLY applyable when is wrapped by a label-element
+         * @property _checkBoxBeforeText
+         * @type Boolean
+         * @private
+         */
+
+        /**
+         * Backup-ref to the label-element - if applyable
+         * @property _bkpLabel
+         * @type Y.Node
+         * @private
+         */
+
         /**
          * @method initializer
          * @protected
@@ -180,12 +206,47 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
         renderUI : function() {
             var instance = this,
                 boundingBox = instance.get(BOUNDINGBOX),
-                src;
-            src = instance.get('srcNode');
+                src, bkpLabel, checkBoxInsideLabel, srcParentNode, checkBoxBeforeText;
+            src = instance._src = instance.get('srcNode');
             if (src && (src.get('tagName')==='INPUT') && (src.getAttribute('type')==='checkbox')) {
-                instance._src = Y.one(src);
-                src.addClass(HIDDEN_CLASS);
-                boundingBox.insert(src, 'before');
+              src.addClass(HIDDEN_CLASS);
+                // Need to check if checkbox is inside a label-element --> due to HTML validation the widget CANNOT lie inside a label!
+                instance._srcParentNode = srcParentNode = src.get('parentNode');
+                checkBoxInsideLabel = (srcParentNode.get('tagName')==='LABEL');
+                // in yui before 3.13.0 the boundingBox was created as a DIV behind srcNode
+                // as from 3.13.0, boundingBox===srcNode
+                if (boundingBox.get('tagName')==='INPUT') {
+                    // as from 3.13.0
+                    // no insert, because srcNode already is in the DOM
+                    clonedNode = Node.create(BOUNDINGBOX_TEMPLATE_NEWVERSION);
+                    if (!checkBoxInsideLabel) {
+                        src.insert(clonedNode, 'after');
+                    }
+                    else {
+                        instance._checkBoxBeforeText = checkBoxBeforeText = (srcParentNode.getHTML().toLowerCase().substr(0, 6)==='<label');
+                        srcParentNode.insert(clonedNode, checkBoxBeforeText ? 'before' : 'after');
+                        // now: mode the checkbox outside its parent labelnode:
+                        srcParentNode.insert(src, 'after');
+                    }
+                    instance._set(BOUNDINGBOX, clonedNode); // redefine the boudingbox --> it has to be a node separate from srcNode
+                    // Next, correct the classes that were added to the input-tag during initialization
+                    src.removeClass(LOADING_CLASS);
+                    src.removeClass(YUI3_+'widget');
+                    src.removeClass(WIDGET_CLASS);
+                    src.removeClass(WIDGET_CLASS+'-content');
+                    if (instance.get(READONLY)) {
+                        src.removeClass(READONLY_CLASS);
+                    }
+                }
+                else {
+                    // before 3.13.0
+                    boundingBox.insert(src, 'before');
+                }
+                // now disable label-activity:
+               bkpLabel = instance._bkpLabel = Y.one('label[for="'+src.get('id')+'"]');
+/*jshint expr:true */
+               bkpLabel && bkpLabel.removeAttribute('for');
+/*jshint expr:false */
             }
             if (instance._parentNode) {
                 instance._parentNode.addClass(PARENT_CLASS);
@@ -246,6 +307,7 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
                     */
                     instance.fire(VALUECHANGE_EVT, e);
                     if (instance._src) {
+                        instance._src.set(CHECKED, checked);
                         if (checked) {
                             instance._src.setAttribute(CHECKED, CHECKED);
                         }
@@ -324,9 +386,17 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
             );
 
             instance._eventhandlers.push(
-                parentNode.on('blur', function() {
-                    instance.blur();
-                })
+                parentNode.on(
+                    'blur',
+                    Y.bind(instance.blur, instance)
+                )
+            );
+
+            instance._eventhandlers.push(
+                Y.after(
+                    'rerenderCheckbox',
+                    Y.bind(instance.syncUI, instance)
+                )
             );
 
             instance._eventhandlers.push(
@@ -414,6 +484,9 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
             var instance = this,
                 prevVal = instance.get(CHECKED),
                 newVal;
+            if (instance.get(READONLY)) {
+                return;
+            }
             if (prevVal!==null) {
                 instance.set(CHECKED, !prevVal);
                 newVal = instance.get(CHECKED);
@@ -443,10 +516,11 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
         destructor : function() {
             var instance = this,
                 dd = instance.dd,
+                checkBoxBeforeText = instance._checkBoxBeforeText,
                 createdSrc = instance._createdSrc,
+                bkpLabel = instance._bkpLabel,
                 src = instance._src;
             instance._destroyAllNodes = true; // making always destroy nodes,
-                                              // independent whether developer calls destroy(true) or destroy(false)
             if (dd) {
                 dd.destroy();
             }
@@ -461,6 +535,16 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
             }
             if (instance._parentNode) {
                 instance._parentNode.removeClass(PARENT_CLASS);
+            }
+            // now reset label-activity:
+/*jshint expr:true */
+            bkpLabel && bkpLabel.setAttribute('for', src.get('id'));
+/*jshint expr:false */
+            // now: replace the checkbox inside its parent labelnode
+            if (typeof checkBoxBeforeText==='boolean') {
+/*jshint expr:true */
+                checkBoxBeforeText ? instance._srcParentNode.prepend(src) : instance._srcParentNode.append(src);
+/*jshint expr:false */
             }
         },
 
@@ -876,7 +960,7 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
     }
 );
 
-}, '@VERSION@', {
+}, 'gallery-2014.02.05-23-53', {
     "requires": [
         "yui-base",
         "dd-ddm",

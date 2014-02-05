@@ -1,0 +1,21 @@
+YUI(yuiconfig).use('gallery-itsacheckboxgroup', 'json-stringify', 'gallery-itsadialog', function(Y) {
+    var checkboxgroup, options, checked, button;
+
+    options = ['event 1', 'event 2', 'event 3', 'event 4'];
+    checked = ['event 2', 'event 3'];
+
+    button = Y.one('#getvalues');
+    checkboxgroup = new Y.ITSACheckboxGroup({srcNode: '#group', options: options, checked: checked});
+
+    checkboxgroup.after('render', function() {
+        button.removeClass('hidden');
+    });
+
+    checkboxgroup.render();
+
+    button.on('click', function(e) {
+        e.preventDefault();
+        Y.alert('selected values:', Y.JSON.stringify(checkboxgroup.get('checked')));
+    });
+
+});

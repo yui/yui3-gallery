@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsacheckboxgroup",
+    "builds": {
+        "gallery-itsacheckboxgroup": {
+            "jsfiles": [
+                "js/gallery-itsacheckboxgroup.js"
+            ]
+        }
+    }
+}

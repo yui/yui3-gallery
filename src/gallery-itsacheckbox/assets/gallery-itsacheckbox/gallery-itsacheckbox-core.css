@@ -7,15 +7,14 @@
 .pure-form-stacked label {
     display: block;
 }
+.yui3-itsacheckbox-hidden,
 .yui3-itsacheckbox-loading,
 .yui3-itsacheckbox-created-checkbox,
 .yui3-itsacheckbox-rerender {
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
-}
-.yui3-itsacheckbox-hidden {
-    display: none;
+    position: absolute !important;
+    visibility: hidden !important;
+    left: -9999px !important;
+    top: -9999px !important;
 }
 .itsa-widget-parent {
     display: inline-block;

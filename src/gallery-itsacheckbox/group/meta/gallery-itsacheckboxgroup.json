@@ -1,0 +1,11 @@
+{
+    "gallery-itsacheckboxgroup": {
+        "requires": [
+            "yui-base",
+            "oop",
+            "widget-base",
+            "timers",
+            "gallery-itsacheckbox"
+        ]
+    }
+}
