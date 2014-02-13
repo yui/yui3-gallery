@@ -1,0 +1,12 @@
+{
+  "projectName": "TreeView",
+  "galleryName": "gallery-yui3treeview-ng",
+  "description": "TreeView - tree widget for YUI",
+  "url": "https://github.com/haizaar/yui3-gallery/tree/master/src/gallery-yui3treeview-ng",
+  "logo": "http://yuilibrary.com/img/yui-logo.png",
+  "yuiSeedUrl" : "http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js",
+  "hasOwnExamples": true,
+  "examples": [
+    { "name": "example-tree", "displayName": "TreeView"}
+  ]
+}

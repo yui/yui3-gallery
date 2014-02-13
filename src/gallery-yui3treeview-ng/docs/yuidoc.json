@@ -1,0 +1,10 @@
+{
+  "name": "TreeView",
+  "description": "TreeView API",
+  "options": {
+    "external": {
+      "data": "http://yuilibrary.com/yui/docs/api/data.json"
+    },
+	"linkNatives": true
+  }
+}

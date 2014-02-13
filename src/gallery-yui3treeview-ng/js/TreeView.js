@@ -64,15 +64,39 @@
 		CONTENT_TEMPLATE :  "<ul></ul>",
 
 		initializer : function (config) {
+			/**
+			 * Fires when node is expanded / collapsed
+			 * @event nodeToggle
+			 * @param {TreeNode} treenode tree node that is expanding / collapsing.
+			 * Use this event to listed for nodes being clicked. 
+			 */
 			this.publish("nodeToggle", {
 				defaultFn: this._nodeToggleDefaultFn
 			});
+			
+			/**
+			 * Fires when node is collapsed
+			 * @event nodeCollapse
+			 * @param {TreeNode} treenode tree node that is collapsing
+			 */
 			this.publish("nodeCollapse", {
 				defaultFn: this._nodeCollapseDefaultFn
 			});
+			
+			/**
+			 * Fires when node is expanded
+			 * @event nodeExpand
+			 * @param {TreeNode} treenode tree node that is expanding
+			 */
 			this.publish("nodeExpand", {
 				defaultFn: this._nodeExpandDefaultFn
 			});
+			
+			/**
+			 * Fires when node is clicked
+			 * @event nodeClick
+			 * @param {TreeNode} treenode tree node that is being clicked
+			 */
 			this.publish("nodeClick", {
 				defaultFn: this._nodeClickDefaultFn
 			});
@@ -232,7 +256,7 @@
 			 * @attribute defaultChildType
 			 * @type String
 			 * @readOnly
-			 * @default child type definition
+			 * @description default child type definition
 			 */
 			defaultChildType : {  
 				value: "TreeNode",
@@ -241,7 +265,7 @@
 			/**
 			 * @attribute toggleOnLabelClick
 			 * @type Boolean
-			 * @whether to toogle tree state on label clicks with addition to toggle control clicks
+			 * @description whether to toogle tree state on label clicks with addition to toggle control clicks
 			 */
 			toggleOnLabelClick : {
 				value: true,
@@ -250,7 +274,7 @@
 			/**
 			 * @attribute startCollapsed
 			 * @type Boolean
-			 * @wither to render tree nodes expanded or collapsed by default
+			 * @description Whether to render tree nodes expanded or collapsed by default
 			 */
 			startCollapsed : {
 				value: true,
@@ -309,10 +333,10 @@
 		},
 		
 		/**
-			* Renders TreeNode
-			* @method renderUI
-			* @protected
-			*/
+		 * Renders TreeNode
+		 * @method renderUI
+		 * @protected
+		*/
 		renderUI : function() {
 			var boundingBox = this.get(BOUNDING_BOX),
                 treeLabel,
@@ -389,9 +413,9 @@
 		},
 		
 		/**
-			* Collapse the tree
-			* @method collapse
-			*/
+		 * Collapse the tree
+		 * @method collapse
+		 */
 		collapse : function () {
 			var boundingBox = this.get(BOUNDING_BOX);
 			if (!boundingBox.hasClass(classNames.collapsed)) {
@@ -400,9 +424,9 @@
 		},
 
 		/**
-			* Expands the tree
-			* @method expand
-			*/
+		 * Expands the tree
+		 * @method expand
+		 */
 		expand : function () {
 			var boundingBox = this.get(BOUNDING_BOX);
 			if (boundingBox.hasClass(classNames.collapsed)) {
@@ -450,19 +474,19 @@
 		},
 
 		/**
-			* Returns toggle control node
-			* @method _getToggleControlNode
-			* @protected
-			*/
+		 * Returns toggle control node
+		 * @method _getToggleControlNode
+		 * @protected
+		 */
 		_getToggleControlNode : function() {
 			return this.get(BOUNDING_BOX).one("." + classNames.toggle);
 		},
 			
 		/**
-			* Returns label content node
-			* @method _getLabelContentNode
-			* @protected
-			*/
+		 * Returns label content node
+		 * @method _getLabelContentNode
+		 * @protected
+		 */
 		_getLabelContentNode : function() {
 			return this.get(BOUNDING_BOX).one("." + classNames.labelContent);
 		}
@@ -471,44 +495,44 @@
 		NAME : TREENODE,
 		ATTRS : {
 			/**
-				* @attribute defaultChildType
-				* @type String
-				* @readOnly
-				* @description default child type definition
-				*/
+			 * @attribute defaultChildType
+			 * @type String
+			 * @readOnly
+			 * @description default child type definition
+			 */
 			defaultChildType : {  
 				value: "TreeNode",
 				readOnly: true
 			},
 			/**
-				* @attribute label
-				* @type String
-				*
-				* @description TreeNode node label 
-				*/
+			 * @attribute label
+			 * @type String
+			 *
+			 * @description TreeNode node label 
+			 */
 			label : {
 				validator: Y.Lang.isString,
 				value: ""
 			},
 			/**
-				* @attribute loadOnDemand
-				* @type boolean
-				*
-				* @description Whether children of this node can be loaded on demand
-				* (when this tree node is expanded, for example).
-				* Use with gallery-yui3treeview-ng-datasource.
-				*/
+			 * @attribute loadOnDemand
+			 * @type boolean
+			 *
+			 * @description Whether children of this node can be loaded on demand
+			 * (when this tree node is expanded, for example).
+			 * Use with gallery-yui3treeview-ng-datasource.
+			 */
 			loadOnDemand : {
 				value: false,
 				validator: Y.Lang.isBoolean
 			},
 			/**
-				* @attribute collapsed
-				* @type Boolean
-				* @readOnly
-				*
-				* @description Represents current treenode state - whether its collapsed or extended
-				*/
+			 * @attribute collapsed
+			 * @type Boolean
+			 * @readOnly
+			 *
+			 * @description Represents current treenode state - whether its collapsed or extended
+			 */
 			collapsed : {
 				value: null,
 				getter: function() {
@@ -517,34 +541,34 @@
 				readOnly: true
 			},
 			/**
-				* @attribute clabel
-				* @type String
-				*
-				* @description Canonical label for the node. 
-				* You can set it to anything you like and use later with your external tools.
-				*/
+			 * @attribute clabel
+			 * @type String
+			 *
+			 * @description Canonical label for the node. 
+			 * You can set it to anything you like and use later with your external tools.
+			 */
 			clabel : {
 				value: "",
 				validator: Y.Lang.isString
 			},
 			/**
-				* @attribute nodeId
-				* @type String
-				*
-				* @description Signifies id of this node.
-				* You can set it to anything you like and use later with your external tools.
-				*/
+			 * @attribute nodeId
+			 * @type String
+			 *
+			 * @description Signifies id of this node.
+			 * You can set it to anything you like and use later with your external tools.
+			 */
 			nodeId : {
 				value: "",
 				validator: Y.Lang.isString
 			},
 			/**
-				* @attribute isLeaf
-				* @type Boolean
-				*
-				* @description Signifies whether this node is a leaf node.
-				* Nodes with loadOnDemand set to true are not considered leafs.
-				*/
+			 * @attribute isLeaf
+			 * @type Boolean
+			 *
+			 * @description Signifies whether this node is a leaf node.
+			 * Nodes with loadOnDemand set to true are not considered leafs.
+			 */
 			isLeaf : {
 				value: null,
 				getter: function() {

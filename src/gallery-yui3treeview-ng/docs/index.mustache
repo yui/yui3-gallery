@@ -1,0 +1,225 @@
+
+{{>getting-started}}
+
+<h2>Using TreeView</h2>
+<p> Simplest tree can be built as follows:
+```
+<div class="yui3-skin-sam" id="tree">
+<script>
+YUI().use("gallery-yui3treeview-ng", function(Y) {
+    var treeview = new Y.TreeView({
+            children: [{
+                label: "Fruits",
+                children: [
+                    { label: "apple" },
+                    { label: "plum" },
+                    { label: "berries",
+                        children: [
+                            { label: "mulberry" },
+                            { label: "raspberry" }
+                        ]
+                    } 
+                ]
+            }]
+        });
+
+    treeview.render("#tree");
+});
+</script>
+```
+<p> `TreeView` uses `Widget Parent` - `Widget child` architecture, where single `TreeView` instance
+holds nested hierarchy of `TreeNode` objects.
+
+<h3>Tree configuration</h3>
+The following configuration properties are supported:
+<dl>
+<dt>startCollapsed</dt>
+<dd>By default tree is rendered having all of its nodes expanded. Set this property to `true` to render tree collapsed by default</dd>
+<dt>toggleOnLabelClick</dt>
+<dd>This property determines whether tree node will be collapsed/expanded when click only on a control ("+" sign) or on a node label as well</dd>
+</dl>
+
+<h3>Skinning</h3>
+<p>Sam skin is bundled with TreeView. Make sure to enable it by adding `yui3-skin-sam` class to the tree container.
+More info on YUI skinning is can be found <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">here</a>.
+
+<h2>Rendering from markup</h2>
+<p>Markup pattern
+```
+<div id="tree">
+    <ul>
+        <li><a><span>Fruits</span></a>
+            <ul>
+                <li><a><span>apple</span></a></li>
+                <li><a><span>plum</span></a></li>
+                <li><a><span>berries</span></a></li>
+                    <ul>
+                        <li><a><span>mulberry</span></a></li>
+                        <li><a><span>raspberry</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+```
+<p>To build tree from the above markup, simply
+```
+var treeview = new Y.TreeView({});
+treeview.render("#tree");
+```
+
+<h2>Changing existing tree</h2>
+<p>`TreeView` uses YUI widget parent-child to hold the tree hierarchy.
+This makes adding or removing nodes straight forward.
+
+<h3>Adding nodes</h3>
+<p>Using config - probably the most simplest way
+```
+treeview.add({ label: "orange" });
+treeview.add({ label: "peaches", children: [ {label: "white-flesh"}, {label: "yellow-flesh"} ]);
+```
+<p> Or using `TreeNode` instance
+```
+var node = Y.TreeNode({label: "pear"});
+treeview.add(node);
+```
+
+<h3>Removing nodes</h3>
+<p>Once you have `TreeNode` reference, simple call
+```
+treeview.remove(node);
+```
+
+<h2>CheckBox TreeView</h2>
+<p>Creating tree with check-boxes near each node is as simple as
+```
+var treeview = new Y.CheckBoxTreeView();
+treeview.render("#tree");
+```
+<p>`CheckBoxTreeView` supports `checkOnLabelClick` property which is similarly to `toggleOnLabelClick` defines whether node click changes checkbox state.
+
+<h3>Node checked state</h3>
+<p> Tree nodes are unchecked by default.
+<p>You can set initial node checked state through `checked` configuration property.
+It accepts either `unchecked`, `halfchecked`, `checked`,
+or correspondingly `10`, `20`, `30`. 
+Please note that property getter returns only numeric value.
+```
+var treeview = new Y.CheckBoxTreeView({
+        children: [
+            { label: "peach", checked: "checked"}
+        ]
+    });
+```
+<strong>Note: </strong>Specifying checked state when rendering from markup is currently not supported.
+
+<h4>Querying for checked nodes and paths</h4>
+There are two utility methods that helps querying checkbox tree for currently selected nodes:
+<dl>
+<dt>`getChecked`</dt>
+<dd>Returns the list of nodes that are roots of checked subtrees</dd>
+<dt>`getCheckedPaths`<dt>
+<dd>Returns list of pathes (breadcrumbs) of nodes that are roots of checked subtrees</dd>
+</dl>
+Example:
+```
+treeview.after("check", function(e) {
+    var checked_roots = [],
+        checked_paths = [];
+    Y.Array.each(treeview.getChecked(), function (n) {
+        checked_roots.push(n.get("label"));
+    });
+    Y.log("Checked roots:\n" + checked_roots.join("\n"));
+
+    Y.Array.each(treeview.getCheckedPaths(), function (n) {
+        checked_paths.push(n.join(" > "));
+    });
+    Y.log("Checked paths:\n" + checked_paths.join("\n"));
+});
+```
+
+<h2>Tree events</h2>
+Tree supports variety of events signifying that nodes are being clicked, checked, expanded and collapsed.
+In addition you can listen for regular widget events, for example monitoring nodes being added or removed.
+
+<h3>Watching node clicks</h3>
+
+```
+treeview.on("nodeClick", function(e) {
+    var node = e.treenode;
+    Y.log("Clicked node with label " + node.get("label"));
+    Y.log("Node path is " + node.path().join(" > "));
+});
+```
+<p>Here we also demonstrate `path` method of the `TreeNode` that returns list of node labels from the root to the node.</p>
+
+<p>`nodeClick` events get fired regardless whether tree state has actually changed. For example when you click on a tree leaf, 
+nothing changes in the tree UI, however `nodeClick` event is still being fired.
+
+<p>Events `nodeToggle`, `nodeExpand` and `nodeCollapse` are however only fired when actual tree node state is changed.
+That is they will be never fired for tree leaf. They also have `treenode` in the event payload.
+
+<p>For `CheckBoxTreeView` you can monitor for nodes being checked/unchecked by listening for `check` event
+```
+treeview.on("nodeClick", function(e) {
+    var node = e.treenode,
+        label = node.get("label"),
+        checked = node.get("checked");
+    Y.log("Intercepted check event for " + label + ", original state was " + checked);
+});
+```
+
+<h2>CSS model</h2>
+Here is `TreeView`/`TreeNode` CSS model.
+```
+<div id="cattree1"> <!-- tree container -->
+    <div class="yui3-widget yui3-treeview"> <!-- TreeView bounding box -->
+        <ul class="yui3-treeview-content">  <!-- TreeView content box -->
+        
+            <!-- 
+                TreeNode bounding box
+                Collapsed tree node will have additional CSS class yui3-treenode-collapsed
+            -->
+            <li class="yui3-widget yui3-treenode yui3-treenode-last">  
+                <a class="yui3-treenode-label"> <!-- TreeNode content box -->
+                    <!-- Decorate this class with toggle control CSS -->
+                    <span class="yui3-treenode-toggle-control">
+                        <!--
+                            toggleOnLabelClick/checkOnLabelClick actually refers to clicks
+                            on this span
+                        -->
+                        <span class="yui3-treenode-label-content">Fruits</span>
+                    </span>
+                </a>
+                <ul class="yui3-treenode-content">
+                    <!-- This is leaf. Its also a last node in its subtree -->
+                    <li class="yui3-widget yui3-treenode yui3-treenode-leaf yui3-treenode-last">
+                        <a class="yui3-treenode-label">
+                            <span class="yui3-treenode-label-content">apple</span>
+                        </a>
+                        <ul class="yui3-treenode-content"></ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+```
+<p>For `CheckBoxTreeView`, there will be another nested span for checkbox control UI
+```
+<a class="yui3-treenode-label">
+    <span class="yui3-treenode-toggle-control">
+        <!--
+            Checkbox span. Will always have one of the following classes set to signify node state:
+               - yui3-checkboxtreenode-checkbox-unchecked - node and its subtree are unchecked
+               - yui3-checkboxtreenode-checkbox-haldchecked - some nodes in the subtree are checked
+               - yui3-checkboxtreenode-checkbox-checked - all nodes on the subtree are checked
+        -->
+        <span class="yui3-checkboxtreenode-checkbox yui3-checkboxtreenode-checkbox-unchecked">
+            <span class="yui3-treenode-label-content">peack</span>
+        </span>
+    </span>
+</a>
+```
+

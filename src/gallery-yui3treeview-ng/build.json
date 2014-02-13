@@ -1,0 +1,25 @@
+{
+    "name": "gallery-yui3treeview-ng",
+    "builds": {
+        "gallery-yui3treeview-ng": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "substitute",
+                    "widget",
+                    "widget-parent",
+                    "widget-child",
+                    "node-focusmanager",
+                    "array-extras"
+                ],
+                "optional": [
+                    ""
+                ]
+            },
+            "skinnable": "true",
+            "meta": {
+                "jsfiles ": " TreeView.js,CheckBoxTreeView.js"
+            }
+        }
+    }
+}

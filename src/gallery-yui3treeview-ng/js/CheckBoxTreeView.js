@@ -11,6 +11,11 @@
 	Y.CheckBoxTreeView = Y.Base.create(CHECKBOXTREEVIEW, Y.TreeView, [], {
 		
 		initializer : function(config) {
+			/**
+			 * Fires when node checkbox state is changed
+			 * @event check
+			 * @param {TreeNode} treenode tree node that is checked
+			 */
 			this.publish("check", {
 				defaultFn: this._checkDefaultFn
 			});
@@ -138,7 +143,7 @@
 			 * @attribute defaultChildType
 			 * @type String
 			 * @readOnly
-			 * @default child type definition
+			 * @description default child type definition
 			 */
 			defaultChildType : {  
 				value: "CheckBoxTreeNode",
@@ -147,7 +152,7 @@
 			/**
 			 * @attribute checkOnLabelClick
 			 * @type Boolean
-			 * @whether to change node checked state on label clicks with addition to checkbox control clicks
+			 * @description Whether to change node checked state on label clicks with addition to checkbox control clicks
 			 */
 			checkOnLabelClick : {
 				value: true,
@@ -161,7 +166,7 @@
  * It extends Y.TreeNode, please refer to it's documentation for more info.   
  * @class CheckBoxTreeNode
  * @constructor
- * @extends Widget
+ * @extends TreeNode
  * @param {Object} config User configuration object.
  */
 	Y.CheckBoxTreeNode = Y.Base.create(CHECKBOXTREENODE, Y.TreeNode, [], {
@@ -341,8 +346,8 @@
 			/**
 			* @attribute checked
 			* @type {String|Number}
-			* @description default child type definition. Accepts either <code>unchecked</code>, <code>halfchecked</code>, <code>checked</code>
-			* or correspondingly 10, 20, 30.
+			* @description Signifies current "checked" state. Accepts either <code>unchecked</code>, <code>halfchecked</code>, <code>checked</code>.
+			* or correspondingly 10, 20, 30. Getter returns only numeric value.
 			*/
 			checked : {
 				value : 10,

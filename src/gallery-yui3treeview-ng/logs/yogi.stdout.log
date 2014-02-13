@@ -1,0 +1,25 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.25
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-yui3treeview-ng
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [warn] no build.json file, downshifting to convert ant files
+shifter [info] looking for ant files
+shifter [info] found 1 .properties files, upshifting to convert
+shifter [info] parsing build.properties
+shifter [info] saving newly parsed build.json file for gallery-yui3treeview-ng
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-yui3treeview-ng
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.003 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

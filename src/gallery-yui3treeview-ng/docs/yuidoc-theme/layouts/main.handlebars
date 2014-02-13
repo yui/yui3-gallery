@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{htmlTitle}}</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.6.0/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/combo/css?main-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/css/apidocs-min.css">
+    <link rel="stylesheet" href="http://yuilibrary.com/vendor/prettify/prettify-min.css">
+    <link rel="shortcut icon" type="image/png" href="http://yuilibrary.com/img/favicon.png">
+    <script src="{{yuiSeedUrl}}"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<a href="https://github.com/yui/yuidoc">
+	<img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub">
+</a>
+
+<div id="doc">
+	
+	<header>	
+    <div id="hd" class="yui3-g">
+		<div class="content">		
+			<div class="yui3-u-3-4">
+			{{#if projectLogo}}
+				<h1><img src="{{projectLogo}}" title="{{projectName}}"></h1>
+			{{else}}
+				<h1><img src="{{projectAssets}}/css/logo.png" title="{{projectName}}"></h1>
+			{{/if}}
+			</div>
+			<div class="yui3-u-1-4 version">
+				{{#if projectVersion}}
+				<em>API Docs for: {{projectVersion}}</em>
+				{{/if}}
+			</div>
+		</div>
+    </div>
+	</header>
+
+	<div id="bd" class="clearfix yui3-g">
+	
+		<!-- Title -->
+		<div class="yui3-u-1">
+			<div id="docs-hd" class="content">
+				<h1>{{title}}</h1>
+				<!-- <a href="#docs-toc" class="jump" tabindex="1">Jump to Table of Contents</a> -->
+			</div>
+		</div>
+
+		<!-- Side bar begin -->  
+		<div class="yui3-u-1-4">
+				<div id="docs-sidebar" class="sidebar apidocs">
+					{{>sidebar}}
+				</div>
+		</div>
+		<!-- Side bar end -->
+
+		<!-- Main content begin -->
+		<div class="yui3-u-3-4 print-max-width">
+			{{>options}}
+			<div class="apidocs">
+				<div id="docs-main">
+					<div class="content">
+						{{>layout_content}}
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Main content end -->
+    </div>
+</div>
+
+<script src="{{projectAssets}}/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="{{projectAssets}}/js/yui-prettify.js"></script>
+<script src="{{projectAssets}}/../api.js"></script>
+<script src="{{projectAssets}}/js/api-filter.js"></script>
+<script src="{{projectAssets}}/js/api-list.js"></script>
+<script src="{{projectAssets}}/js/api-search.js"></script>
+<script src="{{projectAssets}}/js/apidocs.js"></script>
+</body>
+</html>

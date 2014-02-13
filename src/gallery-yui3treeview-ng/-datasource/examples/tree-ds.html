@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.6.0/build/cssreset/cssreset-min.css">
+		<style type="text/css">
+			li {
+				margin-left: 15px;
+				list-style-type: circle;
+			}
+			h3 {
+				font-weight: bold;
+			}
+		</style>
+
+		<link rel="stylesheet" type="text/css" href="../../../build/gallery-yui3treeview-ng/assets/skins/sam/gallery-yui3treeview-ng.css"></link>
+		<link rel="stylesheet" type="text/css" href="../../../build/gallery-yui3treeview-ng/assets/skins/sam/gallery-yui3treeview-ng-skin.css"></link>
+
+		<script type="text/javascript" src="http://yui.yahooapis.com/combo?3.6.0/build/yui/yui-min.js"></script>
+		<script src="../../../build/gallery-yui3treeview-ng/gallery-yui3treeview-ng-debug.js"></script>
+		<script src="../../../build/gallery-yui3treeview-ng-datasource/gallery-yui3treeview-ng-datasource-debug.js"></script> 
+	<head>
+
+	<body class="yui3-skin-sam" style="font-size:13px; font-family:arial">
+
+		<div style="margin: 20px; float: left; clear: both;">
+			<h3>Simple tree from config. Click "Load me" nodes to load them</h3>
+			<div id="cattree1" style="min-width:400px; min-height:300px; padding-right: 20px; padding-bottom: 20px; border: 1px solid gray"></div>
+		</div>
+		
+		<div style="margin: 20px; float: left; clear: both;">
+			<h3>Simple tree from config. Click "[X]" to remove nodes.</h3>
+			<div id="cattree2" style="min-width:400px; min-height:300px; padding-right: 20px; padding-bottom: 20px; border: 1px solid gray"></div>
+		</div>
+
+		<script>
+			YUI().use("gallery-yui3treeview-ng", "gallery-yui3treeview-ng-datasource", function(Y) {
+				var treeConfig = {
+						startCollapsed: false,
+						children: [ {
+							label: "Root",
+							children: [ 
+								{
+									label : "Load me",
+									loadOnDemand : true, // This marks this node as loadable
+								},
+								{
+									label : "sub 2",
+									children : [
+										{ label: "sub 2-1"},
+										{
+											label: "sub 2-2",
+											children: [
+												{ label: "sub 2-2-1" },
+												{ label: "sub 2-2-2" },
+												{ label: "sub 2-2-3" }
+											]
+										},
+									]
+								}
+							]
+						}]
+				},
+				treeview1 = new Y.TreeView(treeConfig),
+				treeview2 = new Y.TreeView(treeConfig);
+
+				var subTreeData1 = [
+					{ label : "Loaded subtree", children: [ { label : "Loaded sub child 1" },  {label : "Loaded sub child 2"} ] },
+					{ label : "Loaded child" },
+					{ label : "Load me", loadOnDemand: true },
+					{ label : "Loaded child" },
+				]
+
+				var subTreeData2 = [
+					{ label : "Loaded subtree<span style='padding-left: 10px;' class='killer'>[X]</span>", 
+								children:	[	{ label : "Loaded sub child 1<span style='padding-left: 10px;' class='killer'>[X]</span>" },
+												{label : "Loaded sub child 2<span style='padding-left: 10px;' class='killer'>[X]</span>"}
+											]
+					},
+					{ label : "Loaded child<span style='padding-left: 10px;' class='killer'>[X]</span>" },
+					{ label : "Load me<span style='padding-left: 10px;' class='killer'>[X]</span>", loadOnDemand: true },
+					{ label : "Loaded child<span style='padding-left: 10px;' class='killer'>[X]</span>" },
+				]
+
+				treeview1.plug(Y.Plugin.TreeViewDataSource, {
+					source : subTreeData1,
+					sourceMethod : "local",
+					loadingMsg : "Loading...",
+				});
+				
+				treeview2.plug(Y.Plugin.TreeViewDataSource, {
+					source : subTreeData2,
+					sourceMethod : "local",
+					loadingMsg : "Loading...",
+				});
+				
+				var nodeclickFn = function(e) {
+					this.ds.load(e.treenode);
+				}
+				
+				treeview1.on("nodeExpand", Y.bind(nodeclickFn, treeview1));
+				treeview2.on("nodeExpand", Y.bind(nodeclickFn, treeview2));
+
+				treeview1.render("#cattree1");
+				treeview2.render("#cattree2");
+				
+				// Quick and dirty way to augment tree nodes:
+				Y.one("#cattree2").all(".yui3-treenode-label-content").each(function(node) {
+					node.appendChild("<span style='padding-left: 10px;' class='killer'>[X]</span>");
+				});
+				Y.one("#cattree2").delegate("click", Y.bind(function(e) {
+					var widget = Y.Widget.getByNode(e.target);
+					widget.remove();				
+				}, this), ".killer");
+
+			});
+		</script>
+	</body>
+</html>

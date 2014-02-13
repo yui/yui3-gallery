@@ -1,0 +1,242 @@
+
+<!-- Tree from config -->
+<h2>Simple tree from config</h2>
+<div class="example yui3-skin-sam">
+    <div id="cattree1" style="min-height: 200px;"></div>
+    <p id="clickme1" style="margin-bottom:10px;">
+           <a style="cursor:pointer;">Click me to add node</a>
+    </p>
+    <p id="unclickme1" style="display:none;margin-bottom:10px;">
+           <a style="cursor:pointer">Click me to remove node</a>
+    </p>
+    <ul id="report1"></ul>
+</div>
+
+<script>
+    YUI({gallery: 'gallery-2012.08.29-20-10'}).use("gallery-yui3treeview-ng", function(Y) {
+        var treeview = new Y.TreeView({
+                startCollapsed: false,
+                children: [ {
+                    label: "Root",
+                    children: [ 
+                        {
+                            label : "sub 1",
+                            children : [
+                                { label: "sub 1-1"},
+                                { label: "sub 1-2"},
+                            ]
+                        },
+                        {
+                            label : "sub 2",
+                            children : [
+                                { label: "sub 2-1"},
+                                {
+                                    label: "sub 2-2",
+                                    children: [
+                                        { label: "sub 2-2-1" },
+                                        { label: "sub 2-2-2" }
+                                    ]
+                                },
+                            ]
+                        }
+                    ]
+                }]
+        });
+        treeview.render("#cattree1");
+        
+        var r = Y.one("#report1");
+        treeview.on("nodeclick", function(e) {
+            var node = e.treenode,
+                label = node.get("label"),
+                isLeaf = node.get("isLeaf"),
+                collapsed = node.get("collapsed");
+
+            r.setContent("");
+            r.appendChild("<li>You clicked " + (isLeaf ? "leaf" : "node") + " " + label);
+            r.appendChild("<li>Path to root is: " + node.path().join(" > "));
+            r.appendChild("<li>State is: " + (collapsed ? "collapsed" : "expanded") );
+        });
+
+        Y.one("#clickme1").once("click", function (e) {
+            treeview.add({
+                label: "foster-child"
+            })
+            e.target.remove(true);
+            Y.one("#unclickme1").setStyle("display", "block");
+        });
+        Y.one("#unclickme1").once("click", function (e) {
+            treeview.remove(1);
+            e.target.remove(true);
+        });
+    });
+</script>
+
+<h3>Complete example source</h3>
+```
+<div class="example yui3-skin-sam">
+    <div id="cattree1" style="min-height: 200px;"></div>
+    <p id="clickme1" style="margin-bottom:10px;">
+           <a style="cursor:pointer;">Click me to add node</a>
+    </p>
+    <p id="unclickme1" style="display:none;margin-bottom:10px;">
+           <a style="cursor:pointer">Click me to remove node</a>
+    </p>
+    <ul id="report1"></ul>
+</div>
+
+<script>
+    YUI({gallery: 'gallery-2012.08.29-20-10'}).use("gallery-yui3treeview-ng", function(Y) {
+        var treeview = new Y.TreeView({
+                startCollapsed: false,
+                children: [ {
+                    label: "Root",
+                    children: [ 
+                        {
+                            label : "sub 1",
+                            children : [
+                                { label: "sub 1-1"},
+                                { label: "sub 1-2"},
+                            ]
+                        },
+                        {
+                            label : "sub 2",
+                            children : [
+                                { label: "sub 2-1"},
+                                {
+                                    label: "sub 2-2",
+                                    children: [
+                                        { label: "sub 2-2-1" },
+                                        { label: "sub 2-2-2" }
+                                    ]
+                                },
+                            ]
+                        }
+                    ]
+                }]
+        });
+        treeview.render("#cattree1");
+        
+        var r = Y.one("#report1");
+        treeview.on("nodeclick", function(e) {
+            var node = e.treenode,
+                label = node.get("label"),
+                isLeaf = node.get("isLeaf"),
+                collapsed = node.get("collapsed");
+
+            r.setContent("");
+            r.appendChild("<li>You clicked " + (isLeaf ? "leaf" : "node") + " " + label);
+            r.appendChild("<li>Path to root is: " + node.path().join(" > "));
+            r.appendChild("<li>State is: " + (collapsed ? "collapsed" : "expanded") );
+        });
+
+        Y.one("#clickme1").once("click", function (e) {
+            treeview.add({
+                label: "foster-child"
+            })
+            e.target.remove(true);
+            Y.one("#unclickme1").setStyle("display", "block");
+        });
+        Y.one("#unclickme1").once("click", function (e) {
+            treeview.remove(1);
+            e.target.remove(true);
+        });
+    });
+</script>
+```
+
+<!-- Tree from markup -->
+<h2>Simple tree from markup</h2>
+<div class="example yui3-skin-sam">
+    <div id="cattree2" style="min-height:200px">
+        <ul>
+            <li><a><span>Root</span></a>
+                <ul>
+                    <li><a><span>sub 1</span></a>
+                        <ul>
+                            <li><a><span>sub 1-1</span></a></li>
+                            <li><a><span>sub 1-2</span></a></li>
+                        </ul>
+                    </li>
+                    <li><a><span>sub 2</span></a>
+                        <ul>
+                            <li><a><span>sub 2-1</span></a></li>
+                            <li><a><span>sub 2-2</span></a>
+                                <ul>
+                                    <li><a><span>sub 2-2-1</span></a></li>
+                                    <li><a><span>sub 2-2-2</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <p id="clickme2">
+        <a style="cursor:pointer;">Click me to render tree above!</a>
+        <br><br>
+    </p>
+</div>
+
+<script>
+    YUI().use("gallery-yui3treeview-ng", function(Y) {
+        Y.one("#clickme2").once("click", function(e) {
+            var treeview = new Y.TreeView({
+                        startCollapsed: false,
+                        // Its important to set srcNode as a <ul> of the main widget container
+                        srcNode: "#cattree2 > ul" 
+                    });
+            treeview.render();  
+            e.target.remove(true);
+        });
+    });
+</script>
+
+<h3>Complete example source</h3>
+```
+<div class="example yui3-skin-sam">
+    <div id="cattree2" style="min-height:200px">
+        <ul>
+            <li><a><span>Root</span></a>
+                <ul>
+                    <li><a><span>sub 1</span></a>
+                        <ul>
+                            <li><a><span>sub 1-1</span></a></li>
+                            <li><a><span>sub 1-2</span></a></li>
+                        </ul>
+                    </li>
+                    <li><a><span>sub 2</span></a>
+                        <ul>
+                            <li><a><span>sub 2-1</span></a></li>
+                            <li><a><span>sub 2-2</span></a>
+                                <ul>
+                                    <li><a><span>sub 2-2-1</span></a></li>
+                                    <li><a><span>sub 2-2-2</span></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <p id="clickme2">
+        <a style="cursor:pointer;">Click me to render tree above!</a>
+        <br><br>
+    </p>
+</div>
+
+<script>
+    YUI().use("gallery-yui3treeview-ng", function(Y) {
+        Y.one("#clickme2").once("click", function(e) {
+            var treeview = new Y.TreeView({
+                        startCollapsed: false,
+                        // Its important to set srcNode as a <ul> of the main widget container
+                        srcNode: "#cattree2 > ul" 
+                    });
+            treeview.render();  
+            e.target.remove(true);
+        });
+    });
+</script>
+```
