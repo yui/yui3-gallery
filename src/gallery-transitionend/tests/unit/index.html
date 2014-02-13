@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+    <title>transitionend</title>
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+    <style>
+.test {
+    height: 100px;
+    width: 100px;
+    background: red;
+-webkit-transition: all 100ms linear;
+   -moz-transition: all 100ms linear;
+    -ms-transition: all 100ms linear;
+     -o-transition: all 100ms linear;
+        transition: all 100ms linear;
+}
+    </style>
+</head>
+<body class="yui3-skin-sam">
+    <div class="test"></div>
+    <div id="logger"></div>
+<script>
+YUI({
+    coverage: ['gallery-transitionend'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw',
+    modules: {
+        'gallery-transitionend': {
+            fullpath: '/build/gallery-transitionend/gallery-transitionend-min.js',
+            requires: [
+                'event-base',
+                'event-synthetic'
+            ]
+        }
+    }
+}).use('test-console', 'test', 'transitionend-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('transitionend');
+    Y.Test.Runner.run();
+});
+</script>
+</body>
+</html>

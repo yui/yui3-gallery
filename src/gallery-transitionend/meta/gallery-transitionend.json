@@ -1,0 +1,8 @@
+{
+    "gallery-transitionend": {
+        "requires": [
+            "event-base",
+            "event-synthetic"
+        ]
+    }
+}

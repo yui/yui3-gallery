@@ -1,0 +1,10 @@
+{
+    "name": "gallery-transitionend",
+    "builds": {
+        "gallery-transitionend": {
+            "jsfiles": [
+                "js/transitionend.js"
+            ]
+        }
+    }
+}
