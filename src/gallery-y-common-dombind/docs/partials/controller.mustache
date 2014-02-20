@@ -1,0 +1,33 @@
+<p>Controller methods/actions comes to support the events attaching functionality of the application, for example on click do something or on focus do another thing, controller methods are specified on the contructor of the DomBind instance, on controller methods, <code>this</code> will refer to the Node element that is triggering the controller's method, given the following example, <code>this</code> will be the <code>button</code> Node:</p>
+
+
+```
+<div id="container">
+    <form>
+        <div>
+        Name:
+        <input type="text" data-db-bind="name"/>
+        </div>
+        <div>
+        Last Name:
+        <input type="text" data-db-bind="lastName"/>
+        </div>
+        <div>
+        Married:
+        <input type="checkbox" data-db-bind="married"/>
+        </div>
+        <button data-db-onclick="submitPerson();">submit</button>
+    </form>
+</div>
+```
+
+```
+var dombind = new Y.Common.DomBind({
+    container: Y.one('#container'),
+    controller: {
+        submitPerson: function() {
+            alert('Person submitted:' + Y.JSON.stringify(dombind.get('model')))
+        }
+    }
+});
+```

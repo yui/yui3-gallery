@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+    <title>gallery-y-common-dombind</title>
+    <script src="/build/yui/yui.js"></script>
+    <script src="/build/gallery-y-common-dombind/gallery-y-common-dombind-debug.js"></script>
+    <script src="js/tests.js"></script>
+    <meta charset="utf-8" />
+</head>
+<body class="yui3-skin-sam">
+<div class="activities-list" id="h">
+    Name:
+    <input class="name" data-db-bind="name" data-db-onblur="afterBlur();" data-db-onfocus="afterFocus();" type="text" value=""/>
+    <span data-db-bind="name"></span>
+    <br>
+    Phone:
+    <input class="phone" data-db-bind="phone.number" type="text" value=""/>
+    <span data-db-bind="phone.number"></span>
+    <br>
+    Married:
+    <input data-db-bind="married" class="marital-status" type="checkbox" />
+    <span data-db-bind="married"></span>
+    <br>
+    Gender:
+    <input name="gender" data-db-bind="gender" class="gender" type="radio" value="male" />
+    <input name="gender" data-db-bind="gender" class="gender" type="radio" value="female"/>
+    <span data-db-bind="gender"></span>
+    <div class="add-reminder">
+        <button class="btn-primary btn add-submit icon-plus-sign">Add</button>
+    </div>
+    <br>
+    Tasks type:
+    <select name="type" data-db-bind="type" data-db-onchange="tasksTypeChange();" class="type">
+        <option value="personal">Personal</option>
+        <option value="enterprise">Enterprise</option>
+    </select>
+    <span data-db-bind="type"></span>
+    
+    <div>
+        <span class="subtitle">Previous tasks</span>
+        <ul class="tasks previous" data-db-template="task-template"  data-db-container-loop-model="task in previousTasks|onBeforeEach:processTask">
+        </ul>
+    </div>
+    <div>
+        <span class="subtitle toggler-header toggler-header-expanded">Today's Tasks</span>
+        <ul class="tasks today toggler-content toggler-content-expanded" data-db-template="task-template"  data-db-container-loop-model="task in todayTasks|onBeforeEach:processTask,onAfterEach:initTaskComponents">
+        </ul>
+    </div>
+    <div>
+        <span class="subtitle">Tomorrows's Tasks</span>
+        <ul class="tasks tomorrow">
+        </ul>
+    </div>
+    <div>
+        <span class="subtitle">Future Tasks</span>
+        <ul class="tasks future">
+        </ul>
+    </div>
+</div>
+
+
+<div id="logger"></div>
+
+<script>
+YUI({
+    coverage: ['gallery-y-common-dombind'],
+    filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+}).use('test-console', 'test', 'module-tests', function(Y) {
+    
+    (new Y.Test.Console()).render('#logger');
+
+    Y.Test.Runner.setName('gallery-y-common-dombind');
+    Y.Test.Runner.run();
+});
+</script>
+<script id="task-list-item-template" type="text/x-html-template">
+<li id="task-{{taskId}}" class="{{done}}">
+    <div class="activity">
+        <button class="btn activity-finished icon-check-empty">Finish</button>
+        <button class="btn activity-undo icon-check">Undo</button>
+        <span class="activity-title">{{name}}</span> <span
+            class="activity-date">{{date}}</span>
+        <button class="btn activity-delete icon-remove-sign" data-db-onclick="deleteTask($event, task);">Delete</button>
+        <input type="hidden" value="{{taskId}}" />
+    </div>
+    <div class="edit">
+        <form>
+            <input type="hidden" value="{{taskId}}" />
+            <div class="control-group">
+                <label class="control-label" for="title">Title</label>
+                <div class="controls">
+                     <input name="title" data-db-bind="task.name" type="text" class="edit-title field-required" value="{{name}}"></input>
+                    <span data-db-bind="task.name"></span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="description">Description</label>
+                <div class="controls">
+                    <textarea name="description" class="edit-description field-required" placeholder="Event Description">{{description}}</textarea>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label class="control-label" for="time">Day</label>
+                <div class="lfr-input-date controls">
+                    <input id="taskCal{{taskId}}" name="time" type="{{dateFieldType}}" class="edit-time field-required" value="{{date}}"></input>
+                </div>
+            </div>
+
+       
+            <button class="btn edit-submit">Submit</button>
+            <button class="btn edit-cancel">Cancel</button>
+
+        </form>
+    </div>
+</li>
+</script>
+
+</body>
+</html>

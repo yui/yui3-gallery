@@ -1,0 +1,57 @@
+<h3>Model depth</h3>
+
+<p>Currently only can use one level model and model object can not be accessed in depth, for example can only defined model objects as :</p>
+```
+{
+    "userId": 1243,
+    "name": "John Doe",
+    "married": true,
+    "gender": "male",
+    "futureTasks": [],
+    "tomorrowTasks": [],
+    "todayTasks": [{
+            "taskId": 2501,
+            "description": "js trends and frontend",
+            "name": "JS Conf 2014",
+            "date": "2014-01-21",
+            "isCompleted": false
+        }, {
+            "taskId": 2301,
+            "description": "js conf",
+            "name": "NodeJS Conffff 54545",
+            "date": "2014-01-21",
+            "isCompleted": true
+    }]
+}
+```
+
+And can not be for example : 
+```
+{
+    "userId": 1243,
+    "name": "John Doe",
+    "married": true,
+    "gender": "male",
+    "phone": {
+        "area": "(2392)",
+        "number": "21313-231"
+    },
+    "futureTasks": [],
+    "tomorrowTasks": [],
+    "todayTasks": [{
+            "taskId": 2501,
+            "description": "js trends and frontend",
+            "name": "JS Conf 2014",
+            "date": "2014-01-21",
+            "isCompleted": false
+        }, {
+            "taskId": 2301,
+            "description": "js conf",
+            "name": "NodeJS Conffff 54545",
+            "date": "2014-01-21",
+            "isCompleted": true
+    }]
+}
+```
+
+<p>Where <code>phone</code> is a compound object which has a second level, cases like this also applies for array lists, so are not currently supported, only single leveled model.</p>

@@ -1,0 +1,26 @@
+{
+    "name"       : "gallery-y-common-dombind",
+    "displayName": "Gallery: gallery-y-common-dombind",
+    "description": "Utility to bind dom with javascript and viceversa, helping to avoid events attaching and data updates directly",
+    "author"     : [ "asotog88" ],
+    "use"        : [ "gallery-y-common-dombind" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [{
+        "name": "example-simple-binding",
+        "displayName": "Simple binding",
+        "description": "This component provides a simple way to bind the dom to model and viceversa without any configuration, only by defining the model properties to be bind inside of the html"
+    }, {
+        "name": "example-more-binding",
+        "displayName": "Multiple elements binding",
+        "description": "Multiple elements can be bind to same model property, reflecting the model updates to every element bind"
+    }, {
+        "name": "example-setting-model-from-code",
+        "displayName": "Set model from code",
+        "description": "The model also can be updated from the code directly and changes are going to be reflected in the ui"
+    }],
+    
+    "apiDocsUrl": "/api/classes/Common.DomBind.html",
+    "yuiConfig": "{base: 'http://yui.yahooapis.com/3.13.0/build/',comboBase: 'http://yui.yahooapis.com/combo?',root: '3.13.0/build/'}"
+}

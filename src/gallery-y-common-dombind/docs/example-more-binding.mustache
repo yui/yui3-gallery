@@ -1,0 +1,71 @@
+{{>module-include}}
+<style>
+    #container {
+        padding: 20px;
+        background: #CDF2FF;
+    }
+    
+</style>
+<div class="intro">
+    <p>
+    {{description}}
+    </p>
+</div>
+
+<div id="container">
+    <form>
+        <div>
+        Name:
+        <input type="text" data-db-bind="name"/>
+        So your name is <span data-db-bind="name"></span> ?
+        </div>
+    </form>
+</div>
+
+<h2>Example</h2>
+
+<h3>HTML</h3>
+```
+<!-- component include  -->
+{{>module-include}}
+
+<!-- example  -->
+<div id="container">
+    <form>
+        <div>
+        Name:
+        <input type="text" data-db-bind="name"/>
+        So your name is <span data-db-bind="name"></span> ?
+        </div>
+    </form>
+</div>
+
+```
+
+
+<h3>Javascript</h3>
+```
+YUI().use('gallery-y-common-dombind', function(Y) {
+
+    var dombind = new Y.Common.DomBind({
+        container: Y.one('#container'),
+        model: {
+            name: 'john doe'
+        }
+    });
+    
+});
+```
+
+
+<script>
+YUI({{{yuiConfig}}}).use('gallery-y-common-dombind', 'json-stringify', function(Y) {
+
+    var dombind = new Y.Common.DomBind({
+        container: Y.one('#container'),
+        model: {
+            name: 'john doe'
+        }
+    });
+});
+</script>

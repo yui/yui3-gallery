@@ -1,0 +1,106 @@
+{
+    "name": "gallery-y-common-dombind",
+    "passed": 24,
+    "failed": 0,
+    "errors": 0,
+    "ignored": 0,
+    "total": 24,
+    "duration": 306,
+    "type": "report",
+    "Automated Tests": {
+        "name": "Automated Tests",
+        "passed": 12,
+        "failed": 0,
+        "errors": 0,
+        "ignored": 0,
+        "total": 12,
+        "duration": 151,
+        "type": "testcase",
+        "Set model": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Set model",
+            "duration": 1
+        },
+        "Verify number of items created in the list after model load": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Verify number of items created in the list after model load",
+            "duration": 23
+        },
+        "Change input that is using bind directive": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Change input that is using bind directive",
+            "duration": 0
+        },
+        "Radio button model listener": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Radio button model listener",
+            "duration": 1
+        },
+        "Simulate change directive using directive": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Simulate change directive using directive",
+            "duration": 0
+        },
+        "Checkbox button model listener": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Checkbox button model listener",
+            "duration": 1
+        },
+        "Simulate bind input field value changes also on model bind": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Simulate bind input field value changes also on model bind",
+            "duration": 2
+        },
+        "Simulate bind input field value  using nested model property changes also on model bind": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Simulate bind input field value  using nested model property changes also on model bind",
+            "duration": 1
+        },
+        "After each item rendered in the list, is executing filter defined": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "After each item rendered in the list, is executing filter defined",
+            "duration": 1
+        },
+        "Simulate click on iterable item button and retrieve the item model": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Simulate click on iterable item button and retrieve the item model",
+            "duration": 1
+        },
+        "Simulate value change of iterable input and check values according to main model object": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "Simulate value change of iterable input and check values according to main model object",
+            "duration": 1
+        },
+        "List ui updated when list property from model is also updated": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "List ui updated when list property from model is also updated",
+            "duration": 5
+        }
+    },
+    "timestamp": "Wed Feb 19 22:28:56 2014",
+    "consoleInfo": []
+}

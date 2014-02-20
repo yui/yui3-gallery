@@ -1,0 +1,24 @@
+<p>Sometimes when working with extensive  applications in javascript, attaching events and set data models can be really cumbersome, two way data binding is an approach to reflect model changes into dom and viceversa, this module provides an easy way to achieve this by just setting the declarations of the model bind in the markup:</p>
+
+```
+<div id="container">
+    <form>
+        <div>
+        Name:
+        <input type="text" data-db-bind="name"/>
+        </div>
+        <div>
+        Last Name:
+        <input type="text" data-db-bind="lastName"/>
+        </div>
+        <div>
+        Married:
+        <input type="checkbox" data-db-bind="married"/>
+        </div>
+        <button data-db-onclick="submitPerson();">submit</button>
+    </form>
+</div>
+```
+
+<p>The two way data binding makes easier the way of how is updated the model as can be seen in <a href="simple-binding.html">simple binding example</a></p>
+

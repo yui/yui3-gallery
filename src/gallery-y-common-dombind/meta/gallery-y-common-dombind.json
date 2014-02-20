@@ -1,0 +1,10 @@
+{
+    "gallery-y-common-dombind": {
+        "requires": [
+            "yui-base",
+            "base-build",
+            "node",
+            "template-base"
+        ]
+    }
+}

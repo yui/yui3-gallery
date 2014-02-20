@@ -1,0 +1,54 @@
+<div class="intro">
+    <p>
+	{{description}}
+    </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+
+<p>This component is focused on decrease the events and dom lookup attaching mainly on ajax or events based javascript applications, by taking care internally of the 
+model updates from view to model and viceversa</p>
+
+
+<p>Following code shows how is configured the component and for detailed explanation of what is each constructor's attribute please look <a href="#api-docs">api docs</a>:</p>
+```
+var dombind = new Y.Common.DomBind({
+    container: Y.one('.simple-form')
+});
+```
+
+<h2>Two way data bind</h2>
+
+{{>two-way-databinding}}
+
+<h2>Controller methods</h2>
+
+{{>controller}}
+
+<h2>Events directives</h2>
+
+{{>events-directives}}
+
+<h2>Template Engine</h2>
+
+<p>Templates are commonly used on <code>-loop-model</code> directive to render each item while iterating the data, by default uses handlebars v1.3.0, which can be seen in the source code at <a href="https://github.com/asotog/y-commons/blob/master/src/gallery-y-common-dombind/js/gallery-y-common-dombind-handlebars.js">gallery-y-common-dombind-handlebars.js </a> file, but template engine can be easily changed to use another one by setting the attribute <a href="/api/classes/Common.DomBind.html#attr_templateEngine">templateEngine</a> in the constructor</p>
+
+<h2>Lists: template, iteration, binding and filtering</h2>
+
+<h2>Directives creation</h2>
+
+<h2>Prefix</h2>
+
+<p>This module uses <code>data-</code> attributes to provide dom declarative based configuration, sometimes on development can be seen
+that this attribute can have conflicts with other functionality that also uses <code>data-</code>, for this reason this component provides the way to modify default <code>data-</code> prefix which is <code>data-db</code> to other one if there are conflicts.</p>
+
+<h2>Important limitations</h2>
+
+{{>limitations}}
+
+
+<h2>API Docs</h2>
+
+<p>For detailed explanation of this component, default values and constructor arguments check <a href="{{{apiDocsUrl}}">api docs</a></p>
