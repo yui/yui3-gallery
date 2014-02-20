@@ -659,14 +659,14 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 1.266 seconds, pretty fast huh?
+shifter [info] finished in 1.145 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
 Starting Grover on 1 files with PhantomJS@1.9.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
@@ -679,5 +679,5 @@ Writing files in JSON format to: /src/gallery-bulkedit/logs/tests.json
 └─────────┴─────────┴────────┴─────────────┴────────┘
 ----------------------------------------------------------------
 ✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
-  [Grover Execution Timer] 2.822 seconds
+  [Grover Execution Timer] 2.416 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

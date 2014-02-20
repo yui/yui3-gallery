@@ -3027,7 +3027,7 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 Y.HTMLTableBulkEditor = HTMLTableBulkEditor;
 
 
-}, 'gallery-2014.02.20-06-27', {
+}, 'gallery-2014.02.20-23-55', {
     "skinnable": "true",
     "requires": [
         "widget",
