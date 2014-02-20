@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.9 on node@0.8.23
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.8.26
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-querybuilder
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -144,19 +144,19 @@ shifter [info] shifting into gear for gallery-querybuilder
    #67: Too many var statements.
        var value_cell = this.qb._createContainer(); // line 880, pos 13
    #68: Trailing whitespace.
-       * // line 1013, pos 3
+       * // line 1006, pos 3
    #69: Trailing whitespace.
-       * // line 1015, pos 3
+       * // line 1008, pos 3
    #70: Trailing whitespace.
-       * // line 1018, pos 3
+       * // line 1011, pos 3
    #71: Too many var statements.
-       var options    = Y.Node.getDOMNode(this.value_menu).options; // line 1045, pos 13
+       var options    = Y.Node.getDOMNode(this.value_menu).options; // line 1038, pos 13
    #72: Too many var statements.
-       var value_list = var_config.value_list; // line 1046, pos 13
+       var value_list = var_config.value_list; // line 1039, pos 13
    #73: Too many var statements.
-       for (var i=0; i<value_list.length; i++) // line 1047, pos 18
+       for (var i=0; i<value_list.length; i++) // line 1040, pos 18
    #74: Trailing whitespace.
-       * // line 1146, pos 3
+       * // line 1132, pos 3
    #75: 'query_row' is defined but never used.
        /* element */	query_row) // line 193, pos 20
    #76: 'config' is defined but never used.
@@ -168,13 +168,13 @@ shifter [info] shifting into gear for gallery-querybuilder
    #79: 'op_list' is defined but never used.
        /* array */		op_list, // line 892, pos 26
    #80: 'value' is defined but never used.
-       /* array */		value) // line 1071, pos 24
+       /* array */		value) // line 1064, pos 24
    #81: 'op_list' is defined but never used.
-       /* array */		op_list, // line 1070, pos 26
+       /* array */		op_list, // line 1063, pos 26
    #82: 'var_config' is defined but never used.
-       /* object */	var_config, // line 1069, pos 25
+       /* object */	var_config, // line 1062, pos 25
    #83: 'query_index' is defined but never used.
-       /* int */		query_index, // line 1068, pos 30
+       /* int */		query_index, // line 1061, pos 30
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-querybuilder/gallery-querybuilder.js with UglifyJS
@@ -191,7 +191,7 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.416 seconds, pretty fast huh?
+shifter [info] finished in 0.632 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
@@ -199,29 +199,17 @@ shifter [info] finished in 0.416 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
-Starting Grover on 1 files with PhantomJS@1.7.0
+Starting Grover on 1 files with PhantomJS@1.9.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-querybuilder]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds) 6%
+✔ [gallery-querybuilder]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
 Writing files in JSON format to: /src/gallery-querybuilder/logs/tests.json
-
-------------------------------+-----------+-----------+-----------+-----------+
-File                          |   % Stmts |% Branches |   % Funcs |   % Lines |
-------------------------------+-----------+-----------+-----------+-----------+
-   gallery-querybuilder/      |      6.83 |      1.09 |      1.96 |      6.83 |
-      gallery-querybuilder.js |      6.83 |      1.09 |      1.96 |      6.83 |
-------------------------------+-----------+-----------+-----------+-----------+
-All files                     |      6.83 |      1.09 |      1.96 |      6.83 |
-------------------------------+-----------+-----------+-----------+-----------+
-
-
-=============================== Coverage summary ===============================
-Statements   : 6.83% ( 20/293 )
-Branches     : 1.09% ( 1/92 )
-Functions    : 1.96% ( 1/51 )
-Lines        : 6.83% ( 20/293 )
-================================================================================
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds)
-  [Grover Execution Timer] 0.866 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+  [Grover Execution Timer] 3.108 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

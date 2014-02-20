@@ -93,14 +93,7 @@ QueryBuilder.String.prototype =
 					}
 				}
 
-				try
-				{
-					this.value_input.focus();
-				}
-				catch (e)
-				{
-					// IE will complain if field is invisible, instead of just ignoring it
-				}
+				this.value_input.focus();
 			}
 		});
 	},

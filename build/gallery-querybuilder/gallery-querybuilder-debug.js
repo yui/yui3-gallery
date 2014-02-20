@@ -908,14 +908,7 @@ QueryBuilder.String.prototype =
 					}
 				}
 
-				try
-				{
-					this.value_input.focus();
-				}
-				catch (e)
-				{
-					// IE will complain if field is invisible, instead of just ignoring it
-				}
+				this.value_input.focus();
 			}
 		});
 	},
@@ -1070,14 +1063,7 @@ QueryBuilder.Select.prototype =
 		/* array */		op_list,
 		/* array */		value)
 	{
-		try
-		{
-			this.value_menu.focus();
-		}
-		catch (e)
-		{
-			// IE will complain if field is invisible, instead of just ignoring it
-		}
+		this.value_menu.focus();
 	},
 
 	destroy: function()
@@ -1165,7 +1151,7 @@ QueryBuilder.plugin_mapping =
 };
 
 
-}, 'gallery-2013.05.29-23-38', {
+}, 'gallery-2014.02.20-06-27', {
     "skinnable": "true",
     "requires": [
         "widget",
