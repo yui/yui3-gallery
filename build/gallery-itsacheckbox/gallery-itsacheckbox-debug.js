@@ -977,7 +977,7 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
     }
 );
 
-}, 'gallery-2014.02.20-06-27', {
+}, 'gallery-2014.02.20-23-55', {
     "requires": [
         "yui-base",
         "dd-ddm",
