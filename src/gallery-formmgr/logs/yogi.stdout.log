@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.8.26
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-formmgr
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -206,115 +206,115 @@ shifter [info] shifting into gear for gallery-formmgr
    #98: Too many var statements.
        var fieldset = e.getAncestorByTagName('fieldset'); // line 522, pos 13
    #99: Trailing whitespace.
-       * // line 588, pos 7
+       * // line 581, pos 7
    #100: Trailing whitespace.
-       * // line 605, pos 7
+       * // line 598, pos 7
    #101: Trailing whitespace.
-       * // line 619, pos 7
+       * // line 612, pos 7
    #102: Trailing whitespace.
-       * // line 635, pos 7
+       * // line 628, pos 7
    #103: Trailing whitespace.
-       * // line 654, pos 7
+       * // line 647, pos 7
    #104: Trailing whitespace.
-       * // line 659, pos 7
+       * // line 652, pos 7
    #105: Trailing whitespace.
-       * // line 690, pos 7
+       * // line 683, pos 7
    #106: Trailing whitespace.
-       * // line 706, pos 7
+       * // line 699, pos 7
    #107: Trailing whitespace.
-       * // line 720, pos 7
+       * // line 713, pos 7
    #108: Trailing whitespace.
-       * // line 741, pos 7
+       * // line 734, pos 7
    #109: Trailing whitespace.
-       * // line 754, pos 7
+       * // line 747, pos 7
    #110: Trailing whitespace.
-       * // line 771, pos 7
+       * // line 764, pos 7
    #111: Trailing whitespace.
-       * // line 780, pos 7
+       * // line 773, pos 7
    #112: Trailing whitespace.
-       * // line 799, pos 7
+       * // line 792, pos 7
    #113: Too many var statements.
-       for (var i=0; i<this.form.elements.length; i++) // line 806, pos 18
+       for (var i=0; i<this.form.elements.length; i++) // line 799, pos 18
    #114: Too many var statements.
-       var e            = this.form.elements[i]; // line 810, pos 21
+       var e            = this.form.elements[i]; // line 803, pos 21
    #115: Trailing whitespace.
-       * // line 820, pos 7
+       * // line 813, pos 7
    #116: Trailing whitespace.
-       * // line 842, pos 7
+       * // line 835, pos 7
    #117: Trailing whitespace.
-       * // line 853, pos 7
+       * // line 846, pos 7
    #118: Trailing whitespace.
-       * // line 865, pos 7
+       * // line 858, pos 7
    #119: Too many var statements.
-       var e = this.form.elements[i]; // line 872, pos 17
+       var e = this.form.elements[i]; // line 865, pos 17
    #120: Too many var statements.
-       var name = e.tagName; // line 878, pos 17
+       var name = e.tagName; // line 871, pos 17
    #121: Too many var statements.
-       var type = (e.type ? e.type.toLowerCase() : null); // line 879, pos 17
+       var type = (e.type ? e.type.toLowerCase() : null); // line 872, pos 17
    #122: Expected '===' and instead saw '=='.
-       if ((name == 'INPUT' && // line 881, pos 23
+       if ((name == 'INPUT' && // line 874, pos 23
    #123: Mixed spaces and tabs.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 4
+       (type == 'file' || type == 'password' || type == 'text')) || // line 875, pos 4
    #124: Expected '===' and instead saw '=='.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 24
+       (type == 'file' || type == 'password' || type == 'text')) || // line 875, pos 24
    #125: Expected '===' and instead saw '=='.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 42
+       (type == 'file' || type == 'password' || type == 'text')) || // line 875, pos 42
    #126: Expected '===' and instead saw '=='.
-       (type == 'file' || type == 'password' || type == 'text')) || // line 882, pos 64
+       (type == 'file' || type == 'password' || type == 'text')) || // line 875, pos 64
    #127: Expected '===' and instead saw '=='.
-       name == 'TEXTAREA') // line 883, pos 22
+       name == 'TEXTAREA') // line 876, pos 22
    #128: Too many var statements.
-       var e                = this.form.elements; // line 908, pos 13
+       var e                = this.form.elements; // line 894, pos 13
    #129: Too many var statements.
-       for (var i=0; i<e.length; i++) // line 911, pos 18
+       for (var i=0; i<e.length; i++) // line 897, pos 18
    #130: Too many var statements.
-       var e_id     = e[i].id; // line 913, pos 17
+       var e_id     = e[i].id; // line 899, pos 17
    #131: Too many var statements.
-       var msg_list = this.validation_msgs[e_id]; // line 914, pos 17
+       var msg_list = this.validation_msgs[e_id]; // line 900, pos 17
    #132: Too many var statements.
-       var info = FormManager.validateFromCSSData(e[i], msg_list); // line 916, pos 17
+       var info = FormManager.validateFromCSSData(e[i], msg_list); // line 902, pos 17
    #133: Too many var statements.
-       var f     = this.validation.fn[e_id]; // line 935, pos 17
+       var f     = this.validation.fn[e_id]; // line 921, pos 17
    #134: Too many var statements.
-       var scope = this; // line 936, pos 17
+       var scope = this; // line 922, pos 17
    #135: Empty block.
-       else if (Y.Lang.isString(f)) // line 941, pos 13
+       else if (Y.Lang.isString(f)) // line 927, pos 13
    #136: Trailing whitespace.
-       * // line 978, pos 7
+       * // line 964, pos 7
    #137: Trailing whitespace.
-       * // line 997, pos 7
+       * // line 983, pos 7
    #138: Trailing whitespace.
-       * // line 1023, pos 7
+       * // line 1009, pos 7
    #139: Trailing whitespace.
-       * // line 1033, pos 7
+       * // line 1019, pos 7
    #140: Trailing whitespace.
-       * // line 1043, pos 7
+       * // line 1029, pos 7
    #141: Too many var statements.
-       for (var i=0; i<this.button_list.length; i++) // line 1053, pos 18
+       for (var i=0; i<this.button_list.length; i++) // line 1039, pos 18
    #142: Too many var statements.
-       var info = this.user_button_list[i]; // line 1060, pos 17
+       var info = this.user_button_list[i]; // line 1046, pos 17
    #143: Trailing whitespace.
-       * // line 1089, pos 7
+       * // line 1075, pos 7
    #144: Trailing whitespace.
-       * // line 1103, pos 7
+       * // line 1089, pos 7
    #145: Expected '!==' and instead saw '!='.
-       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1120, pos 27
+       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1106, pos 27
    #146: Expected '!==' and instead saw '!='.
-       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1120, pos 47
+       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1106, pos 47
    #147: Expected '!==' and instead saw '!='.
-       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1120, pos 67
+       if (e.tagName != 'BUTTON' && type != 'submit' && type != 'reset') // line 1106, pos 67
    #148: Trailing whitespace.
-       * // line 1133, pos 7
+       * // line 1119, pos 7
    #149: Expected '===' and instead saw '=='.
-       if (type == 'error') // line 1150, pos 22
+       if (type == 'error') // line 1136, pos 22
    #150: Trailing whitespace.
-       * // line 1167, pos 7
+       * // line 1153, pos 7
    #151: Trailing whitespace.
-       * // line 1177, pos 7
+       * // line 1163, pos 7
    #152: Mixed spaces and tabs.
-       FormManager.status_success_class)); // line 1200, pos 7
+       FormManager.status_success_class)); // line 1186, pos 7
    #153: 'form' is defined but never used.
-       /* DOM element */	form) // line 983, pos 19
+       /* DOM element */	form) // line 969, pos 19
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-formmgr/gallery-formmgr.js with UglifyJS
@@ -325,28 +325,25 @@ shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
 shifter [queu] writing coverage file to gallery-formmgr/gallery-formmgr-coverage.js
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.583 seconds, pretty fast huh?
+shifter [info] finished in 0.535 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
 Starting Grover on 1 files with PhantomJS@1.9.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-formmgr]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.02 seconds) 54%
+✔ [gallery-formmgr]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.026 seconds)
 Writing files in JSON format to: /src/gallery-formmgr/logs/tests.json
-┌───────────────────────────────────────────────┬───────────┬───────┬─────────────┬───────┐
-│[34m  path                                         [39m│[34m    lines  [39m│[34m    %  [39m│[34m  functions  [39m│[34m    %  [39m│
-├───────────────────────────────────────────────┼───────────┼───────┼─────────────┼───────┤
-│  ✖ /build/gallery-formmgr/gallery-formmgr.js  │  149/272  │  54%  │      21/42  │  50%  │
-├───────────────────────────────────────────────┼───────────┼───────┼─────────────┼───────┤
-│  total                                        │  149/272  │  54%  │      21/42  │  50%  │
-└───────────────────────────────────────────────┴───────────┴───────┴─────────────┴───────┘
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.02 seconds)
-  [Grover Execution Timer] 3.093 seconds
-Failed to find source file: /build/gallery-formmgr/gallery-formmgr.js
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
+✔ [Total]: Passed: 1 Failed: 0 Total: 1 (ignored 0) (0.026 seconds)
+  [Grover Execution Timer] 2.565 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

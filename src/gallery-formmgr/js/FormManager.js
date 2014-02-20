@@ -527,14 +527,7 @@ FormManager.displayMessage = function(
 		if (scroll && e.get('offsetHeight') !== 0)
 		{
 			p.scrollIntoView();
-			try
-			{
-				e.focus();
-			}
-			catch (ex)
-			{
-				// no way to determine in IE if this will fail
-			}
+			e.focus();
 		}
 
 		return true;
@@ -880,14 +873,7 @@ Y.extend(FormManager, Y.Plugin.Host,
 				 (type == 'file' || type == 'password' || type == 'text')) ||
 				name == 'TEXTAREA')
 			{
-				try
-				{
-					e.focus();
-				}
-				catch (ex)
-				{
-					// no way to determine in IE if this will fail
-				}
+				e.focus();
 				e.select();
 				break;
 			}
