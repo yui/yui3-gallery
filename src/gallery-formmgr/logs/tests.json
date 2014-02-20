@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 2,
-    "duration": 52,
+    "duration": 48,
     "type": "report",
     "Form Manager": {
         "name": "Form Manager",
@@ -14,16 +14,16 @@
         "errors": 0,
         "ignored": 0,
         "total": 1,
-        "duration": 24,
+        "duration": 21,
         "type": "testcase",
         "testPopulate": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "testPopulate",
-            "duration": 20
+            "duration": 19
         }
     },
-    "timestamp": "Wed Feb 19 22:28:56 2014",
+    "timestamp": "Thu Feb 20 15:56:30 2014",
     "consoleInfo": []
 }
