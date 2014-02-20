@@ -5,7 +5,7 @@
     "errors": 0,
     "ignored": 0,
     "total": 24,
-    "duration": 306,
+    "duration": 310,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
@@ -14,21 +14,21 @@
         "errors": 0,
         "ignored": 0,
         "total": 12,
-        "duration": 151,
+        "duration": 153,
         "type": "testcase",
         "Set model": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Set model",
-            "duration": 1
+            "duration": 0
         },
         "Verify number of items created in the list after model load": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Verify number of items created in the list after model load",
-            "duration": 23
+            "duration": 19
         },
         "Change input that is using bind directive": {
             "result": "pass",
@@ -56,14 +56,14 @@
             "message": "Test passed",
             "type": "test",
             "name": "Checkbox button model listener",
-            "duration": 1
+            "duration": 0
         },
         "Simulate bind input field value changes also on model bind": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Simulate bind input field value changes also on model bind",
-            "duration": 2
+            "duration": 3
         },
         "Simulate bind input field value  using nested model property changes also on model bind": {
             "result": "pass",
@@ -77,14 +77,14 @@
             "message": "Test passed",
             "type": "test",
             "name": "After each item rendered in the list, is executing filter defined",
-            "duration": 1
+            "duration": 0
         },
         "Simulate click on iterable item button and retrieve the item model": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "Simulate click on iterable item button and retrieve the item model",
-            "duration": 1
+            "duration": 3
         },
         "Simulate value change of iterable input and check values according to main model object": {
             "result": "pass",
@@ -98,9 +98,9 @@
             "message": "Test passed",
             "type": "test",
             "name": "List ui updated when list property from model is also updated",
-            "duration": 5
+            "duration": 8
         }
     },
-    "timestamp": "Wed Feb 19 22:28:56 2014",
+    "timestamp": "Thu Feb 20 15:56:32 2014",
     "consoleInfo": []
 }
