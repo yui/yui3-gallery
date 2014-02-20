@@ -213,7 +213,7 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
             if (src && (src.get('tagName')==='INPUT') && (src.getAttribute('type')==='checkbox')) {
               src.addClass(HIDDEN_CLASS);
                 // Need to check if checkbox is inside a label-element --> due to HTML validation the widget CANNOT lie inside a label!
-                instance._srcParentNode = srcParentNode = src.get('parentNode');
+                instance._srcParentNode = srcParentNode = src.get('parentNode') || Y.one('body');
                 checkBoxInsideLabel = (srcParentNode.get('tagName')==='LABEL');
                 // in yui before 3.13.0 the boundingBox was created as a DIV behind srcNode
                 // as from 3.13.0, boundingBox===srcNode
@@ -338,7 +338,7 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
                     instance._forceCheckedVal = false;
                     dd.set('lock', disabled || instance.get(READONLY));
                     instance._goFinal(checked, true);
-                    // now set up the right payload for the valueChange-event
+                    // now set up the right payload for the valuechange-event
                     if (disabled) {
                         payload.newVal = null;
                         payload.prevVal = checked;
@@ -962,7 +962,7 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
         },
         HTML_PARSER: {
             checked: function (srcNode) {
-                var checked = (srcNode.getAttribute(CHECKED).toLowerCase()===CHECKED);
+                var checked =  srcNode.get(CHECKED);
                 return (this._srcNodeValidCheckbox(srcNode) && checked);
             },
             readonly: function (srcNode) {
@@ -970,14 +970,14 @@ Y.ITSACheckbox = Y.Base.create('itsacheckbox', Y.Widget, [], {
                 return (this._srcNodeValidCheckbox(srcNode) && readonly);
             },
             disabled: function (srcNode) {
-                var disabled = (srcNode.getAttribute(DISABLED).toLowerCase()===DISABLED);
+                var disabled =  srcNode.get(DISABLED);
                 return (this._srcNodeValidCheckbox(srcNode) && disabled);
             }
         }
     }
 );
 
-}, 'gallery-2014.02.05-23-53', {
+}, 'gallery-2014.02.20-06-27', {
     "requires": [
         "yui-base",
         "dd-ddm",

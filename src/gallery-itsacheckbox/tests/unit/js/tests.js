@@ -14,25 +14,25 @@ YUI.add('module-tests', function(Y) {
 
     suite.add(new Y.Test.Case({
         name: 'test 2',
-        'Progressive enhancement --> value processed': function() {
+        'Progressive enhancement --> value processed with XHTML': function() {
             var checkbox = new Y.ITSACheckbox({srcNode: '#checkboxtest2'}).render();
-            Y.Assert.isTrue(checkbox.getValue(), 'checkbox-instance has wrong "checked" value using progressive enhancement');
+            Y.Assert.isTrue(checkbox.getValue(), 'checkbox-instance has wrong "checked" value using progressive enhancement with XHTML');
         }
     }));
 
     suite.add(new Y.Test.Case({
         name: 'test 3',
-        'Progressive enhancement --> disabled processed': function() {
+        'Progressive enhancement --> disabled processed with XHTML': function() {
             var checkbox = new Y.ITSACheckbox({srcNode: '#checkboxtest3'}).render();
-            Y.Assert.isTrue(checkbox.get('disabled'), 'checkbox-instance has wrong "disabled" value using progressive enhancement');
+            Y.Assert.isTrue(checkbox.get('disabled'), 'checkbox-instance has wrong "disabled" value using progressive enhancement with XHTML');
         }
     }));
 
     suite.add(new Y.Test.Case({
         name: 'test 4',
-        'Progressive enhancement --> readonly processed': function() {
+        'Progressive enhancement --> readonly processed with XHTML': function() {
             var checkbox = new Y.ITSACheckbox({srcNode: '#checkboxtest4'}).render();
-            Y.Assert.isTrue(checkbox.get('readonly'), 'checkbox-instance has wrong "readonly" value using progressive enhancement');
+            Y.Assert.isTrue(checkbox.get('readonly'), 'checkbox-instance has wrong "readonly" value using progressive enhancement with XHTML');
         }
     }));
 
@@ -117,49 +117,49 @@ YUI.add('module-tests', function(Y) {
 
     suite.add(new Y.Test.Case({
         name: 'test 11',
-        'checking valueChange-events on enable': function() {
+        'checking valuechange-events on enable': function() {
             var checkbox = new Y.ITSACheckbox({checked: true, disabled: true}).render(),
                 timer;
             timer = Y.later(2000, null, function(){
-                Y.Assert.fail('valueChange is not fired within 2 seconds');
+                Y.Assert.fail('valuechange is not fired within 2 seconds');
             });
-            checkbox.on('valueChange', function(e){
+            checkbox.on('valuechange', function(e){
                 timer.cancel();
-                Y.Assert.isTrue(e.newVal, 'valueChange-event is fired, but with the wrong value for e.newVal');
+                Y.Assert.isTrue(e.newVal, 'valuechange-event is fired, but with the wrong value for e.newVal');
             });
-            checkbox.enable(); // this should fire the 'valueChange-event'
+            checkbox.enable(); // this should fire the 'valuechange-event'
         }
     }));
 
     suite.add(new Y.Test.Case({
         name: 'test 12',
-        'checking valueChange-events on disabled-Change': function() {
+        'checking valuechange-events on disabled-Change': function() {
             var checkbox = new Y.ITSACheckbox({checked: false, disabled: true}).render(),
                 timer;
             timer = Y.later(2000, null, function(){
                 Y.Assert.pass();
             });
-            checkbox.on('valueChange', function(e){
+            checkbox.on('valuechange', function(e){
                 timer.cancel();
-                Y.Assert.fail('valueChange is fired on a disabled checkbox');
+                Y.Assert.fail('valuechange is fired on a disabled checkbox');
             });
-            checkbox.check(); // this should fire the 'valueChange-event'
+            checkbox.check(); // this should fire the 'valuechange-event'
         }
     }));
 
     suite.add(new Y.Test.Case({
         name: 'test 13',
-        'checking valueChange-events on disabled-Change': function() {
+        'checking valuechange-events on disabled-Change': function() {
             var checkbox = new Y.ITSACheckbox({checked: false, readonly: true}).render(),
                 timer;
             timer = Y.later(2000, null, function(){
                 Y.Assert.pass();
             });
-            checkbox.on('valueChange', function(e){
+            checkbox.on('valuechange', function(e){
                 timer.cancel();
-                Y.Assert.fail('valueChange is fired on a readonly checkbox');
+                Y.Assert.fail('valuechange is fired on a readonly checkbox');
             });
-            checkbox.check(); // this should fire the 'valueChange-event'
+            checkbox.check(); // this should fire the 'valuechange-event'
         }
     }));
 
@@ -175,6 +175,22 @@ YUI.add('module-tests', function(Y) {
             value3 = checkbox.getValue(); // should return true
             condition = ((value1===true) && (value2===false) && (value3===true));
             Y.Assert.isFalse(condition, 'Checkbox doesn\'t return the right values after toggling');
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'test 15',
+        'Progressive enhancement --> value processed': function() {
+            var checkbox = new Y.ITSACheckbox({srcNode: '#checkboxtest5'}).render();
+            Y.Assert.isTrue(checkbox.getValue(), 'checkbox-instance has wrong "checked" value using progressive enhancement');
+        }
+    }));
+
+    suite.add(new Y.Test.Case({
+        name: 'test 16',
+        'Progressive enhancement --> disabled processed': function() {
+            var checkbox = new Y.ITSACheckbox({srcNode: '#checkboxtest6'}).render();
+            Y.Assert.isTrue(checkbox.get('disabled'), 'checkbox-instance has wrong "disabled" value using progressive enhancement');
         }
     }));
 

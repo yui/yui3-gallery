@@ -13,6 +13,9 @@
 <input id="checkboxtest3" type="checkbox" disabled="disabled">
 <input id="checkboxtest4" type="checkbox" readonly="readonly">
 
+<input id="checkboxtest5" type="checkbox" checked>
+<input id="checkboxtest6" type="checkbox" disabled>
+
 <!-- ******************************** -->
 <!--  START DEFINING THE COMBOLOADER  -->
 <!-- ******************************** -->
@@ -23,17 +26,13 @@
 <!-- ******************************** -->
 
 <script>
-YUI(yuiconfig).use('base-core', 'test', 'itsa-leakutils', function(Y) {
+// yuiconfig is defined inside loaderconfig.js
+YUI(yuiconfig).use('test-console', 'test', 'module-tests', function(Y) {
 
-    Y.Test.Runner.setDOMIgnore('#logger', '#checkboxtest2', '#checkboxtest3', '#checkboxtest4', 'script', '.yui3-dd-shim', 'document');
-    Y.Test.Runner.enableLeakDetector();
+    (new Y.Test.Console()).render('#logger');
 
-    Y.use('test-console', 'module-tests', function (Y) {
-        (new Y.Test.Console()).render('#logger');
-        Y.Test.Runner.setName('gallery-itsacheckbox');
-        Y.Test.Runner.run();
-    });
-
+    Y.Test.Runner.setName('gallery-itsacheckbox');
+    Y.Test.Runner.run();
 });
 </script>
 </body>
