@@ -2863,15 +2863,14 @@ function moveFocus(e)
 		var field = this.getFieldElement(id, info.field_key);
 		if (field)
 		{
+			field.focus();
 			try
 			{
-				field.focus();
 				field.select();
 			}
 			catch (ex)
 			{
-				// no way to determine in IE if focus will fail
-				// no way to determine if browser allows focus to select elements
+				// select elements don't support select()
 			}
 		}
 	}
@@ -3028,7 +3027,7 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 Y.HTMLTableBulkEditor = HTMLTableBulkEditor;
 
 
-}, 'gallery-2013.10.09-22-56', {
+}, 'gallery-2014.02.20-06-27', {
     "skinnable": "true",
     "requires": [
         "widget",

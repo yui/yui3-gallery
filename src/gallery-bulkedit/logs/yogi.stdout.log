@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.15
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.8.26
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-bulkedit
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -602,25 +602,25 @@ shifter [info] shifting into gear for gallery-bulkedit
    #296: Possible strict violation.
        var field = this.getFieldElement(id, info.field_key); // line 2863, pos 21
    #297: Expected '!==' and instead saw '!='.
-       container.get('firstChild').get('tagName') != 'TABLE' || // line 2893, pos 56
+       container.get('firstChild').get('tagName') != 'TABLE' || // line 2892, pos 56
    #298: Too many var statements.
-       var s = Y.Lang.sub('<table class="{t}"><thead class="{hd}"><tr>', // line 2896, pos 17
+       var s = Y.Lang.sub('<table class="{t}"><thead class="{hd}"><tr>', // line 2895, pos 17
    #299: Too many var statements.
-       var row_markup = '<th class="{cell} {prefix}{key}">{label}</th>'; // line 2902, pos 17
+       var row_markup = '<th class="{cell} {prefix}{key}">{label}</th>'; // line 2901, pos 17
    #300: Too many var statements.
-       var msg_row = Y.Node.create('<tr></tr>'); // line 2948, pos 13
+       var msg_row = Y.Node.create('<tr></tr>'); // line 2947, pos 13
    #301: Too many var statements.
-       var msg_cell = Y.Node.create('<td></td>'); // line 2951, pos 13
+       var msg_cell = Y.Node.create('<td></td>'); // line 2950, pos 13
    #302: Too many var statements.
-       var row = Y.Node.create('<tr></tr>'); // line 2959, pos 13
+       var row = Y.Node.create('<tr></tr>'); // line 2958, pos 13
    #303: Too many var statements.
-       var field  = this.getFieldConfig(key); // line 2973, pos 17
+       var field  = this.getFieldConfig(key); // line 2972, pos 17
    #304: Too many var statements.
-       var cell = Y.Node.create('<td></td>'); // line 2977, pos 17
+       var cell = Y.Node.create('<td></td>'); // line 2976, pos 17
    #305: Too many var statements.
-       var liner = Y.Node.create('<div></div>'); // line 2982, pos 17
+       var liner = Y.Node.create('<div></div>'); // line 2981, pos 17
    #306: Too many var statements.
-       var f = null; // line 2987, pos 17
+       var f = null; // line 2986, pos 17
    #307: 'record_id' is defined but never used.
        var record_id = record[ this.get('uniqueIdKey') ]; // line 517, pos 26
    #308: 'record_id' is defined but never used.
@@ -659,28 +659,25 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.898 seconds, pretty fast huh?
+shifter [info] finished in 1.266 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.9.1
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5007
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5006
+Starting Grover on 1 files with PhantomJS@1.9.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.006 seconds) 6%
+✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
 Writing files in JSON format to: /src/gallery-bulkedit/logs/tests.json
-┌─────────────────────────────────────────────────┬──────────┬──────┬─────────────┬──────┐
-│[34m  path                                           [39m│[34m   lines  [39m│[34m   %  [39m│[34m  functions  [39m│[34m   %  [39m│
-├─────────────────────────────────────────────────┼──────────┼──────┼─────────────┼──────┤
-│  ✖ /build/gallery-bulkedit/gallery-bulkedit.js  │  46/766  │  6%  │      1/125  │  0%  │
-├─────────────────────────────────────────────────┼──────────┼──────┼─────────────┼──────┤
-│  total                                          │  46/766  │  6%  │      1/125  │  0%  │
-└─────────────────────────────────────────────────┴──────────┴──────┴─────────────┴──────┘
+┌─────────┬─────────┬────────┬─────────────┬────────┐
+│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
+├─────────┼─────────┼────────┼─────────────┼────────┤
+│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
+└─────────┴─────────┴────────┴─────────────┴────────┘
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.006 seconds)
-  [Grover Execution Timer] 1.992 seconds
-Failed to find source file: /build/gallery-bulkedit/gallery-bulkedit.js
-[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+  [Grover Execution Timer] 2.822 seconds
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
