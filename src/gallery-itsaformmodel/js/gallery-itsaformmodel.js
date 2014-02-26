@@ -403,7 +403,7 @@ ITSAFormModel.prototype.initializer = function() {
     instance._ATTRS_nodes = {},
 
    /**
-    * internal backup of which nodeid's have been inserted in the dom before, referenced by nodei's
+    * internal backup of which nodeid's have been inserted in the dom before, referenced by nodeid's
     * object-properties are 'true' when not found the be removed from the dom yet and a timestamps when
     * out of the dom (stamped with the time out-of-dom was registered)
     * @property _knownNodeIds
@@ -638,15 +638,15 @@ ITSAFormModel.prototype.disableUI = function() {
  * Only to be used when destroyed - or when a containernode gets empty.
  *
  * @method cleanup
+ * @param [container] {Y.Node} only cleanup items inside this container
  * @protected
  * @since 0.1
 */
-ITSAFormModel.prototype.cleanup = function() {
-    // TODO: also destroy the widgets in case their nodeid's are in the dom
+ITSAFormModel.prototype.cleanup = function(container) {
     var instance = this;
-    instance._FORM_elements = {};
-    instance._ATTRS_nodes = {};
-    instance._knownNodeIds = {};
+/*jshint expr:true */
+    container ? instance._cleanupContainer(container) : instance._cleanup();
+/*jshint expr:false */
 };
 
 /**
@@ -1701,7 +1701,7 @@ ITSAFormModel.prototype.translatePromise = ITSAFormModel.translatePromise;
  * @since 0.1
  */
 ITSAFormModel.prototype.validated  = function() {
-    Y.log('destructor', 'info', 'ITSAFormModel');
+    Y.log('validated', 'info', 'ITSAFormModel');
     return (this.getUnvalidatedUI().size()===0);
 };
 
@@ -1956,6 +1956,87 @@ ITSAFormModel.prototype._bindUI = function() {
 };
 
 /**
+ * Cleans up internal references of everything the formmodel has inserted in the dom.
+ * Only to be used when destroyed - or when a containernode gets empty.
+ *
+ * @method _cleanup
+ * @protected
+ * @private
+ * @since 0.1
+*/
+ITSAFormModel.prototype._cleanup = function() {
+    var instance = this,
+        formelements = instance.getCurrentFormElements(),
+        node;
+    YArray.each(
+        formelements,
+        function(formelement) {
+/*jshint expr:true */
+            formelement.widget && formelement.widget.destroy(true);
+/*jshint expr:false */
+            node = Y.one('#'+formelement.nodeid);
+            if (node) {
+                node.get('childNodes').destroy(true);
+                node.remove(true);
+            }
+        }
+    );
+    instance._FORM_elements = {};
+    instance._ATTRS_nodes = {};
+    instance._knownNodeIds = {};
+};
+
+/**
+ * Cleans up internal references of everything the formmodel has inserted inside the container.
+ * Only to be used when a containernode gets empty.
+ *
+ * @method _cleanupContainer
+ * @param [container] {Y.Node} only cleanup items inside this container
+ * @protected
+ * @private
+ * @since 0.1
+*/
+ITSAFormModel.prototype._cleanupContainer = function(container) {
+    var instance = this,
+        attributenodes = instance._ATTRS_nodes,
+        formelements = instance._FORM_elements,
+        knownNodeIds = instance._knownNodeIds,
+        knowdIdsRemoval = [],
+        node, formelement, attribute, indexofitem;
+    YObject.each(
+        knownNodeIds,
+        function(value, nodeid) {
+            formelement = formelements[nodeid];
+            node = container.one('#'+nodeid);
+            // remove node
+            if (node) {
+/*jshint expr:true */
+                formelement.widget && formelement.widget.destroy(true);
+/*jshint expr:false */
+                node.get('childNodes').destroy(true);
+                node.remove(true);
+                delete formelements[nodeid];
+                // now find the inside the array _ATTRS_nodes[attribute] for the item that holds ref. to the nodeid
+                attribute = formelement.name;
+                indexofitem = attributenodes[attribute].indexOf(nodeid);
+/*jshint expr:true */
+                indexofitem && attributenodes[attribute].splice(indexofitem, 1);
+/*jshint expr:false */
+                // now store the nodeid, because it has to be removed from instance._knownNodeIds
+                knowdIdsRemoval.push(nodeid);
+            }
+        }
+    );
+    // now remove it from knownNodeIds
+    YArray.each(
+        knowdIdsRemoval,
+        function(nodeid) {
+            delete knownNodeIds[nodeid];
+        }
+    );
+};
+
+/**
  * Cleaning up all eventlisteners
  *
  * @method _clearEventhandlers
@@ -2032,7 +2113,11 @@ ITSAFormModel.prototype._defFn_changedate = function(e) {
             // be carefull: button might not exist anymore, when the view is rerendered
             if (node) {
                 node.removeAttribute(DATA_CONTENT);
-                node.focus();
+                try {
+                    // ALWAYS focus nodes using try/catch to prevent js-error when node not in the dom
+                    node.focus();
+                }
+                catch(err) {}
                 tipsycontent = node.getAttribute(DATA+'-contentvalid');
 /*jshint expr:true */
                 tipsycontent && node.setAttribute(DATA_CONTENT, tipsycontent);
