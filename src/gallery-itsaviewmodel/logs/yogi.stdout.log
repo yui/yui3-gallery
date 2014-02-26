@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.21
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.8.26
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-itsaviewmodel
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -9,6 +9,8 @@ shifter [info] putting the hammer down, let's build this thing!
 shifter [info] munging in loader meta data into build.json
 shifter [info] putting the hammer down
 shifter [info] shifting into gear for gallery-itsaviewmodel
+   #1: Missing semicolon.
+       Y.ITSAFormElement.tipsyInvalid._handleDelegateStart({currentTarget: node}) // line 2355, pos 87
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
 shifter [queu] compressing gallery-itsaviewmodel/gallery-itsaviewmodel.js with UglifyJS
@@ -65,15 +67,15 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 1.14 seconds, pretty fast huh?
+shifter [info] finished in 1.081 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-Starting Grover on 1 files with PhantomJS@1.9.1
+Starting Grover on 1 files with PhantomJS@1.9.2
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
 ✖ [http://127.0.0.1:5000/tests/src/gallery-itsaviewmodel/tests/unit/index.html?filter=coverage]: Passed: 0 Failed: 1 Total: 1 (ignored 0)

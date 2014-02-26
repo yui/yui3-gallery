@@ -1135,6 +1135,7 @@ ITSAViewModel.prototype.render = function (clear, modelchange) {
         itsaDateTimePicker = Y.Global.ItsaDateTimePicker,
         html = (clear || !model) ? '' : instance._modelRenderer(model),
         withfocusmanager;
+
     Y.log('render', 'info', 'ITSA-ViewModel');
 /*jshint expr:true */
     // we should do a cleanup always, BUT
@@ -1146,7 +1147,8 @@ ITSAViewModel.prototype.render = function (clear, modelchange) {
     // this seems to lead into buttons not listening to click (empty model-internals)
     // THUS: commented next line:
 
-//    modelchange && !instance.get('partOfMultiView') && model && model.toJSONUI && model.cleanup();
+   // modelchange && !instance.get('partOfMultiView') && model && model.toJSONUI && model.cleanup();
+   modelchange && model && model.toJSONUI && model.cleanup(container);
 
 
 
@@ -1157,7 +1159,11 @@ ITSAViewModel.prototype.render = function (clear, modelchange) {
         if (editMode) {
             instance._initialEditAttrs = model.getAttrs();
         }
-        container.cleanup(instance._rendered);
+// STILL there is a bug that we see when using gallery-itsaviewlogin: container.cleanup messes thing up.
+// that is why temporarely commented clenaup:
+
+       container.cleanup(instance._rendered);
+
     }
     else {
         // we should do a cleanup always, BUT
@@ -1165,7 +1171,10 @@ ITSAViewModel.prototype.render = function (clear, modelchange) {
         // gets rerendered --> some node in the footer gets referenced while it doesn;t exists anymore.
         // that's why the conditional is created.
         if (!modelchange || !instance.get('partOfMultiView')) {
-            container.cleanup(false);
+// STILL there is a bug that we see when using gallery-itsaviewlogin: container.cleanup messes thing up.
+// that is why temporarely commented clenaup:
+
+           container.cleanup(false);
         }
     }
     // Append the container element to the DOM if it's not on the page already.
@@ -1635,7 +1644,7 @@ ITSAViewModel.prototype._bindUI = function() {
                 }
                 (prevFormModel !== newFormModel) && newFormModel && instance.get(TEMPLATE) && instance._setTemplateRenderer();
 /*jshint expr:false */
-                instance.render();
+                instance.render(false, prevFormModel);
             }
         )
     );
@@ -1695,8 +1704,8 @@ ITSAViewModel.prototype._bindUI = function() {
             '*:change',
             function(e) {
                 Y.log('aftersubscriptor '+e.type, 'info', 'ITSA-ViewModel');
-                if (e.target instanceof Y.Model) {
-                    instance.render(false, true);
+                if ((e.target instanceof Y.Model) && !e.formelement) {
+                    instance.render();
                 }
             }
         )
@@ -2341,9 +2350,17 @@ ITSAViewModel.prototype[DEF_FN+VALIDATION_ERROR] = function(e) {
         // if the node does not have focus yet, setting the focus will lead to tipy-popup.
         // when it already has the focus, no tipsy. Thus we need to popup ourselves
         // because Y.Tipsy.showTooltip() does not respond to the 'hideon' events, we will call _handleDelegateStart manually:
-/*jshint expr:true */
-        (node.getDOMNode()===Y.config.doc.activeElement) ? Y.ITSAFormElement.tipsyInvalid._handleDelegateStart({currentTarget: node}) : node.focus();
-/*jshint expr:false */
+
+        if (node.getDOMNode()===Y.config.doc.activeElement) {
+            Y.ITSAFormElement.tipsyInvalid._handleDelegateStart({currentTarget: node})
+        }
+        else {
+            try {
+                // ALWAYS focus nodes using try/catch to prevent js-error when node not in the dom
+                node.focus();
+            }
+            catch(err) {}
+        }
         node.scrollIntoView();
     }
 };
@@ -2560,7 +2577,7 @@ ITSAViewModel.prototype._setTemplateRenderer = function() {
     instance._viewNeedsForm = !instance._contIsForm && !(/<form([^>]*)>/.test(template));
 };
 
-}, 'gallery-2014.01.03-22-50', {
+}, 'gallery-2014.02.26-18-54', {
     "requires": [
         "yui-base",
         "gallery-itsapluginpromise",
@@ -2578,7 +2595,6 @@ ITSAViewModel.prototype._setTemplateRenderer = function() {
         "event-custom-base",
         "oop",
         "promise",
-        "json",
         "pluginhost-base",
         "gallery-itsamodulesloadedpromise",
         "gallerycss-itsa-base"
