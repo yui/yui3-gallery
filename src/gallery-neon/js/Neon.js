@@ -5,8 +5,7 @@
  */
 
 /**********************************************************************
- * <p>Overrides Y.Node.show() to make it look like a flickering neon
- * sign.</p>
+ * Overrides Y.Node.show() to make it look like a flickering neon sign.
  * 
  * @main gallery-neon
  * @class Neon
@@ -142,6 +141,7 @@ function show()
 	{
 		return;
 	}
+	this.neon.orig_show.call(this);
 
 	var plugin           = this.neon;
 	plugin.node          = this;

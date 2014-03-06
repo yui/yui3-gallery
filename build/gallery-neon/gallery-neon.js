@@ -1,4 +1,4 @@
-YUI.add('gallery-neon', function(Y) {
+YUI.add('gallery-neon', function (Y, NAME) {
 
 "use strict";
 
@@ -7,8 +7,7 @@ YUI.add('gallery-neon', function(Y) {
  */
 
 /**********************************************************************
- * <p>Overrides Y.Node.show() to make it look like a flickering neon
- * sign.</p>
+ * Overrides Y.Node.show() to make it look like a flickering neon sign.
  * 
  * @main gallery-neon
  * @class Neon
@@ -144,6 +143,7 @@ function show()
 	{
 		return;
 	}
+	this.neon.orig_show.call(this);
 
 	var plugin           = this.neon;
 	plugin.node          = this;
@@ -174,4 +174,4 @@ Y.namespace("Plugin");
 Y.Plugin.Neon = Neon;
 
 
-}, 'gallery-2012.05.16-20-37' ,{requires:['node-style','node-pluginhost','anim-easing','plugin']});
+}, 'gallery-2014.03.06-14-38', {"requires": ["node-style", "node-pluginhost", "anim-easing", "plugin"]});

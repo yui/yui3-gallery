@@ -1,0 +1,18 @@
+{
+    "name": "gallery-neon",
+    "builds": {
+        "gallery-neon": {
+            "config": {
+                "requires": [
+                    "node-style",
+                    "node-pluginhost",
+                    "anim-easing",
+                    "plugin"
+                ]
+            },
+            "jsfiles": [
+                "Neon.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,138 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.26
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-neon
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-neon
+   #1: Trailing whitespace.
+       * // line 11, pos 3
+   #2: Trailing whitespace.
+       * // line 32, pos 7
+   #3: Trailing whitespace.
+       * // line 43, pos 7
+   #4: Trailing whitespace.
+       * // line 55, pos 7
+   #5: Trailing whitespace.
+       * // line 66, pos 7
+   #6: Trailing whitespace.
+       * // line 79, pos 7
+   #7: Possible strict violation.
+       Y.later(Math.round(Math.random()*1000/(this.flicker_max - this.flicker_count)), this, neonOn); // line 93, pos 44
+   #8: Possible strict violation.
+       Y.later(Math.round(Math.random()*1000/(this.flicker_max - this.flicker_count)), this, neonOn); // line 93, pos 63
+   #9: Possible strict violation.
+       Y.later(Math.round(Math.random()*1000/(this.flicker_max - this.flicker_count)), this, neonOn); // line 93, pos 85
+   #10: Possible strict violation.
+       this.node.setStyle('display', 'none'); // line 95, pos 5
+   #11: Possible strict violation.
+       this.flicker_count--; // line 100, pos 5
+   #12: Possible strict violation.
+       if (this.flicker_count > 0) // line 101, pos 9
+   #13: Possible strict violation.
+       var fn = this.get('easing'); // line 103, pos 18
+   #14: Too many var statements.
+       var color = // line 104, pos 13
+   #15: Possible strict violation.
+       r: fn(this.flicker_count, parseInt(this.end_color[1],10), this.start_color[1]-this.end_color[1], this.flicker_max), // line 106, pos 19
+   #16: Possible strict violation.
+       r: fn(this.flicker_count, parseInt(this.end_color[1],10), this.start_color[1]-this.end_color[1], this.flicker_max), // line 106, pos 48
+   #17: Possible strict violation.
+       r: fn(this.flicker_count, parseInt(this.end_color[1],10), this.start_color[1]-this.end_color[1], this.flicker_max), // line 106, pos 71
+   #18: Possible strict violation.
+       r: fn(this.flicker_count, parseInt(this.end_color[1],10), this.start_color[1]-this.end_color[1], this.flicker_max), // line 106, pos 91
+   #19: Possible strict violation.
+       r: fn(this.flicker_count, parseInt(this.end_color[1],10), this.start_color[1]-this.end_color[1], this.flicker_max), // line 106, pos 110
+   #20: Possible strict violation.
+       g: fn(this.flicker_count, parseInt(this.end_color[2],10), this.start_color[2]-this.end_color[2], this.flicker_max), // line 107, pos 19
+   #21: Possible strict violation.
+       g: fn(this.flicker_count, parseInt(this.end_color[2],10), this.start_color[2]-this.end_color[2], this.flicker_max), // line 107, pos 48
+   #22: Possible strict violation.
+       g: fn(this.flicker_count, parseInt(this.end_color[2],10), this.start_color[2]-this.end_color[2], this.flicker_max), // line 107, pos 71
+   #23: Possible strict violation.
+       g: fn(this.flicker_count, parseInt(this.end_color[2],10), this.start_color[2]-this.end_color[2], this.flicker_max), // line 107, pos 91
+   #24: Possible strict violation.
+       g: fn(this.flicker_count, parseInt(this.end_color[2],10), this.start_color[2]-this.end_color[2], this.flicker_max), // line 107, pos 110
+   #25: Possible strict violation.
+       b: fn(this.flicker_count, parseInt(this.end_color[3],10), this.start_color[3]-this.end_color[3], this.flicker_max) // line 108, pos 19
+   #26: Possible strict violation.
+       b: fn(this.flicker_count, parseInt(this.end_color[3],10), this.start_color[3]-this.end_color[3], this.flicker_max) // line 108, pos 48
+   #27: Possible strict violation.
+       b: fn(this.flicker_count, parseInt(this.end_color[3],10), this.start_color[3]-this.end_color[3], this.flicker_max) // line 108, pos 71
+   #28: Possible strict violation.
+       b: fn(this.flicker_count, parseInt(this.end_color[3],10), this.start_color[3]-this.end_color[3], this.flicker_max) // line 108, pos 91
+   #29: Possible strict violation.
+       b: fn(this.flicker_count, parseInt(this.end_color[3],10), this.start_color[3]-this.end_color[3], this.flicker_max) // line 108, pos 110
+   #30: Possible strict violation.
+       Y.later(Math.round(Math.random()*1000/this.flicker_count), this, neonOff); // line 111, pos 47
+   #31: Possible strict violation.
+       Y.later(Math.round(Math.random()*1000/this.flicker_count), this, neonOff); // line 111, pos 68
+   #32: Too many var statements.
+       var color = // line 115, pos 13
+   #33: 'color' is already defined.
+       var color = // line 115, pos 19
+   #34: Possible strict violation.
+       r: this.end_color[1], // line 117, pos 16
+   #35: Possible strict violation.
+       g: this.end_color[2], // line 118, pos 16
+   #36: Possible strict violation.
+       b: this.end_color[3] // line 119, pos 16
+   #37: 'color' used out of scope.
+       color = 'rgb('+Math.round(color.r)+','+Math.round(color.g)+','+Math.round(color.b)+')'; // line 123, pos 5
+   #38: 'color' used out of scope.
+       color = 'rgb('+Math.round(color.r)+','+Math.round(color.g)+','+Math.round(color.b)+')'; // line 123, pos 31
+   #39: 'color' used out of scope.
+       color = 'rgb('+Math.round(color.r)+','+Math.round(color.g)+','+Math.round(color.b)+')'; // line 123, pos 55
+   #40: 'color' used out of scope.
+       color = 'rgb('+Math.round(color.r)+','+Math.round(color.g)+','+Math.round(color.b)+')'; // line 123, pos 79
+   #41: Possible strict violation.
+       this.node.setStyle('color', color); // line 124, pos 5
+   #42: 'color' used out of scope.
+       this.node.setStyle('color', color); // line 124, pos 33
+   #43: Too many var statements.
+       var shadow = this.get('textShadow'); // line 126, pos 9
+   #44: Possible strict violation.
+       var shadow = this.get('textShadow'); // line 126, pos 18
+   #45: Possible strict violation.
+       this.node.setStyle('textShadow', Y.Lang.sub(shadow, { color: Y.Color.toHex(color) })); // line 129, pos 9
+   #46: 'color' used out of scope.
+       this.node.setStyle('textShadow', Y.Lang.sub(shadow, { color: Y.Color.toHex(color) })); // line 129, pos 84
+   #47: Possible strict violation.
+       this.node.setStyle('display', ''); // line 132, pos 5
+   #48: Possible strict violation.
+       if (this.flicker_count === 0) // line 134, pos 9
+   #49: Possible strict violation.
+       this.node.fire('neon:finished'); // line 136, pos 9
+   #50: Possible strict violation.
+       if (!this._isHidden()) // line 142, pos 10
+   #51: Possible strict violation.
+       this.neon.orig_show.call(this); // line 146, pos 5
+   #52: Possible strict violation.
+       this.neon.orig_show.call(this); // line 146, pos 30
+   #53: Possible strict violation.
+       var plugin           = this.neon; // line 148, pos 28
+   #54: Possible strict violation.
+       plugin.node          = this; // line 149, pos 28
+   #55: 'color' is defined but never used.
+       var color = // line 115, pos 18
+   #56: 'config' is defined but never used.
+       initializer: function(config) // line 160, pos 33
+shifter [queu] file has changed, continuing build
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-neon/gallery-neon.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [queu] coverage file read, starting coverage for: gallery-neon/gallery-neon.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-neon/gallery-neon-coverage.js
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.169 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)
