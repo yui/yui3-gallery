@@ -130,6 +130,7 @@ function formatTwistdown(o)
 	o.td.on('click', function()
 	{
 		var open = plugin.open_rows[ row_id ] = ! plugin.open_rows[ row_id ];
+		o.td.replaceClass('row-(open|closed)', open ? 'row-open' : 'row-closed');
 
 		if (open)
 		{
@@ -369,7 +370,7 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableRowExpansion = RowExpansion;
 
 
-}, 'gallery-2012.12.19-21-23', {
+}, 'gallery-2014.03.06-14-38', {
     "skinnable": "true",
     "requires": [
         "datatable",

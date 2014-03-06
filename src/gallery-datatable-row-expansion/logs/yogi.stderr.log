@@ -1,0 +1,3 @@
+shifter [err] /src/gallery-datatable-row-expansion/js/row-expansion.js contains 44 lint errors
+shifter [err] /assets/skins/sam/gallery-datatable-row-expansion-skin.css contains 3 lint errors
+Please install the phantomjs binary in your path!

@@ -128,6 +128,7 @@ function formatTwistdown(o)
 	o.td.on('click', function()
 	{
 		var open = plugin.open_rows[ row_id ] = ! plugin.open_rows[ row_id ];
+		o.td.replaceClass('row-(open|closed)', open ? 'row-open' : 'row-closed');
 
 		if (open)
 		{
