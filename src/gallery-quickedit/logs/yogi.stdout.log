@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.8.22
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.26
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-quickedit
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -74,47 +74,47 @@ shifter [info] shifting into gear for gallery-quickedit
    #32: Too many var statements.
        var fn = null; // line 518, pos 21
    #33: Too many var statements.
-       var container = host.get('contentBox'); // line 548, pos 13
+       var container = host.get('contentBox'); // line 549, pos 13
    #34: Trailing whitespace.
-       * // line 561, pos 7
+       * // line 562, pos 7
    #35: Too many var statements.
-       var col      = this.column_list[i]; // line 570, pos 17
+       var col      = this.column_list[i]; // line 571, pos 17
    #36: Too many var statements.
-       var host      = this.get('host'); // line 587, pos 13
+       var host      = this.get('host'); // line 589, pos 13
    #37: Too many var statements.
-       var container = host.get('contentBox'); // line 588, pos 13
+       var container = host.get('contentBox'); // line 590, pos 13
    #38: Trailing whitespace.
-       * // line 608, pos 7
+       * // line 610, pos 7
    #39: Too many var statements.
-       var host      = this.get('host'); // line 629, pos 13
+       var host      = this.get('host'); // line 631, pos 13
    #40: Too many var statements.
-       var rows      = host._tbodyNode.get('children'); // line 630, pos 13
+       var rows      = host._tbodyNode.get('children'); // line 632, pos 13
    #41: Too many var statements.
-       var change  = {}, // line 635, pos 17
+       var change  = {}, // line 637, pos 17
    #42: Too many var statements.
-       var qe   = this.column_map[key].quickEdit; // line 641, pos 21
+       var qe   = this.column_map[key].quickEdit; // line 643, pos 21
    #43: Too many var statements.
-       var prev = rec.get(key); // line 642, pos 21
+       var prev = rec.get(key); // line 644, pos 21
    #44: Too many var statements.
-       var val = Y.Lang.trim(field.get('value')); // line 644, pos 21
+       var val = Y.Lang.trim(field.get('value')); // line 646, pos 21
    #45: Too many var statements.
-       for (var j=0; j<always_include.length; j++) // line 656, pos 26
+       for (var j=0; j<always_include.length; j++) // line 658, pos 26
    #46: Too many var statements.
-       var key     = always_include[j]; // line 658, pos 25
+       var key     = always_include[j]; // line 660, pos 25
    #47: Too many var statements.
-       var host   = this.get('host'); // line 685, pos 13
+       var host   = this.get('host'); // line 687, pos 13
    #48: Too many var statements.
-       var e1 = host._tbodyNode.getElementsByTagName('input'); // line 687, pos 13
+       var e1 = host._tbodyNode.getElementsByTagName('input'); // line 689, pos 13
    #49: Too many var statements.
-       var e2 = host._tbodyNode.getElementsByTagName('textarea'); // line 688, pos 13
+       var e2 = host._tbodyNode.getElementsByTagName('textarea'); // line 690, pos 13
    #50: Too many var statements.
-       var e3 = host._tbodyNode.getElementsByTagName('select'); // line 689, pos 13
+       var e3 = host._tbodyNode.getElementsByTagName('select'); // line 691, pos 13
    #51: Trailing whitespace.
-       * // line 705, pos 7
+       * // line 707, pos 7
    #52: Too many var statements.
-       var cell = e.getAncestorByTagName('td'); // line 757, pos 13
+       var cell = e.getAncestorByTagName('td'); // line 759, pos 13
    #53: Trailing whitespace.
-       * // line 790, pos 7
+       * // line 792, pos 7
    #54: 'td' is defined but never used.
        QuickEdit.copyDownFormatter = function(o, td) // line 330, pos 45
    #55: 'config' is defined but never used.
@@ -126,33 +126,20 @@ shifter [queu] writing -min file
 shifter [info] shifting for coverage
 shifter [info] shifting skin for gallery-quickedit
 shifter [queu] coverage file read, starting coverage for: gallery-quickedit/gallery-quickedit.js
-shifter [queu] copying assets to skin for sam
 shifter [info] istanbul providing coverage
 shifter [queu] instrumenting with istanbul
-shifter [info] css lint passed for /assets/skins/sam/gallery-quickedit-skin.css
 shifter [queu] writing coverage file to gallery-quickedit/gallery-quickedit-coverage.js
+shifter [queu] copying assets to skin for sam
+shifter [info] css lint passed for /assets/skins/sam/gallery-quickedit-skin.css
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 0.37 seconds, pretty fast huh?
+shifter [info] finished in 0.474 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
-Starting Grover on 1 files with PhantomJS@1.8.1
-  Running 15 concurrent tests at a time.
-  Using a 120 second timeout per test.
-✔ [gallery-quickedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds)
-Writing files in JSON format to: /src/gallery-quickedit/logs/tests.json
-┌─────────┬─────────┬────────┬─────────────┬────────┐
-│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
-├─────────┼─────────┼────────┼─────────────┼────────┤
-│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
-└─────────┴─────────┴────────┴─────────────┴────────┘
-----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.001 seconds)
-  [Grover Execution Timer] 0.831 seconds
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m grover returned a failure

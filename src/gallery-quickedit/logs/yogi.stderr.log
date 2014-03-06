@@ -1,1 +1,2 @@
 shifter [err] /src/gallery-quickedit/js/QuickEdit.js contains 55 lint errors
+Please install the phantomjs binary in your path!

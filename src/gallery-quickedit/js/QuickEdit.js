@@ -533,6 +533,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 					{
 						formatter:     col.formatter,
 						nodeFormatter: col.nodeFormatter,
+						_formatterFn:  col._formatterFn,
 						allowHTML:     col.allowHTML
 					};
 
@@ -577,6 +578,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 			var col           = this.column_map[key];
 			col.formatter     = fmt.formatter;
 			col.nodeFormatter = fmt.nodeFormatter;
+			col._formatterFn  = fmt._formatterFn;
 			col.allowHTML     = fmt.allowHTML;
 		},
 		this);

@@ -535,6 +535,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 					{
 						formatter:     col.formatter,
 						nodeFormatter: col.nodeFormatter,
+						_formatterFn:  col._formatterFn,
 						allowHTML:     col.allowHTML
 					};
 
@@ -579,6 +580,7 @@ Y.extend(QuickEdit, Y.Plugin.Base,
 			var col           = this.column_map[key];
 			col.formatter     = fmt.formatter;
 			col.nodeFormatter = fmt.nodeFormatter;
+			col._formatterFn  = fmt._formatterFn;
 			col.allowHTML     = fmt.allowHTML;
 		},
 		this);
@@ -805,7 +807,7 @@ Y.namespace("Plugin");
 Y.Plugin.DataTableQuickEdit = QuickEdit;
 
 
-}, 'gallery-2014.01.22-18-38', {
+}, 'gallery-2014.03.06-14-38', {
     "skinnable": "true",
     "requires": [
         "datatable-base",
