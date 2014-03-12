@@ -1,0 +1,4 @@
+shifter [err] /src/gallery-msa-checkbox/js/gallery-msa-checkbox.js contains 5 lint errors
+shifter [err] /assets/skins/android/gallery-msa-checkbox-skin.css contains 23 lint errors
+shifter [err] /assets/skins/ios/gallery-msa-checkbox-skin.css contains 25 lint errors
+shifter [err] /assets/skins/sam/gallery-msa-checkbox-skin.css contains 27 lint errors

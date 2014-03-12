@@ -1,0 +1,195 @@
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.10.26
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-msa-checkbox
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
+shifter [info] racing to find the closest .shifter.json file
+shifter [info] revving up
+shifter [info] looking for build.json file
+shifter [info] found build.json file, shifting
+shifter [info] putting the hammer down, let's build this thing!
+shifter [warn] down shifting, can't find a meta directory
+shifter [info] putting the hammer down
+shifter [info] shifting into gear for gallery-msa-checkbox
+   #1: Mixed spaces and tabs.
+       current 	= e, // line 81, pos 12
+   #2: Expected '{' and instead saw 'return'.
+       return; // line 122, pos 21
+   #3: 'TOGGLE' is defined but never used.
+       TOGGLE = '.toggle', // line 14, pos 11
+   #4: 'READONLY' is defined but never used.
+       READONLY = 'readonly', // line 16, pos 13
+   #5: 'config' is defined but never used.
+       function Checkbox(config) { // line 7, pos 25
+shifter [queu] writing RAW file
+shifter [queu] compressing gallery-msa-checkbox/gallery-msa-checkbox.js with UglifyJS
+shifter [queu] writing -min file
+shifter [info] shifting for coverage
+shifter [info] shifting skin for gallery-msa-checkbox
+shifter [queu] coverage file read, starting coverage for: gallery-msa-checkbox/gallery-msa-checkbox.js
+shifter [info] istanbul providing coverage
+shifter [queu] instrumenting with istanbul
+shifter [queu] writing coverage file to gallery-msa-checkbox/gallery-msa-checkbox-coverage.js
+shifter [queu] copying assets to skin for android
+shifter [queu] copying assets to skin for ios
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 9, pos 2
+   #2: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 2px solid #ddd; // line 18, pos 3
+   #3: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 2px solid #ddd; // line 18, pos 3
+   #4: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: background-color, border; // line 20, pos 3
+   #5: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 23, pos 3
+   #6: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 1px solid #ddd; // line 35, pos 3
+   #7: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #ddd; // line 35, pos 3
+   #8: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: -webkit-transform, border, width; // line 37, pos 3
+   #9: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 40, pos 3
+   #10: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 44, pos 1
+   #11: [warning] The property -moz-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 45, pos 3
+   #12: [warning] The property -o-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 45, pos 3
+   #13: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 2px solid #d7d7d7; // line 53, pos 3
+   #14: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 2px solid #d7d7d7; // line 53, pos 3
+   #15: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 1px solid #b5b5b5; // line 62, pos 3
+   #16: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #b5b5b5; // line 62, pos 3
+   #17: [warning] The property -moz-box-shadow is compatible with -webkit-box-shadow and should be included as well.
+       -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.1); // line 65, pos 3
+   #18: [warning] Don't use adjoining classes.
+       .toggle.active { // line 75, pos 1
+   #19: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 79, pos 1
+   #20: [warning] The property -moz-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(50px, 0, 0); // line 83, pos 3
+   #21: [warning] The property -o-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(50px, 0, 0); // line 83, pos 3
+   #22: [warning] Don't use adjoining classes.
+       .toggle.active:before { // line 87, pos 1
+   #23: [warning] Don't use adjoining classes.
+       .toggle.active:before { // line 87, pos 1
+shifter [queu] copying assets to skin for sam
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 9, pos 2
+   #2: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 2px solid #ddd; // line 18, pos 3
+   #3: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 2px solid #ddd; // line 18, pos 3
+   #4: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: background-color, border; // line 20, pos 3
+   #5: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 23, pos 3
+   #6: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 1px solid #ddd; // line 35, pos 3
+   #7: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #ddd; // line 35, pos 3
+   #8: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: -webkit-transform, border, width; // line 37, pos 3
+   #9: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 40, pos 3
+   #10: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 44, pos 1
+   #11: [warning] The property -moz-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 45, pos 3
+   #12: [warning] The property -o-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 45, pos 3
+   #13: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 2px solid #e6e6e6; // line 52, pos 3
+   #14: [warning] The property -moz-box-shadow is compatible with -webkit-box-shadow and should be included as well.
+       -webkit-box-shadow: inset 0 0 0 0 #e1e1e1; // line 53, pos 3
+   #15: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: box-shadow, border; // line 55, pos 3
+   #16: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 58, pos 3
+   #17: [warning] Fallback border (hex or RGB) should precede RGBA border.
+       border: 1px solid rgba(0, 0, 0, 0.2); // line 63, pos 3
+   #18: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: -webkit-transform, border, width; // line 64, pos 3
+   #19: [warning] The property -moz-box-shadow is compatible with -webkit-box-shadow and should be included as well.
+       -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08); // line 67, pos 3
+   #20: [warning] Don't use adjoining classes.
+       .toggle.active { // line 73, pos 1
+   #21: [warning] The property -moz-box-shadow is compatible with -webkit-box-shadow and should be included as well.
+       -webkit-box-shadow: inset 0 0 0 13px #4cd964; // line 76, pos 3
+   #22: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 79, pos 1
+   #23: [warning] The property -moz-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(17px, 0, 0); // line 80, pos 3
+   #24: [warning] The property -o-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(17px, 0, 0); // line 80, pos 3
+   #25: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 84, pos 1
+   #1: [warning] The box-sizing property isn't supported in IE6 and IE7.
+       box-sizing: border-box; // line 9, pos 2
+   #2: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 2px solid #ddd; // line 18, pos 3
+   #3: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 2px solid #ddd; // line 18, pos 3
+   #4: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: background-color, border; // line 20, pos 3
+   #5: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 23, pos 3
+   #6: [warning] Using height with border can sometimes make elements larger than you expect.
+       border: 1px solid #ddd; // line 35, pos 3
+   #7: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 1px solid #ddd; // line 35, pos 3
+   #8: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: -webkit-transform, border, width; // line 37, pos 3
+   #9: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 40, pos 3
+   #10: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 44, pos 1
+   #11: [warning] The property -moz-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 45, pos 3
+   #12: [warning] The property -o-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 45, pos 3
+   #13: [warning] Using width with border can sometimes make elements larger than you expect.
+       border: 2px solid #e6e6e6; // line 52, pos 3
+   #14: [warning] The property -moz-box-shadow is compatible with -webkit-box-shadow and should be included as well.
+       -webkit-box-shadow: inset 0 0 0 0 #e1e1e1; // line 53, pos 3
+   #15: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: box-shadow, border; // line 55, pos 3
+   #16: [warning] The property -o-transition-duration is compatible with -webkit-transition-duration and -moz-transition-duration and should be included as well.
+       -webkit-transition-duration: 0.2s; // line 58, pos 3
+   #17: [warning] Fallback border (hex or RGB) should precede RGBA border.
+       border: 1px solid rgba(0, 0, 0, 0.2); // line 63, pos 3
+   #18: [warning] The property -o-transition-property is compatible with -webkit-transition-property and -moz-transition-property and should be included as well.
+       -webkit-transition-property: -webkit-transform, border, width; // line 64, pos 3
+   #19: [warning] The property -moz-box-shadow is compatible with -webkit-box-shadow and should be included as well.
+       -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.08); // line 67, pos 3
+   #20: [warning] Don't use adjoining classes.
+       .toggle.active { // line 78, pos 1
+   #21: [warning] The property -moz-box-shadow is compatible with -webkit-box-shadow and should be included as well.
+       -webkit-box-shadow: inset 0 0 0 13px #60a683; // line 82, pos 3
+   #22: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 85, pos 1
+   #23: [warning] The property -moz-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 86, pos 3
+   #24: [warning] The property -o-transform is compatible with -webkit-transform and -ms-transform and should be included as well.
+       -webkit-transform: translate3d(28px, 0, 0); // line 86, pos 3
+   #25: [warning] Don't use adjoining classes.
+       .toggle.active .toggle-handle { // line 90, pos 1
+   #26: [warning] Don't use adjoining classes.
+       .toggle.active:before { // line 93, pos 1
+   #27: [warning] Don't use adjoining classes.
+       .toggle.active:before { // line 93, pos 1
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file with core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [queu] writing skin file without core wrapper
+shifter [info] done racing, the gears are toast
+shifter [info] finished in 0.385 seconds, pretty fast huh?
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
+[35myogi[0m [37m[[0m[31mbail[0m[37m][0m seems this module does not have tests, you should add some :)

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<style>
+.yui3-slidecheckbox-wrapper > .edge{background-color:#F5F5F5 !important;}
+</style>
+<script src="http://yui.yahooapis.com/3.15.0/build/yui/yui-debug.js"></script>
+<script>
+YUI({
+	base: './',
+	gallery:'gallery-2012.06.20-20-07',
+	modules:{
+			'gallery-msa-checkbox-patch':{
+				fullpath:'../../build/gallery-msa-checkbox/assets/skins/sam/gallery-msa-checkbox.css',
+				type: 'css'
+			},
+			'gallery-msa-checkbox':{
+				fullpath:'../../build/gallery-msa-checkbox/gallery-msa-checkbox-debug.js',
+				requires:['node-base','gallery-msa-checkbox-patch'],
+				skinnable:['sam','ios','android']
+			}
+
+		},
+	skin:{
+		overrides:{
+			//'msa-checkbox':['ios']
+		}
+	},
+	filter:'debug'
+	
+}).use('gallery-msa-checkbox',function(Y){
+	new Y.MSA.Checkbox({srcNodes:Y.all('.msa-checkbox')});
+});
+function reset(){
+	var src = document.getElementById('c4');
+	src.checked = !src.checked;
+}
+</script>
+</head>
+<body style="background-color:#F5F5F5;">
+<form>
+
+<input type="checkbox" name="myCheck1" id="c1" class="msa-checkbox"><br/>
+<input type="checkbox" name="myCheck2" checked="CHECKED" id="c2" class="msa-checkbox"><br/>
+<input type="checkbox" name="myCheck3" CHECKED id="c5" class="msa-checkbox"><br/>
+Readonly
+<input type="checkbox" name="myCheck4" READONLY id="c6" class="msa-checkbox"><br/>
+
+Disabled:<br/>
+<input type="checkbox" name="myCheck5" class="msa-checkbox" DISABLED id="c3" ><br/>
+
+</form>
+
+</body>
+</html>

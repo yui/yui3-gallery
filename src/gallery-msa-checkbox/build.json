@@ -1,0 +1,28 @@
+{
+    "name": "gallery-msa-checkbox",
+    "builds": {
+        "gallery-msa-checkbox": {
+            "config": {
+                "skinnable": "true",
+                "requires": [
+                    "node-base",
+                    "base",
+                    "event-base",
+                    "event-move",
+                    "event-delegate",
+                    "node-event-delegate",
+                    "node-style"
+					
+                ],
+                "optional": [
+                    ""
+                ]
+            },
+            "skinnable": "true",
+            "jsfiles": [
+                "gallery-msa-checkbox.js"
+            ],
+            "meta": {}
+        }
+    }
+}
