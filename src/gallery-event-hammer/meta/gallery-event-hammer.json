@@ -1,0 +1,9 @@
+{
+    "gallery-event-hammer": {
+        "requires": [
+            "node-base",
+            "event-touch",
+            "event-synthetic"
+        ]
+    }
+}

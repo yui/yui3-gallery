@@ -1,0 +1,10 @@
+{
+    "name": "gallery-event-hammer",
+    "builds": {
+        "gallery-event-hammer": {
+            "jsfiles": [
+                "js/gallery-event-hammer.js"
+            ]
+        }
+    }
+}

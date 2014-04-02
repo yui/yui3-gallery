@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-event-hammer",
+    "displayName": "Gallery: gallery-event-hammer",
+    "description": "Use HammerJS gesture events in YUI 3.",
+    "author"     : [ "tilomitra" ],
+    "use"        : [ "gallery-event-hammer" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}
