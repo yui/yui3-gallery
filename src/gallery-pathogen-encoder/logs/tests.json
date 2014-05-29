@@ -1,0 +1,8 @@
+{
+    "passed": 0,
+    "failed": 2,
+    "total": 2,
+    "ignored": 0,
+    "name": "http://127.0.0.1:5000/tests/src/gallery-pathogen-encoder/tests/unit/index.html?filter=coverage",
+    "error": "ReferenceError: Can't find variable: YUI\nhttp://127.0.0.1:5000/tests/build/gallery-pathogen-encoder/gallery-pathogen-encoder-debug.js:1"
+}
