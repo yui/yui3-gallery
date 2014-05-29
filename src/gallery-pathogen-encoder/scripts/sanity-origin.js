@@ -28,7 +28,7 @@ var args = process.argv.slice(2),
                 'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-pathogen-encoder/gallery-pathogen-encoder',
                 'http://yui.yahooapis.com/gallery-2013.08.07-20-34/build/gallery-bitly/gallery-bitly'
             ],
-            'os/mit/td/ape-applet-0.0.61+af-applet-editview;os/mit/td/td-applet-weather-0.0.95+td-applet-weather-appletmodel': [
+            's+os/mit/td/ape-applet-0.0.61+af-applet-editview;s+os/mit/td/td-applet-weather-0.0.95+td-applet-weather-appletmodel': [
                 'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-editview/af-applet-editview',
                 'http://l.yimg.com/os/mit/td/td-applet-weather-0.0.95/td-applet-weather-appletmodel/td-applet-weather-appletmodel'
             ],
@@ -42,7 +42,7 @@ var args = process.argv.slice(2),
                 'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-pathogen-encoder/gallery-pathogen-encoder',
                 'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-bitly/gallery-bitly'
             ],
-            'os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview': [
+            's+os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview': [
                 'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-headerview/af-applet-headerview',
                 'http://l.yimg.com/os/mit/td/ape-applet-0.0.61/af-applet-editview/af-applet-editview'
             ],
@@ -52,7 +52,7 @@ var args = process.argv.slice(2),
             ],
 
             // Short groups
-            'c+3.12.0+yui,widget-base;g+2013.09.04-21-56+pathogen-encoder,bitly;r+os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview;p+os/mit/td/ape-applet-0.0.61+af-applet-editview/af-applet-editview': [
+            'c+3.12.0+yui,widget-base;g+2013.09.04-21-56+pathogen-encoder,bitly;s+os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview;os/mit/td/ape-applet-0.0.61+af-applet-editview/af-applet-editview': [
                 'http://yui.yahooapis.com/3.12.0/build/yui/yui',
                 'http://yui.yahooapis.com/3.12.0/build/widget-base/widget-base',
                 'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-pathogen-encoder/gallery-pathogen-encoder',
@@ -62,7 +62,7 @@ var args = process.argv.slice(2),
             ],
 
             // All together now:
-            'core+3.12.0+yui,widget-base;gallery+2013.09.04-21-56+pathogen-encoder,bitly;os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview;os/mit/td/ape-applet-0.0.61/af-applet-editview/af-applet-editview': [
+            'core+3.12.0+yui,widget-base;gallery+2013.09.04-21-56+pathogen-encoder,bitly;s+os/mit/td/ape-applet-0.0.61+af-applet-headerview,af-applet-editview;os/mit/td/ape-applet-0.0.61/af-applet-editview/af-applet-editview': [
                 'http://yui.yahooapis.com/3.12.0/build/yui/yui',
                 'http://yui.yahooapis.com/3.12.0/build/widget-base/widget-base',
                 'http://yui.yahooapis.com/gallery-2013.09.04-21-56/build/gallery-pathogen-encoder/gallery-pathogen-encoder',
@@ -94,10 +94,10 @@ var args = process.argv.slice(2),
             ],
 
             // App css:
-            'os/mit/td/stencil-0.1.111+stencil-theme-001': [
+            's+os/mit/td/stencil-0.1.111+stencil-theme-001': [
                 'http://l.yimg.com/os/mit/td/stencil-0.1.111/stencil-theme-001/stencil-theme-001'
             ],
-            'os/mit/td/stencil-0.1.111+stencil-css': [
+            's+os/mit/td/stencil-0.1.111+stencil-css': [
                 'http://l.yimg.com/os/mit/td/stencil-0.1.111/stencil-css/stencil-css'
             ],
 
@@ -115,7 +115,7 @@ var args = process.argv.slice(2),
                 'http://yui.yahooapis.com/3.12.0/build/datatable-base/assets/skins/sam/datatable-base.css',
                 'http://yui.yahooapis.com/3.12.0-beta-1/build/datatable-base/assets/skins/night/datatable-base.css'
             ],
-            'os/mit/td/stencil-0.1.111+stencil-theme-001;os/mit/td/stencil-0.1.112+stencil-css': [
+            's+os/mit/td/stencil-0.1.111+stencil-theme-001;s+os/mit/td/stencil-0.1.112+stencil-css': [
                 'http://l.yimg.com/os/mit/td/stencil-0.1.111/stencil-theme-001/stencil-theme-001',
                 'http://l.yimg.com/os/mit/td/stencil-0.1.112/stencil-css/stencil-css'
             ],
@@ -129,7 +129,7 @@ var args = process.argv.slice(2),
                 'http://yui.yahooapis.com/3.12.0/build/datatable-base/assets/skins/sam/datatable-base.css',
                 'http://yui.yahooapis.com/3.12.0/build/datatable-base/assets/skins/night/datatable-base.css'
             ],
-            'os/mit/td/stencil-0.1.111+stencil-theme-001,stencil-css': [
+            's+os/mit/td/stencil-0.1.111+stencil-theme-001,stencil-css': [
                 'http://l.yimg.com/os/mit/td/stencil-0.1.111/stencil-theme-001/stencil-theme-001',
                 'http://l.yimg.com/os/mit/td/stencil-0.1.111/stencil-css/stencil-css'
             ],
@@ -139,7 +139,7 @@ var args = process.argv.slice(2),
             ],
 
             // All together now:
-            'core+3.12.0+cssreset,skin-sam-console,cssgrids;os/mit/td/stencil-0.1.111+stencil-theme-001;os/mit/td/stencil-0.1.111/stencil-css/stencil-css': [
+            'core+3.12.0+cssreset,skin-sam-console,cssgrids;s+os/mit/td/stencil-0.1.111+stencil-theme-001;os/mit/td/stencil-0.1.111/stencil-css/stencil-css': [
                 'http://yui.yahooapis.com/3.12.0/build/cssreset/cssreset',
                 'http://yui.yahooapis.com/3.12.0/build/console/assets/skins/sam/console.css',
                 'http://yui.yahooapis.com/3.12.0/build/cssgrids/cssgrids',

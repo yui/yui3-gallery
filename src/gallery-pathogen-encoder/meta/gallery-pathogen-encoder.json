@@ -1,0 +1,5 @@
+{
+    "gallery-pathogen-encoder": {
+        "requires": ["loader-base"]
+    }
+}

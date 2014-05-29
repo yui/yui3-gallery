@@ -1,10 +1,10 @@
+YUI.add('gallery-pathogen-encoder', function (Y, NAME) {
+
 /*
 Copyright 2013 Yahoo! Inc. All rights reserved.
 Licensed under the BSD License.
 http://yuilibrary.com/license/
 */
-
-YUI.add('gallery-pathogen-encoder', function (Y, NAME) {
 
 var resolve = Y.Loader.prototype.resolve,
 
@@ -53,11 +53,10 @@ Y.Loader.prototype.buildCombo = function (groups, comboBase, comboTail) {
             prepend = currDelim + currKey;
             prepend = prepend ? prepend + SUB_GROUP_DELIM : MODULE_DELIM;
 
-            // Since modules with custom paths are treated as their own
-            // segment, we override the prepend value so that it is only ever
-            // set to the group delimiter. TODO: refactor this while loop into
-            // one with multiple if-statements to make it easier to read.
-            if (group.key.indexOf('path') === 0) {
+            // Modules with custom paths have `group.key` set to the same value
+            // as their module name. These are treated as their own module
+            // group.
+            if (modules.length === 1 && currKey === modules[0]) {
                 prepend = currDelim;
             }
 
@@ -138,7 +137,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             key  = 'g' + SUB_GROUP_DELIM + galleryVersion;
         }
         // If the module was built the YUI way, then we segment these modules
-        // into the `root` group.
+        // into the `shifter` group.
         else if (mod.path.indexOf(name + '/' + name) === 0) {
             key = meta.root;
 
@@ -150,7 +149,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
                 key = key.slice(0, -1);
             }
 
-            key = 'r' + SUB_GROUP_DELIM + key;
+            key = 's' + SUB_GROUP_DELIM + key;
         }
         // If the path does not follow the YUI build convention, then we
         // add them to the prefix tree and subsequently segment these modules
@@ -171,7 +170,6 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
             // to the prefix tree for later compression
             if (Y.config.fullpathCompression) {
                 prefixTree = prefixTree || new PrefixTree({
-                    rootPrefix:     'p+',
                     moduleDelim:    MODULE_DELIM,
                     subgroupDelim:  SUB_GROUP_DELIM,
                     groupDelim:     GROUP_DELIM
@@ -180,9 +178,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
                 continue;
             }
 
-            // Tag this module as `path` so that we know to include the
-            // full path in the combo url later on
-            key = 'path' + SUB_GROUP_DELIM + name;
+            key = name;
         }
 
         source[key] = source[key] || [];
@@ -200,7 +196,7 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
     if (prefixTree) {
         compressed = prefixTree.compress();
         for (i = 0, len = compressed.length; i < len; i += 1) {
-            key = 'p' + SUB_GROUP_DELIM + compressed[i].root;
+            key = compressed[i].root;
             source[key] = source[key] || [];
             source[key].push(compressed[i].name);
         }
@@ -214,9 +210,9 @@ Y.Loader.prototype.aggregateGroups = function (modules) {
 };
 
 /**
-A class that represents a prefix tree data structure for file paths. The main
-purpose of this class is to optimally compress itself when the added paths need
-to be serialized.
+A prefix tree data structure for file paths. Can optimally compress itself into
+a serialized representation of a pathogen-encoded url.
+
 @class PrefixTree
 @constructor
 **/
@@ -227,22 +223,40 @@ function PrefixTree (config) {
         children: {}
     };
 
-    this.rootPrefixLen     = config.rootPrefix.length    || 0;
-    this.moduleDelimLen    = config.moduleDelim.length   || 0;
-    this.subgroupDelimLen  = config.subgroupDelim.length || 0;
-    this.groupDelimLen     = config.groupDelim.length    || 0;
+    this.moduleDelimLen   = config.moduleDelim   && config.moduleDelim.length   || 0;
+    this.subgroupDelimLen = config.subgroupDelim && config.subgroupDelim.length || 0;
+    this.groupDelimLen    = config.groupDelim    && config.groupDelim.length    || 0;
 }
 
 PrefixTree.prototype = {
 
     /**
     Adds a path to the prefix tree instance. Calculates the weight of each node
-    as paths are added. The weight of a node represents the number of
-    characters in the the path value of the node, combined with the number of
-    characters in the path value of each of its children's paths (relative to
-    the node's path value).
+    as paths are added. The weight of a node represents the sum of:
+    1) the string length of the path represented by the root and the node
+    2) the string lengths of the paths represented by the node and each leaf node
+
+    For example, given the set of full paths:
+    some/cool/path
+    some/cool/other/path
+    some/awesome/path
+
+    The tree looks like:
+    some --> cool --> path
+        \        \--> other --> path
+         \--> awesome --> path
+
+    The weight of the `some` node is:
+    'some+cool/path,cool/other/path,awesome/path'.length
+
+    The weight of the `cool` node is:
+    'some/cool+path,other/path'.length
+
+    The weight of the `awesome` node is:
+    'some/awesome+path'.length
+
     @method add
-    @param {String} fullpath A path
+    @param {String} fullpath An absolute path
     **/
     add: function (fullpath) {
         var currentNode = this.tree,
@@ -270,10 +284,10 @@ PrefixTree.prototype = {
 
                 // If not leaf node
                 if (remainingPath) {
-                    child.weight += traversedPath.length + remainingPath.length;
-
-                    // Account for the length of the subgroup delimiter
-                    child.weight += this.subgroupDelimLen;
+                    // some/cool/path => some+cool/path
+                    child.weight = traversedPath.length   // 'some'.length
+                                 + this.subgroupDelimLen  // '+'.length
+                                 + remainingPath.length;  // 'cool/path'.length
 
                     child.children = {};
                 } else {
@@ -281,8 +295,10 @@ PrefixTree.prototype = {
                     child.weight = Number.MAX_VALUE;
                 }
             } else {
-                // Account for the length of the module delimiter
-                child.weight += this.moduleDelimLen + remainingPath.length;
+                // add 'some/awesome/path' to existing 'some+cool/path'
+                // => some+cool/path,awesome/path
+                child.weight += this.moduleDelimLen     // ','.length
+                              + remainingPath.length;   // 'awesome/path'.length
             }
 
             // bubble down
@@ -292,11 +308,12 @@ PrefixTree.prototype = {
     },
 
     /**
-    Compresses the prefix tree. Uses a depth-first search to find the optimal
-    set of roots to serialize all the added paths.
+    Compresses the prefix tree. Uses DFS to find the optimal set of root paths
+    and their corresponding relative paths that results in the shortest
+    serialized length.
+
     @method compress
-    @return {Array} compressed An array of (root path, module path) pairs that
-        represent the the optimal way to serialize the prefix tree.
+    @return {Array} compressed An array of root path and relative path pairs
     **/
     compress: function () {
         var process     = [],
@@ -304,7 +321,6 @@ PrefixTree.prototype = {
             children,
             root_re,
             leaves,
-            weight,
             total,
             child,
             node,
@@ -325,37 +341,29 @@ PrefixTree.prototype = {
 
             node = process.pop();
 
-            // Account for the length of the root prefix
-            weight = this.rootPrefixLen + node.weight;
-
             // Find the total resulting weight if we use the children of this
             // node as roots
             for (key in node.children) {
                 if (node.children.hasOwnProperty(key)) {
                     child = node.children[key];
-
-                    // Account for the length of the initial and subsequent
-                    // group delimiters for every additional root
-                    total += children.length ?
-                             this.groupDelimLen + this.rootPrefixLen :  // ;p+
-                             this.rootPrefixLen;                        //  p+
-
                     total += child.weight;
-
                     children.push(child);
                 }
             }
 
+            // Account for the group delimiter lengths
+            total += children.length - 1;
 
-            if (weight <= total) {
+
+            if (node.weight <= total) {
                 // If the weigth of this node is less than or equal to the
                 // total weight of its child nodes combined, it means that
                 // we'll get better compression by using this node as a root
 
                 root_re = new RegExp('^' + node.path + '/');
 
-                // Now that we've decided to use this node as a root, we can
-                // determine what the module names should be
+                // Now that we've decided to use this node (root path), we can
+                // determine what the module names (relative paths) should be
                 leaves = this.getLeafNodes(node);
                 for (i = 0; i < leaves.length; i += 1) {
                     compressed.push({
@@ -365,9 +373,10 @@ PrefixTree.prototype = {
                     });
                 }
             } else {
-                // If the weight of this node is greater than the total weight
-                // of its child nodes combined, it means that we'll get better
-                // compression by using each child node as an individual root.
+                // If the weight of this node is greater than the weight of its
+                // child nodes combined, it means that we'll get better
+                // compression by using the set of root paths represented by
+                // the child nodes
                 process = process.concat(children);
             }
         }
@@ -501,7 +510,9 @@ to see if Loader re-requests any module that we've already seen.
 Y.Loader.prototype.shouldFallback = function (resolved) {
     var modules,
         name,
-        type;
+        type,
+        len,
+        i;
 
     if (this.fallbackMode) {
         return this.fallbackMode;
@@ -557,8 +568,9 @@ Y.Loader.prototype.resolve = function () {
     }
 
     // Add the pathogen namespace to the combo base.
-    if (Y.config.customComboBase) {
-        customComboBase = Y.config.customComboBase + NAMESPACE;
+    if (!customComboBase && Y.config.customComboBase) {
+        customComboBase = Y.config.customComboBase.replace(/\/+$/, '');
+        customComboBase += '/' + NAMESPACE;
     }
 
     // Fallback to the default combo url if we need to.
@@ -587,6 +599,10 @@ Y.Loader.prototype.resolve = function () {
             resolved[urlKey] = resolvedUrls = resolved[urlKey] || [];
             resolved[modKey] = resolvedMods = resolved[modKey] || [];
 
+            // Potential issue here where we're not able to associate a single
+            // url to the module it corresponds to. We end up having to
+            // re-detect that a module needs to load as a single url in
+            // customResolve().
             for (i = 0, len = resolvedUrls.length; i < len; i += 1) {
                 url = resolvedUrls[i];
                 if (
@@ -600,7 +616,7 @@ Y.Loader.prototype.resolve = function () {
             // Generate custom combo urls.
             comboUrls = this.customResolve(resolvedMods, type);
 
-            if (window.JSON) {
+            if (resolvedUrls.length && window.JSON) {
             }
 
             resolved[type] = [].concat(comboUrls, singles);
@@ -610,4 +626,5 @@ Y.Loader.prototype.resolve = function () {
     return resolved;
 };
 
-}, '@BETA@', { requires: ['loader-base'] });
+
+}, 'gallery-2014.05.29-00-48', {"requires": ["loader-base"]});

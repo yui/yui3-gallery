@@ -1,4 +1,4 @@
-YUI.add('gallery-pathogen-encoder', function (Y, NAME) {
+YUI.add('yui-pathogen-encoder', function (Y, NAME) {
 
 /*
 Copyright 2013 Yahoo! Inc. All rights reserved.

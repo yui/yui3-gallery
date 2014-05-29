@@ -6,6 +6,6 @@ http://yuilibrary.com/license/
 
 module.exports = {
     enable: function (app) {
-        app.yui.addModuleToSeed('gallery-pathogen-encoder', 'yui-pathogen-encoder');
+        app.yui.addModuleToSeed('yui-pathogen-encoder');
     }
 };

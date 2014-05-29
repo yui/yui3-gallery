@@ -1,4 +1,4 @@
-YUI.add('gallery-pathogen-encoder', function (Y, NAME) {
+YUI.add('yui-pathogen-encoder', function (Y, NAME) {
 
 /*
 Copyright 2013 Yahoo! Inc. All rights reserved.
@@ -305,7 +305,6 @@ PrefixTree.prototype = {
             currentNode = child;
         }
 
-        Y.log('Added ' + currentNode.path, 'debug', 'PrefixTree');
     },
 
     /**
@@ -335,7 +334,6 @@ PrefixTree.prototype = {
             }
         }
 
-        Y.log(this.stringify(this.tree), 'debug', 'PrefixTree');
 
         while (process.length) {
             total    = 0;
@@ -356,14 +354,11 @@ PrefixTree.prototype = {
             // Account for the group delimiter lengths
             total += children.length - 1;
 
-            Y.log('Weight of the current root "' + node.path + '": ' + node.weight, 'debug', 'PrefixTree');
-            Y.log('Combined weight of child roots: ' + total, 'debug', 'PrefixTree');
 
             if (node.weight <= total) {
                 // If the weigth of this node is less than or equal to the
                 // total weight of its child nodes combined, it means that
                 // we'll get better compression by using this node as a root
-                Y.log('Established root: "' + node.path + '"', 'debug', 'PrefixTree');
 
                 root_re = new RegExp('^' + node.path + '/');
 
@@ -382,12 +377,10 @@ PrefixTree.prototype = {
                 // child nodes combined, it means that we'll get better
                 // compression by using the set of root paths represented by
                 // the child nodes
-                Y.log('Scheduling ' + children.length + ' child(ren) of "' + node.path + '" for further processing...', 'debug', 'PrefixTree');
                 process = process.concat(children);
             }
         }
 
-        Y.log(this.stringify(compressed), 'debug', 'PrefixTree');
 
         return compressed;
     },
@@ -532,8 +525,6 @@ Y.Loader.prototype.shouldFallback = function (resolved) {
                 name = modules[i].name;
 
                 if (this.pathogenSeen[name]) {
-                    Y.log('Detected a request for a module that we have already seen: ' + name, 'warn', NAME);
-                    Y.log('Falling back to default combo urls', 'warn', NAME);
 
                     this.fallbackMode = true;
                     return this.fallbackMode;
@@ -626,10 +617,6 @@ Y.Loader.prototype.resolve = function () {
             comboUrls = this.customResolve(resolvedMods, type);
 
             if (resolvedUrls.length && window.JSON) {
-                Y.log('Default encoding resulted in ' + resolvedUrls.length + ' URLs', 'info', NAME);
-                Y.log(JSON.stringify(resolvedUrls, null, 4), 'info', NAME);
-                Y.log('Custom encoding resulted in ' + comboUrls.length + ' URLs', 'info', NAME);
-                Y.log(JSON.stringify(comboUrls, null, 4), 'info', NAME);
             }
 
             resolved[type] = [].concat(comboUrls, singles);
