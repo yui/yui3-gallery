@@ -1,0 +1,11 @@
+{
+    "name"       : "gallery-y-common-ractive",
+    "displayName": "Gallery: gallery-y-common-ractive",
+    "description": "*Summary Goes Here*",
+    "author"     : [ "asotog88" ],
+    "use"        : [ "gallery-y-common-ractive" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": []
+}

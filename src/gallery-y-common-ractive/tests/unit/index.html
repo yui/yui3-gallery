@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+    
+    <head>
+        <title>gallery-y-common-ractive</title>
+        <script src="/build/yui/yui.js"></script>
+        <script src="/build/gallery-y-common-ractive/gallery-y-common-ractive.js"></script>
+        <script src="js/tests.js"></script>
+        <meta charset="utf-8" />
+    </head>
+    
+    <body class="yui3-skin-sam">
+        <div id="logger"></div>
+        <div id="el">
+            {{^signedIn}}
+                <!-- message for non-signed-in users -->
+                <p>Hi there! Please
+                    <a class='button' on-click='signIn'>sign in</a>
+                </p>
+            {{/signedIn}}
+            {{#signedIn}}
+                <!-- message for signed-in users -->
+                <p>Welcome back, {{username}}!</p>
+            {{/signedIn}}
+        </div>
+        <script>
+            YUI({
+                coverage: ['gallery-y-common-ractive'],
+                filter: (window.location.search.match(/[?&]filter=([^&]+)/) || [])[1] || 'raw'
+            }).use('test-console', 'test', 'module-tests', 'gallery-y-common-ractive', function(Y) {
+
+                var ractive = new Y.Common.Ractive({
+                    container: Y.one('#el'),
+                    data: {
+                        signedIn: false
+                    }
+                });
+                ractive.on('signIn', function() {
+                    var name = prompt('Enter your username to sign in', 'ractive_fan');
+
+                    ractive.set({
+                        username: name,
+                        signedIn: true,
+                        notSignedIn: false
+                    });
+                });
+
+                (new Y.Test.Console()).render('#logger');
+
+                Y.Test.Runner.setName('gallery-y-common-ractive');
+                Y.Test.Runner.run();
+            });
+        </script>
+    </body>
+
+</html>

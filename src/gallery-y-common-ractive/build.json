@@ -1,0 +1,11 @@
+{
+    "name": "gallery-y-common-ractive",
+    "builds": {
+        "gallery-y-common-ractive": {
+            "jsfiles": [
+            	"js/ractive.min.js",
+                "js/gallery-y-common-ractive.js"
+            ]
+        }
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "gallery-y-common-ractive": {
+        "requires": [
+            "yui-base"
+        ]
+    }
+}
