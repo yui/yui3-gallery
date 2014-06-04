@@ -5,4 +5,8 @@ cd ../../;
 grunt uglify:ractive;
 cd src/gallery-y-common-ractive;
 rm -r ractive-tmp;
-
+yogi build;
+git add ../../build/gallery-y-common-ractive/;
+git add js;
+git commit -m "ractivejs updated to latest in cdn edge";
+git push;

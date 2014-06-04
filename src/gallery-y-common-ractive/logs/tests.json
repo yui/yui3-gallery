@@ -1,29 +1,36 @@
 {
     "name": "gallery-y-common-ractive",
-    "passed": 0,
-    "failed": 2,
+    "passed": 4,
+    "failed": 0,
     "errors": 0,
     "ignored": 0,
-    "total": 2,
-    "duration": 8,
+    "total": 4,
+    "duration": 4068,
     "type": "report",
     "Automated Tests": {
         "name": "Automated Tests",
-        "passed": 0,
-        "failed": 1,
+        "passed": 2,
+        "failed": 0,
         "errors": 0,
         "ignored": 0,
-        "total": 1,
-        "duration": 3,
+        "total": 2,
+        "duration": 2029,
         "type": "testcase",
-        "test is empty": {
-            "result": "fail",
-            "message": "No Tests Provided For This Module",
+        "application initialized": {
+            "result": "pass",
+            "message": "Test passed",
             "type": "test",
-            "name": "test is empty",
-            "duration": 1
+            "name": "application initialized",
+            "duration": 1001
+        },
+        "style decorator test": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "style decorator test",
+            "duration": 1002
         }
     },
-    "timestamp": "Thu 29 May 2014 08:47:01 AM PDT",
+    "timestamp": "Wed 04 Jun 2014 02:40:33 PM PDT",
     "consoleInfo": []
 }

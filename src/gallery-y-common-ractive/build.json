@@ -4,7 +4,9 @@
         "gallery-y-common-ractive": {
             "jsfiles": [
             	"js/ractive.min.js",
-                "js/gallery-y-common-ractive.js"
+                "js/gallery-y-common-ractive.js",
+                "js/ractive-decorators/img.js",
+                 "js/ractive-decorators/style.js"
             ]
         }
     }

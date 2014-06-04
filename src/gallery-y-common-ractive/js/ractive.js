@@ -1,6 +1,6 @@
 /*
 	ractive.js v0.4.0
-	2014-05-26 - commit 5296eb4a 
+	2014-05-31 - commit 0100326d 
 
 	http://ractivejs.org
 	http://twitter.com/RactiveJS
@@ -176,7 +176,7 @@
 	/* Ractive/prototype/shared/add.js */
 	var Ractive$shared_add = function( isNumeric ) {
 
-		return function( root, keypath, d ) {
+		return function add( root, keypath, d ) {
 			var value;
 			if ( typeof keypath !== 'string' || !isNumeric( d ) ) {
 				throw new Error( 'Bad arguments' );
@@ -192,7 +192,7 @@
 	/* Ractive/prototype/add.js */
 	var Ractive$add = function( add ) {
 
-		return function( keypath, d ) {
+		return function Ractive$add( keypath, d ) {
 			return add( this, keypath, d === undefined ? 1 : +d );
 		};
 	}( Ractive$shared_add );
@@ -237,7 +237,11 @@
 				};
 				fulfil = makeResolver( FULFILLED );
 				reject = makeResolver( REJECTED );
-				callback( fulfil, reject );
+				try {
+					callback( fulfil, reject );
+				} catch ( err ) {
+					reject( err );
+				}
 				promise = {
 					// `then()` returns a Promise - 2.2.7
 					then: function( onFulfilled, onRejected ) {
@@ -650,10 +654,107 @@
 		return upstreamChanges;
 	};
 
-	/* shared/notifyDependants.js */
-	var notifyDependants = function( circular ) {
+	/* shared/notifyPatternObservers.js */
+	var notifyPatternObservers = function() {
 
-		var get, lastKey = /[^\.]+$/, starMaps = {}, unwrap = {
+		var lastKey = /[^\.]+$/,
+			starMaps = {};
+		// TODO split into two functions? i.e. one for the top-level call, one for the cascade
+		return function notifyPatternObservers( ractive, registeredKeypath, actualKeypath, isParentOfChangedKeypath, isTopLevelCall ) {
+			var i, patternObserver, children, child, key, childActualKeypath, potentialWildcardMatches, cascade;
+			// First, observers that match patterns at the same level
+			// or higher in the tree
+			i = ractive._patternObservers.length;
+			while ( i-- ) {
+				patternObserver = ractive._patternObservers[ i ];
+				if ( patternObserver.regex.test( actualKeypath ) ) {
+					patternObserver.update( actualKeypath );
+				}
+			}
+			if ( isParentOfChangedKeypath ) {
+				return;
+			}
+			// If the changed keypath is 'foo.bar', we need to see if there are
+			// any pattern observer dependants of keypaths below any of
+			// 'foo.bar', 'foo.*', '*.bar' or '*.*' (e.g. 'foo.bar.*' or 'foo.*.baz' )
+			cascade = function( keypath ) {
+				if ( children = ractive._depsMap[ keypath ] ) {
+					i = children.length;
+					while ( i-- ) {
+						child = children[ i ];
+						// foo.*.baz
+						key = lastKey.exec( child )[ 0 ];
+						// 'baz'
+						childActualKeypath = actualKeypath ? actualKeypath + '.' + key : key;
+						// 'foo.bar.baz'
+						notifyPatternObservers( ractive, child, childActualKeypath );
+					}
+				}
+			};
+			if ( isTopLevelCall ) {
+				potentialWildcardMatches = getPotentialWildcardMatches( actualKeypath );
+				potentialWildcardMatches.forEach( cascade );
+			} else {
+				cascade( registeredKeypath );
+			}
+		};
+		// This function takes a keypath such as 'foo.bar.baz', and returns
+		// all the variants of that keypath that include a wildcard in place
+		// of a key, such as 'foo.bar.*', 'foo.*.baz', 'foo.*.*' and so on.
+		// These are then checked against the dependants map (ractive._depsMap)
+		// to see if any pattern observers are downstream of one or more of
+		// these wildcard keypaths (e.g. 'foo.bar.*.status')
+		function getPotentialWildcardMatches( keypath ) {
+			var keys, starMap, mapper, i, result, wildcardKeypath;
+			keys = keypath.split( '.' );
+			starMap = getStarMap( keys.length );
+			result = [];
+			mapper = function( star, i ) {
+				return star ? '*' : keys[ i ];
+			};
+			i = starMap.length;
+			while ( i-- ) {
+				wildcardKeypath = starMap[ i ].map( mapper ).join( '.' );
+				if ( !result[ wildcardKeypath ] ) {
+					result.push( wildcardKeypath );
+					result[ wildcardKeypath ] = true;
+				}
+			}
+			return result;
+		}
+		// This function returns all the possible true/false combinations for
+		// a given number - e.g. for two, the possible combinations are
+		// [ true, true ], [ true, false ], [ false, true ], [ false, false ].
+		// It does so by getting all the binary values between 0 and e.g. 11
+		function getStarMap( num ) {
+			var ones = '',
+				max, binary, starMap, mapper, i;
+			if ( !starMaps[ num ] ) {
+				starMap = [];
+				while ( ones.length < num ) {
+					ones += 1;
+				}
+				max = parseInt( ones, 2 );
+				mapper = function( digit ) {
+					return digit === '1';
+				};
+				for ( i = 0; i <= max; i += 1 ) {
+					binary = i.toString( 2 );
+					while ( binary.length < num ) {
+						binary = '0' + binary;
+					}
+					starMap[ i ] = Array.prototype.map.call( binary, mapper );
+				}
+				starMaps[ num ] = starMap;
+			}
+			return starMaps[ num ];
+		}
+	}();
+
+	/* shared/notifyDependants.js */
+	var notifyDependants = function( notifyPatternObservers, circular ) {
+
+		var get, unwrap = {
 			evaluateWrapped: true
 		};
 		circular.push( function() {
@@ -728,97 +829,7 @@
 				}
 			}
 		}
-		// TODO split into two functions? i.e. one for the top-level call, one for the cascade
-		function notifyPatternObservers( ractive, registeredKeypath, actualKeypath, isParentOfChangedKeypath, isTopLevelCall ) {
-			var i, patternObserver, children, child, key, childActualKeypath, potentialWildcardMatches, cascade;
-			// First, observers that match patterns at the same level
-			// or higher in the tree
-			i = ractive._patternObservers.length;
-			while ( i-- ) {
-				patternObserver = ractive._patternObservers[ i ];
-				if ( patternObserver.regex.test( actualKeypath ) ) {
-					patternObserver.update( actualKeypath );
-				}
-			}
-			if ( isParentOfChangedKeypath ) {
-				return;
-			}
-			// If the changed keypath is 'foo.bar', we need to see if there are
-			// any pattern observer dependants of keypaths below any of
-			// 'foo.bar', 'foo.*', '*.bar' or '*.*' (e.g. 'foo.bar.*' or 'foo.*.baz' )
-			cascade = function( keypath ) {
-				if ( children = ractive._depsMap[ keypath ] ) {
-					i = children.length;
-					while ( i-- ) {
-						child = children[ i ];
-						// foo.*.baz
-						key = lastKey.exec( child )[ 0 ];
-						// 'baz'
-						childActualKeypath = actualKeypath ? actualKeypath + '.' + key : key;
-						// 'foo.bar.baz'
-						notifyPatternObservers( ractive, child, childActualKeypath );
-					}
-				}
-			};
-			if ( isTopLevelCall ) {
-				potentialWildcardMatches = getPotentialWildcardMatches( actualKeypath );
-				potentialWildcardMatches.forEach( cascade );
-			} else {
-				cascade( registeredKeypath );
-			}
-		}
-		// This function takes a keypath such as 'foo.bar.baz', and returns
-		// all the variants of that keypath that include a wildcard in place
-		// of a key, such as 'foo.bar.*', 'foo.*.baz', 'foo.*.*' and so on.
-		// These are then checked against the dependants map (ractive._depsMap)
-		// to see if any pattern observers are downstream of one or more of
-		// these wildcard keypaths (e.g. 'foo.bar.*.status')
-		function getPotentialWildcardMatches( keypath ) {
-			var keys, starMap, mapper, i, result, wildcardKeypath;
-			keys = keypath.split( '.' );
-			starMap = getStarMap( keys.length );
-			result = [];
-			mapper = function( star, i ) {
-				return star ? '*' : keys[ i ];
-			};
-			i = starMap.length;
-			while ( i-- ) {
-				wildcardKeypath = starMap[ i ].map( mapper ).join( '.' );
-				if ( !result[ wildcardKeypath ] ) {
-					result.push( wildcardKeypath );
-					result[ wildcardKeypath ] = true;
-				}
-			}
-			return result;
-		}
-		// This function returns all the possible true/false combinations for
-		// a given number - e.g. for two, the possible combinations are
-		// [ true, true ], [ true, false ], [ false, true ], [ false, false ].
-		// It does so by getting all the binary values between 0 and e.g. 11
-		function getStarMap( num ) {
-			var ones = '',
-				max, binary, starMap, mapper, i;
-			if ( !starMaps[ num ] ) {
-				starMap = [];
-				while ( ones.length < num ) {
-					ones += 1;
-				}
-				max = parseInt( ones, 2 );
-				mapper = function( digit ) {
-					return digit === '1';
-				};
-				for ( i = 0; i <= max; i += 1 ) {
-					binary = i.toString( 2 );
-					while ( binary.length < num ) {
-						binary = '0' + binary;
-					}
-					starMap[ i ] = Array.prototype.map.call( binary, mapper );
-				}
-				starMaps[ num ] = starMap;
-			}
-			return starMaps[ num ];
-		}
-	}( circular );
+	}( notifyPatternObservers, circular );
 
 	/* shared/makeTransitionManager.js */
 	var makeTransitionManager = function( removeFromArray ) {
@@ -1329,14 +1340,14 @@
 	}( circular, isEqual, createBranch, clearCache, notifyDependants );
 
 	/* shared/get/arrayAdaptor/processWrapper.js */
-	var processWrapper = function( types, clearCache, notifyDependants, set, circular ) {
+	var processWrapper = function( types, clearCache, notifyDependants, notifyPatternObservers, set, circular ) {
 
 		var get;
 		circular.push( function() {
 			get = circular.get;
 		} );
 		return function( wrapper, array, methodName, spliceSummary ) {
-			var root, keypath, updateDependant, i, childKeypath, patternObservers;
+			var root, keypath, updateDependant, i, childKeypath;
 			root = wrapper.root;
 			keypath = wrapper.keypath;
 			root._changes.push( keypath );
@@ -1358,16 +1369,8 @@
 			}
 			// Propagate changes. First, pattern observers
 			if ( root._patternObservers.length ) {
-				patternObservers = root._patternObservers.filter( function( patternObserver ) {
-					return patternObserver.regex.test( keypath + '.x' );
-				} );
-				if ( patternObservers.length ) {
-					patternObservers.forEach( function( patternObserver ) {
-						var i;
-						for ( i = spliceSummary.rangeStart; i < spliceSummary.rangeEnd; i += 1 ) {
-							patternObserver.update( keypath + '.' + i );
-						}
-					} );
+				for ( i = spliceSummary.rangeStart; i < spliceSummary.rangeEnd; i += 1 ) {
+					notifyPatternObservers( root, keypath + '.' + i, keypath + '.' + i, false, true );
 				}
 			}
 			updateDependant = function( dependant ) {
@@ -1402,7 +1405,7 @@
 				notifyDependants( root, keypath + '.length', true );
 			}
 		};
-	}( types, clearCache, notifyDependants, set, circular );
+	}( types, clearCache, notifyDependants, notifyPatternObservers, set, circular );
 
 	/* shared/get/arrayAdaptor/patch.js */
 	var patch = function( runloop, defineProperty, getSpliceEquivalent, summariseSpliceOperation, processWrapper ) {
@@ -2145,10 +2148,16 @@
 	var warn = function() {
 
 		/* global console */
-		var warn;
+		var warn, warned = {};
 		if ( typeof console !== 'undefined' && typeof console.warn === 'function' && typeof console.warn.apply === 'function' ) {
-			warn = function() {
-				console.warn.apply( console, arguments );
+			warn = function( message, allowDuplicates ) {
+				if ( !allowDuplicates ) {
+					if ( warned[ message ] ) {
+						return;
+					}
+					warned[ message ] = true;
+				}
+				console.warn( message );
 			};
 		} else {
 			warn = function() {};
@@ -2374,14 +2383,14 @@
 		return Animation;
 	}( warn, runloop, interpolate, set );
 
-	/* Ractive/prototype/animate/_animate.js */
-	var Ractive$animate__animate = function( isEqual, Promise, normaliseKeypath, animations, get, Animation ) {
+	/* Ractive/prototype/animate.js */
+	var Ractive$animate = function( isEqual, Promise, normaliseKeypath, animations, get, Animation ) {
 
 		var noop = function() {},
 			noAnimation = {
 				stop: noop
 			};
-		return function( keypath, to, options ) {
+		return function Ractive$animate( keypath, to, options ) {
 			var promise, fulfilPromise, k, animation, animations, easing, duration, step, complete, makeValueCollector, currentValues, collectValue, dummy, dummyOptions;
 			promise = new Promise( function( fulfil ) {
 				fulfilPromise = fulfil;
@@ -2520,7 +2529,7 @@
 	/* Ractive/prototype/detach.js */
 	var Ractive$detach = function( removeFromArray ) {
 
-		return function() {
+		return function Ractive$detach() {
 			if ( this.el ) {
 				removeFromArray( this.el.__ractive_instances__, this );
 			}
@@ -2529,7 +2538,7 @@
 	}( removeFromArray );
 
 	/* Ractive/prototype/find.js */
-	var Ractive$find = function( selector ) {
+	var Ractive$find = function Ractive$find( selector ) {
 		if ( !this.el ) {
 			return null;
 		}
@@ -2736,7 +2745,7 @@
 	/* Ractive/prototype/shared/makeQuery/_makeQuery.js */
 	var Ractive$shared_makeQuery__makeQuery = function( defineProperties, test, cancel, sort, dirty, remove ) {
 
-		return function( ractive, selector, live, isComponentQuery ) {
+		return function makeQuery( ractive, selector, live, isComponentQuery ) {
 			var query = [];
 			defineProperties( query, {
 				selector: {
@@ -2783,7 +2792,7 @@
 	/* Ractive/prototype/findAll.js */
 	var Ractive$findAll = function( makeQuery ) {
 
-		return function( selector, options ) {
+		return function Ractive$findAll( selector, options ) {
 			var liveQueries, query;
 			if ( !this.el ) {
 				return [];
@@ -2811,7 +2820,7 @@
 	/* Ractive/prototype/findAllComponents.js */
 	var Ractive$findAllComponents = function( makeQuery ) {
 
-		return function( selector, options ) {
+		return function Ractive$findAllComponents( selector, options ) {
 			var liveQueries, query;
 			options = options || {};
 			liveQueries = this._liveComponentQueries;
@@ -2834,12 +2843,12 @@
 	}( Ractive$shared_makeQuery__makeQuery );
 
 	/* Ractive/prototype/findComponent.js */
-	var Ractive$findComponent = function( selector ) {
+	var Ractive$findComponent = function Ractive$findComponent( selector ) {
 		return this.fragment.findComponent( selector );
 	};
 
 	/* Ractive/prototype/fire.js */
-	var Ractive$fire = function( eventName ) {
+	var Ractive$fire = function Ractive$fire( eventName ) {
 		var args, i, len, subscribers = this._subs[ eventName ];
 		if ( !subscribers ) {
 			return;
@@ -2940,7 +2949,7 @@
 	/* Ractive/prototype/insert.js */
 	var Ractive$insert = function( getElement ) {
 
-		return function( target, anchor ) {
+		return function Ractive$insert( target, anchor ) {
 			if ( !this.rendered ) {
 				// TODO create, and link to, documentation explaining this
 				throw new Error( 'The API has changed - you must call `ractive.render(target[, anchor])` to render your Ractive instance. Once rendered you can use `ractive.insert()`.' );
@@ -3022,11 +3031,11 @@
 		};
 	}( types, notifyDependants );
 
-	/* Ractive/prototype/merge/_merge.js */
-	var Ractive$merge__merge = function( runloop, warn, isArray, Promise, set, mapOldToNewIndex, propagateChanges ) {
+	/* Ractive/prototype/merge.js */
+	var Ractive$merge = function( runloop, warn, isArray, Promise, set, mapOldToNewIndex, propagateChanges ) {
 
 		var comparators = {};
-		return function merge( keypath, array, options ) {
+		return function Ractive$merge( keypath, array, options ) {
 			var currentArray, oldArray, newArray, comparator, lengthUnchanged, newIndices, promise, fulfilPromise;
 			currentArray = this.get( keypath );
 			// If either the existing value or the new value isn't an
@@ -3163,42 +3172,47 @@
 	/* Ractive/prototype/observe/getPattern.js */
 	var Ractive$observe_getPattern = function( isArray ) {
 
-		return function( ractive, pattern ) {
-			var keys, key, values, toGet, newToGet, expand, concatenate;
+		return function getPattern( ractive, pattern ) {
+			var keys, key, values, matchingKeypaths;
 			keys = pattern.split( '.' );
-			toGet = [ '' ];
-			expand = function( keypath ) {
+			matchingKeypaths = [ '' ];
+			while ( key = keys.shift() ) {
+				if ( key === '*' ) {
+					// expand to find all valid child keypaths
+					matchingKeypaths = matchingKeypaths.reduce( expand, [] );
+				} else {
+					if ( matchingKeypaths[ 0 ] === '' ) {
+						// first key
+						matchingKeypaths[ 0 ] = key;
+					} else {
+						matchingKeypaths = matchingKeypaths.map( concatenate( key ) );
+					}
+				}
+			}
+			values = {};
+			matchingKeypaths.forEach( function( keypath ) {
+				values[ keypath ] = ractive.get( keypath );
+			} );
+			return values;
+
+			function expand( matchingKeypaths, keypath ) {
 				var value, key, childKeypath;
 				value = ractive._wrapped[ keypath ] ? ractive._wrapped[ keypath ].get() : ractive.get( keypath );
 				for ( key in value ) {
 					if ( value.hasOwnProperty( key ) && ( key !== '_ractive' || !isArray( value ) ) ) {
 						// for benefit of IE8
 						childKeypath = keypath ? keypath + '.' + key : key;
-						newToGet.push( childKeypath );
+						matchingKeypaths.push( childKeypath );
 					}
 				}
-			};
-			concatenate = function( keypath ) {
-				return keypath + '.' + key;
-			};
-			while ( key = keys.shift() ) {
-				if ( key === '*' ) {
-					newToGet = [];
-					toGet.forEach( expand );
-					toGet = newToGet;
-				} else {
-					if ( !toGet[ 0 ] ) {
-						toGet[ 0 ] = key;
-					} else {
-						toGet = toGet.map( concatenate );
-					}
-				}
+				return matchingKeypaths;
 			}
-			values = {};
-			toGet.forEach( function( keypath ) {
-				values[ keypath ] = ractive.get( keypath );
-			} );
-			return values;
+
+			function concatenate( key ) {
+				return function( keypath ) {
+					return keypath ? keypath + '.' + key : key;
+				};
+			}
 		};
 	}( isArray );
 
@@ -3346,7 +3360,7 @@
 	/* Ractive/prototype/observe.js */
 	var Ractive$observe = function( isObject, getObserverFacade ) {
 
-		return function observe( keypath, callback, options ) {
+		return function Ractive$observe( keypath, callback, options ) {
 			var observers, map, keypaths, i;
 			// Allow a map of keypaths to handlers
 			if ( isObject( keypath ) ) {
@@ -3411,7 +3425,7 @@
 	/* Ractive/prototype/off.js */
 	var Ractive$off = function( trim, notEmptyString ) {
 
-		return function( eventName, callback ) {
+		return function Ractive$off( eventName, callback ) {
 			var this$0 = this;
 			var eventNames;
 			// if no arguments specified, remove all callbacks
@@ -3448,7 +3462,7 @@
 	/* Ractive/prototype/on.js */
 	var Ractive$on = function( trim, notEmptyString ) {
 
-		return function( eventName, callback ) {
+		return function Ractive$on( eventName, callback ) {
 			var this$0 = this;
 			var self = this,
 				listeners, n, eventNames;
@@ -3535,16 +3549,6 @@
 			instance._childInitQueue.splice( 0 ).forEach( init );
 		}
 	}( runloop, css, Promise, getElement );
-
-	/* Ractive/prototype/renderHTML.js */
-	var Ractive$renderHTML = function( warn ) {
-
-		return function() {
-			// TODO remove this method in a future version!
-			warn( 'renderHTML() has been deprecated and will be removed in a future version. Please use toHTML() instead' );
-			return this.toHTML();
-		};
-	}( warn );
 
 	/* virtualdom/Fragment/prototype/bubble.js */
 	var virtualdom_Fragment$bubble = function Fragment$bubble() {
@@ -5120,11 +5124,11 @@
 	var getNewKeypath = function( startsWithKeypath ) {
 
 		return function getNewKeypath( targetKeypath, oldKeypath, newKeypath ) {
-			//exact match
+			// exact match
 			if ( targetKeypath === oldKeypath ) {
 				return newKeypath;
 			}
-			//partial match based on leading keypath segments
+			// partial match based on leading keypath segments
 			if ( startsWithKeypath( targetKeypath, oldKeypath ) ) {
 				return targetKeypath.replace( oldKeypath + '.', newKeypath + '.' );
 			}
@@ -5264,6 +5268,7 @@
 			this.ref = template.r;
 			this.root = mustache.root;
 			this.mustache = mustache;
+			this.priority = mustache.priority;
 			this.callback = callback;
 			this.pending = 0;
 			this.unresolved = [];
@@ -7346,10 +7351,6 @@
 			},
 			getValue: function() {
 				var value = this.element.node.value;
-				// if the value is numeric, treat it as a number. otherwise don't
-				if ( +value + '' === value && value.indexOf( 'e' ) === -1 ) {
-					value = +value;
-				}
 				return value;
 			},
 			unrender: function() {
@@ -7395,7 +7396,7 @@
 					if ( isBindable( attributes.checked ) ) {
 						Binding = CheckedBinding;
 					}
-				} else if ( type === 'file' ) {
+				} else if ( type === 'file' && isBindable( attributes.value ) ) {
 					Binding = FileListBinding;
 				} else if ( isBindable( attributes.value ) ) {
 					Binding = GenericBinding;
@@ -8196,6 +8197,11 @@
 				node._ractive.transition = null;
 				t._manager.remove( t );
 			};
+			// If the transition function doesn't exist, abort
+			if ( !t._fn ) {
+				t.complete();
+				return;
+			}
 			t._fn.apply( t.root, [ t ].concat( t.params ) );
 		};
 
@@ -8464,10 +8470,11 @@
 	var assignNewKeypath = function( startsWith, getNewKeypath ) {
 
 		return function assignNewKeypath( target, property, oldKeypath, newKeypath ) {
-			if ( !target[ property ] || startsWith( target[ property ], newKeypath ) ) {
+			var existingKeypath = target[ property ];
+			if ( !existingKeypath || startsWith( existingKeypath, newKeypath ) || !startsWith( existingKeypath, oldKeypath ) ) {
 				return;
 			}
-			target[ property ] = getNewKeypath( target[ property ], oldKeypath, newKeypath );
+			target[ property ] = getNewKeypath( existingKeypath, oldKeypath, newKeypath );
 		};
 	}( startsWith, getNewKeypath );
 
@@ -11415,7 +11422,7 @@
 			'decorators',
 			'events'
 		].join();
-		return function( data, callback ) {
+		return function Ractive$reset( data, callback ) {
 			var self = this,
 				promise, fulfilPromise, wrapper, changes, rerender, i;
 			if ( typeof data === 'function' && !callback ) {
@@ -11486,7 +11493,7 @@
 		// of outro, update template, intro? I reckon probably not, since that
 		// could be achieved with unrender-resetTemplate-render. Also, it should
 		// conceptually be similar to resetPartial, which couldn't be async
-		return function( template ) {
+		return function Ractive$resetTemplate( template ) {
 			var transitionsEnabled, changes, options = {
 				updatesOnly: true,
 				registries: [
@@ -11552,7 +11559,7 @@
 	/* Ractive/prototype/subtract.js */
 	var Ractive$subtract = function( add ) {
 
-		return function( keypath, d ) {
+		return function Ractive$subtract( keypath, d ) {
 			return add( this, keypath, d === undefined ? -1 : -d );
 		};
 	}( Ractive$shared_add );
@@ -11562,7 +11569,7 @@
 
 		// Teardown. This goes through the root fragment and all its children, removing observers
 		// and generally cleaning up after itself
-		return function( callback ) {
+		return function Ractive$teardown( callback ) {
 			var keypath, promise, unresolvedImplicitDependency;
 			this.fire( 'teardown' );
 			this.fragment.teardown();
@@ -11584,12 +11591,12 @@
 	}( Promise, clearCache );
 
 	/* Ractive/prototype/toHTML.js */
-	var Ractive$toHTML = function() {
+	var Ractive$toHTML = function Ractive$toHTML() {
 		return this.fragment.toString( true );
 	};
 
 	/* Ractive/prototype/toggle.js */
-	var Ractive$toggle = function( keypath, callback ) {
+	var Ractive$toggle = function Ractive$toggle( keypath, callback ) {
 		var value;
 		if ( typeof keypath !== 'string' ) {
 			if ( this.debug ) {
@@ -11655,7 +11662,7 @@
 	/* Ractive/prototype/update.js */
 	var Ractive$update = function( runloop, Promise, clearCache, notifyDependants ) {
 
-		return function( keypath, callback ) {
+		return function Ractive$update( keypath, callback ) {
 			var promise, fulfilPromise;
 			if ( typeof keypath === 'function' ) {
 				callback = keypath;
@@ -11744,7 +11751,7 @@
 	}( getValueFromCheckboxes, arrayContentsMatch, isEqual );
 
 	/* Ractive/prototype.js */
-	var prototype = function( add, animate, detach, find, findAll, findAllComponents, findComponent, fire, get, insert, merge, observe, off, on, render, renderHTML, reset, resetTemplate, set, subtract, teardown, toHTML, toggle, unrender, update, updateModel ) {
+	var prototype = function( add, animate, detach, find, findAll, findAllComponents, findComponent, fire, get, insert, merge, observe, off, on, render, reset, resetTemplate, set, subtract, teardown, toHTML, toggle, unrender, update, updateModel ) {
 
 		return {
 			add: add,
@@ -11762,7 +11769,6 @@
 			off: off,
 			on: on,
 			render: render,
-			renderHTML: renderHTML,
 			reset: reset,
 			resetTemplate: resetTemplate,
 			set: set,
@@ -11774,7 +11780,7 @@
 			update: update,
 			updateModel: updateModel
 		};
-	}( Ractive$add, Ractive$animate__animate, Ractive$detach, Ractive$find, Ractive$findAll, Ractive$findAllComponents, Ractive$findComponent, Ractive$fire, Ractive$get, Ractive$insert, Ractive$merge__merge, Ractive$observe, Ractive$off, Ractive$on, Ractive$render, Ractive$renderHTML, Ractive$reset, Ractive$resetTemplate, Ractive$set, Ractive$subtract, Ractive$teardown, Ractive$toHTML, Ractive$toggle, Ractive$unrender, Ractive$update, Ractive$updateModel );
+	}( Ractive$add, Ractive$animate, Ractive$detach, Ractive$find, Ractive$findAll, Ractive$findAllComponents, Ractive$findComponent, Ractive$fire, Ractive$get, Ractive$insert, Ractive$merge, Ractive$observe, Ractive$off, Ractive$on, Ractive$render, Ractive$reset, Ractive$resetTemplate, Ractive$set, Ractive$subtract, Ractive$teardown, Ractive$toHTML, Ractive$toggle, Ractive$unrender, Ractive$update, Ractive$updateModel );
 
 	/* registries/components.js */
 	var components = {};

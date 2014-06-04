@@ -8,10 +8,18 @@
         <script src="js/tests.js"></script>
         <meta charset="utf-8" />
     </head>
-    
+    <style>
+        #el {
+            display: none;
+        }
+        .ractive-ready {
+            display: block !important;
+        }
+    </style>
     <body class="yui3-skin-sam">
         <div id="logger"></div>
         <div id="el">
+            <h1>TEST CODE</h1>
             {{^signedIn}}
                 <!-- message for non-signed-in users -->
                 <p>Hi there! Please
@@ -21,7 +29,9 @@
             {{#signedIn}}
                 <!-- message for signed-in users -->
                 <p>Welcome back, {{username}}!</p>
+                <img decorator="imgSrc:'{{base}}48x48'"/>
             {{/signedIn}}
+            <div class="style-test" decorator="style: 'background: url({{base}}48x48)'" style="width: 400px; height: 200px;"></div>
         </div>
         <script>
             YUI({
@@ -32,7 +42,15 @@
                 var ractive = new Y.Common.Ractive({
                     container: Y.one('#el'),
                     data: {
-                        signedIn: false
+                        signedIn: false,
+                        base: 'http://placehold.it/'
+                    },
+                    decorators: {
+                        imgSrc: Y.Common.RactiveDecorators.imgSource,
+                        style: Y.Common.RactiveDecorators.style
+                    },
+                    complete: function() {
+                        console.info('completed 2');
                     }
                 });
                 ractive.on('signIn', function() {
