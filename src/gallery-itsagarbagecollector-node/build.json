@@ -1,0 +1,10 @@
+{
+    "name": "gallery-itsagarbagecollector-node",
+    "builds": {
+        "gallery-itsagarbagecollector-node": {
+            "jsfiles": [
+                "js/gallery-itsagarbagecollector-node.js"
+            ]
+        }
+    }
+}

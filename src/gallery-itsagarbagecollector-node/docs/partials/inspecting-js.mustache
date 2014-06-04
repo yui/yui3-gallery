@@ -1,0 +1,27 @@
+YUI(yuiconfig).use('node', 'gallery-itsagarbagecollector-node', 'gallerycss-itsa-base', function(Y) {
+    var container = Y.one('#container'),
+        statusnode = Y.one('#status'),
+        addbutton = Y.one('#addbutton'),
+        clearbutton = Y.one('#clearbutton'),
+        TEMPLATE = '<div class="smalldiv"></div>';
+
+    Y.later(200, null, function() {
+        statusnode.set('text', Y.Object.size(Y.Node._instances));
+    }, null, true);
+
+    addbutton.on(
+        'click',
+        function() {
+            var newNode = Y.Node.create(TEMPLATE);
+            container.append(newNode);
+        }
+    );
+
+    clearbutton.on(
+        'click',
+        function() {
+            container.set('text', '');
+        }
+    );
+
+});

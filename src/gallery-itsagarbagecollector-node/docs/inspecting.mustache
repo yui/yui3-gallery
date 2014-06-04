@@ -1,0 +1,37 @@
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.2.1/pure-min.css">
+<div class="intro">
+    <p>
+       {{description}}
+   </p>
+   <p>
+      The startup number of nodeinstances is <b>4</b>. You can add new nodes to the container, which will automaticly have a reference inside Y.Node._instances, (because they are created by Y.Node.create). You see the number of nodeinstances increasing.
+   </p>
+   <p>
+      When clicking on the <i>Whipe nodes</i>-button, the container-node is emptied by <code>container.set('text', '');</code>, this will empty the container, but will not destroy all inner-node instances from Y.Node._instances --> you won't see the number of nodeinstances decreasing at this point.
+   </p>
+   <p>
+      However, the GC-module is working behind the scenes. Just wait and see how the number of nodeinstances will be reduced to 4.
+   </p>
+</div>
+
+{{>inspecting-css}}
+
+{{>inspecting-html}}
+
+<h2>Complete Example Source</h2>
+```
+{{>inspecting-css}}
+
+<body>
+{{>inspecting-html}}
+</body>
+
+<script>
+{{>inspecting-js}}
+</script>
+```
+<script>
+{{>init-loaderconfig-js}}
+{{>loaderconfig-js}}
+{{>inspecting-js}}
+</script>

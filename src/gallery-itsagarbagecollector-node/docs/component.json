@@ -1,0 +1,21 @@
+{
+    "name"       : "gallery-itsagarbagecollector-node",
+    "displayName": "Gallery: gallery-itsagarbagecollector-node",
+    "description": "Background process that keeps the internal Y.Node._instances healty by periodic remove node-instances that left the DOM",
+    "author"     : [ "itsasbreuk" ],
+    "use"        : [ "gallery-itsagarbagecollector-node" ],
+
+    "tags": [ "gallery" ],
+
+    "examples": [
+        {
+            "name"       : "inspecting",
+            "displayName": "Inspecting nodes",
+            "description": "This example shows how the size of Y.Node._instances changes",
+            "author"     : [ "itsasbreuk" ],
+            "modules"    : ["gallery-itsagarbagecollector-node", "node", "gc", "garbage-collector"],
+            "tags"    : ["gallery-itsagarbagecollector-node"],
+            "hideTableOfContents": true
+        }
+    ]
+}

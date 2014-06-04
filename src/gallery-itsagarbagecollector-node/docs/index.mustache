@@ -1,0 +1,33 @@
+{{>api-button}}
+
+<div class="intro">
+  <p>
+    {{description}}
+  </p>
+</div>
+
+{{>getting-started}}
+
+<h2>Description</h2>
+    <p>
+       By using this module, a small number of nodes inside Y.Node._instances will periodic be inspected whether they are still part of the DOM. If not, they will be removed using Node.remove(true);
+    </p>
+
+<h2>Background information</h2>
+    <p>
+       If you develop a webapp, you should take care of memorymanagement of the Nodes. However, in many cases you -or some module- might cleanup a parent-node without realizing some of its innernodes are cached inside Y.Node.instances.
+    </p>
+    <p>
+        This can easily occur when you do just <code>Y.one('#someinnernode')</code> (creating a Node-refference) - and later on: <code>Y.one('#parentcontainer').setHTML('some new content')</code>.
+    </p>
+
+<h2>Precaution</h2>
+    <p>
+        Because node instances inside Y.Node._instances are checked for their presence inside the DOM, you could run into problems when your code is using <code>Y.Node.create()</code> <u>without inserting this node in the DOM</u>. You should insert these instances synchronously, or asynchronously within 2 seconds. After 2 seconds they are marked to be destroyed.
+    </p>
+
+<h2>licence</h2>
+<p class= 'copyright'>
+Copyright (c) 2014 <a href="http://itsasbreuk.nl">Its Asbreuk</a><br />
+Copyright (c) 2014 <a href="http://developer.yahoo.com/yui/license.html">YUI BSD License</a>
+</p>
