@@ -1,4 +1,4 @@
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.11 on node@0.8.26
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using yogi@0.1.12 on node@0.10.26
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  using module: gallery-bulkedit
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  running with shifter
 shifter [info] racing to find the closest .shifter.json file
@@ -553,95 +553,93 @@ shifter [info] shifting into gear for gallery-bulkedit
        var input_markup = Y.Lang.sub('<input type="text" id="{id}-multivalue-input" />', // line 2525, pos 13
    #272: Possible strict violation.
        Y.later(0, this, function() // line 2530, pos 20
-   #273: Missing semicolon.
-       }) // line 2543, pos 15
-   #274: Expected '===' and instead saw '=='.
+   #273: Expected '===' and instead saw '=='.
        else if (type == 'checkboxes') // line 2572, pos 19
-   #275: Too many var statements.
+   #274: Too many var statements.
        var checkbox = // line 2574, pos 13
-   #276: Too many var statements.
+   #275: Too many var statements.
        var column_start = '<td class="checkbox-multiselect-column">', // line 2580, pos 13
-   #277: Too many var statements.
+   #276: Too many var statements.
        var input_markup = Y.Array.reduce(o.field.values, '', function(s, v, i) // line 2583, pos 13
-   #278: 'input_markup' is already defined.
+   #277: 'input_markup' is already defined.
        var input_markup = Y.Array.reduce(o.field.values, '', function(s, v, i) // line 2583, pos 26
-   #279: Too many var statements.
+   #278: Too many var statements.
        var option = '<option value="{value}" {selected}>{text}</option>'; // line 2607, pos 9
-   #280: Too many var statements.
+   #279: Too many var statements.
        var options = Y.Array.reduce(o.field.values, '', function(s, v) // line 2609, pos 9
-   #281: Too many var statements.
+   #280: Too many var statements.
        var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2619, pos 9
-   #282: Possible strict violation.
+   #281: Possible strict violation.
        var label = o.field && o.field.label ? BulkEditor.labelMarkup.call(this, o) : ''; // line 2619, pos 72
-   #283: Mixed spaces and tabs.
+   #282: Mixed spaces and tabs.
        cont:  	 BulkEditor.field_container_class + ' ' + BulkEditor.field_container_class_prefix, // line 2623, pos 9
-   #284: 'input_markup' used out of scope.
+   #283: 'input_markup' used out of scope.
        input:   input_markup, // line 2628, pos 18
-   #285: Expected '===' and instead saw '=='.
+   #284: Expected '===' and instead saw '=='.
        if (o.value == value) // line 2643, pos 21
-   #286: Trailing whitespace.
+   #285: Trailing whitespace.
        * @extends BulkEditor // line 2661, pos 23
-   #287: Trailing whitespace.
+   #286: Trailing whitespace.
        * // line 2693, pos 7
-   #288: Too many var statements.
+   #287: Too many var statements.
        var cell_class        = Y.ClassNameManager.getClassName(HTMLTableBulkEditor.NAME, 'cell'), // line 2708, pos 5
-   #289: Possible strict violation.
-       var info = this.getRecordAndFieldKey(e.target); // line 2844, pos 16
-   #290: Too many var statements.
-       var bd = this.getRecordContainer(e.target); // line 2850, pos 9
-   #291: Possible strict violation.
-       var bd = this.getRecordContainer(e.target); // line 2850, pos 14
-   #292: Expected '===' and instead saw '=='.
-       if (bd && e.keyCode == 38) // line 2851, pos 25
-   #293: Too many var statements.
-       var id = bd && this.getRecordId(bd); // line 2860, pos 9
-   #294: Possible strict violation.
-       var id = bd && this.getRecordId(bd); // line 2860, pos 20
-   #295: Too many var statements.
-       var field = this.getFieldElement(id, info.field_key); // line 2863, pos 13
-   #296: Possible strict violation.
-       var field = this.getFieldElement(id, info.field_key); // line 2863, pos 21
-   #297: Expected '!==' and instead saw '!='.
-       container.get('firstChild').get('tagName') != 'TABLE' || // line 2892, pos 56
+   #288: Possible strict violation.
+       var info = this.getRecordAndFieldKey(e.target); // line 2850, pos 16
+   #289: Too many var statements.
+       var bd = this.getRecordContainer(e.target); // line 2856, pos 9
+   #290: Possible strict violation.
+       var bd = this.getRecordContainer(e.target); // line 2856, pos 14
+   #291: Expected '===' and instead saw '=='.
+       if (bd && e.keyCode == 38) // line 2857, pos 25
+   #292: Too many var statements.
+       var id = bd && this.getRecordId(bd); // line 2866, pos 9
+   #293: Possible strict violation.
+       var id = bd && this.getRecordId(bd); // line 2866, pos 20
+   #294: Too many var statements.
+       var field = this.getFieldElement(id, info.field_key); // line 2869, pos 13
+   #295: Possible strict violation.
+       var field = this.getFieldElement(id, info.field_key); // line 2869, pos 21
+   #296: Expected '!==' and instead saw '!='.
+       container.get('firstChild').get('tagName') != 'TABLE' || // line 2898, pos 56
+   #297: Too many var statements.
+       var s = Y.Lang.sub('<table class="{t}"><thead class="{hd}"><tr>', // line 2901, pos 17
    #298: Too many var statements.
-       var s = Y.Lang.sub('<table class="{t}"><thead class="{hd}"><tr>', // line 2895, pos 17
+       var row_markup = '<th class="{cell} {prefix}{key}">{label}</th>'; // line 2907, pos 17
    #299: Too many var statements.
-       var row_markup = '<th class="{cell} {prefix}{key}">{label}</th>'; // line 2901, pos 17
+       var msg_row = Y.Node.create('<tr></tr>'); // line 2953, pos 13
    #300: Too many var statements.
-       var msg_row = Y.Node.create('<tr></tr>'); // line 2947, pos 13
+       var msg_cell = Y.Node.create('<td></td>'); // line 2956, pos 13
    #301: Too many var statements.
-       var msg_cell = Y.Node.create('<td></td>'); // line 2950, pos 13
+       var row = Y.Node.create('<tr></tr>'); // line 2964, pos 13
    #302: Too many var statements.
-       var row = Y.Node.create('<tr></tr>'); // line 2958, pos 13
+       var field  = this.getFieldConfig(key); // line 2978, pos 17
    #303: Too many var statements.
-       var field  = this.getFieldConfig(key); // line 2972, pos 17
+       var cell = Y.Node.create('<td></td>'); // line 2982, pos 17
    #304: Too many var statements.
-       var cell = Y.Node.create('<td></td>'); // line 2976, pos 17
+       var liner = Y.Node.create('<div></div>'); // line 2987, pos 17
    #305: Too many var statements.
-       var liner = Y.Node.create('<div></div>'); // line 2981, pos 17
-   #306: Too many var statements.
-       var f = null; // line 2986, pos 17
-   #307: 'record_id' is defined but never used.
+       var f = null; // line 2992, pos 17
+   #306: 'record_id' is defined but never used.
        var record_id = record[ this.get('uniqueIdKey') ]; // line 517, pos 26
-   #308: 'record_id' is defined but never used.
+   #307: 'record_id' is defined but never used.
        var record_id = this.get('ds').get('source')[ this._index[j] ][ this.get('uniqueIdKey') ].toString(); // line 644, pos 30
-   #309: 'id' is defined but never used.
+   #308: 'id' is defined but never used.
        var id = this.getRecordContainerId(record); // line 1541, pos 19
-   #310: 'record' is defined but never used.
+   #309: 'record' is defined but never used.
        /* object */	record) // line 1712, pos 21
-   #311: 'container' is defined but never used.
+   #310: 'container' is defined but never used.
        /* element */	container, // line 1711, pos 24
-   #312: 'o' is defined but never used.
+   #311: 'o' is defined but never used.
        /* object */ o) // line 1758, pos 13
-   #313: 'response' is defined but never used.
+   #312: 'response' is defined but never used.
        _updatePaginator: function(response) // line 1769, pos 40
-   #314: 'msg' is defined but never used.
+   #313: 'msg' is defined but never used.
        var msg  = err.msg; // line 1982, pos 28
-   #315: 'type' is defined but never used.
+   #314: 'type' is defined but never used.
        var type = err.type; // line 1983, pos 29
-   #316: 'msg' is defined but never used.
+   #315: 'msg' is defined but never used.
        var msg  = f.msg; // line 2070, pos 32
-   #317: 'type' is defined but never used.
+   #316: 'type' is defined but never used.
        var type = f.type; // line 2071, pos 33
 shifter [queu] file has changed, continuing build
 shifter [queu] writing RAW file
@@ -659,25 +657,25 @@ shifter [queu] copying assets to skin for sam
 shifter [queu] writing skin file with core wrapper
 shifter [queu] writing skin file without core wrapper
 shifter [info] done racing, the gears are toast
-shifter [info] finished in 1.145 seconds, pretty fast huh?
+shifter [info] finished in 2.398 seconds, pretty fast huh?
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  build complete
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  testing module now
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  prepping grover tests
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  adding tests route
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5001
+[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5000
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  turning on coverage support in grover
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  launching xdr server on port 5003
-[35myogi[0m [37m[[0m[37minfo[0m[37m][0m  listening on: http://127.0.0.1:5002
-Starting Grover on 1 files with PhantomJS@1.9.2
+Starting Grover on 1 files with PhantomJS@1.9.7
   Running 15 concurrent tests at a time.
   Using a 120 second timeout per test.
-✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
+✔ [gallery-bulkedit]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.003 seconds)
 Writing files in JSON format to: /src/gallery-bulkedit/logs/tests.json
-┌─────────┬─────────┬────────┬─────────────┬────────┐
-│[34m  path   [39m│[34m  lines  [39m│[34m     %  [39m│[34m  functions  [39m│[34m     %  [39m│
-├─────────┼─────────┼────────┼─────────────┼────────┤
-│  total  │    0/0  │  NaN%  │        0/0  │  NaN%  │
-└─────────┴─────────┴────────┴─────────────┴────────┘
+[90m┌─────────┬─────────┬────────┬─────────────┬────────┐[39m
+[90m│[39m[34m  path   [39m[90m│[39m[34m  lines  [39m[90m│[39m[34m     %  [39m[90m│[39m[34m  functions  [39m[90m│[39m[34m     %  [39m[90m│[39m
+[90m├─────────┼─────────┼────────┼─────────────┼────────┤[39m
+[90m│[39m  total  [90m│[39m    0/0  [90m│[39m  NaN%  [90m│[39m        0/0  [90m│[39m  NaN%  [90m│[39m
+[90m└─────────┴─────────┴────────┴─────────────┴────────┘[39m
 ----------------------------------------------------------------
-✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.002 seconds)
-  [Grover Execution Timer] 2.416 seconds
+✔ [Total]: Passed: 0 Failed: 0 Total: 0 (ignored 0) (0.003 seconds)
+  [Grover Execution Timer] 1.651 seconds
 [35myogi[0m [37m[[0m[37minfo[0m[37m][0m  [32mgrover tests complete[0m

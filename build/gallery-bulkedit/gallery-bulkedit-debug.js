@@ -2540,7 +2540,7 @@ function multiselectMarkup(type, o)
 					list.push(v.text);
 					return list;
 				})
-			})
+			});
 
 			node.plug(Y.Plugin.MultivalueInput,
 			{
@@ -2798,7 +2798,7 @@ HTMLTableBulkEditor.autocompleteInputMultiselectFormatter = function(o)
 };
 
 /**
- * Map of field type to cell formatter.
+ * Map of field type to cell `formatter` and container `css`.
  *
  * @property Y.HTMLTableBulkEditor.defaults
  * @type {Object}
@@ -2808,32 +2808,38 @@ HTMLTableBulkEditor.defaults =
 {
 	input:
 	{
-		formatter: HTMLTableBulkEditor.inputFormatter
+		formatter: HTMLTableBulkEditor.inputFormatter,
+		css:       input_class
 	},
 
 	select:
 	{
-		formatter: HTMLTableBulkEditor.selectFormatter
+		formatter: HTMLTableBulkEditor.selectFormatter,
+		css:       select_class
 	},
 
 	checkbox:
 	{
-		formatter: HTMLTableBulkEditor.checkboxFormatter
+		formatter: HTMLTableBulkEditor.checkboxFormatter,
+		css:       checkbox_class
 	},
 
 	checkboxMultiselect:
 	{
-		formatter: HTMLTableBulkEditor.checkboxMultiselectFormatter
+		formatter: HTMLTableBulkEditor.checkboxMultiselectFormatter,
+		css:       cb_multiselect_class
 	},
 
 	autocompleteInputMultiselect:
 	{
-		formatter: HTMLTableBulkEditor.autocompleteInputMultiselectFormatter
+		formatter: HTMLTableBulkEditor.autocompleteInputMultiselectFormatter,
+		css:       cb_multi_input_class
 	},
 
 	textarea:
 	{
-		formatter: HTMLTableBulkEditor.textareaFormatter
+		formatter: HTMLTableBulkEditor.textareaFormatter,
+		css:       textarea_class
 	}
 };
 
@@ -3027,7 +3033,7 @@ Y.extend(HTMLTableBulkEditor, BulkEditor,
 Y.HTMLTableBulkEditor = HTMLTableBulkEditor;
 
 
-}, 'gallery-2014.02.20-23-55', {
+}, 'gallery-2014.06.04-21-38', {
     "skinnable": "true",
     "requires": [
         "widget",

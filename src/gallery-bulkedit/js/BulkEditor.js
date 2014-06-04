@@ -1527,7 +1527,7 @@ function multiselectMarkup(type, o)
 					list.push(v.text);
 					return list;
 				})
-			})
+			});
 
 			node.plug(Y.Plugin.MultivalueInput,
 			{
