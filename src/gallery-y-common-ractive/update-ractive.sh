@@ -1,5 +1,5 @@
 mkdir ractive-tmp;
-curl http://cdn.ractivejs.org/edge/ractive.js -o ractive-tmp/ractive.js; 
+curl http://cdn.ractivejs.org/edge/ractive-legacy.js -o ractive-tmp/ractive.js; 
 cp ractive-tmp/ractive.js js/ractive.js;
 cd ../../;
 grunt uglify:ractive;

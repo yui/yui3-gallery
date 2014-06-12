@@ -14,23 +14,23 @@
         "errors": 0,
         "ignored": 0,
         "total": 2,
-        "duration": 2029,
+        "duration": 2030,
         "type": "testcase",
         "application initialized": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "application initialized",
-            "duration": 1001
+            "duration": 1007
         },
         "style decorator test": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "style decorator test",
-            "duration": 1002
+            "duration": 1001
         }
     },
-    "timestamp": "Wed 04 Jun 2014 02:40:33 PM PDT",
+    "timestamp": "Thu 12 Jun 2014 02:48:08 PM PDT",
     "consoleInfo": []
 }
