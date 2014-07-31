@@ -13,7 +13,7 @@ YUI({
         node = Y.one('#foo');
     
     Y.io.getJSON('/foo').then(function (data) {
-        foo.setHTML(template(data)));
+        node.setHTML(template(data)));
     });
 
 });
@@ -101,6 +101,11 @@ YUI({
         <tr>
             <td>Y.io.css</td>
             <td>Loads a CSS stylesheet</td>
+            <td></td>
+        </tr>
+        <tr clas="yui3-table-odd">
+            <td>Y.io.postForm</td>
+            <td>Makes a POST Ajax request with the content of the provided form</td>
             <td></td>
         </tr>
     </tbody>

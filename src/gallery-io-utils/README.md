@@ -14,7 +14,7 @@ Create a new YUI instance for your application and populate it with the modules 
 <script>
 YUI({
     gallery: 'gallery-2013.05.15-21-12'
-}).use('gallery-affix', function (Y) {
+}).use('gallery-io-utils', function (Y) {
     
     Y.io.getJSON('/foo/bar').then(function (data) {
         console.log(data);

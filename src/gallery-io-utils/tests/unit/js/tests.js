@@ -13,6 +13,7 @@ YUI.add('module-tests', function(Y) {
             });
         }, function (err) {
             test.resume(function () {
+                Assert.fail('Promise rejected instead of fulfilled');
                 throw err;
             });
         });
@@ -25,7 +26,7 @@ YUI.add('module-tests', function(Y) {
 
         promise.then(function (value) {
             test.resume(function () {
-                throw new Error('Fulfilled instead of rejecting');
+                Assert.fail('Promise fulfilled instead of rejected');
             });
         }, function (err) {
             test.resume(function () {
@@ -132,6 +133,24 @@ YUI.add('module-tests', function(Y) {
             });
 
             this.wait();
+        },
+
+        'reviver function': function () {
+            var date = new Date().toJSON(),
+                DATEPATTERN = /\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/;
+
+            var request = Y.io.json('echo/get/?response={"date":"' + date + '"}', {
+                reviver: function(key, value) {
+                    return DATEPATTERN.test(value) ? new Date(value) : value;
+                }
+            });
+
+            this.success(request, function (data) {
+                Assert.isInstanceOf(Date, data.date, 'Date was not revived');
+                Assert.areSame(date, data.date.toJSON(), 'Date was not properly parsed');
+            });
+
+            this.wait();
         }
     }));
 
@@ -147,7 +166,7 @@ YUI.add('module-tests', function(Y) {
         },
 
         'POST JSON request': function () {
-            this.success(Y.io.postJSON('echo/post/?response={"foo":"bar"}'), function (data) {
+            this.success(Y.io.postJSON('echo/json/', {"foo":"bar"}), function (data) {
                 Assert.areEqual('bar', data.foo, 'POST request failure');
             });
 
@@ -155,7 +174,7 @@ YUI.add('module-tests', function(Y) {
         },
 
         'PUT JSON request': function () {
-            this.success(Y.io.putJSON('echo/put/?response={"foo":"bar"}'), function (data) {
+            this.success(Y.io.putJSON('echo/json/', {"foo":"bar"}), function (data) {
                 Assert.areEqual('bar', data.foo, 'PUT request failure');
             });
 

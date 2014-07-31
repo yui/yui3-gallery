@@ -4,6 +4,9 @@ Promise based methods for performing IO requests.
 @module gallery-io-utils
 **/
 
+var MIME_JSON = 'application/json',
+    CONTENT_TYPE = 'Content-Type';
+
 /**
 Method for initiating an ajax call.
 
@@ -112,19 +115,11 @@ Y.Array.each(['get', 'post', 'put', 'delete'], function (method) {
 /**
 Alias for Y.io.delete()
 
-@method DELETE
-@for io
-@static
-@deprecated
-**/
-/**
-Alias for Y.io.delete()
-
 @method del
 @for io
 @static
 **/
-Y.io.DELETE = Y.io.del = Y.io['delete'];
+Y.io.del = Y.io['delete'];
 
 /**
 Initiaites an AJAX call with the HTTP method POST and sends the data contained
@@ -232,15 +227,26 @@ Requires the JSON module.
 @for io
 @static
 @param {String} uri Qualified path to transaction resource.
-@param {Object} [options] Same configuration options as Y.io.xhr()
+@param {Object} [options] Same configuration options as Y.io.xhr() with an extra
+                `reviver` option which is a reviver function for the `JSON.parse`
+                algorithm.
 @return {Promise} Promise for the response object. Contains an extra
     `abort()` method to cancel the request.
 **/
 Y.io.json = function (uri, options) {
+    options = options || {};
+
+    // Force the use of the correct headers
+    // Since a JSON response is expected, ask for it with the Accept header
+    if (!options.headers) {
+        options.headers = {};
+    }
+    options.headers.Accept = MIME_JSON;
+
     var promise = Y.io.xhr(uri, options);
 
     return Y.mix(promise.then(function (xhr) {
-        return Y.JSON.parse(xhr.responseText);
+        return Y.JSON.parse(xhr.responseText, options.reviver);
     }), {
         // pass around the abort function
         abort: promise.abort
@@ -255,7 +261,7 @@ JSON notation. Requires the JSON module.
 @for io
 @static
 @param {String} uri Qualified path to transaction resource.
-@param {Object} [options] Same configuration options as Y.io.xhr()
+@param {Object} [options] Same configuration options as Y.io.json()
 @return {Promise} Promise for the response object. Contains an extra
     `abort()` method to cancel the request.
 **/
@@ -267,16 +273,16 @@ JSON notation. Requires the JSON module.
 @for io
 @static
 @param {String} uri Qualified path to transaction resource.
-@param {Object} [options] Same configuration options as Y.io.xhr()
+@param {Object} [options] Same configuration options as Y.io.json()
 @return {Promise} Promise for the response object. Contains an extra
     `abort()` method to cancel the request.
 **/
 Y.Array.each(['get', 'delete'], function (verb) {
-    Y.io[verb + 'JSON'] = function (uri, config) {
-        config = config || {};
-        config.method = verb.toUpperCase();
+    Y.io[verb + 'JSON'] = function (uri, options) {
+        options = options || {};
+        options.method = verb.toUpperCase();
 
-        return Y.io.json(uri, config);
+        return Y.io.json(uri, options);
     };
 });
 
@@ -289,7 +295,7 @@ JSON notation. Requires the JSON module.
 @static
 @param {String} uri Qualified path to transaction resource.
 @param {Object|Promise} data Data to send encoded as JSON
-@param {Object} [options] Same configuration options as Y.io.xhr()
+@param {Object} [options] Same configuration options as Y.io.json()
 @return {Promise} Promise for the response object. Contains an extra
     `abort()` method to cancel the request.
 **/
@@ -302,18 +308,26 @@ JSON notation. Requires the JSON module.
 @static
 @param {String} uri Qualified path to transaction resource.
 @param {Object|Promise} data Data to send encoded as JSON
-@param {Object} [options] Same configuration options as Y.io.xhr()
+@param {Object} [options] Same configuration options as Y.io.json()
 @return {Promise} Promise for the response object. Contains an extra
     `abort()` method to cancel the request.
 **/
 Y.Array.each(['post', 'put'], function (verb) {
-    Y.io[verb + 'JSON'] = function (uri, data, config) {
-        config = config || {};
-        config.method = verb.toUpperCase();
+    Y.io[verb + 'JSON'] = function (uri, data, options) {
+        options = options || {};
+        options.method = verb.toUpperCase();
+
+        if (!options.headers) {
+            options.headers = {};
+        }
+        if (!options.headers[CONTENT_TYPE]) {
+            options.headers[CONTENT_TYPE] = MIME_JSON;
+        }
 
         return Y.when(data, function (obj) {
-            config.data = Y.JSON.stringify(obj);
-            return Y.io.json(uri, config);
+            options.data = options.headers[CONTENT_TYPE] === MIME_JSON ?
+                            Y.JSON.stringify(obj) : obj;
+            return Y.io.json(uri, options);
         });
     };
 });

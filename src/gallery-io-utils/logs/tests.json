@@ -1,11 +1,11 @@
 {
     "name": "io-utils",
-    "passed": 48,
-    "failed": 0,
+    "passed": 32,
+    "failed": 2,
     "errors": 0,
     "ignored": 0,
-    "total": 48,
-    "duration": 600,
+    "total": 34,
+    "duration": 684,
     "type": "report",
     "Y.io.xhr() tests": {
         "name": "Y.io.xhr() tests",
@@ -14,21 +14,21 @@
         "errors": 0,
         "ignored": 0,
         "total": 4,
-        "duration": 46,
+        "duration": 50,
         "type": "testcase",
         "simple XHR request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "simple XHR request",
-            "duration": 8
+            "duration": 11
         },
         "request timeout": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "request timeout",
-            "duration": 5
+            "duration": 6
         },
         "request failure": {
             "result": "pass",
@@ -42,68 +42,75 @@
             "message": "Test passed",
             "type": "test",
             "name": "abort() should reject the promise",
-            "duration": 14
+            "duration": 12
         }
     },
     "HTTP verbs": {
         "name": "HTTP verbs",
-        "passed": 4,
-        "failed": 0,
+        "passed": 3,
+        "failed": 1,
         "errors": 0,
         "ignored": 0,
         "total": 4,
-        "duration": 35,
+        "duration": 32,
         "type": "testcase",
         "GET HTTP request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "GET HTTP request",
-            "duration": 5
+            "duration": 6
         },
         "POST HTTP request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "POST HTTP request",
-            "duration": 5
+            "duration": 6
         },
         "PUT HTTP request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "PUT HTTP request",
-            "duration": 6
+            "duration": 5
         },
         "DELETE HTTP request": {
-            "result": "pass",
-            "message": "Test passed",
+            "result": "fail",
+            "message": "Unexpected error: 'undefined' is not a function (evaluating 'Y.io.DELETE('echo/delete/?response=helloworld')')",
             "type": "test",
             "name": "DELETE HTTP request",
-            "duration": 4
+            "duration": 0
         }
     },
     "JSON requests": {
         "name": "JSON requests",
-        "passed": 2,
+        "passed": 3,
         "failed": 0,
         "errors": 0,
         "ignored": 0,
-        "total": 2,
-        "duration": 14,
+        "total": 3,
+        "duration": 30,
         "type": "testcase",
         "simple JSON request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "simple JSON request",
-            "duration": 6
+            "duration": 7
         },
         "catching parse error": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "catching parse error",
+            "duration": 5
+        },
+        "reviver function": {
+            "result": "pass",
+            "message": "Test passed",
+            "type": "test",
+            "name": "reviver function",
             "duration": 5
         }
     },
@@ -114,35 +121,35 @@
         "errors": 0,
         "ignored": 0,
         "total": 4,
-        "duration": 79,
+        "duration": 206,
         "type": "testcase",
         "GET JSON request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "GET JSON request",
-            "duration": 5
+            "duration": 7
         },
         "POST JSON request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "POST JSON request",
-            "duration": 17
+            "duration": 102
         },
         "PUT JSON request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "PUT JSON request",
-            "duration": 18
+            "duration": 58
         },
         "DELETE JSON request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "DELETE JSON request",
-            "duration": 6
+            "duration": 7
         }
     },
     "jsonp requests": {
@@ -152,14 +159,14 @@
         "errors": 0,
         "ignored": 0,
         "total": 2,
-        "duration": 22,
+        "duration": 21,
         "type": "testcase",
         "simple jsonp request": {
             "result": "pass",
             "message": "Test passed",
             "type": "test",
             "name": "simple jsonp request",
-            "duration": 6
+            "duration": 5
         },
         "jsonp request timeout": {
             "result": "pass",
@@ -169,6 +176,6 @@
             "duration": 4
         }
     },
-    "timestamp": "Wed 29 May 2013 04:31:16 PM PDT",
+    "timestamp": "Thu 31 Jul 2014 11:27:11 AM PDT",
     "consoleInfo": []
 }
