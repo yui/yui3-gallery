@@ -192,8 +192,6 @@ Y.WidgetHTMLRenderer.prototype = {
         }
 
         buffer.push(Handlebars.render(this.BOUNDING_TEMPLATE, context));
-
-        this._mapInstance(context.id);
     },
 
     /**
@@ -272,6 +270,7 @@ Y.WidgetHTMLRenderer.prototype = {
 
         // We need to setup bb/cb references, before bind/sync for backwards compat
         this.syncRenderedBoxes();
+        this._mapInstance(Y.stamp(this.get('boundingBox')));
 
         this._bindUI();
         this.bindUI();

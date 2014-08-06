@@ -266,6 +266,9 @@ Example usage:
             
             treeNode.append(childrenHTML);
             treeWidget.set("populated", true);
+            treeWidget.each(function (child) {
+                child._mapInstance(Y.stamp(child.get('boundingBox')));
+            }, this);
         },
         
        /**
