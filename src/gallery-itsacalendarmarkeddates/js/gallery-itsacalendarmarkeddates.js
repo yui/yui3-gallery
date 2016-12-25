@@ -629,7 +629,7 @@ Y.mix(ITSACalendarMarkedDates.prototype, {
      * A utility method that converts a Date to the columnindex of the calendar cell the Date corresponds to.
      *
      * @method _getDateColumn
-     * @param {Date} oDate The Date to retreive the columnindex from
+     * @param {Date} oDate The Date to retrieve the columnindex from
      * @protected
      * @return {int} The columnindex
      */

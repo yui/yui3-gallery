@@ -486,7 +486,7 @@
         },
         /**
          * This is used to check to see if an attributes has been set on the target, if
-         * not then the attName property is used to retreive a default value set in the Form's
+         * not then the attName property is used to retrieve a default value set in the Form's
          * main object.
          * @method checkAttribute
          * @param {BaseInputField} target The input field who's attribute is being checked

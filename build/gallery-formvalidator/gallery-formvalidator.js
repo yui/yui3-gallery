@@ -488,7 +488,7 @@ YUI.add('gallery-formvalidator', function(Y) {
         },
         /**
          * This is used to check to see if an attributes has been set on the target, if
-         * not then the attName property is used to retreive a default value set in the Form's
+         * not then the attName property is used to retrieve a default value set in the Form's
          * main object.
          * @method checkAttribute
          * @param {BaseInputField} target The input field who's attribute is being checked
@@ -1142,7 +1142,7 @@ YUI.add('gallery-formvalidator', function(Y) {
          * The input can optionally override this function so they can
          * retrieve their particular input from the form validator.  If they do
          * not override this, then everyting will still work, they just won't be
-         * able to retreive it by name from the form validator.
+         * able to retrieve it by name from the form validator.
          * @method getId
          * @return {number} the id of the input field
          */
@@ -1737,7 +1737,7 @@ YUI.add('gallery-formvalidator', function(Y) {
          * This will be an object that can optionally implement all the
          * functions used by an input field.  This can also be a function, which
          * retrieves the object, or a string, which can be the name of an instance
-         * object or function call to retreive it.
+         * object or function call to retrieve it.
          * @property emptyValue
          * @type {Object}
          */

@@ -705,10 +705,10 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
         },
 
         /**
-         * Sets the specified Node as the node that should retreive first focus.
+         * Sets the specified Node as the node that should retrieve first focus.
          * (=first focus once the container gets focus and no element has focus yet)
          *
-         * @method retreiveFocus
+         * @method setFirstFocus
          * @param node {Y.Node|String} the Node that should gain first focus. Has to be inside the host (container) and focusable.
          * @since 0.1
         */
@@ -820,7 +820,7 @@ Y.namespace('Plugin').ITSATabKeyManager = Y.Base.create('itsatabkeymanager', Y.P
         },
 
         /**
-         * Retreive the focus again on the 'activeItem', or -when none- on the initial Item.
+         * Retrieve the focus again on the 'activeItem', or -when none- on the initial Item.
          * Is called when the host-node gets focus.
          *
          * @method _retrieveFocus
