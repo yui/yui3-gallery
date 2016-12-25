@@ -423,7 +423,7 @@
          * The input can optionally override this function so they can
          * retrieve their particular input from the form validator.  If they do
          * not override this, then everyting will still work, they just won't be
-         * able to retreive it by name from the form validator.
+         * able to retrieve it by name from the form validator.
          * @method getId
          * @return {number} the id of the input field
          */

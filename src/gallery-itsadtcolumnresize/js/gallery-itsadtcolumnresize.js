@@ -495,14 +495,14 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
         },
 
         /**
-         * Retreives the true col-width in pixels, exact as is occupied on the screen.<br>
-         * Some cols might have been expanded to fit a fixed DataTable-width. To retreive the colwith without this
+         * Retrieves the true col-width in pixels, exact as is occupied on the screen.<br>
+         * Some cols might have been expanded to fit a fixed DataTable-width. To retrieve the colwith without this
          * expansion, you can set withoutExpansion=true.
          * @method getColumnWidthPx
          * @param {Number|String} name key, name, or index of a column in the host's `_displayColumns` array.
          * @param {Boolean} [withoutExpansion] (defaults false) some cols may be expanded to fit the total datatablewidth.<br>
          * These are cols that have undefined width-settings themselves, or -if no undefined col- the last column.<br>
-         * This expansion will be part of the width, because it is the true width on the screen. When set to true, you retreive<br>
+         * This expansion will be part of the width, because it is the true width on the screen. When set to true, you retrieve<br>
          * the original width without the expansion, which is in fact the width that will be reached if the column can get narrower
          * for exampele when other column is set wider and no expansion is required.
          * @return {int} columnwidth in pixels
@@ -537,14 +537,14 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
         },
 
         /**
-         * Retreives the true col-width in percent (in comparison to the DataTable-width) exact as is occupied on the screen.<br>
-         * Some cols might have been expanded to fit a fixed DataTable-width. To retreive the colwith without this
+         * Retrieves the true col-width in percent (in comparison to the DataTable-width) exact as is occupied on the screen.<br>
+         * Some cols might have been expanded to fit a fixed DataTable-width. To retrieve the colwith without this
          * expansion, you can set withoutExpansion=true.
          * @method getColumnWidthPercent
          * @param {Number|String} name key, name, or index of a column in the host's `_displayColumns` array.
          * @param {Boolean} [withoutExpansion] (defaults false) some cols may be expanded to fit the total datatablewidth.<br>
          * These are cols that have undefined width-settings themselves, or -if no undefined col- the last column.<br>
-         * This expansion will be part of the width, because it is the true width on the screen. When set to true, you retreive<br>
+         * This expansion will be part of the width, because it is the true width on the screen. When set to true, you retrieve<br>
          * the original width without the expansion, which is in fact the width that will be reached if the column can get narrower
          * for exampele when other column is set wider and no expansion is required.
          * @return {String} columnwidth in percent
@@ -561,7 +561,7 @@ Y.namespace('Plugin').ITSADTColumnResize = Y.Base.create('itsadtcolumnresize', Y
         },
 
         /**
-         * Retreives the expansion of the column in pixels. Some cols might have been expanded to fit a fixed DataTable-width.
+         * Retrieves the expansion of the column in pixels. Some cols might have been expanded to fit a fixed DataTable-width.
          * @method getColumnExpansion
          * @param {Number|String} name key, name, or index of a column in the host's `_displayColumns` array.
          * @return {int} expansion in pixels

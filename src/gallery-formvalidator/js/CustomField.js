@@ -17,7 +17,7 @@
          * This will be an object that can optionally implement all the
          * functions used by an input field.  This can also be a function, which
          * retrieves the object, or a string, which can be the name of an instance
-         * object or function call to retreive it.
+         * object or function call to retrieve it.
          * @property emptyValue
          * @type {Object}
          */

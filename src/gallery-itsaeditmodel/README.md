@@ -3,7 +3,7 @@ gallery-itsaeditmodel
 
 Plugin for Y.Model that extends Y.Model-instances into having editable properties.
 After pluged-in, Each property can be rendered into a form-element by using: <b>yourModel.itsaeditmodel.formelement()</b>
-You can also retreive a copy of the model's (or object's) attributes with: <b>yourModel.itsaeditmodel.toJSON()</b>
+You can also retrieve a copy of the model's (or object's) attributes with: <b>yourModel.itsaeditmodel.toJSON()</b>
 
 
 You may not need to call the plugin's methods yourself, but want to use one of the next 3 view-widgets who do this automaticly:

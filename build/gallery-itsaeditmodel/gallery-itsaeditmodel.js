@@ -8,7 +8,7 @@ YUI.add('gallery-itsaeditmodel', function (Y, NAME) {
  *
  * Plugin for Y.Model that extends Y.Model-instances into having editable properties.
  * After pluged-in, Each property can be rendered into a form-element by using: <i>yourModel.itsaeditmodel.formelement()</i>
- * You can also retreive a copy of the model's attributes with: <i>yourModel.itsaeditmodel.toJSON()</i>
+ * You can also retrieve a copy of the model's attributes with: <i>yourModel.itsaeditmodel.toJSON()</i>
  *
  * Use the attribute 'template' to specify how the rendering will look like.
  *
