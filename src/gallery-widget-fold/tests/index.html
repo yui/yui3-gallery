@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>index</title>
+  <script src="http://yui.yahooapis.com/3.4.1/build/yui/yui.js"></script>
+</head>
+<body>
+  <div id="widget"></div>
+  <script>
+var Y = YUI({ filter: "raw" }).use("widget", function (Y) {
+
+
+  var widg = new Y.Widget({ srcNode: "#widget" });
+  
+  widg.render();
+
+});
+  </script>
+
+
+</body>
+</html>
