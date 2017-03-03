@@ -636,10 +636,11 @@ Y.Carousel = Y.extend(Carousel, Y.Widget, {
         self.fire(BEFORESCROLL_EVENT, { first: first,
                 last: first + numVisible });
         cb.setStyle(attr, offset);
-        first = self.getFirstVisible(); // ask for the "new" first visible
+        self.set("selectedItem", index); // assume this is what the user want
+        first = index; //updating the first element
         self.fire(AFTERSCROLL_EVENT, { first: first,
                 last: first + numVisible });
-        self.set("selectedItem", index); // assume this is what the user want
+       
     },
 
     /**
