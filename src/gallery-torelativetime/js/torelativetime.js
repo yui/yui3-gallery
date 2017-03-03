@@ -45,7 +45,9 @@ function toRelativeTime(d,from) {
            delta < 172800 ? strings.day     : '';
 
     if (!time) {
+        d = new Date(d.getTime());
         d.setHours(0,0,0);
+        from = new Date(from.getTime());
         from.setHours(0,0,0);
         delta = Math.round((from.getTime() - d.getTime()) / 86400000);
 
