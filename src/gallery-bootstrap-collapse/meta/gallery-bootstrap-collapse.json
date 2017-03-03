@@ -1,0 +1,9 @@
+{
+  "gallery-bootstrap-collapse": {
+    "requires": [
+        "plugin",
+        "transition",
+        "event"
+    ]
+  }
+}

@@ -24,7 +24,7 @@ However, it can be manually plugged into any node or node list.
 @class Bootstrap.Collapse
 **/
 
-function CollapsePlugin(config) {
+function CollapsePlugin() {
     CollapsePlugin.superclass.constructor.apply(this, arguments);
 }
 
@@ -74,9 +74,7 @@ Y.extend(CollapsePlugin, Y.Plugin.Base, {
     * <code>data-target</code> or <code>href</code> attribute.
     */
     hide: function() {
-        var showClass = this.config.showClass,
-            hideClass = this.config.hideClass,
-            node      = this._getTarget();
+        var node      = this._getTarget();
 
         if ( this.transitioning ) {
             return;
@@ -93,9 +91,7 @@ Y.extend(CollapsePlugin, Y.Plugin.Base, {
     * <code>data-target</code> or <code>href</code> attribute.
     */
     show: function() {
-        var showClass = this.config.showClass,
-            hideClass = this.config.hideClass,
-            node      = this._getTarget(),
+        var node      = this._getTarget(),
             host      = this._node,
             self      = this,
             parent,
@@ -154,30 +150,48 @@ Y.extend(CollapsePlugin, Y.Plugin.Base, {
             // And if we are hiding, add the hide class.
             addClass    = method === 'hide' ? config.hideClass : config.showClass,
 
-            to_height   = method === 'hide' ? 0 : null,
-            event       = method === 'hide' ? 'hidden' : 'shown',
+            to_height   = method === 'hide' ? '0px' : null,
+            event       = method === 'hide' ? 'hidden' : 'shown';
 
-            complete = function() {
-                node.removeClass(removeClass);
-                node.addClass(addClass);
-                self.transitioning = false;
-                this.fire( event );
-            };
-
-        if ( to_height === null ) {
-            to_height = 0;
-            node.all('> *').each(function(el) {
-                to_height += el.get('scrollHeight');
+        if (method === 'hide') {
+            // Before making any changes, set the maxHeight to the current height to transition from.
+            node.setStyle('maxHeight', node.get('scrollHeight') + 'px');
+        } else {
+            to_height = node.get('scrollHeight') + 'px';
+            // Standard Bootstrap CSS sets the height to 0px but CSS transitions don't support height changes very well.
+            // Set the maxHeight to 0px and the height to auto instead. The transition then works on the maxHeight.
+            node.setStyles({
+                maxHeight: '0px',
+                height: 'auto'
             });
         }
 
         this.transitioning = true;
 
         node.transition({
-            height   : to_height +'px',
+            maxHeight: to_height,
             duration : duration,
-            easing   : easing
-        }, complete);
+            easing   : easing,
+            on: {
+                end: function() {
+                    node.removeClass(removeClass);
+                    node.addClass(addClass);
+                    if (method === 'hide') {
+                        // Reset maxHeight and height so that the stylesheet takes over.
+                        node.setStyles({
+                            maxHeight: '',
+                            height: ''
+                        });
+                    } else {
+                        // Clear the max-height value to allow the content to change the height later.
+                        // Height is still set to 'auto' from the transition preparation.
+                        node.setStyle('maxHeight', '');
+                    }
+                    self.transitioning = false;
+                    this.fire( event );
+                }
+            }
+        });
     },
 
     /**
@@ -188,13 +202,6 @@ Y.extend(CollapsePlugin, Y.Plugin.Base, {
     **/
     _hideElement : function(node) {
         this._transition(node, 'hide');
-/*
-        var showClass = this.showClass,
-            hideClass = this.hideClass;
-
-        node.removeClass(showClass);
-        node.addClass(hideClass);
-*/
     },
 
     /**
@@ -205,14 +212,7 @@ Y.extend(CollapsePlugin, Y.Plugin.Base, {
     **/
     _showElement : function(node) {
         this._transition(node, 'show');
-/*
-        var showClass = this.showClass,
-            hideClass = this.hideClass;
-        node.removeClass(hideClass);
-        node.addClass(showClass);
-*/
     }
 });
 
 Y.namespace('Bootstrap').Collapse = CollapsePlugin;
-
