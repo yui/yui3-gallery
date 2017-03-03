@@ -1515,6 +1515,50 @@ YUI.add('gallery-effects', function(Y) {
 		return effect;
 	};
 	
+	/***
+	 * Effect that moves a node in x direction five times 
+	 * looking like a node is shaking. Accepts distance and 
+	 * duration config params.
+	 * 
+	 * @class Y.Effects.Shake
+	 * @param config {Object} has of configuration name/value pairs
+	 */
+	     Effects.Shake = function(config) {
+		 config = Y.merge({
+			 distance: 20,
+			 duration: 0.5
+		     }, config);
+
+		 var oldStyle,
+		 distance = parseFloat(config.distance),
+		 split = parseFloat(config.duration) / 10.0,
+		 effect = new Effects.Move({ node: config.node, x:  distance, y: 0, duration: split, afterFinish: function(effect) {
+			     new Effects.Move({ node: config.node, x:  -distance*2, y: 0, duration: split*2, afterFinish: function(effect) {
+					 new Effects.Move({ node: config.node, x:  distance*2, y: 0, duration: split*2, afterFinish: function(effect) {
+						     new Effects.Move({ node: config.node, x:  -distance*2, y: 0, duration: split*2, afterFinish: function(effect) {
+								 new Effects.Move({ node: config.node, x:  distance*2, y: 0, duration: split*2, afterFinish: function(effect) {
+									     new Effects.Move({ node: config.node, x:  -distance, y: 0, duration: split, afterFinish: function(effect) {
+											 config.node.undoPositioned().setStyles(oldStyle);
+										     }});
+									 }});
+							     }});
+						 }});
+				     }});
+			 }});
+		 effect.on("setup", function () {
+			 var node = config.node;
+
+			 oldStyle = {
+			     top: node.getStyle("top"),
+			     left: node.getStyle("left")
+			 };
+
+			 node.makePositioned();
+		     });
+
+		 return effect;
+	     };
+
 	Y.Effects = Effects;
 	
 	/*********************************
@@ -1522,7 +1566,7 @@ YUI.add('gallery-effects', function(Y) {
 	 *********************************/
 	
 	var ExtObj = {},
-		effects = "opacity move scroll scale morph highlight appear fade puff blindUp blindDown switchOff dropOut squish".split(" ");
+		effects = "opacity move scroll scale morph highlight appear fade puff blindUp blindDown switchOff dropOut squish shake".split(" ");
 	
 	Y.Array.each(effects, function (effect) {
 		ExtObj[effect] = function (node, config) {
@@ -1535,4 +1579,4 @@ YUI.add('gallery-effects', function(Y) {
 	Y.Node.importMethod(ExtObj, effects);
 
 
-}, 'gallery-2010.05.21-18-16' ,{requires:['node','anim','async-queue']});
+}, '@VERSION@' ,{requires:['node','anim','async-queue']});
