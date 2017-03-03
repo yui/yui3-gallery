@@ -3,27 +3,47 @@
  * instance to a string like "2 days ago".  If the second parameter is
  * provided, the time delta is in reference to this date.
  *
+ * Also available is Y.toRelativeDuration(Date, refDate) which will
+ * omit the "ago" or "from now" phrase from the returned string, and provide
+ * just a duration in human-readable form.
+ *
  * @module gallery-torelativetime
  *
  * @class YUI~toRelativeTime
  */
 
 /**
+ * @method toRelativeDuration
+ * @param d {Date} the Date to translate.
+ * @param from {Date} (optional) reference Date. Default is now.
+ * @return {String} the duration between from and d, in human readable form
+ */
+function toRelativeDuration(d,from) {
+    return toRelativeTime(d, from, true);
+}
+
+/**
  * @method toRelativeTime
  * @param d {Date} the Date to translate.
  * @param from {Date} (optional) reference Date. Default is now.
+ * @param durationOnly {boolean} (optional) if true, omit "ago" or "from now" in the returned string.
  * @return {String} the delta between from and d, in human readable form
  */
-function toRelativeTime(d,from) {
+function toRelativeTime(d,from,durationOnly) {
     d    = d || new Date();
+    var useFromNow = (from == undefined);
     from = from || new Date();
+    durationOnly = (!!durationOnly);
 
     var delta   = (from.getTime() - d.getTime()) / 1000,
         strings = toRelativeTime.strings,
         time    = "",
         rel, tmp, months, years;
 
-    if (arguments.length < 2) {
+    if (durationOnly) {
+        rel = "";
+    }
+    else if (useFromNow) {
         rel = (delta < 0) ? strings.fromnow : strings.ago;
     } else {
         rel = (delta < 0) ? strings.ahead : strings.before;
@@ -126,3 +146,4 @@ toRelativeTime.strings = {
 };
 
 Y.toRelativeTime = toRelativeTime;
+Y.toRelativeDuration = toRelativeDuration;
