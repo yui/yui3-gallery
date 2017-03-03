@@ -647,7 +647,7 @@
 	     * @private
 	     */
 		_enableKeyboardNav: function () {
-			Y.get(document.body).on("keydown", this._keyboardAction, this);
+			Y.one(document.body).on("keydown", this._keyboardAction, this);
 		},
 		
 		/**
@@ -657,7 +657,7 @@
 	     * @private
 	     */
 		_disableKeyboardNav: function () {
-			Y.get(document.body).unsubscribe("keydown", this._keyboardAction);
+			Y.one(document.body).unsubscribe("keydown", this._keyboardAction);
 		},
 		
 		/**
