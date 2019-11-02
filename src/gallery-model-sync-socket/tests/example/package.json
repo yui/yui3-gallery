@@ -15,6 +15,6 @@
         "express"     : "3.0.0beta4",
         "uglify-js"   : ">=1.2.0 <2.0.0",
         "yui"         : "3.5.1",
-        "socket.io"   : "0.9.6"
+        "socket.io"   : "2.3.0"
     }
 }
